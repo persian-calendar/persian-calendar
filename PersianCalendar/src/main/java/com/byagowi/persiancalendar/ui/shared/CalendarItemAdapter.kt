@@ -12,20 +12,19 @@ import com.byagowi.persiancalendar.utils.*
 class CalendarItemAdapter internal constructor(context: Context) :
     RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
 
-    private val mCalendarFont: Typeface = getCalendarFragmentFont(context)
-    private var mCalendars: List<CalendarType> = emptyList()
+    private val calendarFont: Typeface = getCalendarFragmentFont(context)
+    private var calendars: List<CalendarType> = emptyList()
     internal var isExpanded = false
         set(expanded) {
             field = expanded
-            for (i in mCalendars.indices) notifyItemChanged(i)
+            for (i in calendars.indices) notifyItemChanged(i)
         }
-    private var mJdn: Long = 0
+    private var jdn: Long = 0
 
     internal fun setDate(calendars: List<CalendarType>, jdn: Long) {
-        mCalendars = calendars
-        mJdn = jdn
-        for (i in mCalendars.indices) notifyItemChanged(i)
-        //        notifyDataSetChanged();
+        this.calendars = calendars
+        this.jdn = jdn
+        for (i in calendars.indices) notifyItemChanged(i)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -34,7 +33,7 @@ class CalendarItemAdapter internal constructor(context: Context) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    override fun getItemCount(): Int = mCalendars.size
+    override fun getItemCount(): Int = calendars.size
 
     inner class ViewHolder(private val binding: CalendarItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
@@ -42,8 +41,8 @@ class CalendarItemAdapter internal constructor(context: Context) :
         init {
             val applyLineMultiplier = !isCustomFontEnabled
 
-            binding.monthYear.typeface = mCalendarFont
-            binding.day.typeface = mCalendarFont
+            binding.monthYear.typeface = calendarFont
+            binding.day.typeface = calendarFont
             if (applyLineMultiplier) binding.monthYear.setLineSpacing(0f, .6f)
 
             binding.container.setOnClickListener(this)
@@ -51,7 +50,7 @@ class CalendarItemAdapter internal constructor(context: Context) :
         }
 
         fun bind(position: Int) {
-            val date = getDateFromJdnOfCalendar(mCalendars[position], mJdn)
+            val date = getDateFromJdnOfCalendar(calendars[position], jdn)
 
             binding.linear.text = toLinearDate(date)
             binding.linear.contentDescription = toLinearDate(date)

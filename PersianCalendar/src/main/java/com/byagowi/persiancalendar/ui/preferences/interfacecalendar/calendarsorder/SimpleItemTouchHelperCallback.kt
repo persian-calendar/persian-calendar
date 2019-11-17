@@ -24,7 +24,7 @@ import kotlin.math.abs
 
 private const val ALPHA_FULL = 1.0f
 
-class SimpleItemTouchHelperCallback(private val mAdapter: RecyclerListAdapter) :
+class SimpleItemTouchHelperCallback(private val adapter: RecyclerListAdapter) :
     ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled(): Boolean = true
@@ -55,16 +55,15 @@ class SimpleItemTouchHelperCallback(private val mAdapter: RecyclerListAdapter) :
         if (source.itemViewType != target.itemViewType) return false
 
         // Notify the adapter of the move
-        mAdapter.onItemMoved(source.adapterPosition, target.adapterPosition)
+        adapter.onItemMoved(source.adapterPosition, target.adapterPosition)
         return true
     }
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) =
-        mAdapter.onItemDismissed(viewHolder.adapterPosition) // Notify the adapter of the dismissal
+        adapter.onItemDismissed(viewHolder.adapterPosition) // Notify the adapter of the dismissal
 
     override fun onChildDraw(
-        c: Canvas, recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
+        c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
         dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
     ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {

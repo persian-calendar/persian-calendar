@@ -20,61 +20,59 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     var showHideTodayButtonCallback: (Boolean) -> Unit = fun(_) {}
 
-    private val mCalendarItemAdapter = CalendarItemAdapter(context)
-    private val mBinding: CalendarsViewBinding =
+    private val calendarItemAdapter = CalendarItemAdapter(context)
+    private val binding: CalendarsViewBinding =
         CalendarsViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
-            root.setOnClickListener { expand(!mCalendarItemAdapter.isExpanded) }
+            root.setOnClickListener { expand(!calendarItemAdapter.isExpanded) }
             extraInformationContainer.visibility = View.GONE
             calendarsRecyclerView.layoutManager = LinearLayoutManager(context).apply {
                 orientation = RecyclerView.HORIZONTAL
             }
-            calendarsRecyclerView.adapter = mCalendarItemAdapter
+            calendarsRecyclerView.adapter = calendarItemAdapter
         }
 
     fun hideMoreIcon() {
-        mBinding.moreCalendar.visibility = View.GONE
+        binding.moreCalendar.visibility = View.GONE
     }
 
     fun expand(expanded: Boolean) {
-        mCalendarItemAdapter.isExpanded = expanded
+        calendarItemAdapter.isExpanded = expanded
 
-        mBinding.moreCalendar.setImageResource(
+        binding.moreCalendar.setImageResource(
             if (expanded)
                 R.drawable.ic_keyboard_arrow_up
             else
                 R.drawable.ic_keyboard_arrow_down
         )
-        mBinding.extraInformationContainer.visibility = if (expanded) View.VISIBLE else View.GONE
+        binding.extraInformationContainer.visibility = if (expanded) View.VISIBLE else View.GONE
     }
 
     fun showCalendars(
-        jdn: Long,
-        chosenCalendarType: CalendarType,
-        calendarsToShow: List<CalendarType>
+        jdn: Long, chosenCalendarType: CalendarType, calendarsToShow: List<CalendarType>
     ) {
         val context = context ?: return
 
-        mCalendarItemAdapter.setDate(calendarsToShow, jdn)
-        mBinding.weekDayName.text = getWeekDayName(CivilDate(jdn))
+        calendarItemAdapter.setDate(calendarsToShow, jdn)
+        binding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
-        mBinding.zodiac.text = getZodiacInfo(context, jdn, true)
-        mBinding.zodiac.visibility = if (mBinding.zodiac.text.isEmpty()) View.GONE else View.VISIBLE
+        binding.zodiac.text = getZodiacInfo(context, jdn, true)
+        binding.zodiac.visibility = if (binding.zodiac.text.isEmpty()) View.GONE else View.VISIBLE
 
         val diffDays = abs(getTodayJdn() - jdn)
 
         if (diffDays == 0L) {
             if (isIranTime) {
-                mBinding.weekDayName.text = String.format(
+                binding.weekDayName.text = String.format(
                     "%s (%s)",
-                    mBinding.weekDayName.text,
+                    binding.weekDayName.text,
                     context.getString(R.string.iran_time)
                 )
             }
             showHideTodayButtonCallback(false)
-            mBinding.diffDate.visibility = View.GONE
+            binding.diffDate.visibility = View.GONE
         } else {
             showHideTodayButtonCallback(true)
-            mBinding.diffDate.visibility = View.VISIBLE
+            binding.diffDate.visibility = View.VISIBLE
 
             val civilBase = CivilDate(2000, 1, 1)
             val civilOffset = CivilDate(diffDays + civilBase.toJdn())
@@ -91,7 +89,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             if (diffDays <= 30) {
                 text = text.split("(")[0]
             }
-            mBinding.diffDate.text = text
+            binding.diffDate.text = text
         }
 
         run {
@@ -120,7 +118,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 formatNumber(weeksCount - currentWeek),
                 formatNumber(12 - mainDate.month)
             )
-            mBinding.startAndEndOfYearDiff.text =
+            binding.startAndEndOfYearDiff.text =
                 String.format("%s\n%s", startOfYearText, endOfYearText)
 
             var equinox = ""
@@ -140,11 +138,11 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                     )
                 }
             }
-            mBinding.equinox.text = equinox
-            mBinding.equinox.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
+            binding.equinox.text = equinox
+            binding.equinox.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
         }
 
-        mBinding.root.contentDescription = getA11yDaySummary(
+        binding.root.contentDescription = getA11yDaySummary(
             context, jdn,
             diffDays == 0L, emptyMap(),
             withZodiac = true, withOtherCalendars = true, withTitle = true

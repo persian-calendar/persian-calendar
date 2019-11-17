@@ -85,7 +85,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val title: String, val holidays: String, val nonHolidays: String
     )
 
-    private inner class ItemAdapter internal constructor(private val mRows: List<MonthOverviewRecord>) :
+    private inner class ItemAdapter internal constructor(private val rows: List<MonthOverviewRecord>) :
         RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -94,14 +94,14 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-        override fun getItemCount(): Int = mRows.size
+        override fun getItemCount(): Int = rows.size
 
-        internal inner class ViewHolder(var mBinding: MonthOverviewItemBinding) :
-            RecyclerView.ViewHolder(mBinding.root) {
+        internal inner class ViewHolder(private val binding: MonthOverviewItemBinding) :
+            RecyclerView.ViewHolder(binding.root) {
 
             fun bind(position: Int) {
-                val record = mRows[position]
-                mBinding.run {
+                val record = rows[position]
+                binding.apply {
                     title.text = record.title
                     holidays.text = record.holidays
                     holidays.visibility = if (record.holidays.isEmpty()) View.GONE else View.VISIBLE

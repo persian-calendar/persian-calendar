@@ -287,20 +287,20 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
 
     override fun getItemCount(): Int = deviceInfoItemsList.size
 
-    inner class ViewHolder(private val mBinding: DeviceInfoRowBinding) :
-        RecyclerView.ViewHolder(mBinding.root), View.OnClickListener {
+    inner class ViewHolder(private val binding: DeviceInfoRowBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
-            mBinding.root.setOnClickListener(this)
+            binding.root.setOnClickListener(this)
         }
 
         fun bind(position: Int) {
             with(deviceInfoItemsList[position]) {
-                mBinding.title.text = title
-                mBinding.content.text = content
-                mBinding.version.text = version
+                binding.title.text = title
+                binding.content.text = content
+                binding.version.text = version
             }
-            mBinding.content.movementMethod = LinkMovementMethod.getInstance()
+            binding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
         override fun onClick(v: View?) = copyToClipboard(

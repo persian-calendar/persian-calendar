@@ -32,40 +32,40 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     private val FULL_DAY = Clock(24, 0).toInt().toFloat()
     private val HALF_DAY = Clock(12, 0).toInt().toFloat()
-    var mPaint: Paint
-    var mSunPaint: Paint
-    var mSunRaisePaint: Paint
-    var mDayPaint: Paint
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var sunRaisePaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     @ColorInt
-    internal var horizonColor: Int = 0
+    private var horizonColor: Int = 0
     @ColorInt
-    internal var timelineColor: Int = 0
+    private var timelineColor: Int = 0
     @ColorInt
-    internal var taggingColor: Int = 0
+    private var taggingColor: Int = 0
     @ColorInt
-    internal var nightColor: Int = 0
+    private var nightColor: Int = 0
     @ColorInt
-    internal var dayColor: Int = 0
+    private var dayColor: Int = 0
     @ColorInt
-    internal var daySecondColor: Int = 0
+    private var daySecondColor: Int = 0
     @ColorInt
-    internal var sunColor: Int = 0
+    private var sunColor: Int = 0
     @ColorInt
-    internal var sunBeforeMiddayColor: Int = 0
+    private var sunBeforeMiddayColor: Int = 0
     @ColorInt
-    internal var sunAfterMiddayColor: Int = 0
+    private var sunAfterMiddayColor: Int = 0
     @ColorInt
-    internal var sunEveningColor: Int = 0
+    private var sunEveningColor: Int = 0
     @ColorInt
-    internal var sunriseTextColor: Int = 0
+    private var sunriseTextColor: Int = 0
     @ColorInt
-    internal var middayTextColor: Int = 0
+    private var middayTextColor: Int = 0
     @ColorInt
-    internal var sunsetTextColor: Int = 0
+    private var sunsetTextColor: Int = 0
     @ColorInt
-    internal var colorTextNormal: Int = 0
+    private var colorTextNormal: Int = 0
     @ColorInt
-    internal var colorTextSecond: Int = 0
+    private var colorTextSecond: Int = 0
     internal var width: Int = 0
     internal var height: Int = 0
     lateinit var curvePath: Path
@@ -164,22 +164,18 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             }
         }
 
-        mPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mPaint.typeface = getAppFont(context)
+        paint.typeface = getAppFont(context)
 
-        mSunPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mSunPaint.color = sunColor
-        mSunPaint.style = Paint.Style.FILL
+        sunPaint.color = sunColor
+        sunPaint.style = Paint.Style.FILL
 
-        mSunRaisePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mSunRaisePaint.color = sunColor
-        mSunRaisePaint.style = Paint.Style.STROKE
-        mSunRaisePaint.strokeWidth = 7f
+        sunRaisePaint.color = sunColor
+        sunRaisePaint.style = Paint.Style.STROKE
+        sunRaisePaint.strokeWidth = 7f
         val sunRaysEffects = DashPathEffect(floatArrayOf(3f, 7f), 0f)
-        mSunRaisePaint.pathEffect = sunRaysEffects
+        sunRaisePaint.pathEffect = sunRaysEffects
 
-        mDayPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        mDayPaint.style = Paint.Style.FILL_AND_STROKE
+        dayPaint.style = Paint.Style.FILL_AND_STROKE
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
@@ -217,10 +213,10 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         canvas.save()
 
         // draw fill of night
-        mPaint.style = Paint.Style.FILL
-        mPaint.color = nightColor
+        paint.style = Paint.Style.FILL
+        paint.color = nightColor
         canvas.clipRect(0f, height * 0.75f, width * current, height.toFloat())
-        canvas.drawPath(nightPath, mPaint)
+        canvas.drawPath(nightPath, paint)
 
         canvas.restore()
 
@@ -229,8 +225,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         // draw fill of day
         canvas.clipRect(0, 0, width, height)
         canvas.clipRect(0f, 0f, width * current, height * 0.75f)
-        mDayPaint.shader = linearGradient
-        canvas.drawPath(curvePath, mDayPaint)
+        dayPaint.shader = linearGradient
+        canvas.drawPath(curvePath, dayPaint)
 
         canvas.restore()
 
@@ -238,48 +234,48 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         // draw time curve
         canvas.clipRect(0, 0, width, height)
-        mPaint.strokeWidth = 3f
-        mPaint.style = Paint.Style.STROKE
-        mPaint.color = timelineColor
-        canvas.drawPath(curvePath, mPaint)
+        paint.strokeWidth = 3f
+        paint.style = Paint.Style.STROKE
+        paint.color = timelineColor
+        canvas.drawPath(curvePath, paint)
 
         canvas.restore()
 
         // draw horizon line
-        mPaint.color = horizonColor
-        canvas.drawLine(0f, height * 0.75f, width.toFloat(), height * 0.75f, mPaint)
+        paint.color = horizonColor
+        canvas.drawLine(0f, height * 0.75f, width.toFloat(), height * 0.75f, paint)
 
         // draw sunset and sunrise tag line indicator
-        mPaint.color = taggingColor
-        mPaint.strokeWidth = 2f
-        canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, mPaint)
-        canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, mPaint)
-        canvas.drawLine(getWidth() / 2f, height * 0.7f, getWidth() / 2f, height * 0.8f, mPaint)
+        paint.color = taggingColor
+        paint.strokeWidth = 2f
+        canvas.drawLine(width * 0.17f, height * 0.3f, width * 0.17f, height * 0.7f, paint)
+        canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, paint)
+        canvas.drawLine(getWidth() / 2f, height * 0.7f, getWidth() / 2f, height * 0.8f, paint)
 
         // draw text
-        mPaint.textAlign = Paint.Align.CENTER
-        mPaint.textSize = fontSize.toFloat()
-        mPaint.strokeWidth = 0f
-        mPaint.style = Paint.Style.FILL
-        mPaint.color = sunriseTextColor
-        canvas.drawText(sunriseString, width * 0.17f, height * .2f, mPaint)
-        mPaint.color = middayTextColor
-        canvas.drawText(middayString, width / 2f, height * .94f, mPaint)
-        mPaint.color = sunsetTextColor
-        canvas.drawText(sunsetString, width * 0.83f, height * .2f, mPaint)
+        paint.textAlign = Paint.Align.CENTER
+        paint.textSize = fontSize.toFloat()
+        paint.strokeWidth = 0f
+        paint.style = Paint.Style.FILL
+        paint.color = sunriseTextColor
+        canvas.drawText(sunriseString, width * 0.17f, height * .2f, paint)
+        paint.color = middayTextColor
+        canvas.drawText(middayString, width / 2f, height * .94f, paint)
+        paint.color = sunsetTextColor
+        canvas.drawText(sunsetString, width * 0.83f, height * .2f, paint)
 
         // draw remaining time
-        mPaint.textAlign = Paint.Align.CENTER
-        mPaint.strokeWidth = 0f
-        mPaint.style = Paint.Style.FILL
-        mPaint.color = colorTextSecond
-        canvas.drawText(dayLengthString, width * if (isRTL) 0.70f else 0.30f, height * .94f, mPaint)
+        paint.textAlign = Paint.Align.CENTER
+        paint.strokeWidth = 0f
+        paint.style = Paint.Style.FILL
+        paint.color = colorTextSecond
+        canvas.drawText(dayLengthString, width * if (isRTL) 0.70f else 0.30f, height * .94f, paint)
         if (remainingString.isNotEmpty()) {
             canvas.drawText(
                 remainingString,
                 width * if (isRTL) 0.30f else 0.70f,
                 height * .94f,
-                mPaint
+                paint
             )
         }
 
@@ -292,14 +288,14 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
                 sunBeforeMiddayColor, sunAfterMiddayColor
             ) as Int
 
-            mSunPaint.color = color
+            sunPaint.color = color
             //mSunRaisePaint.setColor(color);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
             canvas.drawCircle(
                 width * current,
                 getY((width * current).toInt(), segmentByPixel, (height * 0.9f).toInt()),
                 height * 0.09f,
-                mSunPaint
+                sunPaint
             )
             //mPaint.clearShadowLayer();
             //canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);

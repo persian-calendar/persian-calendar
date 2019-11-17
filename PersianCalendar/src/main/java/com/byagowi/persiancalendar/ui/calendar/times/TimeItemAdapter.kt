@@ -18,7 +18,7 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
         R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
     )
 
-    var mPrayTimes: PrayTimes? = null
+    var prayTimes: PrayTimes? = null
         set(prayTimes) {
             field = prayTimes
             for (i in timeNames.indices) notifyItemChanged(i)
@@ -51,12 +51,9 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
             binding.root.layoutParams = if (!isExpanded && timeName !in listOf(
                     R.string.fajr, R.string.dhuhr, R.string.maghrib
                 )
-            )
-                emptyLayout
-            else
-                wrapContent
+            ) emptyLayout else wrapContent
             binding.name.setText(timeName)
-            binding.time.text = mPrayTimes?.run {
+            binding.time.text = prayTimes?.run {
                 getFormattedClock(
                     when (timeName) {
                         R.string.imsak -> imsakClock

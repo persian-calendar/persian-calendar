@@ -63,21 +63,21 @@ class CalendarFragment : DaggerFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency // same object from MainActivity
 
-    private val mCalendarFragmentModel by viewModels<CalendarFragmentModel>()
-    private val mCalendar = Calendar.getInstance()
-    private var mCoordinate: Coordinate? = null
+    private val calendarFragmentModel by viewModels<CalendarFragmentModel>()
+    private val calendar = Calendar.getInstance()
+    private var coordinate: Coordinate? = null
     var viewPagerPosition: Int = 0
         private set
-    private lateinit var mMainBinding: FragmentCalendarBinding
-    private lateinit var mCalendarsView: CalendarsView
-    private lateinit var mOwghatBinding: OwghatTabContentBinding
-    private lateinit var mEventsBinding: EventsTabContentBinding
-    private var mLastSelectedJdn: Long = -1
-    private var mSearchView: SearchView? = null
+    private lateinit var mainBinding: FragmentCalendarBinding
+    private lateinit var calendarsView: CalendarsView
+    private lateinit var owghatBinding: OwghatTabContentBinding
+    private lateinit var eventsBinding: EventsTabContentBinding
+    private var lastSelectedJdn: Long = -1
+    private var searchView: SearchView? = null
 
     fun onDaySelected(position: Int) {
         sendUpdateCommandToMonthFragments(position, false)
-        if (position != 0) mMainBinding.todayButton.show()
+        if (position != 0) mainBinding.todayButton.show()
     }
 
     class TabFragment : Fragment() {
@@ -117,36 +117,36 @@ class CalendarFragment : DaggerFragment() {
 
         setHasOptionsMenu(true)
 
-        mMainBinding = FragmentCalendarBinding.inflate(inflater, container, false)
+        mainBinding = FragmentCalendarBinding.inflate(inflater, container, false)
         viewPagerPosition = 0
 
         val titles = ArrayList<String>()
         val tabs = ArrayList<View>()
 
         titles.add(getString(R.string.calendar))
-        mCalendarsView = CalendarsView(context).apply {
+        calendarsView = CalendarsView(context).apply {
             showHideTodayButtonCallback = fun (show) {
-                if (show) mMainBinding.todayButton.show()
-                else mMainBinding.todayButton.hide()
+                if (show) mainBinding.todayButton.show()
+                else mainBinding.todayButton.hide()
             }
         }
-        mMainBinding.todayButton.setOnClickListener { bringTodayYearMonth() }
-        tabs.add(mCalendarsView)
+        mainBinding.todayButton.setOnClickListener { bringTodayYearMonth() }
+        tabs.add(calendarsView)
 
         titles.add(getString(R.string.events))
-        mEventsBinding = EventsTabContentBinding.inflate(inflater, container, false)
-        tabs.add(mEventsBinding.root)
+        eventsBinding = EventsTabContentBinding.inflate(inflater, container, false)
+        tabs.add(eventsBinding.root)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            mEventsBinding.eventsContent.layoutTransition = LayoutTransition().apply {
+            eventsBinding.eventsContent.layoutTransition = LayoutTransition().apply {
                 enableTransitionType(LayoutTransition.CHANGING)
             }
             // Don't do the same for others tabs, it is problematic
         }
 
-        mCoordinate = getCoordinate(context)?.apply {
+        coordinate = getCoordinate(context)?.apply {
             titles.add(getString(R.string.owghat))
-            mOwghatBinding = OwghatTabContentBinding.inflate(inflater, container, false).apply {
+            owghatBinding = OwghatTabContentBinding.inflate(inflater, container, false).apply {
                 tabs.add(root)
                 root.setOnClickListener { onOwghatClick() }
                 cityName.run {
@@ -169,7 +169,7 @@ class CalendarFragment : DaggerFragment() {
             }
         }
 
-        mMainBinding.run {
+        mainBinding.run {
             tabsViewPager.adapter = object : FragmentStateAdapter(context) {
                 override fun getItemCount() = tabs.size
                 override fun createFragment(position: Int) =
@@ -195,23 +195,23 @@ class CalendarFragment : DaggerFragment() {
             formatNumber(today.year)
         )
 
-        mCalendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
-            mLastSelectedJdn = jdn
-            mCalendarsView.showCalendars(
-                mLastSelectedJdn,
+        calendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
+            lastSelectedJdn = jdn
+            calendarsView.showCalendars(
+                lastSelectedJdn,
                 mainCalendar,
                 getEnabledCalendarTypes()
             )
-            val isToday = getTodayJdn() == mLastSelectedJdn
+            val isToday = getTodayJdn() == lastSelectedJdn
             setOwghat(jdn, isToday)
             showEvent(jdn, isToday)
         })
 
-        return mMainBinding.root
+        return mainBinding.root
     }
 
-    fun changeMonth(position: Int) = mMainBinding.calendarViewPager.setCurrentItem(
-        mMainBinding.calendarViewPager.currentItem + position,
+    fun changeMonth(position: Int) = mainBinding.calendarViewPager.setCurrentItem(
+        mainBinding.calendarViewPager.currentItem + position,
         true
     )
 
@@ -251,7 +251,7 @@ class CalendarFragment : DaggerFragment() {
             } catch (e: Exception) {
                 e.printStackTrace()
                 Snackbar.make(
-                    mMainBinding.root,
+                    mainBinding.root,
                     R.string.device_calendar_does_not_support,
                     Snackbar.LENGTH_SHORT
                 ).show()
@@ -265,7 +265,7 @@ class CalendarFragment : DaggerFragment() {
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (isShowDeviceCalendarEvents) {
                 sendUpdateCommandToMonthFragments(
-                    calculateViewPagerPositionFromJdn(mLastSelectedJdn),
+                    calculateViewPagerPositionFromJdn(lastSelectedJdn),
                     true
                 )
             } else {
@@ -285,7 +285,7 @@ class CalendarFragment : DaggerFragment() {
 
     private fun sendUpdateCommandToMonthFragments(toWhich: Int, addOrModify: Boolean) =
         ViewModelProviders.of(this)[CalendarFragmentModel::class.java].monthFragmentsUpdate(
-            CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, mLastSelectedJdn)
+            CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, lastSelectedJdn)
         )
 
     private fun formatClickableEventTitle(event: DeviceCalendarEvent): SpannableString {
@@ -344,7 +344,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     private fun showEvent(jdn: Long, isToday: Boolean) {
-        mEventsBinding.run {
+        eventsBinding.run {
             shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
             val events = getEvents(
                 jdn,
@@ -444,22 +444,22 @@ class CalendarFragment : DaggerFragment() {
     }
 
     private fun setOwghat(jdn: Long, isToday: Boolean) {
-        if (mCoordinate == null) return
+        if (coordinate == null) return
 
         val civilDate = CivilDate(jdn)
-        mCalendar.set(civilDate.year, civilDate.month - 1, civilDate.dayOfMonth)
-        val date = mCalendar.time
+        calendar.set(civilDate.year, civilDate.month - 1, civilDate.dayOfMonth)
+        val date = calendar.time
 
         val prayTimes = PrayTimesCalculator.calculate(
             getCalculationMethod(),
-            date, mCoordinate
+            date, coordinate
         )
-        (mOwghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
-            mPrayTimes = prayTimes
+        (owghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
+            this.prayTimes = prayTimes
         }
-        mOwghatBinding.sunView.run {
+        owghatBinding.sunView.run {
             setSunriseSunsetMoonPhase(prayTimes, try {
-                mCoordinate?.run {
+                coordinate?.run {
                     SunMoonPosition(
                         getTodayJdn().toDouble(), latitude,
                         longitude, 0.0, 0.0
@@ -470,15 +470,15 @@ class CalendarFragment : DaggerFragment() {
                 1.0
             })
             visibility = if (isToday) View.VISIBLE else View.GONE
-            if (isToday && mMainBinding.tabsViewPager.currentItem == OWGHAT_TAB)
+            if (isToday && mainBinding.tabsViewPager.currentItem == OWGHAT_TAB)
                 startAnimate(immediate = false)
         }
     }
 
     private fun onOwghatClick() {
-        (mOwghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
+        (owghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
             isExpanded = !isExpanded
-            mOwghatBinding.moreOwghat.setImageResource(
+            owghatBinding.moreOwghat.setImageResource(
                 if (isExpanded)
                     R.drawable.ic_keyboard_arrow_up
                 else
@@ -486,37 +486,37 @@ class CalendarFragment : DaggerFragment() {
             )
         }
 
-        if (mLastSelectedJdn == -1L)
-            mLastSelectedJdn = getTodayJdn()
+        if (lastSelectedJdn == -1L)
+            lastSelectedJdn = getTodayJdn()
     }
 
     private fun bringTodayYearMonth() {
-        mLastSelectedJdn = -1
+        lastSelectedJdn = -1
         sendUpdateCommandToMonthFragments(BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY, false)
 
-        CalendarAdapter.gotoOffset(mMainBinding.calendarViewPager, 0)
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0)
 
-        mCalendarFragmentModel.selectDay(getTodayJdn())
+        calendarFragmentModel.selectDay(getTodayJdn())
     }
 
     fun afterShiftWorkChange() = context?.run {
         updateStoredPreference(this)
-        sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(mLastSelectedJdn), true)
+        sendUpdateCommandToMonthFragments(calculateViewPagerPositionFromJdn(lastSelectedJdn), true)
     }
 
     fun bringDate(jdn: Long) {
         viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
-        CalendarAdapter.gotoOffset(mMainBinding.calendarViewPager, viewPagerPosition)
+        CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition)
 
-        mCalendarFragmentModel.selectDay(jdn)
-        mLastSelectedJdn = jdn
+        calendarFragmentModel.selectDay(jdn)
+        lastSelectedJdn = jdn
         sendUpdateCommandToMonthFragments(viewPagerPosition, false)
 
         if (isTalkBackEnabled) {
             val todayJdn = getTodayJdn()
             if (jdn != todayJdn) {
                 Snackbar.make(
-                    mMainBinding.root,
+                    mainBinding.root,
                     getA11yDaySummary(
                         mainActivityDependency.mainActivity, jdn,
                         false, emptyMap(), withZodiac = true,
@@ -540,7 +540,7 @@ class CalendarFragment : DaggerFragment() {
         menu.clear()
         inflater.inflate(R.menu.calendar_menu_buttons, menu)
 
-        mSearchView = (menu.findItem(R.id.search).actionView as? SearchView?)?.apply {
+        searchView = (menu.findItem(R.id.search).actionView as? SearchView?)?.apply {
             setOnSearchClickListener {
                 // Remove search edit view below bar
                 findViewById<View?>(androidx.appcompat.R.id.search_plate)?.setBackgroundColor(
@@ -581,24 +581,24 @@ class CalendarFragment : DaggerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.go_to -> SelectDayDialog.newInstance(mLastSelectedJdn).show(
+            R.id.go_to -> SelectDayDialog.newInstance(lastSelectedJdn).show(
                 childFragmentManager,
                 SelectDayDialog::class.java.name
             )
             R.id.add_event -> {
-                if (mLastSelectedJdn == -1L)
-                    mLastSelectedJdn = getTodayJdn()
+                if (lastSelectedJdn == -1L)
+                    lastSelectedJdn = getTodayJdn()
 
-                addEventOnCalendar(mLastSelectedJdn)
+                addEventOnCalendar(lastSelectedJdn)
             }
-            R.id.shift_work -> ShiftWorkDialog.newInstance(mLastSelectedJdn).show(
+            R.id.shift_work -> ShiftWorkDialog.newInstance(lastSelectedJdn).show(
                 childFragmentManager,
                 ShiftWorkDialog::class.java.name
             )
             R.id.month_overview -> {
                 val visibleMonthJdn = MonthFragment.getDateFromOffset(
                     mainCalendar,
-                    CalendarAdapter.applyOffset(mMainBinding.calendarViewPager.currentItem)
+                    CalendarAdapter.applyOffset(mainBinding.calendarViewPager.currentItem)
                 ).toJdn()
                 MonthOverviewDialog.newInstance(visibleMonthJdn).show(
                     childFragmentManager,
@@ -612,7 +612,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     fun closeSearch(): Boolean {
-        mSearchView?.run {
+        searchView?.run {
             if (!isIconified) {
                 onActionViewCollapsed()
                 return true

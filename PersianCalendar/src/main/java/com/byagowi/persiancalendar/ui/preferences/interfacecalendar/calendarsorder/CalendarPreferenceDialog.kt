@@ -25,7 +25,7 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency
 
-    private var mItemTouchHelper: ItemTouchHelper? = null
+    private var itemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val values = ArrayList<String>()
@@ -48,7 +48,7 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
         }
 
         val callback = SimpleItemTouchHelperCallback(adapter)
-        mItemTouchHelper = ItemTouchHelper(callback).apply {
+        itemTouchHelper = ItemTouchHelper(callback).apply {
             attachToRecyclerView(recyclerView)
         }
 
@@ -72,6 +72,6 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
     }
 
     fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-        mItemTouchHelper?.startDrag(viewHolder)
+        itemTouchHelper?.startDrag(viewHolder)
     }
 }
