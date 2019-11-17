@@ -157,7 +157,6 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
 
         internal inner class ViewHolder(private val binding: ShiftWorkItemBinding) :
             RecyclerView.ViewHolder(binding.root) {
-            private var pos: Int = 0
 
             init {
                 val context = binding.root.context
@@ -186,7 +185,9 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                             parent: AdapterView<*>, view: View, position: Int, id: Long
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == pos) ShiftWorkRecord(text.toString(), rows[pos].length)
+                                if (i == adapterPosition) ShiftWorkRecord(
+                                    text.toString(), rows[adapterPosition].length
+                                )
                                 else x
                             }
                             updateShiftWorkResult()
@@ -205,7 +206,10 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                             s: CharSequence?, start: Int, before: Int, count: Int
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == pos) ShiftWorkRecord(text.toString(), rows[pos].length)
+                                if (i == adapterPosition) ShiftWorkRecord(
+                                    text.toString(),
+                                    rows[adapterPosition].length
+                                )
                                 else x
                             }
                             updateShiftWorkResult()
@@ -228,7 +232,7 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                             parent: AdapterView<*>, view: View, position: Int, id: Long
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == pos) ShiftWorkRecord(x.type, position)
+                                if (i == adapterPosition) ShiftWorkRecord(x.type, position)
                                 else x
                             }
                             updateShiftWorkResult()
@@ -243,14 +247,13 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
             }
 
             fun remove() {
-                rows = rows.filterIndexed { i, _ -> i != pos }
+                rows = rows.filterIndexed { i, _ -> i != adapterPosition }
                 notifyDataSetChanged()
                 updateShiftWorkResult()
             }
 
             fun bind(position: Int) = if (position < rows.size) {
                 val shiftWorkRecord = rows[position]
-                pos = position
                 binding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
                 binding.lengthSpinner.setSelection(shiftWorkRecord.length)
                 binding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))

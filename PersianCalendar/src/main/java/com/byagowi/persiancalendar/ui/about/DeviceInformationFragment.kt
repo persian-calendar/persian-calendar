@@ -289,14 +289,12 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
 
     inner class ViewHolder(private val mBinding: DeviceInfoRowBinding) :
         RecyclerView.ViewHolder(mBinding.root), View.OnClickListener {
-        private var mPosition = 0
 
         init {
             mBinding.root.setOnClickListener(this)
         }
 
         fun bind(position: Int) {
-            mPosition = position
             with(deviceInfoItemsList[position]) {
                 mBinding.title.text = title
                 mBinding.content.text = content
@@ -305,10 +303,9 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
             mBinding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        override fun onClick(v: View?) {
-            deviceInfoItemsList[mPosition].apply {
-                copyToClipboard(rootView, title, content)
-            }
-        }
+        override fun onClick(v: View?) = copyToClipboard(
+            rootView,
+            deviceInfoItemsList[adapterPosition].title, deviceInfoItemsList[adapterPosition].content
+        )
     }
 }
