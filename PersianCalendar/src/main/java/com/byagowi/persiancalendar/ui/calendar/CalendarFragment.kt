@@ -125,7 +125,7 @@ class CalendarFragment : DaggerFragment() {
 
         titles.add(getString(R.string.calendar))
         mCalendarsView = CalendarsView(context).apply {
-            setOnShowHideTodayButton { show ->
+            showHideTodayButtonCallback = fun (show) {
                 if (show) mMainBinding.todayButton.show()
                 else mMainBinding.todayButton.hide()
             }

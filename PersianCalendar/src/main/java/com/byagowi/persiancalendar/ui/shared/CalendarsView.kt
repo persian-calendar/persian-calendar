@@ -18,8 +18,7 @@ import kotlin.math.abs
 class CalendarsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
 
-    private var mCalendarsViewExpandListener: OnCalendarsViewExpandListener? = null
-    private var mOnShowHideTodayButton: OnShowHideTodayButton? = null
+    var showHideTodayButtonCallback: (Boolean) -> Unit = fun(_) {}
 
     private val mCalendarItemAdapter = CalendarItemAdapter(context)
     private val mBinding: CalendarsViewBinding =
@@ -36,12 +35,6 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         mBinding.moreCalendar.visibility = View.GONE
     }
 
-    fun setOnShowHideTodayButton(listener: (Boolean) -> Unit) {
-        mOnShowHideTodayButton = object : OnShowHideTodayButton {
-            override fun onShowHideTodayButton(show: Boolean) = listener(show)
-        }
-    }
-
     fun expand(expanded: Boolean) {
         mCalendarItemAdapter.isExpanded = expanded
 
@@ -52,8 +45,6 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 R.drawable.ic_keyboard_arrow_down
         )
         mBinding.extraInformationContainer.visibility = if (expanded) View.VISIBLE else View.GONE
-
-        mCalendarsViewExpandListener?.onCalendarsViewExpand()
     }
 
     fun showCalendars(
@@ -79,10 +70,10 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                     context.getString(R.string.iran_time)
                 )
             }
-            mOnShowHideTodayButton?.onShowHideTodayButton(false)
+            showHideTodayButtonCallback(false)
             mBinding.diffDate.visibility = View.GONE
         } else {
-            mOnShowHideTodayButton?.onShowHideTodayButton(true)
+            showHideTodayButtonCallback(true)
             mBinding.diffDate.visibility = View.VISIBLE
 
             val civilBase = CivilDate(2000, 1, 1)
@@ -158,13 +149,5 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             diffDays == 0L, emptyMap(),
             withZodiac = true, withOtherCalendars = true, withTitle = true
         )
-    }
-
-    interface OnShowHideTodayButton {
-        fun onShowHideTodayButton(show: Boolean)
-    }
-
-    interface OnCalendarsViewExpandListener {
-        fun onCalendarsViewExpand()
     }
 }

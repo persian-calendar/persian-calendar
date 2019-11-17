@@ -31,7 +31,7 @@ class ConverterFragment : DaggerFragment() {
         return FragmentConverterBinding.inflate(inflater, container, false).apply {
             calendarsView.expand(true)
             calendarsView.hideMoreIcon()
-            calendarsView.setOnShowHideTodayButton { show ->
+            calendarsView.showHideTodayButtonCallback = fun (show) {
                 if (show) todayButton.show() else todayButton.hide()
             }
 
