@@ -69,24 +69,14 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         get() = (binding.calendarTypeSpinner.selectedItem as CalendarTypeItem).type
 
     fun setDayJdnOnView(jdn: Long) {
-        var jdn = jdn
-        this.jdn = jdn
-
-        if (jdn == -1L) jdn = getTodayJdn()
-
-        val date = getDateFromJdnOfCalendar(selectedCalendarType, jdn)
-
-        // years spinner init.
-        val YEARS_RANGE = 100
+        this.jdn = if (jdn == -1L) getTodayJdn() else jdn
+        val date = getDateFromJdnOfCalendar(selectedCalendarType, this.jdn)
         binding.yearPicker.apply {
-            minValue = date.year - YEARS_RANGE
-            maxValue = date.year + YEARS_RANGE
+            minValue = date.year - 100
+            maxValue = date.year + 100
             value = date.year
             setFormatter { formatNumber(it) }
         }
-        //
-
-        // month spinner init
         binding.monthPicker.apply {
             minValue = 1
             maxValue = 12
@@ -94,15 +84,12 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             val months = monthsNamesOfCalendar(date)
             setFormatter { months[it - 1] + " / " + formatNumber(it) }
         }
-        //
-
-        // days spinner init
         binding.dayPicker.apply {
             minValue = 1
             maxValue = 31
             value = date.dayOfMonth
             setFormatter { formatNumber(it) }
         }
-        //
+        selectedDayListener(jdn)
     }
 }
