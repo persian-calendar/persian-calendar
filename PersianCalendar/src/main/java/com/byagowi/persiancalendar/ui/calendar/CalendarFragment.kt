@@ -81,23 +81,28 @@ class CalendarFragment : DaggerFragment() {
     }
 
     class TabFragment : Fragment() {
-        @get:JvmName("getView_")
-        var view: View? = null // Don't turn it to lateinit till more investigations
+        internal var view: View? = null // It really can be null, should refactored however
+            private set
         private var position = 0
 
         override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?, savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
         ): View? = view
 
         override fun onResume() {
             super.onResume()
             view?.also {
-                (it.findViewById<View?>(R.id.sunView) as? SunView?)?.startAnimate(immediate = false)
+                (it.findViewById<View?>(R.id.sunView) as? SunView?)?.startAnimate()
 
-                PreferenceManager.getDefaultSharedPreferences(it.context)
-                    .edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+                PreferenceManager.getDefaultSharedPreferences(it.context).edit {
+                    putInt(LAST_CHOSEN_TAB_KEY, position)
+                }
             }
+        }
+
+        override fun onPause() {
+            (view?.findViewById<View?>(R.id.sunView) as? SunView?)?.clear()
+            super.onPause()
         }
 
         companion object {
@@ -125,7 +130,7 @@ class CalendarFragment : DaggerFragment() {
 
         titles.add(getString(R.string.calendar))
         calendarsView = CalendarsView(context).apply {
-            showHideTodayButtonCallback = fun (show) {
+            showHideTodayButtonCallback = fun(show) {
                 if (show) mainBinding.todayButton.show()
                 else mainBinding.todayButton.hide()
             }
@@ -211,8 +216,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     fun changeMonth(position: Int) = mainBinding.calendarViewPager.setCurrentItem(
-        mainBinding.calendarViewPager.currentItem + position,
-        true
+        mainBinding.calendarViewPager.currentItem + position, true
     )
 
     fun addEventOnCalendar(jdn: Long) {
@@ -225,9 +229,7 @@ class CalendarFragment : DaggerFragment() {
                 activity,
                 Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            askForCalendarPermission(activity)
-        } else {
+        ) askForCalendarPermission(activity) else {
             try {
                 startActivityForResult(
                     Intent(Intent.ACTION_INSERT)
@@ -273,9 +275,7 @@ class CalendarFragment : DaggerFragment() {
                         activity,
                         Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    askForCalendarPermission(activity)
-                } else {
+                ) askForCalendarPermission(activity) else {
                     toggleShowDeviceCalendarOnPreference(activity, true)
                     activity.restartActivity()
                 }
@@ -288,12 +288,12 @@ class CalendarFragment : DaggerFragment() {
             CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, lastSelectedJdn)
         )
 
-    private fun formatClickableEventTitle(event: DeviceCalendarEvent): SpannableString {
-        val title = formatDeviceCalendarEventTitle(event)
-        return SpannableString(title).apply {
-            setSpan(object : ClickableSpan() {
-                override fun onClick(textView: View) {
-                    try {
+    private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = dayEvents
+        .filterIsInstance<DeviceCalendarEvent>()
+        .map { event ->
+            SpannableString(formatDeviceCalendarEventTitle(event)).apply {
+                setSpan(object : ClickableSpan() {
+                    override fun onClick(textView: View) = try {
                         startActivityForResult(
                             Intent(Intent.ACTION_VIEW)
                                 .setData(
@@ -311,37 +311,26 @@ class CalendarFragment : DaggerFragment() {
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
-                }
 
-                override fun updateDrawState(ds: TextPaint) {
-                    super.updateDrawState(ds)
-                    if (event.color.isNotEmpty()) {
-                        try {
-                            ds.color = event.color.toInt()
-                        } catch (e: Exception) {
-                            e.printStackTrace()
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        if (event.color.isNotEmpty()) {
+                            try {
+                                ds.color = event.color.toInt()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
                         }
                     }
-                }
-            }, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
         }
-    }
-
-    private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>): SpannableStringBuilder {
-        val titles = SpannableStringBuilder()
-        var first = true
-
-        dayEvents.filterIsInstance<DeviceCalendarEvent>().forEach {
-            if (first)
-                first = false
-            else
-                titles.append("\n")
-
-            titles.append(formatClickableEventTitle(it))
+        .foldIndexed(SpannableStringBuilder()) { i, result, x ->
+            result.apply {
+                if (i != 0) append("\n")
+                append(x)
+            }
         }
-
-        return titles
-    }
 
     private fun showEvent(jdn: Long, isToday: Boolean) {
         eventsBinding.run {
@@ -433,7 +422,6 @@ class CalendarFragment : DaggerFragment() {
             if (messageToShow.isNotEmpty()) {
                 eventMessage.text = messageToShow
                 eventMessage.movementMethod = LinkMovementMethod.getInstance()
-
                 eventMessage.visibility = View.VISIBLE
             }
 
@@ -451,8 +439,7 @@ class CalendarFragment : DaggerFragment() {
         val date = calendar.time
 
         val prayTimes = PrayTimesCalculator.calculate(
-            getCalculationMethod(),
-            date, coordinate
+            getCalculationMethod(), date, coordinate
         )
         (owghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
             this.prayTimes = prayTimes
@@ -470,8 +457,7 @@ class CalendarFragment : DaggerFragment() {
                 1.0
             })
             visibility = if (isToday) View.VISIBLE else View.GONE
-            if (isToday && mainBinding.tabsViewPager.currentItem == OWGHAT_TAB)
-                startAnimate(immediate = false)
+            if (isToday && mainBinding.tabsViewPager.currentItem == OWGHAT_TAB) startAnimate()
         }
     }
 
@@ -479,15 +465,12 @@ class CalendarFragment : DaggerFragment() {
         (owghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
             isExpanded = !isExpanded
             owghatBinding.moreOwghat.setImageResource(
-                if (isExpanded)
-                    R.drawable.ic_keyboard_arrow_up
-                else
-                    R.drawable.ic_keyboard_arrow_down
+                if (isExpanded) R.drawable.ic_keyboard_arrow_up
+                else R.drawable.ic_keyboard_arrow_down
             )
         }
 
-        if (lastSelectedJdn == -1L)
-            lastSelectedJdn = getTodayJdn()
+        if (lastSelectedJdn == -1L) lastSelectedJdn = getTodayJdn()
     }
 
     private fun bringTodayYearMonth() {
@@ -601,8 +584,7 @@ class CalendarFragment : DaggerFragment() {
                     CalendarAdapter.applyOffset(mainBinding.calendarViewPager.currentItem)
                 ).toJdn()
                 MonthOverviewDialog.newInstance(visibleMonthJdn).show(
-                    childFragmentManager,
-                    MonthOverviewDialog::class.java.name
+                    childFragmentManager, MonthOverviewDialog::class.java.name
                 )
             }
             else -> {
@@ -611,13 +593,10 @@ class CalendarFragment : DaggerFragment() {
         return true
     }
 
-    fun closeSearch(): Boolean {
-        searchView?.run {
-            if (!isIconified) {
-                onActionViewCollapsed()
-                return true
-            }
-        }
-        return false
-    }
+    fun closeSearch() = searchView?.run {
+        if (!isIconified) {
+            onActionViewCollapsed()
+            return true
+        } else false
+    } ?: false
 }

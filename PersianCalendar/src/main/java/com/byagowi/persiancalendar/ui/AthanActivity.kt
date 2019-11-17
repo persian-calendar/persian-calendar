@@ -18,8 +18,6 @@ import com.byagowi.persiancalendar.utils.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-private val TAG = AthanActivity::class.java.name
-
 class AthanActivity : AppCompatActivity() {
 
     private val ascendingVolumeStep = 6
@@ -179,9 +177,7 @@ class AthanActivity : AppCompatActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (!hasFocus) {
-            stop()
-        }
+        if (!hasFocus) stop()
     }
 
     override fun onBackPressed() = stop()
@@ -192,12 +188,11 @@ class AthanActivity : AppCompatActivity() {
 
         try {
             getSystemService<TelephonyManager>()?.listen(
-                phoneStateListener,
-                PhoneStateListener.LISTEN_NONE
+                phoneStateListener, PhoneStateListener.LISTEN_NONE
             )
             phoneStateListener = null
         } catch (e: RuntimeException) {
-            Log.e(TAG, "TelephonyManager handling fail", e)
+            Log.e("Athan", "TelephonyManager handling fail", e)
         }
 
         ringtone?.stop()

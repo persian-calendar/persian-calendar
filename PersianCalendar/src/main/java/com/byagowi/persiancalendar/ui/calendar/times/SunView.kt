@@ -32,10 +32,15 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     private val FULL_DAY = Clock(24, 0).toInt().toFloat()
     private val HALF_DAY = Clock(12, 0).toInt().toFloat()
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var sunRaisePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply { typeface = getAppFont(context) }
+    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
+    private var sunRaisePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 7f
+        pathEffect = DashPathEffect(floatArrayOf(3f, 7f), 0f) /* Sun rays effect */
+    }
+    private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL_AND_STROKE }
     @ColorInt
     private var horizonColor: Int = 0
     @ColorInt
@@ -164,18 +169,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             }
         }
 
-        paint.typeface = getAppFont(context)
-
         sunPaint.color = sunColor
-        sunPaint.style = Paint.Style.FILL
-
         sunRaisePaint.color = sunColor
-        sunRaisePaint.style = Paint.Style.STROKE
-        sunRaisePaint.strokeWidth = 7f
-        val sunRaysEffects = DashPathEffect(floatArrayOf(3f, 7f), 0f)
-        sunRaisePaint.pathEffect = sunRaysEffects
-
-        dayPaint.style = Paint.Style.FILL_AND_STROKE
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
@@ -191,8 +186,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             segmentByPixel = 2 * PI / width
         }
 
-        for (x in 0..width) {
-            curvePath.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * 0.9f).toInt()))
+        (0..width).forEach {
+            curvePath.lineTo(it.toFloat(), getY(it, segmentByPixel, (height * 0.9f).toInt()))
         }
 
         nightPath = Path(curvePath)
@@ -203,9 +198,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
 
     // https://stackoverflow.com/a/34763668
-    private fun dpToPx(dp: Int): Int {
-        return (dp * Resources.getSystem().displayMetrics.density).toInt()
-    }
+    private fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -356,7 +349,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         postInvalidate()
     }
 
-    fun startAnimate(immediate: Boolean) {
+    fun startAnimate(immediate: Boolean = false) {
         val context = context
         if (prayTimes == null || context == null)
             return

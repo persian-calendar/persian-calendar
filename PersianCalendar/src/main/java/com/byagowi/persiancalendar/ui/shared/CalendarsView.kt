@@ -92,55 +92,53 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             binding.diffDate.text = text
         }
 
-        run {
-            val mainDate = getDateFromJdnOfCalendar(chosenCalendarType, jdn)
-            val startOfYear = getDateOfCalendar(
-                chosenCalendarType,
-                mainDate.year, 1, 1
-            )
-            val startOfNextYear = getDateOfCalendar(
-                chosenCalendarType, mainDate.year + 1, 1, 1
-            )
-            val startOfYearJdn = startOfYear.toJdn()
-            val endOfYearJdn = startOfNextYear.toJdn() - 1
-            val currentWeek = calculateWeekOfYear(jdn, startOfYearJdn)
-            val weeksCount = calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
+        val mainDate = getDateFromJdnOfCalendar(chosenCalendarType, jdn)
+        val startOfYear = getDateOfCalendar(
+            chosenCalendarType,
+            mainDate.year, 1, 1
+        )
+        val startOfNextYear = getDateOfCalendar(
+            chosenCalendarType, mainDate.year + 1, 1, 1
+        )
+        val startOfYearJdn = startOfYear.toJdn()
+        val endOfYearJdn = startOfNextYear.toJdn() - 1
+        val currentWeek = calculateWeekOfYear(jdn, startOfYearJdn)
+        val weeksCount = calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
 
-            val startOfYearText = String.format(
-                context.getString(R.string.start_of_year_diff),
-                formatNumber((jdn - startOfYearJdn).toInt()),
-                formatNumber(currentWeek),
-                formatNumber(mainDate.month)
-            )
-            val endOfYearText = String.format(
-                context.getString(R.string.end_of_year_diff),
-                formatNumber((endOfYearJdn - jdn).toInt()),
-                formatNumber(weeksCount - currentWeek),
-                formatNumber(12 - mainDate.month)
-            )
-            binding.startAndEndOfYearDiff.text =
-                String.format("%s\n%s", startOfYearText, endOfYearText)
+        val startOfYearText = String.format(
+            context.getString(R.string.start_of_year_diff),
+            formatNumber((jdn - startOfYearJdn).toInt()),
+            formatNumber(currentWeek),
+            formatNumber(mainDate.month)
+        )
+        val endOfYearText = String.format(
+            context.getString(R.string.end_of_year_diff),
+            formatNumber((endOfYearJdn - jdn).toInt()),
+            formatNumber(weeksCount - currentWeek),
+            formatNumber(12 - mainDate.month)
+        )
+        binding.startAndEndOfYearDiff.text =
+            String.format("%s\n%s", startOfYearText, endOfYearText)
 
-            var equinox = ""
-            if (mainCalendar == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
-                if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
-                    val addition = if (mainDate.month == 12) 1 else 0
-                    val springEquinox = getSpringEquinox(mainDate.toJdn())
-                    equinox = String.format(
-                        context.getString(R.string.spring_equinox),
-                        formatNumber(mainDate.year + addition),
-                        getFormattedClock(
-                            Clock(
-                                springEquinox[Calendar.HOUR_OF_DAY],
-                                springEquinox[Calendar.MINUTE]
-                            ), true
-                        )
+        var equinox = ""
+        if (mainCalendar == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
+            if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
+                val addition = if (mainDate.month == 12) 1 else 0
+                val springEquinox = getSpringEquinox(mainDate.toJdn())
+                equinox = String.format(
+                    context.getString(R.string.spring_equinox),
+                    formatNumber(mainDate.year + addition),
+                    getFormattedClock(
+                        Clock(
+                            springEquinox[Calendar.HOUR_OF_DAY],
+                            springEquinox[Calendar.MINUTE]
+                        ), true
                     )
-                }
+                )
             }
-            binding.equinox.text = equinox
-            binding.equinox.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
         }
+        binding.equinox.text = equinox
+        binding.equinox.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
 
         binding.root.contentDescription = getA11yDaySummary(
             context, jdn,

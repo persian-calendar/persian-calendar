@@ -174,7 +174,7 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                     // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
                     val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
                     val versions = IntArray(2)
-                    EGL14.eglInitialize(display, versions, 0, versions, 1);
+                    EGL14.eglInitialize(display, versions, 0, versions, 1)
                     val configAttr = intArrayOf(
                         EGL14.EGL_COLOR_BUFFER_TYPE, EGL14.EGL_RGB_BUFFER,
                         EGL14.EGL_LEVEL, 0, EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,

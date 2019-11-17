@@ -31,13 +31,13 @@ class ConverterFragment : DaggerFragment() {
         return FragmentConverterBinding.inflate(inflater, container, false).apply {
             calendarsView.expand(true)
             calendarsView.hideMoreIcon()
-            calendarsView.showHideTodayButtonCallback = fun (show) {
+            calendarsView.showHideTodayButtonCallback = fun(show) {
                 if (show) todayButton.show() else todayButton.hide()
             }
 
             todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(getTodayJdn()) }
 
-            dayPickerView.selectedDayListener = fun (jdn) {
+            dayPickerView.selectedDayListener = fun(jdn) {
                 if (jdn == -1L) {
                     calendarsView.visibility = View.GONE
                 } else {

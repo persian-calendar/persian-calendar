@@ -22,8 +22,6 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.math.abs
 
-private const val ALPHA_FULL = 1.0f
-
 class SimpleItemTouchHelperCallback(private val adapter: RecyclerListAdapter) :
     ItemTouchHelper.Callback() {
 
@@ -92,5 +90,9 @@ class SimpleItemTouchHelperCallback(private val adapter: RecyclerListAdapter) :
 
         // Tell the view holder it's time to restore the idle state
         (viewHolder as? RecyclerListAdapter.ItemViewHolder?)?.onItemCleared()
+    }
+
+    companion object {
+        const val ALPHA_FULL = 1.0f
     }
 }
