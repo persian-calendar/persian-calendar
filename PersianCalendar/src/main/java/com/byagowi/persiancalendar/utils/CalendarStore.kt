@@ -25,3 +25,5 @@ fun <T : AbstractDate> BaseStore<CalendarEvent<T>>.getEvents(date: T) = this[dat
             // -1 on year field means it is occurring every year on a specific calendar
             (it.date.year == -1 || date.year == -1 || it.date.year == date.year)
 } ?: emptyList()
+
+fun <T> emptyEventsStore(): BaseStore<T> = emptyMap()

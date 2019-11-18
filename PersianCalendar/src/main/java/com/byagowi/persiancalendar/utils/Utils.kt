@@ -131,11 +131,11 @@ var calendarTypesTitleAbbr = emptyList<String>()
 val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 var allEnabledEvents: List<CalendarEvent<*>> = emptyList()
     private set
-var persianCalendarEvents: PersianCalendarEventsStore = emptyMap()
+var persianCalendarEvents: PersianCalendarEventsStore = emptyEventsStore()
     private set
-var islamicCalendarEvents: IslamicCalendarEventsStore = emptyMap()
+var islamicCalendarEvents: IslamicCalendarEventsStore = emptyEventsStore()
     private set
-var gregorianCalendarEvents: GregorianCalendarEventsStore = emptyMap()
+var gregorianCalendarEvents: GregorianCalendarEventsStore = emptyEventsStore()
     private set
 
 fun loadEvents(context: Context) {

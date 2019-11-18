@@ -142,7 +142,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         binding.root.contentDescription = getA11yDaySummary(
             context, jdn,
-            diffDays == 0L, emptyMap(),
+            diffDays == 0L, emptyEventsStore(),
             withZodiac = true, withOtherCalendars = true, withTitle = true
         )
     }

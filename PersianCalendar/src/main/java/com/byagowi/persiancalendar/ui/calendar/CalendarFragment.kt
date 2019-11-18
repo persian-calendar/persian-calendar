@@ -502,7 +502,7 @@ class CalendarFragment : DaggerFragment() {
                     mainBinding.root,
                     getA11yDaySummary(
                         mainActivityDependency.mainActivity, jdn,
-                        false, emptyMap(), withZodiac = true,
+                        false, emptyEventsStore(), withZodiac = true,
                         withOtherCalendars = true, withTitle = true
                     ),
                     Snackbar.LENGTH_SHORT
