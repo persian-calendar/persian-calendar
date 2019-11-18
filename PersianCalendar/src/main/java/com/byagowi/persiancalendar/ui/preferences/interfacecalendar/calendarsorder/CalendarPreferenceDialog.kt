@@ -35,10 +35,10 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
         updateStoredPreference(mainActivityDependency.mainActivity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
         val orderedCalendarTypes = getOrderedCalendarEntities(mainActivityDependency.mainActivity)
-        for (entity in orderedCalendarTypes) {
-            values.add(entity.type.toString())
-            titles.add(entity.toString())
-            enabled.add(enabledCalendarTypes.contains(entity.type))
+        orderedCalendarTypes.forEach {
+            values.add(it.type.toString())
+            titles.add(it.toString())
+            enabled.add(enabledCalendarTypes.contains(it.type))
         }
         val adapter = RecyclerListAdapter(this, mainActivityDependency, titles, values, enabled)
         val recyclerView = RecyclerView(mainActivityDependency.mainActivity).apply {

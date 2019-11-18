@@ -340,14 +340,7 @@ fun getCityFromPreference(context: Context): CityItem? {
     // cache last query even if no city available under the key, useful in case invalid
     // value is somehow inserted on the preference
     cachedCityKey = key
-
-    for (cityEntity in getAllCities(context, false))
-        if (cityEntity.key == key) {
-            cachedCity = cityEntity
-            return cachedCity
-        }
-
-    cachedCity = null
+    cachedCity = getAllCities(context, false).firstOrNull { it.key == key }
     return cachedCity
 }
 

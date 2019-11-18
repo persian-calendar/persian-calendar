@@ -469,16 +469,8 @@ fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
     ).show()
 }
 
-fun dateStringOfOtherCalendars(jdn: Long, separator: String): String {
-    val result = StringBuilder()
-    var first = true
-    for (type in otherCalendars) {
-        if (!first) result.append(separator)
-        result.append(formatDate(getDateFromJdnOfCalendar(type, jdn)))
-        first = false
-    }
-    return result.toString()
-}
+fun dateStringOfOtherCalendars(jdn: Long, separator: String) =
+    otherCalendars.joinToString(separator) { formatDate(getDateFromJdnOfCalendar(it, jdn)) }
 
 private fun calculateDiffToChangeDate(): Long = Calendar.getInstance().apply {
     set(Calendar.HOUR_OF_DAY, 0)
@@ -522,17 +514,16 @@ fun startEitherServiceOrWorker(context: Context) {
         // workManager.cancelAllWorkByTag(UPDATE_TAG);
         // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
-        var isRunning = false
-        context.getSystemService<ActivityManager>()?.let {
+        val isRunning = context.getSystemService<ActivityManager>()?.let { am ->
             try {
-                for (service in it.getRunningServices(Integer.MAX_VALUE)) {
-                    if (ApplicationService::class.java.name == service.service.className)
-                        isRunning = true
+                am.getRunningServices(Integer.MAX_VALUE).any {
+                    ApplicationService::class.java.name == it.service.className
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e)
+                false
             }
-        }
+        } ?: false
 
         if (!isRunning) {
             try {

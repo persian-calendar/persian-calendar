@@ -21,12 +21,12 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
     var prayTimes: PrayTimes? = null
         set(prayTimes) {
             field = prayTimes
-            for (i in timeNames.indices) notifyItemChanged(i)
+            timeNames.indices.forEach(::notifyItemChanged)
         }
     var isExpanded = false
         set(expanded) {
             field = expanded
-            for (i in timeNames.indices) notifyItemChanged(i)
+            timeNames.indices.forEach(::notifyItemChanged)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(

@@ -57,19 +57,15 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
     private val seasonImage: Int
         @DrawableRes
         get() {
-            var isSouthernHemisphere = false
-            val coordinate = getCoordinate(this)
-            if (coordinate != null && coordinate.latitude < 0) {
-                isSouthernHemisphere = true
-            }
+            var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
 
-            var month = getTodayOfCalendar(CalendarType.SHAMSI).month
-            if (isSouthernHemisphere) month = (month + 6 - 1) % 12 + 1
+            // Southern hemisphere
+            if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
 
-            return when {
-                month < 4 -> R.drawable.spring
-                month < 7 -> R.drawable.summer
-                month < 10 -> R.drawable.fall
+            return when (season) {
+                0 -> R.drawable.spring
+                1 -> R.drawable.summer
+                2 -> R.drawable.fall
                 else -> R.drawable.winter
             }
         }

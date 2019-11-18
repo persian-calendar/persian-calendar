@@ -17,14 +17,14 @@ class CalendarItemAdapter internal constructor(context: Context) :
     internal var isExpanded = false
         set(expanded) {
             field = expanded
-            for (i in calendars.indices) notifyItemChanged(i)
+            calendars.indices.forEach(::notifyItemChanged)
         }
     private var jdn: Long = 0
 
     internal fun setDate(calendars: List<CalendarType>, jdn: Long) {
         this.calendars = calendars
         this.jdn = jdn
-        for (i in calendars.indices) notifyItemChanged(i)
+        calendars.indices.forEach(::notifyItemChanged)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(

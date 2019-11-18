@@ -39,8 +39,8 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
         val deviceEvents = readMonthDeviceEvents(context, baseJdn)
-        for (i in 0 until monthLength) {
-            val jdn = baseJdn + i
+        (0 until monthLength).forEach {
+            val jdn = baseJdn + it
             val events = getEvents(jdn, deviceEvents)
             val holidays = getEventsTitle(
                 events,
