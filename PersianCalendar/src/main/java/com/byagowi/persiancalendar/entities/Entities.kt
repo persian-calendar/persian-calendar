@@ -47,7 +47,7 @@ data class CityItem(
     val countryAr: String, val coordinate: Coordinate
 )
 
-data class DayItem(val isToday: Boolean, val jdn: Long, val dayOfWeek: Int)
+data class DayItem(val jdn: Long, val dayOfWeek: Int, val isToday: Boolean)
 
 data class CalendarTypeItem(val type: CalendarType, private val title: String) {
     override fun toString(): String = title

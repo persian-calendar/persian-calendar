@@ -37,30 +37,24 @@ class MonthFragment : DaggerFragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val fragmentMonthBinding = FragmentMonthBinding.inflate(
-            inflater,
-            container, false
+            inflater, container, false
         )
         val calendarFragment = calendarFragmentDependency.calendarFragment
         val isRTL = isRTL(mainActivityDependency.mainActivity)
         val offset = arguments?.getInt(OFFSET_ARGUMENT) ?: 0
 
         fragmentMonthBinding.next.setImageResource(
-            if (isRTL)
-                R.drawable.ic_keyboard_arrow_left
-            else
-                R.drawable.ic_keyboard_arrow_right
+            if (isRTL) R.drawable.ic_keyboard_arrow_left
+            else R.drawable.ic_keyboard_arrow_right
         )
         fragmentMonthBinding.next.setOnClickListener { calendarFragment.changeMonth(1) }
 
         fragmentMonthBinding.prev.setImageResource(
-            if (isRTL)
-                R.drawable.ic_keyboard_arrow_right
-            else
-                R.drawable.ic_keyboard_arrow_left
+            if (isRTL) R.drawable.ic_keyboard_arrow_right
+            else R.drawable.ic_keyboard_arrow_left
         )
         fragmentMonthBinding.prev.setOnClickListener { calendarFragment.changeMonth(-1) }
 
@@ -72,22 +66,20 @@ class MonthFragment : DaggerFragment() {
         ///////
         ///////
         ///////
-        val mainCalendar = mainCalendar
-        val days = ArrayList<DayItem>()
-
         val date = getDateFromOffset(mainCalendar, offset)
         val baseJdn = date.toJdn()
         val monthLength = getMonthLength(mainCalendar, date.year, date.month)
 
-        var dayOfWeek = getDayOfWeekFromJdn(baseJdn)
+        val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
 
         val todayJdn = getTodayJdn()
-        for (i in 0 until monthLength) {
-            val jdn = baseJdn + i
-            days.add(DayItem(jdn == todayJdn, jdn, dayOfWeek))
-            dayOfWeek++
-            if (dayOfWeek == 7) {
-                dayOfWeek = 0
+        val days: List<DayItem> = ArrayList<DayItem>(31).apply {
+            var dayOfWeek = startingDayOfWeek
+            (0 until monthLength).forEach {
+                val jdn = baseJdn + it
+                add(DayItem(jdn, dayOfWeek = dayOfWeek, isToday = jdn == todayJdn))
+                dayOfWeek++
+                if (dayOfWeek == 7) dayOfWeek = 0
             }
         }
 
@@ -95,8 +87,6 @@ class MonthFragment : DaggerFragment() {
         val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
         val weeksCount =
             1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
-
-        val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
         ///////
         ///////
         ///////
@@ -115,7 +105,7 @@ class MonthFragment : DaggerFragment() {
             offset == 0 && calendarFragment.viewPagerPosition == offset
         ) {
             calendarFragmentModel.isTheFirstTime = false
-            calendarFragmentModel.selectDay(getTodayJdn())
+            calendarFragmentModel.selectDay(todayJdn)
             updateTitle(date)
         }
 
