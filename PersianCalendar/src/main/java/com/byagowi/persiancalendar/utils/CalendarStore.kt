@@ -12,11 +12,11 @@ typealias DeviceCalendarEventsStore = BaseStore<DeviceCalendarEvent>
 
 private fun AbstractDate.entry() = month * 100 + dayOfMonth
 
-fun <T : AbstractDate, T2 : CalendarEvent<T>> List<T2>.toEventsStore(): BaseStore<T2> =
-    HashMap<Int, ArrayList<T2>>().also { result ->
+fun <T : CalendarEvent<out AbstractDate>> List<T>.toEventsStore(): BaseStore<T> =
+    HashMap<Int, ArrayList<T>>().also { result ->
         this.forEach { event ->
             val entry = event.date.entry()
-            (result[entry] ?: ArrayList<T2>().also { result[entry] = it }).add(event)
+            (result[entry] ?: ArrayList<T>().also { result[entry] = it }).add(event)
         }
     }
 
