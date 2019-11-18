@@ -21,9 +21,8 @@ fun <T : CalendarEvent<out AbstractDate>> List<T>.toEventsStore(): BaseStore<T> 
     }
 
 fun <T : AbstractDate> BaseStore<CalendarEvent<T>>.getEvents(date: T) = this[date.entry()]?.filter {
-    it.date.dayOfMonth == date.dayOfMonth && it.date.month == date.month &&
-            // -1 on year field means it is occurring every year on a specific calendar
-            (it.date.year == -1 || date.year == -1 || it.date.year == date.year)
+    // dayOfMonth and month are already checked with #entry() so only checking year equality here
+    it.date.year == date.year || it.date.year == -1 // -1 means it is occurring every year
 } ?: emptyList()
 
 fun <T> emptyEventsStore(): BaseStore<T> = emptyMap()
