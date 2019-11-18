@@ -12,13 +12,13 @@ typealias DeviceCalendarEventsStore = BaseStore<DeviceCalendarEvent>
 
 private fun AbstractDate.entry() = month * 100 + dayOfMonth
 
-fun <T : CalendarEvent<out AbstractDate>> List<T>.toEventsStore(): BaseStore<T> =
-    HashMap<Int, ArrayList<T>>().also { result ->
-        this.forEach { event ->
-            val entry = event.date.entry()
-            (result[entry] ?: ArrayList<T>().also { result[entry] = it }).add(event)
-        }
+fun <T : CalendarEvent<out AbstractDate>> List<T>.toEventsStore(): BaseStore<T> {
+    val result = HashMap<Int, ArrayList<T>>()
+    this.forEach {
+        (result[it.date.entry()] ?: ArrayList<T>().apply { result[it.date.entry()] = this }).add(it)
     }
+    return result
+}
 
 fun <T : AbstractDate> BaseStore<CalendarEvent<T>>.getEvents(date: T) = this[date.entry()]?.filter {
     // dayOfMonth and month are already checked with #entry() so only checking year equality here
