@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
-import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -53,22 +52,6 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     val coordinator: CoordinatorLayout
         get() = binding.coordinator
-
-    private val seasonImage: Int
-        @DrawableRes
-        get() {
-            var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
-
-            // Southern hemisphere
-            if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
-
-            return when (season) {
-                0 -> R.drawable.spring
-                1 -> R.drawable.summer
-                2 -> R.drawable.fall
-                else -> R.drawable.winter
-            }
-        }
 
     private var clickedItem = 0
 
@@ -112,11 +95,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         val isRTL = isRTL(this)
 
         val drawerToggle = object : ActionBarDrawerToggle(
-            this,
-            binding.drawer,
-            binding.toolbar,
-            R.string.openDrawer,
-            R.string.closeDrawer
+            this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
         ) {
             var slidingDirection = if (isRTL) -1 else +1
 
@@ -171,8 +150,20 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
-        (binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image))
-            .setImageResource(seasonImage)
+        binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image)
+            .setImageResource(run {
+                var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
+
+                // Southern hemisphere
+                if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
+
+                when (season) {
+                    0 -> R.drawable.spring
+                    1 -> R.drawable.summer
+                    2 -> R.drawable.fall
+                    else -> R.drawable.winter
+                }
+            })
 
         if (prefs.getString(PREF_APP_LANGUAGE, null) == null &&
             !prefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
@@ -242,8 +233,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             settingHasChanged = false // reset for the next time
         }
 
-        Navigation.findNavController(this, R.id.nav_host_fragment)
-            .navigate(id, null, null)
+        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(id, null, null)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
