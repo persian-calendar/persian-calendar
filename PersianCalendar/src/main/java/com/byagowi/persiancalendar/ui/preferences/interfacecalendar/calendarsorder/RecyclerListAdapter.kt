@@ -39,15 +39,7 @@ class RecyclerListAdapter(
     private val enabled: MutableList<Boolean>
 
     val result: List<String>
-        get() {
-            val result = ArrayList<String>()
-            for (i in values.indices) {
-                if (enabled[i]) {
-                    result.add(values[i])
-                }
-            }
-            return result
-        }
+        get() = values.filterIndexed { i, _ -> enabled[i] }
 
     init {
         this.titles = ArrayList(titles)

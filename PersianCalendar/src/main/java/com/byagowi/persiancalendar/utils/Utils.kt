@@ -208,7 +208,7 @@ fun loadEvents(context: Context) {
                 title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
                 PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
             } else null
-        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toPersianEventsStore()
+        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
         islamicCalendarEvents = allTheEvents.getArray("Hijri Calendar").mapNotNull {
             val month = it.getInt("month")
@@ -239,7 +239,7 @@ fun loadEvents(context: Context) {
 
                 IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
             } else null
-        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toIslamicEventsStore()
+        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
         gregorianCalendarEvents = allTheEvents.getArray("Gregorian Calendar").mapNotNull {
             val month = it.getInt("month")
@@ -251,7 +251,7 @@ fun loadEvents(context: Context) {
 
                 GregorianCalendarEvent(CivilDate(-1, month, day), title, false)
             } else null
-        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toGregorianEventsStore()
+        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
         allEnabledEvents = allEnabledEventsBuilder
     } catch (e: JSONException) {

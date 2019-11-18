@@ -590,12 +590,13 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
             country.getJSONObject("cities").forEach { key, city ->
                 result.add(
                     CityItem(
-                        key,
-                        city.getString("en"), city.getString("fa"),
-                        city.getString("ckb"), city.getString("ar"),
-                        countryCode,
-                        countryEn, countryFa, countryCkb, countryAr,
-                        Coordinate(
+                        key = key,
+                        en = city.getString("en"), fa = city.getString("fa"),
+                        ckb = city.getString("ckb"), ar = city.getString("ar"),
+                        countryCode = countryCode,
+                        countryEn = countryEn, countryFa = countryFa,
+                        countryCkb = countryCkb, countryAr = countryAr,
+                        coordinate = Coordinate(
                             city.getDouble("latitude"),
                             city.getDouble("longitude"),
                             // Don't Consider elevation for Iran

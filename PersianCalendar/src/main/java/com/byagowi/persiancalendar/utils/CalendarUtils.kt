@@ -167,7 +167,7 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
             getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
         ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
         val civil = CivilDate(jdn)
-        addAll(deviceCalendarEvents.getDeviceEvents(civil)) // Passed by caller
+        addAll(deviceCalendarEvents.getEvents(civil)) // Passed by caller
         addAll(gregorianCalendarEvents.getEvents(civil))
     }
 
@@ -262,13 +262,13 @@ fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
     ctx,
     civilDateToCalendar(CivilDate(if (jdn == -1L) getTodayJdn() else jdn)),
     DAY_IN_MILLIS
-).toDeviceEventsStore()
+).toEventsStore()
 
 fun readMonthDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
     ctx,
     civilDateToCalendar(CivilDate(jdn)),
     32L * DAY_IN_MILLIS
-).toDeviceEventsStore()
+).toEventsStore()
 
 fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
     ctx,
