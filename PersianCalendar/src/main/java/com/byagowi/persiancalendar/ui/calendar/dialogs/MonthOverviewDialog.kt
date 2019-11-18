@@ -70,15 +70,16 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
         val binding = MonthOverviewDialogBinding.inflate(
             LayoutInflater.from(context), null, false
-        )
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.adapter = ItemAdapter(records)
+        ).apply {
+            recyclerView.layoutManager = LinearLayoutManager(context)
+            recyclerView.adapter = ItemAdapter(records)
+        }
 
-        val bottomSheetDialog = BottomSheetDialog(context)
-        bottomSheetDialog.setContentView(binding.root)
-        bottomSheetDialog.setCancelable(true)
-        bottomSheetDialog.setCanceledOnTouchOutside(true)
-        return bottomSheetDialog
+        return BottomSheetDialog(context).apply {
+            setContentView(binding.root)
+            setCancelable(true)
+            setCanceledOnTouchOutside(true)
+        }
     }
 
     internal class MonthOverviewRecord(

@@ -59,7 +59,7 @@ fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
     else -> gregorianMonths
 }
 
-// Extra helpers
+// Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(
     context: Context, jdn: Long, isToday: Boolean,
     deviceCalendarEvents: DeviceCalendarEventsStore,

@@ -29,8 +29,6 @@ class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
-        if (positiveResult) {
-            (preference as PrayerSelectPreference).prayers = prayers
-        }
+        if (positiveResult) (preference as PrayerSelectPreference).prayers = prayers
     }
 }

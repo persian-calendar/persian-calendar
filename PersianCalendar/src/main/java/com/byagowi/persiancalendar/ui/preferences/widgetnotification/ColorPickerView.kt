@@ -252,28 +252,27 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 }
 
 // https://stackoverflow.com/a/58471997
-fun createCheckerBoard(tileSize: Int): Paint {
-    return Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        shader = BitmapShader(
-            Bitmap.createBitmap(
-                tileSize * 2,
-                tileSize * 2,
-                Bitmap.Config.ARGB_8888
-            ).apply {
-                Canvas(this).apply {
-                    val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                        style = Paint.Style.FILL; color = 0x22000000
-                    }
-                    drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
-                    drawRect(
-                        tileSize.toFloat(),
-                        tileSize.toFloat(),
-                        tileSize * 2f,
-                        tileSize * 2f,
-                        fill
-                    )
+fun createCheckerBoard(tileSize: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    shader = BitmapShader(
+        Bitmap.createBitmap(
+            tileSize * 2,
+            tileSize * 2,
+            Bitmap.Config.ARGB_8888
+        ).apply {
+            Canvas(this).apply {
+                val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    style = Paint.Style.FILL; color = 0x22000000
                 }
-            }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
-        )
-    }
+                drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
+                drawRect(
+                    tileSize.toFloat(),
+                    tileSize.toFloat(),
+                    tileSize * 2f,
+                    tileSize * 2f,
+                    fill
+                )
+            }
+        },
+        Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
+    )
 }

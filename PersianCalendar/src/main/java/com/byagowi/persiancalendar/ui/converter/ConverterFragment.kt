@@ -22,34 +22,31 @@ class ConverterFragment : DaggerFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
         mainActivityDependency.mainActivity.setTitleAndSubtitle(
-            getString(R.string.date_converter),
-            ""
+            getString(R.string.date_converter), ""
         )
 
-        return FragmentConverterBinding.inflate(inflater, container, false).apply {
-            calendarsView.expand(true)
-            calendarsView.hideMoreIcon()
-            calendarsView.showHideTodayButtonCallback = fun(show) {
-                if (show) todayButton.show() else todayButton.hide()
-            }
+        calendarsView.expand(true)
+        calendarsView.hideMoreIcon()
+        calendarsView.showHideTodayButtonCallback = fun(show) {
+            if (show) todayButton.show() else todayButton.hide()
+        }
 
-            todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(getTodayJdn()) }
+        todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(getTodayJdn()) }
 
-            dayPickerView.selectedDayListener = fun(jdn) {
-                if (jdn == -1L) {
-                    calendarsView.visibility = View.GONE
-                } else {
-                    calendarsView.visibility = View.VISIBLE
-                    val selectedCalendarType = dayPickerView.selectedCalendarType
-                    calendarsView.showCalendars(
-                        jdn, selectedCalendarType,
-                        getOrderedCalendarTypes() - selectedCalendarType
-                    )
-                }
+        dayPickerView.selectedDayListener = fun(jdn) {
+            if (jdn == -1L) {
+                calendarsView.visibility = View.GONE
+            } else {
+                calendarsView.visibility = View.VISIBLE
+                val selectedCalendarType = dayPickerView.selectedCalendarType
+                calendarsView.showCalendars(
+                    jdn, selectedCalendarType,
+                    getOrderedCalendarTypes() - selectedCalendarType
+                )
             }
-            dayPickerView.setDayJdnOnView(getTodayJdn())
-        }.root
-    }
+        }
+        dayPickerView.setDayJdnOnView(getTodayJdn())
+    }.root
 }

@@ -191,9 +191,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
 
                     view?.let {
                         Snackbar.make(
-                            it,
-                            R.string.custom_notification_is_set,
-                            Snackbar.LENGTH_SHORT
+                            it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
                         ).show()
                     }
                     putAthanNameOnSummary(ringtoneTitle)

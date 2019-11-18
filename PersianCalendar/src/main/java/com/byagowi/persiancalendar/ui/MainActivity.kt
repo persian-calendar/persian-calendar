@@ -9,7 +9,6 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import androidx.annotation.IdRes
@@ -82,14 +81,12 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         }
         setSupportActionBar(binding.toolbar)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window.apply {
             // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-            val win = window
-            val winParams = win.attributes
-            winParams.flags =
-                winParams.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-            win.attributes = winParams
-            window.statusBarColor = Color.TRANSPARENT
+            attributes = attributes.apply {
+                flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+            }
+            statusBarColor = Color.TRANSPARENT
         }
 
         val isRTL = isRTL(this)
@@ -123,10 +120,9 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         binding.drawer.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
-        val intent = intent
-        if (intent != null) {
+        intent?.run {
             navigateTo(
-                when (intent.action) {
+                when (action) {
                     "COMPASS" -> R.id.compass
                     "LEVEL" -> R.id.level
                     "CONVERTER" -> R.id.converter
@@ -137,7 +133,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
             )
 
             // So it won't happen again if the activity restarted
-            intent.action = ""
+            action = ""
         }
 
         prefs.registerOnSharedPreferenceChangeListener(this)
@@ -395,7 +391,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean =
-        // Checking for the "menu" key
+        // Checking for the ancient "menu" key
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
                 binding.drawer.closeDrawers()
@@ -415,7 +411,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
     private fun restartToSettings() {
         val intent = intent
-        intent.action = "SETTINGS"
+        intent?.action = "SETTINGS"
         finish()
         startActivity(intent)
     }
@@ -423,12 +419,10 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         if (menuItem.itemId == R.id.exit) {
             finish()
-            return true
+        } else {
+            binding.drawer.closeDrawers()
+            clickedItem = menuItem.itemId
         }
-
-        binding.drawer.closeDrawers()
-        clickedItem = menuItem.itemId
-        Log.d("ITEMID", menuItem.itemId.toString())
         return true
     }
 
