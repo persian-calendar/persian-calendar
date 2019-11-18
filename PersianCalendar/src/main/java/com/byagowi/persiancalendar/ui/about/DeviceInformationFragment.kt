@@ -159,11 +159,11 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                     "Battery",
                     (activity.getSystemService<BatteryManager>())?.run {
                         listOf("Charging: $isCharging") + listOf(
-                            Pair("Capacity", BatteryManager.BATTERY_PROPERTY_CAPACITY),
-                            Pair("Charge Counter", BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER),
-                            Pair("Current Avg", BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE),
-                            Pair("Current Now", BatteryManager.BATTERY_PROPERTY_CURRENT_NOW),
-                            Pair("Energy Counter", BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER)
+                            "Capacity" to BatteryManager.BATTERY_PROPERTY_CAPACITY,
+                            "Charge Counter" to BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
+                            "Current Avg" to BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
+                            "Current Now" to BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
+                            "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
                         ).map { "${it.first}: ${getLongProperty(it.second)}" }
                     }?.joinToString("\n"), ""
                 )
@@ -199,30 +199,21 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                 addIfNotNull(
                     "OpenGL",
                     (listOf(
-                        Pair("GL_VERSION", GLES20.GL_VERSION),
-                        Pair("GL_RENDERER", GLES20.GL_RENDERER),
-                        Pair("GL_VENDOR", GLES20.GL_VENDOR)
+                        "GL_VERSION" to GLES20.GL_VERSION,
+                        "GL_RENDERER" to GLES20.GL_RENDERER,
+                        "GL_VENDOR" to GLES20.GL_VENDOR
                     ).map { "${it.first}: ${GLES20.glGetString(it.second)}" } + listOf(
-                        Pair(
-                            "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS",
-                            GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS
-                        ),
-                        Pair("GL_MAX_CUBE_MAP_TEXTURE_SIZE", GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE),
-                        Pair(
-                            "GL_MAX_FRAGMENT_UNIFORM_VECTORS",
-                            GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS
-                        ),
-                        Pair("GL_MAX_RENDERBUFFER_SIZE", GLES20.GL_MAX_RENDERBUFFER_SIZE),
-                        Pair("GL_MAX_TEXTURE_IMAGE_UNITS", GLES20.GL_MAX_TEXTURE_IMAGE_UNITS),
-                        Pair("GL_MAX_TEXTURE_SIZE", GLES20.GL_MAX_TEXTURE_SIZE),
-                        Pair("GL_MAX_VARYING_VECTORS", GLES20.GL_MAX_VARYING_VECTORS),
-                        Pair("GL_MAX_VERTEX_ATTRIBS", GLES20.GL_MAX_VERTEX_ATTRIBS),
-                        Pair(
-                            "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",
-                            GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS
-                        ),
-                        Pair("GL_MAX_VERTEX_UNIFORM_VECTORS", GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS),
-                        Pair("GL_MAX_VIEWPORT_DIMS", GLES20.GL_MAX_VIEWPORT_DIMS)
+                        "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
+                        "GL_MAX_CUBE_MAP_TEXTURE_SIZE" to GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE,
+                        "GL_MAX_FRAGMENT_UNIFORM_VECTORS" to GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS,
+                        "GL_MAX_RENDERBUFFER_SIZE" to GLES20.GL_MAX_RENDERBUFFER_SIZE,
+                        "GL_MAX_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_TEXTURE_IMAGE_UNITS,
+                        "GL_MAX_TEXTURE_SIZE" to GLES20.GL_MAX_TEXTURE_SIZE,
+                        "GL_MAX_VARYING_VECTORS" to GLES20.GL_MAX_VARYING_VECTORS,
+                        "GL_MAX_VERTEX_ATTRIBS" to GLES20.GL_MAX_VERTEX_ATTRIBS,
+                        "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
+                        "GL_MAX_VERTEX_UNIFORM_VECTORS" to GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS,
+                        "GL_MAX_VIEWPORT_DIMS" to GLES20.GL_MAX_VIEWPORT_DIMS
                     ).map {
                         val intBuffer = IntArray(1)
                         GLES10.glGetIntegerv(it.second, intBuffer, 0)
