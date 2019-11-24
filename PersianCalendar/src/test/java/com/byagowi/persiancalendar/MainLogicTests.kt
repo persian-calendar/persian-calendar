@@ -507,6 +507,9 @@ class MainLogicTests {
 
         listOf(
             // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
+            listOf(2020, 3, 20, 7, 20/*should be 19*/, 43/* should be 37*/),
+
+            // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
             listOf(2019, 3, 21, 1, 28, 13/*should be 27*/),
 
             // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf

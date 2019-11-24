@@ -11,8 +11,10 @@ public class MainLogicTests {
     public final void test_equinox_time() {
         Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"));
         int[][] elements = new int[][]{
+                // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201399-Full.pdf
+                {2020, 3, 20, 7, 20/*should be 19*/, 43/* should be 37*/},
                 // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
-                {2019, 3, 21, 1, 28, 13},
+                {2019, 3, 21, 1, 28, 13/*should be 27*/},
                 // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf
                 {2018, 3, 20, 19, 45, 53/*should be 28*/},
                 // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201396-Full.pdf
