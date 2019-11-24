@@ -11,9 +11,7 @@ import javax.inject.Singleton
 
 @PerFragment
 class CalendarFragmentDependency @Inject
-constructor(activity: MainActivity) {
-    val daysPaintResources: DaysPaintResources = DaysPaintResources(activity)
-
+constructor() {
     @Inject
     lateinit var calendarFragment: CalendarFragment
         internal set
