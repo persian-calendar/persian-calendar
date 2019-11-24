@@ -8,6 +8,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.CalendarContract
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -76,6 +77,10 @@ class CalendarFragment : DaggerFragment() {
 
     fun onDaySelected(position: Int) {
         sendUpdateCommandToMonthFragments(position, false)
+        Handler().postDelayed({
+            // FIXME: HACK! Find a better way to make sure update is done after pager's animation
+            sendUpdateCommandToMonthFragments(position, false)
+        }, 250)
         if (position != 0) mainBinding.todayButton.show()
     }
 
