@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.calendar.calendar
+package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,8 +12,6 @@ import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
-import com.byagowi.persiancalendar.ui.calendar.month.DaysPaintResources
-import com.byagowi.persiancalendar.ui.calendar.month.MonthAdapter
 import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.calendar.AbstractDate
 
@@ -76,7 +74,8 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
             val weeksCount =
                 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
             val adapter = MonthAdapter(
-                binding.root.context, DaysPaintResources(binding.root.context), calendarFragment,
+                binding.root.context,
+                DaysPaintResources(binding.root.context), calendarFragment,
                 (baseJdn until baseJdn + monthLength).zip(
                     generateSequence(startingDayOfWeek, { if (it == 6) 0 else it + 1 })
                         .take(monthLength).toList()

@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.calendar.month
+package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.app.Activity
 import android.content.Context

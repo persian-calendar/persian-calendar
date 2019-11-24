@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.calendar.month
+package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
 import android.view.View
@@ -56,7 +56,10 @@ class MonthAdapter internal constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ItemDayView(parent.context, daysPaintResources).also { it.layoutParams = layoutParams }
+        ItemDayView(
+            parent.context,
+            daysPaintResources
+        ).also { it.layoutParams = layoutParams }
     )
 
     private fun hasDeviceEvents(dayEvents: List<CalendarEvent<*>>): Boolean =
