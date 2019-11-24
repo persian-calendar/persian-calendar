@@ -492,20 +492,14 @@ class CalendarFragment : DaggerFragment() {
         lastSelectedJdn = jdn
         sendUpdateCommandToMonthFragments(viewPagerPosition, false)
 
-        if (isTalkBackEnabled) {
-            val todayJdn = getTodayJdn()
-            if (jdn != todayJdn) {
-                Snackbar.make(
-                    mainBinding.root,
-                    getA11yDaySummary(
-                        mainActivityDependency.mainActivity, jdn,
-                        false, emptyEventsStore(), withZodiac = true,
-                        withOtherCalendars = true, withTitle = true
-                    ),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-        }
+        if (isTalkBackEnabled && jdn != getTodayJdn()) Snackbar.make(
+            mainBinding.root,
+            getA11yDaySummary(
+                mainActivityDependency.mainActivity, jdn, false, emptyEventsStore(),
+                withZodiac = true, withOtherCalendars = true, withTitle = true
+            ),
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {

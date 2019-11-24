@@ -36,23 +36,28 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
         init {
             val isRTL = isRTL(binding.root.context)
 
-            binding.next.setImageResource(
-                if (isRTL) R.drawable.ic_keyboard_arrow_left
-                else R.drawable.ic_keyboard_arrow_right
-            )
-            binding.next.setOnClickListener { calendarFragment.changeMonth(1) }
+            binding.next.apply {
+                setImageResource(
+                    if (isRTL) R.drawable.ic_keyboard_arrow_left
+                    else R.drawable.ic_keyboard_arrow_right
+                )
+                setOnClickListener { calendarFragment.changeMonth(1) }
+            }
 
-            binding.prev.setImageResource(
-                if (isRTL) R.drawable.ic_keyboard_arrow_right
-                else R.drawable.ic_keyboard_arrow_left
-            )
-            binding.prev.setOnClickListener { calendarFragment.changeMonth(-1) }
+            binding.prev.apply {
+                setImageResource(
+                    if (isRTL) R.drawable.ic_keyboard_arrow_right
+                    else R.drawable.ic_keyboard_arrow_left
+                )
+                setOnClickListener { calendarFragment.changeMonth(-1) }
+            }
 
-            binding.monthDays.setHasFixedSize(true)
-            binding.monthDays.layoutManager = GridLayoutManager(
-                binding.root.context,
-                if (isShowWeekOfYearEnabled) 8 else 7
-            )
+            binding.monthDays.apply {
+                setHasFixedSize(true)
+                layoutManager = GridLayoutManager(
+                    binding.root.context, if (isShowWeekOfYearEnabled) 8 else 7
+                )
+            }
 
             ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java]
                 .monthFragmentsHandler
@@ -72,14 +77,11 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
             val adapter = MonthAdapter(
                 binding.root.context, DaysPaintResources(binding.root.context), calendarFragment,
-                ArrayList<DayItem>().apply {
-                    var dayOfWeek = startingDayOfWeek
-                    (0 until monthLength).forEach {
-                        val jdn = baseJdn + it
-                        add(DayItem(jdn, dayOfWeek = dayOfWeek, isToday = jdn == todayJdn))
-                        dayOfWeek++
-                        if (dayOfWeek == 7) dayOfWeek = 0
-                    }
+                (baseJdn until baseJdn + monthLength).zip(
+                    generateSequence(startingDayOfWeek, { if (it == 6) 0 else it + 1 })
+                        .take(monthLength).toList()
+                ) { jdn, dayOfWeek ->
+                    DayItem(jdn, dayOfWeek = dayOfWeek, isToday = jdn == todayJdn)
                 }, startingDayOfWeek, weekOfYearStart, weeksCount
             )
             binding.monthDays.let {
