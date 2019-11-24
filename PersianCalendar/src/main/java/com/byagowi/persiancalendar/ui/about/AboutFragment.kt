@@ -25,7 +25,7 @@ import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getMaxSupportedYear
+import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.readRawResource
 import com.google.android.material.chip.Chip
@@ -78,8 +78,8 @@ class AboutFragment : DaggerFragment() {
         // help
         binding.aboutTitle.text = String.format(
             getString(R.string.about_help_subtitle),
-            formatNumber(getMaxSupportedYear() - 1),
-            formatNumber(getMaxSupportedYear())
+            formatNumber(supportedYearOfIranCalendar - 1),
+            formatNumber(supportedYearOfIranCalendar)
         )
         binding.helpCard.visibility = when (language) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> View.VISIBLE

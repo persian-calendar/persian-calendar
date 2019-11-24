@@ -191,7 +191,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
 
         if (mainCalendar == CalendarType.SHAMSI &&
             isIranHolidaysEnabled &&
-            getTodayOfCalendar(CalendarType.SHAMSI).year > getMaxSupportedYear()
+            getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
         ) Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
             setAction(getString(R.string.update)) {
                 try {

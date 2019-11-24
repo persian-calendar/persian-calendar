@@ -57,7 +57,8 @@ fun initUtils(context: Context) {
     loadEvents(context)
 }
 
-fun getMaxSupportedYear(): Int = 1398
+val supportedYearOfIranCalendar: Int
+    get() = 1399
 
 fun isShownOnWidgets(infoType: String): Boolean = whatToShowOnWidgets.contains(infoType)
 
