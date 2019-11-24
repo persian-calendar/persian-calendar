@@ -40,7 +40,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         strokeWidth = 7f
         pathEffect = DashPathEffect(floatArrayOf(3f, 7f), 0f) /* Sun rays effect */
     }
-    private val dayPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL_AND_STROKE }
+    private val dayPaint =
+        Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL_AND_STROKE }
     @ColorInt
     private var horizonColor: Int = 0
     @ColorInt

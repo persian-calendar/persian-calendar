@@ -5,35 +5,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.di.CalendarFragmentDependency
-import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.*
 
 class MonthAdapter internal constructor(
-    mainActivityDependency: MainActivityDependency,
-    private val calendarFragmentDependency: CalendarFragmentDependency,
-    private val days: List<DayItem>,
-    startingDayOfWeek: Int, private val weekOfYearStart: Int,
-    private val weeksCount: Int
+    private val context: Context, private val daysPaintResources: DaysPaintResources,
+    private val calendarFragment: CalendarFragment, private val days: List<DayItem>,
+    startingDayOfWeek: Int, private val weekOfYearStart: Int, private val weeksCount: Int
 ) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
 
     private val startingDayOfWeek: Int = fixDayOfWeekReverse(startingDayOfWeek)
     private val totalDays: Int = days.size
     private val layoutParams: ViewGroup.LayoutParams
-    private val daysPaintResources: DaysPaintResources
     private var monthEvents: DeviceCalendarEventsStore = emptyEventsStore()
     private val isArabicDigit: Boolean
-    private val context: Context
     private var selectedDay = -1
 
     init {
-        this.context = mainActivityDependency.mainActivity
         initializeMonthEvents(context)
         isArabicDigit = isArabicDigitSelected()
 
@@ -41,7 +34,6 @@ class MonthAdapter internal constructor(
             ViewGroup.LayoutParams.MATCH_PARENT,
             context.resources.getDimensionPixelSize(R.dimen.day_item_size)
         )
-        this.daysPaintResources = calendarFragmentDependency.daysPaintResources
     }
 
     internal fun initializeMonthEvents(context: Context?) {
@@ -87,9 +79,7 @@ class MonthAdapter internal constructor(
             val jdn = itemDayView.jdn
             if (jdn == -1L) return
 
-            ViewModelProviders
-                .of(calendarFragmentDependency.calendarFragment)[CalendarFragmentModel::class.java]
-                .selectDay(jdn)
+            ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java].selectDay(jdn)
             this@MonthAdapter.selectDay(itemDayView.dayOfMonth)
         }
 
@@ -100,7 +90,7 @@ class MonthAdapter internal constructor(
             val jdn = itemDayView.jdn
             if (jdn == -1L) return false
 
-            calendarFragmentDependency.calendarFragment.addEventOnCalendar(jdn)
+            calendarFragment.addEventOnCalendar(jdn)
             return false
         }
 

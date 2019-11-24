@@ -25,9 +25,9 @@ import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.readRawResource
+import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment

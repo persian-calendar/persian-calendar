@@ -39,7 +39,6 @@ import com.byagowi.persiancalendar.ui.calendar.calendar.CalendarAdapter
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
-import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 import com.byagowi.persiancalendar.ui.calendar.times.TimeItemAdapter
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.*
@@ -70,7 +69,7 @@ class CalendarFragment : DaggerFragment() {
         private set
     private lateinit var mainBinding: FragmentCalendarBinding
     private lateinit var calendarsView: CalendarsView
-    private lateinit var owghatBinding: OwghatTabContentBinding
+    private var owghatBinding: OwghatTabContentBinding? = null
     private lateinit var eventsBinding: EventsTabContentBinding
     private var lastSelectedJdn: Long = -1
     private var searchView: SearchView? = null
@@ -164,17 +163,24 @@ class CalendarFragment : DaggerFragment() {
             }
             tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    if (position == OWGHAT_TAB) owghatBinding.sunView.startAnimate()
+                    if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
+                    else owghatBinding?.sunView?.clear()
                     PreferenceManager.getDefaultSharedPreferences(context).edit {
                         putInt(LAST_CHOSEN_TAB_KEY, position)
                     }
                 }
             })
-
             TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
                 tab.text = titles[position]
             }.attach()
+
             calendarViewPager.adapter = CalendarAdapter(this@CalendarFragment)
+            calendarViewPager.registerOnPageChangeCallback(
+                object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) =
+                        onDaySelected(CalendarAdapter.applyOffset(position))
+                }
+            )
             CalendarAdapter.gotoOffset(calendarViewPager, 0, false)
 
             var lastTab = appDependency.sharedPreferences
@@ -432,10 +438,10 @@ class CalendarFragment : DaggerFragment() {
         val prayTimes = PrayTimesCalculator.calculate(
             getCalculationMethod(), date, coordinate
         )
-        (owghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
+        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter?)?.run {
             this.prayTimes = prayTimes
         }
-        owghatBinding.sunView.run {
+        owghatBinding?.sunView?.run {
             setSunriseSunsetMoonPhase(prayTimes, try {
                 coordinate?.run {
                     SunMoonPosition(
@@ -453,9 +459,9 @@ class CalendarFragment : DaggerFragment() {
     }
 
     private fun onOwghatClick() {
-        (owghatBinding.timesRecyclerView.adapter as? TimeItemAdapter?)?.run {
+        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter?)?.run {
             isExpanded = !isExpanded
-            owghatBinding.moreOwghat.setImageResource(
+            owghatBinding?.moreOwghat?.setImageResource(
                 if (isExpanded) R.drawable.ic_keyboard_arrow_up
                 else R.drawable.ic_keyboard_arrow_down
             )
@@ -570,7 +576,7 @@ class CalendarFragment : DaggerFragment() {
                 ShiftWorkDialog::class.java.name
             )
             R.id.month_overview -> {
-                val visibleMonthJdn = MonthFragment.getDateFromOffset(
+                val visibleMonthJdn = CalendarAdapter.getDateFromOffset(
                     mainCalendar,
                     CalendarAdapter.applyOffset(mainBinding.calendarViewPager.currentItem)
                 ).toJdn()

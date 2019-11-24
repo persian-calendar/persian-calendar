@@ -7,7 +7,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
-import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.ui.converter.ConverterFragment
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
@@ -31,10 +30,6 @@ abstract class AppModule {
 
 @Module
 abstract class CalendarFragmentModule {
-
-    @PerChildFragment
-    @ContributesAndroidInjector(modules = [MainChildFragmentModule::class])
-    internal abstract fun monthFragmentInjector(): MonthFragment
 
     @PerChildFragment
     @ContributesAndroidInjector

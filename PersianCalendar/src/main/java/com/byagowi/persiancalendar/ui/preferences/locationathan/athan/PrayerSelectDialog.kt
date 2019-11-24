@@ -21,7 +21,7 @@ class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
         entriesKeys.indices.forEach { checked[it] = prayers.contains(entriesKeys[it]) }
 
         builder.setMultiChoiceItems(R.array.prayerTimeNames, checked) { _, which, isChecked ->
-            prayers = when(isChecked) {
+            prayers = when (isChecked) {
                 true -> prayers + entriesKeys[which].toString()
                 false -> prayers - entriesKeys[which].toString()
             }

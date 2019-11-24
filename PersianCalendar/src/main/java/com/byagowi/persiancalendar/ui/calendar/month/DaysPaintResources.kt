@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.month
 
-import android.app.Activity
+import android.content.Context
 import android.graphics.Paint
 import android.util.TypedValue
 import androidx.annotation.ColorInt
@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appTheme
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 
-class DaysPaintResources(activity: Activity) {
+class DaysPaintResources(context: Context) {
 
     @StyleRes
     val style: Int
@@ -45,35 +45,35 @@ class DaysPaintResources(activity: Activity) {
     internal val todayPaint: Paint
 
     init {
-        val theme = activity.theme
+        val theme = context.theme
         val value = TypedValue()
 
         theme.resolveAttribute(R.attr.colorHoliday, value, true)
-        colorHoliday = ContextCompat.getColor(activity, value.resourceId)
+        colorHoliday = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorHolidaySelected, value, true)
-        colorHolidaySelected = ContextCompat.getColor(activity, value.resourceId)
+        colorHolidaySelected = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorTextHoliday, value, true)
-        colorTextHoliday = ContextCompat.getColor(activity, value.resourceId)
+        colorTextHoliday = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorTextDay, value, true)
-        colorTextDay = ContextCompat.getColor(activity, value.resourceId)
+        colorTextDay = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorTextDaySelected, value, true)
-        colorTextDaySelected = ContextCompat.getColor(activity, value.resourceId)
+        colorTextDaySelected = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorTextToday, value, true)
-        colorTextToday = ContextCompat.getColor(activity, value.resourceId)
+        colorTextToday = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorTextDayName, value, true)
-        colorTextDayName = ContextCompat.getColor(activity, value.resourceId)
+        colorTextDayName = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorEventLine, value, true)
-        colorEventLine = ContextCompat.getColor(activity, value.resourceId)
+        colorEventLine = ContextCompat.getColor(context, value.resourceId)
 
         theme.resolveAttribute(R.attr.colorSelectDay, value, true)
-        colorSelectDay = ContextCompat.getColor(activity, value.resourceId)
+        colorSelectDay = ContextCompat.getColor(context, value.resourceId)
 
         style = appTheme
 
@@ -82,7 +82,7 @@ class DaysPaintResources(activity: Activity) {
         selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         todayPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        val resources = activity.resources
+        val resources = context.resources
         eventBarPaint.strokeWidth =
             resources.getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
 
@@ -91,7 +91,7 @@ class DaysPaintResources(activity: Activity) {
             resources.getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
 
         theme.resolveAttribute(R.attr.colorCurrentDay, value, true)
-        todayPaint.color = ContextCompat.getColor(activity, value.resourceId)
+        todayPaint.color = ContextCompat.getColor(context, value.resourceId)
 
         selectedPaint.style = Paint.Style.FILL
         selectedPaint.color = colorSelectDay
@@ -107,6 +107,6 @@ class DaysPaintResources(activity: Activity) {
         persianDigitsTextSize =
             resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
 
-        textPaint.typeface = getCalendarFragmentFont(activity)
+        textPaint.typeface = getCalendarFragmentFont(context)
     }
 }
