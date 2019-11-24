@@ -10,7 +10,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
 import com.byagowi.persiancalendar.entities.DayItem
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.ui.calendar.month.DaysPaintResources
@@ -24,15 +23,18 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
         FragmentMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(position, calendarFragment)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount() = monthsLimit
 
-    class ViewHolder(val binding: FragmentMonthBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int, calendarFragment: CalendarFragment) {
+    inner class ViewHolder(val binding: FragmentMonthBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        private var onUpdateCommandReceived =
+            fun(_: CalendarFragmentModel.MonthFragmentUpdateCommand) {}
+
+        init {
             val isRTL = isRTL(binding.root.context)
-            val offset = applyOffset(position)
 
             binding.next.setImageResource(
                 if (isRTL) R.drawable.ic_keyboard_arrow_left
@@ -51,44 +53,42 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 binding.root.context,
                 if (isShowWeekOfYearEnabled) 8 else 7
             )
-            ///////
-            ///////
-            ///////
+
+            ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java]
+                .monthFragmentsHandler
+                .observe(calendarFragment, Observer { onUpdateCommandReceived(it) })
+        }
+
+        fun bind(position: Int) {
+            val offset = applyOffset(position)
             val date = getDateFromOffset(mainCalendar, offset)
             val baseJdn = date.toJdn()
             val monthLength = getMonthLength(mainCalendar, date.year, date.month)
-
             val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
-
             val todayJdn = getTodayJdn()
-            val days: List<DayItem> = ArrayList<DayItem>(31).apply {
-                var dayOfWeek = startingDayOfWeek
-                (0 until monthLength).forEach {
-                    val jdn = baseJdn + it
-                    add(DayItem(jdn, dayOfWeek = dayOfWeek, isToday = jdn == todayJdn))
-                    dayOfWeek++
-                    if (dayOfWeek == 7) dayOfWeek = 0
-                }
-            }
-
             val startOfYearJdn = getDateOfCalendar(mainCalendar, date.year, 1, 1).toJdn()
             val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
             val weeksCount =
                 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
-            ///////
-            ///////
-            ///////
+            val adapter = MonthAdapter(
+                binding.root.context, DaysPaintResources(binding.root.context), calendarFragment,
+                ArrayList<DayItem>().apply {
+                    var dayOfWeek = startingDayOfWeek
+                    (0 until monthLength).forEach {
+                        val jdn = baseJdn + it
+                        add(DayItem(jdn, dayOfWeek = dayOfWeek, isToday = jdn == todayJdn))
+                        dayOfWeek++
+                        if (dayOfWeek == 7) dayOfWeek = 0
+                    }
+                }, startingDayOfWeek, weekOfYearStart, weeksCount
+            )
+            binding.monthDays.let {
+                it.adapter = adapter
+                it.itemAnimator = null
+            }
 
             val calendarFragmentModel =
                 ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java]
-
-            val adapter = MonthAdapter(
-                binding.root.context, DaysPaintResources(binding.root.context), calendarFragment,
-                days, startingDayOfWeek, weekOfYearStart, weeksCount
-            )
-            binding.monthDays.adapter = adapter
-            binding.monthDays.itemAnimator = null
-
             if (calendarFragmentModel.isTheFirstTime &&
                 offset == 0 && calendarFragment.viewPagerPosition == offset
             ) {
@@ -97,33 +97,30 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 updateTitle(date)
             }
 
-            calendarFragmentModel.monthFragmentsHandler.observe(
-                calendarFragment,
-                Observer { command ->
-                    if (command.target == offset) {
-                        val jdn = command.currentlySelectedJdn
+            onUpdateCommandReceived = fun(cmd: CalendarFragmentModel.MonthFragmentUpdateCommand) {
+                if (cmd.target == offset) {
+                    val jdn = cmd.currentlySelectedJdn
 
-                        if (command.isEventsModification) {
-                            adapter.initializeMonthEvents(binding.root.context)
-                            calendarFragmentModel.selectDay(jdn)
-                        } else {
-                            adapter.selectDay(-1)
-                            updateTitle(date)
-                        }
+                    if (cmd.isEventsModification) {
+                        adapter.initializeMonthEvents(binding.root.context)
+                        calendarFragmentModel.selectDay(jdn)
+                    } else {
+                        adapter.selectDay(-1)
+                        updateTitle(date)
+                    }
 
-                        val selectedDay = 1 + jdn - baseJdn
-                        if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
-                            adapter.selectDay(selectedDay.toInt())
-                    } else adapter.selectDay(-1)
-                })
+                    val selectedDay = 1 + jdn - baseJdn
+                    if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
+                        adapter.selectDay(selectedDay.toInt())
+                } else adapter.selectDay(-1)
+            }
         }
 
-        private fun updateTitle(date: AbstractDate) {
-            (binding.root.context as? MainActivity)?.setTitleAndSubtitle(
+        private fun updateTitle(date: AbstractDate) =
+            calendarFragment.mainActivityDependency.mainActivity.setTitleAndSubtitle(
                 getMonthName(date),
                 formatNumber(date.year)
             )
-        }
     }
 
     companion object {
