@@ -351,8 +351,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     fun startAnimate(immediate: Boolean = false) {
         val context = context
-        if (prayTimes == null || context == null)
-            return
+        if (prayTimes == null || context == null) return
 
         isRTL = isRTL(context)
         sunriseString = context.getString(R.string.sunriseSunView)

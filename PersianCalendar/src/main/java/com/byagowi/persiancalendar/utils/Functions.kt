@@ -44,7 +44,6 @@ import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.InputStream
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.sqrt
@@ -219,13 +218,13 @@ fun getClockFromStringId(@StringRes stringId: Int) = prayTimes?.run {
 fun loadAlarms(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    val prefString = (prefs.getString(PREF_ATHAN_ALARM, "") ?: "").trim()
+    val prefString = prefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
     Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
     val calculationMethod = getCalculationMethod()
 
     if (coordinate != null && prefString.isNotEmpty()) {
         val athanGap =
-            (((prefs.getString(PREF_ATHAN_GAP, "0") ?: "0").toDoubleOrNull() ?: .0)
+            ((prefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0)
                     * 60.0 * 1000.0).toLong()
 
         val prayTimes = PrayTimesCalculator.calculate(
@@ -314,12 +313,8 @@ fun getDayIconResource(day: Int): Int = try {
     0
 }
 
-// http://stackoverflow.com/a/5445161
-private fun readStream(inputStream: InputStream): String =
-    Scanner(inputStream).useDelimiter("\\A").let { if (it.hasNext()) it.next() else "" }
-
 fun readRawResource(context: Context, @RawRes res: Int) =
-    readStream(context.resources.openRawResource(res))
+    context.resources.openRawResource(res).use { String(it.readBytes()) }
 
 fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) = String.format(
     Locale.getDefault(), "%s: %.4f%s%s: %.4f",
@@ -327,45 +322,28 @@ fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String
     context.getString(R.string.longitude), coordinate.longitude
 )
 
-fun getCityName(context: Context, fallbackToCoord: Boolean): String {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    val cityEntity = getCityFromPreference(context)
-    if (cityEntity != null) {
-        if (language == LANG_EN_IR || language == LANG_EN_US || language == LANG_JA)
-            return cityEntity.en
-        else if (language == LANG_CKB)
-            return cityEntity.ckb
-        return cityEntity.fa
-    }
-
-    val geocodedCityName = prefs.getString(PREF_GEOCODED_CITYNAME, "") ?: ""
-    if (geocodedCityName.isNotEmpty()) return geocodedCityName
-
-    if (fallbackToCoord)
-        coordinate?.let {
-            return formatCoordinate(context, it, spacedComma)
+fun getCityName(context: Context, fallbackToCoord: Boolean): String =
+    getCityFromPreference(context)?.let {
+        when (language) {
+            LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
+            LANG_CKB -> it.ckb
+            else -> it.fa
         }
+    } ?: PreferenceManager.getDefaultSharedPreferences(context)
+        .getString(PREF_GEOCODED_CITYNAME, null)?.takeUnless { it.isEmpty() }
+    ?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
+    ?: ""
 
-    return ""
-}
-
-fun getCoordinate(context: Context): Coordinate? {
-    val cityEntity = getCityFromPreference(context)
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-    if (cityEntity != null)
-        return cityEntity.coordinate
-
-    val coord = Coordinate(
-        (prefs.getString(PREF_LATITUDE, "0") ?: "0").toDoubleOrNull() ?: .0,
-        (prefs.getString(PREF_LONGITUDE, "0") ?: "0").toDoubleOrNull() ?: .0,
-        (prefs.getString(PREF_ALTITUDE, "0") ?: "0").toDoubleOrNull() ?: .0
-    )
-
-    // If latitude or longitude is zero probably preference is not set yet
-    return if (coord.latitude == 0.0 && coord.longitude == 0.0) null
-    else coord
-}
+fun getCoordinate(context: Context): Coordinate? =
+    getCityFromPreference(context)?.let { it.coordinate }
+        ?: PreferenceManager.getDefaultSharedPreferences(context)?.let {
+            Coordinate(
+                it.getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
+                it.getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
+                it.getString(PREF_ALTITUDE, null)?.toDoubleOrNull() ?: .0
+            ).takeUnless { it.latitude == 0.0 && it.longitude == 0.0 }
+            // If latitude or longitude is zero probably preference is not set yet
+        }
 
 fun getTodayOfCalendar(calendar: CalendarType) = getDateFromJdnOfCalendar(calendar, getTodayJdn())
 

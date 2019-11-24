@@ -120,9 +120,8 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                         RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                         Settings.System.DEFAULT_NOTIFICATION_URI
                     )
-                val customAthanUri = getCustomAthanUri(context)
-                if (customAthanUri != null) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, customAthanUri)
+                getCustomAthanUri(context)?.let {
+                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it)
                 }
                 try {
                     startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE)
@@ -175,27 +174,22 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         val context = context ?: return
 
-        if (requestCode == ATHAN_RINGTONE_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                val uri: Parcelable? =
-                    data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-                if (uri != null) {
-                    val ringtoneTitle = RingtoneManager
-                        .getRingtone(context, uri.toString().toUri())
-                        .getTitle(context) ?: ""
+        if (requestCode == ATHAN_RINGTONE_REQUEST_CODE && resultCode == RESULT_OK) {
+            data?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)?.let {
+                val ringtoneTitle = RingtoneManager
+                    .getRingtone(context, it.toString().toUri()).getTitle(context) ?: ""
 
-                    appDependency.sharedPreferences.edit {
-                        putString(PREF_ATHAN_NAME, ringtoneTitle)
-                        putString(PREF_ATHAN_URI, uri.toString())
-                    }
-
-                    view?.let {
-                        Snackbar.make(
-                            it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                    putAthanNameOnSummary(ringtoneTitle)
+                appDependency.sharedPreferences.edit {
+                    putString(PREF_ATHAN_NAME, ringtoneTitle)
+                    putString(PREF_ATHAN_URI, it.toString())
                 }
+
+                view?.let {
+                    Snackbar.make(
+                        it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                putAthanNameOnSummary(ringtoneTitle)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)

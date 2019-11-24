@@ -55,9 +55,8 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         if (preference?.key == "calendars_priority") {
-            val fragmentManager = fragmentManager
-            if (fragmentManager != null) {
-                CalendarPreferenceDialog().show(fragmentManager, "CalendarPreferenceDialog")
+            fragmentManager?.apply {
+                CalendarPreferenceDialog().show(this, "CalendarPreferenceDialog")
             }
             return true
         }

@@ -175,6 +175,7 @@ class CalendarFragment : DaggerFragment() {
         }
 
         mainBinding.run {
+            // FIXME: use RecyclerView.Adapter and ViewPager.registerOnPageChangeCallback instead
             tabsViewPager.adapter = object : FragmentStateAdapter(context) {
                 override fun getItemCount() = tabs.size
                 override fun createFragment(position: Int) =

@@ -14,13 +14,8 @@ import com.byagowi.persiancalendar.utils.*
 class WidgetConfigurationActivity : AppCompatActivity() {
 
     private fun finishAndSuccess() {
-        val extras = intent.extras
-        if (extras != null) {
-            val appwidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID)
-            setResult(
-                Activity.RESULT_OK, Intent()
-                    .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appwidgetId)
-            )
+        intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
+            setResult(Activity.RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i))
         }
         updateStoredPreference(this)
         update(this, false)

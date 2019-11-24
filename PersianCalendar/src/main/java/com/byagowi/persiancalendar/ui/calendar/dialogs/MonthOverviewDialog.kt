@@ -30,16 +30,14 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val context = mainActivityDependency.mainActivity
-        var baseJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
-        if (baseJdn == -1L) baseJdn = getTodayJdn()
 
-        val records = ArrayList<MonthOverviewRecord>()
-
+        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)
+            ?.takeUnless { it == -1L } ?: getTodayJdn()
         val mainCalendar = mainCalendar
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
-        val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
         val deviceEvents = readMonthDeviceEvents(context, baseJdn)
-        (0 until monthLength).forEach {
+        val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
+        val events = (0 until monthLength).mapNotNull {
             val jdn = baseJdn + it
             val events = getEvents(jdn, deviceEvents)
             val holidays = getEventsTitle(
@@ -56,23 +54,21 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
                 showDeviceCalendarEvents = true,
                 insertRLM = false
             )
-            if (holidays.isNotEmpty() || nonHolidays.isNotEmpty())
-                records.add(
-                    MonthOverviewRecord(
-                        dayTitleSummary(
-                            getDateFromJdnOfCalendar(mainCalendar, jdn)
-                        ), holidays, nonHolidays
-                    )
-                )
-        }
-        if (records.size == 0)
-            records.add(MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", ""))
+            if (holidays.isEmpty() && nonHolidays.isEmpty()) null
+            else MonthOverviewRecord(
+                dayTitleSummary(
+                    getDateFromJdnOfCalendar(mainCalendar, jdn)
+                ), holidays, nonHolidays
+            )
+        }.takeUnless { it.isEmpty() } ?: listOf(
+            MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
+        )
 
         val binding = MonthOverviewDialogBinding.inflate(
             LayoutInflater.from(context), null, false
         ).apply {
             recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = ItemAdapter(records)
+            recyclerView.adapter = ItemAdapter(events)
         }
 
         return BottomSheetDialog(context).apply {

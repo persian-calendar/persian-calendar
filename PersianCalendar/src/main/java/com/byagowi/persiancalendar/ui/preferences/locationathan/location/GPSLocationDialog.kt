@@ -157,11 +157,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
             appDependency.sharedPreferences.edit {
                 putString(PREF_LATITUDE, latitude)
                 putString(PREF_LONGITUDE, longitude)
-                if (cityName != null) {
-                    putString(PREF_GEOCODED_CITYNAME, cityName)
-                } else {
-                    putString(PREF_GEOCODED_CITYNAME, "")
-                }
+                putString(PREF_GEOCODED_CITYNAME, cityName ?: "")
                 putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
             }
         }

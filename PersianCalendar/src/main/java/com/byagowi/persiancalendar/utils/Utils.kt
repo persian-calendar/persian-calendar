@@ -329,10 +329,9 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
 }
 
 fun getCityFromPreference(context: Context): CityItem? {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-    val key = prefs.getString(PREF_SELECTED_LOCATION, "") ?: ""
-    if (key.isEmpty() || key == DEFAULT_CITY) return null
+    val key = PreferenceManager.getDefaultSharedPreferences(context)
+        ?.getString(PREF_SELECTED_LOCATION, null)
+        ?.takeUnless { it.isEmpty() || it == DEFAULT_CITY } ?: return null
 
     if (key == cachedCityKey)
         return cachedCity
@@ -363,7 +362,7 @@ private fun getOnlyLanguage(string: String): String = string.replace("-(IR|AF|US
 fun updateStoredPreference(context: Context) {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 
-    language = prefs.getString(PREF_APP_LANGUAGE, DEFAULT_APP_LANGUAGE) ?: DEFAULT_APP_LANGUAGE
+    language = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
 
     preferredDigits =
         if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)) when (language) {
@@ -385,25 +384,21 @@ fun updateStoredPreference(context: Context) {
     isCenterAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
 
     selectedWidgetTextColor =
-        (prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, DEFAULT_SELECTED_WIDGET_TEXT_COLOR)
-            ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR)
+        prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null) ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
     selectedWidgetBackgroundColor =
-        (prefs.getString(
-            PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-            DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-        )) ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+        prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR, null)
+            ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
     calculationMethod =
-        prefs.getString(PREF_PRAY_TIME_METHOD, DEFAULT_PRAY_TIME_METHOD) ?: DEFAULT_PRAY_TIME_METHOD
+        prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
 
     coordinate = getCoordinate(context)
     try {
-        mainCalendar = CalendarType.valueOf(
-            prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI"
-        )
+        mainCalendar =
+            CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI")
 
         otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: "GREGORIAN,ISLAMIC")
             .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
@@ -416,8 +411,7 @@ fun updateStoredPreference(context: Context) {
     spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
     isShowWeekOfYearEnabled = prefs.getBoolean("showWeekOfYearNumber", false)
     weekStartOffset =
-        (prefs.getString(PREF_WEEK_START, DEFAULT_WEEK_START) ?: DEFAULT_WEEK_START).toIntOrNull()
-            ?: 0
+        (prefs.getString(PREF_WEEK_START, null) ?: DEFAULT_WEEK_START).toIntOrNull() ?: 0
 
     weekEnds = BooleanArray(7)
     (prefs.getStringSet(PREF_WEEK_ENDS, null) ?: DEFAULT_WEEK_ENDS)

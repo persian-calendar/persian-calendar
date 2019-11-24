@@ -27,7 +27,7 @@ class AthanActivity : AppCompatActivity() {
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
     private var alreadyStopped = false
-    private var stopTask = object : Runnable {
+    private val stopTask = object : Runnable {
         override fun run() {
             if (ringtone == null && mediaPlayer == null) {
                 this@AthanActivity.finish()
@@ -52,7 +52,7 @@ class AthanActivity : AppCompatActivity() {
         }
     }
 
-    private var ascendVolume = object : Runnable {
+    private val ascendVolume = object : Runnable {
         override fun run() {
             currentVolumeSteps++
             audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, currentVolumeSteps, 0)

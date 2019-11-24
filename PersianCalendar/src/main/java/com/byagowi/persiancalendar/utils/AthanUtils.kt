@@ -28,8 +28,8 @@ fun isAscendingAthanVolumeEnabled(context: Context): Boolean =
     ) ?: false
 
 fun getCustomAthanUri(context: Context): Uri? =
-    PreferenceManager.getDefaultSharedPreferences(context)?.getString(PREF_ATHAN_URI, "")
-        ?.run { if (this.isEmpty()) null else this.toUri() }
+    PreferenceManager.getDefaultSharedPreferences(context)?.getString(PREF_ATHAN_URI, null)
+        ?.takeUnless { it.isEmpty() }?.toUri()
 
 fun startAthan(context: Context, prayTimeKey: String): Any? = if (notificationAthan) {
     context.startService(

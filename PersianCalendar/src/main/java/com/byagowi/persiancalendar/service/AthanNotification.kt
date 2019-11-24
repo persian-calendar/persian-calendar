@@ -44,14 +44,12 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        val title = if (intent == null)
-            ""
-        else
-            getString(getPrayTimeText(intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)))
+        val title = intent
+            ?.let { getString(getPrayTimeText(it.getStringExtra(KEY_EXTRA_PRAYER_KEY))) } ?: ""
         val cityName = getCityName(this, false)
         val subtitle =
             if (cityName.isEmpty()) "" else getString(R.string.in_city_time) + " " + cityName
-        var notificationBuilder = NotificationCompat.Builder(
+        val notificationBuilder = NotificationCompat.Builder(
             this,
             NOTIFICATION_CHANNEL_ID
         )
@@ -79,7 +77,7 @@ class AthanNotification : Service() {
                 cv.setTextViewText(R.id.body, subtitle)
             }
 
-            notificationBuilder = notificationBuilder
+            notificationBuilder
                 .setCustomContentView(cv)
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }

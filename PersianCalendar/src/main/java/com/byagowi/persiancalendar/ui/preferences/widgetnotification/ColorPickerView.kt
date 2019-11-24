@@ -187,7 +187,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
             val checkerBoard = createCheckerBoard(12)
             val frameLayout = object : FrameLayout(context) {
-                var rect: Rect = Rect()
+                val rect: Rect = Rect()
                 override fun onDraw(canvas: Canvas?) {
                     super.onDraw(canvas)
                     getDrawingRect(rect)

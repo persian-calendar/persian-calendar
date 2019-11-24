@@ -94,7 +94,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         val drawerToggle = object : ActionBarDrawerToggle(
             this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
         ) {
-            var slidingDirection = if (isRTL) -1 else +1
+            val slidingDirection = if (isRTL) -1 else +1
 
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
                 super.onDrawerSlide(drawerView, slideOffset)
@@ -215,12 +215,12 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
     }
 
     fun navigateTo(@IdRes id: Int) {
-        val menuItem = binding.navigation.menu.findItem(
+        binding.navigation.menu.findItem(
+            // We don't have a menu entry for compass, so
             if (id == R.id.level) R.id.compass else id
-        ) // We don't have a menu entry for compass, so
-        if (menuItem != null) {
-            menuItem.isCheckable = true
-            menuItem.isChecked = true
+        )?.apply {
+            isCheckable = true
+            isChecked = true
         }
 
         if (settingHasChanged) { // update when checked menu item is changed
