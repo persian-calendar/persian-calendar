@@ -17,15 +17,16 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.preference.PreferenceManager
-import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
@@ -39,7 +40,6 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.month.MonthFragment
-import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.calendar.times.TimeItemAdapter
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.*
@@ -80,43 +80,17 @@ class CalendarFragment : DaggerFragment() {
         if (position != 0) mainBinding.todayButton.show()
     }
 
-    class TabFragment : Fragment() {
-        internal var view: View? = null // It really can be null, should refactored however
-            private set
-        private var position = 0
-
-        override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-        ): View? = view
-
-        override fun onResume() {
-            super.onResume()
-            view?.also {
-                (it.findViewById<View?>(R.id.sunView) as? SunView?)?.startAnimate()
-
-                PreferenceManager.getDefaultSharedPreferences(it.context).edit {
-                    putInt(LAST_CHOSEN_TAB_KEY, position)
-                }
-            }
-        }
-
-        override fun onPause() {
-            (view?.findViewById<View?>(R.id.sunView) as? SunView?)?.clear()
-            super.onPause()
-        }
-
-        companion object {
-            internal fun newInstance(view: View, position: Int) = TabFragment().also {
-                it.view = view
-                it.position = position
+    abstract class TabsAdapter : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
+        inner class ViewHolder(private val frame: FrameLayout) : RecyclerView.ViewHolder(frame) {
+            fun bind(view: View) = frame.run {
+                removeAllViews()
+                addView(view)
             }
         }
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val context = mainActivityDependency.mainActivity
 
@@ -175,12 +149,28 @@ class CalendarFragment : DaggerFragment() {
         }
 
         mainBinding.run {
-            // FIXME: use RecyclerView.Adapter and ViewPager.registerOnPageChangeCallback instead
-            tabsViewPager.adapter = object : FragmentStateAdapter(context) {
-                override fun getItemCount() = tabs.size
-                override fun createFragment(position: Int) =
-                    TabFragment.newInstance(tabs[position], position)
+            tabsViewPager.adapter = object : TabsAdapter() {
+                override fun getItemCount(): Int = tabs.size
+                override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+                    holder.bind(tabs[position])
+
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+                    FrameLayout(context).apply {
+                        layoutParams = FrameLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+                        )
+                    }
+                )
             }
+            tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    if (position == OWGHAT_TAB) owghatBinding.sunView.startAnimate()
+                    PreferenceManager.getDefaultSharedPreferences(context).edit {
+                        putInt(LAST_CHOSEN_TAB_KEY, position)
+                    }
+                }
+            })
+
             TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
                 tab.text = titles[position]
             }.attach()
