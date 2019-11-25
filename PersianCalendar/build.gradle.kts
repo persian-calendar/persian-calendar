@@ -69,16 +69,6 @@ android {
             // setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
         }
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-}
-
-// compile bytecode to java 8 (default is java 6)
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
 }
 
 dependencies {
@@ -86,7 +76,7 @@ dependencies {
     implementation(project(":calendar"))
     implementation(project(":praytimes"))
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${KotlinCompilerVersion.VERSION}")
 
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.preference:preference-ktx:1.1.0")
