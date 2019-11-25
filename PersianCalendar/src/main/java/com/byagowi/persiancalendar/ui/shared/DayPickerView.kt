@@ -1,18 +1,20 @@
 package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.NumberPicker
+import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.setMargins
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
-import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.utils.*
+import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 
 class DayPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -22,23 +24,38 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     var selectedDayListener: ((jdn: Long) -> Unit) = fun(_) {}
 
+    var selectedCalendarType: CalendarType = CalendarType.SHAMSI
+
+    // https://stackoverflow.com/a/34763668
+    private fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
+
     val binding: DayPickerViewBinding =
         DayPickerViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
-            calendarTypeSpinner.adapter = ArrayAdapter(
-                getContext(),
-                android.R.layout.simple_spinner_dropdown_item,
-                getOrderedCalendarEntities(getContext())
-            )
 
-            calendarTypeSpinner.setSelection(0)
-            calendarTypeSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(p0: AdapterView<*>?) {}
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        setDayJdnOnView(jdn)
-                        selectedDayListener(jdn)
+            val calendarTypes = getOrderedCalendarEntities(getContext())
+            val layoutInflater = LayoutInflater.from(root.context)
+            val chips = calendarTypes.map {
+                (layoutInflater.inflate(R.layout.single_chip_layout, calendarTypesFlexbox, false) as Chip).apply {
+                    text = it.toString()
+                }
+            }
+            chips.forEachIndexed { i, chip ->
+                chip.setOnClickListener {
+                    selectedCalendarType = calendarTypes[i].type
+                    setDayJdnOnView(jdn)
+                    selectedDayListener(jdn)
+                    chips.forEachIndexed { j, chipView ->
+                        chipView.isClickable = i != j
+                        chipView.isSelected = i == j
                     }
                 }
+                chip.isClickable = i != 0
+                chip.isSelected = i == 0
+                chip.isCheckable = false
+                selectedCalendarType = calendarTypes[0].type
+                calendarTypesFlexbox.addView(chip)
+            }
+
             val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
                 jdn = dayJdnFromView
                 selectedDayListener(jdn)
@@ -53,7 +70,6 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
-            val selectedCalendarType = selectedCalendarType
             if (day > getMonthLength(selectedCalendarType, year, month))
                 throw Exception("Not a valid day")
 
@@ -64,9 +80,6 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             Log.e("SelectDayDialog", "", e)
             -1
         }
-
-    val selectedCalendarType: CalendarType
-        get() = (binding.calendarTypeSpinner.selectedItem as CalendarTypeItem).type
 
     fun setDayJdnOnView(jdn: Long) {
         this.jdn = if (jdn == -1L) getTodayJdn() else jdn

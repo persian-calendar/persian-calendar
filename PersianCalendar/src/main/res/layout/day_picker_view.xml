@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minWidth="400dp"
     android:orientation="vertical"
     android:padding="@dimen/view_padding">
 
-    <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/calendarTypeSpinner"
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/calendarTypesFlexbox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:contentDescription="@string/select_type_date"
-        android:entries="@array/calendar_type"
-        android:prompt="@string/day"
-        android:textColor="?attr/colorTextNormal"
-        android:textSize="@dimen/text_size_description" />
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:flexWrap="wrap"
+        app:justifyContent="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
