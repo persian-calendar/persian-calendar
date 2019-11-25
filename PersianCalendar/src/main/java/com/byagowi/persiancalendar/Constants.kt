@@ -93,7 +93,6 @@ const val BROADCAST_ALARM = "BROADCAST_ALARM"
 const val BROADCAST_RESTART_APP = "BROADCAST_RESTART_APP"
 const val BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP"
 const val KEY_EXTRA_PRAYER_KEY = "prayer_name"
-const val BROADCAST_TO_MONTH_FRAGMENT_RESET_DAY = Integer.MAX_VALUE
 const val FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf"
 
 const val RLM = '\u200F'

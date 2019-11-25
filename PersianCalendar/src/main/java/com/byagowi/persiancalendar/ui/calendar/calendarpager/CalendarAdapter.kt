@@ -2,31 +2,27 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.utils.*
-import io.github.persiancalendar.calendar.AbstractDate
 
-class CalendarAdapter(private val calendarFragment: CalendarFragment) :
+class CalendarAdapter(private val calendarPager: CalendarPager) :
     RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         FragmentMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    override fun getItemCount() = monthsLimit
+    override fun getItemCount() = CalendarPager.monthsLimit
 
     inner class ViewHolder(val binding: FragmentMonthBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private var onUpdateCommandReceived =
-            fun(_: CalendarFragment.MonthFragmentUpdateCommand) {}
+        var update = fun(_: Int, _: Boolean, _: Long) {}
 
         init {
             val isRTL = isRTL(binding.root.context)
@@ -36,7 +32,7 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                     if (isRTL) R.drawable.ic_keyboard_arrow_left
                     else R.drawable.ic_keyboard_arrow_right
                 )
-                setOnClickListener { calendarFragment.changeMonth(1) }
+                setOnClickListener { calendarPager.changeMonth(1) }
             }
 
             binding.prev.apply {
@@ -44,7 +40,7 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                     if (isRTL) R.drawable.ic_keyboard_arrow_right
                     else R.drawable.ic_keyboard_arrow_left
                 )
-                setOnClickListener { calendarFragment.changeMonth(-1) }
+                setOnClickListener { calendarPager.changeMonth(-1) }
             }
 
             binding.monthDays.apply {
@@ -54,15 +50,14 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 )
             }
 
-            calendarFragment.monthFragmentsHandler
-                .observe(calendarFragment, Observer { onUpdateCommandReceived(it) })
+            calendarPager.addViewHolder(this)
         }
 
         private val dayPaintResources = DaysPaintResources(binding.root.context)
 
         fun bind(position: Int) {
-            val offset = applyOffset(position)
-            val date = getDateFromOffset(mainCalendar, offset)
+            val offset = CalendarPager.applyOffset(position)
+            val date = CalendarPager.getDateFromOffset(mainCalendar, offset)
             val baseJdn = date.toJdn()
             val monthLength = getMonthLength(mainCalendar, date.year, date.month)
             val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
@@ -71,7 +66,7 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
             val weeksCount =
                 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
             val adapter = MonthAdapter(
-                binding.root.context, dayPaintResources, calendarFragment,
+                binding.root.context, dayPaintResources, calendarPager,
                 (baseJdn until baseJdn + monthLength).toList(),
                 startingDayOfWeek, weekOfYearStart, weeksCount
             )
@@ -80,16 +75,14 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 it.itemAnimator = null
             }
 
-            onUpdateCommandReceived = fun(cmd: CalendarFragment.MonthFragmentUpdateCommand) {
-                if (cmd.target == offset) {
-                    val jdn = cmd.currentlySelectedJdn
-
-                    if (cmd.isEventsModification) {
+            update = fun(target: Int, isEventsModification: Boolean, jdn: Long) {
+                if (target == offset) {
+                    if (isEventsModification) {
                         adapter.initializeMonthEvents(binding.root.context)
-                        calendarFragment.selectDay(jdn)
+                        calendarPager.onDayClicked(jdn)
                     } else {
                         adapter.selectDay(-1)
-                        updateTitle(date)
+                        calendarPager.onPageSelectedWithDate(date)
                     }
 
                     val selectedDay = 1 + jdn - baseJdn
@@ -98,46 +91,13 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 } else adapter.selectDay(-1)
             }
 
-            if (calendarFragment.getCurrentSelection() == position) {
-                if (calendarFragment.isTheFirstTime && offset == 0) {
-                    calendarFragment.isTheFirstTime = false
-                    calendarFragment.selectDay(getTodayJdn())
+            if (calendarPager.getCurrentSelection() == position) {
+                if (calendarPager.isTheFirstTime && offset == 0) {
+                    calendarPager.isTheFirstTime = false
+                    calendarPager.onDayClicked(getTodayJdn())
                 }
-                calendarFragment.onDaySelected(offset)
+                calendarPager.updateMonthFragments(offset, false)
             }
-        }
-
-        private fun updateTitle(date: AbstractDate) =
-            calendarFragment.mainActivityDependency.mainActivity.setTitleAndSubtitle(
-                getMonthName(date),
-                formatNumber(date.year)
-            )
-    }
-
-    companion object {
-        const val monthsLimit = 5000 // this should be an even number
-
-        fun gotoOffset(monthViewPager: ViewPager2, offset: Int, smoothScroll: Boolean = true) {
-            if (monthViewPager.currentItem != applyOffset(offset))
-                monthViewPager.setCurrentItem(applyOffset(offset), smoothScroll)
-        }
-
-        fun applyOffset(position: Int) = monthsLimit / 2 - position
-
-        fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
-            val date = getTodayOfCalendar(calendar)
-            var month = date.month - offset
-            month -= 1
-            var year = date.year
-
-            year += month / 12
-            month %= 12
-            if (month < 0) {
-                year -= 1
-                month += 12
-            }
-            month += 1
-            return getDateOfCalendar(calendar, year, month, 1)
         }
     }
 }

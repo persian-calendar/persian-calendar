@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
-import android.content.res.Resources
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,12 +17,9 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private var jdn: Long = -1
 
-    var selectedDayListener: ((jdn: Long) -> Unit) = fun(_) {}
+    var selectedDayListener = fun(_: Long) {}
 
     var selectedCalendarType: CalendarType = CalendarType.SHAMSI
-
-    // https://stackoverflow.com/a/34763668
-    private fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
 
     val binding: DayPickerViewBinding =
         DayPickerViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
@@ -32,9 +28,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             val layoutInflater = LayoutInflater.from(root.context)
             val chips = calendarTypes.map {
                 (layoutInflater.inflate(
-                    R.layout.single_chip_layout,
-                    calendarTypesFlexbox,
-                    false
+                    R.layout.single_chip_layout, calendarTypesFlexbox, false
                 ) as Chip).apply {
                     text = it.toString()
                 }

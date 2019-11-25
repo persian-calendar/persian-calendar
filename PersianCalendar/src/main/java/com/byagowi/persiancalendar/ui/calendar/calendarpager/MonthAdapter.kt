@@ -7,12 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.utils.*
 
 class MonthAdapter internal constructor(
     private val context: Context, private val daysPaintResources: DaysPaintResources,
-    private val calendarFragment: CalendarFragment, private val days: List<Long>,
+    private val calendarPager: CalendarPager, private val days: List<Long>,
     startingDayOfWeek: Int, private val weekOfYearStart: Int, private val weeksCount: Int
 ) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
 
@@ -75,7 +74,7 @@ class MonthAdapter internal constructor(
             val jdn = itemDayView.jdn
             if (jdn == -1L) return
 
-            calendarFragment.selectDay(jdn)
+            calendarPager.onDayClicked(jdn)
             this@MonthAdapter.selectDay(itemDayView.dayOfMonth)
         }
 
@@ -86,7 +85,7 @@ class MonthAdapter internal constructor(
             val jdn = itemDayView.jdn
             if (jdn == -1L) return false
 
-            calendarFragment.addEventOnCalendar(jdn)
+            calendarPager.onDayLongClicked(jdn)
             return false
         }
 
