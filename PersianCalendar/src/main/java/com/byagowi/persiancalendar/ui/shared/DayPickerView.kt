@@ -5,12 +5,8 @@ import android.content.res.Resources
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.NumberPicker
-import androidx.appcompat.view.ContextThemeWrapper
-import androidx.core.view.setMargins
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.utils.*
@@ -35,7 +31,11 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             val calendarTypes = getOrderedCalendarEntities(getContext())
             val layoutInflater = LayoutInflater.from(root.context)
             val chips = calendarTypes.map {
-                (layoutInflater.inflate(R.layout.single_chip_layout, calendarTypesFlexbox, false) as Chip).apply {
+                (layoutInflater.inflate(
+                    R.layout.single_chip_layout,
+                    calendarTypesFlexbox,
+                    false
+                ) as Chip).apply {
                     text = it.toString()
                 }
             }
