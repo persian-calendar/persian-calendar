@@ -1,6 +1,5 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -49,7 +48,25 @@ android {
         ).map { it.runCommand()?.trim() }.joinToString("-") +
                 (if ("git status -s".runCommand()?.trim()?.isEmpty() == false) "-dirty" else "")
 
+    signingConfigs {
+        create("nightly"){
+            storeFile = rootProject.file("nightly.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
     buildTypes {
+        create("nightly") {
+            buildOutputs.all {
+                (this as BaseVariantOutputImpl).outputFileName =
+                    "PersianCalendar-nightly-$appVerboseVersion.apk"
+            }
+            signingConfig = signingConfigs.getByName("nightly")
+            applicationIdSuffix = ".nightly"
+            isMinifyEnabled = true
+            isShrinkResources = true
+        }
         getByName("debug") {
             buildOutputs.all {
                 (this as BaseVariantOutputImpl).outputFileName =

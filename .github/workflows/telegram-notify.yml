@@ -1,0 +1,19 @@
+name: Notify
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  notify:
+    name: Notify via Telegram
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send message to Telegram
+        uses: Lukasss93/telegram-action@v1.1
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT: ${{ secrets.TELEGRAM_TO }}
+        with:
+          footer: '📅 @Persian_Calendar'
