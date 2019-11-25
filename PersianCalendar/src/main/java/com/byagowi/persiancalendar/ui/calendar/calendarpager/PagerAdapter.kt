@@ -22,6 +22,10 @@ class PagerAdapter(private val calendarPager: CalendarPager) :
     inner class ViewHolder(val binding: FragmentMonthBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private val daysAdapter = DaysAdapter(
+            binding.root.context, DaysPaintResources(binding.root.context), calendarPager
+        )
+
         var update = fun(_: Int, _: Boolean, _: Long) {}
 
         init {
@@ -51,44 +55,45 @@ class PagerAdapter(private val calendarPager: CalendarPager) :
             }
 
             calendarPager.addViewHolder(this)
-        }
 
-        private val dayPaintResources = DaysPaintResources(binding.root.context)
+            binding.monthDays.apply {
+                adapter = daysAdapter
+                itemAnimator = null
+            }
+        }
 
         fun bind(position: Int) {
             val offset = CalendarPager.applyOffset(position)
             val date = CalendarPager.getDateFromOffset(mainCalendar, offset)
             val baseJdn = date.toJdn()
             val monthLength = getMonthLength(mainCalendar, date.year, date.month)
-            val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
             val startOfYearJdn = getDateOfCalendar(mainCalendar, date.year, 1, 1).toJdn()
-            val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
-            val weeksCount =
-                1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
-            val adapter = DaysAdapter(
-                binding.root.context, dayPaintResources, calendarPager,
-                (baseJdn until baseJdn + monthLength).toList(),
-                startingDayOfWeek, weekOfYearStart, weeksCount
-            )
-            binding.monthDays.let {
-                it.adapter = adapter
-                it.itemAnimator = null
+
+            daysAdapter.apply {
+                startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
+                fixedStartingDayOfWeek = fixDayOfWeekReverse(getDayOfWeekFromJdn(baseJdn))
+                weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
+                weeksCount = calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) -
+                        weekOfYearStart + 1
+                days = (baseJdn until baseJdn + monthLength).toList()
+                initializeMonthEvents()
+                notifyItemRangeChanged(0, daysAdapter.itemCount)
             }
 
             update = fun(target: Int, isEventsModification: Boolean, jdn: Long) {
                 if (target == offset) {
                     if (isEventsModification) {
-                        adapter.initializeMonthEvents(binding.root.context)
+                        daysAdapter.initializeMonthEvents()
                         calendarPager.onDayClicked(jdn)
                     } else {
-                        adapter.selectDay(-1)
+                        daysAdapter.selectDay(-1)
                         calendarPager.onPageSelectedWithDate(date)
                     }
 
                     val selectedDay = 1 + jdn - baseJdn
                     if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
-                        adapter.selectDay(selectedDay.toInt())
-                } else adapter.selectDay(-1)
+                        daysAdapter.selectDay(selectedDay.toInt())
+                } else daysAdapter.selectDay(-1)
             }
 
             if (calendarPager.getCurrentSelection() == position) {
