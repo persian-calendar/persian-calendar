@@ -17,6 +17,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
@@ -148,14 +149,12 @@ class AboutFragment : DaggerFragment() {
         )
         layoutParams.setMargins(8)
 
-        val chipClick = View.OnClickListener { view ->
+        val chipClick = View.OnClickListener {
             try {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        ("https://github.com/" + (view as Chip).text.toString()
-                            .split("@")[1].split(")")[0]).toUri()
-                    )
+                CustomTabsIntent.Builder().build().launchUrl(
+                    activity,
+                    ("https://github.com/" + (it as Chip).text.toString()
+                        .split("@")[1].split(")")[0]).toUri()
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
