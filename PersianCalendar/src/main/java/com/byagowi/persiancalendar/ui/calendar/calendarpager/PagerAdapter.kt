@@ -56,10 +56,7 @@ class PagerAdapter(private val calendarPager: CalendarPager) :
 
             calendarPager.addViewHolder(this)
 
-            binding.monthDays.apply {
-                adapter = daysAdapter
-                itemAnimator = null
-            }
+            binding.monthDays.adapter = daysAdapter
         }
 
         fun bind(position: Int) {
