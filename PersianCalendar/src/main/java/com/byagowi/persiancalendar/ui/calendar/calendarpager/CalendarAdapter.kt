@@ -61,7 +61,7 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 .observe(calendarFragment, Observer { onUpdateCommandReceived(it) })
         }
 
-        val dayPaintResources = DaysPaintResources(binding.root.context)
+        private val dayPaintResources = DaysPaintResources(binding.root.context)
 
         fun bind(position: Int) {
             val offset = applyOffset(position)
@@ -69,7 +69,6 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
             val baseJdn = date.toJdn()
             val monthLength = getMonthLength(mainCalendar, date.year, date.month)
             val startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
-            val todayJdn = getTodayJdn()
             val startOfYearJdn = getDateOfCalendar(mainCalendar, date.year, 1, 1).toJdn()
             val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
             val weeksCount =
@@ -86,13 +85,6 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
 
             val calendarFragmentModel =
                 ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java]
-            if (calendarFragmentModel.isTheFirstTime &&
-                offset == 0 && calendarFragment.viewPagerPosition == offset
-            ) {
-                calendarFragmentModel.isTheFirstTime = false
-                calendarFragmentModel.selectDay(todayJdn)
-                updateTitle(date)
-            }
 
             onUpdateCommandReceived = fun(cmd: CalendarFragmentModel.MonthFragmentUpdateCommand) {
                 if (cmd.target == offset) {
@@ -112,7 +104,13 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 } else adapter.selectDay(-1)
             }
 
-            calendarFragment.onDaySelected(offset)
+            if (calendarFragment.getCurrentSelection() == position) {
+                if (calendarFragmentModel.isTheFirstTime && offset == 0) {
+                    calendarFragmentModel.isTheFirstTime = false
+                    calendarFragmentModel.selectDay(getTodayJdn())
+                }
+                calendarFragment.onDaySelected(offset)
+            }
         }
 
         private fun updateTitle(date: AbstractDate) =

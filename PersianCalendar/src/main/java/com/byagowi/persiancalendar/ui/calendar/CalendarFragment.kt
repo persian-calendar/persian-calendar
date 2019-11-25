@@ -66,8 +66,6 @@ class CalendarFragment : DaggerFragment() {
     private val calendarFragmentModel by viewModels<CalendarFragmentModel>()
     private val calendar = Calendar.getInstance()
     private var coordinate: Coordinate? = null
-    var viewPagerPosition: Int = 0
-        private set
     private lateinit var mainBinding: FragmentCalendarBinding
     private lateinit var calendarsView: CalendarsView
     private var owghatBinding: OwghatTabContentBinding? = null
@@ -97,7 +95,6 @@ class CalendarFragment : DaggerFragment() {
         setHasOptionsMenu(true)
 
         mainBinding = FragmentCalendarBinding.inflate(inflater, container, false)
-        viewPagerPosition = 0
 
         val titles = ArrayList<String>()
         val tabs = ArrayList<View>()
@@ -176,6 +173,12 @@ class CalendarFragment : DaggerFragment() {
             }.attach()
 
             calendarViewPager.adapter = CalendarAdapter(this@CalendarFragment)
+            calendarViewPager.registerOnPageChangeCallback(
+                object : ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) =
+                        onDaySelected(CalendarAdapter.applyOffset(position))
+                }
+            )
             CalendarAdapter.gotoOffset(calendarViewPager, 0, false)
 
             var lastTab = appDependency.sharedPreferences
@@ -206,6 +209,8 @@ class CalendarFragment : DaggerFragment() {
 
         return mainBinding.root
     }
+
+    fun getCurrentSelection() = mainBinding.calendarViewPager.currentItem
 
     fun changeMonth(position: Int) = mainBinding.calendarViewPager.setCurrentItem(
         mainBinding.calendarViewPager.currentItem + position, true
@@ -480,7 +485,7 @@ class CalendarFragment : DaggerFragment() {
     }
 
     fun bringDate(jdn: Long) {
-        viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
+        val viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition)
 
         calendarFragmentModel.selectDay(jdn)
