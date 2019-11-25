@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import kotlin.math.min
 
-class ItemDayView : View {
+class DayView : View {
 
     private lateinit var resource: DaysPaintResources
     private val bounds = Rect()

@@ -9,11 +9,11 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.utils.*
 
-class MonthAdapter internal constructor(
+class DaysAdapter internal constructor(
     private val context: Context, private val daysPaintResources: DaysPaintResources,
     private val calendarPager: CalendarPager, private val days: List<Long>,
     startingDayOfWeek: Int, private val weekOfYearStart: Int, private val weeksCount: Int
-) : RecyclerView.Adapter<MonthAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
     private val startingDayOfWeek: Int = fixDayOfWeekReverse(startingDayOfWeek)
     private val totalDays: Int = days.size
@@ -49,7 +49,7 @@ class MonthAdapter internal constructor(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ItemDayView(parent.context, daysPaintResources).also { it.layoutParams = layoutParams }
+        DayView(parent.context, daysPaintResources).also { it.layoutParams = layoutParams }
     )
 
     private fun hasDeviceEvents(dayEvents: List<CalendarEvent<*>>): Boolean =
@@ -62,7 +62,7 @@ class MonthAdapter internal constructor(
 
     val todayJdn = getTodayJdn()
 
-    inner class ViewHolder(itemView: ItemDayView) : RecyclerView.ViewHolder(itemView),
+    inner class ViewHolder(itemView: DayView) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener, View.OnLongClickListener {
         init {
             itemView.setOnClickListener(this)
@@ -70,18 +70,18 @@ class MonthAdapter internal constructor(
         }
 
         override fun onClick(v: View) {
-            val itemDayView = v as ItemDayView
+            val itemDayView = v as DayView
             val jdn = itemDayView.jdn
             if (jdn == -1L) return
 
             calendarPager.onDayClicked(jdn)
-            this@MonthAdapter.selectDay(itemDayView.dayOfMonth)
+            this@DaysAdapter.selectDay(itemDayView.dayOfMonth)
         }
 
         override fun onLongClick(v: View): Boolean {
             onClick(v)
 
-            val itemDayView = v as ItemDayView
+            val itemDayView = v as DayView
             val jdn = itemDayView.jdn
             if (jdn == -1L) return false
 
@@ -92,7 +92,7 @@ class MonthAdapter internal constructor(
         fun bind(position: Int) {
             var position = position
             val originalPosition = position
-            val itemDayView = itemView as ItemDayView
+            val itemDayView = itemView as DayView
             if (isShowWeekOfYearEnabled) {
                 if (position % 8 == 0) {
                     val row = position / 8

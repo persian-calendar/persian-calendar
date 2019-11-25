@@ -24,9 +24,9 @@ class CalendarPager @JvmOverloads constructor(
     var onNonDefaultPageSelected = fun() {}
     var onPageSelectedWithDate = fun(_: AbstractDate) {}
 
-    private val pagesViewHolders = ArrayList<WeakReference<CalendarAdapter.ViewHolder>>()
+    private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
 
-    fun addViewHolder(vh: CalendarAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
+    fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
 
     fun updateMonthFragments(toWhich: Int, addOrModify: Boolean) = pagesViewHolders.forEach {
         it.get()?.apply { update(toWhich, addOrModify, lastSelectedJdn) }
@@ -35,7 +35,7 @@ class CalendarPager @JvmOverloads constructor(
     fun resetMonthFragments() = updateMonthFragments(Int.MAX_VALUE, false)
 
     init {
-        viewPager.adapter = CalendarAdapter(this)
+        viewPager.adapter = PagerAdapter(this)
         viewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {

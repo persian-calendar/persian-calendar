@@ -8,8 +8,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
 import com.byagowi.persiancalendar.utils.*
 
-class CalendarAdapter(private val calendarPager: CalendarPager) :
-    RecyclerView.Adapter<CalendarAdapter.ViewHolder>() {
+class PagerAdapter(private val calendarPager: CalendarPager) :
+    RecyclerView.Adapter<PagerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         FragmentMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -65,7 +65,7 @@ class CalendarAdapter(private val calendarPager: CalendarPager) :
             val weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
             val weeksCount =
                 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
-            val adapter = MonthAdapter(
+            val adapter = DaysAdapter(
                 binding.root.context, dayPaintResources, calendarPager,
                 (baseJdn until baseJdn + monthLength).toList(),
                 startingDayOfWeek, weekOfYearStart, weeksCount
