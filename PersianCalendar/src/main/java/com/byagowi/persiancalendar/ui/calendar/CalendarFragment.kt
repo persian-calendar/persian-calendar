@@ -8,7 +8,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.provider.CalendarContract
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -22,9 +21,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.MutableLiveData
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -63,7 +60,6 @@ class CalendarFragment : DaggerFragment() {
     @Inject
     lateinit var mainActivityDependency: MainActivityDependency // same object from MainActivity
 
-    private val calendarFragmentModel by viewModels<CalendarFragmentModel>()
     private val calendar = Calendar.getInstance()
     private var coordinate: Coordinate? = null
     private lateinit var mainBinding: FragmentCalendarBinding
@@ -72,6 +68,7 @@ class CalendarFragment : DaggerFragment() {
     private lateinit var eventsBinding: EventsTabContentBinding
     private var lastSelectedJdn: Long = -1
     private var searchView: SearchView? = null
+    var isTheFirstTime: Boolean = true
 
     fun onDaySelected(position: Int) {
         sendUpdateCommandToMonthFragments(position, false)
@@ -195,19 +192,19 @@ class CalendarFragment : DaggerFragment() {
             formatNumber(today.year)
         )
 
-        calendarFragmentModel.selectedDayLiveData.observe(this, Observer { jdn ->
-            lastSelectedJdn = jdn
-            calendarsView.showCalendars(
-                lastSelectedJdn,
-                mainCalendar,
-                getEnabledCalendarTypes()
-            )
-            val isToday = getTodayJdn() == lastSelectedJdn
-            setOwghat(jdn, isToday)
-            showEvent(jdn, isToday)
-        })
-
         return mainBinding.root
+    }
+
+    fun selectDay(jdn: Long) {
+        lastSelectedJdn = jdn
+        calendarsView.showCalendars(
+            lastSelectedJdn,
+            mainCalendar,
+            getEnabledCalendarTypes()
+        )
+        val isToday = getTodayJdn() == lastSelectedJdn
+        setOwghat(jdn, isToday)
+        showEvent(jdn, isToday)
     }
 
     fun getCurrentSelection() = mainBinding.calendarViewPager.currentItem
@@ -280,9 +277,17 @@ class CalendarFragment : DaggerFragment() {
         }
     }
 
+    val monthFragmentsHandler = MutableLiveData<MonthFragmentUpdateCommand>()
+
+    class MonthFragmentUpdateCommand internal constructor(
+        val target: Int,
+        val isEventsModification: Boolean,
+        val currentlySelectedJdn: Long
+    )
+
     private fun sendUpdateCommandToMonthFragments(toWhich: Int, addOrModify: Boolean) =
-        ViewModelProviders.of(this)[CalendarFragmentModel::class.java].monthFragmentsUpdate(
-            CalendarFragmentModel.MonthFragmentUpdateCommand(toWhich, addOrModify, lastSelectedJdn)
+        monthFragmentsHandler.postValue(
+            MonthFragmentUpdateCommand(toWhich, addOrModify, lastSelectedJdn)
         )
 
     private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = dayEvents
@@ -476,7 +481,7 @@ class CalendarFragment : DaggerFragment() {
 
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, 0)
 
-        calendarFragmentModel.selectDay(getTodayJdn())
+        selectDay(getTodayJdn())
     }
 
     fun afterShiftWorkChange() = context?.run {
@@ -488,7 +493,7 @@ class CalendarFragment : DaggerFragment() {
         val viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
         CalendarAdapter.gotoOffset(mainBinding.calendarViewPager, viewPagerPosition)
 
-        calendarFragmentModel.selectDay(jdn)
+        selectDay(jdn)
         lastSelectedJdn = jdn
         sendUpdateCommandToMonthFragments(viewPagerPosition, false)
 

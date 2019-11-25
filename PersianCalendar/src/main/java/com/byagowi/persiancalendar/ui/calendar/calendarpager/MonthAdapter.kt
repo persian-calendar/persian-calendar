@@ -3,13 +3,11 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.*
 
 class MonthAdapter internal constructor(
@@ -77,7 +75,7 @@ class MonthAdapter internal constructor(
             val jdn = itemDayView.jdn
             if (jdn == -1L) return
 
-            ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java].selectDay(jdn)
+            calendarFragment.selectDay(jdn)
             this@MonthAdapter.selectDay(itemDayView.dayOfMonth)
         }
 

@@ -3,14 +3,12 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.calendar.AbstractDate
 
@@ -28,7 +26,7 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
         RecyclerView.ViewHolder(binding.root) {
 
         private var onUpdateCommandReceived =
-            fun(_: CalendarFragmentModel.MonthFragmentUpdateCommand) {}
+            fun(_: CalendarFragment.MonthFragmentUpdateCommand) {}
 
         init {
             val isRTL = isRTL(binding.root.context)
@@ -56,8 +54,7 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 )
             }
 
-            ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java]
-                .monthFragmentsHandler
+            calendarFragment.monthFragmentsHandler
                 .observe(calendarFragment, Observer { onUpdateCommandReceived(it) })
         }
 
@@ -83,16 +80,13 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 it.itemAnimator = null
             }
 
-            val calendarFragmentModel =
-                ViewModelProviders.of(calendarFragment)[CalendarFragmentModel::class.java]
-
-            onUpdateCommandReceived = fun(cmd: CalendarFragmentModel.MonthFragmentUpdateCommand) {
+            onUpdateCommandReceived = fun(cmd: CalendarFragment.MonthFragmentUpdateCommand) {
                 if (cmd.target == offset) {
                     val jdn = cmd.currentlySelectedJdn
 
                     if (cmd.isEventsModification) {
                         adapter.initializeMonthEvents(binding.root.context)
-                        calendarFragmentModel.selectDay(jdn)
+                        calendarFragment.selectDay(jdn)
                     } else {
                         adapter.selectDay(-1)
                         updateTitle(date)
@@ -105,9 +99,9 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
             }
 
             if (calendarFragment.getCurrentSelection() == position) {
-                if (calendarFragmentModel.isTheFirstTime && offset == 0) {
-                    calendarFragmentModel.isTheFirstTime = false
-                    calendarFragmentModel.selectDay(getTodayJdn())
+                if (calendarFragment.isTheFirstTime && offset == 0) {
+                    calendarFragment.isTheFirstTime = false
+                    calendarFragment.selectDay(getTodayJdn())
                 }
                 calendarFragment.onDaySelected(offset)
             }
