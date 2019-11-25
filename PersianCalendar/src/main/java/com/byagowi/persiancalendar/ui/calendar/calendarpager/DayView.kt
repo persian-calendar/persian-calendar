@@ -19,7 +19,7 @@ class DayView : View {
     private val drawingRect = RectF()
     private var text = ""
     private var today: Boolean = false
-    private var IsSelected: Boolean = false
+    private var dayIsSelected: Boolean = false
     private var hasEvent: Boolean = false
     private var hasAppointment: Boolean = false
     private var holiday: Boolean = false
@@ -56,7 +56,7 @@ class DayView : View {
         drawingRect.inset(radius * 0.1f, radius * 0.1f)
         val yOffsetToApply = if (isModernTheme) (-height * .07f).toInt() else 0
 
-        if (IsSelected) {
+        if (dayIsSelected) {
             if (isModernTheme) {
                 canvas.drawRoundRect(drawingRect, 0f, 0f, resource.selectedPaint)
             } else {
@@ -80,9 +80,9 @@ class DayView : View {
 
         val color: Int = if (isNumber) {
             if (holiday)
-                if (IsSelected) resource.colorHolidaySelected else resource.colorHoliday
+                if (dayIsSelected) resource.colorHolidaySelected else resource.colorHoliday
             else
-                if (IsSelected) resource.colorTextDaySelected else resource.colorTextDay
+                if (dayIsSelected) resource.colorTextDaySelected else resource.colorTextDay
             //            if (today && !selected) {
             //                color = resource.colorTextToday;
             //            }
@@ -91,7 +91,7 @@ class DayView : View {
         }
 
         resource.eventBarPaint.color =
-            if (IsSelected && !isModernTheme) color else resource.colorEventLine
+            if (dayIsSelected && !isModernTheme) color else resource.colorEventLine
 
         if (hasEvent) {
             canvas.drawLine(
@@ -130,7 +130,7 @@ class DayView : View {
         canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), resource.textPaint)
 
         resource.textPaint.color =
-            if (IsSelected) resource.colorTextDaySelected else resource.colorTextDay
+            if (dayIsSelected) resource.colorTextDaySelected else resource.colorTextDay
         resource.textPaint.textSize = textSize / 2f
         if (header.isNotEmpty()) {
             val headerXPos = (width - resource.textPaint.measureText(header).toInt()) / 2
@@ -151,7 +151,7 @@ class DayView : View {
     ) {
         this.text = text
         this.today = isToday
-        this.IsSelected = isSelected
+        this.dayIsSelected = isSelected
         this.hasEvent = hasEvent
         this.hasAppointment = hasAppointment
         this.holiday = isHoliday
