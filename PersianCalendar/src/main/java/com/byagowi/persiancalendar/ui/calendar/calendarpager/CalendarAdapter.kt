@@ -62,6 +62,8 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 .observe(calendarFragment, Observer { onUpdateCommandReceived(it) })
         }
 
+        val dayPaintResources = DaysPaintResources(binding.root.context)
+
         fun bind(position: Int) {
             val offset = applyOffset(position)
             val date = getDateFromOffset(mainCalendar, offset)
@@ -74,8 +76,7 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
             val weeksCount =
                 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
             val adapter = MonthAdapter(
-                binding.root.context,
-                DaysPaintResources(binding.root.context), calendarFragment,
+                binding.root.context, dayPaintResources, calendarFragment,
                 (baseJdn until baseJdn + monthLength).zip(
                     generateSequence(startingDayOfWeek, { if (it == 6) 0 else it + 1 })
                         .take(monthLength).toList()
