@@ -77,10 +77,6 @@ class CalendarFragment : DaggerFragment() {
 
     fun onDaySelected(position: Int) {
         sendUpdateCommandToMonthFragments(position, false)
-        Handler().postDelayed({
-            // FIXME: HACK! Find a better way to make sure update is done after pager's animation
-            sendUpdateCommandToMonthFragments(position, false)
-        }, 250)
         if (position != 0) mainBinding.todayButton.show()
     }
 
@@ -180,12 +176,6 @@ class CalendarFragment : DaggerFragment() {
             }.attach()
 
             calendarViewPager.adapter = CalendarAdapter(this@CalendarFragment)
-            calendarViewPager.registerOnPageChangeCallback(
-                object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) =
-                        onDaySelected(CalendarAdapter.applyOffset(position))
-                }
-            )
             CalendarAdapter.gotoOffset(calendarViewPager, 0, false)
 
             var lastTab = appDependency.sharedPreferences

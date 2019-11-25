@@ -115,6 +115,8 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                         adapter.selectDay(selectedDay.toInt())
                 } else adapter.selectDay(-1)
             }
+
+            calendarFragment.onDaySelected(offset)
         }
 
         private fun updateTitle(date: AbstractDate) =
