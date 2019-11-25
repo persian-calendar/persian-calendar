@@ -1,20 +1,66 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.appTheme
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import kotlin.math.min
 
-class DayView : View {
+class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
 
-    private lateinit var resource: DaysPaintResources
+    private val tempTypedValue = TypedValue()
+
+    @ColorInt
+    fun resolveColor(attr: Int) = tempTypedValue.let {
+        context.theme.resolveAttribute(attr, it, true)
+        ContextCompat.getColor(context, it.resourceId)
+    }
+
+    private val colorHoliday = resolveColor(R.attr.colorHoliday)
+    private val colorHolidaySelected = resolveColor(R.attr.colorHolidaySelected)
+    private val colorTextHoliday = resolveColor(R.attr.colorTextHoliday)
+    private val colorTextDay = resolveColor(R.attr.colorTextDay)
+    private val colorTextDaySelected = resolveColor(R.attr.colorTextDaySelected)
+    private val colorTextToday = resolveColor(R.attr.colorTextToday)
+    private val colorTextDayName = resolveColor(R.attr.colorTextDayName)
+    private val colorEventLine = resolveColor(R.attr.colorEventLine)
+
+    private val halfEventBarWidth = context.resources
+        .getDimensionPixelSize(R.dimen.day_item_event_bar_width) / 2
+    private val appointmentYOffset = context.resources
+        .getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
+    private val eventYOffset = context.resources
+        .getDimensionPixelSize(R.dimen.day_item_event_y_offset)
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        typeface = getCalendarFragmentFont(context)
+    }
+    private val eventBarPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        strokeWidth = context.resources
+            .getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
+    }
+    private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = resolveColor(R.attr.colorSelectDay)
+    }
+    private val todayPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = context.resources
+            .getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
+        color = resolveColor(R.attr.colorCurrentDay)
+    }
+
     private val bounds = Rect()
     private val drawingRect = RectF()
     private var text = ""
@@ -31,26 +77,13 @@ class DayView : View {
     private var isNumber: Boolean = false
     private var header = ""
 
-    constructor(context: Context, resource: DaysPaintResources) : super(context) {
-        this.resource = resource
-    }
-
-    // This constructor shouldn't be used
-    // as the first one reuses resource retrieval across the days
-    @JvmOverloads
-    constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
-        if (context is Activity) {
-            resource = DaysPaintResources(context)
-        }
-    }
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val width = width
         val height = height
         val radius = min(width, height) / 2
 
-        val isModernTheme = resource.style == R.style.ModernTheme
+        val isModernTheme = appTheme == R.style.ModernTheme
         getDrawingRect(bounds)
         drawingRect.set(bounds)
         drawingRect.inset(radius * 0.1f, radius * 0.1f)
@@ -58,88 +91,81 @@ class DayView : View {
 
         if (dayIsSelected) {
             if (isModernTheme) {
-                canvas.drawRoundRect(drawingRect, 0f, 0f, resource.selectedPaint)
+                canvas.drawRoundRect(drawingRect, 0f, 0f, selectedPaint)
             } else {
                 canvas.drawCircle(
                     width / 2f, height / 2f, (radius - 5).toFloat(),
-                    resource.selectedPaint
+                    selectedPaint
                 )
             }
         }
 
         if (today) {
             if (isModernTheme) {
-                canvas.drawRoundRect(drawingRect, 0f, 0f, resource.todayPaint)
+                canvas.drawRoundRect(drawingRect, 0f, 0f, todayPaint)
             } else {
                 canvas.drawCircle(
                     width / 2f, height / 2f, (radius - 5).toFloat(),
-                    resource.todayPaint
+                    todayPaint
                 )
             }
         }
 
         val color: Int = if (isNumber) {
             if (holiday)
-                if (dayIsSelected) resource.colorHolidaySelected else resource.colorHoliday
+                if (dayIsSelected) colorHolidaySelected else colorHoliday
             else
-                if (dayIsSelected) resource.colorTextDaySelected else resource.colorTextDay
+                if (dayIsSelected) colorTextDaySelected else colorTextDay
             //            if (today && !selected) {
             //                color = resource.colorTextToday;
             //            }
         } else {
-            resource.colorTextDayName
+            colorTextDayName
         }
 
-        resource.eventBarPaint.color =
-            if (dayIsSelected && !isModernTheme) color else resource.colorEventLine
+        eventBarPaint.color = if (dayIsSelected && !isModernTheme) color else colorEventLine
 
         if (hasEvent) {
             canvas.drawLine(
-                width / 2f - resource.halfEventBarWidth,
-                (height - resource.eventYOffset + yOffsetToApply).toFloat(),
-                width / 2f + resource.halfEventBarWidth,
-                (height - resource.eventYOffset + yOffsetToApply).toFloat(), resource.eventBarPaint
+                width / 2f - halfEventBarWidth,
+                (height - eventYOffset + yOffsetToApply).toFloat(),
+                width / 2f + halfEventBarWidth,
+                (height - eventYOffset + yOffsetToApply).toFloat(), eventBarPaint
             )
         }
 
         if (hasAppointment) {
             canvas.drawLine(
-                width / 2f - resource.halfEventBarWidth,
-                (height - resource.appointmentYOffset + yOffsetToApply).toFloat(),
-                width / 2f + resource.halfEventBarWidth,
-                (height - resource.appointmentYOffset + yOffsetToApply).toFloat(),
-                resource.eventBarPaint
+                width / 2f - halfEventBarWidth,
+                (height - appointmentYOffset + yOffsetToApply).toFloat(),
+                width / 2f + halfEventBarWidth,
+                (height - appointmentYOffset + yOffsetToApply).toFloat(),
+                eventBarPaint
             )
         }
 
         // TODO: Better to not change resource's paint objects, but for now
-        resource.textPaint.color = color
-        resource.textPaint.textSize = textSize.toFloat()
+        textPaint.color = color
+        textPaint.textSize = textSize.toFloat()
 
         if (isModernTheme) {
-            resource.textPaint.isFakeBoldText = today
-            resource.textPaint.textSize = textSize * .8f
+            textPaint.isFakeBoldText = today
+            textPaint.textSize = textSize * .8f
         }
 
-        val xPos = (width - resource.textPaint.measureText(text).toInt()) / 2
+        val xPos = (width - textPaint.measureText(text).toInt()) / 2
         val textToMeasureHeight =
             if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
-        resource.textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
+        textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
         var yPos = (height + bounds.height()) / 2
         yPos += yOffsetToApply
-        canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), resource.textPaint)
+        canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), textPaint)
 
-        resource.textPaint.color =
-            if (dayIsSelected) resource.colorTextDaySelected else resource.colorTextDay
-        resource.textPaint.textSize = textSize / 2f
+        textPaint.color = if (dayIsSelected) colorTextDaySelected else colorTextDay
+        textPaint.textSize = textSize / 2f
         if (header.isNotEmpty()) {
-            val headerXPos = (width - resource.textPaint.measureText(header).toInt()) / 2
-            canvas.drawText(
-                header,
-                headerXPos.toFloat(),
-                yPos * 0.87f - bounds.height(),
-                resource.textPaint
-            )
+            val headerXPos = (width - textPaint.measureText(header).toInt()) / 2F
+            canvas.drawText(header, headerXPos, yPos * 0.87f - bounds.height(), textPaint)
         }
     }
 

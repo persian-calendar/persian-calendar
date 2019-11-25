@@ -22,9 +22,7 @@ class PagerAdapter(private val calendarPager: CalendarPager) :
     inner class ViewHolder(val binding: FragmentMonthBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private val daysAdapter = DaysAdapter(
-            binding.root.context, DaysPaintResources(binding.root.context), calendarPager
-        )
+        private val daysAdapter = DaysAdapter(binding.root.context, calendarPager)
 
         var update = fun(_: Int, _: Boolean, _: Long) {}
 
