@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
-import com.byagowi.persiancalendar.entities.DayItem
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentModel
 import com.byagowi.persiancalendar.utils.*
@@ -77,12 +76,8 @@ class CalendarAdapter(private val calendarFragment: CalendarFragment) :
                 1 + calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) - weekOfYearStart
             val adapter = MonthAdapter(
                 binding.root.context, dayPaintResources, calendarFragment,
-                (baseJdn until baseJdn + monthLength).zip(
-                    generateSequence(startingDayOfWeek, { if (it == 6) 0 else it + 1 })
-                        .take(monthLength).toList()
-                ) { jdn, dayOfWeek ->
-                    DayItem(jdn, dayOfWeek = dayOfWeek, isToday = jdn == todayJdn)
-                }, startingDayOfWeek, weekOfYearStart, weeksCount
+                (baseJdn until baseJdn + monthLength).toList(),
+                startingDayOfWeek, weekOfYearStart, weeksCount
             )
             binding.monthDays.let {
                 it.adapter = adapter
