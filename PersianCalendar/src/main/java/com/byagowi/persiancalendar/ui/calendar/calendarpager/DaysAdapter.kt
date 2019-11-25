@@ -16,7 +16,6 @@ class DaysAdapter internal constructor(
 
     var days: List<Long> = emptyList()
     var startingDayOfWeek: Int = 0
-    var fixedStartingDayOfWeek: Int = 0
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0
 
@@ -39,7 +38,7 @@ class DaysAdapter internal constructor(
 
         if (dayOfMonth == -1) return
 
-        selectedDay = dayOfMonth + 6 + fixedStartingDayOfWeek
+        selectedDay = dayOfMonth + 6 + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
 
         if (isShowWeekOfYearEnabled) selectedDay += selectedDay / 7 + 1
 
@@ -117,17 +116,18 @@ class DaysAdapter internal constructor(
                 position = position - position / 8 - 1
             }
 
+            val fixedStartingDayOfWeek = applyWeekStartOffsetToWeekDay(startingDayOfWeek)
             if (days.size < position - 6 - fixedStartingDayOfWeek) {
                 setEmpty()
             } else if (position < 7) {
                 dayView.setNonDayOfMonthItem(
-                    getInitialOfWeekDay(fixDayOfWeek(position)),
+                    getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position)),
                     daysPaintResources.weekDaysInitialTextSize
                 )
                 if (isTalkBackEnabled) {
                     dayView.contentDescription = String.format(
                         context.getString(R.string.week_days_name_column),
-                        getWeekDayName(fixDayOfWeek(position))
+                        getWeekDayName(revertWeekStartOffsetFromWeekDay(position))
                     )
                 }
 

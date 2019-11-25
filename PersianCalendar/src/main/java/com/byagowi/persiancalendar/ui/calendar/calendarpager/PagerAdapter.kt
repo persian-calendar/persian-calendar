@@ -71,7 +71,6 @@ class PagerAdapter(private val calendarPager: CalendarPager) :
 
             daysAdapter.apply {
                 startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
-                fixedStartingDayOfWeek = fixDayOfWeekReverse(getDayOfWeekFromJdn(baseJdn))
                 weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
                 weeksCount = calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) -
                         weekOfYearStart + 1

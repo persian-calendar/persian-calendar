@@ -21,9 +21,9 @@ import kotlin.math.ceil
 
 fun isWeekEnd(dayOfWeek: Int): Boolean = weekEnds[dayOfWeek]
 
-fun fixDayOfWeek(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
+fun applyWeekStartOffsetToWeekDay(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
 
-fun fixDayOfWeekReverse(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
+fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
 fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
 
@@ -48,7 +48,7 @@ fun getWeekDayName(date: AbstractDate): String = weekDays[civilDateToCalendar(
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     val dayOfYear = jdn - startOfYearJdn
-    return ceil(1 + (dayOfYear - fixDayOfWeekReverse(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
+    return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
 }
 
 fun getMonthName(date: AbstractDate): String = monthsNamesOfCalendar(date)[date.month - 1]
