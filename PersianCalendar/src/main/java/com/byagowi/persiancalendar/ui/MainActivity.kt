@@ -18,7 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
@@ -353,8 +353,10 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         updateStoredPreference(this)
         update(applicationContext, true)
 
-        ViewModelProviders.of(this)[MainActivityModel::class.java].preferenceIsUpdated()
+        preferenceUpdateHandler.postValue(null)
     }
+
+    val preferenceUpdateHandler = MutableLiveData<Void>()
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

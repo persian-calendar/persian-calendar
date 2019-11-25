@@ -14,14 +14,12 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.di.AppDependency
 import com.byagowi.persiancalendar.di.MainActivityDependency
-import com.byagowi.persiancalendar.ui.MainActivityModel
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
@@ -69,7 +67,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         updateAthanPreferencesState()
 
         updateAthanPreferencesState()
-        ViewModelProviders.of(mainActivityDependency.mainActivity)[MainActivityModel::class.java]
+        mainActivityDependency.mainActivity
             .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
 
         putAthanNameOnSummary(
