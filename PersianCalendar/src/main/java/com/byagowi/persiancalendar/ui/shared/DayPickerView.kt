@@ -21,43 +21,39 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     var selectedCalendarType: CalendarType = CalendarType.SHAMSI
 
-    val binding: DayPickerViewBinding =
-        DayPickerViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
-
-            val calendarTypes = getOrderedCalendarEntities(getContext())
-            val layoutInflater = LayoutInflater.from(root.context)
-            val chips = calendarTypes.map {
-                (layoutInflater.inflate(
-                    R.layout.single_chip_layout, calendarTypesFlexbox, false
-                ) as Chip).apply {
-                    text = it.toString()
-                }
-            }
-            chips.forEachIndexed { i, chip ->
-                chip.setOnClickListener {
-                    selectedCalendarType = calendarTypes[i].type
-                    setDayJdnOnView(jdn)
-                    selectedDayListener(jdn)
-                    chips.forEachIndexed { j, chipView ->
-                        chipView.isClickable = i != j
-                        chipView.isSelected = i == j
-                    }
-                }
-                chip.isClickable = i != 0
-                chip.isSelected = i == 0
-                chip.isCheckable = false
-                selectedCalendarType = calendarTypes[0].type
-                calendarTypesFlexbox.addView(chip)
-            }
-
-            val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
-                jdn = dayJdnFromView
-                selectedDayListener(jdn)
-            }
-            yearPicker.setOnValueChangedListener(onDaySelected)
-            monthPicker.setOnValueChangedListener(onDaySelected)
-            dayPicker.setOnValueChangedListener(onDaySelected)
+    private val inflater = LayoutInflater.from(context)
+    val binding: DayPickerViewBinding = DayPickerViewBinding.inflate(inflater, this, true).apply {
+        val calendarTypes = getOrderedCalendarEntities(getContext())
+        val chips = calendarTypes.map { calendarTypeItem ->
+            (inflater.inflate(
+                R.layout.single_chip_layout, calendarTypesFlexbox, false
+            ) as Chip).apply { text = calendarTypeItem.toString() }
         }
+        chips.forEachIndexed { i, chip ->
+            chip.setOnClickListener {
+                selectedCalendarType = calendarTypes[i].type
+                setDayJdnOnView(jdn)
+                selectedDayListener(jdn)
+                chips.forEachIndexed { j, chipView ->
+                    chipView.isClickable = i != j
+                    chipView.isSelected = i == j
+                }
+            }
+            chip.isClickable = i != 0
+            chip.isSelected = i == 0
+            chip.isCheckable = false
+            selectedCalendarType = calendarTypes[0].type
+            calendarTypesFlexbox.addView(chip)
+        }
+
+        val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
+            jdn = dayJdnFromView
+            selectedDayListener(jdn)
+        }
+        yearPicker.setOnValueChangedListener(onDaySelected)
+        monthPicker.setOnValueChangedListener(onDaySelected)
+        dayPicker.setOnValueChangedListener(onDaySelected)
+    }
 
     val dayJdnFromView: Long
         get() = try {

@@ -143,11 +143,10 @@ class AboutFragment : DaggerFragment() {
         val color = TypedValue()
         activity.theme.resolveAttribute(R.attr.colorDrawerIcon, color, true)
 
-        val layoutParams = LinearLayout.LayoutParams(
+        val chipsLayoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
             ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        layoutParams.setMargins(8)
+        ).apply { setMargins(8) }
 
         val chipClick = View.OnClickListener {
             try {
@@ -164,7 +163,7 @@ class AboutFragment : DaggerFragment() {
         getString(R.string.about_developers_list)
             .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
-                    this.layoutParams = layoutParams
+                    layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     text = it
                     chipIcon = developerIcon
@@ -175,7 +174,7 @@ class AboutFragment : DaggerFragment() {
         getString(R.string.about_designers_list)
             .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
-                    this.layoutParams = layoutParams
+                    layoutParams = chipsLayoutParams
                     text = it
                     chipIcon = designerIcon
                     setChipIconTintResource(color.resourceId)
@@ -185,7 +184,7 @@ class AboutFragment : DaggerFragment() {
         getString(R.string.about_translators_list)
             .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
-                    this.layoutParams = layoutParams
+                    layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     text = it
                     chipIcon = translatorIcon
@@ -196,7 +195,7 @@ class AboutFragment : DaggerFragment() {
         getString(R.string.about_contributors_list)
             .trim().split("\n").shuffled().map {
                 Chip(activity).apply {
-                    this.layoutParams = layoutParams
+                    layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     text = it
                     chipIcon = developerIcon
