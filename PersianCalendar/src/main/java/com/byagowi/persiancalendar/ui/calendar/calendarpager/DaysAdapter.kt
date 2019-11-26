@@ -133,16 +133,16 @@ class DaysAdapter internal constructor(
             if (days.size < position - 6 - fixedStartingDayOfWeek) {
                 setEmpty()
             } else if (position < 7) {
+                val weekDayInitial = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position))
                 dayView.setNonDayOfMonthItem(
                     getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position)),
                     weekDaysInitialTextSize
                 )
-                if (isTalkBackEnabled) {
-                    dayView.contentDescription = String.format(
-                        context.getString(R.string.week_days_name_column),
-                        getWeekDayName(revertWeekStartOffsetFromWeekDay(position))
-                    )
-                }
+
+                dayView.contentDescription = if (isTalkBackEnabled) String.format(
+                    context.getString(R.string.week_days_name_column),
+                    getWeekDayName(revertWeekStartOffsetFromWeekDay(position))
+                ) else weekDayInitial
 
                 dayView.visibility = View.VISIBLE
             } else {
@@ -155,18 +155,19 @@ class DaysAdapter internal constructor(
 
                     val isToday = day == todayJdn
 
+                    val dayOfMonth = position - 6 - fixedStartingDayOfWeek
+
                     dayView.setDayOfMonthItem(
                         isToday, originalPosition == selectedDay,
                         events.isNotEmpty(), hasDeviceEvents(events), isHoliday,
                         if (isArabicDigit) arabicDigitsTextSize else persianDigitsTextSize,
-                        day, position - 6 - fixedStartingDayOfWeek,
-                        getShiftWorkTitle(day, true)
+                        day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
 
-                    dayView.contentDescription = getA11yDaySummary(
+                    dayView.contentDescription = if (isTalkBackEnabled) getA11yDaySummary(
                         context, day, isToday, emptyEventsStore(),
                         withZodiac = isToday, withOtherCalendars = false, withTitle = true
-                    )
+                    ) else dayOfMonth.toString()
 
                     dayView.visibility = View.VISIBLE
                 } else {
