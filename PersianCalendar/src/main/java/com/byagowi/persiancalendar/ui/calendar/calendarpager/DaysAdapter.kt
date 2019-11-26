@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.utils.*
 
@@ -52,9 +51,6 @@ class DaysAdapter internal constructor(
             setTextTypeface(typeface)
         }
     )
-
-    private fun hasDeviceEvents(dayEvents: List<CalendarEvent<*>>): Boolean =
-        dayEvents.any { it is DeviceCalendarEvent }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
@@ -149,17 +145,17 @@ class DaysAdapter internal constructor(
                 if (position - 7 - fixedStartingDayOfWeek >= 0) {
                     val day = days[position - 7 - fixedStartingDayOfWeek]
                     val events = getEvents(day, monthEvents)
-                    val isHoliday = isWeekEnd(
-                        ((startingDayOfWeek + day - days[0]) % 7).toInt()
-                    ) || events.any { it.isHoliday }
 
                     val isToday = day == todayJdn
 
                     val dayOfMonth = position - 6 - fixedStartingDayOfWeek
 
                     dayView.setDayOfMonthItem(
-                        isToday, originalPosition == selectedDay,
-                        events.isNotEmpty(), hasDeviceEvents(events), isHoliday,
+                        isToday,
+                        originalPosition == selectedDay,
+                        events.isNotEmpty(),
+                        events.any { it is DeviceCalendarEvent },
+                        isWeekEnd(((startingDayOfWeek + day - days[0]) % 7).toInt()) || events.any { it.isHoliday },
                         if (isArabicDigit) arabicDigitsTextSize else persianDigitsTextSize,
                         day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
