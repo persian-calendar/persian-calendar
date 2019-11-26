@@ -109,12 +109,10 @@ class DaysAdapter internal constructor(
                             weekNumber,
                             weekNumberTextSize
                         )
-                        if (isTalkBackEnabled) {
-                            dayView.contentDescription = String.format(
-                                context.getString(R.string.nth_week_of_year),
-                                weekNumber
-                            )
-                        }
+                        dayView.contentDescription = if (isTalkBackEnabled) String.format(
+                            context.getString(R.string.nth_week_of_year),
+                            weekNumber
+                        ) else weekNumber
 
                         dayView.visibility = View.VISIBLE
                     } else
