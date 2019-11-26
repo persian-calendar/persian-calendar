@@ -1,10 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -13,7 +10,6 @@ import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appTheme
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import kotlin.math.min
 
@@ -30,10 +26,10 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     private val colorHoliday = resolveColor(R.attr.colorHoliday)
     private val colorHolidaySelected = resolveColor(R.attr.colorHolidaySelected)
-    private val colorTextHoliday = resolveColor(R.attr.colorTextHoliday)
+    // private val colorTextHoliday = resolveColor(R.attr.colorTextHoliday)
     private val colorTextDay = resolveColor(R.attr.colorTextDay)
     private val colorTextDaySelected = resolveColor(R.attr.colorTextDaySelected)
-    private val colorTextToday = resolveColor(R.attr.colorTextToday)
+    // private val colorTextToday = resolveColor(R.attr.colorTextToday)
     private val colorTextDayName = resolveColor(R.attr.colorTextDayName)
     private val colorEventLine = resolveColor(R.attr.colorEventLine)
 
@@ -43,9 +39,6 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         .getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
     private val eventYOffset = context.resources
         .getDimensionPixelSize(R.dimen.day_item_event_y_offset)
-    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        typeface = getCalendarFragmentFont(context)
-    }
     private val eventBarPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = context.resources
             .getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
@@ -59,6 +52,11 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         strokeWidth = context.resources
             .getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
         color = resolveColor(R.attr.colorCurrentDay)
+    }
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    fun setTextTypeface(typeface: Typeface) {
+        textPaint.typeface = typeface
     }
 
     private val bounds = Rect()

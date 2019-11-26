@@ -18,7 +18,7 @@ class DaysAdapter internal constructor(
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0
 
-    private val layoutParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
+    private val dayViewLayoutParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
         context.resources.getDimensionPixelSize(R.dimen.day_item_size)
     )
@@ -44,8 +44,13 @@ class DaysAdapter internal constructor(
         notifyItemChanged(selectedDay)
     }
 
+    private val typeface = getCalendarFragmentFont(context)
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        DayView(parent.context).also { it.layoutParams = layoutParams }
+        DayView(parent.context).apply {
+            layoutParams = dayViewLayoutParams
+            setTextTypeface(typeface)
+        }
     )
 
     private fun hasDeviceEvents(dayEvents: List<CalendarEvent<*>>): Boolean =
