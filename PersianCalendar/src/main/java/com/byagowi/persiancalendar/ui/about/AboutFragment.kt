@@ -140,8 +140,9 @@ class AboutFragment : DaggerFragment() {
         val developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer)
         val translatorIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_translator)
         val designerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_designer)
-        val color = TypedValue()
-        activity.theme.resolveAttribute(R.attr.colorDrawerIcon, color, true)
+        val chipsIconsColor = TypedValue().apply {
+            activity.theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
+        }.resourceId
 
         val chipsLayoutParams = LinearLayout.LayoutParams(
             ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -167,7 +168,7 @@ class AboutFragment : DaggerFragment() {
                     setOnClickListener(chipClick)
                     text = it
                     chipIcon = developerIcon
-                    setChipIconTintResource(color.resourceId)
+                    setChipIconTintResource(chipsIconsColor)
                 }
             }.forEach(binding.developers::addView)
 
@@ -177,7 +178,7 @@ class AboutFragment : DaggerFragment() {
                     layoutParams = chipsLayoutParams
                     text = it
                     chipIcon = designerIcon
-                    setChipIconTintResource(color.resourceId)
+                    setChipIconTintResource(chipsIconsColor)
                 }
             }.forEach(binding.developers::addView)
 
@@ -188,7 +189,7 @@ class AboutFragment : DaggerFragment() {
                     setOnClickListener(chipClick)
                     text = it
                     chipIcon = translatorIcon
-                    setChipIconTintResource(color.resourceId)
+                    setChipIconTintResource(chipsIconsColor)
                 }
             }.forEach(binding.developers::addView)
 
@@ -199,7 +200,7 @@ class AboutFragment : DaggerFragment() {
                     setOnClickListener(chipClick)
                     text = it
                     chipIcon = developerIcon
-                    setChipIconTintResource(color.resourceId)
+                    setChipIconTintResource(chipsIconsColor)
                 }
             }.forEach(binding.developers::addView)
 
