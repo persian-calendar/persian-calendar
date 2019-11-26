@@ -225,14 +225,19 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                 addIfNotNull(
                     "OpenGL Extensions",
                     SpannableStringBuilder().apply {
-                        GLES20.glGetString(GLES20.GL_EXTENSIONS).split(" ").forEach {
-                            append(SpannableString(it).apply {
+                        val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS).trim().split(" ")
+                        val regex = "GL_([a-zA-Z]+)_(.+)".toRegex()
+                        extensions.forEachIndexed { i, it ->
+                            if (i != 0) append("\n")
+
+                            if (!regex.matches(it)) append(it)
+                            else append(SpannableString(it).apply {
                                 setSpan(object : ClickableSpan() {
                                     override fun onClick(textView: View) = try {
                                         CustomTabsIntent.Builder().build().launchUrl(
                                             activity,
                                             it.replace(
-                                                "GL_([a-zA-Z]+)_(.+)".toRegex(),
+                                                regex,
                                                 "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
                                             ).toUri()
                                         )
@@ -241,7 +246,6 @@ class DeviceInfoAdapter(activity: Activity, private val rootView: View) :
                                     }
                                 }, 0, it.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                             })
-                            append("\n")
                         }
                     },
                     ""
