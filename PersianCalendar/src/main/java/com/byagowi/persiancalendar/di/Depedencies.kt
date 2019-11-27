@@ -30,10 +30,3 @@ constructor() {
         internal set
 }
 
-//
-//@PerChildFragment
-//public final class MonthFragmentDependency {
-//    @Inject
-//    public MonthFragmentDependency() {
-//    }
-//}
