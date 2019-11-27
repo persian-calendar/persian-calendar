@@ -12,7 +12,7 @@ fun String.runCommand(
     timeoutAmount: Long = 60,
     timeoutUnit: TimeUnit = TimeUnit.SECONDS
 ): String? = try {
-    ProcessBuilder(split("\\s".toRegex()))
+    ProcessBuilder("\\s".toRegex().split(this))
         .directory(workingDir)
         .redirectOutput(ProcessBuilder.Redirect.PIPE)
         .redirectError(ProcessBuilder.Redirect.PIPE)
