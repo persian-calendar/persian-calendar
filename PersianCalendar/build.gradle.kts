@@ -63,6 +63,7 @@ android {
                     "PersianCalendar-nightly-$appVerboseVersion.apk"
             }
             signingConfig = signingConfigs.getByName("nightly")
+            versionNameSuffix = "-nightly"
             applicationIdSuffix = ".nightly"
             isMinifyEnabled = true
             isShrinkResources = true
