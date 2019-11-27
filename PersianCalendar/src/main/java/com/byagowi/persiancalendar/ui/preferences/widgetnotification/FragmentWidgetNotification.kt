@@ -6,8 +6,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.*
 
 // Don't use MainActivity here as it is used in WidgetConfigurationActivity also
@@ -19,7 +19,7 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         val activity = activity ?: return false
 
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+        val sharedPreferences = activity.appPrefs
 
         if (preference?.key == PREF_SELECTED_WIDGET_TEXT_COLOR) {
             val colorPickerView = ColorPickerView(activity)

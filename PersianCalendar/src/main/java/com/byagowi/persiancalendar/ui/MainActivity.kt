@@ -21,7 +21,6 @@ import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.Navigation
-import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.service.ApplicationService
@@ -47,10 +46,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var clickedItem = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Don't replace below with appDependency.getSharedPreferences() ever
-        // as the injection won't happen at the right time
-        val prefs = PreferenceManager.getDefaultSharedPreferences(this)
-        setTheme(getThemeFromName(getThemeFromPreference(this, prefs)))
+        setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
 
         applyAppLanguage(this)
 
@@ -128,7 +124,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             action = ""
         }
 
-        prefs.registerOnSharedPreferenceChangeListener(this)
+        appPrefs.registerOnSharedPreferenceChangeListener(this)
 
         if (isShowDeviceCalendarEvents && ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.READ_CALENDAR
@@ -152,8 +148,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
             })
 
-        if (prefs.getString(PREF_APP_LANGUAGE, null) == null &&
-            !prefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
+        if (appPrefs.getString(PREF_APP_LANGUAGE, null) == null &&
+            !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
         ) {
             Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
@@ -161,7 +157,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
                 view.setOnClickListener { dismiss() }
                 setAction("Settings") {
-                    prefs.edit {
+                    appPrefs.edit {
                         putString(PREF_APP_LANGUAGE, LANG_EN_US)
                         putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
                         putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
@@ -170,9 +166,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
                 setActionTextColor(resources.getColor(R.color.dark_accent))
             }.show()
-            prefs.edit {
-                putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true)
-            }
+            appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)

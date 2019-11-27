@@ -7,8 +7,10 @@ import android.content.pm.PackageManager
 import android.provider.CalendarContract
 import android.text.Html
 import androidx.core.app.ActivityCompat
-import androidx.preference.PreferenceManager
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.LANG_CKB
+import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
@@ -172,9 +174,8 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
     }
 
 fun getIslamicOffset(context: Context): Int =
-    PreferenceManager.getDefaultSharedPreferences(context)?.getString(
-        PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET
-    )?.replace("+", "")?.toIntOrNull() ?: 0
+    context.appPrefs.getString(PREF_ISLAMIC_OFFSET, null)
+        ?.replace("+", "")?.toIntOrNull() ?: 0
 
 private fun baseFormatClock(hour: Int, minute: Int): String =
     formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))

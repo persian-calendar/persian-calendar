@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
@@ -17,7 +16,6 @@ import androidx.lifecycle.Observer
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
@@ -29,6 +27,7 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForLocationPermission
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
@@ -58,10 +57,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         (activity as MainActivity)
             .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
 
-        putAthanNameOnSummary(
-            PreferenceManager.getDefaultSharedPreferences(context)
-                .getString(PREF_ATHAN_NAME, defaultAthanName)
-        )
+        putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
     }
 
     private fun updateAthanPreferencesState() {
@@ -117,7 +113,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 return true
             }
             "pref_key_ringtone_default" -> {
-                PreferenceManager.getDefaultSharedPreferences(context).edit {
+                context.appPrefs.edit {
                     remove(PREF_ATHAN_URI)
                     remove(PREF_ATHAN_NAME)
                 }
@@ -163,7 +159,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 val ringtoneTitle = RingtoneManager
                     .getRingtone(context, it.toString().toUri()).getTitle(context) ?: ""
 
-                PreferenceManager.getDefaultSharedPreferences(context).edit {
+                context.appPrefs.edit {
                     putString(PREF_ATHAN_NAME, ringtoneTitle)
                     putString(PREF_ATHAN_URI, it.toString())
                 }

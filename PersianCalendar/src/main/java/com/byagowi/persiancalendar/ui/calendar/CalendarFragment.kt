@@ -22,7 +22,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.*
@@ -158,16 +157,13 @@ class CalendarFragment : Fragment() {
                 override fun onPageSelected(position: Int) {
                     if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                     else owghatBinding?.sunView?.clear()
-                    PreferenceManager.getDefaultSharedPreferences(context).edit {
-                        putInt(LAST_CHOSEN_TAB_KEY, position)
-                    }
+                    mainActivity.appPrefs.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
                 }
             })
             TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
                 tab.text = titles[position]
             }.attach()
-            var lastTab = PreferenceManager.getDefaultSharedPreferences(mainActivity)
-                .getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
+            var lastTab = mainActivity.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
             if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
             tabsViewPager.setCurrentItem(lastTab, false)
         }
@@ -360,7 +356,7 @@ class CalendarFragment : Fragment() {
 
             val messageToShow = SpannableStringBuilder()
 
-            val enabledTypes = PreferenceManager.getDefaultSharedPreferences(mainActivity)
+            val enabledTypes = mainActivity.appPrefs
                 .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
             if (enabledTypes.size == 0) {
                 noEvent.visibility = View.GONE

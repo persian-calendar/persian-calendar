@@ -10,7 +10,6 @@ import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.core.content.getSystemService
-import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.*
 import com.google.android.material.snackbar.Snackbar
@@ -139,8 +138,8 @@ var gregorianCalendarEvents: GregorianCalendarEventsStore = emptyEventsStore()
     private set
 
 fun loadEvents(context: Context) {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-    val enabledTypes = prefs?.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
+    val enabledTypes =
+        context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
 
     val afghanistanHolidays = enabledTypes.contains("afghanistan_holidays")
     val afghanistanOthers = enabledTypes.contains("afghanistan_others")
@@ -329,8 +328,7 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
 }
 
 fun getCityFromPreference(context: Context): CityItem? {
-    val key = PreferenceManager.getDefaultSharedPreferences(context)
-        ?.getString(PREF_SELECTED_LOCATION, null)
+    val key = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
         ?.takeUnless { it.isEmpty() || it == DEFAULT_CITY } ?: return null
 
     if (key == cachedCityKey)
@@ -360,7 +358,7 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
 private fun getOnlyLanguage(string: String): String = string.replace("-(IR|AF|US)".toRegex(), "")
 
 fun updateStoredPreference(context: Context) {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
+    val prefs = context.appPrefs
 
     language = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
 

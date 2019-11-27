@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +12,7 @@ import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.updateStoredPreference
@@ -54,7 +54,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.accept) { _, _ ->
                 val ordering = adapter.result
-                PreferenceManager.getDefaultSharedPreferences(activity).edit {
+                activity.appPrefs.edit {
                     if (ordering.isNotEmpty()) {
                         putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
                         putString(

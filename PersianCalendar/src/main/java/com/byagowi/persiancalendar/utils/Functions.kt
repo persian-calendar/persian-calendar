@@ -217,15 +217,13 @@ fun getClockFromStringId(@StringRes stringId: Int) = prayTimes?.run {
 } ?: Clock.fromInt(0)
 
 fun loadAlarms(context: Context) {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-
-    val prefString = prefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
+    val prefString = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
     Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
     val calculationMethod = getCalculationMethod()
 
     if (coordinate != null && prefString.isNotEmpty()) {
         val athanGap =
-            ((prefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0)
+            ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0)
                     * 60.0 * 1000.0).toLong()
 
         val prayTimes = PrayTimesCalculator.calculate(
@@ -330,14 +328,13 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String =
             LANG_CKB -> it.ckb
             else -> it.fa
         }
-    } ?: PreferenceManager.getDefaultSharedPreferences(context)
-        .getString(PREF_GEOCODED_CITYNAME, null)?.takeUnless { it.isEmpty() }
+    } ?: context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeUnless { it.isEmpty() }
     ?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
     ?: ""
 
 fun getCoordinate(context: Context): Coordinate? =
     getCityFromPreference(context)?.let { it.coordinate }
-        ?: PreferenceManager.getDefaultSharedPreferences(context)?.let {
+        ?: context.appPrefs.let {
             Coordinate(
                 it.getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
                 it.getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
@@ -394,9 +391,7 @@ fun isRTL(context: Context): Boolean =
     else false
 
 fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
-    PreferenceManager.getDefaultSharedPreferences(context).edit {
-        putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable)
-    }
+    context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable) }
 
 fun askForLocationPermission(activity: Activity?) {
     if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
@@ -626,3 +621,6 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
         }
     })
 }
+
+val Context.appPrefs: SharedPreferences
+    get() = PreferenceManager.getDefaultSharedPreferences(this)

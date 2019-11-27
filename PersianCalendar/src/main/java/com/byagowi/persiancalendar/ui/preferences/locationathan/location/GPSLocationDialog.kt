@@ -16,9 +16,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
-import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForLocationPermission
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import io.github.persiancalendar.praytimes.Coordinate
@@ -152,7 +152,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         if (latitude != null && longitude != null) {
-            PreferenceManager.getDefaultSharedPreferences(mainActivity).edit {
+            mainActivity.appPrefs.edit {
                 putString(PREF_LATITUDE, latitude)
                 putString(PREF_LONGITUDE, longitude)
                 putString(PREF_GEOCODED_CITYNAME, cityName ?: "")
