@@ -29,6 +29,14 @@ android {
     buildToolsVersion("29.0.2")
     viewBinding.isEnabled = true
 
+    val gitVersion =
+        listOf(
+            "git rev-parse --abbrev-ref HEAD",
+            "git rev-list HEAD --count",
+            "git rev-parse --short HEAD"
+        ).map { it.runCommand()?.trim() }.joinToString("-") +
+                (if ("git status -s".runCommand()?.trim()?.isEmpty() == false) "-dirty" else "")
+
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdkVersion(15)
@@ -38,15 +46,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resConfigs("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
+        setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
     }
-
-    val appVerboseVersion =
-        defaultConfig.versionName + "-" + listOf(
-            "git rev-parse --abbrev-ref HEAD",
-            "git rev-list HEAD --count",
-            "git rev-parse --short HEAD"
-        ).map { it.runCommand()?.trim() }.joinToString("-") +
-                (if ("git status -s".runCommand()?.trim()?.isEmpty() == false) "-dirty" else "")
 
     signingConfigs {
         create("nightly"){
@@ -58,10 +59,6 @@ android {
     }
     buildTypes {
         create("nightly") {
-            buildOutputs.all {
-                (this as BaseVariantOutputImpl).outputFileName =
-                    "PersianCalendar-nightly-$appVerboseVersion.apk"
-            }
             signingConfig = signingConfigs.getByName("nightly")
             versionNameSuffix = "-nightly"
             applicationIdSuffix = ".nightly"
@@ -69,18 +66,10 @@ android {
             isShrinkResources = true
         }
         getByName("debug") {
-            buildOutputs.all {
-                (this as BaseVariantOutputImpl).outputFileName =
-                    "PersianCalendar-debug-$appVerboseVersion.apk"
-            }
-            versionNameSuffix = "-$appVerboseVersion"
+            versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
             applicationIdSuffix = ".debug"
         }
         getByName("release") {
-            buildOutputs.all {
-                (this as BaseVariantOutputImpl).outputFileName =
-                    "PersianCalendar-release-$appVerboseVersion.apk"
-            }
             isMinifyEnabled = true
             isShrinkResources = true
             // Maybe proguard-android-optimize.txt in future
