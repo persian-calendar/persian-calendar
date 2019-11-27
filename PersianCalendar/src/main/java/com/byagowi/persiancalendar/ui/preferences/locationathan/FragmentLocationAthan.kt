@@ -17,9 +17,9 @@ import androidx.lifecycle.Observer
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.di.AppDependency
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
@@ -33,15 +33,8 @@ import com.byagowi.persiancalendar.utils.askForLocationPermission
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
 
 class FragmentLocationAthan : PreferenceFragmentCompat() {
-
-    @Inject
-    lateinit var appDependency: AppDependency
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
 
     private var categoryAthan: Preference? = null
 
@@ -50,11 +43,6 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             val context = context ?: return ""
             return context.getString(R.string.default_athan_name)
         }
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
@@ -67,11 +55,11 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
         updateAthanPreferencesState()
 
         updateAthanPreferencesState()
-        mainActivityDependency.mainActivity
+        (activity as MainActivity)
             .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
 
         putAthanNameOnSummary(
-            appDependency.sharedPreferences
+            PreferenceManager.getDefaultSharedPreferences(context)
                 .getString(PREF_ATHAN_NAME, defaultAthanName)
         )
     }
@@ -129,7 +117,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 return true
             }
             "pref_key_ringtone_default" -> {
-                appDependency.sharedPreferences.edit {
+                PreferenceManager.getDefaultSharedPreferences(context).edit {
                     remove(PREF_ATHAN_URI)
                     remove(PREF_ATHAN_NAME)
                 }
@@ -141,13 +129,11 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             }
             "pref_gps_location" -> {
                 try {
-                    val activity = mainActivityDependency.mainActivity
-
                     if (ActivityCompat.checkSelfPermission(
-                            activity,
+                            context,
                             Manifest.permission.ACCESS_FINE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            activity,
+                            context,
                             Manifest.permission.ACCESS_COARSE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED
                     ) {
@@ -177,7 +163,7 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
                 val ringtoneTitle = RingtoneManager
                     .getRingtone(context, it.toString().toUri()).getTitle(context) ?: ""
 
-                appDependency.sharedPreferences.edit {
+                PreferenceManager.getDefaultSharedPreferences(context).edit {
                     putString(PREF_ATHAN_NAME, ringtoneTitle)
                     putString(PREF_ATHAN_URI, it.toString())
                 }

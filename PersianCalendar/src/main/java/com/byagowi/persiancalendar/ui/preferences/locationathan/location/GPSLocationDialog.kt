@@ -11,28 +11,22 @@ import android.os.Handler
 import android.provider.Settings
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
+import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.di.AppDependency
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.askForLocationPermission
 import com.byagowi.persiancalendar.utils.formatCoordinate
-import dagger.android.support.DaggerAppCompatDialogFragment
 import io.github.persiancalendar.praytimes.Coordinate
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-class GPSLocationDialog : DaggerAppCompatDialogFragment() {
-
-    @Inject
-    lateinit var appDependency: AppDependency
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
+class GPSLocationDialog : AppCompatDialogFragment() {
 
     private var locationManager: LocationManager? = null
     private lateinit var textView: TextView
@@ -53,22 +47,26 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         override fun onProviderDisabled(provider: String?) {}
     }
 
+    lateinit var mainActivity: MainActivity
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        textView = TextView(mainActivityDependency.mainActivity).apply {
+        mainActivity = activity as MainActivity
+
+        textView = TextView(mainActivity).apply {
             updatePadding(32)
             setText(R.string.pleasewaitgps)
         }
 
-        locationManager = mainActivityDependency.mainActivity.getSystemService()
+        locationManager = mainActivity.getSystemService()
 
         getLocation()
         if (lacksPermission) {
-            askForLocationPermission(mainActivityDependency.mainActivity)
+            askForLocationPermission(mainActivity)
         }
 
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
 
-        return AlertDialog.Builder(mainActivityDependency.mainActivity)
+        return AlertDialog.Builder(mainActivity)
             .setPositiveButton("", null)
             .setNegativeButton("", null)
             .setView(textView)
@@ -79,14 +77,14 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         if (latitude != null && longitude != null) return
 
         try {
-            val gps = mainActivityDependency.mainActivity.getSystemService<LocationManager>()
+            val gps = mainActivity.getSystemService<LocationManager>()
 
             if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
-                AlertDialog.Builder(mainActivityDependency.mainActivity)
+                AlertDialog.Builder(mainActivity)
                     .setMessage(R.string.gps_internet_desc)
                     .setPositiveButton(R.string.accept) { _, _ ->
                         try {
-                            mainActivityDependency.mainActivity.startActivity(
+                            mainActivity.startActivity(
                                 Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                             )
                         } catch (e: Exception) {
@@ -101,10 +99,10 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
 
     private fun getLocation() {
         if (ActivityCompat.checkSelfPermission(
-                mainActivityDependency.mainActivity,
+                mainActivity,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                mainActivityDependency.mainActivity,
+                mainActivity,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -128,7 +126,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
     private fun showLocation(location: Location) {
         latitude = String.format(Locale.ENGLISH, "%f", location.latitude)
         longitude = String.format(Locale.ENGLISH, "%f", location.longitude)
-        val gcd = Geocoder(mainActivityDependency.mainActivity, Locale.getDefault())
+        val gcd = Geocoder(mainActivity, Locale.getDefault())
         val addresses: List<Address>
         try {
             addresses = gcd.getFromLocation(location.latitude, location.longitude, 1)
@@ -143,7 +141,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
         if (cityName?.isNotEmpty() == true) result = cityName + "\n\n"
         // this time, with native digits
         result += formatCoordinate(
-            mainActivityDependency.mainActivity,
+            mainActivity,
             Coordinate(
                 location.latitude, location.longitude,
                 location.altitude
@@ -154,7 +152,7 @@ class GPSLocationDialog : DaggerAppCompatDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         if (latitude != null && longitude != null) {
-            appDependency.sharedPreferences.edit {
+            PreferenceManager.getDefaultSharedPreferences(mainActivity).edit {
                 putString(PREF_LATITUDE, latitude)
                 putString(PREF_LONGITUDE, longitude)
                 putString(PREF_GEOCODED_CITYNAME, cityName ?: "")

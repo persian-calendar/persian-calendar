@@ -21,36 +21,31 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
+import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.readRawResource
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
-class AboutFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
+class AboutFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        val mainActivity = activity as MainActivity
+        mainActivity.setTitleAndSubtitle(getString(R.string.about), "")
         setHasOptionsMenu(true)
 
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
 
-        val activity = mainActivityDependency.mainActivity
-        activity.setTitleAndSubtitle(getString(R.string.about), "")
-
         // version
-        val version = programVersion(activity).split("-")
+        val version = programVersion(mainActivity).split("-")
             .mapIndexed { i, x -> if (i == 0) formatNumber(x) else x }
         binding.version.text =
             String.format(getString(R.string.version), version.joinToString("\n"))
@@ -58,13 +53,13 @@ class AboutFragment : DaggerFragment() {
         // licenses
         binding.licenses.setOnClickListener {
             AlertDialog.Builder(
-                activity,
+                mainActivity,
                 com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
             )
                 .setTitle(resources.getString(R.string.about_license_title))
-                .setView(ScrollView(activity).apply {
-                    addView(TextView(activity).apply {
-                        text = readRawResource(activity, R.raw.credits)
+                .setView(ScrollView(mainActivity).apply {
+                    addView(TextView(mainActivity).apply {
+                        text = readRawResource(mainActivity, R.raw.credits)
                         setPadding(20)
                         typeface = Typeface.MONOSPACE
                         Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
@@ -105,7 +100,7 @@ class AboutFragment : DaggerFragment() {
 
         binding.email.setOnClickListener {
             val emailBinding = DialogEmailBinding.inflate(inflater, container, false)
-            AlertDialog.Builder(mainActivityDependency.mainActivity)
+            AlertDialog.Builder(mainActivity)
                 .setView(emailBinding.root)
                 .setTitle(R.string.about_email_sum)
                 .setPositiveButton(R.string.continue_button) { _, _ ->
@@ -137,11 +132,11 @@ class AboutFragment : DaggerFragment() {
                 .setNegativeButton(R.string.cancel, null).show()
         }
 
-        val developerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_developer)
-        val translatorIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_translator)
-        val designerIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_designer)
+        val developerIcon = AppCompatResources.getDrawable(mainActivity, R.drawable.ic_developer)
+        val translatorIcon = AppCompatResources.getDrawable(mainActivity, R.drawable.ic_translator)
+        val designerIcon = AppCompatResources.getDrawable(mainActivity, R.drawable.ic_designer)
         val chipsIconsColor = TypedValue().apply {
-            activity.theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
+            mainActivity.theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
         }.resourceId
 
         val chipsLayoutParams = LinearLayout.LayoutParams(
@@ -152,7 +147,7 @@ class AboutFragment : DaggerFragment() {
         val chipClick = View.OnClickListener {
             try {
                 CustomTabsIntent.Builder().build().launchUrl(
-                    activity,
+                    mainActivity,
                     ("https://github.com/" + (it as Chip).text.toString()
                         .split("@")[1].split(")")[0]).toUri()
                 )
@@ -163,7 +158,7 @@ class AboutFragment : DaggerFragment() {
 
         getString(R.string.about_developers_list)
             .trim().split("\n").shuffled().map {
-                Chip(activity).apply {
+                Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     text = it
@@ -174,7 +169,7 @@ class AboutFragment : DaggerFragment() {
 
         getString(R.string.about_designers_list)
             .trim().split("\n").shuffled().map {
-                Chip(activity).apply {
+                Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
                     text = it
                     chipIcon = designerIcon
@@ -184,7 +179,7 @@ class AboutFragment : DaggerFragment() {
 
         getString(R.string.about_translators_list)
             .trim().split("\n").shuffled().map {
-                Chip(activity).apply {
+                Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     text = it
@@ -195,7 +190,7 @@ class AboutFragment : DaggerFragment() {
 
         getString(R.string.about_contributors_list)
             .trim().split("\n").shuffled().map {
-                Chip(activity).apply {
+                Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     text = it
@@ -215,7 +210,7 @@ class AboutFragment : DaggerFragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.deviceInfo -> mainActivityDependency.mainActivity.navigateTo(R.id.deviceInfo)
+            R.id.deviceInfo -> (activity as MainActivity).navigateTo(R.id.deviceInfo)
             else -> {
             }
         }

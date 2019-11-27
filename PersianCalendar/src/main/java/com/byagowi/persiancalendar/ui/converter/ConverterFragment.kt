@@ -4,26 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
 import com.byagowi.persiancalendar.utils.getTodayJdn
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
-
-class ConverterFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
-
+class ConverterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
-        mainActivityDependency.mainActivity.setTitleAndSubtitle(
+        (activity as? MainActivity)?.setTitleAndSubtitle(
             getString(R.string.date_converter), ""
         )
 

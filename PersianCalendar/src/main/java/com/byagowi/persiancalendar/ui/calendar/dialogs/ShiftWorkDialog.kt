@@ -13,7 +13,9 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -22,28 +24,19 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
-import com.byagowi.persiancalendar.di.AppDependency
-import com.byagowi.persiancalendar.di.CalendarFragmentDependency
-import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
-import dagger.android.support.DaggerAppCompatDialogFragment
-import javax.inject.Inject
 
-class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
-
-    @Inject
-    lateinit var appDependency: AppDependency
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
-    @Inject
-    lateinit var calendarFragmentDependency: CalendarFragmentDependency
+class ShiftWorkDialog : AppCompatDialogFragment() {
 
     private var jdn: Long = -1L
     private var selectedJdn: Long = -1L
 
+    var onSuccess = fun() {}
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val mainActivity = mainActivityDependency.mainActivity
+        val mainActivity = activity as MainActivity
 
         applyAppLanguage(mainActivity)
         updateStoredPreference(mainActivity)
@@ -95,14 +88,13 @@ class ShiftWorkDialog : DaggerAppCompatDialogFragment() {
                     "${it.type.replace("=", "").replace(",", "")}=${it.length}"
                 }
 
-                appDependency.sharedPreferences.edit {
+                PreferenceManager.getDefaultSharedPreferences(mainActivity).edit {
                     putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
                     putString(PREF_SHIFT_WORK_SETTING, result.toString())
                     putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
                 }
 
-                calendarFragmentDependency.calendarFragment.afterShiftWorkChange()
-                mainActivity.restartActivity()
+                onSuccess()
             }
             .setCancelable(true)
             .setNegativeButton(R.string.cancel, null)

@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,31 +10,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.android.support.AndroidSupportInjection
-import javax.inject.Inject
 
 class MonthOverviewDialog : BottomSheetDialogFragment() {
 
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val context = mainActivityDependency.mainActivity
+        val mainActivity = activity as MainActivity
 
         val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)
             ?.takeUnless { it == -1L } ?: getTodayJdn()
         val mainCalendar = mainCalendar
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
-        val deviceEvents = readMonthDeviceEvents(context, baseJdn)
+        val deviceEvents = readMonthDeviceEvents(mainActivity, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
         val events = (0 until monthLength).mapNotNull {
             val jdn = baseJdn + it
@@ -71,7 +60,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             recyclerView.adapter = ItemAdapter(events)
         }
 
-        return BottomSheetDialog(context).apply {
+        return BottomSheetDialog(mainActivity).apply {
             setContentView(binding.root)
             setCancelable(true)
             setCanceledOnTouchOutside(true)

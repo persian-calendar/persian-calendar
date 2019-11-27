@@ -3,47 +3,43 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.di.AppDependency
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.updateStoredPreference
-import dagger.android.support.DaggerAppCompatDialogFragment
-import javax.inject.Inject
 
-class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
-
-    @Inject
-    lateinit var appDependency: AppDependency
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
+class CalendarPreferenceDialog : AppCompatDialogFragment() {
 
     private var itemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val activity = activity as MainActivity
+
         val values = ArrayList<String>()
         val titles = ArrayList<String>()
         val enabled = ArrayList<Boolean>()
 
-        updateStoredPreference(mainActivityDependency.mainActivity)
+        updateStoredPreference(activity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
-        val orderedCalendarTypes = getOrderedCalendarEntities(mainActivityDependency.mainActivity)
+        val orderedCalendarTypes = getOrderedCalendarEntities(activity)
         orderedCalendarTypes.forEach {
             values.add(it.type.toString())
             titles.add(it.toString())
             enabled.add(enabledCalendarTypes.contains(it.type))
         }
-        val adapter = RecyclerListAdapter(this, mainActivityDependency, titles, values, enabled)
-        val recyclerView = RecyclerView(mainActivityDependency.mainActivity).apply {
+        val adapter = RecyclerListAdapter(this, activity, titles, values, enabled)
+        val recyclerView = RecyclerView(activity).apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(mainActivityDependency.mainActivity)
+            layoutManager = LinearLayoutManager(activity)
             this.adapter = adapter
         }
 
@@ -52,13 +48,13 @@ class CalendarPreferenceDialog : DaggerAppCompatDialogFragment() {
             attachToRecyclerView(recyclerView)
         }
 
-        return AlertDialog.Builder(mainActivityDependency.mainActivity).apply {
+        return AlertDialog.Builder(activity).apply {
             setView(recyclerView)
             setTitle(R.string.calendars_priority)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.accept) { _, _ ->
                 val ordering = adapter.result
-                appDependency.sharedPreferences.edit {
+                PreferenceManager.getDefaultSharedPreferences(activity).edit {
                     if (ordering.isNotEmpty()) {
                         putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
                         putString(

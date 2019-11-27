@@ -13,24 +13,20 @@ import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.DaggerFragment
 import io.github.persiancalendar.praytimes.Coordinate
-import javax.inject.Inject
 import kotlin.math.abs
 
 /**
  * Compass/Qibla activity
  */
-class CompassFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
+class CompassFragment : Fragment() {
 
     var stopped = false
     private lateinit var binding: FragmentCompassBinding
@@ -75,29 +71,33 @@ class CompassFragment : DaggerFragment() {
     }
 
     private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) =
-        Snackbar.make(mainActivityDependency.mainActivity.coordinator, messageId, duration).apply {
+        Snackbar.make(mainActivity.coordinator, messageId, duration).apply {
             view.setOnClickListener { dismiss() }
             view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
         }.show()
 
+    lateinit var mainActivity: MainActivity
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
-            coordinate = getCoordinate(mainActivityDependency.mainActivity)
+        mainActivity = activity as MainActivity
 
-            mainActivityDependency.mainActivity.setTitleAndSubtitle(
+        binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
+            coordinate = getCoordinate(mainActivity)
+
+            mainActivity.setTitleAndSubtitle(
                 getString(R.string.compass),
-                getCityName(mainActivityDependency.mainActivity, true)
+                getCityName(mainActivity, true)
             )
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
             bottomAppbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.level -> mainActivityDependency.mainActivity.navigateTo(R.id.level)
+                    R.id.level -> mainActivity.navigateTo(R.id.level)
                     R.id.map -> try {
                         CustomTabsIntent.Builder().build().launchUrl(
-                            mainActivityDependency.mainActivity,
+                            mainActivity,
                             "https://g.co/qiblafinder".toUri()
                         )
                     } catch (e: Exception) {
@@ -118,7 +118,7 @@ class CompassFragment : DaggerFragment() {
             fab.setOnClickListener {
                 stopped = !stopped
                 fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
-                fab.contentDescription = mainActivityDependency.mainActivity
+                fab.contentDescription = mainActivity
                     .getString(if (stopped) R.string.resume else R.string.stop)
             }
         }
@@ -139,14 +139,12 @@ class CompassFragment : DaggerFragment() {
     private fun setCompassMetrics() {
         val displayMetrics = DisplayMetrics()
 
-        mainActivityDependency.mainActivity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        mainActivity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val width = displayMetrics.widthPixels
         val height = displayMetrics.heightPixels
         binding.compassView.setScreenResolution(width, height - 2 * height / 8)
 
-        val wm: WindowManager? = mainActivityDependency.mainActivity.getSystemService()
-
-        when (wm?.defaultDisplay?.rotation) {
+        when (mainActivity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
             Surface.ROTATION_0 -> orientation = 0f
             Surface.ROTATION_90 -> orientation = 90f
             Surface.ROTATION_180 -> orientation = 180f
@@ -157,7 +155,6 @@ class CompassFragment : DaggerFragment() {
     override fun onResume() {
         super.onResume()
 
-        val mainActivity = mainActivityDependency.mainActivity
         sensorManager = mainActivity.getSystemService()
         sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         if (sensor != null) {

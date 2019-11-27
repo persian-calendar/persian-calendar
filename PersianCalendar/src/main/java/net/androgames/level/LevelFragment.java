@@ -1,5 +1,7 @@
 package net.androgames.level;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,18 +13,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
-import com.byagowi.persiancalendar.di.MainActivityDependency;
 import com.byagowi.persiancalendar.ui.MainActivity;
 
 import net.androgames.level.orientation.OrientationProvider;
-
-import javax.inject.Inject;
-
-import dagger.android.support.DaggerFragment;
 
 /*
  *  This file is part of Level (an Android Bubble Level).
@@ -43,21 +41,21 @@ import dagger.android.support.DaggerFragment;
  *  You should have received a copy of the GNU General Public License
  *  along with Level. If not, see <http://www.gnu.org/licenses/>
  */
-public class LevelFragment extends DaggerFragment {
-
-    @Inject
-    MainActivityDependency mainActivityDependency;
+public class LevelFragment extends Fragment {
 
     private OrientationProvider provider;
+    private Activity activity;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final MainActivity mainActivity = mainActivityDependency.getMainActivity();
+        final MainActivity mainActivity = (MainActivity) getActivity();
+        assert mainActivity != null;
+        activity = mainActivity;
         mainActivity.setTitleAndSubtitle(getString(R.string.level), "");
 
         final FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
-        provider = new OrientationProvider(mainActivity, binding.levelView);
+        provider = new OrientationProvider(activity, binding.levelView);
 
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
         binding.bottomAppbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -73,7 +71,7 @@ public class LevelFragment extends DaggerFragment {
             public void onClick(View v) {
                 boolean stop = !provider.isListening();
                 binding.fab.setImageResource(stop ? R.drawable.ic_stop : R.drawable.ic_play);
-                binding.fab.setContentDescription(mainActivity.getString(stop ? R.string.stop : R.string.resume));
+                binding.fab.setContentDescription(activity.getString(stop ? R.string.stop : R.string.resume));
                 if (stop) provider.startListening();
                 else provider.stopListening();
             }
@@ -87,7 +85,6 @@ public class LevelFragment extends DaggerFragment {
         super.onResume();
         provider.startListening();
 
-        FragmentActivity activity = mainActivityDependency.getMainActivity();
         // https://stackoverflow.com/a/20017878
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
         switch (rotation) {
@@ -111,8 +108,7 @@ public class LevelFragment extends DaggerFragment {
         if (provider.isListening()) {
             provider.stopListening();
         }
-        mainActivityDependency.getMainActivity()
-                .setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         super.onPause();
     }
 }

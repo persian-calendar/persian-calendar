@@ -13,6 +13,7 @@ import android.view.*
 import android.widget.ImageView
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -23,27 +24,18 @@ import androidx.navigation.Navigation
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
-import com.byagowi.persiancalendar.di.AppDependency
-import com.byagowi.persiancalendar.di.MainActivityDependency
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import dagger.android.support.DaggerAppCompatActivity
-import javax.inject.Inject
 
 
 /**
  * Program activity for android
  */
-class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     NavigationView.OnNavigationItemSelectedListener {
-
-    @Inject
-    lateinit var appDependency: AppDependency // same object from App
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
 
     private var creationDateJdn: Long = 0
     private var settingHasChanged = false
@@ -139,8 +131,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         prefs.registerOnSharedPreferenceChangeListener(this)
 
         if (isShowDeviceCalendarEvents && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_CALENDAR
+                this, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(this)
 
@@ -366,8 +357,7 @@ class MainActivity : DaggerAppCompatActivity(), SharedPreferences.OnSharedPrefer
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.READ_CALENDAR
+                    this, Manifest.permission.READ_CALENDAR
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
                 toggleShowDeviceCalendarOnPreference(this, true)

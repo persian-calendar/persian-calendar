@@ -17,6 +17,7 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
  */
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -25,12 +26,12 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import java.util.*
 
 class RecyclerListAdapter(
     private val calendarPreferenceDialog: CalendarPreferenceDialog,
-    private val mainActivityDependency: MainActivityDependency,
+    private val context: Context,
     titles: List<String>, values: List<String>, enabled: List<Boolean>
 ) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
@@ -79,7 +80,7 @@ class RecyclerListAdapter(
         // Easter egg when all are swiped
         if (titles.size == 0) {
             try {
-                val view = mainActivityDependency.mainActivity.coordinator
+                val view = (context as? MainActivity)?.coordinator ?: return
                 ValueAnimator.ofFloat(0f, 360f).apply {
                     duration = 3000L
                     interpolator = AccelerateDecelerateInterpolator()

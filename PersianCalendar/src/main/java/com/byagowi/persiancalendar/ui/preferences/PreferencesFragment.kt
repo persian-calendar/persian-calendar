@@ -7,29 +7,23 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInterfaceCalendar
 import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.FragmentWidgetNotification
 import com.google.android.material.tabs.TabLayoutMediator
-import dagger.android.support.DaggerFragment
-import javax.inject.Inject
 
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class PreferencesFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
-
+class PreferencesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentSettingsBinding.inflate(
-        LayoutInflater.from(mainActivityDependency.mainActivity), container, false
+        LayoutInflater.from(context), container, false
     ).apply {
-        val mainActivity = mainActivityDependency.mainActivity
+        val mainActivity = activity as MainActivity
         mainActivity.setTitleAndSubtitle(getString(R.string.settings), "")
         viewPager.adapter = object : FragmentStateAdapter(mainActivity) {
             override fun getItemCount() = 3

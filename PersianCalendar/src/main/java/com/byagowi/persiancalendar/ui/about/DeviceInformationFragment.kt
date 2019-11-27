@@ -22,44 +22,40 @@ import android.view.WindowManager
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInfoRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
-import com.byagowi.persiancalendar.di.MainActivityDependency
+import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import dagger.android.support.DaggerFragment
 import java.util.*
-import javax.inject.Inject
 
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class DeviceInformationFragment : DaggerFragment() {
-
-    @Inject
-    lateinit var mainActivityDependency: MainActivityDependency
+class DeviceInformationFragment : Fragment() {
 
     private var clickCount: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
-        val activity = mainActivityDependency.mainActivity
+        val mainActivity = activity as MainActivity
 
-        activity.setTitleAndSubtitle(getString(R.string.device_info), "")
+        mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
 
         circularRevealFromMiddle(circularReveal)
 
         recyclerView.apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
-            adapter = DeviceInfoAdapter(activity, root)
+            layoutManager = LinearLayoutManager(mainActivity)
+            addItemDecoration(DividerItemDecoration(mainActivity, LinearLayoutManager.VERTICAL))
+            adapter = DeviceInfoAdapter(mainActivity, root)
         }
 
         bottomNavigation.apply {
@@ -84,8 +80,8 @@ class DeviceInformationFragment : DaggerFragment() {
             setOnNavigationItemSelectedListener {
                 // Easter egg
                 if (++clickCount % 10 == 0) {
-                    BottomSheetDialog(activity).apply {
-                        setContentView(IndeterminateProgressBar(activity).apply {
+                    BottomSheetDialog(mainActivity).apply {
+                        setContentView(IndeterminateProgressBar(mainActivity).apply {
                             layoutParams =
                                 ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
                         })

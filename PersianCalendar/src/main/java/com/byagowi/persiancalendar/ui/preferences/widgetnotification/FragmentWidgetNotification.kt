@@ -10,7 +10,7 @@ import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.*
 import java.util.*
 
-// Don't use dagger in this class as it is used in WidgetConfigurationActivity also
+// Don't use MainActivity here as it is used in WidgetConfigurationActivity also
 class FragmentWidgetNotification : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) =
