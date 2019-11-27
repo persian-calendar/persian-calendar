@@ -18,7 +18,7 @@ jobs:
         with:
           java-version: 1.8
       - name: Build with Gradle
-        run: ./gradlew assembleGithub_action
+        run: ./gradlew assembleNightly
 
       - name: Send apk to telegram
         run: |
