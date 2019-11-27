@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.api.BaseVariantOutputImpl
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
 
 plugins {
@@ -29,13 +28,12 @@ android {
     buildToolsVersion("29.0.2")
     viewBinding.isEnabled = true
 
-    val gitVersion =
-        listOf(
-            "git rev-parse --abbrev-ref HEAD",
-            "git rev-list HEAD --count",
-            "git rev-parse --short HEAD"
-        ).map { it.runCommand()?.trim() }.joinToString("-") +
-                (if ("git status -s".runCommand()?.trim()?.isEmpty() == false) "-dirty" else "")
+    val gitVersion = listOf(
+        "git rev-parse --abbrev-ref HEAD",
+        "git rev-list HEAD --count",
+        "git rev-parse --short HEAD"
+    ).joinToString("-") { it.runCommand()?.trim() ?: "" } +
+            (if (("git status -s".runCommand() ?: "").isBlank()) "" else "-dirty")
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
@@ -50,7 +48,7 @@ android {
     }
 
     signingConfigs {
-        create("nightly"){
+        create("nightly") {
             storeFile = rootProject.file("nightly.keystore")
             storePassword = "android"
             keyAlias = "androiddebugkey"
