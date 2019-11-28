@@ -11,6 +11,7 @@
     "https://calendar.ut.ac.ir/Fa/News/Data/Doc/calendar%201396-full.pdf",
     "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf",
     "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf",
+    "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201399-Full.pdf",
     "https://www.tasnimnews.com/fa/news/1395/11/10/1310977/",
 
     "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt",
@@ -989,11 +990,14 @@
     { "holiday": false, "month": 10, "day": 5, "type": "Ancient Iran",
       "title": "روز درگذشت زرتشت" },
 
-    { "holiday": false, "year": 1397, "month": 3, "day": 18, "type": "Islamic Iran",
+    { "holiday": false, "year": 1398, "month": 3, "day": 10, "type": "Islamic Iran",
       "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
 
-    { "holiday": false, "year": 1398, "month": 3, "day": 10, "type": "Islamic Iran",
-      "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" }
+    { "holiday": false, "year": 1399, "month": 3, "day": 2, "type": "Islamic Iran",
+      "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
+
+    { "holiday": false, "year": 1399, "month": 4, "day": 1, "type": "Iran",
+      "title": "خورشیدگرفتگی، اوج در تهران در ۱۰:۱۶ با ۴۸درصد گرفتگی" }
   ],
 
   "Hijri Calendar": [
