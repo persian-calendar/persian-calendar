@@ -18,8 +18,6 @@ import kotlin.math.abs
 class CalendarsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
 
-    var showHideTodayButtonCallback: (Boolean) -> Unit = fun(_) {}
-
     private val calendarItemAdapter = CalendarItemAdapter(context)
     private val binding: CalendarsViewBinding =
         CalendarsViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
@@ -68,10 +66,8 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                     context.getString(R.string.iran_time)
                 )
             }
-            showHideTodayButtonCallback(false)
             binding.diffDate.visibility = View.GONE
         } else {
-            showHideTodayButtonCallback(true)
             binding.diffDate.visibility = View.VISIBLE
 
             val civilBase = CivilDate(2000, 1, 1)

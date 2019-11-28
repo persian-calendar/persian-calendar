@@ -92,10 +92,6 @@ class CalendarFragment : Fragment() {
 
             R.string.calendar to CalendarsView(mainActivity).apply {
                 calendarsView = this
-                showHideTodayButtonCallback = fun(show) {
-                    if (show) mainBinding.todayButton.show()
-                    else mainBinding.todayButton.hide()
-                }
             },
 
             R.string.events to EventsTabContentBinding.inflate(inflater, container, false).apply {
@@ -112,7 +108,9 @@ class CalendarFragment : Fragment() {
             coordinate = this
 
             listOf(
-                R.string.owghat to OwghatTabContentBinding.inflate(inflater, container, false).apply {
+                R.string.owghat to OwghatTabContentBinding.inflate(
+                    inflater, container, false
+                ).apply {
                     owghatBinding = this
 
                     root.setOnClickListener { onOwghatClick() }
@@ -139,12 +137,14 @@ class CalendarFragment : Fragment() {
             )
         } ?: emptyList())
 
+        bringDate(getTodayJdn(), monthChange = false, highlight = false)
+
         return FragmentCalendarBinding.inflate(inflater, container, false).apply {
             mainBinding = this
 
-            todayButton.setOnClickListener { bringTodayYearMonth() }
+            todayButton.setOnClickListener { bringDate(getTodayJdn(), highlight = false) }
 
-            calendarPager.onDayClicked = fun(jdn: Long) { selectDay(jdn) }
+            calendarPager.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
             calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
             calendarPager.onNonDefaultPageSelected = fun() { todayButton.show() }
             calendarPager.onPageSelectedWithDate = fun(date: AbstractDate) {
@@ -153,7 +153,6 @@ class CalendarFragment : Fragment() {
                     formatNumber(date.year)
                 )
             }
-
             tabsViewPager.adapter = object : TabsAdapter() {
                 override fun getItemCount(): Int = tabs.size
                 override fun onBindViewHolder(holder: ViewHolder, position: Int) =
@@ -184,16 +183,6 @@ class CalendarFragment : Fragment() {
             if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
             tabsViewPager.setCurrentItem(lastTab, false)
         }.root
-    }
-
-    private fun selectDay(jdn: Long) {
-        mainBinding.calendarPager.lastSelectedJdn = jdn
-        calendarsView.showCalendars(
-            mainBinding.calendarPager.lastSelectedJdn, mainCalendar, getEnabledCalendarTypes()
-        )
-        val isToday = getTodayJdn() == mainBinding.calendarPager.lastSelectedJdn
-        setOwghat(jdn, isToday)
-        showEvent(jdn, isToday)
     }
 
     private fun addEventOnCalendar(jdn: Long) {
@@ -237,12 +226,9 @@ class CalendarFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
-            if (isShowDeviceCalendarEvents) {
-                mainBinding.calendarPager.updateMonthFragments(
-                    calculateViewPagerPositionFromJdn(mainBinding.calendarPager.lastSelectedJdn),
-                    true
-                )
-            } else {
+            if (isShowDeviceCalendarEvents)
+                mainBinding.calendarPager.refresh(isEventsModified = true)
+            else {
                 if (ActivityCompat.checkSelfPermission(
                         mainActivity, Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
@@ -297,6 +283,35 @@ class CalendarFragment : Fragment() {
                 append(x)
             }
         }
+
+    private fun bringDate(jdn: Long, highlight: Boolean = true, monthChange: Boolean = true) {
+        mainBinding.calendarPager.selectedJdn = if (highlight) jdn else -1
+        if (monthChange) {
+            val viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
+            mainBinding.calendarPager.gotoOffset(viewPagerPosition)
+        }
+        mainBinding.calendarPager.refresh()
+
+        val isToday = getTodayJdn() == jdn
+
+        // Show/Hide bring today fab
+        if (isToday) mainBinding.todayButton.hide() else mainBinding.todayButton.show()
+
+        // Update tabs
+        calendarsView.showCalendars(jdn, mainCalendar, getEnabledCalendarTypes())
+        showEvent(jdn, isToday)
+        setOwghat(jdn, isToday)
+
+        // a11y
+        if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
+            mainBinding.root,
+            getA11yDaySummary(
+                mainActivity, jdn, false, emptyEventsStore(),
+                withZodiac = true, withOtherCalendars = true, withTitle = true
+            ),
+            Snackbar.LENGTH_SHORT
+        ).show()
+    }
 
     private fun showEvent(jdn: Long, isToday: Boolean) {
         eventsBinding.run {
@@ -391,7 +406,7 @@ class CalendarFragment : Fragment() {
                 eventMessage.visibility = View.VISIBLE
             }
 
-            todayButtonSpace.visibility = if (isToday) View.GONE else View.VISIBLE
+            todayButtonReservedSpace.visibility = if (isToday) View.GONE else View.VISIBLE
 
             root.contentDescription = contentDescription
         }
@@ -435,36 +450,6 @@ class CalendarFragment : Fragment() {
                 else R.drawable.ic_keyboard_arrow_down
             )
         }
-
-        if (mainBinding.calendarPager.lastSelectedJdn == -1L)
-            mainBinding.calendarPager.lastSelectedJdn = getTodayJdn()
-    }
-
-    private fun bringTodayYearMonth() {
-        mainBinding.calendarPager.lastSelectedJdn = -1
-        mainBinding.calendarPager.resetMonthFragments()
-        mainBinding.calendarPager.gotoOffset(0)
-
-        selectDay(getTodayJdn())
-    }
-
-    private fun bringDate(jdn: Long) {
-        val viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
-        mainBinding.calendarPager.gotoOffset(viewPagerPosition)
-
-        selectDay(jdn)
-        mainBinding.calendarPager.lastSelectedJdn = jdn
-        mainBinding.calendarPager
-            .updateMonthFragments(viewPagerPosition, false)
-
-        if (isTalkBackEnabled && jdn != getTodayJdn()) Snackbar.make(
-            mainBinding.root,
-            getA11yDaySummary(
-                mainActivity, jdn, false, emptyEventsStore(),
-                withZodiac = true, withOtherCalendars = true, withTitle = true
-            ),
-            Snackbar.LENGTH_SHORT
-        ).show()
     }
 
     private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {
@@ -517,27 +502,21 @@ class CalendarFragment : Fragment() {
         }
     }
 
+    private fun getSelectedJdn() =
+        mainBinding.calendarPager.selectedJdn.takeIf { it != -1L } ?: getTodayJdn()
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.go_to -> SelectDayDialog.newInstance(mainBinding.calendarPager.lastSelectedJdn).apply {
+            R.id.go_to -> SelectDayDialog.newInstance(getSelectedJdn()).apply {
                 onSuccess = fun(jdn: Long) { bringDate(jdn) }
             }.show(
                 childFragmentManager,
                 SelectDayDialog::class.java.name
             )
-            R.id.add_event -> {
-                if (mainBinding.calendarPager.lastSelectedJdn == -1L)
-                    mainBinding.calendarPager.lastSelectedJdn = getTodayJdn()
-
-                addEventOnCalendar(mainBinding.calendarPager.lastSelectedJdn)
-            }
-            R.id.shift_work -> ShiftWorkDialog.newInstance(mainBinding.calendarPager.lastSelectedJdn).apply {
+            R.id.add_event -> addEventOnCalendar(getSelectedJdn())
+            R.id.shift_work -> ShiftWorkDialog.newInstance(getSelectedJdn()).apply {
                 onSuccess = fun() {
                     updateStoredPreference(mainActivity)
-                    mainBinding.calendarPager.updateMonthFragments(
-                        calculateViewPagerPositionFromJdn(mainBinding.calendarPager.lastSelectedJdn),
-                        true
-                    )
                     mainActivity.restartActivity()
                 }
             }.show(

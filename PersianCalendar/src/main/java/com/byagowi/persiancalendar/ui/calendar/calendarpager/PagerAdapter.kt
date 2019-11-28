@@ -24,7 +24,7 @@ class PagerAdapter(private val calendarPager: CalendarPager) :
 
         private val daysAdapter = DaysAdapter(binding.root.context, calendarPager)
 
-        var update = fun(_: Int, _: Boolean, _: Long) {}
+        var refresh = fun(_: Boolean, _: Long) {}
 
         init {
             val isRTL = isRTL(binding.root.context)
@@ -74,29 +74,23 @@ class PagerAdapter(private val calendarPager: CalendarPager) :
                 notifyItemRangeChanged(0, daysAdapter.itemCount)
             }
 
-            update = fun(target: Int, isEventsModification: Boolean, jdn: Long) {
-                if (target == offset) {
+            refresh = fun(isEventsModification: Boolean, jdn: Long) {
+                if (calendarPager.getCurrentSelection() == position) {
                     if (isEventsModification) {
                         daysAdapter.initializeMonthEvents()
                         calendarPager.onDayClicked(jdn)
                     } else {
-                        daysAdapter.selectDay(-1)
                         calendarPager.onPageSelectedWithDate(date)
                     }
 
                     val selectedDay = 1 + jdn - baseJdn
                     if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
                         daysAdapter.selectDay(selectedDay.toInt())
+                    else daysAdapter.selectDay(-1)
                 } else daysAdapter.selectDay(-1)
             }
 
-            if (calendarPager.getCurrentSelection() == position) {
-                if (calendarPager.isTheFirstTime && offset == 0) {
-                    calendarPager.isTheFirstTime = false
-                    calendarPager.onDayClicked(getTodayJdn())
-                }
-                calendarPager.updateMonthFragments(offset, false)
-            }
+            calendarPager.refresh()
         }
     }
 }

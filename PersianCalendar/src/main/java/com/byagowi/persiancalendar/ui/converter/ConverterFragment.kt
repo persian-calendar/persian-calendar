@@ -23,16 +23,17 @@ class ConverterFragment : Fragment() {
 
         calendarsView.expand(true)
         calendarsView.hideMoreIcon()
-        calendarsView.showHideTodayButtonCallback = fun(show) {
-            if (show) todayButton.show() else todayButton.hide()
-        }
 
-        todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(getTodayJdn()) }
+        val todayJdn = getTodayJdn()
+
+        todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(todayJdn) }
 
         dayPickerView.selectedDayListener = fun(jdn) {
             if (jdn == -1L) {
                 calendarsView.visibility = View.GONE
             } else {
+                if (jdn == todayJdn) todayButton.hide() else todayButton.show()
+
                 calendarsView.visibility = View.VISIBLE
                 val selectedCalendarType = dayPickerView.selectedCalendarType
                 calendarsView.showCalendars(
