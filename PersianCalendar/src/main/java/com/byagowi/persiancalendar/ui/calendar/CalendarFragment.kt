@@ -277,10 +277,9 @@ class CalendarFragment : Fragment() {
             }
         }
         .foldIndexed(SpannableStringBuilder()) { i, result, x ->
-            result.apply {
-                if (i != 0) append("\n")
-                append(x)
-            }
+            if (i != 0) result.append("\n")
+            result.append(x)
+            result
         }
 
     private fun bringDate(jdn: Long, highlight: Boolean = true, monthChange: Boolean = true) {
