@@ -24,7 +24,10 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
+import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
+import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
@@ -78,58 +81,69 @@ class CalendarFragment : Fragment() {
 
         setHasOptionsMenu(true)
 
-        mainBinding = FragmentCalendarBinding.inflate(inflater, container, false)
-
-        val titles = ArrayList<String>()
-        val tabs = ArrayList<View>()
-
-        titles.add(getString(R.string.calendar))
-        calendarsView = CalendarsView(mainActivity).apply {
-            showHideTodayButtonCallback = fun(show) {
-                if (show) mainBinding.todayButton.show()
-                else mainBinding.todayButton.hide()
-            }
-        }
-        mainBinding.todayButton.setOnClickListener { bringTodayYearMonth() }
-        tabs.add(calendarsView)
-
-        titles.add(getString(R.string.events))
-        eventsBinding = EventsTabContentBinding.inflate(inflater, container, false)
-        tabs.add(eventsBinding.root)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            eventsBinding.eventsContent.layoutTransition = LayoutTransition().apply {
-                enableTransitionType(LayoutTransition.CHANGING)
-            }
-            // Don't do the same for others tabs, it is problematic
+        getTodayOfCalendar(mainCalendar).also {
+            mainActivity.setTitleAndSubtitle(
+                getMonthName(it),
+                formatNumber(it.year)
+            )
         }
 
-        coordinate = getCoordinate(mainActivity)?.apply {
-            titles.add(getString(R.string.owghat))
-            owghatBinding = OwghatTabContentBinding.inflate(inflater, container, false).apply {
-                tabs.add(root)
-                root.setOnClickListener { onOwghatClick() }
-                cityName.run {
-                    setOnClickListener { onOwghatClick() }
-                    // Easter egg to test AthanActivity
-                    setOnLongClickListener {
-                        startAthan(context, "FAJR")
-                        true
-                    }
-                    val cityName = getCityName(context, false)
-                    if (cityName.isNotEmpty()) text = cityName
+        val tabs = listOf(
+
+            CALENDARS_TAB to CalendarsView(mainActivity).apply {
+                calendarsView = this
+                showHideTodayButtonCallback = fun(show) {
+                    if (show) mainBinding.todayButton.show()
+                    else mainBinding.todayButton.hide()
                 }
-                timesRecyclerView.run {
-                    layoutManager = FlexboxLayoutManager(context).apply {
-                        flexWrap = FlexWrap.WRAP
-                        justifyContent = JustifyContent.CENTER
-                    }
-                    adapter = TimeItemAdapter()
-                }
-            }
-        }
+            },
 
-        mainBinding.run {
+            EVENTS_TAB to EventsTabContentBinding.inflate(inflater, container, false).apply {
+                eventsBinding = this
+
+                // Apply some animation, don't do the same for others tabs, it is problematic
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    eventsContent.layoutTransition =
+                        LayoutTransition().apply { enableTransitionType(LayoutTransition.CHANGING) }
+                }
+            }.root
+
+        ) + (getCoordinate(mainActivity)?.run {
+            coordinate = this
+
+            listOf(
+                OWGHAT_TAB to OwghatTabContentBinding.inflate(inflater, container, false).apply {
+                    owghatBinding = this
+
+                    root.setOnClickListener { onOwghatClick() }
+
+                    cityName.run {
+                        setOnClickListener { onOwghatClick() }
+                        // Easter egg to test AthanActivity
+                        setOnLongClickListener {
+                            startAthan(context, "FAJR")
+                            true
+                        }
+                        val cityName = getCityName(context, false)
+                        if (cityName.isNotEmpty()) text = cityName
+                    }
+
+                    timesRecyclerView.run {
+                        layoutManager = FlexboxLayoutManager(context).apply {
+                            flexWrap = FlexWrap.WRAP
+                            justifyContent = JustifyContent.CENTER
+                        }
+                        adapter = TimeItemAdapter()
+                    }
+                }.root
+            )
+        } ?: emptyList())
+
+        return FragmentCalendarBinding.inflate(inflater, container, false).apply {
+            mainBinding = this
+
+            todayButton.setOnClickListener { bringTodayYearMonth() }
+
             calendarPager.onDayClicked = fun(jdn: Long) { selectDay(jdn) }
             calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
             calendarPager.onNonDefaultPageSelected = fun() { todayButton.show() }
@@ -143,7 +157,7 @@ class CalendarFragment : Fragment() {
             tabsViewPager.adapter = object : TabsAdapter() {
                 override fun getItemCount(): Int = tabs.size
                 override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-                    holder.bind(tabs[position])
+                    holder.bind(tabs[position].second)
 
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
                     FrameLayout(mainActivity).apply {
@@ -153,6 +167,7 @@ class CalendarFragment : Fragment() {
                     }
                 )
             }
+
             tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
@@ -160,21 +175,19 @@ class CalendarFragment : Fragment() {
                     mainActivity.appPrefs.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
                 }
             })
+
             TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
-                tab.text = titles[position]
+                tab.setText(
+                    listOf(
+                        R.string.calendar, R.string.events, R.string.owghat
+                    )[tabs[position].first]
+                )
             }.attach()
+
             var lastTab = mainActivity.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
             if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
             tabsViewPager.setCurrentItem(lastTab, false)
-        }
-
-        val today = getTodayOfCalendar(mainCalendar)
-        mainActivity.setTitleAndSubtitle(
-            getMonthName(today),
-            formatNumber(today.year)
-        )
-
-        return mainBinding.root
+        }.root
     }
 
     private fun selectDay(jdn: Long) {
@@ -559,7 +572,7 @@ class CalendarFragment : Fragment() {
 
     companion object {
         private const val CALENDARS_TAB = 0
-        private const val EVENT_TAB = 1
+        private const val EVENTS_TAB = 1
         private const val OWGHAT_TAB = 2
     }
 }
