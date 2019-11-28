@@ -17,10 +17,6 @@ const val LANG_AZB = "azb"
 const val LANG_CKB = "ckb"
 const val LANG_UR = "ur"
 
-const val CALENDARS_TAB = 0
-const val EVENT_TAB = 1
-const val OWGHAT_TAB = 2
-
 const val LAST_CHOSEN_TAB_KEY = "LastChosenTab"
 
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"
@@ -62,7 +58,6 @@ const val CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE"
 
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
-const val DEFAULT_ISLAMIC_OFFSET = "0"
 const val DEFAULT_APP_LANGUAGE = "fa"
 const val DEFAULT_SELECTED_WIDGET_TEXT_COLOR = "#ffffffff"
 const val DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR = "#00000000"

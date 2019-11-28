@@ -177,7 +177,7 @@ class CalendarFragment : Fragment() {
         return mainBinding.root
     }
 
-    fun selectDay(jdn: Long) {
+    private fun selectDay(jdn: Long) {
         mainBinding.calendarPager.lastSelectedJdn = jdn
         calendarsView.showCalendars(
             mainBinding.calendarPager.lastSelectedJdn, mainCalendar, getEnabledCalendarTypes()
@@ -187,7 +187,7 @@ class CalendarFragment : Fragment() {
         showEvent(jdn, isToday)
     }
 
-    fun addEventOnCalendar(jdn: Long) {
+    private fun addEventOnCalendar(jdn: Long) {
         val civil = CivilDate(jdn)
         val time = Calendar.getInstance()
         time.set(civil.year, civil.month - 1, civil.dayOfMonth)
@@ -439,7 +439,7 @@ class CalendarFragment : Fragment() {
         selectDay(getTodayJdn())
     }
 
-    fun bringDate(jdn: Long) {
+    private fun bringDate(jdn: Long) {
         val viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
         mainBinding.calendarPager.gotoOffset(viewPagerPosition)
 
@@ -556,4 +556,10 @@ class CalendarFragment : Fragment() {
             return true
         } else false
     } ?: false
+
+    companion object {
+        private const val CALENDARS_TAB = 0
+        private const val EVENT_TAB = 1
+        private const val OWGHAT_TAB = 2
+    }
 }
