@@ -76,17 +76,10 @@ class CalendarFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View = FragmentCalendarBinding.inflate(inflater, container, false).apply {
+        mainBinding = this
+
         mainActivity = activity as MainActivity
-
-        setHasOptionsMenu(true)
-
-        getTodayOfCalendar(mainCalendar).also {
-            mainActivity.setTitleAndSubtitle(
-                getMonthName(it),
-                formatNumber(it.year)
-            )
-        }
 
         val tabs = listOf(
 
@@ -137,52 +130,58 @@ class CalendarFragment : Fragment() {
             )
         } ?: emptyList())
 
+        todayButton.setOnClickListener { bringDate(getTodayJdn(), highlight = false) }
+
+        calendarPager.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
+        calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
+        calendarPager.onNonDefaultPageSelected = fun() { todayButton.show() }
+        calendarPager.onPageSelectedWithDate = fun(date: AbstractDate) {
+            mainActivity.setTitleAndSubtitle(getMonthName(date), formatNumber(date.year))
+        }
+        tabsViewPager.adapter = object : TabsAdapter() {
+            override fun getItemCount(): Int = tabs.size
+            override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+                holder.bind(tabs[position].second)
+
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+                FrameLayout(mainActivity).apply {
+                    layoutParams = FrameLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+                }
+            )
+        }
+
+        tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
+                else owghatBinding?.sunView?.clear()
+                mainActivity.appPrefs.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+            }
+        })
+
+        TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
+            tab.setText(tabs[position].first)
+        }.attach()
+
+        var lastTab = mainActivity.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
+        if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
+        tabsViewPager.setCurrentItem(lastTab, false)
+    }.root
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
-        return FragmentCalendarBinding.inflate(inflater, container, false).apply {
-            mainBinding = this
+        setHasOptionsMenu(true)
 
-            todayButton.setOnClickListener { bringDate(getTodayJdn(), highlight = false) }
-
-            calendarPager.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
-            calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
-            calendarPager.onNonDefaultPageSelected = fun() { todayButton.show() }
-            calendarPager.onPageSelectedWithDate = fun(date: AbstractDate) {
-                mainActivity.setTitleAndSubtitle(
-                    getMonthName(date),
-                    formatNumber(date.year)
-                )
-            }
-            tabsViewPager.adapter = object : TabsAdapter() {
-                override fun getItemCount(): Int = tabs.size
-                override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-                    holder.bind(tabs[position].second)
-
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-                    FrameLayout(mainActivity).apply {
-                        layoutParams = FrameLayout.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-                        )
-                    }
-                )
-            }
-
-            tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
-                    else owghatBinding?.sunView?.clear()
-                    mainActivity.appPrefs.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
-                }
-            })
-
-            TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
-                tab.setText(tabs[position].first)
-            }.attach()
-
-            var lastTab = mainActivity.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
-            if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-            tabsViewPager.setCurrentItem(lastTab, false)
-        }.root
+        getTodayOfCalendar(mainCalendar).also {
+            mainActivity.setTitleAndSubtitle(
+                getMonthName(it),
+                formatNumber(it.year)
+            )
+        }
     }
 
     private fun addEventOnCalendar(jdn: Long) {
