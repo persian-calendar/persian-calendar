@@ -90,7 +90,7 @@ class CalendarFragment : Fragment() {
 
         val tabs = listOf(
 
-            CALENDARS_TAB to CalendarsView(mainActivity).apply {
+            R.string.calendar to CalendarsView(mainActivity).apply {
                 calendarsView = this
                 showHideTodayButtonCallback = fun(show) {
                     if (show) mainBinding.todayButton.show()
@@ -98,7 +98,7 @@ class CalendarFragment : Fragment() {
                 }
             },
 
-            EVENTS_TAB to EventsTabContentBinding.inflate(inflater, container, false).apply {
+            R.string.events to EventsTabContentBinding.inflate(inflater, container, false).apply {
                 eventsBinding = this
 
                 // Apply some animation, don't do the same for others tabs, it is problematic
@@ -112,7 +112,7 @@ class CalendarFragment : Fragment() {
             coordinate = this
 
             listOf(
-                OWGHAT_TAB to OwghatTabContentBinding.inflate(inflater, container, false).apply {
+                R.string.owghat to OwghatTabContentBinding.inflate(inflater, container, false).apply {
                     owghatBinding = this
 
                     root.setOnClickListener { onOwghatClick() }
@@ -177,11 +177,7 @@ class CalendarFragment : Fragment() {
             })
 
             TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
-                tab.setText(
-                    listOf(
-                        R.string.calendar, R.string.events, R.string.owghat
-                    )[tabs[position].first]
-                )
+                tab.setText(tabs[position].first)
             }.attach()
 
             var lastTab = mainActivity.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
