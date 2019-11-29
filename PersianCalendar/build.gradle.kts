@@ -58,7 +58,7 @@ android {
     buildTypes {
         create("nightly") {
             signingConfig = signingConfigs.getByName("nightly")
-            versionNameSuffix = "-nightly"
+            versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion-nightly"
             applicationIdSuffix = ".nightly"
             isMinifyEnabled = true
             isShrinkResources = true
