@@ -209,11 +209,8 @@ class AboutFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.deviceInfo -> (activity as MainActivity).navigateTo(R.id.deviceInfo)
-            else -> {
-            }
-        }
+        if (item.itemId == R.id.deviceInformation)
+            (activity as MainActivity).navigateTo(R.id.deviceInformation)
         return true
     }
 

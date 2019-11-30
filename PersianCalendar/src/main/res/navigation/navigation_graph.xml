@@ -64,11 +64,11 @@
         tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_about_to_deviceinfo"
-            app:destination="@id/deviceInfo" />
+            app:destination="@id/deviceInformation" />
     </fragment>
 
     <fragment
-        android:id="@+id/deviceInfo"
+        android:id="@+id/deviceInformation"
         android:name="com.byagowi.persiancalendar.ui.about.DeviceInformationFragment"
         android:label="Device Information Fragment" />
 

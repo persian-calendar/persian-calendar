@@ -320,7 +320,7 @@ class CalendarFragment : Fragment() {
             val holidays = getEventsTitle(
                 events,
                 holiday = true,
-                compact = false, of the pager, maybe not
+                compact = false,
                 showDeviceCalendarEvents = false,
                 insertRLM = false
             )

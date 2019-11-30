@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/deviceInfo"
+        android:id="@+id/deviceInformation"
         android:icon="@drawable/ic_device_information"
         android:title="@string/device_info"
         app:showAsAction="always" />

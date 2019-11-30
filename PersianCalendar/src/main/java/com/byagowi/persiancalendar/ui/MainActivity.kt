@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     "LEVEL" -> R.id.level
                     "CONVERTER" -> R.id.converter
                     "SETTINGS" -> R.id.settings
-                    "DEVICE" -> R.id.deviceInfo
+                    "DEVICE" -> R.id.deviceInformation
                     else -> R.id.calendar
                 }
             )
