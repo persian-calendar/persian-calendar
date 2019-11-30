@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +19,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private val calendarItemAdapter = CalendarItemAdapter(context)
     private val binding: CalendarsViewBinding =
-        CalendarsViewBinding.inflate(LayoutInflater.from(context), this, true).apply {
+        CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
             root.setOnClickListener { expand(!calendarItemAdapter.isExpanded) }
             extraInformationContainer.visibility = View.GONE
             calendarsRecyclerView.layoutManager = LinearLayoutManager(context).apply {

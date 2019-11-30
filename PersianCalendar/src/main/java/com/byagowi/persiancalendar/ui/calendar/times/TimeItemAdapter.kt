@@ -1,12 +1,12 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
 import com.byagowi.persiancalendar.utils.getFormattedClock
+import com.byagowi.persiancalendar.utils.layoutInflater
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.persiancalendar.praytimes.PrayTimes
 
@@ -30,7 +30,7 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        TimeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        TimeItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)

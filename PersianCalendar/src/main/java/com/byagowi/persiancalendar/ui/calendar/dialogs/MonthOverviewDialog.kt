@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,7 +53,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         )
 
         val binding = MonthOverviewDialogBinding.inflate(
-            LayoutInflater.from(context), null, false
+            mainActivity.layoutInflater, null, false
         ).apply {
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = ItemAdapter(events)
@@ -75,7 +74,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            MonthOverviewItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            MonthOverviewItemBinding.inflate(parent.context.layoutInflater, parent, false)
         )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)

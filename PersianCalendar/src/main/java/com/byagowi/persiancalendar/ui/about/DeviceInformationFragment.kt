@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
 import com.byagowi.persiancalendar.utils.copyToClipboard
+import com.byagowi.persiancalendar.utils.layoutInflater
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import java.util.*
@@ -262,7 +263,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        DeviceInformationRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        DeviceInformationRowBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)

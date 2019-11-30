@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInterfaceCalendar
 import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.FragmentWidgetNotification
+import com.byagowi.persiancalendar.utils.layoutInflater
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -21,7 +23,7 @@ class PreferencesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentSettingsBinding.inflate(
-        LayoutInflater.from(context), container, false
+        (context as Context).layoutInflater, container, false
     ).apply {
         val mainActivity = activity as MainActivity
         mainActivity.setTitleAndSubtitle(getString(R.string.settings), "")

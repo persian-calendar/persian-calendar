@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.shared
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import android.view.LayoutInflater
 import android.widget.FrameLayout
 import android.widget.NumberPicker
 import com.byagowi.persiancalendar.R
@@ -21,7 +20,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     var selectedCalendarType: CalendarType = CalendarType.SHAMSI
 
-    private val inflater = LayoutInflater.from(context)
+    private val inflater = context.layoutInflater
     val binding: DayPickerViewBinding = DayPickerViewBinding.inflate(inflater, this, true).apply {
         val calendarTypes = getOrderedCalendarEntities(getContext())
         val chips = calendarTypes.map { calendarTypeItem ->

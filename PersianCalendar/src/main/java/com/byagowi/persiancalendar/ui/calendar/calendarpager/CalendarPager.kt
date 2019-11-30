@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -85,7 +84,7 @@ class CalendarPager @JvmOverloads constructor(
     inner class PagerAdapter : RecyclerView.Adapter<PagerAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            FragmentMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            FragmentMonthBinding.inflate(parent.context.layoutInflater, parent, false)
         )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)

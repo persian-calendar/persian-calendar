@@ -12,6 +12,7 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
@@ -617,3 +618,6 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
 
 val Context.appPrefs: SharedPreferences
     get() = PreferenceManager.getDefaultSharedPreferences(this)
+
+val Context.layoutInflater: LayoutInflater
+    get() = LayoutInflater.from(this)

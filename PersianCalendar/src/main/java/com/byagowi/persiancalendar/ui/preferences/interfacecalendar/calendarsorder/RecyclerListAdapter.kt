@@ -19,7 +19,6 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -27,6 +26,7 @@ import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.utils.layoutInflater
 import java.util.*
 
 class RecyclerListAdapter(
@@ -49,7 +49,7 @@ class RecyclerListAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
-        CalendarTypeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        CalendarTypeItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {

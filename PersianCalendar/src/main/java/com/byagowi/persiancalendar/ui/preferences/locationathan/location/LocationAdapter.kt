@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +7,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.layoutInflater
 
 class LocationAdapter(
     private val locationPreferenceDialog: LocationPreferenceDialog,
@@ -15,7 +15,7 @@ class LocationAdapter(
 ) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ListItemCityNameBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        ListItemCityNameBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =

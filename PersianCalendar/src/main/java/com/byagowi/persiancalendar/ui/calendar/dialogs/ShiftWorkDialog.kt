@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
@@ -50,9 +49,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
             jdn = selectedJdn
         }
 
-        val binding = ShiftWorkSettingsBinding.inflate(
-            LayoutInflater.from(mainActivity), null, false
-        )
+        val binding = ShiftWorkSettingsBinding.inflate(mainActivity.layoutInflater, null, false)
         binding.recyclerView.layoutManager = LinearLayoutManager(mainActivity)
         val shiftWorkItemAdapter = ItemsAdapter(
             if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("d", 0)) else shiftWorks,
@@ -133,7 +130,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
             }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            ShiftWorkItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ShiftWorkItemBinding.inflate(parent.context.layoutInflater, parent, false)
         )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
