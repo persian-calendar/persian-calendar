@@ -223,9 +223,9 @@ private fun readDeviceEvents(
             CalendarContract.Instances.EVENT_COLOR // 7
         ), null, null, null
     )?.use {
-        var i = 0 // Don't go more than 1k events on any case
-        generateSequence { if (it.moveToNext() && (++i) < 1000) it else null }.mapNotNull {
-            if (it.getString(5) != "1") return@mapNotNull null
+        generateSequence { if (it.moveToNext()) it else null }.filter {
+            it.getString(5) == "1" // is visible
+        }.map {
             val startDate = Date(it.getLong(3))
             val endDate = Date(it.getLong(4))
             val startCalendar = makeCalendarFromDate(startDate)
@@ -246,7 +246,7 @@ private fun readDeviceEvents(
                 color = it.getString(7) ?: "",
                 isHoliday = false
             )
-        }.toList()
+        }.take(1000 /* let's put some limitation */).toList()
     } ?: emptyList()
 } catch (e: Exception) {
     e.printStackTrace()
