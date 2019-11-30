@@ -16,10 +16,7 @@ import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.praytimes.Clock
-import io.github.persiancalendar.praytimes.Coordinate
-import io.github.persiancalendar.praytimes.PrayTimes
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
+import io.github.persiancalendar.praytimes.*
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -66,8 +63,7 @@ var selectedWidgetTextColor: String = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     private set
 var selectedWidgetBackgroundColor: String = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     private set
-//    static private String islamicOffset = DEFAULT_ISLAMIC_OFFSET;
-var calculationMethod: String = DEFAULT_PRAY_TIME_METHOD
+var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
     private set
 var language: String = DEFAULT_APP_LANGUAGE
     private set
@@ -163,7 +159,9 @@ fun loadEvents(context: Context) {
     }
 
     // Now that we are configuring converter's algorithm above, lets set the offset also
-    IslamicDate.islamicOffset = getIslamicOffset(context)
+
+    IslamicDate.islamicOffset = context.appPrefs
+        .getString(PREF_ISLAMIC_OFFSET, null)?.toIntOrNull() ?: 0
 
     try {
         val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
@@ -306,7 +304,7 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
     coordinate ?: return 0
 
     if (prayTimes == null || dateHasChanged)
-        prayTimes = PrayTimesCalculator.calculate(getCalculationMethod(), Date(), coordinate)
+        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinate)
 
     val clock = current.toInt()
 
@@ -390,8 +388,8 @@ fun updateStoredPreference(context: Context) {
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
-    calculationMethod =
-        prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD
+    calculationMethod = CalculationMethod
+        .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
 
     coordinate = getCoordinate(context)
     try {

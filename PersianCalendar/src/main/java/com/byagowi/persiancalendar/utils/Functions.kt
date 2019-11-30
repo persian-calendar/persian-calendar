@@ -38,7 +38,6 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
@@ -85,8 +84,6 @@ else
         formatNumber(date.dayOfMonth), getMonthName(date),
         formatNumber(date.year)
     )
-
-fun getCalculationMethod(): CalculationMethod = CalculationMethod.valueOf(calculationMethod)
 
 fun isNonArabicScriptSelected() = when (language) {
     LANG_EN_US, LANG_JA -> true
@@ -219,7 +216,6 @@ fun getClockFromStringId(@StringRes stringId: Int) = prayTimes?.run {
 fun loadAlarms(context: Context) {
     val prefString = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
     Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
-    val calculationMethod = getCalculationMethod()
 
     if (coordinate != null && prefString.isNotEmpty()) {
         val athanGap =
@@ -425,9 +421,6 @@ fun askForCalendarPermission(activity: Activity?) {
         }
         .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }.show()
 }
-
-fun isShiaPrayTimeCalculationSelected(): Boolean =
-    getCalculationMethod().run { this == CalculationMethod.Tehran || this == CalculationMethod.Jafari }
 
 fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
     view ?: return

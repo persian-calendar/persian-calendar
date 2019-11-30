@@ -8,7 +8,6 @@ import android.provider.CalendarContract
 import android.text.Html
 import androidx.core.app.ActivityCompat
 import com.byagowi.persiancalendar.LANG_CKB
-import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -30,7 +29,7 @@ fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekSta
 fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
 
 fun getDayOfWeekFromJdn(jdn: Long): Int =
-    civilDateToCalendar(CivilDate(jdn))[Calendar.DAY_OF_WEEK] % 7
+    CivilDate(jdn).toCalendar()[Calendar.DAY_OF_WEEK] % 7
 
 fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
@@ -38,15 +37,14 @@ fun formatDayAndMonth(day: Int, month: String): String =
 fun dayTitleSummary(date: AbstractDate): String =
     getWeekDayName(date) + spacedComma + formatDate(date)
 
-fun civilDateToCalendar(civilDate: CivilDate): Calendar = Calendar.getInstance().apply {
-    set(civilDate.year, civilDate.month - 1, civilDate.dayOfMonth)
-}
+fun CivilDate.toCalendar(): Calendar =
+    Calendar.getInstance().apply { set(year, month - 1, dayOfMonth) }
 
 fun getInitialOfWeekDay(position: Int): String = weekDaysInitials[position % 7]
 
-fun getWeekDayName(date: AbstractDate): String = weekDays[civilDateToCalendar(
-    if (date is CivilDate) date else CivilDate(date)
-)[Calendar.DAY_OF_WEEK] % 7]
+fun getWeekDayName(date: AbstractDate): String = weekDays[
+        (if (date is CivilDate) date else CivilDate(date)).toCalendar()[Calendar.DAY_OF_WEEK] % 7
+]
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     val dayOfYear = jdn - startOfYearJdn
@@ -173,10 +171,6 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
         addAll(gregorianCalendarEvents.getEvents(civil))
     }
 
-fun getIslamicOffset(context: Context): Int =
-    context.appPrefs.getString(PREF_ISLAMIC_OFFSET, null)
-        ?.replace("+", "")?.toIntOrNull() ?: 0
-
 private fun baseFormatClock(hour: Int, minute: Int): String =
     formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
 
@@ -261,13 +255,13 @@ private fun readDeviceEvents(
 
 fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
     ctx,
-    civilDateToCalendar(CivilDate(if (jdn == -1L) getTodayJdn() else jdn)),
+    CivilDate(if (jdn == -1L) getTodayJdn() else jdn).toCalendar(),
     DAY_IN_MILLIS
 ).toEventsStore()
 
 fun readMonthDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
     ctx,
-    civilDateToCalendar(CivilDate(jdn)),
+    CivilDate(jdn).toCalendar(),
     32L * DAY_IN_MILLIS
 ).toEventsStore()
 

@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.AbstractDate
+import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 import java.util.concurrent.TimeUnit.MINUTES
@@ -180,7 +181,8 @@ fun update(context: Context, updateDate: Boolean) {
 
             if (enableClock) {
                 text2 = title
-                if (isForcedIranTimeEnabled) text3 = "(" + context.getString(R.string.iran_time) + ")"
+                if (isForcedIranTimeEnabled) text3 =
+                    "(" + context.getString(R.string.iran_time) + ")"
             } else {
                 remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
                 text2 = mainDateString
@@ -300,15 +302,18 @@ fun update(context: Context, updateDate: Boolean) {
                     R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
                     R.id.textPlaceholder4owghat_5_4x2
                 ).zip(
-                    if (isShiaPrayTimeCalculationSelected()) listOf(
-                        R.string.fajr, R.string.dhuhr,
-                        R.string.sunset, R.string.maghrib,
-                        R.string.midnight
-                    ) else listOf(
-                        R.string.fajr, R.string.dhuhr,
-                        R.string.asr, R.string.maghrib,
-                        R.string.isha
-                    )
+                    when (calculationMethod) {
+                        CalculationMethod.Tehran, CalculationMethod.Jafari -> listOf(
+                            R.string.fajr, R.string.dhuhr,
+                            R.string.sunset, R.string.maghrib,
+                            R.string.midnight
+                        )
+                        else -> listOf(
+                            R.string.fajr, R.string.dhuhr,
+                            R.string.asr, R.string.maghrib,
+                            R.string.isha
+                        )
+                    }
                 ) { textHolderViewId, owghatStringId ->
                     setTextViewText(
                         textHolderViewId,
