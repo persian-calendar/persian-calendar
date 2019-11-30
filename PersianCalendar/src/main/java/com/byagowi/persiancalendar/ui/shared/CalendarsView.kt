@@ -56,35 +56,31 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         binding.zodiac.text = getZodiacInfo(context, jdn, true)
         binding.zodiac.visibility = if (binding.zodiac.text.isEmpty()) View.GONE else View.VISIBLE
 
-        val diffDays = abs(getTodayJdn() - jdn)
+        val selectedDayAbsoluteDistance = abs(getTodayJdn() - jdn)
 
-        if (diffDays == 0L) {
-            if (isIranTime) {
-                binding.weekDayName.text = String.format(
-                    "%s (%s)",
-                    binding.weekDayName.text,
-                    context.getString(R.string.iran_time)
-                )
-            }
+        if (selectedDayAbsoluteDistance == 0L) {
+            if (isForcedIranTimeEnabled) binding.weekDayName.text = String.format(
+                "%s (%s)",
+                getWeekDayName(CivilDate(jdn)),
+                context.getString(R.string.iran_time)
+            )
             binding.diffDate.visibility = View.GONE
         } else {
             binding.diffDate.visibility = View.VISIBLE
 
             val civilBase = CivilDate(2000, 1, 1)
-            val civilOffset = CivilDate(diffDays + civilBase.toJdn())
+            val civilOffset = CivilDate(civilBase.toJdn() + selectedDayAbsoluteDistance)
             val yearDiff = civilOffset.year - 2000
             val monthDiff = civilOffset.month - 1
             val dayOfMonthDiff = civilOffset.dayOfMonth - 1
             var text = String.format(
                 context.getString(R.string.date_diff_text),
-                formatNumber(diffDays.toInt()),
+                formatNumber(selectedDayAbsoluteDistance.toInt()),
                 formatNumber(yearDiff),
                 formatNumber(monthDiff),
                 formatNumber(dayOfMonthDiff)
             )
-            if (diffDays <= 30) {
-                text = text.split("(")[0]
-            }
+            if (selectedDayAbsoluteDistance <= 31) text = text.split(" (")[0]
             binding.diffDate.text = text
         }
 
@@ -138,7 +134,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         binding.root.contentDescription = getA11yDaySummary(
             context, jdn,
-            diffDays == 0L, emptyEventsStore(),
+            selectedDayAbsoluteDistance == 0L, emptyEventsStore(),
             withZodiac = true, withOtherCalendars = true, withTitle = true
         )
     }

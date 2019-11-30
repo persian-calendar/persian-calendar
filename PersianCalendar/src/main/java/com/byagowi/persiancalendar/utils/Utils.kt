@@ -52,7 +52,7 @@ var preferredDigits = PERSIAN_DIGITS
     private set
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
-var isIranTime = DEFAULT_IRAN_TIME
+var isForcedIranTimeEnabled = DEFAULT_IRAN_TIME
     private set
 var isNotifyDateOnLockScreen = DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     private set
@@ -371,7 +371,7 @@ fun updateStoredPreference(context: Context) {
         else ARABIC_DIGITS
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
-    isIranTime = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
+    isForcedIranTimeEnabled = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
     isNotifyDateOnLockScreen = prefs.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN,
         DEFAULT_NOTIFY_DATE_LOCK_SCREEN

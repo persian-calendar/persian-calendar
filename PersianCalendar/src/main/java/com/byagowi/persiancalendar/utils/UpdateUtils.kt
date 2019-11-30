@@ -136,7 +136,7 @@ fun update(context: Context, updateDate: Boolean) {
         val remoteViews4: RemoteViews
         val remoteViews2: RemoteViews
         if (enableClock) {
-            if (isIranTime) {
+            if (isForcedIranTimeEnabled) {
                 remoteViews4 = RemoteViews(
                     context.packageName,
                     if (isCenterAligned) R.layout.widget4x1_clock_iran_center else R.layout.widget4x1_clock_iran
@@ -180,7 +180,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             if (enableClock) {
                 text2 = title
-                if (isIranTime) text3 = "(" + context.getString(R.string.iran_time) + ")"
+                if (isForcedIranTimeEnabled) text3 = "(" + context.getString(R.string.iran_time) + ")"
             } else {
                 remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
                 text2 = mainDateString
@@ -266,7 +266,7 @@ fun update(context: Context, updateDate: Boolean) {
         val remoteViews4x2 = RemoteViews(
             context.packageName,
             if (enableClock) {
-                if (isIranTime) R.layout.widget4x2_clock_iran else R.layout.widget4x2_clock
+                if (isForcedIranTimeEnabled) R.layout.widget4x2_clock_iran else R.layout.widget4x2_clock
             } else R.layout.widget4x2
         )
 

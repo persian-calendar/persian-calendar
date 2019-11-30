@@ -199,7 +199,7 @@ fun calendarToCivilDate(calendar: Calendar) = CivilDate(
 )
 
 fun makeCalendarFromDate(date: Date): Calendar = Calendar.getInstance().apply {
-    if (isIranTime)
+    if (isForcedIranTimeEnabled)
         timeZone = TimeZone.getTimeZone("Asia/Tehran")
     time = date
 }
