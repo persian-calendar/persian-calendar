@@ -34,7 +34,6 @@ import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
@@ -47,7 +46,6 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import com.google.android.flexbox.JustifyContent
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
@@ -55,7 +53,6 @@ import java.util.*
 
 class CalendarFragment : Fragment() {
 
-    private val calendar = Calendar.getInstance()
     private var coordinate: Coordinate? = null
     private lateinit var mainBinding: FragmentCalendarBinding
     private lateinit var calendarsView: CalendarsView
@@ -73,6 +70,7 @@ class CalendarFragment : Fragment() {
     }
 
     lateinit var mainActivity: MainActivity
+    val initialDate = getTodayOfCalendar(mainCalendar)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -134,9 +132,11 @@ class CalendarFragment : Fragment() {
 
         calendarPager.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
         calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
-        calendarPager.onNonDefaultPageSelected = fun() { todayButton.show() }
-        calendarPager.onPageSelectedWithDate = fun(date: AbstractDate) {
+        calendarPager.onMonthSelected = fun() {
+            val date = calendarPager.selectedMonth
             mainActivity.setTitleAndSubtitle(getMonthName(date), formatNumber(date.year))
+            if (date.dayOfMonth != initialDate.dayOfMonth || date.month != initialDate.month)
+                todayButton.show()
         }
         tabsViewPager.adapter = object : TabsAdapter() {
             override fun getItemCount(): Int = tabs.size
@@ -282,13 +282,12 @@ class CalendarFragment : Fragment() {
             result
         }
 
+    private var selectedJdn = getTodayJdn()
+
     private fun bringDate(jdn: Long, highlight: Boolean = true, monthChange: Boolean = true) {
-        mainBinding.calendarPager.selectedJdn = if (highlight) jdn else -1
-        if (monthChange) {
-            val viewPagerPosition = calculateViewPagerPositionFromJdn(jdn)
-            mainBinding.calendarPager.gotoOffset(viewPagerPosition)
-        }
-        mainBinding.calendarPager.refresh()
+        selectedJdn = jdn
+
+        mainBinding.calendarPager.setSelectedDay(jdn, highlight, monthChange)
 
         val isToday = getTodayJdn() == jdn
 
@@ -321,7 +320,7 @@ class CalendarFragment : Fragment() {
             val holidays = getEventsTitle(
                 events,
                 holiday = true,
-                compact = false,
+                compact = false, of the pager, maybe not
                 showDeviceCalendarEvents = false,
                 insertRLM = false
             )
@@ -413,12 +412,8 @@ class CalendarFragment : Fragment() {
     private fun setOwghat(jdn: Long, isToday: Boolean) {
         if (coordinate == null) return
 
-        val civilDate = CivilDate(jdn)
-        calendar.set(civilDate.year, civilDate.month - 1, civilDate.dayOfMonth)
-        val date = calendar.time
-
         val prayTimes = PrayTimesCalculator.calculate(
-            getCalculationMethod(), date, coordinate
+            calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
         )
         (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter?)?.run {
             this.prayTimes = prayTimes
@@ -448,13 +443,6 @@ class CalendarFragment : Fragment() {
                 else R.drawable.ic_keyboard_arrow_down
             )
         }
-    }
-
-    private fun calculateViewPagerPositionFromJdn(jdn: Long): Int {
-        val mainCalendar = mainCalendar
-        val today = getTodayOfCalendar(mainCalendar)
-        val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
-        return (today.year - date.year) * 12 + today.month - date.month
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -500,19 +488,16 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun getSelectedJdn() =
-        mainBinding.calendarPager.selectedJdn.takeIf { it != -1L } ?: getTodayJdn()
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.go_to -> SelectDayDialog.newInstance(getSelectedJdn()).apply {
+            R.id.go_to -> SelectDayDialog.newInstance(selectedJdn).apply {
                 onSuccess = fun(jdn: Long) { bringDate(jdn) }
             }.show(
                 childFragmentManager,
                 SelectDayDialog::class.java.name
             )
-            R.id.add_event -> addEventOnCalendar(getSelectedJdn())
-            R.id.shift_work -> ShiftWorkDialog.newInstance(getSelectedJdn()).apply {
+            R.id.add_event -> addEventOnCalendar(selectedJdn)
+            R.id.shift_work -> ShiftWorkDialog.newInstance(selectedJdn).apply {
                 onSuccess = fun() {
                     updateStoredPreference(mainActivity)
                     mainActivity.restartActivity()
@@ -521,17 +506,9 @@ class CalendarFragment : Fragment() {
                 childFragmentManager,
                 ShiftWorkDialog::class.java.name
             )
-            R.id.month_overview -> {
-                val visibleMonthJdn = CalendarPager.getDateFromOffset(
-                    mainCalendar,
-                    CalendarPager.applyOffset(mainBinding.calendarPager.getCurrentSelection())
-                ).toJdn()
-                MonthOverviewDialog.newInstance(visibleMonthJdn).show(
-                    childFragmentManager, MonthOverviewDialog::class.java.name
-                )
-            }
-            else -> {
-            }
+            R.id.month_overview -> MonthOverviewDialog
+                .newInstance(mainBinding.calendarPager.selectedMonth.toJdn())
+                .show(childFragmentManager, MonthOverviewDialog::class.java.name)
         }
         return true
     }

@@ -2,11 +2,15 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.getDateOfCalendar
-import com.byagowi.persiancalendar.utils.getTodayOfCalendar
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
+import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.calendar.AbstractDate
 import java.lang.ref.WeakReference
 import java.util.*
@@ -14,67 +18,153 @@ import java.util.*
 class CalendarPager @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
-    private val viewPager = ViewPager2(context, attrs)
 
-    var selectedJdn: Long = -1
+    // Public API
+    var onDayClicked = fun(jdn: Long) {}
+    var onDayLongClicked = fun(jdn: Long) {}
+    // Selected month is visible current month of the pager, maybe a day is not selected on it yet
+    var onMonthSelected = fun() {}
+    val selectedMonth: AbstractDate
+        get() = getDateFromOffset(mainCalendar, applyOffset(viewPager.currentItem))
 
-    var onDayClicked = fun(_: Long) {}
-    var onDayLongClicked = fun(_: Long) {}
-    var onNonDefaultPageSelected = fun() {}
-    var onPageSelectedWithDate = fun(_: AbstractDate) {}
+    fun setSelectedDay(jdn: Long, highlight: Boolean = true, monthChange: Boolean = true) {
+        selectedJdn = if (highlight) jdn else -1
 
-    private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
+        if (monthChange) {
+            val today = getTodayOfCalendar(mainCalendar)
+            val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
+            viewPager.setCurrentItem(
+                applyOffset((today.year - date.year) * 12 + today.month - date.month), true
+            )
+        }
 
-    fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
+        refresh()
+    }
 
+    // Public API, to be reviewed
     fun refresh(isEventsModified: Boolean = false) = pagesViewHolders.forEach {
         it.get()?.apply { refresh(isEventsModified, selectedJdn) }
     }
 
+    private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
+    // Package API, to be rewritten with viewPager.adapter.notifyItemChanged()
+    fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
+
+    private val monthsLimit = 5000 // this should be an even number
+
+    private fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
+        val date = getTodayOfCalendar(calendar)
+        var month = date.month - offset
+        month -= 1
+        var year = date.year
+
+        year += month / 12
+        month %= 12
+        if (month < 0) {
+            year -= 1
+            month += 12
+        }
+        month += 1
+        return getDateOfCalendar(calendar, year, month, 1)
+    }
+
+    private fun applyOffset(position: Int) = monthsLimit / 2 - position
+
+    private val viewPager = ViewPager2(context, attrs)
+    private var selectedJdn: Long = -1
+
     init {
-        viewPager.adapter = PagerAdapter(this)
-        viewPager.registerOnPageChangeCallback(
-            object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    val offset = applyOffset(position)
-                    refresh()
-                    if (offset != 0) onNonDefaultPageSelected()
-                }
-            }
-        )
+        viewPager.adapter = PagerAdapter()
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) = refresh()
+        })
         addView(viewPager)
-        gotoOffset(0, false)
+        viewPager.setCurrentItem(applyOffset(0), false)
     }
 
-    fun changeMonth(position: Int) =
-        viewPager.setCurrentItem(viewPager.currentItem + position, true)
+    inner class PagerAdapter : RecyclerView.Adapter<PagerAdapter.ViewHolder>() {
 
-    fun getCurrentSelection() = viewPager.currentItem
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+            FragmentMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
 
-    fun gotoOffset(offset: Int, smoothScroll: Boolean = true) {
-        if (viewPager.currentItem != applyOffset(offset))
-            viewPager.setCurrentItem(applyOffset(offset), smoothScroll)
-    }
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    companion object {
-        const val monthsLimit = 5000 // this should be an even number
+        override fun getItemCount() = monthsLimit
 
-        fun applyOffset(position: Int) = monthsLimit / 2 - position
+        inner class ViewHolder(val binding: FragmentMonthBinding) :
+            RecyclerView.ViewHolder(binding.root) {
 
-        fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
-            val date = getTodayOfCalendar(calendar)
-            var month = date.month - offset
-            month -= 1
-            var year = date.year
+            private val daysAdapter = DaysAdapter(binding.root.context, this@CalendarPager)
 
-            year += month / 12
-            month %= 12
-            if (month < 0) {
-                year -= 1
-                month += 12
+            var refresh = fun(_: Boolean, _: Long) {}
+
+            init {
+                val isRTL = isRTL(binding.root.context)
+
+                binding.next.apply {
+                    setImageResource(
+                        if (isRTL) R.drawable.ic_keyboard_arrow_left
+                        else R.drawable.ic_keyboard_arrow_right
+                    )
+                    setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem + 1, true) }
+                }
+
+                binding.prev.apply {
+                    setImageResource(
+                        if (isRTL) R.drawable.ic_keyboard_arrow_right
+                        else R.drawable.ic_keyboard_arrow_left
+                    )
+                    setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem - 1, true) }
+                }
+
+                binding.monthDays.apply {
+                    setHasFixedSize(true)
+                    layoutManager = GridLayoutManager(
+                        binding.root.context, if (isShowWeekOfYearEnabled) 8 else 7
+                    )
+                }
+
+                addViewHolder(this)
+
+                binding.monthDays.adapter = daysAdapter
             }
-            month += 1
-            return getDateOfCalendar(calendar, year, month, 1)
+
+            fun bind(position: Int) {
+                val offset = applyOffset(position)
+                val date = getDateFromOffset(mainCalendar, offset)
+                val baseJdn = date.toJdn()
+                val monthLength = getMonthLength(mainCalendar, date.year, date.month)
+                val startOfYearJdn = getDateOfCalendar(mainCalendar, date.year, 1, 1).toJdn()
+
+                daysAdapter.apply {
+                    startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
+                    weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
+                    weeksCount = calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) -
+                            weekOfYearStart + 1
+                    days = (baseJdn until baseJdn + monthLength).toList()
+                    initializeMonthEvents()
+                    notifyItemRangeChanged(0, daysAdapter.itemCount)
+                }
+
+                refresh = fun(isEventsModification: Boolean, jdn: Long) {
+                    if (viewPager.currentItem == position) {
+                        if (isEventsModification) {
+                            daysAdapter.initializeMonthEvents()
+                            onDayClicked(jdn)
+                        } else {
+                            onMonthSelected()
+                        }
+
+                        val selectedDay = 1 + jdn - baseJdn
+                        if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
+                            daysAdapter.selectDay(selectedDay.toInt())
+                        else daysAdapter.selectDay(-1)
+                    } else daysAdapter.selectDay(-1)
+                }
+
+                refresh()
+            }
         }
     }
 }
