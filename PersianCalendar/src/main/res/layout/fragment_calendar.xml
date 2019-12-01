@@ -27,7 +27,8 @@
                 style="@style/TabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/colorCard" />
+                android:background="?attr/colorCard"
+                app:tabBackground="?attr/selectableItemBackground" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/tabsViewPager"
