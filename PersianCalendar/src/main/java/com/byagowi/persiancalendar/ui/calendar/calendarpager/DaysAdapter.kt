@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
+import android.os.Build
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -45,10 +47,20 @@ class DaysAdapter internal constructor(
 
     private val typeface = getCalendarFragmentFont(context)
 
+    private val selectableItemBackground = TypedValue().also {
+        context.theme.resolveAttribute(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                android.R.attr.selectableItemBackgroundBorderless
+            else android.R.attr.selectableItemBackground,
+            it, true
+        )
+    }.resourceId
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         DayView(parent.context).apply {
             layoutParams = dayViewLayoutParams
             setTextTypeface(typeface)
+            setBackgroundResource(selectableItemBackground)
         }
     )
 
