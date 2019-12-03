@@ -199,7 +199,7 @@ fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().le
     it + (CalendarType.values().toList() - it)
 }
 
-fun getClockFromStringId(@StringRes stringId: Int) = prayTimes?.run {
+fun getClockFromStringId(@StringRes stringId: Int): Clock = prayTimes?.run {
     when (stringId) {
         R.string.imsak -> imsakClock
         R.string.fajr -> fajrClock

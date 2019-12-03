@@ -22,10 +22,12 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
             root.setOnClickListener { expand(!calendarItemAdapter.isExpanded) }
             extraInformationContainer.visibility = View.GONE
-            calendarsRecyclerView.layoutManager = LinearLayoutManager(context).apply {
-                orientation = RecyclerView.HORIZONTAL
+            calendarsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(context).apply {
+                    orientation = RecyclerView.HORIZONTAL
+                }
+                adapter = calendarItemAdapter
             }
-            calendarsRecyclerView.adapter = calendarItemAdapter
         }
 
     fun hideMoreIcon() {
@@ -52,8 +54,10 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         calendarItemAdapter.setDate(calendarsToShow, jdn)
         binding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
-        binding.zodiac.text = getZodiacInfo(context, jdn, true)
-        binding.zodiac.visibility = if (binding.zodiac.text.isEmpty()) View.GONE else View.VISIBLE
+        binding.zodiac.apply {
+            text = getZodiacInfo(context, jdn, true)
+            visibility = if (text.isEmpty()) View.GONE else View.VISIBLE
+        }
 
         val selectedDayAbsoluteDistance = abs(getTodayJdn() - jdn)
 
@@ -128,8 +132,10 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 )
             }
         }
-        binding.equinox.text = equinox
-        binding.equinox.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
+        binding.equinox.apply {
+            text = equinox
+            visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
+        }
 
         binding.root.contentDescription = getA11yDaySummary(
             context, jdn,
