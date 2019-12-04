@@ -19,6 +19,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
@@ -457,9 +458,7 @@ class CalendarFragment : Fragment() {
                     Color.TRANSPARENT
                 )
 
-                (findViewById<View?>(
-                    androidx.appcompat.R.id.search_src_text
-                ) as? SearchView.SearchAutoComplete?)?.apply {
+                findViewById<SearchAutoComplete?>(androidx.appcompat.R.id.search_src_text)?.apply {
                     setHint(R.string.search_in_events)
                     setAdapter(
                         ArrayAdapter<CalendarEvent<*>>(
