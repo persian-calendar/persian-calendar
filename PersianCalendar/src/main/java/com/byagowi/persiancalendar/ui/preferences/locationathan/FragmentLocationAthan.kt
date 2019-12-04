@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan
 import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.os.Bundle
@@ -12,12 +13,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.Observer
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
@@ -33,7 +32,8 @@ import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.google.android.material.snackbar.Snackbar
 
-class FragmentLocationAthan : PreferenceFragmentCompat() {
+class FragmentLocationAthan : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var categoryAthan: Preference? = null
 
@@ -51,25 +51,17 @@ class FragmentLocationAthan : PreferenceFragmentCompat() {
             ListPreference.SimpleSummaryProvider.getInstance()
 
         categoryAthan = findPreference(PREF_KEY_ATHAN)
-        updateAthanPreferencesState()
 
-        updateAthanPreferencesState()
-        (activity as MainActivity)
-            .preferenceUpdateHandler.observe(this, Observer { updateAthanPreferencesState() })
+        onSharedPreferenceChanged(null, null)
+        activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
     }
 
-    private fun updateAthanPreferencesState() {
-        val context = context ?: return
-
-        val locationEmpty = getCoordinate(context) == null
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        val locationEmpty = getCoordinate(activity ?: return) == null
         categoryAthan?.isEnabled = !locationEmpty
-        if (locationEmpty) {
-            categoryAthan?.setSummary(R.string.athan_disabled_summary)
-        } else {
-            categoryAthan?.summary = ""
-        }
+        categoryAthan?.setSummary(if (locationEmpty) R.string.athan_disabled_summary else R.string.empty)
     }
 
     override fun onDisplayPreferenceDialog(preference: Preference?) {

@@ -330,15 +330,14 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String =
     ?: ""
 
 fun getCoordinate(context: Context): Coordinate? =
-    getCityFromPreference(context)?.let { it.coordinate }
-        ?: context.appPrefs.let {
-            Coordinate(
-                it.getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
-                it.getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
-                it.getString(PREF_ALTITUDE, null)?.toDoubleOrNull() ?: .0
-            ).takeUnless { it.latitude == 0.0 && it.longitude == 0.0 }
-            // If latitude or longitude is zero probably preference is not set yet
-        }
+    getCityFromPreference(context)?.coordinate ?: context.appPrefs.run {
+        Coordinate(
+            getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
+            getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
+            getString(PREF_ALTITUDE, null)?.toDoubleOrNull() ?: .0
+        ).takeUnless { it.latitude == 0.0 && it.longitude == 0.0 }
+        // If latitude or longitude is zero probably preference is not set yet
+    }
 
 fun getTodayOfCalendar(calendar: CalendarType) = getDateFromJdnOfCalendar(calendar, getTodayJdn())
 

@@ -337,11 +337,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         updateStoredPreference(this)
         update(applicationContext, true)
-
-        preferenceUpdateHandler.postValue(null)
     }
-
-    val preferenceUpdateHandler = MutableLiveData<Void>()
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
