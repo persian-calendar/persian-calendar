@@ -71,6 +71,17 @@ class AthanActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Workaround AlarmManager (or the way we use it) that calls it multiple times,
+        // don't run if it is ran less than 10 seconds ago
+        val currentMillis = System.currentTimeMillis()
+        if (currentMillis - lastStart < TimeUnit.SECONDS.toMillis(10)) {
+            finish()
+            return
+        }
+        lastStart = currentMillis
+        //
+
         val ascendingVolume = isAscendingAthanVolumeEnabled(this)
         val settingsVol = getAthanVolume(this)
         audioManager = getSystemService()
@@ -211,5 +222,9 @@ class AthanActivity : AppCompatActivity() {
         handler.removeCallbacks(stopTask)
         handler.removeCallbacks(ascendVolume)
         finish()
+    }
+
+    companion object {
+        private var lastStart = 0L
     }
 }
