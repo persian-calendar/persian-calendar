@@ -16,6 +16,8 @@ public class IranianIslamicDateConverter {
     private static long jdSupportEnd;
     private static long jdSupportStart = 2453766;
 
+    public static int latestSupportedYearOfIran = 1399;
+
     static {
         // https://github.com/ilius/starcal/blob/master/scal3/cal_types/hijri-monthes.json
         // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-%201.pdf

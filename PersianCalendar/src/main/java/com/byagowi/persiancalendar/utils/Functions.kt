@@ -39,6 +39,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
@@ -58,7 +59,7 @@ fun initUtils(context: Context) {
 }
 
 val supportedYearOfIranCalendar: Int
-    get() = 1399
+    get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
 fun isArabicDigitSelected(): Boolean = when (preferredDigits) {
     ARABIC_DIGITS -> true
