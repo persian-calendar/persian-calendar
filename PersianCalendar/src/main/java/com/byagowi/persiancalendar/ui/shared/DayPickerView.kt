@@ -25,7 +25,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         val calendarTypes = getOrderedCalendarEntities(getContext())
         val chips = calendarTypes.map { calendarTypeItem ->
             (inflater.inflate(
-                R.layout.single_chip_layout, calendarTypesFlexbox, false
+                R.layout.single_chip_layout, calendarTypesBox, false
             ) as Chip).apply { text = calendarTypeItem.toString() }
         }
         chips.forEachIndexed { i, chip ->
@@ -42,7 +42,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             chip.isSelected = i == 0
             chip.isCheckable = false
             selectedCalendarType = calendarTypes[0].type
-            calendarTypesFlexbox.addView(chip)
+            calendarTypesBox.addView(chip)
         }
 
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
