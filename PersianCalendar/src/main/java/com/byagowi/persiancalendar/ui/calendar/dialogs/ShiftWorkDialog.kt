@@ -207,7 +207,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                         override fun filter(
                             source: CharSequence?, start: Int, end: Int,
                             dest: Spanned?, dstart: Int, dend: Int
-                        ) = if (source?.contains("[=,]".toRegex()) == true) "" else null
+                        ) = if ("[=,]".toRegex() in (source ?: "")) "" else null
                     })
                 }
 

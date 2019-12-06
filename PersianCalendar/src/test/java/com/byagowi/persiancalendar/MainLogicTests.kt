@@ -186,7 +186,7 @@ class MainLogicTests {
 
             assertEquals(
                 String.format("%d %d %d", year, month, day),
-                positiveJdn.contains(jdn),
+                jdn in positiveJdn,
                 isMoonInScorpio(persian, IslamicDate(jdn))
             )
         }
@@ -495,7 +495,7 @@ class MainLogicTests {
 
         (1206..1498).forEach {
             assertEquals(
-                it.toString(), if (leapYears.contains(it)) 30 else 29,
+                it.toString(), if (it in leapYears) 30 else 29,
                 getMonthLength(CalendarType.SHAMSI, it, 12)
             )
         }

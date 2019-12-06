@@ -60,8 +60,6 @@ fun initUtils(context: Context) {
 val supportedYearOfIranCalendar: Int
     get() = 1399
 
-fun isShownOnWidgets(infoType: String): Boolean = whatToShowOnWidgets.contains(infoType)
-
 fun isArabicDigitSelected(): Boolean = when (preferredDigits) {
     ARABIC_DIGITS -> true
     else -> false

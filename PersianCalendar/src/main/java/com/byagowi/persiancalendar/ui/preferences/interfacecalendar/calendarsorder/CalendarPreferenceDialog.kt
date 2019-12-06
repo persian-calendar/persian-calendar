@@ -34,7 +34,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
         orderedCalendarTypes.forEach {
             values.add(it.type.toString())
             titles.add(it.toString())
-            enabled.add(enabledCalendarTypes.contains(it.type))
+            enabled.add(it.type in enabledCalendarTypes)
         }
         val adapter = RecyclerListAdapter(this, activity, titles, values, enabled)
         val recyclerView = RecyclerView(activity).apply {

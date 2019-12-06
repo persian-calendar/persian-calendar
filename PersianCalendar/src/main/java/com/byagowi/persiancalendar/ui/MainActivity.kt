@@ -276,7 +276,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
-                        currentHolidays.contains("iran_holidays")
+                        "iran_holidays" in currentHolidays
                     ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
 
                 }
@@ -285,7 +285,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() ||
-                        (currentHolidays.size == 1 && currentHolidays.contains("afghanistan_holidays"))
+                        (currentHolidays.size == 1 && "afghanistan_holidays" in currentHolidays)
                     ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
                 }
                 if (removeAllEvents) {
@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() ||
-                        (currentHolidays.size == 1 && currentHolidays.contains("iran_holidays"))
+                        (currentHolidays.size == 1 && "iran_holidays" in currentHolidays)
                     ) putStringSet(PREF_HOLIDAY_TYPES, emptySet())
                 }
                 when {

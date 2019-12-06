@@ -137,13 +137,13 @@ fun loadEvents(context: Context) {
     val enabledTypes =
         context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
 
-    val afghanistanHolidays = enabledTypes.contains("afghanistan_holidays")
-    val afghanistanOthers = enabledTypes.contains("afghanistan_others")
-    val iranHolidays = enabledTypes.contains("iran_holidays")
-    val iranIslamic = enabledTypes.contains("iran_islamic")
-    val iranAncient = enabledTypes.contains("iran_ancient")
-    val iranOthers = enabledTypes.contains("iran_others")
-    val international = enabledTypes.contains("international")
+    val afghanistanHolidays = "afghanistan_holidays" in enabledTypes
+    val afghanistanOthers = "afghanistan_others" in enabledTypes
+    val iranHolidays = "iran_holidays" in enabledTypes
+    val iranIslamic = "iran_islamic" in enabledTypes
+    val iranAncient = "iran_ancient" in enabledTypes
+    val iranOthers = "iran_others" in enabledTypes
+    val international = "international" in enabledTypes
 
     isIranHolidaysEnabled = iranHolidays
 

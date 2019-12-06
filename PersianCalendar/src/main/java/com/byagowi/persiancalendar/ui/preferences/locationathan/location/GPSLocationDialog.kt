@@ -111,12 +111,12 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         }
 
         locationManager?.apply {
-            if (allProviders.contains(LocationManager.GPS_PROVIDER)) {
+            if (LocationManager.GPS_PROVIDER in allProviders) {
                 requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
                 everRegisteredCallback = true
             }
 
-            if (allProviders.contains(LocationManager.NETWORK_PROVIDER)) {
+            if (LocationManager.NETWORK_PROVIDER in allProviders) {
                 requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener)
                 everRegisteredCallback = true
             }

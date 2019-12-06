@@ -117,7 +117,7 @@ fun update(context: Context, updateDate: Boolean) {
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
                 getFormattedClock(getClockFromStringId(nextOwghatId), false)
-        if (isShownOnWidgets("owghat_location")) {
+        if ("owghat_location" in whatToShowOnWidgets) {
             val cityName = getCityName(context, false)
             if (cityName.isNotEmpty()) {
                 owghat = "$owghat ($cityName)"
@@ -187,7 +187,7 @@ fun update(context: Context, updateDate: Boolean) {
                 remoteViews4.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
                 text2 = mainDateString
             }
-            if (isShownOnWidgets("other_calendars")) {
+            if ("other_calendars" in whatToShowOnWidgets) {
                 text2 += spacedComma + subtitle
             }
 
@@ -238,21 +238,21 @@ fun update(context: Context, updateDate: Boolean) {
                 showDeviceCalendarEvents = true,
                 insertRLM = isRTL
             )
-            if (isShownOnWidgets("non_holiday_events") && nonHolidays.isNotEmpty()) {
+            if ("non_holiday_events" in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
                 setTextViewText(R.id.event_2x2, nonHolidays)
                 setViewVisibility(R.id.event_2x2, View.VISIBLE)
             } else {
                 setViewVisibility(R.id.event_2x2, View.GONE)
             }
 
-            if (isShownOnWidgets("owghat") && owghat.isNotEmpty()) {
+            if ("owghat" in whatToShowOnWidgets && owghat.isNotEmpty()) {
                 setTextViewText(R.id.owghat_2x2, owghat)
                 setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
             } else {
                 setViewVisibility(R.id.owghat_2x2, View.GONE)
             }
 
-            if (isShownOnWidgets("other_calendars")) {
+            if ("other_calendars" in whatToShowOnWidgets) {
                 text2 = text2 + "\n" + subtitle + "\n" + getZodiacInfo(context, jdn, true)
             }
             setTextViewText(R.id.date_2x2, text2)
@@ -290,7 +290,7 @@ fun update(context: Context, updateDate: Boolean) {
             else
                 setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 
-            if (isShownOnWidgets("other_calendars"))
+            if ("other_calendars" in whatToShowOnWidgets)
                 text2 = text2 + "\n" + dateStringOfOtherCalendars(jdn, "\n")
 
             setTextViewText(R.id.textPlaceholder1_4x2, text2)
@@ -482,12 +482,12 @@ fun update(context: Context, updateDate: Boolean) {
                 )
                 setTextViewTextOrIfEmpty(
                     R.id.nonholidays,
-                    if (isShownOnWidgets("non_holiday_events")) "" else nonHolidays
+                    if ("non_holiday_events" in whatToShowOnWidgets) "" else nonHolidays
                 )
 
                 setTextViewTextOrIfEmpty(
                     R.id.owghat,
-                    if (isShownOnWidgets("owghat")) "" else owghat
+                    if ("owghat" in whatToShowOnWidgets) "" else owghat
                 )
             }
 

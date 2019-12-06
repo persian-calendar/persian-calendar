@@ -18,7 +18,7 @@ class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
         prayers = prayerSelectPreference.prayers
 
         val checked = BooleanArray(entriesKeys.size)
-        entriesKeys.indices.forEach { checked[it] = prayers.contains(entriesKeys[it]) }
+        entriesKeys.indices.forEach { checked[it] = entriesKeys[it] in prayers }
 
         builder.setMultiChoiceItems(R.array.prayerTimeNames, checked) { _, which, isChecked ->
             prayers = when (isChecked) {
