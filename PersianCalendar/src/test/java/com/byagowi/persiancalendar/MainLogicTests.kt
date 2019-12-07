@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.getDayOfWeekFromJdn
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.cepmuvakkit.times.view.QiblaCompassView
@@ -544,5 +545,23 @@ class MainLogicTests {
 
         // And not having random crashes
         (-2000..10000).forEach { Equinox.northwardEquinox(it) }
+    }
+
+    @Test
+    fun test_day_of_week_from_jdn() {
+        assertEquals(0, getDayOfWeekFromJdn(PersianDate(1398, 9, 9).toJdn()))
+        assertEquals(1, getDayOfWeekFromJdn(PersianDate(1398, 9, 10).toJdn()))
+        assertEquals(2, getDayOfWeekFromJdn(PersianDate(1398, 9, 11).toJdn()))
+        assertEquals(3, getDayOfWeekFromJdn(PersianDate(1398, 9, 12).toJdn()))
+        assertEquals(4, getDayOfWeekFromJdn(PersianDate(1398, 9, 13).toJdn()))
+        assertEquals(5, getDayOfWeekFromJdn(PersianDate(1398, 9, 14).toJdn()))
+        assertEquals(6, getDayOfWeekFromJdn(PersianDate(1398, 9, 15).toJdn()))
+        assertEquals(0, getDayOfWeekFromJdn(PersianDate(1398, 9, 16).toJdn()))
+        assertEquals(1, getDayOfWeekFromJdn(PersianDate(1398, 9, 17).toJdn()))
+        assertEquals(2, getDayOfWeekFromJdn(PersianDate(1398, 9, 18).toJdn()))
+        assertEquals(3, getDayOfWeekFromJdn(PersianDate(1398, 9, 19).toJdn()))
+        assertEquals(4, getDayOfWeekFromJdn(PersianDate(1398, 9, 20).toJdn()))
+        assertEquals(5, getDayOfWeekFromJdn(PersianDate(1398, 9, 21).toJdn()))
+        assertEquals(6, getDayOfWeekFromJdn(PersianDate(1398, 9, 22).toJdn()))
     }
 }
