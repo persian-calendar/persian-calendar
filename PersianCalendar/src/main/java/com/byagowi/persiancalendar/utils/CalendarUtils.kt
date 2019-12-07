@@ -28,8 +28,8 @@ fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekSta
 
 fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
 
-fun getDayOfWeekFromJdn(jdn: Long): Int =
-    CivilDate(jdn).toCalendar()[Calendar.DAY_OF_WEEK] % 7
+// 0 means Saturday on it, see #test_day_of_week_from_jdn() in the test suit
+fun getDayOfWeekFromJdn(jdn: Long): Int = ((jdn + 2) % 7L).toInt()
 
 fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
@@ -42,9 +42,7 @@ fun CivilDate.toCalendar(): Calendar =
 
 fun getInitialOfWeekDay(position: Int): String = weekDaysInitials[position % 7]
 
-fun getWeekDayName(date: AbstractDate): String = weekDays[
-        (if (date is CivilDate) date else CivilDate(date)).toCalendar()[Calendar.DAY_OF_WEEK] % 7
-]
+fun getWeekDayName(date: AbstractDate): String = weekDays[getDayOfWeekFromJdn(date.toJdn())]
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     val dayOfYear = jdn - startOfYearJdn
