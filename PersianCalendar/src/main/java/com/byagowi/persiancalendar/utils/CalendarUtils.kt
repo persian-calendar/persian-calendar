@@ -20,13 +20,13 @@ import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 import kotlin.math.ceil
 
-fun isWeekEnd(dayOfWeek: Int): Boolean = weekEnds[dayOfWeek]
+fun isWeekEnd(dayOfWeek: Int) = weekEnds[dayOfWeek]
 
 fun applyWeekStartOffsetToWeekDay(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
 
 fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
-fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
+fun getWeekDayName(position: Int) = weekDays[position % 7]
 
 // 0 means Saturday on it, see #test_day_of_week_from_jdn() in the test suit
 fun getDayOfWeekFromJdn(jdn: Long): Int = ((jdn + 2L) % 7L).toInt()
@@ -40,9 +40,9 @@ fun dayTitleSummary(date: AbstractDate): String =
 fun CivilDate.toCalendar(): Calendar =
     Calendar.getInstance().apply { set(year, month - 1, dayOfMonth) }
 
-fun getInitialOfWeekDay(position: Int): String = weekDaysInitials[position % 7]
+fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
-fun getWeekDayName(date: AbstractDate): String = weekDays[getDayOfWeekFromJdn(date.toJdn())]
+fun getWeekDayName(date: AbstractDate) = weekDays[getDayOfWeekFromJdn(date.toJdn())]
 
 fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     val dayOfYear = jdn - startOfYearJdn
