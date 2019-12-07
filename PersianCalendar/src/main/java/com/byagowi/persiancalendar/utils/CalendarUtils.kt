@@ -29,7 +29,7 @@ fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekSta
 fun getWeekDayName(position: Int): String? = weekDays.let { it[position % 7] }
 
 // 0 means Saturday on it, see #test_day_of_week_from_jdn() in the test suit
-fun getDayOfWeekFromJdn(jdn: Long): Int = ((jdn + 2) % 7L).toInt()
+fun getDayOfWeekFromJdn(jdn: Long): Int = ((jdn + 2L) % 7L).toInt()
 
 fun formatDayAndMonth(day: Int, month: String): String =
     String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
