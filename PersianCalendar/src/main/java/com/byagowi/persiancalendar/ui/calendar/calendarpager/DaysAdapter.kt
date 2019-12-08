@@ -111,10 +111,9 @@ class DaysAdapter internal constructor(
                             weekNumber,
                             weekNumberTextSize
                         )
-                        dayView.contentDescription = if (isTalkBackEnabled) String.format(
-                            context.getString(R.string.nth_week_of_year),
-                            weekNumber
-                        ) else weekNumber
+                        dayView.contentDescription = if (isTalkBackEnabled)
+                            context.getString(R.string.nth_week_of_year).format(weekNumber)
+                        else weekNumber
 
                         dayView.visibility = View.VISIBLE
                     } else
@@ -135,10 +134,10 @@ class DaysAdapter internal constructor(
                     weekDaysInitialTextSize
                 )
 
-                dayView.contentDescription = if (isTalkBackEnabled) String.format(
-                    context.getString(R.string.week_days_name_column),
-                    getWeekDayName(revertWeekStartOffsetFromWeekDay(position))
-                ) else weekDayInitial
+                dayView.contentDescription = if (isTalkBackEnabled)
+                    context.getString(R.string.week_days_name_column)
+                        .format(getWeekDayName(revertWeekStartOffsetFromWeekDay(position)))
+                else weekDayInitial
 
                 dayView.visibility = View.VISIBLE
             } else {

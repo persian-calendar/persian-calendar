@@ -388,20 +388,12 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         val dayLength = Clock.fromInt((sunset - sunrise).toInt())
         val remaining =
             Clock.fromInt(if (now > sunset || now < sunrise) 0 else (sunset - now).toInt())
-        dayLengthString = String.format(
-            context.getString(R.string.length_of_day),
-            formatNumber(dayLength.hour),
-            formatNumber(dayLength.minute)
+        dayLengthString = context.getString(R.string.length_of_day).format(
+            formatNumber(dayLength.hour), formatNumber(dayLength.minute)
         )
-        remainingString = if (remaining.toInt() == 0) {
-            ""
-        } else {
-            String.format(
-                context.getString(R.string.remaining_daylight),
-                formatNumber(remaining.hour),
-                formatNumber(remaining.minute)
-            )
-        }
+        remainingString = if (remaining.toInt() == 0) "" else context.getString(
+            R.string.remaining_daylight
+        ).format(formatNumber(remaining.hour), formatNumber(remaining.minute))
 
         argbEvaluator = ArgbEvaluator()
 

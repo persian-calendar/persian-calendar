@@ -165,11 +165,9 @@ class AthanActivity : AppCompatActivity() {
             root.setOnClickListener { stop() }
             root.setBackgroundResource(getPrayTimeImage(prayerKey))
 
-            place.text = String.format(
-                "%s %s",
-                getString(R.string.in_city_time),
-                getCityName(this@AthanActivity, true)
-            )
+            place.text = listOf(
+                getString(R.string.in_city_time), getCityName(this@AthanActivity, true)
+            ).joinToString(" ")
         }
 
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))

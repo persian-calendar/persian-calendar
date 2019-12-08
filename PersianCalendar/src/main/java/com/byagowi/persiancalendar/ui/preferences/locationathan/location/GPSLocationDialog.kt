@@ -124,8 +124,8 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     }
 
     private fun showLocation(location: Location) {
-        latitude = String.format(Locale.ENGLISH, "%f", location.latitude)
-        longitude = String.format(Locale.ENGLISH, "%f", location.longitude)
+        latitude = "%f".format(Locale.ENGLISH, location.latitude)
+        longitude = "%f".format(Locale.ENGLISH, location.longitude)
         val gcd = Geocoder(mainActivity, Locale.getDefault())
         val addresses: List<Address>
         try {

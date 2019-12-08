@@ -68,9 +68,8 @@ fun isArabicDigitSelected(): Boolean = when (preferredDigits) {
 
 fun goForWorker(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
-fun toLinearDate(date: AbstractDate): String = String.format(
-    "%s/%s/%s", formatNumber(date.year),
-    formatNumber(date.month), formatNumber(date.dayOfMonth)
+fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
+    formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)
 )
 
 fun isNightModeEnabled(context: Context): Boolean =
@@ -78,12 +77,10 @@ fun isNightModeEnabled(context: Context): Boolean =
 
 fun formatDate(date: AbstractDate): String = if (numericalDatePreferred)
     (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim()
-else
-    String.format(
-        if (language == LANG_CKB) "%sی %sی %s" else "%s %s %s",
-        formatNumber(date.dayOfMonth), getMonthName(date),
-        formatNumber(date.year)
-    )
+else when (language) {
+    LANG_CKB -> "%sی %sی %s"
+    else -> "%s %s %s"
+}.format(formatNumber(date.dayOfMonth), getMonthName(date), formatNumber(date.year))
 
 fun isNonArabicScriptSelected() = when (language) {
     LANG_EN_US, LANG_JA -> true
@@ -311,11 +308,12 @@ fun getDayIconResource(day: Int): Int = try {
 fun readRawResource(context: Context, @RawRes res: Int) =
     context.resources.openRawResource(res).use { String(it.readBytes()) }
 
-fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) = String.format(
-    Locale.getDefault(), "%s: %.4f%s%s: %.4f",
-    context.getString(R.string.latitude), coordinate.latitude, separator,
-    context.getString(R.string.longitude), coordinate.longitude
-)
+fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) =
+    "%s: %.4f%s%s: %.4f".format(
+        Locale.getDefault(),
+        context.getString(R.string.latitude), coordinate.latitude, separator,
+        context.getString(R.string.longitude), coordinate.longitude
+    )
 
 fun getCityName(context: Context, fallbackToCoord: Boolean): String =
     getCityFromPreference(context)?.let {
@@ -429,8 +427,7 @@ fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
 
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
     Snackbar.make(
-        view,
-        String.format(view.context.getString(R.string.date_copied_clipboard), text),
+        view, view.context.getString(R.string.date_copied_clipboard).format(text),
         Snackbar.LENGTH_SHORT
     ).show()
 }

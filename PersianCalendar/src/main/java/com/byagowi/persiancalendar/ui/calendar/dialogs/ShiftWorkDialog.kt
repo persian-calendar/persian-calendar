@@ -57,21 +57,15 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         )
         binding.recyclerView.adapter = shiftWorkItemAdapter
 
-        binding.description.text = String.format(
-            getString(
-                if (isFirstSetup) R.string.shift_work_starting_date else R.string.shift_work_starting_date_edit
-            ),
-            formatDate(getDateFromJdnOfCalendar(mainCalendar, jdn))
-        )
+        binding.description.text = getString(
+            if (isFirstSetup) R.string.shift_work_starting_date
+            else R.string.shift_work_starting_date_edit
+        ).format(formatDate(getDateFromJdnOfCalendar(mainCalendar, jdn)))
 
         binding.resetLink.setOnClickListener {
             jdn = selectedJdn
-            binding.description.text = String.format(
-                getString(R.string.shift_work_starting_date),
-                formatDate(
-                    getDateFromJdnOfCalendar(mainCalendar, jdn)
-                )
-            )
+            binding.description.text = getString(R.string.shift_work_starting_date)
+                .format(formatDate(getDateFromJdnOfCalendar(mainCalendar, jdn)))
             shiftWorkItemAdapter.reset()
         }
         binding.recurs.isChecked = shiftWorkRecurs
@@ -120,10 +114,8 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
 
         private fun updateShiftWorkResult() =
             rows.filter { it.length != 0 }.joinToString(spacedComma) {
-                String.format(
-                    getString(R.string.shift_work_record_title),
-                    formatNumber(it.length), shiftWorkKeyToString(it.type)
-                )
+                getString(R.string.shift_work_record_title)
+                    .format(formatNumber(it.length), shiftWorkKeyToString(it.type))
             }.also {
                 binding.result.text = it
                 binding.result.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
@@ -242,7 +234,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
 
             fun bind(position: Int) = if (position < rows.size) {
                 val shiftWorkRecord = rows[position]
-                binding.rowNumber.text = String.format("%s:", formatNumber(position + 1))
+                binding.rowNumber.text = "%s:".format(formatNumber(position + 1))
                 binding.lengthSpinner.setSelection(shiftWorkRecord.length)
                 binding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
                 binding.detail.visibility = View.VISIBLE

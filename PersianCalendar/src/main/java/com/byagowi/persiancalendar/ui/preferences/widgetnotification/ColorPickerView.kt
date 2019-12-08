@@ -216,7 +216,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         colorResultView.apply {
             setBackgroundColor(color)
             text = if (colorCodeVisibility)
-                String.format(Locale.ENGLISH, "#%08X", color)
+                "#%08X".format(Locale.ENGLISH, color)
             else
                 ""
             setTextColor(color xor 0xFFFFFF)

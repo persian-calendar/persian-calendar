@@ -186,7 +186,7 @@ class MainLogicTests {
             val day = persian.dayOfMonth
 
             assertEquals(
-                String.format("%d %d %d", year, month, day),
+                "%d %d %d".format(year, month, day),
                 jdn in positiveJdn,
                 isMoonInScorpio(persian, IslamicDate(jdn))
             )

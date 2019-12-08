@@ -121,12 +121,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
 
     val deviceInformationItems: List<Item> = listOf(
         Item("Screen Resolution", activity.windowManager.run {
-            String.format(
-                Locale.ENGLISH,
-                "%d*%d pixels",
-                defaultDisplay.width,
-                defaultDisplay.height
-            )
+            "%d*%d pixels".format(Locale.ENGLISH, defaultDisplay.width, defaultDisplay.height)
         }, ""),
         Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
         Item(

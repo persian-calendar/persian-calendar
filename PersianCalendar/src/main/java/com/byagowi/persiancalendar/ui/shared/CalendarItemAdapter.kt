@@ -58,11 +58,8 @@ class CalendarItemAdapter internal constructor(context: Context) :
             binding.day.contentDescription = ""
             binding.day.text = formatNumber(date.dayOfMonth)
             binding.monthYear.contentDescription = ""
-            binding.monthYear.text = String.format(
-                "%s\n%s",
-                getMonthName(date),
-                formatNumber(date.year)
-            )
+            binding.monthYear.text =
+                listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
         }
 
         override fun onClick(view: View?) =

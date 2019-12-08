@@ -31,8 +31,10 @@ fun getWeekDayName(position: Int) = weekDays[position % 7]
 // 0 means Saturday on it, see #test_day_of_week_from_jdn() in the test suit
 fun getDayOfWeekFromJdn(jdn: Long): Int = ((jdn + 2L) % 7L).toInt()
 
-fun formatDayAndMonth(day: Int, month: String): String =
-    String.format(if (language == LANG_CKB) "%sی %s" else "%s %s", formatNumber(day), month)
+fun formatDayAndMonth(day: Int, month: String): String = when (language) {
+    LANG_CKB -> "%sی %s"
+    else -> "%s %s"
+}.format(formatNumber(day), month)
 
 fun dayTitleSummary(date: AbstractDate): String =
     getWeekDayName(date) + spacedComma + formatDate(date)
@@ -136,10 +138,7 @@ fun getA11yDaySummary(
         result.append("\n")
         result.append("\n")
         result.append(
-            String.format(
-                context.getString(R.string.nth_week_of_year),
-                formatNumber(weekOfYearStart)
-            )
+            context.getString(R.string.nth_week_of_year).format(formatNumber(weekOfYearStart))
         )
     }
 
@@ -170,7 +169,7 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
     }
 
 private fun baseFormatClock(hour: Int, minute: Int): String =
-    formatNumber(String.format(Locale.ENGLISH, "%d:%02d", hour, minute))
+    formatNumber("%d:%02d".format(Locale.ENGLISH, hour, minute))
 
 fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
     val in12 = !clockIn24 || forceIn12

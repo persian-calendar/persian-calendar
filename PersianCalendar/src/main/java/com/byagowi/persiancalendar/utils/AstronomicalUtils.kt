@@ -41,8 +41,7 @@ fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean): String {
 
     val persianDate = PersianDate(jdn)
     val islamicDate = IslamicDate(jdn)
-    return String.format(
-        "%s: %s\n%s: %s %s\n%s",
+    return "%s: %s\n%s: %s %s\n%s".format(
         context.getString(R.string.year_name),
         context.getString(YEARS_NAME[persianDate.year % 12]),
         context.getString(R.string.zodiac),

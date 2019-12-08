@@ -48,7 +48,7 @@ class AboutFragment : Fragment() {
         val version = programVersion(mainActivity).split("-")
             .mapIndexed { i, x -> if (i == 0) formatNumber(x) else x }
         binding.version.text =
-            String.format(getString(R.string.version), version.joinToString("\n"))
+            getString(R.string.version).format(version.joinToString("\n"))
 
         // licenses
         binding.licenses.setOnClickListener {
@@ -72,8 +72,7 @@ class AboutFragment : Fragment() {
         }
 
         // help
-        binding.aboutTitle.text = String.format(
-            getString(R.string.about_help_subtitle),
+        binding.aboutTitle.text = getString(R.string.about_help_subtitle).format(
             formatNumber(supportedYearOfIranCalendar - 1),
             formatNumber(supportedYearOfIranCalendar)
         )
@@ -111,11 +110,17 @@ class AboutFragment : Fragment() {
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                     try {
                         emailIntent.putExtra(
-                            Intent.EXTRA_TEXT,
-                            String.format(
-                                emailBinding.inputText.text?.toString() + "\n\n\n\n\n\n\n===Device Information===\nManufacturer: %s\nModel: %s\nAndroid Version: %s\nApp Version Code: %s",
-                                Build.MANUFACTURER, Build.MODEL, Build.VERSION.RELEASE, version[0]
-                            )
+                            Intent.EXTRA_TEXT, """${emailBinding.inputText.text?.toString()}
+
+
+
+
+
+===Device Information===
+Manufacturer: ${Build.MANUFACTURER}
+Model: ${Build.MODEL}
+Android Version: ${Build.VERSION.RELEASE}
+App Version Code: ${version[0]}"""
                         )
                         startActivity(
                             Intent.createChooser(
