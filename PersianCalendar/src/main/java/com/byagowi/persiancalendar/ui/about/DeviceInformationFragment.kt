@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.app.Activity
+import android.app.ActivityManager
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.opengl.EGL14
@@ -100,6 +101,24 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
 
     data class Item(val title: String, val content: CharSequence?, val version: String)
 
+    // https://stackoverflow.com/a/59234917
+    private fun humanReadableByteCountBin(bytes: Long) = when {
+        bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
+        bytes < 1024L -> "$bytes B"
+        bytes <= 0xfffccccccccccccL shr 40 ->
+            "%.1f KiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 10))
+        bytes <= 0xfffccccccccccccL shr 30 ->
+            "%.1f MiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 20))
+        bytes <= 0xfffccccccccccccL shr 20 ->
+            "%.1f GiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 30))
+        bytes <= 0xfffccccccccccccL shr 10 ->
+            "%.1f TiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 40))
+        bytes <= 0xfffccccccccccccL ->
+            "%.1f PiB".format(Locale.ENGLISH, (bytes shr 10).toDouble() / (0x1 shl 40))
+        else ->
+            "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
+    }
+
     val deviceInformationItems: List<Item> = listOf(
         Item("Screen Resolution", activity.windowManager.run {
             String.format(
@@ -109,6 +128,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                 defaultDisplay.height
             )
         }, ""),
+        Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
         Item(
             "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
             Build.VERSION.SDK_INT.toString()
@@ -117,16 +137,19 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         Item("Brand", Build.BRAND, ""),
         Item("Model", Build.MODEL, ""),
         Item("Product", Build.PRODUCT, "")
-    ) + (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    ) + (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+        listOf(Item("RAM", humanReadableByteCountBin(ActivityManager.MemoryInfo().apply {
+            activity.getSystemService<ActivityManager>()?.getMemoryInfo(this)
+        }.totalMem), ""))
+    else emptyList()) + (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         Build.SUPPORTED_ABIS.mapIndexed { index, abi ->
             Item("Instruction CPU ${index + 1}", abi, "")
         }
-    } else {
+    else
         listOf(
             Item("Instruction CPU 1", Build.CPU_ABI, ""),
             Item("Instruction CPU 2", Build.CPU_ABI2, "")
-        )
-    }) + listOf(
+        )) + listOf(
         Item("Instruction Architecture", Build.DEVICE, ""),
         Item("Android Id", Build.ID, ""),
         Item("Board", Build.BOARD, ""),
