@@ -97,81 +97,47 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var moonPhase = 1.0
     private var fontSize: Int = 0
 
+    private val Number.dp: Int
+        get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+
     init {
-        if (attrs != null) {
-            val typedArray = context.obtainStyledAttributes(attrs, R.styleable.SunView)
-            val typedValue = TypedValue()
-            val theme = context.theme
+        val tempTypedValue = TypedValue()
 
-            try {
-                theme.resolveAttribute(R.attr.SunViewHorizonColor, typedValue, true)
-                val HorizonColor = ContextCompat.getColor(context, typedValue.resourceId)
-                horizonColor =
-                    typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, HorizonColor)
-                theme.resolveAttribute(R.attr.SunViewTimelineColor, typedValue, true)
-                val TimelineColor = ContextCompat.getColor(context, typedValue.resourceId)
-                timelineColor =
-                    typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, TimelineColor)
-                theme.resolveAttribute(R.attr.SunViewTaglineColor, typedValue, true)
-                val taglineColor = ContextCompat.getColor(context, typedValue.resourceId)
-                taggingColor =
-                    typedArray.getColor(R.styleable.SunView_SunViewHorizonColor, taglineColor)
-                nightColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewNightColor,
-                    ContextCompat.getColor(context, R.color.sViewNightColor)
-                )
-                dayColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewDayColor,
-                    ContextCompat.getColor(context, R.color.sViewDayColor)
-                )
-                daySecondColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewDaySecondColor,
-                    ContextCompat.getColor(context, R.color.sViewDaySecondColor)
-                )
-                sunColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewSunColor,
-                    ContextCompat.getColor(context, R.color.sViewSunColor)
-                )
-                sunBeforeMiddayColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewBeforeMiddayColor,
-                    ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
-                )
-                sunAfterMiddayColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewAfterMiddayColor,
-                    ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
-                )
-                sunEveningColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewEveningColor,
-                    ContextCompat.getColor(context, R.color.sViewSunEveningColor)
-                )
-                theme.resolveAttribute(R.attr.SunViewSunriseTextColor, typedValue, true)
-                val SunriseTextColor = ContextCompat.getColor(context, typedValue.resourceId)
-                sunriseTextColor = typedArray.getColor(
-                    R.styleable.SunView_SunViewSunriseTextColor,
-                    SunriseTextColor
-                )
-                theme.resolveAttribute(R.attr.SunViewMiddayTextColor, typedValue, true)
-                val MiddayTextColor = ContextCompat.getColor(context, typedValue.resourceId)
-                middayTextColor =
-                    typedArray.getColor(R.styleable.SunView_SunViewMiddayTextColor, MiddayTextColor)
-                theme.resolveAttribute(R.attr.SunViewSunsetTextColor, typedValue, true)
-                val SunsetTextColor = ContextCompat.getColor(context, typedValue.resourceId)
-                sunsetTextColor =
-                    typedArray.getColor(R.styleable.SunView_SunViewSunsetTextColor, SunsetTextColor)
-
-                theme.resolveAttribute(R.attr.colorTextNormal, typedValue, true)
-                colorTextNormal = ContextCompat.getColor(context, typedValue.resourceId)
-                theme.resolveAttribute(R.attr.colorTextSecond, typedValue, true)
-                colorTextSecond = ContextCompat.getColor(context, typedValue.resourceId)
-
-                fontSize = dpToPx(14)
-            } finally {
-                typedArray.recycle()
-            }
+        @ColorInt
+        fun resolveColor(attr: Int) = tempTypedValue.let {
+            context.theme.resolveAttribute(attr, it, true)
+            ContextCompat.getColor(context, it.resourceId)
         }
+
+        colorTextNormal = resolveColor(R.attr.colorTextNormal)
+        colorTextSecond = resolveColor(R.attr.colorTextSecond)
+
+        horizonColor = resolveColor(R.attr.SunViewHorizonColor)
+        timelineColor = resolveColor(R.attr.SunViewTimelineColor)
+        taggingColor = resolveColor(R.attr.SunViewTaglineColor)
+        sunriseTextColor = resolveColor(R.attr.SunViewSunriseTextColor)
+        middayTextColor = resolveColor(R.attr.SunViewMiddayTextColor)
+        sunsetTextColor = resolveColor(R.attr.SunViewSunsetTextColor)
+
+        // resolveColor(R.attr.SunViewNightColor)
+        nightColor = ContextCompat.getColor(context, R.color.sViewNightColor)
+        // resolveColor(R.attr.SunViewDayColor)
+        dayColor = ContextCompat.getColor(context, R.color.sViewDayColor)
+        // resolveColor(R.attr.SunViewDaySecondColor)
+        daySecondColor = ContextCompat.getColor(context, R.color.sViewDaySecondColor)
+        // resolveColor(R.attr.SunViewSunColor)
+        sunColor = ContextCompat.getColor(context, R.color.sViewSunColor)
+        // resolveColor(R.attr.SunViewBeforeMiddayColor)
+        sunBeforeMiddayColor = ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
+        // resolveColor(R.attr.SunViewAfterMiddayColor)
+        sunAfterMiddayColor = ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
+        // resolveColor(R.attr.SunViewEveningColor)
+        sunEveningColor = ContextCompat.getColor(context, R.color.sViewSunEveningColor)
 
         sunPaint.color = sunColor
         sunRaisePaint.color = sunColor
+
+        fontSize = 14.dp
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
@@ -197,9 +163,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         nightPath.lineTo(0f, 0f)
         nightPath.close()
     }
-
-    // https://stackoverflow.com/a/34763668
-    private fun dpToPx(dp: Int): Int = (dp * Resources.getSystem().displayMetrics.density).toInt()
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
