@@ -24,6 +24,7 @@
 package com.byagowi.persiancalendar.ui.preferences.widgetnotification
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.*
 import android.os.Build
 import android.util.AttributeSet
@@ -34,6 +35,7 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
@@ -60,6 +62,9 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             blueSeekBar.progress
         )
 
+    private val Number.dp: Int
+        get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+
     init {
         orientation = VERTICAL
 
@@ -74,9 +79,6 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             }
         }
 
-        val density = context.resources.displayMetrics.density
-        val seekBarPadding = density.toInt() * 8
-
         val listener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
                 showColor()
@@ -85,47 +87,30 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         }
 
-        redSeekBar = SeekBar(context).apply {
-            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
-            max = 255
-            progressDrawable.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
-            setOnSeekBarChangeListener(listener)
-        }
+        redSeekBar = SeekBar(context)
+        greenSeekBar = SeekBar(context)
+        blueSeekBar = SeekBar(context)
+        alphaSeekBar = SeekBar(context)
 
-        greenSeekBar = SeekBar(context).apply {
-            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
-            max = 255
-            progressDrawable.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
-            setOnSeekBarChangeListener(listener)
-        }
+        listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
+            listOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map { Color.parseColor(it) }
+        ) { seekBar, color ->
+            seekBar.apply {
+                updatePadding(top = 8.dp, bottom = 8.dp)
+                max = 255
+                progressDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+                setOnSeekBarChangeListener(listener)
 
-        blueSeekBar = SeekBar(context).apply {
-            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
-            max = 255
-            progressDrawable.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
-            setOnSeekBarChangeListener(listener)
-        }
-
-        alphaSeekBar = SeekBar(context).apply {
-            updatePadding(top = seekBarPadding, bottom = seekBarPadding)
-            max = 255
-            progressDrawable.setColorFilter(-0xa0a0a0, PorterDuff.Mode.SRC_IN)
-            setOnSeekBarChangeListener(listener)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            redSeekBar.thumb.setColorFilter(-0x400000, PorterDuff.Mode.SRC_IN)
-            greenSeekBar.thumb.setColorFilter(-0xff4000, PorterDuff.Mode.SRC_IN)
-            blueSeekBar.thumb.setColorFilter(-0xffff40, PorterDuff.Mode.SRC_IN)
-            alphaSeekBar.thumb.setColorFilter(-0xa0a0a0, PorterDuff.Mode.SRC_IN)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                    thumb.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+            }
         }
 
         seekBars = LinearLayout(context).apply {
             orientation = VERTICAL
-            addView(redSeekBar)
-            addView(greenSeekBar)
-            addView(blueSeekBar)
-            addView(alphaSeekBar)
+
+            listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).forEach(::addView)
+
             layoutParams =
                 LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
                     weight = 1f
@@ -151,8 +136,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
                 LayoutParams.MATCH_PARENT
             )
             setBackgroundColor(Color.LTGRAY)
-            val framePadding = density.toInt()
-            setPadding(framePadding, framePadding, framePadding, framePadding)
+            setPadding(1.dp, 1.dp, 1.dp, 1.dp)
         }
 
         val widgetMain = LinearLayout(context).apply {
@@ -174,14 +158,11 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
         val context = context ?: return
 
-        val density = context.resources.displayMetrics.density
-
         colors.map(Long::toInt).forEach { color ->
             val view = View(context).apply {
                 setBackgroundColor(color)
                 layoutParams = FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT,
-                    FrameLayout.LayoutParams.MATCH_PARENT
+                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
                 )
             }
 
@@ -194,14 +175,12 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
                     canvas?.drawRect(rect, checkerBoard)
                 }
             }.apply {
-                val rectSize = (40 * density).toInt()
-                val margin = (5 * density).toInt()
                 setBackgroundColor(Color.LTGRAY)
-                layoutParams = LayoutParams(rectSize, rectSize).apply {
-                    setMargins(margin, margin * 2, margin, margin)
+                layoutParams = LayoutParams(40.dp, 40.dp).apply {
+                    setMargins(5.dp, 10.dp, 5.dp, 5.dp)
                 }
                 addView(view)
-                setPadding(density.toInt())
+                setPadding(1.dp)
                 setOnClickListener { setPickedColor(color) }
             }
             colorsToPick.addView(frameLayout)
@@ -210,15 +189,11 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private fun showColor() {
         val color = Color.argb(
-            alphaSeekBar.progress, redSeekBar.progress,
-            greenSeekBar.progress, blueSeekBar.progress
+            alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
         )
         colorResultView.apply {
             setBackgroundColor(color)
-            text = if (colorCodeVisibility)
-                "#%08X".format(Locale.ENGLISH, color)
-            else
-                ""
+            text = if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
             setTextColor(color xor 0xFFFFFF)
         }
     }
@@ -245,8 +220,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
         colorFrame.layoutParams = LayoutParams(
-            seekBars.measuredHeight,
-            LayoutParams.MATCH_PARENT
+            seekBars.measuredHeight, LayoutParams.MATCH_PARENT
         )
     }
 }
@@ -254,25 +228,17 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 // https://stackoverflow.com/a/58471997
 fun createCheckerBoard(tileSize: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     shader = BitmapShader(
-        Bitmap.createBitmap(
-            tileSize * 2,
-            tileSize * 2,
-            Bitmap.Config.ARGB_8888
-        ).apply {
+        Bitmap.createBitmap(tileSize * 2, tileSize * 2, Bitmap.Config.ARGB_8888).apply {
             Canvas(this).apply {
                 val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    style = Paint.Style.FILL; color = 0x22000000
+                    style = Paint.Style.FILL
+                    color = 0x22000000
                 }
                 drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
                 drawRect(
-                    tileSize.toFloat(),
-                    tileSize.toFloat(),
-                    tileSize * 2f,
-                    tileSize * 2f,
-                    fill
+                    tileSize.toFloat(), tileSize.toFloat(), tileSize * 2f, tileSize * 2f, fill
                 )
             }
-        },
-        Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
+        }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
     )
 }
