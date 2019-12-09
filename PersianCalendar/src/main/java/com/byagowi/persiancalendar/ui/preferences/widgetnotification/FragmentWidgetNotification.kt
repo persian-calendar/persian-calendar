@@ -34,7 +34,7 @@ class FragmentWidgetNotification : PreferenceFragmentCompat() {
                     )
                 )
             )
-            colorPickerView.hideAlphaSeekbar()
+            colorPickerView.hideAlphaSeekBar()
 
             val padding = (activity.resources.displayMetrics.density * 10).toInt()
             colorPickerView.setPadding(padding, padding, padding, padding)

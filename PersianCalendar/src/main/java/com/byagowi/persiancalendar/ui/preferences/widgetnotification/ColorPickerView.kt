@@ -35,7 +35,6 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
-import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
@@ -92,8 +91,8 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         blueSeekBar = SeekBar(context)
         alphaSeekBar = SeekBar(context)
 
-        listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
-            listOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map { Color.parseColor(it) }
+        sequenceOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
+            sequenceOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map { Color.parseColor(it) }
         ) { seekBar, color ->
             seekBar.apply {
                 updatePadding(top = 8.dp, bottom = 8.dp)
@@ -109,7 +108,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         seekBars = LinearLayout(context).apply {
             orientation = VERTICAL
 
-            listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).forEach(::addView)
+            sequenceOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).forEach(::addView)
 
             layoutParams =
                 LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
@@ -187,33 +186,29 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         }
     }
 
-    private fun showColor() {
+    private fun showColor() = colorResultView.run {
         val color = Color.argb(
             alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
         )
-        colorResultView.apply {
-            setBackgroundColor(color)
-            text = if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
-            setTextColor(color xor 0xFFFFFF)
-        }
+        setBackgroundColor(color)
+        text = if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
+        setTextColor(color xor 0xFFFFFF)
+        Unit
     }
 
     fun setPickedColor(@ColorInt color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            redSeekBar.setProgress(Color.red(color), true)
-            greenSeekBar.setProgress(Color.green(color), true)
-            blueSeekBar.setProgress(Color.blue(color), true)
-            alphaSeekBar.setProgress(Color.alpha(color), true)
-        } else {
-            redSeekBar.progress = Color.red(color)
-            greenSeekBar.progress = Color.green(color)
-            blueSeekBar.progress = Color.blue(color)
-            alphaSeekBar.progress = Color.alpha(color)
+        sequenceOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
+            sequenceOf(Color.red(color), Color.green(color), Color.blue(color), Color.alpha(color))
+        ) { seekBar, channelValue ->
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+                seekBar.setProgress(channelValue, true)
+            else
+                seekBar.progress = channelValue
         }
         showColor()
     }
 
-    fun hideAlphaSeekbar() {
+    fun hideAlphaSeekBar() {
         alphaSeekBar.visibility = GONE
         seekBars.measure(
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
