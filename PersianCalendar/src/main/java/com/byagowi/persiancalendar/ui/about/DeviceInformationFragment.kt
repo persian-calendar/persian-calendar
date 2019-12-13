@@ -101,24 +101,6 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
 
     data class Item(val title: String, val content: CharSequence?, val version: String)
 
-    // https://stackoverflow.com/a/59234917
-    private fun humanReadableByteCountBin(bytes: Long) = when {
-        bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
-        bytes < 1024L -> "$bytes B"
-        bytes <= 0xfffccccccccccccL shr 40 ->
-            "%.1f KiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 10))
-        bytes <= 0xfffccccccccccccL shr 30 ->
-            "%.1f MiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 20))
-        bytes <= 0xfffccccccccccccL shr 20 ->
-            "%.1f GiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 30))
-        bytes <= 0xfffccccccccccccL shr 10 ->
-            "%.1f TiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 40))
-        bytes <= 0xfffccccccccccccL ->
-            "%.1f PiB".format(Locale.ENGLISH, (bytes shr 10).toDouble() / (0x1 shl 40))
-        else ->
-            "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
-    }
-
     val deviceInformationItems: List<Item> = listOf(
         Item("Screen Resolution", activity.windowManager.run {
             "%d*%d pixels".format(Locale.ENGLISH, defaultDisplay.width, defaultDisplay.height)
@@ -131,20 +113,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         Item("Manufacturer", Build.MANUFACTURER, ""),
         Item("Brand", Build.BRAND, ""),
         Item("Model", Build.MODEL, ""),
-        Item("Product", Build.PRODUCT, "")
-    ) + (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-        listOf(Item("RAM", humanReadableByteCountBin(ActivityManager.MemoryInfo().apply {
-            activity.getSystemService<ActivityManager>()?.getMemoryInfo(this)
-        }.totalMem), ""))
-    else emptyList()) + (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        Build.SUPPORTED_ABIS.mapIndexed { index, abi ->
-            Item("Instruction CPU ${index + 1}", abi, "")
-        }
-    else
-        listOf(
-            Item("Instruction CPU 1", Build.CPU_ABI, ""),
-            Item("Instruction CPU 2", Build.CPU_ABI2, "")
-        )) + listOf(
+        Item("Product", Build.PRODUCT, ""),
         Item("Instruction Architecture", Build.DEVICE, ""),
         Item("Android Id", Build.ID, ""),
         Item("Board", Build.BOARD, ""),
@@ -154,14 +123,27 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         Item("Display", Build.DISPLAY, ""),
         Item("Device Fingerprints", Build.FINGERPRINT, ""),
         Item(
-            "Sensors",
-            (activity.getSystemService<SensorManager>())
-                ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
-        )
-    ) + (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        listOf(
-            Item(
-                "Battery",
+            "CPU Instruction Set",
+            (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                Build.SUPPORTED_ABIS
+            else arrayOf(Build.CPU_ABI, Build.CPU_ABI2)).joinToString(", "),
+            ""
+        ),
+        Item(
+            "RAM",
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
+                android.text.format.Formatter.formatShortFileSize(
+                    activity,
+                    ActivityManager.MemoryInfo().apply {
+                        activity.getSystemService<ActivityManager>()?.getMemoryInfo(this)
+                    }.totalMem
+                )
+            else "",
+            ""
+        ),
+        Item(
+            "Battery",
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 (activity.getSystemService<BatteryManager>())?.run {
                     listOf("Charging: $isCharging") + listOf(
                         "Capacity" to BatteryManager.BATTERY_PROPERTY_CAPACITY,
@@ -170,10 +152,16 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                         "Current Now" to BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
                         "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
                     ).map { "${it.first}: ${getLongProperty(it.second)}" }
-                }?.joinToString("\n"), ""
-            )
+                }?.joinToString("\n")
+            else "",
+            ""
+        ),
+        Item(
+            "Sensors",
+            (activity.getSystemService<SensorManager>())
+                ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
         )
-    } else emptyList()) + (try {
+    ) + (try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
             val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
@@ -259,18 +247,6 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         e.printStackTrace()
         emptyList<Item>()
     })
-
-    // If one wants something similar, now raises permission denied
-    //   try {
-    //       File("/sys/devices/system/cpu/cpu0/cpufreq/").listFiles()?.mapNotNull {
-    //           if (it.isDirectory) null
-    //           else Item(it.absolutePath, it.readText(), "")
-    //       } ?: emptyList()
-    //   } catch (e: Exception) {
-    //       e.printStackTrace()
-    //       emptyList<Item>()
-    //   })
-
 
     class DeviceInformationDiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean =
