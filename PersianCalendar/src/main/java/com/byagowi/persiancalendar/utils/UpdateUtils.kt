@@ -471,12 +471,12 @@ fun update(context: Context, updateDate: Boolean) {
                 )
                 setTextViewTextOrIfEmpty(
                     R.id.nonholidays,
-                    if ("non_holiday_events" in whatToShowOnWidgets) "" else nonHolidays
+                    if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else ""
                 )
 
                 setTextViewTextOrIfEmpty(
                     R.id.owghat,
-                    if ("owghat" in whatToShowOnWidgets) "" else owghat
+                    if ("owghat" in whatToShowOnWidgets) owghat else ""
                 )
             }
 
