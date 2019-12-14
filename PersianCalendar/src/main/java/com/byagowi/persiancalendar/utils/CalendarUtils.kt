@@ -51,7 +51,7 @@ fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
     return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
 }
 
-fun getMonthName(date: AbstractDate): String = monthsNamesOfCalendar(date)[date.month - 1]
+fun getMonthName(date: AbstractDate) = monthsNamesOfCalendar(date).getOrNull(date.month - 1) ?: ""
 
 fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
     is PersianDate -> persianMonths

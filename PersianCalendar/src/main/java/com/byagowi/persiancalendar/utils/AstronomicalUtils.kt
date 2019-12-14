@@ -45,8 +45,10 @@ fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean): String {
         context.getString(R.string.year_name),
         context.getString(YEARS_NAME[persianDate.year % 12]),
         context.getString(R.string.zodiac),
-        if (withEmoji) context.getString(ZODIAC_MONTHS_EMOJI[persianDate.month]) else "",
-        context.getString(ZODIAC_MONTHS[persianDate.month]),
+        if (withEmoji) context.getString(
+            ZODIAC_MONTHS_EMOJI.getOrNull(persianDate.month) ?: R.string.empty
+        ) else "",
+        context.getString(ZODIAC_MONTHS.getOrNull(persianDate.month) ?: R.string.empty),
         (if (isMoonInScorpio(persianDate, islamicDate)) context.getString(R.string.moonInScorpio)
         else "")
     ).trim()
