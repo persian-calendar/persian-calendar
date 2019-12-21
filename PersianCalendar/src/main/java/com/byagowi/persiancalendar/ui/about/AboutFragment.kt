@@ -150,14 +150,14 @@ App Version Code: ${version[0]}"""
         ).apply { setMargins(8) }
 
         val chipClick = View.OnClickListener {
-            try {
-                CustomTabsIntent.Builder().build().launchUrl(
-                    mainActivity,
-                    ("https://github.com/" + (it as Chip).text.toString()
-                        .split("@")[1].split(")")[0]).toUri()
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
+            (it.tag as? String?)?.run {
+                try {
+                    CustomTabsIntent.Builder().build().launchUrl(
+                        mainActivity, "https://github.com/$this".toUri()
+                    )
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
 
@@ -166,7 +166,9 @@ App Version Code: ${version[0]}"""
                 Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
-                    text = it
+                    val parts = it.split(": ")
+                    tag = parts[0]
+                    text = parts[1]
                     chipIcon = developerIcon
                     setChipIconTintResource(chipsIconsColor)
                 }
@@ -176,7 +178,10 @@ App Version Code: ${version[0]}"""
             .trim().split("\n").shuffled().map {
                 Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
-                    text = it
+                    // setOnClickListener(chipClick)
+                    val parts = it.split(": ")
+                    if (parts.size == 2) tag = parts[0]
+                    text = parts.last()
                     chipIcon = designerIcon
                     setChipIconTintResource(chipsIconsColor)
                 }
@@ -187,7 +192,9 @@ App Version Code: ${version[0]}"""
                 Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
-                    text = it
+                    val parts = it.split(": ")
+                    tag = parts[0]
+                    text = parts[1]
                     chipIcon = translatorIcon
                     setChipIconTintResource(chipsIconsColor)
                 }
@@ -198,7 +205,9 @@ App Version Code: ${version[0]}"""
                 Chip(mainActivity).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
-                    text = it
+                    val parts = it.split(": ")
+                    tag = parts[0]
+                    text = parts[1]
                     chipIcon = developerIcon
                     setChipIconTintResource(chipsIconsColor)
                 }
