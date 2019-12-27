@@ -29,23 +29,13 @@ class AthanActivity : AppCompatActivity() {
     private var alreadyStopped = false
     private val stopTask = object : Runnable {
         override fun run() {
-            if (ringtone == null && mediaPlayer == null) {
-                this@AthanActivity.finish()
-                return
-            }
+            if (ringtone == null && mediaPlayer == null) return this@AthanActivity.finish()
             try {
-                if (ringtone?.isPlaying == false) {
-                    this@AthanActivity.finish()
-                    return
-                }
-                if (mediaPlayer?.isPlaying == false) {
-                    this@AthanActivity.finish()
-                    return
-                }
+                if (ringtone?.isPlaying == false || mediaPlayer?.isPlaying == false)
+                    return this@AthanActivity.finish()
             } catch (e: Exception) {
                 e.printStackTrace()
-                this@AthanActivity.finish()
-                return
+                return this@AthanActivity.finish()
             }
 
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
@@ -75,10 +65,7 @@ class AthanActivity : AppCompatActivity() {
         // Workaround AlarmManager (or the way we use it) that calls it multiple times,
         // don't run if it is ran less than 10 seconds ago
         val currentMillis = System.currentTimeMillis()
-        if (currentMillis - lastStart < TimeUnit.SECONDS.toMillis(10)) {
-            finish()
-            return
-        }
+        if (currentMillis - lastStart < TimeUnit.SECONDS.toMillis(10)) return finish()
         lastStart = currentMillis
         //
 
