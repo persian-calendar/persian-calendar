@@ -29,16 +29,17 @@ class AthanActivity : AppCompatActivity() {
     private var alreadyStopped = false
     private val stopTask = object : Runnable {
         override fun run() {
-            if (ringtone == null && mediaPlayer == null) return this@AthanActivity.finish()
             try {
-                if (ringtone?.isPlaying == false || mediaPlayer?.isPlaying == false)
-                    return this@AthanActivity.finish()
+                if ((ringtone == null && mediaPlayer == null) ||
+                    ringtone?.isPlaying == false ||
+                    mediaPlayer?.isPlaying == false
+                ) return this@AthanActivity.finish()
+
+                handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
             } catch (e: Exception) {
                 e.printStackTrace()
                 return this@AthanActivity.finish()
             }
-
-            handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
         }
     }
 
