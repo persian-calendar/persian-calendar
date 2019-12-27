@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 class AthanActivity : AppCompatActivity() {
 
     private val ascendingVolumeStep = 6
-    private var currentVolumeSteps = 0
+    private var currentVolumeSteps = 1
     private var audioManager: AudioManager? = null
     private val handler = Handler()
     private var ringtone: Ringtone? = null
@@ -82,14 +82,14 @@ class AthanActivity : AppCompatActivity() {
         lastStart = currentMillis
         //
 
-        val ascendingVolume = isAscendingAthanVolumeEnabled(this)
-        val settingsVol = getAthanVolume(this)
         audioManager = getSystemService()
         audioManager?.let { am ->
             am.setStreamVolume(
                 AudioManager.STREAM_ALARM,
-                if (settingsVol == DEFAULT_ATHAN_VOLUME) settingsVol
-                else am.getStreamVolume(AudioManager.STREAM_ALARM), 0
+                athanVolume.takeUnless { it == DEFAULT_ATHAN_VOLUME } ?: am.getStreamVolume(
+                    AudioManager.STREAM_ALARM
+                ),
+                0
             )
         }
 
@@ -172,7 +172,7 @@ class AthanActivity : AppCompatActivity() {
 
         handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
 
-        if (ascendingVolume) handler.post(ascendVolume)
+        if (isAscendingAthanVolumeEnabled) handler.post(ascendVolume)
 
         try {
             getSystemService<TelephonyManager>()?.listen(

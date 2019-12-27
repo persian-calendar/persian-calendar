@@ -16,11 +16,11 @@ fun getDefaultAthanUri(context: Context): Uri =
             context.resources.getResourceTypeName(R.raw.abdulbasit) + "/" +
             context.resources.getResourceEntryName(R.raw.abdulbasit)).toUri()
 
-fun getAthanVolume(context: Context): Int =
-    context.appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
+val Context.athanVolume: Int
+    get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 
-fun isAscendingAthanVolumeEnabled(context: Context): Boolean =
-    context.appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, false)
+val Context.isAscendingAthanVolumeEnabled: Boolean
+    get() = appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, false)
 
 fun getCustomAthanUri(context: Context): Uri? =
     context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeUnless { it.isEmpty() }?.toUri()
