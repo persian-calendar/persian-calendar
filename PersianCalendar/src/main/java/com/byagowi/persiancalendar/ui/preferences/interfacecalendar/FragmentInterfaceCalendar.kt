@@ -17,8 +17,6 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
-        findPreference<ListPreference>("AppLanguage")?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
         findPreference<ListPreference>("Theme")?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
         findPreference<ListPreference>("WeekStart")?.summaryProvider =
