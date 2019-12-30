@@ -34,7 +34,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     private var latitude: String? = null
     private var longitude: String? = null
     private var cityName: String? = null
-    private val checkGPSProviderCallback = Runnable { this.checkGPSProvider() }
+    private val checkGPSProviderCallback = Runnable { checkGPSProvider() }
     private var lacksPermission = false
     private var everRegisteredCallback = false
     private val locationListener = object : LocationListener {

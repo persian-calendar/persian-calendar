@@ -416,9 +416,7 @@ class CalendarFragment : Fragment() {
         val prayTimes = PrayTimesCalculator.calculate(
             calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
         )
-        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter?)?.run {
-            this.prayTimes = prayTimes
-        }
+        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter)?.prayTimes = prayTimes
         owghatBinding?.sunView?.run {
             setSunriseSunsetMoonPhase(prayTimes, try {
                 coordinate?.run {
@@ -437,7 +435,7 @@ class CalendarFragment : Fragment() {
     }
 
     private fun onOwghatClick() {
-        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter?)?.run {
+        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter)?.run {
             isExpanded = !isExpanded
             owghatBinding?.moreOwghat?.setImageResource(
                 if (isExpanded) R.drawable.ic_keyboard_arrow_up
