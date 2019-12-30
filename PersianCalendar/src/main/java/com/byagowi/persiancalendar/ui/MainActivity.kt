@@ -158,9 +158,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 setAction("Settings") {
                     appPrefs.edit {
                         putString(PREF_APP_LANGUAGE, LANG_EN_US)
-                        putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
-                        putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-                        putStringSet(PREF_HOLIDAY_TYPES, emptySet())
                     }
                 }
                 setActionTextColor(resources.getColor(R.color.dark_accent))
@@ -225,15 +222,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             var changeToGregorianCalendar = false
             var changeToPersianCalendar = false
             var changeToIranEvents = false
-            var removeAllEvents = false
             when (sharedPreferences?.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE) {
                 LANG_EN_US -> {
                     changeToGregorianCalendar = true
-                    removeAllEvents = true
                 }
                 LANG_JA -> {
                     changeToGregorianCalendar = true
-                    removeAllEvents = true
                     persianDigits = true
                 }
                 LANG_AZB, LANG_GLK, LANG_FA -> {
@@ -286,14 +280,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     if (currentHolidays.isEmpty() ||
                         (currentHolidays.size == 1 && "afghanistan_holidays" in currentHolidays)
                     ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
-                }
-                if (removeAllEvents) {
-                    val currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-
-                    if (currentHolidays.isEmpty() ||
-                        (currentHolidays.size == 1 && "iran_holidays" in currentHolidays)
-                    ) putStringSet(PREF_HOLIDAY_TYPES, emptySet())
                 }
                 when {
                     changeToGregorianCalendar -> {
