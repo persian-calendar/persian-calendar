@@ -79,7 +79,7 @@ android {
 dependencies {
     implementation(project(":equinox"))
     implementation(project(":calendar"))
-    implementation ("com.github.persian-calendar:praytimes:1.0.0")
+    implementation ("com.github.persian-calendar:praytimes:1.0.1")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${KotlinCompilerVersion.VERSION}")
 
