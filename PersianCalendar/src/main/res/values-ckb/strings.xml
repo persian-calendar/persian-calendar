@@ -198,7 +198,7 @@
 
     <string name="outdated_app">ڕوژژمێر بەڕۆژ نییە؛ لەوانەیە بۆنەکان دروست نەبن</string>
     <string name="update">نوێکردنەوە</string>
-    <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵ %1$s: %2$s</string>
+    <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵی %1$s: %2$s</string>
     <string name="shift_work_settings">ڕێکخستنی نۆرەکار</string>
     <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه.</string>
     <string name="remove">سڕینەوە</string>
