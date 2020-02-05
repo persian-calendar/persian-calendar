@@ -268,7 +268,8 @@ class CalendarFragment : Fragment() {
                         super.updateDrawState(ds)
                         if (event.color.isNotEmpty()) {
                             try {
-                                ds.color = event.color.toInt()
+                                // should be turned to long then int otherwise gets stupid alpha
+                                ds.color = event.color.toLong().toInt()
                             } catch (e: Exception) {
                                 e.printStackTrace()
                             }
