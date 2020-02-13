@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("com.android.application")
@@ -74,6 +75,15 @@ android {
             // setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
         }
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "1.8"
 }
 
 dependencies {
@@ -81,7 +91,7 @@ dependencies {
     implementation("com.github.persian-calendar:calendar:1.0.0")
     implementation("com.github.persian-calendar:praytimes:1.0.1")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${KotlinCompilerVersion.VERSION}")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
 
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.preference:preference-ktx:1.1.0")
@@ -96,13 +106,13 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
-    implementation("androidx.core:core-ktx:1.1.0")
-    implementation("androidx.fragment:fragment-ktx:1.1.0")
-    implementation("androidx.activity:activity-ktx:1.0.0")
+    implementation("androidx.core:core-ktx:1.2.0")
+    implementation("androidx.fragment:fragment-ktx:1.2.1")
+    implementation("androidx.activity:activity-ktx:1.1.0")
 
     implementation("androidx.browser:browser:1.0.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.2.0")
+    implementation("androidx.work:work-runtime-ktx:2.3.1")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
