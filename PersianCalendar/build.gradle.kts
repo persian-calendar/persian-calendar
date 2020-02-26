@@ -98,7 +98,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("com.google.android.material:material:1.1.0-rc02")
+    implementation("com.google.android.material:material:1.1.0")
     implementation("com.google.android:flexbox:1.1.0")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
@@ -107,12 +107,12 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.core:core-ktx:1.2.0")
-    implementation("androidx.fragment:fragment-ktx:1.2.1")
+    implementation("androidx.fragment:fragment-ktx:1.2.2")
     implementation("androidx.activity:activity-ktx:1.1.0")
 
     implementation("androidx.browser:browser:1.0.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.3.1")
+    implementation("androidx.work:work-runtime-ktx:2.3.2")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
