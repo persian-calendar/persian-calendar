@@ -33,6 +33,8 @@
     "شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران، و شورای فرهنگ عمومی",
     "سعید رسولی <saeed.gnu@gmail.com> مولا پهنادایان <mola.mp@gmail.com>",
 
+    "https://www.yjc.ir/fa/news/6842270",
+
     "Afghanistan events from Wikipedia https://en.wikipedia.org/wiki/Public_holidays_in_Afghanistan, clones in Afghanistan, Afghanistan Calendar Date Converter",
     "http://www.un.org/en/sections/observances/international-days/"
   ],
@@ -587,6 +589,9 @@
 
     { "holiday": false, "month": 12, "day": 5, "type": "Iran",
       "title": "روز مهندسی" },
+
+    { "holiday": false, "month": 12, "day": 7, "type": "Iran",
+      "title": "سالروز استقلال کانون وکلا و روز وکیل مدافع" },
 
     { "holiday": false, "month": 12, "day": 14, "type": "Iran",
       "title": "روز احسان و نیکوکاری" },
