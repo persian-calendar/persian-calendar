@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/add" />
+        android:text="@string/accept" />
 
     <FrameLayout
         android:id="@+id/preference_fragment_holder"

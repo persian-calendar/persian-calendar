@@ -90,6 +90,9 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider1x1" />
+
+            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
         </receiver>
 
         <receiver
@@ -104,6 +107,9 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x1" />
+
+            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
         </receiver>
 
         <receiver
@@ -118,6 +124,9 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x2" />
+
+            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
         </receiver>
 
         <receiver
@@ -132,6 +141,9 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider2x2" />
+
+            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
         </receiver>
 
         <service
