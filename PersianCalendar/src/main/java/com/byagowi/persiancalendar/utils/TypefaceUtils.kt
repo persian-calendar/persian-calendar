@@ -27,6 +27,6 @@ fun overrideFont(defaultFontNameToOverride: String, face: Typeface) {
 fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, FONT_PATH)
 
 fun getCalendarFragmentFont(context: Context): Typeface =
-    if (isCustomFontEnabled) Typeface.create("sans-serif-light", Typeface.NORMAL)
+    if (isCustomFontEnabled) Typeface.create("sans-serif", Typeface.NORMAL)
     else getAppFont(context)
 
