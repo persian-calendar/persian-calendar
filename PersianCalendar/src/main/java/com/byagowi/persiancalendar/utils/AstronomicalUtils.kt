@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
+import android.util.Log
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.IslamicDate
@@ -36,20 +37,25 @@ fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean
     return res == 8
 }
 
-fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean): String {
-    if (!isAstronomicalFeaturesEnabled) return ""
-
-    val persianDate = PersianDate(jdn)
-    val islamicDate = IslamicDate(jdn)
-    return "%s: %s\n%s: %s %s\n%s".format(
-        context.getString(R.string.year_name),
-        context.getString(YEARS_NAME[persianDate.year % 12]),
-        context.getString(R.string.zodiac),
-        if (withEmoji) context.getString(
-            ZODIAC_MONTHS_EMOJI.getOrNull(persianDate.month) ?: R.string.empty
-        ) else "",
-        context.getString(ZODIAC_MONTHS.getOrNull(persianDate.month) ?: R.string.empty),
-        (if (isMoonInScorpio(persianDate, islamicDate)) context.getString(R.string.moonInScorpio)
-        else "")
-    ).trim()
+fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean): String = try {
+    if (isAstronomicalFeaturesEnabled) {
+        val persianDate = PersianDate(jdn)
+        val islamicDate = IslamicDate(jdn)
+        "%s: %s\n%s: %s %s\n%s".format(
+            context.getString(R.string.year_name),
+            context.getString(YEARS_NAME[persianDate.year % 12]),
+            context.getString(R.string.zodiac),
+            if (withEmoji) context.getString(
+                ZODIAC_MONTHS_EMOJI.getOrNull(persianDate.month) ?: R.string.empty
+            ) else "",
+            context.getString(ZODIAC_MONTHS.getOrNull(persianDate.month) ?: R.string.empty),
+            if (isMoonInScorpio(persianDate, islamicDate))
+                context.getString(R.string.moonInScorpio)
+            else ""
+        ).trim()
+    } else ""
+} catch (e: Exception) {
+    // This shouldn't raise out-of-bound in any sense, I am really tired of any exceptions this raises
+    Log.e("Utils", "getZodiacInfo", e)
+    ""
 }
