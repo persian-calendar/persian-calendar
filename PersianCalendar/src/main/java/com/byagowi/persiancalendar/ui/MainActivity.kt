@@ -54,7 +54,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         initUtils(this)
 
-        overrideFont("SERIF", getAppFont(applicationContext))
+        // Don't apply font override to English and Japanese locale
+        if (language !in listOf(LANG_EN_US, LANG_JA))
+            overrideFont("SERIF", getAppFont(applicationContext))
 
         startEitherServiceOrWorker(this)
 
