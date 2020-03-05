@@ -71,6 +71,7 @@
         <item name="colorMonthSwitch">@color/dark_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_dark</item>
+        <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
 
         <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
@@ -131,7 +132,7 @@
         <item name="colorMonthSwitch">@color/light_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_light</item>
-        <item name="android:typeface">serif</item>
+        <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
 
         <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
@@ -193,7 +194,7 @@
         <item name="colorMonthSwitch">@color/blue_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_light</item>
-        <item name="android:typeface">serif</item>
+        <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
 
         <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
@@ -255,7 +256,7 @@
         <item name="colorMonthSwitch">@color/modern_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_light</item>
-        <item name="android:typeface">serif</item>
+        <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
 
         <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
