@@ -112,7 +112,7 @@ dependencies {
 
     implementation("androidx.browser:browser:1.0.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.3.2")
+    implementation("androidx.work:work-runtime-ktx:2.3.3")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
