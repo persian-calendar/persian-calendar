@@ -26,7 +26,7 @@ fun String.runCommand(
 
 android {
     compileSdkVersion(29)
-    buildToolsVersion("29.0.2")
+    buildToolsVersion("29.0.3")
     viewBinding.isEnabled = true
 
     val gitVersion = listOf(
