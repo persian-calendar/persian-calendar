@@ -15,9 +15,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.getCityName
-import com.byagowi.persiancalendar.utils.getPrayTimeText
-import com.byagowi.persiancalendar.utils.isLocaleRTL
+import com.byagowi.persiancalendar.utils.*
 import java.util.concurrent.TimeUnit
 
 private const val NOTIFICATION_ID = 1002
@@ -44,11 +42,22 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        val title = intent
-            ?.let { getString(getPrayTimeText(it.getStringExtra(KEY_EXTRA_PRAYER_KEY))) } ?: ""
-        val cityName = getCityName(this, false)
-        val subtitle =
-            if (cityName.isEmpty()) "" else getString(R.string.in_city_time) + " " + cityName
+        var title = ""
+        var subtitle = ""
+        intent?.let {
+            val athanKey = it.getStringExtra(KEY_EXTRA_PRAYER_KEY)
+            title = getString(getPrayTimeText(athanKey))
+            val cityName = getCityName(this, false)
+            if (cityName.isNotEmpty()) title =
+                "$title - ${getString(R.string.in_city_time)} $cityName"
+
+            val nextAthanText = getNextPrayTimeText(athanKey)
+            subtitle = "${getString(nextAthanText)}: ${getFormattedClock(
+                getClockFromStringId(nextAthanText),
+                false
+            )}"
+        }
+
         val notificationBuilder = NotificationCompat.Builder(
             this,
             NOTIFICATION_CHANNEL_ID
