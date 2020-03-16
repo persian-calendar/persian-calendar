@@ -353,16 +353,6 @@ fun getPrayTimeText(athanKey: String?): Int = when (athanKey) {
     else -> R.string.isha
 }
 
-@StringRes
-fun getNextPrayTimeText(athanKey: String?): Int = when (athanKey) {
-    "FAJR" -> R.string.sunrise
-    "DHUHR" -> R.string.asr
-    "ASR" -> R.string.sunset
-    "MAGHRIB" -> R.string.isha
-    "ISHA" -> R.string.midnight
-    else -> R.string.midnight
-}
-
 @DrawableRes
 fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
     "FAJR" -> R.drawable.fajr

@@ -44,18 +44,26 @@ class AthanNotification : Service() {
 
         var title = ""
         var subtitle = ""
-        intent?.let {
-            val athanKey = it.getStringExtra(KEY_EXTRA_PRAYER_KEY)
+        intent?.let { i ->
+            val athanKey = i.getStringExtra(KEY_EXTRA_PRAYER_KEY)
             title = getString(getPrayTimeText(athanKey))
             val cityName = getCityName(this, false)
             if (cityName.isNotEmpty()) title =
                 "$title - ${getString(R.string.in_city_time)} $cityName"
 
-            val nextAthanText = getNextPrayTimeText(athanKey)
-            subtitle = "${getString(nextAthanText)}: ${getFormattedClock(
-                getClockFromStringId(nextAthanText),
-                false
-            )}"
+            subtitle = when (athanKey) {
+                "FAJR" -> listOf(R.string.sunrise)
+                "DHUHR" -> listOf(R.string.asr, R.string.sunset)
+                "ASR" -> listOf(R.string.sunset)
+                "MAGHRIB" -> listOf(R.string.isha, R.string.midnight)
+                "ISHA" -> listOf(R.string.midnight)
+                else -> listOf(R.string.midnight)
+            }.joinToString(" - ") {
+                "${getString(it)}: ${getFormattedClock(
+                    getClockFromStringId(it),
+                    false
+                )}"
+            }
         }
 
         val notificationBuilder = NotificationCompat.Builder(
