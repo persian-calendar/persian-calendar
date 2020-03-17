@@ -12,7 +12,6 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.*
@@ -26,6 +25,8 @@ class AthanNotification : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        intent ?: return super.onStartCommand(intent, flags, startId)
+
         val notificationManager = getSystemService<NotificationManager>()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -42,28 +43,24 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        var title = ""
-        var subtitle = ""
-        intent?.let { i ->
-            val athanKey = i.getStringExtra(KEY_EXTRA_PRAYER_KEY)
-            title = getString(getPrayTimeText(athanKey))
-            val cityName = getCityName(this, false)
-            if (cityName.isNotEmpty()) title =
-                "$title - ${getString(R.string.in_city_time)} $cityName"
+        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
+        val cityName = getCityName(this, false)
+        val title =
+            if (cityName.isNotEmpty()) getString(getPrayTimeText(athanKey))
+            else "${getString(getPrayTimeText(athanKey))} - ${getString(R.string.in_city_time)} $cityName"
 
-            subtitle = when (athanKey) {
-                "FAJR" -> listOf(R.string.sunrise)
-                "DHUHR" -> listOf(R.string.asr, R.string.sunset)
-                "ASR" -> listOf(R.string.sunset)
-                "MAGHRIB" -> listOf(R.string.isha, R.string.midnight)
-                "ISHA" -> listOf(R.string.midnight)
-                else -> listOf(R.string.midnight)
-            }.joinToString(" - ") {
-                "${getString(it)}: ${getFormattedClock(
-                    getClockFromStringId(it),
-                    false
-                )}"
-            }
+        val subtitle = when (athanKey) {
+            "FAJR" -> listOf(R.string.sunrise)
+            "DHUHR" -> listOf(R.string.asr, R.string.sunset)
+            "ASR" -> listOf(R.string.sunset)
+            "MAGHRIB" -> listOf(R.string.isha, R.string.midnight)
+            "ISHA" -> listOf(R.string.midnight)
+            else -> listOf(R.string.midnight)
+        }.joinToString(" - ") {
+            "${getString(it)}: ${getFormattedClock(
+                getClockFromStringId(it),
+                false
+            )}"
         }
 
         val notificationBuilder = NotificationCompat.Builder(
@@ -79,8 +76,7 @@ class AthanNotification : Service() {
         notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE)
         notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND)
 
-
-        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(
                 applicationContext?.packageName, if (isLocaleRTL())
                     R.layout.custom_notification
