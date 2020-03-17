@@ -430,60 +430,70 @@ fun update(context: Context, updateDate: Boolean) {
         val shouldDisableCustomNotification =
             (Build.BRAND in listOf("samsung", "htc")) && isNightModeEnabled(context)
 
-        if (!isTalkBackEnabled && !shouldDisableCustomNotification &&
-            (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N || BuildConfig.DEBUG)
-        ) {
-            val cv = RemoteViews(
-                context.packageName,
-                if (isRTL) R.layout.custom_notification else R.layout.custom_notification_ltr
-            ).apply {
-                setTextViewText(R.id.title, title)
-                setTextViewText(R.id.body, subtitle)
+        if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val holidays = getEventsTitle(
+                events,
+                holiday = true,
+                compact = true,
+                showDeviceCalendarEvents = true,
+                insertRLM = isRTL
+            )
+
+            val nonHolidays = getEventsTitle(
+                dayEvents = events,
+                holiday = false,
+                compact = true,
+                showDeviceCalendarEvents = true,
+                insertRLM = isRTL
+            )
+
+            if (shouldDisableCustomNotification) {
+                builder.setStyle(
+                    NotificationCompat.BigTextStyle().bigText(
+                        listOf(
+                            subtitle,
+                            holidays,
+                            if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else "",
+                            if ("owghat" in whatToShowOnWidgets) owghat else ""
+                        ).filter { it.isNotBlank() }.joinToString("\n")
+                    )
+                )
+            } else {
+                val cv = RemoteViews(
+                    context.packageName,
+                    if (isRTL) R.layout.custom_notification else R.layout.custom_notification_ltr
+                ).apply {
+                    setTextViewText(R.id.title, title)
+                    setTextViewText(R.id.body, subtitle)
+                }
+
+                val bcv = RemoteViews(
+                    context.packageName,
+                    if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
+                ).apply {
+                    setTextViewText(R.id.title, title)
+
+                    fun RemoteViews.setTextViewTextOrIfEmpty(viewId: Int, text: CharSequence) =
+                        if (text.trim().isEmpty()) setViewVisibility(viewId, View.GONE)
+                        else setTextViewText(viewId, text.trim())
+
+                    setTextViewTextOrIfEmpty(R.id.body, subtitle)
+                    setTextViewTextOrIfEmpty(R.id.holidays, holidays)
+                    setTextViewTextOrIfEmpty(
+                        R.id.nonholidays,
+                        if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else ""
+                    )
+                    setTextViewTextOrIfEmpty(
+                        R.id.owghat,
+                        if ("owghat" in whatToShowOnWidgets) owghat else ""
+                    )
+                }
+
+                builder
+                    .setCustomContentView(cv)
+                    .setCustomBigContentView(bcv)
+                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             }
-
-            val bcv = RemoteViews(
-                context.packageName,
-                if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
-            ).apply {
-                setTextViewText(R.id.title, title)
-
-                fun RemoteViews.setTextViewTextOrIfEmpty(viewId: Int, text: CharSequence) =
-                    if (text.trim().isEmpty()) setViewVisibility(viewId, View.GONE)
-                    else setTextViewText(viewId, text.trim())
-
-                setTextViewTextOrIfEmpty(R.id.body, subtitle)
-
-                val holidays = getEventsTitle(
-                    events,
-                    holiday = true,
-                    compact = true,
-                    showDeviceCalendarEvents = true,
-                    insertRLM = isRTL
-                )
-                setTextViewTextOrIfEmpty(R.id.holidays, holidays)
-
-                val nonHolidays = getEventsTitle(
-                    dayEvents = events,
-                    holiday = false,
-                    compact = true,
-                    showDeviceCalendarEvents = true,
-                    insertRLM = isRTL
-                )
-                setTextViewTextOrIfEmpty(
-                    R.id.nonholidays,
-                    if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else ""
-                )
-
-                setTextViewTextOrIfEmpty(
-                    R.id.owghat,
-                    if ("owghat" in whatToShowOnWidgets) owghat else ""
-                )
-            }
-
-            builder
-                .setCustomContentView(cv)
-                .setCustomBigContentView(bcv)
-                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }
 
         if (BuildConfig.DEBUG) builder.setWhen(Calendar.getInstance().timeInMillis)
