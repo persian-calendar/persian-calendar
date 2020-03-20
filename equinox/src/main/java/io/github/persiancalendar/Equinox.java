@@ -24,18 +24,6 @@ public class Equinox {
     //	return time.Unix(round(seconds_from_base), 0)
     //}
 
-    private static double abs(double x) {
-        return x < 0 ? -x : x;
-    }
-
-    private static double roundf(double x) {
-        return Math.floor(0.5 + x);
-    }
-
-    private static long round(double x) {
-        return (long) roundf(x);
-    }
-
     private static double tableFormula(double x) {
         double result = 0;
         // TODO: Replace with a table and a loop
@@ -72,19 +60,19 @@ public class Equinox {
         double b = (a - 2451545.0) / 36525.0;
         double c = (35999.373 * b - 2.47) * degrees;
         double d = a + (0.00001 * tableFormula(b)) / (1.0 + 0.0334 * Math.cos(c) + 0.0007 * Math.cos(2 * c)) - (66.0 + ((double) (year - 2000)) * 1.0) / 86400.0;
-        double e = roundf(d);
+        double e = Math.round(d);
         double f = Math.floor((e - 1867216.25) / 36524.25);
         double g = e + f - Math.floor(f / 4) + 1525.0;
         double h = Math.floor((g - 122.1) / 365.25);
         double i = 365.0 * h + Math.floor(h / 4);
         double k = Math.floor((g - i) / 30.6001);
         double l = 24.0 * (d + 0.5 - e);
-        int day = (int) (roundf(g - i) - Math.floor(30.6001 * k));
+        int day = (int) (Math.round(g - i) - Math.floor(30.6001 * k));
         double month = k - 1 - 12 * Math.floor(k / 14);
         int hour = (int) (Math.floor(l));
-        double minutef = (abs(l) - Math.floor(abs(l))) * 60.0;
-        int minute = (int) round(minutef);
-        int second = (int) round((minutef - Math.floor(minutef)) * 60.0);
+        double minutef = (Math.abs(l) - Math.floor(Math.abs(l))) * 60.0;
+        int minute = (int) Math.round(minutef);
+        int second = (int) Math.round((minutef - Math.floor(minutef)) * 60.0);
         if (minute == 60.0d) {
             minute = 0;
             hour += 1.0d;
