@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.location.*
 import android.os.Bundle
 import android.os.Handler
@@ -49,11 +50,14 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
     lateinit var mainActivity: MainActivity
 
+    private val Number.dp: Int
+        get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         mainActivity = activity as MainActivity
 
         textView = TextView(mainActivity).apply {
-            updatePadding(32)
+            updatePadding(16.dp, 16.dp, 16.dp, 16.dp)
             setText(R.string.pleasewaitgps)
         }
 
