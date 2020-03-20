@@ -325,6 +325,26 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
     } ?: 0
 }
 
+fun getClockFromStringId(@StringRes stringId: Int): Clock {
+    if (prayTimes == null && coordinate != null)
+        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinate)
+
+    return prayTimes?.run {
+        when (stringId) {
+            R.string.imsak -> imsakClock
+            R.string.fajr -> fajrClock
+            R.string.sunrise -> sunriseClock
+            R.string.dhuhr -> dhuhrClock
+            R.string.asr -> asrClock
+            R.string.sunset -> sunsetClock
+            R.string.maghrib -> maghribClock
+            R.string.isha -> ishaClock
+            R.string.midnight -> midnightClock
+            else -> Clock.fromInt(0)
+        }
+    } ?: Clock.fromInt(0)
+}
+
 fun getCityFromPreference(context: Context): CityItem? {
     val key = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
         ?.takeUnless { it.isEmpty() || it == DEFAULT_CITY } ?: return null

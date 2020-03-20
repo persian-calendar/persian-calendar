@@ -195,21 +195,6 @@ fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().le
     it + (CalendarType.values().toList() - it)
 }
 
-fun getClockFromStringId(@StringRes stringId: Int): Clock = prayTimes?.run {
-    when (stringId) {
-        R.string.imsak -> imsakClock
-        R.string.fajr -> fajrClock
-        R.string.sunrise -> sunriseClock
-        R.string.dhuhr -> dhuhrClock
-        R.string.asr -> asrClock
-        R.string.sunset -> sunsetClock
-        R.string.maghrib -> maghribClock
-        R.string.isha -> ishaClock
-        R.string.midnight -> midnightClock
-        else -> Clock.fromInt(0)
-    }
-} ?: Clock.fromInt(0)
-
 fun loadAlarms(context: Context) {
     val prefString = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
     Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
