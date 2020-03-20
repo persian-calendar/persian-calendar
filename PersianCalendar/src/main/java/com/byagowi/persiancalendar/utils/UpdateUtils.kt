@@ -452,7 +452,10 @@ fun update(context: Context, updateDate: Boolean) {
                     NotificationCompat.BigTextStyle().bigText(
                         listOf(
                             subtitle,
-                            holidays,
+                            if (holidays.isBlank()) ""
+                            else holidays.split("\n").joinToString("\n") {
+                                "$it (تعطیلی)" // Move this to strings or somewhere
+                            },
                             if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else "",
                             if ("owghat" in whatToShowOnWidgets) owghat else ""
                         ).filter { it.isNotBlank() }.joinToString("\n")
