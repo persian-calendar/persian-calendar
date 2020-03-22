@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
+import android.app.KeyguardManager
 import android.media.*
 import android.os.Build
 import android.os.Bundle
@@ -133,6 +134,7 @@ class AthanActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
+            getSystemService<KeyguardManager>()?.requestDismissKeyguard(this, null)
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         } else {
             @Suppress("DEPRECATION")
