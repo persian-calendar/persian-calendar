@@ -87,7 +87,7 @@ tasks.withType<KotlinCompile> {
 }
 
 dependencies {
-    implementation(project(":equinox"))
+    implementation("com.github.persian-calendar:equinox:1.0.0")
     implementation("com.github.persian-calendar:calendar:1.0.0")
     implementation("com.github.persian-calendar:praytimes:1.0.1")
 
