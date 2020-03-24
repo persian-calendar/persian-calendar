@@ -107,7 +107,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.core:core-ktx:1.2.0")
-    implementation("androidx.fragment:fragment-ktx:1.2.2")
+    implementation("androidx.fragment:fragment-ktx:1.2.3")
     implementation("androidx.activity:activity-ktx:1.1.0")
 
     implementation("androidx.browser:browser:1.0.0")
