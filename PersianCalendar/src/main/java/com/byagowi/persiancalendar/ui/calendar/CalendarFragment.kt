@@ -52,6 +52,10 @@ import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*
 
+private const val CALENDARS_TAB = 0
+private const val EVENTS_TAB = 1
+private const val OWGHAT_TAB = 2
+
 class CalendarFragment : Fragment() {
 
     private var coordinate: Coordinate? = null
@@ -517,10 +521,4 @@ class CalendarFragment : Fragment() {
             return true
         } else false
     } ?: false
-
-    companion object {
-        private const val CALENDARS_TAB = 0
-        private const val EVENTS_TAB = 1
-        private const val OWGHAT_TAB = 2
-    }
 }
