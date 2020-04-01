@@ -385,7 +385,7 @@ class CalendarFragment : Fragment() {
 
             val enabledTypes = mainActivity.appPrefs
                 .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-            if (enabledTypes.size == 0) {
+            if (enabledTypes.isEmpty()) {
                 noEvent.visibility = View.GONE
                 if (messageToShow.isNotEmpty()) messageToShow.append("\n")
 
