@@ -21,7 +21,6 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
         val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)
             ?.takeUnless { it == -1L } ?: getTodayJdn()
-        val mainCalendar = mainCalendar
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val deviceEvents = readMonthDeviceEvents(mainActivity, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()

@@ -39,7 +39,6 @@ fun update(context: Context, updateDate: Boolean) {
     Log.d("UpdateUtils", "update")
     applyAppLanguage(context)
     val calendar = makeCalendarFromDate(Date())
-    val mainCalendar = mainCalendar
     val date = getTodayOfCalendar(mainCalendar)
     val jdn = date.toJdn()
 
@@ -54,8 +53,7 @@ fun update(context: Context, updateDate: Boolean) {
     //
     //
     val manager = AppWidgetManager.getInstance(context) ?: return
-    val colorInt = selectedWidgetTextColor
-    val color = Color.parseColor(colorInt)
+    val color = Color.parseColor(selectedWidgetTextColor)
 
     // en-US is our only real LTR language for now
     val isRTL = isLocaleRTL()
