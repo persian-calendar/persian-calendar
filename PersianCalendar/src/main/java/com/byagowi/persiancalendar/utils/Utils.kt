@@ -21,18 +21,13 @@ import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 const val TAG = "Utils"
-val twoSeconds = TimeUnit.SECONDS.toMillis(2)
-//
-//
-//
-// Service
-//
-const val DAY_IN_SECOND: Long = 86400
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
+const val TWO_SECONDS_IN_MILLIS: Long = 2000
+const val DAY_IN_SECOND: Long = 86400
+const val DAY_IN_MILLIS: Long = 86400000
 val monthNameEmptyList = (1..12).map { "" }.toList()
 var persianMonths = monthNameEmptyList
     private set
@@ -90,6 +85,7 @@ var whatToShowOnWidgets: Set<String> = emptySet()
     private set
 var isAstronomicalFeaturesEnabled: Boolean = false
     private set
+
 @StyleRes
 var appTheme = R.style.LightTheme
     private set
@@ -123,7 +119,6 @@ var numericalDatePreferred = false
     private set
 var calendarTypesTitleAbbr = emptyList<String>()
     private set
-val DAY_IN_MILLIS = TimeUnit.DAYS.toMillis(1)
 var allEnabledEvents: List<CalendarEvent<*>> = emptyList()
     private set
 var persianCalendarEvents: PersianCalendarEventsStore = emptyEventsStore()
@@ -365,7 +360,7 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
     val context = view.context ?: return
 
     val now = System.currentTimeMillis()
-    if (now - latestToastShowTime > twoSeconds) {
+    if (now - latestToastShowTime > TWO_SECONDS_IN_MILLIS) {
         Snackbar.make(view, resId, Snackbar.LENGTH_SHORT).show()
         // https://stackoverflow.com/a/29423018
         context.getSystemService<AudioManager>()?.playSoundEffect(AudioManager.FX_KEY_CLICK)
