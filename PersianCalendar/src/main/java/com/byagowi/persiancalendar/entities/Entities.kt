@@ -36,7 +36,7 @@ data class DeviceCalendarEvent(
     override val date: CivilDate, override val title: String, override val isHoliday: Boolean,
     val id: Int, val description: String, val start: Date, val end: Date, val color: String
 ) : CalendarEvent<CivilDate> {
-    override fun toString(): String = title
+    override fun toString(): String = "$title ($description)"
 }
 
 data class ShiftWorkRecord(val type: String, val length: Int)
