@@ -22,6 +22,7 @@ import androidx.core.view.GravityCompat
 import androidx.navigation.Navigation
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
+import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.utils.*
@@ -134,7 +135,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
-        binding.navigation.getHeaderView(0).findViewById<ImageView>(R.id.season_image)
+        val navHeaderBinding = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+        navHeaderBinding.seasonImage
             .setImageResource(run {
                 var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
 
