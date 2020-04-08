@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -135,9 +134,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
-        val navHeaderBinding = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-        navHeaderBinding.seasonImage
-            .setImageResource(run {
+        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+            .seasonImage.setImageResource(run {
                 var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
 
                 // Southern hemisphere

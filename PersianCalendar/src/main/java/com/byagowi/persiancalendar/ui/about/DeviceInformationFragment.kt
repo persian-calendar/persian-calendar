@@ -123,7 +123,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         Item("Display", Build.DISPLAY, ""),
         Item("Device Fingerprints", Build.FINGERPRINT, ""),
         Item(
-            "CPU Instruction Set",
+            "CPU Instructions Sets",
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 Build.SUPPORTED_ABIS
             else arrayOf(Build.CPU_ABI, Build.CPU_ABI2)).joinToString(", "),
