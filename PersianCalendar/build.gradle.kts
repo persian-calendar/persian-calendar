@@ -46,6 +46,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         resConfigs("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
+        multiDexEnabled = false
     }
 
     signingConfigs {
