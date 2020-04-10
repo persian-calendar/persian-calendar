@@ -57,6 +57,7 @@ android {
             keyPassword = "android"
         }
     }
+
     buildTypes {
         create("nightly") {
             signingConfig = signingConfigs.getByName("nightly")
@@ -65,15 +66,15 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
         }
+
         getByName("debug") {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
             applicationIdSuffix = ".debug"
         }
+
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            // Maybe proguard-android-optimize.txt in future
-            // setProguardFiles(listOf(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"))
         }
     }
 
