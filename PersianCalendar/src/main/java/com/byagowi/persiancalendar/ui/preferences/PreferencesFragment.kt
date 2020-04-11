@@ -28,7 +28,7 @@ class PreferencesFragment : Fragment() {
             R.string.pref_header_widget_location to FragmentWidgetNotification::class.java,
             R.string.pref_header_location_athan to FragmentLocationAthan::class.java
         )
-        viewPager.adapter = object : FragmentStateAdapter(mainActivity) {
+        viewPager.adapter = object : FragmentStateAdapter(this@PreferencesFragment) {
             override fun getItemCount() = tabs.size
             override fun createFragment(position: Int) = tabs[position].second.newInstance()
         }
