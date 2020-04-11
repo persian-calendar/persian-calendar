@@ -86,10 +86,12 @@ class CalendarFragment : Fragment() {
 
         val tabs = listOf(
 
+            // First tab
             R.string.calendar to CalendarsView(mainActivity).apply {
                 calendarsView = this
             },
 
+            // Second tab
             R.string.events to EventsTabContentBinding.inflate(inflater, container, false).apply {
                 eventsBinding = this
 
@@ -104,6 +106,7 @@ class CalendarFragment : Fragment() {
             coordinate = this
 
             listOf(
+                // Optional third tab
                 R.string.owghat to OwghatTabContentBinding.inflate(
                     inflater, container, false
                 ).apply {
@@ -143,7 +146,7 @@ class CalendarFragment : Fragment() {
             if (date.dayOfMonth != initialDate.dayOfMonth || date.month != initialDate.month)
                 todayButton.show()
         }
-        tabsViewPager.adapter = object : TabsAdapter() {
+        viewPager.adapter = object : TabsAdapter() {
             override fun getItemCount(): Int = tabs.size
             override fun onBindViewHolder(holder: ViewHolder, position: Int) =
                 holder.bind(tabs[position].second)
@@ -156,8 +159,8 @@ class CalendarFragment : Fragment() {
                 }
             )
         }
-
-        tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        TabLayoutMediator(tabLayout, viewPager) { tab, i -> tab.setText(tabs[i].first) }.attach()
+        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                 else owghatBinding?.sunView?.clear()
@@ -165,13 +168,9 @@ class CalendarFragment : Fragment() {
             }
         })
 
-        TabLayoutMediator(tabLayout, tabsViewPager) { tab, position ->
-            tab.setText(tabs[position].first)
-        }.attach()
-
         var lastTab = mainActivity.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-        tabsViewPager.setCurrentItem(lastTab, false)
+        viewPager.setCurrentItem(lastTab, false)
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -435,7 +434,7 @@ class CalendarFragment : Fragment() {
                 1.0
             })
             visibility = if (isToday) View.VISIBLE else View.GONE
-            if (isToday && mainBinding.tabsViewPager.currentItem == OWGHAT_TAB) startAnimate()
+            if (isToday && mainBinding.viewPager.currentItem == OWGHAT_TAB) startAnimate()
         }
     }
 
