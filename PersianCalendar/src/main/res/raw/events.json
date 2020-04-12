@@ -176,6 +176,9 @@
     { "holiday": false, "month": 1, "day": 21, "type": "Iran",
       "title": "سالروز افتتاح حساب شمارهٔ ۱۰۰ و تأسیس بنیاد مسکن انقلاب اسلامی (۱۳۵۸ ه‍.ش)" },
 
+    { "holiday": false, "month": 1, "day": 23, "type": "Iran",
+      "title": "روز دندانپزشک" },
+
     { "holiday": false, "month": 1, "day": 25, "type": "Iran",
       "title": "روز بزرگداشت عطار نیشابوری" },
 
