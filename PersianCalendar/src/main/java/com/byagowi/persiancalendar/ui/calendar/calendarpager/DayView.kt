@@ -199,10 +199,8 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         )
     }
 
-    fun setNonDayOfMonthItem(text: String, textSize: Int) {
-        setAll(
-            text, false, false, false, false, false,
-            textSize, -1, -1, false, ""
-        )
-    }
+    fun setNonDayOfMonthItem(text: String, textSize: Int) = setAll(
+        text, false, false, false, false, false,
+        textSize, -1, -1, false, ""
+    )
 }

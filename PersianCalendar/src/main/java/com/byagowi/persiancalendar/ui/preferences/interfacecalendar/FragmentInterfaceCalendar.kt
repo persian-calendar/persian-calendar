@@ -39,13 +39,11 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
         }
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean =
         if (preference?.key == "calendars_priority") {
             fragmentManager?.apply {
                 CalendarPreferenceDialog().show(this, "CalendarPreferenceDialog")
             }
-            return true
-        }
-        return super.onPreferenceTreeClick(preference)
-    }
+            true
+        } else super.onPreferenceTreeClick(preference)
 }
