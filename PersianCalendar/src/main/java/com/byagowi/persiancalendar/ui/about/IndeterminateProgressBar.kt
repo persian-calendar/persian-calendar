@@ -26,7 +26,6 @@ class IndeterminateProgressBar @JvmOverloads constructor(
                         PorterDuff.Mode.SRC_ATOP
                     )
                 }
-                start()
-            }
+            }.start()
     }
 }
