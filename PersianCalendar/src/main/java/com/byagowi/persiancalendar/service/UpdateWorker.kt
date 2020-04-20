@@ -11,7 +11,6 @@ import kotlinx.coroutines.withContext
 
 class UpdateWorker(val context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
-
     override suspend fun doWork(): Result = withContext(Dispatchers.Main) {
         try {
             setChangeDateWorker(context)

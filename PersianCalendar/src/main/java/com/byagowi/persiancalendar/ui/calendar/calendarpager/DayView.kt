@@ -191,16 +191,14 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         isToday: Boolean, isSelected: Boolean,
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
         textSize: Int, jdn: Long, dayOfMonth: Int, header: String
-    ) {
-        val dayOfMonthString = formatNumber(dayOfMonth)
-        setAll(
-            dayOfMonthString, isToday, isSelected, hasEvent, hasAppointment,
-            isHoliday, textSize, jdn, dayOfMonth, true, header
-        )
-    }
+    ) = setAll(
+        formatNumber(dayOfMonth), isToday, isSelected, hasEvent, hasAppointment,
+        isHoliday, textSize, jdn, dayOfMonth, true, header
+    )
 
     fun setNonDayOfMonthItem(text: String, textSize: Int) = setAll(
-        text, false, false, false, false, false,
-        textSize, -1, -1, false, ""
+        text, isToday = false, isSelected = false, hasEvent = false, hasAppointment = false,
+        isHoliday = false, textSize = textSize, jdn = -1, dayOfMonth = -1, isNumber = false,
+        header = ""
     )
 }
