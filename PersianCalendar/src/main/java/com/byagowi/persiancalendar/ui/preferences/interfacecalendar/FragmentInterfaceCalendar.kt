@@ -41,7 +41,7 @@ class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean =
         if (preference?.key == "calendars_priority") {
-            fragmentManager?.apply {
+            parentFragmentManager.apply {
                 CalendarPreferenceDialog().show(this, "CalendarPreferenceDialog")
             }
             true
