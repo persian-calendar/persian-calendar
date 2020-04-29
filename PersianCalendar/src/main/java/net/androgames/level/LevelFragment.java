@@ -4,14 +4,12 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.byagowi.persiancalendar.R;
@@ -56,23 +54,17 @@ public class LevelFragment extends Fragment {
         provider = new OrientationProvider(activity, binding.levelView);
 
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
-        binding.bottomAppbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.compass)
-                    mainActivity.navigateTo(R.id.compass);
-                return true;
-            }
+        binding.bottomAppbar.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.compass)
+                mainActivity.navigateTo(R.id.compass);
+            return true;
         });
-        binding.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean stop = !provider.isListening();
-                binding.fab.setImageResource(stop ? R.drawable.ic_stop : R.drawable.ic_play);
-                binding.fab.setContentDescription(activity.getString(stop ? R.string.stop : R.string.resume));
-                if (stop) provider.startListening();
-                else provider.stopListening();
-            }
+        binding.fab.setOnClickListener(v -> {
+            boolean stop = !provider.isListening();
+            binding.fab.setImageResource(stop ? R.drawable.ic_stop : R.drawable.ic_play);
+            binding.fab.setContentDescription(activity.getString(stop ? R.string.stop : R.string.resume));
+            if (stop) provider.startListening();
+            else provider.stopListening();
         });
 
         return binding.getRoot();
