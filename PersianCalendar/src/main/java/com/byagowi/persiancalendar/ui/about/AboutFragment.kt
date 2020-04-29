@@ -22,10 +22,12 @@ import androidx.core.net.toUri
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.MainActivityViewModel
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.readRawResource
@@ -35,11 +37,13 @@ import com.google.android.material.snackbar.Snackbar
 
 class AboutFragment : Fragment() {
 
+    private val model: MainActivityViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val mainActivity = activity as MainActivity
-        mainActivity.setTitleAndSubtitle(getString(R.string.about), "")
+        model.updateActionBar(getString(R.string.about), "")
         setHasOptionsMenu(true)
 
         val binding = FragmentAboutBinding.inflate(inflater, container, false)

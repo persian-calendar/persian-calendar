@@ -23,6 +23,7 @@ import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
@@ -35,6 +36,7 @@ import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.MainActivityViewModel
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
@@ -64,6 +66,7 @@ class CalendarFragment : Fragment() {
     private var owghatBinding: OwghatTabContentBinding? = null
     private lateinit var eventsBinding: EventsTabContentBinding
     private var searchView: SearchView? = null
+    private val model: MainActivityViewModel by activityViewModels()
 
     abstract class TabsAdapter : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
         inner class ViewHolder(private val frame: FrameLayout) : RecyclerView.ViewHolder(frame) {
@@ -142,7 +145,7 @@ class CalendarFragment : Fragment() {
         calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
         calendarPager.onMonthSelected = fun() {
             val date = calendarPager.selectedMonth
-            mainActivity.setTitleAndSubtitle(getMonthName(date), formatNumber(date.year))
+            model.updateActionBar(getMonthName(date), formatNumber(date.year))
             if (date.dayOfMonth != initialDate.dayOfMonth || date.month != initialDate.month)
                 todayButton.show()
         }
@@ -181,10 +184,7 @@ class CalendarFragment : Fragment() {
         setHasOptionsMenu(true)
 
         getTodayOfCalendar(mainCalendar).also {
-            mainActivity.setTitleAndSubtitle(
-                getMonthName(it),
-                formatNumber(it.year)
-            )
+            model.updateActionBar(getMonthName(it), formatNumber(it.year))
         }
     }
 

@@ -103,6 +103,7 @@ dependencies {
     implementation("com.google.android.material:material:1.1.0")
     implementation("com.google.android:flexbox:1.1.0")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
 
     val navVersion = "2.2.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")

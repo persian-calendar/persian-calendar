@@ -5,21 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.MainActivityViewModel
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
 import com.byagowi.persiancalendar.utils.getTodayJdn
 
 class ConverterFragment : Fragment() {
+
+    private val model: MainActivityViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
-        (activity as? MainActivity)?.setTitleAndSubtitle(
-            getString(R.string.date_converter), ""
-        )
+        model.updateActionBar(getString(R.string.date_converter), "")
 
         calendarsView.expand(true)
         calendarsView.hideMoreIcon()

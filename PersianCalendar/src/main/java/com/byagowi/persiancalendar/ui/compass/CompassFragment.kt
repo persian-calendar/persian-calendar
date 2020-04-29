@@ -14,9 +14,11 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.MainActivityViewModel
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.google.android.material.snackbar.Snackbar
@@ -77,6 +79,7 @@ class CompassFragment : Fragment() {
         }.show()
 
     lateinit var mainActivity: MainActivity
+    private val model: MainActivityViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -86,10 +89,7 @@ class CompassFragment : Fragment() {
         binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
             coordinate = getCoordinate(mainActivity)
 
-            mainActivity.setTitleAndSubtitle(
-                getString(R.string.compass),
-                getCityName(mainActivity, true)
-            )
+            model.updateActionBar(getString(R.string.compass), getCityName(mainActivity, true))
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
             bottomAppbar.setOnMenuItemClickListener { item ->

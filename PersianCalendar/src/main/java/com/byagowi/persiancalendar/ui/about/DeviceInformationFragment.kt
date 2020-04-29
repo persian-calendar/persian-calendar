@@ -23,11 +23,13 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInformationRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.MainActivityViewModel
 import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.layoutInflater
@@ -43,12 +45,13 @@ class DeviceInformationFragment : Fragment() {
 
     private var clickCount: Int = 0
 
+    private val model: MainActivityViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
         val mainActivity = activity as MainActivity
-
-        mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
+        model.updateActionBar(getString(R.string.device_info), "")
 
         circularRevealFromMiddle(circularReveal)
 

@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
 import com.byagowi.persiancalendar.ui.MainActivity;
+import com.byagowi.persiancalendar.ui.MainActivityViewModel;
 
 import net.androgames.level.orientation.OrientationProvider;
 
@@ -39,6 +41,7 @@ import net.androgames.level.orientation.OrientationProvider;
  */
 public class LevelFragment extends Fragment {
 
+    MainActivityViewModel model = null;
     private OrientationProvider provider;
     private Activity activity;
 
@@ -48,7 +51,8 @@ public class LevelFragment extends Fragment {
         final MainActivity mainActivity = (MainActivity) getActivity();
         assert mainActivity != null;
         activity = mainActivity;
-        mainActivity.setTitleAndSubtitle(getString(R.string.level), "");
+        model = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
+        model.updateActionBar(getString(R.string.level), "");
 
         final FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
         provider = new OrientationProvider(activity, binding.levelView);

@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
@@ -65,6 +66,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(root)
         }
         setSupportActionBar(binding.toolbar)
+        model.actionBarTitle.observe(this, Observer {
+            supportActionBar?.title = it
+        })
+
+        model.actionBarSubTitle.observe(this , Observer {
+            supportActionBar?.subtitle = it
+        })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window.apply {
             // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
@@ -386,11 +394,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
         return true
     }
-
-    fun setTitleAndSubtitle(title: String, subtitle: String): Unit = supportActionBar?.let {
-        it.title = title
-        it.subtitle = subtitle
-    } ?: Unit
 
     override fun onBackPressed() {
         if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
