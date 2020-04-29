@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.activity.viewModels
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -32,14 +33,12 @@ import com.google.android.material.snackbar.Snackbar
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     NavigationView.OnNavigationItemSelectedListener {
 
-    private var creationDateJdn: Long = 0
-    private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
 
     val coordinator: CoordinatorLayout
         get() = binding.coordinator
 
-    private var clickedItem = 0
+    val model: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
@@ -96,9 +95,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
-                if (clickedItem != 0) {
-                    navigateTo(clickedItem)
-                    clickedItem = 0
+                if (model.clickedItem != 0) {
+                    navigateTo(model.clickedItem)
+                    model.clickedItem = 0
                 }
             }
         }
@@ -165,8 +164,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             binding.appbarLayout.outlineProvider = null
 
-        creationDateJdn = getTodayJdn()
-
         if (mainCalendar == CalendarType.SHAMSI &&
             isIranHolidaysEnabled &&
             getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
@@ -201,17 +198,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             isChecked = true
         }
 
-        if (settingHasChanged) { // update when checked menu item is changed
+        if (model.settingHasChanged) { // update when checked menu item is changed
             initUtils(this)
             update(applicationContext, true)
-            settingHasChanged = false // reset for the next time
+            model.settingHasChanged = false // reset for the next time
         }
 
         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(id, null, null)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        settingHasChanged = true
+        model.settingHasChanged = true
         if (key == PREF_APP_LANGUAGE) {
             var persianDigits = false
             var changeToAfghanistanHolidays = false
@@ -351,7 +348,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
-        if (creationDateJdn != getTodayJdn()) restartActivity()
+        if (model.creationDateJdn != getTodayJdn()) restartActivity()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean =
@@ -385,7 +382,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             finish()
         } else {
             binding.drawer.closeDrawers()
-            clickedItem = menuItem.itemId
+            model.clickedItem = menuItem.itemId
         }
         return true
     }
