@@ -29,9 +29,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 
 
-/**
- * Program activity for android
- */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     NavigationView.OnNavigationItemSelectedListener {
 
@@ -158,9 +155,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
                 view.setOnClickListener { dismiss() }
                 setAction("Settings") {
-                    appPrefs.edit {
-                        putString(PREF_APP_LANGUAGE, LANG_EN_US)
-                    }
+                    appPrefs.edit { putString(PREF_APP_LANGUAGE, LANG_EN_US) }
                 }
                 setActionTextColor(resources.getColor(R.color.dark_accent))
             }.show()
