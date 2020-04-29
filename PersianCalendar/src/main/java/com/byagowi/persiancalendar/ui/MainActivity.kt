@@ -66,12 +66,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(root)
         }
         setSupportActionBar(binding.toolbar)
-        model.actionBarTitle.observe(this, Observer {
-            supportActionBar?.title = it
-        })
-
-        model.actionBarSubTitle.observe(this , Observer {
-            supportActionBar?.subtitle = it
+        model.actionBarTitleAndSubtitle.observe(this, Observer {
+            supportActionBar?.title = it.first
+            supportActionBar?.subtitle = it.second
         })
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window.apply {

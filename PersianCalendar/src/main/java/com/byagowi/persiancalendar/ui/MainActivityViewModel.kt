@@ -10,22 +10,13 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     var clickedItem = 0
     var creationDateJdn: Long = getTodayJdn()
     var settingHasChanged = false
-    private val _title by lazy {
-        MutableLiveData<String>()
+    private val _titleAndSubtitle by lazy {
+        MutableLiveData<Pair<String, String>>()
     }
-    private val _subTitle by lazy {
-        MutableLiveData<String>()
-    }
-    val actionBarSubTitle: LiveData<String>
-        get() = _subTitle
-    val actionBarTitle: LiveData<String>
-        get() = _title
+    val actionBarTitleAndSubtitle: LiveData<Pair<String, String>>
+        get() = _titleAndSubtitle
 
-    private fun updateActionBarTitle(title: String) = _title.postValue(title)
-    private fun updateActionBarSubtitle(subtitle: String) = _subTitle.postValue(subtitle)
-    fun updateActionBar(title: String, subtitle: String) {
-        updateActionBarTitle(title)
-        updateActionBarSubtitle(subtitle)
-    }
+    fun updateActionBar(title: String, subtitle: String) =
+        _titleAndSubtitle.postValue(Pair(title, subtitle))
 
 }
