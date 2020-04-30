@@ -73,11 +73,10 @@ class FragmentLocationAthan : PreferenceFragmentCompat(),
             is NumericPreference -> fragment = NumericDialog()
             else -> super.onDisplayPreferenceDialog(preference)
         }
-        if (fragment != null) {
-            fragment.arguments = Bundle(1).apply { putString("key", preference?.key) }
-            fragment.setTargetFragment(this, 0)
-            val fragmentManager = fragmentManager
-            if (fragmentManager != null) fragment.show(fragmentManager, fragment.javaClass.name)
+        fragment?.let {
+            it.arguments = Bundle(1).apply { putString("key", preference?.key) }
+            it.setTargetFragment(this, 0)
+            it.show(parentFragmentManager, it.javaClass.name)
         }
     }
 
