@@ -23,6 +23,7 @@ class CalendarPager @JvmOverloads constructor(
     // Public API
     var onDayClicked = fun(jdn: Long) {}
     var onDayLongClicked = fun(jdn: Long) {}
+
     // Selected month is visible current month of the pager, maybe a day is not selected on it yet
     var onMonthSelected = fun() {}
     val selectedMonth: AbstractDate
@@ -48,6 +49,7 @@ class CalendarPager @JvmOverloads constructor(
     }
 
     private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
+
     // Package API, to be rewritten with viewPager.adapter.notifyItemChanged()
     fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
 
@@ -71,7 +73,7 @@ class CalendarPager @JvmOverloads constructor(
 
     private fun applyOffset(position: Int) = monthsLimit / 2 - position
 
-    private val viewPager = ViewPager2(context, attrs)
+    private val viewPager = ViewPager2(context)
     private var selectedJdn: Long = -1
 
     init {
