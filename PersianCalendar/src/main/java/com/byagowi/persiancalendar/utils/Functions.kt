@@ -447,7 +447,8 @@ fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNot
 fun startEitherServiceOrWorker(context: Context) {
     val workManager = WorkManager.getInstance(context)
     if (goForWorker()) {
-        val updateBuilder = PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1L, TimeUnit.HOURS)
+        val updateBuilder =
+            PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1L, TimeUnit.HOURS)
 
         val updateWork = updateBuilder.build()
         workManager.enqueueUniquePeriodicWork(

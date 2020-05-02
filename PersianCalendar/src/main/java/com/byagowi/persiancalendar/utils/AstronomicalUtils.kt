@@ -14,6 +14,7 @@ private val YEARS_NAME = listOf(
     R.string.year3, R.string.year4, R.string.year5, R.string.year6, R.string.year7, R.string.year8,
     R.string.year9
 )
+
 @StringRes
 private val ZODIAC_MONTHS = listOf(
     R.string.empty,
@@ -21,6 +22,7 @@ private val ZODIAC_MONTHS = listOf(
     R.string.libra, R.string.scorpio, R.string.sagittarius, R.string.capricorn, R.string.aquarius,
     R.string.pisces
 )
+
 @StringRes
 private val ZODIAC_MONTHS_EMOJI = listOf(
     R.string.empty,

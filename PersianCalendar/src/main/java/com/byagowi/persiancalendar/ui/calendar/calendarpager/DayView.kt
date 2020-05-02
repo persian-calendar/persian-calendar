@@ -26,9 +26,11 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     private val colorHoliday = resolveColor(R.attr.colorHoliday)
     private val colorHolidaySelected = resolveColor(R.attr.colorHolidaySelected)
+
     // private val colorTextHoliday = resolveColor(R.attr.colorTextHoliday)
     private val colorTextDay = resolveColor(R.attr.colorTextDay)
     private val colorTextDaySelected = resolveColor(R.attr.colorTextDaySelected)
+
     // private val colorTextToday = resolveColor(R.attr.colorTextToday)
     private val colorTextDayName = resolveColor(R.attr.colorTextDayName)
     private val colorEventLine = resolveColor(R.attr.colorEventLine)

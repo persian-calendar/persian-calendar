@@ -42,34 +42,49 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL_AND_STROKE }
+
     @ColorInt
     private var horizonColor: Int = 0
+
     @ColorInt
     private var timelineColor: Int = 0
+
     @ColorInt
     private var taggingColor: Int = 0
+
     @ColorInt
     private var nightColor: Int = 0
+
     @ColorInt
     private var dayColor: Int = 0
+
     @ColorInt
     private var daySecondColor: Int = 0
+
     @ColorInt
     private var sunColor: Int = 0
+
     @ColorInt
     private var sunBeforeMiddayColor: Int = 0
+
     @ColorInt
     private var sunAfterMiddayColor: Int = 0
+
     @ColorInt
     private var sunEveningColor: Int = 0
+
     @ColorInt
     private var sunriseTextColor: Int = 0
+
     @ColorInt
     private var middayTextColor: Int = 0
+
     @ColorInt
     private var sunsetTextColor: Int = 0
+
     @ColorInt
     private var colorTextNormal: Int = 0
+
     @ColorInt
     private var colorTextSecond: Int = 0
     internal var width: Int = 0
@@ -93,6 +108,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var segmentByPixel: Double = 0.toDouble()
     private var argbEvaluator = ArgbEvaluator()
     private var prayTimes: PrayTimes? = null
+
     //    private Horizontal moonPosition;
     private var moonPhase = 1.0
     private var fontSize: Int = 0

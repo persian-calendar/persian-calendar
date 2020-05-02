@@ -4,7 +4,9 @@
     package="com.byagowi.persiancalendar">
 
     <!-- remove the permission taken by work manager -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -35,13 +37,13 @@
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
+        android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/LightTheme"
-        tools:ignore="GoogleAppIndexingWarning"
-        android:fullBackupContent="@xml/backup_descriptor">
+        tools:ignore="GoogleAppIndexingWarning">
 
         <activity
             android:name=".ui.MainActivity"
@@ -94,8 +96,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider1x1" />
 
-            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
+            <meta-data
+                android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -111,8 +114,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x1" />
 
-            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
+            <meta-data
+                android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -128,8 +132,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider4x2" />
 
-            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
+            <meta-data
+                android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -145,8 +150,9 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider2x2" />
 
-            <meta-data android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"/>
+            <meta-data
+                android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <service
