@@ -22,6 +22,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
+
 const val TAG = "Utils"
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
@@ -90,6 +91,8 @@ var isAstronomicalFeaturesEnabled: Boolean = false
 var appTheme = R.style.LightTheme
     private set
 var isTalkBackEnabled = false
+    private set
+var isHighTextContrastEnabled = false
     private set
 var prayTimes: PrayTimes? = null
     private set
@@ -475,6 +478,16 @@ fun updateStoredPreference(context: Context) {
     isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.run {
         isEnabled && isTouchExplorationEnabled
     } ?: false
+
+    // https://stackoverflow.com/a/61599809
+    isHighTextContrastEnabled = try {
+        context.getSystemService<AccessibilityManager>()?.run {
+            (javaClass.getMethod("isHighTextContrastEnabled").invoke(this) as? Boolean)
+        } ?: false
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
 }
 
 // Context preferably should be activity context not application

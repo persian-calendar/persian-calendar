@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appTheme
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import kotlin.math.min
 
@@ -124,6 +125,10 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         }
 
         eventBarPaint.color = if (dayIsSelected && !isModernTheme) color else colorEventLine
+
+        // a11y improvement
+        if (isHighTextContrastEnabled && holiday)
+            eventBarPaint.color = color
 
         if (hasEvent) {
             canvas.drawLine(

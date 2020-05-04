@@ -216,7 +216,8 @@ fun update(context: Context, updateDate: Boolean) {
                 holiday = true,
                 compact = true,
                 showDeviceCalendarEvents = true,
-                insertRLM = isRTL
+                insertRLM = isRTL,
+                addIsHoliday = isHighTextContrastEnabled
             )
             if (holidays.isNotEmpty()) {
                 setTextViewText(R.id.holiday_2x2, holidays)
@@ -234,7 +235,8 @@ fun update(context: Context, updateDate: Boolean) {
                 holiday = false,
                 compact = true,
                 showDeviceCalendarEvents = true,
-                insertRLM = isRTL
+                insertRLM = isRTL,
+                addIsHoliday = false
             )
             if ("non_holiday_events" in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
                 setTextViewText(R.id.event_2x2, nonHolidays)
@@ -434,7 +436,8 @@ fun update(context: Context, updateDate: Boolean) {
                 holiday = true,
                 compact = true,
                 showDeviceCalendarEvents = true,
-                insertRLM = isRTL
+                insertRLM = isRTL,
+                addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
             )
 
             val nonHolidays = getEventsTitle(
@@ -442,7 +445,8 @@ fun update(context: Context, updateDate: Boolean) {
                 holiday = false,
                 compact = true,
                 showDeviceCalendarEvents = true,
-                insertRLM = isRTL
+                insertRLM = isRTL,
+                addIsHoliday = false
             )
 
             if (shouldDisableCustomNotification) {
@@ -450,10 +454,7 @@ fun update(context: Context, updateDate: Boolean) {
                     NotificationCompat.BigTextStyle().bigText(
                         listOf(
                             subtitle,
-                            if (holidays.isBlank()) ""
-                            else holidays.split("\n").joinToString("\n") {
-                                "$it (تعطیلی)" // Move this to strings or somewhere
-                            },
+                            holidays.trim(),
                             if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else "",
                             if ("owghat" in whatToShowOnWidgets) owghat else ""
                         ).filter { it.isNotBlank() }.joinToString("\n")

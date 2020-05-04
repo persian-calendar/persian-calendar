@@ -327,14 +327,16 @@ class CalendarFragment : Fragment() {
                 holiday = true,
                 compact = false,
                 showDeviceCalendarEvents = false,
-                insertRLM = false
+                insertRLM = false,
+                addIsHoliday = isHighTextContrastEnabled
             )
             val nonHolidays = getEventsTitle(
                 events,
                 holiday = false,
                 compact = false,
                 showDeviceCalendarEvents = false,
-                insertRLM = false
+                insertRLM = false,
+                addIsHoliday = false
             )
             val deviceEvents = getDeviceEventsTitle(events)
             val contentDescription = StringBuilder()

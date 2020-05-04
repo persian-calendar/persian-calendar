@@ -104,7 +104,8 @@ fun getA11yDaySummary(
         events, true,
         compact = true,
         showDeviceCalendarEvents = true,
-        insertRLM = false
+        insertRLM = false,
+        addIsHoliday = false
     )
     if (holidays.isNotEmpty()) {
         result.append("\n")
@@ -119,7 +120,8 @@ fun getA11yDaySummary(
         holiday = false,
         compact = true,
         showDeviceCalendarEvents = true,
-        insertRLM = false
+        insertRLM = false,
+        addIsHoliday = false
     )
     if (nonHolidays.isNotEmpty()) {
         result.append("\n")
@@ -273,18 +275,27 @@ fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String =
         " (" + Html.fromHtml(event.description).toString().trim() + ")"
     else "").replace("\n", " ").trim()
 
+// Move this to strings or somewhere
+fun addIsHoliday(title: String) = "$title (تعطیل)"
+
 fun getEventsTitle(
     dayEvents: List<CalendarEvent<*>>, holiday: Boolean, compact: Boolean,
-    showDeviceCalendarEvents: Boolean, insertRLM: Boolean
+    showDeviceCalendarEvents: Boolean, insertRLM: Boolean, addIsHoliday: Boolean
 ) = dayEvents
     .filter { it.isHoliday == holiday && (it !is DeviceCalendarEvent || showDeviceCalendarEvents) }
     .map {
-        when {
+        val title = when {
             it is DeviceCalendarEvent && !compact -> formatDeviceCalendarEventTitle(it)
             compact -> it.title.split(" (")[0]
             else -> it.title
         }
-    }.joinToString("\n") { if (insertRLM) RLM + it else it }
+
+        if (addIsHoliday && it.isHoliday)
+            addIsHoliday(title)
+        else
+            title
+    }
+    .joinToString("\n") { if (insertRLM) RLM + it else it }
 
 fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
     is IslamicDate -> CalendarType.ISLAMIC
