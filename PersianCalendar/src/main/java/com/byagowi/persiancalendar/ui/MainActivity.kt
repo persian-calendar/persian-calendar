@@ -78,36 +78,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             statusBarColor = Color.TRANSPARENT
         }
 
-        val isRTL = isRTL(this)
-
-        val drawerToggle = object : ActionBarDrawerToggle(
-            this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
-        ) {
-            val slidingDirection = if (isRTL) -1 else +1
-
-            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                super.onDrawerSlide(drawerView, slideOffset)
-                slidingAnimation(drawerView, slideOffset / 1.5f)
-            }
-
-            private fun slidingAnimation(drawerView: View, slideOffset: Float) = binding.apply {
-                appMainLayout.translationX =
-                    slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
-                drawer.bringChildToFront(drawerView)
-                drawer.requestLayout()
-            }
-
-            override fun onDrawerClosed(drawerView: View) {
-                super.onDrawerClosed(drawerView)
-                if (clickedItem != 0) {
-                    navigateTo(clickedItem)
-                    clickedItem = 0
-                }
-            }
-        }
-
-        binding.drawer.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()
+        binding.drawer.addDrawerListener(drawerToggle().apply { syncState() })
 
         intent?.run {
             navigateTo(
@@ -152,18 +123,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (appPrefs.getString(PREF_APP_LANGUAGE, null) == null &&
             !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
         ) {
-            Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    view.layoutDirection = View.LAYOUT_DIRECTION_LTR
-                }
-                view.setOnClickListener { dismiss() }
-                setAction("Settings") {
-                    appPrefs.edit {
-                        putString(PREF_APP_LANGUAGE, LANG_EN_US)
-                    }
-                }
-                setActionTextColor(resources.getColor(R.color.dark_accent))
-            }.show()
+            changeLangSnackbar().show()
             appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
         }
 
@@ -172,27 +132,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         creationDateJdn = getTodayJdn()
 
-        if (mainCalendar == CalendarType.SHAMSI &&
-            isIranHolidaysEnabled &&
+        if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
             getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
-        ) Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
-            setAction(getString(R.string.update)) {
-                try {
-                    startActivity(
-                        Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
-                    )
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                    startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            "https://play.google.com/store/apps/details?id=$packageName".toUri()
-                        )
-                    )
-                }
-            }
-            setActionTextColor(resources.getColor(R.color.dark_accent))
-        }.show()
+        ) outDatedSnackbar().show()
 
         applyAppLanguage(this)
     }
@@ -418,4 +360,64 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun getCurrentDestinationId(): Int? = Navigation
         .findNavController(this, R.id.nav_host_fragment)
         .currentDestination?.id
+
+    private fun changeLangSnackbar() =
+        Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                view.layoutDirection = View.LAYOUT_DIRECTION_LTR
+            }
+            view.setOnClickListener { dismiss() }
+            setAction("Settings") {
+                appPrefs.edit {
+                    putString(PREF_APP_LANGUAGE, LANG_EN_US)
+                }
+            }
+            setActionTextColor(resources.getColor(R.color.dark_accent))
+        }
+
+    private fun outDatedSnackbar() =
+        Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
+            setAction(getString(R.string.update)) {
+                try {
+                    startActivity(
+                        Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
+                    )
+                } catch (e: ActivityNotFoundException) {
+                    e.printStackTrace()
+                    startActivity(
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            "https://play.google.com/store/apps/details?id=$packageName".toUri()
+                        )
+                    )
+                }
+            }
+            setActionTextColor(resources.getColor(R.color.dark_accent))
+        }
+
+    private fun drawerToggle() = object : ActionBarDrawerToggle(
+        this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
+    ) {
+        val slidingDirection = if (isRTL(this@MainActivity)) -1 else +1
+
+        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            super.onDrawerSlide(drawerView, slideOffset)
+            slidingAnimation(drawerView, slideOffset / 1.5f)
+        }
+
+        private fun slidingAnimation(drawerView: View, slideOffset: Float) = binding.apply {
+            appMainLayout.translationX =
+                slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
+            drawer.bringChildToFront(drawerView)
+            drawer.requestLayout()
+        }
+
+        override fun onDrawerClosed(drawerView: View) {
+            super.onDrawerClosed(drawerView)
+            if (clickedItem != 0) {
+                navigateTo(clickedItem)
+                clickedItem = 0
+            }
+        }
+    }
 }
