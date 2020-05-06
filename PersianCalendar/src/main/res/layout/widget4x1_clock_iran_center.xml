@@ -4,9 +4,9 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="2dp"
     android:layoutDirection="rtl"
     android:orientation="vertical"
+    android:padding="2dp"
     tools:context=".Widget4x1"
     tools:targetApi="JELLY_BEAN_MR1">
 

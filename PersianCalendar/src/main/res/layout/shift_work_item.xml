@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/add_button"
@@ -44,11 +44,11 @@
             android:layout_height="match_parent">
 
             <ImageView
-                app:srcCompat="@drawable/ic_remove_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:contentDescription="@string/remove" />
+                android:contentDescription="@string/remove"
+                app:srcCompat="@drawable/ic_remove_button" />
         </LinearLayout>
 
 
