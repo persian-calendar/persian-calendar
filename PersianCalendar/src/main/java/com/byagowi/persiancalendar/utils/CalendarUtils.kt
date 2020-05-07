@@ -173,14 +173,10 @@ fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<
 private fun baseFormatClock(hour: Int, minute: Int): String =
     formatNumber("%d:%02d".format(Locale.ENGLISH, hour, minute))
 
-fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
-    val in12 = !clockIn24 || forceIn12
-    if (!in12) return baseFormatClock(clock.hour, clock.minute)
-
-    var hour = clock.hour % 12
-    if (hour == 0) hour = 12
-    return baseFormatClock(hour, clock.minute) + " " + if (clock.hour >= 12) pmString else amString
-}
+fun Clock.toFormattedString(forcedIn12: Boolean = false) =
+    if (clockIn24 && !forcedIn12) baseFormatClock(hour, minute)
+    else baseFormatClock((hour % 12).takeIf { it != 0 } ?: 12, minute) + " " +
+            if (hour >= 12) pmString else amString
 
 fun calendarToCivilDate(calendar: Calendar) = CivilDate(
     calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1, calendar[Calendar.DAY_OF_MONTH]

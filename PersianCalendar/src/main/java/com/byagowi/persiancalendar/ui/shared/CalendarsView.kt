@@ -121,12 +121,8 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 val springEquinox = getSpringEquinox(mainDate.toJdn())
                 equinox = context.getString(R.string.spring_equinox).format(
                     formatNumber(mainDate.year + addition),
-                    getFormattedClock(
-                        Clock(
-                            springEquinox[Calendar.HOUR_OF_DAY],
-                            springEquinox[Calendar.MINUTE]
-                        ), true
-                    )
+                    Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
+                        .toFormattedString(forcedIn12 = true)
                 )
             }
         }

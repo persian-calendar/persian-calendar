@@ -57,10 +57,7 @@ class AthanNotification : Service() {
             "ISHA" -> listOf(R.string.midnight)
             else -> listOf(R.string.midnight)
         }.joinToString(" - ") {
-            "${getString(it)}: ${getFormattedClock(
-                getClockFromStringId(it),
-                false
-            )}"
+            "${getString(it)}: ${getClockFromStringId(it).toFormattedString()}"
         }
 
         val notificationBuilder = NotificationCompat.Builder(

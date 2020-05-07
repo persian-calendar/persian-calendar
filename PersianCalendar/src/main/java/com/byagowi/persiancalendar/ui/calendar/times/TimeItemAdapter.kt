@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
-import com.byagowi.persiancalendar.utils.getFormattedClock
+import com.byagowi.persiancalendar.utils.toFormattedString
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -54,20 +54,18 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
             ) emptyLayout else wrapContent
             binding.name.setText(timeName)
             binding.time.text = prayTimes?.run {
-                getFormattedClock(
-                    when (timeName) {
-                        R.string.imsak -> imsakClock
-                        R.string.fajr -> fajrClock
-                        R.string.sunrise -> sunriseClock
-                        R.string.dhuhr -> dhuhrClock
-                        R.string.asr -> asrClock
-                        R.string.sunset -> sunsetClock
-                        R.string.maghrib -> maghribClock
-                        R.string.isha -> ishaClock
-                        R.string.midnight -> midnightClock
-                        else -> midnightClock
-                    }, false
-                )
+                (when (timeName) {
+                    R.string.imsak -> imsakClock
+                    R.string.fajr -> fajrClock
+                    R.string.sunrise -> sunriseClock
+                    R.string.dhuhr -> dhuhrClock
+                    R.string.asr -> asrClock
+                    R.string.sunset -> sunsetClock
+                    R.string.maghrib -> maghribClock
+                    R.string.isha -> ishaClock
+                    R.string.midnight -> midnightClock
+                    else -> midnightClock
+                }).toFormattedString()
             } ?: ""
         }
     }

@@ -114,7 +114,7 @@ fun update(context: Context, updateDate: Boolean) {
     val nextOwghatId = getNextOwghatTimeId(currentClock, dateHasChanged)
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
-                getFormattedClock(getClockFromStringId(nextOwghatId), false)
+                getClockFromStringId(nextOwghatId).toFormattedString()
         if ("owghat_location" in whatToShowOnWidgets) {
             val cityName = getCityName(context, false)
             if (cityName.isNotEmpty()) {
@@ -317,10 +317,8 @@ fun update(context: Context, updateDate: Boolean) {
                 ) { textHolderViewId, owghatStringId ->
                     setTextViewText(
                         textHolderViewId,
-                        "${context.getString(owghatStringId)}\n${getFormattedClock(
-                            getClockFromStringId(owghatStringId),
-                            false
-                        )}"
+                        context.getString(owghatStringId) + "\n" +
+                                getClockFromStringId(owghatStringId).toFormattedString()
                     )
                     setTextColor(
                         textHolderViewId,
