@@ -177,14 +177,9 @@ fun getFormattedClock(clock: Clock, forceIn12: Boolean): String {
     val in12 = !clockIn24 || forceIn12
     if (!in12) return baseFormatClock(clock.hour, clock.minute)
 
-    var hour = clock.hour
-    val suffix: String
-    if (hour >= 12) {
-        suffix = pmString
-        hour -= 12
-    } else suffix = amString
-
-    return baseFormatClock(hour, clock.minute) + " " + suffix
+    var hour = clock.hour % 12
+    if (hour == 0) hour = 12
+    return baseFormatClock(hour, clock.minute) + " " + if (clock.hour >= 12) pmString else amString
 }
 
 fun calendarToCivilDate(calendar: Calendar) = CivilDate(
