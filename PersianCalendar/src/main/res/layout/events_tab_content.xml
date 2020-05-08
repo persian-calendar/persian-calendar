@@ -64,11 +64,6 @@
             android:textColor="?attr/colorTextSecond"
             android:textSize="12sp" />
 
-        <View
-            android:id="@+id/today_button_reserved_space"
-            android:layout_width="match_parent"
-            android:layout_height="58sp" />
-
     </LinearLayout>
 
 </FrameLayout>

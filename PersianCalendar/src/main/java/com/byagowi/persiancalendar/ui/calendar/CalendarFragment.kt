@@ -64,6 +64,7 @@ class CalendarFragment : Fragment() {
     private var owghatBinding: OwghatTabContentBinding? = null
     private lateinit var eventsBinding: EventsTabContentBinding
     private var searchView: SearchView? = null
+    private var todayButton: MenuItem? = null
 
     abstract class TabsAdapter : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
         inner class ViewHolder(private val frame: FrameLayout) : RecyclerView.ViewHolder(frame) {
@@ -136,15 +137,13 @@ class CalendarFragment : Fragment() {
             )
         } ?: emptyList())
 
-        todayButton.setOnClickListener { bringDate(getTodayJdn(), highlight = false) }
-
         calendarPager.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
         calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
         calendarPager.onMonthSelected = fun() {
             val date = calendarPager.selectedMonth
             mainActivity.setTitleAndSubtitle(getMonthName(date), formatNumber(date.year))
-            if (date.dayOfMonth != initialDate.dayOfMonth || date.month != initialDate.month)
-                todayButton.show()
+            todayButton?.isVisible =
+                date.year != initialDate.year || date.month != initialDate.month
         }
         viewPager.adapter = object : TabsAdapter() {
             override fun getItemCount(): Int = tabs.size
@@ -296,8 +295,8 @@ class CalendarFragment : Fragment() {
 
         val isToday = getTodayJdn() == jdn
 
-        // Show/Hide bring today fab
-        if (isToday) mainBinding.todayButton.hide() else mainBinding.todayButton.show()
+        // Show/Hide bring today menu button
+        todayButton?.isVisible = !isToday
 
         // Update tabs
         calendarsView.showCalendars(jdn, mainCalendar, getEnabledCalendarTypes())
@@ -410,8 +409,6 @@ class CalendarFragment : Fragment() {
                 eventMessage.visibility = View.VISIBLE
             }
 
-            todayButtonReservedSpace.visibility = if (isToday) View.GONE else View.VISIBLE
-
             root.contentDescription = contentDescription
         }
     }
@@ -455,6 +452,13 @@ class CalendarFragment : Fragment() {
         menu.clear()
         inflater.inflate(R.menu.calendar_menu_buttons, menu)
 
+        todayButton = menu.findItem(R.id.today_button).apply {
+            isVisible = false
+            setOnMenuItemClickListener {
+                bringDate(getTodayJdn(), highlight = false)
+                true
+            }
+        }
         searchView = (menu.findItem(R.id.search).actionView as? SearchView?)?.apply {
             setOnSearchClickListener {
                 // Remove search edit view below bar

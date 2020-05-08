@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/today_button"
+        android:icon="@drawable/ic_restore_modified"
+        android:title="@string/return_to_today"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/search"
         android:title="@string/search_in_events"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
