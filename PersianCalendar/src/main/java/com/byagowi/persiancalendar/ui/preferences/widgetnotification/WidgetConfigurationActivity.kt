@@ -31,7 +31,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.commit {
-            add(R.id.preference_fragment_holder, FragmentWidgetNotification(), "TAG")
+            add(R.id.preference_fragment_holder, WidgetNotificationFragment(), "TAG")
         }
         binding.addWidgetButton.setOnClickListener { finishAndSuccess() }
     }

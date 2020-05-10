@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.*
 
 // Don't use MainActivity here as it is used in WidgetConfigurationActivity also
-class FragmentWidgetNotification : PreferenceFragmentCompat() {
+class WidgetNotificationFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) =
         addPreferencesFromResource(R.xml.preferences_widget_notification)

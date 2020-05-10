@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 
-class FragmentInterfaceCalendar : PreferenceFragmentCompat() {
+class InterfaceCalendarFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)

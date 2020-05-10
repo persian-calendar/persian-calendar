@@ -32,7 +32,7 @@ import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.google.android.material.snackbar.Snackbar
 
-class FragmentLocationAthan : PreferenceFragmentCompat(),
+class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var categoryAthan: Preference? = null

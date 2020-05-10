@@ -8,9 +8,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.FragmentInterfaceCalendar
-import com.byagowi.persiancalendar.ui.preferences.locationathan.FragmentLocationAthan
-import com.byagowi.persiancalendar.ui.preferences.widgetnotification.FragmentWidgetNotification
+import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
+import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
+import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -24,9 +24,9 @@ class PreferencesFragment : Fragment() {
         val mainActivity = activity as MainActivity
         mainActivity.setTitleAndSubtitle(getString(R.string.settings), "")
         val tabs = listOf(
-            R.string.pref_header_interface_calendar to FragmentInterfaceCalendar::class.java,
-            R.string.pref_header_widget_location to FragmentWidgetNotification::class.java,
-            R.string.pref_header_location_athan to FragmentLocationAthan::class.java
+            R.string.pref_header_interface_calendar to InterfaceCalendarFragment::class.java,
+            R.string.pref_header_widget_location to WidgetNotificationFragment::class.java,
+            R.string.pref_header_location_athan to LocationAthanFragment::class.java
         )
         viewPager.adapter = object : FragmentStateAdapter(this@PreferencesFragment) {
             override fun getItemCount() = tabs.size
