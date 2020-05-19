@@ -21,7 +21,7 @@
             android:layout_margin="4sp"
             android:textColor="?attr/colorTextNormal"
             android:textSize="32sp"
-            tools:text="a" />
+            tools:text="23" />
 
         <TextView
             android:id="@+id/month_year"
@@ -30,7 +30,7 @@
             android:layout_gravity="center_vertical"
             android:textColor="?attr/colorTextNormal"
             android:textSize="@dimen/text_size_description"
-            tools:text="a\nb" />
+            tools:text="May\n1999" />
 
     </LinearLayout>
 
