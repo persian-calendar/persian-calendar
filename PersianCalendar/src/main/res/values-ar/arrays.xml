@@ -36,8 +36,8 @@
     </string-array>
 
     <string-array name="calendar_type">
-        <item>التقويم الهجري الشمسي (الفارسي)</item>
-        <item>التقويم الهجري القمري (الإسلامي)</item>
+        <item>التقويم الفارسي</item>
+        <item>التقويم الهجري</item>
         <item>التقويم الميلادي</item>
     </string-array>
 
