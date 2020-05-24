@@ -249,7 +249,7 @@
       "title": "روز دزفول" },
 
     { "holiday": false, "month": 3, "day": 4, "type": "Iran",
-      "title": " روز مقاومت و پایداری" },
+      "title": "روز مقاومت و پایداری" },
 
     { "holiday": true, "month": 3, "day": 14, "type": "Iran",
       "title": "رحلت امام خمینی رهبر انقلاب اسلامی (۱۳۶۸ ه‍.ش)" },
@@ -909,7 +909,7 @@
       "title": "رام‌روز، جشن رام‌روزی / جشن پیروزی کاوه و فریدون" },
 
     { "holiday": false, "month": 8, "day": 7, "type": "Ancient Iran",
-      "title": " روز کوروش بزرگ" },
+      "title": "روز کوروش بزرگ" },
 
     { "holiday": false, "month": 8, "day": 10, "type": "Ancient Iran",
       "title": "آبان‌روز، جشن آبانگان" },
