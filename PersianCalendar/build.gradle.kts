@@ -28,7 +28,7 @@ android {
     compileSdkVersion(29)
     buildToolsVersion("29.0.3")
 
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 
