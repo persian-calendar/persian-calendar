@@ -27,7 +27,10 @@ fun String.runCommand(
 android {
     compileSdkVersion(29)
     buildToolsVersion("29.0.3")
-    viewBinding.isEnabled = true
+
+    buildFeatures{
+        viewBinding = true
+    }
 
     val gitVersion = listOf(
         "git rev-parse --abbrev-ref HEAD",
