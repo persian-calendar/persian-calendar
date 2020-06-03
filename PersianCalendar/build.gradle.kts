@@ -66,6 +66,7 @@ android {
             signingConfig = signingConfigs.getByName("nightly")
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion-nightly"
             applicationIdSuffix = ".nightly"
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             isMinifyEnabled = true
             isShrinkResources = true
         }
@@ -76,6 +77,7 @@ android {
         }
 
         getByName("release") {
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             isMinifyEnabled = true
             isShrinkResources = true
         }
