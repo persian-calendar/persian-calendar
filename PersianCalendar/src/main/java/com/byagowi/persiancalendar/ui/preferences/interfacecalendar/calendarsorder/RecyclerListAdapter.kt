@@ -117,14 +117,17 @@ class RecyclerListAdapter(
     inner class ItemViewHolder(private val binding: CalendarTypeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        init {
+            binding.checkTextView.setOnClickListener {
+                val newState = !binding.checkTextView.isChecked
+                binding.checkTextView.isChecked = newState
+                enabled[layoutPosition] = newState
+            }
+        }
+
         fun bind(position: Int) = binding.apply {
             checkTextView.text = titles[position]
             checkTextView.isChecked = enabled[position]
-            checkTextView.setOnClickListener {
-                val newState = !binding.checkTextView.isChecked
-                binding.checkTextView.isChecked = newState
-                enabled[position] = newState
-            }
         }
 
         fun onItemSelected() = binding.root.setBackgroundColor(Color.LTGRAY)
