@@ -26,7 +26,7 @@ fun String.runCommand(
 
 android {
     compileSdkVersion(29)
-    buildToolsVersion("29.0.3")
+    buildToolsVersion("30.0.0")
 
     buildFeatures {
         viewBinding = true
