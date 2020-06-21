@@ -8,8 +8,6 @@ import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
-import io.github.persiancalendar.calendar.CivilDate;
-import io.github.persiancalendar.calendar.IslamicDate;
 import com.byagowi.persiancalendar.utils.CalendarType;
 
 import org.junit.Before;
@@ -19,6 +17,9 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
+
+import io.github.persiancalendar.calendar.CivilDate;
+import io.github.persiancalendar.calendar.IslamicDate;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 import static androidx.test.espresso.Espresso.onView;

@@ -28,7 +28,6 @@ import io.github.persiancalendar.praytimes.Coordinate
 import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.math.roundToInt
 
 class GPSLocationDialog : AppCompatDialogFragment() {
 
