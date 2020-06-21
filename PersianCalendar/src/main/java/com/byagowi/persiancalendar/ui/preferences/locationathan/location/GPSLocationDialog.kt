@@ -20,10 +20,7 @@ import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.askForLocationPermission
-import com.byagowi.persiancalendar.utils.formatCoordinate
-import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.praytimes.Coordinate
 import java.io.IOException
 import java.util.*
@@ -140,15 +137,15 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         // this time, with native digits
         result += formatCoordinate(
             mainActivity,
-            Coordinate(
-                location.latitude, location.longitude,
-                location.altitude
-            ), "\n"
+            Coordinate(location.latitude, location.longitude, location.altitude), "\n"
         )
         result += "\n\n" + formatCoordinateISO6709(
             location.latitude, location.longitude, location.altitude
         )
         textView.text = result
+        textView.setOnClickListener {
+            copyToClipboard(textView, "coords", textView.text.split("\n").last())
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
