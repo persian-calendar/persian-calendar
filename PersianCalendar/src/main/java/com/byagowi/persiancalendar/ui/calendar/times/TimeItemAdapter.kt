@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
-import com.byagowi.persiancalendar.utils.toFormattedString
 import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.toFormattedString
 import com.google.android.flexbox.FlexboxLayoutManager
 import io.github.persiancalendar.praytimes.PrayTimes
 

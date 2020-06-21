@@ -47,6 +47,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 // This should be called before any use of Utils on the activity and services
@@ -299,6 +300,16 @@ fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String
         context.getString(R.string.latitude), coordinate.latitude, separator,
         context.getString(R.string.longitude), coordinate.longitude
     )
+
+// https://stackoverflow.com/a/62499553
+// https://en.wikipedia.org/wiki/ISO_6709#Representation_at_the_human_interface_(Annex_D)
+fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) =
+    (listOf(abs(lat) to if (lat >= 0) "N" else "S", abs(long) to if (long >= 0) "E" else "W").map {
+        val degrees = it.first.toInt()
+        val minutes = ((it.first - degrees) * 60).toInt()
+        val seconds = ((it.first - degrees) * 3600 % 60).toInt()
+        "$degrees°$minutes′$seconds${it.second}"
+    } + (alt?.let { "${alt}m" } ?: "")).joinToString(" ")
 
 fun getCityName(context: Context, fallbackToCoord: Boolean): String =
     getCityFromPreference(context)?.let {
