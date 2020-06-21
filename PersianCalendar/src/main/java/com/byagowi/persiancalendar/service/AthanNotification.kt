@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -94,7 +95,7 @@ class AthanNotification : Service() {
 
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder.build())
 
-        Handler().postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed({
             notificationManager?.cancel(NOTIFICATION_ID)
             stopSelf()
         }, TimeUnit.MINUTES.toMillis(5))

@@ -5,6 +5,7 @@ import android.media.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
@@ -24,7 +25,7 @@ class AthanActivity : AppCompatActivity() {
     private val ascendingVolumeStep = 6
     private var currentVolumeSteps = 1
     private var audioManager: AudioManager? = null
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
     private var alreadyStopped = false

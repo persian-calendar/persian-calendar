@@ -9,6 +9,7 @@ import android.content.res.Resources
 import android.location.*
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -31,7 +32,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
     private var locationManager: LocationManager? = null
     private lateinit var textView: TextView
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
     private var latitude: String? = null
     private var longitude: String? = null
     private var cityName: String? = null
