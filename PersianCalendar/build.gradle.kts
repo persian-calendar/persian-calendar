@@ -25,7 +25,7 @@ fun String.runCommand(
 }
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     buildToolsVersion("30.0.0")
 
     buildFeatures {

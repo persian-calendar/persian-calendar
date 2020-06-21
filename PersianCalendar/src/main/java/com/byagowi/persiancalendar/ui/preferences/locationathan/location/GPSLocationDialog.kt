@@ -38,15 +38,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     private val checkGPSProviderCallback = Runnable { checkGPSProvider() }
     private var lacksPermission = false
     private var everRegisteredCallback = false
-    private val locationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location?) {
-            location?.let { showLocation(it) }
-        }
-
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-        override fun onProviderEnabled(provider: String?) {}
-        override fun onProviderDisabled(provider: String?) {}
-    }
+    private val locationListener = LocationListener { showLocation(it) }
 
     lateinit var mainActivity: MainActivity
 
