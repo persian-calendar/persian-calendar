@@ -309,7 +309,7 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
     val degrees = it.first.toInt()
     val minutes = ((it.first - degrees) * 60).toInt()
     val seconds = ((it.first - degrees) * 3600 % 60).toInt()
-    "%d°%02d′%02d%s".format(Locale.US, degrees, minutes, seconds, it.second)
+    "%d°%02d′%02d″%s".format(Locale.US, degrees, minutes, seconds, it.second)
 } + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
 
 fun getCityName(context: Context, fallbackToCoord: Boolean): String =
