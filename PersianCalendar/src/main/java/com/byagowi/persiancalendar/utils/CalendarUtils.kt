@@ -36,8 +36,8 @@ fun formatDayAndMonth(day: Int, month: String): String = when (language) {
     else -> "%s %s"
 }.format(formatNumber(day), month)
 
-fun dayTitleSummary(date: AbstractDate): String =
-    getWeekDayName(date) + spacedComma + formatDate(date)
+fun dayTitleSummary(date: AbstractDate, calendarNameInLinear: Boolean = true): String =
+    getWeekDayName(date) + spacedComma + formatDate(date, calendarNameInLinear)
 
 fun CivilDate.toCalendar(): Calendar =
     Calendar.getInstance().apply { set(year, month - 1, dayOfMonth) }

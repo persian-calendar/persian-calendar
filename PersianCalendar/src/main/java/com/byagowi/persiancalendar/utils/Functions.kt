@@ -76,12 +76,13 @@ fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
 fun isNightModeEnabled(context: Context): Boolean =
     context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-fun formatDate(date: AbstractDate): String = if (numericalDatePreferred)
-    (toLinearDate(date) + " " + getCalendarNameAbbr(date)).trim()
-else when (language) {
-    LANG_CKB -> "%sی %sی %s"
-    else -> "%s %s %s"
-}.format(formatNumber(date.dayOfMonth), getMonthName(date), formatNumber(date.year))
+fun formatDate(date: AbstractDate, calendarNameInLinear: Boolean = true): String =
+    if (numericalDatePreferred)
+        (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
+    else when (language) {
+        LANG_CKB -> "%sی %sی %s"
+        else -> "%s %s %s"
+    }.format(formatNumber(date.dayOfMonth), getMonthName(date), formatNumber(date.year))
 
 fun isNonArabicScriptSelected() = when (language) {
     LANG_EN_US, LANG_JA -> true
