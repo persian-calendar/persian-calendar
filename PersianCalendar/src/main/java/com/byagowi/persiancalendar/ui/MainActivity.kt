@@ -378,19 +378,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun outDatedSnackbar() =
         Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
             setAction(getString(R.string.update)) {
-                try {
-                    startActivity(
-                        Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri())
-                    )
-                } catch (e: ActivityNotFoundException) {
-                    e.printStackTrace()
-                    startActivity(
-                        Intent(
-                            Intent.ACTION_VIEW,
-                            "https://play.google.com/store/apps/details?id=$packageName".toUri()
-                        )
-                    )
-                }
+                bringMarketPage(this@MainActivity)
             }
             setActionTextColor(resources.getColor(R.color.dark_accent))
         }

@@ -224,5 +224,6 @@
     <string name="ascending_athan_volume">اذان کی بڑھتی ہوئی آواز</string>
     <string name="widget_background_color">رنگ پس‌زمینه ویجت</string>
     <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
+    <string name="share">هم‌رسانی</string>
 
 </resources>

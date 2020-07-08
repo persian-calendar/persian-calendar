@@ -22,6 +22,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
@@ -615,3 +616,17 @@ val Context.appPrefs: SharedPreferences
 
 val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)
+
+fun bringMarketPage(activity: Activity) = try {
+    activity.startActivity(
+        Intent(Intent.ACTION_VIEW, "market://details?id=${activity.packageName}".toUri())
+    )
+} catch (e: ActivityNotFoundException) {
+    e.printStackTrace()
+    activity.startActivity(
+        Intent(
+            Intent.ACTION_VIEW,
+            "https://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+        )
+    )
+}

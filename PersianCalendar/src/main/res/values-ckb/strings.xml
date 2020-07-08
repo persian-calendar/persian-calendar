@@ -225,5 +225,6 @@
     <string name="enable_ascending_athan_volume">دەنگی بانگ دوای دەقەیەک دەگاتە زۆرینەی خۆی</string>
     <string name="widget_background_color">ڕەنگی باکگراوندی ویجیت</string>
     <string name="select_widgets_background_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ باکگراوندی ویجیت</string>
+    <string name="share">ھاوبەشی</string>
 
 </resources>

@@ -260,5 +260,6 @@
     <string name="map">خريطة</string>
     <string name="enable_ascending_athan_volume">يصل صوت أذان إلى ذروته خلال دقيقة</string>
     <string name="ascending_athan_volume">زيادة صوت الأذان</string>
+    <string name="share">مشاركة</string>
 
 </resources>

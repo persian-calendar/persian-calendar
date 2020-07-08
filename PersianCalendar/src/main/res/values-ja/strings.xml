@@ -227,5 +227,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="ascending_athan_volume">アザンの音の増加</string>
     <string name="widget_background_color">Widget Background Color</string>
     <string name="select_widgets_background_color">Select custom color for widgets background</string>
+    <string name="share">Share</string>
 
 </resources>

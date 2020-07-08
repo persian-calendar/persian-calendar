@@ -18,6 +18,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
@@ -26,12 +27,10 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.readRawResource
-import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+import java.io.File
 
 class AboutFragment : Fragment() {
 
@@ -222,9 +221,47 @@ App Version Code: ${version[0]}"""
         inflater.inflate(R.menu.about_menu_buttons, menu)
     }
 
+    private fun shareApplication() {
+        val activity = activity ?: return
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            val app = activity.applicationContext?.applicationInfo ?: return
+            val cacheDir = activity.externalCacheDir?.path ?: return
+            try {
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+                    type = "*/*"
+                    val uri = FileProvider.getUriForFile(
+                        activity.applicationContext, activity.packageName + ".provider",
+                        File(app.sourceDir).copyTo(
+                            File(
+                                "$cacheDir/" +
+                                        getString(R.string.app_name).replace(" ", "_") +
+                                        "-" + formatNumber(programVersion(activity).split("-")[0]) + ".apk"
+                            ), true
+                        )
+                    ).apply {
+                        activity.grantUriPermission(
+                            "com.android.providers.media.MediaProvider", this,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION
+                        )
+                    }
+                    putExtra(Intent.EXTRA_STREAM, uri)
+                    setDataAndType(uri, "*/*")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }, getString(R.string.share)))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                bringMarketPage(activity)
+            }
+        } else {
+            bringMarketPage(activity)
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.deviceInformation)
-            (activity as MainActivity).navigateTo(R.id.deviceInformation)
+        when (item.itemId) {
+            R.id.deviceInformation -> (activity as MainActivity).navigateTo(R.id.deviceInformation)
+            R.id.share -> shareApplication()
+        }
         return true
     }
 
