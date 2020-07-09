@@ -229,13 +229,6 @@ App Version Code: ${version[0]}"""
             val cacheDir = activity.externalCacheDir?.path ?: return
             try {
                 val intent = if (shareClicksCount++ % 2 == 0) Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
-                    )
-                } else Intent(Intent.ACTION_SEND).apply {
                     type = "*/*"
                     val uri = FileProvider.getUriForFile(
                         activity.applicationContext, activity.packageName + ".provider",
@@ -255,6 +248,13 @@ App Version Code: ${version[0]}"""
                     putExtra(Intent.EXTRA_STREAM, uri)
                     setDataAndType(uri, "*/*")
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                } else Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+                    )
                 }
 
                 startActivity(Intent.createChooser(intent, getString(R.string.share)))
