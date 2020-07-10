@@ -677,11 +677,8 @@
     { "holiday": false, "month": 4, "day": 16, "type": "Iran",
       "title": "روز مالیات" },
 
-    { "holiday": false, "month": 4, "day": 21, "type": "Iran",
-      "title": "کشف توطئهٔ کودتا در پایگاه هوایی شهید نوژه (۱۳۵۹ ه‍.ش)" },
-
     { "holiday": false, "month": 4, "day": 18, "type": "Iran",
-      "title": "کشف کودتای نوژه (۱۳۵۹ ه‍.ش)" },
+      "title": "کشف توطئهٔ کودتا در پایگاه هوایی شهید نوژه (۱۳۵۹ ه‍.ش)" },
 
     { "holiday": false, "month": 4, "day": 21, "type": "Iran",
       "title": "حمله به مسجد گوهرشاد و کشتار مردم (۱۳۱۴ ه‍.ش)" },
