@@ -18,7 +18,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
@@ -30,7 +29,6 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
-import java.io.File
 
 class AboutFragment : Fragment() {
 
@@ -221,43 +219,18 @@ App Version Code: ${version[0]}"""
         inflater.inflate(R.menu.about_menu_buttons, menu)
     }
 
-    private var shareClicksCount = 0
     private fun shareApplication() {
         val activity = activity ?: return
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            val app = activity.applicationContext?.applicationInfo ?: return
-            val cacheDir = activity.externalCacheDir?.path ?: return
             try {
-                val intent = if (shareClicksCount++ % 2 == 0) Intent(Intent.ACTION_SEND).apply {
-                    type = "*/*"
-                    val uri = FileProvider.getUriForFile(
-                        activity.applicationContext, activity.packageName + ".provider",
-                        File(app.sourceDir).copyTo(
-                            File(
-                                "$cacheDir/" +
-                                        getString(R.string.app_name).replace(" ", "_") +
-                                        "-" + formatNumber(programVersion(activity).split("-")[0]) + ".apk"
-                            ), true
-                        )
-                    ).apply {
-                        activity.grantUriPermission(
-                            "com.android.providers.media.MediaProvider", this,
-                            Intent.FLAG_GRANT_READ_URI_PERMISSION
-                        )
-                    }
-                    putExtra(Intent.EXTRA_STREAM, uri)
-                    setDataAndType(uri, "*/*")
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                } else Intent(Intent.ACTION_SEND).apply {
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                     putExtra(
                         Intent.EXTRA_TEXT,
-                        "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+                        "${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
                     )
-                }
-
-                startActivity(Intent.createChooser(intent, getString(R.string.share)))
+                }, getString(R.string.share)))
             } catch (e: Exception) {
                 e.printStackTrace()
                 bringMarketPage(activity)
