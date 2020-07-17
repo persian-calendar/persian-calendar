@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
 import android.Manifest
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.core.net.toUri
 import androidx.core.view.GravityCompat
 import androidx.navigation.Navigation
 import com.byagowi.persiancalendar.*

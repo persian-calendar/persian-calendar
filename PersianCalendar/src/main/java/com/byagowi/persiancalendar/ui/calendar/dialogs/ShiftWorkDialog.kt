@@ -80,7 +80,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
 
                 mainActivity.appPrefs.edit {
                     putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
-                    putString(PREF_SHIFT_WORK_SETTING, result.toString())
+                    putString(PREF_SHIFT_WORK_SETTING, result)
                     putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
                 }
 
