@@ -122,7 +122,14 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 equinox = context.getString(R.string.spring_equinox).format(
                     formatNumber(mainDate.year + addition),
                     Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
-                        .toFormattedString(forcedIn12 = true)
+                        .toFormattedString(forcedIn12 = true) + " " +
+                            formatDate(
+                                getDateFromJdnOfCalendar(
+                                    mainCalendar,
+                                    calendarToCivilDate(springEquinox).toJdn()
+                                ),
+                                forceNonNumerical = true
+                            )
                 )
             }
         }
