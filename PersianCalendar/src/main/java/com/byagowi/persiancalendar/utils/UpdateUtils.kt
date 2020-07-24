@@ -35,7 +35,16 @@ fun setDeviceCalendarEvents(context: Context) = try {
     e.printStackTrace()
 }
 
+var latestFiredUpdate = 0L
+
 fun update(context: Context, updateDate: Boolean) {
+    val now = System.currentTimeMillis()
+    if (!updateDate && now - latestFiredUpdate < HALF_SECOND_IN_MILLIS) {
+        Log.d("UpdateUtils", "skip update")
+        return
+    }
+    latestFiredUpdate = now
+
     Log.d("UpdateUtils", "update")
     applyAppLanguage(context)
     val calendar = makeCalendarFromDate(Date())

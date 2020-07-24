@@ -27,6 +27,7 @@ const val TAG = "Utils"
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
 const val TWO_SECONDS_IN_MILLIS: Long = 2000
+const val HALF_SECOND_IN_MILLIS: Long = 500
 const val DAY_IN_SECOND: Long = 86400
 const val DAY_IN_MILLIS: Long = 86400000
 val monthNameEmptyList = (1..12).map { "" }.toList()
