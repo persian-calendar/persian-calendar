@@ -69,8 +69,8 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
-                    android:tint="?attr/colorDrawerIcon"
-                    app:srcCompat="@drawable/ic_licences" />
+                    app:srcCompat="@drawable/ic_licences"
+                    app:tint="?attr/colorDrawerIcon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -127,8 +127,8 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
-                    android:tint="?attr/colorDrawerIcon"
-                    app:srcCompat="@drawable/ic_help" />
+                    app:srcCompat="@drawable/ic_help"
+                    app:tint="?attr/colorDrawerIcon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -184,8 +184,8 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
-                    android:tint="?attr/colorDrawerIcon"
-                    app:srcCompat="@drawable/ic_bug" />
+                    app:srcCompat="@drawable/ic_bug"
+                    app:tint="?attr/colorDrawerIcon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -227,8 +227,8 @@
                     android:layout_marginEnd="5dp"
                     android:layout_marginRight="5dp"
                     android:scaleType="center"
-                    android:tint="?attr/colorDrawerIcon"
-                    app:srcCompat="@drawable/ic_email" />
+                    app:srcCompat="@drawable/ic_email"
+                    app:tint="?attr/colorDrawerIcon" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
