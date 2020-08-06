@@ -124,8 +124,10 @@ class CompassFragment : Fragment() {
         }
 
         setCompassMetrics()
-        coordinate?.longitude?.let(binding.compassView::setLongitude)
-        coordinate?.latitude?.let(binding.compassView::setLatitude)
+        coordinate?.apply {
+            binding.compassView.setLongitude(longitude)
+            binding.compassView.setLatitude(latitude)
+        }
         binding.compassView.initCompassView()
 
         return binding.root
