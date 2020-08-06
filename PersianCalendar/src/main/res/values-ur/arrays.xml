@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="themeNames">
-        <item>System Default</item>
+        <item>سسٹم ڈیفالٹ</item>
         <item>روشن</item>
         <item>تاریک</item>
         <item>مدرن</item>

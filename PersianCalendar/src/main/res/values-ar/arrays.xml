@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="themeNames">
-        <item>System Default</item>
+        <item>إعدادات النظام الافتراضية</item>
         <item>فاتح</item>
         <item>داكن</item>
         <item>حديث</item>
