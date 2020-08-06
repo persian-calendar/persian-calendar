@@ -16,6 +16,7 @@
             settings:iconSpaceReserved="false" />
 
         <androidx.preference.ListPreference
+            android:defaultValue="SystemDefault"
             android:entries="@array/themeNames"
             android:entryValues="@array/themeKeys"
             android:key="Theme"

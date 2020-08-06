@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="themeNames">
+        <item>System Default</item>
         <item>Light</item>
         <item>Dark</item>
         <item>Modern</item>
@@ -8,6 +9,7 @@
     </string-array>
 
     <string-array name="themeKeys" translatable="false">
+        <item>SystemDefault</item>
         <item>LightTheme</item>
         <item>DarkTheme</item>
         <item>ClassicTheme</item> <!-- its name is Modern however -->

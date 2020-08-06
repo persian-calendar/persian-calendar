@@ -147,7 +147,7 @@ fun getCalendarNameAbbr(date: AbstractDate): String {
 }
 
 fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
-    prefs.getString(PREF_THEME, null)
+    prefs.getString(PREF_THEME, null)?.takeIf { it != "SystemDefault" }
         ?: if (isNightModeEnabled(context)) DARK_THEME else LIGHT_THEME
 
 fun getEnabledCalendarTypes(): List<CalendarType> = listOf(mainCalendar) + otherCalendars
