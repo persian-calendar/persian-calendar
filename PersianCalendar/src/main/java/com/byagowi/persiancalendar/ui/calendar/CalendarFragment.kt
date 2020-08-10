@@ -361,11 +361,12 @@ class CalendarFragment : Fragment() {
             if (deviceEvents.isNotEmpty()) {
                 noEvent.visibility = View.GONE
                 deviceEventTitle.text = deviceEvents
-                contentDescription.append("\n")
-                contentDescription.append(getString(R.string.show_device_calendar_events))
-                contentDescription.append("\n")
-                contentDescription.append(deviceEvents)
-                deviceEventTitle.movementMethod = LinkMovementMethod.getInstance()
+                contentDescription
+                    .append("\n")
+                    .append(getString(R.string.show_device_calendar_events))
+                    .append("\n")
+                    .append(deviceEvents)
+
 
                 deviceEventTitle.run {
                     movementMethod = LinkMovementMethod.getInstance()
@@ -379,10 +380,12 @@ class CalendarFragment : Fragment() {
             if (nonHolidays.isNotEmpty()) {
                 noEvent.visibility = View.GONE
                 eventTitle.text = nonHolidays
-                contentDescription.append("\n")
-                contentDescription.append(getString(R.string.events))
-                contentDescription.append("\n")
-                contentDescription.append(nonHolidays)
+                contentDescription
+                    .append("\n")
+                    .append(getString(R.string.events))
+                    .append("\n")
+                    .append(nonHolidays)
+
 
                 eventTitle.visibility = View.VISIBLE
             } else {
@@ -407,8 +410,9 @@ class CalendarFragment : Fragment() {
                 ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 messageToShow.append(ss)
 
-                contentDescription.append("\n")
-                contentDescription.append(title)
+                contentDescription
+                    .append("\n")
+                    .append(title)
             }
 
             if (messageToShow.isNotEmpty()) {
