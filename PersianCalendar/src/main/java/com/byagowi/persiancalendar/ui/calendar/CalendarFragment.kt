@@ -137,14 +137,18 @@ class CalendarFragment : Fragment() {
             )
         } ?: emptyList())
 
-        calendarPager.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
-        calendarPager.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
-        calendarPager.onMonthSelected = fun() {
-            val date = calendarPager.selectedMonth
-            mainActivity.setTitleAndSubtitle(getMonthName(date), formatNumber(date.year))
-            todayButton?.isVisible =
-                date.year != initialDate.year || date.month != initialDate.month
+        calendarPager.run {
+            onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
+            onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
+            onMonthSelected = fun() {
+                selectedMonth.let {
+                    mainActivity.setTitleAndSubtitle(getMonthName(it), formatNumber(it.year))
+                    todayButton?.isVisible =
+                        it.year != initialDate.year || it.month != initialDate.month
+                }
+            }
         }
+
         viewPager.adapter = object : TabsAdapter() {
             override fun getItemCount(): Int = tabs.size
             override fun onBindViewHolder(holder: ViewHolder, position: Int) =
@@ -363,7 +367,11 @@ class CalendarFragment : Fragment() {
                 contentDescription.append(deviceEvents)
                 deviceEventTitle.movementMethod = LinkMovementMethod.getInstance()
 
-                deviceEventTitle.visibility = View.VISIBLE
+                deviceEventTitle.run {
+                    movementMethod = LinkMovementMethod.getInstance()
+                    visibility = View.VISIBLE
+                }
+
             } else {
                 deviceEventTitle.visibility = View.GONE
             }
@@ -404,9 +412,11 @@ class CalendarFragment : Fragment() {
             }
 
             if (messageToShow.isNotEmpty()) {
-                eventMessage.text = messageToShow
-                eventMessage.movementMethod = LinkMovementMethod.getInstance()
-                eventMessage.visibility = View.VISIBLE
+                eventMessage.run {
+                    text = messageToShow
+                    movementMethod = LinkMovementMethod.getInstance()
+                    visibility = View.VISIBLE
+                }
             }
 
             root.contentDescription = contentDescription
