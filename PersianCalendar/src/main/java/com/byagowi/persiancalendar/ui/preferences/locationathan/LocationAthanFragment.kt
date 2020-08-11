@@ -17,6 +17,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
@@ -26,10 +27,7 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
-import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.askForLocationPermission
-import com.byagowi.persiancalendar.utils.getCoordinate
-import com.byagowi.persiancalendar.utils.getCustomAthanUri
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
@@ -55,6 +53,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         onSharedPreferenceChanged(null, null)
         activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
+        putLocationOnSummary(context?.appPrefs?.getString(PREF_SELECTED_LOCATION, getString(R.string.location_help)))
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
     }
 
@@ -168,5 +167,19 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
     private fun putAthanNameOnSummary(athanName: String?) {
         findPreference<Preference>("pref_key_ringtone")?.summary = athanName
+    }
+
+    private fun putLocationOnSummary(selected: String?) {
+        val context = context ?: return
+
+        val city: CityItem? = getAllCities(context, false).firstOrNull { it.key == selected }
+        findPreference<Preference>("Location")?.summary = city?.let {
+            when (language) {
+                LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
+                LANG_CKB -> it.ckb
+                LANG_AR -> it.ar
+                else -> it.fa
+            }
+        }
     }
 }
