@@ -19,6 +19,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
 
         findPreference<ListPreference>("Theme")?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>("AppLanguage")?.summaryProvider =
+            ListPreference.SimpleSummaryProvider.getInstance()
         findPreference<ListPreference>("WeekStart")?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
 
