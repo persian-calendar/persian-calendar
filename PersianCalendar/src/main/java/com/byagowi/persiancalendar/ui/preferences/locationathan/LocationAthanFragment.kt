@@ -17,7 +17,6 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
@@ -27,7 +26,10 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.askForLocationPermission
+import com.byagowi.persiancalendar.utils.getCoordinate
+import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.google.android.material.snackbar.Snackbar
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
@@ -53,7 +55,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         onSharedPreferenceChanged(null, null)
         activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
-        putLocationOnSummary(context?.appPrefs?.getString(PREF_SELECTED_LOCATION, getString(R.string.location_help)))
+        putLocationOnSummary(context?.appPrefs?.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY)
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
     }
 
@@ -169,9 +171,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<Preference>("pref_key_ringtone")?.summary = athanName
     }
 
-    private fun putLocationOnSummary(selected: String?) {
+    private fun putLocationOnSummary(selected: String) {
         val context = context ?: return
         findPreference<Preference>("Location")?.summary =
-            LocationPreference.getSummary(context, selected ?: DEFAULT_CITY)
+            LocationPreference.getSummary(context, selected)
     }
 }
