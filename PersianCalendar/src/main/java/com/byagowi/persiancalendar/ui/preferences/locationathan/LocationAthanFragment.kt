@@ -171,15 +171,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
     private fun putLocationOnSummary(selected: String?) {
         val context = context ?: return
-
-        val city: CityItem? = getAllCities(context, false).firstOrNull { it.key == selected }
-        findPreference<Preference>("Location")?.summary = city?.let {
-            when (language) {
-                LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
-                LANG_CKB -> it.ckb
-                LANG_AR -> it.ar
-                else -> it.fa
-            }
-        }
+        findPreference<Preference>("Location")?.summary =
+            LocationPreference.getSummary(context, selected ?: DEFAULT_CITY)
     }
 }
