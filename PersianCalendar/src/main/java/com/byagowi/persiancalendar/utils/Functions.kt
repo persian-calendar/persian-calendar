@@ -77,7 +77,11 @@ fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
 fun isNightModeEnabled(context: Context): Boolean =
     context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-fun formatDate(date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false): String =
+fun formatDate(
+    date: AbstractDate,
+    calendarNameInLinear: Boolean = true,
+    forceNonNumerical: Boolean = false
+): String =
     if (numericalDatePreferred && !forceNonNumerical)
         (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
     else when (language) {
