@@ -100,6 +100,12 @@ fun isLocaleRTL(): Boolean = when (language) {
     else -> true
 }
 
+fun formatNumber(number: Double): String = when (preferredDigits) {
+    ARABIC_DIGITS -> number.toString()
+    else -> formatNumber(number.toString())
+        .replace(".", "٫" /* U+066B, Arabic Decimal Separator */)
+}
+
 fun formatNumber(number: Int): String = formatNumber(number.toString())
 
 fun formatNumber(number: String): String = when (preferredDigits) {

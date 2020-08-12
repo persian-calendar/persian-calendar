@@ -21,6 +21,6 @@ class NumericPreference @JvmOverloads constructor(context: Context, attrs: Attri
         persistString(value.toString())
         val isBlocking = shouldDisableDependents()
         if (isBlocking != wasBlocking) notifyDependencyChange(isBlocking)
-        summary = if (value == 0.0) defaultSummary else formatNumber(value.toString())
+        summary = if (value == 0.0) defaultSummary else formatNumber(value)
     }
 }
