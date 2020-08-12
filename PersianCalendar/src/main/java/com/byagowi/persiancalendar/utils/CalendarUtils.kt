@@ -91,8 +91,7 @@ fun getA11yDaySummary(
     if (withOtherCalendars) {
         val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
         if (otherCalendars.isNotEmpty()) {
-            result.append("\n")
-                .append("\n")
+            result.append("\n\n")
                 .append(context.getString(R.string.equivalent_to))
                 .append(" ")
                 .append(otherCalendars)
@@ -108,8 +107,7 @@ fun getA11yDaySummary(
         addIsHoliday = false
     )
     if (holidays.isNotEmpty()) {
-        result.append("\n")
-            .append("\n")
+        result.append("\n\n")
             .append(context.getString(R.string.holiday_reason))
             .append("\n")
             .append(holidays)
@@ -124,8 +122,7 @@ fun getA11yDaySummary(
         addIsHoliday = false
     )
     if (nonHolidays.isNotEmpty()) {
-        result.append("\n")
-            .append("\n")
+        result.append("\n\n")
             .append(context.getString(R.string.events))
             .append("\n")
             .append(nonHolidays)
@@ -137,8 +134,7 @@ fun getA11yDaySummary(
             mainDate.year, 1, 1
         ).toJdn()
         val weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn)
-        result.append("\n")
-            .append("\n")
+        result.append("\n\n")
             .append(
                 context.getString(R.string.nth_week_of_year).format(formatNumber(weekOfYearStart))
             )
@@ -147,9 +143,7 @@ fun getA11yDaySummary(
     if (withZodiac) {
         val zodiac = getZodiacInfo(context, jdn, false)
         if (zodiac.isNotEmpty()) {
-            result.append("\n")
-                .append("\n")
-                .append(zodiac)
+            result.append("\n\n").append(zodiac)
         }
     }
 
