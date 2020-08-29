@@ -126,6 +126,7 @@ dependencies {
 
     testImplementation("junit:junit:4.13")
 
+    androidTestImplementation("androidx.test:core:1.3.0")
     androidTestImplementation("androidx.test:runner:1.2.0")
     androidTestImplementation("androidx.test:rules:1.2.0")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.2.0")

@@ -10,6 +10,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 
 import com.byagowi.persiancalendar.R;
+import com.byagowi.persiancalendar.ui.MainActivity;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
