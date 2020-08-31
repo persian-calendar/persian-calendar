@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.ChangeBounds
+import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
@@ -20,6 +22,8 @@ import kotlin.math.abs
 class CalendarsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
 
+    private val changeBoundTransition = ChangeBounds()
+    private val animationDuration: Int = resources.getInteger(android.R.integer.config_shortAnimTime)
     private val calendarItemAdapter = CalendarItemAdapter(context)
     private val binding: CalendarsViewBinding =
         CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
@@ -40,13 +44,21 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     fun expand(expanded: Boolean) {
         calendarItemAdapter.isExpanded = expanded
 
-        binding.moreCalendar.setImageResource(
-            if (expanded)
-                R.drawable.ic_keyboard_arrow_up
-            else
-                R.drawable.ic_keyboard_arrow_down
-        )
+        if (expanded) {
+            rotateArrow(180)
+        } else {
+            rotateArrow(0)
+        }
+
+        TransitionManager.beginDelayedTransition(binding.calendarsTabContent, changeBoundTransition)
         binding.extraInformationContainer.visibility = if (expanded) View.VISIBLE else View.GONE
+    }
+
+    private fun rotateArrow(finalAngle: Int) {
+        binding.moreCalendar.animate()
+            .rotation(finalAngle.toFloat())
+            .setDuration(animationDuration.toLong())
+            .start()
     }
 
     fun showCalendars(
