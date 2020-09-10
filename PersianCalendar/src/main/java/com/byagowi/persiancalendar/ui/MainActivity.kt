@@ -16,7 +16,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
-import androidx.navigation.Navigation
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
@@ -152,7 +154,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             settingHasChanged = false // reset for the next time
         }
 
-        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(id, null, null)
+        navController?.navigate(id, null, null)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -355,9 +357,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    private fun getCurrentDestinationId(): Int? = Navigation
-        .findNavController(this, R.id.nav_host_fragment)
-        .currentDestination?.id
+    private val navController: NavController?
+        get() =
+            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)
+                ?.findNavController()
+
+    private fun getCurrentDestinationId(): Int? = navController?.currentDestination?.id
 
     private fun changeLangSnackbar() =
         Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
