@@ -23,7 +23,8 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     FrameLayout(context, attrs) {
 
     private val changeBoundTransition = ChangeBounds()
-    private val animationDuration: Int = resources.getInteger(android.R.integer.config_shortAnimTime)
+    private val arrowRotationAnimationDuration =
+        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     private val calendarItemAdapter = CalendarItemAdapter(context)
     private val binding: CalendarsViewBinding =
         CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
@@ -44,21 +45,14 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     fun expand(expanded: Boolean) {
         calendarItemAdapter.isExpanded = expanded
 
-        if (expanded) {
-            rotateArrow(180)
-        } else {
-            rotateArrow(0)
-        }
+        // Rotate expansion arrow
+        binding.moreCalendar.animate()
+            .rotation(if (expanded) 180f else 0f)
+            .setDuration(arrowRotationAnimationDuration)
+            .start()
 
         TransitionManager.beginDelayedTransition(binding.calendarsTabContent, changeBoundTransition)
         binding.extraInformationContainer.visibility = if (expanded) View.VISIBLE else View.GONE
-    }
-
-    private fun rotateArrow(finalAngle: Int) {
-        binding.moreCalendar.animate()
-            .rotation(finalAngle.toFloat())
-            .setDuration(animationDuration.toLong())
-            .start()
     }
 
     fun showCalendars(

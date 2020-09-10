@@ -452,12 +452,12 @@ class CalendarFragment : Fragment() {
     }
 
     private fun onOwghatClick() {
-        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter)?.run {
+        (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter)?.apply {
             isExpanded = !isExpanded
-            owghatBinding?.moreOwghat?.setImageResource(
-                if (isExpanded) R.drawable.ic_keyboard_arrow_up
-                else R.drawable.ic_keyboard_arrow_down
-            )
+            owghatBinding?.moreOwghat?.animate()
+                ?.rotation(if (isExpanded) 180f else 0f)
+                ?.setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
+                ?.start()
         }
     }
 
