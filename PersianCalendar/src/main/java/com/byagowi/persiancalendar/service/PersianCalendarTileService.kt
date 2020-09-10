@@ -26,12 +26,14 @@ class PersianCalendarTileService : TileService() {
 
     override fun onStartListening() = try {
         val today = getTodayOfCalendar(mainCalendar)
-        qsTile?.also {
-            it.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
-            it.label = getWeekDayName(today)
-            it.contentDescription = getMonthName(today)
+        qsTile?.apply {
+            icon = Icon.createWithResource(
+                this@PersianCalendarTileService, getDayIconResource(today.dayOfMonth)
+            )
+            label = getWeekDayName(today)
+            contentDescription = getMonthName(today)
             // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
-            it.state = Tile.STATE_ACTIVE
+            state = Tile.STATE_ACTIVE
         }?.updateTile() ?: Unit
     } catch (e: Exception) {
         e.printStackTrace()

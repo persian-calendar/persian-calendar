@@ -55,7 +55,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         onSharedPreferenceChanged(null, null)
         activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
-        putLocationOnSummary(context?.appPrefs?.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY)
+        putLocationOnSummary(
+            context?.appPrefs?.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY
+        )
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
     }
 

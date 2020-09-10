@@ -71,7 +71,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val title: String, val holidays: String, val nonHolidays: String
     )
 
-    private inner class ItemAdapter internal constructor(private val rows: List<MonthOverviewRecord>) :
+    private inner class ItemAdapter(private val rows: List<MonthOverviewRecord>) :
         RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -82,7 +82,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
         override fun getItemCount(): Int = rows.size
 
-        internal inner class ViewHolder(private val binding: MonthOverviewItemBinding) :
+        inner class ViewHolder(private val binding: MonthOverviewItemBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
             fun bind(position: Int) {

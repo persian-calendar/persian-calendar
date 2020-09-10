@@ -219,10 +219,12 @@ private fun readDeviceEvents(
                 id = it.getInt(0),
                 title =
                 if (it.getString(6) == "1") "\uD83D\uDCC5 ${it.getString(1) ?: ""}"
-                else "\uD83D\uDD53 ${it.getString(1) ?: ""} (${startCalendar.clock()}${(
-                        if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
-                            "-${endCalendar.clock()}"
-                        else "")})",
+                else "\uD83D\uDD53 ${it.getString(1) ?: ""} (${startCalendar.clock()}${
+                    (
+                            if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
+                                "-${endCalendar.clock()}"
+                            else "")
+                })",
                 description = it.getString(2) ?: "",
                 start = startDate,
                 end = endDate,
