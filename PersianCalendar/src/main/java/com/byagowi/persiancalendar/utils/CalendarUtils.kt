@@ -234,7 +234,7 @@ private fun readDeviceEvents(
     } ?: emptyList()
 } catch (e: Exception) {
     e.printStackTrace()
-    emptyList<DeviceCalendarEvent>()
+    emptyList()
 }
 
 fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(

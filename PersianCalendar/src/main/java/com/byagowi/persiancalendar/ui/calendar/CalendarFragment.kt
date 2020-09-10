@@ -483,7 +483,7 @@ class CalendarFragment : Fragment() {
                 findViewById<SearchAutoComplete?>(androidx.appcompat.R.id.search_src_text)?.apply {
                     setHint(R.string.search_in_events)
                     setAdapter(
-                        ArrayAdapter<CalendarEvent<*>>(
+                        ArrayAdapter(
                             mainActivity, R.layout.suggestion, android.R.id.text1,
                             allEnabledEvents + getAllEnabledAppointments(context)
                         )

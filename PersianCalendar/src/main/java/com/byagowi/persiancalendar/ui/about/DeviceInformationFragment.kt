@@ -245,7 +245,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         )
     } catch (e: Exception) {
         e.printStackTrace()
-        emptyList<Item>()
+        emptyList()
     })
 
     class DeviceInformationDiffCallback : DiffUtil.ItemCallback<Item>() {

@@ -42,7 +42,7 @@ android {
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdkVersion(15)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         versionCode = 623
         versionName = "6.2.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -105,7 +105,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("com.google.android.material:material:1.2.0")
+    implementation("com.google.android.material:material:1.2.1")
     implementation("com.google.android:flexbox:2.0.1")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
