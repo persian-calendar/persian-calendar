@@ -95,7 +95,7 @@ tasks.withType<KotlinCompile> {
 
 dependencies {
     implementation("com.github.persian-calendar:equinox:1.0.0")
-    implementation("com.github.persian-calendar:calendar:1.0.0")
+    implementation("com.github.persian-calendar:calendar:e1f10e4") // Should be 1.0.1
     implementation("com.github.persian-calendar:praytimes:1.0.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
