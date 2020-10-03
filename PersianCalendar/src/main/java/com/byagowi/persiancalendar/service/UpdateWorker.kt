@@ -6,12 +6,11 @@ import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.utils.setChangeDateWorker
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.coroutineScope
 
 class UpdateWorker(context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
-    override suspend fun doWork(): Result = withContext(Dispatchers.Main) {
+    override suspend fun doWork(): Result = coroutineScope {
         try {
             setChangeDateWorker(applicationContext)
             updateStoredPreference(applicationContext)
