@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
@@ -41,7 +42,10 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         override fun onLocationChanged(location: Location) = showLocation(location)
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
         override fun onProviderEnabled(provider: String) {}
-        override fun onProviderDisabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {
+            this@GPSLocationDialog.dismiss()
+            Toast.makeText(mainActivity, "خدمات موقعیت خاموش است", Toast.LENGTH_SHORT).show();
+        }
     }
 
     lateinit var mainActivity: MainActivity
