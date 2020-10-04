@@ -43,8 +43,8 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         minSdkVersion(15)
         targetSdkVersion(30)
-        versionCode = 631
-        versionName = "6.3.1"
+        versionCode = 632
+        versionName = "6.3.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resConfigs("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
