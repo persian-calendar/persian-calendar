@@ -261,5 +261,6 @@
     <string name="enable_ascending_athan_volume">يصل صوت أذان إلى ذروته خلال دقيقة</string>
     <string name="ascending_athan_volume">زيادة صوت الأذان</string>
     <string name="share">مشاركة</string>
+    <string name="enable_location_services">Location services is disabled, please turn it on to use the feature.</string>
 
 </resources>

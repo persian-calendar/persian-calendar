@@ -227,5 +227,6 @@
     <string name="widget_background_color">Widget Background Color</string>
     <string name="select_widgets_background_color">Select custom color for widgets background</string>
     <string name="share">هم‌رسانی</string>
+    <string name="enable_location_services">Location services is disabled, please turn it on to use the feature.</string>
 
 </resources>
