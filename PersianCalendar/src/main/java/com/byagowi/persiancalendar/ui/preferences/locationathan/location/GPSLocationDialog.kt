@@ -44,7 +44,11 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         override fun onProviderEnabled(provider: String) {}
         override fun onProviderDisabled(provider: String) {
             this@GPSLocationDialog.dismiss()
-            Toast.makeText(mainActivity, "خدمات موقعیت خاموش است", Toast.LENGTH_SHORT).show();
+            Toast.makeText(
+                mainActivity,
+                getString(R.string.enable_location_services),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
