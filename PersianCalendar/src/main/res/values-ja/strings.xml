@@ -228,6 +228,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_background_color">Widget Background Color</string>
     <string name="select_widgets_background_color">Select custom color for widgets background</string>
     <string name="share">Share</string>
-    <string name="enable_location_services">Location services is disabled, please turn it on to use the feature.</string>
+    <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
 
 </resources>
