@@ -41,7 +41,7 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdkVersion(15)
+        minSdkVersion(17)
         targetSdkVersion(30)
         versionCode = 632
         versionName = "6.3.2"
