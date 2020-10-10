@@ -12,7 +12,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
@@ -22,6 +21,7 @@ import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
+import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
 import java.io.IOException
 import java.util.*
@@ -38,17 +38,20 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     private val checkGPSProviderCallback = Runnable { checkGPSProvider() }
     private var lacksPermission = false
     private var everRegisteredCallback = false
+    private var isLocationShown = false
+    private var isOneProviderEnabled = false
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) = showLocation(location)
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderEnabled(provider: String) {
+            isOneProviderEnabled = true
+            if (!isLocationShown)
+                textView.setText(R.string.pleasewaitgps)
+        }
+
         override fun onProviderDisabled(provider: String) {
-            this@GPSLocationDialog.dismiss()
-            Toast.makeText(
-                mainActivity,
-                getString(R.string.enable_location_services),
-                Toast.LENGTH_SHORT
-            ).show()
+            if (!isLocationShown && !isOneProviderEnabled)
+                textView.setText(R.string.enable_location_services)
         }
     }
 
@@ -148,17 +151,20 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         var result = ""
         if (cityName?.isNotEmpty() == true) result = cityName + "\n\n"
         // this time, with native digits
+        val plusCodeLink = "https://plus.codes/" +
+                OpenLocationCode.encode(location.latitude, location.longitude)
         result += formatCoordinate(
             mainActivity,
             Coordinate(location.latitude, location.longitude, location.altitude), "\n"
-        )
-        result += "\n\n" + formatCoordinateISO6709(
+        ) + "\n\n" + formatCoordinateISO6709(
             location.latitude, location.longitude, location.altitude
-        )
+        ) + "\n\n" + plusCodeLink
         textView.text = result
         textView.setOnClickListener {
-            copyToClipboard(textView, "coords", textView.text.split("\n").last())
+            copyToClipboard(textView, "coords", plusCodeLink)
         }
+
+        isLocationShown = true
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -193,8 +199,8 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             getLocation()
-            if (lacksPermission)
             // request for permission is rejected
+            if (lacksPermission)
                 dismiss()
         }
     }

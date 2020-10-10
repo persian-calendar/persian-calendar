@@ -307,7 +307,7 @@ fun readRawResource(context: Context, @RawRes res: Int) =
     context.resources.openRawResource(res).use { String(it.readBytes()) }
 
 fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) =
-    "%s: %.4f%s%s: %.4f".format(
+    "%s: %.7f%s%s: %.7f".format(
         Locale.getDefault(),
         context.getString(R.string.latitude), coordinate.latitude, separator,
         context.getString(R.string.longitude), coordinate.longitude

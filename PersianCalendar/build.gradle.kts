@@ -109,6 +109,8 @@ dependencies {
     implementation("com.google.android:flexbox:2.0.1")
     implementation("com.google.android.apps.dashclock:dashclock-api:2.0.0")
 
+    implementation("com.google.openlocationcode:openlocationcode:1.0.4")
+
     val navVersion = "2.3.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
