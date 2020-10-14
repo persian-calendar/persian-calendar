@@ -65,16 +65,6 @@ class CalendarFragment : Fragment() {
     private lateinit var eventsBinding: EventsTabContentBinding
     private var searchView: SearchView? = null
     private var todayButton: MenuItem? = null
-
-    abstract class TabsAdapter : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
-        inner class ViewHolder(private val frame: FrameLayout) : RecyclerView.ViewHolder(frame) {
-            fun bind(view: View) = frame.run {
-                removeAllViews()
-                addView(view)
-            }
-        }
-    }
-
     lateinit var mainActivity: MainActivity
     val initialDate = getTodayOfCalendar(mainCalendar)
 
@@ -137,6 +127,13 @@ class CalendarFragment : Fragment() {
             )
         } ?: emptyList())
 
+        // tabs should fill their parent otherwise view pager can't handle it
+        tabs.forEach {
+            it.second.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+
         calendarPager.run {
             onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
             onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
@@ -149,18 +146,12 @@ class CalendarFragment : Fragment() {
             }
         }
 
-        viewPager.adapter = object : TabsAdapter() {
+        viewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun getItemCount(): Int = tabs.size
-            override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-                holder.bind(tabs[position].second)
-
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-                FrameLayout(mainActivity).apply {
-                    layoutParams = FrameLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-                    )
-                }
-            )
+            override fun getItemViewType(position: Int) = position // set viewtype equal to position
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+                object : RecyclerView.ViewHolder(tabs[viewType].second) {}
         }
         TabLayoutMediator(tabLayout, viewPager) { tab, i -> tab.setText(tabs[i].first) }.attach()
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
