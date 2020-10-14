@@ -330,21 +330,17 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
 
     fun startAnimate(immediate: Boolean = false) {
-        val context = context
-        if (prayTimes == null || context == null) return
+        val context = context ?: return
+        val prayTimes = prayTimes ?: return
 
         isRTL = isRTL(context)
         sunriseString = context.getString(R.string.sunriseSunView)
         middayString = context.getString(R.string.middaySunView)
         sunsetString = context.getString(R.string.sunsetSunView)
 
-        val sunset = prayTimes?.sunsetClock?.toInt()?.toFloat()
-        val sunrise = prayTimes?.sunriseClock?.toInt()?.toFloat()
-        var midnight = prayTimes?.midnightClock?.toInt()?.toFloat()
-
-        sunset ?: return
-        sunrise ?: return
-        midnight ?: return
+        val sunset = prayTimes.sunsetClock.toInt().toFloat()
+        val sunrise = prayTimes.sunriseClock.toInt().toFloat()
+        var midnight = prayTimes.midnightClock.toInt().toFloat()
 
         if (midnight > HALF_DAY) midnight -= FULL_DAY
         val now = Clock(Calendar.getInstance(Locale.getDefault())).toInt().toFloat()
@@ -385,11 +381,12 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             current = c
             postInvalidate()
         } else {
-            val animator = ValueAnimator.ofFloat(0F, c)
-            animator.duration = 1500L
-            animator.interpolator = DecelerateInterpolator()
-            animator.addUpdateListener(this)
-            animator.start()
+            ValueAnimator.ofFloat(0F, c).apply {
+                duration = 1500L
+                interpolator = DecelerateInterpolator()
+                addUpdateListener(this@SunView)
+                start()
+            }
         }
     }
 
