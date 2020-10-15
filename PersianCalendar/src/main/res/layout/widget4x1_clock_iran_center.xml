@@ -34,7 +34,7 @@
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:textColor="@android:color/white"
             android:textSize="12dp" />
     </LinearLayout>

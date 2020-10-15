@@ -10,10 +10,8 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:paddingStart="5dp"
-        android:paddingLeft="5dp"
         android:paddingTop="5dp"
-        android:paddingEnd="0dp"
-        android:paddingRight="0dp" />
+        android:paddingEnd="0dp" />
 
     <TextView
         android:id="@+id/info"
@@ -22,10 +20,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingStart="5dp"
-        android:paddingLeft="5dp"
         android:paddingTop="5dp"
         android:paddingEnd="0dp"
-        android:paddingRight="0dp"
         android:textSize="60sp" />
 
     <Button
