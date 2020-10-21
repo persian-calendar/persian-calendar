@@ -41,7 +41,7 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdkVersion(15)
+        minSdkVersion(17)
         targetSdkVersion(30)
         versionCode = 632
         versionName = "6.3.2"
@@ -119,7 +119,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.2.5")
     implementation("androidx.activity:activity-ktx:1.1.0")
 
-    implementation("androidx.browser:browser:1.0.0") // Update needs minSdkVersion > 15
+    implementation("androidx.browser:browser:1.2.0")
 
     implementation("androidx.work:work-runtime-ktx:2.4.0")
 

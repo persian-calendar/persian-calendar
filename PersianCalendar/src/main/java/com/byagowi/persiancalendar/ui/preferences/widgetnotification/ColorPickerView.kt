@@ -97,8 +97,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
                 progressDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
                 setOnSeekBarChangeListener(listener)
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                    thumb.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+                thumb.setColorFilter(color, PorterDuff.Mode.SRC_IN)
             }
         }
 

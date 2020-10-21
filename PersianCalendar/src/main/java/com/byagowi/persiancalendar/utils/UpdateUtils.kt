@@ -386,9 +386,7 @@ fun update(context: Context, updateDate: Boolean) {
     // Prepend a right-to-left mark character to Android with sane text rendering stack
     // to resolve a bug seems some Samsung devices have with characters with weak direction,
     // digits being at the first of string on
-    if (isRTL && Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN &&
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.N
-    ) {
+    if (isRTL && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
         title = RLM + title
         if (subtitle.isNotEmpty()) {
             subtitle = RLM + subtitle

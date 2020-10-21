@@ -11,7 +11,7 @@
         style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textDirection="rtl"
         tools:text="آزمایش" />
 
@@ -20,7 +20,7 @@
         style="@style/TextAppearance.Compat.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textDirection="rtl"
         tools:text="آزمایش" />
 
@@ -29,7 +29,7 @@
         style="@style/TextAppearance.Compat.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textColor="@color/light_holiday"
         android:textDirection="rtl"
         tools:text="آزمایش" />
@@ -39,7 +39,7 @@
         style="@style/TextAppearance.Compat.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textDirection="rtl"
         tools:text="آزمایش" />
 
@@ -48,7 +48,7 @@
         style="@style/TextAppearance.Compat.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textDirection="rtl"
         tools:text="آزمایش" />
 

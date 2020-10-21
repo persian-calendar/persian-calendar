@@ -87,10 +87,8 @@ class CalendarFragment : Fragment() {
                 eventsBinding = this
 
                 // Apply some animation, don't do the same for others tabs, it is problematic
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    eventsContent.layoutTransition =
-                        LayoutTransition().apply { enableTransitionType(LayoutTransition.CHANGING) }
-                }
+                eventsContent.layoutTransition =
+                    LayoutTransition().apply { enableTransitionType(LayoutTransition.CHANGING) }
             }.root
 
         ) + (getCoordinate(mainActivity)?.run {

@@ -12,11 +12,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
         android:layout_weight="1"
         android:checked="true"
         android:drawableStart="?android:attr/listChoiceIndicatorMultiple"
-        android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
         android:gravity="center_vertical"
         tools:text="Gregorian" />
 
