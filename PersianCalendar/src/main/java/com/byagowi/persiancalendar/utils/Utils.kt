@@ -267,17 +267,17 @@ fun loadEvents(context: Context) {
 
 fun loadLanguageResource(context: Context) {
     @RawRes val messagesFile: Int = when (language) {
-        LANG_FA_AF -> R.raw.messages_fa_af
-        LANG_PS -> R.raw.messages_ps
-        LANG_GLK -> R.raw.messages_glk
-        LANG_AR -> R.raw.messages_ar
-        LANG_CKB -> R.raw.messages_ckb
-        LANG_UR -> R.raw.messages_ur
-        LANG_EN_US -> R.raw.messages_en
-        LANG_JA -> R.raw.messages_ja
-        LANG_AZB -> R.raw.messages_azb
-        LANG_EN_IR, LANG_FA -> R.raw.messages_fa
-        else -> R.raw.messages_fa
+        LANG_FA_AF -> R.raw.faaf
+        LANG_PS -> R.raw.ps
+        LANG_GLK -> R.raw.glk
+        LANG_AR -> R.raw.ar
+        LANG_CKB -> R.raw.ckb
+        LANG_UR -> R.raw.ur
+        LANG_EN_US -> R.raw.en
+        LANG_JA -> R.raw.ja
+        LANG_AZB -> R.raw.azb
+        LANG_EN_IR, LANG_FA -> R.raw.fa
+        else -> R.raw.fa
     }
 
     try {
