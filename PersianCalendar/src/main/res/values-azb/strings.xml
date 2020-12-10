@@ -175,7 +175,6 @@
 
     <!--Permissions-->
     <string name="location_access">مکان قونومونا اریشمک</string>
-    <string name="phone_location_required">برنامنین بو قیسمتی سیزین دسترسلیغیزی ایستئیر یوخسا اوزوز موقعیت ورین</string>
     <string name="phone_location_required">برنامنین بوراسی سیزین اریشیلمگینیزی ایستر یوخسا اؤزونوز موقعیت ورین</string>
     <string name="calendar_access">دستگاهیزین تقویمینه اریشمک ایستر</string>
     <string name="phone_calendar_required">شخصی اولایلاری بوردا گؤسترین، اولده اریشیلمک ایمکانین وئرین</string>
