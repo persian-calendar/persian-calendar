@@ -121,10 +121,7 @@
     <string name="about_developers">گلیشتیره‌نلر</string>
     <string name="about_support_developers">گلیشتیرن‌لری دستکلیین</string>
     <string name="about_email_sum">شخصی ایمیل برنامه صاحیبینه گؤندرمک</string>
-<string name="gps_internet_desc">اینرنت و جی پی اس‌یزی آچیق قویون"
-برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است."</string>
-
-<string name="gps_internet_desc">"اینترنت و جی‌پی‌اس‌ی آچیق بیراخین، برنامه هر مکاندا بیر کئز بو اریشیملره احتیاجی اولاجاقدیر، مکانیز دییشیلن دورومدا یئنیدن تنظیم گرکلی‌دیر"</string>
+    <string name="gps_internet_desc">"اینترنت و جی‌پی‌اس‌ی آچیق بیراخین، برنامه هر مکاندا بیر کئز بو اریشیملره احتیاجی اولاجاقدیر، مکانیز دییشیلن دورومدا یئنیدن تنظیم گرکلی‌دیر"</string>
     <string name="start_of_year_diff">%1$s گۆن (~%2$s هفته یا %3$s آی) ایلین باشیندان</string>
     <string name="end_of_year_diff">%1$s گۆن (~%2$s هفته یا %3$s آی) ایلین سونونا</string>
     <!-- Sun Info -->
