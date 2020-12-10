@@ -34,7 +34,7 @@ class AboutFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val mainActivity = activity as MainActivity
         mainActivity.setTitleAndSubtitle(getString(R.string.about), "")
         setHasOptionsMenu(true)

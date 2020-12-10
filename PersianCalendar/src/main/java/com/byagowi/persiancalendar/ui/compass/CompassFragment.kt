@@ -80,7 +80,7 @@ class CompassFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         mainActivity = activity as MainActivity
 
         binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
