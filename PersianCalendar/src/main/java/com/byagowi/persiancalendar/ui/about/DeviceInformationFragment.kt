@@ -45,7 +45,7 @@ class DeviceInformationFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
+    ): View = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
         val mainActivity = activity as MainActivity
 
         mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
