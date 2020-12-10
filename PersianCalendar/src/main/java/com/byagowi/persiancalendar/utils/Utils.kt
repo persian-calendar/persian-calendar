@@ -265,8 +265,8 @@ fun loadEvents(context: Context) {
     }
 }
 
-fun loadLanguageResource(context: Context) {
-    @RawRes val messagesFile: Int = when (language) {
+fun loadLanguageResource(context: Context) = try {
+    val messages = JSONObject(readRawResource(context, when (language) {
         LANG_FA_AF -> R.raw.faaf
         LANG_PS -> R.raw.ps
         LANG_GLK -> R.raw.glk
@@ -278,34 +278,30 @@ fun loadLanguageResource(context: Context) {
         LANG_AZB -> R.raw.azb
         LANG_EN_IR, LANG_FA -> R.raw.fa
         else -> R.raw.fa
-    }
+    }))
 
-    try {
-        val messages = JSONObject(readRawResource(context, messagesFile))
+    fun JSONArray.toStringList() = (0 until length()).map { getString(it) }
 
-        fun JSONArray.toStringList() = (0 until length()).map { getString(it) }
-
-        persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringList()
-        islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringList()
-        gregorianMonths = messages.getJSONArray("GregorianCalendarMonths").toStringList()
-        messages.getJSONArray("WeekDays").toStringList().run {
-            weekDays = this
-            weekDaysInitials = this.map {
-                when (language) {
-                    LANG_AR -> it.substring(2, 4)
-                    LANG_AZB -> it.substring(0, 2)
-                    else -> it.substring(0, 1)
-                }
+    persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringList()
+    islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringList()
+    gregorianMonths = messages.getJSONArray("GregorianCalendarMonths").toStringList()
+    messages.getJSONArray("WeekDays").toStringList().run {
+        weekDays = this
+        weekDaysInitials = this.map {
+            when (language) {
+                LANG_AR -> it.substring(2, 4)
+                LANG_AZB -> it.substring(0, 2)
+                else -> it.substring(0, 1)
             }
         }
-    } catch (e: JSONException) {
-        e.printStackTrace()
-        persianMonths = monthNameEmptyList
-        islamicMonths = monthNameEmptyList
-        gregorianMonths = monthNameEmptyList
-        weekDays = weekDaysEmptyList
-        weekDaysInitials = weekDaysEmptyList
     }
+} catch (e: JSONException) {
+    e.printStackTrace()
+    persianMonths = monthNameEmptyList
+    islamicMonths = monthNameEmptyList
+    gregorianMonths = monthNameEmptyList
+    weekDays = weekDaysEmptyList
+    weekDaysInitials = weekDaysEmptyList
 }
 
 @StringRes
