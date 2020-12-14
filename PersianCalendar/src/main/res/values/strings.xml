@@ -297,7 +297,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="nth_week_of_year">%1$s week of year</string>
 
     <!-- New additions, to be categorized, keep the section on your translation -->
-    <string name="empty" />
+    <string name="empty" translatable="false" />
     <string name="shift_work_settings">Shift work settings</string>
     <string name="remove">Remove</string>
     <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
