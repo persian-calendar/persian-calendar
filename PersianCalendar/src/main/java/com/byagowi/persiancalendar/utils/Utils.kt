@@ -285,15 +285,10 @@ fun loadLanguageResource(context: Context) = try {
     persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringList()
     islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringList()
     gregorianMonths = messages.getJSONArray("GregorianCalendarMonths").toStringList()
-    messages.getJSONArray("WeekDays").toStringList().run {
-        weekDays = this
-        weekDaysInitials = this.map {
-            when (language) {
-                LANG_AR -> it.substring(2, 4)
-                LANG_AZB -> it.substring(0, 2)
-                else -> it.substring(0, 1)
-            }
-        }
+    weekDays = messages.getJSONArray("WeekDays").toStringList()
+    weekDaysInitials = when (language) {
+        LANG_AR, LANG_AZB -> messages.getJSONArray("WeekDaysInitials").toStringList()
+        else -> weekDays.map { it.substring(0, 1) }
     }
 } catch (e: JSONException) {
     e.printStackTrace()
