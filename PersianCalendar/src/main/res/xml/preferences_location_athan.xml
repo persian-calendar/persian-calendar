@@ -109,8 +109,8 @@
             settings:iconSpaceReserved="false" />
 
         <androidx.preference.SwitchPreferenceCompat
-            android:dependency="NotificationAthan"
             android:defaultValue="false"
+            android:dependency="NotificationAthan"
             android:disableDependentsState="true"
             android:key="AscendingAthanVolume"
             android:summary="@string/enable_ascending_athan_volume"
