@@ -495,20 +495,26 @@ fun updateStoredPreference(context: Context) {
 // Context preferably should be activity context not application
 fun applyAppLanguage(context: Context) {
     val localeCode = getOnlyLanguage(language)
-    // To resolve this issue, https://issuetracker.google.com/issues/128908783 (marked as fixed now)
-    // if ((language.equals(LANG_GLK) || language.equals(LANG_AZB)) && Build.VERSION.SDK_INT == Build.VERSION_CODES.P) {
-    //    localeCode = LANG_FA;
-    // }
-    var locale = Locale(localeCode)
+    val locale = Locale(localeCode)
     Locale.setDefault(locale)
     val resources = context.resources
     val config = resources.configuration
-    config.locale = locale
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-        if (language == LANG_AZB) {
-            locale = Locale(LANG_FA)
-        }
-        config.setLayoutDirection(locale)
-    }
+    config.setLocale(locale)
+    config.setLayoutDirection(when (localeCode) {
+        LANG_AZB, LANG_GLK -> Locale(LANG_FA)
+        else -> locale
+    })
     resources.updateConfiguration(config, resources.displayMetrics)
 }
+
+//fun Context.withLocale(): Context {
+//    val config = resources.configuration
+//    val locale = Locale(getOnlyLanguage(language))
+//    Locale.setDefault(locale)
+//    config.setLocale(locale)
+//    config.setLayoutDirection(when (language) {
+//        LANG_AZB, LANG_GLK -> Locale(LANG_FA)
+//        else -> locale
+//    })
+//    return createConfigurationContext(config)
+//}

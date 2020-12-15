@@ -160,31 +160,28 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                             ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
             )
     ) + (try {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
-            val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
-            val versions = IntArray(2)
-            EGL14.eglInitialize(display, versions, 0, versions, 1)
-            val configAttr = intArrayOf(
-                    EGL14.EGL_COLOR_BUFFER_TYPE, EGL14.EGL_RGB_BUFFER,
-                    EGL14.EGL_LEVEL, 0, EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
-                    EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT, EGL14.EGL_NONE
+        // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
+        val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
+        val versions = IntArray(2)
+        EGL14.eglInitialize(display, versions, 0, versions, 1)
+        val configAttr = intArrayOf(
+                EGL14.EGL_COLOR_BUFFER_TYPE, EGL14.EGL_RGB_BUFFER,
+                EGL14.EGL_LEVEL, 0, EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
+                EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT, EGL14.EGL_NONE
+        )
+        val configs = Array<EGLConfig?>(1) { null }
+        val configsCount = IntArray(1)
+        EGL14.eglChooseConfig(display, configAttr, 0, configs, 0, 1, configsCount, 0)
+        if (configsCount[0] != 0) {
+            val surf = EGL14.eglCreatePbufferSurface(
+                    display, configs[0],
+                    intArrayOf(EGL14.EGL_WIDTH, 64, EGL14.EGL_HEIGHT, 64, EGL14.EGL_NONE), 0
             )
-            val configs = Array<EGLConfig?>(1) { null }
-            val configsCount = IntArray(1)
-            EGL14.eglChooseConfig(display, configAttr, 0, configs, 0, 1, configsCount, 0)
-            if (configsCount[0] != 0) {
-                val surf = EGL14.eglCreatePbufferSurface(
-                        display, configs[0],
-                        intArrayOf(EGL14.EGL_WIDTH, 64, EGL14.EGL_HEIGHT, 64, EGL14.EGL_NONE), 0
-                )
-                EGL14.eglMakeCurrent(
-                        display, surf, surf, EGL14.eglCreateContext(
-                        display, configs[0], EGL14.EGL_NO_CONTEXT,
-                        intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 2, EGL14.EGL_NONE), 0
-                )
-                )
-            }
+            EGL14.eglMakeCurrent(
+                    display, surf, surf, EGL14.eglCreateContext(
+                    display, configs[0], EGL14.EGL_NO_CONTEXT,
+                    intArrayOf(EGL14.EGL_CONTEXT_CLIENT_VERSION, 2, EGL14.EGL_NONE), 0)
+            )
         }
         listOf(
                 Item(

@@ -388,9 +388,7 @@ fun getThemeFromName(name: String): Int = when (name) {
 }
 
 fun isRTL(context: Context): Boolean =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-            context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
-        else false
+        context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
 fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
         context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable) }
@@ -533,10 +531,9 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
     if (shiftWorkRecurs && abbreviated && (type == "r" || type == shiftWorkTitles["r"])) return ""
 
     val title = shiftWorkTitles[type] ?: type
-    return if (abbreviated && title.isNotEmpty()) title.substring(0, 1) + when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && language != LANG_AR -> ZWJ
-        else -> ""
-    } else title
+    return if (abbreviated && title.isNotEmpty()) title.substring(0, 1) +
+            (if (language != LANG_AR) ZWJ else "")
+    else title
 }
 
 fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {

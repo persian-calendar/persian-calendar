@@ -66,9 +66,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
         colorResultView = TextView(context).apply {
             setTextIsSelectable(true)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
-            }
+            gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
             setOnClickListener {
                 colorCodeVisibility = !colorCodeVisibility
                 showColor()
