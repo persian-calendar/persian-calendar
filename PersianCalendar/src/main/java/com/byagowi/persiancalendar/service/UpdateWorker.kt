@@ -12,7 +12,7 @@ import kotlinx.coroutines.coroutineScope
 const val TAG = "UpdateWorker"
 
 class UpdateWorker(context: Context, workerParams: WorkerParameters) :
-    CoroutineWorker(context, workerParams) {
+        CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = coroutineScope {
         try {
             setChangeDateWorker(applicationContext)

@@ -21,7 +21,7 @@ class BroadcastReceivers : BroadcastReceiver() {
         context ?: return
         when (intent?.action) {
             Intent.ACTION_BOOT_COMPLETED, TelephonyManager.ACTION_PHONE_STATE_CHANGED, BROADCAST_RESTART_APP -> startEitherServiceOrWorker(
-                context
+                    context
             )
 
             Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> {

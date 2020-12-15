@@ -27,8 +27,8 @@ public enum Orientation {
     BOTTOM(-1, 180),
     LEFT(-1, -90);
 
-    private int reverse;
-    private int rotation;
+    private final int reverse;
+    private final int rotation;
 
     Orientation(int reverse, int rotation) {
         this.reverse = reverse;

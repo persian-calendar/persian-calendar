@@ -10,8 +10,8 @@ import com.cepmuvakkit.times.posAlgo.SolarPosition;
 
 public class MoonPhases {
 
-    private SolarPosition solar;
-    private LunarPosition lunar;
+    private final SolarPosition solar;
+    private final LunarPosition lunar;
     private Ecliptic moonPos, solarPos;
 
     public MoonPhases() {

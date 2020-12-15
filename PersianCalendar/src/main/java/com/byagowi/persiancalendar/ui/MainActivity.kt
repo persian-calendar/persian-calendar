@@ -33,7 +33,7 @@ import com.google.android.material.snackbar.Snackbar
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    NavigationView.OnNavigationItemSelectedListener {
+        NavigationView.OnNavigationItemSelectedListener {
 
     private var creationDateJdn: Long = 0
     private var settingHasChanged = false
@@ -82,14 +82,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         intent?.run {
             navigateTo(
-                when (action) {
-                    "COMPASS" -> R.id.compass
-                    "LEVEL" -> R.id.level
-                    "CONVERTER" -> R.id.converter
-                    "SETTINGS" -> R.id.settings
-                    "DEVICE" -> R.id.deviceInformation
-                    else -> R.id.calendar
-                }
+                    when (action) {
+                        "COMPASS" -> R.id.compass
+                        "LEVEL" -> R.id.level
+                        "CONVERTER" -> R.id.converter
+                        "SETTINGS" -> R.id.settings
+                        "DEVICE" -> R.id.deviceInformation
+                        else -> R.id.calendar
+                    }
             )
 
             // So it won't happen again if the activity restarted
@@ -99,29 +99,29 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         appPrefs.registerOnSharedPreferenceChangeListener(this)
 
         if (isShowDeviceCalendarEvents && ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.READ_CALENDAR
-            ) != PackageManager.PERMISSION_GRANTED
+                        this, Manifest.permission.READ_CALENDAR
+                ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(this)
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-            .seasonImage.setImageResource(run {
-                var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
+                .seasonImage.setImageResource(run {
+                    var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
 
-                // Southern hemisphere
-                if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
+                    // Southern hemisphere
+                    if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
 
-                when (season) {
-                    0 -> R.drawable.spring
-                    1 -> R.drawable.summer
-                    2 -> R.drawable.fall
-                    else -> R.drawable.winter
-                }
-            })
+                    when (season) {
+                        0 -> R.drawable.spring
+                        1 -> R.drawable.summer
+                        2 -> R.drawable.fall
+                        else -> R.drawable.winter
+                    }
+                })
 
         if (appPrefs.getString(PREF_APP_LANGUAGE, null) == null &&
-            !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
+                !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
         ) {
             changeLangSnackbar().show()
             appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         creationDateJdn = getTodayJdn()
 
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-            getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
+                getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
         ) outDatedSnackbar().show()
 
         applyAppLanguage(this)
@@ -141,8 +141,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     fun navigateTo(@IdRes id: Int) {
         binding.navigation.menu.findItem(
-            // We don't have a menu entry for compass, so
-            if (id == R.id.level) R.id.compass else id
+                // We don't have a menu entry for compass, so
+                if (id == R.id.level) R.id.compass else id
         )?.apply {
             isCheckable = true
             isChecked = true
@@ -210,19 +210,19 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 // Enable Afghanistan holidays when Dari or Pashto is set
                 if (changeToAfghanistanHolidays) {
                     val currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+                            sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
-                        "iran_holidays" in currentHolidays
+                            "iran_holidays" in currentHolidays
                     ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
 
                 }
                 if (changeToIranEvents) {
                     val currentHolidays =
-                        sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+                            sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
 
                     if (currentHolidays.isEmpty() ||
-                        (currentHolidays.size == 1 && "afghanistan_holidays" in currentHolidays)
+                            (currentHolidays.size == 1 && "afghanistan_holidays" in currentHolidays)
                     ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
                 }
                 when {
@@ -249,16 +249,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS &&
-            sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
-            && ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.READ_CALENDAR
-            ) != PackageManager.PERMISSION_GRANTED
+                sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
+                && ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.READ_CALENDAR
+                ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(this)
 
         if (key == PREF_APP_LANGUAGE || key == PREF_THEME) restartToSettings()
 
         if (key == PREF_NOTIFY_DATE &&
-            sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false
+                sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false
         ) {
             stopService(Intent(this, ApplicationService::class.java))
             startEitherServiceOrWorker(applicationContext)
@@ -269,15 +269,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CALENDAR_READ_PERMISSION_REQUEST_CODE) {
             if (ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.READ_CALENDAR
-                ) == PackageManager.PERMISSION_GRANTED
+                            this, Manifest.permission.READ_CALENDAR
+                    ) == PackageManager.PERMISSION_GRANTED
             ) {
                 toggleShowDeviceCalendarOnPreference(this, true)
                 if (getCurrentDestinationId() == R.id.calendar) restartActivity()
@@ -290,7 +290,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         initUtils(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             binding.drawer.layoutDirection =
-                if (isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+                    if (isRTL(this)) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
         }
     }
 
@@ -302,17 +302,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean =
-        // Checking for the ancient "menu" key
-        if (keyCode == KeyEvent.KEYCODE_MENU) {
-            if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
-                binding.drawer.closeDrawers()
+            // Checking for the ancient "menu" key
+            if (keyCode == KeyEvent.KEYCODE_MENU) {
+                if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                    binding.drawer.closeDrawers()
+                } else {
+                    binding.drawer.openDrawer(GravityCompat.START)
+                }
+                true
             } else {
-                binding.drawer.openDrawer(GravityCompat.START)
+                super.onKeyDown(keyCode, event)
             }
-            true
-        } else {
-            super.onKeyDown(keyCode, event)
-        }
 
     fun restartActivity() {
         val intent = intent
@@ -347,7 +347,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             binding.drawer.closeDrawers()
         } else {
             val calendarFragment = supportFragmentManager
-                .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
+                    .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
             if (calendarFragment?.closeSearch() == true) return
 
             if (getCurrentDestinationId() == R.id.calendar)
@@ -360,34 +360,34 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private val navController: NavController?
         get() =
             (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)
-                ?.findNavController()
+                    ?.findNavController()
 
     private fun getCurrentDestinationId(): Int? = navController?.currentDestination?.id
 
     private fun changeLangSnackbar() =
-        Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                view.layoutDirection = View.LAYOUT_DIRECTION_LTR
-            }
-            view.setOnClickListener { dismiss() }
-            setAction("Settings") {
-                appPrefs.edit {
-                    putString(PREF_APP_LANGUAGE, LANG_EN_US)
+            Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    view.layoutDirection = View.LAYOUT_DIRECTION_LTR
                 }
+                view.setOnClickListener { dismiss() }
+                setAction("Settings") {
+                    appPrefs.edit {
+                        putString(PREF_APP_LANGUAGE, LANG_EN_US)
+                    }
+                }
+                setActionTextColor(resources.getColor(R.color.dark_accent))
             }
-            setActionTextColor(resources.getColor(R.color.dark_accent))
-        }
 
     private fun outDatedSnackbar() =
-        Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
-            setAction(getString(R.string.update)) {
-                bringMarketPage(this@MainActivity)
+            Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
+                setAction(getString(R.string.update)) {
+                    bringMarketPage(this@MainActivity)
+                }
+                setActionTextColor(resources.getColor(R.color.dark_accent))
             }
-            setActionTextColor(resources.getColor(R.color.dark_accent))
-        }
 
     private fun drawerToggle() = object : ActionBarDrawerToggle(
-        this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
+            this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
     ) {
         val slidingDirection = if (isRTL(this@MainActivity)) -1 else +1
 
@@ -398,7 +398,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) = binding.apply {
             appMainLayout.translationX =
-                slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
+                    slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
             drawer.bringChildToFront(drawerView)
             drawer.requestLayout()
         }

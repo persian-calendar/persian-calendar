@@ -18,19 +18,19 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
         findPreference<ListPreference>("Theme")?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
+                ListPreference.SimpleSummaryProvider.getInstance()
         findPreference<ListPreference>("AppLanguage")?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
+                ListPreference.SimpleSummaryProvider.getInstance()
         findPreference<ListPreference>("WeekStart")?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
+                ListPreference.SimpleSummaryProvider.getInstance()
 
         val switchPreference = findPreference<SwitchPreferenceCompat>("showDeviceCalendarEvents")
 
         val activity = activity ?: return
         switchPreference?.setOnPreferenceChangeListener { _, _ ->
             if (ActivityCompat.checkSelfPermission(
-                    activity, Manifest.permission.READ_CALENDAR
-                ) != PackageManager.PERMISSION_GRANTED
+                            activity, Manifest.permission.READ_CALENDAR
+                    ) != PackageManager.PERMISSION_GRANTED
             ) {
                 askForCalendarPermission(activity)
                 switchPreference.isChecked = false
@@ -42,10 +42,10 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean =
-        if (preference?.key == "calendars_priority") {
-            parentFragmentManager.apply {
-                CalendarPreferenceDialog().show(this, "CalendarPreferenceDialog")
-            }
-            true
-        } else super.onPreferenceTreeClick(preference)
+            if (preference?.key == "calendars_priority") {
+                parentFragmentManager.apply {
+                    CalendarPreferenceDialog().show(this, "CalendarPreferenceDialog")
+                }
+                true
+            } else super.onPreferenceTreeClick(preference)
 }

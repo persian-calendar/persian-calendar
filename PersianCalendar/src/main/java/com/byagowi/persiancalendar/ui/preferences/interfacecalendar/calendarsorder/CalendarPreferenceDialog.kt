@@ -58,8 +58,8 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
                     if (ordering.isNotEmpty()) {
                         putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
                         putString(
-                            PREF_OTHER_CALENDARS_KEY,
-                            ordering.subList(1, ordering.size).joinToString(",")
+                                PREF_OTHER_CALENDARS_KEY,
+                                ordering.subList(1, ordering.size).joinToString(",")
                         )
                     }
                 }

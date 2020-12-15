@@ -10,8 +10,8 @@ package com.cepmuvakkit.times.posAlgo;
  */
 public class EarthHeading {
 
-    private double mHeading;
-    private long mMetres;
+    private final double mHeading;
+    private final long mMetres;
 
     public EarthHeading(double heading, long metres) {
         mHeading = heading;

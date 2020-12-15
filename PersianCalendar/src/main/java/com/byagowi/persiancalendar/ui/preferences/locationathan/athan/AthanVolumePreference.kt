@@ -6,7 +6,7 @@ import android.util.AttributeSet
 import androidx.preference.DialogPreference
 
 class AthanVolumePreference(context: Context, attrs: AttributeSet) :
-    DialogPreference(context, attrs) {
+        DialogPreference(context, attrs) {
     var volume: Int
         get() = getPersistedInt(1)
         set(volume) {

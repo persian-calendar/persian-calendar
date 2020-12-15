@@ -9,12 +9,14 @@ package com.cepmuvakkit.times.posAlgo;
  */
 public class EarthPosition {
 
-    private double mLatitude;
-    private double mLongitude;
-    private double mTimezone;
+    private final double mLatitude;
+    private final double mLongitude;
+    private final double mTimezone;
 
 
-    private int mAltitude, mTemperature, mPressure;
+    private final int mAltitude;
+    private final int mTemperature;
+    private final int mPressure;
 
     public EarthPosition() {
         this(32.85, 39.95, 2, 10, 1010, 0);

@@ -33,7 +33,7 @@ import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.google.android.material.snackbar.Snackbar
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
-    SharedPreferences.OnSharedPreferenceChangeListener {
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private var categoryAthan: Preference? = null
 
@@ -48,7 +48,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         addPreferencesFromResource(R.xml.preferences_location_athan)
 
         findPreference<ListPreference>("SelectedPrayTimeMethod")?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
+                ListPreference.SimpleSummaryProvider.getInstance()
 
         categoryAthan = findPreference(PREF_KEY_ATHAN)
 
@@ -56,7 +56,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
         putLocationOnSummary(
-            context?.appPrefs?.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY
+                context?.appPrefs?.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY
         )
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
     }
@@ -89,13 +89,13 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         when (preference?.key) {
             "pref_key_ringtone" -> {
                 val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
-                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
-                    .putExtra(
-                        RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                        Settings.System.DEFAULT_NOTIFICATION_URI
-                    )
+                        .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                        .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+                        .putExtra(
+                                RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                                Settings.System.DEFAULT_NOTIFICATION_URI
+                        )
                 getCustomAthanUri(context)?.let {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it)
                 }
@@ -120,18 +120,18 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             "pref_gps_location" -> {
                 try {
                     if (ActivityCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED
+                                    context,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                    context,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
                     ) {
                         askForLocationPermission(activity)
                     } else {
                         GPSLocationDialog().show(
-                            childFragmentManager,
-                            GPSLocationDialog::class.java.name
+                                childFragmentManager,
+                                GPSLocationDialog::class.java.name
                         )
                     }
                 } catch (e: Exception) {
@@ -151,7 +151,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE && resultCode == RESULT_OK) {
             data?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)?.let {
                 val ringtoneTitle = RingtoneManager
-                    .getRingtone(context, it.toString().toUri()).getTitle(context) ?: ""
+                        .getRingtone(context, it.toString().toUri()).getTitle(context) ?: ""
 
                 context.appPrefs.edit {
                     putString(PREF_ATHAN_NAME, ringtoneTitle)
@@ -160,7 +160,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
                 view?.let {
                     Snackbar.make(
-                        it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
+                            it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
                     ).show()
                 }
                 putAthanNameOnSummary(ringtoneTitle)
@@ -176,6 +176,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private fun putLocationOnSummary(selected: String) {
         val context = context ?: return
         findPreference<Preference>("Location")?.summary =
-            LocationPreference.getSummary(context, selected)
+                LocationPreference.getSummary(context, selected)
     }
 }

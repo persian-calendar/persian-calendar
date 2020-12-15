@@ -13,12 +13,12 @@ import com.byagowi.persiancalendar.utils.getTodayJdn
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
         (activity as? MainActivity)?.setTitleAndSubtitle(
-            getString(R.string.date_converter), ""
+                getString(R.string.date_converter), ""
         )
 
         calendarsView.expand(true)
@@ -37,8 +37,8 @@ class ConverterFragment : Fragment() {
                 calendarsView.visibility = View.VISIBLE
                 val selectedCalendarType = dayPickerView.selectedCalendarType
                 calendarsView.showCalendars(
-                    jdn, selectedCalendarType,
-                    getOrderedCalendarTypes() - selectedCalendarType
+                        jdn, selectedCalendarType,
+                        getOrderedCalendarTypes() - selectedCalendarType
                 )
             }
         }

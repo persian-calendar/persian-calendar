@@ -10,21 +10,21 @@ import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.layoutInflater
 
 class LocationAdapter(
-    private val locationPreferenceDialog: LocationPreferenceDialog,
-    private val cities: List<CityItem>
+        private val locationPreferenceDialog: LocationPreferenceDialog,
+        private val cities: List<CityItem>
 ) : RecyclerView.Adapter<LocationAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        ListItemCityNameBinding.inflate(parent.context.layoutInflater, parent, false)
+            ListItemCityNameBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-        holder.bind(cities[position])
+            holder.bind(cities[position])
 
     override fun getItemCount(): Int = cities.size
 
     inner class ViewHolder(private val binding: ListItemCityNameBinding) :
-        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+            RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         fun bind(cityEntity: CityItem) = binding.let {
             it.root.setOnClickListener(this)
@@ -50,6 +50,6 @@ class LocationAdapter(
         }
 
         override fun onClick(view: View) =
-            locationPreferenceDialog.selectItem(cities[adapterPosition].key)
+                locationPreferenceDialog.selectItem(cities[adapterPosition].key)
     }
 }

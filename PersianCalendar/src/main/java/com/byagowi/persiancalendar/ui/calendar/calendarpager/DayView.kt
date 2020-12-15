@@ -15,7 +15,7 @@ import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import kotlin.math.min
 
 class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    View(context, attrs) {
+        View(context, attrs) {
 
     private val tempTypedValue = TypedValue()
 
@@ -37,14 +37,14 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val colorEventLine = resolveColor(R.attr.colorEventLine)
 
     private val halfEventBarWidth = context.resources
-        .getDimensionPixelSize(R.dimen.day_item_event_bar_width) / 2
+            .getDimensionPixelSize(R.dimen.day_item_event_bar_width) / 2
     private val appointmentYOffset = context.resources
-        .getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
+            .getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
     private val eventYOffset = context.resources
-        .getDimensionPixelSize(R.dimen.day_item_event_y_offset)
+            .getDimensionPixelSize(R.dimen.day_item_event_y_offset)
     private val eventBarPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         strokeWidth = context.resources
-            .getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
+                .getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
     }
     private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -53,7 +53,7 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val todayPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = context.resources
-            .getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
+                .getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
         color = resolveColor(R.attr.colorCurrentDay)
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -95,8 +95,8 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
                 canvas.drawRoundRect(drawingRect, 0f, 0f, selectedPaint)
             } else {
                 canvas.drawCircle(
-                    width / 2f, height / 2f, (radius - 5).toFloat(),
-                    selectedPaint
+                        width / 2f, height / 2f, (radius - 5).toFloat(),
+                        selectedPaint
                 )
             }
         }
@@ -106,8 +106,8 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
                 canvas.drawRoundRect(drawingRect, 0f, 0f, todayPaint)
             } else {
                 canvas.drawCircle(
-                    width / 2f, height / 2f, (radius - 5).toFloat(),
-                    todayPaint
+                        width / 2f, height / 2f, (radius - 5).toFloat(),
+                        todayPaint
                 )
             }
         }
@@ -132,20 +132,20 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         if (hasEvent) {
             canvas.drawLine(
-                width / 2f - halfEventBarWidth,
-                (height - eventYOffset + yOffsetToApply).toFloat(),
-                width / 2f + halfEventBarWidth,
-                (height - eventYOffset + yOffsetToApply).toFloat(), eventBarPaint
+                    width / 2f - halfEventBarWidth,
+                    (height - eventYOffset + yOffsetToApply).toFloat(),
+                    width / 2f + halfEventBarWidth,
+                    (height - eventYOffset + yOffsetToApply).toFloat(), eventBarPaint
             )
         }
 
         if (hasAppointment) {
             canvas.drawLine(
-                width / 2f - halfEventBarWidth,
-                (height - appointmentYOffset + yOffsetToApply).toFloat(),
-                width / 2f + halfEventBarWidth,
-                (height - appointmentYOffset + yOffsetToApply).toFloat(),
-                eventBarPaint
+                    width / 2f - halfEventBarWidth,
+                    (height - appointmentYOffset + yOffsetToApply).toFloat(),
+                    width / 2f + halfEventBarWidth,
+                    (height - appointmentYOffset + yOffsetToApply).toFloat(),
+                    eventBarPaint
             )
         }
 
@@ -160,7 +160,7 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         val xPos = (width - textPaint.measureText(text).toInt()) / 2
         val textToMeasureHeight =
-            if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
+                if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
         textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
         var yPos = (height + bounds.height()) / 2
         yPos += yOffsetToApply
@@ -175,10 +175,10 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
 
     private fun setAll(
-        text: String, isToday: Boolean, isSelected: Boolean,
-        hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        textSize: Int, jdn: Long, dayOfMonth: Int, isNumber: Boolean,
-        header: String
+            text: String, isToday: Boolean, isSelected: Boolean,
+            hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
+            textSize: Int, jdn: Long, dayOfMonth: Int, isNumber: Boolean,
+            header: String
     ) {
         this.text = text
         this.today = isToday
@@ -195,17 +195,17 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
 
     fun setDayOfMonthItem(
-        isToday: Boolean, isSelected: Boolean,
-        hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        textSize: Int, jdn: Long, dayOfMonth: Int, header: String
+            isToday: Boolean, isSelected: Boolean,
+            hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
+            textSize: Int, jdn: Long, dayOfMonth: Int, header: String
     ) = setAll(
-        formatNumber(dayOfMonth), isToday, isSelected, hasEvent, hasAppointment,
-        isHoliday, textSize, jdn, dayOfMonth, true, header
+            formatNumber(dayOfMonth), isToday, isSelected, hasEvent, hasAppointment,
+            isHoliday, textSize, jdn, dayOfMonth, true, header
     )
 
     fun setNonDayOfMonthItem(text: String, textSize: Int) = setAll(
-        text, isToday = false, isSelected = false, hasEvent = false, hasAppointment = false,
-        isHoliday = false, textSize = textSize, jdn = -1, dayOfMonth = -1, isNumber = false,
-        header = ""
+            text, isToday = false, isSelected = false, hasEvent = false, hasAppointment = false,
+            isHoliday = false, textSize = textSize, jdn = -1, dayOfMonth = -1, isNumber = false,
+            header = ""
     )
 }

@@ -20,7 +20,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val mainActivity = activity as MainActivity
 
         val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)
-            ?.takeUnless { it == -1L } ?: getTodayJdn()
+                ?.takeUnless { it == -1L } ?: getTodayJdn()
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val deviceEvents = readMonthDeviceEvents(mainActivity, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
@@ -28,33 +28,33 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             val jdn = baseJdn + it
             val events = getEvents(jdn, deviceEvents)
             val holidays = getEventsTitle(
-                events,
-                holiday = true,
-                compact = false,
-                showDeviceCalendarEvents = false,
-                insertRLM = false,
-                addIsHoliday = isHighTextContrastEnabled
+                    events,
+                    holiday = true,
+                    compact = false,
+                    showDeviceCalendarEvents = false,
+                    insertRLM = false,
+                    addIsHoliday = isHighTextContrastEnabled
             )
             val nonHolidays = getEventsTitle(
-                events,
-                holiday = false,
-                compact = false,
-                showDeviceCalendarEvents = true,
-                insertRLM = false,
-                addIsHoliday = false
+                    events,
+                    holiday = false,
+                    compact = false,
+                    showDeviceCalendarEvents = true,
+                    insertRLM = false,
+                    addIsHoliday = false
             )
             if (holidays.isEmpty() && nonHolidays.isEmpty()) null
             else MonthOverviewRecord(
-                dayTitleSummary(
-                    getDateFromJdnOfCalendar(mainCalendar, jdn)
-                ), holidays, nonHolidays
+                    dayTitleSummary(
+                            getDateFromJdnOfCalendar(mainCalendar, jdn)
+                    ), holidays, nonHolidays
             )
         }.takeUnless { it.isEmpty() } ?: listOf(
-            MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
+                MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
         )
 
         val binding = MonthOverviewDialogBinding.inflate(
-            mainActivity.layoutInflater, null, false
+                mainActivity.layoutInflater, null, false
         ).apply {
             recyclerView.layoutManager = LinearLayoutManager(context)
             recyclerView.adapter = ItemAdapter(events)
@@ -68,14 +68,14 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     }
 
     internal class MonthOverviewRecord(
-        val title: String, val holidays: String, val nonHolidays: String
+            val title: String, val holidays: String, val nonHolidays: String
     )
 
     private inner class ItemAdapter(private val rows: List<MonthOverviewRecord>) :
-        RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+            RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            MonthOverviewItemBinding.inflate(parent.context.layoutInflater, parent, false)
+                MonthOverviewItemBinding.inflate(parent.context.layoutInflater, parent, false)
         )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
@@ -83,7 +83,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         override fun getItemCount(): Int = rows.size
 
         inner class ViewHolder(private val binding: MonthOverviewItemBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+                RecyclerView.ViewHolder(binding.root) {
 
             fun bind(position: Int) {
                 val record = rows[position]
@@ -93,7 +93,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
                     holidays.visibility = if (record.holidays.isEmpty()) View.GONE else View.VISIBLE
                     nonHolidays.text = record.nonHolidays
                     nonHolidays.visibility =
-                        if (record.nonHolidays.isEmpty()) View.GONE else View.VISIBLE
+                            if (record.nonHolidays.isEmpty()) View.GONE else View.VISIBLE
                 }
             }
         }

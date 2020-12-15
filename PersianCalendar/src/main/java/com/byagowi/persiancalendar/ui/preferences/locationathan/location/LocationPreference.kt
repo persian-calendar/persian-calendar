@@ -27,15 +27,15 @@ class LocationPreference(context: Context, attrs: AttributeSet) : DialogPreferen
         fun getSummary(context: Context, selected: String): String = (
                 if (selected == DEFAULT_CITY) null
                 else getAllCities(context, false)
-                    .firstOrNull { it.key == selected }
-                    ?.let {
-                        when (language) {
-                            LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
-                            LANG_CKB -> it.ckb
-                            LANG_AR -> it.ar
-                            else -> it.fa
+                        .firstOrNull { it.key == selected }
+                        ?.let {
+                            when (language) {
+                                LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
+                                LANG_CKB -> it.ckb
+                                LANG_AR -> it.ar
+                                else -> it.fa
+                            }
                         }
-                    }
                 ) ?: context.getString(R.string.location_help)
     }
 }

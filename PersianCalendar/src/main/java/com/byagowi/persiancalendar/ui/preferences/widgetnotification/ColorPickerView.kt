@@ -40,7 +40,7 @@ import androidx.core.view.updatePadding
 import java.util.*
 
 class ColorPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    LinearLayout(context, attrs) {
+        LinearLayout(context, attrs) {
 
     private var colorResultView: TextView
     private var redSeekBar: SeekBar
@@ -55,7 +55,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
     val pickerColor: Int
         @ColorInt
         get() = Color.argb(
-            alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
+                alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
         )
 
     private val Number.dp: Int
@@ -77,7 +77,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
         val listener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
-                showColor()
+                    showColor()
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -89,7 +89,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         alphaSeekBar = SeekBar(context)
 
         listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
-            listOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map { Color.parseColor(it) }
+                listOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map { Color.parseColor(it) }
         ) { seekBar, color ->
             seekBar.apply {
                 updatePadding(top = 8.dp, bottom = 8.dp)
@@ -107,12 +107,12 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).forEach(::addView)
 
             layoutParams =
-                LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-                    weight = 1f
-                }
+                    LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
+                        weight = 1f
+                    }
             measure(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
             )
         }
 
@@ -127,8 +127,8 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         }.apply {
             addView(colorResultView)
             layoutParams = LayoutParams(
-                seekBars.measuredHeight,
-                LayoutParams.MATCH_PARENT
+                    seekBars.measuredHeight,
+                    LayoutParams.MATCH_PARENT
             )
             setBackgroundColor(Color.LTGRAY)
             setPadding(1.dp, 1.dp, 1.dp, 1.dp)
@@ -157,7 +157,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             val view = View(context).apply {
                 setBackgroundColor(color)
                 layoutParams = FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+                        FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
                 )
             }
 
@@ -184,19 +184,19 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private fun showColor() {
         val color = Color.argb(
-            alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
+                alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
         )
         colorResultView.apply {
             setBackgroundColor(color)
             text =
-                if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
+                    if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
             setTextColor(color xor 0xFFFFFF)
         }
     }
 
     fun setPickedColor(@ColorInt color: Int) {
         listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
-            listOf(Color.red(color), Color.green(color), Color.blue(color), Color.alpha(color))
+                listOf(Color.red(color), Color.green(color), Color.blue(color), Color.alpha(color))
         ) { seekBar, channelValue ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                 seekBar.setProgress(channelValue, true)
@@ -209,11 +209,11 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
     fun hideAlphaSeekBar() {
         alphaSeekBar.visibility = GONE
         seekBars.measure(
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-            MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
         colorFrame.layoutParams = LayoutParams(
-            seekBars.measuredHeight, LayoutParams.MATCH_PARENT
+                seekBars.measuredHeight, LayoutParams.MATCH_PARENT
         )
     }
 }
@@ -221,17 +221,17 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 // https://stackoverflow.com/a/58471997
 fun createCheckerBoard(tileSize: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     shader = BitmapShader(
-        Bitmap.createBitmap(tileSize * 2, tileSize * 2, Bitmap.Config.ARGB_8888).apply {
-            Canvas(this).apply {
-                val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    style = Paint.Style.FILL
-                    color = 0x22000000
+            Bitmap.createBitmap(tileSize * 2, tileSize * 2, Bitmap.Config.ARGB_8888).apply {
+                Canvas(this).apply {
+                    val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                        style = Paint.Style.FILL
+                        color = 0x22000000
+                    }
+                    drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
+                    drawRect(
+                            tileSize.toFloat(), tileSize.toFloat(), tileSize * 2f, tileSize * 2f, fill
+                    )
                 }
-                drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
-                drawRect(
-                    tileSize.toFloat(), tileSize.toFloat(), tileSize * 2f, tileSize * 2f, fill
-                )
-            }
-        }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
+            }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
     )
 }

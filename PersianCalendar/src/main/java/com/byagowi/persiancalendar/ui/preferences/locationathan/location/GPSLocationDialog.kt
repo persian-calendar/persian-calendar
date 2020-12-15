@@ -78,10 +78,10 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
 
         return AlertDialog.Builder(mainActivity)
-            .setPositiveButton("", null)
-            .setNegativeButton("", null)
-            .setView(textView)
-            .create()
+                .setPositiveButton("", null)
+                .setNegativeButton("", null)
+                .setView(textView)
+                .create()
     }
 
     private fun checkGPSProvider() {
@@ -92,16 +92,16 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
             if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
                 AlertDialog.Builder(mainActivity)
-                    .setMessage(R.string.gps_internet_desc)
-                    .setPositiveButton(R.string.accept) { _, _ ->
-                        try {
-                            mainActivity.startActivity(
-                                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                            )
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }.create().show()
+                        .setMessage(R.string.gps_internet_desc)
+                        .setPositiveButton(R.string.accept) { _, _ ->
+                            try {
+                                mainActivity.startActivity(
+                                        Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                                )
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }.create().show()
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -110,12 +110,12 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
     private fun getLocation() {
         if (ActivityCompat.checkSelfPermission(
-                mainActivity,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                mainActivity,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
+                        mainActivity,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        mainActivity,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
         ) {
             lacksPermission = true
             return
@@ -154,10 +154,10 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         val plusCodeLink = "https://plus.codes/" +
                 OpenLocationCode.encode(location.latitude, location.longitude)
         result += formatCoordinate(
-            mainActivity,
-            Coordinate(location.latitude, location.longitude, location.altitude), "\n"
+                mainActivity,
+                Coordinate(location.latitude, location.longitude, location.altitude), "\n"
         ) + "\n\n" + formatCoordinateISO6709(
-            location.latitude, location.longitude, location.altitude
+                location.latitude, location.longitude, location.altitude
         ) + "\n\n" + plusCodeLink
         textView.text = result
         textView.setOnClickListener {
@@ -192,9 +192,9 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {

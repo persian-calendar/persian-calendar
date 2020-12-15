@@ -6,7 +6,7 @@ import androidx.preference.EditTextPreference
 import com.byagowi.persiancalendar.utils.formatNumber
 
 class NumericPreference @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    EditTextPreference(context, attrs) {
+        EditTextPreference(context, attrs) {
 
     private val defaultSummary: CharSequence = summary ?: ""
 

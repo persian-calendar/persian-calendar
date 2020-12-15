@@ -49,19 +49,19 @@ public class QiblaCompassView extends View {
     private double longitude = 0.0;
     private double latitude = 0.0;
     private Paint textPaint;
-    private Path mPath = new Path();
-    private Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-    private Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private RectF moonRect = new RectF();
-    private RectF moonOval = new RectF();
-    private Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
+    private final Path mPath = new Path();
+    private final Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
+    private final Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final RectF moonRect = new RectF();
+    private final RectF moonOval = new RectF();
+    private final Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
 
     public QiblaCompassView(Context context) {
         super(context);

@@ -33,8 +33,8 @@ class AthanActivity : AppCompatActivity() {
         override fun run() {
             try {
                 if ((ringtone == null && mediaPlayer == null) ||
-                    ringtone?.isPlaying == false ||
-                    mediaPlayer?.isPlaying == false
+                        ringtone?.isPlaying == false ||
+                        mediaPlayer?.isPlaying == false
                 ) return this@AthanActivity.finish()
 
                 handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
@@ -75,11 +75,11 @@ class AthanActivity : AppCompatActivity() {
         audioManager = getSystemService()
         audioManager?.let { am ->
             am.setStreamVolume(
-                AudioManager.STREAM_ALARM,
-                athanVolume.takeUnless { it == DEFAULT_ATHAN_VOLUME } ?: am.getStreamVolume(
-                    AudioManager.STREAM_ALARM
-                ),
-                0
+                    AudioManager.STREAM_ALARM,
+                    athanVolume.takeUnless { it == DEFAULT_ATHAN_VOLUME } ?: am.getStreamVolume(
+                            AudioManager.STREAM_ALARM
+                    ),
+                    0
             )
         }
 
@@ -89,9 +89,9 @@ class AthanActivity : AppCompatActivity() {
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         audioAttributes = AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                            .setUsage(AudioAttributes.USAGE_ALARM)
-                            .build()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_ALARM)
+                                .build()
                     } else {
                         @Suppress("DEPRECATION")
                         streamType = AudioManager.STREAM_ALARM
@@ -109,10 +109,10 @@ class AthanActivity : AppCompatActivity() {
                         setDataSource(this@AthanActivity, getDefaultAthanUri(this@AthanActivity))
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             setAudioAttributes(
-                                AudioAttributes.Builder()
-                                    .setUsage(AudioAttributes.USAGE_ALARM)
-                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                    .build()
+                                    AudioAttributes.Builder()
+                                            .setUsage(AudioAttributes.USAGE_ALARM)
+                                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                            .build()
                             )
                         } else {
                             @Suppress("DEPRECATION")
@@ -140,9 +140,9 @@ class AthanActivity : AppCompatActivity() {
         } else {
             @Suppress("DEPRECATION")
             window.addFlags(
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
-                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
+                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                            WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
             )
         }
 
@@ -156,7 +156,7 @@ class AthanActivity : AppCompatActivity() {
             root.setBackgroundResource(getPrayTimeImage(prayerKey))
 
             place.text = listOf(
-                getString(R.string.in_city_time), getCityName(this@AthanActivity, true)
+                    getString(R.string.in_city_time), getCityName(this@AthanActivity, true)
             ).joinToString(" ")
         }
 
@@ -166,8 +166,8 @@ class AthanActivity : AppCompatActivity() {
 
         try {
             getSystemService<TelephonyManager>()?.listen(
-                phoneStateListener,
-                PhoneStateListener.LISTEN_CALL_STATE
+                    phoneStateListener,
+                    PhoneStateListener.LISTEN_CALL_STATE
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -187,7 +187,7 @@ class AthanActivity : AppCompatActivity() {
 
         try {
             getSystemService<TelephonyManager>()?.listen(
-                phoneStateListener, PhoneStateListener.LISTEN_NONE
+                    phoneStateListener, PhoneStateListener.LISTEN_NONE
             )
             phoneStateListener = null
         } catch (e: RuntimeException) {

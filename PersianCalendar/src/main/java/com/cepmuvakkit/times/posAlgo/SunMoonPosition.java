@@ -9,13 +9,16 @@ package com.cepmuvakkit.times.posAlgo;
  */
 public class SunMoonPosition {
 
-    private Horizontal sunPosition, moonPosition;
-    private double moonPhase;
-    private EarthHeading qiblaInfo;
-    private SolarPosition solar;
-    private LunarPosition lunar;
-    private Ecliptic moonPosEc, solarPosEc;
-    private Equatorial moonPosEq, solarPosEq;
+    private final Horizontal sunPosition;
+    private final Horizontal moonPosition;
+    private final double moonPhase;
+    private final EarthHeading qiblaInfo;
+    private final SolarPosition solar;
+    private final LunarPosition lunar;
+    private final Ecliptic moonPosEc;
+    private final Ecliptic solarPosEc;
+    private final Equatorial moonPosEq;
+    private final Equatorial solarPosEq;
 
     public SunMoonPosition(double jd, double latitude, double longitude, double altitude, double ΔT) {
         solar = new SolarPosition();

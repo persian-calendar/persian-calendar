@@ -20,23 +20,23 @@ import java.util.*
 import kotlin.math.abs
 
 class CalendarsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    FrameLayout(context, attrs) {
+        FrameLayout(context, attrs) {
 
     private val changeBoundTransition = ChangeBounds()
     private val arrowRotationAnimationDuration =
-        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+            resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     private val calendarItemAdapter = CalendarItemAdapter(context)
     private val binding: CalendarsViewBinding =
-        CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
-            root.setOnClickListener { expand(!calendarItemAdapter.isExpanded) }
-            extraInformationContainer.visibility = View.GONE
-            calendarsRecyclerView.apply {
-                layoutManager = LinearLayoutManager(context).apply {
-                    orientation = RecyclerView.HORIZONTAL
+            CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
+                root.setOnClickListener { expand(!calendarItemAdapter.isExpanded) }
+                extraInformationContainer.visibility = View.GONE
+                calendarsRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(context).apply {
+                        orientation = RecyclerView.HORIZONTAL
+                    }
+                    adapter = calendarItemAdapter
                 }
-                adapter = calendarItemAdapter
             }
-        }
 
     fun hideMoreIcon() {
         binding.moreCalendar.visibility = View.GONE
@@ -47,16 +47,16 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         // Rotate expansion arrow
         binding.moreCalendar.animate()
-            .rotation(if (expanded) 180f else 0f)
-            .setDuration(arrowRotationAnimationDuration)
-            .start()
+                .rotation(if (expanded) 180f else 0f)
+                .setDuration(arrowRotationAnimationDuration)
+                .start()
 
         TransitionManager.beginDelayedTransition(binding.calendarsTabContent, changeBoundTransition)
         binding.extraInformationContainer.visibility = if (expanded) View.VISIBLE else View.GONE
     }
 
     fun showCalendars(
-        jdn: Long, chosenCalendarType: CalendarType, calendarsToShow: List<CalendarType>
+            jdn: Long, chosenCalendarType: CalendarType, calendarsToShow: List<CalendarType>
     ) {
         val context = context ?: return
 
@@ -72,8 +72,8 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         if (selectedDayAbsoluteDistance == 0L) {
             if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
-                getWeekDayName(CivilDate(jdn)),
-                context.getString(R.string.iran_time)
+                    getWeekDayName(CivilDate(jdn)),
+                    context.getString(R.string.iran_time)
             )
             binding.diffDate.visibility = View.GONE
         } else {
@@ -85,10 +85,10 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             val monthDiff = civilOffset.month - 1
             val dayOfMonthDiff = civilOffset.dayOfMonth - 1
             var text = context.getString(R.string.date_diff_text).format(
-                formatNumber(selectedDayAbsoluteDistance.toInt()),
-                formatNumber(yearDiff),
-                formatNumber(monthDiff),
-                formatNumber(dayOfMonthDiff)
+                    formatNumber(selectedDayAbsoluteDistance.toInt()),
+                    formatNumber(yearDiff),
+                    formatNumber(monthDiff),
+                    formatNumber(dayOfMonthDiff)
             )
             if (selectedDayAbsoluteDistance <= 31) text = text.split(" (")[0]
             binding.diffDate.text = text
@@ -96,11 +96,11 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         val mainDate = getDateFromJdnOfCalendar(chosenCalendarType, jdn)
         val startOfYear = getDateOfCalendar(
-            chosenCalendarType,
-            mainDate.year, 1, 1
+                chosenCalendarType,
+                mainDate.year, 1, 1
         )
         val startOfNextYear = getDateOfCalendar(
-            chosenCalendarType, mainDate.year + 1, 1, 1
+                chosenCalendarType, mainDate.year + 1, 1, 1
         )
         val startOfYearJdn = startOfYear.toJdn()
         val endOfYearJdn = startOfNextYear.toJdn() - 1
@@ -108,17 +108,17 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         val weeksCount = calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
 
         val startOfYearText = context.getString(R.string.start_of_year_diff).format(
-            formatNumber((jdn - startOfYearJdn).toInt()),
-            formatNumber(currentWeek),
-            formatNumber(mainDate.month)
+                formatNumber((jdn - startOfYearJdn).toInt()),
+                formatNumber(currentWeek),
+                formatNumber(mainDate.month)
         )
         val endOfYearText = context.getString(R.string.end_of_year_diff).format(
-            formatNumber((endOfYearJdn - jdn).toInt()),
-            formatNumber(weeksCount - currentWeek),
-            formatNumber(12 - mainDate.month)
+                formatNumber((endOfYearJdn - jdn).toInt()),
+                formatNumber(weeksCount - currentWeek),
+                formatNumber(12 - mainDate.month)
         )
         binding.startAndEndOfYearDiff.text =
-            listOf(startOfYearText, endOfYearText).joinToString("\n")
+                listOf(startOfYearText, endOfYearText).joinToString("\n")
 
         var equinox = ""
         if (mainCalendar == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
@@ -126,16 +126,16 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 val addition = if (mainDate.month == 12) 1 else 0
                 val springEquinox = getSpringEquinox(mainDate.toJdn())
                 equinox = context.getString(R.string.spring_equinox).format(
-                    formatNumber(mainDate.year + addition),
-                    Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
-                        .toFormattedString(forcedIn12 = true) + " " +
-                            formatDate(
-                                getDateFromJdnOfCalendar(
-                                    mainCalendar,
-                                    calendarToCivilDate(springEquinox).toJdn()
-                                ),
-                                forceNonNumerical = true
-                            )
+                        formatNumber(mainDate.year + addition),
+                        Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
+                                .toFormattedString(forcedIn12 = true) + " " +
+                                formatDate(
+                                        getDateFromJdnOfCalendar(
+                                                mainCalendar,
+                                                calendarToCivilDate(springEquinox).toJdn()
+                                        ),
+                                        forceNonNumerical = true
+                                )
                 )
             }
         }
@@ -145,14 +145,14 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
 
         binding.root.contentDescription = getA11yDaySummary(
-            context, jdn,
-            selectedDayAbsoluteDistance == 0L, emptyEventsStore(),
-            withZodiac = true, withOtherCalendars = true, withTitle = true
+                context, jdn,
+                selectedDayAbsoluteDistance == 0L, emptyEventsStore(),
+                withZodiac = true, withOtherCalendars = true, withTitle = true
         )
     }
 
     class CalendarItemAdapter internal constructor(context: Context) :
-        RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
+            RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
 
         private val calendarFont: Typeface = getCalendarFragmentFont(context)
         private var calendars: List<CalendarType> = emptyList()
@@ -170,7 +170,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            CalendarItemBinding.inflate(parent.context.layoutInflater, parent, false)
+                CalendarItemBinding.inflate(parent.context.layoutInflater, parent, false)
         )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
@@ -178,7 +178,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         override fun getItemCount(): Int = calendars.size
 
         inner class ViewHolder(private val binding: CalendarItemBinding) :
-            RecyclerView.ViewHolder(binding.root), OnClickListener {
+                RecyclerView.ViewHolder(binding.root), OnClickListener {
 
             init {
                 val applyLineMultiplier = !isCustomFontEnabled
@@ -202,11 +202,11 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 binding.day.text = formatNumber(date.dayOfMonth)
                 binding.monthYear.contentDescription = ""
                 binding.monthYear.text =
-                    listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
+                        listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
             }
 
             override fun onClick(view: View?) =
-                copyToClipboard(view, "converted date", view?.contentDescription)
+                    copyToClipboard(view, "converted date", view?.contentDescription)
         }
     }
 }
