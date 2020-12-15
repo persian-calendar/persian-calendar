@@ -39,7 +39,7 @@
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="end|center_vertical"
+            android:gravity="right|center_vertical"
             android:lineSpacingExtra="6dp"
             android:minLines="4"
             android:text=""
