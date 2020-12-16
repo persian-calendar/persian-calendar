@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="themeNames">
-        <item>سیستِمین بیرینجی سِچیمی</item>
+        <item>سیستم سِچیمی</item>
         <item>ایشیق</item>
         <item>قارا</item>
         <item>معاصیر</item>
@@ -9,9 +9,9 @@
     </string-array>
 
     <string-array name="prayMethodsNames">
-        <item>اون‌ایکی ایمام شیعه‌لری، لوا انجمنی، قم</item>
+        <item>اون‌ایکی ایماملی شیعه‌لری، لوا انجمنی، قم</item>
         <item>ایسلام بین‌الخالق بیرلیگی، عربیستان سعودی</item>
-        <item>قوزئی آمریکا ایسلام اهالیسی</item>
+        <item>قوزئی آمریکا ایسلام اهالی‌سی</item>
         <item>میصر مدنیت مرکزی</item>
         <item>مکه ام‌القرا بیلیم‌یوردو</item>
         <item>کراچی ایسلام بیلیم‌یوردو</item>
@@ -22,7 +22,7 @@
         <item>صوبح</item>
         <item>گون‌اورتا</item>
         <item>آخشام</item>
-        <item>گون باتیمی</item>
+        <item>گون‌باتیمی</item>
         <item>ایشا</item>
     </string-array>
 
@@ -50,19 +50,19 @@
 
     <string-array name="week_days">
         <item>يئل‌گونو</item>
-        <item>سودگونو</item>
-        <item>دوزگونو</item>
+        <item>سۆدگونو</item>
+        <item>دۇزگونو</item>
         <item>آراگون</item>
-        <item>اودگونو</item>
-        <item>سوگونو</item>
+        <item>اوْدگونو</item>
+        <item>سۇگونو</item>
         <item>آینی‌گون</item>
     </string-array>
 
     <string-array name="what_to_show">
-        <item>دیگر تقویم لر ویجت ده ۴×۱ و ۲×۲</item>
+        <item>دیگر تقویم‌لر ویجت‌ده ۴×۱ و ۲×۲</item>
         <item>تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</item>
-        <item>شرعی واختلار ویجت ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
-        <item>مکان شرعی اوقات کناریندا ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
+        <item>شرعی واخت‌لار ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
+        <item>مکان، شرعی واخت‌لار یانین‌دا ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
     </string-array>
 
     <string-array name="islamicOffsetNames">
@@ -76,8 +76,8 @@
     <string-array name="shift_work">
         <item>ایش گونو</item>
         <item>ایستراحت گونو</item>
-        <item>آخشام لار</item>
-        <item>گئجه لر</item>
+        <item>آخشام‌لار</item>
+        <item>گئجه‌لر</item>
     </string-array>
 
 </resources>
