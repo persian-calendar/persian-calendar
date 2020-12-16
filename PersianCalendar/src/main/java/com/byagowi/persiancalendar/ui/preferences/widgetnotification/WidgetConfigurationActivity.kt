@@ -21,6 +21,11 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         finish()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAndSuccess()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
 
