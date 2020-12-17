@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.config.KotlinCompilerVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -97,8 +96,6 @@ dependencies {
     implementation("com.github.persian-calendar:equinox:1.0.0")
     implementation("com.github.persian-calendar:calendar:1.0.1")
     implementation("com.github.persian-calendar:praytimes:1.0.0")
-
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${KotlinCompilerVersion.VERSION}")
 
     implementation("androidx.appcompat:appcompat:1.2.0")
     implementation("androidx.preference:preference-ktx:1.1.1")
