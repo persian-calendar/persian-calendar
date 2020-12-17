@@ -46,7 +46,6 @@ class LocationAdapter(
                     it.country.text = cityEntity.countryFa
                 }
             }
-            Unit
         }
 
         override fun onClick(view: View) =
