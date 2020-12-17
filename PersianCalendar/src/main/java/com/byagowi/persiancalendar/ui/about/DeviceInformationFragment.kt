@@ -101,6 +101,19 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
 
     data class Item(val title: String, val content: CharSequence?, val version: String)
 
+    // https://stackoverflow.com/a/59234917
+    // instead android.text.format.Formatter.formatShortFileSize() to control its locale
+    private fun humanReadableByteCountBin(bytes: Long) = when {
+        bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
+        bytes < 1024L -> "$bytes B"
+        bytes <= 0xfffccccccccccccL shr 40 -> "%.1f KiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 10))
+        bytes <= 0xfffccccccccccccL shr 30 -> "%.1f MiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 20))
+        bytes <= 0xfffccccccccccccL shr 20 -> "%.1f GiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 30))
+        bytes <= 0xfffccccccccccccL shr 10 -> "%.1f TiB".format(Locale.ENGLISH, bytes.toDouble() / (0x1 shl 40))
+        bytes <= 0xfffccccccccccccL -> "%.1f PiB".format(Locale.ENGLISH, (bytes shr 10).toDouble() / (0x1 shl 40))
+        else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
+    }
+
     val deviceInformationItems: List<Item> = listOf(
             Item("Screen Resolution", activity.windowManager.run {
                 "%d*%d pixels".format(Locale.ENGLISH, defaultDisplay.width, defaultDisplay.height)
@@ -109,6 +122,13 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
             Item(
                     "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
                     Build.VERSION.SDK_INT.toString()
+            ),
+            Item(
+                    "CPU Instructions Sets",
+                    (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        Build.SUPPORTED_ABIS
+                    else arrayOf(Build.CPU_ABI, Build.CPU_ABI2)).joinToString(", "),
+                    ""
             ),
             Item("Manufacturer", Build.MANUFACTURER, ""),
             Item("Brand", Build.BRAND, ""),
@@ -120,23 +140,18 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
             Item("Radio Firmware Version", Build.getRadioVersion(), ""),
             Item("Build User", Build.USER, ""),
             Item("Host", Build.HOST, ""),
+            Item("Boot Loader", Build.BOOTLOADER, ""),
+            Item("Device", Build.DEVICE, ""),
+            Item("Tags", Build.TAGS, ""),
+            Item("Hardware", Build.HARDWARE, ""),
+            Item("Type", Build.TYPE, ""),
             Item("Display", Build.DISPLAY, ""),
             Item("Device Fingerprints", Build.FINGERPRINT, ""),
             Item(
-                    "CPU Instructions Sets",
-                    (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        Build.SUPPORTED_ABIS
-                    else arrayOf(Build.CPU_ABI, Build.CPU_ABI2)).joinToString(", "),
-                    ""
-            ),
-            Item(
                     "RAM",
-                    android.text.format.Formatter.formatShortFileSize(
-                            activity,
-                            ActivityManager.MemoryInfo().apply {
-                                activity.getSystemService<ActivityManager>()?.getMemoryInfo(this)
-                            }.totalMem
-                    ),
+                    humanReadableByteCountBin(ActivityManager.MemoryInfo().apply {
+                        activity.getSystemService<ActivityManager>()?.getMemoryInfo(this)
+                    }.totalMem),
                     ""
             ),
             Item(
