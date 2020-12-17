@@ -1,10 +1,8 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.numeric
 
-import android.os.Build
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
-
 import androidx.preference.EditTextPreferenceDialogFragmentCompat
 
 class NumericDialog : EditTextPreferenceDialogFragmentCompat() {
