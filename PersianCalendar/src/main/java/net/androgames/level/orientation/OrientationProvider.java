@@ -98,6 +98,7 @@ public final class OrientationProvider implements SensorEventListener {
         // register listener and start listening
         if (sensorManager == null || sensor == null) return;
         running = sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST);
+        view.invalidate();
     }
 
     @Override
