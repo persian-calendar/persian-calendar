@@ -100,6 +100,9 @@ public class LevelView extends View {
      */
     private Orientation orientation;
     private long lastTime;
+    private long lastTimeShowAngle;
+    private double angleToShow1;
+    private double angleToShow2;
     private double angleX;
     private double angleY;
     private double speedX;
@@ -354,6 +357,12 @@ public class LevelView extends View {
         double timeDiff = (currentTime - lastTime) / 1000.0;
         lastTime = currentTime;
 
+        if (currentTime - lastTimeShowAngle > 500) {
+            angleToShow1 = angle1;
+            angleToShow2 = angle2;
+            lastTimeShowAngle = currentTime;
+        }
+
         double posX = orientation.getReverse() * (2 * x - minLevelX - maxLevelX) / levelMinusBubbleWidth;
         switch (orientation) {
             case TOP:
@@ -407,7 +416,7 @@ public class LevelView extends View {
                     displayRect.centerY() + lcdHeight / 2,
                     lcdBackgroundPaint);
             canvas.drawText(
-                    displayFormat.format(angle2),
+                    displayFormat.format(angleToShow2),
                     middleX - (displayRect.width() + displayGap) / 2,
                     displayRect.centerY() + lcdHeight / 2,
                     lcdForegroundPaint);
@@ -417,7 +426,7 @@ public class LevelView extends View {
                     displayRect.centerY() + lcdHeight / 2,
                     lcdBackgroundPaint);
             canvas.drawText(
-                    displayFormat.format(angle1),
+                    displayFormat.format(angleToShow1),
                     middleX + (displayRect.width() + displayGap) / 2,
                     displayRect.centerY() + lcdHeight / 2,
                     lcdForegroundPaint);
@@ -447,7 +456,7 @@ public class LevelView extends View {
                     displayBackgroundText, middleX,
                     displayRect.centerY() + lcdHeight / 2, lcdBackgroundPaint);
             canvas.drawText(
-                    displayFormat.format(angle1), middleX,
+                    displayFormat.format(angleToShow1), middleX,
                     displayRect.centerY() + lcdHeight / 2, lcdForegroundPaint);
             // level
             level1D.draw(canvas);
