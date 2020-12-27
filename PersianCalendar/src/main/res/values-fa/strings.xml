@@ -9,7 +9,7 @@
     <string name="widget_mini_name">تقویم فارسی (کوچک)</string>
     <string name="latitude">عرض جغرافیایی</string>
     <string name="longitude">طول جغرافیایی</string>
-    <string name="settings">تنظیمات</string>
+    <string name="settings">ساماندهی</string>
     <string name="exit">خروج</string>
     <string name="enable_persian_digits">نمایش عددها به فارسی</string>
     <string name="persian_digits">عددهای فارسی</string>
@@ -114,7 +114,7 @@
     <string name="about_license_sum">مجوز GPL3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
     <string name="about_license_dialog_close">بستن</string>
     <string name="help">راهنما</string>
-    <string name="about_report_bug">گزارش اشکال</string>
+    <string name="about_report_bug">گزارش ایراد</string>
     <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
     <string name="about_sendMail">رایانامه</string>
     <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
@@ -181,7 +181,7 @@
     <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم دستگاه را بدهید، اگر اجازه دسترسی به تقویم دستگاه دهید برنامه می‌تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
 
     <!--TalkBack, a11y-->
-    <string name="previous_month">ماه قبل</string>
+    <string name="previous_month">ماه پیش</string>
     <string name="next_month">ماه بعد</string>
     <string name="week_days_name_column">ستون %1$s در جدول روزها</string>
     <string name="equivalent_to">برابر با</string>
@@ -225,7 +225,7 @@
     <string name="enable_ascending_athan_volume">صدای اذان طی یک دقیقه به حداکثر خود می‌رسد</string>
     <string name="widget_background_color">رنگ پس‌زمینه ویجت</string>
     <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
-    <string name="share">هم‌رسانی</string>
+    <string name="share">همرسانی</string>
     <string name="enable_location_services">خدمات موقعیت غیرفعال است، برای استفاده از این ویژگی لطفاً آن را فعال سازید.</string>
 
 </resources>
