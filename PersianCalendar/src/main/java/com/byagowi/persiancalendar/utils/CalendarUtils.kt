@@ -273,7 +273,7 @@ fun getEventsTitle(
         .map {
             val title = when {
                 it is DeviceCalendarEvent && !compact -> formatDeviceCalendarEventTitle(it)
-                compact -> it.title.split(" (")[0]
+                compact -> it.title.replace(Regex(" \\([^)]+\\)$"), "")
                 else -> it.title
             }
 
