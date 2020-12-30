@@ -117,7 +117,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
     val deviceInformationItems: List<Item> = listOf(
             Item("Screen Resolution", activity.windowManager.run {
                 "%d*%d pixels".format(Locale.ENGLISH, defaultDisplay.width, defaultDisplay.height)
-            }, ""),
+            }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
             Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
             Item(
                     "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
@@ -130,11 +130,12 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                     else arrayOf(Build.CPU_ABI, Build.CPU_ABI2)).joinToString(", "),
                     ""
             ),
+            Item("Available Processors", Runtime.getRuntime().availableProcessors().toString(), ""),
+            Item("Instruction Architecture", Build.DEVICE, ""),
             Item("Manufacturer", Build.MANUFACTURER, ""),
             Item("Brand", Build.BRAND, ""),
             Item("Model", Build.MODEL, ""),
             Item("Product", Build.PRODUCT, ""),
-            Item("Instruction Architecture", Build.DEVICE, ""),
             Item("Android Id", Build.ID, ""),
             Item("Board", Build.BOARD, ""),
             Item("Radio Firmware Version", Build.getRadioVersion(), ""),
@@ -169,10 +170,15 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                     else "",
                     ""
             ),
+            Item("Display Metrics", activity.resources.displayMetrics.toString(), ""),
             Item(
                     "Sensors",
                     (activity.getSystemService<SensorManager>())
                             ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
+            ),
+            Item(
+                    "System Features",
+                    activity.packageManager.systemAvailableFeatures.joinToString("\n"), ""
             )
     ) + (try {
         // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
