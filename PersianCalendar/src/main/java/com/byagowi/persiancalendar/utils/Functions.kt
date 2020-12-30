@@ -537,38 +537,36 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
 }
 
 fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
-    val result = mutableListOf<CityItem>()
-    try {
-        fun JSONObject.forEach(f: (String, JSONObject) -> Unit) =
-                this.keys().asSequence().forEach { f(it, this.getJSONObject(it)) }
+    val result = try {
+        fun <T> JSONObject.map(f: (String, JSONObject) -> T) =
+                this.keys().asSequence().map { f(it, this.getJSONObject(it)) }
 
-        JSONObject(readRawResource(context, R.raw.cities)).forEach { countryCode, country ->
+        JSONObject(readRawResource(context, R.raw.cities)).map { countryCode, country ->
             val countryEn = country.getString("en")
             val countryFa = country.getString("fa")
             val countryCkb = country.getString("ckb")
             val countryAr = country.getString("ar")
 
-            country.getJSONObject("cities").forEach { key, city ->
-                result.add(
-                        CityItem(
-                                key = key,
-                                en = city.getString("en"), fa = city.getString("fa"),
-                                ckb = city.getString("ckb"), ar = city.getString("ar"),
-                                countryCode = countryCode,
-                                countryEn = countryEn, countryFa = countryFa,
-                                countryCkb = countryCkb, countryAr = countryAr,
-                                coordinate = Coordinate(
-                                        city.getDouble("latitude"),
-                                        city.getDouble("longitude"),
-                                        // Don't Consider elevation for Iran
-                                        if (countryCode == "ir") 0.0 else city.getDouble("elevation")
-                                )
+            country.getJSONObject("cities").map { key, city ->
+                CityItem(
+                        key = key,
+                        en = city.getString("en"), fa = city.getString("fa"),
+                        ckb = city.getString("ckb"), ar = city.getString("ar"),
+                        countryCode = countryCode,
+                        countryEn = countryEn, countryFa = countryFa,
+                        countryCkb = countryCkb, countryAr = countryAr,
+                        coordinate = Coordinate(
+                                city.getDouble("latitude"),
+                                city.getDouble("longitude"),
+                                // Don't Consider elevation for Iran
+                                if (countryCode == "ir") 0.0 else city.getDouble("elevation")
                         )
                 )
             }
-        }
+        }.flatten().toList()
     } catch (e: JSONException) {
         e.printStackTrace()
+        emptyList()
     }
 
     if (!needsSort) return result
