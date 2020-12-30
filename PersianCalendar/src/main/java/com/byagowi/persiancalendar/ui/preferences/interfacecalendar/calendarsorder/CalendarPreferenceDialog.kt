@@ -24,19 +24,11 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity as MainActivity
 
-        val values = ArrayList<String>()
-        val titles = ArrayList<String>()
-        val enabled = ArrayList<Boolean>()
-
         updateStoredPreference(activity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
-        val orderedCalendarTypes = getOrderedCalendarEntities(activity)
-        orderedCalendarTypes.forEach {
-            values.add(it.type.toString())
-            titles.add(it.toString())
-            enabled.add(it.type in enabledCalendarTypes)
-        }
-        val adapter = RecyclerListAdapter(this, activity, titles, values, enabled)
+        val adapter = RecyclerListAdapter(this, getOrderedCalendarEntities(activity).map {
+            RecyclerListAdapter.Item(it.toString(), it.type.toString(), it.type in enabledCalendarTypes)
+        })
         val recyclerView = RecyclerView(activity).apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(activity)
