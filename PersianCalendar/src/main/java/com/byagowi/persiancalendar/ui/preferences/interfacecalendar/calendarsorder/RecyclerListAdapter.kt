@@ -17,7 +17,6 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
  */
 
 import android.animation.ValueAnimator
-import android.content.Context
 import android.graphics.Color
 import android.view.MotionEvent
 import android.view.ViewGroup
@@ -27,16 +26,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.layoutInflater
-import java.util.*
 
 class RecyclerListAdapter(
         private val calendarPreferenceDialog: CalendarPreferenceDialog,
-        itemsList: List<Item>
+        private var items: List<Item>
 ) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
-    data class Item(val title: String, val key: String, var enabled: Boolean)
-
-    private val items = itemsList.toMutableList()
+    data class Item(val title: String, val key: String, val enabled: Boolean)
 
     val result: List<String>
         get() = items.filter { it.enabled }.map { it.key }
@@ -58,18 +54,26 @@ class RecyclerListAdapter(
     }
 
     fun onItemMoved(fromPosition: Int, toPosition: Int) {
-        Collections.swap(items, fromPosition, toPosition)
+        items = items.mapIndexed { i, x ->
+            // swap from and to in the new object
+            when (i) {
+                fromPosition -> items[toPosition]
+                toPosition -> items[fromPosition]
+                else -> x
+            }
+        }
         notifyItemMoved(fromPosition, toPosition)
     }
 
     fun onItemDismissed(position: Int) {
-        items.removeAt(position)
+        items = items.filterIndexed { i, _ -> i != position }
         notifyItemRemoved(position)
 
         // Easter egg when all are swiped
-        if (items.size == 0) {
+        if (items.isEmpty()) {
             try {
-                val view = (calendarPreferenceDialog.activity as? MainActivity)?.coordinator ?: return
+                val view = (calendarPreferenceDialog.activity as? MainActivity)?.coordinator
+                        ?: return
                 ValueAnimator.ofFloat(0f, 360f).apply {
                     duration = 3000L
                     interpolator = AccelerateDecelerateInterpolator()
@@ -110,7 +114,9 @@ class RecyclerListAdapter(
             binding.checkTextView.setOnClickListener {
                 val newState = !binding.checkTextView.isChecked
                 binding.checkTextView.isChecked = newState
-                items[layoutPosition].enabled = newState
+                items = items.mapIndexed { i, x ->
+                    if (i == layoutPosition) Item(x.title, x.key, newState) else x
+                }
             }
         }
 
