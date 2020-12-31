@@ -50,7 +50,6 @@ class DaysAdapter internal constructor(
             DayView(parent.context).apply {
                 layoutParams = dayViewLayoutParams
                 setTextTypeface(typeface)
-                setBackgroundResource(selectableItemBackground)
             }
     )
 
@@ -140,6 +139,7 @@ class DaysAdapter internal constructor(
                 else weekDayInitial
 
                 dayView.visibility = View.VISIBLE
+                dayView.setBackgroundResource(0)
             } else {
                 if (position - 7 - fixedStartingDayOfWeek >= 0) {
                     val day = days[position - 7 - fixedStartingDayOfWeek]
@@ -165,6 +165,7 @@ class DaysAdapter internal constructor(
                     ) else dayOfMonth.toString()
 
                     dayView.visibility = View.VISIBLE
+                    dayView.setBackgroundResource(selectableItemBackground)
                 } else {
                     setEmpty()
                 }
