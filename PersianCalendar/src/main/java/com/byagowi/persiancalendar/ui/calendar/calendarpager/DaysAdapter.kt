@@ -13,7 +13,7 @@ class DaysAdapter internal constructor(
         private val selectableItemBackground: Int
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
-    var days: List<Long> = emptyList()
+    var days = emptyList<Long>()
     var startingDayOfWeek: Int = 0
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0

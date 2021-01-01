@@ -154,14 +154,14 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     class CalendarItemAdapter internal constructor(context: Context) :
             RecyclerView.Adapter<CalendarItemAdapter.ViewHolder>() {
 
-        private val calendarFont: Typeface = getCalendarFragmentFont(context)
-        private var calendars: List<CalendarType> = emptyList()
+        private val calendarFont = getCalendarFragmentFont(context)
+        private var calendars = emptyList<CalendarType>()
         internal var isExpanded = false
             set(expanded) {
                 field = expanded
                 calendars.indices.forEach(::notifyItemChanged)
             }
-        private var jdn: Long = 0
+        private var jdn = 0L
 
         internal fun setDate(calendars: List<CalendarType>, jdn: Long) {
             this.calendars = calendars

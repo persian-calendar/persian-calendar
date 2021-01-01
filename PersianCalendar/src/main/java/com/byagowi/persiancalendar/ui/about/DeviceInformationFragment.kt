@@ -114,7 +114,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
     }
 
-    val deviceInformationItems: List<Item> = listOf(
+    val deviceInformationItems = listOf(
             Item("Screen Resolution", activity.windowManager.run {
                 "%d*%d pixels".format(Locale.ENGLISH, defaultDisplay.width, defaultDisplay.height)
             }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),

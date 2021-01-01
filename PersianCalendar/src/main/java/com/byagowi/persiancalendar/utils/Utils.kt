@@ -24,10 +24,10 @@ import java.util.*
 const val TAG = "Utils"
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-const val TWO_SECONDS_IN_MILLIS: Long = 2000
-const val HALF_SECOND_IN_MILLIS: Long = 500
-const val DAY_IN_SECOND: Long = 86400
-const val DAY_IN_MILLIS: Long = 86400000
+const val TWO_SECONDS_IN_MILLIS = 2000L
+const val HALF_SECOND_IN_MILLIS = 500L
+const val DAY_IN_SECOND = 86400L
+const val DAY_IN_MILLIS = 86400000L
 val monthNameEmptyList = (1..12).map { "" }.toList()
 var persianMonths = monthNameEmptyList
     private set
@@ -54,13 +54,13 @@ var isNotifyDate = DEFAULT_NOTIFY_DATE
     private set
 var notificationAthan = DEFAULT_NOTIFICATION_ATHAN
     private set
-var selectedWidgetTextColor: String = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     private set
-var selectedWidgetBackgroundColor: String = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     private set
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
     private set
-var language: String = DEFAULT_APP_LANGUAGE
+var language = DEFAULT_APP_LANGUAGE
     private set
     get() = if (field.isEmpty()) DEFAULT_APP_LANGUAGE else field
 var coordinate: Coordinate? = null
@@ -71,19 +71,19 @@ var otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
 var spacedComma = "، "
     private set
-var isShowWeekOfYearEnabled: Boolean = false
+var isShowWeekOfYearEnabled = false
     private set
-var isCenterAlignWidgets: Boolean = false
+var isCenterAlignWidgets = false
     private set
-var weekStartOffset: Int = 0
+var weekStartOffset = 0
     private set
 var weekEnds = BooleanArray(7)
     private set
-var isShowDeviceCalendarEvents: Boolean = false
+var isShowDeviceCalendarEvents = false
     private set
-var whatToShowOnWidgets: Set<String> = emptySet()
+var whatToShowOnWidgets = emptySet<String>()
     private set
-var isAstronomicalFeaturesEnabled: Boolean = false
+var isAstronomicalFeaturesEnabled = false
     private set
 
 @StyleRes
@@ -99,13 +99,13 @@ var cachedCityKey = ""
     private set
 var cachedCity: CityItem? = null
     private set
-var shiftWorkTitles: Map<String, String> = emptyMap()
+var shiftWorkTitles = emptyMap<String, String>()
     private set
-var shiftWorkStartingJdn: Long = -1
+var shiftWorkStartingJdn = -1L
     private set
 var shiftWorkRecurs = true
     private set
-var shiftWorks: List<ShiftWorkRecord> = emptyList()
+var shiftWorks = emptyList<ShiftWorkRecord>()
     private set
 var shiftWorkPeriod = 0
     private set
@@ -115,13 +115,13 @@ var amString = DEFAULT_AM
     private set
 var pmString = DEFAULT_PM
     private set
-var latestToastShowTime: Long = -1
+var latestToastShowTime = -1L
     private set
 var numericalDatePreferred = false
     private set
 var calendarTypesTitleAbbr = emptyList<String>()
     private set
-var allEnabledEvents: List<CalendarEvent<*>> = emptyList()
+var allEnabledEvents = emptyList<CalendarEvent<*>>()
     private set
 var persianCalendarEvents: PersianCalendarEventsStore = emptyEventsStore()
     private set
