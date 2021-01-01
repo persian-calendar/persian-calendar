@@ -31,12 +31,9 @@ private val ZODIAC_MONTHS_EMOJI = listOf(
         R.string.pisces_emoji
 )
 
-fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean {
-    var res =
-            (((islamicDate.dayOfMonth + 1).toFloat() * 12.2f + (persianDate.dayOfMonth + 1)) / 30f + persianDate.month).toInt()
-    if (res > 12) res -= 12
-    return res == 8
-}
+fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
+        (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
+                persianDate.month).toInt() % 12 == 8
 
 fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean) = if (isAstronomicalFeaturesEnabled) {
     val persianDate = PersianDate(jdn)
