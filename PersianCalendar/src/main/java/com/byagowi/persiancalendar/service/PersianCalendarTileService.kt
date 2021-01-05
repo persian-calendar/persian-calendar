@@ -17,8 +17,8 @@ class PersianCalendarTileService : TileService() {
 
     override fun onClick() = try {
         startActivityAndCollapse(
-                Intent(this, MainActivity::class.java)
-                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            Intent(this, MainActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
     } catch (e: Exception) {
         e.printStackTrace()
@@ -28,7 +28,7 @@ class PersianCalendarTileService : TileService() {
         val today = getTodayOfCalendar(mainCalendar)
         qsTile?.apply {
             icon = Icon.createWithResource(
-                    this@PersianCalendarTileService, getDayIconResource(today.dayOfMonth)
+                this@PersianCalendarTileService, getDayIconResource(today.dayOfMonth)
             )
             label = getWeekDayName(today)
             contentDescription = getMonthName(today)

@@ -9,8 +9,8 @@ import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.utils.*
 
 class DaysAdapter internal constructor(
-        private val context: Context, private val calendarPager: CalendarPager,
-        private val selectableItemBackground: Int
+    private val context: Context, private val calendarPager: CalendarPager,
+    private val selectableItemBackground: Int
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
     var days = emptyList<Long>()
@@ -19,8 +19,8 @@ class DaysAdapter internal constructor(
     var weeksCount: Int = 0
 
     private val dayViewLayoutParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
-            ViewGroup.LayoutParams.MATCH_PARENT,
-            context.resources.getDimensionPixelSize(R.dimen.day_item_size)
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        context.resources.getDimensionPixelSize(R.dimen.day_item_size)
     )
     private var monthEvents: DeviceCalendarEventsStore = emptyEventsStore()
     private val isArabicDigit: Boolean = isArabicDigitSelected()
@@ -47,10 +47,10 @@ class DaysAdapter internal constructor(
     private val typeface = getCalendarFragmentFont(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            DayView(parent.context).apply {
-                layoutParams = dayViewLayoutParams
-                setTextTypeface(typeface)
-            }
+        DayView(parent.context).apply {
+            layoutParams = dayViewLayoutParams
+            setTextTypeface(typeface)
+        }
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
@@ -61,7 +61,7 @@ class DaysAdapter internal constructor(
     val todayJdn = getTodayJdn()
 
     inner class ViewHolder(itemView: DayView) : RecyclerView.ViewHolder(itemView),
-            View.OnClickListener, View.OnLongClickListener {
+        View.OnClickListener, View.OnLongClickListener {
 
         init {
             itemView.setOnClickListener(this)
@@ -69,13 +69,13 @@ class DaysAdapter internal constructor(
         }
 
         private val weekNumberTextSize =
-                context.resources.getDimensionPixelSize(R.dimen.day_item_week_number_text_size)
+            context.resources.getDimensionPixelSize(R.dimen.day_item_week_number_text_size)
         private val weekDaysInitialTextSize =
-                context.resources.getDimensionPixelSize(R.dimen.day_item_week_days_initial_text_size)
+            context.resources.getDimensionPixelSize(R.dimen.day_item_week_days_initial_text_size)
         private val arabicDigitsTextSize =
-                context.resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size)
+            context.resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size)
         private val persianDigitsTextSize =
-                context.resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
+            context.resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
 
         override fun onClick(v: View) {
             val itemDayView = v as DayView
@@ -107,8 +107,8 @@ class DaysAdapter internal constructor(
                     if (row in 1..weeksCount) {
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
                         dayView.setNonDayOfMonthItem(
-                                weekNumber,
-                                weekNumberTextSize
+                            weekNumber,
+                            weekNumberTextSize
                         )
                         dayView.contentDescription = if (isTalkBackEnabled)
                             context.getString(R.string.nth_week_of_year).format(weekNumber)
@@ -129,13 +129,13 @@ class DaysAdapter internal constructor(
             } else if (position < 7) {
                 val weekDayInitial = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position))
                 dayView.setNonDayOfMonthItem(
-                        getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position)),
-                        weekDaysInitialTextSize
+                    getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position)),
+                    weekDaysInitialTextSize
                 )
 
                 dayView.contentDescription = if (isTalkBackEnabled)
                     context.getString(R.string.week_days_name_column)
-                            .format(getWeekDayName(revertWeekStartOffsetFromWeekDay(position)))
+                        .format(getWeekDayName(revertWeekStartOffsetFromWeekDay(position)))
                 else weekDayInitial
 
                 dayView.visibility = View.VISIBLE
@@ -150,18 +150,18 @@ class DaysAdapter internal constructor(
                     val dayOfMonth = position - 6 - fixedStartingDayOfWeek
 
                     dayView.setDayOfMonthItem(
-                            isToday,
-                            originalPosition == selectedDay,
-                            events.isNotEmpty(),
-                            events.any { it is DeviceCalendarEvent },
-                            isWeekEnd(((startingDayOfWeek + day - days[0]) % 7).toInt()) || events.any { it.isHoliday },
-                            if (isArabicDigit) arabicDigitsTextSize else persianDigitsTextSize,
-                            day, dayOfMonth, getShiftWorkTitle(day, true)
+                        isToday,
+                        originalPosition == selectedDay,
+                        events.isNotEmpty(),
+                        events.any { it is DeviceCalendarEvent },
+                        isWeekEnd(((startingDayOfWeek + day - days[0]) % 7).toInt()) || events.any { it.isHoliday },
+                        if (isArabicDigit) arabicDigitsTextSize else persianDigitsTextSize,
+                        day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
 
                     dayView.contentDescription = if (isTalkBackEnabled) getA11yDaySummary(
-                            context, day, isToday, emptyEventsStore(),
-                            withZodiac = isToday, withOtherCalendars = false, withTitle = true
+                        context, day, isToday, emptyEventsStore(),
+                        withZodiac = isToday, withOtherCalendars = false, withTitle = true
                     ) else dayOfMonth.toString()
 
                     dayView.visibility = View.VISIBLE

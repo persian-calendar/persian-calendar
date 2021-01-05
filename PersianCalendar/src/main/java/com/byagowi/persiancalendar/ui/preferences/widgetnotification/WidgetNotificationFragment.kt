@@ -14,7 +14,7 @@ import java.util.*
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) =
-            addPreferencesFromResource(R.xml.preferences_widget_notification)
+        addPreferencesFromResource(R.xml.preferences_widget_notification)
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         val activity = activity ?: return false
@@ -24,15 +24,15 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
         if (preference?.key == PREF_SELECTED_WIDGET_TEXT_COLOR) {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(
-                    listOf(0xFFFFFFFFL, 0xFFE65100L, 0xFF00796bL, 0xFFFEF200L, 0xFF202020L)
+                listOf(0xFFFFFFFFL, 0xFFE65100L, 0xFF00796bL, 0xFFFEF200L, 0xFF202020L)
             )
             colorPickerView.setPickedColor(
-                    Color.parseColor(
-                            sharedPreferences.getString(
-                                    PREF_SELECTED_WIDGET_TEXT_COLOR,
-                                    DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-                            )
+                Color.parseColor(
+                    sharedPreferences.getString(
+                        PREF_SELECTED_WIDGET_TEXT_COLOR,
+                        DEFAULT_SELECTED_WIDGET_TEXT_COLOR
                     )
+                )
             )
             colorPickerView.hideAlphaSeekBar()
 
@@ -46,11 +46,11 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                     try {
                         sharedPreferences.edit {
                             putString(
-                                    PREF_SELECTED_WIDGET_TEXT_COLOR,
-                                    "#%06X".format(
-                                            Locale.ENGLISH,
-                                            0xFFFFFF and colorPickerView.pickerColor
-                                    )
+                                PREF_SELECTED_WIDGET_TEXT_COLOR,
+                                "#%06X".format(
+                                    Locale.ENGLISH,
+                                    0xFFFFFF and colorPickerView.pickerColor
+                                )
                             )
                         }
                     } catch (e: Exception) {
@@ -66,12 +66,12 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             val colorPickerView = ColorPickerView(activity)
             colorPickerView.setColorsToPick(listOf(0x00000000L, 0x50000000L, 0xFF000000L))
             colorPickerView.setPickedColor(
-                    Color.parseColor(
-                            sharedPreferences.getString(
-                                    PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-                                    DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-                            )
+                Color.parseColor(
+                    sharedPreferences.getString(
+                        PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+                        DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
                     )
+                )
             )
 
             val padding = (activity.resources.displayMetrics.density * 10).toInt()
@@ -84,11 +84,11 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                     try {
                         sharedPreferences.edit {
                             putString(
-                                    PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-                                    "#%08X".format(
-                                            Locale.ENGLISH,
-                                            0xFFFFFFFF and colorPickerView.pickerColor.toLong()
-                                    )
+                                PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+                                "#%08X".format(
+                                    Locale.ENGLISH,
+                                    0xFFFFFFFF and colorPickerView.pickerColor.toLong()
+                                )
                             )
                         }
                     } catch (e: Exception) {

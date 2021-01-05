@@ -28,6 +28,19 @@ import java.util.GregorianCalendar;
 import static com.byagowi.persiancalendar.utils.UtilsKt.a11yAnnounceAndClick;
 
 public class QiblaCompassView extends View {
+    private final Path mPath = new Path();
+    private final Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
+    private final Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final RectF moonRect = new RectF();
+    private final RectF moonOval = new RectF();
+    private final Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
     @ColorInt
     int qiblaColor;
     // deliberately true
@@ -49,19 +62,6 @@ public class QiblaCompassView extends View {
     private double longitude = 0.0;
     private double latitude = 0.0;
     private Paint textPaint;
-    private final Path mPath = new Path();
-    private final Paint trueNorthArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint markerPaint = new Paint(Paint.FAKE_BOLD_TEXT_FLAG);
-    private final Paint circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint sunPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint moonPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint moonPaintB = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint moonPaintO = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Paint moonPaintD = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final RectF moonRect = new RectF();
-    private final RectF moonOval = new RectF();
-    private final Paint qiblaPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private final Bitmap kaaba = BitmapFactory.decodeResource(getResources(), R.drawable.kaaba);
 
     public QiblaCompassView(Context context) {
         super(context);

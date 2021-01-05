@@ -32,8 +32,8 @@ class AthanNotification : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
-                    NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
-                    NotificationManager.IMPORTANCE_DEFAULT
+                NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = getString(R.string.app_name)
                 enableLights(true)
@@ -47,8 +47,8 @@ class AthanNotification : Service() {
         val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
         val cityName = getCityName(this, false)
         val title =
-                if (cityName.isNotEmpty()) getString(getPrayTimeText(athanKey))
-                else "${getString(getPrayTimeText(athanKey))} - ${getString(R.string.in_city_time)} $cityName"
+            if (cityName.isNotEmpty()) getString(getPrayTimeText(athanKey))
+            else "${getString(getPrayTimeText(athanKey))} - ${getString(R.string.in_city_time)} $cityName"
 
         val subtitle = when (athanKey) {
             "FAJR" -> listOf(R.string.sunrise)
@@ -62,24 +62,24 @@ class AthanNotification : Service() {
         }
 
         val notificationBuilder = NotificationCompat.Builder(
-                this,
-                NOTIFICATION_CHANNEL_ID
+            this,
+            NOTIFICATION_CHANNEL_ID
         )
         notificationBuilder.setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.sun)
-                .setContentTitle(title)
-                .setContentText(subtitle)
+            .setWhen(System.currentTimeMillis())
+            .setSmallIcon(R.drawable.sun)
+            .setContentTitle(title)
+            .setContentText(subtitle)
 
         notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE)
         notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(
-                    applicationContext?.packageName, if (isLocaleRTL())
-                R.layout.custom_notification
-            else
-                R.layout.custom_notification_ltr
+                applicationContext?.packageName, if (isLocaleRTL())
+                    R.layout.custom_notification
+                else
+                    R.layout.custom_notification_ltr
             )
             cv.setTextViewText(R.id.title, title)
             if (subtitle.isEmpty()) {
@@ -89,8 +89,8 @@ class AthanNotification : Service() {
             }
 
             notificationBuilder
-                    .setCustomContentView(cv)
-                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                .setCustomContentView(cv)
+                .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }
 
         notificationManager?.notify(NOTIFICATION_ID, notificationBuilder.build())

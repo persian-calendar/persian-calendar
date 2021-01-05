@@ -12,7 +12,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 
 class DayPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        FrameLayout(context, attrs) {
+    FrameLayout(context, attrs) {
 
     private var jdn: Long = -1
 
@@ -25,7 +25,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         val calendarTypes = getOrderedCalendarEntities(getContext())
         val chips = calendarTypes.map { calendarTypeItem ->
             (inflater.inflate(
-                    R.layout.single_chip_layout, calendarTypesBox, false
+                R.layout.single_chip_layout, calendarTypesBox, false
             ) as Chip).apply { text = calendarTypeItem.toString() }
         }
         chips.forEachIndexed { i, chip ->

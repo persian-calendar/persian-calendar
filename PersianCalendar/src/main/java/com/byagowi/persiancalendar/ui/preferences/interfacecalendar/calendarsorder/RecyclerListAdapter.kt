@@ -28,8 +28,8 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.layoutInflater
 
 class RecyclerListAdapter(
-        private val calendarPreferenceDialog: CalendarPreferenceDialog,
-        private var items: List<Item>
+    private val calendarPreferenceDialog: CalendarPreferenceDialog,
+    private var items: List<Item>
 ) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
     data class Item(val title: String, val key: String, val enabled: Boolean)
@@ -38,7 +38,7 @@ class RecyclerListAdapter(
         get() = items.filter { it.enabled }.map { it.key }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
-            CalendarTypeItemBinding.inflate(parent.context.layoutInflater, parent, false)
+        CalendarTypeItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
@@ -73,7 +73,7 @@ class RecyclerListAdapter(
         if (items.isEmpty()) {
             try {
                 val view = (calendarPreferenceDialog.activity as? MainActivity)?.coordinator
-                        ?: return
+                    ?: return
                 ValueAnimator.ofFloat(0f, 360f).apply {
                     duration = 3000L
                     interpolator = AccelerateDecelerateInterpolator()
@@ -108,7 +108,7 @@ class RecyclerListAdapter(
     override fun getItemCount(): Int = items.size
 
     inner class ItemViewHolder(private val binding: CalendarTypeItemBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.checkTextView.setOnClickListener {

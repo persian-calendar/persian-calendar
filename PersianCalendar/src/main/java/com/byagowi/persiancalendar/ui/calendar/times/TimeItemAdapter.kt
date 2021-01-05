@@ -14,8 +14,8 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
 
     @StringRes
     private val timeNames = listOf(
-            R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
-            R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
+        R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
+        R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
     )
 
     var prayTimes: PrayTimes? = null
@@ -30,7 +30,7 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            TimeItemBinding.inflate(parent.context.layoutInflater, parent, false)
+        TimeItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
@@ -38,19 +38,19 @@ class TimeItemAdapter : RecyclerView.Adapter<TimeItemAdapter.ViewHolder>() {
     override fun getItemCount(): Int = timeNames.size
 
     inner class ViewHolder(private val binding: TimeItemBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+        RecyclerView.ViewHolder(binding.root) {
         private val emptyLayout = FlexboxLayoutManager.LayoutParams(0, 0)
         private val wrapContent = FlexboxLayoutManager.LayoutParams(
-                FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
-                FlexboxLayoutManager.LayoutParams.WRAP_CONTENT
+            FlexboxLayoutManager.LayoutParams.WRAP_CONTENT,
+            FlexboxLayoutManager.LayoutParams.WRAP_CONTENT
         )
 
         fun bind(position: Int) {
             val timeName = timeNames[position]
 
             binding.root.layoutParams = if (!isExpanded && timeName !in listOf(
-                            R.string.fajr, R.string.dhuhr, R.string.maghrib
-                    )
+                    R.string.fajr, R.string.dhuhr, R.string.maghrib
+                )
             ) emptyLayout else wrapContent
             binding.name.setText(timeName)
             binding.time.text = prayTimes?.run {

@@ -132,7 +132,7 @@ var gregorianCalendarEvents: GregorianCalendarEventsStore = emptyEventsStore()
 
 fun loadEvents(context: Context) {
     val enabledTypes =
-            context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
+        context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
 
     val afghanistanHolidays = "afghanistan_holidays" in enabledTypes
     val afghanistanOthers = "afghanistan_others" in enabledTypes
@@ -158,7 +158,7 @@ fun loadEvents(context: Context) {
     // Now that we are configuring converter's algorithm above, lets set the offset also
 
     IslamicDate.islamicOffset = context.appPrefs
-            .getString(PREF_ISLAMIC_OFFSET, null)?.toIntOrNull() ?: 0
+        .getString(PREF_ISLAMIC_OFFSET, null)?.toIntOrNull() ?: 0
 
     try {
         val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
@@ -167,7 +167,7 @@ fun loadEvents(context: Context) {
 
         // https://stackoverflow.com/a/36188796
         fun JSONObject.getArray(key: String): Sequence<JSONObject> =
-                getJSONArray(key).run { (0 until length()).asSequence().map { get(it) as JSONObject } }
+            getJSONArray(key).run { (0 until length()).asSequence().map { get(it) as JSONObject } }
 
         persianCalendarEvents = allTheEvents.getArray("Persian Calendar").mapNotNull {
             val month = it.getInt("month")
@@ -180,7 +180,7 @@ fun loadEvents(context: Context) {
             val type = it.getString("type")
 
             if (holiday && iranHolidays &&
-                    (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
+                (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
             ) addOrNot = true
 
             if (!iranHolidays && type == "Islamic Iran") holiday = false
@@ -245,14 +245,14 @@ fun loadEvents(context: Context) {
             val isOthers = !isOfficialInIran && !isOfficialInAfghanistan
 
             if (
-                    (isOthers && international) ||
-                    (isOfficialInIran && (iranOthers || international)) ||
-                    (isOfficialInAfghanistan && afghanistanOthers)
+                (isOthers && international) ||
+                (isOfficialInIran && (iranOthers || international)) ||
+                (isOfficialInAfghanistan && afghanistanOthers)
             ) {
                 GregorianCalendarEvent(
-                        CivilDate(-1, month, day),
-                        title + " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")",
-                        false
+                    CivilDate(-1, month, day),
+                    title + " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")",
+                    false
                 )
             } else null
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
@@ -264,19 +264,23 @@ fun loadEvents(context: Context) {
 }
 
 fun loadLanguageResource(context: Context) = try {
-    val messages = JSONObject(readRawResource(context, when (language) {
-        LANG_FA_AF -> R.raw.faaf
-        LANG_PS -> R.raw.ps
-        LANG_GLK -> R.raw.glk
-        LANG_AR -> R.raw.ar
-        LANG_CKB -> R.raw.ckb
-        LANG_UR -> R.raw.ur
-        LANG_EN_US -> R.raw.en
-        LANG_JA -> R.raw.ja
-        LANG_AZB -> R.raw.azb
-        LANG_EN_IR, LANG_FA -> R.raw.fa
-        else -> R.raw.fa
-    }))
+    val messages = JSONObject(
+        readRawResource(
+            context, when (language) {
+                LANG_FA_AF -> R.raw.faaf
+                LANG_PS -> R.raw.ps
+                LANG_GLK -> R.raw.glk
+                LANG_AR -> R.raw.ar
+                LANG_CKB -> R.raw.ckb
+                LANG_UR -> R.raw.ur
+                LANG_EN_US -> R.raw.en
+                LANG_JA -> R.raw.ja
+                LANG_AZB -> R.raw.azb
+                LANG_EN_IR, LANG_FA -> R.raw.fa
+                else -> R.raw.fa
+            }
+        )
+    )
 
     fun JSONArray.toStringList() = (0 until length()).map { getString(it) }
 
@@ -345,7 +349,7 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
 
 fun getCityFromPreference(context: Context): CityItem? {
     val key = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
-            ?.takeUnless { it.isEmpty() || it == DEFAULT_CITY } ?: return null
+        ?.takeUnless { it.isEmpty() || it == DEFAULT_CITY } ?: return null
 
     if (key == cachedCityKey)
         return cachedCity
@@ -379,18 +383,18 @@ fun updateStoredPreference(context: Context) {
     language = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
 
     preferredDigits =
-            if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)) when (language) {
-                LANG_AR, LANG_CKB -> ARABIC_INDIC_DIGITS
-                LANG_JA -> CJK_DIGITS
-                else -> PERSIAN_DIGITS
-            }
-            else ARABIC_DIGITS
+        if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)) when (language) {
+            LANG_AR, LANG_CKB -> ARABIC_INDIC_DIGITS
+            LANG_JA -> CJK_DIGITS
+            else -> PERSIAN_DIGITS
+        }
+        else ARABIC_DIGITS
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
     isNotifyDateOnLockScreen = prefs.getBoolean(
-            PREF_NOTIFY_DATE_LOCK_SCREEN,
-            DEFAULT_NOTIFY_DATE_LOCK_SCREEN
+        PREF_NOTIFY_DATE_LOCK_SCREEN,
+        DEFAULT_NOTIFY_DATE_LOCK_SCREEN
     )
     isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
@@ -398,25 +402,25 @@ fun updateStoredPreference(context: Context) {
     isCenterAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
 
     selectedWidgetTextColor =
-            prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
-                    ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+        prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
+            ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
     selectedWidgetBackgroundColor =
-            prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR, null)
-                    ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+        prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR, null)
+            ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
     calculationMethod = CalculationMethod
-            .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
+        .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
 
     coordinate = getCoordinate(context)
     try {
         mainCalendar =
-                CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI")
+            CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI")
 
         otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: "GREGORIAN,ISLAMIC")
-                .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
+            .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
     } catch (e: Exception) {
         Log.e(TAG, "Fail on parsing calendar preference", e)
         mainCalendar = CalendarType.SHAMSI
@@ -426,17 +430,17 @@ fun updateStoredPreference(context: Context) {
     spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
     isShowWeekOfYearEnabled = prefs.getBoolean("showWeekOfYearNumber", false)
     weekStartOffset =
-            (prefs.getString(PREF_WEEK_START, null) ?: DEFAULT_WEEK_START).toIntOrNull() ?: 0
+        (prefs.getString(PREF_WEEK_START, null) ?: DEFAULT_WEEK_START).toIntOrNull() ?: 0
 
     weekEnds = BooleanArray(7)
     (prefs.getStringSet(PREF_WEEK_ENDS, null) ?: DEFAULT_WEEK_ENDS)
-            .mapNotNull(String::toIntOrNull)
-            .forEach { weekEnds[it] = true }
+        .mapNotNull(String::toIntOrNull)
+        .forEach { weekEnds[it] = true }
 
     isShowDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     val resources = context.resources
     whatToShowOnWidgets = prefs.getStringSet("what_to_show", null)
-            ?: resources.getStringArray(R.array.what_to_show_default).toSet()
+        ?: resources.getStringArray(R.array.what_to_show_default).toSet()
 
     isAstronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
     numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false)
@@ -447,16 +451,16 @@ fun updateStoredPreference(context: Context) {
     calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr).toList()
 
     shiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "")
-            .splitIgnoreEmpty(",")
-            .map { it.splitIgnoreEmpty("=") }
-            .filter { it.size == 2 }
-            .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
+        .splitIgnoreEmpty(",")
+        .map { it.splitIgnoreEmpty("=") }
+        .filter { it.size == 2 }
+        .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
     shiftWorkPeriod = shiftWorks.map { it.length }.sum()
     shiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
     shiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
     shiftWorkTitles = resources.getStringArray(R.array.shift_work_keys)
-            .zip(resources.getStringArray(R.array.shift_work))
-            .toMap()
+        .zip(resources.getStringArray(R.array.shift_work))
+        .toMap()
 
     when (language) {
         LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
@@ -499,10 +503,12 @@ fun applyAppLanguage(context: Context) {
     val resources = context.resources
     val config = resources.configuration
     config.setLocale(locale)
-    config.setLayoutDirection(when (localeCode) {
-        LANG_AZB, LANG_GLK -> Locale(LANG_FA)
-        else -> locale
-    })
+    config.setLayoutDirection(
+        when (localeCode) {
+            LANG_AZB, LANG_GLK -> Locale(LANG_FA)
+            else -> locale
+        }
+    )
     resources.updateConfiguration(config, resources.displayMetrics)
 }
 

@@ -12,15 +12,15 @@ class DashClockUpdate : DashClockExtension() {
         val jdn = getTodayJdn()
         val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
         publishUpdate(
-                ExtensionData().visible(true)
-                        .icon(getDayIconResource(date.dayOfMonth))
-                        .status(getMonthName(date))
-                        .expandedTitle(dayTitleSummary(date))
-                        .expandedBody(dateStringOfOtherCalendars(jdn, spacedComma))
-                        .clickIntent(
-                                Intent(applicationContext, MainActivity::class.java)
-                                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        )
+            ExtensionData().visible(true)
+                .icon(getDayIconResource(date.dayOfMonth))
+                .status(getMonthName(date))
+                .expandedTitle(dayTitleSummary(date))
+                .expandedBody(dateStringOfOtherCalendars(jdn, spacedComma))
+                .clickIntent(
+                    Intent(applicationContext, MainActivity::class.java)
+                        .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
         )
     }
 }

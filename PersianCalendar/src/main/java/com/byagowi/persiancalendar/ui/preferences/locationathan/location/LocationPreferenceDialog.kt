@@ -21,8 +21,8 @@ class LocationPreferenceDialog : PreferenceDialogFragmentCompat() {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
             adapter = LocationAdapter(
-                    this@LocationPreferenceDialog,
-                    getAllCities(context, true)
+                this@LocationPreferenceDialog,
+                getAllCities(context, true)
             )
         }
 

@@ -71,15 +71,15 @@ class CompassFragment : Fragment() {
     }
 
     private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) =
-            Snackbar.make(mainActivity.coordinator, messageId, duration).apply {
-                view.setOnClickListener { dismiss() }
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
-            }.show()
+        Snackbar.make(mainActivity.coordinator, messageId, duration).apply {
+            view.setOnClickListener { dismiss() }
+            view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
+        }.show()
 
     lateinit var mainActivity: MainActivity
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         mainActivity = activity as MainActivity
 
@@ -87,8 +87,8 @@ class CompassFragment : Fragment() {
             coordinate = getCoordinate(mainActivity)
 
             mainActivity.setTitleAndSubtitle(
-                    getString(R.string.compass),
-                    getCityName(mainActivity, true)
+                getString(R.string.compass),
+                getCityName(mainActivity, true)
             )
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
@@ -97,18 +97,18 @@ class CompassFragment : Fragment() {
                     R.id.level -> mainActivity.navigateTo(R.id.level)
                     R.id.map -> try {
                         CustomTabsIntent.Builder().build().launchUrl(
-                                mainActivity,
-                                "https://g.co/qiblafinder".toUri()
+                            mainActivity,
+                            "https://g.co/qiblafinder".toUri()
                         )
                     } catch (e: Exception) {
                         e.printStackTrace()
                     }
                     R.id.help -> showLongSnackbar(
-                            if (sensorNotFound)
-                                R.string.compass_not_found
-                            else
-                                R.string.calibrate_compass_summary,
-                            5000
+                        if (sensorNotFound)
+                            R.string.compass_not_found
+                        else
+                            R.string.calibrate_compass_summary,
+                        5000
                     )
                     else -> {
                     }
@@ -119,7 +119,7 @@ class CompassFragment : Fragment() {
                 stopped = !stopped
                 fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
                 fab.contentDescription = mainActivity
-                        .getString(if (stopped) R.string.resume else R.string.stop)
+                    .getString(if (stopped) R.string.resume else R.string.stop)
             }
         }
 
@@ -161,9 +161,9 @@ class CompassFragment : Fragment() {
         sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         if (sensor != null) {
             sensorManager?.registerListener(
-                    compassListener,
-                    sensor,
-                    SensorManager.SENSOR_DELAY_FASTEST
+                compassListener,
+                sensor,
+                SensorManager.SENSOR_DELAY_FASTEST
             )
             if (coordinate == null) showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
         } else {

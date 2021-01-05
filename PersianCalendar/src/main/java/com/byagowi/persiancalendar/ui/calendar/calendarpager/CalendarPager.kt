@@ -17,7 +17,7 @@ import java.lang.ref.WeakReference
 import java.util.*
 
 class CalendarPager @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null
+    context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
 
     // Public API
@@ -36,7 +36,7 @@ class CalendarPager @JvmOverloads constructor(
             val today = getTodayOfCalendar(mainCalendar)
             val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
             viewPager.setCurrentItem(
-                    applyOffset((today.year - date.year) * 12 + today.month - date.month), true
+                applyOffset((today.year - date.year) * 12 + today.month - date.month), true
             )
         }
 
@@ -88,7 +88,7 @@ class CalendarPager @JvmOverloads constructor(
     inner class PagerAdapter : RecyclerView.Adapter<PagerAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-                FragmentMonthBinding.inflate(parent.context.layoutInflater, parent, false)
+            FragmentMonthBinding.inflate(parent.context.layoutInflater, parent, false)
         )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
@@ -96,19 +96,19 @@ class CalendarPager @JvmOverloads constructor(
         override fun getItemCount() = monthsLimit
 
         inner class ViewHolder(val binding: FragmentMonthBinding) :
-                RecyclerView.ViewHolder(binding.root) {
+            RecyclerView.ViewHolder(binding.root) {
 
             private val selectableItemBackground = TypedValue().also {
                 context.theme.resolveAttribute(
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            android.R.attr.selectableItemBackgroundBorderless
-                        else android.R.attr.selectableItemBackground,
-                        it, true
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        android.R.attr.selectableItemBackgroundBorderless
+                    else android.R.attr.selectableItemBackground,
+                    it, true
                 )
             }.resourceId
 
             private val daysAdapter = DaysAdapter(
-                    binding.root.context, this@CalendarPager, selectableItemBackground
+                binding.root.context, this@CalendarPager, selectableItemBackground
             )
 
             var refresh = fun(_: Boolean, _: Long) {}
@@ -118,8 +118,8 @@ class CalendarPager @JvmOverloads constructor(
 
                 binding.next.apply {
                     setImageResource(
-                            if (isRTL) R.drawable.ic_keyboard_arrow_left
-                            else R.drawable.ic_keyboard_arrow_right
+                        if (isRTL) R.drawable.ic_keyboard_arrow_left
+                        else R.drawable.ic_keyboard_arrow_right
                     )
                     setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem + 1, true) }
                     setBackgroundResource(selectableItemBackground)
@@ -127,8 +127,8 @@ class CalendarPager @JvmOverloads constructor(
 
                 binding.prev.apply {
                     setImageResource(
-                            if (isRTL) R.drawable.ic_keyboard_arrow_right
-                            else R.drawable.ic_keyboard_arrow_left
+                        if (isRTL) R.drawable.ic_keyboard_arrow_right
+                        else R.drawable.ic_keyboard_arrow_left
                     )
                     setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem - 1, true) }
                     setBackgroundResource(selectableItemBackground)
@@ -137,7 +137,7 @@ class CalendarPager @JvmOverloads constructor(
                 binding.monthDays.apply {
                     setHasFixedSize(true)
                     layoutManager = GridLayoutManager(
-                            binding.root.context, if (isShowWeekOfYearEnabled) 8 else 7
+                        binding.root.context, if (isShowWeekOfYearEnabled) 8 else 7
                     )
                 }
 

@@ -21,12 +21,12 @@ class SelectDayDialog : AppCompatDialogFragment() {
         dayPickerView.setDayJdnOnView(jdn)
 
         return AlertDialog.Builder(mainActivity)
-                .setView(dayPickerView as View)
-                .setCustomTitle(null)
-                .setPositiveButton(R.string.go) { _, _ ->
-                    val resultJdn = dayPickerView.dayJdnFromView
-                    if (resultJdn != -1L) onSuccess(resultJdn)
-                }.create()
+            .setView(dayPickerView as View)
+            .setCustomTitle(null)
+            .setPositiveButton(R.string.go) { _, _ ->
+                val resultJdn = dayPickerView.dayJdnFromView
+                if (resultJdn != -1L) onSuccess(resultJdn)
+            }.create()
     }
 
     companion object {

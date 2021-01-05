@@ -28,7 +28,7 @@ import kotlin.math.cos
  */
 
 class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        View(context, attrs), ValueAnimator.AnimatorUpdateListener {
+    View(context, attrs), ValueAnimator.AnimatorUpdateListener {
 
     private val FULL_DAY = Clock(24, 0).toInt().toFloat()
     private val HALF_DAY = Clock(12, 0).toInt().toFloat()
@@ -41,7 +41,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         pathEffect = DashPathEffect(floatArrayOf(3f, 7f), 0f) /* Sun rays effect */
     }
     private val dayPaint =
-            Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL_AND_STROKE }
+        Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL_AND_STROKE }
 
     @ColorInt
     private var horizonColor: Int = 0
@@ -245,10 +245,10 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         canvas.drawText(dayLengthString, width * if (isRTL) 0.70f else 0.30f, height * .94f, paint)
         if (remainingString.isNotEmpty()) {
             canvas.drawText(
-                    remainingString,
-                    width * if (isRTL) 0.30f else 0.70f,
-                    height * .94f,
-                    paint
+                remainingString,
+                width * if (isRTL) 0.30f else 0.70f,
+                height * .94f,
+                paint
             )
         }
 
@@ -257,18 +257,18 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
             @ColorInt
             val color = argbEvaluator.evaluate(
-                    current,
-                    sunBeforeMiddayColor, sunAfterMiddayColor
+                current,
+                sunBeforeMiddayColor, sunAfterMiddayColor
             ) as Int
 
             sunPaint.color = color
             //mSunRaisePaint.setColor(color);
             //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
             canvas.drawCircle(
-                    width * current,
-                    getY((width * current).toInt(), segmentByPixel, (height * 0.9f).toInt()),
-                    height * 0.09f,
-                    sunPaint
+                width * current,
+                getY((width * current).toInt(), segmentByPixel, (height * 0.9f).toInt()),
+                height * 0.09f,
+                sunPaint
             )
             //mPaint.clearShadowLayer();
             //canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * 0.9f)), (height * 0.09f) - 5, mSunRaisePaint);
@@ -309,8 +309,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         val arcWidth = ((moonPhase - 0.5) * (4 * r)).toInt()
         moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
         moonOval.set(
-                px - abs(arcWidth) / 2f, py + eOffset - radius - r,
-                px + abs(arcWidth) / 2f, py + eOffset - radius + r
+            px - abs(arcWidth) / 2f, py + eOffset - radius - r,
+            px + abs(arcWidth) / 2f, py + eOffset - radius + r
         )
         canvas.drawArc(moonOval, 0f, 360f, false, moonPaintO)
         canvas.drawArc(moonRect, 0f, 360f, false, moonPaintD)
@@ -362,19 +362,19 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         val dayLength = Clock.fromInt((sunset - sunrise).toInt())
         val remaining =
-                Clock.fromInt(if (now > sunset || now < sunrise) 0 else (sunset - now).toInt())
+            Clock.fromInt(if (now > sunset || now < sunrise) 0 else (sunset - now).toInt())
         dayLengthString = context.getString(R.string.length_of_day).format(
-                formatNumber(dayLength.hour), formatNumber(dayLength.minute)
+            formatNumber(dayLength.hour), formatNumber(dayLength.minute)
         )
         remainingString = if (remaining.toInt() == 0) "" else context.getString(
-                R.string.remaining_daylight
+            R.string.remaining_daylight
         ).format(formatNumber(remaining.hour), formatNumber(remaining.minute))
 
         argbEvaluator = ArgbEvaluator()
 
         linearGradient = LinearGradient(
-                getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
-                dayColor, daySecondColor, Shader.TileMode.MIRROR
+            getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
+            dayColor, daySecondColor, Shader.TileMode.MIRROR
         )
 
         if (immediate) {

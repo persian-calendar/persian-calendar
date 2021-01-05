@@ -67,7 +67,7 @@ class CalendarFragment : Fragment() {
     val initialDate = getTodayOfCalendar(mainCalendar)
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = FragmentCalendarBinding.inflate(inflater, container, false).apply {
         mainBinding = this
 
@@ -75,58 +75,58 @@ class CalendarFragment : Fragment() {
 
         val tabs = listOf(
 
-                // First tab
-                R.string.calendar to CalendarsView(mainActivity).apply {
-                    calendarsView = this
-                },
+            // First tab
+            R.string.calendar to CalendarsView(mainActivity).apply {
+                calendarsView = this
+            },
 
-                // Second tab
-                R.string.events to EventsTabContentBinding.inflate(inflater, container, false).apply {
-                    eventsBinding = this
+            // Second tab
+            R.string.events to EventsTabContentBinding.inflate(inflater, container, false).apply {
+                eventsBinding = this
 
-                    // Apply some animation, don't do the same for others tabs, it is problematic
-                    eventsContent.layoutTransition =
-                            LayoutTransition().apply { enableTransitionType(LayoutTransition.CHANGING) }
-                }.root
+                // Apply some animation, don't do the same for others tabs, it is problematic
+                eventsContent.layoutTransition =
+                    LayoutTransition().apply { enableTransitionType(LayoutTransition.CHANGING) }
+            }.root
 
         ) + (getCoordinate(mainActivity)?.run {
             coordinate = this
 
             listOf(
-                    // Optional third tab
-                    R.string.owghat to OwghatTabContentBinding.inflate(
-                            inflater, container, false
-                    ).apply {
-                        owghatBinding = this
+                // Optional third tab
+                R.string.owghat to OwghatTabContentBinding.inflate(
+                    inflater, container, false
+                ).apply {
+                    owghatBinding = this
 
-                        root.setOnClickListener { onOwghatClick() }
+                    root.setOnClickListener { onOwghatClick() }
 
-                        cityName.run {
-                            setOnClickListener { onOwghatClick() }
-                            // Easter egg to test AthanActivity
-                            setOnLongClickListener {
-                                startAthan(context, "FAJR")
-                                true
-                            }
-                            val cityName = getCityName(context, false)
-                            if (cityName.isNotEmpty()) text = cityName
+                    cityName.run {
+                        setOnClickListener { onOwghatClick() }
+                        // Easter egg to test AthanActivity
+                        setOnLongClickListener {
+                            startAthan(context, "FAJR")
+                            true
                         }
+                        val cityName = getCityName(context, false)
+                        if (cityName.isNotEmpty()) text = cityName
+                    }
 
-                        timesRecyclerView.run {
-                            layoutManager = FlexboxLayoutManager(context).apply {
-                                flexWrap = FlexWrap.WRAP
-                                justifyContent = JustifyContent.CENTER
-                            }
-                            adapter = TimeItemAdapter()
+                    timesRecyclerView.run {
+                        layoutManager = FlexboxLayoutManager(context).apply {
+                            flexWrap = FlexWrap.WRAP
+                            justifyContent = JustifyContent.CENTER
                         }
-                    }.root
+                        adapter = TimeItemAdapter()
+                    }
+                }.root
             )
         } ?: emptyList())
 
         // tabs should fill their parent otherwise view pager can't handle it
         tabs.forEach {
             it.second.layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
 
@@ -137,7 +137,7 @@ class CalendarFragment : Fragment() {
                 selectedMonth.let {
                     mainActivity.setTitleAndSubtitle(getMonthName(it), formatNumber(it.year))
                     todayButton?.isVisible =
-                            it.year != initialDate.year || it.month != initialDate.month
+                        it.year != initialDate.year || it.month != initialDate.month
                 }
             }
         }
@@ -147,7 +147,7 @@ class CalendarFragment : Fragment() {
             override fun getItemViewType(position: Int) = position // set viewtype equal to position
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                    object : RecyclerView.ViewHolder(tabs[viewType].second) {}
+                object : RecyclerView.ViewHolder(tabs[viewType].second) {}
         }
         TabLayoutMediator(tabLayout, viewPager) { tab, i -> tab.setText(tabs[i].first) }.attach()
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -172,8 +172,8 @@ class CalendarFragment : Fragment() {
 
         getTodayOfCalendar(mainCalendar).also {
             mainActivity.setTitleAndSubtitle(
-                    getMonthName(it),
-                    formatNumber(it.year)
+                getMonthName(it),
+                formatNumber(it.year)
             )
         }
     }
@@ -183,35 +183,35 @@ class CalendarFragment : Fragment() {
         val time = Calendar.getInstance()
         time.set(civil.year, civil.month - 1, civil.dayOfMonth)
         if (ActivityCompat.checkSelfPermission(
-                        mainActivity, Manifest.permission.READ_CALENDAR
-                ) != PackageManager.PERMISSION_GRANTED
+                mainActivity, Manifest.permission.READ_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(activity) else {
             try {
                 startActivityForResult(
-                        Intent(Intent.ACTION_INSERT)
-                                .setData(CalendarContract.Events.CONTENT_URI)
-                                .putExtra(
-                                        CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                        getDateFromJdnOfCalendar(mainCalendar, jdn)
-                                )
-                                )
-                                .putExtra(
-                                        CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                                        time.timeInMillis
-                                )
-                                .putExtra(
-                                        CalendarContract.EXTRA_EVENT_END_TIME,
-                                        time.timeInMillis
-                                )
-                                .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
-                        CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
+                    Intent(Intent.ACTION_INSERT)
+                        .setData(CalendarContract.Events.CONTENT_URI)
+                        .putExtra(
+                            CalendarContract.Events.DESCRIPTION, dayTitleSummary(
+                                getDateFromJdnOfCalendar(mainCalendar, jdn)
+                            )
+                        )
+                        .putExtra(
+                            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
+                            time.timeInMillis
+                        )
+                        .putExtra(
+                            CalendarContract.EXTRA_EVENT_END_TIME,
+                            time.timeInMillis
+                        )
+                        .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
+                    CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                 )
             } catch (e: Exception) {
                 e.printStackTrace()
                 Snackbar.make(
-                        mainBinding.root,
-                        R.string.device_calendar_does_not_support,
-                        Snackbar.LENGTH_SHORT
+                    mainBinding.root,
+                    R.string.device_calendar_does_not_support,
+                    Snackbar.LENGTH_SHORT
                 ).show()
             }
         }
@@ -223,8 +223,8 @@ class CalendarFragment : Fragment() {
                 mainBinding.calendarPager.refresh(isEventsModified = true)
             else {
                 if (ActivityCompat.checkSelfPermission(
-                                mainActivity, Manifest.permission.READ_CALENDAR
-                        ) != PackageManager.PERMISSION_GRANTED
+                        mainActivity, Manifest.permission.READ_CALENDAR
+                    ) != PackageManager.PERMISSION_GRANTED
                 ) askForCalendarPermission(activity) else {
                     toggleShowDeviceCalendarOnPreference(mainActivity, true)
                     mainActivity.restartActivity()
@@ -234,48 +234,48 @@ class CalendarFragment : Fragment() {
     }
 
     private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = dayEvents
-            .filterIsInstance<DeviceCalendarEvent>()
-            .map { event ->
-                SpannableString(formatDeviceCalendarEventTitle(event)).apply {
-                    setSpan(object : ClickableSpan() {
-                        override fun onClick(textView: View) = try {
-                            startActivityForResult(
-                                    Intent(Intent.ACTION_VIEW)
-                                            .setData(
-                                                    ContentUris.withAppendedId(
-                                                            CalendarContract.Events.CONTENT_URI, event.id.toLong()
-                                                    )
-                                            ),
-                                    CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-                            )
-                        } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
-                            e.printStackTrace()
-                            Snackbar.make(
-                                    textView,
-                                    R.string.device_calendar_does_not_support,
-                                    Snackbar.LENGTH_SHORT
-                            ).show()
-                        }
+        .filterIsInstance<DeviceCalendarEvent>()
+        .map { event ->
+            SpannableString(formatDeviceCalendarEventTitle(event)).apply {
+                setSpan(object : ClickableSpan() {
+                    override fun onClick(textView: View) = try {
+                        startActivityForResult(
+                            Intent(Intent.ACTION_VIEW)
+                                .setData(
+                                    ContentUris.withAppendedId(
+                                        CalendarContract.Events.CONTENT_URI, event.id.toLong()
+                                    )
+                                ),
+                            CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
+                        )
+                    } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
+                        e.printStackTrace()
+                        Snackbar.make(
+                            textView,
+                            R.string.device_calendar_does_not_support,
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                    }
 
-                        override fun updateDrawState(ds: TextPaint) {
-                            super.updateDrawState(ds)
-                            if (event.color.isNotEmpty()) {
-                                try {
-                                    // should be turned to long then int otherwise gets stupid alpha
-                                    ds.color = event.color.toLong().toInt()
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
+                    override fun updateDrawState(ds: TextPaint) {
+                        super.updateDrawState(ds)
+                        if (event.color.isNotEmpty()) {
+                            try {
+                                // should be turned to long then int otherwise gets stupid alpha
+                                ds.color = event.color.toLong().toInt()
+                            } catch (e: Exception) {
+                                e.printStackTrace()
                             }
                         }
-                    }, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                }
+                    }
+                }, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-            .foldIndexed(SpannableStringBuilder()) { i, result, x ->
-                if (i != 0) result.append("\n")
-                result.append(x)
-                result
-            }
+        }
+        .foldIndexed(SpannableStringBuilder()) { i, result, x ->
+            if (i != 0) result.append("\n")
+            result.append(x)
+            result
+        }
 
     private var selectedJdn = getTodayJdn()
 
@@ -296,12 +296,12 @@ class CalendarFragment : Fragment() {
 
         // a11y
         if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
-                mainBinding.root,
-                getA11yDaySummary(
-                        mainActivity, jdn, false, emptyEventsStore(),
-                        withZodiac = true, withOtherCalendars = true, withTitle = true
-                ),
-                Snackbar.LENGTH_SHORT
+            mainBinding.root,
+            getA11yDaySummary(
+                mainActivity, jdn, false, emptyEventsStore(),
+                withZodiac = true, withOtherCalendars = true, withTitle = true
+            ),
+            Snackbar.LENGTH_SHORT
         ).show()
     }
 
@@ -309,24 +309,24 @@ class CalendarFragment : Fragment() {
         eventsBinding.run {
             shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
             val events = getEvents(
-                    jdn,
-                    readDayDeviceEvents(mainActivity, jdn)
+                jdn,
+                readDayDeviceEvents(mainActivity, jdn)
             )
             val holidays = getEventsTitle(
-                    events,
-                    holiday = true,
-                    compact = false,
-                    showDeviceCalendarEvents = false,
-                    insertRLM = false,
-                    addIsHoliday = isHighTextContrastEnabled
+                events,
+                holiday = true,
+                compact = false,
+                showDeviceCalendarEvents = false,
+                insertRLM = false,
+                addIsHoliday = isHighTextContrastEnabled
             )
             val nonHolidays = getEventsTitle(
-                    events,
-                    holiday = false,
-                    compact = false,
-                    showDeviceCalendarEvents = false,
-                    insertRLM = false,
-                    addIsHoliday = false
+                events,
+                holiday = false,
+                compact = false,
+                showDeviceCalendarEvents = false,
+                insertRLM = false,
+                addIsHoliday = false
             )
             val deviceEvents = getDeviceEventsTitle(events)
             val contentDescription = StringBuilder()
@@ -349,10 +349,10 @@ class CalendarFragment : Fragment() {
                 noEvent.visibility = View.GONE
                 deviceEventTitle.text = deviceEvents
                 contentDescription
-                        .append("\n")
-                        .append(getString(R.string.show_device_calendar_events))
-                        .append("\n")
-                        .append(deviceEvents)
+                    .append("\n")
+                    .append(getString(R.string.show_device_calendar_events))
+                    .append("\n")
+                    .append(deviceEvents)
 
 
                 deviceEventTitle.run {
@@ -368,10 +368,10 @@ class CalendarFragment : Fragment() {
                 noEvent.visibility = View.GONE
                 eventTitle.text = nonHolidays
                 contentDescription
-                        .append("\n")
-                        .append(getString(R.string.events))
-                        .append("\n")
-                        .append(nonHolidays)
+                    .append("\n")
+                    .append(getString(R.string.events))
+                    .append("\n")
+                    .append(nonHolidays)
 
 
                 eventTitle.visibility = View.VISIBLE
@@ -382,7 +382,7 @@ class CalendarFragment : Fragment() {
             val messageToShow = SpannableStringBuilder()
 
             val enabledTypes = mainActivity.appPrefs
-                    .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+                .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
             if (enabledTypes.isEmpty()) {
                 noEvent.visibility = View.GONE
                 if (messageToShow.isNotEmpty()) messageToShow.append("\n")
@@ -398,8 +398,8 @@ class CalendarFragment : Fragment() {
                 messageToShow.append(ss)
 
                 contentDescription
-                        .append("\n")
-                        .append(title)
+                    .append("\n")
+                    .append(title)
             }
 
             if (messageToShow.isNotEmpty()) {
@@ -418,15 +418,15 @@ class CalendarFragment : Fragment() {
         if (coordinate == null) return
 
         val prayTimes = PrayTimesCalculator.calculate(
-                calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
+            calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
         )
         (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter)?.prayTimes = prayTimes
         owghatBinding?.sunView?.run {
             setSunriseSunsetMoonPhase(prayTimes, try {
                 coordinate?.run {
                     SunMoonPosition(
-                            getTodayJdn().toDouble(), latitude,
-                            longitude, 0.0, 0.0
+                        getTodayJdn().toDouble(), latitude,
+                        longitude, 0.0, 0.0
                     ).moonPhase
                 } ?: 1.0
             } catch (e: Exception) {
@@ -442,9 +442,9 @@ class CalendarFragment : Fragment() {
         (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter)?.apply {
             isExpanded = !isExpanded
             owghatBinding?.moreOwghat?.animate()
-                    ?.rotation(if (isExpanded) 180f else 0f)
-                    ?.setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
-                    ?.start()
+                ?.rotation(if (isExpanded) 180f else 0f)
+                ?.setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
+                ?.start()
         }
     }
 
@@ -464,30 +464,30 @@ class CalendarFragment : Fragment() {
             setOnSearchClickListener {
                 // Remove search edit view below bar
                 findViewById<View?>(androidx.appcompat.R.id.search_plate)?.setBackgroundColor(
-                        Color.TRANSPARENT
+                    Color.TRANSPARENT
                 )
 
                 findViewById<SearchAutoComplete?>(androidx.appcompat.R.id.search_src_text)?.apply {
                     setHint(R.string.search_in_events)
                     setAdapter(
-                            ArrayAdapter(
-                                    mainActivity, R.layout.suggestion, android.R.id.text1,
-                                    allEnabledEvents + getAllEnabledAppointments(context)
-                            )
+                        ArrayAdapter(
+                            mainActivity, R.layout.suggestion, android.R.id.text1,
+                            allEnabledEvents + getAllEnabledAppointments(context)
+                        )
                     )
                     setOnItemClickListener { parent, _, position, _ ->
                         val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                         val type = getCalendarTypeFromDate(date)
                         val today = getTodayOfCalendar(type)
                         bringDate(
-                                getDateOfCalendar(
-                                        type,
-                                        if (date.year == -1)
-                                            (today.year + if (date.month < today.month) 1 else 0)
-                                        else date.year,
-                                        date.month,
-                                        date.dayOfMonth
-                                ).toJdn()
+                            getDateOfCalendar(
+                                type,
+                                if (date.year == -1)
+                                    (today.year + if (date.month < today.month) 1 else 0)
+                                else date.year,
+                                date.month,
+                                date.dayOfMonth
+                            ).toJdn()
                         )
                         onActionViewCollapsed()
                     }
@@ -501,8 +501,8 @@ class CalendarFragment : Fragment() {
             R.id.go_to -> SelectDayDialog.newInstance(selectedJdn).apply {
                 onSuccess = fun(jdn: Long) { bringDate(jdn) }
             }.show(
-                    childFragmentManager,
-                    SelectDayDialog::class.java.name
+                childFragmentManager,
+                SelectDayDialog::class.java.name
             )
             R.id.add_event -> addEventOnCalendar(selectedJdn)
             R.id.shift_work -> ShiftWorkDialog.newInstance(selectedJdn).apply {
@@ -511,12 +511,12 @@ class CalendarFragment : Fragment() {
                     mainActivity.restartActivity()
                 }
             }.show(
-                    childFragmentManager,
-                    ShiftWorkDialog::class.java.name
+                childFragmentManager,
+                ShiftWorkDialog::class.java.name
             )
             R.id.month_overview -> MonthOverviewDialog
-                    .newInstance(mainBinding.calendarPager.selectedMonth.toJdn())
-                    .show(childFragmentManager, MonthOverviewDialog::class.java.name)
+                .newInstance(mainBinding.calendarPager.selectedMonth.toJdn())
+                .show(childFragmentManager, MonthOverviewDialog::class.java.name)
         }
         return true
     }
