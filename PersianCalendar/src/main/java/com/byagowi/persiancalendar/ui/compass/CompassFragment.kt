@@ -29,12 +29,18 @@ import kotlin.math.abs
 class CompassFragment : Fragment() {
 
     var stopped = false
-    private lateinit var binding: FragmentCompassBinding
+    private var binding: FragmentCompassBinding? = null
     private var sensorManager: SensorManager? = null
     private var sensor: Sensor? = null
     private var orientation = 0f
     private var sensorNotFound = false
     private var coordinate: Coordinate? = null
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     private val compassListener = object : SensorEventListener {
         /*
          * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
@@ -54,10 +60,10 @@ class CompassFragment : Fragment() {
             if (stopped)
                 angle = 0f
             else
-                binding.compassView.isOnDirectionAction()
+                binding?.compassView?.isOnDirectionAction()
 
             azimuth = lowPass(angle, azimuth)
-            binding.compassView.setBearing(azimuth)
+            binding?.compassView?.setBearing(azimuth)
         }
 
         /**
@@ -70,11 +76,12 @@ class CompassFragment : Fragment() {
         }
     }
 
-    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) =
-        Snackbar.make(mainActivity.coordinator, messageId, duration).apply {
+    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) {
+        Snackbar.make(mainActivity.coordinator ?: return, messageId, duration).apply {
             view.setOnClickListener { dismiss() }
             view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
         }.show()
+    }
 
     lateinit var mainActivity: MainActivity
 
@@ -83,7 +90,7 @@ class CompassFragment : Fragment() {
     ): View {
         mainActivity = activity as MainActivity
 
-        binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
+        val binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
             coordinate = getCoordinate(mainActivity)
 
             mainActivity.setTitleAndSubtitle(
@@ -110,8 +117,7 @@ class CompassFragment : Fragment() {
                             R.string.calibrate_compass_summary,
                         5000
                     )
-                    else -> {
-                    }
+                    else -> Unit
                 }
                 true
             }
@@ -122,6 +128,7 @@ class CompassFragment : Fragment() {
                     .getString(if (stopped) R.string.resume else R.string.stop)
             }
         }
+        this.binding = binding
 
         setCompassMetrics()
         coordinate?.apply {
@@ -144,7 +151,7 @@ class CompassFragment : Fragment() {
         mainActivity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val width = displayMetrics.widthPixels
         val height = displayMetrics.heightPixels
-        binding.compassView.setScreenResolution(width, height - 2 * height / 8)
+        binding?.compassView?.setScreenResolution(width, height - 2 * height / 8)
 
         when (mainActivity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
             Surface.ROTATION_0 -> orientation = 0f

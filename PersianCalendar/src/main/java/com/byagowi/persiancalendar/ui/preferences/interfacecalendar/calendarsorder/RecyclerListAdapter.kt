@@ -72,8 +72,8 @@ class RecyclerListAdapter(
         // Easter egg when all are swiped
         if (items.isEmpty()) {
             try {
-                val view = (calendarPreferenceDialog.activity as? MainActivity)?.coordinator
-                    ?: return
+                val view =
+                    (calendarPreferenceDialog.activity as? MainActivity)?.coordinator ?: return
                 ValueAnimator.ofFloat(0f, 360f).apply {
                     duration = 3000L
                     interpolator = AccelerateDecelerateInterpolator()

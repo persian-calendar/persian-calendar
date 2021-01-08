@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
 class GPSLocationDialog : AppCompatDialogFragment() {
 
     private var locationManager: LocationManager? = null
-    private lateinit var textView: TextView
+    private var textView: TextView? = null
     private val handler = Handler(Looper.getMainLooper())
     private var latitude: String? = null
     private var longitude: String? = null
@@ -46,12 +46,12 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         override fun onProviderEnabled(provider: String) {
             isOneProviderEnabled = true
             if (!isLocationShown)
-                textView.setText(R.string.pleasewaitgps)
+                textView?.setText(R.string.pleasewaitgps)
         }
 
         override fun onProviderDisabled(provider: String) {
             if (!isLocationShown && !isOneProviderEnabled)
-                textView.setText(R.string.enable_location_services)
+                textView?.setText(R.string.enable_location_services)
         }
     }
 
@@ -59,6 +59,11 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
     private val Number.dp: Int
         get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textView = null
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         mainActivity = activity as MainActivity
@@ -159,8 +164,8 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         ) + "\n\n" + formatCoordinateISO6709(
             location.latitude, location.longitude, location.altitude
         ) + "\n\n" + plusCodeLink
-        textView.text = result
-        textView.setOnClickListener {
+        textView?.text = result
+        textView?.setOnClickListener {
             copyToClipboard(textView, "coords", plusCodeLink)
         }
 

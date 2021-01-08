@@ -56,6 +56,18 @@ public class LevelView extends View {
      * Fonts and colors
      */
     private static final String FONT_LCD = "fonts/lcd.ttf";
+    private static final String displayBackgroundText = "88.8";
+    /**
+     * Rect
+     */
+    private final Rect displayRect = new Rect();
+    /**
+     * Format des angles
+     */
+    private final DecimalFormat displayFormat = new DecimalFormat("00.0");
+    private final Paint lcdForegroundPaint = new Paint();
+    private final Paint lcdBackgroundPaint = new Paint();
+    private final Paint infoPaint = new Paint();
     private boolean isAlreadyLeveled = true; // deliberately
     /**
      * Dimensions
@@ -86,10 +98,6 @@ public class LevelView extends View {
     private int displayGap;
     private int sensorGap;
     private int levelMaxDimension;
-    /**
-     * Rect
-     */
-    private final Rect displayRect = new Rect();
     /**
      * Angles
      */
@@ -122,14 +130,6 @@ public class LevelView extends View {
      * Ajustement de la vitesse
      */
     private double viscosityValue = 1;
-    /**
-     * Format des angles
-     */
-    private final DecimalFormat displayFormat = new DecimalFormat("00.0");
-    private static final String displayBackgroundText = "88.8";
-    private final Paint lcdForegroundPaint = new Paint();
-    private final Paint lcdBackgroundPaint = new Paint();
-    private final Paint infoPaint = new Paint();
     private boolean firstTime = true;
 
     public LevelView(Context context) {

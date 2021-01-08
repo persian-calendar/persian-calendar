@@ -81,13 +81,12 @@ fun formatDate(
     date: AbstractDate,
     calendarNameInLinear: Boolean = true,
     forceNonNumerical: Boolean = false
-): String =
-    if (numericalDatePreferred && !forceNonNumerical)
-        (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
-    else when (language) {
-        LANG_CKB -> "%sی %sی %s"
-        else -> "%s %s %s"
-    }.format(formatNumber(date.dayOfMonth), getMonthName(date), formatNumber(date.year))
+): String = if (numericalDatePreferred && !forceNonNumerical)
+    (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
+else when (language) {
+    LANG_CKB -> "%sی %sی %s"
+    else -> "%s %s %s"
+}.format(formatNumber(date.dayOfMonth), getMonthName(date), formatNumber(date.year))
 
 fun isNonArabicScriptSelected() = when (language) {
     LANG_EN_US, LANG_JA -> true
@@ -583,21 +582,20 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
             else -> irCodeOrder.indexOf(countryCode)
         }
 
-    fun prepareForArabicSort(text: String): String =
-        text
-            .replace("ی", "ي")
-            .replace("ک", "ك")
-            .replace("گ", "كی")
-            .replace("ژ", "زی")
-            .replace("چ", "جی")
-            .replace("پ", "بی")
-            .replace("ڕ", "ری")
-            .replace("ڵ", "لی")
-            .replace("ڤ", "فی")
-            .replace("ۆ", "وی")
-            .replace("ێ", "یی")
-            .replace("ھ", "نی")
-            .replace("ە", "هی")
+    fun prepareForArabicSort(text: String) = text
+        .replace("ی", "ي")
+        .replace("ک", "ك")
+        .replace("گ", "كی")
+        .replace("ژ", "زی")
+        .replace("چ", "جی")
+        .replace("پ", "بی")
+        .replace("ڕ", "ری")
+        .replace("ڵ", "لی")
+        .replace("ڤ", "فی")
+        .replace("ۆ", "وی")
+        .replace("ێ", "یی")
+        .replace("ھ", "نی")
+        .replace("ە", "هی")
 
     return result.sortedWith(kotlin.Comparator { l, r ->
         if (l.key == "") return@Comparator -1
