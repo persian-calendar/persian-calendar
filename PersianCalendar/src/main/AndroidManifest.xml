@@ -44,7 +44,11 @@
         android:supportsRtl="true"
         android:theme="@style/LightTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
+        <activity android:name=".ui.preferences.agewidget.AgeWidgetConfigureActivity" android:launchMode="singleTop">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
@@ -82,6 +86,24 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <receiver android:name=".AgeWidget"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/widget_age_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/age_widget_info" />
+
+
+                <meta-data
+                android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.agewidget.WidgetAgeConfigureActivity" />
+        </receiver>
 
         <receiver
             android:name=".Widget1x1"

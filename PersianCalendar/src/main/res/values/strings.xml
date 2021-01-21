@@ -7,6 +7,7 @@
     <string name="app_name">Persian Calendar</string>
     <string name="widget_name">Persian Calendar</string>
     <string name="widget_mini_name">Persian Calendar (mini)</string>
+    <string name="widget_age_name">Persian Calendar (age)</string>
     <string name="closeDrawer">Close</string>
     <string name="openDrawer">Open</string>
     <string name="accept">OK</string>
@@ -323,5 +324,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="select_widgets_background_color">Select custom color for widgets background</string>
     <string name="share">Share</string>
     <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
+    <string name="select_date">Select date</string>
+    <string name="age_widget_title">Widget title</string>
+    <string name="age_widget_placeholder">%d days ( %d years, %d months, %d days )</string>
 
 </resources>

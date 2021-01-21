@@ -261,5 +261,9 @@
     <string name="ascending_athan_volume">زيادة صوت الأذان</string>
     <string name="share">مشاركة</string>
     <string name="enable_location_services">خدمات الموقع غير مفعلة، يرجى تشغيلها لاستخدام الميزة</string>
+    <string name="widget_age_name">التقويم الفارسي (عمر)</string>
+    <string name="age_widget_title">عنوان المصغر</string>
+    <string name="age_widget_placeholder">"%d أيام (%d سنوات ،%d شهر ،%d يوم) "</string>
+    <string name="select_date">"حدد تاريخ "</string>
 
 </resources>

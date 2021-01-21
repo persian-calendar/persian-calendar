@@ -226,5 +226,9 @@
     <string name="select_widgets_background_color">ویجی آرخاسینا ایستدینیز رنگی سئچین</string>
     <string name="share">پایلاش</string>
     <string name="enable_location_services">لوکئیشن سرویسی آچیق دئیل، لطفا بو قابلیت اۆچون اونو آچین</string>
+    <string name="widget_age_name">فارسجا تقویم (یاش)</string>
+    <string name="age_widget_title">عنوان ویجت</string>
+    <string name="select_date">انتخاب تاریخ</string>
+    <string name="age_widget_placeholder">%d روز ( %d سال، %d ماه، %d روز )</string>
 
 </resources>
