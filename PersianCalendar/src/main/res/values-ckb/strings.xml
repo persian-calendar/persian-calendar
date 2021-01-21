@@ -225,5 +225,9 @@
     <string name="select_widgets_background_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ باکگراوندی ویجیت</string>
     <string name="share">ھاوبەشی</string>
     <string name="enable_location_services">راژەی شوێن چالاک نییە، تکایه بۆ بەکارھێنانی ئەم تایبەتمەندییە، چالاکی بکە.</string>
+    <string name="widget_age_name">ڕۆژژمێری فارسی</string>
+    <string name="age_widget_title">عنوان ویجت</string>
+    <string name="select_date">انتخاب تاریخ</string>
+    <string name="age_widget_placeholder">%d روز ( %d سال، %d ماه، %d روز )</string>
 
 </resources>
