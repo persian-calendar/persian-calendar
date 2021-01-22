@@ -227,9 +227,9 @@
     <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
     <string name="share">هم‌رسانی</string>
     <string name="enable_location_services">خدمات موقعیت غیرفعال است، برای استفاده از این ویژگی لطفاً آن را فعال سازید.</string>
-    <string name="widget_age_name">فارسی کلیز</string>
+    <string name="widget_age_name">فارسی کلیز (سن)</string>
     <string name="select_date">انتخاب تاریخ</string>
     <string name="age_widget_title">عنوان ویجت</string>
-    <string name="age_widget_placeholder">%d روز ( %d سال، %d ماه، %d روز )</string>
+    <string name="age_widget_placeholder">%1$s روز (~%2$s سال، %3$s ماه، %4$s روز)</string>
 
 </resources>

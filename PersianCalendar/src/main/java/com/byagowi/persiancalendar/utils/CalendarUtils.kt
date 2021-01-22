@@ -18,6 +18,7 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.ceil
 
 fun isWeekEnd(dayOfWeek: Int) = weekEnds[dayOfWeek]
@@ -301,3 +302,20 @@ fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int = (getDat
 ).toJdn() - getDateOfCalendar(
     calendar, year, month, 1
 ).toJdn()).toInt()
+
+fun calculateDaysDifference(jdn: Long, messageToFormat: String): String {
+    val selectedDayAbsoluteDistance = abs(getTodayJdn() - jdn)
+    val civilBase = CivilDate(2000, 1, 1)
+    val civilOffset = CivilDate(civilBase.toJdn() + selectedDayAbsoluteDistance)
+    val yearDiff = civilOffset.year - 2000
+    val monthDiff = civilOffset.month - 1
+    val dayOfMonthDiff = civilOffset.dayOfMonth - 1
+
+    val result = messageToFormat.format(
+        formatNumber(selectedDayAbsoluteDistance.toInt()),
+        formatNumber(yearDiff),
+        formatNumber(monthDiff),
+        formatNumber(dayOfMonthDiff)
+    )
+    return if (selectedDayAbsoluteDistance <= 31) result.split(" (")[0] else result
+}

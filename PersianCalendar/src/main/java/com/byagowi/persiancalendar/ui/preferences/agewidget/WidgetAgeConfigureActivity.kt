@@ -9,7 +9,7 @@ import androidx.fragment.app.commit
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAgeWidgetConfigureBinding
-import com.byagowi.persiancalendar.updateAppWidget
+import com.byagowi.persiancalendar.updateAgeWidget
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.getThemeFromName
@@ -23,8 +23,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
 
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        updateAppWidget(context, appWidgetManager, appWidgetId)
-
+        updateAgeWidget(context, appWidgetManager, appWidgetId)
 
         // Make sure we pass back the original appWidgetId
         val resultValue = Intent()
@@ -34,7 +33,6 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
     }
 
     override fun onCreate(icicle: Bundle?) {
-
         setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
         applyAppLanguage(this)
 
@@ -49,7 +47,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         }
 
         val intent = intent
-        val extras = intent.extras
+        val extras = intent?.extras
         if (extras != null) {
             appWidgetId = extras.getInt(
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
@@ -85,5 +83,4 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
             confirm()
         }
     }
-
 }

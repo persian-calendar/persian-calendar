@@ -12,6 +12,7 @@ import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.isRTL
@@ -112,9 +113,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     //    private Horizontal moonPosition;
     private var moonPhase = 1.0
     private var fontSize: Int = 0
-
-    private val Number.dp: Int
-        get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
 
     init {
         val tempTypedValue = TypedValue()

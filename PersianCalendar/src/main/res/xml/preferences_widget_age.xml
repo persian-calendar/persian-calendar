@@ -1,9 +1,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:settings="http://schemas.android.com/tools">
+    xmlns:settings="http://schemas.android.com/apk/res-auto">
 
     <androidx.preference.Preference
         android:key="SelectedDateForAgeWidget"
-        android:title="انتخاب تاریخ"
+        android:title="@string/select_date"
         settings:iconSpaceReserved="false" />
 
     <androidx.preference.Preference

@@ -8,6 +8,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.dp
 import java.util.*
 
 // Don't use MainActivity here as it is used in WidgetConfigurationActivity also
@@ -36,7 +37,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             )
             colorPickerView.hideAlphaSeekBar()
 
-            val padding = (activity.resources.displayMetrics.density * 10).toInt()
+            val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
             AlertDialog.Builder(activity).apply {
@@ -74,7 +75,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 )
             )
 
-            val padding = (activity.resources.displayMetrics.density * 10).toInt()
+            val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
             AlertDialog.Builder(activity).apply {

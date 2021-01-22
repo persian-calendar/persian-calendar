@@ -8,66 +8,44 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getTodayJdn
-import io.github.persiancalendar.calendar.CivilDate
-import kotlin.math.abs
+import com.byagowi.persiancalendar.utils.calculateDaysDifference
 
 class AgeWidget : AppWidgetProvider() {
     override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
+        context: Context?, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
     ) {
-        for (appWidgetId in appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId)
-        }
+        context ?: return
+        appWidgetIds.forEach { updateAgeWidget(context, appWidgetManager, it) }
     }
 
-    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        for (appWidgetId in appWidgetIds) {
-            context.appPrefs.edit {
-                remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId)
-                remove(PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId)
-                remove(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId)
-                remove(PREF_TITLE_AGE_WIDGET + appWidgetId)
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray) {
+        context ?: return
+        if (appWidgetIds.isEmpty()) return
+        context.appPrefs.edit {
+            appWidgetIds.forEach {
+                remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + it)
+                remove(PREF_SELECTED_WIDGET_TEXT_COLOR + it)
+                remove(PREF_SELECTED_DATE_AGE_WIDGET + it)
+                remove(PREF_TITLE_AGE_WIDGET + it)
             }
         }
     }
 
-    override fun onEnabled(context: Context) {
-    }
-
-    override fun onDisabled(context: Context) {
-    }
+    override fun onEnabled(context: Context) = Unit
+    override fun onDisabled(context: Context) = Unit
 }
-internal fun updateAppWidget(
-    context: Context,
-    appWidgetManager: AppWidgetManager,
-    appWidgetId: Int
+
+internal fun updateAgeWidget(
+    context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int
 ) {
     val sharedPreferences = context.appPrefs
 
     val jdn = sharedPreferences.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, 0)
-    val selectedDayAbsoluteDistance = abs(getTodayJdn() - jdn)
-    val civilBase = CivilDate(2000, 1, 1)
-    val civilOffset = CivilDate(civilBase.toJdn() + selectedDayAbsoluteDistance)
-    val yearDiff = civilOffset.year - 2000
-    val monthDiff = civilOffset.month - 1
-    val dayOfMonthDiff = civilOffset.dayOfMonth - 1
-
-    var text = context.getString(R.string.age_widget_placeholder).format(
-        formatNumber(selectedDayAbsoluteDistance.toInt()).toInt(),
-        formatNumber(yearDiff).toInt(),
-        formatNumber(monthDiff).toInt(),
-        formatNumber(dayOfMonthDiff).toInt()
-    )
-
-    if (selectedDayAbsoluteDistance <= 31) text = text.split(" (")[0]
-
     val views = RemoteViews(context.packageName, R.layout.widget_age)
-
-    views.setTextViewText(R.id.textview_age_widget, text)
+    views.setTextViewText(
+        R.id.textview_age_widget,
+        calculateDaysDifference(jdn, context.getString(R.string.age_widget_placeholder))
+    )
     val textColor = sharedPreferences.getString(
         PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
         DEFAULT_SELECTED_WIDGET_TEXT_COLOR

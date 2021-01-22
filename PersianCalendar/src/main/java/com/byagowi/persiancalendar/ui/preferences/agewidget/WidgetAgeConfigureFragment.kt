@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.ColorPickerView
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getTodayJdn
 import java.util.*
 
@@ -46,7 +47,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
             )
             colorPickerView.hideAlphaSeekBar()
 
-            val padding = (activity.resources.displayMetrics.density * 10).toInt()
+            val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
             AlertDialog.Builder(activity).apply {
@@ -84,7 +85,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
                 )
             )
 
-            val padding = (activity.resources.displayMetrics.density * 10).toInt()
+            val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
             AlertDialog.Builder(activity).apply {
@@ -111,7 +112,6 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
         }
 
         if (preference?.key == PREF_SELECTED_DATE_AGE_WIDGET) {
-
             SelectDayDialog.newInstance(
                 sharedPreferences.getLong(
                     PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId,

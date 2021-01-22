@@ -326,6 +326,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
     <string name="select_date">Select date</string>
     <string name="age_widget_title">Widget title</string>
-    <string name="age_widget_placeholder">%d days ( %d years, %d months, %d days )</string>
+    <string name="age_widget_placeholder">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
 
 </resources>

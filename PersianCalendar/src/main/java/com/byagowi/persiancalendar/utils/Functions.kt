@@ -9,6 +9,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.*
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
@@ -633,3 +634,6 @@ fun bringMarketPage(activity: Activity) = try {
         )
     )
 }
+
+val Number.dp: Int
+    get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()

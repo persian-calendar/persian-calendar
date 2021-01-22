@@ -263,7 +263,7 @@
     <string name="enable_location_services">خدمات الموقع غير مفعلة، يرجى تشغيلها لاستخدام الميزة</string>
     <string name="widget_age_name">التقويم الفارسي (عمر)</string>
     <string name="age_widget_title">عنوان المصغر</string>
-    <string name="age_widget_placeholder">"%d أيام (%d سنوات ،%d شهر ،%d يوم) "</string>
-    <string name="select_date">"حدد تاريخ "</string>
+    <string name="select_date">اختيار التاريخ</string>
+    <string name="age_widget_placeholder">%1$s يوم (~%2$s سنة، %3$s شهر، %4$s يوم)</string>
 
 </resources>
