@@ -379,7 +379,7 @@ fun update(context: Context, updateDate: Boolean) {
 
 
     //
-    // Permanent Notification Bar and DashClock Data Extension Update
+    // Permanent Notification Bar Update
     //
     //
 

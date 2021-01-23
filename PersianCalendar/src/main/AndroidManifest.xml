@@ -181,24 +181,6 @@
         </receiver>
 
         <service
-            android:name=".DashClockUpdate"
-            android:icon="@drawable/day18"
-            android:label="@string/app_name"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
-            <intent-filter>
-                <action android:name="com.google.android.apps.dashclock.Extension" />
-            </intent-filter>
-
-            <meta-data
-                android:name="protocolVersion"
-                android:value="1" />
-
-            <meta-data
-                android:name="description"
-                android:value="Persian Calendar" />
-        </service>
-
-        <service
             android:name=".service.ApplicationService"
             android:enabled="true"
             android:label="Calendar Service" />
