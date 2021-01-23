@@ -1,1 +1,1 @@
-[Click here](https://github.com/persian-calendar/DroidPersianCalendar/blob/master/PersianCalendar/src/main/res/raw/credits.txt)
+[Click here](https://github.com/persian-calendar/DroidPersianCalendar/blob/main/PersianCalendar/src/main/res/raw/credits.txt)
