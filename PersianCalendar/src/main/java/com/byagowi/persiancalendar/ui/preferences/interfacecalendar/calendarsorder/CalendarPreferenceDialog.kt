@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
+import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
@@ -11,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
@@ -22,8 +22,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
     private var itemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = activity as MainActivity
-
+        val activity = activity as Activity
         updateStoredPreference(activity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
         val adapter = RecyclerListAdapter(this, getOrderedCalendarEntities(activity).map {
