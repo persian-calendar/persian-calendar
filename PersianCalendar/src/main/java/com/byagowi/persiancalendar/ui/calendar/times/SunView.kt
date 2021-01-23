@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.TypedValue

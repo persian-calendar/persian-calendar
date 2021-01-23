@@ -76,12 +76,11 @@ class CompassFragment : Fragment() {
         }
     }
 
-    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) {
-        Snackbar.make(mainActivity.coordinator ?: return, messageId, duration).apply {
+    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) =
+        Snackbar.make(mainActivity.coordinator, messageId, duration).apply {
             view.setOnClickListener { dismiss() }
             view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
         }.show()
-    }
 
     lateinit var mainActivity: MainActivity
 
