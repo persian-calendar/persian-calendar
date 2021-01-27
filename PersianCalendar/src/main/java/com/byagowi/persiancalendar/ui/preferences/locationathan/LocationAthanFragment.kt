@@ -149,13 +149,13 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val context = context ?: return
 
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE && resultCode == RESULT_OK) {
-            data?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)?.let {
+            data?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)?.let { parcelable ->
                 val ringtoneTitle = RingtoneManager
-                    .getRingtone(context, it.toString().toUri()).getTitle(context) ?: ""
+                    .getRingtone(context, parcelable.toString().toUri()).getTitle(context) ?: ""
 
                 context.appPrefs.edit {
                     putString(PREF_ATHAN_NAME, ringtoneTitle)
-                    putString(PREF_ATHAN_URI, it.toString())
+                    putString(PREF_ATHAN_URI, parcelable.toString())
                 }
 
                 view?.let {
