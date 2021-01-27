@@ -9,12 +9,16 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.AthanActivity
 
-// https://stackoverflow.com/a/27788209
-fun getDefaultAthanUri(context: Context): Uri =
-    (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
-            context.resources.getResourcePackageName(R.raw.abdulbasit) + "/" +
-            context.resources.getResourceTypeName(R.raw.abdulbasit) + "/" +
-            context.resources.getResourceEntryName(R.raw.abdulbasit)).toUri()
+class AthanUtils {
+    // https://stackoverflow.com/a/27788209
+    companion object {
+        fun getDefaultAthanUri(context: Context): Uri =
+            (ContentResolver.SCHEME_ANDROID_RESOURCE + "://" +
+                    context.resources.getResourcePackageName(R.raw.abdulbasit) + "/" +
+                    context.resources.getResourceTypeName(R.raw.abdulbasit) + "/" +
+                    context.resources.getResourceEntryName(R.raw.abdulbasit)).toUri()
+    }
+}
 
 val Context.athanVolume: Int
     get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)

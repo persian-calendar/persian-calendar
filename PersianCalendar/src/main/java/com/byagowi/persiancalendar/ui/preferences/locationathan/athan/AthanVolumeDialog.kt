@@ -9,8 +9,8 @@ import android.view.View
 import android.widget.SeekBar
 import androidx.core.content.getSystemService
 import androidx.preference.PreferenceDialogFragmentCompat
+import com.byagowi.persiancalendar.utils.AthanUtils
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
-import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import java.io.IOException
 
 class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
@@ -33,7 +33,7 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
         } else if (context != null) {
             val player = MediaPlayer()
             try {
-                player.setDataSource(context, getDefaultAthanUri(context))
+                player.setDataSource(context, AthanUtils.getDefaultAthanUri(context))
                 player.setAudioStreamType(AudioManager.STREAM_ALARM)
                 player.prepare()
             } catch (e: IOException) {
