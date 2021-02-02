@@ -106,7 +106,7 @@ class AthanActivity : AppCompatActivity() {
             try {
                 mediaPlayer = MediaPlayer().apply {
                     try {
-                        setDataSource(this@AthanActivity, AthanUtils.getDefaultAthanUri(this@AthanActivity))
+                        setDataSource(this@AthanActivity, getDefaultAthanUri(this@AthanActivity))
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             setAudioAttributes(
                                 AudioAttributes.Builder()
