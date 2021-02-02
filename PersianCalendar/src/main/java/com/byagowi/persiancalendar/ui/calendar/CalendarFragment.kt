@@ -16,6 +16,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
 import android.widget.ArrayAdapter
+import androidx.annotation.Keep
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
@@ -65,6 +66,11 @@ class CalendarFragment : Fragment() {
     private var todayButton: MenuItem? = null
     private lateinit var mainActivity: MainActivity
     private val initialDate = getTodayOfCalendar(mainCalendar)
+
+    // Can I haz drawable/blue_shade_background not removed?!
+    // Yet another workaround for weird AGP 4.1.0 >= used resource removal issues
+    @Keep
+    private val blueThemeBackground = R.drawable.blue_shade_background
 
     override fun onDestroyView() {
         super.onDestroyView()
