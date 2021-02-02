@@ -47,7 +47,6 @@ fun update(context: Context, updateDate: Boolean) {
 
     Log.d("UpdateUtils", "update")
     applyAppLanguage(context)
-    val calendar = makeCalendarFromDate(Date())
     val date = getTodayOfCalendar(mainCalendar)
     val jdn = date.toJdn()
 
@@ -121,11 +120,11 @@ fun update(context: Context, updateDate: Boolean) {
     }
     var subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
-    val currentClock = Clock(calendar)
+    val owghatClock = Clock(makeCalendarFromDate(Date(), forceLocalTime = true))
     var owghat = ""
 
     @StringRes
-    val nextOwghatId = getNextOwghatTimeId(currentClock, dateHasChanged)
+    val nextOwghatId = getNextOwghatTimeId(owghatClock, dateHasChanged)
     if (nextOwghatId != 0) {
         owghat = context.getString(nextOwghatId) + ": " +
                 getClockFromStringId(nextOwghatId).toFormattedString()
@@ -343,7 +342,7 @@ fun update(context: Context, updateDate: Boolean) {
                     )
                 }
 
-                var difference = getClockFromStringId(nextOwghatId).toInt() - currentClock.toInt()
+                var difference = getClockFromStringId(nextOwghatId).toInt() - owghatClock.toInt()
                 if (difference < 0) difference += 60 * 24
 
                 val hrs = (MINUTES.toHours(difference.toLong()) % 24).toInt()

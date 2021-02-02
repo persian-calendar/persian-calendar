@@ -177,11 +177,12 @@ fun calendarToCivilDate(calendar: Calendar) = CivilDate(
     calendar[Calendar.YEAR], calendar[Calendar.MONTH] + 1, calendar[Calendar.DAY_OF_MONTH]
 )
 
-fun makeCalendarFromDate(date: Date): Calendar = Calendar.getInstance().apply {
-    if (isForcedIranTimeEnabled)
-        timeZone = TimeZone.getTimeZone("Asia/Tehran")
-    time = date
-}
+fun makeCalendarFromDate(date: Date, forceLocalTime: Boolean = false): Calendar =
+    Calendar.getInstance().apply {
+        if (!forceLocalTime && isForcedIranTimeEnabled)
+            timeZone = TimeZone.getTimeZone("Asia/Tehran")
+        time = date
+    }
 
 private fun readDeviceEvents(
     context: Context,
