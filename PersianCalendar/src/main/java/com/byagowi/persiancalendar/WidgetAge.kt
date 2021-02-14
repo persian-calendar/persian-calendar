@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 
 class AgeWidget : AppWidgetProvider() {
@@ -38,6 +39,8 @@ class AgeWidget : AppWidgetProvider() {
 internal fun updateAgeWidget(
     context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int
 ) {
+    applyAppLanguage(context)
+
     val sharedPreferences = context.appPrefs
 
     val jdn = sharedPreferences.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, 0)
