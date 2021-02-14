@@ -31,25 +31,30 @@ private val ZODIAC_MONTHS_EMOJI = listOf(
     R.string.pisces_emoji
 )
 
-fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
+private fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
     (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
             persianDate.month).toInt() % 12 == 8
 
-fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean) =
+fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean, short: Boolean) =
     if (isAstronomicalFeaturesEnabled) {
         val persianDate = PersianDate(jdn)
         val islamicDate = IslamicDate(jdn)
-        "%s: %s\n%s: %s %s\n%s".format(
-            context.getString(R.string.year_name),
-            // TODO: Check how a negative year can be passed here
-            context.getString(YEARS_NAME.getOrNull(persianDate.year % 12) ?: R.string.empty),
-            context.getString(R.string.zodiac),
-            if (withEmoji) context.getString(
-                ZODIAC_MONTHS_EMOJI.getOrNull(persianDate.month) ?: R.string.empty
-            ) else "",
-            context.getString(ZODIAC_MONTHS.getOrNull(persianDate.month) ?: R.string.empty),
-            if (isMoonInScorpio(persianDate, islamicDate))
-                context.getString(R.string.moonInScorpio)
-            else ""
-        ).trim()
+        val moonInScorpioText = if (isMoonInScorpio(persianDate, islamicDate))
+            context.getString(R.string.moonInScorpio)
+        else ""
+
+        if (short)
+            moonInScorpioText
+        else
+            "%s: %s\n%s: %s %s\n%s".format(
+                context.getString(R.string.year_name),
+                // TODO: Check how a negative year can be passed here
+                context.getString(YEARS_NAME.getOrNull(persianDate.year % 12) ?: R.string.empty),
+                context.getString(R.string.zodiac),
+                if (withEmoji) context.getString(
+                    ZODIAC_MONTHS_EMOJI.getOrNull(persianDate.month) ?: R.string.empty
+                ) else "",
+                context.getString(ZODIAC_MONTHS.getOrNull(persianDate.month) ?: R.string.empty),
+                moonInScorpioText
+            ).trim()
     } else ""

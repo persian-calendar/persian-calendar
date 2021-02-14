@@ -62,7 +62,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         binding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
         binding.zodiac.apply {
-            text = getZodiacInfo(context, jdn, true)
+            text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
             visibility = if (text.isEmpty()) View.GONE else View.VISIBLE
         }
 

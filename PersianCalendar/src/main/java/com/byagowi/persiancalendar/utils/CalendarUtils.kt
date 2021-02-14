@@ -142,7 +142,7 @@ fun getA11yDaySummary(
     }
 
     if (withZodiac) {
-        val zodiac = getZodiacInfo(context, jdn, false)
+        val zodiac = getZodiacInfo(context, jdn, withEmoji = false, short = false)
         if (zodiac.isNotEmpty()) {
             result.append("\n\n").append(zodiac)
         }
