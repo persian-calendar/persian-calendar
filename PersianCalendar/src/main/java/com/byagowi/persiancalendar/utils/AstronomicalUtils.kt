@@ -31,7 +31,7 @@ private val ZODIAC_MONTHS_EMOJI = listOf(
     R.string.pisces_emoji
 )
 
-private fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
+fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
     (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
             persianDate.month).toInt() % 12 == 8
 
