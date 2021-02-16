@@ -102,7 +102,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.1.0")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("com.google.android.material:material:1.2.1")
+    implementation("com.google.android.material:material:1.3.0")
     implementation("com.google.android:flexbox:2.0.1")
 
     implementation("com.google.openlocationcode:openlocationcode:1.0.4")
@@ -112,20 +112,20 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.fragment:fragment-ktx:1.2.5")
-    implementation("androidx.activity:activity-ktx:1.1.0")
+    implementation("androidx.fragment:fragment-ktx:1.3.0")
+    implementation("androidx.activity:activity-ktx:1.2.0")
 
     implementation("androidx.browser:browser:1.3.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.4.0")
+    implementation("androidx.work:work-runtime-ktx:2.5.0")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
     testImplementation("junit:junit:4.13")
 
-    androidTestImplementation("androidx.test:runner:1.2.0")
-    androidTestImplementation("androidx.test:rules:1.2.0")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.2.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    androidTestImplementation("androidx.test:runner:1.3.0")
+    androidTestImplementation("androidx.test:rules:1.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }
