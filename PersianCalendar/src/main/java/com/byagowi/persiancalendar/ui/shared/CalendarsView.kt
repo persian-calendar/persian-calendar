@@ -93,7 +93,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         val weeksCount = calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
 
         val startOfYearText = context.getString(R.string.start_of_year_diff).format(
-            formatNumber((jdn - startOfYearJdn).toInt()),
+            formatNumber((jdn - startOfYearJdn + 1).toInt()),
             formatNumber(currentWeek),
             formatNumber(mainDate.month)
         )
