@@ -270,7 +270,7 @@ fun update(context: Context, updateDate: Boolean) {
                     context,
                     jdn,
                     withEmoji = true,
-                    short = true
+                    short = false
                 )
             }
             setTextViewText(R.id.date_2x2, text2)
