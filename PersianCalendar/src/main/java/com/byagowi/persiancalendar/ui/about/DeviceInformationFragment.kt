@@ -1,7 +1,10 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.opengl.EGL14
@@ -19,6 +22,9 @@ import android.text.style.ClickableSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
+import android.widget.LinearLayout
+import android.widget.ProgressBar
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -33,6 +39,7 @@ import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import java.util.*
 
 /**
@@ -82,9 +89,38 @@ class DeviceInformationFragment : Fragment() {
                 // Easter egg
                 if (++clickCount % 10 == 0) {
                     BottomSheetDialog(mainActivity).apply {
-                        setContentView(IndeterminateProgressBar(mainActivity).apply {
-                            layoutParams =
-                                ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
+                        setContentView(LinearLayout(mainActivity).apply {
+                            orientation = LinearLayout.VERTICAL
+                            // Add one with CircularProgressIndicator also
+                            addView(LinearProgressIndicator(mainActivity).apply {
+                                isIndeterminate = true
+                                setIndicatorColor(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
+                                layoutParams =
+                                    ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT
+                                    )
+                            })
+                            addView(ProgressBar(mainActivity).apply {
+                                isIndeterminate = true
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                    ValueAnimator.ofArgb(
+                                        Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+                                    ).apply {
+                                        duration = 3000
+                                        interpolator = LinearInterpolator()
+                                        repeatMode = ValueAnimator.REVERSE
+                                        repeatCount = ValueAnimator.INFINITE
+                                        addUpdateListener {
+                                            indeterminateDrawable?.setColorFilter(
+                                                it.animatedValue as Int,
+                                                PorterDuff.Mode.SRC_ATOP
+                                            )
+                                        }
+                                    }.start()
+                                layoutParams =
+                                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
+                            })
                         })
                     }.show()
                 }
