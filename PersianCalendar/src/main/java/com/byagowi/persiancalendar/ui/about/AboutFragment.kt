@@ -15,7 +15,6 @@ import android.view.*
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
@@ -28,6 +27,7 @@ import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
 class AboutFragment : Fragment() {
@@ -49,7 +49,7 @@ class AboutFragment : Fragment() {
 
         // licenses
         binding.licenses.setOnClickListener {
-            AlertDialog.Builder(
+            MaterialAlertDialogBuilder(
                 mainActivity,
                 com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
             )
@@ -96,7 +96,7 @@ class AboutFragment : Fragment() {
 
         binding.email.setOnClickListener {
             val emailBinding = DialogEmailBinding.inflate(inflater, container, false)
-            AlertDialog.Builder(mainActivity)
+            MaterialAlertDialogBuilder(mainActivity)
                 .setView(emailBinding.root)
                 .setTitle(R.string.about_email_sum)
                 .setPositiveButton(R.string.continue_button) { _, _ ->

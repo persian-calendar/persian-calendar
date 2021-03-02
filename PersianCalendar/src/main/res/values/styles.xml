@@ -35,7 +35,30 @@
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
 
+    <style name="ShapeAppearance.AppTheme.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+
+    <style name="ShapeAppearance.AppTheme.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <style name="ShapeAppearance.AppTheme.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+    </style>
+
+    <style name="AppTheme.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="dialogCornerRadius">20dp</item>
+    </style>
+
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.AppTheme.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.AppTheme.LargeComponent</item>
         <item name="colorMonthsBackground">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
@@ -44,7 +67,6 @@
             @color/dark_primary_dark
         </item>
         <item name="navigationBarColor">@color/dark_primary</item>
-        <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/dark_card_background</item>
@@ -95,8 +117,11 @@
         <item name="colorTextDaySelected">@color/dark_primary</item>
     </style>
 
-    <!-- Base application theme. -->
     <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.AppTheme.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.AppTheme.LargeComponent</item>
         <item name="colorMonthsBackground">@color/light_primary</item>
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
@@ -105,7 +130,6 @@
             @color/light_primary_dark
         </item>
         <item name="navigationBarColor">@color/light_primary</item>
-        <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/light_card_background</item>
@@ -157,6 +181,10 @@
     </style>
 
     <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.AppTheme.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.AppTheme.LargeComponent</item>
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorPrimaryDark">@color/blue_primary</item>
@@ -166,8 +194,6 @@
         </item>
         <item name="navigationBarColor">@color/blue_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
-
-        <!-- Customize your theme here. -->
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/blue_card_background</item>
@@ -219,6 +245,10 @@
     </style>
 
     <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.AppTheme.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.AppTheme.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.AppTheme.LargeComponent</item>
         <item name="colorMonthsBackground">@color/modern_primary</item>
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorPrimaryDark">@color/modern_primary</item>

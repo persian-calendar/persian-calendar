@@ -12,7 +12,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -21,6 +20,7 @@ import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
 import java.io.IOException
@@ -82,7 +82,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
 
-        return AlertDialog.Builder(mainActivity)
+        return MaterialAlertDialogBuilder(mainActivity)
             .setPositiveButton("", null)
             .setNegativeButton("", null)
             .setView(textView)
@@ -96,7 +96,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
             val gps = mainActivity.getSystemService<LocationManager>()
 
             if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
-                AlertDialog.Builder(mainActivity)
+                MaterialAlertDialogBuilder(mainActivity)
                     .setMessage(R.string.gps_internet_desc)
                     .setPositiveButton(R.string.accept) { _, _ ->
                         try {

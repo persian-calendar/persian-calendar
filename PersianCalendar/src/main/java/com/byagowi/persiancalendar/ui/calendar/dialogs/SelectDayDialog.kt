@@ -4,10 +4,10 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.shared.DayPickerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SelectDayDialog : AppCompatDialogFragment() {
 
@@ -20,7 +20,7 @@ class SelectDayDialog : AppCompatDialogFragment() {
         val dayPickerView = DayPickerView(context)
         dayPickerView.setDayJdnOnView(jdn)
 
-        return AlertDialog.Builder(context)
+        return MaterialAlertDialogBuilder(context)
             .setView(dayPickerView as View)
             .setCustomTitle(null)
             .setPositiveButton(R.string.go) { _, _ ->
