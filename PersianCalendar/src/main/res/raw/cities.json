@@ -381,6 +381,15 @@
         "longitude": 65.71,
         "elevation": 1003.473
       },
+      "KUNDUZ": {
+        "en": "Kunduz",
+        "fa": "قندوز",
+        "ckb": "کوندوز",
+        "ar": "قندوز",
+        "latitude": 36.728,
+        "longitude": 68.868,
+        "elevation": 391
+      },
       "NANGARHAR": {
         "en": "Nangarhar",
         "fa": "ننگرهار",
