@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +25,6 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ShiftWorkDialog : AppCompatDialogFragment() {
 
@@ -70,7 +70,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         }
         binding.recurs.isChecked = shiftWorkRecurs
 
-        return MaterialAlertDialogBuilder(mainActivity)
+        return AlertDialog.Builder(mainActivity)
             .setView(binding.root)
             .setTitle(null)
             .setPositiveButton(R.string.accept) { _, _ ->
