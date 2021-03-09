@@ -19,6 +19,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -34,7 +35,6 @@ import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
@@ -396,7 +396,7 @@ fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
 fun askForLocationPermission(activity: Activity?) {
     if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
 
-    MaterialAlertDialogBuilder(activity)
+    AlertDialog.Builder(activity)
         .setTitle(R.string.location_access)
         .setMessage(R.string.phone_location_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->
@@ -414,7 +414,7 @@ fun askForLocationPermission(activity: Activity?) {
 fun askForCalendarPermission(activity: Activity?) {
     if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
 
-    MaterialAlertDialogBuilder(activity)
+    AlertDialog.Builder(activity)
         .setTitle(R.string.calendar_access)
         .setMessage(R.string.phone_calendar_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->

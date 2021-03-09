@@ -35,30 +35,12 @@
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
 
-    <style name="SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">4dp</item>
-    </style>
-
-    <style name="MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">8dp</item>
-    </style>
-
-    <style name="LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">12dp</item>
-    </style>
-
     <style name="AppTheme.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="dialogCornerRadius">12dp</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
-        <item name="shapeAppearanceSmallComponent">@style/SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/MediumComponent</item>
-        <item name="shapeAppearanceLargeComponent">@style/LargeComponent</item>
 
         <item name="colorMonthsBackground">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_accent</item>
@@ -120,9 +102,6 @@
 
     <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
-        <item name="shapeAppearanceSmallComponent">@style/SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/MediumComponent</item>
-        <item name="shapeAppearanceLargeComponent">@style/LargeComponent</item>
 
         <item name="colorMonthsBackground">@color/light_primary</item>
         <item name="colorPrimary">@color/light_primary</item>
@@ -184,9 +163,6 @@
 
     <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
-        <item name="shapeAppearanceSmallComponent">@style/SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/MediumComponent</item>
-        <item name="shapeAppearanceLargeComponent">@style/LargeComponent</item>
 
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
@@ -249,9 +225,6 @@
 
     <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
-        <item name="shapeAppearanceSmallComponent">@style/SmallComponent</item>
-        <item name="shapeAppearanceMediumComponent">@style/MediumComponent</item>
-        <item name="shapeAppearanceLargeComponent">@style/LargeComponent</item>
 
         <item name="colorMonthsBackground">@color/modern_primary</item>
         <item name="colorPrimary">@color/modern_accent</item>

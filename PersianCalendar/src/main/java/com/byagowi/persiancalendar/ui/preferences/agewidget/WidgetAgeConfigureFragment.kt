@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.preferences.agewidget
 import android.appwidget.AppWidgetManager
 import android.graphics.Color
 import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -12,7 +13,6 @@ import com.byagowi.persiancalendar.ui.preferences.widgetnotification.ColorPicker
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getTodayJdn
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
 class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
@@ -50,7 +50,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
             val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
-            MaterialAlertDialogBuilder(activity).apply {
+            AlertDialog.Builder(activity).apply {
                 setTitle(R.string.widget_text_color)
                 setView(colorPickerView)
                 setPositiveButton(R.string.accept) { _, _ ->
@@ -88,7 +88,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
             val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
-            MaterialAlertDialogBuilder(activity).apply {
+            AlertDialog.Builder(activity).apply {
                 setTitle(R.string.widget_background_color)
                 setView(colorPickerView)
                 setPositiveButton(R.string.accept) { _, _ ->
