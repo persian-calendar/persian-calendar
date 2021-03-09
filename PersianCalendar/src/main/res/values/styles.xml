@@ -36,7 +36,7 @@
     <attr name="colorTextDaySelected" format="reference" />
 
     <style name="AppTheme.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="dialogCornerRadius">12dp</item>
+        <item name="dialogCornerRadius">20dp</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
