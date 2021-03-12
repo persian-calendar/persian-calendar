@@ -48,11 +48,11 @@ import java.util.*
  */
 class DeviceInformationFragment : Fragment() {
 
-    private var clickCount: Int = 0
+    private var clickCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
+    ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
         val mainActivity = activity as MainActivity
 
         mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
@@ -132,7 +132,10 @@ class DeviceInformationFragment : Fragment() {
 
 class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
     ListAdapter<DeviceInformationAdapter.Item, DeviceInformationAdapter.ViewHolder>(
-        DeviceInformationDiffCallback()
+        object : DiffUtil.ItemCallback<Item>() {
+            override fun areItemsTheSame(old: Item, new: Item) = old.title == new.title
+            override fun areContentsTheSame(old: Item, new: Item) = old == new
+        }
     ) {
 
     data class Item(val title: String, val content: CharSequence?, val version: String)
@@ -316,21 +319,13 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         emptyList()
     })
 
-    class DeviceInformationDiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean =
-            oldItem == newItem
-
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean =
-            oldItem == newItem
-    }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         DeviceInformationRowBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    override fun getItemCount(): Int = deviceInformationItems.size
+    override fun getItemCount() = deviceInformationItems.size
 
     inner class ViewHolder(private val binding: DeviceInformationRowBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
