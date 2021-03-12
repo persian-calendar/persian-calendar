@@ -92,7 +92,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     lateinit var curvePath: Path
     lateinit var nightPath: Path
     private var current = 0f
-    private var linearGradient = LinearGradient(0f, 0f, 1f, 0f, 0, 0, Shader.TileMode.MIRROR)
     private var moonPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG)
     private var moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -177,8 +176,21 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         nightPath.close()
     }
 
+    var isShaderInitiated = false
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
+        if (!isShaderInitiated) {
+            isShaderInitiated = true
+            handler.postDelayed({
+                dayPaint.shader = LinearGradient(
+                    getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
+                    dayColor, daySecondColor, Shader.TileMode.MIRROR
+                )
+                postInvalidate()
+            }, 80)
+        }
 
         canvas.save()
 
@@ -195,7 +207,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         // draw fill of day
         canvas.clipRect(0, 0, width, height)
         canvas.clipRect(0f, 0f, width * current, height * 0.75f)
-        dayPaint.shader = linearGradient
         canvas.drawPath(curvePath, dayPaint)
 
         canvas.restore()
@@ -366,11 +377,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         ).format(formatNumber(remaining.hour), formatNumber(remaining.minute))
 
         argbEvaluator = ArgbEvaluator()
-
-        linearGradient = LinearGradient(
-            getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
-            dayColor, daySecondColor, Shader.TileMode.MIRROR
-        )
 
         if (immediate) {
             current = c
