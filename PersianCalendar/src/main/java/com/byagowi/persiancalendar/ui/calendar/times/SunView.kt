@@ -315,10 +315,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         moonPaintD.pathEffect = null
     }
 
-    private fun getY(x: Int, segment: Double, height: Int): Float {
-        val cos = (cos(-PI + x * segment) + 1) / 2
-        return height - height * cos.toFloat() + height * 0.1f
-    }
+    private fun getY(x: Int, segment: Double, height: Int): Float =
+        height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * 0.1f
 
     fun setSunriseSunsetMoonPhase(prayTimes: PrayTimes, moonPhase: Double) {
         this.prayTimes = prayTimes
