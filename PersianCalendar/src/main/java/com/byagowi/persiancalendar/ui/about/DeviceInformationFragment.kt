@@ -121,13 +121,9 @@ class DeviceInformationFragment : Fragment() {
                                 layoutParams =
                                     ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
                                 // setOnLongClickListener {
-                                //     val mediaPlayer = MediaPlayer.create(mainActivity, R.raw.moonlight)
+                                //     val player = MediaPlayer.create(mainActivity, R.raw.moonlight)
                                 //     try {
-                                //         if (!mediaPlayer.isPlaying) mediaPlayer.start()
-                                //     } catch (ignore: Exception) {
-                                //     }
-                                //     fun stop() = try {
-                                //         mediaPlayer.stop()
+                                //         if (!player.isPlaying) player.start()
                                 //     } catch (ignore: Exception) {
                                 //     }
                                 //     AlertDialog.Builder(mainActivity).create().apply {
@@ -135,7 +131,12 @@ class DeviceInformationFragment : Fragment() {
                                 //             setImageResource(R.drawable.ic_stop)
                                 //             setOnClickListener { dismiss() }
                                 //         })
-                                //         setOnDismissListener { stop() }
+                                //         setOnDismissListener {
+                                //             try {
+                                //                 player.stop()
+                                //             } catch (ignore: Exception) {
+                                //             }
+                                //         }
                                 //         show()
                                 //     }
                                 //     true
