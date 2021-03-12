@@ -79,24 +79,6 @@ class RecyclerListAdapter(
                     interpolator = AccelerateDecelerateInterpolator()
                     addUpdateListener { value -> view.rotation = value.animatedValue as Float }
                 }.start()
-                // Context context = calendarPreferenceDialog.getContext();
-                // MediaPlayer mediaPlayer = MediaPlayer.create(context,
-                //         R.raw.bach_invention_01);
-                // if (!mediaPlayer.isPlaying()) {
-                //     mediaPlayer.start();
-                // }
-                // AppCompatImageButton imageButton = new AppCompatImageButton(context);
-                // imageButton.setImageResource(R.drawable.ic_stop);
-                // AlertDialog alertDialog = new AlertDialog.Builder(context)
-                //         .setView(imageButton).create();
-                // imageButton.setOnClickListener(v -> {
-                //     try {
-                //         mediaPlayer.stop();
-                //     } catch (Exception ignore) {
-                //     }
-                //     alertDialog.dismiss();
-                // });
-                // alertDialog.show();
             } catch (e: Exception) {
                 e.printStackTrace()
             }

@@ -120,6 +120,26 @@ class DeviceInformationFragment : Fragment() {
                                     }.start()
                                 layoutParams =
                                     ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
+                                // setOnLongClickListener {
+                                //     val mediaPlayer = MediaPlayer.create(mainActivity, R.raw.moonlight)
+                                //     try {
+                                //         if (!mediaPlayer.isPlaying) mediaPlayer.start()
+                                //     } catch (ignore: Exception) {
+                                //     }
+                                //     fun stop() = try {
+                                //         mediaPlayer.stop()
+                                //     } catch (ignore: Exception) {
+                                //     }
+                                //     AlertDialog.Builder(mainActivity).create().apply {
+                                //         setView(AppCompatImageButton(context).apply {
+                                //             setImageResource(R.drawable.ic_stop)
+                                //             setOnClickListener { dismiss() }
+                                //         })
+                                //         setOnDismissListener { stop() }
+                                //         show()
+                                //     }
+                                //     true
+                                // }
                             })
                         })
                     }.show()
