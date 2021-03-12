@@ -104,6 +104,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var middayString = ""
     private var sunsetString = ""
     private var isRTL = false
+    private var isShaderInitiationNeeded = true
     private var segmentByPixel: Double = 0.toDouble()
     private var argbEvaluator = ArgbEvaluator()
     private var prayTimes: PrayTimes? = null
@@ -155,6 +156,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
 
+        isShaderInitiationNeeded = true
+
         width = w
         height = h - 18
 
@@ -176,13 +179,11 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         nightPath.close()
     }
 
-    var isShaderInitiated = false
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        if (!isShaderInitiated) {
-            isShaderInitiated = true
+        if (isShaderInitiationNeeded) {
+            isShaderInitiationNeeded = false
             handler.postDelayed({
                 dayPaint.shader = LinearGradient(
                     getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
