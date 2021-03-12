@@ -76,7 +76,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".ui.preferences.widgetnotification.WidgetConfigurationActivity">
+        <activity
+            android:name=".ui.preferences.widgetnotification.WidgetConfigurationActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -84,6 +86,7 @@
 
         <activity
             android:name=".ui.preferences.agewidget.AgeWidgetConfigureActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
