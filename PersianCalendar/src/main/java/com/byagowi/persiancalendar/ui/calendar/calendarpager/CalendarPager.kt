@@ -122,6 +122,10 @@ class CalendarPager @JvmOverloads constructor(
                         else R.drawable.ic_keyboard_arrow_right
                     )
                     setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem + 1, true) }
+                    setOnLongClickListener {
+                        viewPager.setCurrentItem(viewPager.currentItem + 12, false)
+                        true
+                    }
                     setBackgroundResource(selectableItemBackground)
                 }
 
@@ -131,6 +135,10 @@ class CalendarPager @JvmOverloads constructor(
                         else R.drawable.ic_keyboard_arrow_left
                     )
                     setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem - 1, true) }
+                    setOnLongClickListener {
+                        viewPager.setCurrentItem(viewPager.currentItem - 12, false)
+                        true
+                    }
                     setBackgroundResource(selectableItemBackground)
                 }
 
