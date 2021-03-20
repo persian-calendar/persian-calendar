@@ -53,15 +53,18 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
         )
 
-        val binding = MonthOverviewDialogBinding.inflate(
-            mainActivity.layoutInflater, null, false
-        ).apply {
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            recyclerView.adapter = ItemAdapter(events)
-        }
-
         return BottomSheetDialog(mainActivity).apply {
-            setContentView(binding.root)
+            setContentView(
+                MonthOverviewDialogBinding.inflate(
+                    mainActivity.layoutInflater, null, false
+                ).apply {
+                    recyclerView.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = ItemAdapter(events)
+                        setPadding(0, 4.dp, 0, 0)
+                    }
+                }.root
+            )
             setCancelable(true)
             setCanceledOnTouchOutside(true)
         }
