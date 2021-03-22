@@ -10,11 +10,11 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import com.byagowi.persiancalendar.LANG_EN_IR
+import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.dp
-import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getAppFont
-import com.byagowi.persiancalendar.utils.isRTL
+import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -150,7 +150,12 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         sunPaint.color = sunColor
         sunRaisePaint.color = sunColor
 
-        fontSize = 14.dp
+        fontSize = when (language) {
+            LANG_EN_IR, LANG_EN_US, LANG_JA -> {
+                12.dp
+            }
+            else -> 14.dp
+        }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
