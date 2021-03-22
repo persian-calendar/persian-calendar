@@ -181,17 +181,24 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        val width = width
+        val height = height
+        val isRTL = isRTL
 
         if (isShaderInitiationNeeded) {
             isShaderInitiationNeeded = false
             handler.postDelayed({
                 dayPaint.shader = LinearGradient(
-                    getWidth() * 0.17f, 0f, getWidth() * 0.5f, 0f,
+                    width * 0.17f, 0f, width * 0.5f, 0f,
                     dayColor, daySecondColor, Shader.TileMode.MIRROR
                 )
                 postInvalidate()
             }, 80)
         }
+
+        canvas.save()
+        if (isRTL)
+            canvas.scale(-1f, 1f, width / 2f, height / 2f)
 
         canvas.save()
 
@@ -234,33 +241,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         canvas.drawLine(width * 0.83f, height * 0.3f, width * 0.83f, height * 0.7f, paint)
         canvas.drawLine(getWidth() / 2f, height * 0.7f, getWidth() / 2f, height * 0.8f, paint)
 
-        // draw text
-        paint.textAlign = Paint.Align.CENTER
-        paint.textSize = fontSize.toFloat()
-        paint.strokeWidth = 0f
-        paint.style = Paint.Style.FILL
-        paint.color = sunriseTextColor
-        canvas.drawText(sunriseString, width * 0.17f, height * .2f, paint)
-        paint.color = middayTextColor
-        canvas.drawText(middayString, width / 2f, height * .94f, paint)
-        paint.color = sunsetTextColor
-        canvas.drawText(sunsetString, width * 0.83f, height * .2f, paint)
-
-        // draw remaining time
-        paint.textAlign = Paint.Align.CENTER
-        paint.strokeWidth = 0f
-        paint.style = Paint.Style.FILL
-        paint.color = colorTextSecond
-        canvas.drawText(dayLengthString, width * if (isRTL) 0.70f else 0.30f, height * .94f, paint)
-        if (remainingString.isNotEmpty()) {
-            canvas.drawText(
-                remainingString,
-                width * if (isRTL) 0.30f else 0.70f,
-                height * .94f,
-                paint
-            )
-        }
-
         // draw sun
         if (current in 0.17f..0.83f) {
 
@@ -284,6 +264,36 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         } else {
             drawMoon(canvas)
         }
+
+        canvas.restore()
+
+        // draw text
+        paint.textAlign = Paint.Align.CENTER
+        paint.textSize = fontSize.toFloat()
+        paint.strokeWidth = 0f
+        paint.style = Paint.Style.FILL
+        paint.color = sunriseTextColor
+        canvas.drawText(sunriseString, width * if (isRTL) 0.83f else 0.17f, height * .2f, paint)
+        paint.color = middayTextColor
+        canvas.drawText(middayString, width / 2f, height * .94f, paint)
+        paint.color = sunsetTextColor
+        canvas.drawText(sunsetString, width * if (isRTL) 0.17f else 0.83f, height * .2f, paint)
+
+        // draw remaining time
+        paint.textAlign = Paint.Align.CENTER
+        paint.strokeWidth = 0f
+        paint.style = Paint.Style.FILL
+        paint.color = colorTextSecond
+        canvas.drawText(dayLengthString, width * if (isRTL) 0.70f else 0.30f, height * .94f, paint)
+        if (remainingString.isNotEmpty()) {
+            canvas.drawText(
+                remainingString,
+                width * if (isRTL) 0.30f else 0.70f,
+                height * .94f,
+                paint
+            )
+        }
+
     }
 
     private fun drawMoon(canvas: Canvas) {
