@@ -15,6 +15,7 @@ import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
@@ -426,17 +427,20 @@ fun askForCalendarPermission(activity: Activity?) {
         .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }.show()
 }
 
-fun copyToClipboard(view: View?, label: CharSequence?, text: CharSequence?) {
+fun copyToClipboard(
+    view: View?, label: CharSequence?, text: CharSequence?, showToastInstead: Boolean = false
+) {
     view ?: return
     val clipboardService = view.context.getSystemService<ClipboardManager>()
 
     if (clipboardService == null || label == null || text == null) return
 
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
-    Snackbar.make(
-        view, view.context.getString(R.string.date_copied_clipboard).format(text),
-        Snackbar.LENGTH_SHORT
-    ).show()
+    val textToShow = view.context.getString(R.string.date_copied_clipboard).format(text)
+    if (showToastInstead)
+        Toast.makeText(view.context, textToShow, Toast.LENGTH_SHORT).show()
+    else
+        Snackbar.make(view, textToShow, Snackbar.LENGTH_SHORT).show()
 }
 
 fun dateStringOfOtherCalendars(jdn: Long, separator: String) =

@@ -102,7 +102,7 @@ class RecyclerListAdapter(
             }
         }
 
-        fun bind(position: Int) = binding.apply {
+        fun bind(position: Int) = binding.run {
             checkTextView.text = items[position].title
             checkTextView.isChecked = items[position].enabled
         }

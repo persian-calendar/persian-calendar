@@ -72,7 +72,10 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
 
     internal class MonthOverviewRecord(
         val title: String, val holidays: String, val nonHolidays: String
-    )
+    ) {
+        override fun toString() = listOf(title, holidays, nonHolidays)
+            .filter { it.isNotEmpty() }.joinToString("\n")
+    }
 
     private inner class ItemAdapter(private val rows: List<MonthOverviewRecord>) :
         RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
@@ -86,19 +89,26 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         override fun getItemCount(): Int = rows.size
 
         inner class ViewHolder(private val binding: MonthOverviewItemBinding) :
-            RecyclerView.ViewHolder(binding.root) {
+            RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-            fun bind(position: Int) {
-                val record = rows[position]
-                binding.apply {
-                    title.text = record.title
-                    holidays.text = record.holidays
-                    holidays.visibility = if (record.holidays.isEmpty()) View.GONE else View.VISIBLE
-                    nonHolidays.text = record.nonHolidays
-                    nonHolidays.visibility =
-                        if (record.nonHolidays.isEmpty()) View.GONE else View.VISIBLE
-                }
+            init {
+                binding.root.setOnClickListener(this)
             }
+
+            fun bind(position: Int) = binding.run {
+                val record = rows[position]
+                title.text = record.title
+                holidays.text = record.holidays
+                holidays.visibility = if (record.holidays.isEmpty()) View.GONE else View.VISIBLE
+                nonHolidays.text = record.nonHolidays
+                nonHolidays.visibility =
+                    if (record.nonHolidays.isEmpty()) View.GONE else View.VISIBLE
+            }
+
+            override fun onClick(v: View?) = copyToClipboard(
+                binding.root, "Events", rows[adapterPosition].toString(),
+                showToastInstead = true
+            )
         }
     }
 
