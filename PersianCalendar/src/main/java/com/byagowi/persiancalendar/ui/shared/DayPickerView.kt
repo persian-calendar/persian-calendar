@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.util.Log
 import android.widget.FrameLayout
@@ -26,7 +27,12 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         val chips = calendarTypes.map { calendarTypeItem ->
             (inflater.inflate(
                 R.layout.single_chip_layout, calendarTypesBox, false
-            ) as Chip).apply { text = calendarTypeItem.toString() }
+            ) as Chip).apply {
+                text = calendarTypeItem.toString()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    elevation = resources.getDimension(R.dimen.chip_elevation)
+                }
+            }
         }
         chips.forEachIndexed { i, chip ->
             chip.setOnClickListener {

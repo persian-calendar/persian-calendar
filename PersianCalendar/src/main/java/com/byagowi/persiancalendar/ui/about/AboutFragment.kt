@@ -168,6 +168,9 @@ App Version Code: ${version[0]}"""
                     text = parts[1]
                     chipIcon = developerIcon
                     setChipIconTintResource(chipsIconsColor)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        elevation = resources.getDimension(R.dimen.chip_elevation)
+                    }
                 }
             }.forEach(binding.developers::addView)
 
