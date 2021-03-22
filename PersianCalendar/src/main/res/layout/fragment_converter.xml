@@ -25,7 +25,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/card_margin"
                 app:cardBackgroundColor="?attr/colorCard"
-                app:cardCornerRadius="@dimen/common_radius">
+                app:cardCornerRadius="@dimen/common_radius"
+                app:cardElevation="@dimen/common_card_elevation"
+                app:cardUseCompatPadding="true">
 
                 <com.byagowi.persiancalendar.ui.shared.CalendarsView
                     android:id="@+id/calendars_view"
