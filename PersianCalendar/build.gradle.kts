@@ -65,7 +65,10 @@ android {
             signingConfig = signingConfigs.getByName("nightly")
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion-nightly"
             applicationIdSuffix = ".nightly"
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             isMinifyEnabled = true
             isShrinkResources = true
         }
@@ -76,7 +79,10 @@ android {
         }
 
         getByName("release") {
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             isMinifyEnabled = true
             isShrinkResources = true
         }
@@ -112,8 +118,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
 
     implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.fragment:fragment-ktx:1.3.0")
-    implementation("androidx.activity:activity-ktx:1.2.0")
+    implementation("androidx.fragment:fragment-ktx:1.3.1")
+    implementation("androidx.activity:activity-ktx:1.2.1")
 
     implementation("androidx.browser:browser:1.3.0")
 
@@ -123,6 +129,10 @@ dependencies {
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
     testImplementation("junit:junit:4.13")
+    // Scratch.kt only dependencies
+    // testImplementation("com.squareup.okhttp:okhttp:2.7.5")
+    // testImplementation("org.json:json:20210307")
+    // testImplementation("com.ibm.icu:icu4j:68.2")
 
     androidTestImplementation("androidx.test:runner:1.3.0")
     androidTestImplementation("androidx.test:rules:1.3.0")
