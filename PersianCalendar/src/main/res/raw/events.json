@@ -52,7 +52,7 @@
     { "holiday": false, "month": 2, "day": 7, "type": "Afghanistan",
       "title": "کودتای حزب دموکراتیک خلق افغانستان (سال ۱۳۵۷)" },
 
-    { "holiday": false, "month": 2, "day": 8, "type": "Afghanistan",
+    { "holiday": true, "month": 2, "day": 8, "type": "Afghanistan",
       "title": "پیروزی جهاد مقدس افغانستان (سال ۱۳۷۱)" },
 
     { "holiday": false, "month": 3, "day": 24, "type": "Afghanistan",
