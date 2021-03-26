@@ -109,7 +109,8 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.google.android.material:material:1.3.0")
-    implementation("com.google.android:flexbox:2.0.1")
+    // Revert to com.google.android:flexbox:2.0.1 when https://github.com/google/flexbox-layout/issues/566 is resolved
+    implementation("com.github.google:flexbox-layout:2.0.1")
 
     implementation("com.google.openlocationcode:openlocationcode:1.0.4")
 

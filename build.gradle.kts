@@ -12,9 +12,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        mavenCentral()
-        // can be removed when https://github.com/google/flexbox-layout/issues/566 is resolved
-        jcenter()
+        gradlePluginPortal()
         maven("https://jitpack.io")
     }
 }
