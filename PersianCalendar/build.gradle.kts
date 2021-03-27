@@ -11,17 +11,14 @@ fun String.runCommand(
     workingDir: File = File("."),
     timeoutAmount: Long = 60,
     timeoutUnit: TimeUnit = TimeUnit.SECONDS
-): String? = try {
+): String? = runCatching {
     ProcessBuilder("\\s".toRegex().split(this))
         .directory(workingDir)
         .redirectOutput(ProcessBuilder.Redirect.PIPE)
         .redirectError(ProcessBuilder.Redirect.PIPE)
         .start().apply { waitFor(timeoutAmount, timeoutUnit) }
         .inputStream.bufferedReader().readText()
-} catch (e: java.io.IOException) {
-    e.printStackTrace()
-    null
-}
+}.onFailure { it.printStackTrace() }.getOrNull()
 
 android {
     compileSdkVersion(30)

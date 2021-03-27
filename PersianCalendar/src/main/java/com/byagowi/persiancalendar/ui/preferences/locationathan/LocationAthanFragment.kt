@@ -26,10 +26,7 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.location.Locatio
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
-import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.askForLocationPermission
-import com.byagowi.persiancalendar.utils.getCoordinate
-import com.byagowi.persiancalendar.utils.getCustomAthanUri
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
@@ -99,11 +96,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 getCustomAthanUri(context)?.let {
                     intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it)
                 }
-                try {
+                runCatching {
                     startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                }.onFailure(logException)
                 return true
             }
             "pref_key_ringtone_default" -> {
@@ -118,7 +113,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 return true
             }
             "pref_gps_location" -> {
-                try {
+                runCatching {
                     if (ActivityCompat.checkSelfPermission(
                             context,
                             Manifest.permission.ACCESS_FINE_LOCATION
@@ -126,19 +121,13 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                             context,
                             Manifest.permission.ACCESS_COARSE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        askForLocationPermission(activity)
-                    } else {
+                    ) askForLocationPermission(activity) else {
                         GPSLocationDialog().show(
                             childFragmentManager,
                             GPSLocationDialog::class.java.name
                         )
                     }
-                } catch (e: Exception) {
-                    // Do whatever we were doing till now
-                    e.printStackTrace()
-                }
-
+                }.onFailure(logException)
                 return super.onPreferenceTreeClick(preference)
             }
             else -> return super.onPreferenceTreeClick(preference)

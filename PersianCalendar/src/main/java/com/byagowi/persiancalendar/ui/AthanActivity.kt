@@ -8,7 +8,6 @@ import android.os.Handler
 import android.os.Looper
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
-import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
@@ -17,7 +16,6 @@ import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.utils.*
-import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 class AthanActivity : AppCompatActivity() {
@@ -30,19 +28,14 @@ class AthanActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private var alreadyStopped = false
     private val stopTask = object : Runnable {
-        override fun run() {
-            try {
-                if ((ringtone == null && mediaPlayer == null) ||
-                    ringtone?.isPlaying == false ||
-                    mediaPlayer?.isPlaying == false
-                ) return this@AthanActivity.finish()
-
-                handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return this@AthanActivity.finish()
-            }
-        }
+        override fun run() = runCatching {
+            if ((ringtone == null && mediaPlayer == null) ||
+                ringtone?.isPlaying == false ||
+                mediaPlayer?.isPlaying == false
+            ) this@AthanActivity.finish()
+            else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
+            Unit
+        }.onFailure { this@AthanActivity.finish() }.getOrElse(logException)
     }
 
     private val ascendVolume = object : Runnable {
@@ -84,8 +77,8 @@ class AthanActivity : AppCompatActivity() {
         }
 
         val customAthanUri = getCustomAthanUri(this)
-        if (customAthanUri != null) {
-            try {
+        runCatching {
+            if (customAthanUri != null) {
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         audioAttributes = AudioAttributes.Builder()
@@ -99,13 +92,9 @@ class AthanActivity : AppCompatActivity() {
                     volumeControlStream = AudioManager.STREAM_ALARM
                     play()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        } else {
-            try {
+            } else {
                 mediaPlayer = MediaPlayer().apply {
-                    try {
+                    runCatching {
                         setDataSource(this@AthanActivity, getDefaultAthanUri(this@AthanActivity))
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             setAudioAttributes(
@@ -120,15 +109,11 @@ class AthanActivity : AppCompatActivity() {
                         }
                         volumeControlStream = AudioManager.STREAM_ALARM
                         prepare()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
+                    }.onFailure(logException)
                     start()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
-        }
+        }.onFailure(logException)
 
         applyAppLanguage(this)
 
@@ -164,14 +149,12 @@ class AthanActivity : AppCompatActivity() {
 
         if (isAscendingAthanVolumeEnabled) handler.post(ascendVolume)
 
-        try {
+        runCatching {
             getSystemService<TelephonyManager>()?.listen(
                 phoneStateListener,
                 PhoneStateListener.LISTEN_CALL_STATE
             )
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        }.onFailure(logException)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -185,27 +168,23 @@ class AthanActivity : AppCompatActivity() {
         if (alreadyStopped) return
         alreadyStopped = true
 
-        try {
+        runCatching {
             getSystemService<TelephonyManager>()?.listen(
                 phoneStateListener, PhoneStateListener.LISTEN_NONE
             )
             phoneStateListener = null
-        } catch (e: RuntimeException) {
-            Log.e("Athan", "TelephonyManager handling fail", e)
-        }
+        }.onFailure(logException)
 
         ringtone?.stop()
 
-        try {
+        runCatching {
             mediaPlayer?.apply {
                 if (isPlaying) {
                     stop()
                     release()
                 }
             }
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        }
+        }.onFailure(logException)
 
         handler.removeCallbacks(stopTask)
         handler.removeCallbacks(ascendVolume)

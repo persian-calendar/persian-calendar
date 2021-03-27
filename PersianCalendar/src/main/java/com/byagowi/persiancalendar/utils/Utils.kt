@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import android.media.AudioManager
-import android.util.Log
 import android.view.View
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
@@ -16,7 +15,6 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.*
 import org.json.JSONArray
-import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 
@@ -160,7 +158,7 @@ fun loadEvents(context: Context) {
     IslamicDate.islamicOffset = context.appPrefs
         .getString(PREF_ISLAMIC_OFFSET, null)?.toIntOrNull() ?: 0
 
-    try {
+    runCatching {
         val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
 
         val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
@@ -258,12 +256,10 @@ fun loadEvents(context: Context) {
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
         allEnabledEvents = allEnabledEventsBuilder
-    } catch (e: JSONException) {
-        e.printStackTrace()
-    }
+    }.onFailure(logException)
 }
 
-fun loadLanguageResource(context: Context) = try {
+fun loadLanguageResource(context: Context): Unit = runCatching {
     val messages = JSONObject(
         readRawResource(
             context, when (language) {
@@ -292,14 +288,13 @@ fun loadLanguageResource(context: Context) = try {
         LANG_AR, LANG_AZB -> messages.getJSONArray("WeekDaysInitials").toStringList()
         else -> weekDays.map { it.substring(0, 1) }
     }
-} catch (e: JSONException) {
-    e.printStackTrace()
+}.onFailure {
     persianMonths = monthNameEmptyList
     islamicMonths = monthNameEmptyList
     gregorianMonths = monthNameEmptyList
     weekDays = weekDaysEmptyList
     weekDaysInitials = weekDaysEmptyList
-}
+}.getOrElse(logException)
 
 @StringRes
 fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
@@ -415,14 +410,13 @@ fun updateStoredPreference(context: Context) {
         .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
 
     coordinate = getCoordinate(context)
-    try {
+    runCatching {
         mainCalendar =
             CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI")
 
         otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: "GREGORIAN,ISLAMIC")
             .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
-    } catch (e: Exception) {
-        Log.e(TAG, "Fail on parsing calendar preference", e)
+    }.onFailure(logException).getOrElse {
         mainCalendar = CalendarType.SHAMSI
         otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     }
@@ -473,26 +467,20 @@ fun updateStoredPreference(context: Context) {
         }
     }
 
-    appTheme = try {
+    appTheme = runCatching {
         getThemeFromName(getThemeFromPreference(context, prefs))
-    } catch (e: Exception) {
-        e.printStackTrace()
-        R.style.LightTheme
-    }
+    }.onFailure(logException).getOrDefault(R.style.LightTheme)
 
     isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.run {
         isEnabled && isTouchExplorationEnabled
     } ?: false
 
     // https://stackoverflow.com/a/61599809
-    isHighTextContrastEnabled = try {
+    isHighTextContrastEnabled = runCatching {
         context.getSystemService<AccessibilityManager>()?.run {
             (javaClass.getMethod("isHighTextContrastEnabled").invoke(this) as? Boolean)
-        } ?: false
-    } catch (e: Exception) {
-        e.printStackTrace()
-        false
-    }
+        }
+    }.onFailure(logException).getOrNull() ?: false
 }
 
 // Context preferably should be activity context not application

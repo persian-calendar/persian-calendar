@@ -1,15 +1,12 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.util.Linkify
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.LinearLayout
@@ -82,16 +79,14 @@ class AboutFragment : Fragment() {
 
         // report bug
         binding.reportBug.setOnClickListener {
-            try {
+            runCatching {
                 startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
                         "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()
                     )
                 )
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            }.onFailure(logException)
         }
 
         binding.email.setOnClickListener {
@@ -105,7 +100,7 @@ class AboutFragment : Fragment() {
                         Uri.fromParts("mailto", "persian-calendar-admin@googlegroups.com", null)
                     )
                     emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                    try {
+                    runCatching {
                         emailIntent.putExtra(
                             Intent.EXTRA_TEXT, """${emailBinding.inputText.text?.toString()}
 
@@ -125,8 +120,7 @@ App Version Code: ${version[0]}"""
                                 getString(R.string.about_sendMail)
                             )
                         )
-                    } catch (e: ActivityNotFoundException) {
-                        e.printStackTrace()
+                    }.onFailure(logException).getOrElse {
                         Snackbar.make(binding.root, R.string.about_noClient, Snackbar.LENGTH_SHORT)
                             .show()
                     }
@@ -148,13 +142,11 @@ App Version Code: ${version[0]}"""
 
         val chipClick = View.OnClickListener {
             (it.tag as? String?)?.run {
-                try {
+                runCatching {
                     CustomTabsIntent.Builder().build().launchUrl(
                         mainActivity, "https://github.com/$this".toUri()
                     )
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+                }.onFailure(logException)
             }
         }
 
@@ -222,26 +214,18 @@ App Version Code: ${version[0]}"""
         inflater.inflate(R.menu.about_menu_buttons, menu)
     }
 
-    private fun shareApplication() {
-        val activity = activity ?: return
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            try {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        "${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
-                    )
-                }, getString(R.string.share)))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                bringMarketPage(activity)
-            }
-        } else {
-            bringMarketPage(activity)
-        }
-    }
+    private fun shareApplication() = if (
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
+    ) runCatching {
+        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+            putExtra(
+                Intent.EXTRA_TEXT,
+                "${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+            )
+        }, getString(R.string.share)))
+    }.onFailure(logException).getOrElse { bringMarketPage(activity ?: return) } else Unit
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -251,10 +235,7 @@ App Version Code: ${version[0]}"""
         return true
     }
 
-    private fun programVersion(context: Context): String = try {
+    private fun programVersion(context: Context): String = runCatching {
         context.packageManager.getPackageInfo(context.packageName, 0).versionName
-    } catch (e: PackageManager.NameNotFoundException) {
-        Log.e(AboutFragment::class.java.name, "Name not found on PersianUtils.programVersion", e)
-        ""
-    }
+    }.onFailure(logException).getOrDefault("")
 }

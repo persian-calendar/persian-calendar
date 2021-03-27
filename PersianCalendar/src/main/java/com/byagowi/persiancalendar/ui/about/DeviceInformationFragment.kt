@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.circularRevealFromMiddle
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -122,20 +123,16 @@ class DeviceInformationFragment : Fragment() {
                                     ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
                                 // setOnLongClickListener {
                                 //     val player = MediaPlayer.create(mainActivity, R.raw.moonlight)
-                                //     try {
+                                //     runCatching {
                                 //         if (!player.isPlaying) player.start()
-                                //     } catch (ignore: Exception) {
-                                //     }
+                                //     }.onFailure(logException)
                                 //     AlertDialog.Builder(mainActivity).create().apply {
                                 //         setView(AppCompatImageButton(context).apply {
                                 //             setImageResource(R.drawable.ic_stop)
                                 //             setOnClickListener { dismiss() }
                                 //         })
                                 //         setOnDismissListener {
-                                //             try {
-                                //                 player.stop()
-                                //             } catch (ignore: Exception) {
-                                //             }
+                                //             runCatching { player.stop() }.onFailure(logException)
                                 //         }
                                 //         show()
                                 //     }
@@ -255,7 +252,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
             "System Features",
             activity.packageManager.systemAvailableFeatures.joinToString("\n"), ""
         )
-    ) + (try {
+    ) + (runCatching {
         // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
         val display = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY)
         val versions = IntArray(2)
@@ -317,7 +314,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                         if (!regex.matches(it)) append(it)
                         else append(SpannableString(it).apply {
                             setSpan(object : ClickableSpan() {
-                                override fun onClick(textView: View) = try {
+                                override fun onClick(textView: View) = runCatching {
                                     CustomTabsIntent.Builder().build().launchUrl(
                                         activity,
                                         it.replace(
@@ -325,9 +322,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                                             "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
                                         ).toUri()
                                     )
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
+                                }.getOrElse(logException)
                             }, 0, it.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                         })
                     }
@@ -335,10 +330,7 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
                 ""
             )
         )
-    } catch (e: Exception) {
-        e.printStackTrace()
-        emptyList()
-    })
+    }.onFailure(logException).getOrDefault(emptyList()))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         DeviceInformationRowBinding.inflate(parent.context.layoutInflater, parent, false)

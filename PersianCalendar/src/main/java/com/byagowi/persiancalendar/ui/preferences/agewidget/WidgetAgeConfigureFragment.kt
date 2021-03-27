@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.ui.preferences.widgetnotification.ColorPicker
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getTodayJdn
+import com.byagowi.persiancalendar.utils.logException
 import java.util.*
 
 class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
@@ -54,7 +55,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
                 setTitle(R.string.widget_text_color)
                 setView(colorPickerView)
                 setPositiveButton(R.string.accept) { _, _ ->
-                    try {
+                    runCatching {
                         sharedPreferences.edit {
                             putString(
                                 PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,
@@ -64,9 +65,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
                                 )
                             )
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    }.onFailure(logException)
                 }
                 setNegativeButton(R.string.cancel, null)
             }.show()
@@ -92,7 +91,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
                 setTitle(R.string.widget_background_color)
                 setView(colorPickerView)
                 setPositiveButton(R.string.accept) { _, _ ->
-                    try {
+                    runCatching {
                         sharedPreferences.edit {
                             putString(
                                 PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId,
@@ -102,9 +101,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
                                 )
                             )
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    }.onFailure(logException)
                 }
                 setNegativeButton(R.string.cancel, null)
             }.show()

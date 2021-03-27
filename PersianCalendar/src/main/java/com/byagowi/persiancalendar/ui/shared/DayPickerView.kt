@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.shared
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
 import android.widget.FrameLayout
 import android.widget.NumberPicker
 import com.byagowi.persiancalendar.R
@@ -61,7 +60,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     val dayJdnFromView: Long
-        get() = try {
+        get() = runCatching {
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
@@ -69,10 +68,8 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                 throw Exception("Not a valid day")
 
             getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        }.onFailure(logException).getOrElse {
             Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).show()
-            Log.e("SelectDayDialog", "", e)
             -1
         }
 

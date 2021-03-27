@@ -9,6 +9,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.dp
+import com.byagowi.persiancalendar.utils.logException
 import java.util.*
 
 // Don't use MainActivity here as it is used in WidgetConfigurationActivity also
@@ -44,7 +45,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 setTitle(R.string.widget_text_color)
                 setView(colorPickerView)
                 setPositiveButton(R.string.accept) { _, _ ->
-                    try {
+                    runCatching {
                         sharedPreferences.edit {
                             putString(
                                 PREF_SELECTED_WIDGET_TEXT_COLOR,
@@ -54,9 +55,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                                 )
                             )
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    }.onFailure(logException)
                 }
                 setNegativeButton(R.string.cancel, null)
             }.show()
@@ -82,7 +81,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 setTitle(R.string.widget_background_color)
                 setView(colorPickerView)
                 setPositiveButton(R.string.accept) { _, _ ->
-                    try {
+                    runCatching {
                         sharedPreferences.edit {
                             putString(
                                 PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
@@ -92,9 +91,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                                 )
                             )
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    }.onFailure(logException)
                 }
                 setNegativeButton(R.string.cancel, null)
             }.show()

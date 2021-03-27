@@ -6,7 +6,10 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.location.*
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,7 +26,6 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
-import java.io.IOException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -92,25 +94,21 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     private fun checkGPSProvider() {
         if (latitude != null && longitude != null) return
 
-        try {
+        runCatching {
             val gps = mainActivity.getSystemService<LocationManager>()
 
             if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
                 AlertDialog.Builder(mainActivity)
                     .setMessage(R.string.gps_internet_desc)
                     .setPositiveButton(R.string.accept) { _, _ ->
-                        try {
+                        runCatching {
                             mainActivity.startActivity(
                                 Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                             )
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
+                        }.onFailure(logException)
                     }.create().show()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        }.onFailure(logException)
     }
 
     private fun getLocation() {
@@ -143,15 +141,12 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         latitude = "%f".format(Locale.ENGLISH, location.latitude)
         longitude = "%f".format(Locale.ENGLISH, location.longitude)
         val gcd = Geocoder(mainActivity, Locale.getDefault())
-        val addresses: List<Address>
-        try {
-            addresses = gcd.getFromLocation(location.latitude, location.longitude, 1)
+        runCatching {
+            val addresses = gcd.getFromLocation(location.latitude, location.longitude, 1)
             if (addresses.isNotEmpty()) {
                 cityName = addresses[0].locality
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        }.onFailure(logException)
 
         var result = ""
         if (cityName?.isNotEmpty() == true) result = cityName + "\n\n"

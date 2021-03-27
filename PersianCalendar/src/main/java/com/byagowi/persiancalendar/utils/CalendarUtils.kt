@@ -192,7 +192,7 @@ private fun readDeviceEvents(
     ActivityCompat.checkSelfPermission(
         context, Manifest.permission.READ_CALENDAR
     ) != PackageManager.PERMISSION_GRANTED
-) emptyList() else try {
+) emptyList() else runCatching {
     context.contentResolver.query(
         CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
             ContentUris.appendId(this, startingDate.timeInMillis - DAY_IN_MILLIS)
@@ -234,11 +234,8 @@ private fun readDeviceEvents(
                 isHoliday = false
             )
         }.take(1000 /* let's put some limitation */).toList()
-    } ?: emptyList()
-} catch (e: Exception) {
-    e.printStackTrace()
-    emptyList()
-}
+    }
+}.onFailure(logException).getOrNull() ?: emptyList()
 
 fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
     ctx,

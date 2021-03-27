@@ -11,7 +11,7 @@ import androidx.core.content.getSystemService
 import androidx.preference.PreferenceDialogFragmentCompat
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
-import java.io.IOException
+import com.byagowi.persiancalendar.utils.logException
 
 class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
 
@@ -32,20 +32,16 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
             }
         } else if (context != null) {
             val player = MediaPlayer()
-            try {
+            runCatching {
                 player.setDataSource(context, getDefaultAthanUri(context))
                 player.setAudioStreamType(AudioManager.STREAM_ALARM)
                 player.prepare()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
+            }.onFailure(logException)
 
-            try {
+            runCatching {
                 player.start()
                 mediaPlayer = player
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            }.onFailure(logException)
         }
 
         return SeekBar(context).apply {
@@ -69,14 +65,12 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
                     if (ringtone?.isPlaying == false) {
                         ringtone?.play()
                     }
-                    try {
+                    runCatching {
                         if (mediaPlayer?.isPlaying == false) {
                             mediaPlayer?.prepare()
                             mediaPlayer?.start()
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    }.onFailure(logException)
                 }
             })
         }
@@ -87,14 +81,12 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
 
         ringtone?.stop()
 
-        try {
+        runCatching {
             if (mediaPlayer?.isPlaying == true) {
                 mediaPlayer?.stop()
                 mediaPlayer?.release()
             }
-        } catch (e: IllegalStateException) {
-            e.printStackTrace()
-        }
+        }.onFailure(logException)
 
         if (positiveResult) athanPref.volume = volume
     }

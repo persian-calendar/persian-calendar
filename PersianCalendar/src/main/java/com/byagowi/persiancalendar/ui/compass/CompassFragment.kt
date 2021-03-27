@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
+import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.praytimes.Coordinate
 import kotlin.math.abs
@@ -101,14 +102,12 @@ class CompassFragment : Fragment() {
             bottomAppbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.level -> mainActivity.navigateTo(R.id.level)
-                    R.id.map -> try {
+                    R.id.map -> runCatching {
                         CustomTabsIntent.Builder().build().launchUrl(
                             mainActivity,
                             "https://g.co/qiblafinder".toUri()
                         )
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    }.onFailure(logException)
                     R.id.help -> showLongSnackbar(
                         if (sensorNotFound)
                             R.string.compass_not_found

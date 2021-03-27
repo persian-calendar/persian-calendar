@@ -6,6 +6,7 @@ import android.content.IntentFilter
 import android.os.IBinder
 import android.util.Log
 import com.byagowi.persiancalendar.utils.loadApp
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 import java.lang.ref.WeakReference
@@ -41,13 +42,7 @@ class ApplicationService : Service() {
     }
 
     override fun onDestroy() {
-        try {
-            unregisterReceiver(receiver)
-        } catch (e: Exception) {
-            // Really can't do much here
-            e.printStackTrace()
-        }
-
+        runCatching { unregisterReceiver(receiver) }.onFailure(logException)
         super.onDestroy()
     }
 

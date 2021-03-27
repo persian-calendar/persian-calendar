@@ -29,11 +29,9 @@ private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyEventsStore()
 
-fun setDeviceCalendarEvents(context: Context) = try {
+fun setDeviceCalendarEvents(context: Context): Unit = runCatching {
     deviceCalendarEvents = readDayDeviceEvents(context, -1)
-} catch (e: Exception) {
-    e.printStackTrace()
-}
+}.getOrElse(logException)
 
 var latestFiredUpdate = 0L
 
@@ -514,14 +512,10 @@ fun update(context: Context, updateDate: Boolean) {
 
         if (BuildConfig.DEBUG) builder.setWhen(Calendar.getInstance().timeInMillis)
 
-        if (goForWorker())
-            notificationManager?.notify(NOTIFICATION_ID, builder.build())
-        else
-            try {
-                ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
-            } catch (e: Exception) {
-                Log.e("UpdateUtils", "failed to start service with the notification", e)
-            }
+        if (goForWorker()) notificationManager?.notify(NOTIFICATION_ID, builder.build())
+        else runCatching {
+            ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
+        }.onFailure(logException)
     } else if (goForWorker()) {
         context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
     }

@@ -46,7 +46,6 @@ import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
-import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -163,47 +162,41 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
 
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
-fun loadApp(context: Context) {
-    if (goForWorker()) return
+fun loadApp(context: Context) = if (!goForWorker()) runCatching {
+    val alarmManager = context.getSystemService<AlarmManager>() ?: return@runCatching
 
-    try {
-        val alarmManager = context.getSystemService<AlarmManager>() ?: return
+    val startTime = Calendar.getInstance().apply {
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 1)
+        add(Calendar.DATE, 1)
+    }
 
-        val startTime = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 1)
-            add(Calendar.DATE, 1)
-        }
+    val dailyPendingIntent = PendingIntent.getBroadcast(
+        context, LOAD_APP_ID,
+        Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_RESTART_APP),
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
+    alarmManager.set(AlarmManager.RTC, startTime.timeInMillis, dailyPendingIntent)
 
-        val dailyPendingIntent = PendingIntent.getBroadcast(
-            context, LOAD_APP_ID,
-            Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_RESTART_APP),
+    // There are simpler triggers on older Androids like SCREEN_ON but they
+    // are not available anymore, lets register an hourly alarm for >= Oreo
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val threeHoursPendingIntent = PendingIntent.getBroadcast(
+            context,
+            THREE_HOURS_APP_ID,
+            Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_UPDATE_APP),
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        alarmManager.set(AlarmManager.RTC, startTime.timeInMillis, dailyPendingIntent)
 
-        // There are simpler triggers on older Androids like SCREEN_ON but they
-        // are not available anymore, lets register an hourly alarm for >= Oreo
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val threeHoursPendingIntent = PendingIntent.getBroadcast(
-                context,
-                THREE_HOURS_APP_ID,
-                Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_UPDATE_APP),
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-
-            alarmManager.setInexactRepeating(
-                AlarmManager.RTC,
-                // Start from one hour from now
-                Calendar.getInstance().timeInMillis + TimeUnit.HOURS.toMillis(1),
-                TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
-            )
-        }
-    } catch (e: Exception) {
-        Log.e(TAG, "loadApp fail", e)
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC,
+            // Start from one hour from now
+            Calendar.getInstance().timeInMillis + TimeUnit.HOURS.toMillis(1),
+            TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
+        )
     }
-}
+}.getOrDefault(logException) else Unit
 
 fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().let {
     it + (CalendarType.values().toList() - it)
@@ -293,16 +286,13 @@ fun getOrderedCalendarEntities(context: Context): List<CalendarTypeItem> {
     }
 }
 
-fun getDayIconResource(day: Int): Int = try {
+fun getDayIconResource(day: Int): Int = runCatching {
     when (preferredDigits) {
         ARABIC_DIGITS -> DAYS_ICONS_ARABIC[day]
         ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC[day]
         else -> DAYS_ICONS_PERSIAN[day]
     }
-} catch (e: IndexOutOfBoundsException) {
-    Log.e(TAG, "No such field is available", e)
-    0
-}
+}.onFailure(logException).getOrDefault(0)
 
 fun readRawResource(context: Context, @RawRes res: Int) =
     context.resources.openRawResource(res).use { String(it.readBytes()) }
@@ -490,29 +480,21 @@ fun startEitherServiceOrWorker(context: Context) {
         // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
 
         val isRunning = context.getSystemService<ActivityManager>()?.let { am ->
-            try {
+            runCatching {
                 am.getRunningServices(Integer.MAX_VALUE).any {
                     ApplicationService::class.java.name == it.service.className
                 }
-            } catch (e: Exception) {
-                Log.e(TAG, "startEitherServiceOrWorker service's first part fail", e)
-                false
-            }
+            }.onFailure(logException).getOrNull()
         } ?: false
 
-        if (!isRunning) {
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                    ContextCompat.startForegroundService(
-                        context,
-                        Intent(context, ApplicationService::class.java)
-                    )
-
-                context.startService(Intent(context, ApplicationService::class.java))
-            } catch (e: Exception) {
-                Log.e(TAG, "startEitherServiceOrWorker service's second part fail", e)
-            }
-        }
+        if (!isRunning) runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                ContextCompat.startForegroundService(
+                    context,
+                    Intent(context, ApplicationService::class.java)
+                )
+            context.startService(Intent(context, ApplicationService::class.java))
+        }.onFailure(logException)
     }
 }
 
@@ -541,7 +523,7 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
 }
 
 fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
-    val result = try {
+    val result = runCatching {
         fun <T> JSONObject.map(f: (String, JSONObject) -> T) =
             this.keys().asSequence().map { f(it, this.getJSONObject(it)) }
 
@@ -568,10 +550,7 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
                 )
             }
         }.flatten().toList()
-    } catch (e: JSONException) {
-        e.printStackTrace()
-        emptyList()
-    }
+    }.onFailure(logException).getOrDefault(emptyList())
 
     if (!needsSort) return result
 
@@ -625,19 +604,22 @@ val Context.appPrefs: SharedPreferences
 val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)
 
-fun bringMarketPage(activity: Activity) = try {
+fun bringMarketPage(activity: Activity): Unit = runCatching {
     activity.startActivity(
         Intent(Intent.ACTION_VIEW, "market://details?id=${activity.packageName}".toUri())
     )
-} catch (e: ActivityNotFoundException) {
-    e.printStackTrace()
-    activity.startActivity(
-        Intent(
-            Intent.ACTION_VIEW,
-            "https://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+}.onFailure(logException).getOrElse {
+    runCatching {
+        activity.startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                "https://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+            )
         )
-    )
+    }.onFailure(logException)
 }
 
 val Number.dp: Int
     get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+
+val logException = fun(e: Throwable) { Log.e("Persian Calendar", e.message, e) }

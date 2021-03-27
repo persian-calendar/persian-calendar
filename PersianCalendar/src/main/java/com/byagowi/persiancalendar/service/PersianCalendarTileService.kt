@@ -15,16 +15,14 @@ import com.byagowi.persiancalendar.utils.*
 @TargetApi(Build.VERSION_CODES.N)
 class PersianCalendarTileService : TileService() {
 
-    override fun onClick() = try {
+    override fun onClick() = runCatching {
         startActivityAndCollapse(
             Intent(this, MainActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+    }.getOrElse(logException)
 
-    override fun onStartListening() = try {
+    override fun onStartListening() = runCatching {
         val today = getTodayOfCalendar(mainCalendar)
         qsTile?.apply {
             icon = Icon.createWithResource(
@@ -35,7 +33,5 @@ class PersianCalendarTileService : TileService() {
             // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
             state = Tile.STATE_ACTIVE
         }?.updateTile() ?: Unit
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
+    }.getOrElse(logException)
 }

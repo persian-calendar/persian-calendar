@@ -199,7 +199,7 @@ class CalendarFragment : Fragment() {
                 mainActivity, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(activity) else {
-            try {
+            runCatching {
                 startActivityForResult(
                     Intent(Intent.ACTION_INSERT)
                         .setData(CalendarContract.Events.CONTENT_URI)
@@ -219,8 +219,7 @@ class CalendarFragment : Fragment() {
                         .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
                     CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                 )
-            } catch (e: Exception) {
-                e.printStackTrace()
+            }.onFailure(logException).getOrElse {
                 Snackbar.make(
                     mainBinding?.root ?: return,
                     R.string.device_calendar_does_not_support,
@@ -251,7 +250,7 @@ class CalendarFragment : Fragment() {
         .map { event ->
             SpannableString(formatDeviceCalendarEventTitle(event)).apply {
                 setSpan(object : ClickableSpan() {
-                    override fun onClick(textView: View) = try {
+                    override fun onClick(textView: View) = runCatching {
                         startActivityForResult(
                             Intent(Intent.ACTION_VIEW)
                                 .setData(
@@ -261,8 +260,7 @@ class CalendarFragment : Fragment() {
                                 ),
                             CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
                         )
-                    } catch (e: Exception) { // Should be ActivityNotFoundException but we don't care really
-                        e.printStackTrace()
+                    }.onFailure(logException).getOrElse {
                         Snackbar.make(
                             textView,
                             R.string.device_calendar_does_not_support,
@@ -272,14 +270,10 @@ class CalendarFragment : Fragment() {
 
                     override fun updateDrawState(ds: TextPaint) {
                         super.updateDrawState(ds)
-                        if (event.color.isNotEmpty()) {
-                            try {
-                                // should be turned to long then int otherwise gets stupid alpha
-                                ds.color = event.color.toLong().toInt()
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
+                        runCatching {
+                            // should be turned to long then int otherwise gets stupid alpha
+                            if (event.color.isNotEmpty()) ds.color = event.color.toLong().toInt()
+                        }.onFailure(logException)
                     }
                 }, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
@@ -435,17 +429,14 @@ class CalendarFragment : Fragment() {
         )
         (owghatBinding?.timesRecyclerView?.adapter as? TimeItemAdapter)?.prayTimes = prayTimes
         owghatBinding?.sunView?.run {
-            setSunriseSunsetMoonPhase(prayTimes, try {
+            setSunriseSunsetMoonPhase(prayTimes, runCatching {
                 coordinate?.run {
                     SunMoonPosition(
                         getTodayJdn().toDouble(), latitude,
                         longitude, 0.0, 0.0
                     ).moonPhase
-                } ?: 1.0
-            } catch (e: Exception) {
-                e.printStackTrace()
-                1.0
-            })
+                }
+            }.onFailure(logException).getOrNull() ?: 1.0)
             visibility = if (isToday) View.VISIBLE else View.GONE
             if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) startAnimate()
         }
