@@ -162,7 +162,7 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
 
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
-fun loadApp(context: Context) = if (!goForWorker()) runCatching {
+fun loadApp(context: Context): Unit = if (!goForWorker()) runCatching {
     val alarmManager = context.getSystemService<AlarmManager>() ?: return@runCatching
 
     val startTime = Calendar.getInstance().apply {
@@ -196,7 +196,7 @@ fun loadApp(context: Context) = if (!goForWorker()) runCatching {
             TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
         )
     }
-}.getOrDefault(logException) else Unit
+}.getOrElse(logException) else Unit
 
 fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().let {
     it + (CalendarType.values().toList() - it)
