@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 
 object ReleaseDebugDifference {
     fun mainApplication(app: Application?) {
@@ -17,4 +18,6 @@ object ReleaseDebugDifference {
     }
 
     fun startLynxListenerIfIsDebug(context: Context?) = Unit // LynxShakeDetector(context).init()
+
+    fun logDebug(tag: String, msg: String) = Log.d(tag, msg)
 }

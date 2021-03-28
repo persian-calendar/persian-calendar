@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import android.util.Log
+import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.utils.loadApp
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.update
@@ -23,7 +23,7 @@ class ApplicationService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         instance = WeakReference(this)
-        Log.d(ApplicationService::class.java.name, "start")
+        logDebug(ApplicationService::class.java.name, "start")
 
         val intentFilter = IntentFilter().apply {
             addAction(Intent.ACTION_DATE_CHANGED)

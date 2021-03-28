@@ -6,4 +6,5 @@ import android.content.Context
 object ReleaseDebugDifference {
     fun mainApplication(app: Application?) {} // Nothing here
     fun startLynxListenerIfIsDebug(context: Context?) {} // Nothing here
+    fun logDebug(tag: String, msg: String) {} // Nothing Here
 }

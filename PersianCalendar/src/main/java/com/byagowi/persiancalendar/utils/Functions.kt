@@ -29,6 +29,7 @@ import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.service.ApplicationService
@@ -204,7 +205,7 @@ fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().le
 
 fun loadAlarms(context: Context) {
     val prefString = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
-    Log.d(TAG, "reading and loading all alarms from prefs: $prefString")
+    logDebug(TAG, "reading and loading all alarms from prefs: $prefString")
 
     if (coordinate != null && prefString.isNotEmpty()) {
         val athanGap =
@@ -244,7 +245,7 @@ private fun setAlarm(
 
     // don't set an alarm in the past
     if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
-        Log.d(TAG, "setting alarm for: " + triggerTime.time)
+        logDebug(TAG, "setting alarm for: " + triggerTime.time)
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,

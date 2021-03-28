@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
-import android.util.Log
 import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.IdRes
@@ -17,6 +16,7 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.AbstractDate
@@ -38,12 +38,12 @@ var latestFiredUpdate = 0L
 fun update(context: Context, updateDate: Boolean) {
     val now = System.currentTimeMillis()
     if (!updateDate && now - latestFiredUpdate < HALF_SECOND_IN_MILLIS) {
-        Log.d("UpdateUtils", "skip update")
+        logDebug("UpdateUtils", "skip update")
         return
     }
     latestFiredUpdate = now
 
-    Log.d("UpdateUtils", "update")
+    logDebug("UpdateUtils", "update")
     applyAppLanguage(context)
     val date = getTodayOfCalendar(mainCalendar)
     val jdn = date.toJdn()
@@ -98,7 +98,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     var dateHasChanged = false
     if (pastDate == null || pastDate != date || updateDate) {
-        Log.d("UpdateUtils", "date has changed")
+        logDebug("UpdateUtils", "date has changed")
 
         loadAlarms(context)
         pastDate = date
