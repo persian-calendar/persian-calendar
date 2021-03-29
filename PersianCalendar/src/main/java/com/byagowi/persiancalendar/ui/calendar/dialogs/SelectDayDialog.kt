@@ -24,8 +24,7 @@ class SelectDayDialog : AppCompatDialogFragment() {
             .setView(dayPickerView as View)
             .setCustomTitle(null)
             .setPositiveButton(R.string.go) { _, _ ->
-                val resultJdn = dayPickerView.dayJdnFromView
-                if (resultJdn != -1L) onSuccess(resultJdn)
+                dayPickerView.dayJdnFromView.takeIf { it != -1L }?.also(onSuccess)
             }.create()
     }
 
