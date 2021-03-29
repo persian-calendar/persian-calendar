@@ -24,17 +24,16 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     private val arrowRotationAnimationDuration =
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     private val calendarItemAdapter = CalendarItemAdapter(context)
-    private val binding: CalendarsViewBinding =
-        CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
-            root.setOnClickListener { expand(!calendarItemAdapter.isExpanded) }
-            extraInformationContainer.visibility = View.GONE
-            calendarsRecyclerView.apply {
-                layoutManager = LinearLayoutManager(context).apply {
-                    orientation = RecyclerView.HORIZONTAL
-                }
-                adapter = calendarItemAdapter
+    private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
+        root.setOnClickListener { expand(!calendarItemAdapter.isExpanded) }
+        extraInformationContainer.visibility = View.GONE
+        calendarsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context).apply {
+                orientation = RecyclerView.HORIZONTAL
             }
+            adapter = calendarItemAdapter
         }
+    }
 
     fun hideMoreIcon() {
         binding.moreCalendar.visibility = View.GONE
