@@ -181,9 +181,11 @@ class CalendarPager @JvmOverloads constructor(
                         }
 
                         val selectedDay = 1 + jdn - baseJdn
-                        if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
-                            daysAdapter.selectDay(selectedDay.toInt())
-                        else daysAdapter.selectDay(-1)
+                        daysAdapter.selectDay(
+                            if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
+                                selectedDay.toInt()
+                            else -1
+                        )
                     } else daysAdapter.selectDay(-1)
                 }
 
