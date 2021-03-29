@@ -12,12 +12,12 @@ val isCustomFontEnabled: Boolean
  * Using reflection to override default typeface
  * NOTICE: DO NOT FORGET TO SET TYPEFACE FOR APP THEME AS DEFAULT TYPEFACE WHICH WILL BE OVERRIDDEN
  */
-fun overrideFont(defaultFontNameToOverride: String, face: Typeface) = runCatching {
+fun overrideFont(defaultFontNameToOverride: String, face: Typeface): Unit = runCatching {
     val defaultFontTypefaceField =
         Typeface::class.java.getDeclaredField(defaultFontNameToOverride)
     defaultFontTypefaceField.isAccessible = true
     defaultFontTypefaceField.set(null, face)
-}.onFailure(logException).getOrNull() ?: Unit
+}.getOrElse(logException)
 
 fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, FONT_PATH)
 
