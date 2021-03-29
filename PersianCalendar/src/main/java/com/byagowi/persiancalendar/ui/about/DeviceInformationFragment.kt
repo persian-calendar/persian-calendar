@@ -53,99 +53,117 @@ class DeviceInformationFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).apply {
-        val mainActivity = activity as MainActivity
+    ) = FragmentDeviceInfoBinding.inflate(inflater, container, false)
+        .also { fragmentDeviceInfoBinding ->
+            val mainActivity = activity as MainActivity
 
-        mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
+            mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
 
-        circularRevealFromMiddle(circularReveal)
+            circularRevealFromMiddle(fragmentDeviceInfoBinding.circularReveal)
 
-        recyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(mainActivity)
-            addItemDecoration(DividerItemDecoration(mainActivity, LinearLayoutManager.VERTICAL))
-            adapter = DeviceInformationAdapter(mainActivity, root)
-        }
-
-        bottomNavigation.apply {
-            menu.apply {
-                add(Build.VERSION.RELEASE)
-                getItem(0).setIcon(R.drawable.ic_developer)
-
-                add("API " + Build.VERSION.SDK_INT)
-                getItem(1).setIcon(R.drawable.ic_settings)
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    add(Build.SUPPORTED_ABIS[0])
-                } else {
-                    add(Build.CPU_ABI)
-                }
-                getItem(2).setIcon(R.drawable.ic_motorcycle)
-
-                add(Build.MODEL)
-                getItem(3).setIcon(R.drawable.ic_device_information_white)
+            fragmentDeviceInfoBinding.recyclerView.also {
+                it.setHasFixedSize(true)
+                it.layoutManager = LinearLayoutManager(mainActivity)
+                it.addItemDecoration(
+                    DividerItemDecoration(
+                        mainActivity,
+                        LinearLayoutManager.VERTICAL
+                    )
+                )
+                it.adapter = DeviceInformationAdapter(mainActivity, fragmentDeviceInfoBinding.root)
             }
-            labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
-            setOnNavigationItemSelectedListener {
-                // Easter egg
-                if (++clickCount % 10 == 0) {
-                    BottomSheetDialog(mainActivity).apply {
-                        setContentView(LinearLayout(mainActivity).apply {
-                            orientation = LinearLayout.VERTICAL
-                            // Add one with CircularProgressIndicator also
-                            addView(LinearProgressIndicator(mainActivity).apply {
-                                isIndeterminate = true
-                                setIndicatorColor(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
-                                layoutParams =
-                                    ViewGroup.LayoutParams(
-                                        ViewGroup.LayoutParams.MATCH_PARENT,
-                                        ViewGroup.LayoutParams.WRAP_CONTENT
-                                    )
-                            })
-                            addView(ProgressBar(mainActivity).apply {
-                                isIndeterminate = true
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                                    ValueAnimator.ofArgb(
-                                        Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-                                    ).apply {
-                                        duration = 3000
-                                        interpolator = LinearInterpolator()
-                                        repeatMode = ValueAnimator.REVERSE
-                                        repeatCount = ValueAnimator.INFINITE
-                                        addUpdateListener {
-                                            indeterminateDrawable?.setColorFilter(
-                                                it.animatedValue as Int,
-                                                PorterDuff.Mode.SRC_ATOP
+
+            fragmentDeviceInfoBinding.bottomNavigation.also { bottomNavigationView ->
+                bottomNavigationView.menu.also {
+                    it.add(Build.VERSION.RELEASE)
+                    it.getItem(0).setIcon(R.drawable.ic_developer).isEnabled = true
+
+                    it.add("API " + Build.VERSION.SDK_INT)
+                    it.getItem(1).setIcon(R.drawable.ic_settings).isEnabled = false
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        it.add(Build.SUPPORTED_ABIS[0])
+                    } else {
+                        it.add(Build.CPU_ABI)
+                    }
+                    it.getItem(2).setIcon(R.drawable.ic_motorcycle).isEnabled = false
+
+                    it.add(Build.MODEL)
+                    it.getItem(3).setIcon(R.drawable.ic_device_information_white).isEnabled = false
+                }
+                bottomNavigationView.labelVisibilityMode =
+                    LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+                bottomNavigationView.setOnNavigationItemSelectedListener {
+                    // Easter egg
+                    when {
+                        ++clickCount % 10 == 0 -> {
+                            BottomSheetDialog(mainActivity).also { bottomSheetDialog ->
+                                bottomSheetDialog.setContentView(LinearLayout(mainActivity).also { linearLayout ->
+                                    linearLayout.orientation = LinearLayout.VERTICAL
+                                    // Add one with CircularProgressIndicator also
+                                    linearLayout.addView(LinearProgressIndicator(mainActivity).also { linearProgressIndicator ->
+                                        linearProgressIndicator.isIndeterminate = true
+                                        linearProgressIndicator.setIndicatorColor(
+                                            Color.RED,
+                                            Color.YELLOW,
+                                            Color.GREEN,
+                                            Color.BLUE
+                                        )
+                                        linearProgressIndicator.layoutParams =
+                                            ViewGroup.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT
                                             )
+                                    })
+                                    linearLayout.addView(ProgressBar(mainActivity).also { progressBar ->
+                                        progressBar.isIndeterminate = true
+                                        when {
+                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
+                                                Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+                                            ).also { valueAnimator ->
+                                                valueAnimator.duration = 3000
+                                                valueAnimator.interpolator = LinearInterpolator()
+                                                valueAnimator.repeatMode = ValueAnimator.REVERSE
+                                                valueAnimator.repeatCount = ValueAnimator.INFINITE
+                                                valueAnimator.addUpdateListener {
+                                                    progressBar.indeterminateDrawable?.setColorFilter(
+                                                        it.animatedValue as Int,
+                                                        PorterDuff.Mode.SRC_ATOP
+                                                    )
+                                                }
+                                            }.start()
                                         }
-                                    }.start()
-                                layoutParams =
-                                    ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 700)
-                                // setOnLongClickListener {
-                                //     val player = MediaPlayer.create(mainActivity, R.raw.moonlight)
-                                //     runCatching {
-                                //         if (!player.isPlaying) player.start()
-                                //     }.onFailure(logException)
-                                //     AlertDialog.Builder(mainActivity).create().apply {
-                                //         setView(AppCompatImageButton(context).apply {
-                                //             setImageResource(R.drawable.ic_stop)
-                                //             setOnClickListener { dismiss() }
-                                //         })
-                                //         setOnDismissListener {
-                                //             runCatching { player.stop() }.onFailure(logException)
-                                //         }
-                                //         show()
-                                //     }
-                                //     true
-                                // }
-                            })
-                        })
-                    }.show()
+                                        progressBar.layoutParams =
+                                            ViewGroup.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                700
+                                            )
+                                        // setOnLongClickListener {
+                                        //     val player = MediaPlayer.create(mainActivity, R.raw.moonlight)
+                                        //     runCatching {
+                                        //         if (!player.isPlaying) player.start()
+                                        //     }.onFailure(logException)
+                                        //     AlertDialog.Builder(mainActivity).create().apply {
+                                        //         setView(AppCompatImageButton(context).apply {
+                                        //             setImageResource(R.drawable.ic_stop)
+                                        //             setOnClickListener { dismiss() }
+                                        //         })
+                                        //         setOnDismissListener {
+                                        //             runCatching { player.stop() }.onFailure(logException)
+                                        //         }
+                                        //         show()
+                                        //     }
+                                        //     true
+                                        // }
+                                    })
+                                })
+                            }.show()
+                        }
+                    }
+                    true
                 }
-                true
             }
-        }
-    }.root
+        }.root
 }
 
 class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
@@ -160,30 +178,32 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
 
     // https://stackoverflow.com/a/59234917
     // instead android.text.format.Formatter.formatShortFileSize() to control its locale
-    private fun humanReadableByteCountBin(bytes: Long) = when {
-        bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
-        bytes < 1024L -> "$bytes B"
-        bytes <= 0xfffccccccccccccL shr 40 -> "%.1f KiB".format(
-            Locale.ENGLISH,
-            bytes.toDouble() / (0x1 shl 10)
-        )
-        bytes <= 0xfffccccccccccccL shr 30 -> "%.1f MiB".format(
-            Locale.ENGLISH,
-            bytes.toDouble() / (0x1 shl 20)
-        )
-        bytes <= 0xfffccccccccccccL shr 20 -> "%.1f GiB".format(
-            Locale.ENGLISH,
-            bytes.toDouble() / (0x1 shl 30)
-        )
-        bytes <= 0xfffccccccccccccL shr 10 -> "%.1f TiB".format(
-            Locale.ENGLISH,
-            bytes.toDouble() / (0x1 shl 40)
-        )
-        bytes <= 0xfffccccccccccccL -> "%.1f PiB".format(
-            Locale.ENGLISH,
-            (bytes shr 10).toDouble() / (0x1 shl 40)
-        )
-        else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
+    private fun humanReadableByteCountBin(bytes: Long): String {
+        return when {
+            bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
+            bytes < 1024L -> "$bytes B"
+            bytes <= 0xfffccccccccccccL shr 40 -> "%.1f KiB".format(
+                Locale.ENGLISH,
+                bytes.toDouble() / (0x1 shl 10)
+            )
+            bytes <= 0xfffccccccccccccL shr 30 -> "%.1f MiB".format(
+                Locale.ENGLISH,
+                bytes.toDouble() / (0x1 shl 20)
+            )
+            bytes <= 0xfffccccccccccccL shr 20 -> "%.1f GiB".format(
+                Locale.ENGLISH,
+                bytes.toDouble() / (0x1 shl 30)
+            )
+            bytes <= 0xfffccccccccccccL shr 10 -> "%.1f TiB".format(
+                Locale.ENGLISH,
+                bytes.toDouble() / (0x1 shl 40)
+            )
+            bytes <= 0xfffccccccccccccL -> "%.1f PiB".format(
+                Locale.ENGLISH,
+                (bytes shr 10).toDouble() / (0x1 shl 40)
+            )
+            else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
+        }
     }
 
     val deviceInformationItems = listOf(
@@ -197,9 +217,10 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         ),
         Item(
             "CPU Instructions Sets",
-            (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                Build.SUPPORTED_ABIS
-            else arrayOf(Build.CPU_ABI, Build.CPU_ABI2)).joinToString(", "),
+            (when {
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> Build.SUPPORTED_ABIS
+                else -> arrayOf(Build.CPU_ABI, Build.CPU_ABI2)
+            }).joinToString(", "),
             ""
         ),
         Item("Available Processors", Runtime.getRuntime().availableProcessors().toString(), ""),
@@ -222,8 +243,8 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         Item("Device Fingerprints", Build.FINGERPRINT, ""),
         Item(
             "RAM",
-            humanReadableByteCountBin(ActivityManager.MemoryInfo().apply {
-                activity.getSystemService<ActivityManager>()?.getMemoryInfo(this)
+            humanReadableByteCountBin(ActivityManager.MemoryInfo().also {
+                activity.getSystemService<ActivityManager>()?.getMemoryInfo(it)
             }.totalMem),
             ""
         ),
@@ -305,15 +326,15 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
             ),
             Item(
                 "OpenGL Extensions",
-                SpannableStringBuilder().apply {
+                SpannableStringBuilder().also { spannableStringBuilder ->
                     val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS).trim().split(" ")
                     val regex = "GL_([a-zA-Z]+)_(.+)".toRegex()
                     extensions.forEachIndexed { i, it ->
-                        if (i != 0) append("\n")
+                        if (i != 0) spannableStringBuilder.append("\n")
 
-                        if (!regex.matches(it)) append(it)
-                        else append(SpannableString(it).apply {
-                            setSpan(object : ClickableSpan() {
+                        if (!regex.matches(it)) spannableStringBuilder.append(it)
+                        else spannableStringBuilder.append(SpannableString(it).also { spannableString ->
+                            spannableString.setSpan(object : ClickableSpan() {
                                 override fun onClick(textView: View) = runCatching {
                                     CustomTabsIntent.Builder().build().launchUrl(
                                         activity,
@@ -348,10 +369,10 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
         }
 
         fun bind(position: Int) {
-            deviceInformationItems[position].apply {
-                binding.title.text = title
-                binding.content.text = content ?: "Unknown"
-                binding.version.text = version
+            deviceInformationItems[position].also {
+                binding.title.text = it.title
+                binding.content.text = it.content ?: "Unknown"
+                binding.version.text = it.version
             }
             binding.content.movementMethod = LinkMovementMethod.getInstance()
         }
