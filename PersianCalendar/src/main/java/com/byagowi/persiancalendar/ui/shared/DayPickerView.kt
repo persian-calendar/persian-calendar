@@ -60,17 +60,16 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     val dayJdnFromView: Long
-        get() = runCatching {
+        get() {
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
-            if (day > getMonthLength(selectedCalendarType, year, month))
-                throw Exception("Not a valid day")
-
-            getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
-        }.onFailure(logException).getOrElse {
-            Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).show()
-            -1
+            return if (day > getMonthLength(selectedCalendarType, year, month)) {
+                Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).show()
+                -1
+            } else {
+                getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
+            }
         }
 
     fun setDayJdnOnView(jdn: Long) {
