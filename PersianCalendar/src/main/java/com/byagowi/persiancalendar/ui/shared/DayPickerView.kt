@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.shared
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.NumberPicker
 import com.byagowi.persiancalendar.R
@@ -19,6 +20,8 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
     var selectedDayListener = fun(_: Long) {}
 
     var selectedCalendarType: CalendarType = CalendarType.SHAMSI
+
+    var anchorView: View? = null
 
     private val inflater = context.layoutInflater
     val binding: DayPickerViewBinding =
@@ -69,7 +72,9 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             val day = binding.dayPicker.value
             return when {
                 day > getMonthLength(selectedCalendarType, year, month) -> {
-                    Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT)
+                        .setAnchorView(anchorView)
+                        .show()
                     -1
                 }
                 else -> {
