@@ -28,21 +28,23 @@ class ConverterFragment : Fragment() {
 
         todayButton.setOnClickListener { dayPickerView.setDayJdnOnView(todayJdn) }
 
-        dayPickerView.selectedDayListener = fun(jdn) {
-            if (jdn == -1L) {
-                calendarsView.visibility = View.GONE
-            } else {
-                if (jdn == todayJdn) todayButton.hide() else todayButton.show()
+        dayPickerView.also {
+            it.selectedDayListener = fun(jdn) {
+                if (jdn == -1L) {
+                    calendarsView.visibility = View.GONE
+                } else {
+                    if (jdn == todayJdn) todayButton.hide() else todayButton.show()
 
-                calendarsView.visibility = View.VISIBLE
-                val selectedCalendarType = dayPickerView.selectedCalendarType
-                calendarsView.showCalendars(
-                    jdn, selectedCalendarType,
-                    getOrderedCalendarTypes() - selectedCalendarType
-                )
+                    calendarsView.visibility = View.VISIBLE
+                    val selectedCalendarType = dayPickerView.selectedCalendarType
+                    calendarsView.showCalendars(
+                        jdn, selectedCalendarType,
+                        getOrderedCalendarTypes() - selectedCalendarType
+                    )
+                }
             }
+            it.setDayJdnOnView(getTodayJdn())
+            it.anchorView = todayButton
         }
-        dayPickerView.setDayJdnOnView(getTodayJdn())
-        dayPickerView.anchorView = todayButton
     }.root
 }
