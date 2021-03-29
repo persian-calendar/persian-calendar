@@ -24,46 +24,45 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
     var anchorView: View? = null
 
     private val inflater = context.layoutInflater
-    val binding: DayPickerViewBinding =
-        DayPickerViewBinding.inflate(inflater, this, true).also { dayPickerViewBinding ->
-            val calendarTypes = getOrderedCalendarEntities(getContext())
-            val chips = calendarTypes.map { calendarTypeItem ->
-                (inflater.inflate(
-                    R.layout.single_chip_layout, dayPickerViewBinding.calendarTypesBox, false
-                ) as Chip).also {
-                    it.text = calendarTypeItem.toString()
-                    when {
-                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
-                            it.elevation = it.resources.getDimension(R.dimen.chip_elevation)
-                        }
+    val binding = DayPickerViewBinding.inflate(inflater, this, true).also { binding ->
+        val calendarTypes = getOrderedCalendarEntities(getContext())
+        val chips = calendarTypes.map { calendarTypeItem ->
+            (inflater.inflate(
+                R.layout.single_chip_layout, binding.calendarTypesBox, false
+            ) as Chip).also {
+                it.text = calendarTypeItem.toString()
+                when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
+                        it.elevation = it.resources.getDimension(R.dimen.chip_elevation)
                     }
                 }
             }
-            chips.forEachIndexed { i, chip ->
-                chip.setOnClickListener {
-                    selectedCalendarType = calendarTypes[i].type
-                    setDayJdnOnView(jdn)
-                    selectedDayListener(jdn)
-                    chips.forEachIndexed { j, chipView ->
-                        chipView.isClickable = i != j
-                        chipView.isSelected = i == j
-                    }
-                }
-                chip.isClickable = i != 0
-                chip.isSelected = i == 0
-                chip.isCheckable = false
-                selectedCalendarType = calendarTypes[0].type
-                dayPickerViewBinding.calendarTypesBox.addView(chip)
-            }
-
-            val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
-                jdn = dayJdnFromView
-                selectedDayListener(jdn)
-            }
-            dayPickerViewBinding.yearPicker.setOnValueChangedListener(onDaySelected)
-            dayPickerViewBinding.monthPicker.setOnValueChangedListener(onDaySelected)
-            dayPickerViewBinding.dayPicker.setOnValueChangedListener(onDaySelected)
         }
+        chips.forEachIndexed { i, chip ->
+            chip.setOnClickListener {
+                selectedCalendarType = calendarTypes[i].type
+                setDayJdnOnView(jdn)
+                selectedDayListener(jdn)
+                chips.forEachIndexed { j, chipView ->
+                    chipView.isClickable = i != j
+                    chipView.isSelected = i == j
+                }
+            }
+            chip.isClickable = i != 0
+            chip.isSelected = i == 0
+            chip.isCheckable = false
+            selectedCalendarType = calendarTypes[0].type
+            binding.calendarTypesBox.addView(chip)
+        }
+
+        val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
+            jdn = dayJdnFromView
+            selectedDayListener(jdn)
+        }
+        binding.yearPicker.setOnValueChangedListener(onDaySelected)
+        binding.monthPicker.setOnValueChangedListener(onDaySelected)
+        binding.dayPicker.setOnValueChangedListener(onDaySelected)
+    }
 
     val dayJdnFromView: Long
         get() {
@@ -86,27 +85,27 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
     fun setDayJdnOnView(jdn: Long) {
         this.jdn = if (jdn == -1L) getTodayJdn() else jdn
         val date = getDateFromJdnOfCalendar(selectedCalendarType, this.jdn)
-        binding.yearPicker.also { numberPicker ->
-            numberPicker.minValue = date.year - 100
-            numberPicker.maxValue = date.year + 100
-            numberPicker.value = date.year
-            numberPicker.setFormatter { formatNumber(it) }
-            numberPicker.isVerticalScrollBarEnabled = false
+        binding.yearPicker.also {
+            it.minValue = date.year - 100
+            it.maxValue = date.year + 100
+            it.value = date.year
+            it.setFormatter(::formatNumber)
+            it.isVerticalScrollBarEnabled = false
         }
-        binding.monthPicker.also { numberPicker ->
-            numberPicker.minValue = 1
-            numberPicker.maxValue = 12
-            numberPicker.value = date.month
+        binding.monthPicker.also {
+            it.minValue = 1
+            it.maxValue = 12
+            it.value = date.month
             val months = monthsNamesOfCalendar(date)
-            numberPicker.setFormatter { months[it - 1] + " / " + formatNumber(it) }
-            numberPicker.isVerticalScrollBarEnabled = false
+            it.setFormatter { x -> months[x - 1] + " / " + formatNumber(x) }
+            it.isVerticalScrollBarEnabled = false
         }
-        binding.dayPicker.also { numberPicker ->
-            numberPicker.minValue = 1
-            numberPicker.maxValue = 31
-            numberPicker.value = date.dayOfMonth
-            numberPicker.setFormatter { formatNumber(it) }
-            numberPicker.isVerticalScrollBarEnabled = false
+        binding.dayPicker.also {
+            it.minValue = 1
+            it.maxValue = 31
+            it.value = date.dayOfMonth
+            it.setFormatter(::formatNumber)
+            it.isVerticalScrollBarEnabled = false
         }
         selectedDayListener(jdn)
     }
