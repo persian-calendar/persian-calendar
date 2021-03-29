@@ -43,5 +43,6 @@ class ConverterFragment : Fragment() {
             }
         }
         dayPickerView.setDayJdnOnView(getTodayJdn())
+        dayPickerView.anchorView = todayButton
     }.root
 }
