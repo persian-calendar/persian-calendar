@@ -53,117 +53,116 @@ class DeviceInformationFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentDeviceInfoBinding.inflate(inflater, container, false)
-        .also { fragmentDeviceInfoBinding ->
-            val mainActivity = activity as MainActivity
+    ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).also { binding ->
+        val mainActivity = activity as MainActivity
 
-            mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
+        mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
 
-            circularRevealFromMiddle(fragmentDeviceInfoBinding.circularReveal)
+        circularRevealFromMiddle(binding.circularReveal)
 
-            fragmentDeviceInfoBinding.recyclerView.also {
-                it.setHasFixedSize(true)
-                it.layoutManager = LinearLayoutManager(mainActivity)
-                it.addItemDecoration(
-                    DividerItemDecoration(
-                        mainActivity,
-                        LinearLayoutManager.VERTICAL
-                    )
+        binding.recyclerView.also {
+            it.setHasFixedSize(true)
+            it.layoutManager = LinearLayoutManager(mainActivity)
+            it.addItemDecoration(
+                DividerItemDecoration(
+                    mainActivity,
+                    LinearLayoutManager.VERTICAL
                 )
-                it.adapter = DeviceInformationAdapter(mainActivity, fragmentDeviceInfoBinding.root)
-            }
+            )
+            it.adapter = DeviceInformationAdapter(mainActivity, binding.root)
+        }
 
-            fragmentDeviceInfoBinding.bottomNavigation.also { bottomNavigationView ->
-                bottomNavigationView.menu.also {
-                    it.add(Build.VERSION.RELEASE)
-                    it.getItem(0).setIcon(R.drawable.ic_developer).isEnabled = true
+        binding.bottomNavigation.also { bottomNavigationView ->
+            bottomNavigationView.menu.also {
+                it.add(Build.VERSION.RELEASE)
+                it.getItem(0).setIcon(R.drawable.ic_developer).isEnabled = true
 
-                    it.add("API " + Build.VERSION.SDK_INT)
-                    it.getItem(1).setIcon(R.drawable.ic_settings).isEnabled = false
+                it.add("API " + Build.VERSION.SDK_INT)
+                it.getItem(1).setIcon(R.drawable.ic_settings).isEnabled = false
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        it.add(Build.SUPPORTED_ABIS[0])
-                    } else {
-                        it.add(Build.CPU_ABI)
-                    }
-                    it.getItem(2).setIcon(R.drawable.ic_motorcycle).isEnabled = false
-
-                    it.add(Build.MODEL)
-                    it.getItem(3).setIcon(R.drawable.ic_device_information_white).isEnabled = false
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    it.add(Build.SUPPORTED_ABIS[0])
+                } else {
+                    it.add(Build.CPU_ABI)
                 }
-                bottomNavigationView.labelVisibilityMode =
-                    LabelVisibilityMode.LABEL_VISIBILITY_LABELED
-                bottomNavigationView.setOnNavigationItemSelectedListener {
-                    // Easter egg
-                    when {
-                        ++clickCount % 10 == 0 -> {
-                            BottomSheetDialog(mainActivity).also { bottomSheetDialog ->
-                                bottomSheetDialog.setContentView(LinearLayout(mainActivity).also { linearLayout ->
-                                    linearLayout.orientation = LinearLayout.VERTICAL
-                                    // Add one with CircularProgressIndicator also
-                                    linearLayout.addView(LinearProgressIndicator(mainActivity).also { linearProgressIndicator ->
-                                        linearProgressIndicator.isIndeterminate = true
-                                        linearProgressIndicator.setIndicatorColor(
-                                            Color.RED,
-                                            Color.YELLOW,
-                                            Color.GREEN,
-                                            Color.BLUE
+                it.getItem(2).setIcon(R.drawable.ic_motorcycle).isEnabled = false
+
+                it.add(Build.MODEL)
+                it.getItem(3).setIcon(R.drawable.ic_device_information_white).isEnabled = false
+            }
+            bottomNavigationView.labelVisibilityMode =
+                LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+            bottomNavigationView.setOnNavigationItemSelectedListener {
+                // Easter egg
+                when {
+                    ++clickCount % 10 == 0 -> {
+                        BottomSheetDialog(mainActivity).also { bottomSheetDialog ->
+                            bottomSheetDialog.setContentView(LinearLayout(mainActivity).also { linearLayout ->
+                                linearLayout.orientation = LinearLayout.VERTICAL
+                                // Add one with CircularProgressIndicator also
+                                linearLayout.addView(LinearProgressIndicator(mainActivity).also { linearProgressIndicator ->
+                                    linearProgressIndicator.isIndeterminate = true
+                                    linearProgressIndicator.setIndicatorColor(
+                                        Color.RED,
+                                        Color.YELLOW,
+                                        Color.GREEN,
+                                        Color.BLUE
+                                    )
+                                    linearProgressIndicator.layoutParams =
+                                        ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT
                                         )
-                                        linearProgressIndicator.layoutParams =
-                                            ViewGroup.LayoutParams(
-                                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                                ViewGroup.LayoutParams.WRAP_CONTENT
-                                            )
-                                    })
-                                    linearLayout.addView(ProgressBar(mainActivity).also { progressBar ->
-                                        progressBar.isIndeterminate = true
-                                        when {
-                                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
-                                                Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-                                            ).also { valueAnimator ->
-                                                valueAnimator.duration = 3000
-                                                valueAnimator.interpolator = LinearInterpolator()
-                                                valueAnimator.repeatMode = ValueAnimator.REVERSE
-                                                valueAnimator.repeatCount = ValueAnimator.INFINITE
-                                                valueAnimator.addUpdateListener {
-                                                    progressBar.indeterminateDrawable?.setColorFilter(
-                                                        it.animatedValue as Int,
-                                                        PorterDuff.Mode.SRC_ATOP
-                                                    )
-                                                }
-                                            }.start()
-                                        }
-                                        progressBar.layoutParams =
-                                            ViewGroup.LayoutParams(
-                                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                                700
-                                            )
-                                        // setOnLongClickListener {
-                                        //     val player = MediaPlayer.create(mainActivity, R.raw.moonlight)
-                                        //     runCatching {
-                                        //         if (!player.isPlaying) player.start()
-                                        //     }.onFailure(logException)
-                                        //     AlertDialog.Builder(mainActivity).create().apply {
-                                        //         setView(AppCompatImageButton(context).apply {
-                                        //             setImageResource(R.drawable.ic_stop)
-                                        //             setOnClickListener { dismiss() }
-                                        //         })
-                                        //         setOnDismissListener {
-                                        //             runCatching { player.stop() }.onFailure(logException)
-                                        //         }
-                                        //         show()
-                                        //     }
-                                        //     true
-                                        // }
-                                    })
                                 })
-                            }.show()
-                        }
+                                linearLayout.addView(ProgressBar(mainActivity).also { progressBar ->
+                                    progressBar.isIndeterminate = true
+                                    when {
+                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
+                                            Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+                                        ).also { valueAnimator ->
+                                            valueAnimator.duration = 3000
+                                            valueAnimator.interpolator = LinearInterpolator()
+                                            valueAnimator.repeatMode = ValueAnimator.REVERSE
+                                            valueAnimator.repeatCount = ValueAnimator.INFINITE
+                                            valueAnimator.addUpdateListener {
+                                                progressBar.indeterminateDrawable?.setColorFilter(
+                                                    it.animatedValue as Int,
+                                                    PorterDuff.Mode.SRC_ATOP
+                                                )
+                                            }
+                                        }.start()
+                                    }
+                                    progressBar.layoutParams =
+                                        ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            700
+                                        )
+                                    // setOnLongClickListener {
+                                    //     val player = MediaPlayer.create(mainActivity, R.raw.moonlight)
+                                    //     runCatching {
+                                    //         if (!player.isPlaying) player.start()
+                                    //     }.onFailure(logException)
+                                    //     AlertDialog.Builder(mainActivity).create().apply {
+                                    //         setView(AppCompatImageButton(context).apply {
+                                    //             setImageResource(R.drawable.ic_stop)
+                                    //             setOnClickListener { dismiss() }
+                                    //         })
+                                    //         setOnDismissListener {
+                                    //             runCatching { player.stop() }.onFailure(logException)
+                                    //         }
+                                    //         show()
+                                    //     }
+                                    //     true
+                                    // }
+                                })
+                            })
+                        }.show()
                     }
-                    true
                 }
+                true
             }
-        }.root
+        }
+    }.root
 }
 
 class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
