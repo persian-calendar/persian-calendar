@@ -81,9 +81,10 @@ class CompassFragment : Fragment() {
         Snackbar.make(mainActivity.coordinator, messageId, duration).apply {
             view.setOnClickListener { dismiss() }
             view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
-        }.show()
+        }.setAnchorView(binding?.fab)
+            .show()
 
-    lateinit var mainActivity: MainActivity
+    private lateinit var mainActivity: MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -109,10 +110,10 @@ class CompassFragment : Fragment() {
                         )
                     }.onFailure(logException)
                     R.id.help -> showLongSnackbar(
-                        if (sensorNotFound)
-                            R.string.compass_not_found
-                        else
-                            R.string.calibrate_compass_summary,
+                        when {
+                            sensorNotFound -> R.string.compass_not_found
+                            else -> R.string.calibrate_compass_summary
+                        },
                         5000
                     )
                     else -> Unit
@@ -164,22 +165,30 @@ class CompassFragment : Fragment() {
 
         sensorManager = mainActivity.getSystemService()
         sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
-        if (sensor != null) {
-            sensorManager?.registerListener(
-                compassListener,
-                sensor,
-                SensorManager.SENSOR_DELAY_FASTEST
-            )
-            if (coordinate == null) showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
-        } else {
-            showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
-            sensorNotFound = true
+        when {
+            sensor != null -> {
+                sensorManager?.registerListener(
+                    compassListener,
+                    sensor,
+                    SensorManager.SENSOR_DELAY_FASTEST
+                )
+                if (coordinate == null) showLongSnackbar(
+                    R.string.set_location,
+                    Snackbar.LENGTH_SHORT
+                )
+            }
+            else -> {
+                showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
+                sensorNotFound = true
+            }
         }
     }
 
     override fun onPause() {
-        if (sensor != null) {
-            sensorManager?.unregisterListener(compassListener)
+        when {
+            sensor != null -> {
+                sensorManager?.unregisterListener(compassListener)
+            }
         }
         super.onPause()
     }
