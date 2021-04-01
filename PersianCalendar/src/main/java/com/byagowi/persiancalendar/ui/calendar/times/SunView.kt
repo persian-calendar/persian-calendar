@@ -29,7 +29,7 @@ import kotlin.math.cos
  */
 
 class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-        View(context, attrs), ValueAnimator.AnimatorUpdateListener {
+    View(context, attrs), ValueAnimator.AnimatorUpdateListener {
 
     private val fullDay = Clock(24, 0).toInt().toFloat()
     private val halfDay = Clock(12, 0).toInt().toFloat()
@@ -42,7 +42,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         it.pathEffect = DashPathEffect(floatArrayOf(3f, 7f), 0f) /* Sun rays effect */
     }
     private val dayPaint =
-            Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
+        Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
 
     private var horizonColor: Int = 0
     private var timelineColor: Int = 0
@@ -51,8 +51,10 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var dayColor = ContextCompat.getColor(context, R.color.sViewDayColor)
     private var daySecondColor = ContextCompat.getColor(context, R.color.sViewDaySecondColor)
     private var sunColor = ContextCompat.getColor(context, R.color.sViewSunColor)
-    private var sunBeforeMiddayColor = ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
-    private var sunAfterMiddayColor = ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
+    private var sunBeforeMiddayColor =
+        ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
+    private var sunAfterMiddayColor =
+        ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
     private var sunriseTextColor: Int = 0
     private var middayTextColor: Int = 0
     private var sunsetTextColor: Int = 0
@@ -164,13 +166,13 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
                 isShaderInitiationNeeded = false
                 handler.postDelayed({
                     LinearGradient(
-                            width * .17f,
-                            0f,
-                            width / 2f,
-                            0f,
-                            dayColor,
-                            daySecondColor,
-                            Shader.TileMode.MIRROR
+                        width * .17f,
+                        0f,
+                        width / 2f,
+                        0f,
+                        dayColor,
+                        daySecondColor,
+                        Shader.TileMode.MIRROR
                     ).also { dayPaint.shader = it }
                     postInvalidate()
                 }, 80)
@@ -239,18 +241,18 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
                 @ColorInt
                 val color = argbEvaluator.evaluate(
-                        current,
-                        sunBeforeMiddayColor, sunAfterMiddayColor
+                    current,
+                    sunBeforeMiddayColor, sunAfterMiddayColor
                 ) as Int
 
                 sunPaint.color = color
                 //mSunRaisePaint.setColor(color);
                 //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
                 canvas.drawCircle(
-                        width * current,
-                        getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt()),
-                        height * .09f,
-                        sunPaint
+                    width * current,
+                    getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt()),
+                    height * .09f,
+                    sunPaint
                 )
                 //mPaint.clearShadowLayer();
                 //canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * .9f)), (height * .09f) - 5, mSunRaisePaint);
@@ -271,19 +273,19 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             it.color = sunriseTextColor
         }
         canvas.drawText(
-                sunriseString, width * when {
-            isRTL -> .83f
-            else -> .17f
-        }, height * .2f, paint
+            sunriseString, width * when {
+                isRTL -> .83f
+                else -> .17f
+            }, height * .2f, paint
         )
         paint.color = middayTextColor
         canvas.drawText(middayString, width / 2f, height * .94f, paint)
         paint.color = sunsetTextColor
         canvas.drawText(
-                sunsetString, width * when {
-            isRTL -> .17f
-            else -> .83f
-        }, height * .2f, paint
+            sunsetString, width * when {
+                isRTL -> .17f
+                else -> .83f
+            }, height * .2f, paint
         )
 
         // draw remaining time
@@ -294,21 +296,21 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             it.color = colorTextSecond
         }
         canvas.drawText(
-                dayLengthString, width * when {
-            isRTL -> .70f
-            else -> .30f
-        }, height * .94f, paint
+            dayLengthString, width * when {
+                isRTL -> .70f
+                else -> .30f
+            }, height * .94f, paint
         )
         when {
             remainingString.isNotEmpty() -> {
                 canvas.drawText(
-                        remainingString,
-                        width * when {
-                            isRTL -> .30f
-                            else -> .70f
-                        },
-                        height * .94f,
-                        paint
+                    remainingString,
+                    width * when {
+                        isRTL -> .30f
+                        else -> .70f
+                    },
+                    height * .94f,
+                    paint
                 )
             }
         }
@@ -359,8 +361,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             else -> Color.WHITE
         }
         moonOval.set(
-                px - abs(arcWidth) / 2f, py + eOffset - radius - r,
-                px + abs(arcWidth) / 2f, py + eOffset - radius + r
+            px - abs(arcWidth) / 2f, py + eOffset - radius - r,
+            px + abs(arcWidth) / 2f, py + eOffset - radius + r
         )
         canvas.also {
             it.drawArc(moonOval, 0f, 360f, false, moonPaintO)
@@ -371,7 +373,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
 
     private fun getY(x: Int, segment: Double, height: Int): Float =
-            height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
+        height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
 
     fun setSunriseSunsetMoonPhase(prayTimes: PrayTimes, moonPhase: Double) {
         this.prayTimes = prayTimes
@@ -424,19 +426,19 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         val dayLength = Clock.fromInt((sunset - sunrise).toInt())
         val remaining =
-                Clock.fromInt(
-                        when {
-                            now > sunset || now < sunrise -> 0
-                            else -> (sunset - now).toInt()
-                        }
-                )
+            Clock.fromInt(
+                when {
+                    now > sunset || now < sunrise -> 0
+                    else -> (sunset - now).toInt()
+                }
+            )
         dayLengthString = context.getString(R.string.length_of_day).format(
-                formatNumber(dayLength.hour), formatNumber(dayLength.minute)
+            formatNumber(dayLength.hour), formatNumber(dayLength.minute)
         )
         remainingString = when {
             remaining.toInt() == 0 -> ""
             else -> context.getString(
-                    R.string.remaining_daylight
+                R.string.remaining_daylight
             ).format(formatNumber(remaining.hour), formatNumber(remaining.minute))
         }
 
