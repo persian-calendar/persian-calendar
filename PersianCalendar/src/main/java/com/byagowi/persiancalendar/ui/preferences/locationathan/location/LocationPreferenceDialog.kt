@@ -16,20 +16,18 @@ class LocationPreferenceDialog : PreferenceDialogFragmentCompat() {
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
         super.onPrepareDialogBuilder(builder)
         if (builder == null) return
-
-        val recyclerView = RecyclerView(builder.context).apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(context)
-            adapter = LocationAdapter(
-                this@LocationPreferenceDialog,
-                getAllCities(context, true)
-            )
+        builder.also {
+            it.setView(RecyclerView(builder.context).apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(context)
+                adapter = LocationAdapter(
+                    this@LocationPreferenceDialog,
+                    getAllCities(context, true)
+                )
+            })
+            it.setPositiveButton("", null)
+            it.setNegativeButton("", null)
         }
-
-        builder.setView(recyclerView)
-
-        builder.setPositiveButton("", null)
-        builder.setNegativeButton("", null)
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {}
