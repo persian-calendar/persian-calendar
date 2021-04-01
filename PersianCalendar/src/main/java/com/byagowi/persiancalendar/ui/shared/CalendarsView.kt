@@ -60,9 +60,9 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         calendarItemAdapter.setDate(calendarsToShow, jdn)
         binding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
-        binding.zodiac.apply {
-            text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
-            visibility = if (text.isEmpty()) View.GONE else View.VISIBLE
+        binding.zodiac.also {
+            it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
+            it.visibility = if (it.text.isEmpty()) View.GONE else View.VISIBLE
         }
 
         val isToday = getTodayJdn() == jdn
@@ -73,9 +73,11 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             )
             binding.diffDate.visibility = View.GONE
         } else {
-            binding.diffDate.visibility = View.VISIBLE
-            binding.diffDate.text =
-                calculateDaysDifference(jdn, context.getString(R.string.date_diff_text))
+            binding.also {
+                it.diffDate.visibility = View.VISIBLE
+                it.diffDate.text =
+                    calculateDaysDifference(jdn, context.getString(R.string.date_diff_text))
+            }
         }
 
         val mainDate = getDateFromJdnOfCalendar(chosenCalendarType, jdn)
@@ -123,9 +125,9 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                 )
             }
         }
-        binding.equinox.apply {
-            text = equinox
-            visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
+        binding.equinox.also {
+            it.text = equinox
+            it.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
         }
 
         binding.root.contentDescription = getA11yDaySummary(
@@ -165,27 +167,28 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
             init {
                 val applyLineMultiplier = !isCustomFontEnabled
-
-                binding.monthYear.typeface = calendarFont
-                binding.day.typeface = calendarFont
-                if (applyLineMultiplier) binding.monthYear.setLineSpacing(0f, .6f)
-
-                binding.container.setOnClickListener(this)
-                binding.linear.setOnClickListener(this)
+                binding.also {
+                    it.monthYear.typeface = calendarFont
+                    it.day.typeface = calendarFont
+                    if (applyLineMultiplier) it.monthYear.setLineSpacing(0f, .6f)
+                    it.container.setOnClickListener(this)
+                    it.linear.setOnClickListener(this)
+                }
             }
 
             fun bind(position: Int) {
                 val date = getDateFromJdnOfCalendar(calendars[position], jdn)
-
-                binding.linear.text = toLinearDate(date)
-                binding.linear.contentDescription = toLinearDate(date)
                 val firstCalendarString = formatDate(date)
-                binding.container.contentDescription = firstCalendarString
-                binding.day.contentDescription = ""
-                binding.day.text = formatNumber(date.dayOfMonth)
-                binding.monthYear.contentDescription = ""
-                binding.monthYear.text =
-                    listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
+                binding.also {
+                    it.linear.text = toLinearDate(date)
+                    it.linear.contentDescription = toLinearDate(date)
+                    it.container.contentDescription = firstCalendarString
+                    it.day.contentDescription = ""
+                    it.day.text = formatNumber(date.dayOfMonth)
+                    it.monthYear.contentDescription = ""
+                    it.monthYear.text =
+                        listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
+                }
             }
 
             override fun onClick(view: View?) =
