@@ -59,17 +59,32 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val curvePath = Path()
     private val nightPath = Path()
     private var current = 0f
-    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = Color.WHITE
+        it.style = Paint.Style.FILL_AND_STROKE
+    }
+    // moon Paint Black
+    private val moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = Color.BLACK
+        it.style = Paint.Style.FILL_AND_STROKE
+    }
+    // moon Paint for Oval
+    private val moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = Color.WHITE
+        it.style = Paint.Style.FILL_AND_STROKE
+    }
+    // moon Paint for Diameter
+    private val moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = Color.GRAY
+        it.style = Paint.Style.STROKE
+    }
     private val moonRect = RectF()
     private val moonOval = RectF()
     private var dayLengthString = ""
     private var remainingString = ""
-    private var sunriseString = ""
-    private var middayString = ""
-    private var sunsetString = ""
+    private val sunriseString = context.getString(R.string.sunriseSunView)
+    private val middayString = context.getString(R.string.middaySunView)
+    private val sunsetString = context.getString(R.string.sunsetSunView)
     private var isRTL = false
     private var isShaderInitiationNeeded = true
     private var segmentByPixel = .0
@@ -79,7 +94,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val fontSize = when (language) {
         LANG_EN_IR, LANG_EN_US, LANG_JA -> 12.dp
         else -> 14.dp
-    }
+    }.toFloat()
 
     @ColorInt
     fun resolveColor(attr: Int) = TypedValue().let {
@@ -185,7 +200,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         // draw text
         paint.also {
             it.textAlign = Paint.Align.CENTER
-            it.textSize = fontSize.toFloat()
+            it.textSize = fontSize
             it.strokeWidth = 0f
             it.style = Paint.Style.FILL
             it.color = sunriseTextColor
@@ -221,30 +236,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         val radius = 1f
         val px = width * current
         val py = getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt())
-        moonPaint.also {
-            it.reset()
-            it.flags = Paint.ANTI_ALIAS_FLAG
-            it.color = Color.WHITE
-            it.style = Paint.Style.FILL_AND_STROKE
-        }
-        moonPaintB.also {
-            it.reset()// moon Paint Black
-            it.flags = Paint.ANTI_ALIAS_FLAG
-            it.color = Color.BLACK
-            it.style = Paint.Style.FILL_AND_STROKE
-        }
-        moonPaintO.also {
-            it.reset()// moon Paint for Oval
-            it.flags = Paint.ANTI_ALIAS_FLAG
-            it.color = Color.WHITE
-            it.style = Paint.Style.FILL_AND_STROKE
-        }
-        moonPaintD.also {
-            it.reset()// moon Paint for Diameter
-            it.flags = Paint.ANTI_ALIAS_FLAG
-            it.color = Color.GRAY
-            it.style = Paint.Style.STROKE
-        }
         canvas.rotate(180f, px, py)
         val eOffset = 0
         val arcWidth = ((moonPhase - .5) * (4 * r)).toInt()
@@ -254,17 +245,16 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             it.drawArc(moonRect, 90f, 180f, false, moonPaint)
             it.drawArc(moonRect, 270f, 180f, false, moonPaintB)
         }
-        moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
         moonOval.set(
             px - abs(arcWidth) / 2f, py + eOffset - radius - r,
             px + abs(arcWidth) / 2f, py + eOffset - radius + r
         )
         canvas.also {
+            moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
             it.drawArc(moonOval, 0f, 360f, false, moonPaintO)
             it.drawArc(moonRect, 0f, 360f, false, moonPaintD)
             it.drawLine(px, py - radius, px, py + radius, moonPaintD)
         }
-        moonPaintD.pathEffect = null
     }
 
     private fun getY(x: Int, segment: Double, height: Int): Float =
@@ -281,9 +271,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         val prayTimes = prayTimes ?: return
 
         isRTL = isRTL(context)
-        sunriseString = context.getString(R.string.sunriseSunView)
-        middayString = context.getString(R.string.middaySunView)
-        sunsetString = context.getString(R.string.sunsetSunView)
 
         val sunset = prayTimes.sunsetClock.toInt().toFloat()
         val sunrise = prayTimes.sunriseClock.toInt().toFloat()
