@@ -17,9 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
@@ -28,7 +26,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-
 
 /**
  * Program activity for android
@@ -74,6 +71,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(it.root)
         }
         setSupportActionBar(binding.toolbar)
+
+        obtainNavHost() // sake of initialize NavHost
 
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> window.also {
@@ -153,6 +152,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         applyAppLanguage(this)
     }
 
+    private fun obtainNavHost(): NavHostFragment {
+        val navHostFragmentTag = "NavHostFrag"
+
+        return supportFragmentManager.findFragmentByTag(navHostFragmentTag) as? NavHostFragment
+            ?: NavHostFragment.create(R.navigation.navigation_graph).also { newNavHostFragment ->
+                supportFragmentManager.beginTransaction()
+                    .add(binding.navHostContainer.id, newNavHostFragment, navHostFragmentTag)
+                    .commitNow()
+            }
+    }
+
     fun navigateTo(@IdRes id: Int) {
         binding.navigation.menu.findItem(
             // We don't have a menu entry for compass, so
@@ -173,7 +183,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        navController?.navigate(id, null, null)
+        obtainNavHost().navController.navigate(id, null, null)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -242,7 +252,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                                     setOf("afghanistan_holidays")
                                 )
                             }
-
                         }
                     }
                     when {
@@ -321,7 +330,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     ) -> {
                         toggleShowDeviceCalendarOnPreference(this, true)
                         when (R.id.calendar) {
-                            getCurrentDestinationId() -> restartActivity()
+                            obtainNavHost().navController.currentDestination?.id -> restartActivity()
                         }
                     }
                     else -> toggleShowDeviceCalendarOnPreference(this, false)
@@ -409,20 +418,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
                 when {
                     calendarFragment?.closeSearch() == true -> return
-                    getCurrentDestinationId() == R.id.calendar -> finish()
+                    obtainNavHost().navController.currentDestination?.id == R.id.calendar -> finish()
                     else -> navigateTo(R.id.calendar)
                 }
-
             }
         }
     }
-
-    private val navController: NavController?
-        get() =
-            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)
-                ?.findNavController()
-
-    private fun getCurrentDestinationId(): Int? = navController?.currentDestination?.id
 
     private fun changeLangSnackbar() =
         Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
@@ -467,7 +468,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         override fun onDrawerClosed(drawerView: View) {
             super.onDrawerClosed(drawerView)
             when {
-                clickedItem != 0 -> {
+                clickedItem != 0 && clickedItem != R.id.calendar -> {
                     navigateTo(clickedItem)
                     clickedItem = 0
                 }
