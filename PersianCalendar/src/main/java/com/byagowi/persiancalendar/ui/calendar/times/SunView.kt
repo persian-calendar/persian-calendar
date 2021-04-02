@@ -73,7 +73,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var isRTL = false
     private var isShaderInitiationNeeded = true
     private var segmentByPixel = .0
-    private var argbEvaluator = ArgbEvaluator()
+    private val argbEvaluator = ArgbEvaluator()
     private var prayTimes: PrayTimes? = null
     private var moonPhase = 1.0
     private val fontSize = when (language) {
@@ -125,12 +125,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             isShaderInitiationNeeded = false
             handler.postDelayed({
                 LinearGradient(
-                    width * .17f,
-                    0f,
-                    width / 2f,
-                    0f,
-                    dayColor,
-                    daySecondColor,
+                    width * .17f, 0f, width / 2f, 0f, dayColor, daySecondColor,
                     Shader.TileMode.MIRROR
                 ).also { dayPaint.shader = it }
                 postInvalidate()
@@ -175,22 +170,15 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
             // draw sun
             if (current in .17f..0.83f) {
-                @ColorInt
-                val color = argbEvaluator.evaluate(
-                    current,
-                    sunBeforeMiddayColor, sunAfterMiddayColor
+                sunPaint.color = argbEvaluator.evaluate(
+                    current, sunBeforeMiddayColor, sunAfterMiddayColor
                 ) as Int
-                sunPaint.color = color
-                //mSunRaisePaint.setColor(color);
-                //mPaint.setShadowLayer(1.0f, 1.0f, 2.0f, 0x33000000);
                 drawCircle(
                     width * current,
                     getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt()),
                     height * .09f,
                     sunPaint
                 )
-                //mPaint.clearShadowLayer();
-                //canvas.drawCircle(width * current, getY((int) (width * current), segmentByPixel, (int) (height * .9f)), (height * .09f) - 5, mSunRaisePaint);
             } else drawMoon(canvas)
         }
 
@@ -342,8 +330,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
                 R.string.remaining_daylight
             ).format(formatNumber(remaining.hour), formatNumber(remaining.minute))
         }
-
-        argbEvaluator = ArgbEvaluator()
 
         ValueAnimator.ofFloat(0F, c).apply {
             duration = 1500L
