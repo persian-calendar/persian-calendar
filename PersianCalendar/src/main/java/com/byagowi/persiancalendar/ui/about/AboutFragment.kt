@@ -172,8 +172,9 @@ class AboutFragment : Fragment() {
     }
 
     private fun showEmailDialog() {
-        val emailBinding = DialogEmailBinding.inflate(LayoutInflater.from(context))
-        AlertDialog.Builder(context ?: return)
+        val context = context ?: return
+        val emailBinding = DialogEmailBinding.inflate(context.layoutInflater)
+        AlertDialog.Builder(context)
             .setView(emailBinding.root)
             .setTitle(R.string.about_email_sum)
             .setPositiveButton(R.string.continue_button) { _, _ ->
