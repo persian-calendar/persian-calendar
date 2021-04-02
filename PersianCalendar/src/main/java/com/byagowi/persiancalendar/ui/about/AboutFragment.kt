@@ -7,12 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.text.util.Linkify
 import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -21,22 +16,11 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.LANG_AZB
-import com.byagowi.persiancalendar.LANG_EN_IR
-import com.byagowi.persiancalendar.LANG_FA
-import com.byagowi.persiancalendar.LANG_FA_AF
-import com.byagowi.persiancalendar.LANG_GLK
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.bringMarketPage
-import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.utils.readRawResource
-import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
+import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 
@@ -86,18 +70,19 @@ class AboutFragment : Fragment() {
     }
 
     private fun setupContributorsList(binding: FragmentAboutBinding) {
-        val developerIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_developer)
-        val translatorIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_translator)
-        val designerIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_designer)
+        val context = binding.root.context
+        val developerIcon = AppCompatResources.getDrawable(context, R.drawable.ic_developer)
+        val translatorIcon = AppCompatResources.getDrawable(context, R.drawable.ic_translator)
+        val designerIcon = AppCompatResources.getDrawable(context, R.drawable.ic_designer)
         val chipsIconTintId = TypedValue().apply {
-            requireContext().theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
+            context.theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
         }.resourceId
 
         val chipClick = View.OnClickListener {
             (it.tag as? String?)?.run {
                 runCatching {
                     CustomTabsIntent.Builder().build().launchUrl(
-                        requireContext(), "https://github.com/$this".toUri()
+                        context, "https://github.com/$this".toUri()
                     )
                 }.onFailure(logException)
             }
@@ -157,7 +142,7 @@ class AboutFragment : Fragment() {
 
     private fun showLicenceDialog() {
         AlertDialog.Builder(
-            requireContext(),
+            context ?: return,
             com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
         )
             .setTitle(resources.getString(R.string.about_license_title))
@@ -188,7 +173,7 @@ class AboutFragment : Fragment() {
 
     private fun showEmailDialog() {
         val emailBinding = DialogEmailBinding.inflate(LayoutInflater.from(context))
-        AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(context ?: return)
             .setView(emailBinding.root)
             .setTitle(R.string.about_email_sum)
             .setPositiveButton(R.string.continue_button) { _, _ ->
@@ -227,7 +212,7 @@ App Version Code: ${appVersionList[0]}"""
         }
             .onFailure(logException)
             .getOrElse {
-                Snackbar.make(requireView(), R.string.about_noClient, Snackbar.LENGTH_SHORT)
+                Snackbar.make(view ?: return, R.string.about_noClient, Snackbar.LENGTH_SHORT)
                     .show()
             }
     }
