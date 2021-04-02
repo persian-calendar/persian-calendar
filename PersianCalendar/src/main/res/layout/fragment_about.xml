@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -146,7 +147,8 @@
                         android:layout_height="wrap_content"
                         android:text="@string/about_help_sum"
                         android:textColor="?attr/colorTextSecond"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        tools:text="short summery" />
 
                 </LinearLayout>
 
@@ -262,15 +264,13 @@
                 android:text="@string/about_developers"
                 android:textColor="?attr/colorTextDrawer" />
 
-            <LinearLayout
+            <com.google.android.material.chip.ChipGroup
                 android:id="@+id/developers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
                 android:layoutDirection="ltr"
                 android:orientation="vertical"
-                android:padding="5dp"
-                android:textColor="?attr/colorTextDrawer" />
+                android:padding="5dp" />
 
         </LinearLayout>
 
