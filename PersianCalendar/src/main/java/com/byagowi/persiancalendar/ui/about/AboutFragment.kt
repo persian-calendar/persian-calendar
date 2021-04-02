@@ -13,14 +13,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
-import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.BuildConfig
@@ -91,14 +89,9 @@ class AboutFragment : Fragment() {
         val developerIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_developer)
         val translatorIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_translator)
         val designerIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_designer)
-        val chipsIconsColor = TypedValue().apply {
+        val chipsIconTintId = TypedValue().apply {
             requireContext().theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
         }.resourceId
-
-        val chipsLayoutParams = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        ).apply { setMargins(8) }
 
         val chipClick = View.OnClickListener {
             (it.tag as? String?)?.run {
@@ -113,13 +106,12 @@ class AboutFragment : Fragment() {
         getString(R.string.about_developers_list)
             .trim().split("\n").shuffled().map {
                 Chip(context).apply {
-                    layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     val parts = it.split(": ")
                     tag = parts[0]
                     text = parts[1]
                     chipIcon = developerIcon
-                    setChipIconTintResource(chipsIconsColor)
+                    setChipIconTintResource(chipsIconTintId)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         elevation = resources.getDimension(R.dimen.chip_elevation)
                     }
@@ -129,39 +121,36 @@ class AboutFragment : Fragment() {
         getString(R.string.about_designers_list)
             .trim().split("\n").shuffled().map {
                 Chip(context).apply {
-                    layoutParams = chipsLayoutParams
                     // setOnClickListener(chipClick)
                     val parts = it.split(": ")
                     if (parts.size == 2) tag = parts[0]
                     text = parts.last()
                     chipIcon = designerIcon
-                    setChipIconTintResource(chipsIconsColor)
+                    setChipIconTintResource(chipsIconTintId)
                 }
             }.forEach(binding.developers::addView)
 
         getString(R.string.about_translators_list)
             .trim().split("\n").shuffled().map {
                 Chip(context).apply {
-                    layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     val parts = it.split(": ")
                     tag = parts[0]
                     text = parts[1]
                     chipIcon = translatorIcon
-                    setChipIconTintResource(chipsIconsColor)
+                    setChipIconTintResource(chipsIconTintId)
                 }
             }.forEach(binding.developers::addView)
 
         getString(R.string.about_contributors_list)
             .trim().split("\n").shuffled().map {
                 Chip(context).apply {
-                    layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     val parts = it.split(": ")
                     tag = parts[0]
                     text = parts[1]
                     chipIcon = developerIcon
-                    setChipIconTintResource(chipsIconsColor)
+                    setChipIconTintResource(chipsIconTintId)
                 }
             }.forEach(binding.developers::addView)
     }
