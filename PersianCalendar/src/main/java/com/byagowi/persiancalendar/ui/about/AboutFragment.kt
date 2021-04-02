@@ -63,25 +63,7 @@ class AboutFragment : Fragment() {
         binding.version.text = getString(R.string.version).format(appVersionList.joinToString("\n"))
 
         // licenses
-        binding.licenses.setOnClickListener {
-            AlertDialog.Builder(
-                mainActivity,
-                com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
-            )
-                .setTitle(resources.getString(R.string.about_license_title))
-                .setView(ScrollView(mainActivity).apply {
-                    addView(TextView(mainActivity).apply {
-                        text = readRawResource(mainActivity, R.raw.credits)
-                        setPadding(20)
-                        typeface = Typeface.MONOSPACE
-                        Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-                        setTextIsSelectable(true)
-                    })
-                })
-                .setCancelable(true)
-                .setNegativeButton(R.string.about_license_dialog_close, null)
-                .show()
-        }
+        binding.licenses.setOnClickListener { showLicenceDialog() }
 
         // help
         binding.aboutTitle.text = getString(R.string.about_help_subtitle).format(
@@ -96,61 +78,21 @@ class AboutFragment : Fragment() {
         Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
 
         // report bug
-        binding.reportBug.setOnClickListener {
-            runCatching {
-                startActivity(
-                    Intent(
-                        Intent.ACTION_VIEW,
-                        "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()
-                    )
-                )
-            }.onFailure(logException)
-        }
+        binding.reportBug.setOnClickListener { launchReportIntent() }
 
-        binding.email.setOnClickListener {
-            val emailBinding = DialogEmailBinding.inflate(inflater, container, false)
-            AlertDialog.Builder(mainActivity)
-                .setView(emailBinding.root)
-                .setTitle(R.string.about_email_sum)
-                .setPositiveButton(R.string.continue_button) { _, _ ->
-                    val emailIntent = Intent(
-                        Intent.ACTION_SENDTO,
-                        Uri.fromParts("mailto", "persian-calendar-admin@googlegroups.com", null)
-                    )
-                    emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                    runCatching {
-                        emailIntent.putExtra(
-                            Intent.EXTRA_TEXT, """${emailBinding.inputText.text?.toString()}
+        binding.email.setOnClickListener { showEmailDialog() }
 
+        setupContributorsList(binding)
 
+        return binding.root
+    }
 
-
-
-===Device Information===
-Manufacturer: ${Build.MANUFACTURER}
-Model: ${Build.MODEL}
-Android Version: ${Build.VERSION.RELEASE}
-App Version Code: ${appVersionList[0]}"""
-                        )
-                        startActivity(
-                            Intent.createChooser(
-                                emailIntent,
-                                getString(R.string.about_sendMail)
-                            )
-                        )
-                    }.onFailure(logException).getOrElse {
-                        Snackbar.make(binding.root, R.string.about_noClient, Snackbar.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-                .setNegativeButton(R.string.cancel, null).show()
-        }
-
-        val developerIcon = AppCompatResources.getDrawable(mainActivity, R.drawable.ic_developer)
-        val translatorIcon = AppCompatResources.getDrawable(mainActivity, R.drawable.ic_translator)
-        val designerIcon = AppCompatResources.getDrawable(mainActivity, R.drawable.ic_designer)
+    private fun setupContributorsList(binding: FragmentAboutBinding) {
+        val developerIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_developer)
+        val translatorIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_translator)
+        val designerIcon = AppCompatResources.getDrawable(requireContext(), R.drawable.ic_designer)
         val chipsIconsColor = TypedValue().apply {
-            mainActivity.theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
+            requireContext().theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
         }.resourceId
 
         val chipsLayoutParams = LinearLayout.LayoutParams(
@@ -162,7 +104,7 @@ App Version Code: ${appVersionList[0]}"""
             (it.tag as? String?)?.run {
                 runCatching {
                     CustomTabsIntent.Builder().build().launchUrl(
-                        mainActivity, "https://github.com/$this".toUri()
+                        requireContext(), "https://github.com/$this".toUri()
                     )
                 }.onFailure(logException)
             }
@@ -170,7 +112,7 @@ App Version Code: ${appVersionList[0]}"""
 
         getString(R.string.about_developers_list)
             .trim().split("\n").shuffled().map {
-                Chip(mainActivity).apply {
+                Chip(context).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     val parts = it.split(": ")
@@ -186,7 +128,7 @@ App Version Code: ${appVersionList[0]}"""
 
         getString(R.string.about_designers_list)
             .trim().split("\n").shuffled().map {
-                Chip(mainActivity).apply {
+                Chip(context).apply {
                     layoutParams = chipsLayoutParams
                     // setOnClickListener(chipClick)
                     val parts = it.split(": ")
@@ -199,7 +141,7 @@ App Version Code: ${appVersionList[0]}"""
 
         getString(R.string.about_translators_list)
             .trim().split("\n").shuffled().map {
-                Chip(mainActivity).apply {
+                Chip(context).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     val parts = it.split(": ")
@@ -212,7 +154,7 @@ App Version Code: ${appVersionList[0]}"""
 
         getString(R.string.about_contributors_list)
             .trim().split("\n").shuffled().map {
-                Chip(mainActivity).apply {
+                Chip(context).apply {
                     layoutParams = chipsLayoutParams
                     setOnClickListener(chipClick)
                     val parts = it.split(": ")
@@ -222,8 +164,83 @@ App Version Code: ${appVersionList[0]}"""
                     setChipIconTintResource(chipsIconsColor)
                 }
             }.forEach(binding.developers::addView)
+    }
 
-        return binding.root
+    private fun showLicenceDialog() {
+        AlertDialog.Builder(
+            requireContext(),
+            com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
+        )
+            .setTitle(resources.getString(R.string.about_license_title))
+            .setView(ScrollView(context).apply {
+                addView(TextView(context).apply {
+                    text = readRawResource(context, R.raw.credits)
+                    setPadding(20)
+                    typeface = Typeface.MONOSPACE
+                    Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                    setTextIsSelectable(true)
+                })
+            })
+            .setCancelable(true)
+            .setNegativeButton(R.string.about_license_dialog_close, null)
+            .show()
+    }
+
+    private fun launchReportIntent() {
+        runCatching {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()
+                )
+            )
+        }.onFailure(logException)
+    }
+
+    private fun showEmailDialog() {
+        val emailBinding = DialogEmailBinding.inflate(LayoutInflater.from(context))
+        AlertDialog.Builder(requireContext())
+            .setView(emailBinding.root)
+            .setTitle(R.string.about_email_sum)
+            .setPositiveButton(R.string.continue_button) { _, _ ->
+                launchEmailIntent(emailBinding.inputText.text?.toString())
+            }
+            .setNegativeButton(R.string.cancel, null).show()
+    }
+
+    private fun launchEmailIntent(defaultMessage: String? = null) {
+        val emailIntent = Intent(
+            Intent.ACTION_SENDTO,
+            Uri.fromParts("mailto", "persian-calendar-admin@googlegroups.com", null)
+        ).apply {
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+            putExtra(
+                Intent.EXTRA_TEXT,
+                """$defaultMessage
+    
+    
+    
+    
+===Device Information===
+Manufacturer: ${Build.MANUFACTURER}
+Model: ${Build.MODEL}
+Android Version: ${Build.VERSION.RELEASE}
+App Version Code: ${appVersionList[0]}"""
+            )
+        }
+        runCatching {
+            startActivity(
+                Intent.createChooser(
+                    emailIntent,
+                    getString(R.string.about_sendMail)
+                )
+            )
+        }
+            .onFailure(logException)
+            .getOrElse {
+                Snackbar.make(requireView(), R.string.about_noClient, Snackbar.LENGTH_SHORT)
+                    .show()
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -232,18 +249,21 @@ App Version Code: ${appVersionList[0]}"""
         inflater.inflate(R.menu.about_menu_buttons, menu)
     }
 
-    private fun shareApplication() = if (
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1
-    ) runCatching {
-        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-            type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            putExtra(
-                Intent.EXTRA_TEXT,
-                "${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
-            )
-        }, getString(R.string.share)))
-    }.onFailure(logException).getOrElse { bringMarketPage(activity ?: return) } else Unit
+    private fun shareApplication() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+            runCatching {
+                startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+                    )
+                }, getString(R.string.share)))
+            }
+                .onFailure(logException)
+                .getOrElse { bringMarketPage(activity ?: return) }
+    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
