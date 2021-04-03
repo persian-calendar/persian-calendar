@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar
 import android.Manifest
 import android.animation.LayoutTransition
 import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -16,6 +17,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
 import android.widget.ArrayAdapter
+import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
@@ -75,6 +77,16 @@ class CalendarFragment : Fragment() {
         eventsBinding = null
         searchView = null
         todayButton = null
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            if (closeSearchIfOpen().not()) {
+                isEnabled = false
+                activity?.onBackPressedDispatcher?.onBackPressed()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -525,10 +537,15 @@ class CalendarFragment : Fragment() {
         return true
     }
 
-    fun closeSearch() = searchView?.run {
-        if (!isIconified) {
-            onActionViewCollapsed()
-            return true
-        } else false
-    } ?: false
+    /**
+     * returns true of does sth, otherwise returns else
+     */
+    private fun closeSearchIfOpen(): Boolean {
+        return searchView?.run {
+            if (!isIconified) {
+                onActionViewCollapsed()
+                true
+            } else false
+        } ?: false
+    }
 }
