@@ -61,6 +61,8 @@ var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
 var language = DEFAULT_APP_LANGUAGE
     private set
     get() = if (field.isEmpty()) DEFAULT_APP_LANGUAGE else field
+var easternGregorianArabicMonths = false
+    private set
 var coordinate: Coordinate? = null
     private set
 var mainCalendar = CalendarType.SHAMSI
@@ -282,7 +284,12 @@ fun loadLanguageResource(context: Context): Unit = runCatching {
 
     persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringList()
     islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringList()
-    gregorianMonths = messages.getJSONArray("GregorianCalendarMonths").toStringList()
+    gregorianMonths = messages.getJSONArray(
+        when {
+            language == LANG_AR && easternGregorianArabicMonths -> "EasternGregorianCalendarMonths"
+            else -> "GregorianCalendarMonths"
+        }
+    ).toStringList()
     weekDays = messages.getJSONArray("WeekDays").toStringList()
     weekDaysInitials = when (language) {
         LANG_AR, LANG_AZB -> messages.getJSONArray("WeekDaysInitials").toStringList()
@@ -376,14 +383,18 @@ fun updateStoredPreference(context: Context) {
     val prefs = context.appPrefs
 
     language = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
+    easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
 
-    preferredDigits =
-        if (prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS)) when (language) {
-            LANG_AR, LANG_CKB -> ARABIC_INDIC_DIGITS
-            LANG_JA -> CJK_DIGITS
-            else -> PERSIAN_DIGITS
+    preferredDigits = when (language) {
+        LANG_EN_US, LANG_JA -> ARABIC_DIGITS
+        else -> when {
+            prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS) -> when (language) {
+                LANG_AR, LANG_CKB -> ARABIC_INDIC_DIGITS
+                else -> PERSIAN_DIGITS
+            }
+            else -> ARABIC_DIGITS
         }
-        else ARABIC_DIGITS
+    }
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)

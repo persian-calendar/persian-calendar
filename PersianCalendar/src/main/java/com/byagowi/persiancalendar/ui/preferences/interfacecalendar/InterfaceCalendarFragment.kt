@@ -8,9 +8,10 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
+import com.byagowi.persiancalendar.utils.language
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
 
@@ -21,8 +22,16 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
             ListPreference.SimpleSummaryProvider.getInstance()
         findPreference<ListPreference>("AppLanguage")?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
+        if (language != LANG_AR)
+            findPreference<SwitchPreferenceCompat>(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS)
+                ?.layoutResource = R.layout.empty
         findPreference<ListPreference>("WeekStart")?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
+        when (language) {
+            LANG_EN_US, LANG_JA -> findPreference<ListPreference>(PREF_PERSIAN_DIGITS)
+                ?.layoutResource = R.layout.empty
+        }
+
 
         val switchPreference = findPreference<SwitchPreferenceCompat>("showDeviceCalendarEvents")
 
