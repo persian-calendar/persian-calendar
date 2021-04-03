@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.navOptions
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
@@ -187,7 +188,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        obtainNavHost().navController.navigate(id, null, null)
+        obtainNavHost().navController.navigate(
+            id,
+            null,
+            navOptions {
+                anim {
+                    enter = R.anim.nav_default_enter_anim
+                    exit = R.anim.nav_default_exit_anim
+                    popEnter = R.anim.nav_default_pop_enter_anim
+                    popExit = R.anim.nav_default_pop_exit_anim
+                }
+            }
+        )
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
