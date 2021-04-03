@@ -34,6 +34,10 @@
         android:name="android.hardware.location.gps"
         android:required="false" />
 
+    <queries>
+        <package android:name="com.farsitel.bazaar" />
+    </queries>
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"

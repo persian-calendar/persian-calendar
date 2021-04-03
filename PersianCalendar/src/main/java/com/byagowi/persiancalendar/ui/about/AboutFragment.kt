@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Typeface
 import android.net.Uri
@@ -23,6 +25,7 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
+
 
 class AboutFragment : Fragment() {
 
@@ -218,6 +221,50 @@ App Version Code: ${appVersionList[0]}"""
             }
     }
 
+    private fun shareApplication() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
+            runCatching {
+                when {
+                    requireContext().isInDevice("com.farsitel.bazaar") -> {
+                        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                "${getString(R.string.app_name)}\nhttps://cafebazaar.ir/app/${BuildConfig.APPLICATION_ID}"
+                            )
+                        }, getString(R.string.share)))
+                    }
+                    else -> {
+                        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                "${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
+                            )
+                        }, getString(R.string.share)))
+                    }
+                }
+            }
+                .onFailure(logException)
+                .getOrElse { bringMarketPage(activity ?: return) }
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    private fun Context.getInstalledPackages(): List<String> {
+        val packagesList = mutableListOf<String>()
+        packageManager.getInstalledPackages(0).forEach {
+            if (it.applicationInfo.sourceDir.startsWith("/data/app/") && it.versionName != null)
+                packagesList.add(it.packageName)
+        }
+        return packagesList
+    }
+
+    private fun Context.isInDevice(packageName: String): Boolean {
+        return getInstalledPackages().contains(packageName)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         menu.clear()
@@ -227,6 +274,7 @@ App Version Code: ${appVersionList[0]}"""
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.deviceInformation -> (activity as MainActivity).navigateTo(R.id.deviceInformation)
+            R.id.share -> shareApplication()
         }
         return true
     }
