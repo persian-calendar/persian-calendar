@@ -19,7 +19,7 @@
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="EasternGregorianArabicMonths"
-            android:summary="كانون الثاني، شباط، آذار، ..."
+            android:summary="كانون الثاني، شباط، آذار، …"
             android:title="السنة الميلادية بالاسماء الشرقية"
             settings:iconSpaceReserved="false" />
 
