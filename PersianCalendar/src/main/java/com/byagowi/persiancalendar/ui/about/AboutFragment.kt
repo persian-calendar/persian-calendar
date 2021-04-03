@@ -224,26 +224,9 @@ App Version Code: ${appVersionList[0]}"""
         inflater.inflate(R.menu.about_menu_buttons, menu)
     }
 
-    private fun shareApplication() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-            runCatching {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        "${getString(R.string.app_name)}\nhttps://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
-                    )
-                }, getString(R.string.share)))
-            }
-                .onFailure(logException)
-                .getOrElse { bringMarketPage(activity ?: return) }
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.deviceInformation -> (activity as MainActivity).navigateTo(R.id.deviceInformation)
-            R.id.share -> shareApplication()
         }
         return true
     }
