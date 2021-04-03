@@ -173,14 +173,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
     }
 
-    fun navigateTo(@IdRes id: Int) {
-        binding.navigation.menu.findItem(
-            // We don't have a menu entry for compass, so
-            when (id) {
-                R.id.level -> R.id.compass
-                else -> id
-            }
-        )?.also {
+    private fun navigateTo(@IdRes id: Int) {
+        binding.navigation.menu.findItem(id)?.also {
             it.isCheckable = true
             it.isChecked = true
         }

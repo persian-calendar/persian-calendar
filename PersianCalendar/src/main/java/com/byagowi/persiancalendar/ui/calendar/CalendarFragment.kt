@@ -23,6 +23,7 @@ import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
@@ -410,7 +411,8 @@ class CalendarFragment : Fragment() {
                 val ss = SpannableString(title)
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(textView: View) {
-                        mainActivity.navigateTo(R.id.settings)
+                        val direction = CalendarFragmentDirections.navigateToSettings()
+                        findNavController().navigate(direction)
                     }
                 }
                 ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

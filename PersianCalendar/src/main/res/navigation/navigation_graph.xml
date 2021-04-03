@@ -17,17 +17,8 @@
         android:label="Calendar Fragment"
         tools:layout="@layout/fragment_calendar">
         <action
-            android:id="@+id/navigate_to_converter"
-            app:destination="@id/converter" />
-        <action
-            android:id="@+id/navigate_to_about"
-            app:destination="@id/about" />
-        <action
             android:id="@+id/navigate_to_settings"
             app:destination="@id/settings" />
-        <action
-            android:id="@+id/navigate_to_compass"
-            app:destination="@id/compass" />
     </fragment>
 
     <fragment
