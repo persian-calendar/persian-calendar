@@ -44,7 +44,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
         addPreferencesFromResource(R.xml.preferences_location_athan)
 
-        findPreference<ListPreference>("SelectedPrayTimeMethod")?.summaryProvider =
+        findPreference<ListPreference>(PREF_PRAY_TIME_METHOD)?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
 
         categoryAthan = findPreference(PREF_KEY_ATHAN)
@@ -166,7 +166,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
     private fun putLocationOnSummary(selected: String) {
         val context = context ?: return
-        findPreference<Preference>("Location")?.summary =
+        findPreference<Preference>(PREF_SELECTED_LOCATION)?.summary =
             LocationPreference.getSummary(context, selected)
     }
 }

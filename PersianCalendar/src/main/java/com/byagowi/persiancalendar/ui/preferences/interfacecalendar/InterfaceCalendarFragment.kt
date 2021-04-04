@@ -18,14 +18,14 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
-        findPreference<ListPreference>("Theme")?.summaryProvider =
+        findPreference<ListPreference>(PREF_THEME)?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
-        findPreference<ListPreference>("AppLanguage")?.summaryProvider =
+        findPreference<ListPreference>(PREF_APP_LANGUAGE)?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
         if (language != LANG_AR)
             findPreference<SwitchPreferenceCompat>(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS)
                 ?.layoutResource = R.layout.empty
-        findPreference<ListPreference>("WeekStart")?.summaryProvider =
+        findPreference<ListPreference>(PREF_WEEK_START)?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
         when (language) {
             LANG_EN_US, LANG_JA -> findPreference<SwitchPreferenceCompat>(PREF_PERSIAN_DIGITS)
@@ -33,7 +33,9 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         }
 
 
-        val switchPreference = findPreference<SwitchPreferenceCompat>("showDeviceCalendarEvents")
+        val switchPreference = findPreference<SwitchPreferenceCompat>(
+            PREF_SHOW_DEVICE_CALENDAR_EVENTS
+        )
 
         val activity = activity ?: return
         switchPreference?.setOnPreferenceChangeListener { _, _ ->

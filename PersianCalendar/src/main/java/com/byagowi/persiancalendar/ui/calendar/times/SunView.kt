@@ -63,16 +63,19 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         it.color = Color.WHITE
         it.style = Paint.Style.FILL_AND_STROKE
     }
+
     // moon Paint Black
     private val moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.BLACK
         it.style = Paint.Style.FILL_AND_STROKE
     }
+
     // moon Paint for Oval
     private val moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.WHITE
         it.style = Paint.Style.FILL_AND_STROKE
     }
+
     // moon Paint for Diameter
     private val moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
