@@ -14,6 +14,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.ui.MainActivity
@@ -102,7 +103,7 @@ class CompassFragment : Fragment() {
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
             bottomAppbar.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.level -> mainActivity.navigateTo(R.id.level)
+                    R.id.level -> findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
                     R.id.map -> runCatching {
                         CustomTabsIntent.Builder().build().launchUrl(
                             mainActivity,

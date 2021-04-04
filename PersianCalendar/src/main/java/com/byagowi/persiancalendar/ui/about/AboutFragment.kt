@@ -16,6 +16,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
@@ -242,7 +243,7 @@ App Version Code: ${appVersionList[0]}"""
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.deviceInformation -> (activity as MainActivity).navigateTo(R.id.deviceInformation)
+            R.id.deviceInformation -> findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
             R.id.share -> shareApplication()
         }
         return true

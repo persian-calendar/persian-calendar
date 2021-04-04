@@ -17,17 +17,12 @@
         android:label="Calendar Fragment"
         tools:layout="@layout/fragment_calendar">
         <action
-            android:id="@+id/navigate_to_converter"
-            app:destination="@id/converter" />
-        <action
-            android:id="@+id/navigate_to_about"
-            app:destination="@id/about" />
-        <action
             android:id="@+id/navigate_to_settings"
-            app:destination="@id/settings" />
-        <action
-            android:id="@+id/navigate_to_compass"
-            app:destination="@id/compass" />
+            app:destination="@id/settings"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -43,7 +38,11 @@
         tools:layout="@layout/fragment_compass">
         <action
             android:id="@+id/action_compass_to_level"
-            app:destination="@id/level" />
+            app:destination="@id/level"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -64,7 +63,11 @@
         tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_about_to_deviceinfo"
-            app:destination="@id/deviceInformation" />
+            app:destination="@id/deviceInformation"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment

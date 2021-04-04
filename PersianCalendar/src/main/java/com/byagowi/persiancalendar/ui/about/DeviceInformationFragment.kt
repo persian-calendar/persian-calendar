@@ -58,7 +58,7 @@ class DeviceInformationFragment : Fragment() {
 
         mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
 
-        circularRevealFromMiddle(binding.circularReveal)
+//        circularRevealFromMiddle(binding.circularReveal)
 
         binding.recyclerView.also {
             it.setHasFixedSize(true)

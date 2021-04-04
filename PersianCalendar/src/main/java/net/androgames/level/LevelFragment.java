@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
@@ -55,8 +56,10 @@ public class LevelFragment extends Fragment {
 
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
         binding.bottomAppbar.setOnMenuItemClickListener(item -> {
-            if (item.getItemId() == R.id.compass)
-                mainActivity.navigateTo(R.id.compass);
+            if (item.getItemId() == R.id.compass) {
+                // because we're know that compass is in the backstack
+                NavHostFragment.findNavController(this).navigateUp();
+            }
             return true;
         });
         binding.fab.setOnClickListener(v -> {

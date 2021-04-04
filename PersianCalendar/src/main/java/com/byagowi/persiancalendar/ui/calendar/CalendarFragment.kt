@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar
 import android.Manifest
 import android.animation.LayoutTransition
 import android.content.ContentUris
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -16,11 +17,13 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
 import android.widget.ArrayAdapter
+import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
@@ -75,6 +78,16 @@ class CalendarFragment : Fragment() {
         eventsBinding = null
         searchView = null
         todayButton = null
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        activity?.onBackPressedDispatcher?.addCallback(this) {
+            if (closeSearchIfOpen().not()) {
+                isEnabled = false
+                activity?.onBackPressedDispatcher?.onBackPressed()
+            }
+        }
     }
 
     override fun onCreateView(
@@ -398,7 +411,8 @@ class CalendarFragment : Fragment() {
                 val ss = SpannableString(title)
                 val clickableSpan = object : ClickableSpan() {
                     override fun onClick(textView: View) {
-                        mainActivity.navigateTo(R.id.settings)
+                        val direction = CalendarFragmentDirections.navigateToSettings()
+                        findNavController().navigate(direction)
                     }
                 }
                 ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -525,10 +539,15 @@ class CalendarFragment : Fragment() {
         return true
     }
 
-    fun closeSearch() = searchView?.run {
-        if (!isIconified) {
-            onActionViewCollapsed()
-            return true
-        } else false
-    } ?: false
+    /**
+     * returns true of does sth, otherwise returns else
+     */
+    private fun closeSearchIfOpen(): Boolean {
+        return searchView?.run {
+            if (!isIconified) {
+                onActionViewCollapsed()
+                true
+            } else false
+        } ?: false
+    }
 }

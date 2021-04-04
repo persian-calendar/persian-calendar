@@ -36,12 +36,9 @@
             </com.google.android.material.appbar.AppBarLayout>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/nav_host_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:id="@+id/nav_host_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/navigation_graph" />
+                android:layout_height="match_parent" />
 
         </LinearLayout>
 

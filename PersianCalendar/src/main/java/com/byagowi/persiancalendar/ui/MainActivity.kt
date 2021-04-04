@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.activity.addCallback
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,18 +18,15 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
-import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-
 
 /**
  * Program activity for android
@@ -52,6 +50,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
+        onBackPressedDispatcher.addCallback(this) {
+            if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                binding.drawer.closeDrawers()
+            } else {
+                isEnabled = false
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         initUtils(this)
 
@@ -75,6 +81,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
         setSupportActionBar(binding.toolbar)
 
+        obtainNavHost() // sake of initialize NavHost
+
         when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> window.also {
                 // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
@@ -88,19 +96,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         binding.drawer.addDrawerListener(drawerToggle().also { it.syncState() })
 
         intent?.run {
-            navigateTo(
-                when (action) {
-                    "COMPASS" -> R.id.compass
-                    "LEVEL" -> R.id.level
-                    "CONVERTER" -> R.id.converter
-                    "SETTINGS" -> R.id.settings
-                    "DEVICE" -> R.id.deviceInformation
-                    else -> R.id.calendar
-                }
-            )
+            val newDestinationId = when (action) {
+                "COMPASS" -> R.id.compass
+                "LEVEL" -> R.id.level
+                "CONVERTER" -> R.id.converter
+                "SETTINGS" -> R.id.settings
+                "DEVICE" -> R.id.deviceInformation
+                else -> null // unsupported action. ignore
+            }
+            if (newDestinationId != null) {
+                navigateTo(newDestinationId)
 
-            // So it won't happen again if the activity restarted
-            action = ""
+                // So it won't happen again if the activity restarted
+                action = ""
+            }
         }
 
         appPrefs.registerOnSharedPreferenceChangeListener(this)
@@ -153,14 +162,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         applyAppLanguage(this)
     }
 
-    fun navigateTo(@IdRes id: Int) {
-        binding.navigation.menu.findItem(
-            // We don't have a menu entry for compass, so
-            when (id) {
-                R.id.level -> R.id.compass
-                else -> id
+    private fun obtainNavHost(): NavHostFragment {
+        val navHostFragmentTag = "NavHostFrag"
+
+        return supportFragmentManager.findFragmentByTag(navHostFragmentTag) as? NavHostFragment
+            ?: NavHostFragment.create(R.navigation.navigation_graph).also { newNavHostFragment ->
+                supportFragmentManager.beginTransaction()
+                    .add(binding.navHostContainer.id, newNavHostFragment, navHostFragmentTag)
+                    .setPrimaryNavigationFragment(newNavHostFragment)
+                    .commitNow()
             }
-        )?.also {
+    }
+
+    private fun navigateTo(@IdRes id: Int) {
+        binding.navigation.menu.findItem(id)?.also {
             it.isCheckable = true
             it.isChecked = true
         }
@@ -173,7 +188,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        navController?.navigate(id, null, null)
+        obtainNavHost().navController.navigate(
+            id,
+            null,
+            navOptions {
+                anim {
+                    enter = R.anim.nav_default_enter_anim
+                    exit = R.anim.nav_default_exit_anim
+                    popEnter = R.anim.nav_default_pop_enter_anim
+                    popExit = R.anim.nav_default_pop_exit_anim
+                }
+            }
+        )
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -242,7 +268,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                                     setOf("afghanistan_holidays")
                                 )
                             }
-
                         }
                     }
                     when {
@@ -321,7 +346,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     ) -> {
                         toggleShowDeviceCalendarOnPreference(this, true)
                         when (R.id.calendar) {
-                            getCurrentDestinationId() -> restartActivity()
+                            obtainNavHost().navController.currentDestination?.id -> restartActivity()
                         }
                     }
                     else -> toggleShowDeviceCalendarOnPreference(this, false)
@@ -399,30 +424,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         it.subtitle = subtitle
     } ?: Unit
 
-    override fun onBackPressed() {
-        when {
-            binding.drawer.isDrawerOpen(GravityCompat.START) -> {
-                binding.drawer.closeDrawers()
-            }
-            else -> {
-                val calendarFragment = supportFragmentManager
-                    .findFragmentByTag(CalendarFragment::class.java.name) as CalendarFragment?
-                when {
-                    calendarFragment?.closeSearch() == true -> return
-                    getCurrentDestinationId() == R.id.calendar -> finish()
-                    else -> navigateTo(R.id.calendar)
-                }
-
-            }
-        }
-    }
-
-    private val navController: NavController?
-        get() =
-            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)
-                ?.findNavController()
-
-    private fun getCurrentDestinationId(): Int? = navController?.currentDestination?.id
 
     private fun changeLangSnackbar() =
         Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
@@ -467,7 +468,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         override fun onDrawerClosed(drawerView: View) {
             super.onDrawerClosed(drawerView)
             when {
-                clickedItem != 0 -> {
+                clickedItem != 0 && clickedItem != R.id.calendar -> {
                     navigateTo(clickedItem)
                     clickedItem = 0
                 }
