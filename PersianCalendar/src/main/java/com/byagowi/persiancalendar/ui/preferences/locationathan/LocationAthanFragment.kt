@@ -140,9 +140,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         if (requestCode == ATHAN_RINGTONE_REQUEST_CODE && resultCode == RESULT_OK) {
             data?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                 ?.let { parcelable ->
-                    val ringtoneTitle = RingtoneManager.getRingtone(
-                        context, parcelable.toString().toUri()
-                    )?.getTitle(context) ?: ""
+                    val ringtone =
+                        RingtoneManager.getRingtone(context, parcelable.toString().toUri())
+                    // If no ringtone has been found better to skip touching preferences store
+                    ringtone ?: return@let
+                    val ringtoneTitle = ringtone.getTitle(context) ?: ""
 
                     context.appPrefs.edit {
                         putString(PREF_ATHAN_NAME, ringtoneTitle)
