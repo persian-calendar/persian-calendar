@@ -34,7 +34,7 @@ class AthanActivity : AppCompatActivity() {
             if ((ringtone == null && mediaPlayer == null) ||
                 ringtone?.isPlaying == false ||
                 mediaPlayer?.isPlaying == false ||
-                spentSeconds > 240
+                spentSeconds > 360
             ) this@AthanActivity.finish()
             else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
             Unit
