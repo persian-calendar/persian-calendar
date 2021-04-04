@@ -28,7 +28,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         findPreference<ListPreference>("WeekStart")?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
         when (language) {
-            LANG_EN_US, LANG_JA -> findPreference<ListPreference>(PREF_PERSIAN_DIGITS)
+            LANG_EN_US, LANG_JA -> findPreference<SwitchPreferenceCompat>(PREF_PERSIAN_DIGITS)
                 ?.layoutResource = R.layout.empty
         }
 
