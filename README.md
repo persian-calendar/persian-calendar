@@ -1,6 +1,6 @@
 # Android Persian Calendar
 
-[![GitHub Actions](https://action-badges.now.sh/persian-calendar/DroidPersianCalendar?workflow=android)](https://github.com/persian-calendar/DroidPersianCalendar/actions)
+[![Android CI](https://github.com/persian-calendar/DroidPersianCalendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/DroidPersianCalendar/actions)
 
 <div dir=rtl>
 
