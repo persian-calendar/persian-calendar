@@ -14,7 +14,7 @@
         <shape android:shape="oval">
             <gradient
                 android:endColor="@color/bubble_border"
-                android:gradientRadius="30"
+                android:gradientRadius="75"
                 android:startColor="@color/bubble_center"
                 android:type="radial" />
         </shape>
