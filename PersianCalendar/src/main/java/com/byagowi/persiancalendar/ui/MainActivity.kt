@@ -95,6 +95,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.drawer.addDrawerListener(drawerToggle().also { it.syncState() })
 
+        binding.navigation.menu.findItem(R.id.calendar)?.also {
+            it.isCheckable = true
+            it.isChecked = true
+        }
         intent?.run {
             val newDestinationId = when (action) {
                 "COMPASS" -> R.id.compass
@@ -467,11 +471,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         override fun onDrawerClosed(drawerView: View) {
             super.onDrawerClosed(drawerView)
-            when {
-                clickedItem != 0 && clickedItem != R.id.calendar -> {
-                    navigateTo(clickedItem)
-                    clickedItem = 0
-                }
+            if (clickedItem != 0) {
+                navigateTo(clickedItem)
+                clickedItem = 0
             }
         }
     }
