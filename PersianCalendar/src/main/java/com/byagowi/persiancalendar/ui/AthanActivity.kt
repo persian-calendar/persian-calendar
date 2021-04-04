@@ -27,11 +27,14 @@ class AthanActivity : AppCompatActivity() {
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
     private var alreadyStopped = false
+    private var spentSeconds = 0
     private val stopTask = object : Runnable {
         override fun run() = runCatching {
+            spentSeconds += 5
             if ((ringtone == null && mediaPlayer == null) ||
                 ringtone?.isPlaying == false ||
-                mediaPlayer?.isPlaying == false
+                mediaPlayer?.isPlaying == false ||
+                spentSeconds > 240
             ) this@AthanActivity.finish()
             else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
             Unit
