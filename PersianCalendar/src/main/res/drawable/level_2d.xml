@@ -6,7 +6,7 @@
                 android:centerX="33%"
                 android:centerY="33%"
                 android:endColor="@color/level_border"
-                android:gradientRadius="100"
+                android:gradientRadius="8%p"
                 android:startColor="@color/level_border_reflect"
                 android:type="radial" />
             <padding
@@ -22,7 +22,7 @@
                 android:centerX="33%"
                 android:centerY="33%"
                 android:endColor="@color/level_liquid_dark"
-                android:gradientRadius="100"
+                android:gradientRadius="8%p"
                 android:startColor="@color/level_liquid_reflect"
                 android:type="radial" />
         </shape>
