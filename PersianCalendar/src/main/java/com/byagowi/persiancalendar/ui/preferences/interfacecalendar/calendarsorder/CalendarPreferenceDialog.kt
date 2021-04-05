@@ -23,20 +23,25 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
     private var itemTouchHelper: ItemTouchHelper? = null
     private lateinit var calendarsAdapter: RecyclerListAdapter
     private lateinit var calendarLayoutManager: LinearLayoutManager
+    private lateinit var itemsList: List<RecyclerListAdapter.Item>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        itemsList = getOrderedCalendarEntities(requireContext()).map {
+            RecyclerListAdapter.Item(
+                it.toString(),
+                it.type.toString(),
+                it.type in getEnabledCalendarTypes()
+            )
+        }
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity as Activity
         updateStoredPreference(activity)
-        val enabledCalendarTypes = getEnabledCalendarTypes()
-
-        calendarsAdapter = RecyclerListAdapter(this, getOrderedCalendarEntities(activity).map {
-            RecyclerListAdapter.Item(
-                it.toString(),
-                it.type.toString(),
-                it.type in enabledCalendarTypes
-            )
-        })
         calendarLayoutManager = LinearLayoutManager(context)
+        calendarsAdapter = RecyclerListAdapter(this, itemsList)
+
         val recyclerView = RecyclerView(activity).apply {
             setHasFixedSize(true)
             layoutManager = calendarLayoutManager
@@ -53,10 +58,10 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
             setTitle(R.string.calendars_priority)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.accept) { _, _ ->
-                val ordering = calendarsAdapter.result
+                val ordering = itemsList
                 activity.appPrefs.edit {
                     if (ordering.isNotEmpty()) {
-                        putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
+                        putString(PREF_MAIN_CALENDAR_KEY, ordering[0].toString())
                         putString(
                             PREF_OTHER_CALENDARS_KEY,
                             ordering.subList(1, ordering.size).joinToString(",")
