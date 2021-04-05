@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui
 
 import android.app.KeyguardManager
 import android.media.*
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -10,7 +9,6 @@ import android.os.Looper
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
@@ -36,13 +34,14 @@ class AthanActivity : AppCompatActivity() {
             if ((ringtone == null && mediaPlayer == null) ||
                 ringtone?.isPlaying == false ||
                 mediaPlayer?.isPlaying == false ||
-                spentSeconds > 360
+                spentSeconds > 360 ||
+                (stopAtHalfMinute && spentSeconds > 30)
             ) this@AthanActivity.finish()
             else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
             Unit
         }.onFailure { this@AthanActivity.finish() }.getOrElse(logException)
     }
-    private var needsBeStoppedAtHalfMinute = false
+    private var stopAtHalfMinute = false
 
     private val ascendVolume = object : Runnable {
         override fun run() {
@@ -85,6 +84,15 @@ class AthanActivity : AppCompatActivity() {
         val customAthanUri = getCustomAthanUri(this)
         runCatching {
             if (customAthanUri != null) {
+                runCatching {
+                    MediaPlayer.create(this, customAthanUri).duration // is in milliseconds
+                }.onFailure(logException).onSuccess {
+                    // if the URIs duration is less than half a minute, it is probably a looping one
+                    // so stop on half a minute regardless
+                    if (it < TimeUnit.SECONDS.toMillis(30)) {
+                        stopAtHalfMinute = true
+                    }
+                }
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         audioAttributes = AudioAttributes.Builder()
