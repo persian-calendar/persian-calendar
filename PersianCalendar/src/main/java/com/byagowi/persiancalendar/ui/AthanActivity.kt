@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui
 
 import android.app.KeyguardManager
 import android.media.*
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -9,6 +10,7 @@ import android.os.Looper
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
@@ -40,6 +42,7 @@ class AthanActivity : AppCompatActivity() {
             Unit
         }.onFailure { this@AthanActivity.finish() }.getOrElse(logException)
     }
+    private var needsBeStoppedAtHalfMinute = false
 
     private val ascendVolume = object : Runnable {
         override fun run() {
