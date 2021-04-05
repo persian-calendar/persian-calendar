@@ -17,14 +17,11 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.activity.addCallback
-import androidx.annotation.StringRes
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -137,28 +134,11 @@ class CalendarFragment : Fragment() {
                         if (cityName.isNotEmpty()) text = cityName
                     }
 
-                    owghatsParent.layoutTransition = LayoutTransition().apply {
+                    times.layoutTransition = LayoutTransition().apply {
                         enableTransitionType(LayoutTransition.APPEARING)
                         setAnimateParentHierarchy(false)
                     }
-                    (item1[0] as? TextView)?.setText(timeNames[0])
-                    item1.visibility = View.GONE
-                    (item2[0] as? TextView)?.setText(timeNames[1])
-                    // item2.visibility = View.GONE
-                    (item3[0] as? TextView)?.setText(timeNames[2])
-                    item3.visibility = View.GONE
-                    (item4[0] as? TextView)?.setText(timeNames[3])
-                    // item4.visibility = View.GONE
-                    (item5[0] as? TextView)?.setText(timeNames[4])
-                    item5.visibility = View.GONE
-                    (item6[0] as? TextView)?.setText(timeNames[5])
-                    item6.visibility = View.GONE
-                    (item7[0] as? TextView)?.setText(timeNames[6])
-                    // item7.visibility = View.GONE
-                    (item8[0] as? TextView)?.setText(timeNames[7])
-                    item8.visibility = View.GONE
-                    (item9[0] as? TextView)?.setText(timeNames[8])
-                    item9.visibility = View.GONE
+                    timesFlow.setup(times)
                 }.root
             )
         } ?: emptyList())
@@ -449,28 +429,13 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    @StringRes
-    private val timeNames = listOf(
-        R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
-        R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
-    )
-
     private fun setOwghat(jdn: Long, isToday: Boolean) {
         if (coordinate == null) return
 
         val prayTimes = PrayTimesCalculator.calculate(
             calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
         )
-        (owghatBinding?.item1?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item2?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item3?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item4?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item5?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item6?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item7?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item8?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-        (owghatBinding?.item9?.get(1) as? TextView)?.text = prayTimes.imsakClock.toFormattedString()
-
+        owghatBinding?.timesFlow?.update(prayTimes)
         owghatBinding?.sunView?.run {
             setSunriseSunsetMoonPhase(prayTimes, runCatching {
                 coordinate?.run {
@@ -487,21 +452,12 @@ class CalendarFragment : Fragment() {
 
     var isExpanded = false
     private fun onOwghatClick() {
-        val visibility = if (isExpanded) View.GONE else View.VISIBLE
-        owghatBinding?.item1?.visibility = visibility
-        // owghatBinding?.item2?.visibility = visibility
-        owghatBinding?.item3?.visibility = visibility
-        // owghatBinding?.item4?.visibility = visibility
-        owghatBinding?.item5?.visibility = visibility
-        owghatBinding?.item6?.visibility = visibility
-        // owghatBinding?.item7?.visibility = visibility
-        owghatBinding?.item8?.visibility = visibility
-        owghatBinding?.item9?.visibility = visibility
-        isExpanded = !isExpanded
+        owghatBinding?.timesFlow?.toggle()
         owghatBinding?.moreOwghat?.animate()
-            ?.rotation(if (isExpanded) 180f else 0f)
+            ?.rotation(if (isExpanded) 0f else 180f)
             ?.setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
             ?.start()
+        isExpanded = !isExpanded
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
