@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,11 +24,11 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
     private var itemTouchHelper: ItemTouchHelper? = null
     private lateinit var calendarsAdapter: RecyclerListAdapter
     private lateinit var calendarLayoutManager: LinearLayoutManager
-    private lateinit var itemsList: List<RecyclerListAdapter.Item>
+    private val itemsListLiveData: MutableLiveData<List<RecyclerListAdapter.Item>> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        itemsList = getOrderedCalendarEntities(requireContext()).map {
+        itemsListLiveData.value = getOrderedCalendarEntities(requireContext()).map {
             RecyclerListAdapter.Item(
                 it.toString(),
                 it.type.toString(),
@@ -40,7 +41,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
         val activity = activity as Activity
         updateStoredPreference(activity)
         calendarLayoutManager = LinearLayoutManager(context)
-        calendarsAdapter = RecyclerListAdapter(this, itemsList)
+        calendarsAdapter = RecyclerListAdapter(this, itemsListLiveData.value!!)
 
         val recyclerView = RecyclerView(activity).apply {
             setHasFixedSize(true)
@@ -58,7 +59,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
             setTitle(R.string.calendars_priority)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.accept) { _, _ ->
-                val ordering = itemsList
+                val ordering = itemsListLiveData.value!!
                 activity.appPrefs.edit {
                     if (ordering.isNotEmpty()) {
                         putString(PREF_MAIN_CALENDAR_KEY, ordering[0].toString())
