@@ -452,12 +452,14 @@ class CalendarFragment : Fragment() {
 
     var isExpanded = false
     private fun onOwghatClick() {
-        owghatBinding?.timesFlow?.toggle()
-        owghatBinding?.moreOwghat?.animate()
-            ?.rotation(if (isExpanded) 0f else 180f)
-            ?.setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
-            ?.start()
         isExpanded = !isExpanded
+        owghatBinding?.let {
+            it.timesFlow.toggle()
+            it.moreOwghat.animate()
+                .rotation(if (isExpanded) 180f else 0f)
+                .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
+                .start()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

@@ -21,7 +21,7 @@ class ConverterFragment : Fragment() {
             getString(R.string.date_converter), ""
         )
 
-        calendarsView.expand(true)
+        calendarsView.toggle()
         calendarsView.hideMoreIcon()
 
         val todayJdn = getTodayJdn()

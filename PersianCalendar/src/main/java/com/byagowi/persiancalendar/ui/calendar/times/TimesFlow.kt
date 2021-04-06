@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.PrayTimes
 
-class TimesFlow(context: Context, attrs: AttributeSet) : Flow(context, attrs) {
+class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
 
     var times = emptyList<Pair<@StringRes Int, TimeItemBinding>>()
     fun setup(parentView: ViewGroup) {
@@ -36,7 +36,7 @@ class TimesFlow(context: Context, attrs: AttributeSet) : Flow(context, attrs) {
         R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
     )
 
-    private fun stringIdToOwghat(timeName: Int, prayTime: PrayTimes) = when (timeName) {
+    private fun stringIdToOwghat(@StringRes timeName: Int, prayTime: PrayTimes) = when (timeName) {
         R.string.imsak -> prayTime.imsakClock
         R.string.fajr -> prayTime.fajrClock
         R.string.sunrise -> prayTime.sunriseClock

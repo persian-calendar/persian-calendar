@@ -21,12 +21,25 @@
         android:textSize="@dimen/text_size_title"
         tools:text="Calendar" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/calendarsRecyclerView"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/calendars"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:gravity="center" />
+        android:gravity="center"
+        android:paddingTop="@dimen/padding_item"
+        android:paddingBottom="@dimen/padding_item">
+
+        <com.byagowi.persiancalendar.ui.shared.CalendarsFlow
+            android:id="@+id/calendars_flow"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:flow_wrapMode="chain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/equinox"
