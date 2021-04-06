@@ -33,11 +33,12 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val enabledCalendarTypes = getEnabledCalendarTypes()
         itemsListLiveData.value = getOrderedCalendarEntities(requireContext()).map {
             CalendarItemAdapter.Item(
                 it.toString(),
                 it.type.toString(),
-                it.type in getEnabledCalendarTypes()
+                it.type in enabledCalendarTypes
             )
         }
     }
