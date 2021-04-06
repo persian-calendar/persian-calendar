@@ -17,28 +17,33 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
-class CalendarPreferenceDialog : AppCompatDialogFragment() {
+class CalendarPreferenceDialog : AppCompatDialogFragment(),
+    CalendarItemTouchCallback.ItemTouchCallback {
 
     private var itemTouchHelper: ItemTouchHelper? = null
+    private lateinit var calendarsAdapter: RecyclerListAdapter
+    private lateinit var calendarLayoutManager: LinearLayoutManager
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity as Activity
         updateStoredPreference(activity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
-        val adapter = RecyclerListAdapter(this, getOrderedCalendarEntities(activity).map {
+
+        calendarsAdapter = RecyclerListAdapter(this, getOrderedCalendarEntities(activity).map {
             RecyclerListAdapter.Item(
                 it.toString(),
                 it.type.toString(),
                 it.type in enabledCalendarTypes
             )
         })
+        calendarLayoutManager = LinearLayoutManager(context)
         val recyclerView = RecyclerView(activity).apply {
             setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            this.adapter = adapter
+            layoutManager = calendarLayoutManager
+            adapter = calendarsAdapter
         }
 
-        val callback = SimpleItemTouchHelperCallback(adapter)
+        val callback = CalendarItemTouchCallback(this)
         itemTouchHelper = ItemTouchHelper(callback).apply {
             attachToRecyclerView(recyclerView)
         }
@@ -48,7 +53,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
             setTitle(R.string.calendars_priority)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.accept) { _, _ ->
-                val ordering = adapter.result
+                val ordering = calendarsAdapter.result
                 activity.appPrefs.edit {
                     if (ordering.isNotEmpty()) {
                         putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
@@ -64,5 +69,13 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
 
     fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
         itemTouchHelper?.startDrag(viewHolder)
+    }
+
+    override fun onOrderItem(fromPos: Int, toPos: Int) {
+        calendarsAdapter.onItemMoved(fromPos, toPos)
+    }
+
+    override fun onSwipedForRemove(itemPos: Int) {
+        calendarsAdapter.onItemDismissed(itemPos)
     }
 }
