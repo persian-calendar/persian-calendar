@@ -23,18 +23,18 @@ import java.util.*
 
 class CalendarPreferenceDialog : AppCompatDialogFragment(),
     CalendarItemTouchCallback.ItemTouchCallback,
-    RecyclerListAdapter.CalendarsOrderItemCallback {
+    CalendarItemAdapter.CalendarsOrderItemCallback {
 
     private var cachedView: View? = null
     private var itemTouchHelper: ItemTouchHelper? = null
-    private lateinit var calendarsAdapter: RecyclerListAdapter
+    private lateinit var calendarsAdapter: CalendarItemAdapter
     private lateinit var calendarLayoutManager: LinearLayoutManager
-    private val itemsListLiveData: MutableLiveData<List<RecyclerListAdapter.Item>> = MutableLiveData()
+    private val itemsListLiveData: MutableLiveData<List<CalendarItemAdapter.Item>> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         itemsListLiveData.value = getOrderedCalendarEntities(requireContext()).map {
-            RecyclerListAdapter.Item(
+            CalendarItemAdapter.Item(
                 it.toString(),
                 it.type.toString(),
                 it.type in getEnabledCalendarTypes()
@@ -72,7 +72,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
 
     override fun onViewCreated(neverUsedView: View, savedInstanceState: Bundle?) {
         calendarLayoutManager = LinearLayoutManager(context)
-        calendarsAdapter = RecyclerListAdapter(this)
+        calendarsAdapter = CalendarItemAdapter(this)
 
         // in this trick we must not use first argument and use #getView
         val recyclerView = requireNotNull(view as RecyclerView) { "in #onViewCreated view must not be null`" }

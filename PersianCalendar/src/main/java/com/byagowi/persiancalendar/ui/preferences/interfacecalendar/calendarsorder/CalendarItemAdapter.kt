@@ -25,9 +25,9 @@ import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.utils.layoutInflater
 
 
-class RecyclerListAdapter(
+class CalendarItemAdapter(
     private val itemCallback: CalendarsOrderItemCallback,
-) : ListAdapter<RecyclerListAdapter.Item, RecyclerListAdapter.VH>(DEFAULT_DIFF_UTIL) {
+) : ListAdapter<CalendarItemAdapter.Item, CalendarItemAdapter.VH>(DEFAULT_DIFF_UTIL) {
 
     data class Item(val title: String, val key: String, val enabled: Boolean)
 
