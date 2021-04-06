@@ -1,11 +1,13 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
+import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
@@ -16,13 +18,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
-import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
-import com.byagowi.persiancalendar.utils.updateStoredPreference
+import com.byagowi.persiancalendar.utils.*
+import java.util.*
 
 class CalendarPreferenceDialog : AppCompatDialogFragment(),
-    CalendarItemTouchCallback.ItemTouchCallback {
+    CalendarItemTouchCallback.ItemTouchCallback,
+    RecyclerListAdapter.CalendarsOrderItemCallback {
 
     private var cachedView: View? = null
     private var itemTouchHelper: ItemTouchHelper? = null
@@ -71,7 +72,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
 
     override fun onViewCreated(neverUsedView: View, savedInstanceState: Bundle?) {
         calendarLayoutManager = LinearLayoutManager(context)
-        calendarsAdapter = RecyclerListAdapter(this, itemsListLiveData.value!!)
+        calendarsAdapter = RecyclerListAdapter(this)
 
         // in this trick we must not use first argument and use #getView
         val recyclerView = requireNotNull(view as RecyclerView) { "in #onViewCreated view must not be null`" }
@@ -85,6 +86,10 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
         itemTouchHelper = ItemTouchHelper(callback).apply {
             attachToRecyclerView(recyclerView)
         }
+
+        itemsListLiveData.observe(this) {
+            calendarsAdapter.submitList(it)
+        }
     }
 
     override fun onDestroyView() {
@@ -92,15 +97,42 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
         super.onDestroyView()
     }
 
-    fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-        itemTouchHelper?.startDrag(viewHolder)
-    }
-
     override fun onOrderItem(fromPos: Int, toPos: Int) {
-        calendarsAdapter.onItemMoved(fromPos, toPos)
+        val newList = itemsListLiveData.value!!.toMutableList()
+        Collections.swap(newList, fromPos, toPos)
+        itemsListLiveData.value = newList
     }
 
     override fun onSwipedForRemove(itemPos: Int) {
-        calendarsAdapter.onItemDismissed(itemPos)
+        itemsListLiveData.value = itemsListLiveData.value
+            ?.filterIndexed { index, _ -> index != itemPos }
+
+        // Easter egg when all are swiped
+        // Do it here because its an event and should not be store in livedata
+        if (itemsListLiveData.value.isNullOrEmpty())
+            rotateScreen()
+    }
+
+    override fun onItemToggle(itemPosition: Int) {
+        itemsListLiveData.value = itemsListLiveData.value?.mapIndexed { index, item ->
+            if (itemPosition == index)
+                item.copy(enabled = item.enabled.not())
+            else
+                item
+        }
+    }
+
+    private fun rotateScreen() {
+        runCatching {
+            val activityContentView = activity?.findViewById<View>(android.R.id.content)
+            ValueAnimator.ofFloat(0f, 360f).apply {
+                duration = 3000L
+                interpolator = AccelerateDecelerateInterpolator()
+                addUpdateListener { value ->
+                    activityContentView?.rotation = value.animatedValue as Float
+                }
+            }.start()
+        }.onFailure(logException)
+        dismiss()
     }
 }

@@ -16,93 +16,55 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
  * limitations under the License.
  */
 
-import android.animation.ValueAnimator
-import android.graphics.Color
-import android.view.MotionEvent
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.core.view.MotionEventCompat
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
-import com.byagowi.persiancalendar.ui.MainActivity
+
 import com.byagowi.persiancalendar.utils.layoutInflater
-import com.byagowi.persiancalendar.utils.logException
+
 
 class RecyclerListAdapter(
-    private val calendarPreferenceDialog: CalendarPreferenceDialog,
-    private var items: List<Item>
-) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
+    private val itemCallback: CalendarsOrderItemCallback,
+) : ListAdapter<RecyclerListAdapter.Item, RecyclerListAdapter.VH>(DEFAULT_DIFF_UTIL) {
 
     data class Item(val title: String, val key: String, val enabled: Boolean)
 
-    val result: List<String>
-        get() = items.filter { it.enabled }.map { it.key }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = VH(
         CalendarTypeItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
-    override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(position)
-
-        // Start a drag whenever the handle view it touched
-        holder.itemView.setOnTouchListener { _, event ->
-            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                calendarPreferenceDialog.onStartDrag(holder)
-            }
-            false
-        }
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        holder.bind()
     }
 
-    fun onItemMoved(fromPosition: Int, toPosition: Int) {
-        items = items.mapIndexed { i, x ->
-            // swap from and to in the new object
-            when (i) {
-                fromPosition -> items[toPosition]
-                toPosition -> items[fromPosition]
-                else -> x
-            }
-        }
-        notifyItemMoved(fromPosition, toPosition)
-    }
-
-    fun onItemDismissed(position: Int) {
-        items = items.filterIndexed { i, _ -> i != position }
-        notifyItemRemoved(position)
-
-        // Easter egg when all are swiped
-        if (items.isEmpty()) {
-            runCatching {
-                val view =
-                    (calendarPreferenceDialog.activity as? MainActivity)?.coordinator ?: return
-                ValueAnimator.ofFloat(0f, 360f).apply {
-                    duration = 3000L
-                    interpolator = AccelerateDecelerateInterpolator()
-                    addUpdateListener { value -> view.rotation = value.animatedValue as Float }
-                }.start()
-            }.onFailure(logException)
-            calendarPreferenceDialog.dismiss()
-        }
-    }
-
-    override fun getItemCount(): Int = items.size
-
-    inner class ItemViewHolder(private val binding: CalendarTypeItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
+    inner class VH(
+        private val binding: CalendarTypeItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
         init {
             binding.checkTextView.setOnClickListener {
-                val newState = !binding.checkTextView.isChecked
-                binding.checkTextView.isChecked = newState
-                items = items.mapIndexed { i, x ->
-                    if (i == layoutPosition) Item(x.title, x.key, newState) else x
-                }
+                if (adapterPosition != RecyclerView.NO_POSITION)
+                    itemCallback.onItemToggle(adapterPosition)
             }
         }
 
-        fun bind(position: Int) = binding.run {
-            checkTextView.text = items[position].title
-            checkTextView.isChecked = items[position].enabled
+        fun bind() {
+            with(getItem(adapterPosition)) {
+                binding.checkTextView.text = title
+                binding.checkTextView.isChecked = enabled
+            }
+        }
+    }
+
+    interface CalendarsOrderItemCallback {
+        fun onItemToggle(itemPosition: Int)
+    }
+
+    companion object {
+        val DEFAULT_DIFF_UTIL = object : DiffUtil.ItemCallback<Item>() {
+            override fun areItemsTheSame(oldItem: Item, newItem: Item) = oldItem.key == newItem.key
+            override fun areContentsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
         }
     }
 }
