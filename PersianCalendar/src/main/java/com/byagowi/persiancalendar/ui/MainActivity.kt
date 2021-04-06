@@ -63,10 +63,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         // Don't apply font override to English and Japanese locale
         when (language) {
-            !in listOf(LANG_EN_US, LANG_JA) -> overrideFont(
-                "SANS_SERIF",
-                getAppFont(applicationContext)
-            )
+            LANG_EN_US, LANG_JA -> Unit
+            else -> overrideFont("SANS_SERIF", getAppFont(applicationContext))
         }
 
         startEitherServiceOrWorker(this)
