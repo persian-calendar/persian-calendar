@@ -3,6 +3,9 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
 import android.app.Activity
 import android.app.Dialog
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
@@ -21,6 +24,7 @@ import com.byagowi.persiancalendar.utils.updateStoredPreference
 class CalendarPreferenceDialog : AppCompatDialogFragment(),
     CalendarItemTouchCallback.ItemTouchCallback {
 
+    private var cachedView: View? = null
     private var itemTouchHelper: ItemTouchHelper? = null
     private lateinit var calendarsAdapter: RecyclerListAdapter
     private lateinit var calendarLayoutManager: LinearLayoutManager
@@ -40,22 +44,9 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = activity as Activity
         updateStoredPreference(activity)
-        calendarLayoutManager = LinearLayoutManager(context)
-        calendarsAdapter = RecyclerListAdapter(this, itemsListLiveData.value!!)
 
-        val recyclerView = RecyclerView(activity).apply {
-            setHasFixedSize(true)
-            layoutManager = calendarLayoutManager
-            adapter = calendarsAdapter
-        }
-
-        val callback = CalendarItemTouchCallback(this)
-        itemTouchHelper = ItemTouchHelper(callback).apply {
-            attachToRecyclerView(recyclerView)
-        }
-
-        return AlertDialog.Builder(activity).apply {
-            setView(recyclerView)
+        return AlertDialog.Builder(requireContext()).apply {
+            setView(onCreateView(LayoutInflater.from(context), null, savedInstanceState))
             setTitle(R.string.calendars_priority)
             setNegativeButton(R.string.cancel, null)
             setPositiveButton(R.string.accept) { _, _ ->
@@ -71,6 +62,34 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
                 }
             }
         }.create()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        cachedView ?: RecyclerView(requireContext()).also { cachedView = it }
+
+    override fun getView(): View? = cachedView
+
+    override fun onViewCreated(neverUsedView: View, savedInstanceState: Bundle?) {
+        calendarLayoutManager = LinearLayoutManager(context)
+        calendarsAdapter = RecyclerListAdapter(this, itemsListLiveData.value!!)
+
+        // in this trick we must not use first argument and use #getView
+        val recyclerView = requireNotNull(view as RecyclerView) { "in #onViewCreated view must not be null`" }
+        with(recyclerView) {
+            setHasFixedSize(true)
+            layoutManager = calendarLayoutManager
+            adapter = calendarsAdapter
+        }
+
+        val callback = CalendarItemTouchCallback(this)
+        itemTouchHelper = ItemTouchHelper(callback).apply {
+            attachToRecyclerView(recyclerView)
+        }
+    }
+
+    override fun onDestroyView() {
+        cachedView = null
+        super.onDestroyView()
     }
 
     fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
