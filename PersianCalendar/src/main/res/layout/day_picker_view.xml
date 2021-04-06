@@ -39,6 +39,7 @@
                 android:id="@+id/dayPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layerType="hardware"
                 android:textSize="@dimen/text_size_description" />
 
         </LinearLayout>
@@ -63,6 +64,7 @@
                 android:id="@+id/monthPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layerType="hardware"
                 android:textSize="@dimen/text_size_description" />
 
         </LinearLayout>
@@ -87,6 +89,7 @@
                 android:id="@+id/yearPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layerType="hardware"
                 android:textSize="@dimen/text_size_description" />
 
         </LinearLayout>
