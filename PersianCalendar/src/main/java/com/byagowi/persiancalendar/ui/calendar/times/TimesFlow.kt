@@ -30,8 +30,7 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
         toggle()
     }
 
-    @StringRes
-    private val timeNames = listOf(
+    private val timeNames = listOf<@StringRes Int>(
         R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
         R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
     )
@@ -55,13 +54,13 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
 
     var isExpanded = true
     fun toggle() {
-        val visibility = if (isExpanded) View.GONE else View.VISIBLE
+        isExpanded = !isExpanded
+        val visibility = if (isExpanded) View.VISIBLE else View.GONE
         times.forEach {
             when (it.first) {
                 R.string.fajr, R.string.dhuhr, R.string.maghrib -> Unit
                 else -> it.second.root.visibility = visibility
             }
         }
-        isExpanded = !isExpanded
     }
 }
