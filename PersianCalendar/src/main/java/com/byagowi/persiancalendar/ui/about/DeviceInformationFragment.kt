@@ -29,6 +29,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInformationRowBinding
@@ -56,7 +57,11 @@ class DeviceInformationFragment : Fragment() {
     ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).also { binding ->
         val mainActivity = activity as MainActivity
 
-        mainActivity.setTitleAndSubtitle(getString(R.string.device_info), "")
+        with(binding.appBar.toolbar) {
+            setTitle(R.string.device_info)
+            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationOnClickListener { findNavController().navigateUp() }
+        }
 
         circularRevealFromMiddle(binding.circularReveal)
 
