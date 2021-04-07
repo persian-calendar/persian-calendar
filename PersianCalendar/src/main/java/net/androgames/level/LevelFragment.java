@@ -49,9 +49,13 @@ public class LevelFragment extends Fragment {
         final MainActivity mainActivity = (MainActivity) getActivity();
         assert mainActivity != null;
         activity = mainActivity;
-        mainActivity.setTitleAndSubtitle(getString(R.string.level), "");
 
         final FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
+
+        binding.appBar.toolbar.setTitle(R.string.level);
+        binding.appBar.toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        binding.appBar.toolbar.setNavigationOnClickListener(v -> NavHostFragment.findNavController(LevelFragment.this).navigateUp());
+
         provider = new OrientationProvider(activity, binding.levelView);
 
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
