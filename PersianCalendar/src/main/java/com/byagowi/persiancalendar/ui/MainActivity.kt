@@ -13,7 +13,6 @@ import androidx.activity.addCallback
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -39,9 +38,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var creationDateJdn: Long = 0
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
-
-    val coordinator: CoordinatorLayout
-        get() = binding.coordinator
 
     private var clickedItem = 0
 
@@ -79,7 +75,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        setSupportActionBar(binding.toolbar)
 
         obtainNavHost() // sake of initialize NavHost
 
@@ -145,22 +140,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         when {
             appPrefs.getString(PREF_APP_LANGUAGE, null) == null &&
-                    !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false) -> {
+                !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false) -> {
                 changeLangSnackbar().show()
                 appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
             }
-        }
-
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> binding.appbarLayout.outlineProvider =
-                null
         }
 
         creationDateJdn = getTodayJdn()
 
         when {
             mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-                    getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar -> outDatedSnackbar().show()
+                getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar -> outDatedSnackbar().show()
         }
 
         applyAppLanguage(this)
@@ -273,7 +263,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
                             when {
                                 currentHolidays.isEmpty() || currentHolidays.size == 1 &&
-                                        "iran_holidays" in currentHolidays -> putStringSet(
+                                    "iran_holidays" in currentHolidays -> putStringSet(
                                     PREF_HOLIDAY_TYPES,
                                     setOf("afghanistan_holidays")
                                 )
@@ -320,8 +310,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         when {
             key == PREF_SHOW_DEVICE_CALENDAR_EVENTS &&
-                    sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
-                    && ActivityCompat.checkSelfPermission(
+                sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
+                && ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED -> askForCalendarPermission(this)
         }
@@ -332,7 +322,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         when {
             key == PREF_NOTIFY_DATE &&
-                    sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false -> {
+                sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false -> {
                 stopService(Intent(this, ApplicationService::class.java))
                 startEitherServiceOrWorker(applicationContext)
             }
@@ -430,7 +420,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun changeLangSnackbar() =
-        Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
+        Snackbar.make(binding.root, "✖  Change app language?", 7000).apply {
             view.layoutDirection = View.LAYOUT_DIRECTION_LTR
             view.setOnClickListener { dismiss() }
             setAction("Settings") {
@@ -442,7 +432,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
     private fun outDatedSnackbar() =
-        Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
+        Snackbar.make(binding.root, getString(R.string.outdated_app), 10000).apply {
             setAction(getString(R.string.update)) {
                 bringMarketPage(this@MainActivity)
             }
@@ -450,7 +440,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
     private fun drawerToggle() = object : ActionBarDrawerToggle(
-        this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
+        this, binding.drawer, null, R.string.openDrawer, R.string.closeDrawer
     ) {
         val slidingDirection = when {
             isRTL(this@MainActivity) -> -1
@@ -463,7 +453,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) = binding.apply {
-            appMainLayout.translationX =
+            navHostContainer.translationX =
                 slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
             drawer.bringChildToFront(drawerView)
             drawer.requestLayout()
