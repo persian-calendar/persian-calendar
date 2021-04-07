@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
+import com.byagowi.persiancalendar.ui.calendar.CalendarNavIconListener
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -32,6 +33,7 @@ import com.google.android.material.snackbar.Snackbar
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
+    CalendarNavIconListener,
     NavigationView.OnNavigationItemSelectedListener {
 
     private var creationDateJdn: Long = 0
@@ -427,12 +429,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         return true
     }
 
-    fun setTitleAndSubtitle(title: String, subtitle: String): Unit = supportActionBar?.let {
-        it.title = title
-        it.subtitle = subtitle
-    } ?: Unit
-
-
     private fun changeLangSnackbar() =
         Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
             view.layoutDirection = View.LAYOUT_DIRECTION_LTR
@@ -480,5 +476,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 clickedItem = 0
             }
         }
+    }
+
+    override fun onBurgerMenuClicked() {
+        binding.drawer.openDrawer(GravityCompat.START)
     }
 }
