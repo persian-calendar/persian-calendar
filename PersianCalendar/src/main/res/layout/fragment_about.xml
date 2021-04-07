@@ -11,6 +11,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
         <LinearLayout
             style="@style/AboutCard"
             android:background="?attr/colorCard"
