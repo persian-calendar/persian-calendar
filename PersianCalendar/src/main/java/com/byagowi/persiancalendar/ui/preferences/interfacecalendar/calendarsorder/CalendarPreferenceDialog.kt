@@ -51,19 +51,22 @@ class CalendarPreferenceDialog : AppCompatDialogFragment(),
             setView(onCreateView(LayoutInflater.from(context), null, savedInstanceState))
             setTitle(R.string.calendars_priority)
             setNegativeButton(R.string.cancel, null)
-            setPositiveButton(R.string.accept) { _, _ ->
-                val ordering = itemsListLiveData.value!!
-                activity.appPrefs.edit {
-                    if (ordering.isNotEmpty()) {
-                        putString(PREF_MAIN_CALENDAR_KEY, ordering[0].toString())
-                        putString(
-                            PREF_OTHER_CALENDARS_KEY,
-                            ordering.subList(1, ordering.size).joinToString(",")
-                        )
-                    }
-                }
-            }
+            setPositiveButton(R.string.accept) { _, _ -> saveChanges() }
         }.create()
+    }
+
+    private fun saveChanges() {
+        val items = itemsListLiveData.value ?: return
+        val activeItems = items.filter { it.enabled }.map { it.key }
+        activity?.appPrefs?.edit {
+            if (activeItems.isNotEmpty()) {
+                putString(PREF_MAIN_CALENDAR_KEY, activeItems[0])
+                putString(
+                    PREF_OTHER_CALENDARS_KEY,
+                    activeItems.subList(1, activeItems.size).joinToString(",")
+                )
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
