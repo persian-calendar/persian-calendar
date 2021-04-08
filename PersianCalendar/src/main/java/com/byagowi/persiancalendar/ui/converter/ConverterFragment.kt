@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
 import com.byagowi.persiancalendar.utils.getTodayJdn
-import com.byagowi.persiancalendar.utils.setupUpNavigationOnToolbar
+import com.byagowi.persiancalendar.utils.setupUpNavigation
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
@@ -18,7 +18,7 @@ class ConverterFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
         with(appBar.toolbar) {
-            setupUpNavigationOnToolbar(this)
+            setupUpNavigation()
             setTitle(R.string.date_converter)
         }
 

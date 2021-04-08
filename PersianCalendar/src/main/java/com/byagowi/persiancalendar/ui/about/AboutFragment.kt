@@ -41,7 +41,7 @@ class AboutFragment : Fragment() {
 
         with(binding.appBar.toolbar) {
             setTitle(R.string.about)
-            setupUpNavigationOnToolbar(this)
+            setupUpNavigation()
             inflateMenu(R.menu.about_menu_buttons)
             setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {

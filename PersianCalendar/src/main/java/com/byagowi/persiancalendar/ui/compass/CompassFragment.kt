@@ -21,7 +21,7 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.utils.setupUpNavigationOnToolbar
+import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.praytimes.Coordinate
 import kotlin.math.abs
@@ -101,7 +101,7 @@ class CompassFragment : Fragment() {
             with(appBar.toolbar) {
                 setTitle(R.string.compass)
                 subtitle = getCityName(mainActivity, true)
-                setupUpNavigationOnToolbar(this)
+                setupUpNavigation()
             }
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)

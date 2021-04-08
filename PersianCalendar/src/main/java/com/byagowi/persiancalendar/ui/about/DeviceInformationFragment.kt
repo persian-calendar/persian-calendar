@@ -55,7 +55,7 @@ class DeviceInformationFragment : Fragment() {
 
         with(binding.appBar.toolbar) {
             setTitle(R.string.device_info)
-            setupUpNavigationOnToolbar(this)
+            setupUpNavigation()
         }
 
         circularRevealFromMiddle(binding.circularReveal)

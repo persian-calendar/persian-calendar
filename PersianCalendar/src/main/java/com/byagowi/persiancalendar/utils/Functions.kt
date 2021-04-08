@@ -630,8 +630,8 @@ val Number.dp: Int
 
 val logException = fun(e: Throwable) { Log.e("Persian Calendar", e.message, e) }
 
-fun setupUpNavigationOnToolbar(toolbar: Toolbar) {
-    toolbar.navigationIcon = DrawerArrowDrawable(toolbar.context).apply { progress = 1f }
-    toolbar.setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
-    toolbar.setNavigationOnClickListener { toolbar.findNavController().navigateUp() }
+fun Toolbar.setupUpNavigation() {
+    navigationIcon = DrawerArrowDrawable(context).apply { progress = 1f }
+    setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
+    setNavigationOnClickListener { findNavController().navigateUp() }
 }

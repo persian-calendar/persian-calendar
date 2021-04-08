@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
-import com.byagowi.persiancalendar.utils.setupUpNavigationOnToolbar
+import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -23,7 +23,7 @@ class PreferencesFragment : Fragment() {
     ) = FragmentSettingsBinding.inflate(inflater, container, false).apply {
         with(appBar.toolbar) {
             setTitle(R.string.settings)
-            setupUpNavigationOnToolbar(this)
+            setupUpNavigation()
         }
 
         val tabs = listOf(
