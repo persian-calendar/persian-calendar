@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="top"
         app:itemIconTint="?attr/normalTabTextColor"
-        app:itemTextColor="?attr/normalTabTextColor" />
+        app:itemTextColor="?attr/normalTabTextColor"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </com.google.android.material.circularreveal.coordinatorlayout.CircularRevealCoordinatorLayout>
-
