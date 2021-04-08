@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
+import com.byagowi.persiancalendar.utils.setupUpNavigationOnToolbar
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -22,10 +22,8 @@ class PreferencesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentSettingsBinding.inflate(inflater, container, false).apply {
         with(appBar.toolbar) {
-            setNavigationIcon(R.drawable.ic_arrow_back)
-            setNavigationContentDescription(R.string.navigate_back_button_label)
-            setNavigationOnClickListener { findNavController().navigateUp() }
             setTitle(R.string.settings)
+            setupUpNavigationOnToolbar(this)
         }
 
         val tabs = listOf(

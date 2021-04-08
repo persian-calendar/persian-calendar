@@ -21,10 +21,13 @@ import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
@@ -626,3 +629,9 @@ val Number.dp: Int
     get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
 
 val logException = fun(e: Throwable) { Log.e("Persian Calendar", e.message, e) }
+
+fun setupUpNavigationOnToolbar(toolbar: Toolbar) {
+    toolbar.navigationIcon = DrawerArrowDrawable(toolbar.context).apply { progress = 1f }
+    toolbar.setNavigationContentDescription(R.string.navigate_back_button_label)
+    toolbar.setNavigationOnClickListener { toolbar.findNavController().navigateUp() }
+}

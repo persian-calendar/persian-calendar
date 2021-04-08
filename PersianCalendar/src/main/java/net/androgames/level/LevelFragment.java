@@ -19,6 +19,8 @@ import com.byagowi.persiancalendar.ui.MainActivity;
 
 import net.androgames.level.orientation.OrientationProvider;
 
+import static com.byagowi.persiancalendar.utils.FunctionsKt.setupUpNavigationOnToolbar;
+
 /*
  *  This file is part of Level (an Android Bubble Level).
  *  <https://github.com/avianey/Level>
@@ -53,8 +55,7 @@ public class LevelFragment extends Fragment {
         final FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
 
         binding.appBar.toolbar.setTitle(R.string.level);
-        binding.appBar.toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        binding.appBar.toolbar.setNavigationContentDescription(R.string.navigate_back_button_label);
+        setupUpNavigationOnToolbar(binding.appBar.toolbar);
         binding.appBar.toolbar.setNavigationOnClickListener(v -> NavHostFragment.findNavController(LevelFragment.this).navigateUp());
 
         provider = new OrientationProvider(activity, binding.levelView);

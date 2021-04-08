@@ -14,7 +14,6 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
@@ -22,6 +21,7 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.setupUpNavigationOnToolbar
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.praytimes.Coordinate
 import kotlin.math.abs
@@ -101,9 +101,7 @@ class CompassFragment : Fragment() {
             with(appBar.toolbar) {
                 setTitle(R.string.compass)
                 subtitle = getCityName(mainActivity, true)
-                setNavigationIcon(R.drawable.ic_arrow_back)
-                setNavigationContentDescription(R.string.navigate_back_button_label)
-                setNavigationOnClickListener { findNavController().navigateUp() }
+                setupUpNavigationOnToolbar(this)
             }
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
