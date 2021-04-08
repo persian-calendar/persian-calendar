@@ -17,6 +17,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import com.byagowi.persiancalendar.*
@@ -33,7 +35,7 @@ import com.google.android.material.snackbar.Snackbar
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     CalendarNavIconListener,
-    NavigationView.OnNavigationItemSelectedListener {
+    NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
 
     private var creationDateJdn: Long = 0
     private var settingHasChanged = false
@@ -90,10 +92,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.drawer.addDrawerListener(drawerToggle().also { it.syncState() })
 
-        binding.navigation.menu.findItem(R.id.calendar)?.also {
-            it.isCheckable = true
-            it.isChecked = true
-        }
+        obtainNavHost().navController.addOnDestinationChangedListener(this)
         intent?.run {
             val newDestinationId = when (action) {
                 "COMPASS" -> R.id.compass
@@ -140,7 +139,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         when {
             appPrefs.getString(PREF_APP_LANGUAGE, null) == null &&
-                !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false) -> {
+                    !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false) -> {
                 changeLangSnackbar().show()
                 appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
             }
@@ -150,7 +149,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         when {
             mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-                getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar -> outDatedSnackbar().show()
+                    getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar -> outDatedSnackbar().show()
         }
 
         applyAppLanguage(this)
@@ -168,12 +167,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
     }
 
-    private fun navigateTo(@IdRes id: Int) {
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
         binding.navigation.menu.findItem(
-            when (id) {
+            when (destination.id) {
                 // We don't have a menu entry for compass, so
                 R.id.level -> R.id.compass
-                else -> id
+                else -> destination.id
             }
         )?.also {
             it.isCheckable = true
@@ -187,7 +190,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 settingHasChanged = false // reset for the next time
             }
         }
+    }
 
+    private fun navigateTo(@IdRes id: Int) {
         obtainNavHost().navController.navigate(
             id,
             null,
@@ -263,7 +268,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
                             when {
                                 currentHolidays.isEmpty() || currentHolidays.size == 1 &&
-                                    "iran_holidays" in currentHolidays -> putStringSet(
+                                        "iran_holidays" in currentHolidays -> putStringSet(
                                     PREF_HOLIDAY_TYPES,
                                     setOf("afghanistan_holidays")
                                 )
@@ -310,8 +315,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         when {
             key == PREF_SHOW_DEVICE_CALENDAR_EVENTS &&
-                sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
-                && ActivityCompat.checkSelfPermission(
+                    sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
+                    && ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED -> askForCalendarPermission(this)
         }
@@ -322,7 +327,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         when {
             key == PREF_NOTIFY_DATE &&
-                sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false -> {
+                    sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false -> {
                 stopService(Intent(this, ApplicationService::class.java))
                 startEitherServiceOrWorker(applicationContext)
             }
