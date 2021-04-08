@@ -65,15 +65,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             it.weight = 1f
         }
     }
-    private val colorFrame = object : FrameLayout(context) {
-        val checker = createCheckerBoard(20)
-        val rect: Rect = Rect()
-        override fun onDraw(canvas: Canvas?) {
-            super.onDraw(canvas)
-            getDrawingRect(rect)
-            canvas?.drawRect(rect, checker)
-        }
-    }
+    private val colorFrame = createColorFrameLayout(createCheckerBoard(20))
     private var colorCodeVisibility = false
 
     val pickerColor: Int
@@ -84,6 +76,16 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     private val Number.dp: Int
         get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+
+    private fun createColorFrameLayout(paint: Paint) = object : FrameLayout(context) {
+        val rect = Rect()
+        override fun onDraw(canvas: Canvas) {
+            super.onDraw(canvas)
+            getDrawingRect(rect)
+            rect.inset(1.dp, 1.dp)
+            canvas.drawRect(rect, paint)
+        }
+    }
 
     init {
         orientation = VERTICAL
@@ -132,9 +134,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
 
     fun setColorsToPick(@ColorInt colors: List<Long>) {
         colorsToPick.removeAllViews()
-
-        val context = context ?: return
-
+        val checkerBoard = createCheckerBoard(12)
         colors.map(Long::toInt).forEach { color ->
             val view = View(context).apply {
                 setBackgroundColor(color)
@@ -142,16 +142,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
                 )
             }
-
-            val checkerBoard = createCheckerBoard(12)
-            val frameLayout = object : FrameLayout(context) {
-                val rect: Rect = Rect()
-                override fun onDraw(canvas: Canvas?) {
-                    super.onDraw(canvas)
-                    getDrawingRect(rect)
-                    canvas?.drawRect(rect, checkerBoard)
-                }
-            }.apply {
+            val frameLayout = createColorFrameLayout(checkerBoard).apply {
                 setBackgroundColor(Color.LTGRAY)
                 layoutParams = LayoutParams(40.dp, 40.dp).apply {
                     setMargins(5.dp, 10.dp, 5.dp, 5.dp)
@@ -170,8 +161,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         )
         colorResultView.apply {
             setBackgroundColor(color)
-            text =
-                if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
+            text = if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
             setTextColor(color xor 0xFFFFFF)
         }
     }
@@ -194,9 +184,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
-        colorFrame.layoutParams = LayoutParams(
-            seekBars.measuredHeight, LayoutParams.MATCH_PARENT
-        )
+        colorFrame.layoutParams = LayoutParams(seekBars.measuredHeight, LayoutParams.MATCH_PARENT)
     }
 }
 
