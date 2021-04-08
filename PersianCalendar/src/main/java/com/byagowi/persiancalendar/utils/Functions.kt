@@ -146,16 +146,15 @@ fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View?, T : C
     }
 }
 
-fun getCalendarNameAbbr(date: AbstractDate): String {
-    if (calendarTypesTitleAbbr.size < 3) return ""
-    // It should match with calendar_type array
-    return when (date) {
-        is PersianDate -> calendarTypesTitleAbbr[0]
-        is IslamicDate -> calendarTypesTitleAbbr[1]
-        is CivilDate -> calendarTypesTitleAbbr[2]
-        else -> ""
+// It should match with calendar_type_abbr array
+fun getCalendarNameAbbr(date: AbstractDate) = calendarTypesTitleAbbr.getOrNull(
+    when (date) {
+        is PersianDate -> 0
+        is IslamicDate -> 1
+        is CivilDate -> 2
+        else -> -1
     }
-}
+) ?: ""
 
 fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
     prefs.getString(PREF_THEME, null)?.takeIf { it != "SystemDefault" }
@@ -276,12 +275,15 @@ private fun setAlarm(
     }
 }
 
-fun getOrderedCalendarEntities(context: Context): List<CalendarTypeItem> {
+fun getOrderedCalendarEntities(
+    context: Context, abbreviation: Boolean = false
+): List<CalendarTypeItem> {
     applyAppLanguage(context)
-    val typeTitleMap = context.resources.getStringArray(R.array.calendar_values)
-        .map(CalendarType::valueOf)
-        .zip(context.resources.getStringArray(R.array.calendar_type))
-        .toMap()
+    val typeTitleMap =
+        context.resources.getStringArray(R.array.calendar_values)
+            .map(CalendarType::valueOf)
+            .zip(context.resources.getStringArray(if (abbreviation) R.array.calendar_type_abbr else R.array.calendar_type))
+            .toMap()
     return getOrderedCalendarTypes().mapNotNull {
         typeTitleMap[it]?.run { CalendarTypeItem(it, this) }
     }

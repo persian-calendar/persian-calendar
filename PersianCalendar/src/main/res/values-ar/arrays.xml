@@ -43,9 +43,9 @@
     </string-array>
 
     <string-array name="calendar_type_abbr">
-        <item>ه.ش</item>
-        <item>ه.</item>
-        <item>م.</item>
+        <item>فارسي</item>
+        <item>هجري</item>
+        <item>ميلادي</item>
     </string-array>
 
     <string-array name="week_days">
