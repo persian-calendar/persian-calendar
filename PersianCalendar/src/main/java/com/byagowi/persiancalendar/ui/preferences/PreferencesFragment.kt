@@ -23,6 +23,7 @@ class PreferencesFragment : Fragment() {
     ) = FragmentSettingsBinding.inflate(inflater, container, false).apply {
         with(appBar.toolbar) {
             setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationContentDescription(R.string.navigate_back_button_label)
             setNavigationOnClickListener { findNavController().navigateUp() }
             setTitle(R.string.settings)
         }

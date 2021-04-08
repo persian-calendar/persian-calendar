@@ -229,5 +229,7 @@
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="select_date">انتخاب تاریخ</string>
     <string name="age_widget_placeholder">%1$s روز (~%2$s سال، %3$s ماه، %4$s روز)</string>
+    <string name="menu_button_label">Menu</string>
+    <string name="navigate_back_button_label">Back</string>
 
 </resources>

@@ -41,6 +41,7 @@ class AboutFragment : Fragment() {
 
         with(binding.appBar.toolbar) {
             setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationContentDescription(R.string.navigate_back_button_label)
             setNavigationOnClickListener { findNavController().navigateUp() }
             setTitle(R.string.about)
             inflateMenu(R.menu.about_menu_buttons)

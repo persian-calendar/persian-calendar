@@ -195,6 +195,7 @@ class CalendarFragment : Fragment(),
 
         mainBinding?.appBar?.let { appbar ->
             appbar.toolbar.setNavigationIcon(R.drawable.ic_burger_menu)
+            appbar.toolbar.setNavigationContentDescription(R.string.menu_button_label)
             appbar.toolbar.setNavigationOnClickListener { navIconListener?.onBurgerMenuClicked() }
             appbar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
             setupToolbarMenu(appbar.toolbar.menu)

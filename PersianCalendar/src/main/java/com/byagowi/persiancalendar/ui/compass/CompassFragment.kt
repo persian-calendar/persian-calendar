@@ -102,6 +102,7 @@ class CompassFragment : Fragment() {
                 setTitle(R.string.compass)
                 subtitle = getCityName(mainActivity, true)
                 setNavigationIcon(R.drawable.ic_arrow_back)
+                setNavigationContentDescription(R.string.navigate_back_button_label)
                 setNavigationOnClickListener { findNavController().navigateUp() }
             }
 

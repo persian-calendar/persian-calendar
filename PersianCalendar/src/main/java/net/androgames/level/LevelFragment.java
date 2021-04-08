@@ -54,6 +54,7 @@ public class LevelFragment extends Fragment {
 
         binding.appBar.toolbar.setTitle(R.string.level);
         binding.appBar.toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        binding.appBar.toolbar.setNavigationContentDescription(R.string.navigate_back_button_label);
         binding.appBar.toolbar.setNavigationOnClickListener(v -> NavHostFragment.findNavController(LevelFragment.this).navigateUp());
 
         provider = new OrientationProvider(activity, binding.levelView);

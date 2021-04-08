@@ -60,6 +60,7 @@ class DeviceInformationFragment : Fragment() {
         with(binding.appBar.toolbar) {
             setTitle(R.string.device_info)
             setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationContentDescription(R.string.navigate_back_button_label)
             setNavigationOnClickListener { findNavController().navigateUp() }
         }
 
