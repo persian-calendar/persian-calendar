@@ -232,6 +232,5 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="age_widget_title">Widget title</string>
     <string name="select_date">Select date</string>
     <string name="age_widget_placeholder">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
-    <string name="navigate_back_button_label">Back</string>
 
 </resources>

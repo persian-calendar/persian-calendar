@@ -447,7 +447,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
     fun createDrawerToggleListener(toolbar: Toolbar) = ActionBarDrawerToggle(
-        this, binding.drawer, toolbar, R.string.openDrawer, R.string.closeDrawer
+        this, binding.drawer, toolbar,
+        androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description, R.string.closeDrawer
     ).also {
         binding.drawer.addDrawerListener(it)
         it.syncState()

@@ -632,6 +632,6 @@ val logException = fun(e: Throwable) { Log.e("Persian Calendar", e.message, e) }
 
 fun setupUpNavigationOnToolbar(toolbar: Toolbar) {
     toolbar.navigationIcon = DrawerArrowDrawable(toolbar.context).apply { progress = 1f }
-    toolbar.setNavigationContentDescription(R.string.navigate_back_button_label)
+    toolbar.setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
     toolbar.setNavigationOnClickListener { toolbar.findNavController().navigateUp() }
 }

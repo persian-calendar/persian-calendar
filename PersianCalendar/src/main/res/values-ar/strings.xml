@@ -265,6 +265,5 @@
     <string name="age_widget_title">عنوان المصغر</string>
     <string name="select_date">اختيار التاريخ</string>
     <string name="age_widget_placeholder">%1$s يوم (~%2$s سنة، %3$s شهر، %4$s يوم)</string>
-    <string name="navigate_back_button_label">Back</string>
 
 </resources>
