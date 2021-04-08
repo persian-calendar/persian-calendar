@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
 import com.byagowi.persiancalendar.utils.getTodayJdn
 
@@ -17,9 +17,12 @@ class ConverterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
-        (activity as? MainActivity)?.setTitleAndSubtitle(
-            getString(R.string.date_converter), ""
-        )
+        with(appBar.toolbar) {
+            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationContentDescription(R.string.navigate_back_button_label)
+            setNavigationOnClickListener { findNavController().navigateUp() }
+            setTitle(R.string.date_converter)
+        }
 
         calendarsView.toggle()
         calendarsView.hideMoreIcon()

@@ -14,6 +14,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
@@ -78,12 +79,14 @@ class CompassFragment : Fragment() {
         }
     }
 
-    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) =
-        Snackbar.make(mainActivity.coordinator, messageId, duration).apply {
+    private fun showLongSnackbar(@StringRes messageId: Int, duration: Int) {
+        val rootView = view ?: return
+        Snackbar.make(rootView, messageId, duration).apply {
             view.setOnClickListener { dismiss() }
             view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
-        }.setAnchorView(binding?.fab)
-            .show()
+            anchorView = binding?.fab
+        }.show()
+    }
 
     private lateinit var mainActivity: MainActivity
 
@@ -95,10 +98,13 @@ class CompassFragment : Fragment() {
         val binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
             coordinate = getCoordinate(mainActivity)
 
-            mainActivity.setTitleAndSubtitle(
-                getString(R.string.compass),
-                getCityName(mainActivity, true)
-            )
+            with(appBar.toolbar) {
+                setTitle(R.string.compass)
+                subtitle = getCityName(mainActivity, true)
+                setNavigationIcon(R.drawable.ic_arrow_back)
+                setNavigationContentDescription(R.string.navigate_back_button_label)
+                setNavigationOnClickListener { findNavController().navigateUp() }
+            }
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
             bottomAppbar.setOnMenuItemClickListener { item ->

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.SpannableString
@@ -64,6 +65,7 @@ class CalendarFragment : Fragment() {
     private var todayButton: MenuItem? = null
     private lateinit var mainActivity: MainActivity
     private val initialDate = getTodayOfCalendar(mainCalendar)
+    private var navIconListener: CalendarNavIconListener? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -78,6 +80,7 @@ class CalendarFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        navIconListener = context as? CalendarNavIconListener
         activity?.onBackPressedDispatcher?.addCallback(this) {
             if (closeSearchIfOpen().not()) {
                 isEnabled = false
@@ -155,7 +158,7 @@ class CalendarFragment : Fragment() {
             onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
             onMonthSelected = fun() {
                 selectedMonth.let {
-                    mainActivity.setTitleAndSubtitle(getMonthName(it), formatNumber(it.year))
+                    updateToolbar(getMonthName(it), formatNumber(it.year))
                     todayButton?.isVisible =
                         it.year != initialDate.year || it.month != initialDate.month
                 }
@@ -188,13 +191,26 @@ class CalendarFragment : Fragment() {
 
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
-        setHasOptionsMenu(true)
+        mainBinding?.appBar?.let { appbar ->
+            appbar.toolbar.setNavigationIcon(R.drawable.ic_burger_menu)
+            appbar.toolbar.setNavigationContentDescription(R.string.menu_button_label)
+            appbar.toolbar.setNavigationOnClickListener { navIconListener?.onBurgerMenuClicked() }
+            appbar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
+            setupToolbarMenu(appbar.toolbar.menu)
+            appbar.toolbar.setOnMenuItemClickListener { item ->
+                when (item?.itemId) {
+                    R.id.go_to -> openGoToDayDialog()
+                    R.id.add_event -> addEventOnCalendar(selectedJdn)
+                    R.id.shift_work -> openShiftWorkDialog()
+                    R.id.month_overview -> openMonthOverView()
+                }
+                true
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) appbar.appbarLayout.outlineProvider = null
+        }
 
-        getTodayOfCalendar(mainCalendar).also {
-            mainActivity.setTitleAndSubtitle(
-                getMonthName(it),
-                formatNumber(it.year)
-            )
+        getTodayOfCalendar(mainCalendar).let { today ->
+            updateToolbar(getMonthName(today), formatNumber(today.year))
         }
     }
 
@@ -233,6 +249,13 @@ class CalendarFragment : Fragment() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+        }
+    }
+
+    private fun updateToolbar(title: String, subTitle: String) {
+        with(mainBinding?.appBar?.toolbar ?: return) {
+            this.title = title
+            this.subtitle = subTitle
         }
     }
 
@@ -462,11 +485,7 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.calendar_menu_buttons, menu)
-
+    private fun setupToolbarMenu(menu: Menu) {
         todayButton = menu.findItem(R.id.today_button).apply {
             isVisible = false
             setOnMenuItemClickListener {
@@ -510,29 +529,31 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.go_to -> SelectDayDialog.newInstance(selectedJdn).apply {
-                onSuccess = fun(jdn: Long) { bringDate(jdn) }
-            }.show(
-                childFragmentManager,
-                SelectDayDialog::class.java.name
-            )
-            R.id.add_event -> addEventOnCalendar(selectedJdn)
-            R.id.shift_work -> ShiftWorkDialog.newInstance(selectedJdn).apply {
-                onSuccess = fun() {
-                    updateStoredPreference(mainActivity)
-                    mainActivity.restartActivity()
-                }
-            }.show(
-                childFragmentManager,
-                ShiftWorkDialog::class.java.name
-            )
-            R.id.month_overview -> MonthOverviewDialog
-                .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn())
-                .show(childFragmentManager, MonthOverviewDialog::class.java.name)
-        }
-        return true
+    private fun openGoToDayDialog() {
+        SelectDayDialog.newInstance(selectedJdn).apply {
+            onSuccess = fun(jdn: Long) { bringDate(jdn) }
+        }.show(
+            childFragmentManager,
+            SelectDayDialog::class.java.name
+        )
+    }
+
+    private fun openShiftWorkDialog() {
+        ShiftWorkDialog.newInstance(selectedJdn).apply {
+            onSuccess = fun() {
+                updateStoredPreference(mainActivity)
+                mainActivity.restartActivity()
+            }
+        }.show(
+            childFragmentManager,
+            ShiftWorkDialog::class.java.name
+        )
+    }
+
+    private fun openMonthOverView() {
+        MonthOverviewDialog
+            .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn())
+            .show(childFragmentManager, MonthOverviewDialog::class.java.name)
     }
 
     /**

@@ -7,7 +7,9 @@ import android.os.Build
 import android.os.Bundle
 import android.text.util.Linkify
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -16,11 +18,10 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
@@ -36,11 +37,24 @@ class AboutFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val mainActivity = activity as MainActivity
-        mainActivity.setTitleAndSubtitle(getString(R.string.about), "")
-        setHasOptionsMenu(true)
-
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
+
+        with(binding.appBar.toolbar) {
+            setNavigationIcon(R.drawable.ic_arrow_back)
+            setNavigationContentDescription(R.string.navigate_back_button_label)
+            setNavigationOnClickListener { findNavController().navigateUp() }
+            setTitle(R.string.about)
+            inflateMenu(R.menu.about_menu_buttons)
+            setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.deviceInformation ->
+                        findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
+                    R.id.share ->
+                        shareApplication()
+                }
+                true
+            }
+        }
 
         // version
         binding.version.text = getString(R.string.version).format(appVersionList.joinToString("\n"))
@@ -219,12 +233,6 @@ App Version Code: ${appVersionList[0]}"""
             }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        menu.clear()
-        inflater.inflate(R.menu.about_menu_buttons, menu)
-    }
-
     private fun shareApplication() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
             runCatching {
@@ -239,13 +247,5 @@ App Version Code: ${appVersionList[0]}"""
             }
                 .onFailure(logException)
                 .getOrElse { bringMarketPage(activity ?: return) }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.deviceInformation -> findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
-            R.id.share -> shareApplication()
-        }
-        return true
     }
 }

@@ -13,17 +13,19 @@ import androidx.activity.addCallback
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
+import com.byagowi.persiancalendar.ui.calendar.CalendarNavIconListener
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -32,14 +34,12 @@ import com.google.android.material.snackbar.Snackbar
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    NavigationView.OnNavigationItemSelectedListener {
+    CalendarNavIconListener,
+    NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
 
     private var creationDateJdn: Long = 0
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
-
-    val coordinator: CoordinatorLayout
-        get() = binding.coordinator
 
     private var clickedItem = 0
 
@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
-        setSupportActionBar(binding.toolbar)
 
         obtainNavHost() // sake of initialize NavHost
 
@@ -93,10 +92,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.drawer.addDrawerListener(drawerToggle().also { it.syncState() })
 
-        binding.navigation.menu.findItem(R.id.calendar)?.also {
-            it.isCheckable = true
-            it.isChecked = true
-        }
+        obtainNavHost().navController.addOnDestinationChangedListener(this)
         intent?.run {
             val newDestinationId = when (action) {
                 "COMPASS" -> R.id.compass
@@ -149,11 +145,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> binding.appbarLayout.outlineProvider =
-                null
-        }
-
         creationDateJdn = getTodayJdn()
 
         when {
@@ -176,12 +167,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
     }
 
-    private fun navigateTo(@IdRes id: Int) {
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
         binding.navigation.menu.findItem(
-            when (id) {
+            when (destination.id) {
                 // We don't have a menu entry for compass, so
                 R.id.level -> R.id.compass
-                else -> id
+                else -> destination.id
             }
         )?.also {
             it.isCheckable = true
@@ -195,7 +190,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 settingHasChanged = false // reset for the next time
             }
         }
+    }
 
+    private fun navigateTo(@IdRes id: Int) {
         obtainNavHost().navController.navigate(
             id,
             null,
@@ -427,14 +424,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         return true
     }
 
-    fun setTitleAndSubtitle(title: String, subtitle: String): Unit = supportActionBar?.let {
-        it.title = title
-        it.subtitle = subtitle
-    } ?: Unit
-
-
     private fun changeLangSnackbar() =
-        Snackbar.make(coordinator, "✖  Change app language?", 7000).apply {
+        Snackbar.make(binding.root, "✖  Change app language?", 7000).apply {
             view.layoutDirection = View.LAYOUT_DIRECTION_LTR
             view.setOnClickListener { dismiss() }
             setAction("Settings") {
@@ -446,7 +437,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
     private fun outDatedSnackbar() =
-        Snackbar.make(coordinator, getString(R.string.outdated_app), 10000).apply {
+        Snackbar.make(binding.root, getString(R.string.outdated_app), 10000).apply {
             setAction(getString(R.string.update)) {
                 bringMarketPage(this@MainActivity)
             }
@@ -454,7 +445,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
     private fun drawerToggle() = object : ActionBarDrawerToggle(
-        this, binding.drawer, binding.toolbar, R.string.openDrawer, R.string.closeDrawer
+        this, binding.drawer, null, R.string.openDrawer, R.string.closeDrawer
     ) {
         val slidingDirection = when {
             isRTL(this@MainActivity) -> -1
@@ -467,7 +458,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) = binding.apply {
-            appMainLayout.translationX =
+            navHostContainer.translationX =
                 slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
             drawer.bringChildToFront(drawerView)
             drawer.requestLayout()
@@ -480,5 +471,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 clickedItem = 0
             }
         }
+    }
+
+    override fun onBurgerMenuClicked() {
+        binding.drawer.openDrawer(GravityCompat.START)
     }
 }
