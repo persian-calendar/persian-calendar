@@ -21,7 +21,6 @@ import android.widget.ArrayAdapter
 import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
-import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
@@ -55,8 +54,7 @@ private const val CALENDARS_TAB = 0
 private const val EVENTS_TAB = 1
 private const val OWGHAT_TAB = 2
 
-class CalendarFragment : Fragment(),
-    Toolbar.OnMenuItemClickListener {
+class CalendarFragment : Fragment() {
 
     private var coordinate: Coordinate? = null
     private var mainBinding: FragmentCalendarBinding? = null
@@ -199,7 +197,15 @@ class CalendarFragment : Fragment(),
             appbar.toolbar.setNavigationOnClickListener { navIconListener?.onBurgerMenuClicked() }
             appbar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
             setupToolbarMenu(appbar.toolbar.menu)
-            appbar.toolbar.setOnMenuItemClickListener(this)
+            appbar.toolbar.setOnMenuItemClickListener { item ->
+                when (item?.itemId) {
+                    R.id.go_to -> openGoToDayDialog()
+                    R.id.add_event -> addEventOnCalendar(selectedJdn)
+                    R.id.shift_work -> openShiftWorkDialog()
+                    R.id.month_overview -> openMonthOverView()
+                }
+                true
+            }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) appbar.appbarLayout.outlineProvider = null
         }
 
@@ -523,29 +529,31 @@ class CalendarFragment : Fragment(),
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            R.id.go_to -> SelectDayDialog.newInstance(selectedJdn).apply {
-                onSuccess = fun(jdn: Long) { bringDate(jdn) }
-            }.show(
-                childFragmentManager,
-                SelectDayDialog::class.java.name
-            )
-            R.id.add_event -> addEventOnCalendar(selectedJdn)
-            R.id.shift_work -> ShiftWorkDialog.newInstance(selectedJdn).apply {
-                onSuccess = fun() {
-                    updateStoredPreference(mainActivity)
-                    mainActivity.restartActivity()
-                }
-            }.show(
-                childFragmentManager,
-                ShiftWorkDialog::class.java.name
-            )
-            R.id.month_overview -> MonthOverviewDialog
-                .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn())
-                .show(childFragmentManager, MonthOverviewDialog::class.java.name)
-        }
-        return true
+    private fun openGoToDayDialog() {
+        SelectDayDialog.newInstance(selectedJdn).apply {
+            onSuccess = fun(jdn: Long) { bringDate(jdn) }
+        }.show(
+            childFragmentManager,
+            SelectDayDialog::class.java.name
+        )
+    }
+
+    private fun openShiftWorkDialog() {
+        ShiftWorkDialog.newInstance(selectedJdn).apply {
+            onSuccess = fun() {
+                updateStoredPreference(mainActivity)
+                mainActivity.restartActivity()
+            }
+        }.show(
+            childFragmentManager,
+            ShiftWorkDialog::class.java.name
+        )
+    }
+
+    private fun openMonthOverView() {
+        MonthOverviewDialog
+            .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn())
+            .show(childFragmentManager, MonthOverviewDialog::class.java.name)
     }
 
     /**
