@@ -42,14 +42,38 @@ import java.util.*
 class ColorPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
 
-    private var colorResultView: TextView
-    private var redSeekBar: SeekBar
-    private var greenSeekBar: SeekBar
-    private var blueSeekBar: SeekBar
-    private var alphaSeekBar: SeekBar
-    private var colorsToPick: LinearLayout
-    private var seekBars: LinearLayout
-    private var colorFrame: FrameLayout
+    private val colorResultView = TextView(context).apply {
+        setTextIsSelectable(true)
+        gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
+        setOnClickListener {
+            colorCodeVisibility = !colorCodeVisibility
+            showColor()
+        }
+    }
+    private val redSeekBar = SeekBar(context)
+    private val greenSeekBar = SeekBar(context)
+    private val blueSeekBar = SeekBar(context)
+    private val alphaSeekBar = SeekBar(context)
+    private val colorsToPick = LinearLayout(context).apply {
+        gravity = Gravity.CENTER
+        orientation = HORIZONTAL
+    }
+    private val seekBars = LinearLayout(context).apply {
+        orientation = VERTICAL
+        listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).forEach(::addView)
+        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).also {
+            it.weight = 1f
+        }
+    }
+    private val colorFrame = object : FrameLayout(context) {
+        val checker = createCheckerBoard(20)
+        val rect: Rect = Rect()
+        override fun onDraw(canvas: Canvas?) {
+            super.onDraw(canvas)
+            getDrawingRect(rect)
+            canvas?.drawRect(rect, checker)
+        }
+    }
     private var colorCodeVisibility = false
 
     val pickerColor: Int
@@ -64,15 +88,6 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
     init {
         orientation = VERTICAL
 
-        colorResultView = TextView(context).apply {
-            setTextIsSelectable(true)
-            gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
-            setOnClickListener {
-                colorCodeVisibility = !colorCodeVisibility
-                showColor()
-            }
-        }
-
         val listener = object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
                 showColor()
@@ -80,11 +95,6 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         }
-
-        redSeekBar = SeekBar(context)
-        greenSeekBar = SeekBar(context)
-        blueSeekBar = SeekBar(context)
-        alphaSeekBar = SeekBar(context)
 
         listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
             listOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map { Color.parseColor(it) }
@@ -99,50 +109,24 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             }
         }
 
-        seekBars = LinearLayout(context).apply {
-            orientation = VERTICAL
-
-            listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).forEach(::addView)
-
-            layoutParams =
-                LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT).apply {
-                    weight = 1f
-                }
-            measure(
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
-            )
-        }
-
-        colorFrame = object : FrameLayout(context) {
-            val checker = createCheckerBoard(20)
-            val rect: Rect = Rect()
-            override fun onDraw(canvas: Canvas?) {
-                super.onDraw(canvas)
-                getDrawingRect(rect)
-                canvas?.drawRect(rect, checker)
-            }
-        }.apply {
-            addView(colorResultView)
-            layoutParams = LayoutParams(
-                seekBars.measuredHeight,
-                LayoutParams.MATCH_PARENT
-            )
-            setBackgroundColor(Color.LTGRAY)
-            setPadding(1.dp, 1.dp, 1.dp, 1.dp)
-        }
-
-        val widgetMain = LinearLayout(context).apply {
-            addView(seekBars)
-            addView(colorFrame)
-        }
-
-        colorsToPick = LinearLayout(context).apply {
-            gravity = Gravity.CENTER
-            orientation = HORIZONTAL
-        }
-
-        addView(widgetMain)
+        addView(LinearLayout(context).apply {
+            addView(seekBars.also {
+                // this should happen here otherwise it won't get rectangular shape
+                it.measure(
+                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                    MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+                )
+            })
+            addView(colorFrame.apply {
+                addView(colorResultView)
+                layoutParams = LayoutParams(
+                    seekBars.measuredHeight,
+                    LayoutParams.MATCH_PARENT
+                )
+                setBackgroundColor(Color.LTGRAY)
+                setPadding(1.dp, 1.dp, 1.dp, 1.dp)
+            })
+        })
         addView(colorsToPick)
     }
 
