@@ -13,10 +13,12 @@ import androidx.activity.addCallback
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -90,7 +92,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-        binding.drawer.addDrawerListener(drawerToggle().also { it.syncState() })
+        binding.drawer.addDrawerListener(createDrawerListener())
 
         obtainNavHost().navController.addOnDestinationChangedListener(this)
         intent?.run {
@@ -444,9 +446,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setActionTextColor(ContextCompat.getColor(context, R.color.dark_accent))
         }
 
-    private fun drawerToggle() = object : ActionBarDrawerToggle(
-        this, binding.drawer, null, R.string.openDrawer, R.string.closeDrawer
-    ) {
+    fun createDrawerToggleListener(toolbar: Toolbar) = ActionBarDrawerToggle(
+        this, binding.drawer, toolbar, R.string.openDrawer, R.string.closeDrawer
+    ).also {
+        binding.drawer.addDrawerListener(it)
+        it.syncState()
+    }
+
+    fun removeDrawerListener(listener: ActionBarDrawerToggle) =
+        binding.drawer.removeDrawerListener(listener)
+
+    private fun createDrawerListener() = object : DrawerLayout.SimpleDrawerListener() {
         val slidingDirection = when {
             isRTL(this@MainActivity) -> -1
             else -> +1
