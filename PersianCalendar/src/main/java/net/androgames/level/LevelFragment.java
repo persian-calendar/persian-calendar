@@ -62,8 +62,8 @@ public class LevelFragment extends Fragment {
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons);
         binding.bottomAppbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.compass) {
-                // because we're know that compass is in the backstack
-                NavHostFragment.findNavController(this).navigateUp();
+                NavHostFragment.findNavController(LevelFragment.this)
+                        .navigate(LevelFragmentDirections.Companion.actionLevelToCompass());
             }
             return true;
         });
