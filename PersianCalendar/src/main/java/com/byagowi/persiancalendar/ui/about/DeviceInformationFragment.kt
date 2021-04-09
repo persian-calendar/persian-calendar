@@ -55,7 +55,7 @@ class DeviceInformationFragment : Fragment() {
     ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).also { binding ->
         val mainActivity = activity as MainActivity
 
-        with(binding.appBar.toolbar) {
+        with(binding.toolbar) {
             setTitle(R.string.device_info)
             setupUpNavigation()
         }
