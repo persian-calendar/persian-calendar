@@ -23,8 +23,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -113,6 +115,21 @@ class DeviceInformationFragment : Fragment() {
                                             ViewGroup.LayoutParams.MATCH_PARENT,
                                             ViewGroup.LayoutParams.WRAP_CONTENT
                                         )
+                                })
+                                linearLayout.addView(ImageView(mainActivity).also { imageView ->
+                                    imageView.minimumHeight = 80.dp
+                                    imageView.minimumWidth = 80.dp
+                                    imageView.setImageDrawable(DrawerArrowDrawable(mainActivity).also { drawable ->
+                                        ValueAnimator.ofFloat(0f, 1f).also { valueAnimator ->
+                                            valueAnimator.duration = 2000
+                                            valueAnimator.interpolator = LinearInterpolator()
+                                            valueAnimator.repeatMode = ValueAnimator.REVERSE
+                                            valueAnimator.repeatCount = ValueAnimator.INFINITE
+                                            valueAnimator.addUpdateListener {
+                                                drawable.progress = it.animatedValue as Float
+                                            }
+                                        }.start()
+                                    })
                                 })
                                 linearLayout.addView(ProgressBar(mainActivity).also { progressBar ->
                                     progressBar.isIndeterminate = true
