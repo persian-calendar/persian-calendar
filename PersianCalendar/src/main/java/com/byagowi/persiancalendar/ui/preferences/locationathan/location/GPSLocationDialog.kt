@@ -148,20 +148,18 @@ class GPSLocationDialog : AppCompatDialogFragment() {
             }
         }.onFailure(logException)
 
-        var result = ""
-        if (cityName?.isNotEmpty() == true) result = cityName + "\n\n"
-        // this time, with native digits
-        val plusCodeLink = "https://plus.codes/" +
-                OpenLocationCode.encode(location.latitude, location.longitude)
-        result += formatCoordinate(
-            mainActivity,
-            Coordinate(location.latitude, location.longitude, location.altitude), "\n"
-        ) + "\n\n" + formatCoordinateISO6709(
-            location.latitude, location.longitude, location.altitude
-        ) + "\n\n" + plusCodeLink
+        val result = listOf(
+            cityName ?: "",
+            formatCoordinate(
+                mainActivity,
+                Coordinate(location.latitude, location.longitude, location.altitude), "\n"
+            ),
+            formatCoordinateISO6709(location.latitude, location.longitude, location.altitude),
+            "https://plus.codes/${OpenLocationCode.encode(location.latitude, location.longitude)}"
+        ).joinToString("\n\n").trim()
         textView?.text = result
         textView?.setOnClickListener {
-            copyToClipboard(textView, "coords", plusCodeLink)
+            copyToClipboard(textView, "coords", result, showToastInstead = true)
         }
 
         isLocationShown = true
