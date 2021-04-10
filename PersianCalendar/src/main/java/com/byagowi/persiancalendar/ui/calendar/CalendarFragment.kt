@@ -36,7 +36,6 @@ import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
@@ -63,9 +62,8 @@ class CalendarFragment : Fragment() {
     private var eventsBinding: EventsTabContentBinding? = null
     private var searchView: SearchView? = null
     private var todayButton: MenuItem? = null
-    private lateinit var mainActivity: MainActivity
     private val initialDate = getTodayOfCalendar(mainCalendar)
-    private var navIconListener: CalendarNavIconListener? = null
+    private var navigation: NavigationInterface? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -80,7 +78,7 @@ class CalendarFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navIconListener = context as? CalendarNavIconListener
+        navigation = activity as? NavigationInterface
         activity?.onBackPressedDispatcher?.addCallback(this) {
             if (closeSearchIfOpen().not()) {
                 isEnabled = false
@@ -94,12 +92,10 @@ class CalendarFragment : Fragment() {
     ): View = FragmentCalendarBinding.inflate(inflater, container, false).apply {
         mainBinding = this
 
-        mainActivity = activity as MainActivity
-
         val tabs = listOf(
 
             // First tab
-            R.string.calendar to CalendarsView(mainActivity).apply {
+            R.string.calendar to CalendarsView(inflater.context).apply {
                 calendarsView = this
             },
 
@@ -114,7 +110,7 @@ class CalendarFragment : Fragment() {
                 }
             }.root
 
-        ) + (getCoordinate(mainActivity)?.run {
+        ) + (getCoordinate(inflater.context)?.run {
             coordinate = this
 
             listOf(
@@ -177,11 +173,11 @@ class CalendarFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                 else owghatBinding?.sunView?.clear()
-                mainActivity.appPrefs.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+                inflater.context.appPrefs.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
             }
         })
 
-        var lastTab = mainActivity.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
+        var lastTab = inflater.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
         viewPager.setCurrentItem(lastTab, false)
     }.root
@@ -192,8 +188,8 @@ class CalendarFragment : Fragment() {
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let { appbar ->
-            mainActivity.setupToolbarWithDrawerToggle(viewLifecycleOwner, appbar.toolbar)
-            appbar.toolbar.setNavigationOnClickListener { navIconListener?.onBurgerMenuClicked() }
+            navigation?.setupToolbarIconWithDrawerToggleSync(viewLifecycleOwner, appbar.toolbar)
+            appbar.toolbar.setNavigationOnClickListener { navigation?.onBurgerMenuClicked() }
             appbar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
             setupToolbarMenu(appbar.toolbar.menu)
             appbar.toolbar.setOnMenuItemClickListener { item ->
@@ -215,11 +211,12 @@ class CalendarFragment : Fragment() {
     }
 
     private fun addEventOnCalendar(jdn: Long) {
+        val activity = activity ?: return
         val civil = CivilDate(jdn)
         val time = Calendar.getInstance()
         time.set(civil.year, civil.month - 1, civil.dayOfMonth)
         if (ActivityCompat.checkSelfPermission(
-                mainActivity, Manifest.permission.READ_CALENDAR
+                activity, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(activity) else {
             runCatching {
@@ -260,16 +257,17 @@ class CalendarFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val activity = activity ?: return
         if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
             if (isShowDeviceCalendarEvents)
                 mainBinding?.calendarPager?.refresh(isEventsModified = true)
             else {
                 if (ActivityCompat.checkSelfPermission(
-                        mainActivity, Manifest.permission.READ_CALENDAR
+                        activity, Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
                 ) askForCalendarPermission(activity) else {
-                    toggleShowDeviceCalendarOnPreference(mainActivity, true)
-                    mainActivity.restartActivity()
+                    toggleShowDeviceCalendarOnPreference(activity, true)
+                    navigation?.restartActivity()
                 }
             }
         }
@@ -335,7 +333,7 @@ class CalendarFragment : Fragment() {
         if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
             mainBinding?.root ?: return,
             getA11yDaySummary(
-                mainActivity, jdn, false, emptyEventsStore(),
+                context ?: return, jdn, false, emptyEventsStore(),
                 withZodiac = true, withOtherCalendars = true, withTitle = true
             ),
             Snackbar.LENGTH_SHORT
@@ -343,11 +341,12 @@ class CalendarFragment : Fragment() {
     }
 
     private fun showEvent(jdn: Long, isToday: Boolean) {
+        val activity = activity ?: return
         eventsBinding?.run {
             shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
             val events = getEvents(
                 jdn,
-                readDayDeviceEvents(mainActivity, jdn)
+                readDayDeviceEvents(activity, jdn)
             )
             val holidays = getEventsTitle(
                 events,
@@ -418,7 +417,7 @@ class CalendarFragment : Fragment() {
 
             val messageToShow = SpannableStringBuilder()
 
-            val enabledTypes = mainActivity.appPrefs
+            val enabledTypes = activity.appPrefs
                 .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
             if (enabledTypes.isEmpty()) {
                 noEvent.visibility = View.GONE
@@ -504,7 +503,7 @@ class CalendarFragment : Fragment() {
                     setHint(R.string.search_in_events)
                     setAdapter(
                         ArrayAdapter(
-                            mainActivity, R.layout.suggestion, android.R.id.text1,
+                            activity ?: return@apply, R.layout.suggestion, android.R.id.text1,
                             allEnabledEvents + getAllEnabledAppointments(context)
                         )
                     )
@@ -539,10 +538,11 @@ class CalendarFragment : Fragment() {
     }
 
     private fun openShiftWorkDialog() {
+        val activity = activity ?: return
         ShiftWorkDialog.newInstance(selectedJdn).apply {
             onSuccess = fun() {
-                updateStoredPreference(mainActivity)
-                mainActivity.restartActivity()
+                updateStoredPreference(activity)
+                navigation?.restartActivity()
             }
         }.show(
             childFragmentManager,

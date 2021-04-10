@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.ui.calendar.CalendarNavIconListener
+import com.byagowi.persiancalendar.ui.calendar.NavigationInterface
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -39,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    CalendarNavIconListener,
+    NavigationInterface,
     NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
 
     private var creationDateJdn: Long = 0
@@ -401,7 +401,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
-    fun restartActivity() {
+    override fun restartActivity() {
         val intent = intent
         finish()
         startActivity(intent)
@@ -452,7 +452,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setActionTextColor(ContextCompat.getColor(context, R.color.dark_accent))
         }
 
-    fun setupToolbarWithDrawerToggle(viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar) {
+    override fun setupToolbarIconWithDrawerToggleSync(
+        viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar
+    ) {
         val listener = ActionBarDrawerToggle(
             this, binding.drawer, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description,
