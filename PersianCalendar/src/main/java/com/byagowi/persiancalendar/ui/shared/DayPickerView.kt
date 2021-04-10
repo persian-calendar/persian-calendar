@@ -18,7 +18,7 @@ import com.google.android.material.snackbar.Snackbar
 class DayPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
 
-    private var jdn: Long = -1
+    private var mJdn: Long = -1
 
     var selectedDayListener = fun(_: Long) {}
 
@@ -49,8 +49,8 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         chips.forEachIndexed { i, chip ->
             chip.setOnClickListener {
                 selectedCalendarType = calendarTypes[i].type
-                setJdn(jdn)
-                selectedDayListener(jdn)
+                jdn = mJdn
+                selectedDayListener(mJdn)
                 chips.forEachIndexed { j, chipView ->
                     chipView.isClickable = i != j
                     chipView.isSelected = i == j
@@ -64,15 +64,15 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
 
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
-            jdn = dayJdnFromView
-            selectedDayListener(jdn)
+            mJdn = jdn
+            selectedDayListener(mJdn)
         }
         binding.yearPicker.setOnValueChangedListener(onDaySelected)
         binding.monthPicker.setOnValueChangedListener(onDaySelected)
         binding.dayPicker.setOnValueChangedListener(onDaySelected)
     }
 
-    val dayJdnFromView: Long
+    var jdn: Long
         get() {
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
@@ -89,32 +89,31 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                 }
             }
         }
-
-    fun setJdn(jdn: Long) {
-        this.jdn = if (jdn == -1L) getTodayJdn() else jdn
-        val date = getDateFromJdnOfCalendar(selectedCalendarType, this.jdn)
-        binding.yearPicker.also {
-            it.minValue = date.year - 100
-            it.maxValue = date.year + 100
-            it.value = date.year
-            it.setFormatter(::formatNumber)
-            it.isVerticalScrollBarEnabled = false
+        set(value) {
+            mJdn = if (value == -1L) getTodayJdn() else value
+            val date = getDateFromJdnOfCalendar(selectedCalendarType, mJdn)
+            binding.yearPicker.also {
+                it.minValue = date.year - 100
+                it.maxValue = date.year + 100
+                it.value = date.year
+                it.setFormatter(::formatNumber)
+                it.isVerticalScrollBarEnabled = false
+            }
+            binding.monthPicker.also {
+                it.minValue = 1
+                it.maxValue = 12
+                it.value = date.month
+                val months = monthsNamesOfCalendar(date)
+                it.setFormatter { x -> months[x - 1] + " / " + formatNumber(x) }
+                it.isVerticalScrollBarEnabled = false
+            }
+            binding.dayPicker.also {
+                it.minValue = 1
+                it.maxValue = 31
+                it.value = date.dayOfMonth
+                it.setFormatter(::formatNumber)
+                it.isVerticalScrollBarEnabled = false
+            }
+            selectedDayListener(value)
         }
-        binding.monthPicker.also {
-            it.minValue = 1
-            it.maxValue = 12
-            it.value = date.month
-            val months = monthsNamesOfCalendar(date)
-            it.setFormatter { x -> months[x - 1] + " / " + formatNumber(x) }
-            it.isVerticalScrollBarEnabled = false
-        }
-        binding.dayPicker.also {
-            it.minValue = 1
-            it.maxValue = 31
-            it.value = date.dayOfMonth
-            it.setFormatter(::formatNumber)
-            it.isVerticalScrollBarEnabled = false
-        }
-        selectedDayListener(jdn)
-    }
 }

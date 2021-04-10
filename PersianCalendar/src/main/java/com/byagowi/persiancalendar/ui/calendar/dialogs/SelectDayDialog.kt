@@ -14,14 +14,14 @@ class SelectDayDialog : AppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
-        val jdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
-
-        val dayPickerView = DayPickerView(activity).also { it.setJdn(jdn) }
+        val dayPickerView = DayPickerView(activity).also {
+            it.jdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
+        }
         return AlertDialog.Builder(activity)
             .setView(dayPickerView)
             .setCustomTitle(null)
             .setPositiveButton(R.string.go) { _, _ ->
-                dayPickerView.dayJdnFromView.takeIf { it != -1L }?.also(onSuccess)
+                dayPickerView.jdn.takeIf { it != -1L }?.also(onSuccess)
             }.create()
     }
 

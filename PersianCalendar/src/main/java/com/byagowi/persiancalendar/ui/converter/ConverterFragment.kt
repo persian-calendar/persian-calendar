@@ -27,7 +27,7 @@ class ConverterFragment : Fragment() {
 
         val todayJdn = getTodayJdn()
 
-        todayButton.setOnClickListener { dayPickerView.setJdn(todayJdn) }
+        todayButton.setOnClickListener { dayPickerView.jdn = todayJdn }
 
         dayPickerView.also {
             it.selectedDayListener = fun(jdn) {
@@ -44,7 +44,7 @@ class ConverterFragment : Fragment() {
                     )
                 }
             }
-            it.setJdn(getTodayJdn())
+            it.jdn = getTodayJdn()
             it.anchorView = todayButton
         }
     }.root
