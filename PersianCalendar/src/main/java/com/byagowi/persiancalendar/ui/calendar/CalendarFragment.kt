@@ -173,7 +173,7 @@ class CalendarFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                 else owghatBinding?.sunView?.clear()
-                inflater.context.appPrefs.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+                context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
             }
         })
 

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -17,12 +16,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class MonthOverviewDialog : BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val mainActivity = activity as MainActivity
+        val activity = requireActivity()
 
         val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)
             ?.takeUnless { it == -1L } ?: getTodayJdn()
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
-        val deviceEvents = readMonthDeviceEvents(mainActivity, baseJdn)
+        val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
         val events = (0 until monthLength).mapNotNull {
             val jdn = baseJdn + it
@@ -53,10 +52,10 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
         )
 
-        return BottomSheetDialog(mainActivity).apply {
+        return BottomSheetDialog(activity).apply {
             setContentView(
                 MonthOverviewDialogBinding.inflate(
-                    mainActivity.layoutInflater, null, false
+                    activity.layoutInflater, null, false
                 ).apply {
                     recyclerView.apply {
                         layoutManager = LinearLayoutManager(context)

@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 
 class ShiftWorkDialog : AppCompatDialogFragment() {
@@ -34,10 +33,10 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
     var onSuccess = fun() {}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val mainActivity = activity as MainActivity
+        val activity = requireActivity()
 
-        applyAppLanguage(mainActivity)
-        updateStoredPreference(mainActivity)
+        applyAppLanguage(activity)
+        updateStoredPreference(activity)
 
         selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
         if (selectedJdn == -1L) selectedJdn = getTodayJdn()
@@ -49,8 +48,8 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
             jdn = selectedJdn
         }
 
-        val binding = ShiftWorkSettingsBinding.inflate(mainActivity.layoutInflater, null, false)
-        binding.recyclerView.layoutManager = LinearLayoutManager(mainActivity)
+        val binding = ShiftWorkSettingsBinding.inflate(activity.layoutInflater, null, false)
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
         val shiftWorkItemAdapter = ItemsAdapter(
             if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("d", 0)) else shiftWorks,
             binding
@@ -70,7 +69,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         }
         binding.recurs.isChecked = shiftWorkRecurs
 
-        return AlertDialog.Builder(mainActivity)
+        return AlertDialog.Builder(activity)
             .setView(binding.root)
             .setTitle(null)
             .setPositiveButton(R.string.accept) { _, _ ->
@@ -78,7 +77,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                     "${it.type.replace("=", "").replace(",", "")}=${it.length}"
                 }
 
-                mainActivity.appPrefs.edit {
+                activity.appPrefs.edit {
                     putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
                     putString(PREF_SHIFT_WORK_SETTING, result)
                     putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)

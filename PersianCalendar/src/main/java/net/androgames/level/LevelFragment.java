@@ -15,7 +15,6 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
-import com.byagowi.persiancalendar.ui.MainActivity;
 
 import net.androgames.level.orientation.OrientationProvider;
 
@@ -48,9 +47,7 @@ public class LevelFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final MainActivity mainActivity = (MainActivity) getActivity();
-        assert mainActivity != null;
-        activity = mainActivity;
+        activity = requireActivity();
 
         final FragmentLevelBinding binding = FragmentLevelBinding.inflate(inflater, container, false);
 

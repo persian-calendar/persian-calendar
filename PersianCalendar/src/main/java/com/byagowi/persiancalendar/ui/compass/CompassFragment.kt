@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.logException
@@ -88,19 +87,15 @@ class CompassFragment : Fragment() {
         }.show()
     }
 
-    private lateinit var mainActivity: MainActivity
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        mainActivity = activity as MainActivity
-
         val binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
-            coordinate = getCoordinate(mainActivity)
+            coordinate = getCoordinate(inflater.context)
 
             with(appBar.toolbar) {
                 setTitle(R.string.compass)
-                subtitle = getCityName(mainActivity, true)
+                subtitle = getCityName(inflater.context, true)
                 setupUpNavigation()
             }
 
@@ -110,7 +105,7 @@ class CompassFragment : Fragment() {
                     R.id.level -> findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
                     R.id.map -> runCatching {
                         CustomTabsIntent.Builder().build().launchUrl(
-                            mainActivity,
+                            activity ?: return@runCatching,
                             "https://g.co/qiblafinder".toUri()
                         )
                     }.onFailure(logException)
@@ -126,9 +121,10 @@ class CompassFragment : Fragment() {
                 true
             }
             fab.setOnClickListener {
+                val activity = activity ?: return@setOnClickListener
                 stopped = !stopped
                 fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
-                fab.contentDescription = mainActivity
+                fab.contentDescription = activity
                     .getString(if (stopped) R.string.resume else R.string.stop)
             }
         }
@@ -150,14 +146,15 @@ class CompassFragment : Fragment() {
     }
 
     private fun setCompassMetrics() {
+        val activity = activity ?: return
         val displayMetrics = DisplayMetrics()
 
-        mainActivity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val width = displayMetrics.widthPixels
         val height = displayMetrics.heightPixels
         binding?.compassView?.setScreenResolution(width, height - 2 * height / 8)
 
-        when (mainActivity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
+        when (activity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
             Surface.ROTATION_0 -> orientation = 0f
             Surface.ROTATION_90 -> orientation = 90f
             Surface.ROTATION_180 -> orientation = 180f
@@ -168,7 +165,7 @@ class CompassFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        sensorManager = mainActivity.getSystemService()
+        sensorManager = activity?.getSystemService()
         sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
         when {
             sensor != null -> {

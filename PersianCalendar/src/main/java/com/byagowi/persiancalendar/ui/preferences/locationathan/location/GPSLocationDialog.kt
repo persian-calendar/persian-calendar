@@ -22,7 +22,6 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
@@ -57,8 +56,6 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         }
     }
 
-    lateinit var mainActivity: MainActivity
-
     private val Number.dp: Int
         get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
 
@@ -68,23 +65,23 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        mainActivity = activity as MainActivity
+        val activity = requireActivity()
 
-        textView = TextView(mainActivity).apply {
+        textView = TextView(activity).apply {
             updatePadding(16.dp, 16.dp, 16.dp, 16.dp)
             setText(R.string.pleasewaitgps)
         }
 
-        locationManager = mainActivity.getSystemService()
+        locationManager = activity.getSystemService()
 
         getLocation()
         if (lacksPermission) {
-            askForLocationPermission(mainActivity)
+            askForLocationPermission(activity)
         }
 
         handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
 
-        return AlertDialog.Builder(mainActivity)
+        return AlertDialog.Builder(activity)
             .setPositiveButton("", null)
             .setNegativeButton("", null)
             .setView(textView)
@@ -92,17 +89,18 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     }
 
     private fun checkGPSProvider() {
+        val activity = activity ?: return
         if (latitude != null && longitude != null) return
 
         runCatching {
-            val gps = mainActivity.getSystemService<LocationManager>()
+            val gps = activity.getSystemService<LocationManager>()
 
             if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
-                AlertDialog.Builder(mainActivity)
+                AlertDialog.Builder(activity)
                     .setMessage(R.string.gps_internet_desc)
                     .setPositiveButton(R.string.accept) { _, _ ->
                         runCatching {
-                            mainActivity.startActivity(
+                            activity.startActivity(
                                 Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                             )
                         }.onFailure(logException)
@@ -112,11 +110,12 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     }
 
     private fun getLocation() {
+        val activity = activity ?: return
         if (ActivityCompat.checkSelfPermission(
-                mainActivity,
+                activity,
                 Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                mainActivity,
+                activity,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -138,9 +137,10 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     }
 
     private fun showLocation(location: Location) {
+        val activity = activity ?: return
         latitude = "%f".format(Locale.ENGLISH, location.latitude)
         longitude = "%f".format(Locale.ENGLISH, location.longitude)
-        val gcd = Geocoder(mainActivity, Locale.getDefault())
+        val gcd = Geocoder(activity, Locale.getDefault())
         runCatching {
             val addresses = gcd.getFromLocation(location.latitude, location.longitude, 1)
             if (addresses.isNotEmpty()) {
@@ -151,7 +151,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         val result = listOf(
             cityName ?: "",
             formatCoordinate(
-                mainActivity,
+                activity,
                 Coordinate(location.latitude, location.longitude, location.altitude), "\n"
             ),
             formatCoordinateISO6709(location.latitude, location.longitude, location.altitude),
@@ -167,7 +167,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
     override fun onDismiss(dialog: DialogInterface) {
         if (latitude != null && longitude != null) {
-            mainActivity.appPrefs.edit {
+            activity?.appPrefs?.edit {
                 putString(PREF_LATITUDE, latitude)
                 putString(PREF_LONGITUDE, longitude)
                 putString(PREF_GEOCODED_CITYNAME, cityName ?: "")

@@ -35,7 +35,6 @@ import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInformationRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
-import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -53,8 +52,6 @@ class DeviceInformationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).also { binding ->
-        val mainActivity = activity as MainActivity
-
         with(binding.toolbar) {
             setTitle(R.string.device_info)
             setupUpNavigation()
@@ -62,16 +59,16 @@ class DeviceInformationFragment : Fragment() {
 
         circularRevealFromMiddle(binding.circularReveal)
 
-        binding.recyclerView.also {
+        binding.recyclerView.let {
             it.setHasFixedSize(true)
-            it.layoutManager = LinearLayoutManager(mainActivity)
+            it.layoutManager = LinearLayoutManager(inflater.context)
             it.addItemDecoration(
                 DividerItemDecoration(
-                    mainActivity,
+                    inflater.context,
                     LinearLayoutManager.VERTICAL
                 )
             )
-            it.adapter = DeviceInformationAdapter(mainActivity, binding.root)
+            it.adapter = DeviceInformationAdapter(activity ?: return@let, binding.root)
         }
 
         binding.bottomNavigation.also { bottomNavigationView ->
@@ -95,14 +92,15 @@ class DeviceInformationFragment : Fragment() {
             bottomNavigationView.labelVisibilityMode =
                 LabelVisibilityMode.LABEL_VISIBILITY_LABELED
             bottomNavigationView.setOnNavigationItemSelectedListener {
+                val activity = activity ?: return@setOnNavigationItemSelectedListener true
                 // Easter egg
                 when {
                     ++clickCount % 10 == 0 -> {
-                        BottomSheetDialog(mainActivity).also { bottomSheetDialog ->
-                            bottomSheetDialog.setContentView(LinearLayout(mainActivity).also { linearLayout ->
+                        BottomSheetDialog(activity).also { bottomSheetDialog ->
+                            bottomSheetDialog.setContentView(LinearLayout(activity).also { linearLayout ->
                                 linearLayout.orientation = LinearLayout.VERTICAL
                                 // Add one with CircularProgressIndicator also
-                                linearLayout.addView(LinearProgressIndicator(mainActivity).also { linearProgressIndicator ->
+                                linearLayout.addView(LinearProgressIndicator(activity).also { linearProgressIndicator ->
                                     linearProgressIndicator.isIndeterminate = true
                                     linearProgressIndicator.setIndicatorColor(
                                         Color.RED,
@@ -116,10 +114,10 @@ class DeviceInformationFragment : Fragment() {
                                             ViewGroup.LayoutParams.WRAP_CONTENT
                                         )
                                 })
-                                linearLayout.addView(ImageView(mainActivity).also { imageView ->
+                                linearLayout.addView(ImageView(activity).also { imageView ->
                                     imageView.minimumHeight = 80.dp
                                     imageView.minimumWidth = 80.dp
-                                    imageView.setImageDrawable(DrawerArrowDrawable(mainActivity).also { drawable ->
+                                    imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
                                         ValueAnimator.ofFloat(0f, 1f).also { valueAnimator ->
                                             valueAnimator.duration = 2000
                                             valueAnimator.interpolator = LinearInterpolator()
@@ -131,7 +129,7 @@ class DeviceInformationFragment : Fragment() {
                                         }.start()
                                     })
                                 })
-                                linearLayout.addView(ProgressBar(mainActivity).also { progressBar ->
+                                linearLayout.addView(ProgressBar(activity).also { progressBar ->
                                     progressBar.isIndeterminate = true
                                     when {
                                         Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
@@ -155,11 +153,11 @@ class DeviceInformationFragment : Fragment() {
                                             700
                                         )
                                     // setOnLongClickListener {
-                                    //     val player = MediaPlayer.create(mainActivity, R.raw.moonlight)
+                                    //     val player = MediaPlayer.create(activity, R.raw.moonlight)
                                     //     runCatching {
                                     //         if (!player.isPlaying) player.start()
                                     //     }.onFailure(logException)
-                                    //     AlertDialog.Builder(mainActivity).create().apply {
+                                    //     AlertDialog.Builder(activity).create().apply {
                                     //         setView(AppCompatImageButton(context).apply {
                                     //             setImageResource(R.drawable.ic_stop)
                                     //             setOnClickListener { dismiss() }
