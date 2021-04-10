@@ -210,7 +210,8 @@ class CalendarFragment : Fragment() {
                 }
                 true
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) appbar.appbarLayout.outlineProvider = null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) appbar.appbarLayout.outlineProvider =
+                null
         }
 
         getTodayOfCalendar(mainCalendar).let { today ->

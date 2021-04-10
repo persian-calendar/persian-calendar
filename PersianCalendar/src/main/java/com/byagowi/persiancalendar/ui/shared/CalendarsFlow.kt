@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.shared
 
-import android.animation.LayoutTransition
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
