@@ -193,7 +193,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun navigateTo(@IdRes id: Int) {
-        obtainNavHost().navController.navigate(
+        val navHost = obtainNavHost()
+        if (navHost.navController.currentDestination?.id == id) return
+        navHost.navController.navigate(
             id,
             null,
             navOptions {
