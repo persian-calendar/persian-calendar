@@ -19,7 +19,6 @@ import android.text.style.ClickableSpan
 import android.view.*
 import android.widget.ArrayAdapter
 import androidx.activity.addCallback
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
@@ -70,8 +69,6 @@ class CalendarFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        toggleListener?.let { mainActivity.removeDrawerListener(it) }
-        toggleListener = null
         coordinate = null
         mainBinding = null
         calendarsView = null
@@ -189,15 +186,13 @@ class CalendarFragment : Fragment() {
         viewPager.setCurrentItem(lastTab, false)
     }.root
 
-    var toggleListener: ActionBarDrawerToggle? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let { appbar ->
-            toggleListener = mainActivity.createDrawerToggleListener(appbar.toolbar)
+            mainActivity.setupToolbarWithDrawerToggle(viewLifecycleOwner, appbar.toolbar)
             appbar.toolbar.setNavigationOnClickListener { navIconListener?.onBurgerMenuClicked() }
             appbar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
             setupToolbarMenu(appbar.toolbar.menu)
