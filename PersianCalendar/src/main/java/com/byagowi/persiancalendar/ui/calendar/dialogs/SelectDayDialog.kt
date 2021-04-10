@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import com.byagowi.persiancalendar.R
@@ -17,11 +16,9 @@ class SelectDayDialog : AppCompatDialogFragment() {
 
         val jdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
 
-        val dayPickerView = DayPickerView(activity)
-        dayPickerView.setDayJdnOnView(jdn)
-
+        val dayPickerView = DayPickerView(activity).also { it.setJdn(jdn) }
         return AlertDialog.Builder(activity)
-            .setView(dayPickerView as View)
+            .setView(dayPickerView)
             .setCustomTitle(null)
             .setPositiveButton(R.string.go) { _, _ ->
                 dayPickerView.dayJdnFromView.takeIf { it != -1L }?.also(onSuccess)

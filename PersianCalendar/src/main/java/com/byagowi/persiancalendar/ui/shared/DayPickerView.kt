@@ -49,7 +49,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         chips.forEachIndexed { i, chip ->
             chip.setOnClickListener {
                 selectedCalendarType = calendarTypes[i].type
-                setDayJdnOnView(jdn)
+                setJdn(jdn)
                 selectedDayListener(jdn)
                 chips.forEachIndexed { j, chipView ->
                     chipView.isClickable = i != j
@@ -90,7 +90,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             }
         }
 
-    fun setDayJdnOnView(jdn: Long) {
+    fun setJdn(jdn: Long) {
         this.jdn = if (jdn == -1L) getTodayJdn() else jdn
         val date = getDateFromJdnOfCalendar(selectedCalendarType, this.jdn)
         binding.yearPicker.also {
