@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/item_calendar_margin_top"
     android:gravity="center"
-    android:minWidth="@dimen/owghatSize"
+    android:minWidth="@dimen/time_item_size"
     android:orientation="vertical">
 
     <TextView
