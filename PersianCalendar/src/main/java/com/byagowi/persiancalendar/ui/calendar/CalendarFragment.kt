@@ -188,8 +188,7 @@ class CalendarFragment : Fragment() {
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let { appbar ->
-            navigation?.setupToolbarIconWithDrawerToggleSync(viewLifecycleOwner, appbar.toolbar)
-            appbar.toolbar.setNavigationOnClickListener { navigation?.onBurgerMenuClicked() }
+            navigation?.setupToolbarWithDrawer(viewLifecycleOwner, appbar.toolbar)
             appbar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
             setupToolbarMenu(appbar.toolbar.menu)
             appbar.toolbar.setOnMenuItemClickListener { item ->

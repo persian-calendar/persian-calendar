@@ -4,7 +4,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner
 
 interface NavigationInterface {
-    fun onBurgerMenuClicked()
-    fun setupToolbarIconWithDrawerToggleSync(viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar)
+    fun setupToolbarWithDrawer(viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar)
     fun restartActivity()
 }

@@ -452,19 +452,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setActionTextColor(ContextCompat.getColor(context, R.color.dark_accent))
         }
 
-    override fun setupToolbarIconWithDrawerToggleSync(
-        viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar
-    ) {
+    override fun setupToolbarWithDrawer(viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar) {
         val listener = ActionBarDrawerToggle(
             this, binding.drawer, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description,
             R.string.closeDrawer
-        ).also {
-            binding.drawer.addDrawerListener(it)
-            it.syncState()
-        }
+        ).apply { syncState() }
+
+        binding.drawer.addDrawerListener(listener)
+        toolbar.setNavigationOnClickListener { binding.drawer.openDrawer(GravityCompat.START) }
         viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_DESTROY) binding.drawer.removeDrawerListener(listener)
+            if (event == Lifecycle.Event.ON_DESTROY) {
+                binding.drawer.removeDrawerListener(listener)
+                toolbar.setNavigationOnClickListener(null)
+            }
         })
     }
 
@@ -485,9 +486,5 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             drawer.bringChildToFront(drawerView)
             drawer.requestLayout()
         }
-    }
-
-    override fun onBurgerMenuClicked() {
-        binding.drawer.openDrawer(GravityCompat.START)
     }
 }
