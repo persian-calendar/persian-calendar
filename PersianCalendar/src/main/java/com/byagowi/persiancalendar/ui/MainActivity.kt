@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onCreate(savedInstanceState)
         onBackPressedDispatcher.addCallback(this) {
             if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
-                binding.drawer.closeDrawers()
+                binding.drawer.closeDrawer(GravityCompat.START)
             } else {
                 isEnabled = false
                 onBackPressedDispatcher.onBackPressed()
@@ -193,9 +193,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun navigateTo(@IdRes id: Int) {
-        val navHost = obtainNavHost()
-        if (navHost.navController.currentDestination?.id == id) return
-        navHost.navController.navigate(
+        obtainNavHost().navController.navigate(
             id,
             null,
             navOptions {
@@ -387,7 +385,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             KeyEvent.KEYCODE_MENU -> {
                 when {
                     binding.drawer.isDrawerOpen(GravityCompat.START) -> {
-                        binding.drawer.closeDrawers()
+                        binding.drawer.closeDrawer(GravityCompat.START)
                     }
                     else -> {
                         binding.drawer.openDrawer(GravityCompat.START)
@@ -419,8 +417,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 finish()
             }
             else -> {
-                binding.drawer.closeDrawers()
-                navigateTo(menuItem.itemId)
+                val id = menuItem.itemId
+                if (obtainNavHost().navController.currentDestination?.id == id) {
+                    binding.drawer.closeDrawer(GravityCompat.START)
+                } else {
+                    binding.drawer.closeDrawer(GravityCompat.START, false)
+                    navigateTo(menuItem.itemId)
+                }
             }
         }
         return true
