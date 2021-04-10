@@ -43,8 +43,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
 
-    private var clickedItem = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
 
@@ -200,10 +198,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             null,
             navOptions {
                 anim {
-                    enter = R.anim.nav_default_enter_anim
-                    exit = R.anim.nav_default_exit_anim
-                    popEnter = R.anim.nav_default_pop_enter_anim
-                    popExit = R.anim.nav_default_pop_exit_anim
+                    enter = R.anim.nav_enter_anim
+                    exit = R.anim.nav_exit_anim
+                    popEnter = R.anim.nav_pop_enter_anim
+                    popExit = R.anim.nav_pop_exit_anim
                 }
             }
         )
@@ -420,7 +418,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
             else -> {
                 binding.drawer.closeDrawers()
-                clickedItem = menuItem.itemId
+                navigateTo(menuItem.itemId)
             }
         }
         return true
@@ -473,14 +471,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
             drawer.bringChildToFront(drawerView)
             drawer.requestLayout()
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-            super.onDrawerClosed(drawerView)
-            if (clickedItem != 0) {
-                navigateTo(clickedItem)
-                clickedItem = 0
-            }
         }
     }
 
