@@ -125,6 +125,9 @@ class AboutFragment : Fragment() {
                     text = parts.last()
                     chipIcon = designerIcon
                     setChipIconTintResource(chipsIconTintId)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        elevation = resources.getDimension(R.dimen.chip_elevation)
+                    }
                 }
             }.forEach(binding.developers::addView)
 
@@ -137,6 +140,9 @@ class AboutFragment : Fragment() {
                     text = parts[1]
                     chipIcon = translatorIcon
                     setChipIconTintResource(chipsIconTintId)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        elevation = resources.getDimension(R.dimen.chip_elevation)
+                    }
                 }
             }.forEach(binding.developers::addView)
 
@@ -149,6 +155,9 @@ class AboutFragment : Fragment() {
                     text = parts[1]
                     chipIcon = developerIcon
                     setChipIconTintResource(chipsIconTintId)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        elevation = resources.getDimension(R.dimen.chip_elevation)
+                    }
                 }
             }.forEach(binding.developers::addView)
     }
