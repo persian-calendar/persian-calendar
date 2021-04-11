@@ -94,21 +94,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         binding.drawer.addDrawerListener(createDrawerListener())
 
         obtainNavHost().navController.addOnDestinationChangedListener(this)
-        intent?.run {
-            val newDestinationId = when (action) {
-                "COMPASS" -> R.id.compass
-                "LEVEL" -> R.id.level
-                "CONVERTER" -> R.id.converter
-                "SETTINGS" -> R.id.settings
-                "DEVICE" -> R.id.deviceInformation
-                else -> null // unsupported action. ignore
-            }
-            if (newDestinationId != null) {
-                navigateTo(newDestinationId)
-
-                // So it won't happen again if the activity restarted
-                action = ""
-            }
+        when (intent?.action) {
+            "COMPASS" -> R.id.compass
+            "LEVEL" -> R.id.level
+            "CONVERTER" -> R.id.converter
+            "SETTINGS" -> R.id.settings
+            "DEVICE" -> R.id.deviceInformation
+            else -> null // unsupported action. ignore
+        }?.also {
+            navigateTo(it)
+            // So it won't happen again if the activity is restarted
+            intent?.action = ""
         }
 
         appPrefs.registerOnSharedPreferenceChangeListener(this)
