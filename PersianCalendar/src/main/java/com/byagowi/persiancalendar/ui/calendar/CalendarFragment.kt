@@ -476,6 +476,8 @@ class CalendarFragment : Fragment() {
         isExpanded = !isExpanded
         owghatBinding?.let {
             it.timesFlow.toggle()
+            it.moreOwghat.contentDescription = resources.getString(
+                if (isExpanded) R.string.close else R.string.open)
             it.moreOwghat.animate()
                 .rotation(if (isExpanded) 180f else 0f)
                 .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())

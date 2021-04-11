@@ -456,7 +456,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val listener = ActionBarDrawerToggle(
             this, binding.drawer, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description,
-            R.string.closeDrawer
+            R.string.close
         ).apply { syncState() }
 
         binding.drawer.addDrawerListener(listener)

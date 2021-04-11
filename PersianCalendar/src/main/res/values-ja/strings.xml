@@ -48,8 +48,8 @@
     <string name="athan_disabled_summary">アダンを使うには、リストから場所を選択するか、あなたの場所の詳細を追加してください</string>
     <string name="athan_gap">実際のアダンとアプリケーションのアダンの間の距離</string>
     <string name="athan_gap_summary">アダンの何分前に通知音が鳴る</string>
-    <string name="closeDrawer">閉じる</string>
-    <string name="openDrawer">開く</string>
+    <string name="close">閉じる</string>
+    <string name="open">開く</string>
     <string name="imsak">エムサーク</string>
     <string name="fajr">朝のアダン</string>
     <string name="dhuhr">昼のアダン</string>

@@ -48,8 +48,8 @@
     <string name="athan_disabled_summary">اذان تنظیم اولماق اۆچون مکان داخیل ادین</string>
     <string name="athan_gap">واقعی اذان‌لا برنامه اذان‌ین مصافه‌سی</string>
     <string name="athan_gap_summary">اذان‌دان نچه دقیقه قاباق، اعلان سس‌لن‌سین</string>
-    <string name="closeDrawer">باغلاماق</string>
-    <string name="openDrawer">آچماق</string>
+    <string name="close">باغلاماق</string>
+    <string name="open">آچماق</string>
     <string name="imsak">امساک</string>
     <string name="fajr">صۆبح اذانی</string>
     <string name="dhuhr">گۆن‌اورتا اذانی</string>

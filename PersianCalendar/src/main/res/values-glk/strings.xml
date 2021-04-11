@@ -48,8 +48,8 @@
     <string name="athan_disabled_summary">اذانˇتنظيماتˇرا تأودأنˇره, ئي جگايأ فهرستˇجأدؤجين بۊکۊنيد, يا شيمي مؤقعيتˇمۊشخصاتˈوارد بۊکۊنيد</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
     <string name="athan_gap_summary">چن دقه به اذان بمانسته, زنگ صدا بۊخۊره</string>
-    <string name="closeDrawer">دٚوستن</string>
-    <string name="openDrawer">واکۊدن</string>
+    <string name="close">دٚوستن</string>
+    <string name="open">واکۊدن</string>
     <string name="imsak">امساک</string>
     <string name="fajr">صؤبˇاذان</string>
     <string name="dhuhr">ظؤهرˇاذان</string>

@@ -8,8 +8,8 @@
     <string name="widget_name">Persian Calendar</string>
     <string name="widget_mini_name">Persian Calendar (mini)</string>
     <string name="widget_age_name">Persian Calendar (age)</string>
-    <string name="closeDrawer">Close</string>
-    <string name="openDrawer">Open</string>
+    <string name="close">Close</string>
+    <string name="open">Open</string>
     <string name="accept">OK</string>
     <string name="add">Add</string>
     <string name="help">Help</string>

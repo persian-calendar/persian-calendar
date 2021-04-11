@@ -28,6 +28,9 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     fun toggle() {
         isExpanded = !isExpanded
 
+        binding.moreCalendar.contentDescription = context.getString(
+            if (isExpanded) R.string.close else R.string.open)
+
         // Rotate expansion arrow
         binding.moreCalendar.animate()
             .rotation(if (isExpanded) 180f else 0f)

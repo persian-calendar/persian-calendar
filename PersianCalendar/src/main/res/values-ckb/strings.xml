@@ -48,8 +48,8 @@
     <string name="athan_disabled_summary">بۆ چالاککردنی ڕێکخستنی بانگ، شوێنێک لە پێڕستدا ھەڵ‌ببژێرن یا پۆتانەکەتان لە سەرەوە تۆمار بکەن</string>
     <string name="athan_gap">مەودای بانگ</string>
     <string name="athan_gap_summary">چەند خولەک بەر لە بانگی مزگەوت، بەرنامە بانگ بدا</string>
-    <string name="closeDrawer">داخستن</string>
-    <string name="openDrawer">کردنەوە</string>
+    <string name="close">داخستن</string>
+    <string name="open">کردنەوە</string>
     <string name="imsak">ئیمساک</string>
     <string name="fajr">بانگی بەیانی</string>
     <string name="dhuhr">بانگی نیوەڕۆ</string>

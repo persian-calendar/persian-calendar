@@ -48,8 +48,8 @@
     <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان، مکانی را از فهرست برگزیده، یا مشخصات موقعیتتان را وارد کنید</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
-    <string name="closeDrawer">بند کریں</string>
-    <string name="openDrawer">کھولیں</string>
+    <string name="close">بند کریں</string>
+    <string name="open">کھولیں</string>
     <string name="imsak">امساک</string>
     <string name="fajr">اذان فجر</string>
     <string name="dhuhr">اذان ظہر</string>
