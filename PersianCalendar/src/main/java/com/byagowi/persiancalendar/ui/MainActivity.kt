@@ -186,8 +186,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 anim {
                     enter = R.anim.nav_enter_anim
                     exit = R.anim.nav_exit_anim
-                    popEnter = R.anim.nav_pop_enter_anim
-                    popExit = R.anim.nav_pop_exit_anim
+                    popEnter = R.anim.nav_enter_anim
+                    popExit = R.anim.nav_exit_anim
                 }
             }
         )
@@ -368,15 +368,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         startActivity(intent)
     }
 
+    private var clickedItem = 0
+
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.exit -> finish()
             else -> {
-                if (obtainNavHost().navController.currentDestination?.id == menuItem.itemId) {
-                    binding.drawer.closeDrawer(GravityCompat.START)
-                } else {
-                    binding.drawer.closeDrawer(GravityCompat.START, false)
-                    navigateTo(menuItem.itemId)
+                binding.drawer.closeDrawer(GravityCompat.START)
+                if (obtainNavHost().navController.currentDestination?.id != menuItem.itemId) {
+                    clickedItem = menuItem.itemId
                 }
             }
         }
@@ -428,6 +428,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
             drawer.bringChildToFront(drawerView)
             drawer.requestLayout()
+        }
+
+        override fun onDrawerClosed(drawerView: View) {
+            super.onDrawerClosed(drawerView)
+            if (clickedItem != 0) {
+                navigateTo(clickedItem)
+                clickedItem = 0
+            }
         }
     }
 }
