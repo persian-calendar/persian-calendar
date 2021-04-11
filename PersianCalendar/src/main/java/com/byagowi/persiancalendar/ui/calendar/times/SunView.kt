@@ -316,9 +316,9 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         )
         remainingString = when {
             remaining.toInt() == 0 -> ""
-            else -> context.getString(
-                R.string.remaining_daylight
-            ).format(formatNumber(remaining.hour), formatNumber(remaining.minute))
+            else -> context.getString(R.string.remaining_daylight).format(
+                formatNumber(remaining.hour), formatNumber(remaining.minute)
+            )
         }
 
         ValueAnimator.ofFloat(0F, c).apply {

@@ -121,10 +121,9 @@ class CompassFragment : Fragment() {
                 true
             }
             fab.setOnClickListener {
-                val activity = activity ?: return@setOnClickListener
                 stopped = !stopped
                 fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
-                fab.contentDescription = activity
+                fab.contentDescription = resources
                     .getString(if (stopped) R.string.resume else R.string.stop)
             }
         }

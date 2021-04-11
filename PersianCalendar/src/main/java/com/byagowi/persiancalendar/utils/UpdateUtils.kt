@@ -360,8 +360,9 @@ fun update(context: Context, updateDate: Boolean) {
 
                 setTextViewText(
                     R.id.textPlaceholder2_4x2,
-                    context.getString(R.string.n_till)
-                        .format(remainingTime, context.getString(nextOwghatId))
+                    context.getString(R.string.n_till).format(
+                        remainingTime, context.getString(nextOwghatId)
+                    )
                 )
                 setTextColor(R.id.textPlaceholder2_4x2, color)
             } else {
