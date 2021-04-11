@@ -115,16 +115,17 @@ class DeviceInformationFragment : Fragment() {
                                         )
                                 })
                                 linearLayout.addView(ImageView(activity).also { imageView ->
-                                    imageView.minimumHeight = 80.dp
-                                    imageView.minimumWidth = 80.dp
+                                    imageView.minimumHeight = 120.dp
+                                    imageView.minimumWidth = 120.dp
                                     imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
-                                        ValueAnimator.ofFloat(0f, 1f).also { valueAnimator ->
-                                            valueAnimator.duration = 2000
+                                        ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
+                                            valueAnimator.duration = 3000
                                             valueAnimator.interpolator = LinearInterpolator()
                                             valueAnimator.repeatMode = ValueAnimator.REVERSE
                                             valueAnimator.repeatCount = ValueAnimator.INFINITE
                                             valueAnimator.addUpdateListener {
-                                                drawable.progress = it.animatedValue as Float
+                                                drawable.progress = (it.animatedValue as Float)
+                                                    .coerceIn(0f, 1f)
                                             }
                                         }.start()
                                     })
