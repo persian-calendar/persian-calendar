@@ -3,8 +3,8 @@ package com.byagowi.persiancalendar.ui.about
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
-import android.graphics.Color
-import android.graphics.PorterDuff
+import android.content.Context
+import android.graphics.*
 import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.opengl.EGL14
@@ -19,13 +19,16 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import androidx.annotation.ColorInt
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
@@ -115,8 +118,8 @@ class DeviceInformationFragment : Fragment() {
                                         )
                                 })
                                 linearLayout.addView(ImageView(activity).also { imageView ->
-                                    imageView.minimumHeight = 120.dp
-                                    imageView.minimumWidth = 120.dp
+                                    imageView.minimumHeight = 80.dp
+                                    imageView.minimumWidth = 80.dp
                                     imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
                                         ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
                                             valueAnimator.duration = 3000
@@ -179,6 +182,44 @@ class DeviceInformationFragment : Fragment() {
             }
         }
     }.root
+}
+
+class CheckerBoard(context: Context, attrs: AttributeSet?) :
+    FrameLayout(context, attrs) {
+    private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor(
+        when (appTheme) {
+            R.style.DarkTheme -> "#22FFFFFF"
+            else -> "#22000000"
+        }
+    ))
+    private val rect = Rect()
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        getDrawingRect(rect)
+        canvas.drawRect(rect, checkerBoard)
+    }
+}
+
+// https://stackoverflow.com/a/58471997
+fun createCheckerRoundedBoard(
+    tileSize: Float, r: Float, @ColorInt color: Int
+) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    shader = BitmapShader(
+        Bitmap.createBitmap(
+            tileSize.toInt() * 2, tileSize.toInt() * 2, Bitmap.Config.ARGB_8888
+        ).apply {
+            Canvas(this).apply {
+                val fill = Paint(Paint.ANTI_ALIAS_FLAG).also {
+                    it.style = Paint.Style.FILL
+                    it.color = color
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    drawRoundRect(0f, 0f, tileSize, tileSize, r, r, fill)
+                    drawRoundRect(tileSize, tileSize, tileSize * 2f, tileSize * 2f, r, r, fill)
+                }
+            }
+        }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
+    )
 }
 
 class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
