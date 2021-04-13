@@ -84,82 +84,43 @@ class AboutFragment : Fragment() {
 
     private fun setupContributorsList(binding: FragmentAboutBinding) {
         val context = binding.root.context
-        val developerIcon = AppCompatResources.getDrawable(context, R.drawable.ic_developer)
-        val translatorIcon = AppCompatResources.getDrawable(context, R.drawable.ic_translator)
-        val designerIcon = AppCompatResources.getDrawable(context, R.drawable.ic_designer)
+
         val chipsIconTintId = TypedValue().apply {
             context.theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
         }.resourceId
 
         val chipClick = View.OnClickListener {
-            (it.tag as? String?)?.run {
+            (it.tag as? String)?.also { user ->
+                if (user != "ImanSoltanian") return@also // The only person without GitHub account
                 runCatching {
                     CustomTabsIntent.Builder().build().launchUrl(
-                        context, "https://github.com/$this".toUri()
+                        context, "https://github.com/$user".toUri()
                     )
                 }.onFailure(logException)
             }
         }
 
-        getString(R.string.about_developers_list)
-            .trim().split("\n").shuffled().map {
-                Chip(context).apply {
-                    setOnClickListener(chipClick)
+        listOf(
+            R.string.about_developers_list to R.drawable.ic_developer,
+            R.string.about_designers_list to R.drawable.ic_designer,
+            R.string.about_translators_list to R.drawable.ic_translator,
+            R.string.about_contributors_list to R.drawable.ic_developer
+        ).forEach {
+            val icon = AppCompatResources.getDrawable(context, it.second)
+            getString(it.first).trim().split("\n").shuffled().forEach {
+                binding.developers.addView(Chip(context).also { chip ->
+                    chip.setOnClickListener(chipClick)
                     val parts = it.split(": ")
-                    tag = parts[0]
-                    text = parts[1]
-                    chipIcon = developerIcon
-                    setChipIconTintResource(chipsIconTintId)
+                    chip.tag = parts[0]
+                    chip.text = parts[1]
+                    chip.chipIcon = icon
+                    chip.setChipIconTintResource(chipsIconTintId)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        elevation = resources.getDimension(R.dimen.chip_elevation)
+                        chip.elevation = resources.getDimension(R.dimen.chip_elevation)
                     }
-                }
-            }.forEach(binding.developers::addView)
-
-        getString(R.string.about_designers_list)
-            .trim().split("\n").shuffled().map {
-                Chip(context).apply {
-                    // setOnClickListener(chipClick)
-                    val parts = it.split(": ")
-                    if (parts.size == 2) tag = parts[0]
-                    text = parts.last()
-                    chipIcon = designerIcon
-                    setChipIconTintResource(chipsIconTintId)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        elevation = resources.getDimension(R.dimen.chip_elevation)
-                    }
-                }
-            }.forEach(binding.developers::addView)
-
-        getString(R.string.about_translators_list)
-            .trim().split("\n").shuffled().map {
-                Chip(context).apply {
-                    setOnClickListener(chipClick)
-                    val parts = it.split(": ")
-                    tag = parts[0]
-                    text = parts[1]
-                    chipIcon = translatorIcon
-                    setChipIconTintResource(chipsIconTintId)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        elevation = resources.getDimension(R.dimen.chip_elevation)
-                    }
-                }
-            }.forEach(binding.developers::addView)
-
-        getString(R.string.about_contributors_list)
-            .trim().split("\n").shuffled().map {
-                Chip(context).apply {
-                    setOnClickListener(chipClick)
-                    val parts = it.split(": ")
-                    tag = parts[0]
-                    text = parts[1]
-                    chipIcon = developerIcon
-                    setChipIconTintResource(chipsIconTintId)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        elevation = resources.getDimension(R.dimen.chip_elevation)
-                    }
-                }
-            }.forEach(binding.developers::addView)
+                })
+            }
+        }
     }
 
     private fun showLicenceDialog() {
