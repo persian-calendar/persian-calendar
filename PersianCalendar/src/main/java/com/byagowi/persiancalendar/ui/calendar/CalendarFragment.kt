@@ -127,7 +127,10 @@ class CalendarFragment : Fragment() {
                         it.setOnClickListener { onOwghatClick() }
                         // Easter egg to test AthanActivity
                         it.setOnLongClickListener { _ ->
-                            startAthan(it.context, "FAJR")
+                            startAthan(
+                                it.context,
+                                listOf("FAJR", "DHUHR", "ASR", "MAGHRIB", "ISHA").random()
+                            )
                             true
                         }
                         val cityName = getCityName(it.context, false)
