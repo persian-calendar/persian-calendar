@@ -188,8 +188,8 @@ class CheckerBoard(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
     private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor(
         when (appTheme) {
-            R.style.DarkTheme -> "#22FFFFFF"
-            else -> "#22000000"
+            R.style.DarkTheme -> "#08FFFFFF"
+            else -> "#08000000"
         }
     ))
     private val rect = Rect()
