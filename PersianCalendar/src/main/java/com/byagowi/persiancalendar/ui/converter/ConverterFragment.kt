@@ -17,9 +17,9 @@ class ConverterFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
-        with(appBar.toolbar) {
-            setupUpNavigation()
-            setTitle(R.string.date_converter)
+        appBar.toolbar.let {
+            it.setupUpNavigation()
+            it.setTitle(R.string.date_converter)
         }
 
         calendarsView.toggle()

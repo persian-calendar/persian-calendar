@@ -18,7 +18,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
@@ -33,22 +33,19 @@ class AboutFragment : Fragment() {
             .mapIndexed { i, x -> if (i == 0) formatNumber(x) else x }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
 
-        with(binding.appBar.toolbar) {
-            setTitle(R.string.about)
-            setupUpNavigation()
-            inflateMenu(R.menu.about_menu_buttons)
-            setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
+        binding.appBar.toolbar.let {
+            it.setTitle(R.string.about)
+            it.setupUpNavigation()
+            it.inflateMenu(R.menu.about_menu_buttons)
+            it.setOnMenuItemClickListener { clickedMenuItem ->
+                when (clickedMenuItem.itemId) {
                     R.id.deviceInformation ->
                         findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
-                    R.id.share ->
-                        shareApplication()
+                    R.id.share -> shareApplication()
                 }
                 true
             }

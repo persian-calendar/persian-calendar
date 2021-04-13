@@ -32,7 +32,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 ?.layoutResource = R.layout.empty
         }
 
-
         val switchPreference = findPreference<SwitchPreferenceCompat>(
             PREF_SHOW_DEVICE_CALENDAR_EVENTS
         )

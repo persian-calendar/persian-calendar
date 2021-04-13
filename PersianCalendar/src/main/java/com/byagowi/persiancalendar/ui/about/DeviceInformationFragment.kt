@@ -55,9 +55,9 @@ class DeviceInformationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).also { binding ->
-        with(binding.toolbar) {
-            setTitle(R.string.device_info)
-            setupUpNavigation()
+        binding.toolbar.let {
+            it.setTitle(R.string.device_info)
+            it.setupUpNavigation()
         }
 
         circularRevealFromMiddle(binding.circularReveal)
@@ -186,12 +186,14 @@ class DeviceInformationFragment : Fragment() {
 
 class CheckerBoard(context: Context, attrs: AttributeSet?) :
     FrameLayout(context, attrs) {
-    private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor(
-        when (appTheme) {
-            R.style.DarkTheme -> "#08FFFFFF"
-            else -> "#08000000"
-        }
-    ))
+    private val checkerBoard = createCheckerRoundedBoard(
+        40f, 8f, Color.parseColor(
+            when (appTheme) {
+                R.style.DarkTheme -> "#08FFFFFF"
+                else -> "#08000000"
+            }
+        )
+    )
     private val rect = Rect()
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)

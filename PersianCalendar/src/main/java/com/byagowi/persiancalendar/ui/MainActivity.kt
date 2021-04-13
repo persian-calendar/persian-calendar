@@ -30,7 +30,6 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.ui.calendar.NavigationInterface
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -370,13 +369,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var clickedItem = 0
 
-    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        when (menuItem.itemId) {
+    override fun onNavigationItemSelected(selectedMenuItem: MenuItem): Boolean {
+        when (val itemId = selectedMenuItem.itemId) {
             R.id.exit -> finish()
             else -> {
                 binding.drawer.closeDrawer(GravityCompat.START)
-                if (obtainNavHost().navController.currentDestination?.id != menuItem.itemId) {
-                    clickedItem = menuItem.itemId
+                if (obtainNavHost().navController.currentDestination?.id != itemId) {
+                    clickedItem = itemId
                 }
             }
         }

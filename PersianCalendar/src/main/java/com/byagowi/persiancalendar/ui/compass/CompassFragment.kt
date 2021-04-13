@@ -93,15 +93,15 @@ class CompassFragment : Fragment() {
         val binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
             coordinate = getCoordinate(inflater.context)
 
-            with(appBar.toolbar) {
-                setTitle(R.string.compass)
-                subtitle = getCityName(inflater.context, true)
-                setupUpNavigation()
+            appBar.toolbar.let {
+                it.setTitle(R.string.compass)
+                it.subtitle = getCityName(inflater.context, true)
+                it.setupUpNavigation()
             }
 
             bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
-            bottomAppbar.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
+            bottomAppbar.setOnMenuItemClickListener { clickedMenuItem ->
+                when (clickedMenuItem.itemId) {
                     R.id.level -> findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
                     R.id.map -> runCatching {
                         CustomTabsIntent.Builder().build().launchUrl(
@@ -186,11 +186,7 @@ class CompassFragment : Fragment() {
     }
 
     override fun onPause() {
-        when {
-            sensor != null -> {
-                sensorManager?.unregisterListener(compassListener)
-            }
-        }
+        if (sensor != null) sensorManager?.unregisterListener(compassListener)
         super.onPause()
     }
 }

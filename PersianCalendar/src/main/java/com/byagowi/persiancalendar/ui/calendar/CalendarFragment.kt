@@ -27,15 +27,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
-import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
+import com.byagowi.persiancalendar.ui.NavigationInterface
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
@@ -187,12 +185,12 @@ class CalendarFragment : Fragment() {
 
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
-        mainBinding?.appBar?.let { appbar ->
-            navigation?.setupToolbarWithDrawer(viewLifecycleOwner, appbar.toolbar)
-            appbar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
-            setupToolbarMenu(appbar.toolbar.menu)
-            appbar.toolbar.setOnMenuItemClickListener { item ->
-                when (item?.itemId) {
+        mainBinding?.appBar?.let {
+            navigation?.setupToolbarWithDrawer(viewLifecycleOwner, it.toolbar)
+            it.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
+            setupToolbarMenu(it.toolbar.menu)
+            it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
+                when (clickedMenuItem?.itemId) {
                     R.id.go_to -> openGoToDayDialog()
                     R.id.add_event -> addEventOnCalendar(selectedJdn)
                     R.id.shift_work -> openShiftWorkDialog()
@@ -200,8 +198,8 @@ class CalendarFragment : Fragment() {
                 }
                 true
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) appbar.appbarLayout.outlineProvider =
-                null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                it.appbarLayout.outlineProvider = null
         }
 
         getTodayOfCalendar(mainCalendar).let { today ->
@@ -249,9 +247,9 @@ class CalendarFragment : Fragment() {
     }
 
     private fun updateToolbar(title: String, subTitle: String) {
-        with(mainBinding?.appBar?.toolbar ?: return) {
-            this.title = title
-            this.subtitle = subTitle
+        mainBinding?.appBar?.toolbar?.let {
+            it.title = title
+            it.subtitle = subTitle
         }
     }
 
@@ -477,7 +475,8 @@ class CalendarFragment : Fragment() {
         owghatBinding?.let {
             it.timesFlow.toggle()
             it.moreOwghat.contentDescription = resources.getString(
-                if (isExpanded) R.string.close else R.string.open)
+                if (isExpanded) R.string.close else R.string.open
+            )
             it.moreOwghat.animate()
                 .rotation(if (isExpanded) 180f else 0f)
                 .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
@@ -530,25 +529,19 @@ class CalendarFragment : Fragment() {
     }
 
     private fun openGoToDayDialog() {
-        SelectDayDialog.newInstance(selectedJdn).apply {
-            onSuccess = fun(jdn: Long) { bringDate(jdn) }
-        }.show(
-            childFragmentManager,
-            SelectDayDialog::class.java.name
-        )
+        SelectDayDialog.newInstance(selectedJdn).also {
+            it.onSuccess = fun(jdn: Long) { bringDate(jdn) }
+        }.show(childFragmentManager, SelectDayDialog::class.java.name)
     }
 
     private fun openShiftWorkDialog() {
         val activity = activity ?: return
-        ShiftWorkDialog.newInstance(selectedJdn).apply {
-            onSuccess = fun() {
+        ShiftWorkDialog.newInstance(selectedJdn).also {
+            it.onSuccess = fun() {
                 updateStoredPreference(activity)
                 navigation?.restartActivity()
             }
-        }.show(
-            childFragmentManager,
-            ShiftWorkDialog::class.java.name
-        )
+        }.show(childFragmentManager, ShiftWorkDialog::class.java.name)
     }
 
     private fun openMonthOverView() {

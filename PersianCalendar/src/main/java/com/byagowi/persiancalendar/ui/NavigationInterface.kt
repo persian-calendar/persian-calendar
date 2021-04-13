@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.calendar
+package com.byagowi.persiancalendar.ui
 
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.LifecycleOwner

@@ -21,9 +21,9 @@ class PreferencesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentSettingsBinding.inflate(inflater, container, false).apply {
-        with(appBar.toolbar) {
-            setTitle(R.string.settings)
-            setupUpNavigation()
+        appBar.toolbar.let {
+            it.setTitle(R.string.settings)
+            it.setupUpNavigation()
         }
 
         val tabs = listOf(

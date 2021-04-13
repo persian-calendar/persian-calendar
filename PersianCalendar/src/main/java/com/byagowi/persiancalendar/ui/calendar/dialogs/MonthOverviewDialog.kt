@@ -27,20 +27,12 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             val jdn = baseJdn + it
             val events = getEvents(jdn, deviceEvents)
             val holidays = getEventsTitle(
-                events,
-                holiday = true,
-                compact = false,
-                showDeviceCalendarEvents = false,
-                insertRLM = false,
-                addIsHoliday = isHighTextContrastEnabled
+                events, holiday = true, compact = false, showDeviceCalendarEvents = false,
+                insertRLM = false, addIsHoliday = isHighTextContrastEnabled
             )
             val nonHolidays = getEventsTitle(
-                events,
-                holiday = false,
-                compact = false,
-                showDeviceCalendarEvents = true,
-                insertRLM = false,
-                addIsHoliday = false
+                events, holiday = false, compact = false, showDeviceCalendarEvents = true,
+                insertRLM = false, addIsHoliday = false
             )
             if (holidays.isEmpty() && nonHolidays.isEmpty()) null
             else MonthOverviewRecord(
