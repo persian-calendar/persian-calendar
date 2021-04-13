@@ -249,9 +249,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         private const val BUNDLE_KEY = "jdn"
 
         fun newInstance(jdn: Long) = ShiftWorkDialog().apply {
-            arguments = Bundle().apply {
-                putLong(BUNDLE_KEY, jdn)
-            }
+            arguments = Bundle().also { it.putLong(BUNDLE_KEY, jdn) }
         }
     }
 }

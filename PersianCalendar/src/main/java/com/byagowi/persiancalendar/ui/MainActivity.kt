@@ -80,15 +80,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         obtainNavHost() // sake of initializing NavHost
 
-        when {
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> window.also {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            window?.also { window ->
                 // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-                it.attributes = it.attributes.apply {
-                    flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+                window.attributes = window.attributes.also {
+                    it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
                 }
-                it.statusBarColor = Color.TRANSPARENT
+                window.statusBarColor = Color.TRANSPARENT
             }
-        }
 
         binding.drawer.addDrawerListener(createDrawerListener())
 
@@ -402,7 +401,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val listener = ActionBarDrawerToggle(
             this, binding.drawer, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description, R.string.close
-        ).apply { syncState() }
+        ).also { it.syncState() }
 
         binding.drawer.addDrawerListener(listener)
         toolbar.setNavigationOnClickListener { binding.drawer.openDrawer(GravityCompat.START) }

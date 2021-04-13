@@ -33,8 +33,7 @@ class SimpleItemTouchHelperCallback(private val adapter: RecyclerListAdapter) :
 
     // Set movement flags based on the layout manager
     override fun getMovementFlags(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder
+        recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder
     ): Int = if (recyclerView.layoutManager is GridLayoutManager) {
         val dragFlags =
             ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -78,7 +77,7 @@ class SimpleItemTouchHelperCallback(private val adapter: RecyclerListAdapter) :
         // We only want the active item to change
         // Let the view holder know that this item is being moved or dragged
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE)
-            (viewHolder as? RecyclerListAdapter.ItemViewHolder?)?.onItemSelected()
+            (viewHolder as? RecyclerListAdapter.ItemViewHolder)?.onItemSelected()
 
         super.onSelectedChanged(viewHolder, actionState)
     }
@@ -89,6 +88,6 @@ class SimpleItemTouchHelperCallback(private val adapter: RecyclerListAdapter) :
         viewHolder.itemView.alpha = ALPHA_FULL
 
         // Tell the view holder it's time to restore the idle state
-        (viewHolder as? RecyclerListAdapter.ItemViewHolder?)?.onItemCleared()
+        (viewHolder as? RecyclerListAdapter.ItemViewHolder)?.onItemCleared()
     }
 }

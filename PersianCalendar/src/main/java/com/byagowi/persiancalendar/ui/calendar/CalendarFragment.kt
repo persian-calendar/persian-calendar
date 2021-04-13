@@ -27,7 +27,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
+import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
+import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
@@ -115,27 +118,27 @@ class CalendarFragment : Fragment() {
                 // Optional third tab
                 R.string.owghat to OwghatTabContentBinding.inflate(
                     inflater, container, false
-                ).apply {
-                    owghatBinding = this
+                ).also { binding ->
+                    owghatBinding = binding
 
                     root.setOnClickListener { onOwghatClick() }
 
-                    cityName.run {
-                        setOnClickListener { onOwghatClick() }
+                    binding.cityName.also {
+                        it.setOnClickListener { onOwghatClick() }
                         // Easter egg to test AthanActivity
-                        setOnLongClickListener {
-                            startAthan(context, "FAJR")
+                        it.setOnLongClickListener { _ ->
+                            startAthan(it.context, "FAJR")
                             true
                         }
-                        val cityName = getCityName(context, false)
-                        if (cityName.isNotEmpty()) text = cityName
+                        val cityName = getCityName(it.context, false)
+                        if (cityName.isNotEmpty()) it.text = cityName
                     }
 
-                    times.layoutTransition = LayoutTransition().apply {
+                    binding.times.layoutTransition = LayoutTransition().apply {
                         enableTransitionType(LayoutTransition.APPEARING)
                         setAnimateParentHierarchy(false)
                     }
-                    timesFlow.setup(times)
+                    binding.timesFlow.setup(binding.times)
                 }.root
             )
         } ?: emptyList())
@@ -492,36 +495,39 @@ class CalendarFragment : Fragment() {
                 true
             }
         }
-        searchView = (menu.findItem(R.id.search).actionView as? SearchView?)?.apply {
-            setOnSearchClickListener {
+        searchView = (menu.findItem(R.id.search).actionView as? SearchView)?.also { searchView ->
+            searchView.setOnSearchClickListener {
                 // Remove search edit view below bar
-                findViewById<View?>(androidx.appcompat.R.id.search_plate)?.setBackgroundColor(
-                    Color.TRANSPARENT
-                )
+                searchView.findViewById<View?>(
+                    androidx.appcompat.R.id.search_plate
+                )?.setBackgroundColor(Color.TRANSPARENT)
 
-                findViewById<SearchAutoComplete?>(androidx.appcompat.R.id.search_src_text)?.apply {
-                    setHint(R.string.search_in_events)
-                    setAdapter(
+                searchView.findViewById<SearchAutoComplete?>(
+                    androidx.appcompat.R.id.search_src_text
+                )?.also { searchAutoComplete ->
+                    val context = searchAutoComplete.context
+                    searchAutoComplete.setHint(R.string.search_in_events)
+                    searchAutoComplete.setAdapter(
                         ArrayAdapter(
-                            activity ?: return@apply, R.layout.suggestion, android.R.id.text1,
+                            context, R.layout.suggestion, android.R.id.text1,
                             allEnabledEvents + getAllEnabledAppointments(context)
                         )
                     )
-                    setOnItemClickListener { parent, _, position, _ ->
+                    searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
                         val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                         val type = getCalendarTypeFromDate(date)
                         val today = getTodayOfCalendar(type)
                         bringDate(
                             getDateOfCalendar(
-                                type,
-                                if (date.year == -1)
+                                calendar = type,
+                                year = if (date.year == -1)
                                     (today.year + if (date.month < today.month) 1 else 0)
                                 else date.year,
-                                date.month,
-                                date.dayOfMonth
+                                month = date.month,
+                                day = date.dayOfMonth
                             ).toJdn()
                         )
-                        onActionViewCollapsed()
+                        searchView.onActionViewCollapsed()
                     }
                 }
             }

@@ -29,9 +29,7 @@ class SelectDayDialog : AppCompatDialogFragment() {
         private const val BUNDLE_KEY = "jdn"
 
         fun newInstance(jdn: Long) = SelectDayDialog().apply {
-            arguments = Bundle().apply {
-                putLong(BUNDLE_KEY, jdn)
-            }
+            arguments = Bundle().also { it.putLong(BUNDLE_KEY, jdn) }
         }
     }
 }

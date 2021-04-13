@@ -60,9 +60,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
             return
         }
 
-        val args = Bundle().apply {
-            putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        }
+        val args = Bundle().also { it.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId) }
         supportFragmentManager.commit {
             add(
                 R.id.preference_fragment_holder,
