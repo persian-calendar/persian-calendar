@@ -455,22 +455,24 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setOwghat(jdn: Long, isToday: Boolean) {
-        if (coordinate == null) return
+        val coordinate = coordinate ?: return
+        val owghatBinding = owghatBinding ?: return
 
         val prayTimes = PrayTimesCalculator.calculate(
             calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
         )
-        owghatBinding?.timesFlow?.update(prayTimes)
-        owghatBinding?.sunView?.run {
-            setSunriseSunsetMoonPhase(prayTimes, runCatching {
-                coordinate?.run {
-                    SunMoonPosition(
-                        getTodayJdn().toDouble(), latitude,
-                        longitude, 0.0, 0.0
-                    ).moonPhase
-                }
-            }.onFailure(logException).getOrNull() ?: 1.0)
-            visibility = if (isToday) View.VISIBLE else View.GONE
+        owghatBinding.timesFlow.update(prayTimes)
+        owghatBinding.sunView.run {
+            visibility = if (isToday) {
+                setSunriseSunsetMoonPhase(prayTimes, runCatching {
+                    coordinate.let {
+                        SunMoonPosition(
+                            jdn.toDouble(), it.latitude, it.longitude, it.elevation, 0.0
+                        ).moonPhase
+                    }
+                }.onFailure(logException).getOrNull() ?: 1.0)
+                View.VISIBLE
+            } else View.GONE
             if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) startAnimate()
         }
     }
