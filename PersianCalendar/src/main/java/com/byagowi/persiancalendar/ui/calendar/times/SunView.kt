@@ -187,6 +187,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             drawLine(width / 2f, height * .7f, width / 2f, height * .8f, paint)
 
             // draw sun
+            val sunMoonRadius = height * .09f
             if (current in .17f..0.83f) {
                 sunPaint.color = argbEvaluator.evaluate(
                     current, sunBeforeMiddayColor, sunAfterMiddayColor
@@ -194,10 +195,9 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
                 drawCircle(
                     width * current,
                     getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt()),
-                    height * .09f,
-                    sunPaint
+                    sunMoonRadius, sunPaint
                 )
-            } else drawMoon(canvas)
+            } else drawMoon(canvas, sunMoonRadius)
         }
 
         // draw text
@@ -233,9 +233,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         )
     }
 
-    private fun drawMoon(canvas: Canvas) {
+    private fun drawMoon(canvas: Canvas, r: Float) {
         // This is brought from QiblaCompassView with some modifications
-        val r = height * .08f
         val radius = 1f
         val px = width * current
         val py = getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt())
