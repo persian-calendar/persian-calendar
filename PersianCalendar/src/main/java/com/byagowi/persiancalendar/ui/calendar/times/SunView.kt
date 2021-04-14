@@ -256,7 +256,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
             it.drawArc(moonOval, 0f, 360f, false, moonPaintO)
             it.drawArc(moonRect, 0f, 360f, false, moonPaintD)
-            it.drawLine(px, py - radius, px, py + radius, moonPaintD)
         }
     }
 
