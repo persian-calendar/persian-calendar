@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -107,7 +108,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         private const val BUNDLE_KEY = "jdn"
 
         fun newInstance(jdn: Long) = MonthOverviewDialog().apply {
-            arguments = Bundle().also { it.putLong(BUNDLE_KEY, jdn) }
+            arguments = bundleOf(BUNDLE_KEY to jdn)
         }
     }
 }

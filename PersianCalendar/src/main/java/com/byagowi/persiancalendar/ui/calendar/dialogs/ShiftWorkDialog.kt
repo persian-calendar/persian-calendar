@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
+import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -249,7 +250,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         private const val BUNDLE_KEY = "jdn"
 
         fun newInstance(jdn: Long) = ShiftWorkDialog().apply {
-            arguments = Bundle().also { it.putLong(BUNDLE_KEY, jdn) }
+            arguments = bundleOf(BUNDLE_KEY to jdn)
         }
     }
 }

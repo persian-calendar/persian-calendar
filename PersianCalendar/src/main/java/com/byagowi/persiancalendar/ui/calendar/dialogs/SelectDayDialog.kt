@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.core.os.bundleOf
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.shared.DayPickerView
 
@@ -29,7 +30,7 @@ class SelectDayDialog : AppCompatDialogFragment() {
         private const val BUNDLE_KEY = "jdn"
 
         fun newInstance(jdn: Long) = SelectDayDialog().apply {
-            arguments = Bundle().also { it.putLong(BUNDLE_KEY, jdn) }
+            arguments = bundleOf(BUNDLE_KEY to jdn)
         }
     }
 }

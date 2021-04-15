@@ -12,6 +12,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.preference.ListPreference
 import androidx.preference.Preference
@@ -74,7 +75,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             else -> super.onDisplayPreferenceDialog(preference)
         }
         fragment?.let {
-            it.arguments = Bundle(1).apply { putString("key", preference?.key) }
+            it.arguments = bundleOf("key" to preference?.key)
             it.setTargetFragment(this, 0)
             it.show(parentFragmentManager, it.javaClass.name)
         }

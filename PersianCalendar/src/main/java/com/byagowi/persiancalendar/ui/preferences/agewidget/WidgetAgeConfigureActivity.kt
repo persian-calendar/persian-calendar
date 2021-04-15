@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
@@ -60,7 +61,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
             return
         }
 
-        val args = Bundle().also { it.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId) }
+        val args = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId)
         supportFragmentManager.commit {
             add(
                 R.id.preference_fragment_holder,
