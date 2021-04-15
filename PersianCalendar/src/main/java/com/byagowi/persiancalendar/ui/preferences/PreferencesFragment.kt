@@ -36,5 +36,6 @@ class PreferencesFragment : Fragment() {
             override fun createFragment(position: Int) = tabs[position].second.newInstance()
         }
         TabLayoutMediator(tabLayout, viewPager) { tab, i -> tab.setText(tabs[i].first) }.attach()
+        viewPager.currentItem = arguments?.getInt("TAB") ?: 0
     }.root
 }

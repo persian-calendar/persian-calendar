@@ -56,6 +56,7 @@ const val PREF_WEEK_ENDS = "WeekEnds"
 const val PREF_SHIFT_WORK_STARTING_JDN = "ShiftWorkJdn"
 const val PREF_SHIFT_WORK_SETTING = "ShiftWorkSetting"
 const val PREF_SHIFT_WORK_RECURS = "ShiftWorkRecurs"
+const val PREF_DISABLE_OWGHAT = "DisableOwghat"
 
 const val CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE"
 
