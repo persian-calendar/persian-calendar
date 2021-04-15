@@ -22,7 +22,12 @@
             app:enterAnim="@anim/nav_enter_anim"
             app:exitAnim="@anim/nav_exit_anim"
             app:popEnterAnim="@anim/nav_enter_anim"
-            app:popExitAnim="@anim/nav_exit_anim" />
+            app:popExitAnim="@anim/nav_exit_anim">
+            <argument
+                android:name="tab"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </action>
     </fragment>
 
     <fragment
@@ -62,7 +67,12 @@
         android:id="@+id/settings"
         android:name="com.byagowi.persiancalendar.ui.preferences.PreferencesFragment"
         android:label="Settings Fragment"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar">
+        <argument
+            android:name="tab"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 
     <fragment
         android:id="@+id/about"

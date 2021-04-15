@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
@@ -36,6 +38,11 @@ class PreferencesFragment : Fragment() {
             override fun createFragment(position: Int) = tabs[position].second.newInstance()
         }
         TabLayoutMediator(tabLayout, viewPager) { tab, i -> tab.setText(tabs[i].first) }.attach()
-        viewPager.currentItem = arguments?.getInt("TAB") ?: 0
+        val args: PreferencesFragmentArgs by navArgs()
+        viewPager.currentItem = args.tab
     }.root
 }
+
+val INTERFACE_CALENDAR_TAB = 0
+val WIDGET_NOTIFICATION_TAB = 1
+val LOCATION_ATHAN_TAB = 2

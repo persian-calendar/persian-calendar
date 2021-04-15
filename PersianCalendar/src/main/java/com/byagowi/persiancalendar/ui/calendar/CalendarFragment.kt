@@ -23,7 +23,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +38,7 @@ import com.byagowi.persiancalendar.ui.NavigationInterface
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
+import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.*
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
@@ -99,7 +99,7 @@ class CalendarFragment : Fragment() {
         val shouldDisableOwghat = (coordinate == null &&
                 appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false)) ||
                 // Just to check the isn't new to the app
-                appPrefs.getString(PREF_THEME, null) != null ||
+                // appPrefs.getString(PREF_THEME, null) != null ||
                 // Really extra check
                 language != LANG_FA
 
@@ -123,7 +123,9 @@ class CalendarFragment : Fragment() {
                 inflater, container, false
             ).also { owghatBinding ->
                 owghatBinding.activate.setOnClickListener {
-                    findNavController().navigate(R.id.settings, bundleOf("TAB" to 2))
+                    findNavController().navigate(
+                        CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
+                    )
                 }
                 owghatBinding.discard.setOnClickListener {
                     context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }

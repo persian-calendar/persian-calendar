@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="@dimen/padding_item"
-        android:text="برای دیدن اوقات شرعی باید مکان را در تنظیمات مشخص کنید." />
+        android:text="برای دیدن اوقات شرعی مکان را در تنظیمات مشخص کنید." />
 
     <LinearLayout
         android:layout_width="match_parent"
