@@ -90,41 +90,56 @@ class CalendarFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = FragmentCalendarBinding.inflate(inflater, container, false).apply {
-        mainBinding = this
+    ): View = FragmentCalendarBinding.inflate(inflater, container, false).also { binding ->
+        mainBinding = binding
 
         val tabs = listOf(
 
             // First tab
-            R.string.calendar to CalendarsView(inflater.context).apply {
-                calendarsView = this
-            },
+            R.string.calendar to CalendarsView(inflater.context).also { this.calendarsView = it },
 
             // Second tab
-            R.string.events to EventsTabContentBinding.inflate(inflater, container, false).apply {
-                eventsBinding = this
-
-                // Apply some animation, don't do the same for others tabs, it is problematic
-                eventsContent.layoutTransition = LayoutTransition().apply {
-                    enableTransitionType(LayoutTransition.CHANGING)
-                    setAnimateParentHierarchy(false)
+            R.string.events to EventsTabContentBinding.inflate(
+                inflater, container, false
+            ).also { eventsBinding ->
+                this.eventsBinding = eventsBinding
+                eventsBinding.eventsContent.layoutTransition = LayoutTransition().also {
+                    it.enableTransitionType(LayoutTransition.CHANGING)
+                    it.setAnimateParentHierarchy(false)
                 }
             }.root
 
-        ) + (getCoordinate(inflater.context)?.run {
-            coordinate = this
-
+        ) + (getCoordinate(inflater.context)?.let { coordinate ->
+            this.coordinate = coordinate
             listOf(
                 // Optional third tab
                 R.string.owghat to OwghatTabContentBinding.inflate(
                     inflater, container, false
-                ).also { binding ->
-                    owghatBinding = binding
+                ).also { owghatBinding ->
+                    this.owghatBinding = owghatBinding
 
-                    root.setOnClickListener { onOwghatClick() }
+                    var isExpanded = false
+                    val onOwghatTabClick = fun(_: View) {
+                        isExpanded = !isExpanded
+                        owghatBinding.timesFlow.toggle()
+                        owghatBinding.moreOwghat.contentDescription = resources.getString(
+                            if (isExpanded) R.string.close else R.string.open
+                        )
+                        owghatBinding.moreOwghat.animate()
+                            .rotation(if (isExpanded) 180f else 0f)
+                            .setDuration(
+                                resources.getInteger(android.R.integer.config_shortAnimTime)
+                                    .toLong()
+                            )
+                            .start()
+                    }
 
-                    binding.cityName.also {
-                        it.setOnClickListener { onOwghatClick() }
+                    owghatBinding.root.setOnClickListener(onOwghatTabClick)
+                    owghatBinding.cityName.also {
+                        val cityName = getCityName(it.context, false)
+                        if (cityName.isNotEmpty()) it.text = cityName
+
+                        it.setOnClickListener(onOwghatTabClick)
                         // Easter egg to test AthanActivity
                         it.setOnLongClickListener { _ ->
                             startAthan(
@@ -133,15 +148,12 @@ class CalendarFragment : Fragment() {
                             )
                             true
                         }
-                        val cityName = getCityName(it.context, false)
-                        if (cityName.isNotEmpty()) it.text = cityName
                     }
-
-                    binding.times.layoutTransition = LayoutTransition().apply {
-                        enableTransitionType(LayoutTransition.APPEARING)
-                        setAnimateParentHierarchy(false)
+                    owghatBinding.times.layoutTransition = LayoutTransition().also {
+                        it.enableTransitionType(LayoutTransition.APPEARING)
+                        it.setAnimateParentHierarchy(false)
                     }
-                    binding.timesFlow.setup(binding.times)
+                    owghatBinding.timesFlow.setup(owghatBinding.times)
                 }.root
             )
         } ?: emptyList())
@@ -153,27 +165,29 @@ class CalendarFragment : Fragment() {
             )
         }
 
-        calendarPager.run {
-            onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
-            onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
-            onMonthSelected = fun() {
-                selectedMonth.let {
-                    updateToolbar(getMonthName(it), formatNumber(it.year))
+        binding.calendarPager.also {
+            it.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
+            it.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
+            it.onMonthSelected = fun() {
+                it.selectedMonth.let { date ->
+                    updateToolbar(getMonthName(date), formatNumber(date.year))
                     todayButton?.isVisible =
-                        it.year != initialDate.year || it.month != initialDate.month
+                        date.year != initialDate.year || date.month != initialDate.month
                 }
             }
         }
 
-        viewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        binding.viewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun getItemCount(): Int = tabs.size
             override fun getItemViewType(position: Int) = position // set viewtype equal to position
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                 object : RecyclerView.ViewHolder(tabs[viewType].second) {}
         }
-        TabLayoutMediator(tabLayout, viewPager) { tab, i -> tab.setText(tabs[i].first) }.attach()
-        viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, i ->
+            tab.setText(tabs[i].first)
+        }.attach()
+        binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                 else owghatBinding?.sunView?.clear()
@@ -183,7 +197,7 @@ class CalendarFragment : Fragment() {
 
         var lastTab = inflater.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-        viewPager.setCurrentItem(lastTab, false)
+        binding.viewPager.setCurrentItem(lastTab, false)
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -279,35 +293,35 @@ class CalendarFragment : Fragment() {
     private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = dayEvents
         .filterIsInstance<DeviceCalendarEvent>()
         .map { event ->
-            SpannableString(formatDeviceCalendarEventTitle(event)).apply {
-                setSpan(object : ClickableSpan() {
-                    override fun onClick(textView: View) = runCatching {
-                        startActivityForResult(
-                            Intent(Intent.ACTION_VIEW)
-                                .setData(
-                                    ContentUris.withAppendedId(
-                                        CalendarContract.Events.CONTENT_URI, event.id.toLong()
-                                    )
-                                ),
-                            CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-                        )
-                    }.onFailure(logException).getOrElse {
-                        Snackbar.make(
-                            textView,
-                            R.string.device_calendar_does_not_support,
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
+            val spannableString = SpannableString(formatDeviceCalendarEventTitle(event))
+            spannableString.setSpan(object : ClickableSpan() {
+                override fun onClick(textView: View) = runCatching {
+                    startActivityForResult(
+                        Intent(Intent.ACTION_VIEW)
+                            .setData(
+                                ContentUris.withAppendedId(
+                                    CalendarContract.Events.CONTENT_URI, event.id.toLong()
+                                )
+                            ),
+                        CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
+                    )
+                }.onFailure(logException).getOrElse {
+                    Snackbar.make(
+                        textView,
+                        R.string.device_calendar_does_not_support,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
 
-                    override fun updateDrawState(ds: TextPaint) {
-                        super.updateDrawState(ds)
-                        runCatching {
-                            // should be turned to long then int otherwise gets stupid alpha
-                            if (event.color.isNotEmpty()) ds.color = event.color.toLong().toInt()
-                        }.onFailure(logException)
-                    }
-                }, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            }
+                override fun updateDrawState(ds: TextPaint) {
+                    super.updateDrawState(ds)
+                    runCatching {
+                        // should be turned to long then int otherwise gets stupid alpha
+                        if (event.color.isNotEmpty()) ds.color = event.color.toLong().toInt()
+                    }.onFailure(logException)
+                }
+            }, 0, spannableString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            spannableString
         }
         .foldIndexed(SpannableStringBuilder()) { i, result, x ->
             if (i != 0) result.append("\n")
@@ -329,7 +343,7 @@ class CalendarFragment : Fragment() {
 
         // Update tabs
         calendarsView?.showCalendars(jdn, mainCalendar, getEnabledCalendarTypes())
-        showEvent(jdn, isToday)
+        showEvent(jdn)
         setOwghat(jdn, isToday)
 
         // a11y
@@ -343,115 +357,112 @@ class CalendarFragment : Fragment() {
         ).show()
     }
 
-    private fun showEvent(jdn: Long, isToday: Boolean) {
+    private fun showEvent(jdn: Long) {
         val activity = activity ?: return
-        eventsBinding?.run {
-            shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
-            val events = getEvents(
-                jdn,
-                readDayDeviceEvents(activity, jdn)
-            )
-            val holidays = getEventsTitle(
-                events,
-                holiday = true,
-                compact = false,
-                showDeviceCalendarEvents = false,
-                insertRLM = false,
-                addIsHoliday = isHighTextContrastEnabled
-            )
-            val nonHolidays = getEventsTitle(
-                events,
-                holiday = false,
-                compact = false,
-                showDeviceCalendarEvents = false,
-                insertRLM = false,
-                addIsHoliday = false
-            )
-            val deviceEvents = getDeviceEventsTitle(events)
-            val contentDescription = StringBuilder()
+        val eventsBinding = eventsBinding ?: return
 
-            eventMessage.visibility = View.GONE
-            noEvent.visibility = View.VISIBLE
+        eventsBinding.shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
+        val events = getEvents(
+            jdn,
+            readDayDeviceEvents(activity, jdn)
+        )
+        val holidays = getEventsTitle(
+            events,
+            holiday = true,
+            compact = false,
+            showDeviceCalendarEvents = false,
+            insertRLM = false,
+            addIsHoliday = isHighTextContrastEnabled
+        )
+        val nonHolidays = getEventsTitle(
+            events,
+            holiday = false,
+            compact = false,
+            showDeviceCalendarEvents = false,
+            insertRLM = false,
+            addIsHoliday = false
+        )
+        val deviceEvents = getDeviceEventsTitle(events)
+        val contentDescription = StringBuilder()
 
-            if (holidays.isNotEmpty()) {
-                noEvent.visibility = View.GONE
-                holidayTitle.text = holidays
-                val holidayContent = getString(R.string.holiday_reason) + "\n" + holidays
-                holidayTitle.contentDescription = holidayContent
-                contentDescription.append(holidayContent)
-                holidayTitle.visibility = View.VISIBLE
-            } else {
-                holidayTitle.visibility = View.GONE
-            }
+        eventsBinding.eventMessage.visibility = View.GONE
+        eventsBinding.noEvent.visibility = View.VISIBLE
 
-            if (deviceEvents.isNotEmpty()) {
-                noEvent.visibility = View.GONE
-                deviceEventTitle.text = deviceEvents
-                contentDescription
-                    .append("\n")
-                    .append(getString(R.string.show_device_calendar_events))
-                    .append("\n")
-                    .append(deviceEvents)
-
-
-                deviceEventTitle.run {
-                    movementMethod = LinkMovementMethod.getInstance()
-                    visibility = View.VISIBLE
-                }
-
-            } else {
-                deviceEventTitle.visibility = View.GONE
-            }
-
-            if (nonHolidays.isNotEmpty()) {
-                noEvent.visibility = View.GONE
-                eventTitle.text = nonHolidays
-                contentDescription
-                    .append("\n")
-                    .append(getString(R.string.events))
-                    .append("\n")
-                    .append(nonHolidays)
-
-
-                eventTitle.visibility = View.VISIBLE
-            } else {
-                eventTitle.visibility = View.GONE
-            }
-
-            val messageToShow = SpannableStringBuilder()
-
-            val enabledTypes = activity.appPrefs
-                .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-            if (enabledTypes.isEmpty()) {
-                noEvent.visibility = View.GONE
-                if (messageToShow.isNotEmpty()) messageToShow.append("\n")
-
-                val title = getString(R.string.warn_if_events_not_set)
-                val ss = SpannableString(title)
-                val clickableSpan = object : ClickableSpan() {
-                    override fun onClick(textView: View) {
-                        val direction = CalendarFragmentDirections.navigateToSettings()
-                        findNavController().navigate(direction)
-                    }
-                }
-                ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                messageToShow.append(ss)
-
-                contentDescription
-                    .append("\n")
-                    .append(title)
-            }
-
-            if (messageToShow.isNotEmpty()) {
-                eventMessage.run {
-                    text = messageToShow
-                    movementMethod = LinkMovementMethod.getInstance()
-                    visibility = View.VISIBLE
-                }
-            }
-
-            root.contentDescription = contentDescription
+        if (holidays.isNotEmpty()) {
+            eventsBinding.noEvent.visibility = View.GONE
+            eventsBinding.holidayTitle.text = holidays
+            val holidayContent = getString(R.string.holiday_reason) + "\n" + holidays
+            eventsBinding.holidayTitle.contentDescription = holidayContent
+            contentDescription.append(holidayContent)
+            eventsBinding.holidayTitle.visibility = View.VISIBLE
+        } else {
+            eventsBinding.holidayTitle.visibility = View.GONE
         }
+
+        if (deviceEvents.isNotEmpty()) {
+            eventsBinding.noEvent.visibility = View.GONE
+            eventsBinding.deviceEventTitle.text = deviceEvents
+            contentDescription
+                .append("\n")
+                .append(getString(R.string.show_device_calendar_events))
+                .append("\n")
+                .append(deviceEvents)
+
+            eventsBinding.deviceEventTitle.let {
+                it.movementMethod = LinkMovementMethod.getInstance()
+                it.visibility = View.VISIBLE
+            }
+        } else {
+            eventsBinding.deviceEventTitle.visibility = View.GONE
+        }
+
+        if (nonHolidays.isNotEmpty()) {
+            eventsBinding.noEvent.visibility = View.GONE
+            eventsBinding.eventTitle.text = nonHolidays
+            contentDescription
+                .append("\n")
+                .append(getString(R.string.events))
+                .append("\n")
+                .append(nonHolidays)
+
+            eventsBinding.eventTitle.visibility = View.VISIBLE
+        } else {
+            eventsBinding.eventTitle.visibility = View.GONE
+        }
+
+        val messageToShow = SpannableStringBuilder()
+
+        val enabledTypes = activity.appPrefs
+            .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+        if (enabledTypes.isEmpty()) {
+            eventsBinding.noEvent.visibility = View.GONE
+            if (messageToShow.isNotEmpty()) messageToShow.append("\n")
+
+            val title = getString(R.string.warn_if_events_not_set)
+            val ss = SpannableString(title)
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(textView: View) {
+                    val direction = CalendarFragmentDirections.navigateToSettings()
+                    findNavController().navigate(direction)
+                }
+            }
+            ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            messageToShow.append(ss)
+
+            contentDescription
+                .append("\n")
+                .append(title)
+        }
+
+        if (messageToShow.isNotEmpty()) {
+            eventsBinding.eventMessage.let {
+                it.text = messageToShow
+                it.movementMethod = LinkMovementMethod.getInstance()
+                it.visibility = View.VISIBLE
+            }
+        }
+
+        eventsBinding.root.contentDescription = contentDescription
     }
 
     private fun setOwghat(jdn: Long, isToday: Boolean) {
@@ -462,40 +473,24 @@ class CalendarFragment : Fragment() {
             calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
         )
         owghatBinding.timesFlow.update(prayTimes)
-        owghatBinding.sunView.run {
-            visibility = if (isToday) {
-                setSunriseSunsetMoonPhase(prayTimes, runCatching {
-                    coordinate.let {
-                        SunMoonPosition(
-                            jdn.toDouble(), it.latitude, it.longitude, it.elevation, 0.0
-                        ).moonPhase
-                    }
+        owghatBinding.sunView.let { sunView ->
+            sunView.visibility = if (isToday) {
+                sunView.setSunriseSunsetMoonPhase(prayTimes, runCatching {
+                    SunMoonPosition(
+                        jdn.toDouble(), coordinate.latitude, coordinate.longitude,
+                        coordinate.elevation, 0.0
+                    ).moonPhase
                 }.onFailure(logException).getOrNull() ?: 1.0)
                 View.VISIBLE
             } else View.GONE
-            if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) startAnimate()
-        }
-    }
-
-    var isExpanded = false
-    private fun onOwghatClick() {
-        isExpanded = !isExpanded
-        owghatBinding?.let {
-            it.timesFlow.toggle()
-            it.moreOwghat.contentDescription = resources.getString(
-                if (isExpanded) R.string.close else R.string.open
-            )
-            it.moreOwghat.animate()
-                .rotation(if (isExpanded) 180f else 0f)
-                .setDuration(resources.getInteger(android.R.integer.config_shortAnimTime).toLong())
-                .start()
+            if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()
         }
     }
 
     private fun setupToolbarMenu(menu: Menu) {
-        todayButton = menu.findItem(R.id.today_button).apply {
-            isVisible = false
-            setOnMenuItemClickListener {
+        todayButton = menu.findItem(R.id.today_button).also {
+            it.isVisible = false
+            it.setOnMenuItemClickListener {
                 bringDate(getTodayJdn(), highlight = false)
                 true
             }
@@ -565,9 +560,9 @@ class CalendarFragment : Fragment() {
      * returns true of does sth, otherwise returns else
      */
     private fun closeSearchIfOpen(): Boolean {
-        return searchView?.run {
-            if (!isIconified) {
-                onActionViewCollapsed()
+        return searchView?.let {
+            if (!it.isIconified) {
+                it.onActionViewCollapsed()
                 true
             } else false
         } ?: false
