@@ -5,8 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
+import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAgeWidgetConfigureBinding
@@ -19,8 +21,16 @@ import com.byagowi.persiancalendar.utils.getThemeFromPreference
 class AgeWidgetConfigureActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
-    private fun confirm() {
+    private fun confirm(title: String) {
         val context = this@AgeWidgetConfigureActivity
+
+        val selectedJdn = appPrefs.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, -1L)
+        appPrefs.edit {
+            if (selectedJdn == -1L) {
+                putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, selectedJdn)
+            }
+            putString(PREF_TITLE_AGE_WIDGET + appWidgetId, title)
+        }
 
         // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -75,11 +85,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, "")
         binding.editWidgetTitle.text = SpannableStringBuilder(title)
         binding.addWidgetButton.setOnClickListener {
-            appPrefs.edit().putString(
-                PREF_TITLE_AGE_WIDGET + appWidgetId,
-                binding.editWidgetTitle.text.toString()
-            ).apply()
-            confirm()
+            confirm(binding.editWidgetTitle.text.toString())
         }
     }
 }
