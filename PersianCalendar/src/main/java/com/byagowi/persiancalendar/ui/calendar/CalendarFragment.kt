@@ -97,15 +97,15 @@ class CalendarFragment : Fragment() {
         this.coordinate = coordinate
 
         val appPrefs = inflater.context.appPrefs
-        val shouldDisableOwghat = (coordinate == null &&
-                appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false)) ||
+        val shouldDisableOwghat = coordinate == null &&
+                (appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
                 // Just to check the isn't new to the app, the value will be not null when
                 // preferences is visited once.
                 appPrefs.getString(PREF_THEME, null) != null ||
                 // Really extra check as a user that has non default PREF_THEME sure went to
                 // preferences once but when we decide to remove the above one we should
                 // have this one at least as the placeholder isn't translated yet.
-                language != LANG_FA
+                language != LANG_FA)
 
         val tabs = listOf(
             // First tab
