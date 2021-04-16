@@ -9,7 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import androidx.activity.addCallback
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +45,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
 
+    private val onBackPressedCloseDrawerCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() = binding.drawer.closeDrawer(GravityCompat.START)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
 
@@ -52,14 +56,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
-        onBackPressedDispatcher.addCallback(this) {
-            if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
-                binding.drawer.closeDrawer(GravityCompat.START)
-            } else {
-                isEnabled = false
-                onBackPressedDispatcher.onBackPressed()
-            }
-        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
         initUtils(this)
 
@@ -439,8 +436,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             drawer.requestLayout()
         }
 
+        override fun onDrawerOpened(drawerView: View) {
+            super.onDrawerOpened(drawerView)
+            onBackPressedCloseDrawerCallback.isEnabled = true
+        }
+
         override fun onDrawerClosed(drawerView: View) {
             super.onDrawerClosed(drawerView)
+            onBackPressedCloseDrawerCallback.isEnabled = false
             if (clickedItem != 0) {
                 navigateTo(clickedItem)
                 clickedItem = 0

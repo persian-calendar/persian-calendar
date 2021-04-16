@@ -18,7 +18,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
 import android.widget.ArrayAdapter
-import androidx.activity.addCallback
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
@@ -76,15 +76,17 @@ class CalendarFragment : Fragment() {
         todayButton = null
     }
 
+    private val onBackPressedCloseSearchCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+            searchView?.takeIf { !it.isIconified }?.onActionViewCollapsed()
+            isEnabled = false
+        }
+    }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         navigation = activity as? NavigationInterface
-        activity?.onBackPressedDispatcher?.addCallback(this) {
-            if (closeSearchIfOpen().not()) {
-                isEnabled = false
-                activity?.onBackPressedDispatcher?.onBackPressed()
-            }
-        }
+        activity?.onBackPressedDispatcher?.addCallback(this, onBackPressedCloseSearchCallback)
     }
 
     override fun onCreateView(
@@ -520,7 +522,12 @@ class CalendarFragment : Fragment() {
             }
         }
         searchView = (menu.findItem(R.id.search).actionView as? SearchView)?.also { searchView ->
+            searchView.setOnCloseListener {
+                onBackPressedCloseSearchCallback.isEnabled = false
+                false // don't prevent the event cascade
+            }
             searchView.setOnSearchClickListener {
+                onBackPressedCloseSearchCallback.isEnabled = true
                 // Remove search edit view below bar
                 searchView.findViewById<View?>(
                     androidx.appcompat.R.id.search_plate
