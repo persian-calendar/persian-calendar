@@ -13,13 +13,11 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.DrawableRes
-import androidx.annotation.RawRes
-import androidx.annotation.StringRes
-import androidx.annotation.StyleRes
+import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
@@ -634,4 +632,10 @@ fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).apply { progress = 1f }
     setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
     setNavigationOnClickListener { findNavController().navigateUp() }
+}
+
+@ColorInt
+fun Context.resolveColor(attr: Int) = TypedValue().let {
+    theme.resolveAttribute(attr, it, true)
+    ContextCompat.getColor(this, it.resourceId)
 }

@@ -39,9 +39,9 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL }
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
-    private val horizonColor = resolveColor(R.attr.SunViewHorizonColor)
-    private val timelineColor = resolveColor(R.attr.SunViewTimelineColor)
-    private val taggingColor = resolveColor(R.attr.SunViewTaglineColor)
+    private val horizonColor = context.resolveColor(R.attr.SunViewHorizonColor)
+    private val timelineColor = context.resolveColor(R.attr.SunViewTimelineColor)
+    private val taggingColor = context.resolveColor(R.attr.SunViewTaglineColor)
     private val nightColor = ContextCompat.getColor(context, R.color.sViewNightColor)
     private val dayColor = ContextCompat.getColor(context, R.color.sViewDayColor)
     private val daySecondColor = ContextCompat.getColor(context, R.color.sViewDaySecondColor)
@@ -49,10 +49,10 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
     private val sunAfterMiddayColor =
         ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
-    private val sunriseTextColor = resolveColor(R.attr.SunViewSunriseTextColor)
-    private val middayTextColor = resolveColor(R.attr.SunViewMiddayTextColor)
-    private val sunsetTextColor = resolveColor(R.attr.SunViewSunsetTextColor)
-    private val colorTextSecond = resolveColor(R.attr.colorTextSecond)
+    private val sunriseTextColor = context.resolveColor(R.attr.SunViewSunriseTextColor)
+    private val middayTextColor = context.resolveColor(R.attr.SunViewMiddayTextColor)
+    private val sunsetTextColor = context.resolveColor(R.attr.SunViewSunsetTextColor)
+    private val colorTextSecond = context.resolveColor(R.attr.colorTextSecond)
 
     internal var width: Int = 0
     internal var height: Int = 0
@@ -98,12 +98,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         LANG_EN_IR, LANG_EN_US, LANG_JA -> 12.dp
         else -> 14.dp
     }.toFloat()
-
-    @ColorInt
-    fun resolveColor(attr: Int) = TypedValue().let {
-        context.theme.resolveAttribute(attr, it, true)
-        ContextCompat.getColor(context, it.resourceId)
-    }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)

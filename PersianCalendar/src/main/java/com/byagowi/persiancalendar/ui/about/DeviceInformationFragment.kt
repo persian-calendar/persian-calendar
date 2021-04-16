@@ -118,6 +118,7 @@ class DeviceInformationFragment : Fragment() {
                                 linearLayout.addView(TabLayout(
                                     activity, null, R.style.TabLayoutColored
                                 ).also { tabLayout ->
+                                    val tintColor = activity.resolveColor(R.attr.normalTabTextColor)
                                     listOf(
                                         R.drawable.ic_developer to -1,
                                         R.drawable.ic_translator to 0,
@@ -127,7 +128,10 @@ class DeviceInformationFragment : Fragment() {
                                     ).map {
                                         tabLayout.addTab(tabLayout.newTab().also { tab ->
                                             tab.setIcon(it.first)
-                                            tab.orCreateBadge.also { badge ->
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                tab.icon?.setTint(tintColor)
+                                            }
+                                            tab.getOrCreateBadge().also { badge ->
                                                 badge.isVisible = it.second >= 0
                                                 if (it.second > 0) badge.number = it.second
                                             }
@@ -138,7 +142,7 @@ class DeviceInformationFragment : Fragment() {
                                         override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
                                         override fun onTabReselected(tab: TabLayout.Tab?) = Unit
                                         override fun onTabSelected(tab: TabLayout.Tab?) {
-                                            tab?.orCreateBadge?.isVisible = false
+                                            tab?.getOrCreateBadge()?.isVisible = false
                                         }
                                     })
                                     tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
