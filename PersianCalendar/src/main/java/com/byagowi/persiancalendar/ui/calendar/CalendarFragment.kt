@@ -98,9 +98,12 @@ class CalendarFragment : Fragment() {
         val appPrefs = inflater.context.appPrefs
         val shouldDisableOwghat = (coordinate == null &&
                 appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false)) ||
-                // Just to check the isn't new to the app
+                // Just to check the isn't new to the app, the value will be not null when
+                // preferences is visited once.
                 appPrefs.getString(PREF_THEME, null) != null ||
-                // Really extra check
+                // Really extra check as a user that has non default PREF_THEME sure went to
+                // preferences once but when we decide to remove the above one we should
+                // have this one at least as the placeholder isn't translated yet.
                 language != LANG_FA
 
         val tabs = listOf(
@@ -119,60 +122,64 @@ class CalendarFragment : Fragment() {
             }.root
         ) + if (shouldDisableOwghat) emptyList() else listOf(
             // The optional third tab
-            if (coordinate == null) R.string.owghat to OwghatTabPlaceholderBinding.inflate(
-                inflater, container, false
-            ).also { owghatBinding ->
-                owghatBinding.activate.setOnClickListener {
-                    findNavController().navigate(
-                        CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
-                    )
-                }
-                owghatBinding.discard.setOnClickListener {
-                    context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
-                    navigation?.restartActivity()
-                }
-            }.root else R.string.owghat to OwghatTabContentBinding.inflate(
-                inflater, container, false
-            ).also { owghatBinding ->
-                this.owghatBinding = owghatBinding
-
-                var isExpanded = false
-                val onOwghatTabClick = fun(_: View) {
-                    isExpanded = !isExpanded
-                    owghatBinding.timesFlow.toggle()
-                    owghatBinding.moreOwghat.contentDescription = resources.getString(
-                        if (isExpanded) R.string.close else R.string.open
-                    )
-                    owghatBinding.moreOwghat.animate()
-                        .rotation(if (isExpanded) 180f else 0f)
-                        .setDuration(
-                            resources.getInteger(android.R.integer.config_shortAnimTime)
-                                .toLong()
+            R.string.owghat to if (coordinate == null) {
+                OwghatTabPlaceholderBinding.inflate(
+                    inflater, container, false
+                ).also { owghatBindingPlaceholder ->
+                    owghatBindingPlaceholder.activate.setOnClickListener {
+                        findNavController().navigate(
+                            CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
                         )
-                        .start()
-                }
-
-                owghatBinding.root.setOnClickListener(onOwghatTabClick)
-                owghatBinding.cityName.also {
-                    val cityName = getCityName(it.context, false)
-                    if (cityName.isNotEmpty()) it.text = cityName
-
-                    it.setOnClickListener(onOwghatTabClick)
-                    // Easter egg to test AthanActivity
-                    it.setOnLongClickListener { _ ->
-                        startAthan(
-                            it.context,
-                            listOf("FAJR", "DHUHR", "ASR", "MAGHRIB", "ISHA").random()
-                        )
-                        true
                     }
-                }
-                owghatBinding.times.layoutTransition = LayoutTransition().also {
-                    it.enableTransitionType(LayoutTransition.APPEARING)
-                    it.setAnimateParentHierarchy(false)
-                }
-                owghatBinding.timesFlow.setup(owghatBinding.times)
-            }.root
+                    owghatBindingPlaceholder.discard.setOnClickListener {
+                        context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
+                        navigation?.restartActivity()
+                    }
+                }.root
+            } else {
+                OwghatTabContentBinding.inflate(
+                    inflater, container, false
+                ).also { owghatBinding ->
+                    this.owghatBinding = owghatBinding
+
+                    var isExpanded = false
+                    val onOwghatTabClick = fun(_: View) {
+                        isExpanded = !isExpanded
+                        owghatBinding.timesFlow.toggle()
+                        owghatBinding.moreOwghat.contentDescription = resources.getString(
+                            if (isExpanded) R.string.close else R.string.open
+                        )
+                        owghatBinding.moreOwghat.animate()
+                            .rotation(if (isExpanded) 180f else 0f)
+                            .setDuration(
+                                resources.getInteger(android.R.integer.config_shortAnimTime)
+                                    .toLong()
+                            )
+                            .start()
+                    }
+
+                    owghatBinding.root.setOnClickListener(onOwghatTabClick)
+                    owghatBinding.cityName.also {
+                        val cityName = getCityName(it.context, false)
+                        if (cityName.isNotEmpty()) it.text = cityName
+
+                        it.setOnClickListener(onOwghatTabClick)
+                        // Easter egg to test AthanActivity
+                        it.setOnLongClickListener { _ ->
+                            startAthan(
+                                it.context,
+                                listOf("FAJR", "DHUHR", "ASR", "MAGHRIB", "ISHA").random()
+                            )
+                            true
+                        }
+                    }
+                    owghatBinding.times.layoutTransition = LayoutTransition().also {
+                        it.enableTransitionType(LayoutTransition.APPEARING)
+                        it.setAnimateParentHierarchy(false)
+                    }
+                    owghatBinding.timesFlow.setup(owghatBinding.times)
+                }.root
+            }
         )
 
         // tabs should fill their parent otherwise view pager can't handle it
