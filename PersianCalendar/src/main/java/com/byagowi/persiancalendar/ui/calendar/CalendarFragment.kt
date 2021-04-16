@@ -34,7 +34,7 @@ import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import com.byagowi.persiancalendar.ui.NavigationInterface
+import com.byagowi.persiancalendar.ui.DrawerSetupContext
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showSelectDayDialog
@@ -63,7 +63,6 @@ class CalendarFragment : Fragment() {
     private var searchView: SearchView? = null
     private var todayButton: MenuItem? = null
     private val initialDate = getTodayOfCalendar(mainCalendar)
-    private var navigation: NavigationInterface? = null
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -85,14 +84,9 @@ class CalendarFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        navigation = activity as? NavigationInterface
         activity?.onBackPressedDispatcher?.addCallback(this, onBackPressedCloseSearchCallback)
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        navigation = null
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -140,7 +134,7 @@ class CalendarFragment : Fragment() {
                     }
                     owghatBindingPlaceholder.discard.setOnClickListener {
                         context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
-                        navigation?.restartActivity()
+                        findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
                     }
                 }.root
             } else {
@@ -237,7 +231,8 @@ class CalendarFragment : Fragment() {
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let {
-            navigation?.setupToolbarWithDrawer(viewLifecycleOwner, it.toolbar)
+            (activity as? DrawerSetupContext)
+                ?.setupToolbarWithDrawer(viewLifecycleOwner, it.toolbar)
             it.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
             setupToolbarMenu(it.toolbar.menu)
             it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
@@ -315,7 +310,7 @@ class CalendarFragment : Fragment() {
                     ) != PackageManager.PERMISSION_GRANTED
                 ) askForCalendarPermission(activity) else {
                     toggleShowDeviceCalendarOnPreference(activity, true)
-                    navigation?.restartActivity()
+                    findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
                 }
             }
         }

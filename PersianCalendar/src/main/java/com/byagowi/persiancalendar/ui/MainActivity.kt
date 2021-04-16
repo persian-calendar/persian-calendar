@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -38,7 +39,7 @@ import com.google.android.material.snackbar.Snackbar
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    NavigationInterface,
+    DrawerSetupContext,
     NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
 
     private var creationDateJdn: Long = 0
@@ -324,8 +325,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     this, Manifest.permission.READ_CALENDAR
                 ) -> {
                     toggleShowDeviceCalendarOnPreference(this, true)
-                    if (obtainNavHost().navController.currentDestination?.id == R.id.calendar)
-                        restartActivity()
+                    val navController = obtainNavHost().navController
+                    if (navController.currentDestination?.id == R.id.calendar)
+                        navController.navigate(CalendarFragmentDirections.navigateToSelf())
                 }
                 else -> toggleShowDeviceCalendarOnPreference(this, false)
             }
@@ -345,7 +347,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
-        if (creationDateJdn != getTodayJdn()) restartActivity()
+        if (creationDateJdn != getTodayJdn()) {
+            obtainNavHost().navController.navigate(CalendarFragmentDirections.navigateToSelf())
+        }
     }
 
     // Checking for the ancient "menu" key
@@ -359,12 +363,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             true
         }
         else -> super.onKeyDown(keyCode, event)
-    }
-
-    override fun restartActivity() {
-        val intent = intent
-        finish()
-        startActivity(intent)
     }
 
     private fun restartToSettings() {

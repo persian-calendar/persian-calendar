@@ -25,7 +25,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.ui.NavigationInterface
+import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.utils.*
 
 class ShiftWorkDialog : AppCompatDialogFragment() {
@@ -85,8 +85,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                 }
 
                 updateStoredPreference(activity)
-                // TODO: Ugly, perhaps we can just navigate to calendar page itself instead?
-                (activity as? NavigationInterface)?.restartActivity()
+                findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
             }
             .setCancelable(true)
             .setNegativeButton(R.string.cancel, null)
