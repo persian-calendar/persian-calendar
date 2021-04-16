@@ -7,34 +7,34 @@
     android:orientation="vertical"
     android:padding="@dimen/padding_item">
 
+    <!-- Only shown in Persian so no need for i18n for now -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="@dimen/padding_item"
-        android:text="برای دیدن اوقات شرعی مکان را در تنظیمات مشخص کنید." />
+        android:text="اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید." />
 
     <LinearLayout
+        android:gravity="end"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
             android:id="@+id/discard"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_item"
-            android:layout_weight="1"
-            android:text="مخفی‌سازی برگه"
-            android:textColor="?attr/colorSecondaryVariant" />
+            android:text="نیازی نیست"
+            android:textColor="?attr/colorTextSecond" />
 
         <Button
             android:id="@+id/activate"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="0dp"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_item"
-            android:layout_weight="1"
             android:text="رفتن به تنظیمات"
             android:textColor="?attr/colorPrimary" />
 
