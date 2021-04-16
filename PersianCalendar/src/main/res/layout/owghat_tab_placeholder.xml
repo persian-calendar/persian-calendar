@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/owghat_content"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,27 +17,28 @@
         android:text="اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید." />
 
     <LinearLayout
-        android:gravity="end"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/discard"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_item"
+            android:layout_weight="1"
             android:text="نیازی نیست"
-            android:textColor="?attr/colorTextSecond" />
+            app:cornerRadius="@dimen/button_radius" />
 
         <Button
             android:id="@+id/activate"
-            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
-            android:layout_width="wrap_content"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_item"
+            android:layout_weight="1"
             android:text="رفتن به تنظیمات"
-            android:textColor="?attr/colorPrimary" />
+            app:cornerRadius="@dimen/button_radius" />
 
     </LinearLayout>
 
