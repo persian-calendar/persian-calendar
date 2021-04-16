@@ -42,6 +42,7 @@ import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.tabs.TabLayout
 import java.util.*
 
 /**
@@ -106,16 +107,42 @@ class DeviceInformationFragment : Fragment() {
                                 linearLayout.addView(LinearProgressIndicator(activity).also { linearProgressIndicator ->
                                     linearProgressIndicator.isIndeterminate = true
                                     linearProgressIndicator.setIndicatorColor(
-                                        Color.RED,
-                                        Color.YELLOW,
-                                        Color.GREEN,
-                                        Color.BLUE
+                                        Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
                                     )
                                     linearProgressIndicator.layoutParams =
                                         ViewGroup.LayoutParams(
                                             ViewGroup.LayoutParams.MATCH_PARENT,
                                             ViewGroup.LayoutParams.WRAP_CONTENT
                                         )
+                                })
+                                linearLayout.addView(TabLayout(
+                                    activity, null, R.style.TabLayoutColored
+                                ).also { tabLayout ->
+                                    listOf(
+                                        R.drawable.ic_developer to -1,
+                                        R.drawable.ic_translator to 0,
+                                        R.drawable.ic_motorcycle to 1,
+                                        R.drawable.ic_help to 33,
+                                        R.drawable.ic_bug to 9999
+                                    ).map {
+                                        tabLayout.addTab(tabLayout.newTab().also { tab ->
+                                            tab.setIcon(it.first)
+                                            tab.orCreateBadge.also { badge ->
+                                                badge.isVisible = it.second >= 0
+                                                if (it.second > 0) badge.number = it.second
+                                            }
+                                        })
+                                    }
+                                    tabLayout.addOnTabSelectedListener(object :
+                                        TabLayout.OnTabSelectedListener {
+                                        override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+                                        override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+                                        override fun onTabSelected(tab: TabLayout.Tab?) {
+                                            tab?.orCreateBadge?.isVisible = false
+                                        }
+                                    })
+                                    tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
+                                    tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
                                 })
                                 linearLayout.addView(ImageView(activity).also { imageView ->
                                     imageView.minimumHeight = 80.dp
@@ -154,7 +181,7 @@ class DeviceInformationFragment : Fragment() {
                                     progressBar.layoutParams =
                                         ViewGroup.LayoutParams(
                                             ViewGroup.LayoutParams.MATCH_PARENT,
-                                            700
+                                            600
                                         )
                                     // setOnLongClickListener {
                                     //     val player = MediaPlayer.create(activity, R.raw.moonlight)
