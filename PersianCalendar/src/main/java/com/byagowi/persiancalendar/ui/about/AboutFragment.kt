@@ -88,7 +88,7 @@ class AboutFragment : Fragment() {
 
         val chipClick = View.OnClickListener {
             (it.tag as? String)?.also { user ->
-                if (user != "ImanSoltanian") return@also // The only person without GitHub account
+                if (user == "ImanSoltanian") return@also // The only person without GitHub account
                 runCatching {
                     CustomTabsIntent.Builder().build().launchUrl(
                         context, "https://github.com/$user".toUri()
