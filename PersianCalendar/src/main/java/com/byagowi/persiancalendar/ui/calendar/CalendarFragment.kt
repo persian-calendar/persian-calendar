@@ -99,7 +99,7 @@ class CalendarFragment : Fragment() {
         val shouldDisableOwghat = (coordinate == null &&
                 appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false)) ||
                 // Just to check the isn't new to the app
-                // appPrefs.getString(PREF_THEME, null) != null ||
+                appPrefs.getString(PREF_THEME, null) != null ||
                 // Really extra check
                 language != LANG_FA
 

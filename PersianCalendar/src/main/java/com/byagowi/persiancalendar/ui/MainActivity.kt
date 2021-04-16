@@ -143,7 +143,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         ) showAppIsOutDatedSnackbar()
 
         applyAppLanguage(this)
+
+        previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
     }
+
+    private var previousAppThemeValue: String? = null
 
     private fun obtainNavHost(): NavHostFragment {
         val navHostFragmentTag = "NavHostFrag"
@@ -293,7 +297,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(this)
 
-        if (key == PREF_APP_LANGUAGE || key == PREF_THEME) restartToSettings()
+        if (key == PREF_APP_LANGUAGE) restartToSettings()
+
+        // Restart activity if theme is changed and don't if app theme
+        // has just got a default value by preferences as going
+        // from null => SystemDefault which makes no difference
+        if (key == PREF_THEME && !(previousAppThemeValue == null &&
+                    sharedPreferences?.getString(PREF_THEME, null) == SYSTEM_DEFAULT_THEME)
+        ) restartToSettings()
 
         if (key == PREF_NOTIFY_DATE &&
             sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false

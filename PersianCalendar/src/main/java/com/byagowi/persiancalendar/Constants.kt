@@ -82,6 +82,7 @@ const val LIGHT_THEME = "LightTheme"
 const val DARK_THEME = "DarkTheme"
 const val BLUE_THEME = "BlueTheme"
 const val MODERN_THEME = "ClassicTheme" // don't change it, for legacy reasons
+const val SYSTEM_DEFAULT_THEME = "SystemDefault"
 
 const val LOAD_APP_ID = 1000
 const val THREE_HOURS_APP_ID = 1010
