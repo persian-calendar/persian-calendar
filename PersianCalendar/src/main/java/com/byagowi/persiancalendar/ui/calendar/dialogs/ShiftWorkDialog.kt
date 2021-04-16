@@ -84,9 +84,9 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                     putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
                 }
 
+                updateStoredPreference(activity)
                 // TODO: Ugly, perhaps we can just navigate to calendar page itself instead?
                 (activity as? NavigationInterface)?.restartActivity()
-                findNavController().navigate(R.id.calendar)
             }
             .setCancelable(true)
             .setNegativeButton(R.string.cancel, null)
