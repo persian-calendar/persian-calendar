@@ -19,10 +19,6 @@
         <action
             android:id="@+id/navigate_to_self"
             app:destination="@id/calendar"
-            app:enterAnim="@anim/nav_enter_anim"
-            app:exitAnim="@anim/nav_exit_anim"
-            app:popEnterAnim="@anim/nav_enter_anim"
-            app:popExitAnim="@anim/nav_exit_anim"
             app:popUpTo="@id/calendar"
             app:popUpToInclusive="true" />
         <action
