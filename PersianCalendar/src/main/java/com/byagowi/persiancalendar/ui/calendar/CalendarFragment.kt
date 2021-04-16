@@ -89,6 +89,11 @@ class CalendarFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(this, onBackPressedCloseSearchCallback)
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        navigation = null
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = FragmentCalendarBinding.inflate(inflater, container, false).also { binding ->
