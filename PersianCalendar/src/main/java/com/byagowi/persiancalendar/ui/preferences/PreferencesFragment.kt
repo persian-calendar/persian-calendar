@@ -8,7 +8,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
@@ -22,8 +21,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class PreferencesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentSettingsBinding.inflate(inflater, container, false).apply {
-        appBar.toolbar.let {
+    ) = FragmentSettingsBinding.inflate(inflater, container, false).also { binding ->
+        binding.appBar.toolbar.let {
             it.setTitle(R.string.settings)
             it.setupUpNavigation()
         }
@@ -33,13 +32,15 @@ class PreferencesFragment : Fragment() {
             R.string.pref_header_widget_location to WidgetNotificationFragment::class.java,
             R.string.pref_header_location_athan to LocationAthanFragment::class.java
         )
-        viewPager.adapter = object : FragmentStateAdapter(this@PreferencesFragment) {
+        binding.viewPager.adapter = object : FragmentStateAdapter(this@PreferencesFragment) {
             override fun getItemCount() = tabs.size
             override fun createFragment(position: Int) = tabs[position].second.newInstance()
         }
-        TabLayoutMediator(tabLayout, viewPager) { tab, i -> tab.setText(tabs[i].first) }.attach()
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, i ->
+            tab.setText(tabs[i].first)
+        }.attach()
         val args: PreferencesFragmentArgs by navArgs()
-        viewPager.currentItem = args.tab
+        binding.viewPager.currentItem = args.tab
     }.root
 }
 
