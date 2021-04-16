@@ -36,8 +36,8 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.NavigationInterface
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showSelectDayDialog
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.*
@@ -242,7 +242,7 @@ class CalendarFragment : Fragment() {
             setupToolbarMenu(it.toolbar.menu)
             it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
                 when (clickedMenuItem?.itemId) {
-                    R.id.go_to -> openGoToDayDialog()
+                    R.id.go_to -> showSelectDayDialog(selectedJdn, ::bringDate)
                     R.id.add_event -> addEventOnCalendar(selectedJdn)
                     R.id.shift_work -> openShiftWorkDialog()
                     R.id.month_overview -> openMonthOverView()
@@ -570,20 +570,9 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun openGoToDayDialog() {
-        SelectDayDialog.newInstance(selectedJdn).also {
-            it.onSuccess = fun(jdn: Long) { bringDate(jdn) }
-        }.show(childFragmentManager, SelectDayDialog::class.java.name)
-    }
-
     private fun openShiftWorkDialog() {
-        val activity = activity ?: return
-        ShiftWorkDialog.newInstance(selectedJdn).also {
-            it.onSuccess = fun() {
-                updateStoredPreference(activity)
-                navigation?.restartActivity()
-            }
-        }.show(childFragmentManager, ShiftWorkDialog::class.java.name)
+        ShiftWorkDialog.newInstance(selectedJdn)
+            .show(childFragmentManager, ShiftWorkDialog::class.java.name)
     }
 
     private fun openMonthOverView() {

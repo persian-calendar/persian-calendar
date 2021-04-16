@@ -13,10 +13,7 @@ import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAgeWidgetConfigureBinding
 import com.byagowi.persiancalendar.updateAgeWidget
-import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.getThemeFromName
-import com.byagowi.persiancalendar.utils.getThemeFromPreference
+import com.byagowi.persiancalendar.utils.*
 
 class AgeWidgetConfigureActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
@@ -27,7 +24,8 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         val selectedJdn = appPrefs.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, -1L)
         appPrefs.edit {
             if (selectedJdn == -1L) {
-                putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, selectedJdn)
+                // Put today's jdn if nothing was set
+                putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, getTodayJdn())
             }
             putString(PREF_TITLE_AGE_WIDGET + appWidgetId, title)
         }
@@ -74,10 +72,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         val args = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId)
         supportFragmentManager.commit {
             add(
-                R.id.preference_fragment_holder,
-                WidgetAgeConfigureFragment::class.java,
-                args,
-                "TAG"
+                R.id.preference_fragment_holder, WidgetAgeConfigureFragment::class.java, args, "TAG"
             )
         }
 

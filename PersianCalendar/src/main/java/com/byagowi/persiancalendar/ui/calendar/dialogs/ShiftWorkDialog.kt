@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -24,14 +25,13 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.ui.NavigationInterface
 import com.byagowi.persiancalendar.utils.*
 
 class ShiftWorkDialog : AppCompatDialogFragment() {
 
     private var jdn: Long = -1L
     private var selectedJdn: Long = -1L
-
-    var onSuccess = fun() {}
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
@@ -84,7 +84,8 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                     putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
                 }
 
-                onSuccess()
+                (activity as? NavigationInterface)?.restartActivity()
+                findNavController().navigate(R.id.calendar)
             }
             .setCancelable(true)
             .setNegativeButton(R.string.cancel, null)

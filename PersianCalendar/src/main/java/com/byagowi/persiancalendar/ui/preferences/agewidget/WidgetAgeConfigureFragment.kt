@@ -8,7 +8,7 @@ import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.ui.calendar.dialogs.SelectDayDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showSelectDayDialog
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.ColorPickerView
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.dp
@@ -109,21 +109,12 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
         }
 
         if (preference?.key == PREF_SELECTED_DATE_AGE_WIDGET) {
-            SelectDayDialog.newInstance(
-                sharedPreferences.getLong(
-                    PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId,
-                    getTodayJdn()
-                )
-            ).apply {
-                onSuccess = fun(jdn: Long) {
-                    sharedPreferences.edit {
-                        putLong(
-                            PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId,
-                            jdn
-                        )
-                    }
-                }
-            }.show(childFragmentManager, SelectDayDialog::class.java.name)
+            val todayJdn = getTodayJdn()
+            showSelectDayDialog(
+                sharedPreferences.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, todayJdn)
+            ) {
+                sharedPreferences.edit { putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, it) }
+            }
         }
         return super.onPreferenceTreeClick(preference)
     }
