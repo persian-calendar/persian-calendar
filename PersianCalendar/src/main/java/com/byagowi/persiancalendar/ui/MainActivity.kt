@@ -347,8 +347,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
+        val navController = obtainNavHost().navController
         if (creationDateJdn != getTodayJdn()) {
-            obtainNavHost().navController.navigate(CalendarFragmentDirections.navigateToSelf())
+            creationDateJdn = getTodayJdn()
+            if (navController.currentDestination?.id == R.id.calendar) {
+                navController.navigate(CalendarFragmentDirections.navigateToSelf())
+            }
         }
     }
 
