@@ -34,7 +34,7 @@ import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
-import com.byagowi.persiancalendar.ui.DrawerSetupContext
+import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showSelectDayDialog
@@ -231,7 +231,7 @@ class CalendarFragment : Fragment() {
         bringDate(getTodayJdn(), monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let {
-            (activity as? DrawerSetupContext)
+            (activity as? DrawerHost)
                 ?.setupToolbarWithDrawer(viewLifecycleOwner, it.toolbar)
             it.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
             setupToolbarMenu(it.toolbar.menu)

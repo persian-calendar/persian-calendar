@@ -39,8 +39,8 @@ import com.google.android.material.snackbar.Snackbar
  * Program activity for android
  */
 class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
-    DrawerSetupContext,
-    NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener {
+    NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener,
+    DrawerHost {
 
     private var creationDateJdn: Long = 0
     private var settingHasChanged = false
