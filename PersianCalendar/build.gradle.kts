@@ -126,7 +126,7 @@ dependencies {
 
     testImplementation("junit:junit:4.13")
     // Scratch.kt only dependencies
-    // testImplementation("com.squareup.okhttp:okhttp:2.7.5")
+    // testImplementation("com.squareup.okhttp3:okhttp:3.10.0")
     // testImplementation("org.json:json:20210307")
     // testImplementation("com.ibm.icu:icu4j:68.2")
 
