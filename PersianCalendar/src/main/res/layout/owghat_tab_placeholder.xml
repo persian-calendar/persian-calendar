@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_item"
             android:layout_weight="1"
-            android:text="نیازی نیست"
+            android:text="در نظر نگرفتن"
             app:cornerRadius="@dimen/button_radius" />
 
         <Button
