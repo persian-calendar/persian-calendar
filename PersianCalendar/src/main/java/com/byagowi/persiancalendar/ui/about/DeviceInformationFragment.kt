@@ -131,7 +131,7 @@ class DeviceInformationFragment : Fragment() {
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                                 tab.icon?.setTint(tintColor)
                                             }
-                                            tab.orCreateBadge.also { badge ->
+                                            tab.getOrCreateBadge().also { badge ->
                                                 badge.isVisible = it.second >= 0
                                                 if (it.second > 0) badge.number = it.second
                                             }
@@ -142,7 +142,7 @@ class DeviceInformationFragment : Fragment() {
                                         override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
                                         override fun onTabReselected(tab: TabLayout.Tab?) = Unit
                                         override fun onTabSelected(tab: TabLayout.Tab?) {
-                                            tab?.orCreateBadge?.isVisible = false
+                                            tab?.getOrCreateBadge()?.isVisible = false
                                         }
                                     })
                                     tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
@@ -234,7 +234,7 @@ class CheckerBoard(context: Context, attrs: AttributeSet?) :
 }
 
 // https://stackoverflow.com/a/58471997
-fun createCheckerRoundedBoard(
+private fun createCheckerRoundedBoard(
     tileSize: Float, r: Float, @ColorInt color: Int
 ) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     shader = BitmapShader(
@@ -255,7 +255,30 @@ fun createCheckerRoundedBoard(
     )
 }
 
-class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
+// https://stackoverflow.com/a/59234917
+// instead android.text.format.Formatter.formatShortFileSize() to control its locale
+private fun humanReadableByteCountBin(bytes: Long): String = when {
+    bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
+    bytes < 1024L -> "$bytes B"
+    bytes <= 0xfffccccccccccccL shr 40 -> "%.1f KiB".format(
+        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 10)
+    )
+    bytes <= 0xfffccccccccccccL shr 30 -> "%.1f MiB".format(
+        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 20)
+    )
+    bytes <= 0xfffccccccccccccL shr 20 -> "%.1f GiB".format(
+        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 30)
+    )
+    bytes <= 0xfffccccccccccccL shr 10 -> "%.1f TiB".format(
+        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 40)
+    )
+    bytes <= 0xfffccccccccccccL -> "%.1f PiB".format(
+        Locale.ENGLISH, (bytes shr 10).toDouble() / (0x1 shl 40)
+    )
+    else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
+}
+
+private class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
     ListAdapter<DeviceInformationAdapter.Item, DeviceInformationAdapter.ViewHolder>(
         object : DiffUtil.ItemCallback<Item>() {
             override fun areItemsTheSame(old: Item, new: Item) = old.title == new.title
@@ -264,36 +287,6 @@ class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
     ) {
 
     data class Item(val title: String, val content: CharSequence?, val version: String)
-
-    // https://stackoverflow.com/a/59234917
-    // instead android.text.format.Formatter.formatShortFileSize() to control its locale
-    private fun humanReadableByteCountBin(bytes: Long): String {
-        return when {
-            bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
-            bytes < 1024L -> "$bytes B"
-            bytes <= 0xfffccccccccccccL shr 40 -> "%.1f KiB".format(
-                Locale.ENGLISH,
-                bytes.toDouble() / (0x1 shl 10)
-            )
-            bytes <= 0xfffccccccccccccL shr 30 -> "%.1f MiB".format(
-                Locale.ENGLISH,
-                bytes.toDouble() / (0x1 shl 20)
-            )
-            bytes <= 0xfffccccccccccccL shr 20 -> "%.1f GiB".format(
-                Locale.ENGLISH,
-                bytes.toDouble() / (0x1 shl 30)
-            )
-            bytes <= 0xfffccccccccccccL shr 10 -> "%.1f TiB".format(
-                Locale.ENGLISH,
-                bytes.toDouble() / (0x1 shl 40)
-            )
-            bytes <= 0xfffccccccccccccL -> "%.1f PiB".format(
-                Locale.ENGLISH,
-                (bytes shr 10).toDouble() / (0x1 shl 40)
-            )
-            else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
-        }
-    }
 
     val deviceInformationItems = listOf(
         Item("Screen Resolution", activity.windowManager.run {
