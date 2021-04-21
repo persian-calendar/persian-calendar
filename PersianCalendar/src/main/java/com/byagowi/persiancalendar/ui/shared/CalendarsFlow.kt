@@ -13,19 +13,20 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
 
     private val calendarFont = getCalendarFragmentFont(context)
 
-    var calendars = emptyList<Pair<CalendarType, CalendarItemBinding>>()
+    var calendars = emptyList<CalendarItemBinding>()
     fun update(parentView: ViewGroup, calendarsToShow: List<CalendarType>, jdn: Long) {
-        // It implicitly expects calendarsToShow to not be changed during the view lifecycle
+        // It implicitly expects the number of calendarsToShow items to not be changed during
+        // the view lifecycle
         if (calendars.isEmpty()) {
             calendars = calendarsToShow.map {
-                it to CalendarItemBinding.inflate(context.layoutInflater, parentView, false)
+                CalendarItemBinding.inflate(context.layoutInflater, parentView, false)
             }
             val applyLineMultiplier = !isCustomFontEnabled
             referencedIds = calendars.map {
                 val id = View.generateViewId()
-                it.second.root.id = id
-                parentView.addView(it.second.root)
-                it.second.apply {
+                it.root.id = id
+                parentView.addView(it.root)
+                it.apply {
                     monthYear.typeface = calendarFont
                     day.typeface = calendarFont
                     if (applyLineMultiplier) monthYear.setLineSpacing(0f, .6f)
@@ -35,17 +36,17 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
                 id
             }.toIntArray()
         }
-        calendars.map {
-            val date = getDateFromJdnOfCalendar(it.first, jdn)
+        calendars.zip(calendarsToShow) { binding, calendarType ->
+            val date = getDateFromJdnOfCalendar(calendarType, jdn)
             val firstCalendarString = formatDate(date)
-            it.second.apply {
-                linear.text = toLinearDate(date)
-                linear.contentDescription = toLinearDate(date)
-                container.contentDescription = firstCalendarString
-                day.contentDescription = ""
-                day.text = formatNumber(date.dayOfMonth)
-                monthYear.contentDescription = ""
-                monthYear.text =
+            binding.also {
+                it.linear.text = toLinearDate(date)
+                it.linear.contentDescription = toLinearDate(date)
+                it.container.contentDescription = firstCalendarString
+                it.day.contentDescription = ""
+                it.day.text = formatNumber(date.dayOfMonth)
+                it.monthYear.contentDescription = ""
+                it.monthYear.text =
                     listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
             }
         }
