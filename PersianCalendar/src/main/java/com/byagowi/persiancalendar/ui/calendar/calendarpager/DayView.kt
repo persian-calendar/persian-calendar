@@ -3,10 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.*
 import kotlin.math.min

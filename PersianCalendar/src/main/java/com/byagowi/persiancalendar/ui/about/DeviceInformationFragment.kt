@@ -131,7 +131,7 @@ class DeviceInformationFragment : Fragment() {
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                                 tab.icon?.setTint(tintColor)
                                             }
-                                            tab.getOrCreateBadge().also { badge ->
+                                            tab.orCreateBadge.also { badge ->
                                                 badge.isVisible = it.second >= 0
                                                 if (it.second > 0) badge.number = it.second
                                             }
@@ -142,7 +142,7 @@ class DeviceInformationFragment : Fragment() {
                                         override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
                                         override fun onTabReselected(tab: TabLayout.Tab?) = Unit
                                         override fun onTabSelected(tab: TabLayout.Tab?) {
-                                            tab?.getOrCreateBadge()?.isVisible = false
+                                            tab?.orCreateBadge?.isVisible = false
                                         }
                                     })
                                     tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
