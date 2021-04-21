@@ -49,6 +49,6 @@ class LocationAdapter(
         }
 
         override fun onClick(view: View) =
-            locationPreferenceDialog.selectItem(cities[adapterPosition].key)
+            locationPreferenceDialog.selectItem(cities[bindingAdapterPosition].key)
     }
 }

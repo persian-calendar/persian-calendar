@@ -166,8 +166,8 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                             parent: AdapterView<*>, view: View, position: Int, id: Long
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == adapterPosition) ShiftWorkRecord(
-                                    text.toString(), rows[adapterPosition].length
+                                if (i == bindingAdapterPosition) ShiftWorkRecord(
+                                    text.toString(), rows[bindingAdapterPosition].length
                                 )
                                 else x
                             }
@@ -187,9 +187,9 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                             s: CharSequence?, start: Int, before: Int, count: Int
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == adapterPosition) ShiftWorkRecord(
+                                if (i == bindingAdapterPosition) ShiftWorkRecord(
                                     text.toString(),
-                                    rows[adapterPosition].length
+                                    rows[bindingAdapterPosition].length
                                 )
                                 else x
                             }
@@ -213,7 +213,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                             parent: AdapterView<*>, view: View, position: Int, id: Long
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == adapterPosition) ShiftWorkRecord(x.type, position)
+                                if (i == bindingAdapterPosition) ShiftWorkRecord(x.type, position)
                                 else x
                             }
                             updateShiftWorkResult()
@@ -228,7 +228,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
             }
 
             fun remove() {
-                rows = rows.filterIndexed { i, _ -> i != adapterPosition }
+                rows = rows.filterIndexed { i, _ -> i != bindingAdapterPosition }
                 notifyDataSetChanged()
                 updateShiftWorkResult()
             }

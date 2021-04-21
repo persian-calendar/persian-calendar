@@ -461,8 +461,8 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
 
         override fun onClick(v: View?) = copyToClipboard(
             rootView,
-            deviceInformationItems[adapterPosition].title,
-            deviceInformationItems[adapterPosition].content
+            deviceInformationItems[bindingAdapterPosition].title,
+            deviceInformationItems[bindingAdapterPosition].content
         )
     }
 }
