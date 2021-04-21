@@ -8,33 +8,22 @@ import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.appTheme
-import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
-import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
+import com.byagowi.persiancalendar.utils.*
 import kotlin.math.min
 
 class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     View(context, attrs) {
 
-    private val tempTypedValue = TypedValue()
+    private val colorHoliday = context.resolveColor(R.attr.colorHoliday)
+    private val colorHolidaySelected = context.resolveColor(R.attr.colorHolidaySelected)
 
-    @ColorInt
-    fun resolveColor(attr: Int) = tempTypedValue.let {
-        context.theme.resolveAttribute(attr, it, true)
-        ContextCompat.getColor(context, it.resourceId)
-    }
+    // private val colorTextHoliday = context.resolveColor(R.attr.colorTextHoliday)
+    private val colorTextDay = context.resolveColor(R.attr.colorTextDay)
+    private val colorTextDaySelected = context.resolveColor(R.attr.colorTextDaySelected)
 
-    private val colorHoliday = resolveColor(R.attr.colorHoliday)
-    private val colorHolidaySelected = resolveColor(R.attr.colorHolidaySelected)
-
-    // private val colorTextHoliday = resolveColor(R.attr.colorTextHoliday)
-    private val colorTextDay = resolveColor(R.attr.colorTextDay)
-    private val colorTextDaySelected = resolveColor(R.attr.colorTextDaySelected)
-
-    // private val colorTextToday = resolveColor(R.attr.colorTextToday)
-    private val colorTextDayName = resolveColor(R.attr.colorTextDayName)
-    private val colorEventLine = resolveColor(R.attr.colorEventLine)
+    // private val colorTextToday = context.resolveColor(R.attr.colorTextToday)
+    private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
+    private val colorEventLine = context.resolveColor(R.attr.colorEventLine)
 
     private val halfEventBarWidth = context.resources
         .getDimensionPixelSize(R.dimen.day_item_event_bar_width) / 2
@@ -48,13 +37,13 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
     private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
-        color = resolveColor(R.attr.colorSelectDay)
+        color = context.resolveColor(R.attr.colorSelectDay)
     }
     private val todayPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = context.resources
             .getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
-        color = resolveColor(R.attr.colorCurrentDay)
+        color = context.resolveColor(R.attr.colorCurrentDay)
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
