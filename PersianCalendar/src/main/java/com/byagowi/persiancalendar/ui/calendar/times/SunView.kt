@@ -256,6 +256,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         postInvalidate()
     }
 
+    private fun Float.safeDiv(other: Float) = if (other == 0f) 0f else this / other
+
     fun startAnimate() {
         val context = context ?: return
         val prayTimes = prayTimes ?: return
@@ -270,15 +272,9 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         val now = Clock(Calendar.getInstance(Locale.getDefault())).toInt().toFloat()
 
         val c = when {
-            now <= sunrise -> if (sunrise != 0f) {
-                (now - midnight) / sunrise * .17f
-            } else 0f
-            now <= sunset -> if (sunset - sunrise != 0f) {
-                (now - sunrise) / (sunset - sunrise) * .66f + .17f
-            } else 0f
-            else -> if (fullDay + midnight - sunset != 0f) {
-                (now - sunset) / (fullDay + midnight - sunset) * .17f + .17f + .66f
-            } else 0f
+            now <= sunrise -> (now - midnight).safeDiv(sunrise) * .17f
+            now <= sunset -> (now - sunrise).safeDiv(sunset - sunrise) * .66f + .17f
+            else -> (now - sunset).safeDiv(fullDay + midnight - sunset) * .17f + .17f + .66f
         }
 
         val dayLength = Clock.fromInt((sunset - sunrise).toInt())
