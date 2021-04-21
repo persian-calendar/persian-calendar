@@ -77,22 +77,15 @@ class DaysAdapter internal constructor(
         private val persianDigitsTextSize =
             context.resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
 
-        override fun onClick(v: View) {
-            val itemDayView = v as DayView
-            val jdn = itemDayView.jdn
-            if (jdn == -1L) return
-
+        override fun onClick(itemDayView: View) {
+            val jdn = (itemDayView as DayView).jdn.takeIf { it != -1L } ?: return
             calendarPager.onDayClicked(jdn)
             this@DaysAdapter.selectDay(itemDayView.dayOfMonth)
         }
 
-        override fun onLongClick(v: View): Boolean {
-            onClick(v)
-
-            val itemDayView = v as DayView
-            val jdn = itemDayView.jdn
-            if (jdn == -1L) return false
-
+        override fun onLongClick(itemDayView: View): Boolean {
+            onClick(itemDayView)
+            val jdn = (itemDayView as DayView).jdn.takeIf { it != -1L } ?: return false
             calendarPager.onDayLongClicked(jdn)
             return false
         }
