@@ -281,12 +281,11 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             )
         }
 
-        ValueAnimator.ofFloat(0F, c).apply {
-            duration = 1500L
-            interpolator = DecelerateInterpolator()
-            addUpdateListener(this@SunView)
-            start()
-        }
+        ValueAnimator.ofFloat(0F, c).also {
+            it.duration = 1500L
+            it.interpolator = DecelerateInterpolator()
+            it.addUpdateListener(this)
+        }.start()
     }
 
     fun clear() {
