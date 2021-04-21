@@ -13,16 +13,16 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
 
     private val calendarFont = getCalendarFragmentFont(context)
 
-    var calendars = emptyList<CalendarItemBinding>()
+    var bindings = emptyList<CalendarItemBinding>()
     fun update(parentView: ViewGroup, calendarsToShow: List<CalendarType>, jdn: Long) {
         // It implicitly expects the number of calendarsToShow items to not be changed during
         // the view lifecycle
-        if (calendars.isEmpty()) {
-            calendars = calendarsToShow.map {
+        if (bindings.isEmpty()) {
+            bindings = calendarsToShow.map {
                 CalendarItemBinding.inflate(context.layoutInflater, parentView, false)
             }
             val applyLineMultiplier = !isCustomFontEnabled
-            referencedIds = calendars.map {
+            referencedIds = bindings.map {
                 val id = View.generateViewId()
                 it.root.id = id
                 parentView.addView(it.root)
@@ -36,7 +36,7 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
                 id
             }.toIntArray()
         }
-        calendars.zip(calendarsToShow) { binding, calendarType ->
+        bindings.zip(calendarsToShow) { binding, calendarType ->
             val date = getDateFromJdnOfCalendar(calendarType, jdn)
             val firstCalendarString = formatDate(date)
             binding.also {
