@@ -326,7 +326,7 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String =
             LANG_CKB -> it.ckb
             else -> it.fa
         }
-    } ?: context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeUnless { it.isEmpty() }
+    } ?: context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
     ?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
     ?: ""
 
@@ -336,8 +336,8 @@ fun getCoordinate(context: Context): Coordinate? =
             getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
             getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
             getString(PREF_ALTITUDE, null)?.toDoubleOrNull() ?: .0
-        ).takeUnless { it.latitude == 0.0 && it.longitude == 0.0 }
-        // If latitude or longitude is zero probably preference is not set yet
+        ).takeIf { it.latitude != 0.0 || it.longitude != 0.0 }
+        // If latitude and longitude both are zero probably preference is not set yet
     }
 
 fun getTodayOfCalendar(calendar: CalendarType) = getDateFromJdnOfCalendar(calendar, getTodayJdn())

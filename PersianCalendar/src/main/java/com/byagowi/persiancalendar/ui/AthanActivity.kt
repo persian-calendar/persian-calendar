@@ -74,7 +74,7 @@ class AthanActivity : AppCompatActivity() {
         audioManager?.let { am ->
             am.setStreamVolume(
                 AudioManager.STREAM_ALARM,
-                athanVolume.takeUnless { it == DEFAULT_ATHAN_VOLUME } ?: am.getStreamVolume(
+                athanVolume.takeIf { it != DEFAULT_ATHAN_VOLUME } ?: am.getStreamVolume(
                     AudioManager.STREAM_ALARM
                 ),
                 0

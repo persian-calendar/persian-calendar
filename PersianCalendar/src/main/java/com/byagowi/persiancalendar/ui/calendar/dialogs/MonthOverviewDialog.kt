@@ -20,7 +20,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val activity = requireActivity()
 
         val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)
-            ?.takeUnless { it == -1L } ?: getTodayJdn()
+            ?.takeIf { it != -1L } ?: getTodayJdn()
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
@@ -41,7 +41,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
                     getDateFromJdnOfCalendar(mainCalendar, jdn)
                 ), holidays, nonHolidays
             )
-        }.takeUnless { it.isEmpty() } ?: listOf(
+        }.takeIf { it.isNotEmpty() } ?: listOf(
             MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
         )
 

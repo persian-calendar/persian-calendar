@@ -24,7 +24,7 @@ val Context.isAscendingAthanVolumeEnabled: Boolean
     get() = appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, false)
 
 fun getCustomAthanUri(context: Context): Uri? =
-    context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeUnless { it.isEmpty() }?.toUri()
+    context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }?.toUri()
 
 fun startAthan(context: Context, prayTimeKey: String): Any? = if (notificationAthan) {
     context.startService(
