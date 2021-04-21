@@ -5,10 +5,8 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
 import android.view.animation.DecelerateInterpolator
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withScale
@@ -135,13 +133,10 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         if (isShaderInitiationNeeded) {
             isShaderInitiationNeeded = false
-            handler.postDelayed({
-                LinearGradient(
-                    width * .17f, 0f, width / 2f, 0f, dayColor, daySecondColor,
-                    Shader.TileMode.MIRROR
-                ).also { dayPaint.shader = it }
-                postInvalidate()
-            }, 80)
+            dayPaint.shader = LinearGradient(
+                width * .17f, 0f, width / 2f, 0f, dayColor, daySecondColor,
+                Shader.TileMode.MIRROR
+            )
         }
 
         canvas.withScale(x = if (isRTL) -1f else 1f, pivotX = width / 2f, pivotY = height / 2f) {
