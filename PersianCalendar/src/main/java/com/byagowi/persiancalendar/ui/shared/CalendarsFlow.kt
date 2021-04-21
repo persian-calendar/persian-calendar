@@ -37,16 +37,14 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
         bindings.zip(calendarsToShow) { binding, calendarType ->
             val date = getDateFromJdnOfCalendar(calendarType, jdn)
             val firstCalendarString = formatDate(date)
-            binding.also {
-                it.linear.text = toLinearDate(date)
-                it.linear.contentDescription = toLinearDate(date)
-                it.container.contentDescription = firstCalendarString
-                it.day.contentDescription = ""
-                it.day.text = formatNumber(date.dayOfMonth)
-                it.monthYear.contentDescription = ""
-                it.monthYear.text =
-                    listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
-            }
+            binding.linear.text = toLinearDate(date)
+            binding.linear.contentDescription = toLinearDate(date)
+            binding.container.contentDescription = firstCalendarString
+            binding.day.contentDescription = ""
+            binding.day.text = formatNumber(date.dayOfMonth)
+            binding.monthYear.contentDescription = ""
+            binding.monthYear.text =
+                listOf(getMonthName(date), formatNumber(date.year)).joinToString("\n")
         }
     }
 
