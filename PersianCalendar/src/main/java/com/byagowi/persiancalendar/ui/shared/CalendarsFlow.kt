@@ -26,13 +26,11 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
                 val id = View.generateViewId()
                 it.root.id = id
                 parentView.addView(it.root)
-                it.apply {
-                    monthYear.typeface = calendarFont
-                    day.typeface = calendarFont
-                    if (applyLineMultiplier) monthYear.setLineSpacing(0f, .6f)
-                    container.setOnClickListener(this@CalendarsFlow)
-                    linear.setOnClickListener(this@CalendarsFlow)
-                }
+                it.monthYear.typeface = calendarFont
+                it.day.typeface = calendarFont
+                if (applyLineMultiplier) it.monthYear.setLineSpacing(0f, .6f)
+                it.container.setOnClickListener(this)
+                it.linear.setOnClickListener(this)
                 id
             }.toIntArray()
         }
