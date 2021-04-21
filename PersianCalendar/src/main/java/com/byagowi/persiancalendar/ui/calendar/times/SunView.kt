@@ -87,7 +87,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val middayString = context.getString(R.string.middaySunView)
     private val sunsetString = context.getString(R.string.sunsetSunView)
     private var isRTL = false
-    private var isShaderInitiationNeeded = true
     private var segmentByPixel = .0
     private val argbEvaluator = ArgbEvaluator()
     private var prayTimes: PrayTimes? = null
@@ -100,10 +99,13 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
 
-        isShaderInitiationNeeded = true
-
         width = w
         height = h - 18
+
+        dayPaint.shader = LinearGradient(
+            width * .17f, 0f, width / 2f, 0f, dayColor, daySecondColor,
+            Shader.TileMode.MIRROR
+        )
 
         if (width != 0) segmentByPixel = 2 * PI / width
 
@@ -127,18 +129,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val width = width
-        val height = height
-        val isRTL = isRTL
-
-        if (isShaderInitiationNeeded) {
-            isShaderInitiationNeeded = false
-            dayPaint.shader = LinearGradient(
-                width * .17f, 0f, width / 2f, 0f, dayColor, daySecondColor,
-                Shader.TileMode.MIRROR
-            )
-        }
-
         canvas.withScale(x = if (isRTL) -1f else 1f, pivotX = width / 2f, pivotY = height / 2f) {
             // draw fill of night
             withClip(0f, height * .75f, width * current, height.toFloat()) {
