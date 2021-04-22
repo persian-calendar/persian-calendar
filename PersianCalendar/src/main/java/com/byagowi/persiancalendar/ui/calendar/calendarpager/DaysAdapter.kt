@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.utils.*
 
@@ -77,15 +78,16 @@ class DaysAdapter internal constructor(
         private val persianDigitsTextSize =
             context.resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
 
-        override fun onClick(itemDayView: View) {
-            val jdn = (itemDayView as DayView).jdn.takeIf { it != -1L } ?: return
+        override fun onClick(v: View) {
+            val itemDayView = (v as? DayView).debugAssertNotNull ?: return
+            val jdn = itemDayView.jdn.takeIf { it != -1L } ?: return
             calendarPager.onDayClicked(jdn)
             this@DaysAdapter.selectDay(itemDayView.dayOfMonth)
         }
 
-        override fun onLongClick(itemDayView: View): Boolean {
-            onClick(itemDayView)
-            val jdn = (itemDayView as DayView).jdn.takeIf { it != -1L } ?: return false
+        override fun onLongClick(v: View): Boolean {
+            onClick(v)
+            val jdn = (v as? DayView).debugAssertNotNull?.jdn?.takeIf { it != -1L } ?: return false
             calendarPager.onDayLongClicked(jdn)
             return false
         }
@@ -93,7 +95,7 @@ class DaysAdapter internal constructor(
         fun bind(position: Int) {
             var position = position
             val originalPosition = position
-            val dayView = itemView as DayView
+            val dayView = (itemView as? DayView).debugAssertNotNull ?: return
             if (isShowWeekOfYearEnabled) {
                 if (position % 8 == 0) {
                     val row = position / 8
