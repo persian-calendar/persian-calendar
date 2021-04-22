@@ -13,8 +13,6 @@ sealed class CalendarEvent<T : AbstractDate>(
     val isHoliday: Boolean,
     val date: T
 ) {
-    override fun toString(): String = title
-
     class GregorianCalendarEvent(title: String, isHoliday: Boolean, date: CivilDate) :
         CalendarEvent<CivilDate>(title, isHoliday, date)
 
@@ -33,9 +31,7 @@ sealed class CalendarEvent<T : AbstractDate>(
         val start: Date,
         val end: Date,
         val color: String
-    ) : CalendarEvent<CivilDate>(title, isHoliday, date) {
-        override fun toString(): String = "$title ($description)"
-    }
+    ) : CalendarEvent<CivilDate>(title, isHoliday, date)
 }
 
 data class ShiftWorkRecord(val type: String, val length: Int)

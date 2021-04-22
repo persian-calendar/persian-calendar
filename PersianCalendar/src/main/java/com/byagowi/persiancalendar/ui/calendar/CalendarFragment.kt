@@ -17,7 +17,6 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.*
-import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
@@ -37,6 +36,7 @@ import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showSelectDayDialog
+import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.*
@@ -538,8 +538,8 @@ class CalendarFragment : Fragment() {
                     val context = searchAutoComplete.context
                     searchAutoComplete.setHint(R.string.search_in_events)
                     searchAutoComplete.setAdapter(
-                        ArrayAdapter(
-                            context, R.layout.suggestion, android.R.id.text1,
+                        SearchEventsAdapter(
+                            context,
                             allEnabledEvents + getAllEnabledAppointments(context)
                         )
                     )
