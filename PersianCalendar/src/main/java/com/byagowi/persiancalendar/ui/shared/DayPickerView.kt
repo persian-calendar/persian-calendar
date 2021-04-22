@@ -77,17 +77,12 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
-            return when {
-                day > getMonthLength(selectedCalendarType, year, month) -> {
-                    Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT)
-                        .setAnchorView(anchorView)
-                        .show()
-                    -1
-                }
-                else -> {
-                    getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
-                }
-            }
+            return if (day > getMonthLength(selectedCalendarType, year, month)) {
+                Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT)
+                    .setAnchorView(anchorView)
+                    .show()
+                -1
+            } else getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
         }
         set(value) {
             mJdn = if (value == -1L) getTodayJdn() else value
