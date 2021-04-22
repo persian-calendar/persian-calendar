@@ -200,7 +200,11 @@ fun loadEvents(context: Context) {
                         title += "افغانستان، "
                 }
                 title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
-                PersianCalendarEvent(PersianDate(year, month, day), title, holiday)
+                CalendarEvent.PersianCalendarEvent(
+                    date = PersianDate(year, month, day),
+                    title = title,
+                    isHoliday = holiday
+                )
             } else null
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
@@ -231,7 +235,11 @@ fun loadEvents(context: Context) {
                 }
                 title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
 
-                IslamicCalendarEvent(IslamicDate(-1, month, day), title, holiday)
+                CalendarEvent.IslamicCalendarEvent(
+                    date = IslamicDate(-1, month, day),
+                    title = title,
+                    isHoliday = holiday
+                )
             } else null
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
@@ -249,10 +257,10 @@ fun loadEvents(context: Context) {
                 (isOfficialInIran && (iranOthers || international)) ||
                 (isOfficialInAfghanistan && afghanistanOthers)
             ) {
-                GregorianCalendarEvent(
-                    CivilDate(-1, month, day),
-                    title + " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")",
-                    false
+                CalendarEvent.GregorianCalendarEvent(
+                    date = CivilDate(-1, month, day),
+                    title = title + " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")",
+                    isHoliday = false
                 )
             } else null
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()

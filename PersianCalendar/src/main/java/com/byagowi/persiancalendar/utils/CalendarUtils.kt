@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -188,7 +187,7 @@ private fun readDeviceEvents(
     context: Context,
     startingDate: Calendar,
     rangeInMillis: Long
-): List<DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents ||
+): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents ||
     ActivityCompat.checkSelfPermission(
         context, Manifest.permission.READ_CALENDAR
     ) != PackageManager.PERMISSION_GRANTED
@@ -217,7 +216,7 @@ private fun readDeviceEvents(
             val startCalendar = makeCalendarFromDate(startDate)
             val endCalendar = makeCalendarFromDate(endDate)
             fun Calendar.clock() = baseFormatClock(get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE))
-            DeviceCalendarEvent(
+            CalendarEvent.DeviceCalendarEvent(
                 id = it.getInt(0),
                 title =
                 if (it.getString(6) == "1") "\uD83D\uDCC5 ${it.getString(1) ?: ""}"
@@ -255,7 +254,7 @@ fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
 )
 
-fun formatDeviceCalendarEventTitle(event: DeviceCalendarEvent): String =
+fun formatDeviceCalendarEventTitle(event: CalendarEvent.DeviceCalendarEvent): String =
     (event.title + if (event.description.isNotBlank())
         " (" + Html.fromHtml(event.description).toString().trim() + ")"
     else "").replace("\n", " ").trim()
@@ -267,10 +266,10 @@ fun getEventsTitle(
     dayEvents: List<CalendarEvent<*>>, holiday: Boolean, compact: Boolean,
     showDeviceCalendarEvents: Boolean, insertRLM: Boolean, addIsHoliday: Boolean
 ) = dayEvents
-    .filter { it.isHoliday == holiday && (it !is DeviceCalendarEvent || showDeviceCalendarEvents) }
+    .filter { it.isHoliday == holiday && (it !is CalendarEvent.DeviceCalendarEvent || showDeviceCalendarEvents) }
     .map {
         val title = when {
-            it is DeviceCalendarEvent && !compact -> formatDeviceCalendarEventTitle(it)
+            it is CalendarEvent.DeviceCalendarEvent && !compact -> formatDeviceCalendarEventTitle(it)
             compact -> it.title.replace(" \\([^)]+\\)$".toRegex(), "")
             else -> it.title
         }

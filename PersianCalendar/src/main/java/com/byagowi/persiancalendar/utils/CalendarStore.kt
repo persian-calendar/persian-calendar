@@ -5,10 +5,10 @@ import io.github.persiancalendar.calendar.AbstractDate
 import java.util.*
 
 private typealias BaseStore<T> = Map<Int, List<T>>
-typealias PersianCalendarEventsStore = BaseStore<PersianCalendarEvent>
-typealias IslamicCalendarEventsStore = BaseStore<IslamicCalendarEvent>
-typealias GregorianCalendarEventsStore = BaseStore<GregorianCalendarEvent>
-typealias DeviceCalendarEventsStore = BaseStore<DeviceCalendarEvent>
+typealias PersianCalendarEventsStore = BaseStore<CalendarEvent.PersianCalendarEvent>
+typealias IslamicCalendarEventsStore = BaseStore<CalendarEvent.IslamicCalendarEvent>
+typealias GregorianCalendarEventsStore = BaseStore<CalendarEvent.GregorianCalendarEvent>
+typealias DeviceCalendarEventsStore = BaseStore<CalendarEvent.DeviceCalendarEvent>
 
 private fun AbstractDate.entry() = month * 100 + dayOfMonth
 

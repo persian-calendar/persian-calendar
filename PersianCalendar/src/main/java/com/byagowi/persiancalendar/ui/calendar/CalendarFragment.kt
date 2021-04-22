@@ -33,7 +33,6 @@ import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.DeviceCalendarEvent
 import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
@@ -317,7 +316,7 @@ class CalendarFragment : Fragment() {
     }
 
     private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = dayEvents
-        .filterIsInstance<DeviceCalendarEvent>()
+        .filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
         .map { event ->
             val spannableString = SpannableString(formatDeviceCalendarEventTitle(event))
             spannableString.setSpan(object : ClickableSpan() {
