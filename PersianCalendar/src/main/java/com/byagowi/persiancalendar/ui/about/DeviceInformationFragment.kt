@@ -192,16 +192,15 @@ class DeviceInformationFragment : Fragment() {
                                     //     runCatching {
                                     //         if (!player.isPlaying) player.start()
                                     //     }.onFailure(logException)
-                                    //     AlertDialog.Builder(activity).create().apply {
-                                    //         setView(AppCompatImageButton(context).apply {
+                                    //     AlertDialog.Builder(activity)
+                                    //         .setView(AppCompatImageButton(context).apply {
                                     //             setImageResource(R.drawable.ic_stop)
                                     //             setOnClickListener { dismiss() }
                                     //         })
-                                    //         setOnDismissListener {
+                                    //         .setOnDismissListener {
                                     //             runCatching { player.stop() }.onFailure(logException)
                                     //         }
-                                    //         show()
-                                    //     }
+                                    //         .show()
                                     //     true
                                     // }
                                 })

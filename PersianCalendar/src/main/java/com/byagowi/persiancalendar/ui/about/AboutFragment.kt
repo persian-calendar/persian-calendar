@@ -152,15 +152,16 @@ class AboutFragment : Fragment() {
     }
 
     private fun showEmailDialog() {
-        val context = context ?: return
-        val emailBinding = DialogEmailBinding.inflate(context.layoutInflater)
-        AlertDialog.Builder(context)
+        val activity = activity ?: return
+        val emailBinding = DialogEmailBinding.inflate(activity.layoutInflater)
+        AlertDialog.Builder(activity)
             .setView(emailBinding.root)
             .setTitle(R.string.about_email_sum)
             .setPositiveButton(R.string.continue_button) { _, _ ->
                 launchEmailIntent(emailBinding.inputText.text?.toString())
             }
-            .setNegativeButton(R.string.cancel, null).show()
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private fun launchEmailIntent(defaultMessage: String? = null) {

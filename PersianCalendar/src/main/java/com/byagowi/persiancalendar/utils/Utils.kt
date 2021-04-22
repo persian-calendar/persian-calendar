@@ -312,17 +312,17 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
 
     val clock = current.toInt()
 
-    return prayTimes?.run {
+    return prayTimes?.let {
         //TODO We like to show Imsak only in Ramadan
         when {
-            fajrClock.toInt() > clock -> R.string.fajr
-            sunriseClock.toInt() > clock -> R.string.sunrise
-            dhuhrClock.toInt() > clock -> R.string.dhuhr
-            asrClock.toInt() > clock -> R.string.asr
-            sunsetClock.toInt() > clock -> R.string.sunset
-            maghribClock.toInt() > clock -> R.string.maghrib
-            ishaClock.toInt() > clock -> R.string.isha
-            midnightClock.toInt() > clock -> R.string.midnight
+            it.fajrClock.toInt() > clock -> R.string.fajr
+            it.sunriseClock.toInt() > clock -> R.string.sunrise
+            it.dhuhrClock.toInt() > clock -> R.string.dhuhr
+            it.asrClock.toInt() > clock -> R.string.asr
+            it.sunsetClock.toInt() > clock -> R.string.sunset
+            it.maghribClock.toInt() > clock -> R.string.maghrib
+            it.ishaClock.toInt() > clock -> R.string.isha
+            it.midnightClock.toInt() > clock -> R.string.midnight
             // TODO: this is today's, not tomorrow
             else -> R.string.fajr
         }
@@ -333,18 +333,18 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
     if (prayTimes == null && coordinate != null)
         prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinate)
 
-    return prayTimes?.run {
+    return prayTimes?.let {
         when (stringId) {
-            R.string.imsak -> imsakClock
-            R.string.fajr -> fajrClock
-            R.string.sunrise -> sunriseClock
-            R.string.dhuhr -> dhuhrClock
-            R.string.asr -> asrClock
-            R.string.sunset -> sunsetClock
-            R.string.maghrib -> maghribClock
-            R.string.isha -> ishaClock
-            R.string.midnight -> midnightClock
-            else -> Clock.fromInt(0)
+            R.string.imsak -> it.imsakClock
+            R.string.fajr -> it.fajrClock
+            R.string.sunrise -> it.sunriseClock
+            R.string.dhuhr -> it.dhuhrClock
+            R.string.asr -> it.asrClock
+            R.string.sunset -> it.sunsetClock
+            R.string.maghrib -> it.maghribClock
+            R.string.isha -> it.ishaClock
+            R.string.midnight -> it.midnightClock
+            else -> null
         }
     } ?: Clock.fromInt(0)
 }

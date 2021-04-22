@@ -31,22 +31,22 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
                 it.type in enabledCalendarTypes
             )
         })
-        val recyclerView = RecyclerView(activity).apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(activity)
-            this.adapter = adapter
+        val recyclerView = RecyclerView(activity).also {
+            it.setHasFixedSize(true)
+            it.layoutManager = LinearLayoutManager(activity)
+            it.adapter = adapter
         }
 
         val callback = SimpleItemTouchHelperCallback(adapter)
-        itemTouchHelper = ItemTouchHelper(callback).apply {
-            attachToRecyclerView(recyclerView)
+        itemTouchHelper = ItemTouchHelper(callback).also {
+            it.attachToRecyclerView(recyclerView)
         }
 
-        return AlertDialog.Builder(activity).apply {
-            setView(recyclerView)
-            setTitle(R.string.calendars_priority)
-            setNegativeButton(R.string.cancel, null)
-            setPositiveButton(R.string.accept) { _, _ ->
+        return AlertDialog.Builder(activity)
+            .setView(recyclerView)
+            .setTitle(R.string.calendars_priority)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.accept) { _, _ ->
                 val ordering = adapter.result
                 activity.appPrefs.edit {
                     if (ordering.isNotEmpty()) {
@@ -58,7 +58,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
                     }
                 }
             }
-        }.create()
+            .create()
     }
 
     fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {

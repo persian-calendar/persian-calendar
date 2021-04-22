@@ -403,7 +403,8 @@ fun askForLocationPermission(activity: Activity?) {
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         }
-        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }.show()
+        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+        .show()
 }
 
 fun askForCalendarPermission(activity: Activity?) {
@@ -418,7 +419,8 @@ fun askForCalendarPermission(activity: Activity?) {
                 CALENDAR_READ_PERMISSION_REQUEST_CODE
             )
         }
-        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }.show()
+        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+        .show()
 }
 
 fun copyToClipboard(

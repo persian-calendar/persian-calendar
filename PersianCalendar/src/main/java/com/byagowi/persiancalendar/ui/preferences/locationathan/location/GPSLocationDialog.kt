@@ -104,7 +104,8 @@ class GPSLocationDialog : AppCompatDialogFragment() {
                                 Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                             )
                         }.onFailure(logException)
-                    }.create().show()
+                    }
+                    .show()
             }
         }.onFailure(logException)
     }

@@ -41,10 +41,10 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
-            AlertDialog.Builder(activity).apply {
-                setTitle(R.string.widget_text_color)
-                setView(colorPickerView)
-                setPositiveButton(R.string.accept) { _, _ ->
+            AlertDialog.Builder(activity)
+                .setTitle(R.string.widget_text_color)
+                .setView(colorPickerView)
+                .setPositiveButton(R.string.accept) { _, _ ->
                     runCatching {
                         sharedPreferences.edit {
                             putString(
@@ -57,8 +57,8 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                         }
                     }.onFailure(logException)
                 }
-                setNegativeButton(R.string.cancel, null)
-            }.show()
+                .setNegativeButton(R.string.cancel, null)
+                .show()
             return true
         }
 
@@ -77,10 +77,10 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             val padding = 10.dp
             colorPickerView.setPadding(padding, padding, padding, padding)
 
-            AlertDialog.Builder(activity).apply {
-                setTitle(R.string.widget_background_color)
-                setView(colorPickerView)
-                setPositiveButton(R.string.accept) { _, _ ->
+            AlertDialog.Builder(activity)
+                .setTitle(R.string.widget_background_color)
+                .setView(colorPickerView)
+                .setPositiveButton(R.string.accept) { _, _ ->
                     runCatching {
                         sharedPreferences.edit {
                             putString(
@@ -93,8 +93,8 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                         }
                     }.onFailure(logException)
                 }
-                setNegativeButton(R.string.cancel, null)
-            }.show()
+                .setNegativeButton(R.string.cancel, null)
+                .show()
             return true
         }
         return super.onPreferenceTreeClick(preference)

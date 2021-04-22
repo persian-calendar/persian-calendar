@@ -17,7 +17,7 @@ fun String.runCommand(
         .directory(workingDir)
         .redirectOutput(ProcessBuilder.Redirect.PIPE)
         .redirectError(ProcessBuilder.Redirect.PIPE)
-        .start().apply { waitFor(timeoutAmount, timeoutUnit) }
+        .start().also { it.waitFor(timeoutAmount, timeoutUnit) }
         .inputStream.bufferedReader().readText()
 }.onFailure { it.printStackTrace() }.getOrNull()
 

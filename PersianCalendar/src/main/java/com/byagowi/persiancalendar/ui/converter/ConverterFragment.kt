@@ -13,39 +13,37 @@ import com.byagowi.persiancalendar.utils.setupUpNavigation
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragmentConverterBinding.inflate(inflater, container, false).apply {
-        appBar.toolbar.let {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ) = FragmentConverterBinding.inflate(inflater, container, false).also { binding ->
+        binding.appBar.toolbar.let {
             it.setupUpNavigation()
             it.setTitle(R.string.date_converter)
         }
 
-        calendarsView.toggle()
-        calendarsView.hideMoreIcon()
+        binding.calendarsView.toggle()
+        binding.calendarsView.hideMoreIcon()
 
         val todayJdn = getTodayJdn()
 
-        todayButton.setOnClickListener { dayPickerView.jdn = todayJdn }
+        binding.todayButton.setOnClickListener { binding.dayPickerView.jdn = todayJdn }
 
-        dayPickerView.also {
+        binding.dayPickerView.also {
             it.selectedDayListener = fun(jdn) {
                 if (jdn == -1L) {
-                    calendarsView.visibility = View.GONE
+                    binding.calendarsView.visibility = View.GONE
                 } else {
-                    if (jdn == todayJdn) todayButton.hide() else todayButton.show()
+                    if (jdn == todayJdn) binding.todayButton.hide() else binding.todayButton.show()
 
-                    calendarsView.visibility = View.VISIBLE
-                    val selectedCalendarType = dayPickerView.selectedCalendarType
-                    calendarsView.showCalendars(
+                    binding.calendarsView.visibility = View.VISIBLE
+                    val selectedCalendarType = binding.dayPickerView.selectedCalendarType
+                    binding.calendarsView.showCalendars(
                         jdn, selectedCalendarType,
                         getOrderedCalendarTypes() - selectedCalendarType
                     )
                 }
             }
             it.jdn = getTodayJdn()
-            it.anchorView = todayButton
+            it.anchorView = binding.todayButton
         }
     }.root
 }

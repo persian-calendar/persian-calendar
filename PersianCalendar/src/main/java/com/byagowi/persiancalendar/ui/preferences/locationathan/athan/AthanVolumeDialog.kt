@@ -26,9 +26,9 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
 
         val customAthanUri = context?.let { getCustomAthanUri(it) }
         if (customAthanUri != null) {
-            ringtone = RingtoneManager.getRingtone(context, customAthanUri).apply {
-                streamType = AudioManager.STREAM_ALARM
-                play()
+            ringtone = RingtoneManager.getRingtone(context, customAthanUri).also {
+                it.streamType = AudioManager.STREAM_ALARM
+                it.play()
             }
         } else if (context != null) {
             val player = MediaPlayer()
@@ -44,16 +44,15 @@ class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
             }.onFailure(logException)
         }
 
-        return SeekBar(context).apply {
-            max = audioManager?.getStreamMaxVolume(AudioManager.STREAM_ALARM) ?: 7
-            volume = athanPref.volume
-            progress = volume
-            setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        volume = athanPref.volume
+
+        return SeekBar(context).also {
+            it.max = audioManager?.getStreamMaxVolume(AudioManager.STREAM_ALARM) ?: 7
+            it.progress = volume
+            it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
                 override fun onProgressChanged(
-                    seekBar: SeekBar?,
-                    progress: Int,
-                    fromUser: Boolean
+                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
                 ) {
                     volume = progress
                     audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0)

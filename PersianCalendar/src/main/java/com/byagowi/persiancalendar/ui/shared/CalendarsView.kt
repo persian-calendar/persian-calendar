@@ -19,9 +19,9 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     private val changeBoundTransition = ChangeBounds()
     private val arrowRotationAnimationDuration =
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-    private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).apply {
-        root.setOnClickListener { toggle() }
-        extraInformationContainer.visibility = View.GONE
+    private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).also {
+        it.root.setOnClickListener { toggle() }
+        it.extraInformationContainer.visibility = View.GONE
     }
     private var isExpanded = false
 
