@@ -9,9 +9,7 @@ import io.github.persiancalendar.praytimes.Coordinate
 import java.util.*
 
 sealed class CalendarEvent<T : AbstractDate>(
-    val title: String,
-    val isHoliday: Boolean,
-    val date: T
+    val title: String, val isHoliday: Boolean, val date: T
 ) {
     class GregorianCalendarEvent(title: String, isHoliday: Boolean, date: CivilDate) :
         CalendarEvent<CivilDate>(title, isHoliday, date)
@@ -23,14 +21,8 @@ sealed class CalendarEvent<T : AbstractDate>(
         CalendarEvent<PersianDate>(title, isHoliday, date)
 
     class DeviceCalendarEvent(
-        date: CivilDate,
-        title: String,
-        isHoliday: Boolean,
-        val id: Int,
-        val description: String,
-        val start: Date,
-        val end: Date,
-        val color: String
+        date: CivilDate, title: String, isHoliday: Boolean, val id: Int, val description: String,
+        val start: Date, val end: Date, val color: String
     ) : CalendarEvent<CivilDate>(title, isHoliday, date)
 }
 

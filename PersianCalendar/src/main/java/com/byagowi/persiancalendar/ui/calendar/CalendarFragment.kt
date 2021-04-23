@@ -539,8 +539,7 @@ class CalendarFragment : Fragment() {
                     searchAutoComplete.setHint(R.string.search_in_events)
                     searchAutoComplete.setAdapter(
                         SearchEventsAdapter(
-                            context,
-                            allEnabledEvents + getAllEnabledAppointments(context)
+                            context, allEnabledEvents + getAllEnabledAppointments(context)
                         )
                     )
                     searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
