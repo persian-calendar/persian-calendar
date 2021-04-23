@@ -19,55 +19,43 @@ class SearchEventsAdapter(
     private var showingItems: List<CalendarEvent<*>> = originalItems
     private val itemsWords: List<Pair<CalendarEvent<*>, List<String>>> by lazy {
         val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
-        originalItems.map {
-            it to when (it) {
-                is CalendarEvent.GregorianCalendarEvent,
-                is CalendarEvent.IslamicCalendarEvent,
-                is CalendarEvent.PersianCalendarEvent -> it.title.split(*delimiters)
-                is CalendarEvent.DeviceCalendarEvent ->
-                    "${it.title} ${it.description}".split(*delimiters)
-            }
-        }
+        originalItems.map { it to it.formattedTitle.split(*delimiters) }
     }
 
     override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
     override fun getCount(): Int = showingItems.size
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return SuggestionBinding.bind(super.getView(position, convertView, parent)).also {
-            it.text.text = when (val item = getItem(position)) {
-                is CalendarEvent.GregorianCalendarEvent,
-                is CalendarEvent.IslamicCalendarEvent,
-                is CalendarEvent.PersianCalendarEvent -> item.title
-                is CalendarEvent.DeviceCalendarEvent -> {
-                    if (item.description.isBlank()) item.title
-                    else "${item.title} (${item.description})"
-                }
-            }
+            it.text.text = getItem(position).formattedTitle
         }.root
     }
+
+    private val CalendarEvent<*>.formattedTitle
+        get() = when (this) {
+            is CalendarEvent.GregorianCalendarEvent,
+            is CalendarEvent.IslamicCalendarEvent,
+            is CalendarEvent.PersianCalendarEvent -> title
+            is CalendarEvent.DeviceCalendarEvent ->
+                if (description.isBlank()) title else "$title ($description)"
+        }
 
     private val filterInstance = ArrayFilter()
     override fun getFilter() = filterInstance
 
-    // inspired from ArrayAdapter.ArrayFilter
+    // Inspired from ArrayAdapter.ArrayFilter
     inner class ArrayFilter : Filter() {
 
-        override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val result = FilterResults()
-            if (constraint.isNullOrBlank()) {
-                result.values = originalItems
-                result.count = originalItems.size
-            } else {
-                itemsWords.filter { (_: CalendarEvent<*>, words: List<String>) ->
-                    words.any { word -> word.startsWith(constraint) }
-                }.map { it.first }.let { events: List<CalendarEvent<*>> ->
-                    result.values = events
-                    result.count = events.size
-                }
-            }
-
-            return result
+        private fun <T> createFilterResults(list: List<T>): FilterResults = FilterResults().apply {
+            values = list
+            count = list.size
         }
+
+        override fun performFiltering(constraint: CharSequence?) = createFilterResults(
+            if (constraint.isNullOrBlank()) originalItems
+            else itemsWords.filter { (_: CalendarEvent<*>, words: List<String>) ->
+                words.any { word -> word.startsWith(constraint) }
+            }.map { it.first }
+        )
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
             // Suppress unchecked cast just as ArrayAdapter.ArrayFilter.publishResults
