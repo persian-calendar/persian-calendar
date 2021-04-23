@@ -6,10 +6,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import io.github.persiancalendar.calendar.AbstractDate
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
@@ -18,7 +16,7 @@ class SearchEventsAdapter(
     context: Context, private val originalItems: List<CalendarEvent<*>>
 ) : ArrayAdapter<CalendarEvent<*>>(context, R.layout.suggestion, R.id.text, originalItems) {
 
-    private var showingItems: List<CalendarEvent<out AbstractDate>> = originalItems
+    private var showingItems: List<CalendarEvent<*>> = originalItems
     private val itemsWords: List<Pair<CalendarEvent<*>, List<String>>> by lazy {
         val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
         originalItems.map {
@@ -32,11 +30,11 @@ class SearchEventsAdapter(
         }
     }
 
-    override fun getItem(position: Int): CalendarEvent<out AbstractDate> = showingItems[position]
+    override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
     override fun getCount(): Int = showingItems.size
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return SuggestionBinding.bind(super.getView(position, convertView, parent)).also {
-            it.text.text = when (val item = getItem(position).debugAssertNotNull) {
+            it.text.text = when (val item = getItem(position)) {
                 is CalendarEvent.GregorianCalendarEvent,
                 is CalendarEvent.IslamicCalendarEvent,
                 is CalendarEvent.PersianCalendarEvent -> item.title
@@ -72,6 +70,8 @@ class SearchEventsAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
+            // Supress unchecked cast just as ArrayAdapter.ArrayFilter.publishResults
+            @Suppress("UNCHECKED_CAST")
             showingItems = results.values as List<CalendarEvent<*>>
             if (results.count > 0)
                 notifyDataSetChanged()
