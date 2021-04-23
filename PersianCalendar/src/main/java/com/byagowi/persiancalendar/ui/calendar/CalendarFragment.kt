@@ -537,11 +537,8 @@ class CalendarFragment : Fragment() {
                 )?.also { searchAutoComplete ->
                     val context = searchAutoComplete.context
                     searchAutoComplete.setHint(R.string.search_in_events)
-                    searchAutoComplete.setAdapter(
-                        SearchEventsAdapter(
-                            context, allEnabledEvents + getAllEnabledAppointments(context)
-                        )
-                    )
+                    val events = allEnabledEvents + getAllEnabledAppointments(context)
+                    searchAutoComplete.setAdapter(SearchEventsAdapter(context, events))
                     searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
                         val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                         val type = getCalendarTypeFromDate(date)
