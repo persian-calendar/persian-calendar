@@ -129,6 +129,8 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        val width = width
+        val height = height
         canvas.withScale(x = if (isRTL) -1f else 1f, pivotX = width / 2f, pivotY = height / 2f) {
             // draw fill of night
             withClip(0f, height * .75f, width * current, height.toFloat()) {
