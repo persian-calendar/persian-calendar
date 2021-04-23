@@ -70,7 +70,7 @@ class SearchEventsAdapter(
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-            // Supress unchecked cast just as ArrayAdapter.ArrayFilter.publishResults
+            // Suppress unchecked cast just as ArrayAdapter.ArrayFilter.publishResults
             @Suppress("UNCHECKED_CAST")
             showingItems = results.values as List<CalendarEvent<*>>
             if (results.count > 0)

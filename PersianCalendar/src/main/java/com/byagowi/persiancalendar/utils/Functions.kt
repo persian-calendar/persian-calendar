@@ -550,7 +550,7 @@ fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
                     coordinate = Coordinate(
                         city.getDouble("latitude"),
                         city.getDouble("longitude"),
-                        // Don't Consider elevation for Iran
+                        // Don't consider elevation for Iran
                         if (countryCode == "ir") 0.0 else city.getDouble("elevation")
                     )
                 )
