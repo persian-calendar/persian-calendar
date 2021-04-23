@@ -19,7 +19,7 @@ class SearchEventsAdapter(
 ) : ArrayAdapter<CalendarEvent<*>>(context, R.layout.suggestion, R.id.text, originalItems) {
 
     private var showingItems: List<CalendarEvent<out AbstractDate>> = originalItems
-    private val itemsWords by lazy {
+    private val itemsWords: List<Pair<CalendarEvent<*>, List<String>>> by lazy {
         val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
         originalItems.map {
             it to when (it) {
@@ -36,9 +36,7 @@ class SearchEventsAdapter(
     override fun getCount(): Int = showingItems.size
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return SuggestionBinding.bind(super.getView(position, convertView, parent)).also {
-            it.text.text = when (
-                val item = getItem(position).debugAssertNotNull
-            ) {
+            it.text.text = when (val item = getItem(position).debugAssertNotNull) {
                 is CalendarEvent.GregorianCalendarEvent,
                 is CalendarEvent.IslamicCalendarEvent,
                 is CalendarEvent.PersianCalendarEvent -> item.title
@@ -62,11 +60,11 @@ class SearchEventsAdapter(
                 result.values = originalItems
                 result.count = originalItems.size
             } else {
-                itemsWords.filter {
-                    it.second.any { word -> word.startsWith(constraint) }
-                }.map { it.first }.let {
-                    result.values = it
-                    result.count = it.size
+                itemsWords.filter { (_: CalendarEvent<*>, words: List<String>) ->
+                    words.any { word -> word.startsWith(constraint) }
+                }.map { it.first }.let { events: List<CalendarEvent<*>> ->
+                    result.values = events
+                    result.count = events.size
                 }
             }
 
