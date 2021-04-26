@@ -18,34 +18,32 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.preferences_interface_calendar)
 
-        findPreference<ListPreference>(PREF_THEME)?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
-        findPreference<ListPreference>(PREF_APP_LANGUAGE)?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
+        val summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>(PREF_THEME)?.summaryProvider = summaryProvider
+        findPreference<ListPreference>(PREF_APP_LANGUAGE)?.summaryProvider = summaryProvider
         if (language != LANG_AR)
             findPreference<SwitchPreferenceCompat>(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS)
                 ?.layoutResource = R.layout.empty
-        findPreference<ListPreference>(PREF_WEEK_START)?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
+        findPreference<ListPreference>(PREF_WEEK_START)?.summaryProvider = summaryProvider
         when (language) {
             LANG_EN_US, LANG_JA -> findPreference<SwitchPreferenceCompat>(PREF_PERSIAN_DIGITS)
                 ?.layoutResource = R.layout.empty
         }
 
-        val switchPreference = findPreference<SwitchPreferenceCompat>(
+        val showDeviceCalendarSwitch = findPreference<SwitchPreferenceCompat>(
             PREF_SHOW_DEVICE_CALENDAR_EVENTS
         )
-
-        val activity = activity ?: return
-        switchPreference?.setOnPreferenceChangeListener { _, _ ->
-            if (ActivityCompat.checkSelfPermission(
-                    activity, Manifest.permission.READ_CALENDAR
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                askForCalendarPermission(activity)
-                switchPreference.isChecked = false
-            } else {
-                switchPreference.isChecked = !switchPreference.isChecked
+        showDeviceCalendarSwitch?.setOnPreferenceChangeListener { _, _ ->
+            activity?.let { activity ->
+                if (ActivityCompat.checkSelfPermission(
+                        activity, Manifest.permission.READ_CALENDAR
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    askForCalendarPermission(activity)
+                    showDeviceCalendarSwitch.isChecked = false
+                } else {
+                    showDeviceCalendarSwitch.isChecked = !showDeviceCalendarSwitch.isChecked
+                }
             }
             false
         }
