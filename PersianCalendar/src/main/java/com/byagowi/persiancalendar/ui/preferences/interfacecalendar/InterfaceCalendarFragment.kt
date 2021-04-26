@@ -23,11 +23,11 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         findPreference<ListPreference>(PREF_APP_LANGUAGE)?.summaryProvider = summaryProvider
         if (language != LANG_AR)
             findPreference<SwitchPreferenceCompat>(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS)
-                ?.layoutResource = R.layout.empty
+                ?.isVisible = false
         findPreference<ListPreference>(PREF_WEEK_START)?.summaryProvider = summaryProvider
         when (language) {
             LANG_EN_US, LANG_JA -> findPreference<SwitchPreferenceCompat>(PREF_PERSIAN_DIGITS)
-                ?.layoutResource = R.layout.empty
+                ?.isVisible = false
         }
 
         val showDeviceCalendarSwitch = findPreference<SwitchPreferenceCompat>(
