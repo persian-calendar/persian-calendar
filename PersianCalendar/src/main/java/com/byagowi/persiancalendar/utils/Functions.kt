@@ -467,24 +467,16 @@ fun setChangeDateWorker(context: Context) {
 fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNotEmpty() }
 
 fun startEitherServiceOrWorker(context: Context) {
-    val workManager = WorkManager.getInstance(context)
     if (goForWorker()) {
+        val workManager = WorkManager.getInstance(context)
         val updateBuilder =
             PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1L, TimeUnit.HOURS)
 
         val updateWork = updateBuilder.build()
         workManager.enqueueUniquePeriodicWork(
-            UPDATE_TAG,
-            ExistingPeriodicWorkPolicy.REPLACE,
-            updateWork
+            UPDATE_TAG, ExistingPeriodicWorkPolicy.REPLACE, updateWork
         )
     } else {
-        // Disable all the scheduled workers, just in case enabled before
-        workManager.cancelAllWork()
-        // Or,
-        // workManager.cancelAllWorkByTag(UPDATE_TAG);
-        // workManager.cancelUniqueWork(CHANGE_DATE_TAG);
-
         val isRunning = context.getSystemService<ActivityManager>()?.let { am ->
             runCatching {
                 am.getRunningServices(Integer.MAX_VALUE).any {
