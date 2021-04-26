@@ -15,14 +15,6 @@
             android:title="@string/language"
             settings:iconSpaceReserved="false" />
 
-        <!-- this is only shown in Arabic interface so i18n is no issue here -->
-        <androidx.preference.SwitchPreferenceCompat
-            android:defaultValue="false"
-            android:key="EasternGregorianArabicMonths"
-            android:summary="كانون الثاني، شباط، آذار، …"
-            android:title="السنة الميلادية بالاسماء الشرقية"
-            settings:iconSpaceReserved="false" />
-
         <androidx.preference.ListPreference
             android:defaultValue="SystemDefault"
             android:entries="@array/themeNames"
@@ -33,6 +25,14 @@
             android:title="@string/skin"
             settings:iconSpaceReserved="false"
             settings:useSimpleSummaryProvider="true" />
+
+        <!-- this is only shown in Arabic interface so i18n is no issue here -->
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="EasternGregorianArabicMonths"
+            android:summary="كانون الثاني، شباط، آذار، …"
+            android:title="السنة الميلادية بالاسماء الشرقية"
+            settings:iconSpaceReserved="false" />
 
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="true"
