@@ -30,6 +30,7 @@ import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.CityItem
@@ -468,14 +469,13 @@ fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNot
 
 fun startEitherServiceOrWorker(context: Context) {
     if (goForWorker()) {
-        val workManager = WorkManager.getInstance(context)
-        val updateBuilder =
-            PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1L, TimeUnit.HOURS)
-
-        val updateWork = updateBuilder.build()
-        workManager.enqueueUniquePeriodicWork(
-            UPDATE_TAG, ExistingPeriodicWorkPolicy.REPLACE, updateWork
-        )
+        runCatching {
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                UPDATE_TAG, ExistingPeriodicWorkPolicy.REPLACE,
+                // An hourly task to call UpdateWorker.doWork
+                PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1L, TimeUnit.HOURS).build()
+            )
+        }.onFailure(logException).getOrNull().debugAssertNotNull
     } else {
         val isRunning = context.getSystemService<ActivityManager>()?.let { am ->
             runCatching {
