@@ -39,8 +39,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         applyAppLanguage(activity)
         updateStoredPreference(activity)
 
-        selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L) ?: -1L
-        if (selectedJdn == -1L) selectedJdn = getTodayJdn()
+        selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: getTodayJdn()
 
         jdn = shiftWorkStartingJdn
         var isFirstSetup = false
