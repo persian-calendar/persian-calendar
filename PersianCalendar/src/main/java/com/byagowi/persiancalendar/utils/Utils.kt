@@ -11,6 +11,9 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.generated.gregorianEvents
+import com.byagowi.persiancalendar.generated.islamicEvents
+import com.byagowi.persiancalendar.generated.persianEvents
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -164,21 +167,15 @@ fun loadEvents(context: Context) {
     runCatching {
         val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
 
-        val allTheEvents = JSONObject(readRawResource(context, R.raw.events))
-
-        // https://stackoverflow.com/a/36188796
-        fun JSONObject.getArray(key: String): Sequence<JSONObject> =
-            getJSONArray(key).run { (0 until length()).asSequence().map { get(it) as JSONObject } }
-
-        persianCalendarEvents = allTheEvents.getArray("Persian Calendar").mapNotNull {
-            val month = it.getInt("month")
-            val day = it.getInt("day")
-            val year = if (it.has("year")) it.getInt("year") else -1
-            var title = it.getString("title")
-            var holiday = it.getBoolean("holiday")
+        persianCalendarEvents = persianEvents.mapNotNull {
+            val month = it.month
+            val day = it.day
+            val year = it.year
+            var title = it.title
+            var holiday = it.isHoliday
 
             var addOrNot = false
-            val type = it.getString("type")
+            val type = it.type
 
             if (holiday && iranHolidays &&
                 (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
@@ -209,14 +206,14 @@ fun loadEvents(context: Context) {
             } else null
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
-        islamicCalendarEvents = allTheEvents.getArray("Hijri Calendar").mapNotNull {
-            val month = it.getInt("month")
-            val day = it.getInt("day")
-            var title = it.getString("title")
-            var holiday = it.getBoolean("holiday")
+        islamicCalendarEvents = islamicEvents.mapNotNull {
+            val month = it.month
+            val day = it.day
+            var title = it.title
+            var holiday = it.isHoliday
 
             var addOrNot = false
-            val type = it.getString("type")
+            val type = it.type
 
             if (afghanistanHolidays && holiday && type == "Islamic Afghanistan") addOrNot = true
             if (!afghanistanHolidays && type == "Islamic Afghanistan") holiday = false
@@ -244,13 +241,13 @@ fun loadEvents(context: Context) {
             } else null
         }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
-        gregorianCalendarEvents = allTheEvents.getArray("Gregorian Calendar").mapNotNull {
-            val month = it.getInt("month")
-            val day = it.getInt("day")
-            val title = it.getString("title")
+        gregorianCalendarEvents = gregorianEvents.mapNotNull {
+            val month = it.month
+            val day = it.day
+            val title = it.title
 
-            val isOfficialInIran = it.has("type") && it.getString("type") == "Iran"
-            val isOfficialInAfghanistan = it.has("type") && it.getString("type") == "Afghanistan"
+            val isOfficialInIran = it.type == "Iran"
+            val isOfficialInAfghanistan = it.type == "Afghanistan"
             val isOthers = !isOfficialInIran && !isOfficialInAfghanistan
 
             if (

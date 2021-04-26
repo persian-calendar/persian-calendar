@@ -1,4 +1,6 @@
+import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.json.JSONObject
 
 plugins {
     id("com.android.application")
@@ -21,7 +23,12 @@ fun String.runCommand(
         .inputStream.bufferedReader().readText()
 }.onFailure { it.printStackTrace() }.getOrNull()
 
+val appGeneratedSrcDir = File(buildDir, "generated/app/src/main/java/")
 android {
+    sourceSets {
+        getByName("main").java.srcDir(appGeneratedSrcDir)
+    }
+
     compileSdkVersion(30)
     buildToolsVersion("30.0.3")
 
@@ -134,4 +141,48 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+}
+
+// readEventsTask section
+val readEventsTask by tasks.registering {
+    doLast {
+        fun JSONObject.getArray(key: String): Sequence<JSONObject> =
+            getJSONArray(key).run { (0 until length()).asSequence().map { get(it) as JSONObject } }
+
+        val events = JSONObject(File(projectDir, "src/main/res/raw/events.json").readText())
+
+        fun createEventStore(key: String) = events.getArray(key).joinToString(",\n    ") {
+            "CalendarRecord(\"${it.getString("title")}\"," +
+                    " \"${it.optString("type", "")}\"," +
+                    " ${it.optBoolean("holiday", false)}," +
+                    " ${it.optInt("year", -1)}," +
+                    " ${it.getInt("month")}, ${it.getInt("day")})"
+        }
+
+        val persianEvents = createEventStore("Persian Calendar")
+        val islamicEvents = createEventStore("Hijri Calendar")
+        val gregorianEvents = createEventStore("Gregorian Calendar")
+
+        val file = File(appGeneratedSrcDir, "Events.kt")
+        file.ensureParentDirsCreated()
+        file.writeText(
+            """package com.byagowi.persiancalendar.generated
+
+class CalendarRecord(val title: String, val type: String, val isHoliday: Boolean, val year: Int, val month: Int, val day: Int)
+val persianEvents = listOf(
+    $persianEvents
+)
+val islamicEvents = listOf(
+    $islamicEvents
+)
+val gregorianEvents = listOf(
+    $gregorianEvents
+)"""
+        )
+    }
+}
+afterEvaluate {
+    android.applicationVariants.forEach { variant ->
+        variant.javaCompileProvider { dependsOn(readEventsTask) }
+    }
 }
