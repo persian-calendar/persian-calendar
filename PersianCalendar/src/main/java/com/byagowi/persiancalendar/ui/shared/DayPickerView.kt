@@ -85,7 +85,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
             } else getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
         }
         set(value) {
-            mJdn = if (value == -1L) getTodayJdn() else value
+            mJdn = value.takeIf { it != -1L } ?: getTodayJdn()
             val date = getDateFromJdnOfCalendar(selectedCalendarType, mJdn)
             binding.yearPicker.also {
                 it.minValue = date.year - 100

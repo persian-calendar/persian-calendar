@@ -237,20 +237,15 @@ private fun readDeviceEvents(
 }.onFailure(logException).getOrNull() ?: emptyList()
 
 fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
-    ctx,
-    CivilDate(if (jdn == -1L) getTodayJdn() else jdn).toCalendar(),
-    DAY_IN_MILLIS
+    ctx, CivilDate(jdn.takeIf { it != -1L } ?: getTodayJdn()).toCalendar(), DAY_IN_MILLIS
 ).toEventsStore()
 
 fun readMonthDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
-    ctx,
-    CivilDate(jdn).toCalendar(),
-    32L * DAY_IN_MILLIS
+    ctx, CivilDate(jdn).toCalendar(), 32L * DAY_IN_MILLIS
 ).toEventsStore()
 
 fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
-    ctx,
-    Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
+    ctx, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
 )
 

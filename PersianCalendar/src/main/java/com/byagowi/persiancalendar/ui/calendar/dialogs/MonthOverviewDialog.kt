@@ -19,8 +19,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
-        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)
-            ?.takeIf { it != -1L } ?: getTodayJdn()
+        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: getTodayJdn()
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
