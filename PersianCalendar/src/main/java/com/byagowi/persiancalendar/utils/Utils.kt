@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.generated.citiesList
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.persianEvents
@@ -19,7 +20,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.*
-import org.json.JSONObject
 import java.util.*
 
 
@@ -333,7 +333,7 @@ fun getCityFromPreference(context: Context): CityItem? {
     // cache last query even if no city available under the key, useful in case invalid
     // value is somehow inserted on the preference
     cachedCityKey = key
-    cachedCity = getAllCities(context, false).firstOrNull { it.key == key }
+    cachedCity = citiesList.firstOrNull { it.key == key }
     return cachedCity
 }
 

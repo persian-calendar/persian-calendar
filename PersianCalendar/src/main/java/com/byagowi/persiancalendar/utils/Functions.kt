@@ -33,7 +33,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
-import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
@@ -49,7 +48,6 @@ import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
-import org.json.JSONObject
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -518,82 +516,6 @@ fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
     return if (abbreviated && title.isNotEmpty()) title.substring(0, 1) +
             (if (language != LANG_AR) ZWJ else "")
     else title
-}
-
-fun getAllCities(context: Context, needsSort: Boolean): List<CityItem> {
-    val result = runCatching {
-        fun <T> JSONObject.map(f: (String, JSONObject) -> T) =
-            this.keys().asSequence().map { f(it, this.getJSONObject(it)) }
-
-        JSONObject(readRawResource(context, R.raw.cities)).map { countryCode, country ->
-            val countryEn = country.getString("en")
-            val countryFa = country.getString("fa")
-            val countryCkb = country.getString("ckb")
-            val countryAr = country.getString("ar")
-
-            country.getJSONObject("cities").map { key, city ->
-                CityItem(
-                    key = key,
-                    en = city.getString("en"), fa = city.getString("fa"),
-                    ckb = city.getString("ckb"), ar = city.getString("ar"),
-                    countryCode = countryCode,
-                    countryEn = countryEn, countryFa = countryFa,
-                    countryCkb = countryCkb, countryAr = countryAr,
-                    coordinate = Coordinate(
-                        city.getDouble("latitude"),
-                        city.getDouble("longitude"),
-                        // Don't consider elevation for Iran
-                        if (countryCode == "ir") 0.0 else city.getDouble("elevation")
-                    )
-                )
-            }
-        }.flatten().toList()
-    }.onFailure(logException).getOrDefault(emptyList())
-
-    if (!needsSort) return result
-
-    val irCodeOrder = listOf("zz", "ir", "af", "iq")
-    val afCodeOrder = listOf("zz", "af", "ir", "iq")
-    val arCodeOrder = listOf("zz", "iq", "ir", "af")
-
-    fun getCountryCodeOrder(countryCode: String): Int =
-        when (language) {
-            LANG_FA_AF, LANG_PS -> afCodeOrder.indexOf(countryCode)
-            LANG_AR -> arCodeOrder.indexOf(countryCode)
-            LANG_FA, LANG_GLK, LANG_AZB -> irCodeOrder.indexOf(countryCode)
-            else -> irCodeOrder.indexOf(countryCode)
-        }
-
-    fun prepareForArabicSort(text: String) = text
-        .replace("ی", "ي")
-        .replace("ک", "ك")
-        .replace("گ", "كی")
-        .replace("ژ", "زی")
-        .replace("چ", "جی")
-        .replace("پ", "بی")
-        .replace("ڕ", "ری")
-        .replace("ڵ", "لی")
-        .replace("ڤ", "فی")
-        .replace("ۆ", "وی")
-        .replace("ێ", "یی")
-        .replace("ھ", "نی")
-        .replace("ە", "هی")
-
-    return result.sortedWith(kotlin.Comparator { l, r ->
-        if (l.key == "") return@Comparator -1
-
-        if (r.key == DEFAULT_CITY) return@Comparator 1
-
-        val compare = getCountryCodeOrder(l.countryCode) - getCountryCodeOrder(r.countryCode)
-        if (compare != 0) return@Comparator compare
-
-        when (language) {
-            LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
-            LANG_AR -> l.ar.compareTo(r.ar)
-            LANG_CKB -> prepareForArabicSort(l.ckb).compareTo(prepareForArabicSort(r.ckb))
-            else -> prepareForArabicSort(l.fa).compareTo(prepareForArabicSort(r.fa))
-        }
-    })
 }
 
 val Context.appPrefs: SharedPreferences

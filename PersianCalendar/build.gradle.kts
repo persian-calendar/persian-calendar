@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.internal.ensureParentDirsCreated
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.json.JSONObject
 
@@ -23,10 +22,10 @@ fun String.runCommand(
         .inputStream.bufferedReader().readText()
 }.onFailure { it.printStackTrace() }.getOrNull()
 
-val appGeneratedSrcDir = File(buildDir, "generated/app/src/main/java/")
+val generatedAppSrcDir = File(buildDir, "generated/app/src/main/java/")
 android {
     sourceSets {
-        getByName("main").java.srcDir(appGeneratedSrcDir)
+        getByName("main").java.srcDir(generatedAppSrcDir)
     }
 
     compileSdkVersion(30)
@@ -143,11 +142,16 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 }
 
-// readEventsTask section
-val readEventsTask by tasks.registering {
+// generatedAppSrcTask
+val generatedAppSrcTask by tasks.registering {
     doLast {
+        generatedAppSrcDir.mkdirs()
+
+        // Events
         fun JSONObject.getArray(key: String): Sequence<JSONObject> =
-            getJSONArray(key).run { (0 until length()).asSequence().map { get(it) as JSONObject } }
+            getJSONArray(key).run {
+                (0 until length()).asSequence().map { get(it) as JSONObject }
+            }
 
         val events = JSONObject(File(projectDir, "src/main/res/raw/events.json").readText())
 
@@ -163,9 +167,7 @@ val readEventsTask by tasks.registering {
         val islamicEvents = createEventStore("Hijri Calendar")
         val gregorianEvents = createEventStore("Gregorian Calendar")
 
-        val file = File(appGeneratedSrcDir, "Events.kt")
-        file.ensureParentDirsCreated()
-        file.writeText(
+        File(generatedAppSrcDir, "Events.kt").writeText(
             """package com.byagowi.persiancalendar.generated
 
 class CalendarRecord(val title: String, val type: String, val isHoliday: Boolean, val year: Int, val month: Int, val day: Int)
@@ -179,10 +181,50 @@ val gregorianEvents = listOf(
     $gregorianEvents
 )"""
         )
+
+        // Cities
+        fun <T> JSONObject.map(f: (String, JSONObject) -> T) =
+            keys().asSequence().map { f(it, this.getJSONObject(it)) }
+
+        val result = JSONObject(
+            File(projectDir, "src/main/res/raw/cities.json").readText()
+        ).map { countryCode, country ->
+            val countryEn = country.getString("en")
+            val countryFa = country.getString("fa")
+            val countryCkb = country.getString("ckb")
+            val countryAr = country.getString("ar")
+
+            country.getJSONObject("cities").map { key, city ->
+                """CityItem(
+        key = "$key",
+        en = "${city.getString("en")}", fa = "${city.getString("fa")}",
+        ckb = "${city.getString("ckb")}", ar = "${city.getString("ar")}",
+        countryCode = "$countryCode",
+        countryEn = "$countryEn", countryFa = "$countryFa",
+        countryCkb = "$countryCkb", countryAr = "$countryAr",
+        coordinate = Coordinate(
+            ${city.getDouble("latitude")},
+            ${city.getDouble("longitude")},
+            ${if (countryCode == "ir") 0.0 else city.getDouble("elevation")}
+        )
+    )"""
+            }
+        }.flatten().joinToString(",\n    ")
+
+        File(generatedAppSrcDir, "Cities.kt").writeText(
+            """package com.byagowi.persiancalendar.generated
+
+import com.byagowi.persiancalendar.entities.CityItem
+import io.github.persiancalendar.praytimes.Coordinate
+
+val citiesList = listOf(
+    $result
+)"""
+        )
     }
 }
 afterEvaluate {
     android.applicationVariants.forEach { variant ->
-        variant.javaCompileProvider { dependsOn(readEventsTask) }
+        variant.javaCompileProvider { dependsOn(generatedAppSrcTask) }
     }
 }
