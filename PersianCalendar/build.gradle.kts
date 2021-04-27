@@ -153,7 +153,7 @@ val generatedAppSrcTask by tasks.registering {
                 (0 until length()).asSequence().map { get(it) as JSONObject }
             }
 
-        val events = JSONObject(File(projectDir, "src/main/res/raw/events.json").readText())
+        val events = JSONObject(File(projectDir, "data/events.json").readText())
 
         fun createEventStore(key: String) = events.getArray(key).joinToString(",\n    ") {
             "CalendarRecord(\"${it.getString("title")}\"," +
@@ -187,7 +187,7 @@ val gregorianEvents = listOf(
             keys().asSequence().map { f(it, this.getJSONObject(it)) }
 
         val result = JSONObject(
-            File(projectDir, "src/main/res/raw/cities.json").readText()
+            File(projectDir, "data/cities.json").readText()
         ).map { countryCode, country ->
             val countryEn = country.getString("en")
             val countryFa = country.getString("fa")
