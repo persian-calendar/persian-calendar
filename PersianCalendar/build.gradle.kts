@@ -47,6 +47,10 @@ android {
         resConfigs("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
         multiDexEnabled = false
+
+        android.defaultConfig.testInstrumentationRunner = "androidx.benchmark.junit4.AndroidBenchmarkRunner"
+        // Enable measuring on an emulator, or devices with low battery
+        testInstrumentationRunnerArgument("androidx.benchmark.suppressErrors", "EMULATOR,LOW_BATTERY")
     }
 
     signingConfigs {
@@ -65,7 +69,7 @@ android {
             applicationIdSuffix = ".nightly"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro", "benchmark-proguard-rules.pro"
             )
             isMinifyEnabled = true
             isShrinkResources = true
@@ -74,12 +78,16 @@ android {
         getByName("debug") {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
             applicationIdSuffix = ".debug"
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro", "benchmark-proguard-rules.pro"
+            )
         }
 
         getByName("release") {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro", "benchmark-proguard-rules.pro"
             )
             isMinifyEnabled = true
             isShrinkResources = true
@@ -134,4 +142,7 @@ dependencies {
     androidTestImplementation("androidx.test:rules:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    androidTestImplementation("androidx.benchmark:benchmark-junit4:1.0.0")
+    androidTestImplementation("androidx.test:core:1.3.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2")
 }

@@ -1,0 +1,11 @@
+<!-- Important: disable debuggable for accurate performance results -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.byagowi.persiancalendar">
+
+    <application
+        android:debuggable="false"
+        tools:ignore="HardcodedDebugMode"
+        tools:replace="android:debuggable" />
+
+</manifest>
