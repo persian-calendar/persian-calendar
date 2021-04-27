@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.generated.citiesList
+import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.persianEvents
@@ -333,7 +333,7 @@ fun getCityFromPreference(context: Context): CityItem? {
     // cache last query even if no city available under the key, useful in case invalid
     // value is somehow inserted on the preference
     cachedCityKey = key
-    cachedCity = citiesList.firstOrNull { it.key == key }
+    cachedCity = citiesStore[key]
     return cachedCity
 }
 

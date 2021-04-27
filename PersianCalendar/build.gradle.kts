@@ -195,7 +195,7 @@ val gregorianEvents = listOf(
             val countryAr = country.getString("ar")
 
             country.getJSONObject("cities").map { key, city ->
-                """CityItem(
+                """"$key" to CityItem(
         key = "$key",
         en = "${city.getString("en")}", fa = "${city.getString("fa")}",
         ckb = "${city.getString("ckb")}", ar = "${city.getString("ar")}",
@@ -217,7 +217,7 @@ val gregorianEvents = listOf(
 import com.byagowi.persiancalendar.entities.CityItem
 import io.github.persiancalendar.praytimes.Coordinate
 
-val citiesList = listOf(
+val citiesStore = mapOf(
     $result
 )"""
         )

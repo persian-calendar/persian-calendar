@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.preference.DialogPreference
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.generated.citiesList
+import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.utils.language
 
 /**
@@ -26,7 +26,7 @@ class LocationPreference(context: Context, attrs: AttributeSet) : DialogPreferen
     companion object {
         fun getSummary(context: Context, selected: String): String = (
                 if (selected == DEFAULT_CITY) null
-                else citiesList.firstOrNull { it.key == selected }?.let {
+                else citiesStore[selected]?.let {
                     when (language) {
                         LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
                         LANG_CKB -> it.ckb

@@ -5,7 +5,7 @@ import androidx.preference.PreferenceDialogFragmentCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.generated.citiesList
+import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.utils.language
 
 /**
@@ -42,7 +42,7 @@ class LocationPreferenceDialog : PreferenceDialogFragmentCompat() {
         .replace("ھ", "نی")
         .replace("ە", "هی")
 
-    private val sortedCitiesList = citiesList.sortedWith(kotlin.Comparator { l, r ->
+    private val sortedCitiesList = citiesStore.values.sortedWith(kotlin.Comparator { l, r ->
         if (l.key == "") return@Comparator -1
 
         if (r.key == DEFAULT_CITY) return@Comparator 1
