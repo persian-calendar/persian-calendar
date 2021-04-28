@@ -8,13 +8,14 @@ import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.CityItem
+import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.*
-import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 
@@ -269,47 +270,15 @@ fun loadEvents(context: Context) {
     }.onFailure(logException)
 }
 
-fun loadLanguageResource(context: Context): Unit = runCatching {
-    val messages = JSONObject(
-        readRawResource(
-            context, when (language) {
-                LANG_FA_AF -> R.raw.faaf
-                LANG_PS -> R.raw.ps
-                LANG_GLK -> R.raw.glk
-                LANG_AR -> R.raw.ar
-                LANG_CKB -> R.raw.ckb
-                LANG_UR -> R.raw.ur
-                LANG_EN_US -> R.raw.en
-                LANG_JA -> R.raw.ja
-                LANG_AZB -> R.raw.azb
-                LANG_EN_IR, LANG_FA -> R.raw.fa
-                else -> R.raw.fa
-            }
-        )
-    )
-
-    fun JSONArray.toStringList() = (0 until length()).map { getString(it) }
-
-    persianMonths = messages.getJSONArray("PersianCalendarMonths").toStringList()
-    islamicMonths = messages.getJSONArray("IslamicCalendarMonths").toStringList()
-    gregorianMonths = messages.getJSONArray(
-        when {
-            language == LANG_AR && easternGregorianArabicMonths -> "EasternGregorianCalendarMonths"
-            else -> "GregorianCalendarMonths"
-        }
-    ).toStringList()
-    weekDays = messages.getJSONArray("WeekDays").toStringList()
-    weekDaysInitials = when (language) {
-        LANG_AR, LANG_AZB -> messages.getJSONArray("WeekDaysInitials").toStringList()
-        else -> weekDays.map { it.substring(0, 1) }
-    }
-}.onFailure {
-    persianMonths = monthNameEmptyList
-    islamicMonths = monthNameEmptyList
-    gregorianMonths = monthNameEmptyList
-    weekDays = weekDaysEmptyList
-    weekDaysInitials = weekDaysEmptyList
-}.getOrElse(logException)
+fun loadLanguageResource() {
+    val language = language
+    persianMonths = AppLocalesData.getPersianCalendarMonths(language)
+    islamicMonths = AppLocalesData.getIslamicCalendarMonths(language)
+    gregorianMonths =
+        AppLocalesData.getGregorianCalendarMonths(language, easternGregorianArabicMonths)
+    weekDays = AppLocalesData.getWeekDays(language)
+    weekDaysInitials = AppLocalesData.getWeekDaysInitials(language)
+}
 
 @StringRes
 fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {

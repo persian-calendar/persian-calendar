@@ -59,7 +59,7 @@ import kotlin.math.sqrt
 fun initUtils(context: Context) {
     updateStoredPreference(context)
     applyAppLanguage(context)
-    loadLanguageResource(context)
+    loadLanguageResource()
     loadAlarms(context)
     loadEvents(context)
 }
