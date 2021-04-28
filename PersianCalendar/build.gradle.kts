@@ -124,7 +124,7 @@ dependencies {
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
-    testImplementation("junit:junit:4.13")
+    testImplementation("junit:junit:4.13.2")
     // Scratch.kt only dependencies
     // testImplementation("com.squareup.okhttp3:okhttp:3.10.0")
     // testImplementation("org.json:json:20210307")
