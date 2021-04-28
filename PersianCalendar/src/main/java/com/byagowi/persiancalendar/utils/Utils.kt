@@ -26,14 +26,14 @@ const val TWO_SECONDS_IN_MILLIS = 2000L
 const val HALF_SECOND_IN_MILLIS = 500L
 const val DAY_IN_SECOND = 86400L
 const val DAY_IN_MILLIS = 86400000L
-val monthNameEmptyList = (1..12).map { "" }.toList()
+val monthNameEmptyList = List(12) { "" }
 var persianMonths = monthNameEmptyList
     private set
 var islamicMonths = monthNameEmptyList
     private set
 var gregorianMonths = monthNameEmptyList
     private set
-val weekDaysEmptyList = (1..7).map { "" }.toList()
+val weekDaysEmptyList = List(7) { "" }
 var weekDays = weekDaysEmptyList
     private set
 var weekDaysInitials = weekDaysEmptyList
