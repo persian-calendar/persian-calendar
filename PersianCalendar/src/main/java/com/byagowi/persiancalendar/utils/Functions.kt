@@ -421,19 +421,17 @@ fun askForCalendarPermission(activity: Activity?) {
 
 fun copyToClipboard(
     view: View?, label: CharSequence?, text: CharSequence?, showToastInstead: Boolean = false
-) {
-    view ?: return
+) = runCatching {
+    view ?: return@runCatching null
     val clipboardService = view.context.getSystemService<ClipboardManager>()
-
-    if (clipboardService == null || label == null || text == null) return
-
+    if (clipboardService == null || label == null || text == null) return@runCatching null
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
     val textToShow = view.context.getString(R.string.date_copied_clipboard).format(text)
     if (showToastInstead)
         Toast.makeText(view.context, textToShow, Toast.LENGTH_SHORT).show()
     else
         Snackbar.make(view, textToShow, Snackbar.LENGTH_SHORT).show()
-}
+}.onFailure(logException).getOrNull().debugAssertNotNull ?: Unit
 
 fun dateStringOfOtherCalendars(jdn: Long, separator: String) =
     otherCalendars.joinToString(separator) { formatDate(getDateFromJdnOfCalendar(it, jdn)) }
