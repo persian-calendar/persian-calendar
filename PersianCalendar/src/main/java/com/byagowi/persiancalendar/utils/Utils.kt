@@ -164,107 +164,105 @@ fun loadEvents(context: Context) {
     IslamicDate.islamicOffset = context.appPrefs
         .getString(PREF_ISLAMIC_OFFSET, null)?.toIntOrNull() ?: 0
 
-    runCatching {
-        val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
+    val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
 
-        persianCalendarEvents = persianEvents.mapNotNull {
-            val month = it.month
-            val day = it.day
-            val year = it.year
-            var title = it.title
-            var holiday = it.isHoliday
+    persianCalendarEvents = persianEvents.mapNotNull {
+        val month = it.month
+        val day = it.day
+        val year = it.year
+        var title = it.title
+        var holiday = it.isHoliday
 
-            var addOrNot = false
-            val type = it.type
+        var addOrNot = false
+        val type = it.type
 
-            if (holiday && iranHolidays &&
-                (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
-            ) addOrNot = true
+        if (holiday && iranHolidays &&
+            (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
+        ) addOrNot = true
 
-            if (!iranHolidays && type == "Islamic Iran") holiday = false
-            if (iranIslamic && type == "Islamic Iran") addOrNot = true
-            if (iranAncient && type == "Ancient Iran") addOrNot = true
-            if (iranOthers && type == "Iran") addOrNot = true
-            if (afghanistanHolidays && type == "Afghanistan" && holiday) addOrNot = true
-            if (!afghanistanHolidays && type == "Afghanistan") holiday = false
-            if (afghanistanOthers && type == "Afghanistan") addOrNot = true
+        if (!iranHolidays && type == "Islamic Iran") holiday = false
+        if (iranIslamic && type == "Islamic Iran") addOrNot = true
+        if (iranAncient && type == "Ancient Iran") addOrNot = true
+        if (iranOthers && type == "Iran") addOrNot = true
+        if (afghanistanHolidays && type == "Afghanistan" && holiday) addOrNot = true
+        if (!afghanistanHolidays && type == "Afghanistan") holiday = false
+        if (afghanistanOthers && type == "Afghanistan") addOrNot = true
 
-            if (addOrNot) {
-                title += " ("
-                if (holiday && afghanistanHolidays && iranHolidays) {
-                    if (type == "Islamic Iran" || type == "Iran")
-                        title += "ایران، "
-                    else if (type == "Afghanistan")
-                        title += "افغانستان، "
-                }
-                title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
-                CalendarEvent.PersianCalendarEvent(
-                    date = PersianDate(year, month, day),
-                    title = title,
-                    isHoliday = holiday
-                )
-            } else null
-        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+        if (addOrNot) {
+            title += " ("
+            if (holiday && afghanistanHolidays && iranHolidays) {
+                if (type == "Islamic Iran" || type == "Iran")
+                    title += "ایران، "
+                else if (type == "Afghanistan")
+                    title += "افغانستان، "
+            }
+            title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
+            CalendarEvent.PersianCalendarEvent(
+                date = PersianDate(year, month, day),
+                title = title,
+                isHoliday = holiday
+            )
+        } else null
+    }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
-        islamicCalendarEvents = islamicEvents.mapNotNull {
-            val month = it.month
-            val day = it.day
-            var title = it.title
-            var holiday = it.isHoliday
+    islamicCalendarEvents = islamicEvents.mapNotNull {
+        val month = it.month
+        val day = it.day
+        var title = it.title
+        var holiday = it.isHoliday
 
-            var addOrNot = false
-            val type = it.type
+        var addOrNot = false
+        val type = it.type
 
-            if (afghanistanHolidays && holiday && type == "Islamic Afghanistan") addOrNot = true
-            if (!afghanistanHolidays && type == "Islamic Afghanistan") holiday = false
-            if (afghanistanOthers && type == "Islamic Afghanistan") addOrNot = true
-            if (iranHolidays && holiday && type == "Islamic Iran") addOrNot = true
-            if (!iranHolidays && type == "Islamic Iran") holiday = false
-            if (iranIslamic && type == "Islamic Iran") addOrNot = true
-            if (iranOthers && type == "Islamic Iran") addOrNot = true
+        if (afghanistanHolidays && holiday && type == "Islamic Afghanistan") addOrNot = true
+        if (!afghanistanHolidays && type == "Islamic Afghanistan") holiday = false
+        if (afghanistanOthers && type == "Islamic Afghanistan") addOrNot = true
+        if (iranHolidays && holiday && type == "Islamic Iran") addOrNot = true
+        if (!iranHolidays && type == "Islamic Iran") holiday = false
+        if (iranIslamic && type == "Islamic Iran") addOrNot = true
+        if (iranOthers && type == "Islamic Iran") addOrNot = true
 
-            if (addOrNot) {
-                title += " ("
-                if (holiday && afghanistanHolidays && iranHolidays) {
-                    if (type == "Islamic Iran")
-                        title += "ایران، "
-                    else if (type == "Islamic Afghanistan")
-                        title += "افغانستان، "
-                }
-                title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
+        if (addOrNot) {
+            title += " ("
+            if (holiday && afghanistanHolidays && iranHolidays) {
+                if (type == "Islamic Iran")
+                    title += "ایران، "
+                else if (type == "Islamic Afghanistan")
+                    title += "افغانستان، "
+            }
+            title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
 
-                CalendarEvent.IslamicCalendarEvent(
-                    date = IslamicDate(-1, month, day),
-                    title = title,
-                    isHoliday = holiday
-                )
-            } else null
-        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+            CalendarEvent.IslamicCalendarEvent(
+                date = IslamicDate(-1, month, day),
+                title = title,
+                isHoliday = holiday
+            )
+        } else null
+    }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
-        gregorianCalendarEvents = gregorianEvents.mapNotNull {
-            val month = it.month
-            val day = it.day
-            val title = it.title
+    gregorianCalendarEvents = gregorianEvents.mapNotNull {
+        val month = it.month
+        val day = it.day
+        val title = it.title
 
-            val isOfficialInIran = it.type == "Iran"
-            val isOfficialInAfghanistan = it.type == "Afghanistan"
-            val isOthers = !isOfficialInIran && !isOfficialInAfghanistan
+        val isOfficialInIran = it.type == "Iran"
+        val isOfficialInAfghanistan = it.type == "Afghanistan"
+        val isOthers = !isOfficialInIran && !isOfficialInAfghanistan
 
-            if (
-                (isOthers && international) ||
-                (isOfficialInIran && (iranOthers || international)) ||
-                (isOfficialInAfghanistan && afghanistanOthers)
-            ) {
-                CalendarEvent.GregorianCalendarEvent(
-                    date = CivilDate(-1, month, day),
-                    title = title + " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")",
-                    isHoliday = false
-                )
-            } else null
-        }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+        if (
+            (isOthers && international) ||
+            (isOfficialInIran && (iranOthers || international)) ||
+            (isOfficialInAfghanistan && afghanistanOthers)
+        ) {
+            CalendarEvent.GregorianCalendarEvent(
+                date = CivilDate(-1, month, day),
+                title = title + " (" + formatDayAndMonth(day, gregorianMonths[month - 1]) + ")",
+                isHoliday = false
+            )
+        } else null
+    }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
-        allEnabledEvents = allEnabledEventsBuilder
-    }.onFailure(logException)
+    allEnabledEvents = allEnabledEventsBuilder
 }
 
 fun loadLanguageResource() {
