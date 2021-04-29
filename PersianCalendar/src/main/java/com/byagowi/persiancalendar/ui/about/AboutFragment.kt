@@ -102,10 +102,10 @@ class AboutFragment : Fragment() {
             R.string.about_designers_list to R.drawable.ic_designer,
             R.string.about_translators_list to R.drawable.ic_translator,
             R.string.about_contributors_list to R.drawable.ic_developer
-        ).forEach {
-            val icon = AppCompatResources.getDrawable(context, it.second)
-            getString(it.first).trim().split("\n").shuffled().forEach {
-                binding.developers.addView(Chip(context).also { chip ->
+        ).flatMap { (listId: Int, iconId: Int) ->
+            val icon = AppCompatResources.getDrawable(context, iconId)
+            getString(listId).trim().split("\n").map {
+                Chip(context).also { chip ->
                     chip.setOnClickListener(chipClick)
                     val parts = it.split(": ")
                     chip.tag = parts[0]
@@ -115,9 +115,9 @@ class AboutFragment : Fragment() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         chip.elevation = resources.getDimension(R.dimen.chip_elevation)
                     }
-                })
+                }
             }
-        }
+        }.shuffled().forEach(binding.developers::addView)
     }
 
     private fun showLicenceDialog() {
