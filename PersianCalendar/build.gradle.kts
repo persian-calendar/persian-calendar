@@ -1,5 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.json.JSONObject
+import groovy.json.JsonSlurper
 
 plugins {
     id("com.android.application")
@@ -152,23 +152,18 @@ val generateAppSrcTask by tasks.registering {
         generateDir.mkdirs()
 
         // Events
-        fun JSONObject.getArray(key: String): Sequence<JSONObject> =
-            getJSONArray(key).run { (0 until length()).asSequence().map { getJSONObject(it) } }
-
-        val events = JSONObject(File(projectDir, "data/events.json").readText())
-
-        fun createEventStore(key: String) = events.getArray(key).joinToString(",\n    ") {
-            "CalendarRecord(title = \"${it.getString("title")}\"," +
-                    " type = \"${it.optString("type", "")}\"," +
-                    " isHoliday = ${it.optBoolean("holiday", false)}," +
-                    " year = ${it.optInt("year", -1)}," +
-                    " month = ${it.getInt("month")}, day = ${it.getInt("day")})"
+        fun Any?.toSerializedEvents() = (this as List<*>).joinToString(",\n    ") {
+            val record = it as Map<*, *>
+            "CalendarRecord(title = \"${record["title"]}\"," +
+                    " type = \"${record["type"] ?: ""}\"," +
+                    " isHoliday = ${record["holiday"] ?: false}," +
+                    " year = ${record["year"] ?: -1}," +
+                    " month = ${record["month"]}, day = ${record["day"]})"
         }
-
-        val persianEvents = createEventStore("Persian Calendar")
-        val islamicEvents = createEventStore("Hijri Calendar")
-        val gregorianEvents = createEventStore("Gregorian Calendar")
-
+        val events = JsonSlurper().parse(File(projectDir, "data/events.json")) as Map<*, *>
+        val persianEvents = events["Persian Calendar"].toSerializedEvents()
+        val islamicEvents = events["Hijri Calendar"].toSerializedEvents()
+        val gregorianEvents = events["Gregorian Calendar"].toSerializedEvents()
         File(generateDir, "Events.kt").writeText(
             """package com.byagowi.persiancalendar.generated
 
@@ -185,29 +180,29 @@ val gregorianEvents = listOf(
         )
 
         // Cities
-        fun <T> JSONObject.map(f: (String, JSONObject) -> T) =
-            keys().asSequence().map { f(it, this.getJSONObject(it)) }
-
-        val cities = JSONObject(
-            File(projectDir, "data/cities.json").readText()
-        ).map { countryCode, country ->
-            country.getJSONObject("cities").map { key, city ->
+        val cities = (JsonSlurper().parse(
+            File(projectDir, "data/cities.json")
+        ) as Map<*, *>).entries.map { countryEntry ->
+            val countryCode = countryEntry.key as String
+            val country = countryEntry.value as Map<*, *>
+            (country["cities"] as Map<*, *>).map { cityEntry ->
+                val key = cityEntry.key as String
+                val city = cityEntry.value as Map<*, *>
                 """"$key" to CityItem(
         key = "$key",
-        en = "${city.getString("en")}", fa = "${city.getString("fa")}",
-        ckb = "${city.getString("ckb")}", ar = "${city.getString("ar")}",
+        en = "${city["en"]}", fa = "${city["fa"]}",
+        ckb = "${city["ckb"]}", ar = "${city["ar"]}",
         countryCode = "$countryCode",
-        countryEn = "${country.getString("en")}", countryFa = "${country.getString("fa")}",
-        countryCkb = "${country.getString("ckb")}", countryAr = "${country.getString("ar")}",
+        countryEn = "${country["en"]}", countryFa = "${country["fa"]}",
+        countryCkb = "${country["ckb"]}", countryAr = "${country["ar"]}",
         coordinate = Coordinate(
-            ${city.getDouble("latitude")},
-            ${city.getDouble("longitude")},
-            ${if (countryCode == "ir") 0.0 else city.getDouble("elevation")}
+            ${(city["latitude"] as Number).toDouble()},
+            ${(city["longitude"] as Number).toDouble()},
+            ${if (countryCode == "ir") 0.0 else (city["elevation"] as Number).toDouble()}
         )
     )"""
             }
         }.flatten().joinToString(",\n    ")
-
         File(generateDir, "Cities.kt").writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
