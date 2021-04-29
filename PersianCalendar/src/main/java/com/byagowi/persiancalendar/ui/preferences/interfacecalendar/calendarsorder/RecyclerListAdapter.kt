@@ -26,7 +26,6 @@ import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.utils.layoutInflater
-import com.byagowi.persiancalendar.utils.logException
 
 class RecyclerListAdapter(
     private val calendarPreferenceDialog: CalendarPreferenceDialog,
@@ -72,16 +71,14 @@ class RecyclerListAdapter(
 
         // Easter egg when all are swiped
         if (items.isEmpty()) {
-            runCatching {
-                val view =
-                    calendarPreferenceDialog.activity?.findViewById<View>(android.R.id.content)
-                        ?: return
-                ValueAnimator.ofFloat(0f, 360f).apply {
-                    duration = 3000L
-                    interpolator = AccelerateDecelerateInterpolator()
-                    addUpdateListener { value -> view.rotation = value.animatedValue as Float }
-                }.start()
-            }.onFailure(logException)
+            val view =
+                calendarPreferenceDialog.activity?.findViewById<View>(android.R.id.content)
+                    ?: return
+            ValueAnimator.ofFloat(0f, 360f).apply {
+                duration = 3000L
+                interpolator = AccelerateDecelerateInterpolator()
+                addUpdateListener { value -> view.rotation = value.animatedValue as Float }
+            }.start()
             calendarPreferenceDialog.dismiss()
         }
     }

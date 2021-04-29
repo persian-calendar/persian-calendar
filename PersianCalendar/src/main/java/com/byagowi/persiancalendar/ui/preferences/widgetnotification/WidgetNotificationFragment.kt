@@ -9,7 +9,6 @@ import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.dp
-import com.byagowi.persiancalendar.utils.logException
 import java.util.*
 
 // Don't use MainActivity here as it is used in WidgetConfigurationActivity also
@@ -45,17 +44,15 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 .setTitle(R.string.widget_text_color)
                 .setView(colorPickerView)
                 .setPositiveButton(R.string.accept) { _, _ ->
-                    runCatching {
-                        sharedPreferences.edit {
-                            putString(
-                                PREF_SELECTED_WIDGET_TEXT_COLOR,
-                                "#%06X".format(
-                                    Locale.ENGLISH,
-                                    0xFFFFFF and colorPickerView.pickerColor
-                                )
+                    sharedPreferences.edit {
+                        putString(
+                            PREF_SELECTED_WIDGET_TEXT_COLOR,
+                            "#%06X".format(
+                                Locale.ENGLISH,
+                                0xFFFFFF and colorPickerView.pickerColor
                             )
-                        }
-                    }.onFailure(logException)
+                        )
+                    }
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
@@ -81,17 +78,15 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 .setTitle(R.string.widget_background_color)
                 .setView(colorPickerView)
                 .setPositiveButton(R.string.accept) { _, _ ->
-                    runCatching {
-                        sharedPreferences.edit {
-                            putString(
-                                PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
-                                "#%08X".format(
-                                    Locale.ENGLISH,
-                                    0xFFFFFFFF and colorPickerView.pickerColor.toLong()
-                                )
+                    sharedPreferences.edit {
+                        putString(
+                            PREF_SELECTED_WIDGET_BACKGROUND_COLOR,
+                            "#%08X".format(
+                                Locale.ENGLISH,
+                                0xFFFFFFFF and colorPickerView.pickerColor.toLong()
                             )
-                        }
-                    }.onFailure(logException)
+                        )
+                    }
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .show()
