@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
-import com.byagowi.persiancalendar.entities.*
+import com.byagowi.persiancalendar.entities.CalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
 import java.util.*
 
