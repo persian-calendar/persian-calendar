@@ -26,4 +26,3 @@
 #    public static *** i(...);
 #}
 
--dontobfuscate
