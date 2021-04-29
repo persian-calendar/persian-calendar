@@ -297,9 +297,6 @@ fun getDayIconResource(day: Int): Int = runCatching {
     }
 }.onFailure(logException).getOrDefault(0)
 
-fun readRawResource(context: Context, @RawRes res: Int) =
-    context.resources.openRawResource(res).use { String(it.readBytes()) }
-
 fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) =
     "%s: %.7f%s%s: %.7f".format(
         Locale.getDefault(),

@@ -128,7 +128,7 @@ class AboutFragment : Fragment() {
             .setTitle(resources.getString(R.string.about_license_title))
             .setView(ScrollView(context).apply {
                 addView(TextView(context).apply {
-                    text = readRawResource(context, R.raw.credits)
+                    text = resources.openRawResource(R.raw.credits).use { String(it.readBytes()) }
                     setPadding(20)
                     typeface = Typeface.MONOSPACE
                     Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
