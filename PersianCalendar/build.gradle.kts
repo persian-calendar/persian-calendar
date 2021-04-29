@@ -227,7 +227,7 @@ afterEvaluate {
 }
 
 // https://stackoverflow.com/a/66823671
-val dependenciesURLs: Sequence<Pair<String, String?>>
+val dependenciesURLs: Sequence<Pair<String, URL?>>
     get() = project.configurations.getByName(
         "implementation"
     ).dependencies.asSequence().mapNotNull {
@@ -241,8 +241,9 @@ val dependenciesURLs: Sequence<Pair<String, String?>>
             ).let { x -> listOf("$x.jar", "$x.aar") }
         }.firstNotNullResult { url ->
             runCatching {
-                URL(url).openStream() ?: throw Exception()
-                url
+                val connection = URL(url).openConnection()
+                connection.getInputStream() ?: throw Exception()
+                connection.url
             }.getOrNull()
         }
     }
