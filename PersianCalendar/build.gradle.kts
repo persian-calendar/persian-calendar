@@ -158,11 +158,11 @@ val generateAppSrcTask by tasks.registering {
         val events = JSONObject(File(projectDir, "data/events.json").readText())
 
         fun createEventStore(key: String) = events.getArray(key).joinToString(",\n    ") {
-            "CalendarRecord(\"${it.getString("title")}\"," +
-                    " \"${it.optString("type", "")}\"," +
-                    " ${it.optBoolean("holiday", false)}," +
-                    " ${it.optInt("year", -1)}," +
-                    " ${it.getInt("month")}, ${it.getInt("day")})"
+            "CalendarRecord(title = \"${it.getString("title")}\"," +
+                    " type = \"${it.optString("type", "")}\"," +
+                    " isHoliday = ${it.optBoolean("holiday", false)}," +
+                    " year = ${it.optInt("year", -1)}," +
+                    " month = ${it.getInt("month")}, day = ${it.getInt("day")})"
         }
 
         val persianEvents = createEventStore("Persian Calendar")
