@@ -1,5 +1,7 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import groovy.json.JsonSlurper
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
+import java.net.URL
 
 plugins {
     id("com.android.application")
@@ -160,6 +162,7 @@ val generateAppSrcTask by tasks.registering {
                     " year = ${record["year"] ?: -1}," +
                     " month = ${record["month"]}, day = ${record["day"]})"
         }
+
         val events = JsonSlurper().parse(File(projectDir, "data/events.json")) as Map<*, *>
         val persianEvents = events["Persian Calendar"].toSerializedEvents()
         val islamicEvents = events["Hijri Calendar"].toSerializedEvents()
@@ -218,5 +221,31 @@ val citiesStore = mapOf(
 afterEvaluate {
     android.applicationVariants.forEach { variant ->
         variant.registerJavaGeneratingTask(generateAppSrcTask.get(), generatedAppSrcDir)
+    }
+}
+
+// https://stackoverflow.com/a/66823671
+val dependenciesURLs: Sequence<Pair<String, String?>>
+    get() = project.configurations.getByName(
+        "implementation"
+    ).dependencies.asSequence().mapNotNull {
+        it.run { "$group:$name:$version" } to project.repositories.mapNotNull { repo ->
+            (repo as? UrlArtifactRepository)?.url
+        }.flatMap { repoUrl ->
+            "%s/%s/%s/%s/%s-%s".format(
+                repoUrl.toString().trimEnd('/'),
+                it.group?.replace('.', '/') ?: "", it.name, it.version,
+                it.name, it.version
+            ).let { x -> listOf("$x.jar", "$x.aar") }
+        }.firstNotNullResult { url ->
+            runCatching {
+                URL(url).openStream() ?: throw Exception()
+                url
+            }.getOrNull()
+        }
+    }
+tasks.register("printDependenciesURLs") {
+    doLast {
+        dependenciesURLs.forEach { println("${it.first} => ${it.second}") }
     }
 }
