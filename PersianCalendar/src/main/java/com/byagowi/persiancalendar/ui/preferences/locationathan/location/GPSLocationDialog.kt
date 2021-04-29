@@ -23,7 +23,6 @@ import androidx.core.content.getSystemService
 import androidx.core.view.updatePadding
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.utils.*
-import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -155,8 +154,10 @@ class GPSLocationDialog : AppCompatDialogFragment() {
                 activity,
                 Coordinate(location.latitude, location.longitude, location.altitude), "\n"
             ),
-            formatCoordinateISO6709(location.latitude, location.longitude, location.altitude),
-            "https://plus.codes/${OpenLocationCode.encode(location.latitude, location.longitude)}"
+            formatCoordinateISO6709(location.latitude, location.longitude, location.altitude)
+            // Let's ask them to add to it https://maven.google.com
+            // https://github.com/google/open-location-code/issues/452
+            // "https://plus.codes/${OpenLocationCode.encode(location.latitude, location.longitude)}"
         ).joinToString("\n\n").trim()
         textView?.text = result
         textView?.setOnClickListener {

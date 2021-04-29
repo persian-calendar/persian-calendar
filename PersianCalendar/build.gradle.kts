@@ -116,8 +116,6 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.google.android.material:material:1.3.0")
 
-    implementation("com.google.openlocationcode:openlocationcode:1.0.4")
-
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
 
@@ -128,6 +126,10 @@ dependencies {
     implementation("androidx.browser:browser:1.3.0")
 
     implementation("androidx.work:work-runtime-ktx:2.5.0")
+
+    // Let's ask them to add it to https://maven.google.com
+    // https://github.com/google/open-location-code/issues/452
+    // implementation("com.google.openlocationcode:openlocationcode:1.0.4")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
