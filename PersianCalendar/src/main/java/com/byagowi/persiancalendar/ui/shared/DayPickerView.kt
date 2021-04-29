@@ -33,34 +33,11 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                 LANG_EN_US, LANG_JA, LANG_AR -> true
                 else -> false
             }
-        )
-        val chips = calendarTypes.map { calendarTypeItem ->
-            (inflater.inflate(
-                R.layout.single_chip_layout, binding.calendarTypesBox, false
-            ) as Chip).also {
-                it.text = calendarTypeItem.toString()
-                when {
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
-                        it.elevation = it.resources.getDimension(R.dimen.chip_elevation)
-                    }
-                }
-            }
-        }
-        chips.forEachIndexed { i, chip ->
-            chip.setOnClickListener {
-                selectedCalendarType = calendarTypes[i].type
-                jdn = mJdn
-                selectedDayListener(mJdn)
-                chips.forEachIndexed { j, chipView ->
-                    chipView.isClickable = i != j
-                    chipView.isSelected = i == j
-                }
-            }
-            chip.isClickable = i != 0
-            chip.isSelected = i == 0
-            chip.isCheckable = false
-            selectedCalendarType = calendarTypes[0].type
-            binding.calendarTypesBox.addView(chip)
+        ).also { selectedCalendarType = it[0].type }
+        binding.calendarsFlow.setup(calendarTypes, binding.calendars) {
+            selectedCalendarType = it
+            jdn = mJdn
+            selectedDayListener(mJdn)
         }
 
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
