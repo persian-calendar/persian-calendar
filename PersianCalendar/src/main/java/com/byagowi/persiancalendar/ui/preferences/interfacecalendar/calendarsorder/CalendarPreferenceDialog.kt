@@ -43,13 +43,11 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
             .setTitle(R.string.calendars_priority)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.accept) { _, _ ->
-                val ordering = adapter.result
-                activity.appPrefs.edit {
-                    if (ordering.isNotEmpty()) {
-                        putString(PREF_MAIN_CALENDAR_KEY, ordering[0])
+                adapter.result.takeIf { it.isNotEmpty() }?.let { ordering ->
+                    activity.appPrefs.edit {
+                        putString(PREF_MAIN_CALENDAR_KEY, ordering.first())
                         putString(
-                            PREF_OTHER_CALENDARS_KEY,
-                            ordering.subList(1, ordering.size).joinToString(",")
+                            PREF_OTHER_CALENDARS_KEY, ordering.drop(1).joinToString(",")
                         )
                     }
                 }
