@@ -185,7 +185,7 @@ val gregorianEvents = listOf(
         // Cities
         val cities = (JsonSlurper().parse(
             File(projectDir, "data/cities.json")
-        ) as Map<*, *>).entries.map { countryEntry ->
+        ) as Map<*, *>).entries.flatMap { countryEntry ->
             val countryCode = countryEntry.key as String
             val country = countryEntry.value as Map<*, *>
             (country["cities"] as Map<*, *>).map { cityEntry ->
@@ -205,7 +205,7 @@ val gregorianEvents = listOf(
         )
     )"""
             }
-        }.flatten().joinToString(",\n    ")
+        }.joinToString(",\n    ")
         File(generateDir, "Cities.kt").writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
