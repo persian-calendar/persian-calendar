@@ -24,27 +24,9 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
         toggle()
     }
 
-    private val timeNames = listOf<@StringRes Int>(
-        R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
-        R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
-    )
-
-    private fun stringIdToOwghat(@StringRes timeName: Int, prayTime: PrayTimes) = when (timeName) {
-        R.string.imsak -> prayTime.imsakClock
-        R.string.fajr -> prayTime.fajrClock
-        R.string.sunrise -> prayTime.sunriseClock
-        R.string.dhuhr -> prayTime.dhuhrClock
-        R.string.asr -> prayTime.asrClock
-        R.string.sunset -> prayTime.sunsetClock
-        R.string.maghrib -> prayTime.maghribClock
-        R.string.isha -> prayTime.ishaClock
-        R.string.midnight -> prayTime.midnightClock
-        else -> prayTime.midnightClock
-    }
-
     fun update(prayTimes: PrayTimes) = times
         .forEach { (timeId: Int, timeItemBinding: TimeItemBinding) ->
-            timeItemBinding.time.text = stringIdToOwghat(timeId, prayTimes).toFormattedString()
+            timeItemBinding.time.text = timeIdToClock(timeId, prayTimes).toFormattedString()
         }
 
     var isExpanded = true
@@ -56,6 +38,26 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
                 R.string.fajr, R.string.dhuhr, R.string.maghrib -> Unit
                 else -> timeItemBinding.root.visibility = visibility
             }
+        }
+    }
+
+    companion object {
+        private val timeNames = listOf<@StringRes Int>(
+            R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
+            R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
+        )
+
+        private fun timeIdToClock(@StringRes timeId: Int, prayTime: PrayTimes) = when (timeId) {
+            R.string.imsak -> prayTime.imsakClock
+            R.string.fajr -> prayTime.fajrClock
+            R.string.sunrise -> prayTime.sunriseClock
+            R.string.dhuhr -> prayTime.dhuhrClock
+            R.string.asr -> prayTime.asrClock
+            R.string.sunset -> prayTime.sunsetClock
+            R.string.maghrib -> prayTime.maghribClock
+            R.string.isha -> prayTime.ishaClock
+            R.string.midnight -> prayTime.midnightClock
+            else -> prayTime.midnightClock
         }
     }
 }
