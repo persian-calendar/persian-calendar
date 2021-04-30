@@ -224,30 +224,3 @@ afterEvaluate {
         variant.registerJavaGeneratingTask(generateAppSrcTask.get(), generatedAppSrcDir)
     }
 }
-
-// https://stackoverflow.com/a/66823671
-val dependenciesURLs: Sequence<Pair<String, URL?>>
-    get() = project.configurations.getByName(
-        "implementation"
-    ).dependencies.asSequence().mapNotNull {
-        it.run { "$group:$name:$version" } to project.repositories.mapNotNull { repo ->
-            (repo as? UrlArtifactRepository)?.url
-        }.flatMap { repoUrl ->
-            "%s/%s/%s/%s/%s-%s".format(
-                repoUrl.toString().trimEnd('/'),
-                it.group?.replace('.', '/') ?: "", it.name, it.version,
-                it.name, it.version
-            ).let { x -> listOf("$x.jar", "$x.aar") }
-        }.firstNotNullResult { url ->
-            runCatching {
-                val connection = URL(url).openConnection()
-                connection.getInputStream() ?: throw Exception()
-                connection.url
-            }.getOrNull()
-        }
-    }
-tasks.register("printDependenciesURLs") {
-    doLast {
-        dependenciesURLs.forEach { (dependency: String, url: URL?) -> println("$dependency => $url") }
-    }
-}
