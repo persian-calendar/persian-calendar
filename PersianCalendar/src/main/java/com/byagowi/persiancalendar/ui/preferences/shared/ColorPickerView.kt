@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.byagowi.persiancalendar.ui.preferences.widgetnotification
+package com.byagowi.persiancalendar.ui.preferences.shared
 
 import android.content.Context
 import android.content.res.Resources
