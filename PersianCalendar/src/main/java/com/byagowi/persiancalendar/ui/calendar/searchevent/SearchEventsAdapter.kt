@@ -52,9 +52,9 @@ class SearchEventsAdapter(
 
         override fun performFiltering(constraint: CharSequence?) = createFilterResults(
             if (constraint.isNullOrBlank()) originalItems
-            else itemsWords.filter { (_: CalendarEvent<*>, words: List<String>) ->
-                words.any { word -> word.startsWith(constraint) }
-            }.map { it.first }
+            else itemsWords.mapNotNull { (event: CalendarEvent<*>, words: List<String>) ->
+                event.takeIf { words.any { word -> word.startsWith(constraint) } }
+            }
         )
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
