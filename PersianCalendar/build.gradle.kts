@@ -247,6 +247,6 @@ val dependenciesURLs: Sequence<Pair<String, URL?>>
     }
 tasks.register("printDependenciesURLs") {
     doLast {
-        dependenciesURLs.forEach { println("${it.first} => ${it.second}") }
+        dependenciesURLs.forEach { (dependency: String, url: URL?) -> println("$dependency => $url") }
     }
 }

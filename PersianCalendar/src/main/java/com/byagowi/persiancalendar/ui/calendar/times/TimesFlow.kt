@@ -20,11 +20,11 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
         times = timeNames.map { name ->
             name to TimeItemBinding.inflate(context.layoutInflater, parentView, false)
         }
-        referencedIds = times.map {
+        referencedIds = times.map { (timeStringId: Int, timeItemBinding: TimeItemBinding) ->
             val id = View.generateViewId()
-            it.second.root.id = id
-            parentView.addView(it.second.root)
-            it.second.name.setText(it.first)
+            timeItemBinding.root.id = id
+            parentView.addView(timeItemBinding.root)
+            timeItemBinding.name.setText(timeStringId)
             id
         }.toIntArray()
         toggle()
@@ -48,18 +48,19 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
         else -> prayTime.midnightClock
     }
 
-    fun update(prayTimes: PrayTimes) = times.forEach {
-        it.second.time.text = stringIdToOwghat(it.first, prayTimes).toFormattedString()
-    }
+    fun update(prayTimes: PrayTimes) = times
+        .forEach { (timeId: Int, timeItemBinding: TimeItemBinding) ->
+            timeItemBinding.time.text = stringIdToOwghat(timeId, prayTimes).toFormattedString()
+        }
 
     var isExpanded = true
     fun toggle() {
         isExpanded = !isExpanded
         val visibility = if (isExpanded) View.VISIBLE else View.GONE
-        times.forEach {
-            when (it.first) {
+        times.forEach { (timeId: Int, timeItemBinding: TimeItemBinding) ->
+            when (timeId) {
                 R.string.fajr, R.string.dhuhr, R.string.maghrib -> Unit
-                else -> it.second.root.visibility = visibility
+                else -> timeItemBinding.root.visibility = visibility
             }
         }
     }

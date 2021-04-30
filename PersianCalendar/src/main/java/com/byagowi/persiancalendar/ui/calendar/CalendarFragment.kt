@@ -183,8 +183,8 @@ class CalendarFragment : Fragment() {
         )
 
         // tabs should fill their parent otherwise view pager can't handle it
-        tabs.forEach {
-            it.second.layoutParams = ViewGroup.LayoutParams(
+        tabs.forEach { (_: Int, tabView: ViewGroup) ->
+            tabView.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
         }

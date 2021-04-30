@@ -125,15 +125,15 @@ class DeviceInformationFragment : Fragment() {
                                         R.drawable.ic_motorcycle to 1,
                                         R.drawable.ic_help to 33,
                                         R.drawable.ic_bug to 9999
-                                    ).map {
+                                    ).map { (iconId: Int, badgeNumber: Int) ->
                                         tabLayout.addTab(tabLayout.newTab().also { tab ->
-                                            tab.setIcon(it.first)
+                                            tab.setIcon(iconId)
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                                 tab.icon?.setTint(tintColor)
                                             }
                                             tab.getOrCreateBadge().also { badge ->
-                                                badge.isVisible = it.second >= 0
-                                                if (it.second > 0) badge.number = it.second
+                                                badge.isVisible = badgeNumber >= 0
+                                                if (badgeNumber > 0) badge.number = badgeNumber
                                             }
                                         })
                                     }
@@ -339,7 +339,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
                         "Current Avg" to BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
                         "Current Now" to BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
                         "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
-                    ).map { "${it.first}: ${getLongProperty(it.second)}" }
+                    ).map { (title: String, id: Int) -> "$title: ${getLongProperty(id)}" }
                 }?.joinToString("\n")
             else "",
             ""
@@ -386,7 +386,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
                     "GL_VERSION" to GLES20.GL_VERSION,
                     "GL_RENDERER" to GLES20.GL_RENDERER,
                     "GL_VENDOR" to GLES20.GL_VENDOR
-                ).map { "${it.first}: ${GLES20.glGetString(it.second)}" } + listOf(
+                ).map { (title: String, id: Int) -> "$title: ${GLES20.glGetString(id)}" } + listOf(
                     "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
                     "GL_MAX_CUBE_MAP_TEXTURE_SIZE" to GLES20.GL_MAX_CUBE_MAP_TEXTURE_SIZE,
                     "GL_MAX_FRAGMENT_UNIFORM_VECTORS" to GLES20.GL_MAX_FRAGMENT_UNIFORM_VECTORS,
@@ -398,10 +398,10 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
                     "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
                     "GL_MAX_VERTEX_UNIFORM_VECTORS" to GLES20.GL_MAX_VERTEX_UNIFORM_VECTORS,
                     "GL_MAX_VIEWPORT_DIMS" to GLES20.GL_MAX_VIEWPORT_DIMS
-                ).map {
+                ).map { (title: String, id: Int) ->
                     val intBuffer = IntArray(1)
-                    GLES10.glGetIntegerv(it.second, intBuffer, 0)
-                    "${it.first}: ${intBuffer[0]}"
+                    GLES10.glGetIntegerv(id, intBuffer, 0)
+                    "$title: ${intBuffer[0]}"
                 }).joinToString("\n"),
                 ""
             ),
