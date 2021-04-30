@@ -3,30 +3,24 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
+import com.byagowi.persiancalendar.utils.addViewsToFlow
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.PrayTimes
 
 class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
 
-    var times = emptyList<Pair<@StringRes Int, TimeItemBinding>>()
-    fun setup(parentView: ViewGroup) {
-        if (times.isNotEmpty()) return
-        times = timeNames.map { name ->
-            name to TimeItemBinding.inflate(context.layoutInflater, parentView, false)
-        }
-        referencedIds = times.map { (timeStringId: Int, timeItemBinding: TimeItemBinding) ->
-            val id = View.generateViewId()
-            timeItemBinding.root.id = id
-            parentView.addView(timeItemBinding.root)
-            timeItemBinding.name.setText(timeStringId)
-            id
-        }.toIntArray()
+    private var times = emptyList<Pair<@StringRes Int, TimeItemBinding>>()
+    fun setup() {
+        times = timeNames.map { name -> name to TimeItemBinding.inflate(context.layoutInflater) }
+        addViewsToFlow(times.map { (timeId: Int, timeItemBinding: TimeItemBinding) ->
+            timeItemBinding.name.setText(timeId)
+            timeItemBinding.root
+        })
         toggle()
     }
 

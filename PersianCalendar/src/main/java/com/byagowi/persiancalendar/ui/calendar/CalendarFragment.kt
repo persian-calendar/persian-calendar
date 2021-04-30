@@ -177,7 +177,7 @@ class CalendarFragment : Fragment() {
                         it.enableTransitionType(LayoutTransition.APPEARING)
                         it.setAnimateParentHierarchy(false)
                     }
-                    owghatBinding.timesFlow.setup(owghatBinding.times)
+                    owghatBinding.timesFlow.setup()
                 }.root
             }
         )

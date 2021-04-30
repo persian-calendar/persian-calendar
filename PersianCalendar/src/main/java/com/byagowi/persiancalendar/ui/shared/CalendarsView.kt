@@ -51,7 +51,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     ) {
         val context = context ?: return
 
-        binding.calendarsFlow.update(binding.calendars, calendarsToShow, jdn)
+        binding.calendarsFlow.update(calendarsToShow, jdn)
         binding.weekDayName.text = getWeekDayName(CivilDate(jdn))
 
         binding.zodiac.also {

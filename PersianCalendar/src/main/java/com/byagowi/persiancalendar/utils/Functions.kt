@@ -16,11 +16,13 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
+import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -548,4 +550,14 @@ fun Toolbar.setupUpNavigation() {
 fun Context.resolveColor(attr: Int) = TypedValue().let {
     theme.resolveAttribute(attr, it, true)
     ContextCompat.getColor(this, it.resourceId)
+}
+
+fun Flow.addViewsToFlow(viewList: List<View>) {
+    val parentView = (this.parent as? ViewGroup).debugAssertNotNull ?: return
+    this.referencedIds = viewList.map {
+        View.generateViewId().also { id ->
+            it.id = id
+            parentView.addView(it)
+        }
+    }.toIntArray()
 }

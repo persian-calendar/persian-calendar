@@ -32,7 +32,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                 else -> false
             }
         ).also { selectedCalendarType = it[0].type }
-        binding.calendarsFlow.setup(calendarTypes, binding.calendars) {
+        binding.calendarsFlow.setup(calendarTypes) {
             selectedCalendarType = it
             jdn = mJdn
             selectedDayListener(mJdn)

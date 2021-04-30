@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.shared
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.utils.*
@@ -12,27 +11,22 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
     View.OnClickListener {
 
     private val calendarFont = getCalendarFragmentFont(context)
+    private var bindings = emptyList<CalendarItemBinding>()
 
-    var bindings = emptyList<CalendarItemBinding>()
-    fun update(parentView: ViewGroup, calendarsToShow: List<CalendarType>, jdn: Long) {
+    fun update(calendarsToShow: List<CalendarType>, jdn: Long) {
         // It implicitly expects the number of calendarsToShow items to not be changed during
         // the view lifecycle
         if (bindings.isEmpty()) {
-            bindings = calendarsToShow.map {
-                CalendarItemBinding.inflate(context.layoutInflater, parentView, false)
-            }
+            bindings = calendarsToShow.map { CalendarItemBinding.inflate(context.layoutInflater) }
             val applyLineMultiplier = !isCustomFontEnabled
-            referencedIds = bindings.map {
-                val id = View.generateViewId()
-                it.root.id = id
-                parentView.addView(it.root)
+            addViewsToFlow(bindings.map {
                 it.monthYear.typeface = calendarFont
                 it.day.typeface = calendarFont
                 if (applyLineMultiplier) it.monthYear.setLineSpacing(0f, .6f)
                 it.container.setOnClickListener(this)
                 it.linear.setOnClickListener(this)
-                id
-            }.toIntArray()
+                it.root
+            })
         }
         bindings.zip(calendarsToShow) { binding, calendarType ->
             val date = getDateFromJdnOfCalendar(calendarType, jdn)

@@ -3,23 +3,18 @@ package com.byagowi.persiancalendar.ui.shared
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
-import android.view.View
-import android.view.ViewGroup
 import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SingleChipLayoutBinding
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.addViewsToFlow
 import com.byagowi.persiancalendar.utils.layoutInflater
 
 class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
-
-    fun setup(
-        calendarTypes: List<CalendarTypeItem>, parentView: ViewGroup,
-        onItemClick: (CalendarType) -> Unit
-    ) {
+    fun setup(calendarTypes: List<CalendarTypeItem>, onItemClick: (CalendarType) -> Unit) {
         val chips = calendarTypes.map { calendarTypeItem ->
-            SingleChipLayoutBinding.inflate(context.layoutInflater, parentView, false).also {
+            SingleChipLayoutBinding.inflate(context.layoutInflater).also {
                 it.chip.text = calendarTypeItem.toString()
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
@@ -28,7 +23,7 @@ class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(cont
                 }
             }.root
         }
-        referencedIds = chips.mapIndexed { i, chip ->
+        addViewsToFlow(chips.mapIndexed { i, chip ->
             chip.setOnClickListener {
                 onItemClick(calendarTypes[i].type)
                 chips.forEachIndexed { j, chipView ->
@@ -39,11 +34,7 @@ class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(cont
             chip.isClickable = i != 0
             chip.isSelected = i == 0
             chip.isCheckable = false
-
-            val id = View.generateViewId()
-            chip.id = id
-            parentView.addView(chip)
-            id
-        }.toIntArray()
+            chip
+        })
     }
 }
