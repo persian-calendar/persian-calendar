@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -12,7 +11,6 @@ import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.utils.*
-import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 
 class DayPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
