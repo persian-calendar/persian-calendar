@@ -1,7 +1,6 @@
+import com.android.build.gradle.internal.tasks.factory.dependsOn
 import groovy.json.JsonSlurper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
-import java.net.URL
 
 plugins {
     id("com.android.application")
@@ -219,8 +218,4 @@ val citiesStore = mapOf(
         )
     }
 }
-afterEvaluate {
-    android.applicationVariants.forEach { variant ->
-        variant.registerJavaGeneratingTask(generateAppSrcTask.get(), generatedAppSrcDir)
-    }
-}
+tasks.named("preBuild").dependsOn(generateAppSrcTask)
