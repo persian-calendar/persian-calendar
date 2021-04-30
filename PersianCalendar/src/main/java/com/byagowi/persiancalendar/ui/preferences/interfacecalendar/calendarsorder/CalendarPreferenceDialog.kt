@@ -25,11 +25,7 @@ class CalendarPreferenceDialog : AppCompatDialogFragment() {
         updateStoredPreference(activity)
         val enabledCalendarTypes = getEnabledCalendarTypes()
         val adapter = RecyclerListAdapter(this, getOrderedCalendarEntities(activity).map {
-            RecyclerListAdapter.Item(
-                it.toString(),
-                it.type.toString(),
-                it.type in enabledCalendarTypes
-            )
+            RecyclerListAdapter.Item(it.title, it.type.name, it.type in enabledCalendarTypes)
         })
         val recyclerView = RecyclerView(activity).also {
             it.setHasFixedSize(true)

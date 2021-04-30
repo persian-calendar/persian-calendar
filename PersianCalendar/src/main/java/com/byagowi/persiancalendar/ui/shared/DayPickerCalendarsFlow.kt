@@ -15,7 +15,7 @@ class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(cont
     fun setup(calendarTypes: List<CalendarTypeItem>, onItemClick: (CalendarType) -> Unit) {
         val chips = calendarTypes.map { calendarTypeItem ->
             SingleChipLayoutBinding.inflate(context.layoutInflater).also {
-                it.chip.text = calendarTypeItem.toString()
+                it.chip.text = calendarTypeItem.title
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
                         it.chip.elevation = resources.getDimension(R.dimen.chip_elevation)

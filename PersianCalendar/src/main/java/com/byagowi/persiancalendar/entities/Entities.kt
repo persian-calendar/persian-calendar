@@ -34,6 +34,4 @@ data class CityItem(
     val countryAr: String, val coordinate: Coordinate
 )
 
-data class CalendarTypeItem(val type: CalendarType, private val title: String) {
-    override fun toString(): String = title
-}
+data class CalendarTypeItem(val type: CalendarType, val title: String)
