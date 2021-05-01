@@ -169,7 +169,7 @@ val generateAppSrcTask by tasks.registering {
         val islamicEvents = events["Hijri Calendar"].toSerializedEvents()
         val gregorianEvents = events["Gregorian Calendar"].toSerializedEvents()
         File(generateDir, "Events.kt").writeText(
-            """package com.byagowi.persiancalendar.generated
+            """package ${android.defaultConfig.applicationId}.generated
 
 class CalendarRecord(val title: String, val type: String, val isHoliday: Boolean, val year: Int, val month: Int, val day: Int)
 val persianEvents = listOf(
