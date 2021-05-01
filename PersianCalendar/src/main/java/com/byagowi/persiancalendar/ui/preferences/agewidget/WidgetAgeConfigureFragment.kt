@@ -6,7 +6,7 @@ import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showSelectDayDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getTodayJdn
@@ -41,7 +41,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
             }
             PREF_SELECTED_DATE_AGE_WIDGET -> {
                 val todayJdn = getTodayJdn()
-                showSelectDayDialog(
+                showDayPickerDialog(
                     jdn = activity?.appPrefs?.getLong(key, todayJdn) ?: todayJdn
                 ) { jdnResult -> activity?.appPrefs?.edit { putLong(key, jdnResult) } }
                 true

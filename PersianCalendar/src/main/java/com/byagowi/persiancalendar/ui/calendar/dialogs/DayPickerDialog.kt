@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.shared.DayPickerView
 
-fun Fragment.showSelectDayDialog(jdn: Long, onSuccess: (jdn: Long) -> Unit) {
+fun Fragment.showDayPickerDialog(jdn: Long, onSuccess: (jdn: Long) -> Unit) {
     val activity = activity ?: return
     val dayPickerView = DayPickerView(activity).also { it.jdn = jdn }
     AlertDialog.Builder(activity)

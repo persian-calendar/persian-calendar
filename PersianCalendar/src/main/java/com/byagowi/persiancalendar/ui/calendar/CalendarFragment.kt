@@ -35,7 +35,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showSelectDayDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
@@ -236,7 +236,7 @@ class CalendarFragment : Fragment() {
             setupToolbarMenu(it.toolbar.menu)
             it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
                 when (clickedMenuItem?.itemId) {
-                    R.id.go_to -> showSelectDayDialog(selectedJdn, ::bringDate)
+                    R.id.go_to -> showDayPickerDialog(selectedJdn, ::bringDate)
                     R.id.add_event -> addEventOnCalendar(selectedJdn)
                     R.id.shift_work -> openShiftWorkDialog()
                     R.id.month_overview -> openMonthOverView()
