@@ -29,8 +29,8 @@ android {
         getByName("main").java.srcDir(generatedAppSrcDir)
     }
 
-    compileSdkVersion(30)
-    buildToolsVersion("30.0.3")
+    compileSdk = 30
+    buildToolsVersion = "30.0.3"
 
     buildFeatures {
         viewBinding = true
@@ -45,13 +45,15 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdkVersion(17)
-        targetSdkVersion(30)
+        minSdk = 17
+        targetSdk = 30
         versionCode = 651
         versionName = "6.5.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        resConfigs("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
+        resourceConfigurations.addAll(
+            listOf("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
+        )
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
         multiDexEnabled = false
     }
