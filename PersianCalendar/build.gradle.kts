@@ -137,27 +137,30 @@ dependencies {
 // App's own generated sources
 val generateAppSrcTask by tasks.registering {
     val generateDir = File(generatedAppSrcDir, "com/byagowi/persiancalendar/generated")
-    inputs.dir(File(projectDir, "data"))
-    outputs.file(File(generateDir, "Events.kt"))
-    outputs.file(File(generateDir, "Cities.kt"))
+    val eventsJson = File(projectDir, "data/events.json")
+    val citiesJson = File(projectDir, "data/cities.json")
+    inputs.files(eventsJson, citiesJson)
+    val eventsOutput = File(generateDir, "Events.kt")
+    val citiesOutput = File(generateDir, "Cities.kt")
+    outputs.files(eventsOutput, citiesOutput)
     doLast {
         generateDir.mkdirs()
 
         // Events
-        fun Any?.toSerializedEvents() = (this as List<*>).joinToString(",\n    ") {
-            val record = it as Map<*, *>
-            "CalendarRecord(title = \"${record["title"]}\"," +
-                    " type = \"${record["type"] ?: ""}\"," +
-                    " isHoliday = ${record["holiday"] ?: false}," +
-                    " year = ${record["year"] ?: -1}," +
-                    " month = ${record["month"]}, day = ${record["day"]})"
+        val events = JsonSlurper().parse(eventsJson) as Map<*, *>
+        val (persianEvents, islamicEvents, gregorianEvents) = listOf(
+            "Persian Calendar", "Hijri Calendar","Gregorian Calendar"
+        ).map { key ->
+            (events[key] as List<*>).joinToString(",\n    ") {
+                val record = it as Map<*, *>
+                "CalendarRecord(title = \"${record["title"]}\"," +
+                        " type = \"${record["type"] ?: ""}\"," +
+                        " isHoliday = ${record["holiday"] ?: false}," +
+                        " year = ${record["year"] ?: -1}," +
+                        " month = ${record["month"]}, day = ${record["day"]})"
+            }
         }
-
-        val events = JsonSlurper().parse(File(projectDir, "data/events.json")) as Map<*, *>
-        val persianEvents = events["Persian Calendar"].toSerializedEvents()
-        val islamicEvents = events["Hijri Calendar"].toSerializedEvents()
-        val gregorianEvents = events["Gregorian Calendar"].toSerializedEvents()
-        File(generateDir, "Events.kt").writeText(
+        eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
 class CalendarRecord(val title: String, val type: String, val isHoliday: Boolean, val year: Int, val month: Int, val day: Int)
@@ -173,9 +176,7 @@ val gregorianEvents = listOf(
         )
 
         // Cities
-        val cities = (JsonSlurper().parse(
-            File(projectDir, "data/cities.json")
-        ) as Map<*, *>).entries.flatMap { countryEntry ->
+        val cities = (JsonSlurper().parse(citiesJson) as Map<*, *>).flatMap { countryEntry ->
             val countryCode = countryEntry.key as String
             val country = countryEntry.value as Map<*, *>
             (country["cities"] as Map<*, *>).map { cityEntry ->
@@ -198,7 +199,7 @@ val gregorianEvents = listOf(
     )"""
             }
         }.joinToString(",\n    ")
-        File(generateDir, "Cities.kt").writeText(
+        citiesOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
 import com.byagowi.persiancalendar.entities.CityItem
