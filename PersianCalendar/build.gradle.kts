@@ -1,4 +1,5 @@
 import groovy.json.JsonSlurper
+import org.codehaus.groovy.runtime.ProcessGroovyMethods
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -9,18 +10,9 @@ plugins {
 }
 
 // https://stackoverflow.com/a/52441962
-fun String.runCommand(
-    workingDir: File = File("."),
-    timeoutAmount: Long = 60,
-    timeoutUnit: TimeUnit = TimeUnit.SECONDS
-): String? = runCatching {
-    ProcessBuilder("\\s".toRegex().split(this))
-        .directory(workingDir)
-        .redirectOutput(ProcessBuilder.Redirect.PIPE)
-        .redirectError(ProcessBuilder.Redirect.PIPE)
-        .start().also { it.waitFor(timeoutAmount, timeoutUnit) }
-        .inputStream.bufferedReader().readText()
-}.onFailure { it.printStackTrace() }.getOrNull()
+fun String.runCommand(): String? = runCatching {
+    ProcessGroovyMethods.getText(ProcessGroovyMethods.execute(this))
+}.getOrNull()
 
 val generatedAppSrcDir = File(buildDir, "generated/source/appsrc/main")
 android {
@@ -40,7 +32,7 @@ android {
         "git rev-list HEAD --count",
         "git rev-parse --short HEAD"
     ).joinToString("-") { it.runCommand()?.trim() ?: "" } +
-            (if (("git status -s".runCommand() ?: "").isBlank()) "" else "-dirty")
+            (if ("git status -s".runCommand().isNullOrBlank()) "" else "-dirty")
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
@@ -50,9 +42,7 @@ android {
         versionName = "6.5.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
-        resourceConfigurations.addAll(
-            listOf("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
-        )
+        resourceConfigurations += listOf("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja")
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
         multiDexEnabled = false
     }
@@ -195,7 +185,8 @@ val gregorianEvents = listOf(
                 val longitude = (city["longitude"] as Number).toDouble()
                 // Maybe we can enable elevation for better calculations sometime
                 // just that we want be sure it won't regress accuracy
-                val elevation = if (countryCode == "ir") 0.0 else (city["elevation"] as Number).toDouble()
+                val elevation =
+                    if (countryCode == "ir") 0.0 else (city["elevation"] as Number).toDouble()
                 """"$key" to CityItem(
         key = "$key",
         en = "${city["en"]}", fa = "${city["fa"]}",
