@@ -1,4 +1,3 @@
-import com.android.build.gradle.internal.tasks.factory.dependsOn
 import groovy.json.JsonSlurper
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -220,4 +219,4 @@ val citiesStore = mapOf(
         )
     }
 }
-tasks.named("preBuild").dependsOn(generateAppSrcTask)
+tasks.named("preBuild").configure { dependsOn(generateAppSrcTask) }
