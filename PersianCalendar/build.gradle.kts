@@ -14,7 +14,9 @@ fun String.runCommand(): String? = runCatching {
     ProcessGroovyMethods.getText(ProcessGroovyMethods.execute(this))
 }.getOrNull()
 
-val generatedAppSrcDir = File(buildDir, "generated/source/appsrc/main")
+operator fun File.div(child: String) = File(this, child)
+
+val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
 android {
     sourceSets {
         getByName("main").java.srcDir(generatedAppSrcDir)
@@ -136,12 +138,12 @@ dependencies {
 
 // App's own generated sources
 val generateAppSrcTask by tasks.registering {
-    val generateDir = File(generatedAppSrcDir, "com/byagowi/persiancalendar/generated")
-    val eventsJson = File(projectDir, "data/events.json")
-    val citiesJson = File(projectDir, "data/cities.json")
+    val eventsJson = projectDir / "data" / "events.json"
+    val citiesJson = projectDir / "data" / "cities.json"
     inputs.files(eventsJson, citiesJson)
-    val eventsOutput = File(generateDir, "Events.kt")
-    val citiesOutput = File(generateDir, "Cities.kt")
+    val generateDir = generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
+    val eventsOutput = generateDir / "Events.kt"
+    val citiesOutput = generateDir / "Cities.kt"
     outputs.files(eventsOutput, citiesOutput)
     doLast {
         generateDir.mkdirs()
@@ -149,7 +151,7 @@ val generateAppSrcTask by tasks.registering {
         // Events
         val events = JsonSlurper().parse(eventsJson) as Map<*, *>
         val (persianEvents, islamicEvents, gregorianEvents) = listOf(
-            "Persian Calendar", "Hijri Calendar","Gregorian Calendar"
+            "Persian Calendar", "Hijri Calendar", "Gregorian Calendar"
         ).map { key ->
             (events[key] as List<*>).joinToString(",\n    ") {
                 val record = it as Map<*, *>
