@@ -91,15 +91,14 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
         orientation = VERTICAL
 
         val listener = object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
-                showColor()
-
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
+                showColor()
         }
 
         listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
-            listOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map { Color.parseColor(it) }
+            listOf("#ff1744", "#00c853", "#448aff", "#a0a0a0").map(Color::parseColor)
         ) { seekBar, color ->
             seekBar.apply {
                 updatePadding(top = 8.dp, bottom = 8.dp)
