@@ -236,7 +236,7 @@ class CalendarFragment : Fragment() {
             setupToolbarMenu(it.toolbar.menu)
             it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
                 when (clickedMenuItem?.itemId) {
-                    R.id.go_to -> showDayPickerDialog(selectedJdn, ::bringDate)
+                    R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) }
                     R.id.add_event -> addEventOnCalendar(selectedJdn)
                     R.id.shift_work -> openShiftWorkDialog()
                     R.id.month_overview -> openMonthOverView()
