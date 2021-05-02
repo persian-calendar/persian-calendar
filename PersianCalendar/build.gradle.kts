@@ -7,6 +7,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
+    id("kotlin-android")
 }
 
 // https://stackoverflow.com/a/52441962
@@ -27,6 +28,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
     val gitVersion = listOf(
@@ -38,7 +40,7 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdk = 17
+        minSdk = 21
         targetSdk = 30
         versionCode = 651
         versionName = "6.5.1"
@@ -68,7 +70,7 @@ android {
                 "proguard-rules.pro"
             )
             isMinifyEnabled = true
-            isShrinkResources = true
+            // isShrinkResources = true
         }
 
         getByName("debug") {
@@ -82,7 +84,7 @@ android {
                 "proguard-rules.pro"
             )
             isMinifyEnabled = true
-            isShrinkResources = true
+            // isShrinkResources = true
         }
     }
 
@@ -90,10 +92,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.0.0-beta05"
+        kotlinCompilerVersion = "1.4.32"
+    }
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions {
+        jvmTarget = "1.8"
+        useIR = true
+    }
 }
 
 dependencies {
@@ -120,6 +130,15 @@ dependencies {
     implementation("androidx.browser:browser:1.3.0")
 
     implementation("androidx.work:work-runtime-ktx:2.5.0")
+
+    implementation("androidx.compose.ui:ui:1.0.0-beta05")
+    implementation("androidx.compose.ui:ui-tooling:1.0.0-beta05")
+    implementation("androidx.compose.foundation:foundation:1.0.0-beta05")
+    implementation("androidx.compose.material:material:1.0.0-beta05")
+    implementation("androidx.compose.material:material-icons-core:1.0.0-beta05")
+    implementation("androidx.compose.material:material-icons-extended:1.0.0-beta05")
+    implementation("androidx.activity:activity-compose:1.3.0-alpha07")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha04")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
     // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
