@@ -35,6 +35,8 @@ import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.annotation.ColorInt
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
@@ -103,10 +105,10 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             seekBar.apply {
                 updatePadding(top = 8.dp, bottom = 8.dp)
                 max = 255
-                progressDrawable.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+                progressDrawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_IN)
                 setOnSeekBarChangeListener(listener)
 
-                thumb.setColorFilter(color, PorterDuff.Mode.SRC_IN)
+                thumb.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_IN)
             }
         }
 

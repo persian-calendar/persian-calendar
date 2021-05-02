@@ -32,6 +32,8 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
+import androidx.core.graphics.BlendModeColorFilterCompat
+import androidx.core.graphics.BlendModeCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
@@ -175,10 +177,9 @@ class DeviceInformationFragment : Fragment() {
                                             valueAnimator.repeatMode = ValueAnimator.REVERSE
                                             valueAnimator.repeatCount = ValueAnimator.INFINITE
                                             valueAnimator.addUpdateListener {
-                                                progressBar.indeterminateDrawable?.setColorFilter(
+                                                progressBar.indeterminateDrawable?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                                                     it.animatedValue as Int,
-                                                    PorterDuff.Mode.SRC_ATOP
-                                                )
+                                                    BlendModeCompat.SRC_ATOP)
                                             }
                                         }.start()
                                     }
