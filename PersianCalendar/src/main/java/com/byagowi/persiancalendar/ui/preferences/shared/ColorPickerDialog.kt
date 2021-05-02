@@ -2,13 +2,26 @@ package com.byagowi.persiancalendar.ui.preferences.shared
 
 import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.dp
 import java.util.*
 
-fun Fragment.showColorPickerDialog(
+fun Fragment.showColorPickerDialog(isBackgroundPick: Boolean, key: String): Boolean {
+    val initialColor = activity?.appPrefs?.getString(key, null)
+        ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+    showColorPickerDialog(isBackgroundPick, initialColor) { colorResult ->
+        activity?.appPrefs?.edit { putString(key, colorResult) }
+    }
+    return true // Just a convenience result meaning click event is consumed here
+}
+
+private fun Fragment.showColorPickerDialog(
     isBackgroundPick: Boolean, initialColor: String, onResult: (String) -> Unit
 ) {
     val activity = activity ?: return
@@ -27,11 +40,9 @@ fun Fragment.showColorPickerDialog(
         .setPositiveButton(R.string.accept) { _, _ ->
             onResult(
                 if (isBackgroundPick) "#%08X".format(
-                    Locale.ENGLISH,
-                    0xFFFFFFFF and colorPickerView.pickerColor.toLong()
+                    Locale.ENGLISH, 0xFFFFFFFF and colorPickerView.pickerColor.toLong()
                 ) else "#%06X".format(
-                    Locale.ENGLISH,
-                    0xFFFFFF and colorPickerView.pickerColor
+                    Locale.ENGLISH, 0xFFFFFF and colorPickerView.pickerColor
                 )
             )
         }
