@@ -24,6 +24,9 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
+import androidx.compose.material.MaterialTheme
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
@@ -602,8 +605,16 @@ class CalendarFragment : Fragment() {
     }
 
     private fun openShiftWorkDialog() {
-        ShiftWorkDialog.newInstance(selectedJdn)
-            .show(childFragmentManager, ShiftWorkDialog::class.java.name)
+        mainBinding?.composeView?.apply {
+            val openDialog = mutableStateOf(true)
+            setContent {
+                MaterialTheme {
+                    ShiftWorkDialog(selectedJdn, openDialog) {
+                        findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
+                    }
+                }
+            }
+        }
     }
 
     private fun openMonthOverView() {
