@@ -165,9 +165,8 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                             parent: AdapterView<*>, view: View, position: Int, id: Long
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == bindingAdapterPosition) ShiftWorkRecord(
-                                    text.toString(), rows[bindingAdapterPosition].length
-                                )
+                                if (i == bindingAdapterPosition)
+                                    ShiftWorkRecord(text.toString(), x.length)
                                 else x
                             }
                             updateShiftWorkResult()
@@ -186,10 +185,8 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                             s: CharSequence?, start: Int, before: Int, count: Int
                         ) {
                             rows = rows.mapIndexed { i, x ->
-                                if (i == bindingAdapterPosition) ShiftWorkRecord(
-                                    text.toString(),
-                                    rows[bindingAdapterPosition].length
-                                )
+                                if (i == bindingAdapterPosition)
+                                    ShiftWorkRecord(text.toString(), x.length)
                                 else x
                             }
                             updateShiftWorkResult()
