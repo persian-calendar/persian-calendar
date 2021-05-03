@@ -1,22 +1,25 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -39,37 +42,38 @@ fun List<ShiftWorkRecord>.modifyLengthOfRecord(newValue: Int, position: Int) =
 
 @Preview(locale = "fa")
 @Composable
-private fun ShiftWorkDialogList(
-    record: List<ShiftWorkRecord> = listOf(
-        ShiftWorkRecord("روزکاری", 1),
-        ShiftWorkRecord("شب‌کاری", 2),
-        ShiftWorkRecord("استراحت", 3),
-        ShiftWorkRecord("", 0)
-    )
+fun ShiftWorkDialogList(
+    state: MutableState<List<ShiftWorkRecord>> = mutableStateOf(listOf(ShiftWorkRecord("", 0)))
 ) {
-    val state = remember { mutableStateOf(record) }
     val selectedTypeDropdownIndex = remember { mutableStateOf(-1) }
     val selectedLengthDropdownIndex = remember { mutableStateOf(-1) }
+    val scrollState = remember { ScrollState(0) }
 
     val shiftWorkLengthHeader = stringResource(R.string.shift_work_days_head)
     val resultTemplate = stringResource(R.string.shift_work_record_title)
     val shiftWorkTitles = stringArrayResource(R.array.shift_work)
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(
+        modifier = Modifier
+            .heightIn(0.dp, 300.dp)
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+    ) {
         state.value.forEachIndexed { position: Int, (type: String, length: Int) ->
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "%s:".format(formatNumber(position + 1)),
-                    modifier = Modifier.width(10.dp)
+                    modifier = Modifier.width(20.dp)
                 )
                 TextField(
-                    modifier = Modifier.onFocusChanged {
-                        if (it == FocusState.Active)
-                            selectedTypeDropdownIndex.value = position
-                        else if (selectedTypeDropdownIndex.value == position)
-                            selectedTypeDropdownIndex.value = -1
-                    },
+                    modifier = Modifier
+                        .onFocusChanged {
+                            if (it == FocusState.Active)
+                                selectedTypeDropdownIndex.value = position
+                            else if (selectedTypeDropdownIndex.value == position)
+                                selectedTypeDropdownIndex.value = -1
+                        }
+                        .width(180.dp),
                     value = type,
                     onValueChange = { state.value = state.value.modifyTypeOfRecord(it, position) }
                 )
@@ -123,9 +127,13 @@ private fun ShiftWorkDialogList(
 
         val recordsToShow = state.value.filter { it.length != 0 }
         if (recordsToShow.isNotEmpty()) {
-            Text(text = recordsToShow.joinToString(spacedComma) {
-                resultTemplate.format(formatNumber(it.length), shiftWorkKeyToString(it.type))
-            }, modifier = Modifier.align(Alignment.CenterHorizontally))
+            Text(
+                text = recordsToShow.joinToString(spacedComma) {
+                    resultTemplate.format(formatNumber(it.length), shiftWorkKeyToString(it.type))
+                },
+                textAlign = TextAlign.Center,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
         }
     }
 }
