@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDialogFragment
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -14,7 +14,6 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
-import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -53,9 +52,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
 
         val binding = ShiftWorkSettingsBinding.inflate(activity.layoutInflater, null, false)
 
-        val state = mutableStateOf(
-            if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("", 0)) else shiftWorks
-        )
+        val state = shiftWorks.toMutableStateList()
         binding.composeList.setContent { ShiftWorkDialogList(state) }
 
         binding.description.text = getString(
@@ -67,7 +64,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
             jdn = selectedJdn
             binding.description.text = getString(R.string.shift_work_starting_date)
                 .format(formatDate(getDateFromJdnOfCalendar(mainCalendar, jdn)))
-            state.value = listOf(ShiftWorkRecord("", 0))
+            state.clear()
         }
         binding.recurs.isChecked = shiftWorkRecurs
 
@@ -75,7 +72,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
             .setView(binding.root)
             .setTitle(null)
             .setPositiveButton(R.string.accept) { _, _ ->
-                val result = state.value.filter { it.length != 0 }.joinToString(",") {
+                val result = state.filter { it.length != 0 }.joinToString(",") {
                     "${it.type.replace("=", "").replace(",", "")}=${it.length}"
                 }
 

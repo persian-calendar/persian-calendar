@@ -9,9 +9,10 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusState
@@ -24,27 +25,34 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.shiftWorkTitles
 import com.byagowi.persiancalendar.utils.spacedComma
 
-fun List<ShiftWorkRecord>.prepareNewState() =
-    this.filterNot { it.length == 0 && it.type.isBlank() } + ShiftWorkRecord("", 0)
+fun prepareNewState(state: SnapshotStateList<ShiftWorkRecord>) {
+    val newState = state.filterNot { it.length == 0 && it.type.isBlank() } + ShiftWorkRecord("", 0)
+    state.clear()
+    state.addAll(newState)
+    logDebug("ShiftWorkDialogList", "state rewritten")
+}
 
-fun List<ShiftWorkRecord>.modifyTypeOfRecord(newValue: String, position: Int) =
-    this.mapIndexed { i, x -> if (i == position) ShiftWorkRecord(newValue, x.length) else x }
-        .prepareNewState()
+fun SnapshotStateList<ShiftWorkRecord>.modifyTypeOfRecord(position: Int, newValue: String) {
+    this[position] = ShiftWorkRecord(newValue, this[position].length)
+    prepareNewState(this)
+}
 
-fun List<ShiftWorkRecord>.modifyLengthOfRecord(newValue: Int, position: Int) =
-    this.mapIndexed { i, x -> if (i == position) ShiftWorkRecord(x.type, newValue) else x }
-        .prepareNewState()
+fun SnapshotStateList<ShiftWorkRecord>.modifyLengthOfRecord(position: Int, newValue: Int) {
+    this[position] = ShiftWorkRecord(this[position].type, newValue)
+    prepareNewState(this)
+}
 
 @Preview(locale = "fa")
 @Composable
-fun ShiftWorkDialogList(
-    state: MutableState<List<ShiftWorkRecord>> = mutableStateOf(listOf(ShiftWorkRecord("", 0)))
-) {
+fun ShiftWorkDialogList(state: SnapshotStateList<ShiftWorkRecord> = mutableStateListOf()) {
+    if (state.isEmpty()) prepareNewState(state)
+
     val selectedTypeDropdownIndex = remember { mutableStateOf(-1) }
     val selectedLengthDropdownIndex = remember { mutableStateOf(-1) }
     val scrollState = remember { ScrollState(0) }
@@ -59,7 +67,7 @@ fun ShiftWorkDialogList(
             .fillMaxWidth()
             .verticalScroll(scrollState)
     ) {
-        state.value.forEachIndexed { position: Int, (type: String, length: Int) ->
+        state.forEachIndexed { position: Int, (type: String, length: Int) ->
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "%s:".format(formatNumber(position + 1)),
@@ -75,7 +83,7 @@ fun ShiftWorkDialogList(
                         }
                         .width(180.dp),
                     value = type,
-                    onValueChange = { state.value = state.value.modifyTypeOfRecord(it, position) }
+                    onValueChange = { state.modifyTypeOfRecord(position, it) }
                 )
                 DropdownMenu(
                     expanded = selectedTypeDropdownIndex.value == position,
@@ -86,7 +94,7 @@ fun ShiftWorkDialogList(
                         DropdownMenuItem(
                             onClick = {
                                 selectedTypeDropdownIndex.value = -1
-                                state.value = state.value.modifyTypeOfRecord(item, position)
+                                state.modifyTypeOfRecord(position, item)
                             }
                         ) { Text(item) }
                     }
@@ -96,8 +104,7 @@ fun ShiftWorkDialogList(
                     value = length.toString(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     onValueChange = {
-                        state.value =
-                            state.value.modifyLengthOfRecord(it.toIntOrNull() ?: 0, position)
+                        state.modifyLengthOfRecord(position, it.toIntOrNull() ?: 0)
                     },
                     modifier = Modifier
                         .width(70.dp)
@@ -117,7 +124,7 @@ fun ShiftWorkDialogList(
                         DropdownMenuItem(
                             onClick = {
                                 selectedLengthDropdownIndex.value = -1
-                                state.value = state.value.modifyLengthOfRecord(length, position)
+                                state.modifyLengthOfRecord(position, length)
                             }
                         ) { Text(if (length == 0) shiftWorkLengthHeader else formatNumber(length)) }
                     }
@@ -125,7 +132,7 @@ fun ShiftWorkDialogList(
             }
         }
 
-        val recordsToShow = state.value.filter { it.length != 0 }
+        val recordsToShow = state.filter { it.length != 0 }
         if (recordsToShow.isNotEmpty()) {
             Text(
                 text = recordsToShow.joinToString(spacedComma) {
@@ -138,4 +145,5 @@ fun ShiftWorkDialogList(
     }
 }
 
+// Don't inline it, utils.shiftWorkTitles is a title dictionary hold for legacy reasons
 fun shiftWorkKeyToString(type: String): String = shiftWorkTitles[type] ?: type
