@@ -570,16 +570,4 @@ class CalendarFragment : Fragment() {
             .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn())
             .show(childFragmentManager, MonthOverviewDialog::class.java.name)
     }
-
-    /**
-     * returns true of does sth, otherwise returns else
-     */
-    private fun closeSearchIfOpen(): Boolean {
-        return searchView?.let {
-            if (!it.isIconified) {
-                it.onActionViewCollapsed()
-                true
-            } else false
-        } ?: false
-    }
 }
