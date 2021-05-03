@@ -1,5 +1,8 @@
-//package com.byagowi.persiancalendar
-//
+package com.byagowi.persiancalendar
+
+import org.junit.Assert.assertTrue
+import org.junit.Test
+
 //import okhttp3.HttpUrl
 //import okhttp3.OkHttpClient
 //import okhttp3.Request
@@ -9,8 +12,13 @@
 //import java.net.URL
 //import java.text.DateFormatSymbols
 //import java.util.*
-//
-//class Scratch {
+
+class Scratch {
+    @Test
+    fun test() {
+        assertTrue(true)
+    }
+
 //    @Test
 //    fun listBugs() {
 //        fun JSONArray.toObjectList() = (0 until length()).map { getJSONObject(it) }
@@ -81,4 +89,4 @@
 //        )
 //        return titles.map { response.optString(it, "") }
 //    }
-//}
+}
