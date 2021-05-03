@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.app.ActivityCompat
@@ -33,12 +33,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-import com.byagowi.persiancalendar.LANG_FA
-import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
-import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
-import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
@@ -618,8 +613,10 @@ class CalendarFragment : Fragment() {
     }
 
     private fun openMonthOverView() {
-        MonthOverviewDialog
-            .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn())
-            .show(childFragmentManager, MonthOverviewDialog::class.java.name)
+        mainBinding?.composeView?.apply {
+            val pageJdn = mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn()
+            val openDialog = mutableStateOf(true)
+            setContent { MaterialTheme { MonthOverviewDialog(pageJdn, openDialog) } }
+        }
     }
 }
