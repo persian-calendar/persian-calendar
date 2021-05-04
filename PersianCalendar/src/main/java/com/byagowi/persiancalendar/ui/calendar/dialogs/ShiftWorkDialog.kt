@@ -1,10 +1,26 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Checkbox
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
@@ -26,7 +42,17 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
+import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.shiftWorkRecurs
+import com.byagowi.persiancalendar.utils.shiftWorkStartingJdn
+import com.byagowi.persiancalendar.utils.shiftWorkTitles
+import com.byagowi.persiancalendar.utils.shiftWorks
+import com.byagowi.persiancalendar.utils.spacedComma
+import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 class ShiftWorkDialogState(jdn: Long) {
     val isDialogOpen = mutableStateOf(true)

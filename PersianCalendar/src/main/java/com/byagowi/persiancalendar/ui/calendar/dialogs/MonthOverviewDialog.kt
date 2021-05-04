@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -17,7 +22,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.copyToClipboard
+import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
+import com.byagowi.persiancalendar.utils.getEvents
+import com.byagowi.persiancalendar.utils.getEventsTitle
+import com.byagowi.persiancalendar.utils.getMonthLength
+import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 
 class MonthOverviewDialogState(baseJdn: Long, context: Context) {
     val isDialogOpen = mutableStateOf(true)
