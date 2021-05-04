@@ -26,7 +26,20 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
+import com.byagowi.persiancalendar.utils.getTodayJdn
+import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.shiftWorkRecurs
+import com.byagowi.persiancalendar.utils.shiftWorkStartingJdn
+import com.byagowi.persiancalendar.utils.shiftWorkTitles
+import com.byagowi.persiancalendar.utils.shiftWorks
+import com.byagowi.persiancalendar.utils.spacedComma
+import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 class ShiftWorkDialog : AppCompatDialogFragment() {
 

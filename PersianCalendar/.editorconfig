@@ -8,10 +8,14 @@ indent_style = space
 insert_final_newline = true
 max_line_length = 100
 tab_width = 4
+trim_trailing_whitespace = true﴿
 
 [{*.kt, *.kts}]
 ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
 ij_continuation_indent_size = 8
+# Disable star imports
+ij_kotlin_name_count_to_use_star_import = 99
+ij_kotlin_name_count_to_use_star_import_for_members = 99
 
 [*.java]
 ij_continuation_indent_size = 8

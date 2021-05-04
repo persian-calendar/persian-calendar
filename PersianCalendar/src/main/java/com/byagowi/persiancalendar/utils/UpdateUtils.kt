@@ -15,8 +15,14 @@ import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.Widget1x1
+import com.byagowi.persiancalendar.Widget2x2
+import com.byagowi.persiancalendar.Widget4x1
+import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.AbstractDate

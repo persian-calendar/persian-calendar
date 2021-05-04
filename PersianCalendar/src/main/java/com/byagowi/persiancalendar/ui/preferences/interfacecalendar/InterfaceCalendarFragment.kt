@@ -8,7 +8,16 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.LANG_AR
+import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_JA
+import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
+import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
+import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
+import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.PREF_WEEK_START
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.language

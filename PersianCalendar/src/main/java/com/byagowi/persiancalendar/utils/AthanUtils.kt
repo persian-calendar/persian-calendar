@@ -5,7 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.net.toUri
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
+import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
+import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
+import com.byagowi.persiancalendar.PREF_ATHAN_URI
+import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.AthanActivity
 

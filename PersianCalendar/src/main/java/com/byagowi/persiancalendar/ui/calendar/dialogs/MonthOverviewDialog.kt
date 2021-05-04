@@ -10,7 +10,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.copyToClipboard
+import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.dp
+import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
+import com.byagowi.persiancalendar.utils.getEvents
+import com.byagowi.persiancalendar.utils.getEventsTitle
+import com.byagowi.persiancalendar.utils.getMonthLength
+import com.byagowi.persiancalendar.utils.getTodayJdn
+import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 

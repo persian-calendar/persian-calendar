@@ -15,7 +15,11 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.getCityName
+import com.byagowi.persiancalendar.utils.getClockFromStringId
+import com.byagowi.persiancalendar.utils.getPrayTimeText
+import com.byagowi.persiancalendar.utils.isLocaleRTL
+import com.byagowi.persiancalendar.utils.toFormattedString
 import java.util.concurrent.TimeUnit
 
 private const val NOTIFICATION_ID = 1002

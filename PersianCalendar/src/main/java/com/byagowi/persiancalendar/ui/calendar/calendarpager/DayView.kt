@@ -1,11 +1,19 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
+import android.graphics.RectF
+import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.appTheme
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
+import com.byagowi.persiancalendar.utils.resolveColor
 import kotlin.math.min
 
 class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :

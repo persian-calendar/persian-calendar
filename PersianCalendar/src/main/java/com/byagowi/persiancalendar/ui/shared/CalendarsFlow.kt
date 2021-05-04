@@ -5,7 +5,17 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.addViewsToFlow
+import com.byagowi.persiancalendar.utils.copyToClipboard
+import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
+import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
+import com.byagowi.persiancalendar.utils.getMonthName
+import com.byagowi.persiancalendar.utils.isCustomFontEnabled
+import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.toLinearDate
 
 class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs),
     View.OnClickListener {
