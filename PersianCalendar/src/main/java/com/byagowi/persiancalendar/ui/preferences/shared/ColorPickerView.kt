@@ -105,10 +105,17 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
             seekBar.apply {
                 updatePadding(top = 8.dp, bottom = 8.dp)
                 max = 255
-                progressDrawable.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_IN)
+                progressDrawable.colorFilter =
+                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                        color,
+                        BlendModeCompat.SRC_IN
+                    )
                 setOnSeekBarChangeListener(listener)
 
-                thumb.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(color, BlendModeCompat.SRC_IN)
+                thumb.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                    color,
+                    BlendModeCompat.SRC_IN
+                )
             }
         }
 

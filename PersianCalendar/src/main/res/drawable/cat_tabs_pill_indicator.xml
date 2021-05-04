@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2017 The Android Open Source Project
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -18,17 +17,16 @@
         android:left="5dp"
         android:right="5dp"
         android:top="5dp">
-        <shape
-            android:shape="rectangle">
-            <solid android:color="@android:color/transparent"/>
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/transparent" />
             <stroke
                 android:width="3dp"
-                android:color="@android:color/white"/>
+                android:color="@android:color/white" />
             <corners
                 android:bottomLeftRadius="50dp"
                 android:bottomRightRadius="50dp"
                 android:topLeftRadius="50dp"
-                android:topRightRadius="50dp"/>
+                android:topRightRadius="50dp" />
         </shape>
     </item>
 </layer-list>

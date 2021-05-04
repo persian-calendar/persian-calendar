@@ -4,7 +4,10 @@ import android.appwidget.AppWidgetManager
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
+import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
+import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 

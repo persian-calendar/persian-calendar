@@ -1,5 +1,7 @@
 package net.androgames.level;
 
+import static com.byagowi.persiancalendar.utils.FunctionsKt.setupUpNavigation;
+
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -18,8 +20,6 @@ import com.byagowi.persiancalendar.R;
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding;
 
 import net.androgames.level.orientation.OrientationProvider;
-
-import static com.byagowi.persiancalendar.utils.FunctionsKt.setupUpNavigation;
 
 /*
  *  This file is part of Level (an Android Bubble Level).

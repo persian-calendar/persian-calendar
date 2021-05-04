@@ -2,9 +2,9 @@
     android:id="@+id/age_widget_root"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/textview_age_widget_title"

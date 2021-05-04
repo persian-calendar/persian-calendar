@@ -210,8 +210,6 @@ App Version Code: ${appVersionList[0]}"""
                         "${getString(R.string.app_name)}\nhttps://github.com/persian-calendar/DroidPersianCalendar"
                     )
                 }, getString(R.string.share)))
-            }
-                .onFailure(logException)
-                .getOrElse { bringMarketPage(activity ?: return) }
+            }.onFailure(logException).getOrElse { bringMarketPage(activity ?: return) }
     }
 }

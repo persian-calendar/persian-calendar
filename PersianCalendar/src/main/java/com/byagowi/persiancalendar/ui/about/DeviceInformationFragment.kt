@@ -177,9 +177,11 @@ class DeviceInformationFragment : Fragment() {
                                             valueAnimator.repeatMode = ValueAnimator.REVERSE
                                             valueAnimator.repeatCount = ValueAnimator.INFINITE
                                             valueAnimator.addUpdateListener {
-                                                progressBar.indeterminateDrawable?.colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                                                    it.animatedValue as Int,
-                                                    BlendModeCompat.SRC_ATOP)
+                                                progressBar.indeterminateDrawable?.colorFilter =
+                                                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                                                        it.animatedValue as Int,
+                                                        BlendModeCompat.SRC_ATOP
+                                                    )
                                             }
                                         }.start()
                                     }

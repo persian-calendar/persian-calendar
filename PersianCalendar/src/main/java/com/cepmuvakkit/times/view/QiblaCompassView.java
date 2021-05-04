@@ -2,6 +2,8 @@
 // licensed under GPLv3
 package com.cepmuvakkit.times.view;
 
+import static com.byagowi.persiancalendar.utils.UtilsKt.a11yAnnounceAndClick;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,8 +26,6 @@ import com.cepmuvakkit.times.posAlgo.Horizontal;
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition;
 
 import java.util.GregorianCalendar;
-
-import static com.byagowi.persiancalendar.utils.UtilsKt.a11yAnnounceAndClick;
 
 public class QiblaCompassView extends View {
     private final Path mPath = new Path();
