@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.utils.*
 
@@ -77,14 +76,15 @@ fun ShiftWorkDialog(
     }
 }
 
-fun prepareNewState(state: MutableList<ShiftWorkRecord>) {
+// Returns whether any change has occurred which is used only in testing
+fun ensureShiftWorkDialogMainStateIntegrity(state: MutableList<ShiftWorkRecord>): Boolean {
     if (state.isNotEmpty() && state.filterIndexed { index, it ->
             (it.length == 0 && it.type.isBlank()) xor (index + 1 == state.size)
-        }.isEmpty()) return
+        }.isEmpty()) return false
     val newState = state.filterNot { it.length == 0 && it.type.isBlank() } + ShiftWorkRecord("", 0)
     state.clear()
     state.addAll(newState)
-    logDebug("ShiftWorkDialogList", "state rewritten")
+    return true
 }
 
 fun SnapshotStateList<ShiftWorkRecord>.modifyTypeOfRecord(position: Int, newValue: String) {
@@ -103,7 +103,7 @@ fun ShiftWorkDialogList(
     shiftWorkRecurs: MutableState<Boolean> = mutableStateOf(true),
     isFirstSetupInitially: Boolean = true
 ) {
-    prepareNewState(state)
+    ensureShiftWorkDialogMainStateIntegrity(state)
 
     val selectedTypeDropdownIndex = remember { mutableStateOf(-1) }
     val selectedLengthDropdownIndex = remember { mutableStateOf(-1) }
