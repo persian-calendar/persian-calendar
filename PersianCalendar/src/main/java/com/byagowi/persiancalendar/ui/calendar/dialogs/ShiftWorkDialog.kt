@@ -1,10 +1,9 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -108,18 +107,15 @@ fun ShiftWorkDialogList(
     val selectedTypeDropdownIndex = remember { mutableStateOf(-1) }
     val selectedLengthDropdownIndex = remember { mutableStateOf(-1) }
     val isFirstSetup = remember { mutableStateOf(isFirstSetupInitially) }
-    val scrollState = remember { ScrollState(0) }
 
     val shiftWorkLengthHeader = stringResource(R.string.shift_work_days_head)
     val resultTemplate = stringResource(R.string.shift_work_record_title)
     val shiftWorkTitles = stringArrayResource(R.array.shift_work)
 
     Column(
-        modifier = Modifier
+        Modifier
             .heightIn(0.dp, 500.dp)
-            .fillMaxWidth()
-            .verticalScroll(scrollState)
-    ) {
+            .fillMaxWidth()) {
         Text(
             stringResource(
                 if (isFirstSetup.value) R.string.shift_work_starting_date
@@ -127,12 +123,12 @@ fun ShiftWorkDialogList(
             ).format(formatDate(getDateFromJdnOfCalendar(mainCalendar, selectedJdn.value)))
         )
 
-        Row(modifier = Modifier.padding(8.dp)) {
+        Row(Modifier.padding(8.dp)) {
             Checkbox(shiftWorkRecurs.value, onCheckedChange = { shiftWorkRecurs.value = it })
             Text(stringResource(R.string.recurs))
         }
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(Modifier.height(4.dp))
         Button(
             modifier = Modifier.align(Alignment.CenterHorizontally),
             shape = RoundedCornerShape(50),
@@ -141,72 +137,7 @@ fun ShiftWorkDialogList(
             Text(stringResource(R.string.shift_work_reset_button))
             isFirstSetup.value = true
         }
-        Spacer(modifier = Modifier.height(4.dp))
-
-        state.forEachIndexed { position: Int, (type: String, length: Int) ->
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "%s:".format(formatNumber(position + 1)),
-                    modifier = Modifier.weight(5f)
-                )
-                TextField(
-                    modifier = Modifier
-                        .onFocusChanged {
-                            if (it == FocusState.Active)
-                                selectedTypeDropdownIndex.value = position
-                            else if (selectedTypeDropdownIndex.value == position)
-                                selectedTypeDropdownIndex.value = -1
-                        }
-                        .weight(75f),
-                    value = type,
-                    onValueChange = { state.modifyTypeOfRecord(position, it) }
-                )
-                DropdownMenu(
-                    expanded = selectedTypeDropdownIndex.value == position,
-                    onDismissRequest = { selectedTypeDropdownIndex.value = -1 },
-                    offset = DpOffset(20.dp, 0.dp)
-                ) {
-                    shiftWorkTitles.forEach { item ->
-                        DropdownMenuItem(
-                            onClick = {
-                                selectedTypeDropdownIndex.value = -1
-                                state.modifyTypeOfRecord(position, item)
-                            }
-                        ) { Text(item) }
-                    }
-                }
-                Spacer(modifier = Modifier.width(4.dp))
-                TextField(
-                    value = length.toString(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    onValueChange = {
-                        state.modifyLengthOfRecord(position, it.toIntOrNull() ?: 0)
-                    },
-                    modifier = Modifier
-                        .weight(20f)
-                        .onFocusChanged {
-                            if (it == FocusState.Active)
-                                selectedLengthDropdownIndex.value = position
-                            else if (selectedLengthDropdownIndex.value == position)
-                                selectedLengthDropdownIndex.value = -1
-                        }
-                )
-                DropdownMenu(
-                    expanded = selectedLengthDropdownIndex.value == position,
-                    onDismissRequest = { selectedLengthDropdownIndex.value = -1 },
-                    offset = DpOffset(220.dp, 0.dp)
-                ) {
-                    (0..7).map { length ->
-                        DropdownMenuItem(
-                            onClick = {
-                                selectedLengthDropdownIndex.value = -1
-                                state.modifyLengthOfRecord(position, length)
-                            }
-                        ) { Text(if (length == 0) shiftWorkLengthHeader else formatNumber(length)) }
-                    }
-                }
-            }
-        }
+        Spacer(Modifier.height(4.dp))
 
         val recordsToShow = state.filter { it.length != 0 }
         if (recordsToShow.isNotEmpty()) {
@@ -217,6 +148,75 @@ fun ShiftWorkDialogList(
                 textAlign = TextAlign.Center,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
+            Spacer(Modifier.height(4.dp))
+        }
+
+        LazyColumn {
+            items(state.size) { position ->
+                val (type: String, length: Int) = state[position]
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "%s:".format(formatNumber(position + 1)),
+                        modifier = Modifier.weight(5f)
+                    )
+                    TextField(
+                        modifier = Modifier
+                            .onFocusChanged {
+                                if (it == FocusState.Active)
+                                    selectedTypeDropdownIndex.value = position
+                                else if (selectedTypeDropdownIndex.value == position)
+                                    selectedTypeDropdownIndex.value = -1
+                            }
+                            .weight(75f),
+                        value = type,
+                        onValueChange = { state.modifyTypeOfRecord(position, it) }
+                    )
+                    DropdownMenu(
+                        expanded = selectedTypeDropdownIndex.value == position,
+                        onDismissRequest = { selectedTypeDropdownIndex.value = -1 },
+                        offset = DpOffset(20.dp, 0.dp)
+                    ) {
+                        shiftWorkTitles.forEach { item ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedTypeDropdownIndex.value = -1
+                                    state.modifyTypeOfRecord(position, item)
+                                }
+                            ) { Text(item) }
+                        }
+                    }
+                    Spacer(Modifier.width(4.dp))
+                    TextField(
+                        value = length.toString(),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        onValueChange = {
+                            state.modifyLengthOfRecord(position, it.toIntOrNull() ?: 0)
+                        },
+                        modifier = Modifier
+                            .weight(20f)
+                            .onFocusChanged {
+                                if (it == FocusState.Active)
+                                    selectedLengthDropdownIndex.value = position
+                                else if (selectedLengthDropdownIndex.value == position)
+                                    selectedLengthDropdownIndex.value = -1
+                            }
+                    )
+                    DropdownMenu(
+                        expanded = selectedLengthDropdownIndex.value == position,
+                        onDismissRequest = { selectedLengthDropdownIndex.value = -1 },
+                        offset = DpOffset(220.dp, 0.dp)
+                    ) {
+                        (0..7).map { length ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    selectedLengthDropdownIndex.value = -1
+                                    state.modifyLengthOfRecord(position, length)
+                                }
+                            ) { Text(if (length == 0) shiftWorkLengthHeader else formatNumber(length)) }
+                        }
+                    }
+                }
+            }
         }
     }
 }

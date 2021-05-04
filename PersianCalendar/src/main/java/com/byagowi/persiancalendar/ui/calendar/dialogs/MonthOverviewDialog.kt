@@ -1,13 +1,12 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.view.View
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -29,7 +28,6 @@ fun MonthOverviewDialog(
 ) {
     val context = LocalContext.current
     val warningIfIsEmpty = stringResource(R.string.warn_if_events_not_set)
-    val scrollState = remember { ScrollState(0) }
     val entries = remember {
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val deviceEvents = readMonthDeviceEvents(context, baseJdn)
@@ -62,12 +60,9 @@ fun MonthOverviewDialog(
                 onDismissRequest = { isDialogOpen.value = false },
                 shape = RoundedCornerShape(16.dp),
                 text = {
-                    Column(
-                        Modifier
-                            .fillMaxWidth()
-                            .verticalScroll(scrollState)
-                    ) {
-                        entries.forEach { (title: String, holidays: String, nonHolidays: String) ->
+                    LazyColumn {
+                        items(entries.size) { index ->
+                            val (title: String, holidays: String, nonHolidays: String) = entries[index]
                             Card(
                                 elevation = 8.dp,
                                 modifier = Modifier
