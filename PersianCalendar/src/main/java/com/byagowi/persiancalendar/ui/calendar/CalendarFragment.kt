@@ -38,9 +38,7 @@ import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.DrawerHost
-import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.*
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
@@ -598,10 +596,10 @@ class CalendarFragment : Fragment() {
 
     private fun openShiftWorkDialog() {
         mainBinding?.composeView?.apply {
-            val rememberKey = System.currentTimeMillis()
+            val state = ShiftWorkDialogState(selectedJdn)
             setContent {
                 MaterialTheme {
-                    ShiftWorkDialog(rememberKey, selectedJdn) {
+                    ShiftWorkDialog(state) {
                         findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
                     }
                 }
@@ -611,9 +609,10 @@ class CalendarFragment : Fragment() {
 
     private fun openMonthOverView() {
         mainBinding?.composeView?.apply {
-            val rememberKey = System.currentTimeMillis()
-            val pageJdn = mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn()
-            setContent { MaterialTheme { MonthOverviewDialog(rememberKey, pageJdn) } }
+            val state = MonthOverviewDialogState(
+                mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn(), context
+            )
+            setContent { MaterialTheme { MonthOverviewDialog(state) } }
         }
     }
 }

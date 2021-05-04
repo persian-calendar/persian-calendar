@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
+import android.content.Context
 import android.view.View
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -10,25 +11,17 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.*
 
-@Preview(locale = "fa", showBackground = true)
-@Composable
-fun MonthOverviewDialog(rememberKey: Long = 0L, baseJdn: Long = -1L) {
-    val context = LocalContext.current
-    val warningIfIsEmpty = stringResource(R.string.warn_if_events_not_set)
-
-    val isDialogOpen = remember(rememberKey) { mutableStateOf(true) }
-    // remember by baseJdn to ensure won't show the same in other months
-    val entries = remember(rememberKey) {
+class MonthOverviewDialogState(baseJdn: Long, context: Context) {
+    val isDialogOpen = mutableStateOf(true)
+    val entries = run {
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val deviceEvents = readMonthDeviceEvents(context, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
@@ -49,20 +42,27 @@ fun MonthOverviewDialog(rememberKey: Long = 0L, baseJdn: Long = -1L) {
                     getDateFromJdnOfCalendar(mainCalendar, jdn)
                 ), holidays, nonHolidays
             )
-        }.takeIf { it.isNotEmpty() } ?: listOf(Triple(warningIfIsEmpty, "", ""))
+        }.takeIf { it.isNotEmpty() } ?: listOf(
+            Triple(context.getString(R.string.warn_if_events_not_set), "", "")
+        )
     }
+}
+
+@Composable
+fun MonthOverviewDialog(state: MonthOverviewDialogState) {
+    val context = LocalContext.current
 
     Surface(color = MaterialTheme.colors.background) {
-        if (isDialogOpen.value) {
+        if (state.isDialogOpen.value) {
             val dismissText = stringResource(R.string.close)
             // TODO: Turn it to BottomSheet again
             AlertDialog(
-                onDismissRequest = { isDialogOpen.value = false },
+                onDismissRequest = { state.isDialogOpen.value = false },
                 shape = RoundedCornerShape(16.dp),
                 text = {
                     LazyColumn {
-                        items(entries.size) { index ->
-                            val (title: String, holidays: String, nonHolidays: String) = entries[index]
+                        items(state.entries.size) { index ->
+                            val (title: String, holidays: String, nonHolidays: String) = state.entries[index]
                             Card(
                                 elevation = 8.dp,
                                 modifier = Modifier
@@ -91,7 +91,7 @@ fun MonthOverviewDialog(rememberKey: Long = 0L, baseJdn: Long = -1L) {
                     }
                 },
                 confirmButton = {
-                    TextButton(onClick = { isDialogOpen.value = false }) { Text(dismissText) }
+                    TextButton(onClick = { state.isDialogOpen.value = false }) { Text(dismissText) }
                 }
             )
         }
