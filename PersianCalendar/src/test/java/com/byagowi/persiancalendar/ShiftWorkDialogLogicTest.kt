@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.ui.calendar.dialogs.ensureShiftWorkDialogMainStateIntegrity
+import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialogState
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -57,8 +57,8 @@ class ShiftWorkDialogLogicTest {
         expected: List<ShiftWorkRecord>, input: List<ShiftWorkRecord>
     ) {
         val actual = input.toMutableList()
-        assertTrue(ensureShiftWorkDialogMainStateIntegrity(actual)) // changes the state
+        assertTrue(ShiftWorkDialogState.ensureBodyStateIntegrity(actual)) // changes the state
         assertEquals(expected, actual)
-        assertFalse(ensureShiftWorkDialogMainStateIntegrity(actual)) // doesn't change the state
+        assertFalse(ShiftWorkDialogState.ensureBodyStateIntegrity(actual)) // doesn't change the state
     }
 }

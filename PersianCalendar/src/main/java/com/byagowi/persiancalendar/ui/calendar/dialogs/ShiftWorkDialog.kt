@@ -44,19 +44,30 @@ class ShiftWorkDialogState(jdn: Long) {
     fun modifyLengthOfRecord(position: Int, newValue: Int) {
         body[position] = ShiftWorkRecord(body[position].type, newValue)
     }
+
+    fun ensureBodyIntegrity() {
+        ensureBodyStateIntegrity(body)
+    }
+
+    fun closeDialog() {
+        isDialogOpen.value = false
+    }
+
+    companion object {
+        // Returns whether any change has occurred which is used only in testing
+        fun ensureBodyStateIntegrity(state: MutableList<ShiftWorkRecord>): Boolean {
+            if (state.isNotEmpty() && state.filterIndexed { index, it ->
+                    (it.length == 0 && it.type.isBlank()) xor (index + 1 == state.size)
+                }.isEmpty()) return false
+            val newState =
+                state.filterNot { it.length == 0 && it.type.isBlank() } + ShiftWorkRecord("", 0)
+            state.clear()
+            state.addAll(newState)
+            return true
+        }
+    }
 }
 
-// TODO: Turn it to a state object method?
-// Returns whether any change has occurred which is used only in testing
-fun ensureShiftWorkDialogMainStateIntegrity(state: MutableList<ShiftWorkRecord>): Boolean {
-    if (state.isNotEmpty() && state.filterIndexed { index, it ->
-            (it.length == 0 && it.type.isBlank()) xor (index + 1 == state.size)
-        }.isEmpty()) return false
-    val newState = state.filterNot { it.length == 0 && it.type.isBlank() } + ShiftWorkRecord("", 0)
-    state.clear()
-    state.addAll(newState)
-    return true
-}
 
 @Composable
 fun ShiftWorkDialog(state: ShiftWorkDialogState, onSuccess: () -> Unit) {
@@ -66,12 +77,12 @@ fun ShiftWorkDialog(state: ShiftWorkDialogState, onSuccess: () -> Unit) {
             val dismissText = stringResource(R.string.cancel)
             val context = LocalContext.current
             AlertDialog(
-                onDismissRequest = { state.isDialogOpen.value = false },
+                onDismissRequest = { state.closeDialog() },
                 shape = RoundedCornerShape(16.dp),
                 text = { ShiftWorkDialogContent(state) },
                 confirmButton = {
                     TextButton(onClick = {
-                        state.isDialogOpen.value = false
+                        state.closeDialog()
                         context.appPrefs.edit {
                             putLong(
                                 PREF_SHIFT_WORK_STARTING_JDN,
@@ -90,8 +101,8 @@ fun ShiftWorkDialog(state: ShiftWorkDialogState, onSuccess: () -> Unit) {
                     }) { Text(confirmText) }
                 },
                 dismissButton = {
-                    TextButton(onClick = { state.isDialogOpen.value = false }) { Text(dismissText) }
-                },
+                    TextButton(onClick = { state.closeDialog() }) { Text(dismissText) }
+                }
             )
         }
     }
@@ -100,7 +111,7 @@ fun ShiftWorkDialog(state: ShiftWorkDialogState, onSuccess: () -> Unit) {
 @Preview(locale = "fa", showBackground = true)
 @Composable
 fun ShiftWorkDialogContent(state: ShiftWorkDialogState = ShiftWorkDialogState(-1)) {
-    ensureShiftWorkDialogMainStateIntegrity(state.body)
+    state.ensureBodyIntegrity()
 
     val shiftWorkLengthHeader = stringResource(R.string.shift_work_days_head)
     val resultTemplate = stringResource(R.string.shift_work_record_title)
