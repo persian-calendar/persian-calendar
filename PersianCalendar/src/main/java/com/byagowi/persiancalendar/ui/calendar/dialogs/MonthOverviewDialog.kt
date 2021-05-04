@@ -9,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -23,12 +22,13 @@ import com.byagowi.persiancalendar.utils.*
 
 @Preview(locale = "fa", showBackground = true)
 @Composable
-fun MonthOverviewDialog(
-    baseJdn: Long = -1L, isDialogOpen: MutableState<Boolean> = mutableStateOf(true)
-) {
+fun MonthOverviewDialog(rememberKey: Long = 0L, baseJdn: Long = -1L) {
     val context = LocalContext.current
     val warningIfIsEmpty = stringResource(R.string.warn_if_events_not_set)
-    val entries = remember {
+
+    val isDialogOpen = remember(rememberKey) { mutableStateOf(true) }
+    // remember by baseJdn to ensure won't show the same in other months
+    val entries = remember(rememberKey) {
         val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
         val deviceEvents = readMonthDeviceEvents(context, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()

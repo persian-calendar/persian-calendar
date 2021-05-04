@@ -24,9 +24,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
-import androidx.compose.material.*
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.ComposeView
+import androidx.compose.material.MaterialTheme
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
@@ -34,7 +32,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
@@ -601,10 +598,10 @@ class CalendarFragment : Fragment() {
 
     private fun openShiftWorkDialog() {
         mainBinding?.composeView?.apply {
-            val openDialog = mutableStateOf(true)
+            val rememberKey = System.currentTimeMillis()
             setContent {
                 MaterialTheme {
-                    ShiftWorkDialog(selectedJdn, openDialog) {
+                    ShiftWorkDialog(rememberKey, selectedJdn) {
                         findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
                     }
                 }
@@ -614,9 +611,9 @@ class CalendarFragment : Fragment() {
 
     private fun openMonthOverView() {
         mainBinding?.composeView?.apply {
+            val rememberKey = System.currentTimeMillis()
             val pageJdn = mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn()
-            val openDialog = mutableStateOf(true)
-            setContent { MaterialTheme { MonthOverviewDialog(pageJdn, openDialog) } }
+            setContent { MaterialTheme { MonthOverviewDialog(rememberKey, pageJdn) } }
         }
     }
 }

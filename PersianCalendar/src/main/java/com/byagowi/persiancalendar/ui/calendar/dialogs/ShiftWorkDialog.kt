@@ -29,12 +29,11 @@ import com.byagowi.persiancalendar.utils.*
 
 @Preview(locale = "fa", showBackground = true)
 @Composable
-fun ShiftWorkDialog(
-    jdn: Long, isDialogOpen: MutableState<Boolean>, onSuccess: () -> Unit
-) {
-    val selectedJdn = remember { mutableStateOf(jdn) }
-    val state = remember { shiftWorks.toMutableStateList() }
-    val recurs = remember { mutableStateOf(shiftWorkRecurs) }
+fun ShiftWorkDialog(rememberKey: Long, jdn: Long, onSuccess: () -> Unit) {
+    val isDialogOpen = remember(rememberKey) { mutableStateOf(true) }
+    val selectedJdn = remember(rememberKey) { mutableStateOf(jdn) }
+    val state = remember(rememberKey) { shiftWorks.toMutableStateList() }
+    val recurs = remember(rememberKey) { mutableStateOf(shiftWorkRecurs) }
 
     Surface(color = MaterialTheme.colors.background) {
         if (isDialogOpen.value) {
@@ -45,7 +44,9 @@ fun ShiftWorkDialog(
                 onDismissRequest = { isDialogOpen.value = false },
                 shape = RoundedCornerShape(16.dp),
                 text = {
-                    ShiftWorkDialogList(state, selectedJdn, recurs, shiftWorkStartingJdn == -1L)
+                    ShiftWorkDialogContent(
+                        rememberKey, state, selectedJdn, recurs, shiftWorkStartingJdn == -1L
+                    )
                 },
                 confirmButton = {
                     TextButton(onClick = {
@@ -96,7 +97,8 @@ fun SnapshotStateList<ShiftWorkRecord>.modifyLengthOfRecord(position: Int, newVa
 
 @Preview(locale = "fa", showBackground = true)
 @Composable
-fun ShiftWorkDialogList(
+fun ShiftWorkDialogContent(
+    rememberKey: Long = 0L,
     state: SnapshotStateList<ShiftWorkRecord> = mutableStateListOf(),
     selectedJdn: MutableState<Long> = mutableStateOf(getTodayJdn()),
     shiftWorkRecurs: MutableState<Boolean> = mutableStateOf(true),
@@ -104,9 +106,9 @@ fun ShiftWorkDialogList(
 ) {
     ensureShiftWorkDialogMainStateIntegrity(state)
 
-    val selectedTypeDropdownIndex = remember { mutableStateOf(-1) }
-    val selectedLengthDropdownIndex = remember { mutableStateOf(-1) }
-    val isFirstSetup = remember { mutableStateOf(isFirstSetupInitially) }
+    val selectedTypeDropdownIndex = remember(rememberKey) { mutableStateOf(-1) }
+    val selectedLengthDropdownIndex = remember(rememberKey) { mutableStateOf(-1) }
+    val isFirstSetup = remember(rememberKey) { mutableStateOf(isFirstSetupInitially) }
 
     val shiftWorkLengthHeader = stringResource(R.string.shift_work_days_head)
     val resultTemplate = stringResource(R.string.shift_work_record_title)
@@ -115,7 +117,8 @@ fun ShiftWorkDialogList(
     Column(
         Modifier
             .heightIn(0.dp, 500.dp)
-            .fillMaxWidth()) {
+            .fillMaxWidth()
+    ) {
         Text(
             stringResource(
                 if (isFirstSetup.value) R.string.shift_work_starting_date
