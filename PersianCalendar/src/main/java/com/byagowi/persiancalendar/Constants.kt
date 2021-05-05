@@ -144,4 +144,3 @@ val DAYS_ICONS_ARABIC_INDIC = listOf(
     R.drawable.day24_ckb, R.drawable.day25_ckb, R.drawable.day26_ckb, R.drawable.day27,
     R.drawable.day28, R.drawable.day29, R.drawable.day30, R.drawable.day31
 )
-

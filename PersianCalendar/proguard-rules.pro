@@ -25,4 +25,3 @@
     public static *** d(...);
     public static *** i(...);
 }
-

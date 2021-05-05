@@ -24,4 +24,3 @@ fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.as
 fun getCalendarFragmentFont(context: Context): Typeface =
     if (isCustomFontEnabled) Typeface.create("sans-serif", Typeface.NORMAL)
     else getAppFont(context)
-
