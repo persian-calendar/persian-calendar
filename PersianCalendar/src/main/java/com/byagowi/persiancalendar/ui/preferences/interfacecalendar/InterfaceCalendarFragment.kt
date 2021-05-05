@@ -10,9 +10,11 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.LANG_AR
 import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
+import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
@@ -32,6 +34,9 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         findPreference<ListPreference>(PREF_APP_LANGUAGE)?.summaryProvider = summaryProvider
         if (language != LANG_AR)
             findPreference<SwitchPreferenceCompat>(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS)
+                ?.isVisible = false
+        if (language != LANG_FA)
+            findPreference<SwitchPreferenceCompat>(PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS)
                 ?.isVisible = false
         findPreference<ListPreference>(PREF_WEEK_START)?.summaryProvider = summaryProvider
         when (language) {

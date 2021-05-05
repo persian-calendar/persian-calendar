@@ -29,12 +29,15 @@ object AppLocalesData {
         else -> fa.islamicCalendarMonths
     }
 
-    fun getGregorianCalendarMonths(locale: String, isEasternArabicMonth: Boolean) = when (locale) {
+    fun getGregorianCalendarMonths(
+        locale: String,
+        isEasternGregorianArabicMonths: Boolean, isEnglishGregorianPersianMonths: Boolean
+    ) = when (locale) {
         LANG_FA_AF -> fa_af.gregorianCalendarMonths
         LANG_PS -> ps.gregorianCalendarMonths
         LANG_GLK -> glk.gregorianCalendarMonths
         LANG_AR -> {
-            if (isEasternArabicMonth) ar.easternGregorianCalendarMonths
+            if (isEasternGregorianArabicMonths) ar.easternGregorianCalendarMonths
             else ar.gregorianCalendarMonths
         }
         LANG_CKB -> ckb.gregorianCalendarMonths
@@ -42,7 +45,11 @@ object AppLocalesData {
         LANG_EN_US -> en.gregorianCalendarMonths
         LANG_JA -> ja.gregorianCalendarMonths
         LANG_AZB -> azb.gregorianCalendarMonths
-        LANG_EN_IR, LANG_FA -> fa.gregorianCalendarMonths
+        LANG_FA -> {
+            if (isEnglishGregorianPersianMonths) fa.gregorianCalendarEnglishMonths
+            else fa.gregorianCalendarMonths
+        }
+        LANG_EN_IR -> fa.gregorianCalendarEnglishMonths
         else -> fa.gregorianCalendarMonths
     }
 
@@ -86,6 +93,10 @@ object AppLocalesData {
         val gregorianCalendarMonths = listOf12Items(
             "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر",
             "نوامبر", "دسامبر"
+        )
+        val gregorianCalendarEnglishMonths = listOf12Items(
+            "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون", "جولای", "آگست", "سپتمبر", "اکتبر",
+            "نومبر", "دیسمبر"
         )
         val weekDays = listOf7Items(
             "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"

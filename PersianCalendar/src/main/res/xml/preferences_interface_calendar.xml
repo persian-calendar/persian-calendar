@@ -26,6 +26,14 @@
             settings:iconSpaceReserved="false"
             settings:useSimpleSummaryProvider="true" />
 
+        <!-- this is only shown in Persian interface so i18n is no issue here -->
+        <androidx.preference.SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="EnglishGregorianPersianMonths"
+            android:summary="جنوری، فبروری، مارچ، اپریل، …"
+            android:title="سال میلادی به ماه‌های تلفظ انگلیسی"
+            settings:iconSpaceReserved="false" />
+
         <!-- this is only shown in Arabic interface so i18n is no issue here -->
         <androidx.preference.SwitchPreferenceCompat
             android:defaultValue="false"

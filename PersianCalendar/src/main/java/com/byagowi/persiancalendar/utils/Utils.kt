@@ -40,6 +40,7 @@ import com.byagowi.persiancalendar.LANG_UR
 import com.byagowi.persiancalendar.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
+import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
@@ -124,6 +125,8 @@ var language = DEFAULT_APP_LANGUAGE
     private set
     get() = if (field.isEmpty()) DEFAULT_APP_LANGUAGE else field
 var easternGregorianArabicMonths = false
+    private set
+var englishGregorianPersianMonths = false
     private set
 var coordinate: Coordinate? = null
     private set
@@ -327,8 +330,9 @@ fun loadLanguageResource() {
     val language = language
     persianMonths = AppLocalesData.getPersianCalendarMonths(language)
     islamicMonths = AppLocalesData.getIslamicCalendarMonths(language)
-    gregorianMonths =
-        AppLocalesData.getGregorianCalendarMonths(language, easternGregorianArabicMonths)
+    gregorianMonths = AppLocalesData.getGregorianCalendarMonths(
+        language, easternGregorianArabicMonths, englishGregorianPersianMonths
+    )
     weekDays = AppLocalesData.getWeekDays(language)
     weekDaysInitials = AppLocalesData.getWeekDaysInitials(language)
 }
@@ -414,6 +418,7 @@ fun updateStoredPreference(context: Context) {
 
     language = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
+    englishGregorianPersianMonths = prefs.getBoolean(PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, false)
 
     preferredDigits = when (language) {
         LANG_EN_US, LANG_JA -> ARABIC_DIGITS
