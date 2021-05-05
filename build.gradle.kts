@@ -5,7 +5,7 @@ buildscript {
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.2.0")
-        classpath(kotlin("gradle-plugin", version = "1.4.32"))
+        classpath(kotlin("gradle-plugin", version = "1.5.0"))
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.3.5")
     }
 }
