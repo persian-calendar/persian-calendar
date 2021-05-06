@@ -289,11 +289,13 @@ fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): 
         CalendarType.SHAMSI -> PersianDate(year, month, day)
     }
 
-fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int = (getDateOfCalendar(
-    calendar, if (month == 12) year + 1 else year, if (month == 12) 1 else month + 1, 1
-).toJdn() - getDateOfCalendar(
-    calendar, year, month, 1
-).toJdn()).toInt()
+fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
+    val nextMonthYear = if (month == 12) year + 1 else year
+    val nextMonthMonth = if (month == 12) 1 else month + 1
+    val nextMonthStartingDay = getDateOfCalendar(calendar, nextMonthYear, nextMonthMonth, 1)
+    val thisMonthStartingDay = getDateOfCalendar(calendar, year, month, 1)
+    return (nextMonthStartingDay.toJdn() - thisMonthStartingDay.toJdn()).toInt()
+}
 
 fun calculateDaysDifference(jdn: Long, messageToFormat: String): String {
     val selectedDayAbsoluteDistance = abs(getTodayJdn() - jdn)
