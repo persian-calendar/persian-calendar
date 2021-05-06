@@ -490,7 +490,7 @@ fun updateStoredPreference(context: Context) {
         .map { it.splitIgnoreEmpty("=") }
         .filter { it.size == 2 }
         .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
-    shiftWorkPeriod = shiftWorks.sumBy { it.length }
+    shiftWorkPeriod = shiftWorks.sumOf { it.length }
     shiftWorkStartingJdn = prefs.getLong(PREF_SHIFT_WORK_STARTING_JDN, -1)
     shiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
     shiftWorkTitles = resources.getStringArray(R.array.shift_work_keys)
