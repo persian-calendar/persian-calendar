@@ -15,8 +15,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.preferences_widget_notification)
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        val key = preference?.key ?: return super.onPreferenceTreeClick(preference)
-        return when (key) {
+        return when (val key = preference?.key) {
             PREF_SELECTED_WIDGET_TEXT_COLOR -> showColorPickerDialog(false, key)
             PREF_SELECTED_WIDGET_BACKGROUND_COLOR -> showColorPickerDialog(true, key)
             else -> super.onPreferenceTreeClick(preference)
