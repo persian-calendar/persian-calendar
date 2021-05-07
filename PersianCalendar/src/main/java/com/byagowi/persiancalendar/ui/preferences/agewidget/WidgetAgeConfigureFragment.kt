@@ -22,15 +22,15 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
             ?.takeIf { it.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID) }
             ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
 
-    override fun onPreferenceTreeClick(preference: Preference?) = appWidgetId?.let { appWidgetId ->
-        when (preference?.key) {
-            PREF_SELECTED_WIDGET_TEXT_COLOR ->
-                showColorPickerDialog(isBackgroundPick = false, key = preference.key + appWidgetId)
-            PREF_SELECTED_WIDGET_BACKGROUND_COLOR ->
-                showColorPickerDialog(isBackgroundPick = true, key = preference.key + appWidgetId)
-            PREF_SELECTED_DATE_AGE_WIDGET ->
-                showDayPickerDialog(key = preference.key + appWidgetId)
-            else -> null
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        val appWidgetId = appWidgetId ?: return super.onPreferenceTreeClick(preference)
+        if (preference == null) return super.onPreferenceTreeClick(preference)
+        val key = preference.key + appWidgetId
+        return when (preference.key) {
+            PREF_SELECTED_WIDGET_TEXT_COLOR -> showColorPickerDialog(false, key)
+            PREF_SELECTED_WIDGET_BACKGROUND_COLOR -> showColorPickerDialog(true, key)
+            PREF_SELECTED_DATE_AGE_WIDGET -> showDayPickerDialog(key)
+            else -> super.onPreferenceTreeClick(preference)
         }
-    } ?: super.onPreferenceTreeClick(preference)
+    }
 }

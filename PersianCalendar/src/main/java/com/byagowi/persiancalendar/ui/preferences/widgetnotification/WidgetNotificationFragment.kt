@@ -14,13 +14,12 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) =
         addPreferencesFromResource(R.xml.preferences_widget_notification)
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean = when (
-        val key = preference?.key
-    ) {
-        PREF_SELECTED_WIDGET_TEXT_COLOR ->
-            showColorPickerDialog(isBackgroundPick = false, key = key)
-        PREF_SELECTED_WIDGET_BACKGROUND_COLOR ->
-            showColorPickerDialog(isBackgroundPick = true, key = key)
-        else -> super.onPreferenceTreeClick(preference)
+    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
+        val key = preference?.key ?: return super.onPreferenceTreeClick(preference)
+        return when (key) {
+            PREF_SELECTED_WIDGET_TEXT_COLOR -> showColorPickerDialog(false, key)
+            PREF_SELECTED_WIDGET_BACKGROUND_COLOR -> showColorPickerDialog(true, key)
+            else -> super.onPreferenceTreeClick(preference)
+        }
     }
 }
