@@ -412,7 +412,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
                 "OpenGL Extensions",
                 SpannableStringBuilder().also { spannableStringBuilder ->
                     val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS).trim().split(" ")
-                    val regex = "GL_([a-zA-Z]+)_(.+)".toRegex()
+                    val regex = Regex("GL_([a-zA-Z]+)_(.+)")
                     extensions.forEachIndexed { i, it ->
                         if (i != 0) spannableStringBuilder.append("\n")
 

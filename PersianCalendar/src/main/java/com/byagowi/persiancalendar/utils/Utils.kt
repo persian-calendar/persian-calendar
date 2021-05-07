@@ -407,7 +407,7 @@ fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
     }
 }
 
-private fun getOnlyLanguage(string: String): String = string.replace("-(IR|AF|US)".toRegex(), "")
+private fun getOnlyLanguage(string: String): String = string.replace(Regex("-(IR|AF|US)"), "")
 
 fun updateStoredPreference(context: Context) {
     val prefs = context.appPrefs

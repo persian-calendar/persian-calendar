@@ -4,7 +4,6 @@ import android.app.Dialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
-import android.text.Spanned
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
@@ -205,11 +204,9 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                             updateShiftWorkResult()
                         }
                     })
-                    filters = arrayOf(object : InputFilter {
-                        override fun filter(
-                            source: CharSequence?, start: Int, end: Int,
-                            dest: Spanned?, dstart: Int, dend: Int
-                        ) = if ("[=,]".toRegex() in (source ?: "")) "" else null
+                    // Don't allow inserting '=' or ',' as they have special meaning
+                    filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
+                        if (Regex("[=,]") in (source ?: "")) "" else null
                     })
                 }
 
