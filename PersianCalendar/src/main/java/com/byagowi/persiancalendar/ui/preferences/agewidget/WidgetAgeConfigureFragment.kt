@@ -29,7 +29,7 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
             PREF_SELECTED_WIDGET_BACKGROUND_COLOR ->
                 showColorPickerDialog(isBackgroundPick = true, key = preference.key + appWidgetId)
             PREF_SELECTED_DATE_AGE_WIDGET ->
-                showDayPickerDialog(preference.key)
+                showDayPickerDialog(key = preference.key + appWidgetId)
             else -> null
         }
     } ?: super.onPreferenceTreeClick(preference)
