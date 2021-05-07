@@ -113,8 +113,8 @@ fun formatNumber(number: Int): String = formatNumber(number.toString())
 
 fun formatNumber(number: String): String = when (preferredDigits) {
     ARABIC_DIGITS -> number
-    else -> number.toCharArray().map {
-        if (Character.isDigit(it)) preferredDigits[Character.getNumericValue(it)] else it
+    else -> number.map {
+        preferredDigits.getOrNull(Character.getNumericValue(it)) ?: it
     }.joinToString("")
 }
 
