@@ -33,7 +33,7 @@ value class Jdn(val value: Long) {
         return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(dayOfWeek)) / 7.0).toInt()
     }
 
-    infix fun until(other: Jdn) = value until other.value
+    fun createMonthDaysRange(monthLength: Int) = value until value + monthLength
 
     operator fun plus(other: Int): Jdn = Jdn(value + other)
     operator fun minus(other: Int): Jdn = Jdn(value - other)
