@@ -89,8 +89,8 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
 
         val mainDate = Jdn(jdn).toCalendar(chosenCalendarType)
-        val startOfYearJdn = Jdn.fromDate(chosenCalendarType, mainDate.year, 1, 1)
-        val endOfYearJdn = Jdn.fromDate(chosenCalendarType, mainDate.year + 1, 1, 1) - 1
+        val startOfYearJdn = Jdn(chosenCalendarType, mainDate.year, 1, 1)
+        val endOfYearJdn = Jdn(chosenCalendarType, mainDate.year + 1, 1, 1) - 1
         val currentWeek = Jdn(jdn).getWeekOfYear(startOfYearJdn)
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
 

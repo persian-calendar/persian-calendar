@@ -121,7 +121,7 @@ fun getA11yDaySummary(
     }
 
     if (isShowWeekOfYearEnabled) {
-        val startOfYearJdn = Jdn.fromDate(mainCalendar, mainDate.year, 1, 1)
+        val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
         val weekOfYearStart = Jdn(jdn).getWeekOfYear(startOfYearJdn)
         result.append("\n\n")
             .append(
@@ -274,8 +274,8 @@ fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
 fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
     val nextMonthYear = if (month == 12) year + 1 else year
     val nextMonthMonth = if (month == 12) 1 else month + 1
-    val nextMonthStartingDay = Jdn.fromDate(calendar, nextMonthYear, nextMonthMonth, 1)
-    val thisMonthStartingDay = Jdn.fromDate(calendar, year, month, 1)
+    val nextMonthStartingDay = Jdn(calendar, nextMonthYear, nextMonthMonth, 1)
+    val thisMonthStartingDay = Jdn(calendar, year, month, 1)
     return nextMonthStartingDay - thisMonthStartingDay
 }
 

@@ -582,13 +582,10 @@ class CalendarFragment : Fragment() {
                         val type = getCalendarTypeFromDate(date)
                         val today = Jdn.today.toCalendar(type)
                         bringDate(
-                            Jdn.fromDate(
-                                calendar = type,
-                                year = if (date.year == -1)
+                            Jdn(
+                                type, if (date.year == -1)
                                     (today.year + if (date.month < today.month) 1 else 0)
-                                else date.year,
-                                month = date.month,
-                                day = date.dayOfMonth
+                                else date.year, date.month, date.dayOfMonth
                             ).value
                         )
                         searchView.onActionViewCollapsed()

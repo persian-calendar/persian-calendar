@@ -68,7 +68,7 @@ class CalendarPager @JvmOverloads constructor(
             month += 12
         }
         month += 1
-        return Jdn.fromDate(calendar, year, month, 1).toCalendar(calendar)
+        return Jdn(calendar, year, month, 1).toCalendar(calendar)
     }
 
     private fun applyOffset(position: Int) = monthsLimit / 2 - position
@@ -159,7 +159,7 @@ class CalendarPager @JvmOverloads constructor(
                 val date = getDateFromOffset(mainCalendar, offset)
                 val baseJdn = Jdn(date)
                 val monthLength = getMonthLength(mainCalendar, date.year, date.month)
-                val startOfYearJdn = Jdn.fromDate(mainCalendar, date.year, 1, 1)
+                val startOfYearJdn = Jdn(mainCalendar, date.year, 1, 1)
 
                 daysAdapter.apply {
                     startingDayOfWeek = baseJdn.dayOfWeek

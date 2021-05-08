@@ -64,7 +64,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                     .setAnchorView(anchorView)
                     .show()
                 -1
-            } else Jdn.fromDate(selectedCalendarType, year, month, day).value
+            } else Jdn(selectedCalendarType, year, month, day).value
         }
         set(value) {
             mJdn = value.takeIf { it != -1L } ?: Jdn.today.value
