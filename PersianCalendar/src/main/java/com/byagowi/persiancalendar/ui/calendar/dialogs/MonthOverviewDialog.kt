@@ -14,7 +14,6 @@ import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.dp
-import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
@@ -29,7 +28,8 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
-        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
+        val baseJdn =
+            arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
         val date = baseJdn.toCalendar(mainCalendar)
         val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
         val events = (0 until getMonthLength(mainCalendar, date.year, date.month)).mapNotNull {
@@ -45,7 +45,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             )
             if (holidays.isEmpty() && nonHolidays.isEmpty()) null
             else MonthOverviewRecord(
-                dayTitleSummary(jdn.toCalendar(mainCalendar)), holidays, nonHolidays
+                dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)), holidays, nonHolidays
             )
         }.takeIf { it.isNotEmpty() } ?: listOf(
             MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")

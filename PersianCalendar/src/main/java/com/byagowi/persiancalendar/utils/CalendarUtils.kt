@@ -32,15 +32,13 @@ fun formatDayAndMonth(day: Int, month: String): String = when (language) {
     else -> "%s %s"
 }.format(formatNumber(day), month)
 
-fun dayTitleSummary(date: AbstractDate, calendarNameInLinear: Boolean = true): String =
-    getWeekDayName(Jdn(date)) + spacedComma + formatDate(date, calendarNameInLinear)
+fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
+    jdn.dayOfWeekName + spacedComma + formatDate(date, calendarNameInLinear)
 
 fun CivilDate.toCalendar(): Calendar =
     Calendar.getInstance().apply { set(year, month - 1, dayOfMonth) }
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
-
-fun getWeekDayName(jdn: Jdn) = weekDays[jdn.dayOfWeek]
 
 fun getMonthName(date: AbstractDate) = monthsNamesOfCalendar(date).getOrNull(date.month - 1) ?: ""
 
@@ -70,7 +68,7 @@ fun getA11yDaySummary(
 
     if (withTitle) {
         result.append("\n")
-            .append(dayTitleSummary(mainDate))
+            .append(dayTitleSummary(jdn, mainDate))
     }
 
     val shift = getShiftWorkTitle(jdn, false)

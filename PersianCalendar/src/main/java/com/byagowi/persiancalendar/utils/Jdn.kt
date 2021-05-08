@@ -12,21 +12,26 @@ import kotlin.math.ceil
 @JvmInline
 value class Jdn(val value: Long) {
     constructor(value: AbstractDate) : this(value.toJdn())
-    constructor(calendar: CalendarType, year: Int, month: Int, day: Int) : this(when (calendar) {
-        CalendarType.ISLAMIC -> IslamicDate(year, month, day)
-        CalendarType.GREGORIAN -> CivilDate(year, month, day)
-        CalendarType.SHAMSI -> PersianDate(year, month, day)
-    })
+    constructor(calendar: CalendarType, year: Int, month: Int, day: Int) : this(
+        when (calendar) {
+            CalendarType.ISLAMIC -> IslamicDate(year, month, day)
+            CalendarType.GREGORIAN -> CivilDate(year, month, day)
+            CalendarType.SHAMSI -> PersianDate(year, month, day)
+        }
+    )
 
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
     val dayOfWeek: Int
         get() = ((value + 2L) % 7L).toInt()
+    val dayOfWeekName: String
+        get() = weekDays[dayOfWeek]
 
     fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
         CalendarType.ISLAMIC -> toIslamicCalendar()
         CalendarType.GREGORIAN -> toGregorianCalendar()
         CalendarType.SHAMSI -> toPersianCalendar()
     }
+
     fun toIslamicCalendar() = IslamicDate(value)
     fun toGregorianCalendar() = CivilDate(value)
     fun toPersianCalendar() = PersianDate(value)

@@ -81,7 +81,6 @@ import com.byagowi.persiancalendar.utils.toggleShowDeviceCalendarOnPreference
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*

@@ -17,13 +17,11 @@ import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getSpringEquinox
-import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.toFormattedString
-import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 
@@ -66,7 +64,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         val context = context ?: return
 
         binding.calendarsFlow.update(calendarsToShow, jdn)
-        binding.weekDayName.text = getWeekDayName(jdn)
+        binding.weekDayName.text = jdn.dayOfWeekName
 
         binding.zodiac.also {
             it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
@@ -76,8 +74,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         val isToday = Jdn.today == jdn
         if (isToday) {
             if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
-                getWeekDayName(jdn),
-                context.getString(R.string.iran_time)
+                jdn.dayOfWeekName, context.getString(R.string.iran_time)
             )
             binding.diffDate.visibility = View.GONE
         } else {
