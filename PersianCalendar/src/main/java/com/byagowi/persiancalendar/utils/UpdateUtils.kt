@@ -114,7 +114,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     val showOtherCalendars = "other_calendars" in whatToShowOnWidgets
 
-    val weekDayName = getWeekDayName(date)
+    val weekDayName = getWeekDayName(jdn)
     var title = dayTitleSummary(date)
     var widgetTitle = dayTitleSummary(date, calendarNameInLinear = showOtherCalendars)
     val shiftWorkTitle = getShiftWorkTitle(jdn, false)
@@ -305,7 +305,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             var text2 = formatDate(date, calendarNameInLinear = showOtherCalendars)
             if (enableClock)
-                text2 = getWeekDayName(date) + "\n" + text2
+                text2 = getWeekDayName(jdn) + "\n" + text2
             else
                 setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 

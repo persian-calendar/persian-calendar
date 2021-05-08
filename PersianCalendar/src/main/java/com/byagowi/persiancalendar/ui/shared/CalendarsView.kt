@@ -66,7 +66,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         val context = context ?: return
 
         binding.calendarsFlow.update(calendarsToShow, jdn)
-        binding.weekDayName.text = getWeekDayName(jdn.toGregorianCalendar())
+        binding.weekDayName.text = getWeekDayName(jdn)
 
         binding.zodiac.also {
             it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
@@ -76,7 +76,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         val isToday = Jdn.today == jdn
         if (isToday) {
             if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
-                getWeekDayName(jdn.toGregorianCalendar()),
+                getWeekDayName(jdn),
                 context.getString(R.string.iran_time)
             )
             binding.diffDate.visibility = View.GONE

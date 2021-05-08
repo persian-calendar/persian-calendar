@@ -33,14 +33,14 @@ fun formatDayAndMonth(day: Int, month: String): String = when (language) {
 }.format(formatNumber(day), month)
 
 fun dayTitleSummary(date: AbstractDate, calendarNameInLinear: Boolean = true): String =
-    getWeekDayName(date) + spacedComma + formatDate(date, calendarNameInLinear)
+    getWeekDayName(Jdn(date)) + spacedComma + formatDate(date, calendarNameInLinear)
 
 fun CivilDate.toCalendar(): Calendar =
     Calendar.getInstance().apply { set(year, month - 1, dayOfMonth) }
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
-fun getWeekDayName(date: AbstractDate) = weekDays[Jdn(date.toJdn()).dayOfWeek]
+fun getWeekDayName(jdn: Jdn) = weekDays[jdn.dayOfWeek]
 
 fun getMonthName(date: AbstractDate) = monthsNamesOfCalendar(date).getOrNull(date.month - 1) ?: ""
 
