@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.dp
+import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
@@ -34,7 +35,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
         val events = (0 until getMonthLength(mainCalendar, date.year, date.month)).mapNotNull {
             val jdn = baseJdn + it
-            val events = getEvents(jdn, deviceEvents)
+            val events = jdn.getEvents(deviceEvents)
             val holidays = getEventsTitle(
                 events, holiday = true, compact = false, showDeviceCalendarEvents = false,
                 insertRLM = false, addIsHoliday = isHighTextContrastEnabled

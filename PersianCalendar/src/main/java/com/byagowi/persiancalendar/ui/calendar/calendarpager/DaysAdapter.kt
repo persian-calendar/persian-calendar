@@ -138,7 +138,7 @@ class DaysAdapter internal constructor(
             } else {
                 if (position - 7 - fixedStartingDayOfWeek >= 0) {
                     val day = days[position - 7 - fixedStartingDayOfWeek]
-                    val events = getEvents(day, monthEvents)
+                    val events = day.getEvents(monthEvents)
 
                     val isToday = day == todayJdn
 

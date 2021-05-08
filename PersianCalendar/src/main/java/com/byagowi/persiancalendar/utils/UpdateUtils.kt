@@ -139,7 +139,7 @@ fun update(context: Context, updateDate: Boolean) {
             }
         }
     }
-    val events = getEvents(jdn, deviceCalendarEvents)
+    val events = jdn.getEvents(deviceCalendarEvents)
 
     val enableClock = isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val isCenterAligned = isCenterAlignWidgets

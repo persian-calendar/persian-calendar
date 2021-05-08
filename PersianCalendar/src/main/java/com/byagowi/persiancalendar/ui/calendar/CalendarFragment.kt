@@ -304,7 +304,7 @@ class CalendarFragment : Fragment() {
                         .setData(CalendarContract.Events.CONTENT_URI)
                         .putExtra(
                             CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                jdn.toCalendar(mainCalendar)
+                                jdn, jdn.toCalendar(mainCalendar)
                             )
                         )
                         .putExtra(
@@ -424,7 +424,7 @@ class CalendarFragment : Fragment() {
         val eventsBinding = eventsBinding ?: return
 
         eventsBinding.shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
-        val events = getEvents(jdn, readDayDeviceEvents(activity, jdn))
+        val events = jdn.getEvents(readDayDeviceEvents(activity, jdn))
         val holidays = getEventsTitle(
             events,
             holiday = true,

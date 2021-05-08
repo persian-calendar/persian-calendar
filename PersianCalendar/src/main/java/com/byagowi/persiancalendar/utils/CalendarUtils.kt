@@ -87,7 +87,7 @@ fun getA11yDaySummary(
         }
     }
 
-    val events = getEvents(jdn, deviceCalendarEvents)
+    val events = jdn.getEvents(deviceCalendarEvents)
     val holidays = getEventsTitle(
         events, true,
         compact = true,
@@ -136,16 +136,16 @@ fun getA11yDaySummary(
     return result.toString()
 }
 
-fun getEvents(jdn: Jdn, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
+fun Jdn.getEvents(deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
     ArrayList<CalendarEvent<*>>().apply {
-        addAll(persianCalendarEvents.getEvents(jdn.toPersianCalendar()))
-        val islamic = jdn.toIslamicCalendar()
+        addAll(persianCalendarEvents.getEvents(toPersianCalendar()))
+        val islamic = toIslamicCalendar()
         addAll(islamicCalendarEvents.getEvents(islamic))
         // Special case Islamic events happening in 30th day but the month has only 29 days
         if (islamic.dayOfMonth == 29 &&
             getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
         ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
-        val civil = jdn.toGregorianCalendar()
+        val civil = toGregorianCalendar()
         addAll(deviceCalendarEvents.getEvents(civil)) // Passed by caller
         addAll(gregorianCalendarEvents.getEvents(civil))
     }
