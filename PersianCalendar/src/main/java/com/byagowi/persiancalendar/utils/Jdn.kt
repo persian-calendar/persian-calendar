@@ -18,7 +18,7 @@ value class Jdn(val value: Long) {
         CalendarType.SHAMSI -> PersianDate(year, month, day)
     })
 
-    // 0 means Saturday on it, see #test_day_of_week_from_jdn() in the testsuite
+    // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
     val dayOfWeek: Int
         get() = ((value + 2L) % 7L).toInt()
 
@@ -28,8 +28,8 @@ value class Jdn(val value: Long) {
         CalendarType.SHAMSI -> PersianDate(value)
     }
 
-    fun getWeekOfYear(startOfYearJdn: Jdn): Int {
-        val dayOfYear = this - startOfYearJdn
+    fun getWeekOfYear(startOfYear: Jdn): Int {
+        val dayOfYear = this - startOfYear
         return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(dayOfWeek)) / 7.0).toInt()
     }
 
