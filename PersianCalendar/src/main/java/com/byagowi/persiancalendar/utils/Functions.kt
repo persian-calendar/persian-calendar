@@ -337,10 +337,6 @@ fun getCoordinate(context: Context): Coordinate? =
         // If latitude and longitude both are zero probably preference is not set yet
     }
 
-fun getTodayOfCalendar(calendar: CalendarType) = getDateFromJdnOfCalendar(calendar, getTodayJdn())
-
-fun getTodayJdn(): Long = calendarToCivilDate(makeCalendarFromDate(Date())).toJdn()
-
 fun getSpringEquinox(jdn: Long) =
     makeCalendarFromDate(Equinox.northwardEquinox(CivilDate(jdn).year))
 
@@ -362,12 +358,6 @@ fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
     "MAGHRIB" -> R.drawable.maghrib
     "ISHA" -> R.drawable.isha
     else -> R.drawable.isha
-}
-
-fun getDateFromJdnOfCalendar(calendar: CalendarType, jdn: Long): AbstractDate = when (calendar) {
-    CalendarType.ISLAMIC -> IslamicDate(jdn)
-    CalendarType.GREGORIAN -> CivilDate(jdn)
-    CalendarType.SHAMSI -> PersianDate(jdn)
 }
 
 @StyleRes
@@ -435,7 +425,7 @@ fun copyToClipboard(
 }.onFailure(logException).getOrNull().debugAssertNotNull ?: Unit
 
 fun dateStringOfOtherCalendars(jdn: Long, separator: String) =
-    otherCalendars.joinToString(separator) { formatDate(getDateFromJdnOfCalendar(it, jdn)) }
+    otherCalendars.joinToString(separator) { formatDate(Jdn(jdn).toCalendar(it)) }
 
 private fun calculateDiffToChangeDate(): Long = Calendar.getInstance().apply {
     set(Calendar.HOUR_OF_DAY, 0)

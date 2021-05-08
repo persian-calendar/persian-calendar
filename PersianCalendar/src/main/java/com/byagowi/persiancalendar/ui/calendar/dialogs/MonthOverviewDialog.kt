@@ -10,14 +10,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.dp
-import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getMonthLength
-import com.byagowi.persiancalendar.utils.getTodayJdn
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
@@ -30,8 +29,8 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
-        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: getTodayJdn()
-        val date = getDateFromJdnOfCalendar(mainCalendar, baseJdn)
+        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: Jdn.today.value
+        val date = Jdn(baseJdn).toCalendar(mainCalendar)
         val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
         val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
         val events = (0 until monthLength).mapNotNull {
@@ -47,9 +46,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             )
             if (holidays.isEmpty() && nonHolidays.isEmpty()) null
             else MonthOverviewRecord(
-                dayTitleSummary(
-                    getDateFromJdnOfCalendar(mainCalendar, jdn)
-                ), holidays, nonHolidays
+                dayTitleSummary(Jdn(jdn).toCalendar(mainCalendar)), holidays, nonHolidays
             )
         }.takeIf { it.isNotEmpty() } ?: listOf(
             MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")

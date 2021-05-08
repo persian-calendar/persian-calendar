@@ -28,9 +28,6 @@ fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekSta
 
 fun getWeekDayName(position: Int) = weekDays[position % 7]
 
-// 0 means Saturday on it, see #test_day_of_week_from_jdn() in the test suit
-fun getDayOfWeekFromJdn(jdn: Long): Int = ((jdn + 2L) % 7L).toInt()
-
 fun formatDayAndMonth(day: Int, month: String): String = when (language) {
     LANG_CKB -> "%sی %s"
     else -> "%s %s"
@@ -44,12 +41,7 @@ fun CivilDate.toCalendar(): Calendar =
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
-fun getWeekDayName(date: AbstractDate) = weekDays[getDayOfWeekFromJdn(date.toJdn())]
-
-fun calculateWeekOfYear(jdn: Long, startOfYearJdn: Long): Int {
-    val dayOfYear = jdn - startOfYearJdn
-    return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(getDayOfWeekFromJdn(jdn))) / 7.0).toInt()
-}
+fun getWeekDayName(date: AbstractDate) = weekDays[Jdn(date.toJdn()).dayOfWeek]
 
 fun getMonthName(date: AbstractDate) = monthsNamesOfCalendar(date).getOrNull(date.month - 1) ?: ""
 
@@ -75,7 +67,7 @@ fun getA11yDaySummary(
             .append("\n")
     }
 
-    val mainDate = getDateFromJdnOfCalendar(mainCalendar, jdn)
+    val mainDate = Jdn(jdn).toCalendar(mainCalendar)
 
     if (withTitle) {
         result.append("\n")
@@ -129,11 +121,8 @@ fun getA11yDaySummary(
     }
 
     if (isShowWeekOfYearEnabled) {
-        val startOfYearJdn = getDateOfCalendar(
-            mainCalendar,
-            mainDate.year, 1, 1
-        ).toJdn()
-        val weekOfYearStart = calculateWeekOfYear(jdn, startOfYearJdn)
+        val startOfYearJdn = Jdn.fromDate(mainCalendar, mainDate.year, 1, 1)
+        val weekOfYearStart = Jdn(jdn).getWeekOfYear(startOfYearJdn)
         result.append("\n\n")
             .append(
                 context.getString(R.string.nth_week_of_year).format(formatNumber(weekOfYearStart))
@@ -237,7 +226,7 @@ private fun readDeviceEvents(
 }.onFailure(logException).getOrNull() ?: emptyList()
 
 fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
-    ctx, CivilDate(jdn.takeIf { it != -1L } ?: getTodayJdn()).toCalendar(), DAY_IN_MILLIS
+    ctx, CivilDate(jdn.takeIf { it != -1L } ?: Jdn.today.value).toCalendar(), DAY_IN_MILLIS
 ).toEventsStore()
 
 fun readMonthDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
@@ -282,23 +271,16 @@ fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
     else -> CalendarType.SHAMSI
 }
 
-fun getDateOfCalendar(calendar: CalendarType, year: Int, month: Int, day: Int): AbstractDate =
-    when (calendar) {
-        CalendarType.ISLAMIC -> IslamicDate(year, month, day)
-        CalendarType.GREGORIAN -> CivilDate(year, month, day)
-        CalendarType.SHAMSI -> PersianDate(year, month, day)
-    }
-
 fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
     val nextMonthYear = if (month == 12) year + 1 else year
     val nextMonthMonth = if (month == 12) 1 else month + 1
-    val nextMonthStartingDay = getDateOfCalendar(calendar, nextMonthYear, nextMonthMonth, 1)
-    val thisMonthStartingDay = getDateOfCalendar(calendar, year, month, 1)
-    return (nextMonthStartingDay.toJdn() - thisMonthStartingDay.toJdn()).toInt()
+    val nextMonthStartingDay = Jdn.fromDate(calendar, nextMonthYear, nextMonthMonth, 1)
+    val thisMonthStartingDay = Jdn.fromDate(calendar, year, month, 1)
+    return nextMonthStartingDay - thisMonthStartingDay
 }
 
 fun calculateDaysDifference(jdn: Long, messageToFormat: String): String {
-    val selectedDayAbsoluteDistance = abs(getTodayJdn() - jdn)
+    val selectedDayAbsoluteDistance = abs(Jdn.today.value - jdn)
     val civilBase = CivilDate(2000, 1, 1)
     val civilOffset = CivilDate(civilBase.toJdn() + selectedDayAbsoluteDistance)
     val yearDiff = civilOffset.year - 2000

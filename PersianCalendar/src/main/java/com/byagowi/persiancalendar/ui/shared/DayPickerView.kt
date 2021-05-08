@@ -11,12 +11,10 @@ import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
-import com.byagowi.persiancalendar.utils.getDateOfCalendar
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
-import com.byagowi.persiancalendar.utils.getTodayJdn
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.monthsNamesOfCalendar
@@ -66,11 +64,11 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                     .setAnchorView(anchorView)
                     .show()
                 -1
-            } else getDateOfCalendar(selectedCalendarType, year, month, day).toJdn()
+            } else Jdn.fromDate(selectedCalendarType, year, month, day).value
         }
         set(value) {
-            mJdn = value.takeIf { it != -1L } ?: getTodayJdn()
-            val date = getDateFromJdnOfCalendar(selectedCalendarType, mJdn)
+            mJdn = value.takeIf { it != -1L } ?: Jdn.today.value
+            val date = Jdn(mJdn).toCalendar(selectedCalendarType)
             binding.yearPicker.also {
                 it.minValue = date.year - 100
                 it.maxValue = date.year + 100

@@ -23,7 +23,7 @@ class PersianCalendarTileService : TileService() {
     }.getOrElse(logException)
 
     override fun onStartListening() = runCatching {
-        val today = getTodayOfCalendar(mainCalendar)
+        val today = Jdn.today.toCalendar(mainCalendar)
         qsTile?.apply {
             icon = Icon.createWithResource(
                 this@PersianCalendarTileService, getDayIconResource(today.dayOfMonth)

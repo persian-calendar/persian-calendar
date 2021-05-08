@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
-import com.byagowi.persiancalendar.utils.getTodayJdn
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 
 class ConverterFragment : Fragment() {
@@ -23,7 +23,7 @@ class ConverterFragment : Fragment() {
         binding.calendarsView.toggle()
         binding.calendarsView.hideMoreIcon()
 
-        val todayJdn = getTodayJdn()
+        val todayJdn = Jdn.today.value
 
         binding.todayButton.setOnClickListener { binding.dayPickerView.jdn = todayJdn }
 
@@ -42,7 +42,7 @@ class ConverterFragment : Fragment() {
                     )
                 }
             }
-            it.jdn = getTodayJdn()
+            it.jdn = Jdn.today.value
             it.anchorView = binding.todayButton
         }
     }.root

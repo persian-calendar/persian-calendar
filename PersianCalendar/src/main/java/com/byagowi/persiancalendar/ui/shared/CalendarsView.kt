@@ -9,17 +9,14 @@ import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import com.byagowi.persiancalendar.utils.calculateWeekOfYear
 import com.byagowi.persiancalendar.utils.calendarToCivilDate
 import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
-import com.byagowi.persiancalendar.utils.getDateOfCalendar
 import com.byagowi.persiancalendar.utils.getSpringEquinox
-import com.byagowi.persiancalendar.utils.getTodayJdn
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.isForcedIranTimeEnabled
@@ -76,7 +73,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             it.visibility = if (it.text.isEmpty()) View.GONE else View.VISIBLE
         }
 
-        val isToday = getTodayJdn() == jdn
+        val isToday = Jdn.today.value == jdn
         if (isToday) {
             if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
                 getWeekDayName(CivilDate(jdn)),
@@ -91,26 +88,19 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             }
         }
 
-        val mainDate = getDateFromJdnOfCalendar(chosenCalendarType, jdn)
-        val startOfYear = getDateOfCalendar(
-            chosenCalendarType,
-            mainDate.year, 1, 1
-        )
-        val startOfNextYear = getDateOfCalendar(
-            chosenCalendarType, mainDate.year + 1, 1, 1
-        )
-        val startOfYearJdn = startOfYear.toJdn()
-        val endOfYearJdn = startOfNextYear.toJdn() - 1
-        val currentWeek = calculateWeekOfYear(jdn, startOfYearJdn)
-        val weeksCount = calculateWeekOfYear(endOfYearJdn, startOfYearJdn)
+        val mainDate = Jdn(jdn).toCalendar(chosenCalendarType)
+        val startOfYearJdn = Jdn.fromDate(chosenCalendarType, mainDate.year, 1, 1)
+        val endOfYearJdn = Jdn.fromDate(chosenCalendarType, mainDate.year + 1, 1, 1) - 1
+        val currentWeek = Jdn(jdn).getWeekOfYear(startOfYearJdn)
+        val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
 
         val startOfYearText = context.getString(R.string.start_of_year_diff).format(
-            formatNumber((jdn - startOfYearJdn + 1).toInt()),
+            formatNumber(Jdn(jdn) - startOfYearJdn + 1),
             formatNumber(currentWeek),
             formatNumber(mainDate.month)
         )
         val endOfYearText = context.getString(R.string.end_of_year_diff).format(
-            formatNumber((endOfYearJdn - jdn).toInt()),
+            formatNumber(endOfYearJdn - Jdn(jdn)),
             formatNumber(weeksCount - currentWeek),
             formatNumber(12 - mainDate.month)
         )
@@ -127,10 +117,8 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
                     Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
                         .toFormattedString(forcedIn12 = true) + " " +
                             formatDate(
-                                getDateFromJdnOfCalendar(
-                                    mainCalendar,
-                                    calendarToCivilDate(springEquinox).toJdn()
-                                ),
+                                Jdn(calendarToCivilDate(springEquinox).toJdn())
+                                    .toCalendar(mainCalendar),
                                 forceNonNumerical = true
                             )
                 )

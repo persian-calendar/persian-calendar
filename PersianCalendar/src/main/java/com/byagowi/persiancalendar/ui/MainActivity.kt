@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
             .seasonImage.setImageResource(run {
-                var season = (getTodayOfCalendar(CalendarType.SHAMSI).month - 1) / 3
+                var season = (Jdn.today.toCalendar(CalendarType.SHAMSI).month - 1) / 3
 
                 // Southern hemisphere
                 if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
@@ -134,10 +134,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
         }
 
-        creationDateJdn = getTodayJdn()
+        creationDateJdn = Jdn.today.value
 
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-            getTodayOfCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
+            Jdn.today.toCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
         ) showAppIsOutDatedSnackbar()
 
         applyAppLanguage(this)
@@ -347,8 +347,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
-        if (creationDateJdn != getTodayJdn()) {
-            creationDateJdn = getTodayJdn()
+        if (creationDateJdn != Jdn.today.value) {
+            creationDateJdn = Jdn.today.value
             val navController = obtainNavHost().navController
             if (navController.currentDestination?.id == R.id.calendar) {
                 navController.navigate(CalendarFragmentDirections.navigateToSelf())

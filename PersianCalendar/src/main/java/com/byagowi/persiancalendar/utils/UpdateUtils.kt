@@ -51,7 +51,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     logDebug("UpdateUtils", "update")
     applyAppLanguage(context)
-    val date = getTodayOfCalendar(mainCalendar)
+    val date = Jdn.today.toCalendar(mainCalendar)
     val jdn = date.toJdn()
 
     val launchAppPendingIntent = PendingIntent.getActivity(

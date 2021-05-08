@@ -6,12 +6,12 @@ import android.view.View
 import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.addViewsToFlow
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
-import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
 import com.byagowi.persiancalendar.utils.getMonthName
 import com.byagowi.persiancalendar.utils.isCustomFontEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
@@ -39,7 +39,7 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
             })
         }
         bindings.zip(calendarsToShow) { binding, calendarType ->
-            val date = getDateFromJdnOfCalendar(calendarType, jdn)
+            val date = Jdn(jdn).toCalendar(calendarType)
             val firstCalendarString = formatDate(date)
             binding.linear.text = toLinearDate(date)
             binding.linear.contentDescription = toLinearDate(date)

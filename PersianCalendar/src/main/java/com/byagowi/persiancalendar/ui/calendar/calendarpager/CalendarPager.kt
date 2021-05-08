@@ -33,8 +33,8 @@ class CalendarPager @JvmOverloads constructor(
         selectedJdn = if (highlight) jdn else -1
 
         if (monthChange) {
-            val today = getTodayOfCalendar(mainCalendar)
-            val date = getDateFromJdnOfCalendar(mainCalendar, jdn)
+            val today = Jdn.today.toCalendar(mainCalendar)
+            val date = Jdn(jdn).toCalendar(mainCalendar)
             viewPager.setCurrentItem(
                 applyOffset((today.year - date.year) * 12 + today.month - date.month), true
             )
@@ -56,7 +56,7 @@ class CalendarPager @JvmOverloads constructor(
     private val monthsLimit = 5000 // this should be an even number
 
     private fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
-        val date = getTodayOfCalendar(calendar)
+        val date = Jdn.today.toCalendar(calendar)
         var month = date.month - offset
         month -= 1
         var year = date.year
@@ -68,7 +68,7 @@ class CalendarPager @JvmOverloads constructor(
             month += 12
         }
         month += 1
-        return getDateOfCalendar(calendar, year, month, 1)
+        return Jdn.fromDate(calendar, year, month, 1).toCalendar(calendar)
     }
 
     private fun applyOffset(position: Int) = monthsLimit / 2 - position
@@ -157,14 +157,14 @@ class CalendarPager @JvmOverloads constructor(
             fun bind(position: Int) {
                 val offset = applyOffset(position)
                 val date = getDateFromOffset(mainCalendar, offset)
-                val baseJdn = date.toJdn()
+                val baseJdn = Jdn(date)
                 val monthLength = getMonthLength(mainCalendar, date.year, date.month)
-                val startOfYearJdn = getDateOfCalendar(mainCalendar, date.year, 1, 1).toJdn()
+                val startOfYearJdn = Jdn.fromDate(mainCalendar, date.year, 1, 1)
 
                 daysAdapter.apply {
-                    startingDayOfWeek = getDayOfWeekFromJdn(baseJdn)
-                    weekOfYearStart = calculateWeekOfYear(baseJdn, startOfYearJdn)
-                    weeksCount = calculateWeekOfYear(baseJdn + monthLength - 1, startOfYearJdn) -
+                    startingDayOfWeek = baseJdn.dayOfWeek
+                    weekOfYearStart = baseJdn.getWeekOfYear(startOfYearJdn)
+                    weeksCount = (baseJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
                             weekOfYearStart + 1
                     days = (baseJdn until baseJdn + monthLength).toList()
                     initializeMonthEvents()
@@ -180,9 +180,9 @@ class CalendarPager @JvmOverloads constructor(
                             onMonthSelected()
                         }
 
-                        val selectedDay = 1 + jdn - baseJdn
+                        val selectedDay = 1 + jdn - baseJdn.value
                         daysAdapter.selectDay(
-                            if (jdn != -1L && jdn >= baseJdn && selectedDay <= monthLength)
+                            if (jdn != -1L && jdn >= baseJdn.value && selectedDay <= monthLength)
                                 selectedDay.toInt()
                             else -1
                         )

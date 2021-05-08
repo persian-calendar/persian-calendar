@@ -25,12 +25,11 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
-import com.byagowi.persiancalendar.utils.getTodayJdn
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.shiftWorkRecurs
@@ -51,7 +50,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         applyAppLanguage(activity)
         updateStoredPreference(activity)
 
-        selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: getTodayJdn()
+        selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: Jdn.today.value
 
         jdn = shiftWorkStartingJdn
         var isFirstSetup = false
@@ -71,12 +70,12 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         binding.description.text = getString(
             if (isFirstSetup) R.string.shift_work_starting_date
             else R.string.shift_work_starting_date_edit
-        ).format(formatDate(getDateFromJdnOfCalendar(mainCalendar, jdn)))
+        ).format(formatDate(Jdn(jdn).toCalendar(mainCalendar)))
 
         binding.resetLink.setOnClickListener {
             jdn = selectedJdn
             binding.description.text = getString(R.string.shift_work_starting_date)
-                .format(formatDate(getDateFromJdnOfCalendar(mainCalendar, jdn)))
+                .format(formatDate(Jdn(jdn).toCalendar(mainCalendar)))
             shiftWorkItemAdapter.reset()
         }
         binding.recurs.isChecked = shiftWorkRecurs

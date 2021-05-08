@@ -49,6 +49,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
@@ -62,15 +63,11 @@ import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.getCalendarTypeFromDate
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
-import com.byagowi.persiancalendar.utils.getDateFromJdnOfCalendar
-import com.byagowi.persiancalendar.utils.getDateOfCalendar
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getMonthName
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.getTodayJdn
-import com.byagowi.persiancalendar.utils.getTodayOfCalendar
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled
@@ -102,7 +99,7 @@ class CalendarFragment : Fragment() {
     private var eventsBinding: EventsTabContentBinding? = null
     private var searchView: SearchView? = null
     private var todayButton: MenuItem? = null
-    private val initialDate = getTodayOfCalendar(mainCalendar)
+    private val initialDate = Jdn.today.toCalendar(mainCalendar)
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -268,7 +265,7 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bringDate(getTodayJdn(), monthChange = false, highlight = false)
+        bringDate(Jdn.today.value, monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let {
             (activity as? DrawerHost)
@@ -288,7 +285,7 @@ class CalendarFragment : Fragment() {
                 it.appbarLayout.outlineProvider = null
         }
 
-        getTodayOfCalendar(mainCalendar).let { today ->
+        Jdn.today.toCalendar(mainCalendar).let { today ->
             updateToolbar(getMonthName(today), formatNumber(today.year))
         }
     }
@@ -308,7 +305,7 @@ class CalendarFragment : Fragment() {
                         .setData(CalendarContract.Events.CONTENT_URI)
                         .putExtra(
                             CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                getDateFromJdnOfCalendar(mainCalendar, jdn)
+                                Jdn(jdn).toCalendar(mainCalendar)
                             )
                         )
                         .putExtra(
@@ -395,14 +392,14 @@ class CalendarFragment : Fragment() {
             result
         }
 
-    private var selectedJdn = getTodayJdn()
+    private var selectedJdn = Jdn.today.value
 
     private fun bringDate(jdn: Long, highlight: Boolean = true, monthChange: Boolean = true) {
         selectedJdn = jdn
 
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange)
 
-        val isToday = getTodayJdn() == jdn
+        val isToday = Jdn.today.value == jdn
 
         // Show/Hide bring today menu button
         todayButton?.isVisible = !isToday
@@ -557,7 +554,7 @@ class CalendarFragment : Fragment() {
         todayButton = menu.findItem(R.id.today_button).also {
             it.isVisible = false
             it.setOnMenuItemClickListener {
-                bringDate(getTodayJdn(), highlight = false)
+                bringDate(Jdn.today.value, highlight = false)
                 true
             }
         }
@@ -583,16 +580,16 @@ class CalendarFragment : Fragment() {
                     searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
                         val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                         val type = getCalendarTypeFromDate(date)
-                        val today = getTodayOfCalendar(type)
+                        val today = Jdn.today.toCalendar(type)
                         bringDate(
-                            getDateOfCalendar(
+                            Jdn.fromDate(
                                 calendar = type,
                                 year = if (date.year == -1)
                                     (today.year + if (date.month < today.month) 1 else 0)
                                 else date.year,
                                 month = date.month,
                                 day = date.dayOfMonth
-                            ).toJdn()
+                            ).value
                         )
                         searchView.onActionViewCollapsed()
                     }
@@ -608,7 +605,7 @@ class CalendarFragment : Fragment() {
 
     private fun openMonthOverView() {
         MonthOverviewDialog
-            .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: getTodayJdn())
+            .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: Jdn.today.value)
             .show(childFragmentManager, MonthOverviewDialog::class.java.name)
     }
 }

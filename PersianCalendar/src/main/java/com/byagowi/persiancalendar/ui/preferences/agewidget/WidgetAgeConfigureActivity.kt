@@ -25,7 +25,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         appPrefs.edit {
             if (selectedJdn == -1L) {
                 // Put today's jdn if nothing was set
-                putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, getTodayJdn())
+                putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today.value)
             }
             putString(PREF_TITLE_AGE_WIDGET + appWidgetId, title)
         }
