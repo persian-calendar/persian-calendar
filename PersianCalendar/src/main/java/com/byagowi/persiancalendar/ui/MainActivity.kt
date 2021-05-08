@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
             .seasonImage.setImageResource(run {
-                var season = (Jdn.today.toCalendar(CalendarType.SHAMSI).month - 1) / 3
+                var season = (Jdn.today.toPersianCalendar().month - 1) / 3
 
                 // Southern hemisphere
                 if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         creationDateJdn = Jdn.today.value
 
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-            Jdn.today.toCalendar(CalendarType.SHAMSI).year > supportedYearOfIranCalendar
+            Jdn.today.toPersianCalendar().year > supportedYearOfIranCalendar
         ) showAppIsOutDatedSnackbar()
 
         applyAppLanguage(this)

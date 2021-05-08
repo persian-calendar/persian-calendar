@@ -23,17 +23,20 @@ value class Jdn(val value: Long) {
         get() = ((value + 2L) % 7L).toInt()
 
     fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
-        CalendarType.ISLAMIC -> IslamicDate(value)
-        CalendarType.GREGORIAN -> CivilDate(value)
-        CalendarType.SHAMSI -> PersianDate(value)
+        CalendarType.ISLAMIC -> toIslamicCalendar()
+        CalendarType.GREGORIAN -> toGregorianCalendar()
+        CalendarType.SHAMSI -> toPersianCalendar()
     }
+    fun toIslamicCalendar() = IslamicDate(value)
+    fun toGregorianCalendar() = CivilDate(value)
+    fun toPersianCalendar() = PersianDate(value)
 
     fun getWeekOfYear(startOfYear: Jdn): Int {
         val dayOfYear = this - startOfYear
         return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(dayOfWeek)) / 7.0).toInt()
     }
 
-    fun createMonthDaysRange(monthLength: Int) = value until value + monthLength
+    fun createMonthDaysList(monthLength: Int) = (value until value + monthLength).map(::Jdn)
 
     operator fun plus(other: Int): Jdn = Jdn(value + other)
     operator fun minus(other: Int): Jdn = Jdn(value - other)

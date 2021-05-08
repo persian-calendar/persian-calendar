@@ -228,8 +228,8 @@ class CalendarFragment : Fragment() {
         }
 
         binding.calendarPager.also {
-            it.onDayClicked = fun(jdn: Long) { bringDate(jdn, monthChange = false) }
-            it.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(jdn) }
+            it.onDayClicked = fun(jdn: Long) { bringDate(Jdn(jdn), monthChange = false) }
+            it.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(Jdn(jdn)) }
             it.onMonthSelected = fun() {
                 it.selectedMonth.let { date ->
                     updateToolbar(getMonthName(date), formatNumber(date.year))
@@ -265,7 +265,7 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bringDate(Jdn.today.value, monthChange = false, highlight = false)
+        bringDate(Jdn.today, monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let {
             (activity as? DrawerHost)
@@ -274,8 +274,8 @@ class CalendarFragment : Fragment() {
             setupToolbarMenu(it.toolbar.menu)
             it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
                 when (clickedMenuItem?.itemId) {
-                    R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) }
-                    R.id.add_event -> addEventOnCalendar(selectedJdn)
+                    R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(Jdn(jdn)) }
+                    R.id.add_event -> addEventOnCalendar(Jdn(selectedJdn))
                     R.id.shift_work -> openShiftWorkDialog()
                     R.id.month_overview -> openMonthOverView()
                 }
@@ -290,11 +290,11 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun addEventOnCalendar(jdn: Long) {
+    private fun addEventOnCalendar(jdn: Jdn) {
         val activity = activity ?: return
-        val civil = CivilDate(jdn)
+        val gregorian = jdn.toGregorianCalendar()
         val time = Calendar.getInstance()
-        time.set(civil.year, civil.month - 1, civil.dayOfMonth)
+        time.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
         if (ActivityCompat.checkSelfPermission(
                 activity, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
@@ -305,7 +305,7 @@ class CalendarFragment : Fragment() {
                         .setData(CalendarContract.Events.CONTENT_URI)
                         .putExtra(
                             CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                Jdn(jdn).toCalendar(mainCalendar)
+                                jdn.toCalendar(mainCalendar)
                             )
                         )
                         .putExtra(
@@ -394,12 +394,12 @@ class CalendarFragment : Fragment() {
 
     private var selectedJdn = Jdn.today.value
 
-    private fun bringDate(jdn: Long, highlight: Boolean = true, monthChange: Boolean = true) {
-        selectedJdn = jdn
+    private fun bringDate(jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true) {
+        selectedJdn = jdn.value
 
-        mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange)
+        mainBinding?.calendarPager?.setSelectedDay(jdn.value, highlight, monthChange)
 
-        val isToday = Jdn.today.value == jdn
+        val isToday = Jdn.today == jdn
 
         // Show/Hide bring today menu button
         todayButton?.isVisible = !isToday
@@ -420,15 +420,12 @@ class CalendarFragment : Fragment() {
         ).show()
     }
 
-    private fun showEvent(jdn: Long) {
+    private fun showEvent(jdn: Jdn) {
         val activity = activity ?: return
         val eventsBinding = eventsBinding ?: return
 
         eventsBinding.shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
-        val events = getEvents(
-            jdn,
-            readDayDeviceEvents(activity, jdn)
-        )
+        val events = getEvents(jdn, readDayDeviceEvents(activity, jdn))
         val holidays = getEventsTitle(
             events,
             holiday = true,
@@ -528,19 +525,19 @@ class CalendarFragment : Fragment() {
         eventsBinding.root.contentDescription = contentDescription
     }
 
-    private fun setOwghat(jdn: Long, isToday: Boolean) {
+    private fun setOwghat(jdn: Jdn, isToday: Boolean) {
         val coordinate = coordinate ?: return
         val owghatBinding = owghatBinding ?: return
 
         val prayTimes = PrayTimesCalculator.calculate(
-            calculationMethod, CivilDate(jdn).toCalendar().time, coordinate
+            calculationMethod, jdn.toGregorianCalendar().toCalendar().time, coordinate
         )
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->
             sunView.visibility = if (isToday) {
                 sunView.setSunriseSunsetMoonPhase(prayTimes, runCatching {
                     SunMoonPosition(
-                        jdn.toDouble(), coordinate.latitude, coordinate.longitude,
+                        jdn.value.toDouble(), coordinate.latitude, coordinate.longitude,
                         coordinate.elevation, 0.0
                     ).moonPhase
                 }.onFailure(logException).getOrNull() ?: 1.0)
@@ -554,7 +551,7 @@ class CalendarFragment : Fragment() {
         todayButton = menu.findItem(R.id.today_button).also {
             it.isVisible = false
             it.setOnMenuItemClickListener {
-                bringDate(Jdn.today.value, highlight = false)
+                bringDate(Jdn.today, highlight = false)
                 true
             }
         }
@@ -586,7 +583,7 @@ class CalendarFragment : Fragment() {
                                 type, if (date.year == -1)
                                     (today.year + if (date.month < today.month) 1 else 0)
                                 else date.year, date.month, date.dayOfMonth
-                            ).value
+                            )
                         )
                         searchView.onActionViewCollapsed()
                     }

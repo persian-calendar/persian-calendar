@@ -36,7 +36,7 @@ private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyEventsStore()
 
 fun setDeviceCalendarEvents(context: Context): Unit = runCatching {
-    deviceCalendarEvents = readDayDeviceEvents(context, -1)
+    deviceCalendarEvents = readDayDeviceEvents(context, Jdn(-1))
 }.getOrElse(logException)
 
 var latestFiredUpdate = 0L
@@ -51,8 +51,8 @@ fun update(context: Context, updateDate: Boolean) {
 
     logDebug("UpdateUtils", "update")
     applyAppLanguage(context)
-    val date = Jdn.today.toCalendar(mainCalendar)
-    val jdn = date.toJdn()
+    val jdn = Jdn.today
+    val date = jdn.toCalendar(mainCalendar)
 
     val launchAppPendingIntent = PendingIntent.getActivity(
         context, 0,
@@ -271,10 +271,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             if (showOtherCalendars) {
                 text2 = text2 + "\n" + subtitle + "\n" + getZodiacInfo(
-                    context,
-                    jdn,
-                    withEmoji = true,
-                    short = false
+                    context, jdn, withEmoji = true, short = false
                 )
             }
             setTextViewText(R.id.date_2x2, text2)

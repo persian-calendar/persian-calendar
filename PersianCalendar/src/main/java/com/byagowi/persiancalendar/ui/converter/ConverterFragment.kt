@@ -37,7 +37,7 @@ class ConverterFragment : Fragment() {
                     binding.calendarsView.visibility = View.VISIBLE
                     val selectedCalendarType = binding.dayPickerView.selectedCalendarType
                     binding.calendarsView.showCalendars(
-                        jdn, selectedCalendarType,
+                        Jdn(jdn), selectedCalendarType,
                         getOrderedCalendarTypes() - selectedCalendarType
                     )
                 }

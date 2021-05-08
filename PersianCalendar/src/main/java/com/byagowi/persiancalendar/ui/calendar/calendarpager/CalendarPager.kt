@@ -166,7 +166,7 @@ class CalendarPager @JvmOverloads constructor(
                     weekOfYearStart = baseJdn.getWeekOfYear(startOfYearJdn)
                     weeksCount = (baseJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
                             weekOfYearStart + 1
-                    days = baseJdn.createMonthDaysRange(monthLength).toList()
+                    days = baseJdn.createMonthDaysList(monthLength)
                     initializeMonthEvents()
                     notifyItemRangeChanged(0, daysAdapter.itemCount)
                 }

@@ -35,10 +35,10 @@ fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
     (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
             persianDate.month).toInt() % 12 == 8
 
-fun getZodiacInfo(context: Context, jdn: Long, withEmoji: Boolean, short: Boolean) =
+fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean) =
     if (isAstronomicalFeaturesEnabled) {
-        val persianDate = PersianDate(jdn)
-        val islamicDate = IslamicDate(jdn)
+        val persianDate = jdn.toPersianCalendar()
+        val islamicDate = jdn.toIslamicCalendar()
         val moonInScorpioText = if (isMoonInScorpio(persianDate, islamicDate))
             context.getString(R.string.moonInScorpio)
         else ""

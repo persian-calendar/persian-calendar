@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.edit
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -47,7 +48,7 @@ internal fun updateAgeWidget(
     val views = RemoteViews(context.packageName, R.layout.widget_age)
     views.setTextViewText(
         R.id.textview_age_widget,
-        calculateDaysDifference(jdn, context.getString(R.string.age_widget_placeholder))
+        calculateDaysDifference(Jdn(jdn), context.getString(R.string.age_widget_placeholder))
     )
     val textColor = sharedPreferences.getString(
         PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,

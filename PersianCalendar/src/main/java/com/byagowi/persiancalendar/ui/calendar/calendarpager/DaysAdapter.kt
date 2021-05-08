@@ -14,7 +14,7 @@ class DaysAdapter internal constructor(
     private val selectableItemBackground: Int
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
-    var days = emptyList<Long>()
+    var days = emptyList<Jdn>()
     var startingDayOfWeek: Int = 0
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0
@@ -59,7 +59,7 @@ class DaysAdapter internal constructor(
     // days of week * month view rows
     override fun getItemCount(): Int = 7 * if (isShowWeekOfYearEnabled) 8 else 7
 
-    val todayJdn = Jdn.today.value
+    val todayJdn = Jdn.today
 
     inner class ViewHolder(itemView: DayView) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener, View.OnLongClickListener {
@@ -148,7 +148,7 @@ class DaysAdapter internal constructor(
                         originalPosition == selectedDay,
                         events.isNotEmpty(),
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
-                        isWeekEnd(((startingDayOfWeek + day - days[0]) % 7).toInt()) || events.any { it.isHoliday },
+                        isWeekEnd((day + startingDayOfWeek - days[0]) % 7) || events.any { it.isHoliday },
                         if (isArabicDigit) arabicDigitsTextSize else persianDigitsTextSize,
                         day, dayOfMonth, getShiftWorkTitle(day, true)
                     )

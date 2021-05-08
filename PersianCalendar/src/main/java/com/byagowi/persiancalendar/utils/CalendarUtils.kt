@@ -18,7 +18,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.ceil
 
 fun isWeekEnd(dayOfWeek: Int) = weekEnds[dayOfWeek]
 
@@ -53,7 +52,7 @@ fun monthsNamesOfCalendar(date: AbstractDate): List<String> = when (date) {
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(
-    context: Context, jdn: Long, isToday: Boolean,
+    context: Context, jdn: Jdn, isToday: Boolean,
     deviceCalendarEvents: DeviceCalendarEventsStore,
     withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
 ): String {
@@ -67,7 +66,7 @@ fun getA11yDaySummary(
             .append("\n")
     }
 
-    val mainDate = Jdn(jdn).toCalendar(mainCalendar)
+    val mainDate = jdn.toCalendar(mainCalendar)
 
     if (withTitle) {
         result.append("\n")
@@ -122,7 +121,7 @@ fun getA11yDaySummary(
 
     if (isShowWeekOfYearEnabled) {
         val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
-        val weekOfYearStart = Jdn(jdn).getWeekOfYear(startOfYearJdn)
+        val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn)
         result.append("\n\n")
             .append(
                 context.getString(R.string.nth_week_of_year).format(formatNumber(weekOfYearStart))
@@ -139,16 +138,16 @@ fun getA11yDaySummary(
     return result.toString()
 }
 
-fun getEvents(jdn: Long, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
+fun getEvents(jdn: Jdn, deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
     ArrayList<CalendarEvent<*>>().apply {
-        addAll(persianCalendarEvents.getEvents(PersianDate(jdn)))
-        val islamic = IslamicDate(jdn)
+        addAll(persianCalendarEvents.getEvents(jdn.toPersianCalendar()))
+        val islamic = jdn.toIslamicCalendar()
         addAll(islamicCalendarEvents.getEvents(islamic))
         // Special case Islamic events happening in 30th day but the month has only 29 days
         if (islamic.dayOfMonth == 29 &&
             getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
         ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
-        val civil = CivilDate(jdn)
+        val civil = jdn.toGregorianCalendar()
         addAll(deviceCalendarEvents.getEvents(civil)) // Passed by caller
         addAll(gregorianCalendarEvents.getEvents(civil))
     }
@@ -225,12 +224,12 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun readDayDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
-    ctx, CivilDate(jdn.takeIf { it != -1L } ?: Jdn.today.value).toCalendar(), DAY_IN_MILLIS
+fun readDayDeviceEvents(ctx: Context, jdn: Jdn) = readDeviceEvents(
+    ctx, CivilDate(jdn.value.takeIf { it != -1L } ?: Jdn.today.value).toCalendar(), DAY_IN_MILLIS
 ).toEventsStore()
 
-fun readMonthDeviceEvents(ctx: Context, jdn: Long) = readDeviceEvents(
-    ctx, CivilDate(jdn).toCalendar(), 32L * DAY_IN_MILLIS
+fun readMonthDeviceEvents(ctx: Context, jdn: Jdn) = readDeviceEvents(
+    ctx, jdn.toGregorianCalendar().toCalendar(), 32L * DAY_IN_MILLIS
 ).toEventsStore()
 
 fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
@@ -279,8 +278,8 @@ fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
     return nextMonthStartingDay - thisMonthStartingDay
 }
 
-fun calculateDaysDifference(jdn: Long, messageToFormat: String): String {
-    val selectedDayAbsoluteDistance = abs(Jdn.today.value - jdn)
+fun calculateDaysDifference(jdn: Jdn, messageToFormat: String): String {
+    val selectedDayAbsoluteDistance = abs(Jdn.today - jdn)
     val civilBase = CivilDate(2000, 1, 1)
     val civilOffset = CivilDate(civilBase.toJdn() + selectedDayAbsoluteDistance)
     val yearDiff = civilOffset.year - 2000

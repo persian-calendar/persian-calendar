@@ -23,7 +23,7 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
     private val calendarFont = getCalendarFragmentFont(context)
     private var bindings = emptyList<CalendarItemBinding>()
 
-    fun update(calendarsToShow: List<CalendarType>, jdn: Long) {
+    fun update(calendarsToShow: List<CalendarType>, jdn: Jdn) {
         // It implicitly expects the number of calendarsToShow items to not be changed during
         // the view lifecycle
         if (bindings.isEmpty()) {
@@ -39,7 +39,7 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
             })
         }
         bindings.zip(calendarsToShow) { binding, calendarType ->
-            val date = Jdn(jdn).toCalendar(calendarType)
+            val date = jdn.toCalendar(calendarType)
             val firstCalendarString = formatDate(date)
             binding.linear.text = toLinearDate(date)
             binding.linear.contentDescription = toLinearDate(date)

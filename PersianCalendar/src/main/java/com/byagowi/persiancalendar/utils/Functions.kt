@@ -424,8 +424,8 @@ fun copyToClipboard(
         Snackbar.make(view, textToShow, Snackbar.LENGTH_SHORT).show()
 }.onFailure(logException).getOrNull().debugAssertNotNull ?: Unit
 
-fun dateStringOfOtherCalendars(jdn: Long, separator: String) =
-    otherCalendars.joinToString(separator) { formatDate(Jdn(jdn).toCalendar(it)) }
+fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
+    otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
 
 private fun calculateDiffToChangeDate(): Long = Calendar.getInstance().apply {
     set(Calendar.HOUR_OF_DAY, 0)
@@ -480,11 +480,11 @@ fun startEitherServiceOrWorker(context: Context) {
     }
 }
 
-fun getShiftWorkTitle(jdn: Long, abbreviated: Boolean): String {
-    if (shiftWorkStartingJdn == -1L || jdn < shiftWorkStartingJdn || shiftWorkPeriod == 0)
+fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
+    if (shiftWorkStartingJdn == -1L || jdn.value < shiftWorkStartingJdn || shiftWorkPeriod == 0)
         return ""
 
-    val passedDays = jdn - shiftWorkStartingJdn
+    val passedDays = jdn.value - shiftWorkStartingJdn
     if (!shiftWorkRecurs && passedDays >= shiftWorkPeriod) return ""
 
     val dayInPeriod = (passedDays % shiftWorkPeriod).toInt()

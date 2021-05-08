@@ -9,6 +9,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.appTheme
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
@@ -191,10 +192,10 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     fun setDayOfMonthItem(
         isToday: Boolean, isSelected: Boolean,
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        textSize: Int, jdn: Long, dayOfMonth: Int, header: String
+        textSize: Int, jdn: Jdn, dayOfMonth: Int, header: String
     ) = setAll(
         formatNumber(dayOfMonth), isToday, isSelected, hasEvent, hasAppointment,
-        isHoliday, textSize, jdn, dayOfMonth, true, header
+        isHoliday, textSize, jdn.value, dayOfMonth, true, header
     )
 
     fun setNonDayOfMonthItem(text: String, textSize: Int) = setAll(

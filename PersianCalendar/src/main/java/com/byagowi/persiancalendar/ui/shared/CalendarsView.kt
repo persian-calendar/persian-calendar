@@ -61,22 +61,22 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     fun showCalendars(
-        jdn: Long, chosenCalendarType: CalendarType, calendarsToShow: List<CalendarType>
+        jdn: Jdn, chosenCalendarType: CalendarType, calendarsToShow: List<CalendarType>
     ) {
         val context = context ?: return
 
         binding.calendarsFlow.update(calendarsToShow, jdn)
-        binding.weekDayName.text = getWeekDayName(CivilDate(jdn))
+        binding.weekDayName.text = getWeekDayName(jdn.toGregorianCalendar())
 
         binding.zodiac.also {
             it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
             it.visibility = if (it.text.isEmpty()) View.GONE else View.VISIBLE
         }
 
-        val isToday = Jdn.today.value == jdn
+        val isToday = Jdn.today == jdn
         if (isToday) {
             if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
-                getWeekDayName(CivilDate(jdn)),
+                getWeekDayName(jdn.toGregorianCalendar()),
                 context.getString(R.string.iran_time)
             )
             binding.diffDate.visibility = View.GONE
@@ -88,19 +88,19 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             }
         }
 
-        val mainDate = Jdn(jdn).toCalendar(chosenCalendarType)
+        val mainDate = jdn.toCalendar(chosenCalendarType)
         val startOfYearJdn = Jdn(chosenCalendarType, mainDate.year, 1, 1)
         val endOfYearJdn = Jdn(chosenCalendarType, mainDate.year + 1, 1, 1) - 1
-        val currentWeek = Jdn(jdn).getWeekOfYear(startOfYearJdn)
+        val currentWeek = jdn.getWeekOfYear(startOfYearJdn)
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
 
         val startOfYearText = context.getString(R.string.start_of_year_diff).format(
-            formatNumber(Jdn(jdn) - startOfYearJdn + 1),
+            formatNumber(jdn - startOfYearJdn + 1),
             formatNumber(currentWeek),
             formatNumber(mainDate.month)
         )
         val endOfYearText = context.getString(R.string.end_of_year_diff).format(
-            formatNumber(endOfYearJdn - Jdn(jdn)),
+            formatNumber(endOfYearJdn - jdn),
             formatNumber(weeksCount - currentWeek),
             formatNumber(12 - mainDate.month)
         )

@@ -29,11 +29,10 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
-        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: Jdn.today.value
-        val date = Jdn(baseJdn).toCalendar(mainCalendar)
+        val baseJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
+        val date = baseJdn.toCalendar(mainCalendar)
         val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
-        val monthLength = getMonthLength(mainCalendar, date.year, date.month).toLong()
-        val events = (0 until monthLength).mapNotNull {
+        val events = (0 until getMonthLength(mainCalendar, date.year, date.month)).mapNotNull {
             val jdn = baseJdn + it
             val events = getEvents(jdn, deviceEvents)
             val holidays = getEventsTitle(
@@ -46,7 +45,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
             )
             if (holidays.isEmpty() && nonHolidays.isEmpty()) null
             else MonthOverviewRecord(
-                dayTitleSummary(Jdn(jdn).toCalendar(mainCalendar)), holidays, nonHolidays
+                dayTitleSummary(jdn.toCalendar(mainCalendar)), holidays, nonHolidays
             )
         }.takeIf { it.isNotEmpty() } ?: listOf(
             MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
