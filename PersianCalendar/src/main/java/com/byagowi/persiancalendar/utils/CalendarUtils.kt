@@ -18,6 +18,7 @@ import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.ceil
 
 fun isWeekEnd(dayOfWeek: Int) = weekEnds[dayOfWeek]
 
@@ -135,20 +136,6 @@ fun getA11yDaySummary(
 
     return result.toString()
 }
-
-fun Jdn.getEvents(deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
-    ArrayList<CalendarEvent<*>>().apply {
-        addAll(persianCalendarEvents.getEvents(toPersianCalendar()))
-        val islamic = toIslamicCalendar()
-        addAll(islamicCalendarEvents.getEvents(islamic))
-        // Special case Islamic events happening in 30th day but the month has only 29 days
-        if (islamic.dayOfMonth == 29 &&
-            getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
-        ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
-        val civil = toGregorianCalendar()
-        addAll(deviceCalendarEvents.getEvents(civil)) // Passed by caller
-        addAll(gregorianCalendarEvents.getEvents(civil))
-    }
 
 private fun baseFormatClock(hour: Int, minute: Int): String =
     formatNumber("%d:%02d".format(Locale.ENGLISH, hour, minute))
@@ -292,3 +279,25 @@ fun calculateDaysDifference(jdn: Jdn, messageToFormat: String): String {
     )
     return if (selectedDayAbsoluteDistance <= 31) result.split(" (")[0] else result
 }
+
+fun Jdn.getWeekOfYear(startOfYear: Jdn): Int {
+    val dayOfYear = this - startOfYear
+    return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(dayOfWeek)) / 7.0).toInt()
+}
+
+val Jdn.dayOfWeekName: String
+    get() = weekDays[dayOfWeek]
+
+fun Jdn.getEvents(deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
+    ArrayList<CalendarEvent<*>>().apply {
+        addAll(persianCalendarEvents.getEvents(toPersianCalendar()))
+        val islamic = toIslamicCalendar()
+        addAll(islamicCalendarEvents.getEvents(islamic))
+        // Special case Islamic events happening in 30th day but the month has only 29 days
+        if (islamic.dayOfMonth == 29 &&
+            getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
+        ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
+        val civil = toGregorianCalendar()
+        addAll(deviceCalendarEvents.getEvents(civil)) // Passed by caller
+        addAll(gregorianCalendarEvents.getEvents(civil))
+    }

@@ -12,11 +12,13 @@ import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.calendarToCivilDate
+import com.byagowi.persiancalendar.utils.dayOfWeekName
 import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getSpringEquinox
+import com.byagowi.persiancalendar.utils.getWeekOfYear
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
