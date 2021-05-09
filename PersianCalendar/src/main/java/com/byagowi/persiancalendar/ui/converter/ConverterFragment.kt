@@ -30,11 +30,11 @@ class ConverterFragment : Fragment() {
         binding.dayPickerView.also {
             it.selectedDayListener = fun(jdn) {
                 if (jdn == null) {
-                    binding.calendarsView.visibility = View.GONE
+                    binding.resultCard.visibility = View.GONE
                 } else {
                     if (jdn == todayJdn) binding.todayButton.hide() else binding.todayButton.show()
 
-                    binding.calendarsView.visibility = View.VISIBLE
+                    binding.resultCard.visibility = View.VISIBLE
                     val selectedCalendarType = binding.dayPickerView.selectedCalendarType
                     binding.calendarsView.showCalendars(
                         jdn, selectedCalendarType, getOrderedCalendarTypes() - selectedCalendarType
