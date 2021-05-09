@@ -21,20 +21,20 @@ class CalendarPager @JvmOverloads constructor(
 ) : FrameLayout(context, attrs) {
 
     // Public API
-    var onDayClicked = fun(jdn: Long) {}
-    var onDayLongClicked = fun(jdn: Long) {}
+    var onDayClicked = fun(_: Jdn) {}
+    var onDayLongClicked = fun(_: Jdn) {}
 
     // Selected month is visible current month of the pager, maybe a day is not selected on it yet
     var onMonthSelected = fun() {}
     val selectedMonth: AbstractDate
         get() = getDateFromOffset(mainCalendar, applyOffset(viewPager.currentItem))
 
-    fun setSelectedDay(jdn: Long, highlight: Boolean = true, monthChange: Boolean = true) {
-        selectedJdn = if (highlight) jdn else -1
+    fun setSelectedDay(jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true) {
+        selectedJdn = if (highlight) jdn else Jdn.INVALID
 
         if (monthChange) {
             val today = Jdn.today.toCalendar(mainCalendar)
-            val date = Jdn(jdn).toCalendar(mainCalendar)
+            val date = jdn.toCalendar(mainCalendar)
             viewPager.setCurrentItem(
                 applyOffset((today.year - date.year) * 12 + today.month - date.month), true
             )
@@ -74,7 +74,7 @@ class CalendarPager @JvmOverloads constructor(
     private fun applyOffset(position: Int) = monthsLimit / 2 - position
 
     private val viewPager = ViewPager2(context)
-    private var selectedJdn: Long = -1
+    private var selectedJdn = Jdn.INVALID
 
     init {
         viewPager.adapter = PagerAdapter()
@@ -111,7 +111,7 @@ class CalendarPager @JvmOverloads constructor(
                 binding.root.context, this@CalendarPager, selectableItemBackground
             )
 
-            var refresh = fun(_: Boolean, _: Long) {}
+            var refresh = fun(_: Boolean, _: Jdn) {}
 
             init {
                 val isRTL = isRTL(binding.root.context)
@@ -171,7 +171,7 @@ class CalendarPager @JvmOverloads constructor(
                     notifyItemRangeChanged(0, daysAdapter.itemCount)
                 }
 
-                refresh = fun(isEventsModification: Boolean, jdn: Long) {
+                refresh = fun(isEventsModification: Boolean, jdn: Jdn) {
                     if (viewPager.currentItem == position) {
                         if (isEventsModification) {
                             daysAdapter.initializeMonthEvents()
@@ -180,10 +180,10 @@ class CalendarPager @JvmOverloads constructor(
                             onMonthSelected()
                         }
 
-                        val selectedDay = 1 + jdn - baseJdn.value
+                        val selectedDay = jdn - baseJdn + 1
                         daysAdapter.selectDay(
-                            if (jdn != -1L && jdn >= baseJdn.value && selectedDay <= monthLength)
-                                selectedDay.toInt()
+                            if (jdn != Jdn.INVALID && jdn >= baseJdn && selectedDay <= monthLength)
+                                selectedDay
                             else -1
                         )
                     } else daysAdapter.selectDay(-1)

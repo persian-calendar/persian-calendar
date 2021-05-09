@@ -41,20 +41,17 @@ import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 class ShiftWorkDialog : AppCompatDialogFragment() {
 
-    private var jdn: Long = -1L
-    private var selectedJdn: Long = -1L
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
         applyAppLanguage(activity)
         updateStoredPreference(activity)
 
-        selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L } ?: Jdn.today.value
+        val selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
 
-        jdn = shiftWorkStartingJdn
+        var jdn = Jdn(shiftWorkStartingJdn)
         var isFirstSetup = false
-        if (jdn == -1L) {
+        if (jdn == Jdn.INVALID) {
             isFirstSetup = true
             jdn = selectedJdn
         }
@@ -70,12 +67,12 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         binding.description.text = getString(
             if (isFirstSetup) R.string.shift_work_starting_date
             else R.string.shift_work_starting_date_edit
-        ).format(formatDate(Jdn(jdn).toCalendar(mainCalendar)))
+        ).format(formatDate(jdn.toCalendar(mainCalendar)))
 
         binding.resetLink.setOnClickListener {
             jdn = selectedJdn
             binding.description.text = getString(R.string.shift_work_starting_date)
-                .format(formatDate(Jdn(jdn).toCalendar(mainCalendar)))
+                .format(formatDate(jdn.toCalendar(mainCalendar)))
             shiftWorkItemAdapter.reset()
         }
         binding.recurs.isChecked = shiftWorkRecurs
@@ -89,7 +86,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                 }
 
                 activity.appPrefs.edit {
-                    putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn)
+                    putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn.value)
                     putString(PREF_SHIFT_WORK_SETTING, result)
                     putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
                 }
@@ -255,8 +252,8 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
     companion object {
         private const val BUNDLE_KEY = "jdn"
 
-        fun newInstance(jdn: Long) = ShiftWorkDialog().apply {
-            arguments = bundleOf(BUNDLE_KEY to jdn)
+        fun newInstance(jdn: Jdn) = ShiftWorkDialog().apply {
+            arguments = bundleOf(BUNDLE_KEY to jdn.value)
         }
     }
 }

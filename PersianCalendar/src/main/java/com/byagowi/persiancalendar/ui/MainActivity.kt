@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener,
     DrawerHost {
 
-    private var creationDateJdn: Long = 0
+    private var creationDateJdn = Jdn.INVALID
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
 
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
         }
 
-        creationDateJdn = Jdn.today.value
+        creationDateJdn = Jdn.today
 
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
             Jdn.today.toPersianCalendar().year > supportedYearOfIranCalendar
@@ -347,8 +347,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
-        if (creationDateJdn != Jdn.today.value) {
-            creationDateJdn = Jdn.today.value
+        if (creationDateJdn != Jdn.today) {
+            creationDateJdn = Jdn.today
             val navController = obtainNavHost().navController
             if (navController.currentDestination?.id == R.id.calendar) {
                 navController.navigate(CalendarFragmentDirections.navigateToSelf())

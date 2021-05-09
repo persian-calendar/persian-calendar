@@ -23,13 +23,13 @@ class ConverterFragment : Fragment() {
         binding.calendarsView.toggle()
         binding.calendarsView.hideMoreIcon()
 
-        val todayJdn = Jdn.today.value
+        val todayJdn = Jdn.today
 
         binding.todayButton.setOnClickListener { binding.dayPickerView.jdn = todayJdn }
 
         binding.dayPickerView.also {
             it.selectedDayListener = fun(jdn) {
-                if (jdn == -1L) {
+                if (jdn == Jdn.INVALID) {
                     binding.calendarsView.visibility = View.GONE
                 } else {
                     if (jdn == todayJdn) binding.todayButton.hide() else binding.todayButton.show()
@@ -37,12 +37,11 @@ class ConverterFragment : Fragment() {
                     binding.calendarsView.visibility = View.VISIBLE
                     val selectedCalendarType = binding.dayPickerView.selectedCalendarType
                     binding.calendarsView.showCalendars(
-                        Jdn(jdn), selectedCalendarType,
-                        getOrderedCalendarTypes() - selectedCalendarType
+                        jdn, selectedCalendarType, getOrderedCalendarTypes() - selectedCalendarType
                     )
                 }
             }
-            it.jdn = Jdn.today.value
+            it.jdn = Jdn.today
             it.anchorView = binding.todayButton
         }
     }.root

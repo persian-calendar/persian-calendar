@@ -114,8 +114,8 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     companion object {
         private const val BUNDLE_KEY = "jdn"
 
-        fun newInstance(jdn: Long) = MonthOverviewDialog().apply {
-            arguments = bundleOf(BUNDLE_KEY to jdn)
+        fun newInstance(jdn: Jdn) = MonthOverviewDialog().apply {
+            arguments = bundleOf(BUNDLE_KEY to jdn.value)
         }
     }
 }

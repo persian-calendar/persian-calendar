@@ -110,7 +110,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         if (mainCalendar == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
             if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                 val addition = if (mainDate.month == 12) 1 else 0
-                val springEquinox = getSpringEquinox(mainDate.toJdn())
+                val springEquinox = getSpringEquinox(jdn)
                 equinox = context.getString(R.string.spring_equinox).format(
                     formatNumber(mainDate.year + addition),
                     Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])

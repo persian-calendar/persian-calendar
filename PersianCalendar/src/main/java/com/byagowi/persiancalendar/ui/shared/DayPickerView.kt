@@ -23,9 +23,9 @@ import com.google.android.material.snackbar.Snackbar
 class DayPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
 
-    private var mJdn: Long = -1
+    private var mJdn: Jdn = Jdn.INVALID
 
-    var selectedDayListener = fun(_: Long) {}
+    var selectedDayListener = fun(_: Jdn) {}
 
     var selectedCalendarType: CalendarType = CalendarType.SHAMSI
 
@@ -54,7 +54,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
         binding.dayPicker.setOnValueChangedListener(onDaySelected)
     }
 
-    var jdn: Long
+    var jdn: Jdn
         get() {
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
@@ -63,12 +63,12 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                 Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT)
                     .setAnchorView(anchorView)
                     .show()
-                -1
-            } else Jdn(selectedCalendarType, year, month, day).value
+                Jdn.INVALID
+            } else Jdn(selectedCalendarType, year, month, day)
         }
         set(value) {
-            mJdn = value.takeIf { it != -1L } ?: Jdn.today.value
-            val date = Jdn(mJdn).toCalendar(selectedCalendarType)
+            mJdn = value.takeIf { it != Jdn.INVALID } ?: Jdn.today
+            val date = mJdn.toCalendar(selectedCalendarType)
             binding.yearPicker.also {
                 it.minValue = date.year - 100
                 it.maxValue = date.year + 100

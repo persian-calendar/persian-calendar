@@ -35,6 +35,7 @@ value class Jdn(val value: Long) {
 
     fun createMonthDaysList(monthLength: Int) = (value until value + monthLength).map(::Jdn)
 
+    operator fun compareTo(other: Jdn) = value.compareTo(other.value)
     operator fun plus(other: Int): Jdn = Jdn(value + other)
     operator fun minus(other: Int): Jdn = Jdn(value - other)
 
@@ -44,5 +45,8 @@ value class Jdn(val value: Long) {
     companion object {
         val today: Jdn
             get() = Jdn(calendarToCivilDate(makeCalendarFromDate(Date())).toJdn())
+
+        // To be replaced with null
+        val INVALID = Jdn(-1)
     }
 }

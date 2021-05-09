@@ -227,8 +227,8 @@ class CalendarFragment : Fragment() {
         }
 
         binding.calendarPager.also {
-            it.onDayClicked = fun(jdn: Long) { bringDate(Jdn(jdn), monthChange = false) }
-            it.onDayLongClicked = fun(jdn: Long) { addEventOnCalendar(Jdn(jdn)) }
+            it.onDayClicked = fun(jdn: Jdn) { bringDate(jdn, monthChange = false) }
+            it.onDayLongClicked = fun(jdn: Jdn) { addEventOnCalendar(jdn) }
             it.onMonthSelected = fun() {
                 it.selectedMonth.let { date ->
                     updateToolbar(getMonthName(date), formatNumber(date.year))
@@ -273,8 +273,8 @@ class CalendarFragment : Fragment() {
             setupToolbarMenu(it.toolbar.menu)
             it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
                 when (clickedMenuItem?.itemId) {
-                    R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(Jdn(jdn)) }
-                    R.id.add_event -> addEventOnCalendar(Jdn(selectedJdn))
+                    R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) }
+                    R.id.add_event -> addEventOnCalendar(selectedJdn)
                     R.id.shift_work -> openShiftWorkDialog()
                     R.id.month_overview -> openMonthOverView()
                 }
@@ -391,12 +391,12 @@ class CalendarFragment : Fragment() {
             result
         }
 
-    private var selectedJdn = Jdn.today.value
+    private var selectedJdn = Jdn.today
 
     private fun bringDate(jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true) {
-        selectedJdn = jdn.value
+        selectedJdn = jdn
 
-        mainBinding?.calendarPager?.setSelectedDay(jdn.value, highlight, monthChange)
+        mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange)
 
         val isToday = Jdn.today == jdn
 
@@ -598,7 +598,7 @@ class CalendarFragment : Fragment() {
 
     private fun openMonthOverView() {
         MonthOverviewDialog
-            .newInstance(mainBinding?.calendarPager?.selectedMonth?.toJdn() ?: Jdn.today.value)
+            .newInstance(mainBinding?.calendarPager?.selectedMonth?.let(::Jdn) ?: Jdn.today)
             .show(childFragmentManager, MonthOverviewDialog::class.java.name)
     }
 }

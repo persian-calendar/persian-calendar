@@ -10,19 +10,19 @@ import com.byagowi.persiancalendar.utils.appPrefs
 
 // Only one use but to match with showColorPickerDialog
 fun Fragment.showDayPickerDialog(key: String): Boolean {
-    val todayJdn = Jdn.today.value
-    val jdn = activity?.appPrefs?.getLong(key, todayJdn) ?: todayJdn
-    showDayPickerDialog(jdn) { jdnResult -> activity?.appPrefs?.edit { putLong(key, jdnResult) } }
+    val todayJdn = Jdn.today
+    val jdn = activity?.appPrefs?.getLong(key, todayJdn.value)?.let(::Jdn) ?: todayJdn
+    showDayPickerDialog(jdn) { result -> activity?.appPrefs?.edit { putLong(key, result.value) } }
     return true // Just a convenience result meaning click event is consumed here
 }
 
-fun Fragment.showDayPickerDialog(jdn: Long, onSuccess: (jdn: Long) -> Unit) {
+fun Fragment.showDayPickerDialog(jdn: Jdn, onSuccess: (jdn: Jdn) -> Unit) {
     val activity = activity ?: return
     val dayPickerView = DayPickerView(activity).also { it.jdn = jdn }
     AlertDialog.Builder(activity)
         .setView(dayPickerView)
         .setCustomTitle(null)
         .setPositiveButton(R.string.go) { _, _ ->
-            dayPickerView.jdn.takeIf { it != -1L }?.also(onSuccess)
+            dayPickerView.jdn.takeIf { it != Jdn.INVALID }?.also(onSuccess)
         }.show()
 }

@@ -66,7 +66,7 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var hasAppointment: Boolean = false
     private var holiday: Boolean = false
     private var textSize: Int = 0
-    var jdn: Long = -1
+    var jdn = Jdn.INVALID
         private set
     var dayOfMonth = -1
         private set
@@ -172,7 +172,7 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private fun setAll(
         text: String, isToday: Boolean, isSelected: Boolean,
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        textSize: Int, jdn: Long, dayOfMonth: Int, isNumber: Boolean,
+        textSize: Int, jdn: Jdn, dayOfMonth: Int, isNumber: Boolean,
         header: String
     ) {
         this.text = text
@@ -195,12 +195,12 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         textSize: Int, jdn: Jdn, dayOfMonth: Int, header: String
     ) = setAll(
         formatNumber(dayOfMonth), isToday, isSelected, hasEvent, hasAppointment,
-        isHoliday, textSize, jdn.value, dayOfMonth, true, header
+        isHoliday, textSize, jdn, dayOfMonth, true, header
     )
 
     fun setNonDayOfMonthItem(text: String, textSize: Int) = setAll(
         text, isToday = false, isSelected = false, hasEvent = false, hasAppointment = false,
-        isHoliday = false, textSize = textSize, jdn = -1, dayOfMonth = -1, isNumber = false,
-        header = ""
+        isHoliday = false, textSize = textSize, jdn = Jdn.INVALID, dayOfMonth = -1,
+        isNumber = false, header = ""
     )
 }

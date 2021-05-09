@@ -337,8 +337,8 @@ fun getCoordinate(context: Context): Coordinate? =
         // If latitude and longitude both are zero probably preference is not set yet
     }
 
-fun getSpringEquinox(jdn: Long) =
-    makeCalendarFromDate(Equinox.northwardEquinox(CivilDate(jdn).year))
+fun getSpringEquinox(jdn: Jdn) =
+    makeCalendarFromDate(Equinox.northwardEquinox(jdn.toGregorianCalendar().year))
 
 @StringRes
 fun getPrayTimeText(athanKey: String?): Int = when (athanKey) {
