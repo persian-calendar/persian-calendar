@@ -36,7 +36,7 @@ private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyEventsStore()
 
 fun setDeviceCalendarEvents(context: Context): Unit = runCatching {
-    deviceCalendarEvents = readDayDeviceEvents(context, Jdn.today)
+    deviceCalendarEvents = Jdn.today.readDayDeviceEvents(context)
 }.getOrElse(logException)
 
 var latestFiredUpdate = 0L

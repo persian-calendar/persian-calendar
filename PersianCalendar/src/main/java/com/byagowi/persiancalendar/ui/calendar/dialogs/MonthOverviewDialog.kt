@@ -32,7 +32,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val baseJdn =
             arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
         val date = baseJdn.toCalendar(mainCalendar)
-        val deviceEvents = readMonthDeviceEvents(activity, baseJdn)
+        val deviceEvents = baseJdn.readMonthDeviceEvents(activity)
         val events = (0 until getMonthLength(mainCalendar, date.year, date.month)).mapNotNull {
             val jdn = baseJdn + it
             val events = jdn.getEvents(deviceEvents)

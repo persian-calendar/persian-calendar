@@ -28,7 +28,7 @@ class DaysAdapter internal constructor(
     private var selectedDay = -1
 
     fun initializeMonthEvents() {
-        if (isShowDeviceCalendarEvents) monthEvents = readMonthDeviceEvents(context, days[0])
+        if (isShowDeviceCalendarEvents) monthEvents = days[0].readMonthDeviceEvents(context)
     }
 
     internal fun selectDay(dayOfMonth: Int) {

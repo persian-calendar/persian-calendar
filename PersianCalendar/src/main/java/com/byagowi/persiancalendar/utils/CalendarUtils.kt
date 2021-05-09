@@ -209,12 +209,12 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun readDayDeviceEvents(ctx: Context, jdn: Jdn) = readDeviceEvents(
-    ctx, CivilDate(jdn.value.takeIf { it != -1L } ?: Jdn.today.value).toCalendar(), DAY_IN_MILLIS
+fun Jdn.readDayDeviceEvents(ctx: Context) = readDeviceEvents(
+    ctx, this.toGregorianCalendar().toCalendar(), DAY_IN_MILLIS
 ).toEventsStore()
 
-fun readMonthDeviceEvents(ctx: Context, jdn: Jdn) = readDeviceEvents(
-    ctx, jdn.toGregorianCalendar().toCalendar(), 32L * DAY_IN_MILLIS
+fun Jdn.readMonthDeviceEvents(ctx: Context) = readDeviceEvents(
+    ctx, this.toGregorianCalendar().toCalendar(), 32L * DAY_IN_MILLIS
 ).toEventsStore()
 
 fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(

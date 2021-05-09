@@ -424,7 +424,7 @@ class CalendarFragment : Fragment() {
         val eventsBinding = eventsBinding ?: return
 
         eventsBinding.shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
-        val events = jdn.getEvents(readDayDeviceEvents(activity, jdn))
+        val events = jdn.getEvents(jdn.readDayDeviceEvents(activity))
         val holidays = getEventsTitle(
             events,
             holiday = true,
