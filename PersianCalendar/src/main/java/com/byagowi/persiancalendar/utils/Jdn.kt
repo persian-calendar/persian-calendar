@@ -45,8 +45,5 @@ value class Jdn(val value: Long) {
     companion object {
         val today: Jdn
             get() = Jdn(calendarToCivilDate(makeCalendarFromDate(Date())).toJdn())
-
-        // To be replaced with null
-        val INVALID = Jdn(-1)
     }
 }

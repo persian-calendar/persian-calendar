@@ -29,7 +29,7 @@ class ConverterFragment : Fragment() {
 
         binding.dayPickerView.also {
             it.selectedDayListener = fun(jdn) {
-                if (jdn == Jdn.INVALID) {
+                if (jdn == null) {
                     binding.calendarsView.visibility = View.GONE
                 } else {
                     if (jdn == todayJdn) binding.todayButton.hide() else binding.todayButton.show()

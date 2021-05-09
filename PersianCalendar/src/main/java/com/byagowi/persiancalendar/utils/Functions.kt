@@ -481,13 +481,14 @@ fun startEitherServiceOrWorker(context: Context) {
 }
 
 fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
-    if (shiftWorkStartingJdn == -1L || jdn.value < shiftWorkStartingJdn || shiftWorkPeriod == 0)
+    val shiftWorkStartingJdn = shiftWorkStartingJdn ?: return ""
+    if (jdn < shiftWorkStartingJdn || shiftWorkPeriod == 0)
         return ""
 
-    val passedDays = jdn.value - shiftWorkStartingJdn
+    val passedDays = jdn - shiftWorkStartingJdn
     if (!shiftWorkRecurs && passedDays >= shiftWorkPeriod) return ""
 
-    val dayInPeriod = (passedDays % shiftWorkPeriod).toInt()
+    val dayInPeriod = passedDays % shiftWorkPeriod
 
     var accumulation = 0
     val type = shiftWorks.firstOrNull {

@@ -44,11 +44,11 @@ internal fun updateAgeWidget(
 
     val sharedPreferences = context.appPrefs
 
-    val jdn = sharedPreferences.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, 0)
+    val jdn = Jdn(sharedPreferences.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, 0))
     val views = RemoteViews(context.packageName, R.layout.widget_age)
     views.setTextViewText(
         R.id.textview_age_widget,
-        calculateDaysDifference(Jdn(jdn), context.getString(R.string.age_widget_placeholder))
+        calculateDaysDifference(jdn, context.getString(R.string.age_widget_placeholder))
     )
     val textColor = sharedPreferences.getString(
         PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId,

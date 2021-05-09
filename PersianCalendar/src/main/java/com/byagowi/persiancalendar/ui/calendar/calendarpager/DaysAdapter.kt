@@ -80,15 +80,14 @@ class DaysAdapter internal constructor(
 
         override fun onClick(v: View) {
             val itemDayView = (v as? DayView).debugAssertNotNull ?: return
-            val jdn = itemDayView.jdn.takeIf { it != Jdn.INVALID } ?: return
+            val jdn = itemDayView.jdn ?: return
             calendarPager.onDayClicked(jdn)
             this@DaysAdapter.selectDay(itemDayView.dayOfMonth)
         }
 
         override fun onLongClick(v: View): Boolean {
             onClick(v)
-            val jdn = (v as? DayView).debugAssertNotNull?.jdn?.takeIf { it != Jdn.INVALID }
-                ?: return false
+            val jdn = (v as? DayView).debugAssertNotNull?.jdn ?: return false
             calendarPager.onDayLongClicked(jdn)
             return false
         }

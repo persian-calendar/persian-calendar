@@ -30,7 +30,7 @@ class CalendarPager @JvmOverloads constructor(
         get() = getDateFromOffset(mainCalendar, applyOffset(viewPager.currentItem))
 
     fun setSelectedDay(jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true) {
-        selectedJdn = if (highlight) jdn else Jdn.INVALID
+        selectedJdn = if (highlight) jdn else null
 
         if (monthChange) {
             val today = Jdn.today.toCalendar(mainCalendar)
@@ -74,7 +74,7 @@ class CalendarPager @JvmOverloads constructor(
     private fun applyOffset(position: Int) = monthsLimit / 2 - position
 
     private val viewPager = ViewPager2(context)
-    private var selectedJdn = Jdn.INVALID
+    private var selectedJdn: Jdn? = null
 
     init {
         viewPager.adapter = PagerAdapter()
@@ -111,7 +111,7 @@ class CalendarPager @JvmOverloads constructor(
                 binding.root.context, this@CalendarPager, selectableItemBackground
             )
 
-            var refresh = fun(_: Boolean, _: Jdn) {}
+            var refresh = fun(_: Boolean, _: Jdn?) {}
 
             init {
                 val isRTL = isRTL(binding.root.context)
@@ -171,19 +171,18 @@ class CalendarPager @JvmOverloads constructor(
                     notifyItemRangeChanged(0, daysAdapter.itemCount)
                 }
 
-                refresh = fun(isEventsModification: Boolean, jdn: Jdn) {
+                refresh = fun(isEventsModification: Boolean, jdn: Jdn?) {
                     if (viewPager.currentItem == position) {
-                        if (isEventsModification) {
+                        if (isEventsModification && jdn != null) {
                             daysAdapter.initializeMonthEvents()
                             onDayClicked(jdn)
                         } else {
                             onMonthSelected()
                         }
 
-                        val selectedDay = jdn - baseJdn + 1
                         daysAdapter.selectDay(
-                            if (jdn != Jdn.INVALID && jdn >= baseJdn && selectedDay <= monthLength)
-                                selectedDay
+                            if (jdn != null && jdn >= baseJdn && jdn - baseJdn + 1 <= monthLength)
+                                jdn - baseJdn + 1
                             else -1
                         )
                     } else daysAdapter.selectDay(-1)

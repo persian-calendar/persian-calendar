@@ -47,13 +47,13 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         applyAppLanguage(activity)
         updateStoredPreference(activity)
 
-        val selectedJdn = arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
+        val selectedJdn =
+            arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
 
-        var jdn = Jdn(shiftWorkStartingJdn)
         var isFirstSetup = false
-        if (jdn == Jdn.INVALID) {
+        var jdn = shiftWorkStartingJdn ?: run {
             isFirstSetup = true
-            jdn = selectedJdn
+            selectedJdn
         }
 
         val binding = ShiftWorkSettingsBinding.inflate(activity.layoutInflater, null, false)

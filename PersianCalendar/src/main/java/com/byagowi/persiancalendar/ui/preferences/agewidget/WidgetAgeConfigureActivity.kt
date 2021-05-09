@@ -22,8 +22,9 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         val context = this@AgeWidgetConfigureActivity
 
         val selectedJdn = appPrefs.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, -1L)
+            .takeIf { it != -1L }?.let(::Jdn)
         appPrefs.edit {
-            if (selectedJdn == -1L) {
+            if (selectedJdn == null) {
                 // Put today's jdn if nothing was set
                 putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today.value)
             }

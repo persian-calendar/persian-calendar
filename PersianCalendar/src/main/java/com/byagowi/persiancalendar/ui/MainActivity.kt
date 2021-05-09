@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener,
     DrawerHost {
 
-    private var creationDateJdn = Jdn.INVALID
+    private var creationDateJdn: Jdn? = null
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
 

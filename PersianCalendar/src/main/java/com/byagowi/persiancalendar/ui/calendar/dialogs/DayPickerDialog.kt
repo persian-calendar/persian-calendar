@@ -23,6 +23,6 @@ fun Fragment.showDayPickerDialog(jdn: Jdn, onSuccess: (jdn: Jdn) -> Unit) {
         .setView(dayPickerView)
         .setCustomTitle(null)
         .setPositiveButton(R.string.go) { _, _ ->
-            dayPickerView.jdn.takeIf { it != Jdn.INVALID }?.also(onSuccess)
+            dayPickerView.jdn?.also(onSuccess)
         }.show()
 }
