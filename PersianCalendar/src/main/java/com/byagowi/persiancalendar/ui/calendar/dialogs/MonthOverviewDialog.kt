@@ -33,7 +33,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
         val baseJdn = arguments?.getJdnOrNull(BUNDLE_KEY) ?: Jdn.today
         val date = baseJdn.toCalendar(mainCalendar)
         val deviceEvents = baseJdn.readMonthDeviceEvents(activity)
-        val events = (0 until getMonthLength(mainCalendar, date.year, date.month)).mapNotNull {
+        val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
             val jdn = baseJdn + it
             val events = jdn.getEvents(deviceEvents)
             val holidays = getEventsTitle(

@@ -255,11 +255,11 @@ fun getCalendarTypeFromDate(date: AbstractDate): CalendarType = when (date) {
     else -> CalendarType.SHAMSI
 }
 
-fun getMonthLength(calendar: CalendarType, year: Int, month: Int): Int {
+fun CalendarType.getMonthLength(year: Int, month: Int): Int {
     val nextMonthYear = if (month == 12) year + 1 else year
     val nextMonthMonth = if (month == 12) 1 else month + 1
-    val nextMonthStartingDay = Jdn(calendar, nextMonthYear, nextMonthMonth, 1)
-    val thisMonthStartingDay = Jdn(calendar, year, month, 1)
+    val nextMonthStartingDay = Jdn(this, nextMonthYear, nextMonthMonth, 1)
+    val thisMonthStartingDay = Jdn(this, year, month, 1)
     return nextMonthStartingDay - thisMonthStartingDay
 }
 
@@ -295,7 +295,7 @@ fun Jdn.getEvents(deviceCalendarEvents: DeviceCalendarEventsStore): List<Calenda
         addAll(islamicCalendarEvents.getEvents(islamic))
         // Special case Islamic events happening in 30th day but the month has only 29 days
         if (islamic.dayOfMonth == 29 &&
-            getMonthLength(CalendarType.ISLAMIC, islamic.year, islamic.month) == 29
+            CalendarType.ISLAMIC.getMonthLength(islamic.year, islamic.month) == 29
         ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
         val civil = toGregorianCalendar()
         addAll(deviceCalendarEvents.getEvents(civil)) // Passed by caller

@@ -195,18 +195,18 @@ class MainLogicTests {
 
     @Test
     fun test_getMonthLength() {
-        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 1))
-        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 2))
-        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 3))
-        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 4))
-        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 5))
-        assertEquals(31, getMonthLength(CalendarType.SHAMSI, 1397, 6))
-        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 7))
-        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 8))
-        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 9))
-        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 10))
-        assertEquals(30, getMonthLength(CalendarType.SHAMSI, 1397, 11))
-        assertEquals(29, getMonthLength(CalendarType.SHAMSI, 1397, 12))
+        assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 1))
+        assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 2))
+        assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 3))
+        assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 4))
+        assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 5))
+        assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 6))
+        assertEquals(30, CalendarType.SHAMSI.getMonthLength(1397, 7))
+        assertEquals(30, CalendarType.SHAMSI.getMonthLength(1397, 8))
+        assertEquals(30, CalendarType.SHAMSI.getMonthLength(1397, 9))
+        assertEquals(30, CalendarType.SHAMSI.getMonthLength(1397, 10))
+        assertEquals(30, CalendarType.SHAMSI.getMonthLength(1397, 11))
+        assertEquals(29, CalendarType.SHAMSI.getMonthLength(1397, 12))
     }
 
     private fun getDate(year: Int, month: Int, dayOfMonth: Int): Date =
@@ -497,7 +497,7 @@ class MainLogicTests {
         (1206..1498).forEach {
             assertEquals(
                 it.toString(), if (it in leapYears) 30 else 29,
-                getMonthLength(CalendarType.SHAMSI, it, 12)
+                CalendarType.SHAMSI.getMonthLength(it, 12)
             )
         }
     }
