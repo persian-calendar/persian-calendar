@@ -22,7 +22,6 @@ fun Fragment.showDayPickerDialog(jdn: Jdn, onSuccess: (jdn: Jdn) -> Unit) {
     AlertDialog.Builder(activity)
         .setView(dayPickerView)
         .setCustomTitle(null)
-        .setPositiveButton(R.string.go) { _, _ ->
-            dayPickerView.jdn?.also(onSuccess)
-        }.show()
+        .setPositiveButton(R.string.go) { _, _ -> dayPickerView.jdn?.also(onSuccess) }
+        .show()
 }

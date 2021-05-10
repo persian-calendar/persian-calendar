@@ -11,21 +11,21 @@ sealed interface AppLocalesData {
         get() = weekDays.map { it.substring(0, 1) }
 
     companion object {
-        fun getPersianCalendarMonths(locale: String) = localeDataFinder(locale).persianCalendarMonths
-        fun getIslamicCalendarMonths(locale: String) = localeDataFinder(locale).islamicCalendarMonths
+        fun getPersianCalendarMonths(locale: String) = localeFinder(locale).persianCalendarMonths
+        fun getIslamicCalendarMonths(locale: String) = localeFinder(locale).islamicCalendarMonths
         fun getGregorianCalendarMonths(locale: String, isEasternArabicMonth: Boolean) =
             when (locale) {
                 LANG_AR -> {
                     if (isEasternArabicMonth) ar.easternGregorianCalendarMonths
                     else ar.gregorianCalendarMonths
                 }
-                else -> localeDataFinder(locale).gregorianCalendarMonths
+                else -> localeFinder(locale).gregorianCalendarMonths
             }
 
-        fun getWeekDays(locale: String) = localeDataFinder(locale).weekDays
-        fun getWeekDaysInitials(locale: String) = localeDataFinder(locale).weekDaysInitials
+        fun getWeekDays(locale: String) = localeFinder(locale).weekDays
+        fun getWeekDaysInitials(locale: String) = localeFinder(locale).weekDaysInitials
 
-        private fun localeDataFinder(locale: String): AppLocalesData = when (locale) {
+        private fun localeFinder(locale: String): AppLocalesData = when (locale) {
             LANG_FA_AF -> fa_af
             LANG_PS -> ps
             LANG_GLK -> glk

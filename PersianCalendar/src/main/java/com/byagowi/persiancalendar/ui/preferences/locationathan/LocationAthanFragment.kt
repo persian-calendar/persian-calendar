@@ -116,16 +116,13 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             "pref_gps_location" -> {
                 runCatching {
                     if (ActivityCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_FINE_LOCATION
+                            context, Manifest.permission.ACCESS_FINE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
+                            context, Manifest.permission.ACCESS_COARSE_LOCATION
                         ) != PackageManager.PERMISSION_GRANTED
                     ) askForLocationPermission(activity) else {
                         GPSLocationDialog().show(
-                            childFragmentManager,
-                            GPSLocationDialog::class.java.name
+                            childFragmentManager, GPSLocationDialog::class.java.name
                         )
                     }
                 }.onFailure(logException)
