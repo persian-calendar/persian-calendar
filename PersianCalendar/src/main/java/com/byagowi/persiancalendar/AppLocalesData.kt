@@ -6,26 +6,26 @@ sealed interface AppLocalesData {
     val gregorianCalendarMonths: List<String>
     val weekDays: List<String>
 
+    // This is the default implementation and overridden by locales having custom initials
+    val weekDaysInitials: List<String>
+        get() = weekDays.map { it.substring(0, 1) }
+
     companion object {
-        fun getPersianCalendarMonths(locale: String) = localeFinder(locale).persianCalendarMonths
-        fun getIslamicCalendarMonths(locale: String) = localeFinder(locale).islamicCalendarMonths
+        fun getPersianCalendarMonths(locale: String) = localeDataFinder(locale).persianCalendarMonths
+        fun getIslamicCalendarMonths(locale: String) = localeDataFinder(locale).islamicCalendarMonths
         fun getGregorianCalendarMonths(locale: String, isEasternArabicMonth: Boolean) =
             when (locale) {
                 LANG_AR -> {
                     if (isEasternArabicMonth) ar.easternGregorianCalendarMonths
                     else ar.gregorianCalendarMonths
                 }
-                else -> localeFinder(locale).gregorianCalendarMonths
+                else -> localeDataFinder(locale).gregorianCalendarMonths
             }
 
-        fun getWeekDays(locale: String) = localeFinder(locale).weekDays
-        fun getWeekDaysInitials(locale: String) = when (locale) {
-            LANG_AR -> ar.weekDaysInitials
-            LANG_AZB -> azb.weekDaysInitials
-            else -> getWeekDays(locale).map { it.substring(0, 1) }
-        }
+        fun getWeekDays(locale: String) = localeDataFinder(locale).weekDays
+        fun getWeekDaysInitials(locale: String) = localeDataFinder(locale).weekDaysInitials
 
-        private fun localeFinder(locale: String): AppLocalesData = when (locale) {
+        private fun localeDataFinder(locale: String): AppLocalesData = when (locale) {
             LANG_FA_AF -> fa_af
             LANG_PS -> ps
             LANG_GLK -> glk
@@ -38,15 +38,15 @@ sealed interface AppLocalesData {
             LANG_EN_IR, LANG_FA -> fa
             else -> fa
         }
+
+        private inline fun <T> listOf12Items(
+            x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T
+        ) = listOf(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)
+
+        private inline fun <T> listOf7Items(
+            x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T
+        ) = listOf(x1, x2, x3, x4, x5, x6, x7)
     }
-
-    fun <T> listOf12Items(
-        x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T
-    ) = listOf(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)
-
-    fun <T> listOf7Items(
-        x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T
-    ) = listOf(x1, x2, x3, x4, x5, x6, x7)
 
     private object fa : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
@@ -140,7 +140,7 @@ sealed interface AppLocalesData {
         override val weekDays = listOf7Items(
             "السبت", "الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"
         )
-        val weekDaysInitials = listOf7Items(
+        override val weekDaysInitials = listOf7Items(
             "سب", "أح", "اث", "ثل", "أر", "خم", "جم"
         )
     }
@@ -179,7 +179,7 @@ sealed interface AppLocalesData {
         override val weekDays = listOf7Items(
             "يئل‌گونو", "سۆدگونو", "دۇزگونو", "آراگون", "اوْدگونو", "سۇگونو", "آینی‌گون"
         )
-        val weekDaysInitials = listOf7Items(
+        override val weekDaysInitials = listOf7Items(
             "یئل", "سۆد", "دۇز", "آرا", "اوْد", "سۇ", "آینی"
         )
     }
