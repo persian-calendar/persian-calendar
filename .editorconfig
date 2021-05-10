@@ -10,6 +10,9 @@ max_line_length = 100
 tab_width = 4
 trim_trailing_whitespace = true
 
+[*.yml]
+indent_size = 2
+
 [{*.kt, *.kts}]
 ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
 ij_continuation_indent_size = 8
