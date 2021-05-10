@@ -43,7 +43,6 @@ value class Jdn(val value: Long) {
     operator fun minus(other: Jdn): Int = (value - other.value).toInt()
 
     companion object {
-        val today: Jdn
-            get() = Jdn(calendarToCivilDate(makeCalendarFromDate(Date())).toJdn())
+        val today: Jdn get() = Jdn(Date().toJavaCalendar().toCivilDate())
     }
 }

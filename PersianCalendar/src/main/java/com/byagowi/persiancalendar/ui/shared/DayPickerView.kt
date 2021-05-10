@@ -12,12 +12,13 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.layoutInflater
-import com.byagowi.persiancalendar.utils.monthsNamesOfCalendar
+import com.byagowi.persiancalendar.utils.monthsNames
 import com.google.android.material.snackbar.Snackbar
 
 class DayPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
@@ -81,7 +82,7 @@ class DayPickerView @JvmOverloads constructor(context: Context, attrs: Attribute
                 it.minValue = 1
                 it.maxValue = 12
                 it.value = date.month
-                val months = monthsNamesOfCalendar(date)
+                val months = date.calendarType.monthsNames
                 it.setFormatter { x -> months[x - 1] + " / " + formatNumber(x) }
                 it.isVerticalScrollBarEnabled = false
             }

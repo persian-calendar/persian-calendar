@@ -60,13 +60,13 @@ import com.byagowi.persiancalendar.utils.formatDeviceCalendarEventTitle
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
-import com.byagowi.persiancalendar.utils.getCalendarTypeFromDate
+import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
-import com.byagowi.persiancalendar.utils.getMonthName
+import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
@@ -76,7 +76,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.startAthan
-import com.byagowi.persiancalendar.utils.toCalendar
+import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.byagowi.persiancalendar.utils.toggleShowDeviceCalendarOnPreference
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
@@ -231,7 +231,7 @@ class CalendarFragment : Fragment() {
             it.onDayLongClicked = fun(jdn: Jdn) { addEventOnCalendar(jdn) }
             it.onMonthSelected = fun() {
                 it.selectedMonth.let { date ->
-                    updateToolbar(getMonthName(date), formatNumber(date.year))
+                    updateToolbar(date.monthName, formatNumber(date.year))
                     todayButton?.isVisible =
                         date.year != initialDate.year || date.month != initialDate.month
                 }
@@ -285,7 +285,7 @@ class CalendarFragment : Fragment() {
         }
 
         Jdn.today.toCalendar(mainCalendar).let { today ->
-            updateToolbar(getMonthName(today), formatNumber(today.year))
+            updateToolbar(today.monthName, formatNumber(today.year))
         }
     }
 
@@ -529,7 +529,7 @@ class CalendarFragment : Fragment() {
         val owghatBinding = owghatBinding ?: return
 
         val prayTimes = PrayTimesCalculator.calculate(
-            calculationMethod, jdn.toGregorianCalendar().toCalendar().time, coordinate
+            calculationMethod, jdn.toGregorianCalendar().toJavaCalendar().time, coordinate
         )
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->
@@ -575,7 +575,7 @@ class CalendarFragment : Fragment() {
                     searchAutoComplete.setAdapter(SearchEventsAdapter(context, events))
                     searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
                         val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
-                        val type = getCalendarTypeFromDate(date)
+                        val type = date.calendarType
                         val today = Jdn.today.toCalendar(type)
                         bringDate(
                             Jdn(

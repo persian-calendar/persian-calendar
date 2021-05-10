@@ -30,7 +30,7 @@ class PersianCalendarTileService : TileService() {
                 this@PersianCalendarTileService, getDayIconResource(today.dayOfMonth)
             )
             label = jdn.dayOfWeekName
-            contentDescription = getMonthName(today)
+            contentDescription = today.monthName
             // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
             state = Tile.STATE_ACTIVE
         }?.updateTile() ?: Unit

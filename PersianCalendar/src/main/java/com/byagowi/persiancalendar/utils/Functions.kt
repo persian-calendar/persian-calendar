@@ -91,7 +91,7 @@ fun formatDate(
 else when (language) {
     LANG_CKB -> "%sی %sی %s"
     else -> "%s %s %s"
-}.format(formatNumber(date.dayOfMonth), getMonthName(date), formatNumber(date.year))
+}.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
 
 fun isNonArabicScriptSelected() = when (language) {
     LANG_EN_US, LANG_JA -> true
@@ -338,8 +338,7 @@ fun getCoordinate(context: Context): Coordinate? =
         // If latitude and longitude both are zero probably preference is not set yet
     }
 
-fun getSpringEquinox(jdn: Jdn) =
-    makeCalendarFromDate(Equinox.northwardEquinox(jdn.toGregorianCalendar().year))
+fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()
 
 @StringRes
 fun getPrayTimeText(athanKey: String?): Int = when (athanKey) {

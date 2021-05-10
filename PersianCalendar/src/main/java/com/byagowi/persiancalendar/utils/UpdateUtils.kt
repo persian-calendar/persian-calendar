@@ -88,14 +88,8 @@ fun update(context: Context, updateDate: Boolean) {
             setBackgroundColor(R.id.widget_layout1x1)
             setTextColor(R.id.textPlaceholder1_1x1, color)
             setTextColor(R.id.textPlaceholder2_1x1, color)
-            setTextViewText(
-                R.id.textPlaceholder1_1x1,
-                formatNumber(date.dayOfMonth)
-            )
-            setTextViewText(
-                R.id.textPlaceholder2_1x1,
-                getMonthName(date)
-            )
+            setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
+            setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
             setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
             manager.updateAppWidget(widget1x1, this)
         }
@@ -124,7 +118,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
     var subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
-    val owghatClock = Clock(makeCalendarFromDate(Date(), forceLocalTime = true))
+    val owghatClock = Clock(Date().toJavaCalendar(forceLocalTime = true))
     var owghat = ""
 
     @StringRes

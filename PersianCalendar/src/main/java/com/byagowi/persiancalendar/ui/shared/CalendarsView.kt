@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import com.byagowi.persiancalendar.utils.calendarToCivilDate
+import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.dayOfWeekName
 import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatDate
@@ -110,14 +110,13 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         if (mainCalendar == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
             if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                 val addition = if (mainDate.month == 12) 1 else 0
-                val springEquinox = getSpringEquinox(jdn)
+                val springEquinox = jdn.toGregorianCalendar().getSpringEquinox()
                 equinox = context.getString(R.string.spring_equinox).format(
                     formatNumber(mainDate.year + addition),
                     Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
                         .toFormattedString(forcedIn12 = true) + " " +
                             formatDate(
-                                Jdn(calendarToCivilDate(springEquinox).toJdn())
-                                    .toCalendar(mainCalendar),
+                                Jdn(springEquinox.toCivilDate()).toCalendar(mainCalendar),
                                 forceNonNumerical = true
                             )
                 )
