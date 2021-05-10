@@ -30,8 +30,10 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.shiftWorkRecurs
 import com.byagowi.persiancalendar.utils.shiftWorkStartingJdn
 import com.byagowi.persiancalendar.utils.shiftWorkTitles
@@ -47,9 +49,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
         applyAppLanguage(activity)
         updateStoredPreference(activity)
 
-        val selectedJdn =
-            arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
-
+        val selectedJdn = arguments?.getJdnOrNull(BUNDLE_KEY) ?: Jdn.today
         var isFirstSetup = false
         var jdn = shiftWorkStartingJdn ?: run {
             isFirstSetup = true
@@ -86,7 +86,7 @@ class ShiftWorkDialog : AppCompatDialogFragment() {
                 }
 
                 activity.appPrefs.edit {
-                    putLong(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) -1 else jdn.value)
+                    putJdn(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) Jdn(-1) else jdn)
                     putString(PREF_SHIFT_WORK_SETTING, result)
                     putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
                 }

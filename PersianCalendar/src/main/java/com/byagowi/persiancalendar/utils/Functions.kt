@@ -12,6 +12,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -507,6 +508,15 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
 
 val Context.appPrefs: SharedPreferences
     get() = PreferenceManager.getDefaultSharedPreferences(this)
+
+fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) =
+    putLong(key, jdn.value)
+
+fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
+    getLong(key, -1).takeIf { it != -1L }?.let(::Jdn)
+
+fun Bundle.getJdnOrNull(key: String): Jdn? =
+    getLong(key, -1).takeIf { it != -1L }?.let(::Jdn)
 
 val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)

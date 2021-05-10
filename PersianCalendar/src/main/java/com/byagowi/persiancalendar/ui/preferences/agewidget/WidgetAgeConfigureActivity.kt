@@ -21,12 +21,11 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
     private fun confirm(title: String) {
         val context = this@AgeWidgetConfigureActivity
 
-        val selectedJdn = appPrefs.getLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, -1L)
-            .takeIf { it != -1L }?.let(::Jdn)
+        val selectedJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId)
         appPrefs.edit {
             if (selectedJdn == null) {
                 // Put today's jdn if nothing was set
-                putLong(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today.value)
+                putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today)
             }
             putString(PREF_TITLE_AGE_WIDGET + appWidgetId, title)
         }

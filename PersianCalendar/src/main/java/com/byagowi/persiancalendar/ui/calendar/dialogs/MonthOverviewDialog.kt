@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
+import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
@@ -29,8 +30,7 @@ class MonthOverviewDialog : BottomSheetDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
-        val baseJdn =
-            arguments?.getLong(BUNDLE_KEY, -1L)?.takeIf { it != -1L }?.let(::Jdn) ?: Jdn.today
+        val baseJdn = arguments?.getJdnOrNull(BUNDLE_KEY) ?: Jdn.today
         val date = baseJdn.toCalendar(mainCalendar)
         val deviceEvents = baseJdn.readMonthDeviceEvents(activity)
         val events = (0 until getMonthLength(mainCalendar, date.year, date.month)).mapNotNull {
