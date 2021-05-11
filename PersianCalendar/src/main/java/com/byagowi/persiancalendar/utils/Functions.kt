@@ -471,9 +471,6 @@ fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn?) {
 fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
     getLong(key, -1).takeIf { it != -1L }?.let(::Jdn)
 
-fun Bundle.getJdnOrNull(key: String): Jdn? =
-    getLong(key, -1).takeIf { it != -1L }?.let(::Jdn)
-
 val Context.layoutInflater: LayoutInflater
     get() = LayoutInflater.from(this)
 

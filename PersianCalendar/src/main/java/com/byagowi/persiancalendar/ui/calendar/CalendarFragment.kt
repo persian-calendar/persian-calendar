@@ -43,9 +43,9 @@ import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.DrawerHost
-import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
@@ -272,7 +272,7 @@ class CalendarFragment : Fragment() {
                 when (clickedMenuItem?.itemId) {
                     R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) }
                     R.id.add_event -> addEventOnCalendar(selectedJdn)
-                    R.id.shift_work -> openShiftWorkDialog()
+                    R.id.shift_work -> showShiftWorkDialog(selectedJdn)
                     R.id.month_overview -> showMonthOverviewDialog(it.calendarPager.selectedMonth)
                 }
                 true
@@ -565,10 +565,5 @@ class CalendarFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun openShiftWorkDialog() {
-        ShiftWorkDialog.newInstance(selectedJdn)
-            .show(childFragmentManager, ShiftWorkDialog::class.java.name)
     }
 }
