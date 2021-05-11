@@ -43,9 +43,9 @@ import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.DrawerHost
-import com.byagowi.persiancalendar.ui.calendar.dialogs.MonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.ShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
@@ -54,19 +54,18 @@ import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.calculationMethod
+import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatDeviceCalendarEventTitle
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
-import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
-import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
@@ -74,6 +73,7 @@ import com.byagowi.persiancalendar.utils.isTalkBackEnabled
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.toJavaCalendar
@@ -276,7 +276,7 @@ class CalendarFragment : Fragment() {
                     R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) }
                     R.id.add_event -> addEventOnCalendar(selectedJdn)
                     R.id.shift_work -> openShiftWorkDialog()
-                    R.id.month_overview -> openMonthOverView()
+                    R.id.month_overview -> openMonthOverview()
                 }
                 true
             }
@@ -596,9 +596,8 @@ class CalendarFragment : Fragment() {
             .show(childFragmentManager, ShiftWorkDialog::class.java.name)
     }
 
-    private fun openMonthOverView() {
-        MonthOverviewDialog
-            .newInstance(mainBinding?.calendarPager?.selectedMonth?.let(::Jdn) ?: Jdn.today)
-            .show(childFragmentManager, MonthOverviewDialog::class.java.name)
+    private fun openMonthOverview() {
+        val jdn = mainBinding?.calendarPager?.selectedMonth?.let(::Jdn) ?: Jdn.today
+        showMonthOverviewDialog(jdn)
     }
 }

@@ -7,7 +7,11 @@ import android.graphics.Color
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.content.edit
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.calculateDaysDifference
+import com.byagowi.persiancalendar.utils.getJdnOrNull
 
 class AgeWidget : AppWidgetProvider() {
     override fun onUpdate(
