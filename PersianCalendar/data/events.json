@@ -1,10 +1,15 @@
 {
   "#source": [
     "https://github.com/persian-calendar",
-    "فهرست مناسبت‌های ایران و افغانستان که در پروژهٔ تقویم فارسی اندروید و توسط توسعه‌دهندگان آن و به کمک منابع زیر",
-    "تهیه نگه‌داری می‌شود. با توجه به زحمتی که برای گردآوردی آن کشیده شده است",
+    "فهرست مناسبت‌های ایران و افغانستان که در پروژهٔ تقویم فارسی، توسط توسعه‌دهندگان آن و به کمک منابع زیر",
+    "تهیه و نگه‌داری می‌شود. با توجه به زحمتی که برای گردآوردی آن کشیده شده است",
     "پیشنهاد می‌شود آن را فقط در پروژه‌های متن‌باز و یا با ارجاع مناسب به منبع استفادهٔ مجدد کنید",
     "و اگر اشکالی در یکی از مناسبت‌ها، عنوان یا تاریخ یا عدم وجود مناسبتی دیدید سریعاً پروژه را مطلع کنید، با تشکر",
+
+    "توجه:",
+    "در استفاده از این داده‌ها، به قسمت مناسبت‌های که دارای الگوی متفاوتی متفاوت و خاص هستند که در بخشی جدا گذاشته شده‌اند توجه کنید",
+    "از آنجایی که ماه‌های قمری می‌توانند ۲۹ روزه باشند هنگام استفاده از داده‌ها در ماه ۲۹ روزهٔ قمری مناسبت روز ۳۰م را باید در نظر گرفت",
+    "این داده‌های از منابع رسمی زیر گردآوری شده‌اند ولی خود این گردآوردی دارای تضمین بی‌نقص بودن نیست ولی محتویات آن‌ها به منابع زیر بر می‌گردد",
 
     "افغانستان",
     "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
@@ -988,16 +993,26 @@
       "title": "روز تولد زرتشت" },
 
     { "holiday": false, "month": 10, "day": 5, "type": "Ancient Iran",
-      "title": "روز درگذشت زرتشت" },
+      "title": "روز درگذشت زرتشت" }
+  ],
 
-    { "holiday": false, "year": 1399, "month": 3, "day": 2, "type": "Islamic Iran",
-      "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
-
-    { "holiday": false, "year": 1400, "month": 2, "day": 17, "type": "Islamic Iran",
-      "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
-
-    { "holiday": false, "year": 1399, "month": 4, "day": 1, "type": "Iran",
-      "title": "خورشیدگرفتگی، اوج در تهران در ۱۰:۱۶ با ۴۸درصد گرفتگی" }
+  "Special": [
+    { "month": 1, "calendar": "Persian Calendar", "protocol": "second week",
+      "type": "Afghanistan", "title": "هفته جیولوجست‌های افغانستان (هفته دوم حمل)" },
+    { "month": 2, "calendar": "Persian Calendar", "protocol": "last week",
+      "type": "Afghanistan", "title": "هفته کتاب‌خوانی (هفته اخیر ثور)" },
+    { "month": 6, "calendar": "Gregorian Calendar", "protocol": "week from day", "day": 5,
+      "type": "Afghanistan", "title": "هفته محیط زیست (۵-۱۱ جون)" },
+    { "month": 6, "calendar": "Gregorian Calendar", "protocol": "week from day", "day": 26,
+      "type": "Afghanistan", "title": "هفته مبارزه علیه مواد مخدر که از تاریخ ۲۶ جون (روز جهانی مبارزه علیه مواد مخدر) آغاز می‌گردد" },
+    { "month": 8, "calendar": "Gregorian Calendar", "protocol": "week from day", "day": 1,
+      "type": "Afghanistan", "title": "هفته تغذیه از شیر مادر (۱-۷ آگست)" },
+    { "month": 10, "calendar": "Persian Calendar", "protocol": "week from day", "day": 14,
+      "type": "Afghanistan", "title": "هفته قانون اساسی افغانستان (۱۴-۲۰ جدی)" },
+    { "month": 9, "calendar": "Hijri Calendar", "protocol": "last day of week", "dayOfWeek": 7,
+      "type": "Islamic Iran", "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
+    { "month": 12, "calendar": "Persian Calendar", "protocol": "last tuesday", "dayOfWeek": 4,
+      "type": "Ancient Iran", "title": "چهارشنبه‌سوری (آخرین سه‌شنبه سال)" }
   ],
 
   "Hijri Calendar": [

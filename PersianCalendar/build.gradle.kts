@@ -160,14 +160,16 @@ val generateAppSrcTask by tasks.registering {
                 "CalendarRecord(title = \"${record["title"]}\"," +
                         " type = \"${record["type"] ?: ""}\"," +
                         " isHoliday = ${record["holiday"] ?: false}," +
-                        " year = ${record["year"] ?: -1}," +
                         " month = ${record["month"]}, day = ${record["day"]})"
             }
+        }
+        val specialOccurringEvents = (events["Special"] as List<*>).joinToString(",\n    ") {
+            "mapOf(${(it as Map<*, *>).map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
         }
         eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
-class CalendarRecord(val title: String, val type: String, val isHoliday: Boolean, val year: Int, val month: Int, val day: Int)
+class CalendarRecord(val title: String, val type: String, val isHoliday: Boolean, val month: Int, val day: Int)
 val persianEvents = listOf(
     $persianEvents
 )
@@ -176,7 +178,11 @@ val islamicEvents = listOf(
 )
 val gregorianEvents = listOf(
     $gregorianEvents
-)"""
+)
+val specialOccurringEvents = listOf(
+    $specialOccurringEvents
+)
+"""
         )
 
         // Cities

@@ -1,7 +1,8 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.getLastDayOfWeek
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.cepmuvakkit.times.view.QiblaCompassView
@@ -13,7 +14,9 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.*
 
@@ -499,6 +502,22 @@ class MainLogicTests {
                 it.toString(), if (it in leapYears) 30 else 29,
                 CalendarType.SHAMSI.getMonthLength(it, 12)
             )
+        }
+    }
+
+    @Test
+    fun test_getLastDayOfWeekOfMonth() {
+        listOf(
+            2 to 29, 1 to 28, 7 to 27, 6 to 26, 5 to 25, 4 to 24, 3 to 23
+        ).forEach { (dayOfWeek, day) ->
+            assertEquals(day, CalendarType.SHAMSI.getLastDayOfWeek(1400, 12, dayOfWeek))
+        }
+
+        listOf(
+            1400 to 27, 1399 to 29, 1398 to 23, 1397 to 24, 1396 to 25, 1395 to 27, 1394 to 28,
+            1393 to 29, 1392 to 23, 1391 to 25, 1390 to 26
+        ).forEach { (year, day) ->
+            assertEquals(day, CalendarType.SHAMSI.getLastDayOfWeek(year, 12, 7))
         }
     }
 

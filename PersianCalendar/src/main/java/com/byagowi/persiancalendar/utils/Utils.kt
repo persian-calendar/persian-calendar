@@ -69,6 +69,7 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.persianEvents
+import com.byagowi.persiancalendar.generated.specialOccurringEvents
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -227,7 +228,6 @@ fun loadEvents(context: Context) {
     persianCalendarEvents = persianEvents.mapNotNull {
         val month = it.month
         val day = it.day
-        val year = it.year
         var title = it.title
         var holiday = it.isHoliday
 
@@ -256,12 +256,10 @@ fun loadEvents(context: Context) {
             }
             title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
             CalendarEvent.PersianCalendarEvent(
-                date = PersianDate(year, month, day),
-                title = title,
-                isHoliday = holiday
+                date = PersianDate(-1, month, day), title = title, isHoliday = holiday
             )
         } else null
-    }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+    }.also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
     islamicCalendarEvents = islamicEvents.mapNotNull {
         val month = it.month
@@ -291,12 +289,27 @@ fun loadEvents(context: Context) {
             title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
 
             CalendarEvent.IslamicCalendarEvent(
-                date = IslamicDate(-1, month, day),
-                title = title,
-                isHoliday = holiday
+                date = IslamicDate(-1, month, day), title = title, isHoliday = holiday
             )
         } else null
-    }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+    }.let { list ->
+        list + specialOccurringEvents.filter { event ->
+            (iranIslamic || iranOthers) &&
+                    event["calendar"] == "Hijri Calendar" && event["type"] == "Islamic Iran"
+        }.mapNotNull { event ->
+            // This adds only this, next and previous years' events, hacky but enough for now
+            val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
+            val dayOfWeek = event["dayOfWeek"]?.toIntOrNull() ?: return@mapNotNull null
+            val title = event["title"] ?: return@mapNotNull null
+            val year = Jdn.today.toIslamicCalendar().year
+            (-1..1).map { offset ->
+                val day = CalendarType.ISLAMIC.getLastDayOfWeek(year + offset, month, dayOfWeek)
+                CalendarEvent.IslamicCalendarEvent(
+                    date = IslamicDate(year + offset, month, day), title = title, isHoliday = false
+                )
+            }
+        }.flatten()
+    }.also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
     gregorianCalendarEvents = gregorianEvents.mapNotNull {
         val month = it.month
@@ -318,9 +331,16 @@ fun loadEvents(context: Context) {
                 isHoliday = false
             )
         } else null
-    }.toList().also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+    }.also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
     allEnabledEvents = allEnabledEventsBuilder
+}
+
+// 1 means Saturday on it and 7 means Friday
+fun CalendarType.getLastDayOfWeek(year: Int, month: Int, dayOfWeek: Int): Int {
+    val monthLength = this.getMonthLength(year, month)
+    val endOfMonthJdn = Jdn(this, year, month, monthLength)
+    return monthLength - ((endOfMonthJdn.value - dayOfWeek + 3L) % 7).toInt()
 }
 
 fun loadLanguageResource() {
