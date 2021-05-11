@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
 import android.Manifest
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
 import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlarmManager
@@ -10,7 +8,6 @@ import android.app.PendingIntent
 import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -39,8 +36,6 @@ import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
-import com.google.android.material.circularreveal.CircularRevealCompat
-import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
@@ -54,7 +49,6 @@ import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-import kotlin.math.sqrt
 
 // This should be called before any use of Utils on the activity and services
 fun initUtils(context: Context) {
@@ -117,36 +111,6 @@ fun formatNumber(number: String): String = when (preferredDigits) {
     else -> number.map {
         preferredDigits.getOrNull(Character.getNumericValue(it)) ?: it
     }.joinToString("")
-}
-
-// https://stackoverflow.com/a/52557989
-fun <T> circularRevealFromMiddle(circularRevealWidget: T) where T : View?, T : CircularRevealWidget {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        circularRevealWidget.post {
-            val viewWidth = circularRevealWidget.width
-            val viewHeight = circularRevealWidget.height
-
-            val viewDiagonal =
-                sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
-
-            AnimatorSet().apply {
-                playTogether(
-                    CircularRevealCompat.createCircularReveal(
-                        circularRevealWidget,
-                        (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
-                        10f, (viewDiagonal / 2).toFloat()
-                    ),
-                    ObjectAnimator.ofArgb(
-                        circularRevealWidget,
-                        CircularRevealWidget.CircularRevealScrimColorProperty
-                            .CIRCULAR_REVEAL_SCRIM_COLOR,
-                        Color.GRAY, Color.TRANSPARENT
-                    )
-                )
-                duration = 500
-            }.start()
-        }
-    }
 }
 
 // It should match with calendar_type_abbr array

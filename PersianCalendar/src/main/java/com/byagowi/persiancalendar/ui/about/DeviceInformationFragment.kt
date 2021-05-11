@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
@@ -43,9 +45,12 @@ import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.circularreveal.CircularRevealCompat
+import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.tabs.TabLayout
 import java.util.*
+import kotlin.math.sqrt
 
 /**
  * @author MEHDI DIMYADI
@@ -63,7 +68,7 @@ class DeviceInformationFragment : Fragment() {
             it.setupUpNavigation()
         }
 
-        circularRevealFromMiddle(binding.circularReveal)
+        binding.circularReveal.circularRevealFromMiddle()
 
         binding.recyclerView.let {
             it.setHasFixedSize(true)
@@ -215,6 +220,36 @@ class DeviceInformationFragment : Fragment() {
             }
         }
     }.root
+}
+
+// https://stackoverflow.com/a/52557989
+fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        post {
+            val viewWidth = width
+            val viewHeight = height
+
+            val viewDiagonal =
+                sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
+
+            AnimatorSet().also {
+                it.playTogether(
+                    CircularRevealCompat.createCircularReveal(
+                        this@circularRevealFromMiddle,
+                        (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
+                        10f, (viewDiagonal / 2).toFloat()
+                    ),
+                    ObjectAnimator.ofArgb(
+                        this@circularRevealFromMiddle,
+                        CircularRevealWidget.CircularRevealScrimColorProperty
+                            .CIRCULAR_REVEAL_SCRIM_COLOR,
+                        Color.GRAY, Color.TRANSPARENT
+                    )
+                )
+                it.duration = 500
+            }.start()
+        }
+    }
 }
 
 class CheckerBoard(context: Context, attrs: AttributeSet?) :
