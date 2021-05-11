@@ -295,11 +295,12 @@ fun loadEvents(context: Context) {
     }.let { list ->
         list + specialOccurringEvents.filter { event ->
             (iranIslamic || iranOthers) &&
-                    event["calendar"] == "Hijri Calendar" && event["type"] == "Islamic Iran"
+                    event["calendar"] == "Hijri" && event["type"] == "Islamic Iran"
         }.mapNotNull { event ->
             // This adds only this, next and previous years' events, hacky but enough for now
+            if (event["protocol"] != "last day of week") return@mapNotNull null
+            val dayOfWeek = event["day of week"]?.toIntOrNull() ?: return@mapNotNull null
             val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
-            val dayOfWeek = event["dayOfWeek"]?.toIntOrNull() ?: return@mapNotNull null
             val title = event["title"] ?: return@mapNotNull null
             val year = Jdn.today.toIslamicCalendar().year
             (-1..1).map { offset ->

@@ -997,22 +997,22 @@
   ],
 
   "Special": [
-    { "month": 1, "calendar": "Persian Calendar", "protocol": "second week",
-      "type": "Afghanistan", "title": "هفته جیولوجست‌های افغانستان (هفته دوم حمل)" },
-    { "month": 2, "calendar": "Persian Calendar", "protocol": "last week",
-      "type": "Afghanistan", "title": "هفته کتاب‌خوانی (هفته اخیر ثور)" },
-    { "month": 6, "calendar": "Gregorian Calendar", "protocol": "week from day", "day": 5,
-      "type": "Afghanistan", "title": "هفته محیط زیست (۵-۱۱ جون)" },
-    { "month": 6, "calendar": "Gregorian Calendar", "protocol": "week from day", "day": 26,
-      "type": "Afghanistan", "title": "هفته مبارزه علیه مواد مخدر که از تاریخ ۲۶ جون (روز جهانی مبارزه علیه مواد مخدر) آغاز می‌گردد" },
-    { "month": 8, "calendar": "Gregorian Calendar", "protocol": "week from day", "day": 1,
-      "type": "Afghanistan", "title": "هفته تغذیه از شیر مادر (۱-۷ آگست)" },
-    { "month": 10, "calendar": "Persian Calendar", "protocol": "week from day", "day": 14,
-      "type": "Afghanistan", "title": "هفته قانون اساسی افغانستان (۱۴-۲۰ جدی)" },
-    { "month": 9, "calendar": "Hijri Calendar", "protocol": "last day of week", "dayOfWeek": 7,
-      "type": "Islamic Iran", "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
-    { "month": 12, "calendar": "Persian Calendar", "protocol": "last tuesday", "dayOfWeek": 4,
-      "type": "Ancient Iran", "title": "چهارشنبه‌سوری (آخرین سه‌شنبه سال)" }
+    { "month": 1, "calendar": "Persian", "protocol": "second week", "type": "Afghanistan",
+      "title": "هفته جیولوجست‌های افغانستان (هفته دوم حمل)" },
+    { "month": 2, "calendar": "Persian", "protocol": "last week", "type": "Afghanistan",
+      "title": "هفته کتاب‌خوانی (هفته اخیر ثور)" },
+    { "month": 6, "calendar": "Gregorian", "protocol": "week from day", "day": 5, "type": "Afghanistan",
+      "title": "هفته محیط زیست (۵-۱۱ جون)" },
+    { "month": 6, "calendar": "Gregorian", "protocol": "week from day", "day": 26, "type": "Afghanistan",
+      "title": "هفته مبارزه علیه مواد مخدر که از تاریخ ۲۶ جون (روز جهانی مبارزه علیه مواد مخدر) آغاز می‌گردد" },
+    { "month": 8, "calendar": "Gregorian", "protocol": "week from day", "day": 1, "type": "Afghanistan",
+      "title": "هفته تغذیه از شیر مادر (۱-۷ آگست)" },
+    { "month": 10, "calendar": "Persian", "protocol": "week from day", "day": 14, "type": "Afghanistan",
+      "title": "هفته قانون اساسی افغانستان (۱۴-۲۰ جدی)" },
+    { "month": 9, "calendar": "Hijri", "protocol": "last day of week", "day of week": 7, "type": "Islamic Iran",
+      "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)" },
+    { "month": 12, "calendar": "Persian", "protocol": "last day of week", "day of week": 4, "type": "Ancient Iran",
+      "title": "چهارشنبه‌سوری (آخرین سه‌شنبه سال)" }
   ],
 
   "Hijri Calendar": [
