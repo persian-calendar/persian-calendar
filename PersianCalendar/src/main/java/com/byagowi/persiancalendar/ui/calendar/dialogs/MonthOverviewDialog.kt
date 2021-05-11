@@ -20,10 +20,11 @@ import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import io.github.persiancalendar.calendar.AbstractDate
 
-fun Fragment.showMonthOverviewDialog(baseJdn: Jdn) {
+fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
     val activity = activity ?: return
-    val date = baseJdn.toCalendar(mainCalendar)
+    val baseJdn = Jdn(date)
     val deviceEvents = baseJdn.readMonthDeviceEvents(activity)
     val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
         val jdn = baseJdn + it

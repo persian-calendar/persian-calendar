@@ -123,7 +123,6 @@ class CalendarFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(this, onBackPressedCloseSearchCallback)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = FragmentCalendarBinding.inflate(inflater, container, false).also { binding ->
@@ -266,22 +265,22 @@ class CalendarFragment : Fragment() {
 
         bringDate(Jdn.today, monthChange = false, highlight = false)
 
-        mainBinding?.appBar?.let {
+        mainBinding?.let {
             (activity as? DrawerHost)
-                ?.setupToolbarWithDrawer(viewLifecycleOwner, it.toolbar)
-            it.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
-            setupToolbarMenu(it.toolbar.menu)
-            it.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
+                ?.setupToolbarWithDrawer(viewLifecycleOwner, it.appBar.toolbar)
+            it.appBar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
+            setupToolbarMenu(it.appBar.toolbar.menu)
+            it.appBar.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
                 when (clickedMenuItem?.itemId) {
                     R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) }
                     R.id.add_event -> addEventOnCalendar(selectedJdn)
                     R.id.shift_work -> openShiftWorkDialog()
-                    R.id.month_overview -> openMonthOverview()
+                    R.id.month_overview -> showMonthOverviewDialog(it.calendarPager.selectedMonth)
                 }
                 true
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                it.appbarLayout.outlineProvider = null
+                it.appBar.appbarLayout.outlineProvider = null
         }
 
         Jdn.today.toCalendar(mainCalendar).let { today ->
@@ -594,10 +593,5 @@ class CalendarFragment : Fragment() {
     private fun openShiftWorkDialog() {
         ShiftWorkDialog.newInstance(selectedJdn)
             .show(childFragmentManager, ShiftWorkDialog::class.java.name)
-    }
-
-    private fun openMonthOverview() {
-        val jdn = mainBinding?.calendarPager?.selectedMonth?.let(::Jdn) ?: Jdn.today
-        showMonthOverviewDialog(jdn)
     }
 }
