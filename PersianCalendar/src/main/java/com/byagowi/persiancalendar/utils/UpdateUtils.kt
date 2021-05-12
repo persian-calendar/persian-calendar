@@ -465,8 +465,7 @@ fun update(context: Context, updateDate: Boolean) {
                 builder.setStyle(
                     NotificationCompat.BigTextStyle().bigText(
                         listOf(
-                            subtitle,
-                            holidays.trim(),
+                            subtitle, holidays.trim(),
                             if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else "",
                             if ("owghat" in whatToShowOnWidgets) owghat else ""
                         ).filter { it.isNotBlank() }.joinToString("\n")

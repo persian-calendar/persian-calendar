@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar
 
+import com.byagowi.persiancalendar.utils.listOf12Items
+import com.byagowi.persiancalendar.utils.listOf7Items
+
 sealed interface AppLocalesData {
     val persianCalendarMonths: List<String>
     val islamicCalendarMonths: List<String>
@@ -38,14 +41,6 @@ sealed interface AppLocalesData {
             LANG_EN_IR, LANG_FA -> fa
             else -> fa
         }
-
-        private inline fun <T> listOf12Items(
-            x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T
-        ) = listOf(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)
-
-        private inline fun <T> listOf7Items(
-            x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T
-        ) = listOf(x1, x2, x3, x4, x5, x6, x7)
     }
 
     private object fa : AppLocalesData {

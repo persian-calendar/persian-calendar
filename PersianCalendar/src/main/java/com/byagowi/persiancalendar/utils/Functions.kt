@@ -256,13 +256,11 @@ fun getOrderedCalendarEntities(
     }
 }
 
-fun getDayIconResource(day: Int): Int = runCatching {
-    when (preferredDigits) {
-        ARABIC_DIGITS -> DAYS_ICONS_ARABIC[day]
-        ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC[day]
-        else -> DAYS_ICONS_PERSIAN[day]
-    }
-}.onFailure(logException).getOrDefault(0)
+fun getDayIconResource(day: Int): Int = when (preferredDigits) {
+    ARABIC_DIGITS -> DAYS_ICONS_ARABIC
+    ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC
+    else -> DAYS_ICONS_PERSIAN
+}.getOrNull(day - 1) ?: 0
 
 fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) =
     "%s: %.7f%s%s: %.7f".format(
@@ -526,3 +524,21 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
         }
     }.toIntArray()
 }
+
+inline fun <T> listOf31Items(
+    x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,
+    x13: T, x14: T, x15: T, x16: T, x17: T, x18: T, x19: T, x20: T, x21: T, x22: T,
+    x23: T, x24: T, x25: T, x26: T, x27: T, x28: T, x29: T, x30: T, x31: T
+) = listOf(
+    x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12,
+    x13, x14, x15, x16, x17, x18, x19, x20, x21, x22,
+    x23, x24, x25, x26, x27, x28, x29, x30, x31
+)
+
+inline fun <T> listOf12Items(
+    x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T
+) = listOf(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)
+
+inline fun <T> listOf7Items(
+    x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T
+) = listOf(x1, x2, x3, x4, x5, x6, x7)
