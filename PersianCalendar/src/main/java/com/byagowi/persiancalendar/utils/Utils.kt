@@ -477,7 +477,7 @@ fun updateStoredPreference(context: Context) {
             CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI")
 
         otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: "GREGORIAN,ISLAMIC")
-            .splitIgnoreEmpty(",").map(CalendarType::valueOf).toList()
+            .splitIgnoreEmpty(",").map(CalendarType::valueOf)
     }.onFailure(logException).getOrElse {
         mainCalendar = CalendarType.SHAMSI
         otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
@@ -490,8 +490,7 @@ fun updateStoredPreference(context: Context) {
 
     weekEnds = BooleanArray(7)
     (prefs.getStringSet(PREF_WEEK_ENDS, null) ?: DEFAULT_WEEK_ENDS)
-        .mapNotNull(String::toIntOrNull)
-        .forEach { weekEnds[it] = true }
+        .mapNotNull(String::toIntOrNull).forEach { weekEnds[it] = true }
 
     isShowDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     val resources = context.resources
