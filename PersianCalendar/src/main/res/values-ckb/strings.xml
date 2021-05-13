@@ -30,6 +30,8 @@
     <string name="pray_methods_calculation">شێوازەکانی حیسابکردنی کاتە شەرعییەکان و ڕووگەنوێن</string>
     <string name="altitude">بەرزاییی جوگرافی</string>
     <string name="altitude_praytime">بە مەتر (دڵخواز)</string>
+    <string name="coordination">مختصات جغرافیایی</string>
+
     <string name="gps_location">وەرگرتنی شوێن لە GPS یان تۆڕ</string>
     <string name="gps_location_help">ئەگەر ئەمە بلوێ، ھیچی تر پێویست نییە</string>
     <string name="location">شوێن</string>
