@@ -13,7 +13,7 @@ fun Fragment.showPrayerSelectDialog(): Boolean {
     val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
     val alarms = (context.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
         .splitIgnoreEmpty(",").toMutableSet()
-    val checked = entriesKeys.indices.map { entriesKeys[it] in alarms }.toBooleanArray()
+    val checked = entriesKeys.map { it in alarms }.toBooleanArray()
 
     AlertDialog.Builder(context)
         .setTitle(R.string.athan_alarm)
