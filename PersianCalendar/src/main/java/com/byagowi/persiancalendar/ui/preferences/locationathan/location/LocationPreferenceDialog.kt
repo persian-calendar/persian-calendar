@@ -3,13 +3,15 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.preference.PreferenceDialogFragmentCompat
+import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.generated.citiesStore
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.layoutInflater
 
@@ -18,62 +20,65 @@ import com.byagowi.persiancalendar.utils.layoutInflater
  * Author: hamidsafdari22@gmail.com
  * Date: 1/17/16
  */
-class LocationPreferenceDialog : PreferenceDialogFragmentCompat() {
-
-    override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
-        super.onPrepareDialogBuilder(builder)
-        builder?.setView(RecyclerView(builder.context).also {
-            it.setHasFixedSize(true)
-            it.layoutManager = LinearLayoutManager(it.context)
-            it.adapter = CitiesListAdapter()
-        })?.setPositiveButton("", null)?.setNegativeButton("", null)
+fun Fragment.showLocationPreferenceDialog(onSuccess: () -> Unit) {
+    val context = context ?: return
+    val recyclerView = RecyclerView(context)
+    val dialog = AlertDialog.Builder(context)
+        .setTitle(R.string.location)
+        .setView(recyclerView)
+        .setPositiveButton("", null)
+        .setNegativeButton("", null)
+        .create()
+    recyclerView.setHasFixedSize(true)
+    recyclerView.layoutManager = LinearLayoutManager(context)
+    recyclerView.adapter = CitiesListAdapter { result ->
+        dialog.dismiss()
+        this.context?.appPrefs?.edit { putString(PREF_SELECTED_LOCATION, result) }
+        onSuccess()
     }
+    dialog.show()
+}
 
-    override fun onDialogClosed(positiveResult: Boolean) {}
+private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :
+    RecyclerView.Adapter<CitiesListAdapter.ViewHolder>() {
 
-    private inner class CitiesListAdapter : RecyclerView.Adapter<CitiesListAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
+        ListItemCityNameBinding.inflate(parent.context.layoutInflater, parent, false)
+    )
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            ListItemCityNameBinding.inflate(parent.context.layoutInflater, parent, false)
-        )
+    private val cities = getCitiesList(language)
 
-        private val cities = getCitiesList(language)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) =
+        holder.bind(cities[position])
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) =
-            holder.bind(cities[position])
+    override fun getItemCount(): Int = cities.size
 
-        override fun getItemCount(): Int = cities.size
+    inner class ViewHolder(private val binding: ListItemCityNameBinding) :
+        RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-        inner class ViewHolder(private val binding: ListItemCityNameBinding) :
-            RecyclerView.ViewHolder(binding.root), View.OnClickListener {
-
-            fun bind(cityEntity: CityItem) = binding.let {
-                it.root.setOnClickListener(this)
-                when (language) {
-                    LANG_EN_IR, LANG_EN_US, LANG_JA -> {
-                        it.city.text = cityEntity.en
-                        it.country.text = cityEntity.countryEn
-                    }
-                    LANG_CKB -> {
-                        it.city.text = cityEntity.ckb
-                        it.country.text = cityEntity.countryCkb
-                    }
-                    LANG_AR -> {
-                        it.city.text = cityEntity.ar
-                        it.country.text = cityEntity.countryAr
-                    }
-                    else -> {
-                        it.city.text = cityEntity.fa
-                        it.country.text = cityEntity.countryFa
-                    }
+        fun bind(cityEntity: CityItem) = binding.let {
+            it.root.setOnClickListener(this)
+            when (language) {
+                LANG_EN_IR, LANG_EN_US, LANG_JA -> {
+                    it.city.text = cityEntity.en
+                    it.country.text = cityEntity.countryEn
+                }
+                LANG_CKB -> {
+                    it.city.text = cityEntity.ckb
+                    it.country.text = cityEntity.countryCkb
+                }
+                LANG_AR -> {
+                    it.city.text = cityEntity.ar
+                    it.country.text = cityEntity.countryAr
+                }
+                else -> {
+                    it.city.text = cityEntity.fa
+                    it.country.text = cityEntity.countryFa
                 }
             }
-
-            override fun onClick(view: View) {
-                (preference as LocationPreference).setSelected(cities[bindingAdapterPosition].key)
-                dismiss()
-            }
         }
+
+        override fun onClick(view: View) = onItemClicked(cities[bindingAdapterPosition].key)
     }
 
     companion object {

@@ -21,14 +21,14 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectPreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreference
-import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
+import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showLocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
 import com.byagowi.persiancalendar.utils.*
@@ -57,10 +57,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         onSharedPreferenceChanged(null, null)
         activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
-        putLocationOnSummary(
-            context?.appPrefs?.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY
-        )
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
+        updateLocationOnSummary()
         updateCoordination()
     }
 
@@ -75,7 +73,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         when (preference) {
             is PrayerSelectPreference -> fragment = PrayerSelectDialog()
             is AthanVolumePreference -> fragment = AthanVolumeDialog()
-            is LocationPreference -> fragment = LocationPreferenceDialog()
             is NumericPreference -> fragment = NumericDialog()
             else -> super.onDisplayPreferenceDialog(preference)
         }
@@ -160,6 +157,10 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 }.onFailure(logException)
                 return true
             }
+            PREF_SELECTED_LOCATION -> {
+                showLocationPreferenceDialog(::updateLocationOnSummary)
+                return true
+            }
             "Coordination" -> {
                 showCoordinatesDialog(::updateCoordination)
                 return true
@@ -181,9 +182,18 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<Preference>("pref_key_ringtone")?.summary = athanName
     }
 
-    private fun putLocationOnSummary(selected: String) {
+    private fun updateLocationOnSummary() {
         val context = context ?: return
+        val selected = context.appPrefs.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY
         findPreference<Preference>(PREF_SELECTED_LOCATION)?.summary =
-            LocationPreference.getSummary(context, selected)
+            (if (selected == DEFAULT_CITY) null
+            else citiesStore[selected]?.let {
+                when (language) {
+                    LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
+                    LANG_CKB -> it.ckb
+                    LANG_AR -> it.ar
+                    else -> it.fa
+                }
+            }) ?: context.getString(R.string.location_help)
     }
 }

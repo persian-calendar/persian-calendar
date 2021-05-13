@@ -13,7 +13,7 @@
             android:title="@string/gps_location"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreference
+        <androidx.preference.Preference
             android:key="Location"
             android:summary="@string/location_help"
             android:title="@string/location"
