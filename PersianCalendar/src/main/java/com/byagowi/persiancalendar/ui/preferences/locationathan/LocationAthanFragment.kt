@@ -2,13 +2,16 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.media.RingtoneManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -81,25 +84,52 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         }
     }
 
+    class PickRingtoneContract : ActivityResultContract<Uri?, String>() {
+        override fun createIntent(context: Context, input: Uri?): Intent =
+            Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+                .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
+                .putExtra(
+                    RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
+                    Settings.System.DEFAULT_NOTIFICATION_URI
+                )
+                .also { intent ->
+                    input?.let { intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it) }
+                }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): String? =
+            if (resultCode == RESULT_OK)
+                intent
+                    ?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
+                    ?.toString()
+            else null
+    }
+
+    private val pickRingtone = registerForActivityResult(PickRingtoneContract()) { uri ->
+        uri ?: return@registerForActivityResult
+        val context = context ?: return@registerForActivityResult
+        val ringtone = RingtoneManager.getRingtone(context, uri.toUri())
+        // If no ringtone has been found better to skip touching preferences store
+        ringtone ?: return@registerForActivityResult
+        val ringtoneTitle = ringtone.getTitle(context) ?: ""
+        context.appPrefs.edit {
+            putString(PREF_ATHAN_NAME, ringtoneTitle)
+            putString(PREF_ATHAN_URI, uri)
+        }
+        view?.let {
+            Snackbar.make(it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT).show()
+        }
+        putAthanNameOnSummary(ringtoneTitle)
+    }
+
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        val context = context ?: return true
+        val context = context ?: return super.onPreferenceTreeClick(preference)
 
         when (preference?.key) {
             "pref_key_ringtone" -> {
-                val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
-                    .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
-                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-                    .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
-                    .putExtra(
-                        RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
-                        Settings.System.DEFAULT_NOTIFICATION_URI
-                    )
-                getCustomAthanUri(context)?.let {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it)
-                }
-                runCatching {
-                    startActivityForResult(intent, ATHAN_RINGTONE_REQUEST_CODE)
-                }.onFailure(logException)
+                runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
+                    .onFailure(logException)
                 return true
             }
             "pref_key_ringtone_default" -> {
@@ -130,36 +160,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             }
             else -> return super.onPreferenceTreeClick(preference)
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val context = context ?: return
-
-        if (requestCode == ATHAN_RINGTONE_REQUEST_CODE && resultCode == RESULT_OK) {
-            data?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-                ?.let { parcelable ->
-                    val uri = parcelable.toString()
-                    val ringtone = RingtoneManager.getRingtone(context, uri.toUri())
-
-                    // If no ringtone has been found better to skip touching preferences store
-                    ringtone ?: return@let
-
-                    val ringtoneTitle = ringtone.getTitle(context) ?: ""
-
-                    context.appPrefs.edit {
-                        putString(PREF_ATHAN_NAME, ringtoneTitle)
-                        putString(PREF_ATHAN_URI, uri)
-                    }
-
-                    view?.let {
-                        Snackbar.make(
-                            it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                    putAthanNameOnSummary(ringtoneTitle)
-                }
-        }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {
