@@ -272,10 +272,8 @@ fun calculateDaysDifference(jdn: Jdn, messageToFormat: String): String {
     val dayOfMonthDiff = civilOffset.dayOfMonth - 1
 
     val result = messageToFormat.format(
-        formatNumber(selectedDayAbsoluteDistance.toInt()),
-        formatNumber(yearDiff),
-        formatNumber(monthDiff),
-        formatNumber(dayOfMonthDiff)
+        formatNumber(selectedDayAbsoluteDistance),formatNumber(yearDiff),
+        formatNumber(monthDiff), formatNumber(dayOfMonthDiff)
     )
     return if (selectedDayAbsoluteDistance <= 31) result.split(" (")[0] else result
 }

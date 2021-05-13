@@ -173,10 +173,10 @@ class AboutFragment : Fragment() {
             putExtra(
                 Intent.EXTRA_TEXT,
                 """$defaultMessage
-    
-    
-    
-    
+
+
+
+
 ===Device Information===
 Manufacturer: ${Build.MANUFACTURER}
 Model: ${Build.MODEL}
