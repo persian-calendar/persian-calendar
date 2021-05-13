@@ -30,6 +30,8 @@
     <string name="pray_methods_calculation">اؤقاتˇشرعي شيوهانأ مۊحاسبه کۊدن</string>
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (ديلبخا)</string>
+    <string name="coordination">مختصات جغرافیایی</string>
+
     <string name="gps_location">مؤختصاتˇ فأگيفتن جي‌پي‌اسˇجأ</string>
     <string name="gps_location_help">أگه أيأ جأ بتأنيد, تنظيماتˇباقي بخشانأ نيازي ني-يه</string>
     <string name="location">مؤقعیت</string>

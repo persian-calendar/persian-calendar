@@ -182,6 +182,7 @@
     <string name="longitude">خط الطول</string>
     <string name="altitude">الأرتفاع</string>
     <string name="altitude_praytime">وحدة القياس: المتر (إختياري)</string>
+    <string name="coordination">الإحداثيات الجغرافية</string>
 
     <string name="athan">الأذان</string>
     <string name="in_city_time">بتوقيت</string>
