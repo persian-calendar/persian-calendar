@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
+import com.byagowi.persiancalendar.Widget4x1dateOnly
 import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
@@ -75,6 +76,7 @@ fun update(context: Context, updateDate: Boolean) {
     val widget4x1 = ComponentName(context, Widget4x1::class.java)
     val widget4x2 = ComponentName(context, Widget4x2::class.java)
     val widget2x2 = ComponentName(context, Widget2x2::class.java)
+    val widget4x1dateOnly = ComponentName(context, Widget4x1dateOnly::class.java)
 
     fun RemoteViews.setBackgroundColor(@IdRes layoutId: Int): Unit =
         this.setInt(
@@ -272,6 +274,50 @@ fun update(context: Context, updateDate: Boolean) {
 
             setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent)
             manager.updateAppWidget(widget2x2, this)
+        }
+    }
+    //endregion
+
+    //region Widget 4x1 dateOnly
+    if (manager.getAppWidgetIds(widget4x1dateOnly)?.isNotEmpty() == true) {
+        val remoteViews: RemoteViews
+        if (enableClock) {
+            if (isForcedIranTimeEnabled) {
+                remoteViews = RemoteViews(
+                    context.packageName,
+                    if (isCenterAligned) R.layout.widget4x1_date_only_clock_iran_center else R.layout.widget4x1_date_only_clock_iran
+                )
+            } else {
+                remoteViews = RemoteViews(
+                    context.packageName,
+                    if (isCenterAligned) R.layout.widget4x1_date_only_clock_center else R.layout.widget4x1_date_only_clock
+                )
+            }
+        } else {
+            remoteViews = RemoteViews(
+                context.packageName,
+                if (isCenterAligned) R.layout.widget4x1_date_only_center else R.layout.widget4x1_date_only
+            )
+        }
+
+        val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
+
+        remoteViews.run {
+            // Widget 4x1
+            setBackgroundColor(R.id.widget_layout4x1)
+            setTextColor(R.id.textPlaceholder1_4x1_dateOnly, color)
+            setTextColor(R.id.textPlaceholder2_4x1_dateOnly, color)
+            setTextColor(R.id.textPlaceholder3_4x1_dateOnly, color)
+
+            val text3 = if (enableClock && isForcedIranTimeEnabled) "(" +
+                    context.getString(R.string.iran_time) + ")" else ""
+
+            val text2 = if ("show_weekday" in whatToShowOnWidgets) widgetTitle else mainDateString
+
+            setTextViewText(R.id.textPlaceholder2_4x1_dateOnly, text2)
+            setTextViewText(R.id.textPlaceholder3_4x1_dateOnly, text3)
+            setOnClickPendingIntent(R.id.widget_layout4x1dateOnly, launchAppPendingIntent)
+            manager.updateAppWidget(widget4x1dateOnly, this)
         }
     }
     //endregion
