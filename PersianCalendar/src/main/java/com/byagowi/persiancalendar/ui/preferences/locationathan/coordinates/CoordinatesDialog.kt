@@ -22,7 +22,7 @@ class CoordinatesDialog : PreferenceDialogFragmentCompat() {
         super.onPrepareDialogBuilder(builder)
         val context = builder?.context ?: return
         builder.setView(DialogCoordinatesBinding.inflate(context.layoutInflater).also { binding ->
-            binding.coordinatesEditable.zip(
+            binding.coordinatesEdits.zip(
                 coordinatesKeys.map { context.appPrefs.getString(it, "0.0") }
             ) { editable, value ->
                 editable.setText(value)
@@ -41,7 +41,7 @@ class CoordinatesDialog : PreferenceDialogFragmentCompat() {
         if (positiveResult) {
             val context = context ?: return
             val binding = binding ?: return
-            val coordinates = binding.coordinatesEditable.map { it.text.toString() }
+            val coordinates = binding.coordinatesEdits.map { it.text.toString() }
             // just ensure they are parsable numbers, if not, bail out
             if (coordinates.any { it.toDoubleOrNull() == null }) return
             context.appPrefs.edit { coordinatesKeys.zip(coordinates, ::putString) }
@@ -50,7 +50,7 @@ class CoordinatesDialog : PreferenceDialogFragmentCompat() {
 
     companion object {
         private val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
-        private val DialogCoordinatesBinding.coordinatesEditable
+        private val DialogCoordinatesBinding.coordinatesEdits
             get() = listOf(latitude, longitude, altitude)
     }
 }
