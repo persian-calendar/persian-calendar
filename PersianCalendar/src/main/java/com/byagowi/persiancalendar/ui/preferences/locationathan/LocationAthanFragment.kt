@@ -25,11 +25,10 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolum
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectPreference
-import com.byagowi.persiancalendar.ui.preferences.locationathan.coordinates.CoordinatesDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.coordinates.CoordinatesPreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.LocationPreferenceDialog
+import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
 import com.byagowi.persiancalendar.utils.*
@@ -77,7 +76,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             is AthanVolumePreference -> fragment = AthanVolumeDialog()
             is LocationPreference -> fragment = LocationPreferenceDialog()
             is NumericPreference -> fragment = NumericDialog()
-            is CoordinatesPreference -> fragment = CoordinatesDialog()
             else -> super.onDisplayPreferenceDialog(preference)
         }
         fragment?.let {
@@ -159,7 +157,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         )
                     }
                 }.onFailure(logException)
-                return super.onPreferenceTreeClick(preference)
+                return true
+            }
+            "Coordination" -> {
+                showCoordinatesDialog()
+                return true
             }
             else -> return super.onPreferenceTreeClick(preference)
         }

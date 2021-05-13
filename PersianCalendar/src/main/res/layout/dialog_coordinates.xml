@@ -16,9 +16,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:completionThreshold="1"
         android:hint="@string/latitude"
-        android:singleLine="true" />
+        android:inputType="number|numberDecimal|numberSigned"
+        android:layoutDirection="ltr"
+        android:singleLine="true"
+        android:textDirection="ltr" />
 
     <TextView
         android:layout_width="match_parent"
@@ -31,9 +33,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:completionThreshold="1"
         android:hint="@string/longitude"
-        android:singleLine="true" />
+        android:inputType="number|numberDecimal|numberSigned"
+        android:layoutDirection="ltr"
+        android:singleLine="true"
+        android:textDirection="ltr" />
 
     <TextView
         android:id="@+id/altitude_label"
@@ -47,8 +51,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:completionThreshold="1"
         android:hint="@string/altitude"
-        android:singleLine="true" />
+        android:inputType="number|numberDecimal|numberSigned"
+        android:layoutDirection="ltr"
+        android:singleLine="true"
+        android:textDirection="ltr" />
 
 </LinearLayout>

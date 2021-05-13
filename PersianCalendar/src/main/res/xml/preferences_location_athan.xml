@@ -19,7 +19,7 @@
             android:title="@string/location"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.ui.preferences.locationathan.coordinates.CoordinatesPreference
+        <androidx.preference.Preference
             android:key="Coordination"
             android:title="@string/coordination"
             settings:iconSpaceReserved="false" />
