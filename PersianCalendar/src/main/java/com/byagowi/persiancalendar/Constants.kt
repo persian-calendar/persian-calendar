@@ -4,7 +4,6 @@ import com.byagowi.persiancalendar.utils.listOf31Items
 
 const val LOCATION_PERMISSION_REQUEST_CODE = 23
 const val CALENDAR_READ_PERMISSION_REQUEST_CODE = 55
-const val CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE = 63
 
 const val LANG_FA = "fa"
 const val LANG_FA_AF = "fa-AF"

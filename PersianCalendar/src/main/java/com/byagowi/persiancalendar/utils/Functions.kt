@@ -362,8 +362,7 @@ fun askForCalendarPermission(activity: Activity?) {
         .setMessage(R.string.phone_calendar_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->
             activity.requestPermissions(
-                arrayOf(Manifest.permission.READ_CALENDAR),
-                CALENDAR_READ_PERMISSION_REQUEST_CODE
+                arrayOf(Manifest.permission.READ_CALENDAR), CALENDAR_READ_PERMISSION_REQUEST_CODE
             )
         }
         .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
@@ -396,16 +395,13 @@ private fun calculateDiffToChangeDate(): Long = Calendar.getInstance().apply {
 fun setChangeDateWorker(context: Context) {
     val remainedSeconds = calculateDiffToChangeDate()
     val changeDateWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
-        .setInitialDelay(
-            remainedSeconds,
-            TimeUnit.SECONDS
-        )// Use this when you want to add initial delay or schedule initial work to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+        // Use this when you want to add initial delay or schedule initial work
+        // to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
+        .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)
         .build()
 
     WorkManager.getInstance(context).beginUniqueWork(
-        CHANGE_DATE_TAG,
-        ExistingWorkPolicy.REPLACE,
-        changeDateWorker
+        CHANGE_DATE_TAG, ExistingWorkPolicy.REPLACE, changeDateWorker
     ).enqueue()
 }
 

@@ -22,6 +22,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
@@ -30,7 +31,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.byagowi.persiancalendar.CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
 import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
@@ -77,13 +77,11 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.toJavaCalendar
-import com.byagowi.persiancalendar.utils.toggleShowDeviceCalendarOnPreference
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
-import java.util.*
 
 private const val CALENDARS_TAB = 0
 private const val EVENTS_TAB = 1
@@ -290,34 +288,11 @@ class CalendarFragment : Fragment() {
 
     private fun addEventOnCalendar(jdn: Jdn) {
         val activity = activity ?: return
-        val gregorian = jdn.toGregorianCalendar()
-        val time = Calendar.getInstance()
-        time.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
         if (ActivityCompat.checkSelfPermission(
                 activity, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission(activity) else {
-            runCatching {
-                startActivityForResult(
-                    Intent(Intent.ACTION_INSERT)
-                        .setData(CalendarContract.Events.CONTENT_URI)
-                        .putExtra(
-                            CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                                jdn, jdn.toCalendar(mainCalendar)
-                            )
-                        )
-                        .putExtra(
-                            CalendarContract.EXTRA_EVENT_BEGIN_TIME,
-                            time.timeInMillis
-                        )
-                        .putExtra(
-                            CalendarContract.EXTRA_EVENT_END_TIME,
-                            time.timeInMillis
-                        )
-                        .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true),
-                    CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-                )
-            }.onFailure(logException).getOrElse {
+            runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
                 Snackbar.make(
                     mainBinding?.root ?: return,
                     R.string.device_calendar_does_not_support,
@@ -334,21 +309,37 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val activity = activity ?: return
-        if (requestCode == CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE) {
-            if (isShowDeviceCalendarEvents)
-                mainBinding?.calendarPager?.refresh(isEventsModified = true)
-            else {
-                if (ActivityCompat.checkSelfPermission(
-                        activity, Manifest.permission.READ_CALENDAR
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) askForCalendarPermission(activity) else {
-                    toggleShowDeviceCalendarOnPreference(activity, true)
-                    findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
-                }
+    private val addEvent =
+        registerForActivityResult(object : ActivityResultContract<Jdn, Void>() {
+            override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
+            override fun createIntent(context: Context, jdn: Jdn): Intent {
+                val time = jdn.toJavaCalendar().timeInMillis
+                return Intent(Intent.ACTION_INSERT)
+                    .setData(CalendarContract.Events.CONTENT_URI)
+                    .putExtra(
+                        CalendarContract.Events.DESCRIPTION, dayTitleSummary(
+                            jdn, jdn.toCalendar(mainCalendar)
+                        )
+                    )
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
+                    .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, time)
+                    .putExtra(CalendarContract.EXTRA_EVENT_ALL_DAY, true)
             }
-        }
+        }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
+
+    private val viewEvent =
+        registerForActivityResult(object : ActivityResultContract<Long, Void>() {
+            override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
+            override fun createIntent(context: Context, id: Long): Intent =
+                Intent(Intent.ACTION_VIEW).setData(
+                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, id)
+                )
+        }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
+
+    override fun onResume() {
+        super.onResume()
+        // If events are enabled refresh the pager events on resumes anyway
+        if (isShowDeviceCalendarEvents) mainBinding?.calendarPager?.refresh(isEventsModified = true)
     }
 
     private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = dayEvents
@@ -357,15 +348,7 @@ class CalendarFragment : Fragment() {
             val spannableString = SpannableString(formatDeviceCalendarEventTitle(event))
             spannableString.setSpan(object : ClickableSpan() {
                 override fun onClick(textView: View) = runCatching {
-                    startActivityForResult(
-                        Intent(Intent.ACTION_VIEW)
-                            .setData(
-                                ContentUris.withAppendedId(
-                                    CalendarContract.Events.CONTENT_URI, event.id.toLong()
-                                )
-                            ),
-                        CALENDAR_EVENT_ADD_MODIFY_REQUEST_CODE
-                    )
+                    viewEvent.launch(event.id.toLong())
                 }.onFailure(logException).getOrElse {
                     Snackbar.make(
                         textView,
@@ -426,18 +409,12 @@ class CalendarFragment : Fragment() {
         val events = jdn.getEvents(jdn.readDayDeviceEvents(activity))
         val holidays = getEventsTitle(
             events,
-            holiday = true,
-            compact = false,
-            showDeviceCalendarEvents = false,
-            insertRLM = false,
+            holiday = true, compact = false, showDeviceCalendarEvents = false, insertRLM = false,
             addIsHoliday = isHighTextContrastEnabled
         )
         val nonHolidays = getEventsTitle(
             events,
-            holiday = false,
-            compact = false,
-            showDeviceCalendarEvents = false,
-            insertRLM = false,
+            holiday = false, compact = false, showDeviceCalendarEvents = false, insertRLM = false,
             addIsHoliday = false
         )
         val deviceEvents = getDeviceEventsTitle(events)
@@ -528,7 +505,7 @@ class CalendarFragment : Fragment() {
         val owghatBinding = owghatBinding ?: return
 
         val prayTimes = PrayTimesCalculator.calculate(
-            calculationMethod, jdn.toGregorianCalendar().toJavaCalendar().time, coordinate
+            calculationMethod, jdn.toJavaCalendar().time, coordinate
         )
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->

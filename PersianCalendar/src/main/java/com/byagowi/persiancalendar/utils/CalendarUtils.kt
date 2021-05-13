@@ -151,8 +151,10 @@ fun Date.toJavaCalendar(forceLocalTime: Boolean = false): Calendar = Calendar.ge
     it.time = this
 }
 
-fun CivilDate.toJavaCalendar(): Calendar =
-    Calendar.getInstance().also { it.set(year, month - 1, dayOfMonth) }
+fun Jdn.toJavaCalendar(): Calendar = Calendar.getInstance().also {
+    val gregorian = this.toGregorianCalendar()
+    it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
+}
 
 private fun readDeviceEvents(
     context: Context, startingDate: Calendar, rangeInMillis: Long
@@ -206,11 +208,11 @@ private fun readDeviceEvents(
 }.onFailure(logException).getOrNull() ?: emptyList()
 
 fun Jdn.readDayDeviceEvents(ctx: Context) = readDeviceEvents(
-    ctx, this.toGregorianCalendar().toJavaCalendar(), DAY_IN_MILLIS
+    ctx, this.toJavaCalendar(), DAY_IN_MILLIS
 ).toEventsStore()
 
 fun Jdn.readMonthDeviceEvents(ctx: Context) = readDeviceEvents(
-    ctx, this.toGregorianCalendar().toJavaCalendar(), 32L * DAY_IN_MILLIS
+    ctx, this.toJavaCalendar(), 32L * DAY_IN_MILLIS
 ).toEventsStore()
 
 fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
