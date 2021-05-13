@@ -16,13 +16,13 @@ import com.byagowi.persiancalendar.utils.spacedComma
 
 class CoordinatesDialog : PreferenceDialogFragmentCompat() {
 
-    var binding: DialogCoordinatesBinding? = null
+    private var binding: DialogCoordinatesBinding? = null
 
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
         super.onPrepareDialogBuilder(builder)
         val context = builder?.context ?: return
         builder.setView(DialogCoordinatesBinding.inflate(context.layoutInflater).also { binding ->
-            listOf(binding.latitude, binding.longitude, binding.altitude).zip(
+            binding.coordinatesEditable.zip(
                 coordinatesKeys.map { context.appPrefs.getString(it, "0.0") }
             ) { editable, value ->
                 editable.setText(value)
@@ -41,15 +41,16 @@ class CoordinatesDialog : PreferenceDialogFragmentCompat() {
         if (positiveResult) {
             val context = context ?: return
             val binding = binding ?: return
-            val coordinates = listOf(binding.latitude, binding.longitude, binding.altitude)
-                .map { it.text.toString() }
-                // just ensure again they are parsable numbers
-                .takeIf { it.all { x -> x.toDoubleOrNull() != null } } ?: return
+            val coordinates = binding.coordinatesEditable.map { it.text.toString() }
+            // just ensure they are parsable numbers, if not, bail out
+            if (coordinates.any { it.toDoubleOrNull() == null }) return
             context.appPrefs.edit { coordinatesKeys.zip(coordinates, ::putString) }
         }
     }
 
     companion object {
-        val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
+        private val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
+        private val DialogCoordinatesBinding.coordinatesEditable
+            get() = listOf(latitude, longitude, altitude)
     }
 }
