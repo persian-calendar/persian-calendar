@@ -37,6 +37,13 @@ fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean 
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
+// 1 means Saturday on it and 7 means Friday
+fun CalendarType.getLastDayOfWeek(year: Int, month: Int, dayOfWeek: Int): Int {
+    val monthLength = this.getMonthLength(year, month)
+    val endOfMonthJdn = Jdn(this, year, month, monthLength)
+    return monthLength - ((endOfMonthJdn.value - dayOfWeek + 3L) % 7).toInt()
+}
+
 val AbstractDate.monthName get() = this.calendarType.monthsNames.getOrNull(month - 1) ?: ""
 
 val CalendarType.monthsNames: List<String>
@@ -48,8 +55,7 @@ val CalendarType.monthsNames: List<String>
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(
-    context: Context, jdn: Jdn, isToday: Boolean,
-    deviceCalendarEvents: DeviceCalendarEventsStore,
+    context: Context, jdn: Jdn, isToday: Boolean, deviceCalendarEvents: DeviceCalendarEventsStore,
     withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
 ): String {
     // It has some expensive calculations, lets not do that when not needed
@@ -88,10 +94,7 @@ fun getA11yDaySummary(
     val events = jdn.getEvents(deviceCalendarEvents)
     val holidays = getEventsTitle(
         events, true,
-        compact = true,
-        showDeviceCalendarEvents = true,
-        insertRLM = false,
-        addIsHoliday = false
+        compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
     )
     if (holidays.isNotEmpty()) {
         result.append("\n\n")
@@ -101,12 +104,8 @@ fun getA11yDaySummary(
     }
 
     val nonHolidays = getEventsTitle(
-        events,
-        holiday = false,
-        compact = true,
-        showDeviceCalendarEvents = true,
-        insertRLM = false,
-        addIsHoliday = false
+        events, false,
+        compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
     )
     if (nonHolidays.isNotEmpty()) {
         result.append("\n\n")
@@ -156,9 +155,7 @@ fun CivilDate.toJavaCalendar(): Calendar =
     Calendar.getInstance().also { it.set(year, month - 1, dayOfMonth) }
 
 private fun readDeviceEvents(
-    context: Context,
-    startingDate: Calendar,
-    rangeInMillis: Long
+    context: Context, startingDate: Calendar, rangeInMillis: Long
 ): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents ||
     ActivityCompat.checkSelfPermission(
         context, Manifest.permission.READ_CALENDAR
@@ -272,7 +269,7 @@ fun calculateDaysDifference(jdn: Jdn, messageToFormat: String): String {
     val dayOfMonthDiff = civilOffset.dayOfMonth - 1
 
     val result = messageToFormat.format(
-        formatNumber(selectedDayAbsoluteDistance),formatNumber(yearDiff),
+        formatNumber(selectedDayAbsoluteDistance), formatNumber(yearDiff),
         formatNumber(monthDiff), formatNumber(dayOfMonthDiff)
     )
     return if (selectedDayAbsoluteDistance <= 31) result.split(" (")[0] else result

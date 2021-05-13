@@ -337,13 +337,6 @@ fun loadEvents(context: Context) {
     allEnabledEvents = allEnabledEventsBuilder
 }
 
-// 1 means Saturday on it and 7 means Friday
-fun CalendarType.getLastDayOfWeek(year: Int, month: Int, dayOfWeek: Int): Int {
-    val monthLength = this.getMonthLength(year, month)
-    val endOfMonthJdn = Jdn(this, year, month, monthLength)
-    return monthLength - ((endOfMonthJdn.value - dayOfWeek + 3L) % 7).toInt()
-}
-
 fun loadLanguageResource() {
     val language = language
     persianMonths = AppLocalesData.getPersianCalendarMonths(language)
