@@ -16,6 +16,8 @@
 
     <AutoCompleteTextView
         android:id="@+id/coordinate_latitude"
+        android:labelFor="@id/textView_latitude"
+        android:hint="@string/latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -30,6 +32,8 @@
 
     <AutoCompleteTextView
         android:id="@+id/coordinate_longitude"
+        android:labelFor="@id/textView_longitude"
+        android:hint="@string/longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -44,6 +48,8 @@
 
     <AutoCompleteTextView
         android:id="@+id/coordinate_altitude"
+        android:labelFor="@id/textView_altitude"
+        android:hint="@string/altitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
