@@ -43,19 +43,14 @@
             settings:iconSpaceReserved="false"
             settings:useSimpleSummaryProvider="true" />
 
-        <com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
-            android:inputType="numberSigned"
+        <androidx.preference.Preference
             android:key="AthanGap"
-            android:negativeButtonText="@string/cancel"
-            android:positiveButtonText="@string/accept"
             android:summary="@string/athan_gap_summary"
             android:title="@string/athan_gap"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectPreference
+        <androidx.preference.Preference
             android:key="AthanAlarm"
-            android:negativeButtonText="@string/cancel"
-            android:positiveButtonText="@string/accept"
             android:summary="@string/athan_alarm_summary"
             android:title="@string/athan_alarm"
             settings:iconSpaceReserved="false" />

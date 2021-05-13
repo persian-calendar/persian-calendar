@@ -1,34 +1,33 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
 import androidx.appcompat.app.AlertDialog
-import androidx.preference.PreferenceDialogFragmentCompat
+import androidx.core.content.edit
+import androidx.fragment.app.Fragment
+import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
 
-class PrayerSelectDialog : PreferenceDialogFragmentCompat() {
+fun Fragment.showPrayerSelectDialog(): Boolean {
+    val context = context ?: return true
+    val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
+    val alarms = (context.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
+        .splitIgnoreEmpty(",").toMutableSet()
+    val checked = entriesKeys.indices.map { entriesKeys[it] in alarms }.toBooleanArray()
 
-    private var prayers = emptySet<String>()
-
-    override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
-        super.onPrepareDialogBuilder(builder)
-        if (builder == null) return
-        val prayerSelectPreference = preference as PrayerSelectPreference
-
-        val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
-
-        prayers = prayerSelectPreference.prayers
-
-        val checked = BooleanArray(entriesKeys.size)
-        entriesKeys.indices.forEach { checked[it] = entriesKeys[it] in prayers }
-
-        builder.setMultiChoiceItems(R.array.prayerTimeNames, checked) { _, which, isChecked ->
-            prayers = when (isChecked) {
-                true -> prayers + entriesKeys[which].toString()
-                false -> prayers - entriesKeys[which].toString()
+    AlertDialog.Builder(context)
+        .setTitle(R.string.athan_alarm)
+        .setMultiChoiceItems(R.array.prayerTimeNames, checked) { _, which, isChecked ->
+            val key = entriesKeys[which].toString()
+            if (isChecked) alarms.add(key) else alarms.remove(key)
+        }
+        .setPositiveButton(R.string.accept) { _, _ ->
+            this.context?.appPrefs?.edit {
+                putString(PREF_ATHAN_ALARM, alarms.joinToString(","))
             }
         }
-    }
+        .setNegativeButton(R.string.cancel, null)
+        .show()
 
-    override fun onDialogClosed(positiveResult: Boolean) {
-        if (positiveResult) (preference as PrayerSelectPreference).prayers = prayers
-    }
+    return true
 }

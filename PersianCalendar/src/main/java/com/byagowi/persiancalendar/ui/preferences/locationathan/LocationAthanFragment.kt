@@ -15,21 +15,17 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.generated.citiesStore
-import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectPreference
+import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
+import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showLocationPreferenceDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.numeric.NumericPreference
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
 
@@ -58,27 +54,12 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
         updateLocationOnSummary()
-        updateCoordination()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val locationEmpty = getCoordinate(activity ?: return) == null
         categoryAthan?.isEnabled = !locationEmpty
         categoryAthan?.setSummary(if (locationEmpty) R.string.athan_disabled_summary else R.string.empty)
-    }
-
-    override fun onDisplayPreferenceDialog(preference: Preference?) {
-        var fragment: DialogFragment? = null
-        when (preference) {
-            is PrayerSelectPreference -> fragment = PrayerSelectDialog()
-            is NumericPreference -> fragment = NumericDialog()
-            else -> super.onDisplayPreferenceDialog(preference)
-        }
-        fragment?.let {
-            it.arguments = bundleOf("key" to preference?.key)
-            it.setTargetFragment(this, 0)
-            it.show(parentFragmentManager, it.javaClass.name)
-        }
     }
 
     private class PickRingtoneContract : ActivityResultContract<Uri?, String>() {
@@ -150,6 +131,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         GPSLocationDialog().show(
                             childFragmentManager, GPSLocationDialog::class.java.name
                         )
+                        // TODO: #updateCoordination() on its callback
                     }
                 }.onFailure(logException)
                 true
@@ -157,6 +139,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             PREF_SELECTED_LOCATION -> showLocationPreferenceDialog(::updateLocationOnSummary)
             "Coordination" -> showCoordinatesDialog(::updateCoordination)
             PREF_ATHAN_VOLUME -> showAthanVolumeDialog()
+            PREF_ATHAN_ALARM -> showPrayerSelectDialog()
+            PREF_ATHAN_GAP -> showAthanGapDialog()
             else -> super.onPreferenceTreeClick(preference)
         }
     }
@@ -187,5 +171,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     else -> it.fa
                 }
             }) ?: context.getString(R.string.location_help)
+        updateCoordination()
     }
 }

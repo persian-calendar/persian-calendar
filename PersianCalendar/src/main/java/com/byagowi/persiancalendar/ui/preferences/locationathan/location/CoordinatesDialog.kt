@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.spacedComma
 
@@ -24,8 +25,9 @@ fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit): Boolean {
     val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
 
     coordinatesEdits.zip(
-        coordinatesKeys.map { context.appPrefs.getString(it, "0.0") }
-    ) { editable, value -> editable.setText(value) }
+        getCoordinate(context)?.let { listOf(it.latitude, it.longitude, it.elevation) }
+            ?: listOf(.0, .0, .0)
+    ) { editable, value -> editable.setText(value.toString()) }
 
     AlertDialog.Builder(context)
         .setView(binding.root)
@@ -34,12 +36,13 @@ fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit): Boolean {
             val coordinates = coordinatesEdits.map { it.text.toString() }
             // just ensure they are parsable numbers for the last time otherwise reset it
             if (coordinates.all { it.toDoubleOrNull() != null })
-                context.appPrefs.edit { coordinatesKeys.zip(coordinates, ::putString) }
+                this.context?.appPrefs?.edit { coordinatesKeys.zip(coordinates, ::putString) }
             else
-                context.appPrefs.edit { coordinatesKeys.forEach(::remove) }
+                this.context?.appPrefs?.edit { coordinatesKeys.forEach(::remove) }
             onSuccess()
         }
         .setNegativeButton(R.string.cancel, null)
         .show()
+
     return true
 }

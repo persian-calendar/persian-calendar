@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
-import android.app.AlertDialog
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.widget.SeekBar
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
@@ -75,7 +75,7 @@ fun Fragment.showAthanVolumeDialog(): Boolean {
         .setTitle(R.string.athan_volume)
         .setView(seekBar)
         .setPositiveButton(R.string.accept) { _, _ ->
-            context.appPrefs.edit { putInt(PREF_ATHAN_VOLUME, volume) }
+            this.context?.appPrefs?.edit { putInt(PREF_ATHAN_VOLUME, volume) }
         }
         .setNegativeButton(R.string.cancel, null)
         .setOnDismissListener {
