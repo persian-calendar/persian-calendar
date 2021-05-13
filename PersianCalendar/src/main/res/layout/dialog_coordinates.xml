@@ -1,59 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/dialog_coordinate"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="25dp" >
+    android:padding="25dp">
 
     <TextView
-        android:id="@+id/textView_latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:labelFor="@id/latitude"
         android:text="@string/latitude" />
 
-    <AutoCompleteTextView
-        android:id="@+id/coordinate_latitude"
-        android:labelFor="@id/textView_latitude"
-        android:hint="@string/latitude"
+    <EditText
+        android:id="@+id/latitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:completionThreshold="1"
+        android:hint="@string/latitude"
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/textView_longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:labelFor="@id/longitude"
         android:text="@string/longitude" />
 
-    <AutoCompleteTextView
-        android:id="@+id/coordinate_longitude"
-        android:labelFor="@id/textView_longitude"
-        android:hint="@string/longitude"
+    <EditText
+        android:id="@+id/longitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:completionThreshold="1"
+        android:hint="@string/longitude"
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/textView_altitude"
+        android:id="@+id/altitude_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:labelFor="@id/altitude"
         android:text="@string/altitude" />
 
-    <AutoCompleteTextView
-        android:id="@+id/coordinate_altitude"
-        android:labelFor="@id/textView_altitude"
-        android:hint="@string/altitude"
+    <EditText
+        android:id="@+id/altitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:completionThreshold="1"
+        android:hint="@string/altitude"
         android:singleLine="true" />
 
 </LinearLayout>

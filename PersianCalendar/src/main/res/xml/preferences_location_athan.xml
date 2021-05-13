@@ -5,7 +5,7 @@
     <androidx.preference.PreferenceCategory
         android:layout="@layout/category_preference"
         android:title="@string/location"
-        settings:iconSpaceReserved="false" >
+        settings:iconSpaceReserved="false">
 
         <androidx.preference.Preference
             android:key="pref_gps_location"

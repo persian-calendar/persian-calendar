@@ -2,54 +2,54 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.coordinates
 
 import android.text.InputType
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.edit
 import androidx.preference.PreferenceDialogFragmentCompat
-import androidx.preference.PreferenceManager
+import com.byagowi.persiancalendar.PREF_ALTITUDE
+import com.byagowi.persiancalendar.PREF_LATITUDE
+import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.spacedComma
 
 class CoordinatesDialog : PreferenceDialogFragmentCompat() {
 
+    var binding: DialogCoordinatesBinding? = null
+
     override fun onPrepareDialogBuilder(builder: AlertDialog.Builder?) {
         super.onPrepareDialogBuilder(builder)
-
-        builder?.setView(R.layout.dialog_coordinates)?.create()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
-        dialog?.findViewById<EditText>(R.id.coordinate_latitude)?.apply {
-            setText(sharedPreferences.getString("Latitude", "0.0"))
-            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED or
-                    InputType.TYPE_NUMBER_FLAG_DECIMAL
-            textDirection = View.TEXT_DIRECTION_LTR
-            layoutDirection = View.LAYOUT_DIRECTION_LTR
-        }
-        dialog?.findViewById<EditText>(R.id.coordinate_longitude)?.apply {
-            setText(sharedPreferences.getString("Longitude", "0.0"))
-            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED or
-                    InputType.TYPE_NUMBER_FLAG_DECIMAL
-            textDirection = View.TEXT_DIRECTION_LTR
-            layoutDirection = View.LAYOUT_DIRECTION_LTR
-        }
-        dialog?.findViewById<EditText>(R.id.coordinate_altitude)?.apply {
-            setText(sharedPreferences.getString("Altitude", "0.0"))
-            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED or
-                    InputType.TYPE_NUMBER_FLAG_DECIMAL
-            textDirection = View.TEXT_DIRECTION_LTR
-            layoutDirection = View.LAYOUT_DIRECTION_LTR
-        }
+        val context = builder?.context ?: return
+        builder.setView(DialogCoordinatesBinding.inflate(context.layoutInflater).also { binding ->
+            listOf(binding.latitude, binding.longitude, binding.altitude).zip(
+                coordinatedKeys.map { context.appPrefs.getString(it, "0.0") }
+            ) { editable, value ->
+                editable.setText(value)
+                editable.inputType = InputType.TYPE_CLASS_NUMBER or
+                        InputType.TYPE_NUMBER_FLAG_SIGNED or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                editable.textDirection = View.TEXT_DIRECTION_LTR
+                editable.layoutDirection = View.LAYOUT_DIRECTION_LTR
+            }
+            binding.altitudeLabel.text = listOf(R.string.altitude, R.string.altitude_praytime)
+                .joinToString(spacedComma) { context.getString(it) }
+            this.binding = binding
+        }.root)
     }
 
     override fun onDialogClosed(positiveResult: Boolean) {
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext())
         if (positiveResult) {
-            sharedPreferences.edit()
-                .putString("Latitude", dialog?.findViewById<EditText>(R.id.coordinate_latitude)?.text.toString())
-                .putString("Longitude", dialog?.findViewById<EditText>(R.id.coordinate_longitude)?.text.toString())
-                .putString("Altitude", dialog?.findViewById<EditText>(R.id.coordinate_altitude)?.text.toString())
-                .apply()
+            val context = context ?: return
+            val binding = binding ?: return
+            val coordinates = listOf(binding.latitude, binding.longitude, binding.altitude)
+                .map { it.text.toString() }
+                // just ensure again they are parsable numbers
+                .takeIf { it.all { x -> x.toDoubleOrNull() != null } } ?: return
+            context.appPrefs.edit { coordinatedKeys.zip(coordinates, ::putString) }
         }
+    }
+
+    companion object {
+        val coordinatedKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
     }
 }
