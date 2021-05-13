@@ -61,6 +61,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             context?.appPrefs?.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY
         )
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
+        updateCoordination()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -160,11 +161,20 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 return true
             }
             "Coordination" -> {
-                showCoordinatesDialog()
+                showCoordinatesDialog(::updateCoordination)
                 return true
             }
             else -> return super.onPreferenceTreeClick(preference)
         }
+    }
+
+    private fun updateCoordination() {
+        val coordinates = getCoordinate(context ?: return)
+        findPreference<Preference>("Coordination")?.summary =
+            if (coordinates == null) ""
+            else formatCoordinateISO6709(
+                coordinates.latitude, coordinates.longitude, coordinates.elevation
+            )
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {

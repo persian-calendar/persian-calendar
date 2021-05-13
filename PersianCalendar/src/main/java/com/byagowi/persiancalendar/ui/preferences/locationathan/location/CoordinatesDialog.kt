@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.spacedComma
 
-fun Fragment.showCoordinatesDialog() {
+fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit) {
     val context = context ?: return
     val binding = DialogCoordinatesBinding.inflate(context.layoutInflater)
 
@@ -32,9 +32,12 @@ fun Fragment.showCoordinatesDialog() {
         .setTitle(R.string.coordination)
         .setPositiveButton(R.string.accept) { _, _ ->
             val coordinates = coordinatesEdits.map { it.text.toString() }
-            // just ensure they are parsable numbers for the last time
+            // just ensure they are parsable numbers for the last time otherwise reset it
             if (coordinates.all { it.toDoubleOrNull() != null })
                 context.appPrefs.edit { coordinatesKeys.zip(coordinates, ::putString) }
+            else
+                context.appPrefs.edit { coordinatesKeys.forEach(::remove) }
+            onSuccess()
         }
         .setNegativeButton(R.string.cancel, null)
         .show()
