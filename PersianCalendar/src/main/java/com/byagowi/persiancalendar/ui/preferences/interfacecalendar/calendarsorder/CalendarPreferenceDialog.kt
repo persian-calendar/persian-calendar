@@ -1,10 +1,8 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
-import android.app.Dialog
-import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.content.edit
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,46 +14,53 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
-class CalendarPreferenceDialog : AppCompatDialogFragment() {
+fun Fragment.showCalendarPreferenceDialog(): Boolean {
+    val context = context ?: return true
+    var itemTouchHelper: ItemTouchHelper? = null
+    var dialog: AlertDialog? = null
 
-    private var itemTouchHelper: ItemTouchHelper? = null
+    updateStoredPreference(context)
+    val enabledCalendarTypes = getEnabledCalendarTypes()
+    val adapter = RecyclerListAdapter(getOrderedCalendarEntities(context).map {
+        RecyclerListAdapter.Item(it.title, it.type.name, it.type in enabledCalendarTypes)
+    }, {
+        dialog?.dismiss()
+        // Easter egg when all are swiped
+        val view = activity?.findViewById<android.view.View?>(android.R.id.content)
+            ?: return@RecyclerListAdapter
+        android.animation.ValueAnimator.ofFloat(0f, 360f).also {
+            it.duration = 3000L
+            it.interpolator = android.view.animation.AccelerateDecelerateInterpolator()
+            it.addUpdateListener { value -> view.rotation = value.animatedValue as Float }
+        }.start()
+    }, { viewHolder -> itemTouchHelper?.startDrag(viewHolder) })
+    val recyclerView = RecyclerView(context).also {
+        it.setHasFixedSize(true)
+        it.layoutManager = LinearLayoutManager(activity)
+        it.adapter = adapter
+    }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val activity = requireActivity()
-        updateStoredPreference(activity)
-        val enabledCalendarTypes = getEnabledCalendarTypes()
-        val adapter = RecyclerListAdapter(this, getOrderedCalendarEntities(activity).map {
-            RecyclerListAdapter.Item(it.title, it.type.name, it.type in enabledCalendarTypes)
-        })
-        val recyclerView = RecyclerView(activity).also {
-            it.setHasFixedSize(true)
-            it.layoutManager = LinearLayoutManager(activity)
-            it.adapter = adapter
-        }
+    val callback = SimpleItemTouchHelperCallback(adapter)
+    itemTouchHelper = ItemTouchHelper(callback).also {
+        it.attachToRecyclerView(recyclerView)
+    }
 
-        val callback = SimpleItemTouchHelperCallback(adapter)
-        itemTouchHelper = ItemTouchHelper(callback).also {
-            it.attachToRecyclerView(recyclerView)
-        }
-
-        return AlertDialog.Builder(activity)
-            .setView(recyclerView)
-            .setTitle(R.string.calendars_priority)
-            .setNegativeButton(R.string.cancel, null)
-            .setPositiveButton(R.string.accept) { _, _ ->
-                adapter.result.takeIf { it.isNotEmpty() }?.let { ordering ->
-                    activity.appPrefs.edit {
-                        putString(PREF_MAIN_CALENDAR_KEY, ordering.first())
-                        putString(
-                            PREF_OTHER_CALENDARS_KEY, ordering.drop(1).joinToString(",")
-                        )
-                    }
+    dialog = AlertDialog.Builder(context)
+        .setView(recyclerView)
+        .setTitle(R.string.calendars_priority)
+        .setNegativeButton(R.string.cancel, null)
+        .setPositiveButton(R.string.accept) { _, _ ->
+            adapter.result.takeIf { it.isNotEmpty() }?.let { ordering ->
+                this.context?.appPrefs?.edit {
+                    putString(PREF_MAIN_CALENDAR_KEY, ordering.first())
+                    putString(
+                        PREF_OTHER_CALENDARS_KEY, ordering.drop(1).joinToString(",")
+                    )
                 }
             }
-            .create()
-    }
+        }
+        .create()
+    dialog.show()
 
-    fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
-        itemTouchHelper?.startDrag(viewHolder)
-    }
+    return true
 }

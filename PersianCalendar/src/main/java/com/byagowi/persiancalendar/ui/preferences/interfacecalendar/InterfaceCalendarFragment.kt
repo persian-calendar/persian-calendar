@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.CalendarPreferenceDialog
+import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.language
 
@@ -59,10 +59,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean =
-        if (preference?.key == "calendars_priority") {
-            parentFragmentManager.apply {
-                CalendarPreferenceDialog().show(this, "CalendarPreferenceDialog")
-            }
-            true
-        } else super.onPreferenceTreeClick(preference)
+        if (preference?.key == "calendars_priority") showCalendarPreferenceDialog()
+        else super.onPreferenceTreeClick(preference)
 }

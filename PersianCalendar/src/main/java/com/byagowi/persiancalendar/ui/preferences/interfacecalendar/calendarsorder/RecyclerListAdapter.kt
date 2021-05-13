@@ -16,20 +16,17 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
  * limitations under the License.
  */
 
-import android.animation.ValueAnimator
 import android.graphics.Color
 import android.view.MotionEvent
-import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.utils.layoutInflater
 
 class RecyclerListAdapter(
-    private val calendarPreferenceDialog: CalendarPreferenceDialog,
-    private var items: List<Item>
+    private var items: List<Item>, private val onAllItemsDismissed: () -> Unit,
+    private val onStartDrag: (RecyclerView.ViewHolder) -> Unit
 ) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
     data class Item(val title: String, val key: String, val enabled: Boolean)
@@ -47,7 +44,7 @@ class RecyclerListAdapter(
         // Start a drag whenever the handle view it touched
         holder.itemView.setOnTouchListener { _, event ->
             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                calendarPreferenceDialog.onStartDrag(holder)
+                onStartDrag(holder)
             }
             false
         }
@@ -68,19 +65,7 @@ class RecyclerListAdapter(
     fun onItemDismissed(position: Int) {
         items = items.filterIndexed { i, _ -> i != position }
         notifyItemRemoved(position)
-
-        // Easter egg when all are swiped
-        if (items.isEmpty()) {
-            val view =
-                calendarPreferenceDialog.activity?.findViewById<View>(android.R.id.content)
-                    ?: return
-            ValueAnimator.ofFloat(0f, 360f).apply {
-                duration = 3000L
-                interpolator = AccelerateDecelerateInterpolator()
-                addUpdateListener { value -> view.rotation = value.animatedValue as Float }
-            }.start()
-            calendarPreferenceDialog.dismiss()
-        }
+        if (items.isEmpty()) onAllItemsDismissed()
     }
 
     override fun getItemCount(): Int = items.size
