@@ -90,11 +90,9 @@
             android:title="@string/ascending_athan_volume"
             settings:iconSpaceReserved="false" />
 
-        <com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
+        <androidx.preference.Preference
             android:dependency="AscendingAthanVolume"
             android:key="AthanVolume"
-            android:negativeButtonText="@string/cancel"
-            android:positiveButtonText="@string/accept"
             android:summary="@string/athan_volume_summary"
             android:title="@string/athan_volume"
             settings:iconSpaceReserved="false" />

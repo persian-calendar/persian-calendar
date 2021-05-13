@@ -12,8 +12,8 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.spacedComma
 
-fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit) {
-    val context = context ?: return
+fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit): Boolean {
+    val context = context ?: return true
     val binding = DialogCoordinatesBinding.inflate(context.layoutInflater)
 
     // As we don't already a string concatenated of the two, let's do in code
@@ -41,4 +41,5 @@ fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit) {
         }
         .setNegativeButton(R.string.cancel, null)
         .show()
+    return true
 }

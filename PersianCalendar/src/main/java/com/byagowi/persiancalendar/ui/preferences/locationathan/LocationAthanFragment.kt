@@ -22,10 +22,9 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.generated.citiesStore
-import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumeDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.AthanVolumePreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.PrayerSelectPreference
+import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showLocationPreferenceDialog
@@ -72,7 +71,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         var fragment: DialogFragment? = null
         when (preference) {
             is PrayerSelectPreference -> fragment = PrayerSelectDialog()
-            is AthanVolumePreference -> fragment = AthanVolumeDialog()
             is NumericPreference -> fragment = NumericDialog()
             else -> super.onDisplayPreferenceDialog(preference)
         }
@@ -124,12 +122,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         val context = context ?: return super.onPreferenceTreeClick(preference)
-
-        when (preference?.key) {
+        return when (preference?.key) {
             "pref_key_ringtone" -> {
                 runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
                     .onFailure(logException)
-                return true
+                true
             }
             "pref_key_ringtone_default" -> {
                 context.appPrefs.edit {
@@ -140,7 +137,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     Snackbar.make(it, R.string.returned_to_default, Snackbar.LENGTH_SHORT).show()
                 }
                 putAthanNameOnSummary(defaultAthanName)
-                return true
+                true
             }
             "pref_gps_location" -> {
                 runCatching {
@@ -155,17 +152,12 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         )
                     }
                 }.onFailure(logException)
-                return true
+                true
             }
-            PREF_SELECTED_LOCATION -> {
-                showLocationPreferenceDialog(::updateLocationOnSummary)
-                return true
-            }
-            "Coordination" -> {
-                showCoordinatesDialog(::updateCoordination)
-                return true
-            }
-            else -> return super.onPreferenceTreeClick(preference)
+            PREF_SELECTED_LOCATION -> showLocationPreferenceDialog(::updateLocationOnSummary)
+            "Coordination" -> showCoordinatesDialog(::updateCoordination)
+            PREF_ATHAN_VOLUME -> showAthanVolumeDialog()
+            else -> super.onPreferenceTreeClick(preference)
         }
     }
 

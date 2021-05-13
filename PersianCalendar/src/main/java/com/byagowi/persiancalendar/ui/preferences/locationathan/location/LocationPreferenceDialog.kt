@@ -20,8 +20,8 @@ import com.byagowi.persiancalendar.utils.layoutInflater
  * Author: hamidsafdari22@gmail.com
  * Date: 1/17/16
  */
-fun Fragment.showLocationPreferenceDialog(onSuccess: () -> Unit) {
-    val context = context ?: return
+fun Fragment.showLocationPreferenceDialog(onSuccess: () -> Unit): Boolean {
+    val context = context ?: return true
     val recyclerView = RecyclerView(context)
     val dialog = AlertDialog.Builder(context)
         .setTitle(R.string.location)
@@ -37,6 +37,7 @@ fun Fragment.showLocationPreferenceDialog(onSuccess: () -> Unit) {
         onSuccess()
     }
     dialog.show()
+    return true
 }
 
 private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :

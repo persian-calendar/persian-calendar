@@ -1,92 +1,93 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
-import android.content.Context
+import android.app.AlertDialog
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
 import android.media.RingtoneManager
-import android.view.View
 import android.widget.SeekBar
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.preference.PreferenceDialogFragmentCompat
+import androidx.fragment.app.Fragment
+import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
+import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import com.byagowi.persiancalendar.utils.logException
 
-class AthanVolumeDialog : PreferenceDialogFragmentCompat() {
+fun Fragment.showAthanVolumeDialog(): Boolean {
+    val context = context ?: return true
+    var volume = context.athanVolume
+    var ringtone: Ringtone? = null
+    var mediaPlayer: MediaPlayer? = null
 
-    private var volume: Int = 0
-    private var ringtone: Ringtone? = null
-    private var mediaPlayer: MediaPlayer? = null
+    val audioManager = context.getSystemService<AudioManager>() ?: return true
+    audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
 
-    override fun onCreateDialogView(context: Context?): View {
-        val athanPref = preference as AthanVolumePreference
-        val audioManager = context?.getSystemService<AudioManager>()
-        audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, athanPref.volume, 0)
-
-        val customAthanUri = context?.let { getCustomAthanUri(it) }
-        if (customAthanUri != null) {
-            ringtone = RingtoneManager.getRingtone(context, customAthanUri).also {
-                it.streamType = AudioManager.STREAM_ALARM
-                it.play()
-            }
-        } else if (context != null) {
-            val player = MediaPlayer()
-            runCatching {
-                player.setDataSource(context, getDefaultAthanUri(context))
-                player.setAudioStreamType(AudioManager.STREAM_ALARM)
-                player.prepare()
-            }.onFailure(logException)
-
-            runCatching {
-                player.start()
-                mediaPlayer = player
-            }.onFailure(logException)
+    val customAthanUri = getCustomAthanUri(context)
+    if (customAthanUri != null) {
+        ringtone = RingtoneManager.getRingtone(context, customAthanUri).also {
+            it.streamType = AudioManager.STREAM_ALARM
+            it.play()
         }
-
-        volume = athanPref.volume
-
-        return SeekBar(context).also {
-            it.max = audioManager?.getStreamMaxVolume(AudioManager.STREAM_ALARM) ?: 7
-            it.progress = volume
-            it.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
-                override fun onProgressChanged(
-                    seekBar: SeekBar?, progress: Int, fromUser: Boolean
-                ) {
-                    volume = progress
-                    audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0)
-                }
-
-                override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-                override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                    if (ringtone?.isPlaying == false) {
-                        ringtone?.play()
-                    }
-                    runCatching {
-                        if (mediaPlayer?.isPlaying == false) {
-                            mediaPlayer?.prepare()
-                            mediaPlayer?.start()
-                        }
-                    }.onFailure(logException)
-                }
-            })
-        }
-    }
-
-    override fun onDialogClosed(positiveResult: Boolean) {
-        val athanPref = preference as AthanVolumePreference
-
-        ringtone?.stop()
-
+    } else {
+        val player = MediaPlayer()
         runCatching {
-            if (mediaPlayer?.isPlaying == true) {
-                mediaPlayer?.stop()
-                mediaPlayer?.release()
-            }
+            player.setDataSource(context, getDefaultAthanUri(context))
+            player.setAudioStreamType(AudioManager.STREAM_ALARM)
+            player.prepare()
         }.onFailure(logException)
 
-        if (positiveResult) athanPref.volume = volume
+        runCatching {
+            player.start()
+            mediaPlayer = player
+        }.onFailure(logException)
     }
+
+    val seekBar = SeekBar(context)
+    seekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
+    seekBar.progress = volume
+    seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        override fun onStartTrackingTouch(seekBar: SeekBar?) = Unit
+        override fun onProgressChanged(
+            seekBar: SeekBar?, progress: Int, fromUser: Boolean
+        ) {
+            volume = progress
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, progress, 0)
+        }
+
+        override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            if (ringtone?.isPlaying == false) {
+                ringtone.play()
+            }
+            runCatching {
+                if (mediaPlayer?.isPlaying == false) {
+                    mediaPlayer?.prepare()
+                    mediaPlayer?.start()
+                }
+            }.onFailure(logException)
+        }
+    })
+
+    AlertDialog.Builder(context)
+        .setTitle(R.string.athan_volume)
+        .setView(seekBar)
+        .setPositiveButton(R.string.accept) { _, _ ->
+            context.appPrefs.edit { putInt(PREF_ATHAN_VOLUME, volume) }
+        }
+        .setNegativeButton(R.string.cancel, null)
+        .setOnDismissListener {
+            ringtone?.stop()
+            runCatching {
+                if (mediaPlayer?.isPlaying == true) {
+                    mediaPlayer?.stop()
+                    mediaPlayer?.release()
+                }
+            }.onFailure(logException)
+        }
+        .show()
+
+    return true
 }
