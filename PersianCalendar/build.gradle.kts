@@ -163,9 +163,11 @@ val generateAppSrcTask by tasks.registering {
                         " month = ${record["month"]}, day = ${record["day"]})"
             }
         }
-        val specialOccurringEvents = (events["Special"] as List<*>).joinToString(",\n    ") {
-            "mapOf(${(it as Map<*, *>).map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
-        }
+        val specialOccurringEvents = (events["Special"] as List<*>)
+            .mapNotNull { (it as Map<*, *>).takeIf { event -> event["rule"] == "last day of week" } }
+            .joinToString(",\n    ") { event ->
+                "mapOf(${event.map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
+            }
         eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 

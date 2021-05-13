@@ -298,7 +298,7 @@ fun loadEvents(context: Context) {
                     event["calendar"] == "Hijri" && event["type"] == "Islamic Iran"
         }.mapNotNull { event ->
             // This adds only this, next and previous years' events, hacky but enough for now
-            if (event["protocol"] != "last day of week") return@mapNotNull null
+            if (event["rule"] != "last day of week") return@mapNotNull null
             val dayOfWeek = event["day of week"]?.toIntOrNull() ?: return@mapNotNull null
             val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
             val title = event["title"] ?: return@mapNotNull null
