@@ -19,7 +19,6 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectDialog
@@ -53,7 +52,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
-        updateLocationOnSummary()
+        updateLocationOnSummaries()
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
@@ -131,13 +130,13 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         GPSLocationDialog().show(
                             childFragmentManager, GPSLocationDialog::class.java.name
                         )
-                        // TODO: #updateCoordination() on its callback
+                        // TODO: #updateLocationOnSummaries() on its callback
                     }
                 }.onFailure(logException)
                 true
             }
-            PREF_SELECTED_LOCATION -> showLocationPreferenceDialog(::updateLocationOnSummary)
-            "Coordination" -> showCoordinatesDialog(::updateCoordination)
+            PREF_SELECTED_LOCATION -> showLocationPreferenceDialog(::updateLocationOnSummaries)
+            "Coordination" -> showCoordinatesDialog(::updateLocationOnSummaries)
             PREF_ATHAN_VOLUME -> showAthanVolumeDialog()
             PREF_ATHAN_ALARM -> showPrayerSelectDialog()
             PREF_ATHAN_GAP -> showAthanGapDialog()
@@ -145,32 +144,23 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         }
     }
 
-    private fun updateCoordination() {
-        val coordinates = getCoordinate(context ?: return)
-        findPreference<Preference>("Coordination")?.summary =
-            if (coordinates == null) ""
-            else formatCoordinateISO6709(
-                coordinates.latitude, coordinates.longitude, coordinates.elevation
-            )
-    }
-
     private fun putAthanNameOnSummary(athanName: String?) {
         findPreference<Preference>("pref_key_ringtone")?.summary = athanName
     }
 
-    private fun updateLocationOnSummary() {
+    private fun updateLocationOnSummaries() {
         val context = context ?: return
-        val selected = context.appPrefs.getString(PREF_SELECTED_LOCATION, null) ?: DEFAULT_CITY
+        val cityName = getCityName(context, false).takeIf { it.isNotEmpty() }
         findPreference<Preference>(PREF_SELECTED_LOCATION)?.summary =
-            (if (selected == DEFAULT_CITY) null
-            else citiesStore[selected]?.let {
-                when (language) {
-                    LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
-                    LANG_CKB -> it.ckb
-                    LANG_AR -> it.ar
-                    else -> it.fa
-                }
-            }) ?: context.getString(R.string.location_help)
-        updateCoordination()
+            cityName ?: context.getString(R.string.location_help)
+        val coordinates = getCoordinate(context)
+        findPreference<Preference>("Coordination")?.summary =
+            if (cityName != null || coordinates == null) null
+            else if (coordinates.elevation == .0)
+                formatCoordinateISO6709(coordinates.latitude, coordinates.latitude)
+            else
+                formatCoordinateISO6709(
+                    coordinates.latitude, coordinates.latitude, coordinates.elevation
+                )
     }
 }
