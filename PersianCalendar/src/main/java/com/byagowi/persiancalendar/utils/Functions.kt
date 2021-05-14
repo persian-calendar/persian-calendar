@@ -9,7 +9,6 @@ import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.os.Build
-import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater

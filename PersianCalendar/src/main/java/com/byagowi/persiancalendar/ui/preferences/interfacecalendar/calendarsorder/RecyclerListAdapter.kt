@@ -16,35 +16,38 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsor
  * limitations under the License.
  */
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.core.view.MotionEventCompat
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.utils.layoutInflater
 
 class RecyclerListAdapter(
-    private var items: List<Item>, private val onAllItemsDismissed: () -> Unit,
-    private val onStartDrag: (RecyclerView.ViewHolder) -> Unit
+    private var items: List<Item>, private val onAllItemsDismissed: () -> Unit
 ) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
     data class Item(val title: String, val key: String, val enabled: Boolean)
 
-    val result: List<String>
-        get() = items.filter { it.enabled }.map { it.key }
+    val result: List<String> get() = items.filter { it.enabled }.map { it.key }
+
+    val itemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(this))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         CalendarTypeItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(position)
 
         // Start a drag whenever the handle view it touched
         holder.itemView.setOnTouchListener { _, event ->
             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                onStartDrag(holder)
+                itemTouchHelper.startDrag(holder)
             }
             false
         }
