@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
@@ -20,7 +19,7 @@ import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.view.updatePadding
+import androidx.core.view.setPadding
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
@@ -31,6 +30,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForLocationPermission
 import com.byagowi.persiancalendar.utils.copyToClipboard
+import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.logException
@@ -67,9 +67,6 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         }
     }
 
-    private val Number.dp: Int
-        get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
-
     override fun onDestroyView() {
         super.onDestroyView()
         textView = null
@@ -78,9 +75,9 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val activity = requireActivity()
 
-        textView = TextView(activity).apply {
-            updatePadding(16.dp, 16.dp, 16.dp, 16.dp)
-            setText(R.string.pleasewaitgps)
+        textView = TextView(activity).also {
+            it.setPadding(16.dp)
+            it.setText(R.string.pleasewaitgps)
         }
 
         locationManager = activity.getSystemService()
@@ -135,14 +132,14 @@ class GPSLocationDialog : AppCompatDialogFragment() {
             return
         }
 
-        locationManager?.apply {
-            if (LocationManager.GPS_PROVIDER in allProviders) {
-                requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
+        locationManager?.also {
+            if (LocationManager.GPS_PROVIDER in it.allProviders) {
+                it.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, locationListener)
                 everRegisteredCallback = true
             }
 
-            if (LocationManager.NETWORK_PROVIDER in allProviders) {
-                requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener)
+            if (LocationManager.NETWORK_PROVIDER in it.allProviders) {
+                it.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener)
                 everRegisteredCallback = true
             }
         }
