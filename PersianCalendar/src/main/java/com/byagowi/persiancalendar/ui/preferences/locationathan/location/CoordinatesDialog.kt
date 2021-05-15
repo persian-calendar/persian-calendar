@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.spacedComma
 
-fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit): Boolean {
+fun Fragment.showCoordinatesDialog(): Boolean {
     val context = context ?: return true
     val binding = DialogCoordinatesBinding.inflate(context.layoutInflater)
 
@@ -39,7 +39,6 @@ fun Fragment.showCoordinatesDialog(onSuccess: () -> Unit): Boolean {
                 this.context?.appPrefs?.edit { coordinatesKeys.zip(coordinates, ::putString) }
             else
                 this.context?.appPrefs?.edit { coordinatesKeys.forEach(::remove) }
-            onSuccess()
         }
         .setNegativeButton(R.string.cancel, null)
         .show()

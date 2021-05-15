@@ -22,6 +22,7 @@ import androidx.core.content.getSystemService
 import androidx.core.view.setPadding
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
+import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
@@ -46,6 +47,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     private val handler = Handler(Looper.getMainLooper())
     private var latitude: String? = null
     private var longitude: String? = null
+    private var altitude: String? = null
     private var cityName: String? = null
     private val checkGPSProviderCallback = Runnable { checkGPSProvider() }
     private var lacksPermission = false
@@ -121,11 +123,9 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     private fun getLocation() {
         val activity = activity ?: return
         if (ActivityCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                activity, Manifest.permission.ACCESS_FINE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                activity,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                activity, Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             lacksPermission = true
@@ -147,18 +147,12 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
     private fun showLocation(location: Location) {
         val activity = activity ?: return
+        val textView = textView ?: return
         latitude = "%f".format(Locale.ENGLISH, location.latitude)
         longitude = "%f".format(Locale.ENGLISH, location.longitude)
-        val gcd = Geocoder(activity, Locale.getDefault())
-        runCatching {
-            val addresses = gcd.getFromLocation(location.latitude, location.longitude, 1)
-            if (addresses.isNotEmpty()) {
-                cityName = addresses[0].locality
-            }
-        }.onFailure(logException)
+        altitude = "%f".format(Locale.ENGLISH, location.altitude)
 
         val result = listOf(
-            cityName ?: "",
             formatCoordinate(
                 activity,
                 Coordinate(location.latitude, location.longitude, location.altitude), "\n"
@@ -166,12 +160,28 @@ class GPSLocationDialog : AppCompatDialogFragment() {
             formatCoordinateISO6709(location.latitude, location.longitude, location.altitude),
             "https://plus.codes/${OpenLocationCode.encode(location.latitude, location.longitude)}"
         ).joinToString("\n\n").trim()
-        textView?.text = result
-        textView?.setOnClickListener {
-            copyToClipboard(textView, "coords", result, showToastInstead = true)
+        textView.text = result
+        textView.setOnClickListener {
+            copyToClipboard(textView, "coords", textView.text, showToastInstead = true)
         }
 
         isLocationShown = true
+
+        // TODO: Rewrite with some more modern stuff
+        cityName = null
+        Thread {
+            runCatching {
+                Geocoder(context, Locale.getDefault())
+                    .getFromLocation(location.latitude, location.longitude, 1)
+                    .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }?.also {
+                        activity.runOnUiThread {
+                            cityName = it
+                            textView.text =
+                                listOf(cityName, textView.text).joinToString("\n").trim()
+                        }
+                    }
+            }
+        }.run()
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -179,6 +189,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
             activity?.appPrefs?.edit {
                 putString(PREF_LATITUDE, latitude)
                 putString(PREF_LONGITUDE, longitude)
+                putString(PREF_ALTITUDE, altitude)
                 putString(PREF_GEOCODED_CITYNAME, cityName ?: "")
                 putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
             }
@@ -204,9 +215,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {

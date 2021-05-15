@@ -31,8 +31,6 @@ import com.google.android.material.snackbar.Snackbar
 class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private var categoryAthan: Preference? = null
-
     private val defaultAthanName: String
         get() {
             val context = context ?: return ""
@@ -46,19 +44,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<ListPreference>(PREF_PRAY_TIME_METHOD)?.summaryProvider =
             ListPreference.SimpleSummaryProvider.getInstance()
 
-        categoryAthan = findPreference(PREF_KEY_ATHAN)
-
         onSharedPreferenceChanged(null, null)
         activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
 
         putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
         updateLocationOnSummaries()
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        val locationEmpty = getCoordinate(activity ?: return) == null
-        categoryAthan?.isEnabled = !locationEmpty
-        categoryAthan?.setSummary(if (locationEmpty) R.string.athan_disabled_summary else R.string.empty)
     }
 
     private class PickRingtoneContract : ActivityResultContract<Uri?, String>() {
@@ -135,8 +125,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 }.onFailure(logException)
                 true
             }
-            PREF_SELECTED_LOCATION -> showLocationPreferenceDialog(::updateLocationOnSummaries)
-            "Coordination" -> showCoordinatesDialog(::updateLocationOnSummaries)
+            PREF_SELECTED_LOCATION -> showLocationPreferenceDialog()
+            "Coordination" -> showCoordinatesDialog()
             PREF_ATHAN_VOLUME -> showAthanVolumeDialog()
             PREF_ATHAN_ALARM -> showPrayerSelectDialog()
             PREF_ATHAN_GAP -> showAthanGapDialog()
@@ -148,14 +138,22 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<Preference>("pref_key_ringtone")?.summary = athanName
     }
 
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
+        updateLocationOnSummaries()
+
     private fun updateLocationOnSummaries() {
         val context = context ?: return
         val cityName = getCityName(context, false).takeIf { it.isNotEmpty() }
         findPreference<Preference>(PREF_SELECTED_LOCATION)?.summary =
             cityName ?: context.getString(R.string.location_help)
         val coordinates = getCoordinate(context)
+        findPreference<Preference>(PREF_KEY_ATHAN)?.isEnabled = coordinates != null
+        findPreference<Preference>(PREF_KEY_ATHAN)?.setSummary(
+            if (coordinates == null) R.string.athan_disabled_summary else R.string.empty
+        )
+        val isGeocoded = context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null) == null
         findPreference<Preference>("Coordination")?.summary =
-            if (cityName != null || coordinates == null) null
+            if ((cityName != null && isGeocoded) || coordinates == null) null
             else if (coordinates.elevation == .0)
                 formatCoordinateISO6709(coordinates.latitude, coordinates.latitude)
             else
