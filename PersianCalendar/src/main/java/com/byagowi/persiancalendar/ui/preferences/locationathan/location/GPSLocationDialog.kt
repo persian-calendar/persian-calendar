@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForLocationPermission
+import com.byagowi.persiancalendar.utils.coordinate
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatCoordinate
@@ -40,7 +41,11 @@ import com.byagowi.persiancalendar.utils.logException
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -63,50 +68,57 @@ private fun Fragment.showGPSLocationDialogMain() {
         return
     }
 
-    var coordinate: Coordinate? = null
+    val coordinatesFlow = MutableStateFlow<Coordinate?>(null)
     var cityName: String? = null
     val resultTextView = TextView(activity).also {
         it.setPadding(16.dp)
         it.setText(R.string.pleasewaitgps)
+        it.setOnClickListener { _ ->
+            copyToClipboard(it, "coords", it.text, showToastInstead = true)
+        }
     }
     var isLocationShown = false
 
-    fun showLocation(location: Location) {
-        logDebug("GPSLocationDialog", "A location is received")
-        coordinate = Coordinate(location.latitude, location.longitude, location.altitude)
-        val result = listOf(
-            "",
-            formatCoordinate(
-                activity,
-                Coordinate(location.latitude, location.longitude, location.altitude), "\n"
+    fun setResultFromCoordinates(coordinates: Coordinate, cityName: String = "") {
+        resultTextView.text = listOf(
+            cityName,
+            formatCoordinate(activity, coordinates, "\n"),
+            formatCoordinateISO6709(
+                coordinates.latitude, coordinates.longitude, coordinates.elevation
             ),
-            formatCoordinateISO6709(location.latitude, location.longitude, location.altitude),
-            "https://plus.codes/${OpenLocationCode.encode(location.latitude, location.longitude)}"
+            "https://plus.codes/${
+                OpenLocationCode.encode(coordinates.latitude, coordinates.longitude)
+            }"
         ).joinToString("\n\n")
-        resultTextView.text = result
-        resultTextView.setOnClickListener {
-            copyToClipboard(resultTextView, "coords", resultTextView.text, showToastInstead = true)
-        }
-
-        isLocationShown = true
-
-        val geocoder = Geocoder(context, Locale(language))
-        // This is preference fragment view lifecycle but ideally we should've used
-        // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
-        // won't give it to us probably because AlertDialog isn't fragment based
-        this.viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            runCatching {
-                geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                    .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }?.also {
-                        withContext(Dispatchers.Main.immediate) {
-                            cityName = it
-                            resultTextView.text = listOf(cityName, result).joinToString("")
-                        }
-                    }
-                logDebug("GPSLocationDialog", "Geocoder locality result is received")
-            }.onFailure(logException)
-        }
     }
+
+
+    // This is preference fragment view lifecycle but ideally we should've used
+    // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
+    // won't give it to us probably because AlertDialog isn't fragment based
+    val viewScope = this.viewLifecycleOwner.lifecycleScope
+
+    coordinatesFlow.transform { coordinates ->
+        if (coordinates != null) emit(coordinates)
+    }.transform { coordinates ->
+        logDebug("GPSLocationDialog", "A location is received")
+        setResultFromCoordinates(coordinates)
+        isLocationShown = true
+        val geocoder = Geocoder(context, Locale(language))
+        // Maybe some debouncing would be nice here to not spam geocoder much,
+        // currently marked as experimental API however
+        val geocoderCityName = withContext(Dispatchers.IO) {
+            runCatching {
+                logDebug("GPSLocationDialog", "Geocoder locality result is received")
+                geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1)
+                    .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
+            }.onFailure(logException).getOrNull()
+        }
+        if (geocoderCityName != null) emit(coordinates to geocoderCityName)
+    }.onEach { (coordinates, geocoderCityName) ->
+        setResultFromCoordinates(coordinates, geocoderCityName)
+        cityName = geocoderCityName
+    }.launchIn(viewScope)
 
     val locationManager = activity.getSystemService<LocationManager>() ?: return
 
@@ -131,7 +143,11 @@ private fun Fragment.showGPSLocationDialogMain() {
     val checkGPSProviderCallback = Runnable { checkGPSProvider() }
     var isOneProviderEnabled = false
     val locationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location) = showLocation(location)
+        override fun onLocationChanged(location: Location) {
+            coordinatesFlow.value =
+                Coordinate(location.latitude, location.longitude, location.altitude)
+        }
+
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
         override fun onProviderEnabled(provider: String) {
             isOneProviderEnabled = true
