@@ -44,8 +44,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -102,15 +102,18 @@ private fun Fragment.showGPSLocationDialogMain() {
         logDebug("GPSLocationDialog", "A location is received")
         showResult(coordinates, "")
         isLocationShown = true
-    }.transform { coordinates ->
-        // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much
+    }.mapNotNull { coordinates ->
+        // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much.
+        // There is an experimental debounce in stdlib itself but it wasn't exactly what was needed
+        // as it feels it needed a throttle/leading debounce instead, this should be ok for now as
+        // it is no worse that what we are shipping right now already.
         val geocoder = Geocoder(context, Locale(language))
         withContext(Dispatchers.IO) {
             runCatching {
                 geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
             }.getOrNull()
-        }?.let { emit(coordinates to it) }
+        }?.let { coordinates to it }
     }.onEach { (coordinates, locality) ->
         logDebug("GPSLocationDialog", "A geocoder locality result is received")
         showResult(coordinates, locality)
