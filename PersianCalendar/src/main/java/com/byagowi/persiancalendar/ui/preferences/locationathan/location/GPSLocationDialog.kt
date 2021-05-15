@@ -62,9 +62,7 @@ private fun Fragment.showGPSLocationDialogMain() {
         return
     }
 
-    var latitude: String? = null
-    var longitude: String? = null
-    var altitude: String? = null
+    var coordinate: Coordinate? = null
     var cityName: String? = null
     val resultTextView = TextView(activity).also {
         it.setPadding(16.dp)
@@ -74,10 +72,7 @@ private fun Fragment.showGPSLocationDialogMain() {
 
     fun showLocation(location: Location) {
         logDebug("GPSLocationDialog", "A location is received")
-        latitude = "%f".format(Locale.ENGLISH, location.latitude)
-        longitude = "%f".format(Locale.ENGLISH, location.longitude)
-        altitude = "%f".format(Locale.ENGLISH, location.altitude)
-
+        coordinate = Coordinate(location.latitude, location.longitude, location.altitude)
         val result = listOf(
             "",
             formatCoordinate(
@@ -104,24 +99,23 @@ private fun Fragment.showGPSLocationDialogMain() {
                             resultTextView.text = listOf(cityName, result).joinToString("")
                         }
                     }
-                logDebug("GPSLocationDialog", "Geocoder information is received")
+                logDebug("GPSLocationDialog", "Geocoder locality result is received")
             }.onFailure(logException)
         }
     }
 
+    val locationManager = activity.getSystemService<LocationManager>() ?: return
+
     fun checkGPSProvider() {
-        if (latitude != null && longitude != null) return
+        if (coordinate != null) return
 
         runCatching {
-            val gps = activity.getSystemService<LocationManager>()
-            if (gps?.isProviderEnabled(LocationManager.GPS_PROVIDER) == false) {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 AlertDialog.Builder(activity)
                     .setMessage(R.string.gps_internet_desc)
                     .setPositiveButton(R.string.accept) { _, _ ->
                         runCatching {
-                            activity.startActivity(
-                                Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                            )
+                            activity.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                         }.onFailure(logException)
                     }
                     .show()
@@ -147,7 +141,6 @@ private fun Fragment.showGPSLocationDialogMain() {
         }
     }
 
-    val locationManager = activity.getSystemService<LocationManager>() ?: return
     if (LocationManager.GPS_PROVIDER in locationManager.allProviders) {
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 0, 0f, locationListener
@@ -160,38 +153,39 @@ private fun Fragment.showGPSLocationDialogMain() {
     }
 
     handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
-    var dialog: AlertDialog? = null
-    val lifeCycleObserver = LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) dialog?.dismiss()
-    }
-    lifecycle.addObserver(lifeCycleObserver)
-
-    dialog = AlertDialog.Builder(activity)
+    val dialog = AlertDialog.Builder(activity)
         .setPositiveButton("", null)
         .setNegativeButton("", null)
         .setView(resultTextView)
-        .setOnDismissListener {
-            logDebug("GPSLocationDialog", "Dialog is dismissed")
-            if (latitude != null && longitude != null) {
-                activity.appPrefs.edit {
-                    putString(PREF_LATITUDE, latitude)
-                    putString(PREF_LONGITUDE, longitude)
-                    putString(PREF_ALTITUDE, altitude)
-                    putString(PREF_GEOCODED_CITYNAME, cityName ?: "")
-                    putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
-                }
-            }
-
-            if (ActivityCompat.checkSelfPermission(
-                    activity, Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                    activity, Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            ) locationManager.removeUpdates(locationListener)
-
-            handler.removeCallbacks(checkGPSProviderCallback)
-            lifecycle.removeObserver(lifeCycleObserver)
-        }
         .create()
+
+    val lifeCycleObserver = LifecycleEventObserver { _, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) dialog.dismiss()
+    }
+    // This is fragment's lifecycle
+    lifecycle.addObserver(lifeCycleObserver)
+    dialog.setOnDismissListener {
+        logDebug("GPSLocationDialog", "Dialog is dismissed")
+        coordinate?.let { coordinate ->
+            activity.appPrefs.edit {
+                putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinate.latitude))
+                putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinate.longitude))
+                putString(PREF_ALTITUDE, "%f".format(Locale.ENGLISH, coordinate.elevation))
+                putString(PREF_GEOCODED_CITYNAME, cityName ?: "")
+                putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
+            }
+        }
+
+        if (ActivityCompat.checkSelfPermission(
+                activity, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                activity, Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) locationManager.removeUpdates(locationListener)
+
+        handler.removeCallbacks(checkGPSProviderCallback)
+        lifecycle.removeObserver(lifeCycleObserver)
+    }
+
     dialog.show()
 }
