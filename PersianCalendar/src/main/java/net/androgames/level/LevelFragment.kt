@@ -49,10 +49,9 @@ class LevelFragment : Fragment() {
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons)
         binding.bottomAppbar.setOnMenuItemClickListener { item: MenuItem ->
             if (item.itemId == R.id.compass) {
-                val navController = findNavController()
                 // If compass wasn't in backstack (level is brought from shortcut), navigate to it
-                if (!navController.popBackStack(R.id.compass, false))
-                    navController.navigate(LevelFragmentDirections.actionLevelToCompass())
+                if (!findNavController().popBackStack(R.id.compass, false))
+                    findNavController().navigate(LevelFragmentDirections.actionLevelToCompass())
             }
             true
         }
@@ -71,15 +70,13 @@ class LevelFragment : Fragment() {
         super.onResume()
         provider?.startListening()
         // https://stackoverflow.com/a/20017878
-        when (activity?.windowManager?.defaultDisplay?.rotation) {
-            Surface.ROTATION_180 ->
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
-            Surface.ROTATION_270 ->
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-            Surface.ROTATION_0 ->
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-            Surface.ROTATION_90 ->
-                activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        val rotation = (activity ?: return).windowManager.defaultDisplay.rotation
+        activity?.requestedOrientation = when (rotation) {
+            Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
+            Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+            Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 
