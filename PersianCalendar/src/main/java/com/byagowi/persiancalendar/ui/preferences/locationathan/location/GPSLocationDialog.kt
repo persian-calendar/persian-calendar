@@ -179,8 +179,7 @@ class GPSLocationDialog : AppCompatDialogFragment() {
                     .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }?.also {
                         withContext(Dispatchers.Main.immediate) {
                             cityName = it
-                            textView.text =
-                                listOf(cityName, result).joinToString("")
+                            textView.text = listOf(cityName, result).joinToString("")
                         }
                     }
             }.onFailure(logException)

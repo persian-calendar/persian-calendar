@@ -151,14 +151,16 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<Preference>(PREF_KEY_ATHAN)?.setSummary(
             if (coordinates == null) R.string.athan_disabled_summary else R.string.empty
         )
-        val isGeocoded = context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null) == null
-        findPreference<Preference>("Coordination")?.summary =
-            if ((cityName != null && isGeocoded) || coordinates == null) null
-            else if (coordinates.elevation == .0)
+        val selectedLocation = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
+            ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }
+        findPreference<Preference>("Coordination")?.isEnabled = selectedLocation == null
+        findPreference<Preference>("Coordination")?.summary = when {
+            coordinates == null -> null
+            coordinates.elevation == .0 ->
                 formatCoordinateISO6709(coordinates.latitude, coordinates.latitude)
-            else
-                formatCoordinateISO6709(
-                    coordinates.latitude, coordinates.latitude, coordinates.elevation
-                )
+            else -> formatCoordinateISO6709(
+                coordinates.latitude, coordinates.latitude, coordinates.elevation
+            )
+        }
     }
 }
