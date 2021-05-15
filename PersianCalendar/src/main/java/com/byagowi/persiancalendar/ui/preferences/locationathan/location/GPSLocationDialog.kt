@@ -31,7 +31,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForLocationPermission
-import com.byagowi.persiancalendar.utils.coordinate
 import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatCoordinate
@@ -80,7 +79,7 @@ private fun Fragment.showGPSLocationDialogMain() {
     }
     var isLocationShown = false
 
-    fun setResultFromCoordinates(coordinates: Coordinate, cityName: String = "") {
+    fun showResult(coordinates: Coordinate, cityName: String) {
         resultTextView.text = listOf(
             cityName,
             formatCoordinate(activity, coordinates, "\n"),
@@ -101,7 +100,7 @@ private fun Fragment.showGPSLocationDialogMain() {
 
     coordinatesFlow.filterNotNull().onEach { coordinates ->
         logDebug("GPSLocationDialog", "A location is received")
-        setResultFromCoordinates(coordinates)
+        showResult(coordinates, "")
         isLocationShown = true
     }.transform { coordinates ->
         // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much
@@ -114,7 +113,7 @@ private fun Fragment.showGPSLocationDialogMain() {
         }?.let { emit(coordinates to it) }
     }.onEach { (coordinates, locality) ->
         logDebug("GPSLocationDialog", "A geocoder locality result is received")
-        setResultFromCoordinates(coordinates, locality)
+        showResult(coordinates, locality)
         cityName = locality
     }.catch { logException(it) }.launchIn(viewScope)
 
@@ -141,12 +140,12 @@ private fun Fragment.showGPSLocationDialogMain() {
     val checkGPSProviderCallback = Runnable { checkGPSProvider() }
     var isOneProviderEnabled = false
     val locationListener = object : LocationListener {
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
         override fun onLocationChanged(location: Location) {
             coordinatesFlow.value =
                 Coordinate(location.latitude, location.longitude, location.altitude)
         }
 
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
         override fun onProviderEnabled(provider: String) {
             isOneProviderEnabled = true
             if (!isLocationShown)
@@ -184,7 +183,7 @@ private fun Fragment.showGPSLocationDialogMain() {
     lifecycle.addObserver(lifeCycleObserver)
     dialog.setOnDismissListener {
         logDebug("GPSLocationDialog", "Dialog is dismissed")
-        coordinate?.let { coordinate ->
+        coordinatesFlow.value?.let { coordinate ->
             activity.appPrefs.edit {
                 putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinate.latitude))
                 putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinate.longitude))
