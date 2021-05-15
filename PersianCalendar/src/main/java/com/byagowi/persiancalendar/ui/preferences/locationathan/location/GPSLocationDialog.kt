@@ -92,30 +92,44 @@ private fun Fragment.showGPSLocationDialogMain() {
         ).joinToString("\n\n")
     }
 
-    coordinatesFlow.filterNotNull().onEach { coordinates ->
-        logDebug("GPSLocationDialog", "A location is received")
-        showResult(coordinates, "")
-        isLocationEverShown = true
-    }.flowOn(Dispatchers.Main.immediate).mapNotNull { coordinates ->
-        // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much.
-        // There is an experimental debounce in stdlib itself but it wasn't exactly what was needed
-        // as it feels it needed a throttle/leading debounce instead, this should be ok for now as
-        // it is no worse that what we are shipping right now already.
-        runCatching {
-            Geocoder(context, Locale(language))
-                .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
-                .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
-        }.getOrNull()?.let { coordinates to it }
-    }.flowOn(Dispatchers.IO).onEach { (coordinates, locality) ->
-        logDebug("GPSLocationDialog", "A geocoder locality result is received")
-        showResult(coordinates, locality)
-        cityName = locality
-    }.flowOn(Dispatchers.Main.immediate).catch { logException(it) }.launchIn(
-        // This is preference fragment view lifecycle but ideally we should've used
-        // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
-        // won't give it to us probably because AlertDialog isn't fragment based
-        this.viewLifecycleOwner.lifecycleScope
-    )
+    // This is preference fragment view lifecycle but ideally we should've used
+    // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
+    // won't give it to us probably because AlertDialog isn't fragment based
+    val viewLifeCycle = this.viewLifecycleOwner.lifecycleScope
+
+    coordinatesFlow
+        .filterNotNull()
+        .onEach { coordinates ->
+            logDebug("GPSLocationDialog", "A location is received")
+            showResult(coordinates, "")
+            isLocationEverShown = true
+        }
+        .flowOn(Dispatchers.Main.immediate)
+        .catch { logException(it) }
+        .launchIn(viewLifeCycle)
+
+    coordinatesFlow
+        .filterNotNull()
+        .mapNotNull { coordinates ->
+            // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much.
+            // There is an experimental debounce in stdlib itself but it wasn't exactly what was needed
+            // as it feels it needed a throttle/leading debounce instead, this should be ok for now as
+            // it is no worse that what we are shipping right now already.
+            runCatching {
+                Geocoder(context, Locale(language))
+                    .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
+                    .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
+            }.getOrNull()?.let { coordinates to it }
+        }
+        .flowOn(Dispatchers.IO)
+        .onEach { (coordinates, locality) ->
+            logDebug("GPSLocationDialog", "A geocoder locality result is received")
+            showResult(coordinates, locality)
+            cityName = locality
+        }
+        .flowOn(Dispatchers.Main.immediate)
+        .catch { logException(it) }
+        .launchIn(viewLifeCycle)
 
     val locationManager = activity.getSystemService<LocationManager>() ?: return
 
