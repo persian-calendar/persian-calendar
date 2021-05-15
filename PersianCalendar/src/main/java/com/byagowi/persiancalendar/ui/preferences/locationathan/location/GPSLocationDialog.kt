@@ -43,6 +43,7 @@ import io.github.persiancalendar.praytimes.Coordinate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
@@ -98,24 +99,21 @@ private fun Fragment.showGPSLocationDialogMain() {
     // won't give it to us probably because AlertDialog isn't fragment based
     val viewScope = this.viewLifecycleOwner.lifecycleScope
 
-    coordinatesFlow.transform { coordinates ->
-        if (coordinates != null) emit(coordinates)
-    }.transform { coordinates ->
+    coordinatesFlow.filterNotNull().onEach { coordinates ->
         logDebug("GPSLocationDialog", "A location is received")
         setResultFromCoordinates(coordinates)
         isLocationShown = true
+    }.transform { coordinates ->
+        // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much
         val geocoder = Geocoder(context, Locale(language))
-        // Maybe some debouncing would be nice here to not spam geocoder much,
-        // currently marked as experimental API however
-        val locality = withContext(Dispatchers.IO) {
+        withContext(Dispatchers.IO) {
             runCatching {
                 geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
             }.getOrNull()
-        }
-        if (locality != null) emit(coordinates to locality)
+        }?.let { emit(coordinates to it) }
     }.onEach { (coordinates, locality) ->
-        logDebug("GPSLocationDialog", "Geocoder locality result is received")
+        logDebug("GPSLocationDialog", "A geocoder locality result is received")
         setResultFromCoordinates(coordinates, locality)
         cityName = locality
     }.catch { logException(it) }.launchIn(viewScope)
