@@ -22,8 +22,8 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.location.GPSLocationDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
+import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showLocationPreferenceDialog
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
@@ -109,22 +109,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 putAthanNameOnSummary(defaultAthanName)
                 true
             }
-            "pref_gps_location" -> {
-                runCatching {
-                    if (ActivityCompat.checkSelfPermission(
-                            context, Manifest.permission.ACCESS_FINE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            context, Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) != PackageManager.PERMISSION_GRANTED
-                    ) askForLocationPermission(activity) else {
-                        GPSLocationDialog().show(
-                            childFragmentManager, GPSLocationDialog::class.java.name
-                        )
-                        // TODO: #updateLocationOnSummaries() on its callback
-                    }
-                }.onFailure(logException)
-                true
-            }
+            "pref_gps_location" -> showGPSLocationDialog()
             PREF_SELECTED_LOCATION -> showLocationPreferenceDialog()
             "Coordination" -> showCoordinatesDialog()
             PREF_ATHAN_VOLUME -> showAthanVolumeDialog()
