@@ -42,6 +42,7 @@ import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
@@ -106,18 +107,18 @@ private fun Fragment.showGPSLocationDialogMain() {
         val geocoder = Geocoder(context, Locale(language))
         // Maybe some debouncing would be nice here to not spam geocoder much,
         // currently marked as experimental API however
-        val geocoderCityName = withContext(Dispatchers.IO) {
+        val locality = withContext(Dispatchers.IO) {
             runCatching {
-                logDebug("GPSLocationDialog", "Geocoder locality result is received")
                 geocoder.getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
-            }.onFailure(logException).getOrNull()
+            }.getOrNull()
         }
-        if (geocoderCityName != null) emit(coordinates to geocoderCityName)
-    }.onEach { (coordinates, geocoderCityName) ->
-        setResultFromCoordinates(coordinates, geocoderCityName)
-        cityName = geocoderCityName
-    }.launchIn(viewScope)
+        if (locality != null) emit(coordinates to locality)
+    }.onEach { (coordinates, locality) ->
+        logDebug("GPSLocationDialog", "Geocoder locality result is received")
+        setResultFromCoordinates(coordinates, locality)
+        cityName = locality
+    }.catch { logException(it) }.launchIn(viewScope)
 
     val locationManager = activity.getSystemService<LocationManager>() ?: return
 
