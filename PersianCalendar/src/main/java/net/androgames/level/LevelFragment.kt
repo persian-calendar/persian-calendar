@@ -9,7 +9,6 @@ import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
@@ -50,11 +49,10 @@ class LevelFragment : Fragment() {
         binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons)
         binding.bottomAppbar.setOnMenuItemClickListener { item: MenuItem ->
             if (item.itemId == R.id.compass) {
-                val navController = NavHostFragment.findNavController(this@LevelFragment)
+                val navController = findNavController()
                 // If compass wasn't in backstack (level is brought from shortcut), navigate to it
-                if (!navController.popBackStack(R.id.compass, false)) navController.navigate(
-                    LevelFragmentDirections.actionLevelToCompass()
-                )
+                if (!navController.popBackStack(R.id.compass, false))
+                    navController.navigate(LevelFragmentDirections.actionLevelToCompass())
             }
             true
         }
