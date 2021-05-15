@@ -20,6 +20,7 @@ import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
@@ -34,10 +35,10 @@ import com.byagowi.persiancalendar.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.logException
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -89,10 +90,13 @@ private fun Fragment.showGPSLocationDialogMain() {
 
         isLocationShown = true
 
-        CoroutineScope(Dispatchers.IO).launch {
+        val geocoder = Geocoder(context, Locale(language))
+        // This is preference fragment view lifecycle but ideally we should've used
+        // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
+        // won't give it to us probably because AlertDialog isn't fragment based
+        this.viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             runCatching {
-                Geocoder(context, Locale.getDefault())
-                    .getFromLocation(location.latitude, location.longitude, 1)
+                geocoder.getFromLocation(location.latitude, location.longitude, 1)
                     .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }?.also {
                         withContext(Dispatchers.Main.immediate) {
                             cityName = it
