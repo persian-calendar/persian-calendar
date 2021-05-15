@@ -42,7 +42,6 @@ import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
@@ -123,7 +122,7 @@ private fun Fragment.showGPSLocationDialogMain() {
     val locationManager = activity.getSystemService<LocationManager>() ?: return
 
     fun checkGPSProvider() {
-        if (coordinate != null) return
+        if (coordinatesFlow.value != null) return
 
         runCatching {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
