@@ -37,6 +37,10 @@ import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.logException
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -153,13 +157,14 @@ class GPSLocationDialog : AppCompatDialogFragment() {
         altitude = "%f".format(Locale.ENGLISH, location.altitude)
 
         val result = listOf(
+            "",
             formatCoordinate(
                 activity,
                 Coordinate(location.latitude, location.longitude, location.altitude), "\n"
             ),
             formatCoordinateISO6709(location.latitude, location.longitude, location.altitude),
             "https://plus.codes/${OpenLocationCode.encode(location.latitude, location.longitude)}"
-        ).joinToString("\n\n").trim()
+        ).joinToString("\n\n")
         textView.text = result
         textView.setOnClickListener {
             copyToClipboard(textView, "coords", textView.text, showToastInstead = true)
@@ -167,21 +172,19 @@ class GPSLocationDialog : AppCompatDialogFragment() {
 
         isLocationShown = true
 
-        // TODO: Rewrite with some more modern stuff
-        cityName = null
-        Thread {
+        CoroutineScope(Dispatchers.IO).launch {
             runCatching {
                 Geocoder(context, Locale.getDefault())
                     .getFromLocation(location.latitude, location.longitude, 1)
                     .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }?.also {
-                        activity.runOnUiThread {
+                        withContext(Dispatchers.Main.immediate) {
                             cityName = it
                             textView.text =
-                                listOf(cityName, textView.text).joinToString("\n").trim()
+                                listOf(cityName, result).joinToString("")
                         }
                     }
-            }
-        }.run()
+            }.onFailure(logException)
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
