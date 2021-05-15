@@ -73,7 +73,7 @@ private fun Fragment.showGPSLocationDialogMain() {
     var isLocationShown = false
 
     fun showLocation(location: Location) {
-        logDebug("A", "AAA")
+        logDebug("GPSLocationDialog", "A location is received")
         latitude = "%f".format(Locale.ENGLISH, location.latitude)
         longitude = "%f".format(Locale.ENGLISH, location.longitude)
         altitude = "%f".format(Locale.ENGLISH, location.altitude)
@@ -104,6 +104,7 @@ private fun Fragment.showGPSLocationDialogMain() {
                             resultTextView.text = listOf(cityName, result).joinToString("")
                         }
                     }
+                logDebug("GPSLocationDialog", "Geocoder information is received")
             }.onFailure(logException)
         }
     }
@@ -160,18 +161,17 @@ private fun Fragment.showGPSLocationDialogMain() {
 
     handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
     var dialog: AlertDialog? = null
-    val lifeCyclceObserver = LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) {
-            dialog?.dismiss()
-        }
+    val lifeCycleObserver = LifecycleEventObserver { _, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) dialog?.dismiss()
     }
-    lifecycle.addObserver(lifeCyclceObserver)
+    lifecycle.addObserver(lifeCycleObserver)
 
     dialog = AlertDialog.Builder(activity)
         .setPositiveButton("", null)
         .setNegativeButton("", null)
         .setView(resultTextView)
         .setOnDismissListener {
+            logDebug("GPSLocationDialog", "Dialog is dismissed")
             if (latitude != null && longitude != null) {
                 activity.appPrefs.edit {
                     putString(PREF_LATITUDE, latitude)
@@ -182,17 +182,15 @@ private fun Fragment.showGPSLocationDialogMain() {
                 }
             }
 
-            activity.let { activity ->
-                if (ActivityCompat.checkSelfPermission(
-                        activity, Manifest.permission.ACCESS_FINE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                        activity, Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) locationManager.removeUpdates(locationListener)
-            }
+            if (ActivityCompat.checkSelfPermission(
+                    activity, Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                    activity, Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) locationManager.removeUpdates(locationListener)
 
             handler.removeCallbacks(checkGPSProviderCallback)
-            lifecycle.removeObserver(lifeCyclceObserver)
+            lifecycle.removeObserver(lifeCycleObserver)
         }
         .create()
     dialog.show()
