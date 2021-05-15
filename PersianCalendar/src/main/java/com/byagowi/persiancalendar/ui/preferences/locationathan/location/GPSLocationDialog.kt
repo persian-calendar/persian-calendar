@@ -77,7 +77,7 @@ private fun Fragment.showGPSLocationDialogMain() {
             copyToClipboard(it, "coords", it.text, showToastInstead = true)
         }
     }
-    var isLocationShown = false
+    var isLocationEverShown = false
 
     fun showResult(coordinates: Coordinate, cityName: String) {
         resultTextView.text = listOf(
@@ -92,16 +92,10 @@ private fun Fragment.showGPSLocationDialogMain() {
         ).joinToString("\n\n")
     }
 
-
-    // This is preference fragment view lifecycle but ideally we should've used
-    // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
-    // won't give it to us probably because AlertDialog isn't fragment based
-    val viewScope = this.viewLifecycleOwner.lifecycleScope
-
     coordinatesFlow.filterNotNull().onEach { coordinates ->
         logDebug("GPSLocationDialog", "A location is received")
         showResult(coordinates, "")
-        isLocationShown = true
+        isLocationEverShown = true
     }.mapNotNull { coordinates ->
         // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much.
         // There is an experimental debounce in stdlib itself but it wasn't exactly what was needed
@@ -118,7 +112,12 @@ private fun Fragment.showGPSLocationDialogMain() {
         logDebug("GPSLocationDialog", "A geocoder locality result is received")
         showResult(coordinates, locality)
         cityName = locality
-    }.catch { logException(it) }.launchIn(viewScope)
+    }.catch { logException(it) }.launchIn(
+        // This is preference fragment view lifecycle but ideally we should've used
+        // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
+        // won't give it to us probably because AlertDialog isn't fragment based
+        this.viewLifecycleOwner.lifecycleScope
+    )
 
     val locationManager = activity.getSystemService<LocationManager>() ?: return
 
@@ -151,12 +150,12 @@ private fun Fragment.showGPSLocationDialogMain() {
 
         override fun onProviderEnabled(provider: String) {
             isOneProviderEnabled = true
-            if (!isLocationShown)
+            if (!isLocationEverShown)
                 resultTextView.setText(R.string.pleasewaitgps)
         }
 
         override fun onProviderDisabled(provider: String) {
-            if (!isLocationShown && !isOneProviderEnabled)
+            if (!isLocationEverShown && !isOneProviderEnabled)
                 resultTextView.setText(R.string.enable_location_services)
         }
     }
