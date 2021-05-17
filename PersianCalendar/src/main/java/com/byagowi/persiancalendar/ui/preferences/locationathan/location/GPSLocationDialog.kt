@@ -11,12 +11,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.widget.TextView
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -29,10 +28,10 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForLocationPermission
 import com.byagowi.persiancalendar.utils.copyToClipboard
-import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.language
@@ -70,26 +69,13 @@ private fun Fragment.showGPSLocationDialogMain() {
 
     val coordinatesFlow = MutableStateFlow<Coordinate?>(null)
     var cityName: String? = null
-    val resultTextView = TextView(activity).also {
-        it.setPadding(16.dp)
-        it.setText(R.string.pleasewaitgps)
+    val binding = GpsLocationDialogBinding.inflate(activity.layoutInflater)
+    listOf(
+        binding.cityName, binding.coordinates, binding.coordinatesIso6709, binding.plusLink
+    ).forEach {
         it.setOnClickListener { _ ->
             copyToClipboard(it, "coords", it.text, showToastInstead = true)
         }
-    }
-    var isLocationEverShown = false
-
-    fun showResult(coordinates: Coordinate, cityName: String) {
-        resultTextView.text = listOf(
-            cityName,
-            formatCoordinate(activity, coordinates, "\n"),
-            formatCoordinateISO6709(
-                coordinates.latitude, coordinates.longitude, coordinates.elevation
-            ),
-            "https://plus.codes/${
-                OpenLocationCode.encode(coordinates.latitude, coordinates.longitude)
-            }"
-        ).joinToString("\n\n")
     }
 
     // This is preference fragment view lifecycle but ideally we should've used
@@ -101,8 +87,16 @@ private fun Fragment.showGPSLocationDialogMain() {
         .filterNotNull()
         .onEach { coordinates ->
             logDebug("GPSLocationDialog", "A location is received")
-            showResult(coordinates, "")
-            isLocationEverShown = true
+            binding.message.visibility = View.GONE
+            binding.coordinatesBox.visibility = View.VISIBLE
+            binding.coordinates.text = formatCoordinate(activity, coordinates, "\n")
+            binding.coordinatesIso6709.text = formatCoordinateISO6709(
+                coordinates.latitude, coordinates.longitude, coordinates.elevation
+            )
+            binding.plusLink.text = listOf(
+                "https://plus.codes/",
+                OpenLocationCode.encode(coordinates.latitude, coordinates.longitude)
+            ).joinToString("")
         }
         .flowOn(Dispatchers.Main.immediate)
         .catch { logException(it) }
@@ -114,17 +108,18 @@ private fun Fragment.showGPSLocationDialogMain() {
             // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much.
             // There is an experimental debounce in stdlib itself but it wasn't exactly what was needed
             // as it feels it needed a throttle/leading debounce instead, this should be ok for now as
-            // it is no worse that what we are shipping right now already.
+            // it is no worse than what we are shipping right now already.
             runCatching {
                 Geocoder(context, Locale(language))
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
-            }.getOrNull()?.let { coordinates to it }
+            }.getOrNull()
         }
         .flowOn(Dispatchers.IO)
-        .onEach { (coordinates, locality) ->
+        .onEach { locality ->
             logDebug("GPSLocationDialog", "A geocoder locality result is received")
-            showResult(coordinates, locality)
+            binding.cityName.visibility = View.VISIBLE
+            binding.cityName.text = locality
             cityName = locality
         }
         .flowOn(Dispatchers.Main.immediate)
@@ -162,13 +157,11 @@ private fun Fragment.showGPSLocationDialogMain() {
 
         override fun onProviderEnabled(provider: String) {
             isOneProviderEnabled = true
-            if (!isLocationEverShown)
-                resultTextView.setText(R.string.pleasewaitgps)
+            binding.message.setText(R.string.pleasewaitgps)
         }
 
         override fun onProviderDisabled(provider: String) {
-            if (!isLocationEverShown && !isOneProviderEnabled)
-                resultTextView.setText(R.string.enable_location_services)
+            if (!isOneProviderEnabled) binding.message.setText(R.string.enable_location_services)
         }
     }
 
@@ -187,7 +180,7 @@ private fun Fragment.showGPSLocationDialogMain() {
     val dialog = AlertDialog.Builder(activity)
         .setPositiveButton("", null)
         .setNegativeButton("", null)
-        .setView(resultTextView)
+        .setView(binding.root)
         .create()
 
     val lifeCycleObserver = LifecycleEventObserver { _, event ->
