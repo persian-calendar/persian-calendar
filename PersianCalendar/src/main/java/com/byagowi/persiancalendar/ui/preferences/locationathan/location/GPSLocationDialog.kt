@@ -92,7 +92,7 @@ private fun Fragment.showGPSLocationDialogMain() {
                     old.elevation == new.elevation
         }
 
-    distinctCoordinatesFlow
+    val updateCoordinatesJob = distinctCoordinatesFlow
         .onEach { coordinates ->
             binding.message.visibility = View.GONE
             binding.coordinatesBox.visibility = View.VISIBLE
@@ -109,7 +109,7 @@ private fun Fragment.showGPSLocationDialogMain() {
         .catch { logException(it) }
         .launchIn(viewLifeCycle)
 
-    distinctCoordinatesFlow
+    val updateGeocoderResultJob = distinctCoordinatesFlow
         .mapNotNull { coordinates ->
             runCatching {
                 Geocoder(context, Locale(language))
@@ -211,6 +211,11 @@ private fun Fragment.showGPSLocationDialogMain() {
 
         handler.removeCallbacks(checkGPSProviderCallback)
         lifecycle.removeObserver(lifeCycleObserver)
+
+        // This wasn't necessary if we had a proper view lifecycle scope, yet, this is more
+        // preferred than going for a fragment based dialog for now.
+        updateCoordinatesJob.cancel()
+        updateGeocoderResultJob.cancel()
     }
 
     dialog.show()
