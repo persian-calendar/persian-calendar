@@ -41,6 +41,7 @@ import io.github.persiancalendar.praytimes.Coordinate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
@@ -83,10 +84,16 @@ private fun Fragment.showGPSLocationDialogMain() {
     // won't give it to us probably because AlertDialog isn't fragment based
     val viewLifeCycle = this.viewLifecycleOwner.lifecycleScope
 
-    coordinatesFlow
+    val distinctCoordinatesFlow = coordinatesFlow
         .filterNotNull()
+        .onEach { logDebug("GPSLocationDialog", "A location is received") }
+        .distinctUntilChanged { old, new ->
+            old.latitude == new.latitude && old.longitude == new.longitude &&
+                    old.elevation == new.elevation
+        }
+
+    distinctCoordinatesFlow
         .onEach { coordinates ->
-            logDebug("GPSLocationDialog", "A location is received")
             binding.message.visibility = View.GONE
             binding.coordinatesBox.visibility = View.VISIBLE
             binding.coordinates.text = formatCoordinate(activity, coordinates, "\n")
@@ -102,13 +109,8 @@ private fun Fragment.showGPSLocationDialogMain() {
         .catch { logException(it) }
         .launchIn(viewLifeCycle)
 
-    coordinatesFlow
-        .filterNotNull()
+    distinctCoordinatesFlow
         .mapNotNull { coordinates ->
-            // Maybe some sort of throttling/debouncing would be nice here to not spam geocoder much.
-            // There is an experimental debounce in stdlib itself but it wasn't exactly what was needed
-            // as it feels it needed a throttle/leading debounce instead, this should be ok for now as
-            // it is no worse than what we are shipping right now already.
             runCatching {
                 Geocoder(context, Locale(language))
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
