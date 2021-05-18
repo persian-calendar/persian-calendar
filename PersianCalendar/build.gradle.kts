@@ -196,7 +196,9 @@ val specialOccurringEvents = listOf(
                 val city = cityEntry.value as Map<*, *>
                 val latitude = (city["latitude"] as Number).toDouble()
                 val longitude = (city["longitude"] as Number).toDouble()
-                val elevation = (city["elevation"] as Number).toDouble()
+                // Elevation really degrades quality of calculations
+                val elevation =
+                    if (countryCode == "ir") .0 else (city["elevation"] as Number).toDouble()
                 """"$key" to CityItem(
         key = "$key",
         en = "${city["en"]}", fa = "${city["fa"]}",

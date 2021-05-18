@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
@@ -70,6 +71,7 @@ private fun Fragment.showGPSLocationDialogMain() {
 
     val coordinatesFlow = MutableStateFlow<Coordinate?>(null)
     var cityName: String? = null
+    var countryCode: String? = null
     val binding = GpsLocationDialogBinding.inflate(activity.layoutInflater)
     listOf(
         binding.cityName, binding.coordinates, binding.coordinatesIso6709, binding.plusLink
@@ -112,9 +114,11 @@ private fun Fragment.showGPSLocationDialogMain() {
     val updateGeocoderResultJob = distinctCoordinatesFlow
         .mapNotNull { coordinates ->
             runCatching {
-                Geocoder(context, Locale(language))
+                val result = Geocoder(context, Locale(language))
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
-                    .firstOrNull()?.locality?.takeIf { it.isNotEmpty() }
+                    .firstOrNull()
+                countryCode = result?.countryCode
+                result?.locality?.takeIf { it.isNotEmpty() }
             }.getOrNull()
         }
         .flowOn(Dispatchers.IO)
@@ -196,7 +200,9 @@ private fun Fragment.showGPSLocationDialogMain() {
             activity.appPrefs.edit {
                 putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinate.latitude))
                 putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinate.longitude))
-                putString(PREF_ALTITUDE, "%f".format(Locale.ENGLISH, coordinate.elevation))
+                // Don't store elevation on Iranian cities, it degrades the calculations quality
+                val elevation = if (countryCode == "IR") .0 else coordinate.elevation
+                putString(PREF_ALTITUDE, "%f".format(Locale.ENGLISH, elevation))
                 putString(PREF_GEOCODED_CITYNAME, cityName ?: "")
                 putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
             }

@@ -1,18 +1,15 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan
 
-import android.Manifest
 import android.app.Activity.RESULT_OK
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.ListPreference
@@ -131,16 +128,19 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val cityName = getCityName(context, false).takeIf { it.isNotEmpty() }
         findPreference<Preference>(PREF_SELECTED_LOCATION)?.summary =
             cityName ?: context.getString(R.string.location_help)
-        val coordinate = getCoordinate(context)
-        findPreference<Preference>(PREF_KEY_ATHAN)?.isEnabled = coordinate != null
+        val coordinates = getCoordinate(context)
+        findPreference<Preference>(PREF_KEY_ATHAN)?.isEnabled = coordinates != null
         findPreference<Preference>(PREF_KEY_ATHAN)?.setSummary(
-            if (coordinate == null) R.string.athan_disabled_summary else R.string.empty
+            if (coordinates == null) R.string.athan_disabled_summary else R.string.empty
         )
         val selectedLocation = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
             ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }
         findPreference<Preference>("Coordination")?.isEnabled = selectedLocation == null
-        findPreference<Preference>("Coordination")?.summary = coordinate?.let {
-            formatCoordinateISO6709(coordinate.latitude, coordinate.latitude, coordinate.elevation)
+        findPreference<Preference>("Coordination")?.summary = coordinates?.let {
+            formatCoordinateISO6709(
+                coordinates.latitude, coordinates.latitude,
+                coordinates.elevation.takeIf { it != .0 }
+            )
         }
     }
 }
