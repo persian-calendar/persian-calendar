@@ -82,7 +82,7 @@
         <activity
             android:name=".ui.preferences.widgetnotification.WidgetConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -91,7 +91,7 @@
         <activity
             android:name=".ui.preferences.agewidget.AgeWidgetConfigureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
-            android:exported="false"
+            android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
