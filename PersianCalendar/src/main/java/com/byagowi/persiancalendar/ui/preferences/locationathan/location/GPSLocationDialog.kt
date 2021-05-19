@@ -11,11 +11,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -95,8 +95,8 @@ private fun Fragment.showGPSLocationDialogMain() {
 
     val updateCoordinatesJob = distinctCoordinatesFlow
         .onEach { coordinates ->
-            binding.message.visibility = View.GONE
-            binding.coordinatesBox.visibility = View.VISIBLE
+            binding.message.isVisible = false
+            binding.coordinatesBox.isVisible = true
             binding.coordinates.text = formatCoordinate(activity, coordinates, "\n")
             binding.coordinatesIso6709.text = formatCoordinateISO6709(
                 coordinates.latitude, coordinates.longitude, coordinates.elevation
@@ -123,7 +123,7 @@ private fun Fragment.showGPSLocationDialogMain() {
         .flowOn(Dispatchers.IO)
         .onEach { locality ->
             logDebug("GPSLocationDialog", "A geocoder locality result is received")
-            binding.cityName.visibility = View.VISIBLE
+            binding.cityName.isVisible = true
             binding.cityName.text = locality
             cityName = locality
         }
