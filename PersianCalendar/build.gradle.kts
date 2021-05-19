@@ -101,7 +101,7 @@ dependencies {
     implementation("com.github.persian-calendar:calendar:1.0.1")
     implementation("com.github.persian-calendar:praytimes:1.0.2")
 
-    implementation("androidx.appcompat:appcompat:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.3.0")
     implementation("androidx.preference:preference-ktx:1.1.1")
     implementation("androidx.recyclerview:recyclerview:1.2.0")
     implementation("androidx.cardview:cardview:1.0.0")
@@ -113,8 +113,8 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
 
-    implementation("androidx.core:core-ktx:1.3.2")
-    implementation("androidx.fragment:fragment-ktx:1.3.3")
+    implementation("androidx.core:core-ktx:1.5.0")
+    implementation("androidx.fragment:fragment-ktx:1.3.4")
     implementation("androidx.activity:activity-ktx:1.2.3")
 
     implementation("androidx.browser:browser:1.3.0")
