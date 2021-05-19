@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.utils
 
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
-import java.util.*
 
 private typealias BaseStore<T> = Map<Int, List<T>>
 typealias PersianCalendarEventsStore = BaseStore<CalendarEvent.PersianCalendarEvent>
