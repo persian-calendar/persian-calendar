@@ -2,9 +2,9 @@ package com.byagowi.persiancalendar.ui.calendar.times
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import androidx.annotation.StringRes
 import androidx.constraintlayout.helper.widget.Flow
+import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
 import com.byagowi.persiancalendar.utils.addViewsToFlow
@@ -32,11 +32,11 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
     var isExpanded = true
     fun toggle() {
         isExpanded = !isExpanded
-        val visibility = if (isExpanded) View.VISIBLE else View.GONE
+        val visibility = isExpanded
         times.forEach { (timeId: Int, timeItemBinding: TimeItemBinding) ->
             when (timeId) {
                 R.string.fajr, R.string.dhuhr, R.string.maghrib -> Unit
-                else -> timeItemBinding.root.visibility = visibility
+                else -> timeItemBinding.root.isVisible = visibility
             }
         }
     }

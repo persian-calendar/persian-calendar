@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
@@ -30,11 +31,11 @@ class ConverterFragment : Fragment() {
         binding.dayPickerView.also {
             it.selectedDayListener = fun(jdn) {
                 if (jdn == null) {
-                    binding.resultCard.visibility = View.GONE
+                    binding.resultCard.isVisible = false
                 } else {
                     if (jdn == todayJdn) binding.todayButton.hide() else binding.todayButton.show()
 
-                    binding.resultCard.visibility = View.VISIBLE
+                    binding.resultCard.isVisible = true
                     val selectedCalendarType = binding.dayPickerView.selectedCalendarType
                     binding.calendarsView.showCalendars(
                         jdn, selectedCalendarType, getOrderedCalendarTypes() - selectedCalendarType

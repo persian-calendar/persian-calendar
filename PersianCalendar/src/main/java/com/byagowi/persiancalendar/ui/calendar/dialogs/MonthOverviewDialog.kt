@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -91,10 +92,10 @@ private class MonthOverviewItemAdapter(private val rows: List<MonthOverviewRecor
             val record = rows[position]
             it.title.text = record.title
             it.holidays.text = record.holidays
-            it.holidays.visibility = if (record.holidays.isEmpty()) View.GONE else View.VISIBLE
+            it.holidays.isVisible = record.holidays.isNotEmpty()
             it.nonHolidays.text = record.nonHolidays
-            it.nonHolidays.visibility =
-                if (record.nonHolidays.isEmpty()) View.GONE else View.VISIBLE
+            it.nonHolidays.isVisible =
+                record.nonHolidays.isNotEmpty()
         }
 
         override fun onClick(v: View?) = copyToClipboard(

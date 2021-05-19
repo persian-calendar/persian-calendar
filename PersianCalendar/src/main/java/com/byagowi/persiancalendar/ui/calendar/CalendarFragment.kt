@@ -27,6 +27,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -420,22 +421,22 @@ class CalendarFragment : Fragment() {
         val deviceEvents = getDeviceEventsTitle(events)
         val contentDescription = StringBuilder()
 
-        eventsBinding.eventMessage.visibility = View.GONE
-        eventsBinding.noEvent.visibility = View.VISIBLE
+        eventsBinding.eventMessage.isVisible = false
+        eventsBinding.noEvent.isVisible = true
 
         if (holidays.isNotEmpty()) {
-            eventsBinding.noEvent.visibility = View.GONE
+            eventsBinding.noEvent.isVisible = false
             eventsBinding.holidayTitle.text = holidays
             val holidayContent = getString(R.string.holiday_reason) + "\n" + holidays
             eventsBinding.holidayTitle.contentDescription = holidayContent
             contentDescription.append(holidayContent)
-            eventsBinding.holidayTitle.visibility = View.VISIBLE
+            eventsBinding.holidayTitle.isVisible = true
         } else {
-            eventsBinding.holidayTitle.visibility = View.GONE
+            eventsBinding.holidayTitle.isVisible = false
         }
 
         if (deviceEvents.isNotEmpty()) {
-            eventsBinding.noEvent.visibility = View.GONE
+            eventsBinding.noEvent.isVisible = false
             eventsBinding.deviceEventTitle.text = deviceEvents
             contentDescription
                 .append("\n")
@@ -445,14 +446,14 @@ class CalendarFragment : Fragment() {
 
             eventsBinding.deviceEventTitle.let {
                 it.movementMethod = LinkMovementMethod.getInstance()
-                it.visibility = View.VISIBLE
+                it.isVisible = true
             }
         } else {
-            eventsBinding.deviceEventTitle.visibility = View.GONE
+            eventsBinding.deviceEventTitle.isVisible = false
         }
 
         if (nonHolidays.isNotEmpty()) {
-            eventsBinding.noEvent.visibility = View.GONE
+            eventsBinding.noEvent.isVisible = false
             eventsBinding.eventTitle.text = nonHolidays
             contentDescription
                 .append("\n")
@@ -460,9 +461,9 @@ class CalendarFragment : Fragment() {
                 .append("\n")
                 .append(nonHolidays)
 
-            eventsBinding.eventTitle.visibility = View.VISIBLE
+            eventsBinding.eventTitle.isVisible = true
         } else {
-            eventsBinding.eventTitle.visibility = View.GONE
+            eventsBinding.eventTitle.isVisible = false
         }
 
         val messageToShow = SpannableStringBuilder()
@@ -470,7 +471,7 @@ class CalendarFragment : Fragment() {
         val enabledTypes = activity.appPrefs
             .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
         if (enabledTypes.isEmpty()) {
-            eventsBinding.noEvent.visibility = View.GONE
+            eventsBinding.noEvent.isVisible = false
             if (messageToShow.isNotEmpty()) messageToShow.append("\n")
 
             val title = getString(R.string.warn_if_events_not_set)
@@ -493,7 +494,7 @@ class CalendarFragment : Fragment() {
             eventsBinding.eventMessage.let {
                 it.text = messageToShow
                 it.movementMethod = LinkMovementMethod.getInstance()
-                it.visibility = View.VISIBLE
+                it.isVisible = true
             }
         }
 
@@ -509,15 +510,15 @@ class CalendarFragment : Fragment() {
         )
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->
-            sunView.visibility = if (isToday) {
+            sunView.isVisible = if (isToday) {
                 sunView.setSunriseSunsetMoonPhase(prayTimes, runCatching {
                     SunMoonPosition(
                         jdn.value.toDouble(), coordinate.latitude, coordinate.longitude,
                         coordinate.elevation, 0.0
                     ).moonPhase
                 }.onFailure(logException).getOrNull() ?: 1.0)
-                View.VISIBLE
-            } else View.GONE
+                true
+            } else false
             if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()
         }
     }

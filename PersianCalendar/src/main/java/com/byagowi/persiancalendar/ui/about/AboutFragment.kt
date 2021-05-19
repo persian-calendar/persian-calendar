@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -62,9 +63,9 @@ class AboutFragment : Fragment() {
             formatNumber(supportedYearOfIranCalendar - 1),
             formatNumber(supportedYearOfIranCalendar)
         )
-        binding.helpCard.visibility = when (language) {
-            LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> View.VISIBLE
-            else -> View.GONE
+        binding.helpCard.isVisible = when (language) {
+            LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> true
+            else -> false
         }
 
         Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)

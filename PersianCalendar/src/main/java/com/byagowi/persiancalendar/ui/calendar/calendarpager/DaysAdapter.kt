@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
@@ -109,7 +110,7 @@ class DaysAdapter internal constructor(
                             context.getString(R.string.nth_week_of_year).format(weekNumber)
                         else weekNumber
 
-                        dayView.visibility = View.VISIBLE
+                        dayView.isVisible = true
                     } else
                         setEmpty()
                     return
@@ -133,7 +134,7 @@ class DaysAdapter internal constructor(
                         .format(getWeekDayName(revertWeekStartOffsetFromWeekDay(position)))
                 else weekDayInitial
 
-                dayView.visibility = View.VISIBLE
+                dayView.isVisible = true
                 dayView.setBackgroundResource(0)
             } else {
                 if (position - 7 - fixedStartingDayOfWeek >= 0) {
@@ -158,7 +159,7 @@ class DaysAdapter internal constructor(
                         withZodiac = isToday, withOtherCalendars = false, withTitle = true
                     ) else dayOfMonth.toString()
 
-                    dayView.visibility = View.VISIBLE
+                    dayView.isVisible = true
                     dayView.setBackgroundResource(selectableItemBackground)
                 } else {
                     setEmpty()
@@ -167,7 +168,7 @@ class DaysAdapter internal constructor(
         }
 
         private fun setEmpty() {
-            itemView.visibility = View.GONE
+            itemView.isVisible = false
         }
     }
 }

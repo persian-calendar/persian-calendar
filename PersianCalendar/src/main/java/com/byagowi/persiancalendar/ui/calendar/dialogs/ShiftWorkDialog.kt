@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -108,7 +109,7 @@ private class ShiftWorkItemsAdapter(
                 .format(formatNumber(it.length), shiftWorkKeyToString(it.type))
         }.also {
             binding.result.text = it
-            binding.result.visibility = if (it.isEmpty()) View.GONE else View.VISIBLE
+            binding.result.isVisible = it.isNotEmpty()
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -221,11 +222,11 @@ private class ShiftWorkItemsAdapter(
             binding.rowNumber.text = "%s:".format(formatNumber(position + 1))
             binding.lengthSpinner.setSelection(shiftWorkRecord.length)
             binding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
-            binding.detail.visibility = View.VISIBLE
-            binding.addButton.visibility = View.GONE
+            binding.detail.isVisible = true
+            binding.addButton.isVisible = false
         } else {
-            binding.detail.visibility = View.GONE
-            binding.addButton.visibility = if (rows.size < 20) View.VISIBLE else View.GONE
+            binding.detail.isVisible = false
+            binding.addButton.isVisible = rows.size < 20
         }
     }
 }

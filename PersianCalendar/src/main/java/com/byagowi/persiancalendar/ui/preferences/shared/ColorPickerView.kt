@@ -43,6 +43,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
@@ -193,7 +194,7 @@ class ColorPickerView @JvmOverloads constructor(context: Context, attrs: Attribu
     }
 
     fun hideAlphaSeekBar() {
-        alphaSeekBar.visibility = GONE
+        alphaSeekBar.isVisible = false
         seekBars.measure(
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)

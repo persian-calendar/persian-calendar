@@ -2,8 +2,8 @@ package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
+import androidx.core.view.isVisible
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
@@ -35,7 +35,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).also {
         it.root.setOnClickListener { toggle() }
-        it.extraInformationContainer.visibility = View.GONE
+        it.extraInformationContainer.isVisible = false
     }
     private var isExpanded = false
 
@@ -53,11 +53,11 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             .start()
 
         TransitionManager.beginDelayedTransition(binding.calendarsTabContent, changeBoundTransition)
-        binding.extraInformationContainer.visibility = if (isExpanded) View.VISIBLE else View.GONE
+        binding.extraInformationContainer.isVisible = isExpanded
     }
 
     fun hideMoreIcon() {
-        binding.moreCalendar.visibility = View.GONE
+        binding.moreCalendar.isVisible = false
     }
 
     fun showCalendars(
@@ -70,7 +70,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
 
         binding.zodiac.also {
             it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
-            it.visibility = if (it.text.isEmpty()) View.GONE else View.VISIBLE
+            it.isVisible = it.text.isNotEmpty()
         }
 
         val isToday = Jdn.today == jdn
@@ -78,10 +78,10 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
             if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
                 jdn.dayOfWeekName, context.getString(R.string.iran_time)
             )
-            binding.diffDate.visibility = View.GONE
+            binding.diffDate.isVisible = false
         } else {
             binding.also {
-                it.diffDate.visibility = View.VISIBLE
+                it.diffDate.isVisible = true
                 it.diffDate.text =
                     calculateDaysDifference(jdn, context.getString(R.string.date_diff_text))
             }
@@ -124,7 +124,7 @@ class CalendarsView @JvmOverloads constructor(context: Context, attrs: Attribute
         }
         binding.equinox.also {
             it.text = equinox
-            it.visibility = if (equinox.isEmpty()) View.GONE else View.VISIBLE
+            it.isVisible = equinox.isNotEmpty()
         }
 
         binding.root.contentDescription = getA11yDaySummary(

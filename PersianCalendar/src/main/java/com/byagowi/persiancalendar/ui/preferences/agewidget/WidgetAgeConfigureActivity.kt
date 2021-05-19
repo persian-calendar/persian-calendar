@@ -7,6 +7,7 @@ import android.text.SpannableStringBuilder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.commit
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
@@ -76,7 +77,6 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
             )
         }
 
-        binding.editWidgetTitle.visibility
         val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, "")
         binding.editWidgetTitle.text = SpannableStringBuilder(title)
         binding.addWidgetButton.setOnClickListener {
