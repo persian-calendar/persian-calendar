@@ -7,4 +7,5 @@
     android:previewImage="@drawable/w1x1"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="600000"
-    android:widgetCategory="keyguard|home_screen" />
+    android:widgetCategory="keyguard|home_screen"
+    android:widgetFeatures="reconfigurable" />
