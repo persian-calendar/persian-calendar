@@ -118,7 +118,7 @@ private fun Fragment.showGPSLocationDialogMain() {
                     .firstOrNull()
                 countryCode = result?.countryCode
                 result?.locality?.takeIf { it.isNotEmpty() }
-            }.getOrNull()
+            }.onFailure(logException).getOrNull()
         }
         .flowOn(Dispatchers.IO)
         .onEach { locality ->
