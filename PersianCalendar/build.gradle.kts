@@ -9,11 +9,6 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
-// https://stackoverflow.com/a/52441962
-fun String.runCommand(): String? = runCatching {
-    ProcessGroovyMethods.getText(ProcessGroovyMethods.execute(this))
-}.getOrNull()
-
 operator fun File.div(child: String) = File(this, child)
 
 val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
@@ -32,9 +27,13 @@ android {
     val gitVersion = listOf(
         "git rev-parse --abbrev-ref HEAD",
         "git rev-list HEAD --count",
-        "git rev-parse --short HEAD"
-    ).joinToString("-") { it.runCommand()?.trim() ?: "" } +
-            (if ("git status -s".runCommand().isNullOrBlank()) "" else "-dirty")
+        "git rev-parse --short HEAD",
+        "git status -s" // i == 3, if its result is non empty -dirty will be used otherwise ignored
+    ).mapIndexedNotNull { i, cmd ->
+        // https://stackoverflow.com/a/52441962 equivalent to Groovy's "".execute().text
+        ProcessGroovyMethods.getText(ProcessGroovyMethods.execute(cmd))?.trim()
+            ?.takeIf { it.isNotEmpty() }.let { if (i == 3 && it != null) "dirty" else it }
+    }.joinToString("-")
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
