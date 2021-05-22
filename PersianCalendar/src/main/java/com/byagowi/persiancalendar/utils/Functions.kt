@@ -139,7 +139,8 @@ fun loadApp(context: Context): Unit = if (!goForWorker()) runCatching {
     val dailyPendingIntent = PendingIntent.getBroadcast(
         context, LOAD_APP_ID,
         Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_RESTART_APP),
-        PendingIntent.FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_UPDATE_CURRENT or
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
     alarmManager.set(AlarmManager.RTC, startTime.timeInMillis, dailyPendingIntent)
 
@@ -150,7 +151,8 @@ fun loadApp(context: Context): Unit = if (!goForWorker()) runCatching {
             context,
             THREE_HOURS_APP_ID,
             Intent(context, BroadcastReceivers::class.java).setAction(BROADCAST_UPDATE_APP),
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
         )
 
         alarmManager.setInexactRepeating(
@@ -216,7 +218,8 @@ private fun setAlarm(
             Intent(context, BroadcastReceivers::class.java)
                 .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
                 .setAction(BROADCAST_ALARM),
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
         )
 
         when {

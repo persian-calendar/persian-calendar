@@ -58,7 +58,8 @@ fun update(context: Context, updateDate: Boolean) {
     val launchAppPendingIntent = PendingIntent.getActivity(
         context, 0,
         Intent(context, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-        PendingIntent.FLAG_UPDATE_CURRENT
+        PendingIntent.FLAG_UPDATE_CURRENT or
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
 
     //
