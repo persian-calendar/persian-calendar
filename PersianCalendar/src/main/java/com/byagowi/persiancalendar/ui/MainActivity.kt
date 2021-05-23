@@ -27,6 +27,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
@@ -76,8 +77,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(it.root)
         }
 
-        obtainNavHost() // sake of initializing NavHost
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             window?.also { window ->
                 // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
@@ -89,7 +88,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.drawer.addDrawerListener(createDrawerListener())
 
-        obtainNavHost().navController.addOnDestinationChangedListener(this)
+        navController?.addOnDestinationChangedListener(this)
         when (intent?.action) {
             "COMPASS" -> R.id.compass
             "LEVEL" -> R.id.level
@@ -147,16 +146,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var previousAppThemeValue: String? = null
 
-    private fun obtainNavHost(): NavHostFragment {
-        val navHostFragmentTag = "NavHostFrag"
-
-        return supportFragmentManager.findFragmentByTag(navHostFragmentTag) as? NavHostFragment
-            ?: NavHostFragment.create(R.navigation.navigation_graph).also { newNavHostFragment ->
-                supportFragmentManager.beginTransaction()
-                    .add(binding.navHostContainer.id, newNavHostFragment, navHostFragmentTag)
-                    .setPrimaryNavigationFragment(newNavHostFragment)
-                    .commitNow()
-            }
+    private val navController by lazy {
+        (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment)
+            ?.navController.debugAssertNotNull
     }
 
     override fun onDestinationChanged(
@@ -181,7 +173,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun navigateTo(@IdRes id: Int) {
-        obtainNavHost().navController.navigate(
+        navController?.navigate(
             id, null, navOptions {
                 anim {
                     enter = R.anim.nav_enter_anim
@@ -325,9 +317,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     this, Manifest.permission.READ_CALENDAR
                 ) -> {
                     toggleShowDeviceCalendarOnPreference(this, true)
-                    val navController = obtainNavHost().navController
-                    if (navController.currentDestination?.id == R.id.calendar)
-                        navController.navigate(CalendarFragmentDirections.navigateToSelf())
+                    if (navController?.currentDestination?.id == R.id.calendar)
+                        navController?.navigate(CalendarFragmentDirections.navigateToSelf())
                 }
                 else -> toggleShowDeviceCalendarOnPreference(this, false)
             }
@@ -349,9 +340,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         update(applicationContext, false)
         if (creationDateJdn != Jdn.today) {
             creationDateJdn = Jdn.today
-            val navController = obtainNavHost().navController
-            if (navController.currentDestination?.id == R.id.calendar) {
-                navController.navigate(CalendarFragmentDirections.navigateToSelf())
+            if (navController?.currentDestination?.id == R.id.calendar) {
+                navController?.navigate(CalendarFragmentDirections.navigateToSelf())
             }
         }
     }
@@ -383,7 +373,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             R.id.exit -> finish()
             else -> {
                 binding.drawer.closeDrawer(GravityCompat.START)
-                if (obtainNavHost().navController.currentDestination?.id != itemId) {
+                if (navController?.currentDestination?.id != itemId) {
                     clickedItem = itemId
                 }
             }
@@ -431,11 +421,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             slidingAnimation(drawerView, slideOffset / 1.5f)
         }
 
-        private fun slidingAnimation(drawerView: View, slideOffset: Float) = binding.apply {
-            navHostContainer.translationX =
+        private fun slidingAnimation(drawerView: View, slideOffset: Float) {
+            binding.navHostFragment.translationX =
                 slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
-            drawer.bringChildToFront(drawerView)
-            drawer.requestLayout()
+            binding.drawer.bringChildToFront(drawerView)
+            binding.drawer.requestLayout()
         }
 
         override fun onDrawerOpened(drawerView: View) {
