@@ -135,7 +135,7 @@ private class ShiftWorkItemsAdapter(
             binding.lengthSpinner.adapter = ArrayAdapter(
                 context,
                 android.R.layout.simple_spinner_dropdown_item,
-                (0..7).map {
+                (0..14).map {
                     if (it == 0) binding.root.context.getString(R.string.shift_work_days_head)
                     else formatNumber(it)
                 }
