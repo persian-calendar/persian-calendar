@@ -60,6 +60,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean =
-        if (preference?.key == "calendars_priority") showCalendarPreferenceDialog().returnTrue()
+        if (preference?.key == "calendars_priority") showCalendarPreferenceDialog().let { true }
         else super.onPreferenceTreeClick(preference)
 }

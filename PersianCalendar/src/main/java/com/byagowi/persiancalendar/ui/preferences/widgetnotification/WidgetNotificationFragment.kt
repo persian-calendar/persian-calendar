@@ -7,7 +7,6 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
-import com.byagowi.persiancalendar.utils.returnTrue
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
@@ -20,6 +19,6 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             PREF_SELECTED_WIDGET_TEXT_COLOR -> showColorPickerDialog(false, key)
             PREF_SELECTED_WIDGET_BACKGROUND_COLOR -> showColorPickerDialog(true, key)
             else -> null
-        }?.returnTrue() ?: super.onPreferenceTreeClick(preference)
+        }?.let { true } ?: super.onPreferenceTreeClick(preference)
     }
 }

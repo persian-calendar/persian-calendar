@@ -111,7 +111,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             PREF_ATHAN_ALARM -> showPrayerSelectDialog()
             PREF_ATHAN_GAP -> showAthanGapDialog()
             else -> null
-        }?.returnTrue() ?: super.onPreferenceTreeClick(preference)
+        }?.let { true } ?: super.onPreferenceTreeClick(preference)
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {

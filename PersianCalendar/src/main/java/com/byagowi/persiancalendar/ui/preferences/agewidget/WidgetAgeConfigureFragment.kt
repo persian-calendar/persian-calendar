@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
-import com.byagowi.persiancalendar.utils.returnTrue
 
 class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
 
@@ -32,6 +31,6 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
             PREF_SELECTED_WIDGET_BACKGROUND_COLOR -> showColorPickerDialog(true, key)
             PREF_SELECTED_DATE_AGE_WIDGET -> showDayPickerDialog(key)
             else -> null
-        }?.returnTrue() ?: super.onPreferenceTreeClick(preference)
+        }?.let { true } ?: super.onPreferenceTreeClick(preference)
     }
 }
