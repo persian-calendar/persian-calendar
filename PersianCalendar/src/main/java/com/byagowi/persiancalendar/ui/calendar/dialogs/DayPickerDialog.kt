@@ -11,11 +11,10 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.putJdn
 
 // Only one use but to match with showColorPickerDialog
-fun Fragment.showDayPickerDialog(key: String): Boolean {
+fun Fragment.showDayPickerDialog(key: String) {
     val todayJdn = Jdn.today
     val jdn = activity?.appPrefs?.getJdnOrNull(key) ?: todayJdn
     showDayPickerDialog(jdn) { result -> activity?.appPrefs?.edit { putJdn(key, result) } }
-    return true // Just a convenience result meaning click event is consumed here
 }
 
 fun Fragment.showDayPickerDialog(jdn: Jdn, onSuccess: (jdn: Jdn) -> Unit) {

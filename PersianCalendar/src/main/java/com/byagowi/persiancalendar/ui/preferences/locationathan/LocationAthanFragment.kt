@@ -92,8 +92,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         return when (preference?.key) {
             "pref_key_ringtone" -> {
                 runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
-                    .onFailure(logException)
-                true
+                    .onFailure(logException).getOrNull() ?: Unit
             }
             "pref_key_ringtone_default" -> {
                 context.appPrefs.edit {
@@ -104,7 +103,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     Snackbar.make(it, R.string.returned_to_default, Snackbar.LENGTH_SHORT).show()
                 }
                 putAthanNameOnSummary(defaultAthanName)
-                true
             }
             "pref_gps_location" -> showGPSLocationDialog()
             PREF_SELECTED_LOCATION -> showLocationPreferenceDialog()
@@ -112,8 +110,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             PREF_ATHAN_VOLUME -> showAthanVolumeDialog()
             PREF_ATHAN_ALARM -> showPrayerSelectDialog()
             PREF_ATHAN_GAP -> showAthanGapDialog()
-            else -> super.onPreferenceTreeClick(preference)
-        }
+            else -> null
+        }?.returnTrue() ?: super.onPreferenceTreeClick(preference)
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {

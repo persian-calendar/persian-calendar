@@ -14,8 +14,8 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
-fun Fragment.showCalendarPreferenceDialog(): Boolean {
-    val context = context ?: return true
+fun Fragment.showCalendarPreferenceDialog() {
+    val context = context ?: return
     var dialog: AlertDialog? = null
 
     updateStoredPreference(context)
@@ -55,6 +55,4 @@ fun Fragment.showCalendarPreferenceDialog(): Boolean {
         }
         .create()
     dialog.show()
-
-    return true
 }

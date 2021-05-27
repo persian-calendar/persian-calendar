@@ -518,6 +518,8 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
     }.toIntArray()
 }
 
+fun Unit.returnTrue() = true
+
 inline fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,
     x13: T, x14: T, x15: T, x16: T, x17: T, x18: T, x19: T, x20: T, x21: T, x22: T,

@@ -8,8 +8,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
 
-fun Fragment.showPrayerSelectDialog(): Boolean {
-    val context = context ?: return true
+fun Fragment.showPrayerSelectDialog() {
+    val context = context ?: return
     val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
     val alarms = (context.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
         .splitIgnoreEmpty(",").toMutableSet()
@@ -28,6 +28,4 @@ fun Fragment.showPrayerSelectDialog(): Boolean {
         }
         .setNegativeButton(R.string.cancel, null)
         .show()
-
-    return true
 }

@@ -50,9 +50,8 @@ import kotlinx.coroutines.flow.onEach
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-fun Fragment.showGPSLocationDialog(): Boolean {
+fun Fragment.showGPSLocationDialog() {
     runCatching { showGPSLocationDialogMain() }.onFailure(logException)
-    return true
 }
 
 private fun Fragment.showGPSLocationDialogMain() {

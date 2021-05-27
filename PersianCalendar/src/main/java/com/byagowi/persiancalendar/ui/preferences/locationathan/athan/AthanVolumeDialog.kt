@@ -17,13 +17,13 @@ import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import com.byagowi.persiancalendar.utils.logException
 
-fun Fragment.showAthanVolumeDialog(): Boolean {
-    val context = context ?: return true
+fun Fragment.showAthanVolumeDialog() {
+    val context = context ?: return
     var volume = context.athanVolume
     var ringtone: Ringtone? = null
     var mediaPlayer: MediaPlayer? = null
 
-    val audioManager = context.getSystemService<AudioManager>() ?: return true
+    val audioManager = context.getSystemService<AudioManager>() ?: return
     audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
 
     val customAthanUri = getCustomAthanUri(context)
@@ -88,6 +88,4 @@ fun Fragment.showAthanVolumeDialog(): Boolean {
             }.onFailure(logException)
         }
         .show()
-
-    return true
 }

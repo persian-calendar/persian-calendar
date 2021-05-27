@@ -12,13 +12,12 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.dp
 import java.util.*
 
-fun Fragment.showColorPickerDialog(isBackgroundPick: Boolean, key: String): Boolean {
+fun Fragment.showColorPickerDialog(isBackgroundPick: Boolean, key: String) {
     val initialColor = activity?.appPrefs?.getString(key, null)
         ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     showColorPickerDialog(isBackgroundPick, initialColor) { colorResult ->
         activity?.appPrefs?.edit { putString(key, colorResult) }
     }
-    return true // Just a convenience result meaning click event is consumed here
 }
 
 private fun Fragment.showColorPickerDialog(

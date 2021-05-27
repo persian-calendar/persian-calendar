@@ -9,8 +9,8 @@ import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.layoutInflater
 
-fun Fragment.showAthanGapDialog(): Boolean {
-    val context = context ?: return true
+fun Fragment.showAthanGapDialog() {
+    val context = context ?: return
 
     val binding = NumericBinding.inflate(context.layoutInflater)
     val gap = context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0
@@ -24,6 +24,4 @@ fun Fragment.showAthanGapDialog(): Boolean {
         }
         .setNegativeButton(R.string.cancel, null)
         .show()
-
-    return true
 }

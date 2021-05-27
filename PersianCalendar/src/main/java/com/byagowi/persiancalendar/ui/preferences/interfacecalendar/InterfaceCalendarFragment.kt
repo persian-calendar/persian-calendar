@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.returnTrue
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
 
@@ -59,6 +60,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean =
-        if (preference?.key == "calendars_priority") showCalendarPreferenceDialog()
+        if (preference?.key == "calendars_priority") showCalendarPreferenceDialog().returnTrue()
         else super.onPreferenceTreeClick(preference)
 }
