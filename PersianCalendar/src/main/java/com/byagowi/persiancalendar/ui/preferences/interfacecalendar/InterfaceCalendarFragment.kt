@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.returnTrue
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
 
