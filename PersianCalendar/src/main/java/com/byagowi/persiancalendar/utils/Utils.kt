@@ -65,11 +65,12 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.generated.gregorianEvents
+import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.persianEvents
-import com.byagowi.persiancalendar.generated.specialOccurringEvents
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -234,24 +235,23 @@ fun loadEvents(context: Context) {
         var addOrNot = false
         val type = it.type
 
-        if (holiday && iranHolidays &&
-            (type == "Islamic Iran" || type == "Iran" || type == "Ancient Iran")
-        ) addOrNot = true
+        if (holiday && iranHolidays && (type == EventType.Iran || type == EventType.AncientIran))
+            addOrNot = true
 
-        if (!iranHolidays && type == "Islamic Iran") holiday = false
-        if (iranIslamic && type == "Islamic Iran") addOrNot = true
-        if (iranAncient && type == "Ancient Iran") addOrNot = true
-        if (iranOthers && type == "Iran") addOrNot = true
-        if (afghanistanHolidays && type == "Afghanistan" && holiday) addOrNot = true
-        if (!afghanistanHolidays && type == "Afghanistan") holiday = false
-        if (afghanistanOthers && type == "Afghanistan") addOrNot = true
+        if (!iranHolidays && type == EventType.Iran) holiday = false
+        if (iranIslamic && type == EventType.Iran) addOrNot = true
+        if (iranAncient && type == EventType.AncientIran) addOrNot = true
+        if (iranOthers && type == EventType.Iran) addOrNot = true
+        if (afghanistanHolidays && type == EventType.Afghanistan && holiday) addOrNot = true
+        if (!afghanistanHolidays && type == EventType.Afghanistan) holiday = false
+        if (afghanistanOthers && type == EventType.Afghanistan) addOrNot = true
 
         if (addOrNot) {
             title += " ("
             if (holiday && afghanistanHolidays && iranHolidays) {
-                if (type == "Islamic Iran" || type == "Iran")
+                if (type == EventType.Iran)
                     title += "ایران، "
-                else if (type == "Afghanistan")
+                else if (type == EventType.Afghanistan)
                     title += "افغانستان، "
             }
             title += formatDayAndMonth(day, persianMonths[month - 1]) + ")"
@@ -270,20 +270,20 @@ fun loadEvents(context: Context) {
         var addOrNot = false
         val type = it.type
 
-        if (afghanistanHolidays && holiday && type == "Islamic Afghanistan") addOrNot = true
-        if (!afghanistanHolidays && type == "Islamic Afghanistan") holiday = false
-        if (afghanistanOthers && type == "Islamic Afghanistan") addOrNot = true
-        if (iranHolidays && holiday && type == "Islamic Iran") addOrNot = true
-        if (!iranHolidays && type == "Islamic Iran") holiday = false
-        if (iranIslamic && type == "Islamic Iran") addOrNot = true
-        if (iranOthers && type == "Islamic Iran") addOrNot = true
+        if (afghanistanHolidays && holiday && type == EventType.Afghanistan) addOrNot = true
+        if (!afghanistanHolidays && type == EventType.Afghanistan) holiday = false
+        if (afghanistanOthers && type == EventType.Afghanistan) addOrNot = true
+        if (iranHolidays && holiday && type == EventType.Iran) addOrNot = true
+        if (!iranHolidays && type == EventType.Iran) holiday = false
+        if (iranIslamic && type == EventType.Iran) addOrNot = true
+        if (iranOthers && type == EventType.Iran) addOrNot = true
 
         if (addOrNot) {
             title += " ("
             if (holiday && afghanistanHolidays && iranHolidays) {
-                if (type == "Islamic Iran")
+                if (type == EventType.Iran)
                     title += "ایران، "
-                else if (type == "Islamic Afghanistan")
+                else if (type == EventType.Afghanistan)
                     title += "افغانستان، "
             }
             title += formatDayAndMonth(day, islamicMonths[month - 1]) + ")"
@@ -293,7 +293,7 @@ fun loadEvents(context: Context) {
             )
         } else null
     }.let { list ->
-        list + specialOccurringEvents.filter { event ->
+        list + irregularRecurringEvents.filter { event ->
             (iranIslamic || iranOthers) &&
                     event["calendar"] == "Hijri" && event["type"] == "Islamic Iran"
         }.mapNotNull { event ->
@@ -317,8 +317,8 @@ fun loadEvents(context: Context) {
         val day = it.day
         val title = it.title
 
-        val isOfficialInIran = it.type == "Iran"
-        val isOfficialInAfghanistan = it.type == "Afghanistan"
+        val isOfficialInIran = it.type == EventType.Iran
+        val isOfficialInAfghanistan = it.type == EventType.Afghanistan
         val isOthers = !isOfficialInIran && !isOfficialInAfghanistan
 
         if (

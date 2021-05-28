@@ -10,7 +10,7 @@ max_line_length = 100
 tab_width = 4
 trim_trailing_whitespace = true
 
-[*.yml]
+[{*.yml, *.json}]
 indent_size = 2
 
 [{*.kt, *.kts}]

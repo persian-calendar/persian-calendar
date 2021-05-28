@@ -163,12 +163,12 @@ val generateAppSrcTask by tasks.registering {
             (events[key] as List<*>).joinToString(",\n    ") {
                 val record = it as Map<*, *>
                 "CalendarRecord(title = \"${record["title"]}\"," +
-                        " type = \"${record["type"] ?: ""}\"," +
-                        " isHoliday = ${record["holiday"] ?: false}," +
+                        " type = EventType.${record["type"].toString().replace(" ", "")}," +
+                        " isHoliday = ${record["holiday"]}," +
                         " month = ${record["month"]}, day = ${record["day"]})"
             }
         }
-        val specialOccurringEvents = (events["Special"] as List<*>)
+        val irregularRecurringEvents = (events["Irregular Recurring"] as List<*>)
             .mapNotNull { (it as Map<*, *>).takeIf { event -> event["rule"] == "last day of week" } }
             .joinToString(",\n    ") { event ->
                 "mapOf(${event.map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
@@ -176,18 +176,24 @@ val generateAppSrcTask by tasks.registering {
         eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
-class CalendarRecord(val title: String, val type: String, val isHoliday: Boolean, val month: Int, val day: Int)
+enum class EventType { Afghanistan, Iran, AncientIran, International }
+
+class CalendarRecord(val title: String, val type: EventType, val isHoliday: Boolean, val month: Int, val day: Int)
+
 val persianEvents = listOf(
     $persianEvents
 )
+
 val islamicEvents = listOf(
     $islamicEvents
 )
+
 val gregorianEvents = listOf(
     $gregorianEvents
 )
-val specialOccurringEvents = listOf(
-    $specialOccurringEvents
+
+val irregularRecurringEvents = listOf(
+    $irregularRecurringEvents
 )
 """
         )
