@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
@@ -41,7 +42,10 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         }
 
         supportFragmentManager.commit {
-            add(R.id.preference_fragment_holder, WidgetNotificationFragment(), "TAG")
+            add(
+                R.id.preference_fragment_holder, WidgetNotificationFragment::class.java,
+                bundleOf(IS_IN_WIDGETS_CONFIGURATION_KEY to true), "TAG"
+            )
         }
         binding.addWidgetButton.setOnClickListener { finishAndSuccess() }
     }

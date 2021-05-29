@@ -17,14 +17,31 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 
+const val IS_IN_WIDGETS_CONFIGURATION_KEY = "IS_IN_WIDGETS_CONFIGURATION_KEY"
+
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = context ?: return
 
         val screen = preferenceManager.createPreferenceScreen(context)
-        listOf(
+        val notificationPreferences =
+            if (arguments?.getBoolean(IS_IN_WIDGETS_CONFIGURATION_KEY, false) == true) emptyList()
+            else listOf<Preference>(
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_NOTIFY_DATE
+                    it.setDefaultValue(true)
+                    it.setTitle(R.string.notify_date)
+                    it.setSummary(R.string.enable_notify)
+                },
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_NOTIFY_DATE_LOCK_SCREEN
+                    it.setDefaultValue(true)
+                    it.setTitle(R.string.notify_date_lock_screen)
+                    it.setSummary(R.string.notify_date_lock_screen_summary)
+                }
+            )
+        (notificationPreferences + listOf(
             Preference(context).also {
                 it.setTitle(R.string.widget_text_color)
                 it.setSummary(R.string.select_widgets_text_color)
@@ -78,20 +95,8 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 it.setDefaultValue(R.array.what_to_show_default)
                 it.setEntries(R.array.what_to_show)
                 it.setEntryValues(R.array.what_to_show_keys)
-            },
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_NOTIFY_DATE
-                it.setDefaultValue(true)
-                it.setTitle(R.string.notify_date)
-                it.setSummary(R.string.enable_notify)
-            },
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_NOTIFY_DATE_LOCK_SCREEN
-                it.setDefaultValue(true)
-                it.setTitle(R.string.notify_date_lock_screen)
-                it.setSummary(R.string.notify_date_lock_screen_summary)
             }
-        ).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
+        )).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
         preferenceScreen = screen
 
         // wire up the dependency

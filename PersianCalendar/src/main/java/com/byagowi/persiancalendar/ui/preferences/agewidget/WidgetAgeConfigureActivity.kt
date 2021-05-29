@@ -69,10 +69,10 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
             return
         }
 
-        val args = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId)
         supportFragmentManager.commit {
             add(
-                R.id.preference_fragment_holder, WidgetAgeConfigureFragment::class.java, args, "TAG"
+                R.id.preference_fragment_holder, WidgetAgeConfigureFragment::class.java,
+                bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId), "TAG"
             )
         }
 
