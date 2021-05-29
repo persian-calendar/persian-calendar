@@ -12,25 +12,38 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 
 class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.preferences_widget_age, rootKey)
-    }
-
-    private val appWidgetId: Int?
-        get() = arguments
+        val context = context ?: return
+        val appWidgetId = arguments
             ?.takeIf { it.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID) }
-            ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, 0)
+            ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, 0) ?: return
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        val appWidgetId = appWidgetId ?: return super.onPreferenceTreeClick(preference)
-        if (preference == null) return super.onPreferenceTreeClick(preference)
-        val key = preference.key + appWidgetId
-        return when (preference.key) {
-            PREF_SELECTED_WIDGET_TEXT_COLOR -> showColorPickerDialog(false, key)
-            PREF_SELECTED_WIDGET_BACKGROUND_COLOR -> showColorPickerDialog(true, key)
-            PREF_SELECTED_DATE_AGE_WIDGET -> showDayPickerDialog(key)
-            else -> null
-        }?.let { true } ?: super.onPreferenceTreeClick(preference)
+        val screen = preferenceManager.createPreferenceScreen(context)
+        listOf(
+            Preference(context).also {
+                it.setTitle(R.string.select_date)
+                it.setOnPreferenceClickListener {
+                    showDayPickerDialog(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId)
+                    true
+                }
+            },
+            Preference(context).also {
+                it.setTitle(R.string.widget_text_color)
+                it.setSummary(R.string.select_widgets_text_color)
+                it.setOnPreferenceClickListener {
+                    showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId)
+                    true
+                }
+            },
+            Preference(context).also {
+                it.setTitle(R.string.widget_background_color)
+                it.setSummary(R.string.select_widgets_background_color)
+                it.setOnPreferenceClickListener {
+                    showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId)
+                    true
+                }
+            }
+        ).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
+        preferenceScreen = screen
     }
 }

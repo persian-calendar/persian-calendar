@@ -39,6 +39,7 @@ import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.LANG_UR
 import com.byagowi.persiancalendar.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
@@ -47,6 +48,7 @@ import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
+import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
@@ -59,6 +61,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
+import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
@@ -432,7 +435,7 @@ fun updateStoredPreference(context: Context) {
     isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
-    isCenterAlignWidgets = prefs.getBoolean("CenterAlignWidgets", false)
+    isCenterAlignWidgets = prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, false)
 
     selectedWidgetTextColor =
         prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
@@ -470,11 +473,11 @@ fun updateStoredPreference(context: Context) {
 
     isShowDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     val resources = context.resources
-    whatToShowOnWidgets = prefs.getStringSet("what_to_show", null)
+    whatToShowOnWidgets = prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null)
         ?: resources.getStringArray(R.array.what_to_show_default).toSet()
 
     isAstronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
-    numericalDatePreferred = prefs.getBoolean("numericalDatePreferred", false)
+    numericalDatePreferred = prefs.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     if (getOnlyLanguage(language) != resources.getString(R.string.code))
         applyAppLanguage(context)
