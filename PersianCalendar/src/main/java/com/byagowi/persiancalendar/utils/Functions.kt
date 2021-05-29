@@ -491,8 +491,7 @@ fun bringMarketPage(activity: Activity): Unit = runCatching {
     }.onFailure(logException)
 }
 
-val Number.dp: Int
-    get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+val Number.dp: Int get() = (this.toFloat() * Resources.getSystem().displayMetrics.density).toInt()
 
 val logException = fun(e: Throwable) { Log.e("Persian Calendar", e.message, e) }
 
