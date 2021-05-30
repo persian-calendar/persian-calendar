@@ -25,6 +25,7 @@ import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.navigation.findNavController
+import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
@@ -515,6 +516,13 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
             parentView.addView(it)
         }
     }.toIntArray()
+}
+
+inline fun Preference.setOnClickListener(crossinline listener: () -> Unit) {
+    this.setOnPreferenceClickListener {
+        listener()
+        true // means it captures the click event
+    }
 }
 
 inline fun <T> listOf31Items(

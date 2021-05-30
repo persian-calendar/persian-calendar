@@ -47,7 +47,7 @@
     <string name="athan_alarm">اذانیں</string>
     <string name="athan_volume_summary">تنظیم حجم صدای اذان</string>
     <string name="athan_volume">آواز کا والیوم</string>
-    <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان، مکانی را از فهرست برگزیده، یا مشخصات موقعیتتان را وارد کنید</string>
+    <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان، مکان را مشخص کنید</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
     <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
     <string name="close">بند کریں</string>

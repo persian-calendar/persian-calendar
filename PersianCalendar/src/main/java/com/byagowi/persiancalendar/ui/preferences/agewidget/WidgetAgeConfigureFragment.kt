@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
+import com.byagowi.persiancalendar.utils.setOnClickListener
 
 class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -22,25 +23,20 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
         listOf(
             Preference(context).also {
                 it.setTitle(R.string.select_date)
-                it.setOnPreferenceClickListener {
-                    showDayPickerDialog(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId)
-                    true
-                }
+                it.setOnClickListener { showDayPickerDialog(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId) }
             },
             Preference(context).also {
                 it.setTitle(R.string.widget_text_color)
                 it.setSummary(R.string.select_widgets_text_color)
-                it.setOnPreferenceClickListener {
+                it.setOnClickListener {
                     showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId)
-                    true
                 }
             },
             Preference(context).also {
                 it.setTitle(R.string.widget_background_color)
                 it.setSummary(R.string.select_widgets_background_color)
-                it.setOnPreferenceClickListener {
+                it.setOnClickListener {
                     showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId)
-                    true
                 }
             }
         ).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)

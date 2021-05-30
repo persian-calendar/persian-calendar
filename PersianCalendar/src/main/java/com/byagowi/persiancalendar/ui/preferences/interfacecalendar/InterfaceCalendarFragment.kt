@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.setOnClickListener
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -109,10 +110,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 Preference(context).also {
                     it.setTitle(R.string.calendars_priority)
                     it.setSummary(R.string.calendars_priority_summary)
-                    it.setOnPreferenceClickListener {
-                        showCalendarPreferenceDialog()
-                        true
-                    }
+                    it.setOnClickListener { showCalendarPreferenceDialog() }
                 },
                 SwitchPreferenceCompat(context).also {
                     it.key = PREF_ASTRONOMICAL_FEATURES
@@ -166,10 +164,12 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
             )
         ).forEach { (title, preferences) ->
             val category = PreferenceCategory(context)
-            screen.addPreference(category)
+            // Needed for expandable categories
+            category.key = title.toString()
             category.setTitle(title)
             category.initialExpandedChildrenCount = 6 // only needed for calendar category
             category.isIconSpaceReserved = false
+            screen.addPreference(category)
             preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
         }
         preferenceScreen = screen

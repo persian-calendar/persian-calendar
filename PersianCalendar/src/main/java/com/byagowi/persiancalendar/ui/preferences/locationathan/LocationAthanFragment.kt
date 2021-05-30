@@ -51,26 +51,17 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 Preference(context).also {
                     it.setTitle(R.string.gps_location)
                     it.setSummary(R.string.gps_location_help)
-                    it.setOnPreferenceClickListener {
-                        showGPSLocationDialog()
-                        true
-                    }
+                    it.setOnClickListener { showGPSLocationDialog() }
                 },
                 Preference(context).also {
                     it.setTitle(R.string.location)
                     it.setSummary(R.string.location_help)
-                    it.setOnPreferenceClickListener {
-                        showLocationPreferenceDialog()
-                        true
-                    }
+                    it.setOnClickListener { showLocationPreferenceDialog() }
                 },
                 Preference(context).also {
                     it.key = coordinatesPref
                     it.setTitle(R.string.coordination)
-                    it.setOnPreferenceClickListener {
-                        showCoordinatesDialog()
-                        true
-                    }
+                    it.setOnClickListener { showCoordinatesDialog() }
                 }
             ),
             R.string.athan to listOf(
@@ -87,59 +78,49 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 Preference(context).also {
                     it.setTitle(R.string.athan_gap)
                     it.setSummary(R.string.athan_gap_summary)
-                    it.setOnPreferenceClickListener {
-                        showAthanGapDialog()
-                        true
-                    }
+                    it.setOnClickListener { showAthanGapDialog() }
                 },
                 Preference(context).also {
                     it.setTitle(R.string.athan_alarm)
                     it.setSummary(R.string.athan_alarm_summary)
-                    it.setOnPreferenceClickListener {
-                        showPrayerSelectDialog()
-                        true
-                    }
+                    it.setOnClickListener { showPrayerSelectDialog() }
                 },
                 SwitchPreferenceCompat(context).also {
-                    it.setDefaultValue(false)
-                    it.disableDependentsState = true
                     it.key = PREF_NOTIFICATION_ATHAN
                     it.setTitle(R.string.notification_athan)
                     it.setSummary(R.string.enable_notification_athan)
+                    it.setDefaultValue(false)
+                    it.disableDependentsState = true
                 },
                 Preference(context).also {
                     handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
                     it.setTitle(R.string.athan_alarm)
                     it.setSummary(R.string.athan_alarm_summary)
-                    it.setOnPreferenceClickListener {
-                        showPrayerSelectDialog()
-                        true
-                    }
+                    it.setOnClickListener { showPrayerSelectDialog() }
                 },
                 Preference(context).also {
                     handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
                     it.setTitle(R.string.custom_athan)
                     it.key = ringtonePref
-                    it.setOnPreferenceClickListener {
+                    it.setOnClickListener {
                         runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
-                            .onFailure(logException).getOrNull() ?: Unit
-                        true
+                            .onFailure(logException).getOrNull()
                     }
                 },
                 Preference(context).also {
                     handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
                     it.setTitle(R.string.default_athan)
                     it.setTitle(R.string.default_athan_summary)
-                    it.setOnPreferenceClickListener {
+                    it.setOnClickListener {
                         context.appPrefs.edit {
                             remove(PREF_ATHAN_URI)
                             remove(PREF_ATHAN_NAME)
                         }
                         view?.let { v ->
-                            Snackbar.make(v, R.string.returned_to_default, Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(v, R.string.returned_to_default, Snackbar.LENGTH_SHORT)
+                                .show()
                         }
                         putAthanNameOnSummary(defaultAthanName)
-                        true
                     }
                 },
                 SwitchPreferenceCompat(context).also {
@@ -154,19 +135,16 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     handler.post { it.dependency = PREF_ASCENDING_ATHAN_VOLUME }
                     it.setTitle(R.string.athan_volume)
                     it.setSummary(R.string.athan_volume_summary)
-                    it.setOnPreferenceClickListener {
-                        showAthanVolumeDialog()
-                        true
-                    }
+                    it.setOnClickListener { showAthanVolumeDialog() }
                 }
             )
         ).forEach { (title, preferences) ->
             val category = PreferenceCategory(context)
-            screen.addPreference(category)
-            category.setTitle(title)
-            // R.string.athan.toString() is used below, not clean however does the job
+            // Needed for expandable categories, also R.string.athan.toString() is used below
             category.key = title.toString()
+            category.setTitle(title)
             category.isIconSpaceReserved = false
+            screen.addPreference(category)
             preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
         }
         preferenceScreen = screen
