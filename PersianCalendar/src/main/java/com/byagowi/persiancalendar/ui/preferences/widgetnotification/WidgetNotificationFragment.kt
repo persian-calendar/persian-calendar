@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.preferences.widgetnotification
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -36,6 +38,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 },
                 SwitchPreferenceCompat(context).also {
                     it.key = PREF_NOTIFY_DATE_LOCK_SCREEN
+                    Handler(Looper.getMainLooper()).post { it.dependency = PREF_NOTIFY_DATE }
                     it.setDefaultValue(true)
                     it.setTitle(R.string.notify_date_lock_screen)
                     it.setSummary(R.string.notify_date_lock_screen_summary)
@@ -92,15 +95,11 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 it.setDialogTitle(R.string.which_one_to_show)
                 it.setNegativeButtonText(R.string.cancel)
                 it.setPositiveButtonText(R.string.accept)
-                it.setDefaultValue(R.array.what_to_show_default)
-                it.setEntries(R.array.what_to_show)
-                it.setEntryValues(R.array.what_to_show_keys)
+                it.setDefaultValue(resources.getStringArray(R.array.what_to_show_default).toSet())
+                it.entries = resources.getStringArray(R.array.what_to_show)
+                it.entryValues = resources.getStringArray(R.array.what_to_show_keys)
             }
         )).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
         preferenceScreen = screen
-
-        // wire up the dependency
-        findPreference<SwitchPreferenceCompat>(PREF_NOTIFY_DATE_LOCK_SCREEN)
-            ?.dependency = PREF_NOTIFY_DATE
     }
 }

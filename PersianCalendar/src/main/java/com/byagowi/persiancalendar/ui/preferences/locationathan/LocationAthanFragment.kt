@@ -7,6 +7,8 @@ import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
@@ -14,7 +16,9 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
@@ -34,17 +38,144 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             return context.getString(R.string.default_athan_name)
         }
 
+    private val coordinatesPref = "PREF_COORDINATES"
+    private val ringtonePref = "PREF_KEY_RINGTONE"
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        val context = context ?: return
 
-        addPreferencesFromResource(R.xml.preferences_location_athan)
-
-        findPreference<ListPreference>(PREF_PRAY_TIME_METHOD)?.summaryProvider =
-            ListPreference.SimpleSummaryProvider.getInstance()
+        val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
+        val screen = preferenceManager.createPreferenceScreen(context)
+        listOf(
+            R.string.location to listOf(
+                Preference(context).also {
+                    it.setTitle(R.string.gps_location)
+                    it.setSummary(R.string.gps_location_help)
+                    it.setOnPreferenceClickListener {
+                        showGPSLocationDialog()
+                        true
+                    }
+                },
+                Preference(context).also {
+                    it.setTitle(R.string.location)
+                    it.setSummary(R.string.location_help)
+                    it.setOnPreferenceClickListener {
+                        showLocationPreferenceDialog()
+                        true
+                    }
+                },
+                Preference(context).also {
+                    it.key = coordinatesPref
+                    it.setTitle(R.string.coordination)
+                    it.setOnPreferenceClickListener {
+                        showCoordinatesDialog()
+                        true
+                    }
+                }
+            ),
+            R.string.athan to listOf(
+                ListPreference(context).also {
+                    it.key = PREF_PRAY_TIME_METHOD
+                    it.setDialogTitle(R.string.pray_methods_calculation)
+                    it.setTitle(R.string.pray_methods)
+                    it.setDefaultValue("Tehran")
+                    it.setEntries(R.array.prayMethodsNames)
+                    it.setEntryValues(R.array.prayMethodsKeys)
+                    it.setNegativeButtonText(R.string.cancel)
+                    it.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                },
+                Preference(context).also {
+                    it.setTitle(R.string.athan_gap)
+                    it.setSummary(R.string.athan_gap_summary)
+                    it.setOnPreferenceClickListener {
+                        showAthanGapDialog()
+                        true
+                    }
+                },
+                Preference(context).also {
+                    it.setTitle(R.string.athan_alarm)
+                    it.setSummary(R.string.athan_alarm_summary)
+                    it.setOnPreferenceClickListener {
+                        showPrayerSelectDialog()
+                        true
+                    }
+                },
+                SwitchPreferenceCompat(context).also {
+                    it.setDefaultValue(false)
+                    it.disableDependentsState = true
+                    it.key = PREF_NOTIFICATION_ATHAN
+                    it.setTitle(R.string.notification_athan)
+                    it.setSummary(R.string.enable_notification_athan)
+                },
+                Preference(context).also {
+                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
+                    it.setTitle(R.string.athan_alarm)
+                    it.setSummary(R.string.athan_alarm_summary)
+                    it.setOnPreferenceClickListener {
+                        showPrayerSelectDialog()
+                        true
+                    }
+                },
+                Preference(context).also {
+                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
+                    it.setTitle(R.string.custom_athan)
+                    it.key = ringtonePref
+                    it.setOnPreferenceClickListener {
+                        runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
+                            .onFailure(logException).getOrNull() ?: Unit
+                        true
+                    }
+                },
+                Preference(context).also {
+                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
+                    it.setTitle(R.string.default_athan)
+                    it.setTitle(R.string.default_athan_summary)
+                    it.setOnPreferenceClickListener {
+                        context.appPrefs.edit {
+                            remove(PREF_ATHAN_URI)
+                            remove(PREF_ATHAN_NAME)
+                        }
+                        view?.let { v ->
+                            Snackbar.make(v, R.string.returned_to_default, Snackbar.LENGTH_SHORT).show()
+                        }
+                        putAthanNameOnSummary(defaultAthanName)
+                        true
+                    }
+                },
+                SwitchPreferenceCompat(context).also {
+                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
+                    it.setDefaultValue(false)
+                    it.disableDependentsState = true
+                    it.key = PREF_ASCENDING_ATHAN_VOLUME
+                    it.setTitle(R.string.ascending_athan_volume)
+                    it.setSummary(R.string.enable_ascending_athan_volume)
+                },
+                Preference(context).also {
+                    handler.post { it.dependency = PREF_ASCENDING_ATHAN_VOLUME }
+                    it.setTitle(R.string.athan_volume)
+                    it.setSummary(R.string.athan_volume_summary)
+                    it.setOnPreferenceClickListener {
+                        showAthanVolumeDialog()
+                        true
+                    }
+                }
+            )
+        ).forEach { (title, preferences) ->
+            val category = PreferenceCategory(context)
+            screen.addPreference(category)
+            category.layoutResource = R.layout.category_preference
+            category.setTitle(title)
+            // R.string.athan.toString() is used below, not clean however does the job
+            category.key = title.toString()
+            category.isIconSpaceReserved = false
+            preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
+        }
+        preferenceScreen = screen
 
         onSharedPreferenceChanged(null, null)
-        activity?.appPrefs?.registerOnSharedPreferenceChangeListener(this)
+        context.appPrefs.registerOnSharedPreferenceChangeListener(this)
 
-        putAthanNameOnSummary(context?.appPrefs?.getString(PREF_ATHAN_NAME, defaultAthanName))
+        putAthanNameOnSummary(context.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName))
         updateLocationOnSummaries()
     }
 
@@ -87,35 +218,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         putAthanNameOnSummary(ringtoneTitle)
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        val context = context ?: return super.onPreferenceTreeClick(preference)
-        return when (preference?.key) {
-            "pref_key_ringtone" -> {
-                runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
-                    .onFailure(logException).getOrNull() ?: Unit
-            }
-            "pref_key_ringtone_default" -> {
-                context.appPrefs.edit {
-                    remove(PREF_ATHAN_URI)
-                    remove(PREF_ATHAN_NAME)
-                }
-                view?.let {
-                    Snackbar.make(it, R.string.returned_to_default, Snackbar.LENGTH_SHORT).show()
-                }
-                putAthanNameOnSummary(defaultAthanName)
-            }
-            "pref_gps_location" -> showGPSLocationDialog()
-            PREF_SELECTED_LOCATION -> showLocationPreferenceDialog()
-            "Coordination" -> showCoordinatesDialog()
-            PREF_ATHAN_VOLUME -> showAthanVolumeDialog()
-            PREF_ATHAN_ALARM -> showPrayerSelectDialog()
-            PREF_ATHAN_GAP -> showAthanGapDialog()
-            else -> null
-        }?.let { true } ?: super.onPreferenceTreeClick(preference)
-    }
-
     private fun putAthanNameOnSummary(athanName: String?) {
-        findPreference<Preference>("pref_key_ringtone")?.summary = athanName
+        findPreference<Preference>(ringtonePref)?.summary = athanName
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
@@ -127,14 +231,14 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<Preference>(PREF_SELECTED_LOCATION)?.summary =
             cityName ?: context.getString(R.string.location_help)
         val coordinates = getCoordinate(context)
-        findPreference<Preference>(PREF_KEY_ATHAN)?.isEnabled = coordinates != null
-        findPreference<Preference>(PREF_KEY_ATHAN)?.setSummary(
+        findPreference<Preference>(R.string.athan.toString())?.isEnabled = coordinates != null
+        findPreference<Preference>(R.string.athan.toString())?.setSummary(
             if (coordinates == null) R.string.athan_disabled_summary else R.string.empty
         )
         val selectedLocation = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
             ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }
-        findPreference<Preference>("Coordination")?.isEnabled = selectedLocation == null
-        findPreference<Preference>("Coordination")?.summary = coordinates?.let {
+        findPreference<Preference>(coordinatesPref)?.isEnabled = selectedLocation == null
+        findPreference<Preference>(coordinatesPref)?.summary = coordinates?.let {
             formatCoordinateISO6709(
                 coordinates.latitude, coordinates.latitude,
                 coordinates.elevation.takeIf { it != .0 }
