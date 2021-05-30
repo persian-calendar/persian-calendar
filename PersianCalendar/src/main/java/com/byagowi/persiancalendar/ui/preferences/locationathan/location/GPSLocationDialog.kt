@@ -51,10 +51,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 fun Fragment.showGPSLocationDialog() {
-    runCatching { showGPSLocationDialogMain() }.onFailure(logException)
-}
-
-private fun Fragment.showGPSLocationDialogMain() {
     val activity = activity ?: return
 
     if (ActivityCompat.checkSelfPermission(
