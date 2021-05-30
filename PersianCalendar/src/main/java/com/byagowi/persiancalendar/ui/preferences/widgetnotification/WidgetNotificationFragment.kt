@@ -28,24 +28,25 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
         val context = context ?: return
 
         val screen = preferenceManager.createPreferenceScreen(context)
-        val notificationPreferences =
-            if (arguments?.getBoolean(IS_IN_WIDGETS_CONFIGURATION_KEY, false) == true) emptyList()
-            else listOf<Preference>(
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_NOTIFY_DATE
-                    it.setDefaultValue(true)
-                    it.setTitle(R.string.notify_date)
-                    it.setSummary(R.string.enable_notify)
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_NOTIFY_DATE_LOCK_SCREEN
-                    Handler(Looper.getMainLooper()).post { it.dependency = PREF_NOTIFY_DATE }
-                    it.setDefaultValue(true)
-                    it.setTitle(R.string.notify_date_lock_screen)
-                    it.setSummary(R.string.notify_date_lock_screen_summary)
-                }
-            )
-        (notificationPreferences + listOf(
+        val isWidgetsConfiguration =
+            arguments?.getBoolean(IS_IN_WIDGETS_CONFIGURATION_KEY, false) == true
+        val handler = Handler(Looper.getMainLooper())
+        listOf(
+            SwitchPreferenceCompat(context).also {
+                it.key = PREF_NOTIFY_DATE
+                it.setDefaultValue(true)
+                it.setTitle(R.string.notify_date)
+                it.setSummary(R.string.enable_notify)
+                if (isWidgetsConfiguration) it.isVisible = false
+            },
+            SwitchPreferenceCompat(context).also {
+                it.key = PREF_NOTIFY_DATE_LOCK_SCREEN
+                handler.post { it.dependency = PREF_NOTIFY_DATE } // deferred dependency wire up
+                it.setDefaultValue(true)
+                it.setTitle(R.string.notify_date_lock_screen)
+                it.setSummary(R.string.notify_date_lock_screen_summary)
+                if (isWidgetsConfiguration) it.isVisible = false
+            },
             Preference(context).also {
                 it.setTitle(R.string.widget_text_color)
                 it.setSummary(R.string.select_widgets_text_color)
@@ -98,7 +99,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 it.entries = resources.getStringArray(R.array.what_to_show)
                 it.entryValues = resources.getStringArray(R.array.what_to_show_keys)
             }
-        )).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
+        ).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
         preferenceScreen = screen
     }
 }

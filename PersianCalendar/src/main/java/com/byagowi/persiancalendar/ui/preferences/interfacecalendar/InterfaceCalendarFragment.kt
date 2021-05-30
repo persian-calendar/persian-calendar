@@ -164,8 +164,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
             )
         ).forEach { (title, preferences) ->
             val category = PreferenceCategory(context)
-            // Needed for expandable categories
-            category.key = title.toString()
+            category.key = title.toString() // Needed for expandable categories
             category.setTitle(title)
             category.initialExpandedChildrenCount = 6 // only needed for calendar category
             category.isIconSpaceReserved = false
