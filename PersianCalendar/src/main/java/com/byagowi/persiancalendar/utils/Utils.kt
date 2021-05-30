@@ -39,6 +39,7 @@ import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.LANG_UR
 import com.byagowi.persiancalendar.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -59,6 +60,7 @@ import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
+import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
@@ -463,7 +465,7 @@ fun updateStoredPreference(context: Context) {
     }
 
     spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
-    isShowWeekOfYearEnabled = prefs.getBoolean("showWeekOfYearNumber", false)
+    isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =
         (prefs.getString(PREF_WEEK_START, null) ?: DEFAULT_WEEK_START).toIntOrNull() ?: 0
 
@@ -476,7 +478,7 @@ fun updateStoredPreference(context: Context) {
     whatToShowOnWidgets = prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null)
         ?: resources.getStringArray(R.array.what_to_show_default).toSet()
 
-    isAstronomicalFeaturesEnabled = prefs.getBoolean("astronomicalFeatures", false)
+    isAstronomicalFeaturesEnabled = prefs.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
     numericalDatePreferred = prefs.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     if (getOnlyLanguage(language) != resources.getString(R.string.code))
