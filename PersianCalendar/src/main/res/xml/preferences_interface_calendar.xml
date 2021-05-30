@@ -3,7 +3,6 @@
     xmlns:settings="http://schemas.android.com/apk/res-auto">
 
     <androidx.preference.PreferenceCategory
-        android:layout="@layout/category_preference"
         android:title="@string/pref_interface"
         settings:iconSpaceReserved="false">
 
@@ -44,7 +43,6 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:layout="@layout/category_preference"
         android:title="@string/calendar"
         settings:iconSpaceReserved="false"
         settings:initialExpandedChildrenCount="6">

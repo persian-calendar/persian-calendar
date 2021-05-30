@@ -163,7 +163,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         ).forEach { (title, preferences) ->
             val category = PreferenceCategory(context)
             screen.addPreference(category)
-            category.layoutResource = R.layout.category_preference
             category.setTitle(title)
             // R.string.athan.toString() is used below, not clean however does the job
             category.key = title.toString()
