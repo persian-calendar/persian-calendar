@@ -20,16 +20,13 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 import com.byagowi.persiancalendar.utils.setOnClickListener
 
-const val IS_IN_WIDGETS_CONFIGURATION_KEY = "IS_IN_WIDGETS_CONFIGURATION_KEY"
-
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = context ?: return
 
         val screen = preferenceManager.createPreferenceScreen(context)
-        val isWidgetsConfiguration =
-            arguments?.getBoolean(IS_IN_WIDGETS_CONFIGURATION_KEY, false) == true
+        val isWidgetsConfiguration = arguments?.getBoolean(IS_WIDGETS_CONFIGURATION, false) == true
         val handler = Handler(Looper.getMainLooper())
         listOf(
             SwitchPreferenceCompat(context).also {
@@ -98,5 +95,9 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             }
         ).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
         preferenceScreen = screen
+    }
+
+    companion object {
+        const val IS_WIDGETS_CONFIGURATION = "IS_WIDGETS_CONFIGURATION"
     }
 }

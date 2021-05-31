@@ -44,7 +44,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         supportFragmentManager.commit {
             add(
                 R.id.preference_fragment_holder, WidgetNotificationFragment::class.java,
-                bundleOf(IS_IN_WIDGETS_CONFIGURATION_KEY to true), "TAG"
+                bundleOf(WidgetNotificationFragment.IS_WIDGETS_CONFIGURATION to true), "TAG"
             )
         }
         binding.addWidgetButton.setOnClickListener { finishAndSuccess() }
