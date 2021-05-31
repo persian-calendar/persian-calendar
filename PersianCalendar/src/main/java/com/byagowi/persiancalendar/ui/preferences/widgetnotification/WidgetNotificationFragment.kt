@@ -50,7 +50,6 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             Preference(context).also {
                 it.setTitle(R.string.widget_text_color)
                 it.setSummary(R.string.select_widgets_text_color)
-                it.isIconSpaceReserved = false
                 it.setOnClickListener {
                     showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }
@@ -58,7 +57,6 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             Preference(context).also {
                 it.setTitle(R.string.widget_background_color)
                 it.setSummary(R.string.select_widgets_background_color)
-                it.isIconSpaceReserved = false
                 it.setOnClickListener {
                     showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
                 }
@@ -68,7 +66,6 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 it.setDefaultValue(false)
                 it.setTitle(R.string.prefer_linear_date)
                 it.setSummary(R.string.prefer_linear_date_summary)
-                it.isIconSpaceReserved = false
             },
             SwitchPreferenceCompat(context).also {
                 it.key = PREF_WIDGET_CLOCK
