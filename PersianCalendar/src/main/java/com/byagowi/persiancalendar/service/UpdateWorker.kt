@@ -16,7 +16,7 @@ class UpdateWorker(context: Context, workerParams: WorkerParameters) :
             setChangeDateWorker(applicationContext)
             updateStoredPreference(applicationContext)
             update(applicationContext, true)
-            Result.success()
-        }.onFailure(logException).getOrElse { Result.failure() }
+        }.onFailure(logException)
+        Result.success()
     }
 }
