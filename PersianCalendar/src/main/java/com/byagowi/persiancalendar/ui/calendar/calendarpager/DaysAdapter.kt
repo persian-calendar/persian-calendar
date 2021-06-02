@@ -83,7 +83,7 @@ class DaysAdapter internal constructor(
             val itemDayView = (v as? DayView).debugAssertNotNull ?: return
             val jdn = itemDayView.jdn ?: return
             calendarPager.onDayClicked(jdn)
-            this@DaysAdapter.selectDay(itemDayView.dayOfMonth)
+            selectDay(itemDayView.dayOfMonth)
         }
 
         override fun onLongClick(v: View): Boolean {

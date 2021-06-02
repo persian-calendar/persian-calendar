@@ -77,14 +77,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(it.root)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            window?.also { window ->
-                // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-                window.attributes = window.attributes.also {
-                    it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-                }
-                window.statusBarColor = Color.TRANSPARENT
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window?.also { window ->
+            // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
+            window.attributes = window.attributes.also {
+                it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
             }
+            window.statusBarColor = Color.TRANSPARENT
+        }
 
         binding.drawer.addDrawerListener(createDrawerListener())
 
@@ -392,9 +391,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private fun showAppIsOutDatedSnackbar() = Snackbar.make(
         binding.root, getString(R.string.outdated_app), 10000
-    ).apply {
-        setAction(getString(R.string.update)) { bringMarketPage(this@MainActivity) }
-        setActionTextColor(ContextCompat.getColor(context, R.color.dark_accent))
+    ).also {
+        it.setAction(getString(R.string.update)) { bringMarketPage(this) }
+        it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
     }.show()
 
     override fun setupToolbarWithDrawer(viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar) {

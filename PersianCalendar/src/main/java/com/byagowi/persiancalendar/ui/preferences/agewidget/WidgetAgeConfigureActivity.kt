@@ -19,8 +19,6 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     private fun confirm(title: String) {
-        val context = this@AgeWidgetConfigureActivity
-
         val selectedJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId)
         appPrefs.edit {
             if (selectedJdn == null) {
@@ -31,8 +29,8 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         }
 
         // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(context)
-        updateAgeWidget(context, appWidgetManager, appWidgetId)
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        updateAgeWidget(this, appWidgetManager, appWidgetId)
 
         // Make sure we pass back the original appWidgetId
         val resultValue = Intent()

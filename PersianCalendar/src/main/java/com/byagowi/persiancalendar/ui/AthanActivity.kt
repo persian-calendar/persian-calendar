@@ -36,10 +36,10 @@ class AthanActivity : AppCompatActivity() {
                 mediaPlayer?.isPlaying == false ||
                 spentSeconds > 360 ||
                 (stopAtHalfMinute && spentSeconds > 30)
-            ) this@AthanActivity.finish()
+            ) finish()
             else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
             Unit
-        }.onFailure { this@AthanActivity.finish() }.getOrElse(logException)
+        }.onFailure { finish() }.getOrElse(logException)
     }
     private var stopAtHalfMinute = false
 
@@ -107,11 +107,11 @@ class AthanActivity : AppCompatActivity() {
                     play()
                 }
             } else {
-                mediaPlayer = MediaPlayer().apply {
+                mediaPlayer = MediaPlayer().also { mediaPlayer ->
                     runCatching {
-                        setDataSource(this@AthanActivity, getDefaultAthanUri(this@AthanActivity))
+                        mediaPlayer.setDataSource(this, getDefaultAthanUri(this))
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            setAudioAttributes(
+                            mediaPlayer.setAudioAttributes(
                                 AudioAttributes.Builder()
                                     .setUsage(AudioAttributes.USAGE_ALARM)
                                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -119,12 +119,12 @@ class AthanActivity : AppCompatActivity() {
                             )
                         } else {
                             @Suppress("DEPRECATION")
-                            setAudioStreamType(AudioManager.STREAM_ALARM)
+                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM)
                         }
                         volumeControlStream = AudioManager.STREAM_ALARM
-                        prepare()
+                        mediaPlayer.prepare()
                     }.onFailure(logException)
-                    start()
+                    mediaPlayer.start()
                 }
             }
         }.onFailure(logException)
@@ -147,15 +147,15 @@ class AthanActivity : AppCompatActivity() {
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
 
-        ActivityAthanBinding.inflate(layoutInflater).apply {
-            setContentView(root)
-            athanName.setText(getPrayTimeText(prayerKey))
+        ActivityAthanBinding.inflate(layoutInflater).also { binding ->
+            setContentView(binding.root)
+            binding.athanName.setText(getPrayTimeText(prayerKey))
 
-            root.setOnClickListener { stop() }
-            root.setBackgroundResource(getPrayTimeImage(prayerKey))
+            binding.root.setOnClickListener { stop() }
+            binding.root.setBackgroundResource(getPrayTimeImage(prayerKey))
 
-            place.text = listOf(
-                getString(R.string.in_city_time), getCityName(this@AthanActivity, true)
+            binding.place.text = listOf(
+                getString(R.string.in_city_time), getCityName(this, true)
             ).joinToString(" ")
         }
 

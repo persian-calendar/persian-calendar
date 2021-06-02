@@ -235,12 +235,11 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
             AnimatorSet().also {
                 it.playTogether(
                     CircularRevealCompat.createCircularReveal(
-                        this@circularRevealFromMiddle,
-                        (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
+                        this, (viewWidth / 2).toFloat(), (viewHeight / 2).toFloat(),
                         10f, (viewDiagonal / 2).toFloat()
                     ),
                     ObjectAnimator.ofArgb(
-                        this@circularRevealFromMiddle,
+                        this,
                         CircularRevealWidget.CircularRevealScrimColorProperty
                             .CIRCULAR_REVEAL_SCRIM_COLOR,
                         Color.GRAY, Color.TRANSPARENT
