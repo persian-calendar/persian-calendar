@@ -127,7 +127,8 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
 
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
-fun loadApp(context: Context): Unit = if (!goForWorker()) runCatching {
+fun loadApp(context: Context) = runCatching {
+    if (goForWorker()) return@runCatching
     val alarmManager = context.getSystemService<AlarmManager>() ?: return@runCatching
 
     val startTime = Calendar.getInstance().apply {
@@ -163,7 +164,7 @@ fun loadApp(context: Context): Unit = if (!goForWorker()) runCatching {
             TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
         )
     }
-}.getOrElse(logException) else Unit
+}.onFailure(logException).let {}
 
 fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().let {
     it + (CalendarType.values().toList() - it)
@@ -384,7 +385,7 @@ fun copyToClipboard(
         Toast.makeText(view.context, textToShow, Toast.LENGTH_SHORT).show()
     else
         Snackbar.make(view, textToShow, Snackbar.LENGTH_SHORT).show()
-}.onFailure(logException).getOrNull().debugAssertNotNull ?: Unit
+}.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
@@ -481,7 +482,7 @@ fun bringMarketPage(activity: Activity): Unit = runCatching {
     activity.startActivity(
         Intent(Intent.ACTION_VIEW, "market://details?id=${activity.packageName}".toUri())
     )
-}.onFailure(logException).getOrElse {
+}.onFailure(logException).onFailure {
     runCatching {
         activity.startActivity(
             Intent(
@@ -490,7 +491,7 @@ fun bringMarketPage(activity: Activity): Unit = runCatching {
             )
         )
     }.onFailure(logException)
-}
+}.let {}
 
 val Number.dp: Int get() = (this.toFloat() * Resources.getSystem().displayMetrics.density).toInt()
 
@@ -518,12 +519,8 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
     }.toIntArray()
 }
 
-inline fun Preference.setOnClickListener(crossinline listener: () -> Unit) {
-    this.setOnPreferenceClickListener {
-        listener()
-        true // means it captures the click event
-    }
-}
+inline fun Preference.setOnClickListener(crossinline listener: () -> Unit) =
+    this.setOnPreferenceClickListener { listener().let { true } } // it captures the click event
 
 inline fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,

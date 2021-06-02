@@ -36,9 +36,9 @@ private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyEventsStore()
 
-fun setDeviceCalendarEvents(context: Context): Unit = runCatching {
+fun setDeviceCalendarEvents(context: Context) = runCatching {
     deviceCalendarEvents = Jdn.today.readDayDeviceEvents(context)
-}.getOrElse(logException)
+}.onFailure(logException).let {}
 
 var latestFiredUpdate = 0L
 
@@ -79,11 +79,9 @@ fun update(context: Context, updateDate: Boolean) {
     val widget2x2 = ComponentName(context, Widget2x2::class.java)
     val widget4x1dateOnly = ComponentName(context, Widget4x1dateOnly::class.java)
 
-    fun RemoteViews.setBackgroundColor(@IdRes layoutId: Int): Unit =
-        this.setInt(
-            layoutId, "setBackgroundColor",
-            Color.parseColor(selectedWidgetBackgroundColor)
-        )
+    fun RemoteViews.setBackgroundColor(@IdRes layoutId: Int) = this.setInt(
+        layoutId, "setBackgroundColor", Color.parseColor(selectedWidgetBackgroundColor)
+    )
 
     //region Widget 1x1
     if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {

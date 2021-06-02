@@ -461,7 +461,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
                                             "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
                                         ).toUri()
                                     )
-                                }.getOrElse(logException)
+                                }.onFailure(logException).let {}
                             }, 0, it.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                         })
                     }

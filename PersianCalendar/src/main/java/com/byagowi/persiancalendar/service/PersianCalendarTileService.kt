@@ -20,7 +20,7 @@ class PersianCalendarTileService : TileService() {
             Intent(this, MainActivity::class.java)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
-    }.getOrElse(logException)
+    }.onFailure(logException).let {}
 
     override fun onStartListening() = runCatching {
         qsTile?.also { tile ->
@@ -31,6 +31,6 @@ class PersianCalendarTileService : TileService() {
             tile.contentDescription = today.monthName
             // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
             tile.state = Tile.STATE_ACTIVE
-        }?.updateTile() ?: Unit
-    }.getOrElse(logException)
+        }?.updateTile()
+    }.onFailure(logException).let {}
 }

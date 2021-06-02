@@ -1,7 +1,11 @@
 package com.byagowi.persiancalendar.ui
 
 import android.app.KeyguardManager
-import android.media.*
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.media.Ringtone
+import android.media.RingtoneManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -15,7 +19,15 @@ import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.athanVolume
+import com.byagowi.persiancalendar.utils.getCityName
+import com.byagowi.persiancalendar.utils.getCustomAthanUri
+import com.byagowi.persiancalendar.utils.getDefaultAthanUri
+import com.byagowi.persiancalendar.utils.getPrayTimeImage
+import com.byagowi.persiancalendar.utils.getPrayTimeText
+import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
+import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
 
 class AthanActivity : AppCompatActivity() {
@@ -36,10 +48,8 @@ class AthanActivity : AppCompatActivity() {
                 mediaPlayer?.isPlaying == false ||
                 spentSeconds > 360 ||
                 (stopAtHalfMinute && spentSeconds > 30)
-            ) finish()
-            else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
-            Unit
-        }.onFailure { finish() }.getOrElse(logException)
+            ) finish() else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
+        }.onFailure(logException).onFailure { finish() }.let {}
     }
     private var stopAtHalfMinute = false
 

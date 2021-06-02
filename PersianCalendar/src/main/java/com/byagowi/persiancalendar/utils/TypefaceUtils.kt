@@ -17,7 +17,7 @@ fun overrideFont(defaultFontNameToOverride: String, face: Typeface): Unit = runC
         Typeface::class.java.getDeclaredField(defaultFontNameToOverride)
     defaultFontTypefaceField.isAccessible = true
     defaultFontTypefaceField.set(null, face)
-}.getOrElse(logException)
+}.onFailure(logException).let {}
 
 fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, FONT_PATH)
 

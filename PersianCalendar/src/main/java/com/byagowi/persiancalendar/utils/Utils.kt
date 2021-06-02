@@ -459,7 +459,7 @@ fun updateStoredPreference(context: Context) {
 
         otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: "GREGORIAN,ISLAMIC")
             .splitIgnoreEmpty(",").map(CalendarType::valueOf)
-    }.onFailure(logException).getOrElse {
+    }.onFailure(logException).onFailure {
         mainCalendar = CalendarType.SHAMSI
         otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     }

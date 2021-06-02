@@ -351,13 +351,13 @@ class CalendarFragment : Fragment() {
             spannableString.setSpan(object : ClickableSpan() {
                 override fun onClick(textView: View) = runCatching {
                     viewEvent.launch(event.id.toLong())
-                }.onFailure(logException).getOrElse {
+                }.onFailure(logException).onFailure {
                     Snackbar.make(
                         textView,
                         R.string.device_calendar_does_not_support,
                         Snackbar.LENGTH_SHORT
                     ).show()
-                }
+                }.let {}
 
                 override fun updateDrawState(ds: TextPaint) {
                     super.updateDrawState(ds)
