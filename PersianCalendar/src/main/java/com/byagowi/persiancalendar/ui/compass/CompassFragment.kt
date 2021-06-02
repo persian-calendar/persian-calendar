@@ -38,11 +38,6 @@ class CompassFragment : Fragment() {
     private var sensorNotFound = false
     private var coordinate: Coordinate? = null
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
     private val compassListener = object : SensorEventListener {
         /*
          * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
@@ -87,71 +82,68 @@ class CompassFragment : Fragment() {
         }.show()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentCompassBinding.inflate(inflater, container, false).apply {
-            coordinate = getCoordinate(inflater.context)
-
-            appBar.toolbar.let {
-                it.setTitle(R.string.compass)
-                it.subtitle = getCityName(inflater.context, true)
-                it.setupUpNavigation()
-            }
-
-            bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
-            bottomAppbar.setOnMenuItemClickListener { clickedMenuItem ->
-                when (clickedMenuItem.itemId) {
-                    R.id.level -> findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
-                    R.id.map -> runCatching {
-                        CustomTabsIntent.Builder().build().launchUrl(
-                            activity ?: return@runCatching,
-                            "https://g.co/qiblafinder".toUri()
-                        )
-                    }.onFailure(logException)
-                    R.id.help -> showLongSnackbar(
-                        when {
-                            sensorNotFound -> R.string.compass_not_found
-                            else -> R.string.calibrate_compass_summary
-                        },
-                        5000
-                    )
-                    else -> Unit
-                }
-                true
-            }
-            fab.setOnClickListener {
-                stopped = !stopped
-                fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
-                fab.contentDescription = resources
-                    .getString(if (stopped) R.string.resume else R.string.stop)
-            }
-        }
+    ) = FragmentCompassBinding.inflate(inflater, container, false).also { binding ->
         this.binding = binding
+        coordinate = getCoordinate(inflater.context)
 
-        setCompassMetrics()
-        coordinate?.apply {
-            binding.compassView.setLongitude(longitude)
-            binding.compassView.setLatitude(latitude)
+        binding.appBar.toolbar.let {
+            it.setTitle(R.string.compass)
+            it.subtitle = getCityName(inflater.context, true)
+            it.setupUpNavigation()
+        }
+
+        binding.bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
+        binding.bottomAppbar.setOnMenuItemClickListener { clickedMenuItem ->
+            when (clickedMenuItem.itemId) {
+                R.id.level -> findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
+                R.id.map -> runCatching {
+                    CustomTabsIntent.Builder().build().launchUrl(
+                        activity ?: return@runCatching, "https://g.co/qiblafinder".toUri()
+                    )
+                }.onFailure(logException)
+                R.id.help -> showLongSnackbar(
+                    if (sensorNotFound) R.string.compass_not_found
+                    else R.string.calibrate_compass_summary,
+                    5000
+                )
+                else -> Unit
+            }
+            true
+        }
+        binding.fab.setOnClickListener {
+            stopped = !stopped
+            binding.fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
+            binding.fab.contentDescription = resources
+                .getString(if (stopped) R.string.resume else R.string.stop)
+        }
+        updateCompassMetrics(binding)
+        coordinate?.also {
+            binding.compassView.setLongitude(it.longitude)
+            binding.compassView.setLatitude(it.latitude)
         }
         binding.compassView.initCompassView()
-
-        return binding.root
-    }
+    }.root
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        setCompassMetrics()
+        binding?.let(::updateCompassMetrics)
     }
 
-    private fun setCompassMetrics() {
+    private fun updateCompassMetrics(binding: FragmentCompassBinding) {
         val activity = activity ?: return
         val displayMetrics = DisplayMetrics()
 
         activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
         val width = displayMetrics.widthPixels
         val height = displayMetrics.heightPixels
-        binding?.compassView?.setScreenResolution(width, height - 2 * height / 8)
+        binding.compassView.setScreenResolution(width, height - 2 * height / 8)
 
         when (activity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
             Surface.ROTATION_0 -> orientation = 0f
@@ -169,9 +161,7 @@ class CompassFragment : Fragment() {
         when {
             sensor != null -> {
                 sensorManager?.registerListener(
-                    compassListener,
-                    sensor,
-                    SensorManager.SENSOR_DELAY_FASTEST
+                    compassListener, sensor, SensorManager.SENSOR_DELAY_FASTEST
                 )
                 if (coordinate == null) showLongSnackbar(
                     R.string.set_location,

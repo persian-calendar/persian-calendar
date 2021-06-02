@@ -103,18 +103,18 @@ class AthanActivity : AppCompatActivity() {
                         stopAtHalfMinute = true
                     }
                 }
-                ringtone = RingtoneManager.getRingtone(this, customAthanUri).apply {
+                ringtone = RingtoneManager.getRingtone(this, customAthanUri).also {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        audioAttributes = AudioAttributes.Builder()
+                        it.audioAttributes = AudioAttributes.Builder()
                             .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                             .setUsage(AudioAttributes.USAGE_ALARM)
                             .build()
                     } else {
                         @Suppress("DEPRECATION")
-                        streamType = AudioManager.STREAM_ALARM
+                        it.streamType = AudioManager.STREAM_ALARM
                     }
                     volumeControlStream = AudioManager.STREAM_ALARM
-                    play()
+                    it.play()
                 }
             } else {
                 mediaPlayer = MediaPlayer().also { mediaPlayer ->
@@ -202,10 +202,10 @@ class AthanActivity : AppCompatActivity() {
         ringtone?.stop()
 
         runCatching {
-            mediaPlayer?.apply {
-                if (isPlaying) {
-                    stop()
-                    release()
+            mediaPlayer?.also {
+                if (it.isPlaying) {
+                    it.stop()
+                    it.release()
                 }
             }
         }.onFailure(logException)

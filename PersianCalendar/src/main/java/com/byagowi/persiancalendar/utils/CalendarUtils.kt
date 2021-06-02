@@ -167,8 +167,7 @@ private fun readDeviceEvents(
         CalendarContract.Instances.CONTENT_URI.buildUpon().apply {
             ContentUris.appendId(this, startingDate.timeInMillis - DAY_IN_MILLIS)
             ContentUris.appendId(this, startingDate.timeInMillis + rangeInMillis + DAY_IN_MILLIS)
-        }.build(),
-        arrayOf(
+        }.build(), arrayOf(
             CalendarContract.Instances.EVENT_ID, // 0
             CalendarContract.Instances.TITLE, // 1
             CalendarContract.Instances.DESCRIPTION, // 2

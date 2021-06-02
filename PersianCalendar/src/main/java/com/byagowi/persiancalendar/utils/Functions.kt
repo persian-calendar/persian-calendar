@@ -253,8 +253,8 @@ fun getOrderedCalendarEntities(
             .map(CalendarType::valueOf)
             .zip(context.resources.getStringArray(if (abbreviation) R.array.calendar_type_abbr else R.array.calendar_type))
             .toMap()
-    return getOrderedCalendarTypes().mapNotNull {
-        typeTitleMap[it]?.run { CalendarTypeItem(it, this) }
+    return getOrderedCalendarTypes().mapNotNull { calendarType ->
+        typeTitleMap[calendarType]?.let { CalendarTypeItem(calendarType, it) }
     }
 }
 
@@ -293,12 +293,12 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String =
     ?: ""
 
 fun getCoordinate(context: Context): Coordinate? =
-    getCityFromPreference(context)?.coordinate ?: context.appPrefs.run {
+    getCityFromPreference(context)?.coordinate ?: context.appPrefs.let {
         Coordinate(
-            getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
-            getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
-            getString(PREF_ALTITUDE, null)?.toDoubleOrNull() ?: .0
-        ).takeIf { it.latitude != 0.0 || it.longitude != 0.0 }
+            it.getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
+            it.getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
+            it.getString(PREF_ALTITUDE, null)?.toDoubleOrNull() ?: .0
+        ).takeIf { coordinates -> coordinates.latitude != .0 || coordinates.longitude != .0 }
         // If latitude and longitude both are zero probably preference is not set yet
     }
 

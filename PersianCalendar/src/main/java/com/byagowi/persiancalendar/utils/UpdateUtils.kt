@@ -179,12 +179,12 @@ fun update(context: Context, updateDate: Boolean) {
 
         val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
 
-        remoteViews4.run {
-            // Widget 4x1
-            setBackgroundColor(R.id.widget_layout4x1)
-            setTextColor(R.id.textPlaceholder1_4x1, color)
-            setTextColor(R.id.textPlaceholder2_4x1, color)
-            setTextColor(R.id.textPlaceholder3_4x1, color)
+        // Widget 4x1
+        manager.updateAppWidget(widget4x1, remoteViews4.also {
+            it.setBackgroundColor(R.id.widget_layout4x1)
+            it.setTextColor(R.id.textPlaceholder1_4x1, color)
+            it.setTextColor(R.id.textPlaceholder2_4x1, color)
+            it.setTextColor(R.id.textPlaceholder3_4x1, color)
 
             var text2: String
             var text3 = ""
@@ -201,25 +201,24 @@ fun update(context: Context, updateDate: Boolean) {
                 text2 += spacedComma + subtitle
             }
 
-            setTextViewText(R.id.textPlaceholder2_4x1, text2)
-            setTextViewText(R.id.textPlaceholder3_4x1, text3)
-            setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent)
-            manager.updateAppWidget(widget4x1, this)
-        }
+            it.setTextViewText(R.id.textPlaceholder2_4x1, text2)
+            it.setTextViewText(R.id.textPlaceholder3_4x1, text3)
+            it.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent)
+        })
 
-        remoteViews2.run {
+        // Widget 2x2
+        manager.updateAppWidget(widget2x2, remoteViews2.also {
             var text2: String
-            // Widget 2x2
-            setBackgroundColor(R.id.widget_layout2x2)
-            setTextColor(R.id.time_2x2, color)
-            setTextColor(R.id.date_2x2, color)
-            setTextColor(R.id.event_2x2, color)
-            setTextColor(R.id.owghat_2x2, color)
+            it.setBackgroundColor(R.id.widget_layout2x2)
+            it.setTextColor(R.id.time_2x2, color)
+            it.setTextColor(R.id.date_2x2, color)
+            it.setTextColor(R.id.event_2x2, color)
+            it.setTextColor(R.id.owghat_2x2, color)
 
             text2 = if (enableClock) {
                 widgetTitle
             } else {
-                setTextViewText(R.id.time_2x2, weekDayName)
+                it.setTextViewText(R.id.time_2x2, weekDayName)
                 mainDateString
             }
 
@@ -232,14 +231,13 @@ fun update(context: Context, updateDate: Boolean) {
                 addIsHoliday = isHighTextContrastEnabled
             )
             if (holidays.isNotEmpty()) {
-                setTextViewText(R.id.holiday_2x2, holidays)
-                if (isTalkBackEnabled) setContentDescription(
-                    R.id.holiday_2x2,
-                    context.getString(R.string.holiday_reason) + " " + holidays
+                it.setTextViewText(R.id.holiday_2x2, holidays)
+                if (isTalkBackEnabled) it.setContentDescription(
+                    R.id.holiday_2x2, context.getString(R.string.holiday_reason) + " " + holidays
                 )
-                setViewVisibility(R.id.holiday_2x2, View.VISIBLE)
+                it.setViewVisibility(R.id.holiday_2x2, View.VISIBLE)
             } else {
-                setViewVisibility(R.id.holiday_2x2, View.GONE)
+                it.setViewVisibility(R.id.holiday_2x2, View.GONE)
             }
 
             val nonHolidays = getEventsTitle(
@@ -251,17 +249,17 @@ fun update(context: Context, updateDate: Boolean) {
                 addIsHoliday = false
             )
             if ("non_holiday_events" in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
-                setTextViewText(R.id.event_2x2, nonHolidays)
-                setViewVisibility(R.id.event_2x2, View.VISIBLE)
+                it.setTextViewText(R.id.event_2x2, nonHolidays)
+                it.setViewVisibility(R.id.event_2x2, View.VISIBLE)
             } else {
-                setViewVisibility(R.id.event_2x2, View.GONE)
+                it.setViewVisibility(R.id.event_2x2, View.GONE)
             }
 
             if ("owghat" in whatToShowOnWidgets && owghat.isNotEmpty()) {
-                setTextViewText(R.id.owghat_2x2, owghat)
-                setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
+                it.setTextViewText(R.id.owghat_2x2, owghat)
+                it.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
             } else {
-                setViewVisibility(R.id.owghat_2x2, View.GONE)
+                it.setViewVisibility(R.id.owghat_2x2, View.GONE)
             }
 
             if (showOtherCalendars) {
@@ -269,11 +267,10 @@ fun update(context: Context, updateDate: Boolean) {
                     context, jdn, withEmoji = true, short = false
                 )
             }
-            setTextViewText(R.id.date_2x2, text2)
+            it.setTextViewText(R.id.date_2x2, text2)
 
-            setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent)
-            manager.updateAppWidget(widget2x2, this)
-        }
+            it.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent)
+        })
     }
     //endregion
 
@@ -301,23 +298,22 @@ fun update(context: Context, updateDate: Boolean) {
 
         val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
 
-        remoteViews.run {
+        manager.updateAppWidget(widget4x1dateOnly, remoteViews.also {
             // Widget 4x1
-            setBackgroundColor(R.id.widget_layout4x1)
-            setTextColor(R.id.textPlaceholder1_4x1_dateOnly, color)
-            setTextColor(R.id.textPlaceholder2_4x1_dateOnly, color)
-            setTextColor(R.id.textPlaceholder3_4x1_dateOnly, color)
+            it.setBackgroundColor(R.id.widget_layout4x1)
+            it.setTextColor(R.id.textPlaceholder1_4x1_dateOnly, color)
+            it.setTextColor(R.id.textPlaceholder2_4x1_dateOnly, color)
+            it.setTextColor(R.id.textPlaceholder3_4x1_dateOnly, color)
 
             val text3 = if (enableClock && isForcedIranTimeEnabled) "(" +
                     context.getString(R.string.iran_time) + ")" else ""
 
             val text2 = if ("show_weekday" in whatToShowOnWidgets) widgetTitle else mainDateString
 
-            setTextViewText(R.id.textPlaceholder2_4x1_dateOnly, text2)
-            setTextViewText(R.id.textPlaceholder3_4x1_dateOnly, text3)
-            setOnClickPendingIntent(R.id.widget_layout4x1dateOnly, launchAppPendingIntent)
-            manager.updateAppWidget(widget4x1dateOnly, this)
-        }
+            it.setTextViewText(R.id.textPlaceholder2_4x1_dateOnly, text2)
+            it.setTextViewText(R.id.textPlaceholder3_4x1_dateOnly, text3)
+            it.setOnClickPendingIntent(R.id.widget_layout4x1dateOnly, launchAppPendingIntent)
+        })
     }
     //endregion
 
@@ -330,28 +326,28 @@ fun update(context: Context, updateDate: Boolean) {
             } else R.layout.widget4x2
         )
 
-        remoteViews4x2.run {
-            setBackgroundColor(R.id.widget_layout4x2)
+        manager.updateAppWidget(widget4x2, remoteViews4x2.also {
+            it.setBackgroundColor(R.id.widget_layout4x2)
 
-            setTextColor(R.id.textPlaceholder0_4x2, color)
-            setTextColor(R.id.textPlaceholder1_4x2, color)
-            setTextColor(R.id.textPlaceholder2_4x2, color)
-            setTextColor(R.id.textPlaceholder4owghat_3_4x2, color)
-            setTextColor(R.id.textPlaceholder4owghat_1_4x2, color)
-            setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
-            setTextColor(R.id.textPlaceholder4owghat_2_4x2, color)
-            setTextColor(R.id.textPlaceholder4owghat_5_4x2, color)
+            it.setTextColor(R.id.textPlaceholder0_4x2, color)
+            it.setTextColor(R.id.textPlaceholder1_4x2, color)
+            it.setTextColor(R.id.textPlaceholder2_4x2, color)
+            it.setTextColor(R.id.textPlaceholder4owghat_3_4x2, color)
+            it.setTextColor(R.id.textPlaceholder4owghat_1_4x2, color)
+            it.setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
+            it.setTextColor(R.id.textPlaceholder4owghat_2_4x2, color)
+            it.setTextColor(R.id.textPlaceholder4owghat_5_4x2, color)
 
             var text2 = formatDate(date, calendarNameInLinear = showOtherCalendars)
             if (enableClock)
                 text2 = jdn.dayOfWeekName + "\n" + text2
             else
-                setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
+                it.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
 
             if (showOtherCalendars)
                 text2 = text2 + "\n" + dateStringOfOtherCalendars(jdn, "\n")
 
-            setTextViewText(R.id.textPlaceholder1_4x2, text2)
+            it.setTextViewText(R.id.textPlaceholder1_4x2, text2)
 
             if (nextOwghatId != 0) {
                 // Set text of owghats
@@ -373,17 +369,13 @@ fun update(context: Context, updateDate: Boolean) {
                         )
                     }
                 ) { textHolderViewId, owghatStringId ->
-                    setTextViewText(
+                    it.setTextViewText(
                         textHolderViewId,
                         context.getString(owghatStringId) + "\n" +
                                 getClockFromStringId(owghatStringId).toFormattedString()
                     )
-                    setTextColor(
-                        textHolderViewId,
-                        if (owghatStringId == nextOwghatId)
-                            Color.RED
-                        else
-                            color
+                    it.setTextColor(
+                        textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
                     )
                 }
 
@@ -400,25 +392,22 @@ fun update(context: Context, updateDate: Boolean) {
                         .format(formatNumber(hrs), formatNumber(min))
                 }
 
-                setTextViewText(
+                it.setTextViewText(
                     R.id.textPlaceholder2_4x2,
                     context.getString(R.string.n_till).format(
                         remainingTime, context.getString(nextOwghatId)
                     )
                 )
-                setTextColor(R.id.textPlaceholder2_4x2, color)
+                it.setTextColor(R.id.textPlaceholder2_4x2, color)
             } else {
-                setTextViewText(
-                    R.id.textPlaceholder2_4x2,
-                    context.getString(R.string.ask_user_to_set_location)
+                it.setTextViewText(
+                    R.id.textPlaceholder2_4x2, context.getString(R.string.ask_user_to_set_location)
                 )
-                setTextColor(R.id.textPlaceholder2_4x2, color)
+                it.setTextColor(R.id.textPlaceholder2_4x2, color)
             }
 
-            setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent)
-
-            manager.updateAppWidget(widget4x2, this)
-        }
+            it.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent)
+        })
     }
     //endregion
 

@@ -513,14 +513,14 @@ fun updateStoredPreference(context: Context) {
         getThemeFromName(getThemeFromPreference(context, prefs))
     }.onFailure(logException).getOrDefault(R.style.LightTheme)
 
-    isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.run {
-        isEnabled && isTouchExplorationEnabled
+    isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.let {
+        it.isEnabled && it.isTouchExplorationEnabled
     } ?: false
 
     // https://stackoverflow.com/a/61599809
     isHighTextContrastEnabled = runCatching {
-        context.getSystemService<AccessibilityManager>()?.run {
-            (javaClass.getMethod("isHighTextContrastEnabled").invoke(this) as? Boolean)
+        context.getSystemService<AccessibilityManager>()?.let {
+            (it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean)
         }
     }.onFailure(logException).getOrNull() ?: false
 }

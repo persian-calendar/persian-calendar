@@ -49,8 +49,8 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
-        val binding = ActivityAgeWidgetConfigureBinding.inflate(layoutInflater).apply {
-            setContentView(root)
+        val binding = ActivityAgeWidgetConfigureBinding.inflate(layoutInflater).also {
+            setContentView(it.root)
         }
 
         val intent = intent

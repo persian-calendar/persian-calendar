@@ -86,9 +86,9 @@ class RecyclerListAdapter(
             }
         }
 
-        fun bind(position: Int) = binding.run {
-            checkTextView.text = items[position].title
-            checkTextView.isChecked = items[position].enabled
+        fun bind(position: Int) = binding.let {
+            it.checkTextView.text = items[position].title
+            it.checkTextView.isChecked = items[position].enabled
         }
 
         fun onItemSelected() = binding.root.setBackgroundColor(Color.LTGRAY)

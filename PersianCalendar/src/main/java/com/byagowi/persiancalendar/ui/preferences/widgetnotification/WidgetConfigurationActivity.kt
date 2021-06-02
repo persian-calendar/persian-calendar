@@ -37,8 +37,8 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
-        val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).apply {
-            setContentView(root)
+        val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {
+            setContentView(it.root)
         }
 
         supportFragmentManager.commit {

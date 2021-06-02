@@ -325,8 +325,8 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
     data class Item(val title: String, val content: CharSequence?, val version: String)
 
     val deviceInformationItems = listOf(
-        Item("Screen Resolution", activity.windowManager.run {
-            "%d*%d pixels".format(Locale.ENGLISH, defaultDisplay.width, defaultDisplay.height)
+        Item("Screen Resolution", activity.windowManager.let {
+            "%d*%d pixels".format(Locale.ENGLISH, it.defaultDisplay.width, it.defaultDisplay.height)
         }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
         Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
         Item(
@@ -369,14 +369,14 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
         Item(
             "Battery",
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                (activity.getSystemService<BatteryManager>())?.run {
-                    listOf("Charging: $isCharging") + listOf(
+                (activity.getSystemService<BatteryManager>())?.let {
+                    listOf("Charging: ${it.isCharging}") + listOf(
                         "Capacity" to BatteryManager.BATTERY_PROPERTY_CAPACITY,
                         "Charge Counter" to BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
                         "Current Avg" to BatteryManager.BATTERY_PROPERTY_CURRENT_AVERAGE,
                         "Current Now" to BatteryManager.BATTERY_PROPERTY_CURRENT_NOW,
                         "Energy Counter" to BatteryManager.BATTERY_PROPERTY_ENERGY_COUNTER
-                    ).map { (title: String, id: Int) -> "$title: ${getLongProperty(id)}" }
+                    ).map { (title: String, id: Int) -> "$title: ${it.getLongProperty(id)}" }
                 }?.joinToString("\n")
             else "",
             ""

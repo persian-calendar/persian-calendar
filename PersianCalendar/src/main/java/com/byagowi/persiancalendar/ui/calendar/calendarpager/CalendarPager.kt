@@ -44,9 +44,8 @@ class CalendarPager @JvmOverloads constructor(
     }
 
     // Public API, to be reviewed
-    fun refresh(isEventsModified: Boolean = false) = pagesViewHolders.forEach {
-        it.get()?.apply { refresh(isEventsModified, selectedJdn) }
-    }
+    fun refresh(isEventsModified: Boolean = false) = pagesViewHolders
+        .mapNotNull { it.get() }.forEach { it.pageRefresh(isEventsModified, selectedJdn) }
 
     private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
 
@@ -111,40 +110,44 @@ class CalendarPager @JvmOverloads constructor(
                 binding.root.context, this@CalendarPager, selectableItemBackground
             )
 
-            var refresh = fun(_: Boolean, _: Jdn?) {}
+            var pageRefresh = fun(_: Boolean, _: Jdn?) {}
 
             init {
                 val isRTL = isRTL(binding.root.context)
 
-                binding.next.apply {
-                    setImageResource(
+                binding.next.let {
+                    it.setImageResource(
                         if (isRTL) R.drawable.ic_keyboard_arrow_left
                         else R.drawable.ic_keyboard_arrow_right
                     )
-                    setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem + 1, true) }
-                    setOnLongClickListener {
+                    it.setOnClickListener {
+                        viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+                    }
+                    it.setOnLongClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 12, false)
                         true
                     }
-                    setBackgroundResource(selectableItemBackground)
+                    it.setBackgroundResource(selectableItemBackground)
                 }
 
-                binding.prev.apply {
-                    setImageResource(
+                binding.prev.let {
+                    it.setImageResource(
                         if (isRTL) R.drawable.ic_keyboard_arrow_right
                         else R.drawable.ic_keyboard_arrow_left
                     )
-                    setOnClickListener { viewPager.setCurrentItem(viewPager.currentItem - 1, true) }
-                    setOnLongClickListener {
+                    it.setOnClickListener {
+                        viewPager.setCurrentItem(viewPager.currentItem - 1, true)
+                    }
+                    it.setOnLongClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem - 12, false)
                         true
                     }
-                    setBackgroundResource(selectableItemBackground)
+                    it.setBackgroundResource(selectableItemBackground)
                 }
 
-                binding.monthDays.apply {
-                    setHasFixedSize(true)
-                    layoutManager = GridLayoutManager(
+                binding.monthDays.let {
+                    it.setHasFixedSize(true)
+                    it.layoutManager = GridLayoutManager(
                         binding.root.context, if (isShowWeekOfYearEnabled) 8 else 7
                     )
                 }
@@ -161,17 +164,17 @@ class CalendarPager @JvmOverloads constructor(
                 val monthLength = mainCalendar.getMonthLength(date.year, date.month)
                 val startOfYearJdn = Jdn(mainCalendar, date.year, 1, 1)
 
-                daysAdapter.apply {
-                    startingDayOfWeek = baseJdn.dayOfWeek
-                    weekOfYearStart = baseJdn.getWeekOfYear(startOfYearJdn)
-                    weeksCount = (baseJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
-                            weekOfYearStart + 1
-                    days = baseJdn.createMonthDaysList(monthLength)
-                    initializeMonthEvents()
-                    notifyItemRangeChanged(0, daysAdapter.itemCount)
+                daysAdapter.let {
+                    it.startingDayOfWeek = baseJdn.dayOfWeek
+                    it.weekOfYearStart = baseJdn.getWeekOfYear(startOfYearJdn)
+                    it.weeksCount = (baseJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
+                            it.weekOfYearStart + 1
+                    it.days = baseJdn.createMonthDaysList(monthLength)
+                    it.initializeMonthEvents()
+                    it.notifyItemRangeChanged(0, daysAdapter.itemCount)
                 }
 
-                refresh = fun(isEventsModification: Boolean, jdn: Jdn?) {
+                pageRefresh = fun(isEventsModification: Boolean, jdn: Jdn?) {
                     if (viewPager.currentItem == position) {
                         if (isEventsModification && jdn != null) {
                             daysAdapter.initializeMonthEvents()
@@ -188,7 +191,7 @@ class CalendarPager @JvmOverloads constructor(
                     } else daysAdapter.selectDay(-1)
                 }
 
-                refresh()
+                pageRefresh(false, null)
             }
         }
     }
