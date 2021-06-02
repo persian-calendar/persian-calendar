@@ -48,6 +48,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
+import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.Jdn
@@ -478,8 +479,11 @@ class CalendarFragment : Fragment() {
             val ss = SpannableString(title)
             val clickableSpan = object : ClickableSpan() {
                 override fun onClick(textView: View) {
-                    val direction = CalendarFragmentDirections.navigateToSettings()
-                    findNavController().navigate(direction)
+                    findNavController().navigate(
+                        CalendarFragmentDirections.navigateToSettings(
+                            INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
+                        )
+                    )
                 }
             }
             ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

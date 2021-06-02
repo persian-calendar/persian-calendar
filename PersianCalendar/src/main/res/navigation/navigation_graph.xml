@@ -32,6 +32,10 @@
                 android:name="tab"
                 android:defaultValue="0"
                 app:argType="integer" />
+            <argument
+                android:name="preferenceKey"
+                android:defaultValue=""
+                app:argType="string" />
         </action>
     </fragment>
 
@@ -77,6 +81,10 @@
             android:name="tab"
             android:defaultValue="0"
             app:argType="integer" />
+        <argument
+            android:name="preferenceKey"
+            android:defaultValue=""
+            app:argType="string" />
     </fragment>
 
     <fragment

@@ -32,14 +32,18 @@ class PreferencesFragment : Fragment() {
             R.string.pref_header_widget_location to WidgetNotificationFragment::class.java,
             R.string.pref_header_location_athan to LocationAthanFragment::class.java
         )
-        binding.viewPager.adapter = object : FragmentStateAdapter(this@PreferencesFragment) {
+        val args: PreferencesFragmentArgs by navArgs()
+        binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = tabs.size
-            override fun createFragment(position: Int) = tabs[position].second.newInstance()
+            override fun createFragment(position: Int) = tabs[position].second.newInstance().also {
+                if (position == args.tab && args.preferenceKey.isNotEmpty()) {
+                    it.scrollToPreference(args.preferenceKey)
+                }
+            }
         }
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, i ->
             tab.setText(tabs[i].first)
         }.attach()
-        val args: PreferencesFragmentArgs by navArgs()
         binding.viewPager.currentItem = args.tab
     }.root
 }
