@@ -127,7 +127,6 @@ class CalendarPager @JvmOverloads constructor(
                         viewPager.setCurrentItem(viewPager.currentItem + 12, false)
                         true
                     }
-                    it.setBackgroundResource(selectableItemBackground)
                 }
 
                 binding.prev.let {
@@ -142,7 +141,6 @@ class CalendarPager @JvmOverloads constructor(
                         viewPager.setCurrentItem(viewPager.currentItem - 12, false)
                         true
                     }
-                    it.setBackgroundResource(selectableItemBackground)
                 }
 
                 binding.monthDays.let {
