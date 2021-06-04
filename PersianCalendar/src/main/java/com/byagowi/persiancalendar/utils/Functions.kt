@@ -20,8 +20,10 @@ import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -47,6 +49,7 @@ import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
+import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -509,6 +512,16 @@ fun Context.resolveColor(attr: Int) = TypedValue().let {
     theme.resolveAttribute(attr, it, true)
     ContextCompat.getColor(this, it.resourceId)
 }
+
+fun Context.showHtml(html: String) = runCatching {
+    val uri = FileProvider.getUriForFile(
+        applicationContext, "$packageName.provider",
+        File(externalCacheDir, "temp.html").also { it.writeText(html) }
+    )
+    CustomTabsIntent.Builder().build()
+        .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+        .launchUrl(this, uri)
+}.onFailure(logException).let {}
 
 fun Flow.addViewsToFlow(viewList: List<View>) {
     val parentView = (this.parent as? ViewGroup).debugAssertNotNull ?: return

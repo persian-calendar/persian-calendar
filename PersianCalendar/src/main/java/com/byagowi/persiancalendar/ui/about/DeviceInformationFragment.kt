@@ -6,7 +6,6 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.*
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -23,7 +22,6 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
-import android.util.Base64
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -487,28 +485,22 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
 
     override fun getItemCount() = deviceInformationItems.size
 
-    fun print(context: Context) = runCatching {
-        val style = "td { padding: .5em; border-top: 1px solid lightgray }"
-        val header = "<h1>Device Information<h1>"
-        val headerRow = "<thead><tr><th>Item</th><th>Value</th></tr></thead>"
-        val tableContent = headerRow + deviceInformationItems.joinToString("") {
+    fun print(context: Context) {
+        val tableBody = deviceInformationItems.joinToString("") {
             val formattedVersion = if (it.version.isEmpty()) "" else " (${it.version})"
             "<tr><td>${it.title}${formattedVersion}</td><td>${it.content}</td></tr>"
         }
-        // TODO: Store in a file and use androidx.browser.customtabs.CustomTabsIntent instead
-        val uri = "data:text/html;charset=utf8;base64,${
-            Base64.encodeToString(
-                "<style>$style</style>$header<table>$tableContent</table><script>print()</script>"
-                    .encodeToByteArray(),
-                Base64.DEFAULT
-            )
-        }".toUri()
-        // https://stackoverflow.com/a/35677658
-        context.startActivity(
-            Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
-                .setData(uri)
+        context.showHtml(
+            """<meta charset=utf8>
+<style>td { padding: .5em; border-top: 1px solid lightgray }</style>
+<h1>Device Information</h1>
+<table>
+    <thead><tr><th>Item</th><th>Value</th></tr></thead>
+    <tbody>$tableBody</tbody>
+</table>
+<script>print()</script>"""
         )
-    }.onFailure(logException).let {}
+    }
 
     inner class ViewHolder(private val binding: DeviceInformationRowBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
