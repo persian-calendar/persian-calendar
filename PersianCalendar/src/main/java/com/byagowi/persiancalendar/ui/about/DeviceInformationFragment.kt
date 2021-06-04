@@ -87,9 +87,7 @@ class DeviceInformationFragment : Fragment() {
         binding.toolbar.menu.add("Print").also {
             it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_print)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.setOnMenuItemClickListener {
-            adapter.print(binding.root.context)
-            true
+            it.onClick { context?.also(adapter::print) }
         }
 
         binding.bottomNavigation.also { bottomNavigationView ->

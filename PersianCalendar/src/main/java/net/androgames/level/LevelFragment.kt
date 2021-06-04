@@ -8,10 +8,12 @@ import android.view.MenuItem
 import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
+import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 import net.androgames.level.orientation.OrientationProvider
 
@@ -46,14 +48,14 @@ class LevelFragment : Fragment() {
         binding.appBar.toolbar.setupUpNavigation()
         binding.appBar.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         provider = OrientationProvider(activity, binding.levelView)
-        binding.bottomAppbar.replaceMenu(R.menu.level_menu_buttons)
-        binding.bottomAppbar.setOnMenuItemClickListener { item: MenuItem ->
-            if (item.itemId == R.id.compass) {
+        binding.bottomAppbar.menu.add(R.string.level).also {
+            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_compass_menu)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick {
                 // If compass wasn't in backstack (level is brought from shortcut), navigate to it
                 if (!findNavController().popBackStack(R.id.compass, false))
                     findNavController().navigate(LevelFragmentDirections.actionLevelToCompass())
             }
-            true
         }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener

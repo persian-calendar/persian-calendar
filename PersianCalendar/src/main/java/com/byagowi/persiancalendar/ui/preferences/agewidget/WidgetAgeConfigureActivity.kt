@@ -13,7 +13,13 @@ import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAgeWidgetConfigureBinding
 import com.byagowi.persiancalendar.updateAgeWidget
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.getJdnOrNull
+import com.byagowi.persiancalendar.utils.getThemeFromName
+import com.byagowi.persiancalendar.utils.getThemeFromPreference
+import com.byagowi.persiancalendar.utils.putJdn
 
 class AgeWidgetConfigureActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID

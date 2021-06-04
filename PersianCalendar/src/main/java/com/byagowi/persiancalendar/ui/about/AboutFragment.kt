@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
@@ -15,6 +16,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
@@ -38,17 +40,19 @@ class AboutFragment : Fragment() {
     ): View {
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
 
-        binding.appBar.toolbar.let {
-            it.setTitle(R.string.about)
-            it.setupUpNavigation()
-            it.inflateMenu(R.menu.about_menu_buttons)
-            it.setOnMenuItemClickListener { clickedMenuItem ->
-                when (clickedMenuItem.itemId) {
-                    R.id.deviceInformation ->
-                        findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
-                    R.id.share -> shareApplication()
-                }
-                true
+        val toolbar = binding.appBar.toolbar
+        toolbar.setTitle(R.string.about)
+        toolbar.setupUpNavigation()
+        toolbar.menu.add(R.string.share).also {
+            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_baseline_share)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick { shareApplication() }
+        }
+        toolbar.menu.add(R.string.device_info).also {
+            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_device_information)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick {
+                findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
             }
         }
 

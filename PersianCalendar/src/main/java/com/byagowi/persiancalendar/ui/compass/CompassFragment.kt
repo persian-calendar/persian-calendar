@@ -11,6 +11,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.praytimes.Coordinate
@@ -99,24 +101,35 @@ class CompassFragment : Fragment() {
             it.setupUpNavigation()
         }
 
-        binding.bottomAppbar.replaceMenu(R.menu.compass_menu_buttons)
-        binding.bottomAppbar.setOnMenuItemClickListener { clickedMenuItem ->
-            when (clickedMenuItem.itemId) {
-                R.id.level -> findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
-                R.id.map -> runCatching {
+        binding.bottomAppbar.menu.add(R.string.help).also {
+            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_info_in_menu)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick {
+                showLongSnackbar(
+                    if (sensorNotFound) R.string.compass_not_found
+                    else R.string.calibrate_compass_summary, 5000
+                )
+            }
+        }
+        binding.bottomAppbar.menu.add(R.string.map).also {
+            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_map)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick {
+                runCatching {
                     CustomTabsIntent.Builder().build().launchUrl(
                         activity ?: return@runCatching, "https://g.co/qiblafinder".toUri()
                     )
                 }.onFailure(logException)
-                R.id.help -> showLongSnackbar(
-                    if (sensorNotFound) R.string.compass_not_found
-                    else R.string.calibrate_compass_summary,
-                    5000
-                )
-                else -> Unit
             }
-            true
         }
+        binding.bottomAppbar.menu.add(R.string.level).also {
+            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_level)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            it.onClick {
+                findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
+            }
+        }
+
         binding.fab.setOnClickListener {
             stopped = !stopped
             binding.fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)

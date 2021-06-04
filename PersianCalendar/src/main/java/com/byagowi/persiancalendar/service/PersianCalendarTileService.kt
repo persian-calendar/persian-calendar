@@ -7,7 +7,12 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.byagowi.persiancalendar.ui.MainActivity
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.dayOfWeekName
+import com.byagowi.persiancalendar.utils.getDayIconResource
+import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.monthName
 
 /**
  * Created by Alireza Afkar on 19/6/2018AD.

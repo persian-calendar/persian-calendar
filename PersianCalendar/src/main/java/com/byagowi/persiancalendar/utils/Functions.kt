@@ -12,6 +12,7 @@ import android.os.Build
 import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -519,8 +520,11 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
     }.toIntArray()
 }
 
-inline fun Preference.setOnClickListener(crossinline listener: () -> Unit) =
-    this.setOnPreferenceClickListener { listener().let { true } } // it captures the click event
+inline fun Preference.setOnClickListener(crossinline action: () -> Unit) =
+    this.setOnPreferenceClickListener { action().let { true } } // it captures the click event
+
+inline fun MenuItem.onClick(crossinline action: () -> Unit) =
+    this.setOnMenuItemClickListener { action().let { true } }.let {}
 
 inline fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,

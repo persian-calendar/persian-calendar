@@ -17,7 +17,6 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -76,6 +76,7 @@ import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.toJavaCalendar
@@ -266,19 +267,8 @@ class CalendarFragment : Fragment() {
         bringDate(Jdn.today, monthChange = false, highlight = false)
 
         mainBinding?.let {
-            (activity as? DrawerHost)
-                ?.setupToolbarWithDrawer(viewLifecycleOwner, it.appBar.toolbar)
-            it.appBar.toolbar.inflateMenu(R.menu.calendar_menu_buttons)
-            setupToolbarMenu(it.appBar.toolbar.menu)
-            it.appBar.toolbar.setOnMenuItemClickListener { clickedMenuItem ->
-                when (clickedMenuItem?.itemId) {
-                    R.id.go_to -> showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) }
-                    R.id.add_event -> addEventOnCalendar(selectedJdn)
-                    R.id.shift_work -> showShiftWorkDialog(selectedJdn)
-                    R.id.month_overview -> showMonthOverviewDialog(it.calendarPager.selectedMonth)
-                }
-                true
-            }
+            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, it.appBar.toolbar)
+            setupToolbarMenu(it)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 it.appBar.appbarLayout.outlineProvider = null
         }
@@ -527,47 +517,67 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun setupToolbarMenu(menu: Menu) {
-        todayButton = menu.findItem(R.id.today_button).also {
+    private fun setupToolbarMenu(binding: FragmentCalendarBinding) {
+        val context = context ?: return
+        val menu = binding.appBar.toolbar.menu
+        this.todayButton = menu.add(R.string.return_to_today).also {
+            it.icon = ContextCompat.getDrawable(context, R.drawable.ic_restore_modified)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.isVisible = false
-            it.setOnMenuItemClickListener {
-                bringDate(Jdn.today, highlight = false)
-                true
-            }
+            it.onClick { bringDate(Jdn.today, highlight = false) }
         }
-        searchView = (menu.findItem(R.id.search).actionView as? SearchView)?.also { searchView ->
-            searchView.setOnCloseListener {
-                onBackPressedCloseSearchCallback.isEnabled = false
-                false // don't prevent the event cascade
-            }
-            searchView.setOnSearchClickListener {
-                onBackPressedCloseSearchCallback.isEnabled = true
-                // Remove search edit view below bar
-                searchView.findViewById<View?>(
-                    androidx.appcompat.R.id.search_plate
-                )?.setBackgroundColor(Color.TRANSPARENT)
+        val searchView = SearchView(context)
+        this.searchView = searchView
+        menu.add(R.string.search_in_events).also {
+            it.icon = ContextCompat.getDrawable(context, R.drawable.ic_restore_modified)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            it.actionView = searchView
+        }
+        menu.add(R.string.goto_date).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) } }
+        }
+        menu.add(R.string.add_event).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { addEventOnCalendar(selectedJdn) }
+        }
+        menu.add(R.string.shift_work_settings).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { showShiftWorkDialog(selectedJdn) }
+        }
+        menu.add(R.string.month_overview).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { showMonthOverviewDialog(binding.calendarPager.selectedMonth) }
+        }
 
-                searchView.findViewById<SearchAutoComplete?>(
-                    androidx.appcompat.R.id.search_src_text
-                )?.also { searchAutoComplete ->
-                    val context = searchAutoComplete.context
-                    searchAutoComplete.setHint(R.string.search_in_events)
-                    val events = allEnabledEvents + getAllEnabledAppointments(context)
-                    searchAutoComplete.setAdapter(SearchEventsAdapter(context, events))
-                    searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
-                        val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
-                        val type = date.calendarType
-                        val today = Jdn.today.toCalendar(type)
-                        bringDate(
-                            Jdn(
-                                type, if (date.year == -1)
-                                    (today.year + if (date.month < today.month) 1 else 0)
-                                else date.year, date.month, date.dayOfMonth
-                            )
-                        )
-                        searchView.onActionViewCollapsed()
-                    }
-                }
+        searchView.setOnCloseListener {
+            onBackPressedCloseSearchCallback.isEnabled = false
+            false // don't prevent the event cascade
+        }
+        searchView.setOnSearchClickListener {
+            onBackPressedCloseSearchCallback.isEnabled = true
+            // Remove search edit view below bar
+            searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate)
+                ?.setBackgroundColor(Color.TRANSPARENT)
+
+            val searchAutoComplete = searchView.findViewById<SearchAutoComplete?>(
+                androidx.appcompat.R.id.search_src_text
+            ) ?: return@setOnSearchClickListener
+            searchAutoComplete.setHint(R.string.search_in_events)
+            val events = allEnabledEvents + getAllEnabledAppointments(searchAutoComplete.context)
+            searchAutoComplete.setAdapter(SearchEventsAdapter(searchAutoComplete.context, events))
+            searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
+                val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
+                val type = date.calendarType
+                val today = Jdn.today.toCalendar(type)
+                bringDate(
+                    Jdn(
+                        type, if (date.year == -1)
+                            (today.year + if (date.month < today.month) 1 else 0)
+                        else date.year, date.month, date.dayOfMonth
+                    )
+                )
+                searchView.onActionViewCollapsed()
             }
         }
     }
