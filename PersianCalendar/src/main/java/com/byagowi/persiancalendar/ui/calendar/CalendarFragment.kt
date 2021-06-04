@@ -17,7 +17,6 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -262,6 +262,7 @@ class CalendarFragment : Fragment() {
         var lastTab = inflater.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
         binding.viewPager.setCurrentItem(lastTab, false)
+        setupMenu(binding.appBar.toolbar, binding.calendarPager)
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -271,7 +272,6 @@ class CalendarFragment : Fragment() {
 
         mainBinding?.let {
             (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, it.appBar.toolbar)
-            setupMenu(it.appBar.toolbar.menu, it.calendarPager)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 it.appBar.appbarLayout.outlineProvider = null
         }
@@ -520,9 +520,10 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun setupMenu(menu: Menu, calendarPager: CalendarPager) {
-        val context = context ?: return
-        this.todayButton = menu.add(R.string.return_to_today).also {
+    private fun setupMenu(toolbar: Toolbar, calendarPager: CalendarPager) {
+        val context = toolbar.context
+
+        this.todayButton = toolbar.menu.add(R.string.return_to_today).also {
             it.icon = ContextCompat.getDrawable(context, R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.isVisible = false
@@ -530,24 +531,24 @@ class CalendarFragment : Fragment() {
         }
         val searchView = SearchView(context)
         this.searchView = searchView
-        menu.add(R.string.search_in_events).also {
-            it.icon = ContextCompat.getDrawable(context, R.drawable.ic_restore_modified)
+
+        toolbar.menu.add(R.string.search_in_events).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.actionView = searchView
         }
-        menu.add(R.string.goto_date).also {
+        toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick { showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) } }
         }
-        menu.add(R.string.add_event).also {
+        toolbar.menu.add(R.string.add_event).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick { addEventOnCalendar(selectedJdn) }
         }
-        menu.add(R.string.shift_work_settings).also {
+        toolbar.menu.add(R.string.shift_work_settings).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick { showShiftWorkDialog(selectedJdn) }
         }
-        menu.add(R.string.month_overview).also {
+        toolbar.menu.add(R.string.month_overview).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick { showMonthOverviewDialog(calendarPager.selectedMonth) }
         }

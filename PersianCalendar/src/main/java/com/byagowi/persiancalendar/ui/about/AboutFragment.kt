@@ -44,12 +44,12 @@ class AboutFragment : Fragment() {
         toolbar.setTitle(R.string.about)
         toolbar.setupUpNavigation()
         toolbar.menu.add(R.string.share).also {
-            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_baseline_share)
+            it.icon = ContextCompat.getDrawable(toolbar.context, R.drawable.ic_baseline_share)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick { shareApplication() }
         }
         toolbar.menu.add(R.string.device_info).also {
-            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_device_information)
+            it.icon = ContextCompat.getDrawable(toolbar.context, R.drawable.ic_device_information)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
