@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -22,7 +23,9 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
+import android.util.Base64
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
@@ -33,6 +36,7 @@ import android.widget.ProgressBar
 import androidx.annotation.ColorInt
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
@@ -52,6 +56,7 @@ import com.google.android.material.tabs.TabLayout
 import java.util.*
 import kotlin.math.sqrt
 
+
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI
@@ -70,16 +75,21 @@ class DeviceInformationFragment : Fragment() {
 
         binding.circularReveal.circularRevealFromMiddle()
 
+        val adapter = DeviceInformationAdapter(activity ?: return@also, binding.root)
         binding.recyclerView.let {
             it.setHasFixedSize(true)
             it.layoutManager = LinearLayoutManager(inflater.context)
             it.addItemDecoration(
-                DividerItemDecoration(
-                    inflater.context,
-                    LinearLayoutManager.VERTICAL
-                )
+                DividerItemDecoration(inflater.context, LinearLayoutManager.VERTICAL)
             )
-            it.adapter = DeviceInformationAdapter(activity ?: return@let, binding.root)
+            it.adapter = adapter
+        }
+        binding.toolbar.menu.add("Print").also {
+            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_print)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.setOnMenuItemClickListener {
+            adapter.print(binding.root.context)
+            true
         }
 
         binding.bottomNavigation.also { bottomNavigationView ->
@@ -324,7 +334,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
 
     data class Item(val title: String, val content: CharSequence?, val version: String)
 
-    val deviceInformationItems = listOf(
+    private val deviceInformationItems = listOf(
         Item("Screen Resolution", activity.windowManager.let {
             "%d*%d pixels".format(Locale.ENGLISH, it.defaultDisplay.width, it.defaultDisplay.height)
         }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
@@ -478,6 +488,29 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
     override fun getItemCount() = deviceInformationItems.size
+
+    fun print(context: Context) = runCatching {
+        val style = "td { padding: .5em; border-top: 1px solid lightgray }"
+        val header = "<h1>Device Information<h1>"
+        val headerRow = "<thead><tr><th>Item</th><th>Value</th></tr></thead>"
+        val tableContent = headerRow + deviceInformationItems.joinToString("") {
+            val formattedVersion = if (it.version.isEmpty()) "" else " (${it.version})"
+            "<tr><td>${it.title}${formattedVersion}</td><td>${it.content}</td></tr>"
+        }
+        // TODO: Store in a file and use androidx.browser.customtabs.CustomTabsIntent instead
+        val uri = "data:text/html;charset=utf8;base64,${
+            Base64.encodeToString(
+                "<style>$style</style>$header<table>$tableContent</table><script>print()</script>"
+                    .encodeToByteArray(),
+                Base64.DEFAULT
+            )
+        }".toUri()
+        // https://stackoverflow.com/a/35677658
+        context.startActivity(
+            Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER)
+                .setData(uri)
+        )
+    }.onFailure(logException).let {}
 
     inner class ViewHolder(private val binding: DeviceInformationRowBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
