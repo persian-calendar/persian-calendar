@@ -534,7 +534,7 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
     }.toIntArray()
 }
 
-fun Context.getVectorDrawable(drawableRes: Int) =
+fun Context.getVectorDrawable(@DrawableRes drawableRes: Int) =
     VectorDrawableCompat.create(this.resources, drawableRes, this.theme)
 
 inline fun Preference.onClick(crossinline action: () -> Unit) =
