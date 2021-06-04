@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.setOnClickListener
+import com.byagowi.persiancalendar.utils.onClick
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -110,7 +110,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 Preference(context).also {
                     it.setTitle(R.string.calendars_priority)
                     it.setSummary(R.string.calendars_priority_summary)
-                    it.setOnClickListener { showCalendarPreferenceDialog() }
+                    it.onClick { showCalendarPreferenceDialog() }
                 },
                 SwitchPreferenceCompat(context).also {
                     it.key = PREF_ASTRONOMICAL_FEATURES

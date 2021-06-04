@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
-import com.byagowi.persiancalendar.utils.setOnClickListener
+import com.byagowi.persiancalendar.utils.onClick
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
@@ -47,14 +47,14 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             Preference(context).also {
                 it.setTitle(R.string.widget_text_color)
                 it.setSummary(R.string.select_widgets_text_color)
-                it.setOnClickListener {
+                it.onClick {
                     showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }
             },
             Preference(context).also {
                 it.setTitle(R.string.widget_background_color)
                 it.setSummary(R.string.select_widgets_background_color)
-                it.setOnClickListener {
+                it.onClick {
                     showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
                 }
             },

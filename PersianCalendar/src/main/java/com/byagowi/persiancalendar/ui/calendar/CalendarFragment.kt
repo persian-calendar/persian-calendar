@@ -17,6 +17,7 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -38,12 +39,14 @@ import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.DrawerHost
+import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showShiftWorkDialog
@@ -268,7 +271,7 @@ class CalendarFragment : Fragment() {
 
         mainBinding?.let {
             (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, it.appBar.toolbar)
-            setupToolbarMenu(it)
+            setupMenu(it.appBar.toolbar.menu, it.calendarPager)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 it.appBar.appbarLayout.outlineProvider = null
         }
@@ -517,9 +520,8 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun setupToolbarMenu(binding: FragmentCalendarBinding) {
+    private fun setupMenu(menu: Menu, calendarPager: CalendarPager) {
         val context = context ?: return
-        val menu = binding.appBar.toolbar.menu
         this.todayButton = menu.add(R.string.return_to_today).also {
             it.icon = ContextCompat.getDrawable(context, R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
@@ -547,7 +549,7 @@ class CalendarFragment : Fragment() {
         }
         menu.add(R.string.month_overview).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showMonthOverviewDialog(binding.calendarPager.selectedMonth) }
+            it.onClick { showMonthOverviewDialog(calendarPager.selectedMonth) }
         }
 
         searchView.setOnCloseListener {
@@ -562,11 +564,11 @@ class CalendarFragment : Fragment() {
 
             val searchAutoComplete = searchView.findViewById<SearchAutoComplete?>(
                 androidx.appcompat.R.id.search_src_text
-            ) ?: return@setOnSearchClickListener
-            searchAutoComplete.setHint(R.string.search_in_events)
-            val events = allEnabledEvents + getAllEnabledAppointments(searchAutoComplete.context)
-            searchAutoComplete.setAdapter(SearchEventsAdapter(searchAutoComplete.context, events))
-            searchAutoComplete.setOnItemClickListener { parent, _, position, _ ->
+            ).debugAssertNotNull
+            searchAutoComplete?.setHint(R.string.search_in_events)
+            val events = allEnabledEvents + getAllEnabledAppointments(context)
+            searchAutoComplete?.setAdapter(SearchEventsAdapter(context, events))
+            searchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
                 val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                 val type = date.calendarType
                 val today = Jdn.today.toCalendar(type)

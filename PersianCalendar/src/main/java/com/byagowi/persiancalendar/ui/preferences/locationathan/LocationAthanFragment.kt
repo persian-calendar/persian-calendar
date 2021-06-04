@@ -51,17 +51,17 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 Preference(context).also {
                     it.setTitle(R.string.gps_location)
                     it.setSummary(R.string.gps_location_help)
-                    it.setOnClickListener { showGPSLocationDialog() }
+                    it.onClick { showGPSLocationDialog() }
                 },
                 Preference(context).also {
                     it.setTitle(R.string.location)
                     it.setSummary(R.string.location_help)
-                    it.setOnClickListener { showLocationPreferenceDialog() }
+                    it.onClick { showLocationPreferenceDialog() }
                 },
                 Preference(context).also {
                     it.key = coordinatesPref
                     it.setTitle(R.string.coordination)
-                    it.setOnClickListener { showCoordinatesDialog() }
+                    it.onClick { showCoordinatesDialog() }
                 }
             ),
             R.string.athan to listOf(
@@ -78,12 +78,12 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 Preference(context).also {
                     it.setTitle(R.string.athan_gap)
                     it.setSummary(R.string.athan_gap_summary)
-                    it.setOnClickListener { showAthanGapDialog() }
+                    it.onClick { showAthanGapDialog() }
                 },
                 Preference(context).also {
                     it.setTitle(R.string.athan_alarm)
                     it.setSummary(R.string.athan_alarm_summary)
-                    it.setOnClickListener { showPrayerSelectDialog() }
+                    it.onClick { showPrayerSelectDialog() }
                 },
                 SwitchPreferenceCompat(context).also {
                     it.key = PREF_NOTIFICATION_ATHAN
@@ -96,13 +96,13 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
                     it.setTitle(R.string.athan_alarm)
                     it.setSummary(R.string.athan_alarm_summary)
-                    it.setOnClickListener { showPrayerSelectDialog() }
+                    it.onClick { showPrayerSelectDialog() }
                 },
                 Preference(context).also {
                     handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
                     it.setTitle(R.string.custom_athan)
                     it.key = ringtonePref
-                    it.setOnClickListener {
+                    it.onClick {
                         runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
                             .onFailure(logException).getOrNull()
                     }
@@ -111,7 +111,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
                     it.setTitle(R.string.default_athan)
                     it.setTitle(R.string.default_athan_summary)
-                    it.setOnClickListener {
+                    it.onClick {
                         context.appPrefs.edit {
                             remove(PREF_ATHAN_URI)
                             remove(PREF_ATHAN_NAME)
@@ -135,7 +135,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     handler.post { it.dependency = PREF_ASCENDING_ATHAN_VOLUME }
                     it.setTitle(R.string.athan_volume)
                     it.setSummary(R.string.athan_volume_summary)
-                    it.setOnClickListener { showAthanVolumeDialog() }
+                    it.onClick { showAthanVolumeDialog() }
                 }
             )
         ).forEach { (title, preferences) ->

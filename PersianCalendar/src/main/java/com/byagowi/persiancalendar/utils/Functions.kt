@@ -520,7 +520,7 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
     }.toIntArray()
 }
 
-inline fun Preference.setOnClickListener(crossinline action: () -> Unit) =
+inline fun Preference.onClick(crossinline action: () -> Unit) =
     this.setOnPreferenceClickListener { action().let { true } } // it captures the click event
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
