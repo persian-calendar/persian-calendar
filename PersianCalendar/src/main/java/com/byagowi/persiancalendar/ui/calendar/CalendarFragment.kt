@@ -523,36 +523,7 @@ class CalendarFragment : Fragment() {
     private fun setupMenu(toolbar: Toolbar, calendarPager: CalendarPager) {
         val context = toolbar.context
 
-        this.todayButton = toolbar.menu.add(R.string.return_to_today).also {
-            it.icon = ContextCompat.getDrawable(context, R.drawable.ic_restore_modified)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.isVisible = false
-            it.onClick { bringDate(Jdn.today, highlight = false) }
-        }
         val searchView = SearchView(context)
-        this.searchView = searchView
-
-        toolbar.menu.add(R.string.search_in_events).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.actionView = searchView
-        }
-        toolbar.menu.add(R.string.goto_date).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) } }
-        }
-        toolbar.menu.add(R.string.add_event).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { addEventOnCalendar(selectedJdn) }
-        }
-        toolbar.menu.add(R.string.shift_work_settings).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showShiftWorkDialog(selectedJdn) }
-        }
-        toolbar.menu.add(R.string.month_overview).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showMonthOverviewDialog(calendarPager.selectedMonth) }
-        }
-
         searchView.setOnCloseListener {
             onBackPressedCloseSearchCallback.isEnabled = false
             false // don't prevent the event cascade
@@ -582,6 +553,35 @@ class CalendarFragment : Fragment() {
                 )
                 searchView.onActionViewCollapsed()
             }
+        }
+        this.searchView = searchView
+
+        toolbar.menu.add(R.string.return_to_today).also {
+            it.icon = ContextCompat.getDrawable(context, R.drawable.ic_restore_modified)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            it.isVisible = false
+            it.onClick { bringDate(Jdn.today, highlight = false) }
+            todayButton = it
+        }
+        toolbar.menu.add(R.string.search_in_events).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            it.actionView = searchView
+        }
+        toolbar.menu.add(R.string.goto_date).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) } }
+        }
+        toolbar.menu.add(R.string.add_event).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { addEventOnCalendar(selectedJdn) }
+        }
+        toolbar.menu.add(R.string.shift_work_settings).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { showShiftWorkDialog(selectedJdn) }
+        }
+        toolbar.menu.add(R.string.month_overview).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick { showMonthOverviewDialog(calendarPager.selectedMonth) }
         }
     }
 }
