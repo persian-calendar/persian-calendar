@@ -34,7 +34,6 @@ import android.widget.ProgressBar
 import androidx.annotation.ColorInt
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
@@ -83,7 +82,7 @@ class DeviceInformationFragment : Fragment() {
             it.adapter = adapter
         }
         binding.toolbar.menu.add("Print").also {
-            it.icon = ContextCompat.getDrawable(binding.toolbar.context, R.drawable.ic_print)
+            it.icon = binding.toolbar.context.getVectorDrawable(R.drawable.ic_print)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick { context?.also(adapter::print) }
         }

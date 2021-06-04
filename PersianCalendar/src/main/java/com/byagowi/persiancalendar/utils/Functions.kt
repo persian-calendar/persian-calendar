@@ -30,6 +30,7 @@ import androidx.core.net.toUri
 import androidx.navigation.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
@@ -532,6 +533,9 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
         }
     }.toIntArray()
 }
+
+fun Context.getVectorDrawable(drawableRes: Int) =
+    VectorDrawableCompat.create(this.resources, drawableRes, this.theme)
 
 inline fun Preference.onClick(crossinline action: () -> Unit) =
     this.setOnPreferenceClickListener { action().let { true } } // it captures the click event

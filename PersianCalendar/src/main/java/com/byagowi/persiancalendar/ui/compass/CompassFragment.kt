@@ -11,7 +11,6 @@ import android.view.*
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
-import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -20,6 +19,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
+import com.byagowi.persiancalendar.utils.getVectorDrawable
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
@@ -102,7 +102,7 @@ class CompassFragment : Fragment() {
         }
 
         binding.bottomAppbar.menu.add(R.string.help).also {
-            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_info_in_menu)
+            it.icon = binding.bottomAppbar.context.getVectorDrawable(R.drawable.ic_info_in_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 showLongSnackbar(
@@ -112,7 +112,7 @@ class CompassFragment : Fragment() {
             }
         }
         binding.bottomAppbar.menu.add(R.string.map).also {
-            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_map)
+            it.icon = binding.bottomAppbar.context.getVectorDrawable(R.drawable.ic_map)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 runCatching {
@@ -123,7 +123,7 @@ class CompassFragment : Fragment() {
             }
         }
         binding.bottomAppbar.menu.add(R.string.level).also {
-            it.icon = ContextCompat.getDrawable(inflater.context, R.drawable.ic_level)
+            it.icon = binding.bottomAppbar.context.getVectorDrawable(R.drawable.ic_level)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
