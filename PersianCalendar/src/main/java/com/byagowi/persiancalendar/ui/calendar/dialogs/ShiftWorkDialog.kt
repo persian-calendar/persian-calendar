@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.shiftWorkRecurs
 import com.byagowi.persiancalendar.utils.shiftWorkStartingJdn
@@ -86,7 +87,7 @@ fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
             }
 
             updateStoredPreference(this.context ?: return@setPositiveButton)
-            findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
+            findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
         }
         .setCancelable(true)
         .setNegativeButton(R.string.cancel, null)

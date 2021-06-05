@@ -27,6 +27,8 @@ import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -533,6 +535,10 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
         }
     }.toIntArray()
 }
+
+fun NavController.navigateSafe(directions: NavDirections) = runCatching {
+    navigate(directions)
+}.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 
 fun Context.getVectorDrawable(@DrawableRes drawableRes: Int) =
     VectorDrawableCompat.create(this.resources, drawableRes, this.theme)

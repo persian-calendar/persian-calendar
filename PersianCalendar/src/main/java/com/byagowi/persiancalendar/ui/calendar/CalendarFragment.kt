@@ -79,6 +79,7 @@ import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.startAthan
@@ -167,13 +168,15 @@ class CalendarFragment : Fragment() {
                     inflater, container, false
                 ).also { owghatBindingPlaceholder ->
                     owghatBindingPlaceholder.activate.setOnClickListener {
-                        findNavController().navigate(
+                        findNavController().navigateSafe(
                             CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
                         )
                     }
                     owghatBindingPlaceholder.discard.setOnClickListener {
                         context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
-                        findNavController().navigate(CalendarFragmentDirections.navigateToSelf())
+                        findNavController().navigateSafe(
+                            CalendarFragmentDirections.navigateToSelf()
+                        )
                     }
                 }.root
             } else {
@@ -472,7 +475,7 @@ class CalendarFragment : Fragment() {
             val ss = SpannableString(title)
             val clickableSpan = object : ClickableSpan() {
                 override fun onClick(textView: View) {
-                    findNavController().navigate(
+                    findNavController().navigateSafe(
                         CalendarFragmentDirections.navigateToSettings(
                             INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                         )

@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
 import com.byagowi.persiancalendar.utils.getVectorDrawable
+import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 import net.androgames.level.orientation.OrientationProvider
@@ -54,7 +55,7 @@ class LevelFragment : Fragment() {
             it.onClick {
                 // If compass wasn't in backstack (level is brought from shortcut), navigate to it
                 if (!findNavController().popBackStack(R.id.compass, false))
-                    findNavController().navigate(LevelFragmentDirections.actionLevelToCompass())
+                    findNavController().navigateSafe(LevelFragmentDirections.actionLevelToCompass())
             }
         }
         binding.fab.setOnClickListener {

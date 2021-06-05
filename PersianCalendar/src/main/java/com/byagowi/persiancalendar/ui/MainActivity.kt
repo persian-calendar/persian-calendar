@@ -317,7 +317,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 ) -> {
                     toggleShowDeviceCalendarOnPreference(this, true)
                     if (navController?.currentDestination?.id == R.id.calendar)
-                        navController?.navigate(CalendarFragmentDirections.navigateToSelf())
+                        navController?.navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
                 else -> toggleShowDeviceCalendarOnPreference(this, false)
             }
@@ -340,7 +340,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (creationDateJdn != Jdn.today) {
             creationDateJdn = Jdn.today
             if (navController?.currentDestination?.id == R.id.calendar) {
-                navController?.navigate(CalendarFragmentDirections.navigateToSelf())
+                navController?.navigateSafe(CalendarFragmentDirections.navigateToSelf())
             }
         }
     }

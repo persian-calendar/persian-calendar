@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getVectorDrawable
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.snackbar.Snackbar
@@ -126,7 +127,7 @@ class CompassFragment : Fragment() {
             it.icon = binding.bottomAppbar.context.getVectorDrawable(R.drawable.ic_level)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
-                findNavController().navigate(CompassFragmentDirections.actionCompassToLevel())
+                findNavController().navigateSafe(CompassFragmentDirections.actionCompassToLevel())
             }
         }
 

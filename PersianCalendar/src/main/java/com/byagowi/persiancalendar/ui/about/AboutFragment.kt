@@ -51,7 +51,7 @@ class AboutFragment : Fragment() {
             it.icon = toolbar.context.getVectorDrawable(R.drawable.ic_device_information)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
-                findNavController().navigate(AboutFragmentDirections.actionAboutToDeviceinfo())
+                findNavController().navigateSafe(AboutFragmentDirections.actionAboutToDeviceinfo())
             }
         }
 
