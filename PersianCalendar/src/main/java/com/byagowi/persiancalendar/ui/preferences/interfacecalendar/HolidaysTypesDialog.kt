@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
+import android.os.Build
 import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
@@ -8,6 +9,7 @@ import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.android.material.checkbox.MaterialCheckBox
 
 fun Fragment.showHolidaysTypesDialog() {
     val context = context ?: return
@@ -44,15 +46,22 @@ fun Fragment.showHolidaysTypesDialog() {
             binding.afghanistanHolidays.isChecked || binding.afghanistanOthers.isChecked
     }
     updateGroupsChecks()
-    fun updateGroupsOpacity() {
-        binding.iran.alpha = if (
+    fun updateGroupsMixedIndicator() {
+        fun MaterialCheckBox.setMixedIndicator(value: Boolean) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                this.buttonDrawable?.alpha = if (value) 127 else 255
+            } else {
+                this.alpha = if (value) .5f else 1f
+            }
+        }
+        binding.iran.setMixedIndicator(
             binding.iranHolidays.isChecked xor binding.iranOthers.isChecked
-        ) .5f else 1f
-        binding.afghanistan.alpha = if (
+        )
+        binding.afghanistan.setMixedIndicator(
             binding.afghanistanHolidays.isChecked xor binding.afghanistanOthers.isChecked
-        ) .5f else 1f
+        )
     }
-    updateGroupsOpacity()
+    updateGroupsMixedIndicator()
     binding.iranAncient.isChecked = "iran_ancient" in initial
     binding.international.isChecked = "international" in initial
 
@@ -62,19 +71,24 @@ fun Fragment.showHolidaysTypesDialog() {
                 || isChecked
         binding.iranHolidays.isChecked = dest
         binding.iranOthers.isChecked = dest
-        updateGroupsOpacity()
+        updateGroupsMixedIndicator()
     }
     binding.afghanistan.setOnCheckedChangeListener { _, isChecked ->
         val dest = (binding.afghanistanHolidays.isChecked xor binding.afghanistanOthers.isChecked)
                 || isChecked
         binding.afghanistanHolidays.isChecked = dest
         binding.afghanistanOthers.isChecked = dest
-        updateGroupsOpacity()
+        updateGroupsMixedIndicator()
     }
     listOf(
         binding.iranHolidays, binding.iranOthers,
         binding.afghanistanHolidays, binding.afghanistanOthers
-    ).forEach { it.setOnCheckedChangeListener { _, _ -> updateGroupsChecks(); updateGroupsOpacity() } }
+    ).forEach {
+        it.setOnCheckedChangeListener { _, _ ->
+            updateGroupsChecks()
+            updateGroupsMixedIndicator()
+        }
+    }
 
     // Run the dialog
     AlertDialog.Builder(context)
