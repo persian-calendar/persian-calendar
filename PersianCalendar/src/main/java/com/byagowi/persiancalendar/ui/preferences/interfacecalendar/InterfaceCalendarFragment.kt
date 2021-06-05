@@ -169,10 +169,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         preferenceScreen = screen
 
         // Handle navigation passed destination
-        arguments?.let {
-            when (it[PREF_DESTINATION]) {
-                PREF_HOLIDAY_TYPES -> showHolidaysTypesDialog()
-            }
+        when (arguments?.getString(PREF_DESTINATION)) {
+            PREF_HOLIDAY_TYPES -> showHolidaysTypesDialog()
         }
     }
 }
