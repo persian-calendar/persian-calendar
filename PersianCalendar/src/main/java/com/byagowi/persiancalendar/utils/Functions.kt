@@ -544,10 +544,10 @@ fun Context.getVectorDrawable(@DrawableRes drawableRes: Int) =
     VectorDrawableCompat.create(this.resources, drawableRes, this.theme)
 
 inline fun Preference.onClick(crossinline action: () -> Unit) =
-    this.setOnPreferenceClickListener { action().let { true } } // it captures the click event
+    this.setOnPreferenceClickListener { action(); true /* it captures the click event */ }
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
-    this.setOnMenuItemClickListener { action().let { true } }.let {}
+    this.setOnMenuItemClickListener { action(); true /* it captures the click event */ }.let {}
 
 inline fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,
