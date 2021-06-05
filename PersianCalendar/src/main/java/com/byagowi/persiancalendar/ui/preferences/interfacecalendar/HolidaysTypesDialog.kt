@@ -56,6 +56,7 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.iranAncient.isChecked = "iran_ancient" in initial
     binding.international.isChecked = "international" in initial
 
+    // Install events listeners
     binding.iran.setOnCheckedChangeListener { _, isChecked ->
         val dest = (binding.iranHolidays.isChecked xor binding.iranOthers.isChecked)
                 || isChecked
@@ -70,12 +71,12 @@ fun Fragment.showHolidaysTypesDialog() {
         binding.afghanistanOthers.isChecked = dest
         updateGroupsOpacity()
     }
-
     listOf(
         binding.iranHolidays, binding.iranOthers,
         binding.afghanistanHolidays, binding.afghanistanOthers
     ).forEach { it.setOnCheckedChangeListener { _, _ -> updateGroupsChecks(); updateGroupsOpacity() } }
 
+    // Run the dialog
     AlertDialog.Builder(context)
         .setTitle(R.string.events)
         .setView(binding.root)
