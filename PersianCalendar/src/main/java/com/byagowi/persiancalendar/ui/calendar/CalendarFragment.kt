@@ -472,18 +472,15 @@ class CalendarFragment : Fragment() {
             if (messageToShow.isNotEmpty()) messageToShow.append("\n")
 
             val title = getString(R.string.warn_if_events_not_set)
-            val ss = SpannableString(title)
-            val clickableSpan = object : ClickableSpan() {
-                override fun onClick(textView: View) {
-                    findNavController().navigateSafe(
+            messageToShow.append(SpannableString(title).also {
+                it.setSpan(object : ClickableSpan() {
+                    override fun onClick(textView: View) = findNavController().navigateSafe(
                         CalendarFragmentDirections.navigateToSettings(
                             INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                         )
                     )
-                }
-            }
-            ss.setSpan(clickableSpan, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            messageToShow.append(ss)
+                }, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            })
 
             contentDescription
                 .append("\n")

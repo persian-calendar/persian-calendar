@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.preferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -37,7 +38,7 @@ class PreferencesFragment : Fragment() {
             override fun getItemCount() = tabs.size
             override fun createFragment(position: Int) = tabs[position].second.newInstance().also {
                 if (position == args.tab && args.preferenceKey.isNotEmpty()) {
-                    it.scrollToPreference(args.preferenceKey)
+                    it.arguments = bundleOf(PREF_DESTINATION to args.preferenceKey)
                 }
             }
         }
@@ -47,6 +48,8 @@ class PreferencesFragment : Fragment() {
         binding.viewPager.currentItem = args.tab
     }.root
 }
+
+val PREF_DESTINATION = "DESTINATION"
 
 val INTERFACE_CALENDAR_TAB = 0
 val WIDGET_NOTIFICATION_TAB = 1

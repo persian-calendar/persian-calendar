@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
+import com.byagowi.persiancalendar.ui.preferences.PREF_DESTINATION
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.language
@@ -166,5 +167,12 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
             preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
         }
         preferenceScreen = screen
+
+        // Handle navigation passed destination
+        arguments?.let {
+            when (it[PREF_DESTINATION]) {
+                PREF_HOLIDAY_TYPES -> showHolidaysTypesDialog()
+            }
+        }
     }
 }
