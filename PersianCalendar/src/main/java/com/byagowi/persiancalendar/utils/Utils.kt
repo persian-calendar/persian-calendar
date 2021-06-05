@@ -206,9 +206,9 @@ fun loadEvents(context: Context) {
     val afghanistanHolidays = "afghanistan_holidays" in enabledTypes
     val afghanistanOthers = "afghanistan_others" in enabledTypes
     val iranHolidays = "iran_holidays" in enabledTypes
-    val iranIslamic = "iran_islamic" in enabledTypes
     val iranAncient = "iran_ancient" in enabledTypes
-    val iranOthers = "iran_others" in enabledTypes
+    val iranOthers =
+        "iran_others" in enabledTypes || "iran_islamic" in enabledTypes // the latter is considered legacy now
     val international = "international" in enabledTypes
 
     isIranHolidaysEnabled = iranHolidays
@@ -268,7 +268,6 @@ fun loadEvents(context: Context) {
         if (afghanistanOthers && it.type == EventType.Afghanistan) addOrNot = true
         if (iranHolidays && holiday && it.type == EventType.Iran) addOrNot = true
         if (!iranHolidays && it.type == EventType.Iran) holiday = false
-        if (iranIslamic && it.type == EventType.Iran) addOrNot = true
         if (iranOthers && it.type == EventType.Iran) addOrNot = true
 
         if (addOrNot) {
@@ -287,7 +286,7 @@ fun loadEvents(context: Context) {
         } else null
     }.let { list ->
         list + irregularRecurringEvents.filter { event ->
-            (iranIslamic || iranOthers) && event["calendar"] == "Hijri" && event["type"] == "Iran"
+            iranOthers && event["calendar"] == "Hijri" && event["type"] == "Iran"
         }.flatMap { event ->
             // This adds only this, next and previous years' events, hacky but enough for now
             if (event["rule"] != "last day of week") return@flatMap emptyList()

@@ -90,20 +90,6 @@
         <item>سایر مناسبت‌های افغانستان</item>
     </string-array>
 
-    <string-array name="holidays_values" translatable="false">
-        <item>iran_holidays</item>
-        <item>iran_islamic</item>
-        <item>iran_ancient</item>
-        <item>iran_others</item>
-        <item>international</item>
-        <item>afghanistan_holidays</item>
-        <item>afghanistan_others</item>
-    </string-array>
-
-    <string-array name="default_holidays" translatable="false">
-        <item>iran_holidays</item>
-    </string-array>
-
     <string-array name="calendar_type">
         <item>Persian Calendar</item>
         <item>Islamic Calendar</item>

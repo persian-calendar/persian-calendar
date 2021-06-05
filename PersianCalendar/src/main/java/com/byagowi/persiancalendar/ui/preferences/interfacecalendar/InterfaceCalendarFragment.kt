@@ -77,16 +77,10 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
             ),
             R.string.calendar to listOf(
-                MultiSelectListPreference(context).also {
-                    it.key = PREF_HOLIDAY_TYPES
+                Preference(context).also {
                     it.setTitle(R.string.events)
                     it.setSummary(R.string.events_summary)
-                    it.setDialogTitle(R.string.events)
-                    it.setDefaultValue(resources.getStringArray(R.array.default_holidays).toSet())
-                    it.entries = resources.getStringArray(R.array.holidays_types)
-                    it.entryValues = resources.getStringArray(R.array.holidays_values)
-                    it.setNegativeButtonText(R.string.cancel)
-                    it.setPositiveButtonText(R.string.accept)
+                    it.onClick { showHolidaysTypesDialog() }
                 },
                 SwitchPreferenceCompat(context).also {
                     it.key = PREF_SHOW_DEVICE_CALENDAR_EVENTS
