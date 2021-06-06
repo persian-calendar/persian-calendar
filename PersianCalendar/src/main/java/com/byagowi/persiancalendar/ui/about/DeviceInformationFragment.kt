@@ -49,6 +49,21 @@ import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.tabs.TabLayout
+import kotlinx.html.body
+import kotlinx.html.h1
+import kotlinx.html.head
+import kotlinx.html.html
+import kotlinx.html.meta
+import kotlinx.html.script
+import kotlinx.html.stream.appendHTML
+import kotlinx.html.stream.createHTML
+import kotlinx.html.style
+import kotlinx.html.table
+import kotlinx.html.tbody
+import kotlinx.html.th
+import kotlinx.html.thead
+import kotlinx.html.tr
+import kotlinx.html.unsafe
 import java.util.*
 import kotlin.math.sqrt
 
@@ -480,22 +495,33 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
 
     override fun getItemCount() = deviceInformationItems.size
 
-    fun print(context: Context) {
-        val tableBody = deviceInformationItems.joinToString("") {
-            val formattedVersion = if (it.version.isEmpty()) "" else " (${it.version})"
-            "<tr><td>${it.title}${formattedVersion}</td><td>${it.content}</td></tr>"
+    fun print(context: Context) = context.showHtml(createHTML().html {
+        head {
+            meta(charset = "utf8")
+            style { unsafe { +"td { padding: .5em; border-top: 1px solid lightgray }" } }
         }
-        context.showHtml(
-            """<meta charset=utf8>
-<style>td { padding: .5em; border-top: 1px solid lightgray }</style>
-<h1>Device Information</h1>
-<table>
-    <thead><tr><th>Item</th><th>Value</th></tr></thead>
-    <tbody>$tableBody</tbody>
-</table>
-<script>print()</script>"""
-        )
-    }
+        body {
+            h1 { +"Device Information" }
+            table {
+                thead {
+                    tr {
+                        th { +"Item" }
+                        th { +"Value" }
+                    }
+                }
+                tbody {
+                    deviceInformationItems.forEach {
+                        val title = it.title + if (it.version.isEmpty()) "" else " (${it.version})"
+                        tr {
+                            th { +title }
+                            th { +it.content.toString() }
+                        }
+                    }
+                }
+            }
+            script { unsafe { +"print()" } }
+        }
+    })
 
     inner class ViewHolder(private val binding: DeviceInformationRowBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
