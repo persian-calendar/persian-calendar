@@ -35,12 +35,9 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.afghanistan.movementMethod = LinkMovementMethod.getInstance()
 
     // Update view from stored settings
-    val initial =
-        (context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")).map {
-            if (it == "iran_islamic") "iran_others" else it // update the legacy key
-        }.toSet()
+    val initial = context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
     binding.iranHolidays.isChecked = "iran_holidays" in initial
-    binding.iranOthers.isChecked = "iran_others" in initial
+    binding.iranOthers.isChecked = "iran_others" in initial || /*legacy*/ "iran_islamic" in initial
     binding.afghanistanHolidays.isChecked = "afghanistan_holidays" in initial
     binding.afghanistanOthers.isChecked = "afghanistan_others" in initial
     binding.iranAncient.isChecked = "iran_ancient" in initial

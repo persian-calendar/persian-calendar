@@ -207,8 +207,7 @@ fun loadEvents(context: Context) {
     val afghanistanOthers = "afghanistan_others" in enabledTypes
     val iranHolidays = "iran_holidays" in enabledTypes
     val iranAncient = "iran_ancient" in enabledTypes
-    val iranOthers =
-        "iran_others" in enabledTypes || "iran_islamic" in enabledTypes // the latter is considered legacy now
+    val iranOthers = "iran_others" in enabledTypes || /*legacy*/ "iran_islamic" in enabledTypes
     val international = "international" in enabledTypes
 
     isIranHolidaysEnabled = iranHolidays
