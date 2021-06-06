@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.checkbox.MaterialCheckBox
+import kotlin.random.Random
 
 fun Fragment.showHolidaysTypesDialog() {
     val context = context ?: return
@@ -66,7 +67,9 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.international.isChecked = "international" in initial
 
     // Install events listeners
+    val disabledEvents = Random.nextInt()
     binding.iran.setOnCheckedChangeListener { _, isChecked ->
+        if (binding.iran.getTag(disabledEvents) == true) return@setOnCheckedChangeListener
         val dest = (binding.iranHolidays.isChecked xor binding.iranOthers.isChecked)
                 || isChecked
         binding.iranHolidays.isChecked = dest
@@ -74,6 +77,7 @@ fun Fragment.showHolidaysTypesDialog() {
         updateGroupsMixedIndicator()
     }
     binding.afghanistan.setOnCheckedChangeListener { _, isChecked ->
+        if (binding.afghanistan.getTag(disabledEvents) == true) return@setOnCheckedChangeListener
         val dest = (binding.afghanistanHolidays.isChecked xor binding.afghanistanOthers.isChecked)
                 || isChecked
         binding.afghanistanHolidays.isChecked = dest
@@ -81,11 +85,14 @@ fun Fragment.showHolidaysTypesDialog() {
         updateGroupsMixedIndicator()
     }
     listOf(
-        binding.iranHolidays, binding.iranOthers,
-        binding.afghanistanHolidays, binding.afghanistanOthers
-    ).forEach {
-        it.setOnCheckedChangeListener { _, _ ->
+        binding.iranHolidays to binding.iran, binding.iranOthers to binding.iran,
+        binding.afghanistanHolidays to binding.afghanistan,
+        binding.afghanistanOthers to binding.afghanistan
+    ).forEach { (child, parent) ->
+        child.setOnCheckedChangeListener { _, _ ->
+            parent.setTag(disabledEvents, true)
             updateGroupsChecks()
+            parent.setTag(disabledEvents, false)
             updateGroupsMixedIndicator()
         }
     }
