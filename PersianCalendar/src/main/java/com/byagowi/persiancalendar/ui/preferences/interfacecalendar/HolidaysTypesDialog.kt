@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.utils.appPrefs
-import kotlin.random.Random
 
 fun Fragment.showHolidaysTypesDialog() {
     val context = context ?: return
@@ -57,22 +56,14 @@ fun Fragment.showHolidaysTypesDialog() {
     updateParents()
 
     // Install events listeners
-    val disabledEventsTag = Random.nextInt()
     hierarchy.forEach { (parent, children) ->
         parent.setOnCheckedChangeListener { _, isChecked ->
-            if (parent.getTag(disabledEventsTag) == true) return@setOnCheckedChangeListener
-            children.map { it.isChecked }
+            if (!parent.isPressed) return@setOnCheckedChangeListener /* isn't a click by user, skip */
             val dest = children.fold(false) { acc, child -> acc xor child.isChecked } || isChecked
             children.forEach { it.isChecked = dest }
             updateParents()
         }
-        children.forEach {
-            it.setOnCheckedChangeListener { _, _ ->
-                parent.setTag(disabledEventsTag, true)
-                updateParents()
-                parent.setTag(disabledEventsTag, false)
-            }
-        }
+        children.forEach { it.setOnCheckedChangeListener { _, _ -> updateParents() } }
     }
 
     // Run the dialog
