@@ -1,71 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:orientation="vertical">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/iran"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="iran" />
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/iran_holidays"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        tools:text="iran_holidays" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/iran"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="iran" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/iran_others"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        tools:text="iran_others" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/iran_holidays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            tools:text="iran_holidays" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/afghanistan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:text="afghanistan" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/iran_others"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            tools:text="iran_others" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/afghanistan_holidays"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        tools:text="afghanistan_holidays" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/afghanistan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="afghanistan" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/afghanistan_others"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        tools:text="afghanistan_others" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/afghanistan_holidays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            tools:text="afghanistan_holidays" />
 
-    <TextView
-        android:id="@+id/other"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        tools:text="other" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/afghanistan_others"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            tools:text="afghanistan_others" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/iran_ancient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        tools:text="iran_ancient" />
+        <TextView
+            android:id="@+id/other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            tools:text="other" />
 
-    <com.google.android.material.checkbox.MaterialCheckBox
-        android:id="@+id/international"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        tools:text="iran_others" />
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/iran_ancient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            tools:text="iran_ancient" />
 
-</LinearLayout>
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/international"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            tools:text="iran_others" />
+
+    </LinearLayout>
+
+</ScrollView>
