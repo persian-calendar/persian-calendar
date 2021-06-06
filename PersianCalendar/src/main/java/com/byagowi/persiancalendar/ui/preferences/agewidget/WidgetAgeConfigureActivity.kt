@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.preferences.agewidget
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
-import android.text.SpannableStringBuilder
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
@@ -81,7 +80,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         }
 
         val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + appWidgetId, "")
-        binding.editWidgetTitle.text = SpannableStringBuilder(title)
+        binding.editWidgetTitle.setText(title)
         binding.addWidgetButton.setOnClickListener {
             confirm(binding.editWidgetTitle.text.toString())
         }

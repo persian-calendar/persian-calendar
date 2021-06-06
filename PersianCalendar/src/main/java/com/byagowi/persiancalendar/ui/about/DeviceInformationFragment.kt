@@ -16,9 +16,6 @@ import android.opengl.GLES20
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
@@ -38,6 +35,8 @@ import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.net.toUri
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
@@ -449,26 +448,23 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
             ),
             Item(
                 "OpenGL Extensions",
-                SpannableStringBuilder().also { spannableStringBuilder ->
+                buildSpannedString {
                     val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS).trim().split(" ")
                     val regex = Regex("GL_([a-zA-Z]+)_(.+)")
                     extensions.forEachIndexed { i, it ->
-                        if (i != 0) spannableStringBuilder.append("\n")
+                        if (i != 0) append("\n")
 
-                        if (!regex.matches(it)) spannableStringBuilder.append(it)
-                        else spannableStringBuilder.append(SpannableString(it).also { spannableString ->
-                            spannableString.setSpan(object : ClickableSpan() {
-                                override fun onClick(textView: View) = runCatching {
-                                    CustomTabsIntent.Builder().build().launchUrl(
-                                        activity,
-                                        it.replace(
-                                            regex,
-                                            "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
-                                        ).toUri()
-                                    )
-                                }.onFailure(logException).let {}
-                            }, 0, it.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                        })
+                        if (!regex.matches(it)) append(it)
+                        else inSpans(object : ClickableSpan() {
+                            override fun onClick(textView: View) = runCatching {
+                                CustomTabsIntent.Builder().build().launchUrl(
+                                    activity, it.replace(
+                                        regex,
+                                        "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
+                                    ).toUri()
+                                )
+                            }.onFailure(logException).let {}
+                        }) { append(it) }
                     }
                 },
                 ""

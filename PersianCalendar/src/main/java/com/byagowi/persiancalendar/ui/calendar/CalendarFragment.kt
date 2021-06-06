@@ -10,9 +10,7 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
-import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
@@ -27,6 +25,8 @@ import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -340,11 +340,10 @@ class CalendarFragment : Fragment() {
         if (isShowDeviceCalendarEvents) mainBinding?.calendarPager?.refresh(isEventsModified = true)
     }
 
-    private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = dayEvents
-        .filterIsInstance<CalendarEvent.DeviceCalendarEvent>()
-        .map { event ->
-            val spannableString = SpannableString(formatDeviceCalendarEventTitle(event))
-            spannableString.setSpan(object : ClickableSpan() {
+    private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = buildSpannedString {
+        dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>().forEachIndexed { i, event ->
+            if (i != 0) append("\n")
+            inSpans(object : ClickableSpan() {
                 override fun onClick(textView: View) = runCatching {
                     viewEvent.launch(event.id.toLong())
                 }.onFailure(logException).onFailure {
@@ -362,14 +361,9 @@ class CalendarFragment : Fragment() {
                         if (event.color.isNotEmpty()) ds.color = event.color.toLong().toInt()
                     }.onFailure(logException)
                 }
-            }, 0, spannableString.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            spannableString
+            }) { append(formatDeviceCalendarEventTitle(event)) }
         }
-        .foldIndexed(SpannableStringBuilder()) { i, result, x ->
-            if (i != 0) result.append("\n")
-            result.append(x)
-            result
-        }
+    }
 
     private var selectedJdn = Jdn.today
 
@@ -472,14 +466,14 @@ class CalendarFragment : Fragment() {
             if (messageToShow.isNotEmpty()) messageToShow.append("\n")
 
             val title = getString(R.string.warn_if_events_not_set)
-            messageToShow.append(SpannableString(title).also {
-                it.setSpan(object : ClickableSpan() {
+            messageToShow.append(buildSpannedString {
+                inSpans(object : ClickableSpan() {
                     override fun onClick(textView: View) = findNavController().navigateSafe(
                         CalendarFragmentDirections.navigateToSettings(
                             INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                         )
                     )
-                }, 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                }) { append(title) }
             })
 
             contentDescription
