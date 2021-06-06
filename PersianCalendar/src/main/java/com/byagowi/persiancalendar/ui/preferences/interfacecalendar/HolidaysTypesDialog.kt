@@ -37,15 +37,16 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.iranAncient.isChecked = "iran_ancient" in initial
     binding.international.isChecked = "international" in initial
 
-    // Parents update logic
+    // Check boxes hierarchy
     val hierarchy = listOf(
         binding.iran to listOf(binding.iranHolidays, binding.iranOthers),
         binding.afghanistan to listOf(binding.afghanistanHolidays, binding.afghanistanOthers)
     )
-    fun updateParents() = hierarchy.forEach { (parent, children) ->
-        parent.isChecked = children.fold(false) { acc, child -> acc || child.isChecked }
 
-        val isMixed = children.fold(false) { acc, child -> acc xor child.isChecked }
+    // Parents update logic
+    fun updateParents() = hierarchy.forEach { (parent, children) ->
+        parent.isChecked = children.any { it.isChecked }
+        val isMixed = parent.isChecked && !children.all { it.isChecked }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             parent.buttonDrawable?.alpha = if (isMixed) 127 else 255
         } else {
@@ -56,8 +57,9 @@ fun Fragment.showHolidaysTypesDialog() {
     hierarchy.forEach { (parent, children) ->
         // Add check click listeners
         parent.setOnCheckedChangeListener { _, isChecked ->
-            if (!parent.isPressed) return@setOnCheckedChangeListener /* isn't a click by user, skip */
-            val dest = children.fold(false) { acc, child -> acc xor child.isChecked } || isChecked
+            if (!parent.isPressed) return@setOnCheckedChangeListener // Skip non user initiated changes
+            val dest = isChecked || // if is a change from not checked to checked, check them all
+                    (parent.isChecked && !children.all { it.isChecked }) // turn mixed state also to all checked
             children.forEach { it.isChecked = dest }
             updateParents()
         }
