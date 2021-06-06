@@ -46,12 +46,10 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.iranAncient.isChecked = "iran_ancient" in initial
     binding.international.isChecked = "international" in initial
 
-    // Hierarchy updates logics
-    fun updateGroupsChecks() = hierarchy.forEach { (parent, children) ->
+    // Parent updates logics
+    fun updateGroups() = hierarchy.forEach { (parent, children) ->
         parent.isChecked = children.fold(false) { acc, child -> acc || child.isChecked }
-    }
-    updateGroupsChecks()
-    fun updateGroupsMixedIndicator() = hierarchy.forEach { (parent, children) ->
+
         val isMixed = children.fold(false) { acc, child -> acc xor child.isChecked }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             parent.buttonDrawable?.alpha = if (isMixed) 127 else 255
@@ -59,7 +57,7 @@ fun Fragment.showHolidaysTypesDialog() {
             parent.alpha = if (isMixed) .5f else 1f
         }
     }
-    updateGroupsMixedIndicator()
+    updateGroups()
 
     // Install events listeners
     val disabledEventsTag = Random.nextInt()
@@ -69,14 +67,13 @@ fun Fragment.showHolidaysTypesDialog() {
             children.map { it.isChecked }
             val dest = children.fold(false) { acc, child -> acc xor child.isChecked } || isChecked
             children.forEach { it.isChecked = dest }
-            updateGroupsMixedIndicator()
+            updateGroups()
         }
         children.forEach {
             it.setOnCheckedChangeListener { _, _ ->
                 parent.setTag(disabledEventsTag, true)
-                updateGroupsChecks()
+                updateGroups()
                 parent.setTag(disabledEventsTag, false)
-                updateGroupsMixedIndicator()
             }
         }
     }
