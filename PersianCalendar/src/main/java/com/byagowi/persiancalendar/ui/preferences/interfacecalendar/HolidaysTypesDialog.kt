@@ -15,11 +15,6 @@ fun Fragment.showHolidaysTypesDialog() {
 
     val binding = HolidaysTypesDialogBinding.inflate(layoutInflater)
 
-    val hierarchy = listOf(
-        binding.iran to listOf(binding.iranHolidays, binding.iranOthers),
-        binding.afghanistan to listOf(binding.afghanistanHolidays, binding.afghanistanOthers)
-    )
-
     // Update labels
     listOf(
         binding.iranHolidays, null, binding.iranAncient, binding.iranOthers,
@@ -43,6 +38,10 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.international.isChecked = "international" in initial
 
     // Parents update logic
+    val hierarchy = listOf(
+        binding.iran to listOf(binding.iranHolidays, binding.iranOthers),
+        binding.afghanistan to listOf(binding.afghanistanHolidays, binding.afghanistanOthers)
+    )
     fun updateParents() = hierarchy.forEach { (parent, children) ->
         parent.isChecked = children.fold(false) { acc, child -> acc || child.isChecked }
 
@@ -54,9 +53,8 @@ fun Fragment.showHolidaysTypesDialog() {
         }
     }
     updateParents()
-
-    // Install events listeners
     hierarchy.forEach { (parent, children) ->
+        // Add check click listeners
         parent.setOnCheckedChangeListener { _, isChecked ->
             if (!parent.isPressed) return@setOnCheckedChangeListener /* isn't a click by user, skip */
             val dest = children.fold(false) { acc, child -> acc xor child.isChecked } || isChecked
