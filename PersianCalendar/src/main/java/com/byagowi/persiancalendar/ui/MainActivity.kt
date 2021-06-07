@@ -32,6 +32,7 @@ import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
+import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -385,7 +386,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     ).apply {
         view.layoutDirection = View.LAYOUT_DIRECTION_LTR
         view.setOnClickListener { dismiss() }
-        setAction("Settings") { appPrefs.edit { putString(PREF_APP_LANGUAGE, LANG_EN_US) } }
+        setAction("Settings") {
+            navController?.navigateSafe(
+                CalendarFragmentDirections.navigateToSettings(
+                    INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
+                )
+            )
+        }
         setActionTextColor(ContextCompat.getColor(context, R.color.dark_accent))
     }.show()
 

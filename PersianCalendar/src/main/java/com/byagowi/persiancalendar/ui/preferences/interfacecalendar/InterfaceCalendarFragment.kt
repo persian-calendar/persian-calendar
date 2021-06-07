@@ -40,14 +40,10 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         val screen = preferenceManager.createPreferenceScreen(context)
         listOf(
             R.string.pref_interface to listOf(
-                ListPreference(context).also {
+                Preference(context).also {
                     it.key = PREF_APP_LANGUAGE
                     it.setTitle(R.string.language)
-                    it.setDialogTitle(R.string.language)
-                    it.setEntries(R.array.languageNames)
-                    it.setEntryValues(R.array.languageKeys)
-                    it.setNegativeButtonText(R.string.cancel)
-                    it.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                    it.onClick { showLanguagePreferenceDialog() }
                 },
                 ListPreference(context).also {
                     it.key = PREF_THEME
@@ -171,6 +167,10 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         // Handle navigation passed destination
         when (arguments?.getString(PREF_DESTINATION)) {
             PREF_HOLIDAY_TYPES -> showHolidaysTypesDialog()
+            PREF_APP_LANGUAGE -> {
+                // Bringing up the dialog is too much, only turn preference title to English
+                screen.findPreference<Preference>(PREF_APP_LANGUAGE)?.title = "Language"
+            }
         }
     }
 }
