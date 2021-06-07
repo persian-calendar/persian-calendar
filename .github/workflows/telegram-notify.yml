@@ -11,9 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send message to Telegram
-        uses: Lukasss93/telegram-action@792464d69a5487168719274bc9685a8c1af57dfe
+        uses: Lukasss93/telegram-action@a415be173bf3d3c3d6c6252e4487ce8db1b39fc3
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT: ${{ secrets.TELEGRAM_TO }}
         with:
-          footer: '📅 @Persian_Calendar'
+          status: '📅 @Persian_Calendar'
