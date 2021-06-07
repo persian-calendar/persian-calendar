@@ -36,34 +36,6 @@
         <item>Tehran</item>
     </string-array>
 
-    <string-array name="languageNames" translatable="false">
-        <item>فارسی</item>
-        <item>دری</item>
-        <item>پښتو</item>
-        <item>کوردی</item>
-        <item>العربية</item>
-        <item>گيلکي</item>
-        <item>تۆرکجه‌</item>
-        <item>اردو</item>
-        <item>English (Iran)</item>
-        <item>English</item>
-        <item>日本語</item>
-    </string-array>
-
-    <string-array name="languageKeys" translatable="false">
-        <item>fa</item>
-        <item>fa-AF</item>
-        <item>ps</item>
-        <item>ckb</item>
-        <item>ar</item>
-        <item>glk</item>
-        <item>azb</item>
-        <item>ur</item>
-        <item>en</item>
-        <item>en-US</item>
-        <item>ja</item>
-    </string-array>
-
     <string-array name="prayerTimeNames">
         <item>Morning</item>
         <item>Dhohr</item>
