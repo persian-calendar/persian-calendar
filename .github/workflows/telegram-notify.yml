@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Send message to Telegram
-        uses: Lukasss93/telegram-action@v1.1
+        uses: Lukasss93/telegram-action@638625ff965e347e2518cce79db754901ecc639d
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT: ${{ secrets.TELEGRAM_TO }}
