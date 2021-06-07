@@ -36,7 +36,6 @@ import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
@@ -137,15 +136,12 @@ class CalendarFragment : Fragment() {
         this.coordinate = coordinate
 
         val appPrefs = inflater.context.appPrefs
-        val shouldDisableOwghat = coordinate == null &&
-                (appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
-                        // Just to check the isn't new to the app, the value will be not null when
-                        // preferences is visited once.
-                        appPrefs.getString(PREF_THEME, null) != null ||
-                        // Really extra check as a user that has non default PREF_THEME sure went to
-                        // preferences once but when we decide to remove the above one we should
-                        // have this one at least as the placeholder isn't translated yet.
-                        language != LANG_FA)
+        val shouldDisableOwghatTab = coordinate == null && // if coordinates is set, should be shown
+                (language != LANG_FA || // The placeholder isn't translated to other languages
+                        // The user is already dismissed the third tab
+                        appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
+                        // Try to not show the placeholder to established users
+                        appPrefs.contains(PREF_HOLIDAY_TYPES))
 
         val tabs = listOf(
             // First tab
@@ -161,7 +157,7 @@ class CalendarFragment : Fragment() {
                     it.setAnimateParentHierarchy(false)
                 }
             }.root
-        ) + if (shouldDisableOwghat) emptyList() else listOf(
+        ) + if (shouldDisableOwghatTab) emptyList() else listOf(
             // The optional third tab
             R.string.owghat to if (coordinate == null) {
                 OwghatTabPlaceholderBinding.inflate(
