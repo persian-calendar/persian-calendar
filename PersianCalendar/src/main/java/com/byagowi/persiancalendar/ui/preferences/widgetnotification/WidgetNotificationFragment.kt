@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
@@ -29,71 +30,85 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
         val isWidgetsConfiguration = arguments?.getBoolean(IS_WIDGETS_CONFIGURATION, false) == true
         val handler = Handler(Looper.getMainLooper())
         listOf(
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_NOTIFY_DATE
-                it.setDefaultValue(true)
-                it.setTitle(R.string.notify_date)
-                it.setSummary(R.string.enable_notify)
-                if (isWidgetsConfiguration) it.isVisible = false
-            },
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_NOTIFY_DATE_LOCK_SCREEN
-                handler.post { it.dependency = PREF_NOTIFY_DATE } // deferred dependency wire up
-                it.setDefaultValue(true)
-                it.setTitle(R.string.notify_date_lock_screen)
-                it.setSummary(R.string.notify_date_lock_screen_summary)
-                if (isWidgetsConfiguration) it.isVisible = false
-            },
-            Preference(context).also {
-                it.setTitle(R.string.widget_text_color)
-                it.setSummary(R.string.select_widgets_text_color)
-                it.onClick {
-                    showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR)
+            R.string.pref_notification to listOf(
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_NOTIFY_DATE
+                    it.setDefaultValue(true)
+                    it.setTitle(R.string.notify_date)
+                    it.setSummary(R.string.enable_notify)
+                },
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_NOTIFY_DATE_LOCK_SCREEN
+                    handler.post { it.dependency = PREF_NOTIFY_DATE } // deferred dependency wire up
+                    it.setDefaultValue(true)
+                    it.setTitle(R.string.notify_date_lock_screen)
+                    it.setSummary(R.string.notify_date_lock_screen_summary)
                 }
-            },
-            Preference(context).also {
-                it.setTitle(R.string.widget_background_color)
-                it.setSummary(R.string.select_widgets_background_color)
-                it.onClick {
-                    showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
+            ),
+            R.string.pref_widget to listOf(
+                Preference(context).also {
+                    it.setTitle(R.string.widget_text_color)
+                    it.setSummary(R.string.select_widgets_text_color)
+                    it.onClick {
+                        showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR)
+                    }
+                },
+                Preference(context).also {
+                    it.setTitle(R.string.widget_background_color)
+                    it.setSummary(R.string.select_widgets_background_color)
+                    it.onClick {
+                        showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
+                    }
+                },
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_NUMERICAL_DATE_PREFERRED
+                    it.setDefaultValue(false)
+                    it.setTitle(R.string.prefer_linear_date)
+                    it.setSummary(R.string.prefer_linear_date_summary)
+                },
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_WIDGET_CLOCK
+                    it.setDefaultValue(true)
+                    it.setTitle(R.string.clock_on_widget)
+                    it.setSummary(R.string.showing_clock_on_widget)
+                },
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_CENTER_ALIGN_WIDGETS
+                    it.setDefaultValue(false)
+                    it.setTitle(R.string.center_align_widgets)
+                    it.setSummary(R.string.center_align_widgets_summary)
+                },
+                SwitchPreferenceCompat(context).also {
+                    it.key = PREF_IRAN_TIME
+                    it.setDefaultValue(false)
+                    it.setTitle(R.string.iran_time)
+                    it.setSummary(R.string.showing_iran_time)
+                },
+                MultiSelectListPreference(context).also {
+                    it.key = PREF_WHAT_TO_SHOW_WIDGETS
+                    it.setTitle(R.string.customize_widget)
+                    it.setSummary(R.string.customize_widget_summary)
+                    it.setDialogTitle(R.string.which_one_to_show)
+                    it.setNegativeButtonText(R.string.cancel)
+                    it.setPositiveButtonText(R.string.accept)
+                    it.setDefaultValue(
+                        resources.getStringArray(R.array.what_to_show_default).toSet()
+                    )
+                    it.entries = resources.getStringArray(R.array.what_to_show)
+                    it.entryValues = resources.getStringArray(R.array.what_to_show_keys)
                 }
-            },
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_NUMERICAL_DATE_PREFERRED
-                it.setDefaultValue(false)
-                it.setTitle(R.string.prefer_linear_date)
-                it.setSummary(R.string.prefer_linear_date_summary)
-            },
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_WIDGET_CLOCK
-                it.setDefaultValue(true)
-                it.setTitle(R.string.clock_on_widget)
-                it.setSummary(R.string.showing_clock_on_widget)
-            },
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_CENTER_ALIGN_WIDGETS
-                it.setDefaultValue(false)
-                it.setTitle(R.string.center_align_widgets)
-                it.setSummary(R.string.center_align_widgets_summary)
-            },
-            SwitchPreferenceCompat(context).also {
-                it.key = PREF_IRAN_TIME
-                it.setDefaultValue(false)
-                it.setTitle(R.string.iran_time)
-                it.setSummary(R.string.showing_iran_time)
-            },
-            MultiSelectListPreference(context).also {
-                it.key = PREF_WHAT_TO_SHOW_WIDGETS
-                it.setTitle(R.string.customize_widget)
-                it.setSummary(R.string.customize_widget_summary)
-                it.setDialogTitle(R.string.which_one_to_show)
-                it.setNegativeButtonText(R.string.cancel)
-                it.setPositiveButtonText(R.string.accept)
-                it.setDefaultValue(resources.getStringArray(R.array.what_to_show_default).toSet())
-                it.entries = resources.getStringArray(R.array.what_to_show)
-                it.entryValues = resources.getStringArray(R.array.what_to_show_keys)
-            }
-        ).onEach { it.isIconSpaceReserved = false }.forEach(screen::addPreference)
+            )
+        ).forEach { (title, preferences) ->
+            val category = PreferenceCategory(context)
+            category.key = title.toString()
+            category.setTitle(title)
+            category.isIconSpaceReserved = false
+            // Hide notification category if we are in widgets configuration
+            if (isWidgetsConfiguration && title == R.string.pref_notification)
+                category.isVisible = false
+            screen.addPreference(category)
+            preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
+        }
         preferenceScreen = screen
     }
 

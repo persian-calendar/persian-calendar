@@ -30,7 +30,7 @@ class PreferencesFragment : Fragment() {
 
         val tabs = listOf(
             R.string.pref_header_interface_calendar to InterfaceCalendarFragment::class.java,
-            R.string.pref_header_widget_location to WidgetNotificationFragment::class.java,
+            R.string.pref_header_notification_widget to WidgetNotificationFragment::class.java,
             R.string.pref_header_location_athan to LocationAthanFragment::class.java
         )
         val args: PreferencesFragmentArgs by navArgs()

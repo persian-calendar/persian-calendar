@@ -119,7 +119,9 @@
 
     <!-- Settings -->
     <string name="pref_header_interface_calendar">Interface and Calendar</string>
-    <string name="pref_header_widget_location">Widget and Notification</string>
+    <string name="pref_header_notification_widget">Notification and Widget</string>
+    <string name="pref_widget">Widget</string>
+    <string name="pref_notification">Notification</string>
     <string name="pref_header_location_athan">Location and Athan</string>
 
     <!--Interface and Calendar Settings-->
