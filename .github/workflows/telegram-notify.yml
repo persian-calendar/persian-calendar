@@ -16,4 +16,4 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT: ${{ secrets.TELEGRAM_TO }}
         with:
-          status: '📅 @Persian_Calendar'
+          commit_template: ./.github/workflows/commit-template.mustache
