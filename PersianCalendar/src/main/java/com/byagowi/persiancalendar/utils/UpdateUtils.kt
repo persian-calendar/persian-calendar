@@ -263,7 +263,7 @@ fun update(context: Context, updateDate: Boolean) {
             }
 
             if (showOtherCalendars) {
-                text2 = text2 + "\n" + subtitle+ "\n" + getZodiacInfo(
+                text2 = text2 + "\n" + subtitle + "\n" + getZodiacInfo(
                     context, jdn, withEmoji = true, short = true
                 )
             }

@@ -55,7 +55,6 @@ import kotlinx.html.head
 import kotlinx.html.html
 import kotlinx.html.meta
 import kotlinx.html.script
-import kotlinx.html.stream.appendHTML
 import kotlinx.html.stream.createHTML
 import kotlinx.html.style
 import kotlinx.html.table
