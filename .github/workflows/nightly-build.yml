@@ -20,7 +20,7 @@ jobs:
           distribution: 'adopt'
 
       - name: Build with Gradle
-        run: sudo ./gradlew assembleNightly
+        run: ./gradlew assembleNightly
 
       - name: Send apk to telegram
         run: |
