@@ -37,8 +37,9 @@ fun Fragment.showLanguagePreferenceDialog() {
     val languageNames = languages.map { it.second }.toTypedArray()
     AlertDialog.Builder(context ?: return)
         .setTitle(R.string.language)
-        .setSingleChoiceItems(languageNames, languageKeys.indexOf(language)) { _, which ->
+        .setSingleChoiceItems(languageNames, languageKeys.indexOf(language)) { dialog, which ->
             context?.appPrefs?.edit { putString(PREF_APP_LANGUAGE, languageKeys[which]) }
+            dialog.cancel()
         }
         .setNegativeButton(R.string.cancel, null)
         .show()
