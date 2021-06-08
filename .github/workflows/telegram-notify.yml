@@ -16,4 +16,4 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT: ${{ secrets.TELEGRAM_TO }}
         with:
-          commit_template: ./commit-template.mustache
+          commit_template: commit-template.mustache
