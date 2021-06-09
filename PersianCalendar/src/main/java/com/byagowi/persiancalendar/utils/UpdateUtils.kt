@@ -465,7 +465,7 @@ fun update(context: Context, updateDate: Boolean) {
                 else
                     NotificationCompat.VISIBILITY_SECRET
             )
-            .setColor(-0x9f8275)
+            .setColor(0xFF607D8B.toInt())
             .setColorized(true)
             .setContentTitle(title)
             .setContentText(subtitle)
