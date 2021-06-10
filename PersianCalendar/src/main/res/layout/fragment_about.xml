@@ -71,6 +71,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
+                        android:importantForAccessibility="no"
                         app:srcCompat="@drawable/ic_licences"
                         app:tint="?attr/colorDrawerIcon" />
 
@@ -127,6 +128,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
+                        android:importantForAccessibility="no"
                         android:scaleType="center"
                         app:srcCompat="@drawable/ic_help"
                         app:tint="?attr/colorDrawerIcon" />
@@ -184,6 +186,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
+                        android:importantForAccessibility="no"
                         android:scaleType="center"
                         app:srcCompat="@drawable/ic_bug"
                         app:tint="?attr/colorDrawerIcon" />
@@ -226,6 +229,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginEnd="5dp"
+                        android:importantForAccessibility="no"
                         android:scaleType="center"
                         app:srcCompat="@drawable/ic_email"
                         app:tint="?attr/colorDrawerIcon" />
@@ -279,4 +283,5 @@
         </LinearLayout>
 
     </ScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

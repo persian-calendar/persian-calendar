@@ -50,8 +50,8 @@
                 android:layout_gravity="center_vertical"
                 android:contentDescription="@string/remove"
                 app:srcCompat="@drawable/ic_remove_button" />
-        </LinearLayout>
 
+        </LinearLayout>
 
     </LinearLayout>
 
