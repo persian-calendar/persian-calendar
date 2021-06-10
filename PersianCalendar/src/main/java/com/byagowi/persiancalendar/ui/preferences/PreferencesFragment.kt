@@ -2,16 +2,21 @@ package com.byagowi.persiancalendar.ui.preferences
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -26,6 +31,11 @@ class PreferencesFragment : Fragment() {
         binding.appBar.toolbar.let {
             it.setTitle(R.string.settings)
             it.setupUpNavigation()
+            if (BuildConfig.DEBUG) {
+                val menuItem = it.menu.add("RESET")
+                menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                menuItem.onClick { it.context.appPrefs.edit { clear() }; activity?.recreate() }
+            }
         }
 
         val tabs = listOf(
