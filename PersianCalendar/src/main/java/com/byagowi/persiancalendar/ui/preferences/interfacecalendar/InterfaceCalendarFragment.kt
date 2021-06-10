@@ -26,10 +26,12 @@ import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
 import com.byagowi.persiancalendar.ui.preferences.PREF_DESTINATION
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
+import com.byagowi.persiancalendar.utils.build
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.onClick
 
@@ -37,8 +39,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = context ?: return
 
-        val screen = preferenceManager.createPreferenceScreen(context)
-        listOf(
+        preferenceScreen = preferenceManager.createPreferenceScreen(context).build(
             R.string.pref_interface to listOf(
                 Preference(context).also {
                     it.key = PREF_APP_LANGUAGE
@@ -153,23 +154,19 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     it.setPositiveButtonText(R.string.accept)
                 }
             )
-        ).forEach { (title, preferences) ->
-            val category = PreferenceCategory(context)
-            category.key = title.toString() // Needed for expandable categories
-            category.setTitle(title)
-            category.initialExpandedChildrenCount = 6 // only needed for calendar category
-            category.isIconSpaceReserved = false
-            screen.addPreference(category)
-            preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
-        }
-        preferenceScreen = screen
+        )
+
+        // Mark the rest of options as advanced
+        preferenceScreen?.findPreference<PreferenceCategory?>(R.string.calendar.toString())
+            .debugAssertNotNull?.initialExpandedChildrenCount = 6
 
         // Handle navigation passed destination
         when (arguments?.getString(PREF_DESTINATION)) {
             PREF_HOLIDAY_TYPES -> showHolidaysTypesDialog()
             PREF_APP_LANGUAGE -> {
                 // Bringing up the dialog is too much, only turn preference title to English
-                screen.findPreference<Preference>(PREF_APP_LANGUAGE)?.title = "Language"
+                preferenceScreen?.findPreference<Preference>(PREF_APP_LANGUAGE).debugAssertNotNull
+                    ?.title = "Language"
             }
         }
     }

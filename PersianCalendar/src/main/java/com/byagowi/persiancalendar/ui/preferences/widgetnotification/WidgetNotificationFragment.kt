@@ -18,7 +18,9 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
+import com.byagowi.persiancalendar.utils.build
 import com.byagowi.persiancalendar.utils.onClick
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
@@ -26,10 +28,8 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = context ?: return
 
-        val screen = preferenceManager.createPreferenceScreen(context)
-        val isWidgetsConfiguration = arguments?.getBoolean(IS_WIDGETS_CONFIGURATION, false) == true
         val handler = Handler(Looper.getMainLooper())
-        listOf(
+        preferenceScreen = preferenceManager.createPreferenceScreen(context).build(
             R.string.pref_notification to listOf(
                 SwitchPreferenceCompat(context).also {
                     it.key = PREF_NOTIFY_DATE
@@ -98,18 +98,16 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                     it.entryValues = resources.getStringArray(R.array.what_to_show_keys)
                 }
             )
-        ).forEach { (title, preferences) ->
-            val category = PreferenceCategory(context)
-            category.key = title.toString()
-            category.setTitle(title)
-            category.isIconSpaceReserved = false
-            // Hide notification category if we are in widgets configuration
-            if (isWidgetsConfiguration && title == R.string.pref_notification)
-                category.isVisible = false
-            screen.addPreference(category)
-            preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
-        }
-        preferenceScreen = screen
+        )
+
+        // Mark the rest of options as advanced
+        preferenceScreen?.findPreference<PreferenceCategory?>(R.string.pref_widget.toString())
+            .debugAssertNotNull?.initialExpandedChildrenCount = 5
+
+        // Hide notification category if we are in widgets configuration
+        if (arguments?.getBoolean(IS_WIDGETS_CONFIGURATION, false) == true)
+            preferenceScreen?.findPreference<PreferenceCategory?>(R.string.pref_notification.toString())
+                .debugAssertNotNull?.isVisible = false
     }
 
     companion object {

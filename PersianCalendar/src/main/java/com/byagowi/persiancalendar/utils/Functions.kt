@@ -32,7 +32,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceManager
+import androidx.preference.PreferenceScreen
 import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
@@ -539,6 +541,20 @@ fun NavController.navigateSafe(directions: NavDirections) = runCatching {
 
 fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
     AppCompatResources.getDrawable(this, drawableRes)
+
+// Builds preference screen pair of title ids to list of preferences
+// Its only caveat is it turns title's integers to string to be used as category keys
+// so they can be referenced later and used for expansion logic.
+fun PreferenceScreen.build(vararg pairs: Pair<Int, List<Preference>>) = this.also {
+    pairs.forEach { (title, preferences) ->
+        val category = PreferenceCategory(context)
+        category.key = title.toString()
+        category.setTitle(title)
+        category.isIconSpaceReserved = false
+        this.addPreference(category)
+        preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
+    }
+}
 
 inline fun Preference.onClick(crossinline action: () -> Unit) =
     this.setOnPreferenceClickListener { action(); true /* it captures the click event */ }

@@ -16,7 +16,6 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.ListPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.*
@@ -45,8 +44,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val context = context ?: return
 
         val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
-        val screen = preferenceManager.createPreferenceScreen(context)
-        listOf(
+        preferenceScreen = preferenceManager.createPreferenceScreen(context).build(
             R.string.location to listOf(
                 Preference(context).also {
                     it.setTitle(R.string.gps_location)
@@ -138,16 +136,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     it.onClick { showAthanVolumeDialog() }
                 }
             )
-        ).forEach { (title, preferences) ->
-            val category = PreferenceCategory(context)
-            // Needed for expandable categories, also R.string.athan.toString() is used below
-            category.key = title.toString()
-            category.setTitle(title)
-            category.isIconSpaceReserved = false
-            screen.addPreference(category)
-            preferences.onEach { it.isIconSpaceReserved = false }.forEach(category::addPreference)
-        }
-        preferenceScreen = screen
+        )
 
         onSharedPreferenceChanged(null, null)
         context.appPrefs.registerOnSharedPreferenceChangeListener(this)
