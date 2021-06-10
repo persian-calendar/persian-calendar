@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 
@@ -57,81 +58,78 @@ fun Fragment.showLanguagePreferenceDialog() {
 
 // Preferences changes be applied automatically when user requests a language change
 private fun SharedPreferences.changeLanguage(language: String) = edit {
+    putString(PREF_APP_LANGUAGE, language)
+
     var persianDigits = false
     var changeToAfghanistanHolidays = false
-    var changeToIslamicCalendar = false
-    var changeToGregorianCalendar = false
-    var changeToPersianCalendar = false
+    var destinationCalendar = CalendarType.SHAMSI
     var changeToIranEvents = false
     when (language) {
         LANG_EN_US -> {
-            changeToGregorianCalendar = true
+            destinationCalendar = CalendarType.GREGORIAN
         }
         LANG_JA -> {
-            changeToGregorianCalendar = true
-            persianDigits = true
+            destinationCalendar = CalendarType.GREGORIAN
+            persianDigits = false
         }
         LANG_AZB, LANG_GLK, LANG_FA -> {
             persianDigits = true
-            changeToPersianCalendar = true
+            destinationCalendar = CalendarType.SHAMSI
             changeToIranEvents = true
         }
         LANG_EN_IR -> {
             persianDigits = false
-            changeToPersianCalendar = true
+            destinationCalendar = CalendarType.SHAMSI
             changeToIranEvents = true
         }
         LANG_UR -> {
             persianDigits = false
-            changeToGregorianCalendar = true
+            destinationCalendar = CalendarType.GREGORIAN
         }
         LANG_AR -> {
             persianDigits = true
-            changeToIslamicCalendar = true
+            destinationCalendar = CalendarType.ISLAMIC
         }
-        LANG_FA_AF -> {
+        LANG_FA_AF, LANG_PS -> {
             persianDigits = true
-            changeToPersianCalendar = true
-            changeToAfghanistanHolidays = true
-        }
-        LANG_PS -> {
-            persianDigits = true
-            changeToPersianCalendar = true
+            destinationCalendar = CalendarType.SHAMSI
             changeToAfghanistanHolidays = true
         }
         else -> persianDigits = true
     }
 
-    putString(PREF_APP_LANGUAGE, language)
     putBoolean(PREF_PERSIAN_DIGITS, persianDigits)
 
-    // Enable Afghanistan holidays when Dari or Pashto is set
-    if (changeToAfghanistanHolidays) {
-        val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-        if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
-            "iran_holidays" in currentHolidays
-        ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
-    }
-    if (changeToIranEvents) {
-        val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-        if (currentHolidays.isEmpty() || currentHolidays.size == 1
-            && "afghanistan_holidays" in currentHolidays
-        ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
-    }
     when {
-        changeToGregorianCalendar -> {
+        changeToAfghanistanHolidays -> {
+            // Enable Afghanistan holidays when Dari or Pashto is set
+            val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+            if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
+                "iran_holidays" in currentHolidays
+            ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
+        }
+        changeToIranEvents -> {
+            val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+            if (currentHolidays.isEmpty() || currentHolidays.size == 1
+                && "afghanistan_holidays" in currentHolidays
+            ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
+        }
+    }
+
+    when (destinationCalendar) {
+        CalendarType.GREGORIAN -> {
             putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
             putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
             putString(PREF_WEEK_START, "1")
             putStringSet(PREF_WEEK_ENDS, setOf("1"))
         }
-        changeToIslamicCalendar -> {
+        CalendarType.ISLAMIC -> {
             putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
             putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI")
             putString(PREF_WEEK_START, DEFAULT_WEEK_START)
             putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
         }
-        changeToPersianCalendar -> {
+        CalendarType.SHAMSI -> {
             putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")
             putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")
             putString(PREF_WEEK_START, DEFAULT_WEEK_START)
