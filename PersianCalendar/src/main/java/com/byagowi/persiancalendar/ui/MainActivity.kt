@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.drawer.addDrawerListener(createDrawerListener())
 
-        navController?.addOnDestinationChangedListener(this)
+        navHostFragment?.navController?.addOnDestinationChangedListener(this)
         when (intent?.action) {
             "COMPASS" -> R.id.compass
             "LEVEL" -> R.id.level
@@ -144,9 +144,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var previousAppThemeValue: String? = null
 
-    private val navController by lazy {
+    private val navHostFragment by lazy {
         (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment)
-            ?.navController.debugAssertNotNull
+            .debugAssertNotNull
     }
 
     override fun onDestinationChanged(
@@ -171,7 +171,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun navigateTo(@IdRes id: Int) {
-        navController?.navigate(
+        navHostFragment?.navController?.navigate(
             id, null, navOptions {
                 anim {
                     enter = R.anim.nav_enter_anim
@@ -223,8 +223,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     this, Manifest.permission.READ_CALENDAR
                 ) -> {
                     toggleShowDeviceCalendarOnPreference(this, true)
+                    val navController = navHostFragment?.navController
                     if (navController?.currentDestination?.id == R.id.calendar)
-                        navController?.navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                        navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
                 else -> toggleShowDeviceCalendarOnPreference(this, false)
             }
@@ -246,8 +247,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         update(applicationContext, false)
         if (creationDateJdn != Jdn.today) {
             creationDateJdn = Jdn.today
+            val navController = navHostFragment?.navController
             if (navController?.currentDestination?.id == R.id.calendar) {
-                navController?.navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
             }
         }
     }
@@ -278,7 +280,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             R.id.exit -> finish()
             else -> {
                 binding.drawer.closeDrawer(GravityCompat.START)
-                if (navController?.currentDestination?.id != itemId) {
+                if (navHostFragment?.navController?.currentDestination?.id != itemId) {
                     clickedItem = itemId
                 }
             }
@@ -292,7 +294,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         it.view.layoutDirection = View.LAYOUT_DIRECTION_LTR
         it.view.setOnClickListener { _ -> it.dismiss() }
         it.setAction("Settings") {
-            navController?.navigateSafe(
+            navHostFragment?.navController?.navigateSafe(
                 CalendarFragmentDirections.navigateToSettings(
                     INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
                 )
