@@ -223,12 +223,8 @@ fun update(context: Context, updateDate: Boolean) {
             }
 
             val holidays = getEventsTitle(
-                events,
-                holiday = true,
-                compact = true,
-                showDeviceCalendarEvents = true,
-                insertRLM = isRTL,
-                addIsHoliday = isHighTextContrastEnabled
+                events, holiday = true, compact = true, showDeviceCalendarEvents = true,
+                insertRLM = isRTL, addIsHoliday = isHighTextContrastEnabled
             )
             if (holidays.isNotEmpty()) {
                 it.setTextViewText(R.id.holiday_2x2, holidays)
@@ -241,12 +237,8 @@ fun update(context: Context, updateDate: Boolean) {
             }
 
             val nonHolidays = getEventsTitle(
-                events,
-                holiday = false,
-                compact = true,
-                showDeviceCalendarEvents = true,
-                insertRLM = isRTL,
-                addIsHoliday = false
+                events, holiday = false, compact = true, showDeviceCalendarEvents = true,
+                insertRLM = isRTL, addIsHoliday = false
             )
             if ("non_holiday_events" in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
                 it.setTextViewText(R.id.event_2x2, nonHolidays)
@@ -263,9 +255,8 @@ fun update(context: Context, updateDate: Boolean) {
             }
 
             if (showOtherCalendars) {
-                text2 = text2 + "\n" + subtitle + "\n" + getZodiacInfo(
-                    context, jdn, withEmoji = true, short = true
-                )
+                text2 = text2 + "\n" + subtitle + "\n" +
+                        getZodiacInfo(context, jdn, withEmoji = true, short = true)
             }
             it.setTextViewText(R.id.date_2x2, text2)
 
@@ -276,25 +267,18 @@ fun update(context: Context, updateDate: Boolean) {
 
     //region Widget 4x1 dateOnly
     if (manager.getAppWidgetIds(widget4x1dateOnly)?.isNotEmpty() == true) {
-        val remoteViews: RemoteViews
-        if (enableClock) {
-            if (isForcedIranTimeEnabled) {
-                remoteViews = RemoteViews(
-                    context.packageName,
+        val remoteViews = RemoteViews(
+            context.packageName,
+            if (enableClock) {
+                if (isForcedIranTimeEnabled) {
                     if (isCenterAligned) R.layout.widget4x1_date_only_clock_iran_center else R.layout.widget4x1_date_only_clock_iran
-                )
-            } else {
-                remoteViews = RemoteViews(
-                    context.packageName,
+                } else {
                     if (isCenterAligned) R.layout.widget4x1_date_only_clock_center else R.layout.widget4x1_date_only_clock
-                )
-            }
-        } else {
-            remoteViews = RemoteViews(
-                context.packageName,
+                }
+            } else {
                 if (isCenterAligned) R.layout.widget4x1_date_only_center else R.layout.widget4x1_date_only
-            )
-        }
+            }
+        )
 
         val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
 
@@ -305,8 +289,8 @@ fun update(context: Context, updateDate: Boolean) {
             it.setTextColor(R.id.textPlaceholder2_4x1_dateOnly, color)
             it.setTextColor(R.id.textPlaceholder3_4x1_dateOnly, color)
 
-            val text3 = if (enableClock && isForcedIranTimeEnabled) "(" +
-                    context.getString(R.string.iran_time) + ")" else ""
+            val text3 = if (enableClock && isForcedIranTimeEnabled)
+                "(${context.getString(R.string.iran_time)})" else ""
 
             val text2 = if ("show_weekday" in whatToShowOnWidgets) widgetTitle else mainDateString
 

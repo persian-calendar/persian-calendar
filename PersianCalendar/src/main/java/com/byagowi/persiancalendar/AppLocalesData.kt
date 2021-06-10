@@ -10,8 +10,7 @@ sealed interface AppLocalesData {
     val weekDays: List<String>
 
     // This is the default implementation and overridden by locales having custom initials
-    val weekDaysInitials: List<String>
-        get() = weekDays.map { it.substring(0, 1) }
+    val weekDaysInitials: List<String> get() = weekDays.map { it.substring(0, 1) }
 
     companion object {
         fun getPersianCalendarMonths(locale: String) = localeFinder(locale).persianCalendarMonths

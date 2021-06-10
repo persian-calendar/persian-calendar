@@ -87,7 +87,6 @@ import io.github.persiancalendar.praytimes.PrayTimes
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*
 
-
 const val TAG = "Utils"
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"

@@ -66,8 +66,7 @@ fun initUtils(context: Context) {
     loadEvents(context)
 }
 
-val supportedYearOfIranCalendar: Int
-    get() = IranianIslamicDateConverter.latestSupportedYearOfIran
+val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
 fun isArabicDigitSelected(): Boolean = when (preferredDigits) {
     ARABIC_DIGITS -> true
@@ -472,8 +471,7 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
     else title
 }
 
-val Context.appPrefs: SharedPreferences
-    get() = PreferenceManager.getDefaultSharedPreferences(this)
+val Context.appPrefs: SharedPreferences get() = PreferenceManager.getDefaultSharedPreferences(this)
 
 fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn?) {
     if (jdn == null) remove(jdn) else putLong(key, jdn.value)
@@ -482,8 +480,7 @@ fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn?) {
 fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
     getLong(key, -1).takeIf { it != -1L }?.let(::Jdn)
 
-val Context.layoutInflater: LayoutInflater
-    get() = LayoutInflater.from(this)
+val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
 
 fun bringMarketPage(activity: Activity): Unit = runCatching {
     activity.startActivity(

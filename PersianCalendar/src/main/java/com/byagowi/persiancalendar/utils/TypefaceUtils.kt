@@ -5,8 +5,7 @@ import android.graphics.Typeface
 import com.byagowi.persiancalendar.FONT_PATH
 
 // https://gist.github.com/artem-zinnatullin/7749076
-val isCustomFontEnabled: Boolean
-    get() = isArabicDigitSelected() || isNonArabicScriptSelected()
+val isCustomFontEnabled: Boolean get() = isArabicDigitSelected() || isNonArabicScriptSelected()
 
 /**
  * Using reflection to override default typeface

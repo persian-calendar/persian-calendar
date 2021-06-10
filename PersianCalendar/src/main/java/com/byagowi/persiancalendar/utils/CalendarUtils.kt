@@ -281,8 +281,7 @@ fun Jdn.getWeekOfYear(startOfYear: Jdn): Int {
     return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(dayOfWeek)) / 7.0).toInt()
 }
 
-val Jdn.dayOfWeekName: String
-    get() = weekDays[dayOfWeek]
+val Jdn.dayOfWeekName: String get() = weekDays[dayOfWeek]
 
 fun Jdn.getEvents(deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
     ArrayList<CalendarEvent<*>>().apply {

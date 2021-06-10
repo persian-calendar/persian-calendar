@@ -22,8 +22,7 @@ fun getDefaultAthanUri(context: Context) = "%s://%s/%s/%s".format(
     context.resources.getResourceEntryName(R.raw.abdulbasit)
 ).toUri()
 
-val Context.athanVolume: Int
-    get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
+val Context.athanVolume: Int get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 
 val Context.isAscendingAthanVolumeEnabled: Boolean
     get() = appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, false)

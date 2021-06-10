@@ -510,9 +510,8 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
                 }
                 tbody {
                     deviceInformationItems.forEach {
-                        val title = it.title + if (it.version.isEmpty()) "" else " (${it.version})"
                         tr {
-                            th { +title }
+                            th { +(it.title + if (it.version.isEmpty()) "" else " (${it.version})") }
                             th { +it.content.toString() }
                         }
                     }

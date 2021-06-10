@@ -20,8 +20,7 @@ value class Jdn(val value: Long) {
     )
 
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
-    val dayOfWeek: Int
-        get() = ((value + 2L) % 7L).toInt()
+    val dayOfWeek: Int get() = ((value + 2L) % 7L).toInt()
 
     fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
         CalendarType.ISLAMIC -> toIslamicCalendar()
