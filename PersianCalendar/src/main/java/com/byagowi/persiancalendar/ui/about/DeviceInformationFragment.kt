@@ -95,7 +95,7 @@ class DeviceInformationFragment : Fragment() {
             it.adapter = adapter
         }
         binding.toolbar.menu.add("Print").also {
-            it.icon = binding.toolbar.context.getVectorDrawable(R.drawable.ic_print)
+            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_print)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick { context?.also(adapter::print) }
         }

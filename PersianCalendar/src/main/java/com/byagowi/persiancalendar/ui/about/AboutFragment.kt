@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
@@ -43,12 +42,12 @@ class AboutFragment : Fragment() {
         toolbar.setTitle(R.string.about)
         toolbar.setupUpNavigation()
         toolbar.menu.add(R.string.share).also {
-            it.icon = toolbar.context.getVectorDrawable(R.drawable.ic_baseline_share)
+            it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick { shareApplication() }
         }
         toolbar.menu.add(R.string.device_info).also {
-            it.icon = toolbar.context.getVectorDrawable(R.drawable.ic_device_information)
+            it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController().navigateSafe(AboutFragmentDirections.actionAboutToDeviceinfo())
@@ -107,7 +106,7 @@ class AboutFragment : Fragment() {
             R.string.about_translators_list to R.drawable.ic_translator,
             R.string.about_contributors_list to R.drawable.ic_developer
         ).flatMap { (listId: Int, iconId: Int) ->
-            val icon = AppCompatResources.getDrawable(context, iconId)
+            val icon = context.getCompatDrawable(iconId)
             getString(listId).trim().split("\n").map {
                 Chip(context).also { chip ->
                     chip.setOnClickListener(chipClick)

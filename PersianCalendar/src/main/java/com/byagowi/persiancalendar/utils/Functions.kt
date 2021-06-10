@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
@@ -32,7 +33,6 @@ import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
@@ -540,8 +540,8 @@ fun NavController.navigateSafe(directions: NavDirections) = runCatching {
     navigate(directions)
 }.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 
-fun Context.getVectorDrawable(@DrawableRes drawableRes: Int) =
-    VectorDrawableCompat.create(this.resources, drawableRes, this.theme)
+fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
+    AppCompatResources.getDrawable(this, drawableRes)
 
 inline fun Preference.onClick(crossinline action: () -> Unit) =
     this.setOnPreferenceClickListener { action(); true /* it captures the click event */ }
@@ -549,7 +549,7 @@ inline fun Preference.onClick(crossinline action: () -> Unit) =
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
     this.setOnMenuItemClickListener { action(); true /* it captures the click event */ }.let {}
 
-inline fun <T> listOf31Items(
+fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,
     x13: T, x14: T, x15: T, x16: T, x17: T, x18: T, x19: T, x20: T, x21: T, x22: T,
     x23: T, x24: T, x25: T, x26: T, x27: T, x28: T, x29: T, x30: T, x31: T
@@ -559,10 +559,10 @@ inline fun <T> listOf31Items(
     x23, x24, x25, x26, x27, x28, x29, x30, x31
 )
 
-inline fun <T> listOf12Items(
+fun <T> listOf12Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T
 ) = listOf(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12)
 
-inline fun <T> listOf7Items(
+fun <T> listOf7Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T
 ) = listOf(x1, x2, x3, x4, x5, x6, x7)

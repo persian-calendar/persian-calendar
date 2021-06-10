@@ -70,7 +70,7 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.getVectorDrawable
+import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled
@@ -547,7 +547,7 @@ class CalendarFragment : Fragment() {
         this.searchView = searchView
 
         toolbar.menu.add(R.string.return_to_today).also {
-            it.icon = toolbar.context.getVectorDrawable(R.drawable.ic_restore_modified)
+            it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.isVisible = false
             it.onClick { bringDate(Jdn.today, highlight = false) }

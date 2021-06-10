@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
-import com.byagowi.persiancalendar.utils.getVectorDrawable
+import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
@@ -50,7 +50,7 @@ class LevelFragment : Fragment() {
         binding.appBar.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         provider = OrientationProvider(activity, binding.levelView)
         binding.bottomAppbar.menu.add(R.string.level).also {
-            it.icon = binding.bottomAppbar.context.getVectorDrawable(R.drawable.ic_compass_menu)
+            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 // If compass wasn't in backstack (level is brought from shortcut), navigate to it
