@@ -186,27 +186,29 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         settingHasChanged = true
 
-        if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS &&
-            sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
-            && ActivityCompat.checkSelfPermission(
-                this, Manifest.permission.READ_CALENDAR
-            ) != PackageManager.PERMISSION_GRANTED
-        ) askForCalendarPermission(this)
-
-        if (key == PREF_APP_LANGUAGE) restartToSettings()
-
-        // Restart activity if theme is changed and don't if app theme
-        // has just got a default value by preferences as going
-        // from null => SystemDefault which makes no difference
-        if (key == PREF_THEME && !(previousAppThemeValue == null &&
-                    sharedPreferences?.getString(PREF_THEME, null) == SYSTEM_DEFAULT_THEME)
-        ) restartToSettings()
-
-        if (key == PREF_NOTIFY_DATE &&
-            sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false
-        ) {
-            stopService(Intent(this, ApplicationService::class.java))
-            startEitherServiceOrWorker(applicationContext)
+        when (key) {
+            PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
+                if (sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
+                    && ActivityCompat.checkSelfPermission(
+                        this, Manifest.permission.READ_CALENDAR
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) askForCalendarPermission(this)
+            }
+            PREF_APP_LANGUAGE -> restartToSettings()
+            PREF_THEME -> {
+                // Restart activity if theme is changed and don't if app theme
+                // has just got a default value by preferences as going
+                // from null => SystemDefault which makes no difference
+                if (previousAppThemeValue != null ||
+                    sharedPreferences?.getString(PREF_THEME, null) != SYSTEM_DEFAULT_THEME
+                ) restartToSettings()
+            }
+            PREF_NOTIFY_DATE -> {
+                if (sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false) {
+                    stopService(Intent(this, ApplicationService::class.java))
+                    startEitherServiceOrWorker(applicationContext)
+                }
+            }
         }
 
         updateStoredPreference(this)
