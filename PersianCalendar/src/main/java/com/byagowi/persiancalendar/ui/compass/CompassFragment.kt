@@ -18,8 +18,8 @@ import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.utils.getCityName
-import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getCompatDrawable
+import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick

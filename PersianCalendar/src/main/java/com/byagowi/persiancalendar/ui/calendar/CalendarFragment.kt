@@ -65,12 +65,12 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.getCityName
+import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled

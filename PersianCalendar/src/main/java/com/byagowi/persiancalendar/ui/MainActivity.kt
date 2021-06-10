@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (appPrefs.getString(PREF_APP_LANGUAGE, null) == null &&
             !appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)
         ) {
-            showChangeLangSnackbar()
+            showChangeLanguageSnackbar()
             appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
         }
 
@@ -187,98 +187,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         settingHasChanged = true
-        when (key) {
-            PREF_APP_LANGUAGE -> {
-                var persianDigits = false
-                var changeToAfghanistanHolidays = false
-                var changeToIslamicCalendar = false
-                var changeToGregorianCalendar = false
-                var changeToPersianCalendar = false
-                var changeToIranEvents = false
-                when (sharedPreferences?.getString(PREF_APP_LANGUAGE, null)
-                    ?: DEFAULT_APP_LANGUAGE) {
-                    LANG_EN_US -> {
-                        changeToGregorianCalendar = true
-                    }
-                    LANG_JA -> {
-                        changeToGregorianCalendar = true
-                        persianDigits = true
-                    }
-                    LANG_AZB, LANG_GLK, LANG_FA -> {
-                        persianDigits = true
-                        changeToPersianCalendar = true
-                        changeToIranEvents = true
-                    }
-                    LANG_EN_IR -> {
-                        persianDigits = false
-                        changeToPersianCalendar = true
-                        changeToIranEvents = true
-                    }
-                    LANG_UR -> {
-                        persianDigits = false
-                        changeToGregorianCalendar = true
-                    }
-                    LANG_AR -> {
-                        persianDigits = true
-                        changeToIslamicCalendar = true
-                    }
-                    LANG_FA_AF -> {
-                        persianDigits = true
-                        changeToPersianCalendar = true
-                        changeToAfghanistanHolidays = true
-                    }
-                    LANG_PS -> {
-                        persianDigits = true
-                        changeToPersianCalendar = true
-                        changeToAfghanistanHolidays = true
-                    }
-                    else -> persianDigits = true
-                }
-
-                sharedPreferences?.edit {
-                    putBoolean(PREF_PERSIAN_DIGITS, persianDigits)
-                    // Enable Afghanistan holidays when Dari or Pashto is set
-                    if (changeToAfghanistanHolidays) {
-                        val currentHolidays =
-                            sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null)
-                                ?: emptySet()
-
-                        if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
-                            "iran_holidays" in currentHolidays
-                        ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
-                    }
-                    if (changeToIranEvents) {
-                        val currentHolidays =
-                            sharedPreferences.getStringSet(PREF_HOLIDAY_TYPES, null)
-                                ?: emptySet()
-
-                        if (currentHolidays.isEmpty() || currentHolidays.size == 1
-                            && "afghanistan_holidays" in currentHolidays
-                        ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
-                    }
-                    when {
-                        changeToGregorianCalendar -> {
-                            putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
-                            putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-                            putString(PREF_WEEK_START, "1")
-                            putStringSet(PREF_WEEK_ENDS, setOf("1"))
-                        }
-                        changeToIslamicCalendar -> {
-                            putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
-                            putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI")
-                            putString(PREF_WEEK_START, DEFAULT_WEEK_START)
-                            putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
-                        }
-                        changeToPersianCalendar -> {
-                            putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")
-                            putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")
-                            putString(PREF_WEEK_START, DEFAULT_WEEK_START)
-                            putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
-                        }
-                    }
-                }
-            }
-        }
 
         if (key == PREF_SHOW_DEVICE_CALENDAR_EVENTS &&
             sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
@@ -349,11 +257,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     // Checking for the ancient "menu" key
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = when (keyCode) {
         KeyEvent.KEYCODE_MENU -> {
-            when {
-                binding.drawer.isDrawerOpen(GravityCompat.START) ->
-                    binding.drawer.closeDrawer(GravityCompat.START)
-                else -> binding.drawer.openDrawer(GravityCompat.START)
-            }
+            if (binding.drawer.isDrawerOpen(GravityCompat.START))
+                binding.drawer.closeDrawer(GravityCompat.START)
+            else
+                binding.drawer.openDrawer(GravityCompat.START)
             true
         }
         else -> super.onKeyDown(keyCode, event)
@@ -381,19 +288,19 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         return true
     }
 
-    private fun showChangeLangSnackbar() = Snackbar.make(
+    private fun showChangeLanguageSnackbar() = Snackbar.make(
         binding.root, "✖  Change app language?", 7000
-    ).apply {
-        view.layoutDirection = View.LAYOUT_DIRECTION_LTR
-        view.setOnClickListener { dismiss() }
-        setAction("Settings") {
+    ).also {
+        it.view.layoutDirection = View.LAYOUT_DIRECTION_LTR
+        it.view.setOnClickListener { _ -> it.dismiss() }
+        it.setAction("Settings") {
             navController?.navigateSafe(
                 CalendarFragmentDirections.navigateToSettings(
                     INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
                 )
             )
         }
-        setActionTextColor(ContextCompat.getColor(context, R.color.dark_accent))
+        it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
     }.show()
 
     private fun showAppIsOutDatedSnackbar() = Snackbar.make(
