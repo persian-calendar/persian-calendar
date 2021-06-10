@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 
@@ -60,55 +59,19 @@ fun Fragment.showLanguagePreferenceDialog() {
 private fun SharedPreferences.changeLanguage(language: String) = edit {
     putString(PREF_APP_LANGUAGE, language)
 
-    var persianDigits = false
-    var changeToAfghanistanHolidays = false
-    var destinationCalendar = CalendarType.SHAMSI
-    var changeToIranEvents = false
     when (language) {
-        LANG_EN_US -> {
-            destinationCalendar = CalendarType.GREGORIAN
-        }
-        LANG_JA -> {
-            destinationCalendar = CalendarType.GREGORIAN
-            persianDigits = false
-        }
-        LANG_AZB, LANG_GLK, LANG_FA -> {
-            persianDigits = true
-            destinationCalendar = CalendarType.SHAMSI
-            changeToIranEvents = true
-        }
-        LANG_EN_IR -> {
-            persianDigits = false
-            destinationCalendar = CalendarType.SHAMSI
-            changeToIranEvents = true
-        }
-        LANG_UR -> {
-            persianDigits = false
-            destinationCalendar = CalendarType.GREGORIAN
-        }
-        LANG_AR -> {
-            persianDigits = true
-            destinationCalendar = CalendarType.ISLAMIC
-        }
-        LANG_FA_AF, LANG_PS -> {
-            persianDigits = true
-            destinationCalendar = CalendarType.SHAMSI
-            changeToAfghanistanHolidays = true
-        }
-        else -> persianDigits = true
+        LANG_UR, LANG_EN_IR, LANG_EN_US, LANG_JA -> putBoolean(PREF_PERSIAN_DIGITS, false)
+        else -> putBoolean(PREF_PERSIAN_DIGITS, true)
     }
 
-    putBoolean(PREF_PERSIAN_DIGITS, persianDigits)
-
-    when {
-        changeToAfghanistanHolidays -> {
-            // Enable Afghanistan holidays when Dari or Pashto is set
+    when (language) {
+        LANG_FA_AF, LANG_PS -> {
             val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
             if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
                 "iran_holidays" in currentHolidays
             ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
         }
-        changeToIranEvents -> {
+        LANG_AZB, LANG_GLK, LANG_FA, LANG_EN_IR -> {
             val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
             if (currentHolidays.isEmpty() || currentHolidays.size == 1
                 && "afghanistan_holidays" in currentHolidays
@@ -116,20 +79,20 @@ private fun SharedPreferences.changeLanguage(language: String) = edit {
         }
     }
 
-    when (destinationCalendar) {
-        CalendarType.GREGORIAN -> {
+    when (language) {
+        LANG_EN_US, LANG_JA, LANG_UR -> {
             putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
             putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
             putString(PREF_WEEK_START, "1")
             putStringSet(PREF_WEEK_ENDS, setOf("1"))
         }
-        CalendarType.ISLAMIC -> {
+        LANG_AR -> {
             putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
             putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI")
             putString(PREF_WEEK_START, DEFAULT_WEEK_START)
             putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
         }
-        CalendarType.SHAMSI -> {
+        LANG_AZB, LANG_GLK, LANG_FA, LANG_FA_AF, LANG_PS, LANG_EN_IR -> {
             putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")
             putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")
             putString(PREF_WEEK_START, DEFAULT_WEEK_START)
