@@ -8,6 +8,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.dayOfWeekName
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
@@ -31,7 +32,11 @@ class PersianCalendarTileService : TileService() {
         qsTile?.also { tile ->
             val jdn = Jdn.today
             val today = jdn.toCalendar(mainCalendar)
-            tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
+            if ((false)) { // Dynamic icon generation isn't fully reviewed yet so is disabled
+                tile.icon = createStatusIcon(this, today.dayOfMonth).toIcon(this)
+            } else {
+                tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
+            }
             tile.label = jdn.dayOfWeekName
             tile.contentDescription = today.monthName
             // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices

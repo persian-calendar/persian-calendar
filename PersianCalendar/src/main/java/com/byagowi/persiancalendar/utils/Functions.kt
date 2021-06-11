@@ -8,6 +8,10 @@ import android.app.PendingIntent
 import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
@@ -27,6 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -271,6 +276,18 @@ fun getDayIconResource(day: Int): Int = when (preferredDigits) {
     ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC
     else -> DAYS_ICONS_PERSIAN
 }.getOrNull(day - 1) ?: 0
+
+fun createStatusIcon(context: Context, dayOfMonth: Int): IconCompat {
+    val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    paint.textSize = 90f
+    paint.typeface = getAppFont(context)
+    val text = formatNumber(dayOfMonth)
+    val bounds = Rect()
+    paint.getTextBounds(text, 0, text.length, bounds)
+    val bitmap = Bitmap.createBitmap(90, 90, Bitmap.Config.ARGB_8888)
+    Canvas(bitmap).drawText(text, 45 - bounds.width() / 2f, 45 + bounds.height() / 2f, paint)
+    return IconCompat.createWithBitmap(bitmap)
+}
 
 fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) =
     "%s: %.7f%s%s: %.7f".format(

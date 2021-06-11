@@ -439,7 +439,6 @@ fun update(context: Context, updateDate: Boolean) {
 
         val builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setSmallIcon(getDayIconResource(date.dayOfMonth))
             .setOngoing(true)
             .setWhen(0)
             .setContentIntent(launchAppPendingIntent)
@@ -453,6 +452,15 @@ fun update(context: Context, updateDate: Boolean) {
             .setColorized(true)
             .setContentTitle(title)
             .setContentText(subtitle)
+
+        // Dynamic small icon generator, disabled as it needs API 23 and isn't fully reviewed
+        if ((false)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                builder.setSmallIcon(createStatusIcon(context, date.dayOfMonth))
+            }
+        } else {
+            builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
+        }
 
         // Night mode doesn't like our custom notification in Samsung and HTC One UI
         val shouldDisableCustomNotification = when (Build.BRAND) {
