@@ -60,9 +60,8 @@ private fun SharedPreferences.changeLanguage(language: String) = edit {
     putString(PREF_APP_LANGUAGE, language)
 
     when (language) {
-        LANG_UR, LANG_EN_IR, LANG_EN_US, LANG_JA -> putBoolean(PREF_PERSIAN_DIGITS, false)
-        else -> putBoolean(PREF_PERSIAN_DIGITS, true)
-    }
+        LANG_UR, LANG_EN_IR, LANG_EN_US, LANG_JA -> false; else -> true
+    }.let { putBoolean(PREF_PERSIAN_DIGITS, it) }
 
     when (language) {
         LANG_FA_AF, LANG_PS -> {
