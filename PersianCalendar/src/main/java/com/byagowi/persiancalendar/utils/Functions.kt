@@ -8,11 +8,6 @@ import android.app.PendingIntent
 import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
@@ -32,15 +27,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.graphics.drawable.IconCompat
 import androidx.core.net.toUri
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
-import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceManager
-import androidx.preference.PreferenceScreen
 import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
@@ -270,28 +261,6 @@ fun getOrderedCalendarEntities(
     return getOrderedCalendarTypes().mapNotNull { calendarType ->
         typeTitleMap[calendarType]?.let { CalendarTypeItem(calendarType, it) }
     }
-}
-
-fun getDayIconResource(day: Int): Int = when (preferredDigits) {
-    ARABIC_DIGITS -> DAYS_ICONS_ARABIC
-    ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC
-    else -> DAYS_ICONS_PERSIAN
-}.getOrNull(day - 1) ?: 0
-
-fun createStatusIcon(context: Context, dayOfMonth: Int): IconCompat {
-    val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    paint.textSize = when (preferredDigits) {
-        ARABIC_DIGITS -> 75f; else -> 90f
-    }
-    paint.textAlign = Paint.Align.CENTER
-    paint.typeface = getAppFont(context)
-    val text = formatNumber(dayOfMonth)
-    val bounds = Rect()
-    paint.color = Color.WHITE
-    paint.getTextBounds(text, 0, text.length, bounds)
-    val bitmap = Bitmap.createBitmap(90, 90, Bitmap.Config.ARGB_8888)
-    Canvas(bitmap).drawText(text, 45f, 45 + bounds.height() / 2f, paint)
-    return IconCompat.createWithBitmap(bitmap)
 }
 
 fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) =
