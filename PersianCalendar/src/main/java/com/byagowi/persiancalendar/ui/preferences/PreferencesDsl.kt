@@ -11,10 +11,9 @@ import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.R
 
 @DslMarker
-@Target(AnnotationTarget.FUNCTION, AnnotationTarget.FIELD)
+@Target(AnnotationTarget.FUNCTION)
 annotation class PreferencesDsl
 
-// Builds preference screen pair of title ids to list of preferences
 // Its only caveat is it turns title's integers to string to be used as category keys
 // so they can be referenced later and used for expansion logic.
 @PreferencesDsl
@@ -36,12 +35,11 @@ inline fun PreferenceScreen.section(
 @PreferencesDsl
 inline fun PreferenceCategory.clickable(
     crossinline onClick: () -> Unit, crossinline block: Preference.() -> Unit
-) = Preference(this.context).also {
+) = this.addPreference(Preference(this.context).also {
     it.setOnPreferenceClickListener { onClick(); true /* it captures the click event */ }
     it.isIconSpaceReserved = false
     block(it)
-    this.addPreference(it)
-}
+})
 
 @PreferencesDsl
 fun Preference.key(key: String) = setKey(key)
@@ -62,7 +60,7 @@ fun Preference.summary(titleResId: Int) = setSummary(titleResId)
 inline fun PreferenceCategory.singleSelect(
     key: String, @ArrayRes entriesResId: Int, @ArrayRes entryValuesResId: Int, defaultValue: String,
     crossinline block: ListPreference.() -> Unit
-) = ListPreference(this.context).also {
+) = this.addPreference(ListPreference(this.context).also {
     it.key = key
     it.setEntries(entriesResId)
     it.setEntryValues(entryValuesResId)
@@ -70,15 +68,14 @@ inline fun PreferenceCategory.singleSelect(
     it.setNegativeButtonText(R.string.cancel)
     it.isIconSpaceReserved = false
     block(it)
-    this.addPreference(it)
-}
+})
 
 @PreferencesDsl
 inline fun PreferenceCategory.multiSelect(
     key: String,
     @ArrayRes entriesResId: Int, @ArrayRes entryValuesResId: Int, defaultValue: Set<String>,
     crossinline block: MultiSelectListPreference.() -> Unit
-) = MultiSelectListPreference(this.context).also {
+) = this.addPreference(MultiSelectListPreference(this.context).also {
     it.key = key
     it.setEntries(entriesResId)
     it.setEntryValues(entryValuesResId)
@@ -87,16 +84,14 @@ inline fun PreferenceCategory.multiSelect(
     it.setPositiveButtonText(R.string.accept)
     it.isIconSpaceReserved = false
     block(it)
-    this.addPreference(it)
-}
+})
 
 @PreferencesDsl
 inline fun PreferenceCategory.switch(
     key: String, defaultValue: Boolean, crossinline block: SwitchPreferenceCompat.() -> Unit
-) = SwitchPreferenceCompat(this.context).also {
+) = this.addPreference(SwitchPreferenceCompat(this.context).also {
     it.key = key
     it.setDefaultValue(defaultValue)
     it.isIconSpaceReserved = false
     block(it)
-    this.addPreference(it)
-}
+})

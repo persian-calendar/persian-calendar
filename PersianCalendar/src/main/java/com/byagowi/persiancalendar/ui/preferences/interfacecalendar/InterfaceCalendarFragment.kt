@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
-import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START

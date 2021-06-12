@@ -186,10 +186,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<Preference>(ringtonePref)?.summary = athanName
     }
 
-    override fun onSharedPreferenceChanged(
-        sharedPreferences: SharedPreferences?,
-        key: String?
-    ) =
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
         updateLocationOnSummaries()
 
     private fun updateLocationOnSummaries() {
