@@ -17,14 +17,22 @@ import androidx.core.net.toUri
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.ui.preferences.build
+import com.byagowi.persiancalendar.ui.preferences.clickable
+import com.byagowi.persiancalendar.ui.preferences.dialogTitle
+import com.byagowi.persiancalendar.ui.preferences.key
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showLocationPreferenceDialog
+import com.byagowi.persiancalendar.ui.preferences.section
+import com.byagowi.persiancalendar.ui.preferences.singleSelect
+import com.byagowi.persiancalendar.ui.preferences.summary
+import com.byagowi.persiancalendar.ui.preferences.switch
+import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
 
@@ -41,107 +49,92 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private val ringtonePref = "PREF_KEY_RINGTONE"
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val context = context ?: return
-
         val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
-        preferenceScreen = preferenceManager.createPreferenceScreen(context).build(
-            R.string.location to listOf(
-                Preference(context).also {
-                    it.setTitle(R.string.gps_location)
-                    it.setSummary(R.string.gps_location_help)
-                    it.onClick { showGPSLocationDialog() }
-                },
-                Preference(context).also {
-                    it.setTitle(R.string.location)
-                    it.setSummary(R.string.location_help)
-                    it.onClick { showLocationPreferenceDialog() }
-                },
-                Preference(context).also {
-                    it.key = coordinatesPref
-                    it.setTitle(R.string.coordination)
-                    it.onClick { showCoordinatesDialog() }
+        preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
+            section(R.string.location) {
+                clickable(onClick = { showGPSLocationDialog() }) {
+                    title(R.string.gps_location)
+                    summary(R.string.gps_location_help)
                 }
-            ),
-            R.string.athan to listOf(
-                ListPreference(context).also {
-                    it.key = PREF_PRAY_TIME_METHOD
-                    it.setDialogTitle(R.string.pray_methods_calculation)
-                    it.setTitle(R.string.pray_methods)
-                    it.setDefaultValue("Tehran")
-                    it.setEntries(R.array.prayMethodsNames)
-                    it.setEntryValues(R.array.prayMethodsKeys)
-                    it.setNegativeButtonText(R.string.cancel)
-                    it.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-                },
-                Preference(context).also {
-                    it.setTitle(R.string.athan_gap)
-                    it.setSummary(R.string.athan_gap_summary)
-                    it.onClick { showAthanGapDialog() }
-                },
-                Preference(context).also {
-                    it.setTitle(R.string.athan_alarm)
-                    it.setSummary(R.string.athan_alarm_summary)
-                    it.onClick { showPrayerSelectDialog() }
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_NOTIFICATION_ATHAN
-                    it.setTitle(R.string.notification_athan)
-                    it.setSummary(R.string.enable_notification_athan)
-                    it.setDefaultValue(false)
-                    it.disableDependentsState = true
-                },
-                Preference(context).also {
-                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
-                    it.setTitle(R.string.athan_alarm)
-                    it.setSummary(R.string.athan_alarm_summary)
-                    it.onClick { showPrayerSelectDialog() }
-                },
-                Preference(context).also {
-                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
-                    it.setTitle(R.string.custom_athan)
-                    it.key = ringtonePref
-                    it.onClick {
-                        runCatching { pickRingtone.launch(getCustomAthanUri(context)) }
-                            .onFailure(logException).getOrNull()
-                    }
-                },
-                Preference(context).also {
-                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
-                    it.setTitle(R.string.default_athan)
-                    it.setTitle(R.string.default_athan_summary)
-                    it.onClick {
-                        context.appPrefs.edit {
-                            remove(PREF_ATHAN_URI)
-                            remove(PREF_ATHAN_NAME)
-                        }
-                        view?.let { v ->
-                            Snackbar.make(v, R.string.returned_to_default, Snackbar.LENGTH_SHORT)
-                                .show()
-                        }
-                        putAthanNameOnSummary(defaultAthanName)
-                    }
-                },
-                SwitchPreferenceCompat(context).also {
-                    handler.post { it.dependency = PREF_NOTIFICATION_ATHAN }
-                    it.setDefaultValue(false)
-                    it.disableDependentsState = true
-                    it.key = PREF_ASCENDING_ATHAN_VOLUME
-                    it.setTitle(R.string.ascending_athan_volume)
-                    it.setSummary(R.string.enable_ascending_athan_volume)
-                },
-                Preference(context).also {
-                    handler.post { it.dependency = PREF_ASCENDING_ATHAN_VOLUME }
-                    it.setTitle(R.string.athan_volume)
-                    it.setSummary(R.string.athan_volume_summary)
-                    it.onClick { showAthanVolumeDialog() }
+                clickable(onClick = { showLocationPreferenceDialog() }) {
+                    title(R.string.location)
+                    summary(R.string.location_help)
                 }
-            )
-        )
+                clickable(onClick = { showCoordinatesDialog() }) {
+                    key(coordinatesPref)
+                    title(R.string.coordination)
+                }
+            }
+            section(R.string.athan) {
+                singleSelect(
+                    PREF_PRAY_TIME_METHOD,
+                    R.array.prayMethodsNames, R.array.prayMethodsKeys, DEFAULT_PRAY_TIME_METHOD
+                ) {
+                    title(R.string.pray_methods)
+                    dialogTitle(R.string.pray_methods_calculation)
+                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                }
+                clickable(onClick = { showAthanGapDialog() }) {
+                    title(R.string.athan_gap)
+                    summary(R.string.athan_gap_summary)
+                }
+                clickable(onClick = { showPrayerSelectDialog() }) {
+                    title(R.string.athan_alarm)
+                    summary(R.string.athan_alarm_summary)
+                }
+                switch(PREF_NOTIFICATION_ATHAN, false) {
+                    title(R.string.notification_athan)
+                    summary(R.string.enable_notification_athan)
+                    disableDependentsState = true
+                }
+                clickable(onClick = { showPrayerSelectDialog() }) {
+                    title(R.string.athan_alarm)
+                    summary(R.string.athan_alarm_summary)
+                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
+                }
+                clickable(onClick = {
+                    runCatching { pickRingtone.launch(getCustomAthanUri(layoutInflater.context)) }
+                        .onFailure(logException).getOrNull()
+                }) {
+                    title(R.string.custom_athan)
+                    key(ringtonePref)
+                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
+                }
+                clickable(onClick = {
+                    context?.appPrefs?.edit {
+                        remove(PREF_ATHAN_URI)
+                        remove(PREF_ATHAN_NAME)
+                    }
+                    view?.let { v ->
+                        Snackbar.make(v, R.string.returned_to_default, Snackbar.LENGTH_SHORT)
+                            .show()
+                    }
+                    putAthanNameOnSummary(defaultAthanName)
+                }) {
+                    title(R.string.default_athan)
+                    summary(R.string.default_athan_summary)
+                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
+                }
+                switch(PREF_ASCENDING_ATHAN_VOLUME, false) {
+                    title(R.string.ascending_athan_volume)
+                    summary(R.string.enable_ascending_athan_volume)
+                    disableDependentsState = true
+                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
+                }
+                clickable(onClick = { showAthanVolumeDialog() }) {
+                    title(R.string.athan_volume)
+                    summary(R.string.athan_volume_summary)
+                    handler.post { dependency = PREF_ASCENDING_ATHAN_VOLUME }
+                }
+            }
+        }
 
         onSharedPreferenceChanged(null, null)
-        context.appPrefs.registerOnSharedPreferenceChangeListener(this)
+        layoutInflater.context.appPrefs.registerOnSharedPreferenceChangeListener(this)
 
-        putAthanNameOnSummary(context.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName))
+        putAthanNameOnSummary(
+            layoutInflater.context.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName)
+        )
         updateLocationOnSummaries()
     }
 
@@ -156,7 +149,12 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     Settings.System.DEFAULT_NOTIFICATION_URI
                 )
                 .also { intent ->
-                    input?.let { intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it) }
+                    input?.let {
+                        intent.putExtra(
+                            RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
+                            it
+                        )
+                    }
                 }
 
         override fun parseResult(resultCode: Int, intent: Intent?): String? =
@@ -188,7 +186,10 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         findPreference<Preference>(ringtonePref)?.summary = athanName
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences?,
+        key: String?
+    ) =
         updateLocationOnSummaries()
 
     private fun updateLocationOnSummaries() {

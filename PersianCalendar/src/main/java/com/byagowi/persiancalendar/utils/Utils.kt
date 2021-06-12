@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_APP_LANGUAGE
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
+import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
@@ -225,7 +226,7 @@ fun loadEvents(context: Context) {
     // Now that we are configuring converter's algorithm above, lets set the offset also
 
     IslamicDate.islamicOffset = context.appPrefs
-        .getString(PREF_ISLAMIC_OFFSET, null)?.toIntOrNull() ?: 0
+        .getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
     val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
 

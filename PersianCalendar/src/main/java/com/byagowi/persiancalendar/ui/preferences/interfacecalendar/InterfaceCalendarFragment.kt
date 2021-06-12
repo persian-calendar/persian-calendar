@@ -5,11 +5,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.preference.ListPreference
-import androidx.preference.MultiSelectListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreferenceCompat
+import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.LANG_AR
 import com.byagowi.persiancalendar.LANG_EN_US
 import com.byagowi.persiancalendar.LANG_JA
@@ -29,136 +29,114 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
 import com.byagowi.persiancalendar.ui.preferences.PREF_DESTINATION
+import com.byagowi.persiancalendar.ui.preferences.build
+import com.byagowi.persiancalendar.ui.preferences.clickable
+import com.byagowi.persiancalendar.ui.preferences.dialogTitle
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
+import com.byagowi.persiancalendar.ui.preferences.key
+import com.byagowi.persiancalendar.ui.preferences.multiSelect
+import com.byagowi.persiancalendar.ui.preferences.section
+import com.byagowi.persiancalendar.ui.preferences.singleSelect
+import com.byagowi.persiancalendar.ui.preferences.summary
+import com.byagowi.persiancalendar.ui.preferences.switch
+import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
-import com.byagowi.persiancalendar.utils.build
 import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.onClick
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val context = context ?: return
-
-        preferenceScreen = preferenceManager.createPreferenceScreen(context).build(
-            R.string.pref_interface to listOf(
-                Preference(context).also {
-                    it.key = PREF_APP_LANGUAGE
-                    it.setTitle(R.string.language)
-                    it.onClick { showLanguagePreferenceDialog() }
-                },
-                ListPreference(context).also {
-                    it.key = PREF_THEME
-                    it.setTitle(R.string.select_skin)
-                    it.setDialogTitle(R.string.select_skin)
-                    it.setDefaultValue(SYSTEM_DEFAULT_THEME)
-                    it.setEntries(R.array.themeNames)
-                    it.setEntryValues(R.array.themeKeys)
-                    it.setNegativeButtonText(R.string.cancel)
-                    it.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
-                    it.setDefaultValue(false)
+        preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
+            section(R.string.pref_interface) {
+                clickable(onClick = { showLanguagePreferenceDialog() }) {
+                    key(PREF_APP_LANGUAGE) // Referenced at the end of the method
+                    title(R.string.language)
+                }
+                singleSelect(
+                    PREF_THEME, R.array.themeNames, R.array.themeKeys, SYSTEM_DEFAULT_THEME
+                ) {
+                    title(R.string.select_skin)
+                    dialogTitle(R.string.select_skin)
+                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                }
+                switch(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false) {
                     if (language == LANG_AR) {
-                        it.title = "السنة الميلادية بالاسماء الشرقية"
-                        it.summary = "كانون الثاني، شباط، آذار، …"
-                    } else it.isVisible = false
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_PERSIAN_DIGITS
-                    it.setDefaultValue(true)
-                    it.setTitle(R.string.persian_digits)
-                    it.setSummary(R.string.enable_persian_digits)
+                        title = "السنة الميلادية بالاسماء الشرقية"
+                        summary = "كانون الثاني، شباط، آذار، …"
+                    } else isVisible = false
+                }
+                switch(PREF_PERSIAN_DIGITS, true) {
+                    title(R.string.persian_digits)
+                    summary(R.string.enable_persian_digits)
                     when (language) {
-                        LANG_EN_US, LANG_JA -> it.isVisible = false
+                        LANG_EN_US, LANG_JA -> isVisible = false
                     }
                 }
-            ),
-            R.string.calendar to listOf(
-                Preference(context).also {
-                    it.setTitle(R.string.events)
-                    it.setSummary(R.string.events_summary)
-                    it.onClick { showHolidaysTypesDialog() }
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_SHOW_DEVICE_CALENDAR_EVENTS
-                    it.setDefaultValue(false)
-                    it.setTitle(R.string.show_device_calendar_events)
-                    it.setSummary(R.string.show_device_calendar_events_summary)
-                    it.setOnPreferenceChangeListener { _, _ ->
+            }
+            section(R.string.calendar) {
+                // Mark the rest of options as advanced
+                initialExpandedChildrenCount = 6
+                clickable(onClick = { showHolidaysTypesDialog() }) {
+                    title(R.string.events)
+                    summary(R.string.events_summary)
+                }
+                switch(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) {
+                    title(R.string.show_device_calendar_events)
+                    summary(R.string.show_device_calendar_events_summary)
+                    setOnPreferenceChangeListener { _, _ ->
                         val activity = activity ?: return@setOnPreferenceChangeListener false
-                        if (ActivityCompat.checkSelfPermission(
+                        isChecked = if (ActivityCompat.checkSelfPermission(
                                 activity, Manifest.permission.READ_CALENDAR
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             askForCalendarPermission(activity)
-                            it.isChecked = false
+                            false
                         } else {
-                            it.isChecked = !it.isChecked
+                            !isChecked
                         }
                         false
                     }
-                },
-                Preference(context).also {
-                    it.setTitle(R.string.calendars_priority)
-                    it.setSummary(R.string.calendars_priority_summary)
-                    it.onClick { showCalendarPreferenceDialog() }
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_ASTRONOMICAL_FEATURES
-                    it.setDefaultValue(false)
-                    it.setTitle(R.string.astronomical_info)
-                    it.setSummary(R.string.astronomical_info_summary)
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_SHOW_WEEK_OF_YEAR_NUMBER
-                    it.setDefaultValue(false)
-                    it.setTitle(R.string.week_of_year)
-                    it.setSummary(R.string.week_of_year_summary)
-                },
-                SwitchPreferenceCompat(context).also {
-                    it.key = PREF_WIDGET_IN_24
-                    it.setDefaultValue(true)
-                    it.setTitle(R.string.clock_in_24)
-                    it.setSummary(R.string.showing_clock_in_24)
-                },
-                ListPreference(context).also {
-                    it.key = PREF_ISLAMIC_OFFSET
-                    it.setTitle(R.string.islamic_offset)
-                    it.setSummary(R.string.islamic_offset_summary)
-                    it.setDialogTitle(R.string.islamic_offset)
-                    it.setDefaultValue("0")
-                    it.setEntries(R.array.islamicOffsetNames)
-                    it.setEntryValues(R.array.islamicOffsetKeys)
-                    it.setNegativeButtonText(R.string.cancel)
-                },
-                ListPreference(context).also {
-                    it.key = PREF_WEEK_START
-                    it.setTitle(R.string.week_start)
-                    it.setDialogTitle(R.string.week_start_summary)
-                    it.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-                    it.setDefaultValue("0")
-                    it.setEntries(R.array.week_days)
-                    it.setEntryValues(R.array.week_days_value)
-                    it.setNegativeButtonText(R.string.cancel)
-                },
-                MultiSelectListPreference(context).also {
-                    it.key = PREF_WEEK_ENDS
-                    it.setTitle(R.string.week_ends)
-                    it.setSummary(R.string.week_ends_summary)
-                    it.setDialogTitle(R.string.week_ends_summary)
-                    it.setDefaultValue(resources.getStringArray(R.array.default_weekends).toSet())
-                    it.entries = resources.getStringArray(R.array.week_days)
-                    it.entryValues = resources.getStringArray(R.array.week_days_value)
-                    it.setNegativeButtonText(R.string.cancel)
-                    it.setPositiveButtonText(R.string.accept)
                 }
-            )
-        )
-
-        // Mark the rest of options as advanced
-        preferenceScreen?.findPreference<PreferenceCategory?>(R.string.calendar.toString())
-            .debugAssertNotNull?.initialExpandedChildrenCount = 6
+                clickable(onClick = { showCalendarPreferenceDialog() }) {
+                    title(R.string.calendars_priority)
+                    summary(R.string.calendars_priority_summary)
+                }
+                switch(PREF_ASTRONOMICAL_FEATURES, false) {
+                    title(R.string.astronomical_info)
+                    summary(R.string.astronomical_info_summary)
+                }
+                switch(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false) {
+                    title(R.string.week_of_year)
+                    summary(R.string.week_of_year_summary)
+                }
+                switch(PREF_WIDGET_IN_24, true) {
+                    title(R.string.clock_in_24)
+                    summary(R.string.showing_clock_in_24)
+                }
+                singleSelect(
+                    PREF_ISLAMIC_OFFSET,
+                    R.array.islamicOffsetNames, R.array.islamicOffsetKeys, DEFAULT_ISLAMIC_OFFSET
+                ) {
+                    title(R.string.islamic_offset)
+                    summary(R.string.islamic_offset_summary)
+                    dialogTitle(R.string.islamic_offset)
+                }
+                singleSelect(
+                    PREF_WEEK_START, R.array.week_days, R.array.week_days_value, DEFAULT_WEEK_START
+                ) {
+                    title(R.string.week_start)
+                    dialogTitle(R.string.week_start_summary)
+                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                }
+                multiSelect(
+                    PREF_WEEK_ENDS, R.array.week_days, R.array.week_days_value,
+                    resources.getStringArray(R.array.default_weekends).toSet()
+                ) {
+                    title(R.string.week_ends)
+                    summary(R.string.week_ends_summary)
+                    dialogTitle(R.string.week_ends_summary)
+                }
+            }
+        }
 
         // Handle navigation passed destination
         when (arguments?.getString(PREF_DESTINATION)) {
