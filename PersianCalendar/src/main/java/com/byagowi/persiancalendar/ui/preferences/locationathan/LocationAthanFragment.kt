@@ -16,12 +16,12 @@ import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.ListPreference
 import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
 import com.byagowi.persiancalendar.ui.preferences.dialogTitle
-import com.byagowi.persiancalendar.ui.preferences.key
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectDialog
@@ -45,8 +45,10 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             return context.getString(R.string.default_athan_name)
         }
 
-    private val coordinatesPref = "PREF_COORDINATES"
-    private val ringtonePref = "PREF_KEY_RINGTONE"
+    private var coordinatesPreference: Preference? = null
+    private var ringtonePreference: Preference? = null
+    private var selectedLocationPreference: Preference? = null
+    private var athanPreferenceCategory: PreferenceCategory? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
@@ -59,13 +61,15 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 clickable(onClick = { showLocationPreferenceDialog() }) {
                     title(R.string.location)
                     summary(R.string.location_help)
+                    this@LocationAthanFragment.selectedLocationPreference = this
                 }
                 clickable(onClick = { showCoordinatesDialog() }) {
-                    key(coordinatesPref)
                     title(R.string.coordination)
+                    this@LocationAthanFragment.coordinatesPreference = this
                 }
             }
             section(R.string.athan) {
+                this@LocationAthanFragment.athanPreferenceCategory = this
                 singleSelect(
                     PREF_PRAY_TIME_METHOD,
                     R.array.prayMethodsNames, R.array.prayMethodsKeys, DEFAULT_PRAY_TIME_METHOD
@@ -97,7 +101,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         .onFailure(logException).getOrNull()
                 }) {
                     title(R.string.custom_athan)
-                    key(ringtonePref)
+                    this@LocationAthanFragment.ringtonePreference = this
                     handler.post { dependency = PREF_NOTIFICATION_ATHAN }
                 }
                 clickable(onClick = {
@@ -183,7 +187,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {
-        findPreference<Preference>(ringtonePref)?.summary = athanName
+        ringtonePreference?.summary = athanName
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
@@ -192,17 +196,16 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private fun updateLocationOnSummaries() {
         val context = context ?: return
         val cityName = getCityName(context, false).takeIf { it.isNotEmpty() }
-        findPreference<Preference>(PREF_SELECTED_LOCATION)?.summary =
-            cityName ?: context.getString(R.string.location_help)
+        selectedLocationPreference?.summary = cityName ?: context.getString(R.string.location_help)
         val coordinates = getCoordinate(context)
-        findPreference<Preference>(R.string.athan.toString())?.isEnabled = coordinates != null
-        findPreference<Preference>(R.string.athan.toString())?.setSummary(
+        athanPreferenceCategory?.isEnabled = coordinates != null
+        athanPreferenceCategory?.setSummary(
             if (coordinates == null) R.string.athan_disabled_summary else R.string.empty
         )
         val selectedLocation = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
             ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }
-        findPreference<Preference>(coordinatesPref)?.isEnabled = selectedLocation == null
-        findPreference<Preference>(coordinatesPref)?.summary = coordinates?.let {
+        coordinatesPreference?.isEnabled = selectedLocation == null
+        coordinatesPreference?.summary = coordinates?.let {
             formatCoordinateISO6709(
                 coordinates.latitude, coordinates.latitude,
                 coordinates.elevation.takeIf { it != .0 }

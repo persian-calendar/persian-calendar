@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.preference.ListPreference
-import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
@@ -25,14 +24,12 @@ import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
 import com.byagowi.persiancalendar.ui.preferences.PREF_DESTINATION
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
 import com.byagowi.persiancalendar.ui.preferences.dialogTitle
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
-import com.byagowi.persiancalendar.ui.preferences.key
 import com.byagowi.persiancalendar.ui.preferences.multiSelect
 import com.byagowi.persiancalendar.ui.preferences.section
 import com.byagowi.persiancalendar.ui.preferences.singleSelect
@@ -44,11 +41,16 @@ import com.byagowi.persiancalendar.utils.language
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        val destination = arguments?.getString(PREF_DESTINATION)
+        if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog()
+
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.pref_interface) {
                 clickable(onClick = { showLanguagePreferenceDialog() }) {
-                    key(PREF_APP_LANGUAGE) // Referenced at the end of the method
-                    title(R.string.language)
+                    if (destination == PREF_APP_LANGUAGE)
+                        title = "Language"
+                    else
+                        title(R.string.language)
                 }
                 singleSelect(
                     PREF_THEME, R.array.themeNames, R.array.themeKeys, SYSTEM_DEFAULT_THEME
@@ -59,7 +61,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 switch(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false) {
                     if (language == LANG_AR) {
-                        title = "السنة الميلادية بالاسماء الشرقية"
+                        title = "السنة الميلادية بالاسماء الشرقي¬ة"
                         summary = "كانون الثاني، شباط، آذار، …"
                     } else isVisible = false
                 }
@@ -134,16 +136,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     summary(R.string.week_ends_summary)
                     dialogTitle(R.string.week_ends_summary)
                 }
-            }
-        }
-
-        // Handle navigation passed destination
-        when (arguments?.getString(PREF_DESTINATION)) {
-            PREF_HOLIDAY_TYPES -> showHolidaysTypesDialog()
-            PREF_APP_LANGUAGE -> {
-                // Bringing up the dialog is too much, only turn preference title to English
-                preferenceScreen?.findPreference<Preference>(PREF_APP_LANGUAGE).debugAssertNotNull
-                    ?.title = "Language"
             }
         }
     }

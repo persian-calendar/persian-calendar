@@ -14,8 +14,6 @@ import com.byagowi.persiancalendar.R
 @Target(AnnotationTarget.FUNCTION)
 annotation class PreferencesDsl
 
-// Its only caveat is it turns title's integers to string to be used as category keys
-// so they can be referenced later and used for expansion logic.
 @PreferencesDsl
 inline fun PreferenceScreen.build(crossinline block: PreferenceScreen.() -> Unit) =
     this.also { block(it) }
@@ -25,7 +23,7 @@ inline fun PreferenceScreen.section(
     @StringRes title: Int, crossinline block: PreferenceCategory.() -> Unit
 ) {
     val category = PreferenceCategory(context)
-    category.key = title.toString()
+    category.key = title.toString() // turns title's int id to string to make expansion logic work
     category.setTitle(title)
     category.isIconSpaceReserved = false
     this.addPreference(category)
@@ -42,19 +40,18 @@ inline fun PreferenceCategory.clickable(
 })
 
 @PreferencesDsl
-fun Preference.key(key: String) = setKey(key)
+fun Preference.title(@StringRes titleResId: Int) = setTitle(titleResId)
 
 @PreferencesDsl
-fun Preference.title(titleResId: Int) = setTitle(titleResId)
+fun MultiSelectListPreference.dialogTitle(@StringRes dialogTitleResId: Int) =
+    setDialogTitle(dialogTitleResId)
 
 @PreferencesDsl
-fun MultiSelectListPreference.dialogTitle(dialogTitleResId: Int) = setDialogTitle(dialogTitleResId)
+fun ListPreference.dialogTitle(@StringRes dialogTitleResId: Int) =
+    setDialogTitle(dialogTitleResId)
 
 @PreferencesDsl
-fun ListPreference.dialogTitle(dialogTitleResId: Int) = setDialogTitle(dialogTitleResId)
-
-@PreferencesDsl
-fun Preference.summary(titleResId: Int) = setSummary(titleResId)
+fun Preference.summary(@StringRes summaryResId: Int) = setSummary(summaryResId)
 
 @PreferencesDsl
 inline fun PreferenceCategory.singleSelect(
