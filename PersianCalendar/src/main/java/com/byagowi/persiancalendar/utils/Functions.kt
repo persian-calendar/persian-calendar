@@ -10,6 +10,7 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.os.Build
@@ -279,13 +280,17 @@ fun getDayIconResource(day: Int): Int = when (preferredDigits) {
 
 fun createStatusIcon(context: Context, dayOfMonth: Int): IconCompat {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    paint.textSize = 90f
+    paint.textSize = when (preferredDigits) {
+        ARABIC_DIGITS -> 75f; else -> 90f
+    }
+    paint.textAlign = Paint.Align.CENTER
     paint.typeface = getAppFont(context)
     val text = formatNumber(dayOfMonth)
     val bounds = Rect()
+    paint.color = Color.WHITE
     paint.getTextBounds(text, 0, text.length, bounds)
     val bitmap = Bitmap.createBitmap(90, 90, Bitmap.Config.ARGB_8888)
-    Canvas(bitmap).drawText(text, 45 - bounds.width() / 2f, 45 + bounds.height() / 2f, paint)
+    Canvas(bitmap).drawText(text, 45f, 45 + bounds.height() / 2f, paint)
     return IconCompat.createWithBitmap(bitmap)
 }
 

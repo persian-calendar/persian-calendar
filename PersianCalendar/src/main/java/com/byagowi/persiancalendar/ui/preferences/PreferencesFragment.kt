@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
@@ -32,9 +31,9 @@ class PreferencesFragment : Fragment() {
             it.setTitle(R.string.settings)
             it.setupUpNavigation()
             if (BuildConfig.DEBUG) {
-                val menuItem = it.menu.add("RESET")
-                menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-                menuItem.onClick { it.context.appPrefs.edit { clear() }; activity?.recreate() }
+                it.menu.add("Generated vs static icons").onClick { showIconsDemoDialog() }
+                it.menu.add("Clear preferences store")
+                    .onClick { it.context.appPrefs.edit { clear() }; activity?.recreate() }
             }
         }
 
