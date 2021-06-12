@@ -61,7 +61,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 switch(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false) {
                     if (language == LANG_AR) {
-                        title = "السنة الميلادية بالاسماء الشرقي¬ة"
+                        title = "السنة الميلادية بالاسماء الشرقية"
                         summary = "كانون الثاني، شباط، آذار، …"
                     } else isVisible = false
                 }
