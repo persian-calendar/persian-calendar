@@ -31,7 +31,7 @@ class PreferencesFragment : Fragment() {
             it.setTitle(R.string.settings)
             it.setupUpNavigation()
             if (BuildConfig.DEBUG) {
-                it.menu.add("Generated vs static icons").onClick { showIconsDemoDialog() }
+                it.menu.add("Static vs generated icons").onClick { showIconsDemoDialog() }
                 it.menu.add("Clear preferences store")
                     .onClick { it.context.appPrefs.edit { clear() }; activity?.recreate() }
             }
