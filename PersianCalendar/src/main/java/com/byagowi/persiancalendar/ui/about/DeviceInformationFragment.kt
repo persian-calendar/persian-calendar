@@ -123,117 +123,112 @@ class DeviceInformationFragment : Fragment() {
             bottomNavigationView.setOnNavigationItemSelectedListener {
                 val activity = activity ?: return@setOnNavigationItemSelectedListener true
                 // Easter egg
-                when {
-                    ++clickCount % 10 == 0 -> {
-                        BottomSheetDialog(activity).also { bottomSheetDialog ->
-                            bottomSheetDialog.setContentView(LinearLayout(activity).also { linearLayout ->
-                                linearLayout.orientation = LinearLayout.VERTICAL
-                                // Add one with CircularProgressIndicator also
-                                linearLayout.addView(LinearProgressIndicator(activity).also { linearProgressIndicator ->
-                                    linearProgressIndicator.isIndeterminate = true
-                                    linearProgressIndicator.setIndicatorColor(
-                                        Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-                                    )
-                                    linearProgressIndicator.layoutParams =
-                                        ViewGroup.LayoutParams(
-                                            ViewGroup.LayoutParams.MATCH_PARENT,
-                                            ViewGroup.LayoutParams.WRAP_CONTENT
-                                        )
-                                })
-                                linearLayout.addView(TabLayout(
-                                    activity, null, R.style.TabLayoutColored
-                                ).also { tabLayout ->
-                                    val tintColor = activity.resolveColor(R.attr.normalTabTextColor)
-                                    listOf(
-                                        R.drawable.ic_developer to -1,
-                                        R.drawable.ic_translator to 0,
-                                        R.drawable.ic_motorcycle to 1,
-                                        R.drawable.ic_help to 33,
-                                        R.drawable.ic_bug to 9999
-                                    ).map { (iconId: Int, badgeNumber: Int) ->
-                                        tabLayout.addTab(tabLayout.newTab().also { tab ->
-                                            tab.setIcon(iconId)
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                tab.icon?.setTint(tintColor)
-                                            }
-                                            tab.orCreateBadge.also { badge ->
-                                                badge.isVisible = badgeNumber >= 0
-                                                if (badgeNumber > 0) badge.number = badgeNumber
-                                            }
-                                        })
+                if (++clickCount % 10 == 0) BottomSheetDialog(activity).also { bottomSheetDialog ->
+                    bottomSheetDialog.setContentView(LinearLayout(activity).also { linearLayout ->
+                        linearLayout.orientation = LinearLayout.VERTICAL
+                        // Add one with CircularProgressIndicator also
+                        linearLayout.addView(LinearProgressIndicator(activity).also { linearProgressIndicator ->
+                            linearProgressIndicator.isIndeterminate = true
+                            linearProgressIndicator.setIndicatorColor(
+                                Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+                            )
+                            linearProgressIndicator.layoutParams =
+                                ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT
+                                )
+                        })
+                        linearLayout.addView(TabLayout(
+                            activity, null, R.style.TabLayoutColored
+                        ).also { tabLayout ->
+                            val tintColor = activity.resolveColor(R.attr.normalTabTextColor)
+                            listOf(
+                                R.drawable.ic_developer to -1,
+                                R.drawable.ic_translator to 0,
+                                R.drawable.ic_motorcycle to 1,
+                                R.drawable.ic_help to 33,
+                                R.drawable.ic_bug to 9999
+                            ).map { (iconId: Int, badgeNumber: Int) ->
+                                tabLayout.addTab(tabLayout.newTab().also { tab ->
+                                    tab.setIcon(iconId)
+                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                        tab.icon?.setTint(tintColor)
                                     }
-                                    tabLayout.addOnTabSelectedListener(object :
-                                        TabLayout.OnTabSelectedListener {
-                                        override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-                                        override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-                                        override fun onTabSelected(tab: TabLayout.Tab?) {
-                                            tab?.orCreateBadge?.isVisible = false
-                                        }
-                                    })
-                                    tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
-                                    tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
-                                })
-                                linearLayout.addView(ImageView(activity).also { imageView ->
-                                    imageView.minimumHeight = 80.dp
-                                    imageView.minimumWidth = 80.dp
-                                    imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
-                                        ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
-                                            valueAnimator.duration = 3000
-                                            valueAnimator.interpolator = LinearInterpolator()
-                                            valueAnimator.repeatMode = ValueAnimator.REVERSE
-                                            valueAnimator.repeatCount = ValueAnimator.INFINITE
-                                            valueAnimator.addUpdateListener {
-                                                drawable.progress = (it.animatedValue as Float)
-                                                    .coerceIn(0f, 1f)
-                                            }
-                                        }.start()
-                                    })
-                                })
-                                linearLayout.addView(ProgressBar(activity).also { progressBar ->
-                                    progressBar.isIndeterminate = true
-                                    when {
-                                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
-                                            Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-                                        ).also { valueAnimator ->
-                                            valueAnimator.duration = 3000
-                                            valueAnimator.interpolator = LinearInterpolator()
-                                            valueAnimator.repeatMode = ValueAnimator.REVERSE
-                                            valueAnimator.repeatCount = ValueAnimator.INFINITE
-                                            valueAnimator.addUpdateListener {
-                                                progressBar.indeterminateDrawable?.colorFilter =
-                                                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                                                        it.animatedValue as Int,
-                                                        BlendModeCompat.SRC_ATOP
-                                                    )
-                                            }
-                                        }.start()
+                                    tab.orCreateBadge.also { badge ->
+                                        badge.isVisible = badgeNumber >= 0
+                                        if (badgeNumber > 0) badge.number = badgeNumber
                                     }
-                                    progressBar.layoutParams =
-                                        ViewGroup.LayoutParams(
-                                            ViewGroup.LayoutParams.MATCH_PARENT,
-                                            600
-                                        )
-                                    // setOnLongClickListener {
-                                    //     val player = MediaPlayer.create(activity, R.raw.moonlight)
-                                    //     runCatching {
-                                    //         if (!player.isPlaying) player.start()
-                                    //     }.onFailure(logException)
-                                    //     AlertDialog.Builder(activity)
-                                    //         .setView(AppCompatImageButton(context).apply {
-                                    //             setImageResource(R.drawable.ic_stop)
-                                    //             setOnClickListener { dismiss() }
-                                    //         })
-                                    //         .setOnDismissListener {
-                                    //             runCatching { player.stop() }.onFailure(logException)
-                                    //         }
-                                    //         .show()
-                                    //     true
-                                    // }
                                 })
+                            }
+                            tabLayout.addOnTabSelectedListener(object :
+                                TabLayout.OnTabSelectedListener {
+                                override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+                                override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+                                override fun onTabSelected(tab: TabLayout.Tab?) {
+                                    tab?.orCreateBadge?.isVisible = false
+                                }
                             })
-                        }.show()
-                    }
-                }
+                            tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
+                            tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
+                        })
+                        linearLayout.addView(ImageView(activity).also { imageView ->
+                            imageView.minimumHeight = 80.dp
+                            imageView.minimumWidth = 80.dp
+                            imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
+                                ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
+                                    valueAnimator.duration = 3000
+                                    valueAnimator.interpolator = LinearInterpolator()
+                                    valueAnimator.repeatMode = ValueAnimator.REVERSE
+                                    valueAnimator.repeatCount = ValueAnimator.INFINITE
+                                    valueAnimator.addUpdateListener {
+                                        drawable.progress =
+                                            (it.animatedValue as Float).coerceIn(0f, 1f)
+                                    }
+                                }.start()
+                            })
+                        })
+                        linearLayout.addView(ProgressBar(activity).also { progressBar ->
+                            progressBar.isIndeterminate = true
+                            when {
+                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
+                                    Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+                                ).also { valueAnimator ->
+                                    valueAnimator.duration = 3000
+                                    valueAnimator.interpolator = LinearInterpolator()
+                                    valueAnimator.repeatMode = ValueAnimator.REVERSE
+                                    valueAnimator.repeatCount = ValueAnimator.INFINITE
+                                    valueAnimator.addUpdateListener {
+                                        progressBar.indeterminateDrawable?.colorFilter =
+                                            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                                                it.animatedValue as Int, BlendModeCompat.SRC_ATOP
+                                            )
+                                    }
+                                }.start()
+                            }
+                            progressBar.layoutParams =
+                                ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    600
+                                )
+                            // setOnLongClickListener {
+                            //     val player = MediaPlayer.create(activity, R.raw.moonlight)
+                            //     runCatching {
+                            //         if (!player.isPlaying) player.start()
+                            //     }.onFailure(logException)
+                            //     AlertDialog.Builder(activity)
+                            //         .setView(AppCompatImageButton(context).also {
+                            //             it.setImageResource(R.drawable.ic_stop)
+                            //             it.setOnClickListener { dismiss() }
+                            //         })
+                            //         .setOnDismissListener {
+                            //             runCatching { player.stop() }.onFailure(logException)
+                            //         }
+                            //         .show()
+                            //     true
+                            // }
+                        })
+                    })
+                }.show()
                 true
             }
         }
@@ -290,23 +285,17 @@ class CheckerBoard(context: Context, attrs: AttributeSet?) :
 // https://stackoverflow.com/a/58471997
 private fun createCheckerRoundedBoard(
     tileSize: Float, r: Float, @ColorInt color: Int
-) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    shader = BitmapShader(
-        Bitmap.createBitmap(
-            tileSize.toInt() * 2, tileSize.toInt() * 2, Bitmap.Config.ARGB_8888
-        ).apply {
-            Canvas(this).apply {
-                val fill = Paint(Paint.ANTI_ALIAS_FLAG).also {
-                    it.style = Paint.Style.FILL
-                    it.color = color
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    drawRoundRect(0f, 0f, tileSize, tileSize, r, r, fill)
-                    drawRoundRect(tileSize, tileSize, tileSize * 2f, tileSize * 2f, r, r, fill)
-                }
-            }
-        }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
-    )
+) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return@also
+    val tileSize2x = tileSize.toInt() * 2
+    val bitmap = Bitmap.createBitmap(tileSize2x, tileSize2x, Bitmap.Config.ARGB_8888)
+    val fill = Paint(Paint.ANTI_ALIAS_FLAG)
+    fill.style = Paint.Style.FILL
+    fill.color = color
+    val canvas = Canvas(bitmap)
+    canvas.drawRoundRect(0f, 0f, tileSize, tileSize, r, r, fill)
+    canvas.drawRoundRect(tileSize, tileSize, tileSize * 2f, tileSize * 2f, r, r, fill)
+    paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
 }
 
 // https://stackoverflow.com/a/59234917
@@ -352,8 +341,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
             Build.VERSION.SDK_INT.toString()
         ),
         Item(
-            "CPU Instructions Sets",
-            (when {
+            "CPU Instructions Sets", (when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> Build.SUPPORTED_ABIS
                 else -> arrayOf(Build.CPU_ABI, Build.CPU_ABI2)
             }).joinToString(", "),
@@ -378,15 +366,13 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
         Item("Display", Build.DISPLAY, ""),
         Item("Device Fingerprints", Build.FINGERPRINT, ""),
         Item(
-            "RAM",
-            humanReadableByteCountBin(ActivityManager.MemoryInfo().also {
+            "RAM", humanReadableByteCountBin(ActivityManager.MemoryInfo().also {
                 activity.getSystemService<ActivityManager>()?.getMemoryInfo(it)
             }.totalMem),
             ""
         ),
         Item(
-            "Battery",
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            "Battery", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 (activity.getSystemService<BatteryManager>())?.let {
                     listOf("Charging: ${it.isCharging}") + listOf(
                         "Capacity" to BatteryManager.BATTERY_PROPERTY_CAPACITY,
@@ -401,8 +387,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
         ),
         Item("Display Metrics", activity.resources.displayMetrics.toString(), ""),
         Item(
-            "Sensors",
-            (activity.getSystemService<SensorManager>())
+            "Sensors", (activity.getSystemService<SensorManager>())
                 ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
         ),
         Item(
@@ -436,10 +421,8 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
         }
         listOf(
             Item(
-                "OpenGL",
-                (listOf(
-                    "GL_VERSION" to GLES20.GL_VERSION,
-                    "GL_RENDERER" to GLES20.GL_RENDERER,
+                "OpenGL", (listOf(
+                    "GL_VERSION" to GLES20.GL_VERSION, "GL_RENDERER" to GLES20.GL_RENDERER,
                     "GL_VENDOR" to GLES20.GL_VENDOR
                 ).map { (title: String, id: Int) -> "$title: ${GLES20.glGetString(id)}" } + listOf(
                     "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS" to GLES20.GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
@@ -461,8 +444,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
                 ""
             ),
             Item(
-                "OpenGL Extensions",
-                buildSpannedString {
+                "OpenGL Extensions", buildSpannedString {
                     val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS).trim().split(" ")
                     val regex = Regex("GL_([a-zA-Z]+)_(.+)")
                     extensions.forEachIndexed { i, it ->
@@ -502,12 +484,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
         body {
             h1 { +"Device Information" }
             table {
-                thead {
-                    tr {
-                        th { +"Item" }
-                        th { +"Value" }
-                    }
-                }
+                thead { tr { th { +"Item" }; th { +"Value" } } }
                 tbody {
                     deviceInformationItems.forEach {
                         tr {
