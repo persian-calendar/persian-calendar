@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.preferences
 
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -28,6 +29,13 @@ fun Fragment.showIconsDemoDialog() {
                     object : RecyclerView.ViewHolder(FrameLayout(context).also { frameLayout ->
                         frameLayout.setPadding(4.dp)
                         frameLayout.addView(ImageView(context).also { imageView ->
+                            val gradientDrawable = GradientDrawable()
+                            gradientDrawable.cornerRadius = 10.dp.toFloat()
+                            gradientDrawable.setColor(Color.BLACK)
+                            imageView.background = gradientDrawable
+                            imageView.layoutParams = ViewGroup.LayoutParams(36.dp, 36.dp)
+                        })
+                        frameLayout.addView(ImageView(context).also { imageView ->
                             val day = viewType / 2 + 1
                             if (viewType % 2 == 0) {
                                 imageView.setImageResource(getDayIconResource(day))
@@ -37,7 +45,6 @@ fun Fragment.showIconsDemoDialog() {
                                 )
                             }
                             imageView.layoutParams = ViewGroup.LayoutParams(36.dp, 36.dp)
-                            imageView.setBackgroundColor(Color.BLACK)
                         })
                     }) {}
             }
