@@ -1260,7 +1260,6 @@
     { "holiday": false, "month": 6, "day": 10, "title": "روز جهانی صنایع دستی", "type": "International" },
     { "holiday": false, "month": 6, "day": 12, "title": "روز جهانی منع کار کودکان", "type": "International" },
     { "holiday": false, "month": 6, "day": 14, "title": "روز جهانی اهدا خون", "type": "International" },
-    { "holiday": false, "month": 6, "day": 14, "title": "روز جهانی مادر", "type": "International" },
     { "holiday": false, "month": 6, "day": 26, "title": "روز جهانی قربانیان خشونت", "type": "International" },
     { "holiday": false, "month": 6, "day": 26, "title": "روز جهانی جمعیت", "type": "International" },
     { "holiday": false, "month": 8, "day": 12, "title": "روز جهانی جوانان", "type": "International" },
