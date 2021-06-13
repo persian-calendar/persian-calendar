@@ -7,8 +7,6 @@ import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.ARABIC_DIGITS
-import com.byagowi.persiancalendar.ARABIC_INDIC_DIGITS
 import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_APP_LANGUAGE
@@ -38,7 +36,6 @@ import com.byagowi.persiancalendar.LANG_GLK
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.LANG_UR
-import com.byagowi.persiancalendar.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
