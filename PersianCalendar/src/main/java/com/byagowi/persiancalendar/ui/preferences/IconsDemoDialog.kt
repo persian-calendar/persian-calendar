@@ -21,9 +21,9 @@ fun Fragment.showIconsDemoDialog() {
     AlertDialog.Builder(context)
         .setView(RecyclerView(context).also {
             it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun getItemViewType(position: Int) = position
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
                 override fun getItemCount() = 62
+                override fun getItemViewType(position: Int) = position
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                     object : RecyclerView.ViewHolder(FrameLayout(context).also { frameLayout ->
                         frameLayout.setPadding(4.dp)
@@ -46,12 +46,8 @@ fun Fragment.showIconsDemoDialog() {
                     }) {}
             }
             it.layoutManager = GridLayoutManager(context, 8)
-            it.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
-            )
             it.setBackgroundColor(Color.WHITE)
         })
-        .setCancelable(true)
         .setNegativeButton(R.string.cancel, null)
         .show()
 }
