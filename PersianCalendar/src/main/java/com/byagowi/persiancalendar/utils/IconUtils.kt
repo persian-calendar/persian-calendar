@@ -6,11 +6,10 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
-import androidx.core.graphics.drawable.IconCompat
 import com.byagowi.persiancalendar.R
 
 // Dynamic icon generation, currently unused
-fun createStatusIcon(context: Context, dayOfMonth: Int): IconCompat {
+fun createStatusIcon(context: Context, dayOfMonth: Int): Bitmap {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     paint.textSize = when (preferredDigits) {
         ARABIC_DIGITS -> 75f; else -> 90f
@@ -23,7 +22,7 @@ fun createStatusIcon(context: Context, dayOfMonth: Int): IconCompat {
     paint.getTextBounds(text, 0, text.length, bounds)
     val bitmap = Bitmap.createBitmap(90, 90, Bitmap.Config.ARGB_8888)
     Canvas(bitmap).drawText(text, 45f, 45 + bounds.height() / 2f, paint)
-    return IconCompat.createWithBitmap(bitmap)
+    return bitmap
 }
 
 fun getDayIconResource(day: Int): Int = when (preferredDigits) {

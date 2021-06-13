@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences
 
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.os.Build
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -39,10 +38,8 @@ fun Fragment.showIconsDemoDialog() {
                             val day = viewType / 2 + 1
                             if (viewType % 2 == 0) {
                                 imageView.setImageResource(getDayIconResource(day))
-                            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                imageView.setImageIcon(
-                                    createStatusIcon(context, day).toIcon(context)
-                                )
+                            } else {
+                                imageView.setImageBitmap(createStatusIcon(context, day))
                             }
                             imageView.layoutParams = ViewGroup.LayoutParams(36.dp, 36.dp)
                         })

@@ -15,6 +15,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import androidx.core.graphics.drawable.IconCompat
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
@@ -453,10 +454,11 @@ fun update(context: Context, updateDate: Boolean) {
             .setContentTitle(title)
             .setContentText(subtitle)
 
-        // Dynamic small icon generator, disabled as it needs API 23 and isn't fully reviewed
+        // Dynamic small icon generator, disabled as it needs API 23 and we need to have the other path anyway
         if ((false)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                builder.setSmallIcon(createStatusIcon(context, date.dayOfMonth))
+                val icon = IconCompat.createWithBitmap(createStatusIcon(context, date.dayOfMonth))
+                builder.setSmallIcon(icon)
             }
         } else {
             builder.setSmallIcon(getDayIconResource(date.dayOfMonth))

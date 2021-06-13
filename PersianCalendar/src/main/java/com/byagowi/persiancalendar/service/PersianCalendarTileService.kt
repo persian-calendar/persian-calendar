@@ -32,8 +32,8 @@ class PersianCalendarTileService : TileService() {
         qsTile?.also { tile ->
             val jdn = Jdn.today
             val today = jdn.toCalendar(mainCalendar)
-            if ((false)) { // Dynamic icon generation isn't fully reviewed yet so is disabled
-                tile.icon = createStatusIcon(this, today.dayOfMonth).toIcon(this)
+            if ((false)) { // Maybe increases quick tile start time? It already gives ANRs so we should be careful
+                tile.icon = Icon.createWithBitmap(createStatusIcon(this, today.dayOfMonth))
             } else {
                 tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
             }
