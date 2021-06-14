@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.times
 
-import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -26,6 +25,7 @@ import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.isRTL
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.resolveColor
+import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -99,7 +99,6 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val sunsetString = context.getString(R.string.sunsetSunView)
     private var isRTL = false
     private var segmentByPixel = .0
-    private val argbEvaluator = ArgbEvaluator()
     private var prayTimes: PrayTimes? = null
     private var moonPhase = 1.0
     private val fontSize = when (language) {
@@ -181,9 +180,9 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             // draw sun
             val sunMoonRadius = height * .09f
             if (current in .17f..0.83f) {
-                sunPaint.color = argbEvaluator.evaluate(
+                sunPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
                     current, sunBeforeMiddayColor, sunAfterMiddayColor
-                ) as Int
+                )
                 drawCircle(
                     width * current,
                     getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt()),
