@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.google.android.material.imageview.ShapeableImageView
-import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.ShapeAppearanceModel
 
 // Debug only dialog to check validity of dynamic icons generation
@@ -33,9 +32,7 @@ fun Fragment.showIconsDemoDialog() {
                         }
                         layoutParams = ViewGroup.MarginLayoutParams(36.dp, 36.dp)
                             .apply { setMargins(4.dp) }
-                        shapeAppearanceModel = ShapeAppearanceModel().toBuilder()
-                            .setAllCorners(CornerFamily.ROUNDED, 8.dp.toFloat())
-                            .build()
+                        shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(4.dp.toFloat())
                         setBackgroundColor(Color.DKGRAY)
                     }) {}
             }
