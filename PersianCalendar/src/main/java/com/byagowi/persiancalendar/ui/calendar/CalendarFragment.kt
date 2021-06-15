@@ -141,7 +141,7 @@ class CalendarFragment : Fragment() {
                         // The user is already dismissed the third tab
                         appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
                         // Try to not show the placeholder to established users
-                        appPrefs.contains(PREF_HOLIDAY_TYPES))
+                        PREF_HOLIDAY_TYPES in appPrefs)
 
         val tabs = listOf(
             // First tab
