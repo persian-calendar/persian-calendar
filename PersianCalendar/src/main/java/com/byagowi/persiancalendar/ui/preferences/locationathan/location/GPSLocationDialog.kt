@@ -112,6 +112,8 @@ fun Fragment.showGPSLocationDialog() {
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()
                 countryCode = result?.countryCode
+                logDebug("Geocoder country code", countryCode ?: "empty")
+                logDebug("Geocoder locality", result?.locality ?: "empty")
                 result?.locality?.takeIf { it.isNotEmpty() }
             }.onFailure(logException).getOrNull()
         }
