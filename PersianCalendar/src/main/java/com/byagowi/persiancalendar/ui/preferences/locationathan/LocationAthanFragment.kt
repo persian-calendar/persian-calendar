@@ -91,11 +91,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.enable_notification_athan)
                     disableDependentsState = true
                 }
-                clickable(onClick = { showPrayerSelectDialog() }) {
-                    title(R.string.athan_alarm)
-                    summary(R.string.athan_alarm_summary)
-                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
-                }
                 clickable(onClick = {
                     runCatching { pickRingtone.launch(getCustomAthanUri(layoutInflater.context)) }
                         .onFailure(logException).getOrNull()
