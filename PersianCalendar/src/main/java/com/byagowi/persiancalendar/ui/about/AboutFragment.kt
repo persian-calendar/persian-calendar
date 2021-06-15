@@ -125,7 +125,7 @@ class AboutFragment : Fragment() {
 
     private fun showLicenceDialog() {
         AlertDialog.Builder(
-            context ?: return,
+            layoutInflater.context,
             com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
         )
             .setTitle(resources.getString(R.string.about_license_title))
@@ -154,9 +154,8 @@ class AboutFragment : Fragment() {
     }
 
     private fun showEmailDialog() {
-        val activity = activity ?: return
-        val emailBinding = DialogEmailBinding.inflate(activity.layoutInflater)
-        AlertDialog.Builder(activity)
+        val emailBinding = DialogEmailBinding.inflate(layoutInflater)
+        AlertDialog.Builder(layoutInflater.context)
             .setView(emailBinding.root)
             .setTitle(R.string.about_email_sum)
             .setPositiveButton(R.string.continue_button) { _, _ ->

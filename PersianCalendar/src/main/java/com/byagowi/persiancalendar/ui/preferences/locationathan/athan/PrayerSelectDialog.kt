@@ -9,13 +9,12 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
 
 fun Fragment.showPrayerSelectDialog() {
-    val context = context ?: return
     val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
-    val alarms = (context.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
+    val alarms = (context?.appPrefs?.getString(PREF_ATHAN_ALARM, null) ?: "")
         .splitIgnoreEmpty(",").toMutableSet()
     val checked = entriesKeys.map { it in alarms }.toBooleanArray()
 
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(layoutInflater.context)
         .setTitle(R.string.athan_alarm)
         .setMultiChoiceItems(R.array.prayerTimeNames, checked) { _, which, isChecked ->
             val key = entriesKeys[which].toString()

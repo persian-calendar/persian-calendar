@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.utils.listOf31Items
-
 const val LOCATION_PERMISSION_REQUEST_CODE = 23
 const val CALENDAR_READ_PERMISSION_REQUEST_CODE = 55
 

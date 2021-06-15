@@ -10,26 +10,25 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getCoordinate
-import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.spacedComma
 
 fun Fragment.showCoordinatesDialog() {
-    val context = context ?: return
-    val binding = DialogCoordinatesBinding.inflate(context.layoutInflater)
+    val binding = DialogCoordinatesBinding.inflate(layoutInflater)
 
     // As we don't already a string concatenated of the two, let's do in code
     binding.altitudeLabel.text = listOf(R.string.altitude, R.string.altitude_praytime)
-        .joinToString(spacedComma) { context.getString(it) }
+        .joinToString(spacedComma) { getString(it) }
 
     val coordinatesEdits = listOf(binding.latitude, binding.longitude, binding.altitude)
     val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
 
     coordinatesEdits.zip(
-        getCoordinate(context)?.let { listOf(it.latitude, it.longitude, it.elevation) }
+        getCoordinate(layoutInflater.context)
+            ?.let { listOf(it.latitude, it.longitude, it.elevation) }
             ?: listOf(.0, .0, .0)
     ) { editable, value -> editable.setText(value.toString()) }
 
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(layoutInflater.context)
         .setView(binding.root)
         .setTitle(R.string.coordination)
         .setPositiveButton(R.string.accept) { _, _ ->

@@ -21,9 +21,8 @@ import com.byagowi.persiancalendar.utils.layoutInflater
  * Date: 1/17/16
  */
 fun Fragment.showLocationPreferenceDialog() {
-    val context = context ?: return
-    val recyclerView = RecyclerView(context)
-    val dialog = AlertDialog.Builder(context)
+    val recyclerView = RecyclerView(layoutInflater.context)
+    val dialog = AlertDialog.Builder(layoutInflater.context)
         .setTitle(R.string.location)
         .setView(recyclerView)
         .setPositiveButton("", null)

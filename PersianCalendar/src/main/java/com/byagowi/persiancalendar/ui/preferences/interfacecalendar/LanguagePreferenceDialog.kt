@@ -44,7 +44,7 @@ fun Fragment.showLanguagePreferenceDialog() {
     )
     val languageKeys = languages.map { it.first }
     val languageNames = languages.map { it.second }.toTypedArray()
-    AlertDialog.Builder(context ?: return)
+    AlertDialog.Builder(layoutInflater.context)
         .setTitle(R.string.language)
         .setSingleChoiceItems(languageNames, languageKeys.indexOf(language)) { dialog, which ->
             val chosenLanguage = languageKeys[which]

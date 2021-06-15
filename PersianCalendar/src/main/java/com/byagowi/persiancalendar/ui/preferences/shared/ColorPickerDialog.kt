@@ -23,8 +23,7 @@ fun Fragment.showColorPickerDialog(isBackgroundPick: Boolean, key: String) {
 private fun Fragment.showColorPickerDialog(
     isBackgroundPick: Boolean, initialColor: String, onResult: (String) -> Unit
 ) {
-    val activity = activity ?: return
-    val colorPickerView = ColorPickerView(activity).also {
+    val colorPickerView = ColorPickerView(layoutInflater.context).also {
         it.setColorsToPick(
             if (isBackgroundPick) listOf(0x00000000L, 0x50000000L, 0xFF000000L)
             else listOf(0xFFFFFFFFL, 0xFFE65100L, 0xFF00796bL, 0xFFFEF200L, 0xFF202020L)
@@ -33,7 +32,7 @@ private fun Fragment.showColorPickerDialog(
         it.setPickedColor(Color.parseColor(initialColor))
         it.setPadding(10.dp)
     }
-    AlertDialog.Builder(activity)
+    AlertDialog.Builder(layoutInflater.context)
         .setTitle(if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color)
         .setView(colorPickerView)
         .setPositiveButton(R.string.accept) { _, _ ->

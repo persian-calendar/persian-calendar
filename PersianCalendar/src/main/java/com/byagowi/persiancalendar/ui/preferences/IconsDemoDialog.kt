@@ -18,9 +18,8 @@ import com.google.android.material.shape.TriangleEdgeTreatment
 
 // Debug only dialog to check validity of dynamic icons generation
 fun Fragment.showIconsDemoDialog() {
-    val context = layoutInflater.context
-    AlertDialog.Builder(context)
-        .setView(RecyclerView(context).also {
+    AlertDialog.Builder(layoutInflater.context)
+        .setView(RecyclerView(layoutInflater.context).also {
             it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
                 override fun getItemCount() = 62

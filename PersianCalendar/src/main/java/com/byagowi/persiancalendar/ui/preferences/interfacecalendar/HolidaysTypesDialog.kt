@@ -11,8 +11,6 @@ import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.utils.appPrefs
 
 fun Fragment.showHolidaysTypesDialog() {
-    val context = context ?: return
-
     val binding = HolidaysTypesDialogBinding.inflate(layoutInflater)
 
     // Update labels
@@ -29,7 +27,8 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.afghanistan.movementMethod = LinkMovementMethod.getInstance()
 
     // Update view from stored settings
-    val initial = context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
+    val initial =
+        context?.appPrefs?.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
     binding.iranHolidays.isChecked = "iran_holidays" in initial
     binding.iranOthers.isChecked = "iran_others" in initial || /*legacy*/ "iran_islamic" in initial
     binding.afghanistanHolidays.isChecked = "afghanistan_holidays" in initial
@@ -67,7 +66,7 @@ fun Fragment.showHolidaysTypesDialog() {
     }
 
     // Run the dialog
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(layoutInflater.context)
         .setTitle(R.string.events)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->

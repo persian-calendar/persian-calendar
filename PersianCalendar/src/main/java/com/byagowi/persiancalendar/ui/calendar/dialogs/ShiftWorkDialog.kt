@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.layoutInflater
@@ -39,18 +38,13 @@ import com.byagowi.persiancalendar.utils.spacedComma
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
-    val context = context ?: return
-
-    applyAppLanguage(context)
-    updateStoredPreference(context)
-
     var isFirstSetup = false
     var jdn = shiftWorkStartingJdn ?: run {
         isFirstSetup = true
         selectedJdn
     }
 
-    val binding = ShiftWorkSettingsBinding.inflate(context.layoutInflater, null, false)
+    val binding = ShiftWorkSettingsBinding.inflate(layoutInflater, null, false)
     binding.recyclerView.layoutManager = LinearLayoutManager(context)
     val shiftWorkItemAdapter = ShiftWorkItemsAdapter(
         if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("d", 0)) else shiftWorks,
@@ -72,7 +66,7 @@ fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
     binding.recurs.isChecked = shiftWorkRecurs
     binding.root.onCheckIsTextEditor()
 
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(layoutInflater.context)
         .setView(binding.root)
         .setTitle(null)
         .setPositiveButton(R.string.accept) { _, _ ->

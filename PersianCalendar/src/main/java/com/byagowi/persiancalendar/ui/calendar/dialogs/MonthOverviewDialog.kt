@@ -24,9 +24,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.persiancalendar.calendar.AbstractDate
 
 fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
-    val activity = activity ?: return
     val baseJdn = Jdn(date)
-    val deviceEvents = baseJdn.readMonthDeviceEvents(activity)
+    val deviceEvents = baseJdn.readMonthDeviceEvents(context ?: return)
     val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
         val jdn = baseJdn + it
         val events = jdn.getEvents(deviceEvents)
@@ -46,11 +45,9 @@ fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
         MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
     )
 
-    BottomSheetDialog(activity).also { dialog ->
+    BottomSheetDialog(layoutInflater.context).also { dialog ->
         dialog.setContentView(
-            MonthOverviewDialogBinding.inflate(
-                activity.layoutInflater, null, false
-            ).also { binding ->
+            MonthOverviewDialogBinding.inflate(layoutInflater).also { binding ->
                 binding.recyclerView.also {
                     it.layoutManager = LinearLayoutManager(context)
                     it.adapter = MonthOverviewItemAdapter(events)
