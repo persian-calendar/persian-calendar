@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
-import com.byagowi.persiancalendar.Widget4x1dateOnly
 import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
