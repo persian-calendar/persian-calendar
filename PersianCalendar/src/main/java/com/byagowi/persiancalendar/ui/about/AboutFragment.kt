@@ -138,7 +138,6 @@ class AboutFragment : Fragment() {
                     setTextIsSelectable(true)
                 })
             })
-            .setCancelable(true)
             .setNegativeButton(R.string.about_license_dialog_close, null)
             .show()
     }

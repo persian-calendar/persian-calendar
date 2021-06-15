@@ -89,7 +89,6 @@ fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
             updateStoredPreference(this.context ?: return@setPositiveButton)
             findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
         }
-        .setCancelable(true)
         .setNegativeButton(R.string.cancel, null)
         .show()
 }
