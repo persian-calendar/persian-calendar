@@ -559,7 +559,7 @@ class CalendarFragment : Fragment() {
         }
         toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showDayPickerDialog(selectedJdn) { jdn -> bringDate(jdn) } }
+            it.onClick { showDayPickerDialog(selectedJdn, R.string.go) { jdn -> bringDate(jdn) } }
         }
         toolbar.menu.add(R.string.add_event).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)

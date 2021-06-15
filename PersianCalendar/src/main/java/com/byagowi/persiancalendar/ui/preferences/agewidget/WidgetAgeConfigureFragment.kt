@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.preferences.agewidget
 
 import android.appwidget.AppWidgetManager
 import android.os.Bundle
+import androidx.core.content.edit
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
@@ -14,6 +15,10 @@ import com.byagowi.persiancalendar.ui.preferences.section
 import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.title
+import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.getJdnOrNull
+import com.byagowi.persiancalendar.utils.putJdn
 
 class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -24,7 +29,11 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.empty) {
                 clickable(onClick = {
-                    showDayPickerDialog(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId)
+                    val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
+                    val jdn = activity?.appPrefs?.getJdnOrNull(key) ?: Jdn.today
+                    showDayPickerDialog(jdn, R.string.accept) { result ->
+                        activity?.appPrefs?.edit { putJdn(key, result) }
+                    }
                 }) {
                     title(R.string.select_date)
                 }
