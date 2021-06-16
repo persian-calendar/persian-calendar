@@ -8,32 +8,13 @@
         android:name="android.permission.ACCESS_NETWORK_STATE"
         tools:node="remove" />
 
-    <!-- permissions, the app works without most of them so let's mark them as optional -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission
-        android:name="android.permission.WAKE_LOCK"
-        android:requiredFeature="false"
-        tools:ignore="UnusedAttribute" />
-    <uses-permission
-        android:name="android.permission.ACCESS_COARSE_LOCATION"
-        android:requiredFeature="false"
-        tools:ignore="UnusedAttribute" />
-    <uses-permission
-        android:name="android.permission.ACCESS_FINE_LOCATION"
-        android:requiredFeature="false"
-        tools:ignore="UnusedAttribute" />
-    <uses-permission
-        android:name="android.permission.FOREGROUND_SERVICE"
-        android:requiredFeature="false"
-        tools:ignore="UnusedAttribute" />
-    <uses-permission
-        android:name="android.permission.SCHEDULE_EXACT_ALARM"
-        android:requiredFeature="false"
-        tools:ignore="UnusedAttribute" />
-    <uses-permission
-        android:name="android.permission.READ_CALENDAR"
-        android:requiredFeature="false"
-        tools:ignore="UnusedAttribute" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
