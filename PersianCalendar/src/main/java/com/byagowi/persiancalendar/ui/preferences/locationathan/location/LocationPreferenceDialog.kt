@@ -63,7 +63,7 @@ private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :
         fun bind(cityEntity: CityItem) = binding.let {
             it.root.setOnClickListener(this)
             when (language) {
-                LANG_EN_IR, LANG_EN_US, LANG_JA -> {
+                LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR -> {
                     it.city.text = cityEntity.en
                     it.country.text = cityEntity.countryEn
                 }
@@ -123,7 +123,7 @@ private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :
                 if (compare != 0) return@Comparator compare
 
                 return@Comparator when (language) {
-                    LANG_EN_US, LANG_JA, LANG_EN_IR -> l.en.compareTo(r.en)
+                    LANG_EN_US, LANG_JA, LANG_FR, LANG_EN_IR -> l.en.compareTo(r.en)
                     LANG_AR -> l.ar.compareTo(r.ar)
                     LANG_CKB -> prepareForArabicSort(l.ckb).compareTo(prepareForArabicSort(r.ckb))
                     else -> prepareForArabicSort(l.fa).compareTo(prepareForArabicSort(r.fa))

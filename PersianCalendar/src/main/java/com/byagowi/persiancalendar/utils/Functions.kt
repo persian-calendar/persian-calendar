@@ -91,13 +91,13 @@ else when (language) {
 }.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
 
 fun isNonArabicScriptSelected() = when (language) {
-    LANG_EN_US, LANG_JA -> true
+    LANG_EN_US, LANG_JA, LANG_FR -> true
     else -> false
 }
 
 // en-US and ja are our only real LTR locales for now
 fun isLocaleRTL(): Boolean = when (language) {
-    LANG_EN_US, LANG_JA -> false
+    LANG_EN_US, LANG_JA, LANG_FR -> false
     else -> true
 }
 
@@ -283,7 +283,7 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
 fun getCityName(context: Context, fallbackToCoord: Boolean): String =
     getCityFromPreference(context)?.let {
         when (language) {
-            LANG_EN_IR, LANG_EN_US, LANG_JA -> it.en
+            LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR -> it.en
             LANG_CKB -> it.ckb
             else -> it.fa
         }

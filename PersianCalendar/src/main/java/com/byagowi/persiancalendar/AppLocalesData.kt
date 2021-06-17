@@ -36,6 +36,7 @@ sealed interface AppLocalesData {
             LANG_UR -> ur
             LANG_EN_US -> en
             LANG_JA -> ja
+            LANG_FR -> fr
             LANG_AZB -> azb
             LANG_EN_IR, LANG_FA -> fa
             else -> fa
@@ -212,6 +213,25 @@ sealed interface AppLocalesData {
         )
         override val weekDays = listOf7Items(
             "Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"
+        )
+    }
+
+    private object fr : AppLocalesData {
+        override val persianCalendarMonths = listOf12Items(
+            "Farvardin", "Ordibehesht", "Khordad", "Tir", "Mordad", "Shahrivar",
+            "Mehr", "Aban", "Azar", "Dey", "Bahman", "Esfand"
+        )
+        override val islamicCalendarMonths = listOf12Items(
+            "Mouharram", "Safar", "Rabia al awal", "Rabia ath-thani", "Joumada al oula",
+            "Joumada ath-thania", "Rajab", "Chaabane", "Ramadan", "Chawwal", "Dhou al qi`da",
+            "Dhou al-hijja"
+        )
+        override val gregorianCalendarMonths = listOf12Items(
+            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet",
+            "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        )
+        override val weekDays = listOf7Items(
+            "Samedi", "Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"
         )
     }
 

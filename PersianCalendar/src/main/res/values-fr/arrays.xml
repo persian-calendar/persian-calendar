@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="themeNames">
+        <item>System Default</item>
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Modern</item>
+        <item>Blue</item>
+    </string-array>
+
+    <string-array name="prayMethodsNames">
+        <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
+        <item>Muslim World League</item>
+        <item>Islamic Society of North America</item>
+        <item>Egyptian General Authority of Survey</item>
+        <item>Umm Al-Qura University, Makkah</item>
+        <item>University of Islamic Sciences, Karachi</item>
+        <item>Institute of Geophysics, University of Tehran</item>
+    </string-array>
+
+    <string-array name="prayerTimeNames">
+        <item>Morning</item>
+        <item>Dhohr</item>
+        <item>Asr</item>
+        <item>Maghrib</item>
+        <item>Isha</item>
+    </string-array>
+
+    <string-array name="holidays_types">
+        <item>تعطیلات در ایران</item>
+        <item>مناسبت‌های اسلامی در ایران</item>
+        <item>مناسبت‌های ایران باستان</item>
+        <item>سایر مناسبت‌های ایران</item>
+        <item>مناسبت‌های بین‌المللی و جهانی</item>
+        <item>رخصتی‌های افغانستان</item>
+        <item>سایر مناسبت‌های افغانستان</item>
+    </string-array>
+
+    <string-array name="calendar_type">
+        <item>Persian Calendar</item>
+        <item>Islamic Calendar</item>
+        <item>Gregorian Calendar</item>
+    </string-array>
+
+    <string-array name="calendar_type_abbr">
+        <item>Persian</item>
+        <item>Islamic</item>
+        <item>Gregorian</item>
+    </string-array>
+
+    <string-array name="week_days">
+        <item>Saturday</item>
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+    </string-array>
+
+    <string-array name="what_to_show">
+        <item>Other calendars on 1x4 and 2x2 widgets</item>
+        <item>Non-holidays on 2x2 widget and notification</item>
+        <item>Pray times on 2x2 and notification (if is set)</item>
+        <item>Location of pray times on 2x2 and notification (if is set)</item>
+<!--        <item>Show weekday in 4x1 date only widget</item>-->
+    </string-array>
+
+    <string-array name="islamicOffsetNames">
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>+1</item>
+        <item>+2</item>
+    </string-array>
+
+    <string-array name="shift_work">
+        <item>Morning</item>
+        <item>Off</item>
+        <item>Evening</item>
+        <item>Night</item>
+    </string-array>
+
+</resources>
