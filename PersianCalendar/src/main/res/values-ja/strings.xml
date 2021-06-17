@@ -118,7 +118,7 @@
     <string name="help">案内</string>
     <string name="about_report_bug">問題を報告します</string>
     <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
-    <string name="about_sendMail">Eメール</string>
+    <string name="about_sendMail">電子メール</string>
     <string name="about_noClient">No email client is installed</string>
     <string name="about_developers">開発者</string>
     <string name="about_support_developers">Developer Support</string>
