@@ -102,7 +102,7 @@
     <string name="south">Sud</string>
     <string name="east">Est</string>
     <string name="north">Nord</string>
-    <string name="set_location">Pour obtenir la position du Soleil et de la Lune, ainsi que la Qibla, définissez la position dans les paramètres</string>
+    <string name="set_location">Pour obtenir la position du Soleil et de la Lune, ainsi que la Qibla, définissez la position dans les paramètres.</string>
     <string name="resume">Reprendre</string>
     <string name="stop">Arrêter</string>
     <string name="level">Niveau</string>
