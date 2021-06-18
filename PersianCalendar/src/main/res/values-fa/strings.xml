@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="code">fa</string>
-
     <string name="app_name">تقویم فارسی</string>
     <string name="cancel">لغو</string>
     <string name="widget_name">تقویم فارسی</string>
@@ -31,7 +29,6 @@
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (اختیاری)</string>
     <string name="coordination">مختصات جغرافیایی</string>
-
     <string name="gps_location">دریافت مختصات از جی‌پی‌اس</string>
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
@@ -73,15 +70,15 @@
     <string name="select_year">انتخاب سال</string>
     <string name="select_month">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
-    <string name="date_exception">تاریخ وارد شده اشتباه است!</string>
+    <string name="date_exception">تاریخ وارد شده اشتباه است.</string>
     <string name="in_city_time">به افق</string>
-    <string name="date_copied_clipboard">«%1$s» به حافظه رونوشت شد</string>
+    <string name="date_copied_clipboard">«%1$s» به حافظه رونوشت شد.</string>
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
     <string name="go">برو</string>
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
-    <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
+    <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند.</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="date_diff_text">فاصله: %1$s روز (~%2$s سال و %3$s ماه و %4$s روز)</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
@@ -117,14 +114,15 @@
     <string name="about_license_dialog_close">بستن</string>
     <string name="help">راهنما</string>
     <string name="about_report_bug">گزارش اشکال</string>
-    <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>
+    <string name="about_report_bug_sum">راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب</string>
     <string name="about_sendMail">رایانامه</string>
-    <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست!</string>
+    <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست</string>
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه</string>
-    <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
-برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است."</string>
+    <string name="gps_internet_desc">لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
+\n
+\nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
@@ -177,13 +175,11 @@
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
     <string name="continue_button">ادامه</string>
-
     <!--Permissions-->
     <string name="location_access">دسترسی به موقعیت مکانی</string>
     <string name="phone_location_required">این قسمت از برنامه نیازمند گرفتن دسترسی مکان است، در غیر است می‌بایست طول و عرض جفرافیایی خود را به صورت دستی وارد کنید.</string>
     <string name="calendar_access">دسترسی به تقویم دستگاه</string>
     <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم دستگاه را بدهید، اگر اجازه دسترسی به تقویم دستگاه دهید برنامه می‌تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
-
     <!--TalkBack, a11y-->
     <string name="previous_month">ماه قبل</string>
     <string name="next_month">ماه بعد</string>
@@ -191,19 +187,16 @@
     <string name="equivalent_to">برابر با</string>
     <string name="holiday_reason">تعطیل به مناسبت</string>
     <string name="nth_week_of_year">هفتهٔ %1$s سال</string>
-
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">شمال</string>
     <string name="east">شرق</string>
     <string name="south">جنوب</string>
     <string name="west">غرب</string>
     <string name="qibla">قبله</string>
-
     <string name="outdated_app">تقویم به‌روز نیست؛ مناسبت‌ها ممکن است نادرست باشد</string>
     <string name="update">بروزرسانی</string>
     <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
-
     <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s خواهد بود.</string>
@@ -236,5 +229,4 @@
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="age_widget_placeholder">%1$s روز (~%2$s سال، %3$s ماه، %4$s روز)</string>
     <string name="preview">پیش‌نمایش</string>
-
 </resources>
