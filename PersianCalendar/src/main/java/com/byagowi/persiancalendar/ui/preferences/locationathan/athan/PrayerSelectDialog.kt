@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
+import com.byagowi.persiancalendar.utils.startAthan
 
 fun Fragment.showPrayerSelectDialog() {
     val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
@@ -24,6 +25,16 @@ fun Fragment.showPrayerSelectDialog() {
             this.context?.appPrefs?.edit {
                 putString(PREF_ATHAN_ALARM, alarms.joinToString(","))
             }
+        }
+        .setNegativeButton(R.string.cancel, null)
+        .show()
+}
+
+fun Fragment.showPrayerSelectPreviewDialog() {
+    AlertDialog.Builder(layoutInflater.context)
+        .setItems(R.array.prayerTimeNames) { _, which ->
+            val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
+            startAthan(layoutInflater.context, entriesKeys.getOrNull(which) ?: "FAJR")
         }
         .setNegativeButton(R.string.cancel, null)
         .show()

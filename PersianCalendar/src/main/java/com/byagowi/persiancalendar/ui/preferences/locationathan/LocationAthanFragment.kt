@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.ui.preferences.dialogTitle
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectDialog
+import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectPreviewDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showLocationPreferenceDialog
@@ -125,6 +126,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.athan_volume_summary)
                     handler.post { dependency = PREF_ASCENDING_ATHAN_VOLUME }
                 }
+                clickable(onClick = { showPrayerSelectPreviewDialog() }) { title(R.string.preview) }
             }
         }
 

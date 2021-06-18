@@ -81,7 +81,6 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
-import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
@@ -182,7 +181,7 @@ class CalendarFragment : Fragment() {
                     this.owghatBinding = owghatBinding
 
                     var isExpanded = false
-                    val onOwghatTabClick = fun(_: View) {
+                    owghatBinding.root.setOnClickListener {
                         isExpanded = !isExpanded
                         owghatBinding.timesFlow.toggle()
                         owghatBinding.moreOwghat.contentDescription = resources.getString(
@@ -196,21 +195,9 @@ class CalendarFragment : Fragment() {
                             )
                             .start()
                     }
-
-                    owghatBinding.root.setOnClickListener(onOwghatTabClick)
                     owghatBinding.cityName.also {
                         val cityName = getCityName(it.context, false)
                         if (cityName.isNotEmpty()) it.text = cityName
-
-                        it.setOnClickListener(onOwghatTabClick)
-                        // Easter egg to test AthanActivity
-                        it.setOnLongClickListener { _ ->
-                            startAthan(
-                                it.context,
-                                listOf("FAJR", "DHUHR", "ASR", "MAGHRIB", "ISHA").random()
-                            )
-                            true
-                        }
                     }
                     owghatBinding.times.layoutTransition = LayoutTransition().also {
                         it.enableTransitionType(LayoutTransition.APPEARING)
