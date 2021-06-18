@@ -1,6 +1,7 @@
 # Android Persian Calendar
 
 [![Android CI](https://github.com/persian-calendar/DroidPersianCalendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/DroidPersianCalendar/actions)
+[![Translation status](https://hosted.weblate.org/widgets/persian-calendar/-/svg-badge.svg)](https://hosted.weblate.org/engage/persian-calendar/)
 
 <div dir=rtl>
 
