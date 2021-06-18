@@ -190,7 +190,6 @@
     <string name="widget_name">Calendrier persan</string>
     <string name="app_name">Calendrier persan</string>
     <string name="code">fr</string>
-<<<<<<< HEAD
     <string name="n_till">%1$s jusqu’à %2$s</string>
     <string name="athan_disabled_summary">Pour définir l’alarme d’Athan, choisissez un emplacement ou saisissez les coordonnées ci-dessus</string>
     <string name="shift_work_starting_date_edit">%1$s,vsélectionné précédemment, est le jour de début de travail en postes choisi.</string>
