@@ -55,12 +55,12 @@ fun Preference.summary(@StringRes summaryResId: Int) = setSummary(summaryResId)
 
 @PreferencesDsl
 inline fun PreferenceCategory.singleSelect(
-    key: String, @ArrayRes entriesResId: Int, @ArrayRes entryValuesResId: Int, defaultValue: String,
+    key: String, entries: List<String>, entryValues: List<String>, defaultValue: String,
     crossinline block: ListPreference.() -> Unit
 ) = this.addPreference(ListPreference(this.context).also {
     it.key = key
-    it.setEntries(entriesResId)
-    it.setEntryValues(entryValuesResId)
+    it.entries = entries.toTypedArray()
+    it.entryValues = entryValues.toTypedArray()
     it.setDefaultValue(defaultValue)
     it.setNegativeButtonText(R.string.cancel)
     it.isIconSpaceReserved = false
@@ -70,12 +70,12 @@ inline fun PreferenceCategory.singleSelect(
 @PreferencesDsl
 inline fun PreferenceCategory.multiSelect(
     key: String,
-    @ArrayRes entriesResId: Int, @ArrayRes entryValuesResId: Int, defaultValue: Set<String>,
+    entries: List<String>, entryValues: List<String>, defaultValue: Set<String>,
     crossinline block: MultiSelectListPreference.() -> Unit
 ) = this.addPreference(MultiSelectListPreference(this.context).also {
     it.key = key
-    it.setEntries(entriesResId)
-    it.setEntryValues(entryValuesResId)
+    it.entries = entries.toTypedArray()
+    it.entryValues = entryValues.toTypedArray()
     it.setDefaultValue(defaultValue)
     it.setNegativeButtonText(R.string.cancel)
     it.setPositiveButtonText(R.string.accept)

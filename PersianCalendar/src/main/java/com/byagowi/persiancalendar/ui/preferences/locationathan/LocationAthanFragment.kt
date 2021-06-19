@@ -73,7 +73,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 this@LocationAthanFragment.athanPreferenceCategory = this
                 singleSelect(
                     PREF_PRAY_TIME_METHOD,
-                    R.array.prayMethodsNames, R.array.prayMethodsKeys, DEFAULT_PRAY_TIME_METHOD
+                    resources.getStringArray(R.array.prayMethodsNames).toList(),
+                    resources.getStringArray(R.array.prayMethodsKeys).toList(),
+                    DEFAULT_PRAY_TIME_METHOD
                 ) {
                     title(R.string.pray_methods)
                     dialogTitle(R.string.pray_methods_calculation)

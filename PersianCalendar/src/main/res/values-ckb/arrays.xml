@@ -48,16 +48,6 @@
         <item>زایینی</item>
     </string-array>
 
-    <string-array name="week_days">
-        <item>شەممە</item>
-        <item>یەکشەممە</item>
-        <item>دووشەممە</item>
-        <item>سێشەممە</item>
-        <item>چوارشەممە</item>
-        <item>پێنجشەممە</item>
-        <item>ھەینی</item>
-    </string-array>
-
     <string-array name="what_to_show" translatable="false">
         <item>ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</item>
         <item>ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</item>

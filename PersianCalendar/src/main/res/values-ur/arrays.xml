@@ -48,16 +48,6 @@
         <item>عیسوی</item>
     </string-array>
 
-    <string-array name="week_days">
-        <item>سنیچر</item>
-        <item>اتوار</item>
-        <item>پیر</item>
-        <item>منگل</item>
-        <item>بدھ</item>
-        <item>جمعرات</item>
-        <item>جمعہ</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</item>
         <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>

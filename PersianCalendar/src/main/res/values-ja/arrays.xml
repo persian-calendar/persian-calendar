@@ -48,16 +48,6 @@
         <item>グレゴリオ暦</item>
     </string-array>
 
-    <string-array name="week_days">
-        <item>土曜日</item>
-        <item>日曜日</item>
-        <item>月曜日</item>
-        <item>火曜日</item>
-        <item>水曜日</item>
-        <item>木曜日</item>
-        <item>金曜日</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>2×2及び1×4ウィジェットの他のカレンダー</item>
         <item>2×2ウィジェットの非休日祝日と通知</item>

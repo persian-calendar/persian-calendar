@@ -48,16 +48,6 @@
         <item>میلادی</item>
     </string-array>
 
-    <string-array name="week_days">
-        <item>يئل‌گونو</item>
-        <item>سۆدگونو</item>
-        <item>دۇزگونو</item>
-        <item>آراگون</item>
-        <item>اوْدگونو</item>
-        <item>سۇگونو</item>
-        <item>آینی‌گون</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>دیگر تقویم‌لر ویجت‌ده ۴×۱ و ۲×۲</item>
         <item>تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</item>

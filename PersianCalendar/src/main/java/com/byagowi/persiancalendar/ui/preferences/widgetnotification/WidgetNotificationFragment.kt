@@ -75,7 +75,9 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                     summary(R.string.showing_iran_time)
                 }
                 multiSelect(
-                    PREF_WHAT_TO_SHOW_WIDGETS, R.array.what_to_show, R.array.what_to_show_keys,
+                    PREF_WHAT_TO_SHOW_WIDGETS,
+                    resources.getStringArray(R.array.what_to_show).toList(),
+                    resources.getStringArray(R.array.what_to_show_keys).toList(),
                     resources.getStringArray(R.array.what_to_show_default).toSet()
                 ) {
                     title(R.string.customize_widget)

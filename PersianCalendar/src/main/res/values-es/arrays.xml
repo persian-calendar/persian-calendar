@@ -48,16 +48,6 @@
         <item>Gregorian</item>
     </string-array>
 
-    <string-array name="week_days">
-        <item>Saturday</item>
-        <item>Sunday</item>
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-        <item>Friday</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>Other calendars on 1x4 and 2x2 widgets</item>
         <item>Non-holidays on 2x2 widget and notification</item>

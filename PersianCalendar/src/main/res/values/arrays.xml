@@ -82,26 +82,6 @@
         <item>GREGORIAN</item>
     </string-array>
 
-    <string-array name="week_days">
-        <item>Saturday</item>
-        <item>Sunday</item>
-        <item>Monday</item>
-        <item>Tuesday</item>
-        <item>Wednesday</item>
-        <item>Thursday</item>
-        <item>Friday</item>
-    </string-array>
-
-    <string-array name="week_days_value" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-    </string-array>
-
     <!-- Which means Friday -->
     <string-array name="default_weekends" translatable="false">
         <item>6</item>

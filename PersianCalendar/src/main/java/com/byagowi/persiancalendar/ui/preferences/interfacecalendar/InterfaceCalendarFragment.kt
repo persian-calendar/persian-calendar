@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
+import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.LANG_AR
@@ -54,7 +55,10 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                         title(R.string.language)
                 }
                 singleSelect(
-                    PREF_THEME, R.array.themeNames, R.array.themeKeys, SYSTEM_DEFAULT_THEME
+                    PREF_THEME,
+                    resources.getStringArray(R.array.themeNames).toList(),
+                    resources.getStringArray(R.array.themeKeys).toList(),
+                    SYSTEM_DEFAULT_THEME
                 ) {
                     title(R.string.select_skin)
                     dialogTitle(R.string.select_skin)
@@ -116,21 +120,25 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 singleSelect(
                     PREF_ISLAMIC_OFFSET,
-                    R.array.islamicOffsetNames, R.array.islamicOffsetKeys, DEFAULT_ISLAMIC_OFFSET
+                    resources.getStringArray(R.array.islamicOffsetNames).toList(),
+                    resources.getStringArray(R.array.islamicOffsetKeys).toList(),
+                    DEFAULT_ISLAMIC_OFFSET
                 ) {
                     title(R.string.islamic_offset)
                     summary(R.string.islamic_offset_summary)
                     dialogTitle(R.string.islamic_offset)
                 }
+                val weekDays = AppLocalesData.getWeekDays(language)
+                val weekDaysValues = (0..6).map { it.toString() }
                 singleSelect(
-                    PREF_WEEK_START, R.array.week_days, R.array.week_days_value, DEFAULT_WEEK_START
+                    PREF_WEEK_START, weekDays, weekDaysValues, DEFAULT_WEEK_START
                 ) {
                     title(R.string.week_start)
                     dialogTitle(R.string.week_start_summary)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
                 multiSelect(
-                    PREF_WEEK_ENDS, R.array.week_days, R.array.week_days_value,
+                    PREF_WEEK_ENDS, weekDays, weekDaysValues,
                     resources.getStringArray(R.array.default_weekends).toSet()
                 ) {
                     title(R.string.week_ends)
