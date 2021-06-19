@@ -56,14 +56,6 @@
 <!--        <item>نمایش روز هفته در ویجت ۴×۱ فقط تاریخ</item>-->
     </string-array>
 
-    <string-array name="islamicOffsetNames">
-        <item>2-</item>
-        <item>1-</item>
-        <item>0</item>
-        <item>1+</item>
-        <item>2+</item>
-    </string-array>
-
     <string-array name="shift_work">
         <item>روزکاری</item>
         <item>استراحت</item>

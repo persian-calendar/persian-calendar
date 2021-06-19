@@ -82,11 +82,6 @@
         <item>GREGORIAN</item>
     </string-array>
 
-    <!-- Which means Friday -->
-    <string-array name="default_weekends" translatable="false">
-        <item>6</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>Other calendars on 1x4 and 2x2 widgets</item>
         <item>Non-holidays on 2x2 widget and notification</item>
@@ -109,22 +104,6 @@
         <item>owghat</item>
         <item>owghat_location</item>
 <!--        <item>show_weekday</item>-->
-    </string-array>
-
-    <string-array name="islamicOffsetNames">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
-    </string-array>
-
-    <string-array name="islamicOffsetKeys" translatable="false">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
     </string-array>
 
     <string-array name="shift_work">

@@ -39,6 +39,7 @@ import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.language
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
@@ -120,8 +121,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 singleSelect(
                     PREF_ISLAMIC_OFFSET,
-                    resources.getStringArray(R.array.islamicOffsetNames).toList(),
-                    resources.getStringArray(R.array.islamicOffsetKeys).toList(),
+                    // One is formatted with locale's numerals and the other used for keys isn't
+                    (-2..2).map { formatNumber(it.toString()) }, (-2..2).map { it.toString() },
                     DEFAULT_ISLAMIC_OFFSET
                 ) {
                     title(R.string.islamic_offset)
@@ -138,8 +139,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
                 multiSelect(
-                    PREF_WEEK_ENDS, weekDays, weekDaysValues,
-                    resources.getStringArray(R.array.default_weekends).toSet()
+                    PREF_WEEK_ENDS, weekDays, weekDaysValues, setOf("6") // 6 means Friday
                 ) {
                     title(R.string.week_ends)
                     summary(R.string.week_ends_summary)

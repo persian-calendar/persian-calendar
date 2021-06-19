@@ -56,14 +56,6 @@
 <!--        <item>عرض أيام الأسبوع في مصغر 4x1 فقط تاریخ</item>-->
     </string-array>
 
-    <string-array name="islamicOffsetNames">
-        <item>-2</item>
-        <item>-1</item>
-        <item>0</item>
-        <item>+1</item>
-        <item>+2</item>
-    </string-array>
-
     <string-array name="shift_work">
         <item>نهار</item>
         <item>إستراحة</item>
