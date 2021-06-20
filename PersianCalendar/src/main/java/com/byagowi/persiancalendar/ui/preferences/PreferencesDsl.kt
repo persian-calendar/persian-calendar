@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.preferences
 
-import androidx.annotation.ArrayRes
 import androidx.annotation.StringRes
 import androidx.preference.ListPreference
 import androidx.preference.MultiSelectListPreference

@@ -57,7 +57,8 @@ fun Fragment.showHolidaysTypesDialog() {
         // Add check click listeners
         parent.setOnCheckedChangeListener { _, _ ->
             if (!parent.isPressed) return@setOnCheckedChangeListener // Skip non user initiated changes
-            val destination = !children.all { it.isChecked } // turn clear or mixed state to all checked
+            val destination =
+                !children.all { it.isChecked } // turn clear or mixed state to all checked
             children.forEach { it.isChecked = destination }
             updateParents()
         }
