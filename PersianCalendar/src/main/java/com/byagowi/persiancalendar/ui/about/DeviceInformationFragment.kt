@@ -118,8 +118,7 @@ class DeviceInformationFragment : Fragment() {
                 it.add(Build.MODEL)
                 it.getItem(3).setIcon(R.drawable.ic_device_information_white).isEnabled = false
             }
-            bottomNavigationView.labelVisibilityMode =
-                LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+            bottomNavigationView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
             bottomNavigationView.setOnNavigationItemSelectedListener {
                 val activity = activity ?: return@setOnNavigationItemSelectedListener true
                 // Easter egg

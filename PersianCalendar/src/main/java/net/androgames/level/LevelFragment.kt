@@ -45,9 +45,11 @@ class LevelFragment : Fragment() {
     ): View {
         val activity = activity ?: return View(inflater.context)
         val binding = FragmentLevelBinding.inflate(inflater, container, false)
-        binding.appBar.toolbar.setTitle(R.string.level)
-        binding.appBar.toolbar.setupUpNavigation()
-        binding.appBar.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.appBar.toolbar.also {
+            it.setTitle(R.string.level)
+            it.setupUpNavigation()
+            it.setNavigationOnClickListener { findNavController().navigateUp() }
+        }
         provider = OrientationProvider(activity, binding.levelView)
         binding.bottomAppbar.menu.add(R.string.level).also {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
