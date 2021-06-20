@@ -8,6 +8,7 @@ import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.LANG_AR
 import com.byagowi.persiancalendar.LANG_EN_US
@@ -131,16 +132,12 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 val weekDays = AppLocalesData.getWeekDays(language)
                 val weekDaysValues = (0..6).map { it.toString() }
-                singleSelect(
-                    PREF_WEEK_START, weekDays, weekDaysValues, DEFAULT_WEEK_START
-                ) {
+                singleSelect(PREF_WEEK_START, weekDays, weekDaysValues, DEFAULT_WEEK_START) {
                     title(R.string.week_start)
                     dialogTitle(R.string.week_start_summary)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
-                multiSelect(
-                    PREF_WEEK_ENDS, weekDays, weekDaysValues, setOf("6") // 6 means Friday
-                ) {
+                multiSelect(PREF_WEEK_ENDS, weekDays, weekDaysValues, DEFAULT_WEEK_ENDS) {
                     title(R.string.week_ends)
                     summary(R.string.week_ends_summary)
                     dialogTitle(R.string.week_ends_summary)

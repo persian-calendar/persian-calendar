@@ -80,7 +80,7 @@ const val DEFAULT_WEEK_START = "0"
 const val DEFAULT_ISLAMIC_OFFSET = "0"
 
 // WeekEnds, 6 means Friday
-val DEFAULT_WEEK_ENDS: Set<String> = setOf("6")
+val DEFAULT_WEEK_ENDS = setOf("6")
 
 const val LIGHT_THEME = "LightTheme"
 const val DARK_THEME = "DarkTheme"
