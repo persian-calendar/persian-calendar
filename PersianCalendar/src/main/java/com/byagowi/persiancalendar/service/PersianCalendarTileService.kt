@@ -23,8 +23,7 @@ class PersianCalendarTileService : TileService() {
 
     override fun onClick() = runCatching {
         startActivityAndCollapse(
-            Intent(this, MainActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         )
     }.onFailure(logException).let {}
 

@@ -431,8 +431,7 @@ fun startEitherServiceOrWorker(context: Context) {
         if (!isRunning) runCatching {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 ContextCompat.startForegroundService(
-                    context,
-                    Intent(context, ApplicationService::class.java)
+                    context, Intent(context, ApplicationService::class.java)
                 )
             context.startService(Intent(context, ApplicationService::class.java))
         }.onFailure(logException)
@@ -481,12 +480,8 @@ fun bringMarketPage(activity: Activity): Unit = runCatching {
     )
 }.onFailure(logException).onFailure {
     runCatching {
-        activity.startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                "https://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
-            )
-        )
+        val uri = "https://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
+        activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
     }.onFailure(logException)
 }.let {}
 

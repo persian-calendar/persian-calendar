@@ -93,9 +93,8 @@ class AboutFragment : Fragment() {
             (it.tag as? String)?.also { user ->
                 if (user == "ImanSoltanian") return@also // The only person without GitHub account
                 runCatching {
-                    CustomTabsIntent.Builder().build().launchUrl(
-                        context, "https://github.com/$user".toUri()
-                    )
+                    val uri = "https://github.com/$user".toUri()
+                    CustomTabsIntent.Builder().build().launchUrl(context, uri)
                 }.onFailure(logException)
             }
         }
@@ -144,12 +143,8 @@ class AboutFragment : Fragment() {
 
     private fun launchReportIntent() {
         runCatching {
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()
-                )
-            )
+            val uri = "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
         }.onFailure(logException)
     }
 
@@ -186,18 +181,11 @@ App Version Code: ${appVersionList[0]}"""
             )
         }
         runCatching {
-            startActivity(
-                Intent.createChooser(
-                    emailIntent,
-                    getString(R.string.about_sendMail)
-                )
-            )
+            startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
+        }.onFailure(logException).onFailure {
+            Snackbar.make(view ?: return, R.string.about_noClient, Snackbar.LENGTH_SHORT)
+                .show()
         }
-            .onFailure(logException)
-            .onFailure {
-                Snackbar.make(view ?: return, R.string.about_noClient, Snackbar.LENGTH_SHORT)
-                    .show()
-            }
     }
 
     private fun shareApplication() {

@@ -175,8 +175,7 @@ class AthanActivity : AppCompatActivity() {
 
         runCatching {
             getSystemService<TelephonyManager>()?.listen(
-                phoneStateListener,
-                PhoneStateListener.LISTEN_CALL_STATE
+                phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE
             )
         }.onFailure(logException)
     }

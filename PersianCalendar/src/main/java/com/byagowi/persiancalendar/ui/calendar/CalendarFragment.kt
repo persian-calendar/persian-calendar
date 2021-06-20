@@ -275,8 +275,7 @@ class CalendarFragment : Fragment() {
         ) askForCalendarPermission(activity) else {
             runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
                 Snackbar.make(
-                    mainBinding?.root ?: return,
-                    R.string.device_calendar_does_not_support,
+                    mainBinding?.root ?: return, R.string.device_calendar_does_not_support,
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
