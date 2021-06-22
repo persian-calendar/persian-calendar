@@ -93,8 +93,8 @@ class QiblaCompassView : View {
             jd, latitude, longitude,
             altitude, ΔT
         )
-        sunPosition = sunMoonPosition.getSunPosition()
-        moonPosition = sunMoonPosition.getMoonPosition()
+        sunPosition = sunMoonPosition?.sunPosition
+        moonPosition = sunMoonPosition?.moonPosition
     }
 
     fun initCompassView() {
@@ -104,7 +104,7 @@ class QiblaCompassView : View {
         eastString = "E"
         southString = "S"
         westString = "W"
-        dashPath = DashPathEffect(floatArrayOf(2f, 5f), 1)
+        dashPath = DashPathEffect(floatArrayOf(2f, 5f), 1f)
         dashedPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG)
         dashedPaint!!.pathEffect = dashPath
         dashedPaint!!.strokeWidth = 2f
@@ -148,7 +148,7 @@ class QiblaCompassView : View {
         radius = Math.min(px - px / 12, py - py / 12)
         r = radius / 10 // Sun Moon radius;
         // over here
-        qiblaInfo = sunMoonPosition.getDestinationHeading()
+        qiblaInfo = sunMoonPosition?.destinationHeading
         textPaint!!.textAlign = Paint.Align.LEFT
         textPaint!!.color = qiblaColor
         canvas.rotate(-bearing, px.toFloat(), py.toFloat()) // Attach and Detach capability lies
@@ -257,10 +257,11 @@ class QiblaCompassView : View {
         sunPaint.color = Color.YELLOW
         sunPaint.style = Paint.Style.FILL_AND_STROKE
         // Horizontal sunPosition = new Horizontal(225, 45);
-        if (sunPosition.getElevation() > -10) {
-            canvas.rotate(sunPosition.getAzimuth() as Float - 360, px.toFloat(), py.toFloat())
+        val sunPosition = sunPosition ?: return
+        if (sunPosition.elevation > -10) {
+            canvas.rotate(sunPosition.azimuth.toFloat() - 360f, px.toFloat(), py.toFloat())
             sunPaint.pathEffect = dashPath
-            val ry = ((90 - sunPosition.getElevation()) / 90 * radius) as Int
+            val ry = ((90 - sunPosition.elevation) / 90 * radius).toInt()
             canvas.drawCircle(px.toFloat(), (py - ry).toFloat(), r.toFloat(), sunPaint)
             dashedPaint!!.color = Color.YELLOW
             canvas.drawLine(
@@ -289,10 +290,11 @@ class QiblaCompassView : View {
         // draw
         moonPaintD.color = Color.GRAY
         moonPaintD.style = Paint.Style.STROKE
-        val moonPhase = sunMoonPosition.getMoonPhase()
-        if (moonPosition.getElevation() > -5) {
-            canvas.rotate(moonPosition.getAzimuth() as Float - 360, px.toFloat(), py.toFloat())
-            val eOffset = (moonPosition.getElevation() / 90 * radius) as Int
+        val moonPhase = sunMoonPosition?.moonPhase ?: return
+        val moonPosition = moonPosition ?: return
+        if (moonPosition.elevation > -5) {
+            canvas.rotate(moonPosition.azimuth.toFloat() - 360, px.toFloat(), py.toFloat())
+            val eOffset = (moonPosition.elevation / 90 * radius).toInt()
             // elevation Offset 0 for 0 degree; r for 90 degree
             moonRect[(px - r).toFloat(), (py + eOffset - radius - r).toFloat(), (px + r).toFloat()] =
                 (py + eOffset - radius + r).toFloat()
@@ -319,7 +321,8 @@ class QiblaCompassView : View {
     }
 
     fun drawQibla(canvas: Canvas) {
-        canvas.rotate(qiblaInfo.getHeading() as Float - 360, px.toFloat(), py.toFloat())
+        val qiblaInfo = qiblaInfo ?: return
+        canvas.rotate(qiblaInfo.heading.toFloat() - 360, px.toFloat(), py.toFloat())
         qiblaPaint.reset()
         qiblaPaint.color = Color.GREEN
         qiblaPaint.style = Paint.Style.FILL_AND_STROKE
@@ -346,54 +349,52 @@ class QiblaCompassView : View {
     }
 
     // 0=North, 90=East, 180=South, 270=West
-    val isOnDirectionAction: Unit
-        get() {
-            val context = context ?: return
-
-            // 0=North, 90=East, 180=South, 270=West
-            if (isNearToDegree(bearing, 0f)) {
-                if (!isCurrentlyNorth) {
-                    a11yAnnounceAndClick(this, R.string.north)
-                    isCurrentlyNorth = true
+    fun isOnDirectionAction() {
+        // 0=North, 90=East, 180=South, 270=West
+        if (isNearToDegree(bearing, 0f)) {
+            if (!isCurrentlyNorth) {
+                a11yAnnounceAndClick(this, R.string.north)
+                isCurrentlyNorth = true
+            }
+        } else {
+            isCurrentlyNorth = false
+        }
+        if (isNearToDegree(bearing, 90f)) {
+            if (!isCurrentlyEast) {
+                a11yAnnounceAndClick(this, R.string.east)
+                isCurrentlyEast = true
+            }
+        } else {
+            isCurrentlyEast = false
+        }
+        if (isNearToDegree(bearing, 180f)) {
+            if (!isCurrentlySouth) {
+                a11yAnnounceAndClick(this, R.string.south)
+                isCurrentlySouth = true
+            }
+        } else {
+            isCurrentlySouth = false
+        }
+        if (isNearToDegree(bearing, 270f)) {
+            if (!isCurrentlyWest) {
+                a11yAnnounceAndClick(this, R.string.west)
+                isCurrentlyWest = true
+            }
+        } else {
+            isCurrentlyWest = false
+        }
+        val qiblaInfo = qiblaInfo ?: return
+        if (isLongLatAvailable) {
+            if (isNearToDegree(bearing, qiblaInfo.heading.toFloat())) {
+                if (!isCurrentlyQibla) {
+                    a11yAnnounceAndClick(this, R.string.qibla)
+                    isCurrentlyQibla = true
                 }
             } else {
-                isCurrentlyNorth = false
-            }
-            if (isNearToDegree(bearing, 90f)) {
-                if (!isCurrentlyEast) {
-                    a11yAnnounceAndClick(this, R.string.east)
-                    isCurrentlyEast = true
-                }
-            } else {
-                isCurrentlyEast = false
-            }
-            if (isNearToDegree(bearing, 180f)) {
-                if (!isCurrentlySouth) {
-                    a11yAnnounceAndClick(this, R.string.south)
-                    isCurrentlySouth = true
-                }
-            } else {
-                isCurrentlySouth = false
-            }
-            if (isNearToDegree(bearing, 270f)) {
-                if (!isCurrentlyWest) {
-                    a11yAnnounceAndClick(this, R.string.west)
-                    isCurrentlyWest = true
-                }
-            } else {
-                isCurrentlyWest = false
-            }
-            if (isLongLatAvailable && qiblaInfo != null) {
-                if (isNearToDegree(bearing, qiblaInfo.getHeading() as Float)) {
-                    if (!isCurrentlyQibla) {
-                        a11yAnnounceAndClick(this, R.string.qibla)
-                        isCurrentlyQibla = true
-                    }
-                } else {
-                    isCurrentlyQibla = false
-                }
+                isCurrentlyQibla = false
             }
         }
+    }
 
     fun setLatitude(latitude: Double) {
         this.latitude = latitude

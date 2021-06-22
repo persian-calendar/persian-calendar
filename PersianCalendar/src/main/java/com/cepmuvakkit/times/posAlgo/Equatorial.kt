@@ -55,8 +55,7 @@ class Equatorial {
 
         //Calculate the adjustment in right ascension
         val Δα = MATH.atan2(-ρCosϕPr * sinπ * sinH, cosδ - ρCosϕPr * sinπ * cosH)
-        val horizontal: Horizontal
-        horizontal = Horizontal()
+        val horizontal = Horizontal()
         //  CAA2DCoordinate Topocentric;
         //    double αPrime =Math.toRadians(α)+Δα;
         val δPrime = MATH.atan2(
@@ -64,13 +63,13 @@ class Equatorial {
             cosδ - ρCosϕPr * sinπ * cosH
         )
         val HPrime = H - Δα
-        horizontal.Az = Math.toDegrees(
+        horizontal.azimuth = Math.toDegrees(
             MATH.atan2(
                 Math.sin(HPrime),
                 Math.cos(HPrime) * Math.sin(ϕ) - Math.tan(δPrime) * Math.cos(ϕ)
             ) + Math.PI
         )
-        horizontal.h = Math.toDegrees(
+        horizontal.elevation = Math.toDegrees(
             MATH.asin(
                 Math.sin(ϕ) * Math.sin(δPrime) + Math.cos(ϕ) * Math.cos(δPrime) * Math.cos(HPrime)
             )

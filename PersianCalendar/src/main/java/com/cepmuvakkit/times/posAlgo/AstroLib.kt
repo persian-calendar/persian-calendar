@@ -6,6 +6,11 @@ package com.cepmuvakkit.times.posAlgo
 
 import com.cepmuvakkit.conversion.phaseEvents.MoonPhases
 import java.util.*
+import kotlin.math.abs
+import kotlin.math.floor
+import kotlin.math.roundToLong
+import kotlin.math.sqrt
+import kotlin.math.tan
 
 object AstroLib {
     // private static final int JGREG = 588829;//15 + 31*(10+12*1582); //
@@ -37,19 +42,17 @@ object AstroLib {
     ): Double {
         var year = year
         var month = month
-        val dayDecimal: Double
-        var julianDay: Double
         val a: Double
-        dayDecimal = day + (hour - tz + (minute + second / 60.0) / 60.0) / 24.0
+        val dayDecimal: Double = day + (hour - tz + (minute + second / 60.0) / 60.0) / 24.0
         if (month < 3) {
             month += 12
             year--
         }
-        julianDay = (Math.floor(365.25 * (year + 4716.0))
-                + Math.floor(30.6001 * (month + 1)) + dayDecimal) - 1524.5
+        var julianDay: Double = (floor(365.25 * (year + 4716.0))
+                + floor(30.6001 * (month + 1)) + dayDecimal) - 1524.5
         if (julianDay > 2299160.0) {
-            a = Math.floor((year / 100).toDouble())
-            julianDay += 2 - a + Math.floor(a / 4)
+            a = floor((year / 100).toDouble())
+            julianDay += 2 - a + floor(a / 4)
         }
         return julianDay
     }
@@ -84,11 +87,11 @@ object AstroLib {
             month += 12
             year--
         }
-        julianDay = (Math.floor(365.25 * (year + 4716.0))
-                + Math.floor(30.6001 * (month + 1)) + dayDecimal) - 1524.5
+        julianDay = (floor(365.25 * (year + 4716.0))
+                + floor(30.6001 * (month + 1)) + dayDecimal) - 1524.5
         if (julianDay > 2299160.0) {
-            a = Math.floor((year / 100).toDouble())
-            julianDay += 2 - a + Math.floor(a / 4)
+            a = floor((year / 100).toDouble())
+            julianDay += 2 - a + floor(a / 4)
         }
         return julianDay
     }
@@ -166,7 +169,7 @@ object AstroLib {
      * @return ΔT = TD - UT POLYNOMIAL EXPRESSIONS FOR DELTA T (ΔT) seconds:
      */
     fun calculateTimeDifference(jd: Double): Double {
-        val ymd = getYMDHMSfromJulian(jd as Int.toDouble())
+        val ymd = getYMDHMSfromJulian(jd)
         // System.out.println("Year: "+ymd[0]);
         val y = ymd[0] + (ymd[1] - 0.5) / 12.0
         // System.out.println("Year: "+y);
@@ -279,7 +282,7 @@ object AstroLib {
      * @return int[] {Hour, Minute};;
      */
     fun convertHour2HHMM(hour: Double): IntArray {
-        val Minute = Math.round(hour * 60).toInt() % 60
+        val Minute = (hour * 60).roundToLong().toInt() % 60
         val Hour = hour.toInt()
         return intArrayOf(Hour, Minute)
     }
@@ -317,20 +320,20 @@ object AstroLib {
     fun fromJulian(julianDay: Double): IntArray {
         // this.julianDay = julianDay;
         val jd = julianDay + 0.5
-        val z = Math.floor(jd).toInt()
+        val z = floor(jd).toInt()
         val f = jd - z // a fraction between zero and one
         var a = z
         if (z >= 2299161) { // (typo in the book)
-            val alpha = Math.floor((z - 1867216.25) / 36524.25).toInt()
-            a += 1 + alpha - Math.floor(alpha / 4.0).toInt()
+            val alpha = floor((z - 1867216.25) / 36524.25).toInt()
+            a += 1 + alpha - floor(alpha / 4.0).toInt()
         }
         val b = a + 1524
-        val c = Math.floor((b - 122.1) / 365.25).toInt()
-        val dd = Math.floor(365.25 * c).toInt()
-        val e = Math.floor((b - dd) / 30.6001).toInt()
+        val c = floor((b - 122.1) / 365.25).toInt()
+        val dd = floor(365.25 * c).toInt()
+        val e = floor((b - dd) / 30.6001).toInt()
         // and then,
         // double d = b - dd - Math.floor(30.6001 * e) + f;
-        val day = (b - dd - Math.floor(30.6001 * e) + f).toInt()
+        val day = (b - dd - floor(30.6001 * e) + f).toInt()
         val month = e - if (e < 14) 1 else 13
         // sometimes the year is too high by one
         val year = c - if (month > 2) 4716 else 4715
@@ -354,20 +357,20 @@ object AstroLib {
     fun getYMDHMSfromJulian(julianDay: Double): IntArray {
         // this.julianDay = julianDay;
         val jd = julianDay + 0.5
-        val z = Math.floor(jd).toInt()
+        val z = floor(jd).toInt()
         val f = jd - z // a fraction between zero and one
         var a = z
         if (z >= 2299161) { // (typo in the book)
-            val alpha = Math.floor((z - 1867216.25) / 36524.25).toInt()
-            a += 1 + alpha - Math.floor(alpha / 4.0).toInt()
+            val alpha = floor((z - 1867216.25) / 36524.25).toInt()
+            a += 1 + alpha - floor(alpha / 4.0).toInt()
         }
         val b = a + 1524
-        val c = Math.floor((b - 122.1) / 365.25).toInt()
-        val dd = Math.floor(365.25 * c).toInt()
-        val e = Math.floor((b - dd) / 30.6001).toInt()
+        val c = floor((b - 122.1) / 365.25).toInt()
+        val dd = floor(365.25 * c).toInt()
+        val e = floor((b - dd) / 30.6001).toInt()
         // and then,
         // double d = b - dd - Math.floor(30.6001 * e) + f;
-        val day = (b - dd - Math.floor(30.6001 * e) + f).toInt()
+        val day = (b - dd - floor(30.6001 * e) + f).toInt()
         val month = e - if (e < 14) 1 else 13
         // sometimes the year is too high by one
         val year = c - if (month > 2) 4716 else 4715
@@ -390,20 +393,20 @@ object AstroLib {
     fun convertJulian2Gregorian(julianDay: Double): GregorianCalendar {
         // this.julianDay = julianDay;
         val jd = julianDay + 0.5
-        val z = Math.floor(jd).toInt()
+        val z = floor(jd).toInt()
         val f = jd - z // a fraction between zero and one
         var a = z
         if (z >= 2299161) { // (typo in the book)
-            val alpha = Math.floor((z - 1867216.25) / 36524.25).toInt()
-            a += 1 + alpha - Math.floor(alpha / 4.0).toInt()
+            val alpha = floor((z - 1867216.25) / 36524.25).toInt()
+            a += 1 + alpha - floor(alpha / 4.0).toInt()
         }
         val b = a + 1524
-        val c = Math.floor((b - 122.1) / 365.25).toInt()
-        val dd = Math.floor(365.25 * c).toInt()
-        val e = Math.floor((b - dd) / 30.6001).toInt()
+        val c = floor((b - 122.1) / 365.25).toInt()
+        val dd = floor(365.25 * c).toInt()
+        val e = floor((b - dd) / 30.6001).toInt()
         // and then,
         // double d = b - dd - Math.floor(30.6001 * e) + f;
-        val day = (b - dd - Math.floor(30.6001 * e) + f).toInt()
+        val day = (b - dd - floor(30.6001 * e) + f).toInt()
         val month = e - if (e < 14) 1 else 13
         // sometimes the year is too high by one
         val year = c - if (month > 2) 4716 else 4715
@@ -481,7 +484,7 @@ object AstroLib {
      * @result corection for altitude angle in Minutes
      */
     fun getApparentAtmosphericRefraction(ho: Double): Double {
-        val R = 1 / Math.tan(Math.toRadians(ho + 7.31 / (ho + 4.4))) + 0.001351521723799
+        val R = 1 / tan(Math.toRadians(ho + 7.31 / (ho + 4.4))) + 0.001351521723799
         return R / 60
     }
 
@@ -494,7 +497,7 @@ object AstroLib {
      * @result corection for altitude angle in Minutes
      */
     fun getAtmosphericRefraction(h: Double): Double {
-        val R = (1.02 / Math.tan(Math.toRadians(h + 10.3 / (h + 5.11)))
+        val R = (1.02 / tan(Math.toRadians(h + 10.3 / (h + 5.11)))
                 + +0.0019279)
         return R / 60
     }
@@ -513,15 +516,14 @@ object AstroLib {
     fun refractionCorrection(zenith: Double): Double {
         val exoatmElevation = 90 - zenith
         if (exoatmElevation > 85) {
-            return 0
+            return 0.0
         }
         val refractionCorrection: Double // In minute of degrees
-        val te = Math.tan(Math.toRadians(exoatmElevation))
-        if (exoatmElevation > 5.0) {
-            refractionCorrection = 58.1 / te - 0.07 / (te * te * te) + 0.000086
-            / te * te * te * te * te
+        val te = tan(Math.toRadians(exoatmElevation))
+        refractionCorrection = if (exoatmElevation > 5.0) {
+            58.1 / te - 0.07 / (te * te * te) + 0.000086 / te * te * te * te * te
         } else {
-            refractionCorrection = if (exoatmElevation > -0.575) {
+            if (exoatmElevation > -0.575) {
                 (1735.0
                         + exoatmElevation
                         * (-518.2 + exoatmElevation
@@ -554,14 +556,13 @@ object AstroLib {
      * @result corection for altitude angle in degrees
      */
     fun getAltitudeCorrection(h: Int): Double {
-        return 0.0347 * Math.sqrt(h.toDouble())
+        return 0.0347 * sqrt(h.toDouble())
     }
 
     fun limitDegrees(degrees: Double): Double {
         var degrees = degrees
-        var limited: Double
         degrees /= 360.0
-        limited = 360.0 * (degrees - Math.floor(degrees))
+        var limited: Double = 360.0 * (degrees - floor(degrees))
         if (limited < 0) {
             limited += 360.0
         }
@@ -640,12 +641,12 @@ object AstroLib {
                     x2 = x3
                     f2 = f3 // Replace (x2,f2) by (x3,f3)
                 }
-                Root = if (Math.abs(f1) < Math.abs(f2)) {
+                Root = if (abs(f1) < abs(f2)) {
                     x1
                 } else {
                     x2
                 }
-                Success[0] = Math.abs(x2 - x1) <= Accuracy
+                Success[0] = abs(x2 - x1) <= Accuracy
                 Iterat++
             } while (!Success[0] && Iterat < MaxIterat)
         }

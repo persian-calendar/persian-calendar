@@ -15,7 +15,6 @@ class Ecliptic {
     var Δ //distance  in km
             = 0.0
 
-    internal constructor() {}
     internal constructor(longitude: Double, latitude: Double) {
         λ = longitude
         β = latitude
