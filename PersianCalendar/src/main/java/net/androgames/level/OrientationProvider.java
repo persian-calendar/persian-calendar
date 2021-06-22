@@ -1,4 +1,4 @@
-package net.androgames.level.orientation;
+package net.androgames.level;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,8 +7,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.Surface;
-
-import net.androgames.level.view.LevelView;
 
 import java.util.List;
 

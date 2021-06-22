@@ -1,4 +1,4 @@
-package net.androgames.level.orientation;
+package net.androgames.level;
 
 /*
  *  This file is part of Level (an Android Bubble Level).

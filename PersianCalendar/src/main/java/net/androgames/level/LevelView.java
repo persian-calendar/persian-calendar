@@ -1,6 +1,4 @@
-package net.androgames.level.view;
-
-import static com.byagowi.persiancalendar.utils.UtilsKt.a11yAnnounceAndClick;
+package net.androgames.level;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -17,11 +15,11 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.byagowi.persiancalendar.R;
 
-import net.androgames.level.orientation.Orientation;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+
+import static com.byagowi.persiancalendar.utils.UtilsKt.a11yAnnounceAndClick;
 
 /*
  *  This file is part of Level (an Android Bubble Level).
