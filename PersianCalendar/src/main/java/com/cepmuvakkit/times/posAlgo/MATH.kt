@@ -1,0 +1,248 @@
+package com.cepmuvakkit.times.posAlgo
+
+object MATH {
+    // Square root from 3
+    const val SQRT3 = 1.732050807568877294
+
+    /**
+     * ln(0.5) constant
+     */
+    const val LOGdiv2 = -0.6931471805599453094
+    fun round(a: Float): Int {
+        return Math.floor((a + 0.5f).toDouble()).toInt()
+    }
+
+    fun round(a: Double): Long {
+        return Math.floor(a + 0.5).toLong()
+    }
+
+    fun acos(x: Double): Double {
+        val f = asin(x)
+        return if (f == Double.NaN) {
+            f
+        } else Math.PI / 2 - f
+    }
+
+    fun asin(x: Double): Double {
+        if (x < -1.0 || x > 1.0) {
+            return Double.NaN
+        }
+        if (x == -1.0) {
+            return -Math.PI / 2
+        }
+        return if (x == 1.0) {
+            Math.PI / 2
+        } else atan(x / Math.sqrt(1 - x * x))
+    }
+
+    fun atan(x: Double): Double {
+        var x = x
+        var signChange = false
+        var Invert = false
+        var sp = 0
+        val x2: Double
+        var a: Double
+        // check up the sign change
+        if (x < 0.0) {
+            x = -x
+            signChange = true
+        }
+        // check up the invertation
+        if (x > 1.0) {
+            x = 1 / x
+            Invert = true
+        }
+        // process shrinking the domain until x<PI/12
+        while (x > Math.PI / 12) {
+            sp++
+            a = x + SQRT3
+            a = 1 / a
+            x = x * SQRT3
+            x = x - 1
+            x = x * a
+        }
+        // calculation core
+        x2 = x * x
+        a = x2 + 1.4087812
+        a = 0.55913709 / a
+        a = a + 0.60310579
+        a = a - x2 * 0.05160454
+        a = a * x
+        // process until sp=0
+        while (sp > 0) {
+            a = a + Math.PI / 6
+            sp--
+        }
+        // invertation took place
+        if (Invert) {
+            a = Math.PI / 2 - a
+        }
+        // sign change took place
+        if (signChange) {
+            a = -a
+        }
+        //
+        return a
+    }
+
+    fun atan2(y: Double, x: Double): Double {
+        // if x=y=0
+        if (y == 0.0 && x == 0.0) {
+            return 0.0
+        }
+        // if x>0 atan(y/x)
+        if (x > 0.0) {
+            return atan(y / x)
+        }
+        // if x<0 sign(y)*(pi - atan(|y/x|))
+        if (x < 0.0) {
+            return if (y < 0.0) {
+                -(Math.PI - atan(y / x))
+            } else {
+                Math.PI - atan(-y / x)
+            }
+        }
+        // if x=0 y!=0 sign(y)*pi/2
+        return if (y < 0.0) {
+            -Math.PI / 2.0
+        } else {
+            Math.PI / 2.0
+        }
+    }
+
+    fun frac(x: Double): Double {
+        return x - Math.floor(x)
+    }
+
+    fun pow(x: Double, y: Double): Double {
+        if (y == 0.0) {
+            return 1.0
+        }
+        if (y == 1.0) {
+            return x
+        }
+        if (x == 0.0) {
+            return 0.0
+        }
+        if (x == 1.0) {
+            return 1.0
+        }
+        //
+        val l = Math.floor(y).toLong()
+        val integerValue = y == l.toDouble()
+        //
+        return if (integerValue) {
+            var neg = false
+            if (y < 0.0) {
+                neg = true
+            }
+            //
+            var result = x
+            for (i in 1 until if (neg) -l else l) {
+                result = result * x
+            }
+            //
+            if (neg) {
+                1.0 / result
+            } else {
+                result
+            }
+        } else {
+            if (x > 0.0) {
+                exp(y * log(x))
+            } else {
+                Double.NaN
+            }
+        }
+    }
+
+    fun exp(x: Double): Double {
+        var x = x
+        if (x == 0.0) {
+            return 1.0
+        }
+        //
+        var f = 1.0
+        val d: Long = 1
+        var k: Double
+        val isless = x < 0.0
+        if (isless) {
+            x = -x
+        }
+        k = x / d
+        //
+        for (i in 2..49) {
+            f = f + k
+            k = k * x / i
+        }
+        //
+        return if (isless) {
+            1 / f
+        } else {
+            f
+        }
+    }
+
+    private fun _log(x: Double): Double {
+        var x = x
+        if (x <= 0.0) {
+            return Double.NaN
+        }
+        //
+        var f = 0.0
+        //
+        var appendix = 0
+        while (x > 0.0 && x <= 1.0) {
+            x *= 2.0
+            appendix++
+        }
+        //
+        x /= 2.0
+        appendix--
+        //
+        val y1 = x - 1.0
+        var y2 = x + 1.0
+        val y = y1 / y2
+        //
+        var k = y
+        y2 = k * y
+        //
+        run {
+            var i: Long = 1
+            while (i < 50) {
+                f += k / i
+                k *= y2
+                i += 2
+            }
+        }
+        //
+        f *= 2.0
+        for (i in 0 until appendix) {
+            f += LOGdiv2
+        }
+        //
+        return f
+    }
+
+    fun log(x: Double): Double {
+        var x = x
+        if (x <= 0.0) {
+            return Double.NaN
+        }
+        //
+        if (x == 1.0) {
+            return 0.0
+        }
+        // Argument of _log must be (0; 1]
+        if (x > 1.0) {
+            x = 1 / x
+            return -_log(x)
+        }
+        //
+        return _log(x)
+    }
+
+    fun Frac(x: Double): Double {
+        return x - Math.floor(x)
+    }
+}
