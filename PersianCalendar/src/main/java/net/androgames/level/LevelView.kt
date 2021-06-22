@@ -7,9 +7,9 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
+import com.byagowi.persiancalendar.utils.getCompatDrawable
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
@@ -52,7 +52,11 @@ class LevelView @JvmOverloads constructor(
     private val displayFormat = DecimalFormat("00.0").also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
-    private val lcd = Typeface.createFromAsset(context.assets, FONT_LCD)
+
+    /**
+     * Fonts and colors
+     */
+    private val lcd = Typeface.createFromAsset(context.assets, "fonts/lcd.ttf")
     private val lcdForegroundPaint = Paint().also {
         it.color = resources.getColor(R.color.lcd_front)
         it.isAntiAlias = true
@@ -97,16 +101,14 @@ class LevelView @JvmOverloads constructor(
     private var maxLevelY = 0
     private var minBubble = 0
     private var maxBubble = 0
-    private val markerThickness = context.resources.getDimensionPixelSize(R.dimen.marker_thickness)
-    private val levelBorderWidth =
-        context.resources.getDimensionPixelSize(R.dimen.level_border_width)
-    private val levelBorderHeight =
-        context.resources.getDimensionPixelSize(R.dimen.level_border_height)
+    private val markerThickness = resources.getDimensionPixelSize(R.dimen.marker_thickness)
+    private val levelBorderWidth = resources.getDimensionPixelSize(R.dimen.level_border_width)
+    private val levelBorderHeight = resources.getDimensionPixelSize(R.dimen.level_border_height)
     private val lcdWidth = displayRect.width()
     private val lcdHeight = displayRect.height()
-    private val displayPadding = context.resources.getDimensionPixelSize(R.dimen.display_padding)
-    private val displayGap = context.resources.getDimensionPixelSize(R.dimen.display_gap)
-    private val sensorGap = context.resources.getDimensionPixelSize(R.dimen.sensor_gap)
+    private val displayPadding = resources.getDimensionPixelSize(R.dimen.display_padding)
+    private val displayGap = resources.getDimensionPixelSize(R.dimen.display_gap)
+    private val sensorGap = resources.getDimensionPixelSize(R.dimen.sensor_gap)
     private var levelMaxDimension = 0
 
     /**
@@ -133,17 +135,13 @@ class LevelView @JvmOverloads constructor(
     /**
      * Drawables
      */
-    private val level1D = ResourcesCompat.getDrawable(context.resources, R.drawable.level_1d, null)
-    private val bubble1D =
-        ResourcesCompat.getDrawable(context.resources, R.drawable.bubble_1d, null)
-    private val marker1D =
-        ResourcesCompat.getDrawable(context.resources, R.drawable.marker_1d, null)
-    private val level2D = ResourcesCompat.getDrawable(context.resources, R.drawable.level_2d, null)
-    private val bubble2D =
-        ResourcesCompat.getDrawable(context.resources, R.drawable.bubble_2d, null)
-    private val marker2D =
-        ResourcesCompat.getDrawable(context.resources, R.drawable.marker_2d, null)
-    private val display = ResourcesCompat.getDrawable(context.resources, R.drawable.display, null)
+    private val level1D = context.getCompatDrawable(R.drawable.level_1d)
+    private val bubble1D = context.getCompatDrawable(R.drawable.bubble_1d)
+    private val marker1D = context.getCompatDrawable(R.drawable.marker_1d)
+    private val level2D = context.getCompatDrawable(R.drawable.level_2d)
+    private val bubble2D = context.getCompatDrawable(R.drawable.bubble_2d)
+    private val marker2D = context.getCompatDrawable(R.drawable.marker_2d)
+    private val display = context.getCompatDrawable(R.drawable.display)
 
     /**
      * Ajustement de la vitesse
@@ -439,16 +437,7 @@ class LevelView @JvmOverloads constructor(
         private const val BUBBLE_ASPECT_RATIO = 1.000
         private const val BUBBLE_CROPPING = 0.500
         private const val MARKER_GAP = BUBBLE_WIDTH + 0.020
-
-        /**
-         * Angle max
-         */
-        private val MAX_SINUS = sin(Math.PI / 4)
-
-        /**
-         * Fonts and colors
-         */
-        private const val FONT_LCD = "fonts/lcd.ttf"
+        private val MAX_SINUS = sin(Math.PI / 4) // Angle max
         private const val displayBackgroundText = "88.8"
     }
 }

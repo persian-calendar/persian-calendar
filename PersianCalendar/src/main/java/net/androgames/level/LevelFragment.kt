@@ -49,8 +49,7 @@ class LevelFragment : Fragment() {
             it.setupUpNavigation()
             it.setNavigationOnClickListener { findNavController().navigateUp() }
         }
-        provider =
-            OrientationProvider(activity, binding.levelView)
+        provider = OrientationProvider(activity, binding.levelView)
         binding.bottomAppbar.menu.add(R.string.level).also {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)

@@ -31,15 +31,15 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
     private val colorEventLine = context.resolveColor(R.attr.colorEventLine)
 
-    private val halfEventBarWidth = context.resources
-        .getDimensionPixelSize(R.dimen.day_item_event_bar_width) / 2
-    private val appointmentYOffset = context.resources
-        .getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
-    private val eventYOffset = context.resources
-        .getDimensionPixelSize(R.dimen.day_item_event_y_offset)
+    private val halfEventBarWidth =
+        resources.getDimensionPixelSize(R.dimen.day_item_event_bar_width) / 2
+    private val appointmentYOffset =
+        resources.getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
+    private val eventYOffset =
+        resources.getDimensionPixelSize(R.dimen.day_item_event_y_offset)
     private val eventBarPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth = context.resources
-            .getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
+        strokeWidth =
+            resources.getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
     }
     private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -47,8 +47,8 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     }
     private val todayPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth = context.resources
-            .getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
+        strokeWidth =
+            resources.getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
         color = context.resolveColor(R.attr.colorCurrentDay)
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
