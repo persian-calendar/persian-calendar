@@ -1,5 +1,7 @@
 package net.androgames.level
 
+import kotlin.math.abs
+
 /*
  *  This file is part of Level (an Android Bubble Level).
  *  <https://github.com/avianey/Level>
@@ -22,19 +24,10 @@ package net.androgames.level
 enum class Orientation(val reverse: Int, val rotation: Int) {
     LANDING(1, 0), TOP(1, 0), RIGHT(1, 90), BOTTOM(-1, 180), LEFT(-1, -90);
 
-    fun isLevel(pitch: Float, roll: Float, balance: Float, sensibility: Float): Boolean {
-        return when (this) {
-            BOTTOM, TOP -> balance <= sensibility
-                    && balance >= -sensibility
-            LANDING -> roll <= sensibility && roll >= -sensibility && (Math.abs(
-                pitch
-            ) <= sensibility
-                    || Math.abs(pitch) >= 180 - sensibility)
-            LEFT, RIGHT -> Math.abs(
-                pitch
-            ) <= sensibility
-                    || Math.abs(pitch) >= 180 - sensibility
-        }
-        return false
+    fun isLevel(pitch: Float, roll: Float, balance: Float, sensibility: Float) = when (this) {
+        BOTTOM, TOP -> balance <= sensibility && balance >= -sensibility
+        LANDING -> roll <= sensibility && roll >= -sensibility &&
+                (abs(pitch) <= sensibility || abs(pitch) >= 180 - sensibility)
+        LEFT, RIGHT -> abs(pitch) <= sensibility || abs(pitch) >= 180 - sensibility
     }
 }

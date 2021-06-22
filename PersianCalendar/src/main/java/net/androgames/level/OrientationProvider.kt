@@ -7,6 +7,11 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.view.Surface
+import com.byagowi.persiancalendar.utils.logException
+import kotlin.math.abs
+import kotlin.math.asin
+import kotlin.math.min
+import kotlin.math.sqrt
 
 /*
 *  This file is part of Level (an Android Bubble Level).
@@ -28,6 +33,7 @@ import android.view.Surface
 *  along with Level. If not, see <http://www.gnu.org/licenses/>
 */
 class OrientationProvider(activity: Activity, private val view: LevelView) : SensorEventListener {
+
     /**
      * Rotation Matrix
      */
@@ -36,9 +42,10 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
     private val R = FloatArray(16)
     private val outR = FloatArray(16)
     private val LOC = FloatArray(3)
-    private val sensorManager: SensorManager?
-    private val displayOrientation: Int
-    private val sensor: Sensor?
+    private val sensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+    private val displayOrientation = activity.windowManager.defaultDisplay.rotation
+    private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.get(0)
+
     /**
      * Returns true if the manager is listening to orientation changes
      */
@@ -62,10 +69,7 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
      */
     fun stopListening() {
         isListening = false
-        try {
-            sensorManager?.unregisterListener(this)
-        } catch (ignore: Exception) {
-        }
+        runCatching { sensorManager?.unregisterListener(this) }.onFailure(logException)
     }
 
     /**
@@ -87,95 +91,65 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
         SensorManager.getRotationMatrix(R, I, event.values, MAG)
         when (displayOrientation) {
             Surface.ROTATION_270 -> SensorManager.remapCoordinateSystem(
-                R,
-                SensorManager.AXIS_MINUS_Y,
-                SensorManager.AXIS_X,
-                outR
+                R, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, outR
             )
             Surface.ROTATION_180 -> SensorManager.remapCoordinateSystem(
-                R,
-                SensorManager.AXIS_MINUS_X,
-                SensorManager.AXIS_MINUS_Y,
-                outR
+                R, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, outR
             )
             Surface.ROTATION_90 -> SensorManager.remapCoordinateSystem(
-                R,
-                SensorManager.AXIS_Y,
-                SensorManager.AXIS_MINUS_X,
-                outR
+                R, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, outR
             )
             Surface.ROTATION_0 -> SensorManager.remapCoordinateSystem(
-                R,
-                SensorManager.AXIS_X,
-                SensorManager.AXIS_Y,
-                outR
+                R, SensorManager.AXIS_X, SensorManager.AXIS_Y, outR
             )
             else -> SensorManager.remapCoordinateSystem(
-                R,
-                SensorManager.AXIS_X,
-                SensorManager.AXIS_Y,
-                outR
+                R, SensorManager.AXIS_X, SensorManager.AXIS_Y, outR
             )
         }
         SensorManager.getOrientation(outR, LOC)
 
         // normalize z on ux, uy
-        var tmp = Math.sqrt((outR[8] * outR[8] + outR[9] * outR[9]).toDouble())
-            .toFloat()
-        tmp = if (tmp == 0f) 0 else outR[8] / tmp
+        var tmp = sqrt((outR[8] * outR[8] + outR[9] * outR[9]).toDouble()).toFloat()
+        tmp = if (tmp == 0f) 0f else outR[8] / tmp
 
         // LOC[0] compass
         pitch = Math.toDegrees(LOC[1].toDouble()).toFloat()
         roll = (-Math.toDegrees(LOC[2].toDouble())).toFloat()
-        balance = Math.toDegrees(Math.asin(tmp.toDouble())).toFloat()
+        balance = Math.toDegrees(asin(tmp.toDouble())).toFloat()
 
         // calculating minimal sensor step
         if (oldRoll != roll || oldPitch != pitch || oldBalance != balance) {
             if (oldPitch != pitch) {
-                minStep = Math.min(minStep, Math.abs(pitch - oldPitch))
+                minStep = min(minStep, abs(pitch - oldPitch))
             }
             if (oldRoll != roll) {
-                minStep = Math.min(minStep, Math.abs(roll - oldRoll))
+                minStep = min(minStep, abs(roll - oldRoll))
             }
             if (oldBalance != balance) {
-                minStep = Math.min(minStep, Math.abs(balance - oldBalance))
+                minStep = min(minStep, abs(balance - oldBalance))
             }
             if (refValues < MIN_VALUES) {
                 refValues++
             }
         }
-        val orientation: Orientation
-        orientation = if (pitch < -45 && pitch > -135) {
-            // top side up
-            Orientation.TOP
-        } else if (pitch > 45 && pitch < 135) {
-            // bottom side up
-            Orientation.BOTTOM
-        } else if (roll > 45) {
-            // right side up
-            Orientation.RIGHT
-        } else if (roll < -45) {
-            // left side up
-            Orientation.LEFT
-        } else {
-            // landing
-            Orientation.LANDING
-        }
 
+        val orientation = when {
+            // top side up
+            pitch < -45 && pitch > -135 -> Orientation.TOP
+            // bottom side up
+            pitch > 45 && pitch < 135 -> Orientation.BOTTOM
+            // right side up
+            roll > 45 -> Orientation.RIGHT
+            // left side up
+            roll < -45 -> Orientation.LEFT
+            // landing
+            else -> Orientation.LANDING
+        }
         // propagation of the orientation
         view.setOrientation(orientation, pitch, roll, balance)
     }
 
     companion object {
         private const val MIN_VALUES = 20
-    }
-
-    init {
-        displayOrientation = activity.windowManager.defaultDisplay.rotation
-        sensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        if (sensorManager == null) return
-        val sensors = sensorManager!!.getSensorList(Sensor.TYPE_ACCELEROMETER)
-        if (sensors.size == 0) return
-        sensor = sensors[0]
     }
 }

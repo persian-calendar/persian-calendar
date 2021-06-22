@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
@@ -14,6 +13,13 @@ import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
+import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.cos
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 /*
 *  This file is part of Level (an Android Bubble Level).
@@ -34,19 +40,41 @@ import java.util.*
 *  You should have received a copy of the GNU General Public License
 *  along with Level. If not, see <http://www.gnu.org/licenses/>
 */
-class LevelView : View {
-    /**
-     * Rect
-     */
+class LevelView @JvmOverloads constructor(
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private val displayRect = Rect()
 
     /**
      * Format des angles
      */
-    private val displayFormat = DecimalFormat("00.0")
-    private val lcdForegroundPaint = Paint()
-    private val lcdBackgroundPaint = Paint()
-    private val infoPaint = Paint()
+    private val displayFormat = DecimalFormat("00.0").also {
+        it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
+    }
+    private val lcd = Typeface.createFromAsset(context.assets, FONT_LCD)
+    private val lcdForegroundPaint = Paint().also {
+        it.color = resources.getColor(R.color.lcd_front)
+        it.isAntiAlias = true
+        it.textSize = resources.getDimensionPixelSize(R.dimen.lcd_text).toFloat()
+        it.typeface = lcd
+        it.textAlign = Paint.Align.CENTER
+    }
+    private val lcdBackgroundPaint = Paint().also {
+        it.color = resources.getColor(R.color.lcd_back)
+        it.isAntiAlias = true
+        it.textSize = resources.getDimensionPixelSize(R.dimen.lcd_text).toFloat()
+        it.typeface = lcd
+        it.textAlign = Paint.Align.CENTER
+        it.getTextBounds(displayBackgroundText, 0, displayBackgroundText.length, displayRect)
+    }
+    private val infoPaint = Paint().also {
+        it.color = resources.getColor(R.color.black)
+        it.isAntiAlias = true
+        it.textSize = resources.getDimensionPixelSize(R.dimen.info_text).toFloat()
+        it.typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
+        it.textAlign = Paint.Align.CENTER
+    }
     private var isAlreadyLeveled = true // deliberately
 
     /**
@@ -69,14 +97,16 @@ class LevelView : View {
     private var maxLevelY = 0
     private var minBubble = 0
     private var maxBubble = 0
-    private var markerThickness = 0
-    private var levelBorderWidth = 0
-    private var levelBorderHeight = 0
-    private var lcdWidth = 0
-    private var lcdHeight = 0
-    private var displayPadding = 0
-    private var displayGap = 0
-    private var sensorGap = 0
+    private val markerThickness = context.resources.getDimensionPixelSize(R.dimen.marker_thickness)
+    private val levelBorderWidth =
+        context.resources.getDimensionPixelSize(R.dimen.level_border_width)
+    private val levelBorderHeight =
+        context.resources.getDimensionPixelSize(R.dimen.level_border_height)
+    private val lcdWidth = displayRect.width()
+    private val lcdHeight = displayRect.height()
+    private val displayPadding = context.resources.getDimensionPixelSize(R.dimen.display_padding)
+    private val displayGap = context.resources.getDimensionPixelSize(R.dimen.display_gap)
+    private val sensorGap = context.resources.getDimensionPixelSize(R.dimen.sensor_gap)
     private var levelMaxDimension = 0
 
     /**
@@ -103,13 +133,17 @@ class LevelView : View {
     /**
      * Drawables
      */
-    private var level1D: Drawable? = null
-    private var bubble1D: Drawable? = null
-    private var marker1D: Drawable? = null
-    private var level2D: Drawable? = null
-    private var bubble2D: Drawable? = null
-    private var marker2D: Drawable? = null
-    private var display: Drawable? = null
+    private val level1D = ResourcesCompat.getDrawable(context.resources, R.drawable.level_1d, null)
+    private val bubble1D =
+        ResourcesCompat.getDrawable(context.resources, R.drawable.bubble_1d, null)
+    private val marker1D =
+        ResourcesCompat.getDrawable(context.resources, R.drawable.marker_1d, null)
+    private val level2D = ResourcesCompat.getDrawable(context.resources, R.drawable.level_2d, null)
+    private val bubble2D =
+        ResourcesCompat.getDrawable(context.resources, R.drawable.bubble_2d, null)
+    private val marker2D =
+        ResourcesCompat.getDrawable(context.resources, R.drawable.marker_2d, null)
+    private val display = ResourcesCompat.getDrawable(context.resources, R.drawable.display, null)
 
     /**
      * Ajustement de la vitesse
@@ -117,76 +151,12 @@ class LevelView : View {
     private var viscosityValue = 1.0
     private var firstTime = true
 
-    constructor(context: Context) : super(context) {
-        init(context)
-    }
-
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        init(context)
-    }
-
-    private fun init(context: Context) {
-        val resources = context.resources
-        // drawable
-        level1D = ResourcesCompat.getDrawable(resources, R.drawable.level_1d, null)
-        level2D = ResourcesCompat.getDrawable(resources, R.drawable.level_2d, null)
-        bubble1D = ResourcesCompat.getDrawable(resources, R.drawable.bubble_1d, null)
-        bubble2D = ResourcesCompat.getDrawable(resources, R.drawable.bubble_2d, null)
-        marker1D = ResourcesCompat.getDrawable(resources, R.drawable.marker_1d, null)
-        marker2D = ResourcesCompat.getDrawable(resources, R.drawable.marker_2d, null)
-        display = ResourcesCompat.getDrawable(resources, R.drawable.display, null)
-
-        // config
-        displayFormat.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
-
-        // typeface
-        val lcd = Typeface.createFromAsset(context.assets, FONT_LCD)
-
-        // paint
-        infoPaint.color = resources.getColor(R.color.black)
-        infoPaint.isAntiAlias = true
-        infoPaint.textSize = resources.getDimensionPixelSize(R.dimen.info_text).toFloat()
-        infoPaint.typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
-        infoPaint.textAlign = Paint.Align.CENTER
-        lcdForegroundPaint.color = resources.getColor(R.color.lcd_front)
-        lcdForegroundPaint.isAntiAlias = true
-        lcdForegroundPaint.textSize = resources.getDimensionPixelSize(R.dimen.lcd_text).toFloat()
-        lcdForegroundPaint.typeface = lcd
-        lcdForegroundPaint.textAlign = Paint.Align.CENTER
-        lcdBackgroundPaint.color = resources.getColor(R.color.lcd_back)
-        lcdBackgroundPaint.isAntiAlias = true
-        lcdBackgroundPaint.textSize = resources.getDimensionPixelSize(R.dimen.lcd_text).toFloat()
-        lcdBackgroundPaint.typeface = lcd
-        lcdBackgroundPaint.textAlign = Paint.Align.CENTER
-
-        // dimens
-        lcdBackgroundPaint.getTextBounds(
-            displayBackgroundText,
-            0,
-            displayBackgroundText.length,
-            displayRect
-        )
-        lcdHeight = displayRect.height()
-        lcdWidth = displayRect.width()
-        levelBorderWidth = resources.getDimensionPixelSize(R.dimen.level_border_width)
-        levelBorderHeight = resources.getDimensionPixelSize(R.dimen.level_border_height)
-        markerThickness = resources.getDimensionPixelSize(R.dimen.marker_thickness)
-        displayGap = resources.getDimensionPixelSize(R.dimen.display_gap)
-        sensorGap = resources.getDimensionPixelSize(R.dimen.sensor_gap)
-        displayPadding = resources.getDimensionPixelSize(R.dimen.display_padding)
-        invalidate()
-    }
-
     fun setOrientation(
-        newOrientation: Orientation,
-        newPitch: Float,
-        newRoll: Float,
-        newBalance: Float
+        newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float
     ) {
         if (orientation == null || orientation != newOrientation) {
             orientation = newOrientation
-            val infoY: Int
-            infoY = when (newOrientation) {
+            val infoY: Int = when (newOrientation) {
                 Orientation.LEFT, Orientation.RIGHT -> (canvasHeight - canvasWidth) / 2 + canvasWidth
                 Orientation.TOP, Orientation.BOTTOM -> canvasHeight
                 else -> canvasHeight
@@ -230,9 +200,9 @@ class LevelView : View {
             levelMinusBubbleHeight = levelHeight - bubbleHeight - 2 * levelBorderWidth
 
             // positionnement
-            level1D!!.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
-            level2D!!.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
-            marker2D!!.setBounds(
+            level1D?.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
+            level2D?.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
+            marker2D?.setBounds(
                 middleX - halfMarkerGap - markerThickness,
                 middleY - halfMarkerGap - markerThickness,
                 middleX + halfMarkerGap + markerThickness,
@@ -243,21 +213,21 @@ class LevelView : View {
         }
         when (orientation) {
             Orientation.TOP, Orientation.BOTTOM -> {
-                angle1 = Math.abs(newBalance)
-                angleX = Math.sin(Math.toRadians(newBalance.toDouble())) / MAX_SINUS
+                angle1 = abs(newBalance)
+                angleX = sin(Math.toRadians(newBalance.toDouble())) / MAX_SINUS
             }
             Orientation.LANDING -> {
-                angle2 = Math.abs(newRoll)
-                angleX = Math.sin(Math.toRadians(newRoll.toDouble())) / MAX_SINUS
-                angle1 = Math.abs(newPitch)
-                angleY = Math.sin(Math.toRadians(newPitch.toDouble())) / MAX_SINUS
+                angle2 = abs(newRoll)
+                angleX = sin(Math.toRadians(newRoll.toDouble())) / MAX_SINUS
+                angle1 = abs(newPitch)
+                angleY = sin(Math.toRadians(newPitch.toDouble())) / MAX_SINUS
                 if (angle1 > 90) {
                     angle1 = 180 - angle1
                 }
             }
             Orientation.RIGHT, Orientation.LEFT -> {
-                angle1 = Math.abs(newPitch)
-                angleY = Math.sin(Math.toRadians(newPitch.toDouble())) / MAX_SINUS
+                angle1 = abs(newPitch)
+                angleY = sin(Math.toRadians(newPitch.toDouble())) / MAX_SINUS
                 if (angle1 > 90) {
                     angle1 = 180 - angle1
                 }
@@ -285,13 +255,13 @@ class LevelView : View {
         // correction des angles a plat
         // la bulle ne doit pas sortir du niveau
         if (orientation == Orientation.LANDING && angleX != 0.0 && angleY != 0.0) {
-            val n = Math.sqrt(angleX * angleX + angleY * angleY)
-            val teta = Math.acos(Math.abs(angleX) / n)
-            val l = 1 / Math.max(Math.abs(Math.cos(teta)), Math.abs(Math.sin(teta)))
-            angleX = angleX / l
-            angleY = angleY / l
+            val n = sqrt(angleX * angleX + angleY * angleY)
+            val teta = acos(abs(angleX) / n)
+            val l = 1 / max(abs(cos(teta)), abs(sin(teta)))
+            angleX /= l
+            angleY /= l
         }
-        if (orientation!!.isLevel(newPitch, newRoll, newBalance, .8f)) {
+        if (orientation?.isLevel(newPitch, newRoll, newBalance, .8f) == true) {
             if (!isAlreadyLeveled) {
                 a11yAnnounceAndClick(this, R.string.level)
                 isAlreadyLeveled = true
@@ -306,19 +276,19 @@ class LevelView : View {
         super.onSizeChanged(w, h, oldw, oldh)
         canvasWidth = w
         canvasHeight = h
-        levelMaxDimension = Math.min(
-            Math.min(h, w) - 2 * displayGap,
-            Math.max(h, w) - 2 * (sensorGap + 3 * displayGap + lcdHeight)
+        levelMaxDimension = min(
+            min(h, w) - 2 * displayGap, max(h, w) - 2 * (sensorGap + 3 * displayGap + lcdHeight)
         )
     }
 
     public override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.save()
         if (firstTime) {
             setOrientation(Orientation.LANDING, 0f, 0f, 0f)
             firstTime = false
         }
+        val orientation = orientation ?: return
+        val display = display ?: return
 
         // update physics
         val currentTime = System.currentTimeMillis()
@@ -329,13 +299,12 @@ class LevelView : View {
             angleToShow2 = angle2.toDouble()
             lastTimeShowAngle = currentTime
         }
-        val posX =
-            orientation.getReverse() * (2 * x - minLevelX - maxLevelX) / levelMinusBubbleWidth
+        val posX = orientation.reverse * (2 * x - minLevelX - maxLevelX) / levelMinusBubbleWidth
         when (orientation) {
-            Orientation.TOP, Orientation.BOTTOM -> speedX =
-                orientation.getReverse() * (angleX - posX) * viscosityValue
-            Orientation.LEFT, Orientation.RIGHT -> speedX =
-                orientation.getReverse() * (angleY - posX) * viscosityValue
+            Orientation.TOP, Orientation.BOTTOM ->
+                speedX = orientation.reverse * (angleX - posX) * viscosityValue
+            Orientation.LEFT, Orientation.RIGHT ->
+                speedX = orientation.reverse * (angleY - posX) * viscosityValue
             Orientation.LANDING -> {
                 val posY = (2 * y - minLevelY - maxLevelY) / levelMinusBubbleHeight
                 speedX = (angleX - posX) * viscosityValue
@@ -348,10 +317,8 @@ class LevelView : View {
         // si la bubble a trop deviee
         // elle est replacee correctement
         if (orientation == Orientation.LANDING) {
-            if (Math.sqrt(
-                    (middleX - x) * (middleX - x)
-                            + (middleY - y) * (middleY - y)
-                ) > levelMaxDimension / 2 - halfBubbleWidth
+            if (sqrt((middleX - x) * (middleX - x) + (middleY - y) * (middleY - y))
+                > levelMaxDimension / 2 - halfBubbleWidth
             ) {
                 x = (angleX * levelMinusBubbleWidth + minLevelX + maxLevelX) / 2
                 y = (angleY * levelMinusBubbleHeight + minLevelY + maxLevelY) / 2
@@ -363,20 +330,20 @@ class LevelView : View {
         }
         if (orientation == Orientation.LANDING) {
             // Angle
-            display!!.setBounds(
+            display.setBounds(
                 displayRect.left - (displayRect.width() + displayGap) / 2,
                 displayRect.top,
                 displayRect.right - (displayRect.width() + displayGap) / 2,
                 displayRect.bottom
             )
-            display!!.draw(canvas)
-            display!!.setBounds(
+            display.draw(canvas)
+            display.setBounds(
                 displayRect.left + (displayRect.width() + displayGap) / 2,
                 displayRect.top,
                 displayRect.right + (displayRect.width() + displayGap) / 2,
                 displayRect.bottom
             )
-            display!!.draw(canvas)
+            display.draw(canvas)
             canvas.drawText(
                 displayBackgroundText, (
                         middleX - (displayRect.width() + displayGap) / 2).toFloat(), (
@@ -402,15 +369,15 @@ class LevelView : View {
                 lcdForegroundPaint
             )
             //
-            bubble2D!!.setBounds(
+            bubble2D?.setBounds(
                 (x - halfBubbleWidth).toInt(),
                 (y - halfBubbleHeight).toInt(),
                 (x + halfBubbleWidth).toInt(),
                 (y + halfBubbleHeight).toInt()
             )
-            level2D!!.draw(canvas)
-            bubble2D!!.draw(canvas)
-            marker2D!!.draw(canvas)
+            level2D?.draw(canvas)
+            bubble2D?.draw(canvas)
+            marker2D?.draw(canvas)
             canvas.drawLine(
                 minLevelX.toFloat(), middleY.toFloat(), (
                         middleX - halfMarkerGap).toFloat(), middleY.toFloat(), infoPaint
@@ -428,10 +395,10 @@ class LevelView : View {
                 middleX.toFloat(), maxLevelY.toFloat(), infoPaint
             )
         } else {
-            canvas.rotate(orientation.getRotation().toFloat(), middleX.toFloat(), middleY.toFloat())
+            canvas.rotate(orientation.rotation.toFloat(), middleX.toFloat(), middleY.toFloat())
             // Angle
-            display!!.bounds = displayRect
-            display!!.draw(canvas)
+            display.bounds = displayRect
+            display.draw(canvas)
             canvas.drawText(
                 displayBackgroundText, middleX.toFloat(), (
                         displayRect.centerY() + lcdHeight / 2).toFloat(), lcdBackgroundPaint
@@ -441,30 +408,29 @@ class LevelView : View {
                         displayRect.centerY() + lcdHeight / 2).toFloat(), lcdForegroundPaint
             )
             // level
-            level1D!!.draw(canvas)
+            level1D?.draw(canvas)
             // bubble
             canvas.clipRect(
                 minLevelX + levelBorderWidth, minLevelY + levelBorderHeight,
                 maxLevelX - levelBorderWidth, maxLevelY - levelBorderHeight
             )
-            bubble1D!!.setBounds(
+            bubble1D?.setBounds(
                 (x - halfBubbleWidth).toInt(), minBubble,
                 (x + halfBubbleWidth).toInt(), maxBubble
             )
-            bubble1D!!.draw(canvas)
+            bubble1D?.draw(canvas)
             // marker
-            marker1D!!.setBounds(
+            marker1D?.setBounds(
                 middleX - halfMarkerGap - markerThickness, minLevelY,
                 middleX - halfMarkerGap, maxLevelY
             )
-            marker1D!!.draw(canvas)
-            marker1D!!.setBounds(
+            marker1D?.draw(canvas)
+            marker1D?.setBounds(
                 middleX + halfMarkerGap, minLevelY,
                 middleX + halfMarkerGap + markerThickness, maxLevelY
             )
-            marker1D!!.draw(canvas)
+            marker1D?.draw(canvas)
         }
-        canvas.restore()
     }
 
     companion object {
@@ -477,7 +443,7 @@ class LevelView : View {
         /**
          * Angle max
          */
-        private val MAX_SINUS = Math.sin(Math.PI / 4)
+        private val MAX_SINUS = sin(Math.PI / 4)
 
         /**
          * Fonts and colors
