@@ -1268,7 +1268,6 @@
     { "holiday": false, "month": 8, "day": 19, "title": "روز جهانی عکاسی", "type": "International" },
     { "holiday": false, "month": 9, "day": 8, "title": "روز جهانی باسوادی", "type": "International" },
     { "holiday": false, "month": 9, "day": 10, "title": "روز جهانی جلوگیری از خودکشی", "type": "International" },
-    { "holiday": false, "month": 9, "day": 12, "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "type": "International" },
     { "holiday": false, "month": 9, "day": 21, "title": "روز جهانی آلزایمر", "type": "International" },
     { "holiday": false, "month": 9, "day": 21, "title": "روز جهانی صلح", "type": "International" },
     { "holiday": false, "month": 9, "day": 30, "title": "روز جهانی ترجمه", "type": "International" },
@@ -1303,6 +1302,8 @@
     { "month": 9, "calendar": "Hijri", "rule": "last day of week", "day of week": 7, "type": "Iran",
       "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)", "holiday": false },
     { "month": 12, "calendar": "Persian", "rule": "last day of week", "day of week": 4, "type": "Ancient Iran",
-      "title": "چهارشنبه‌سوری (آخرین سه‌شنبه سال)", "holiday": false }
+      "title": "چهارشنبه‌سوری (آخرین سه‌شنبه سال)", "holiday": false },
+    { "calendar": "Gregorian", "rule": "nth day of year", "nth": 256, "type": "International",
+      "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "holiday": false }
   ]
 }
