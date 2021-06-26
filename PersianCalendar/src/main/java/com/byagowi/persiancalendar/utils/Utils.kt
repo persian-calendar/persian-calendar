@@ -286,8 +286,8 @@ fun loadEvents(context: Context) {
             iranOthers && event["calendar"] == "Hijri" && event["type"] == "Iran"
         }.flatMap { event ->
             // This adds only this, next and previous years' events, hacky but enough for now
-            if (event["rule"] != "last day of week") return@flatMap emptyList()
-            val dayOfWeek = event["day of week"]?.toIntOrNull() ?: return@flatMap emptyList()
+            if (event["rule"] != "last weekday of month") return@flatMap emptyList()
+            val dayOfWeek = event["weekday"]?.toIntOrNull() ?: return@flatMap emptyList()
             val month = event["month"]?.toIntOrNull() ?: return@flatMap emptyList()
             val title = event["title"] ?: return@flatMap emptyList()
             val year = Jdn.today.toIslamicCalendar().year
