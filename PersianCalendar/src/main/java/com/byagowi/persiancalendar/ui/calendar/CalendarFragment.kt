@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
+import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
@@ -140,7 +141,7 @@ class CalendarFragment : Fragment() {
                         // The user is already dismissed the third tab
                         appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
                         // Try to not show the placeholder to established users
-                        PREF_HOLIDAY_TYPES in appPrefs)
+                        PREF_APP_LANGUAGE in appPrefs)
 
         val tabs = listOf(
             // First tab
