@@ -68,6 +68,7 @@ fun update(context: Context, updateDate: Boolean) {
     //
     val manager = AppWidgetManager.getInstance(context) ?: return
     val color = Color.parseColor(selectedWidgetTextColor)
+    val packageName = context.packageName
 
     // en-US is our only real LTR language for now
     val isRTL = isLocaleRTL()
@@ -85,15 +86,14 @@ fun update(context: Context, updateDate: Boolean) {
 
     //region Widget 1x1
     if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {
-        RemoteViews(context.packageName, R.layout.widget1x1).apply {
-            setBackgroundColor(R.id.widget_layout1x1)
-            setTextColor(R.id.textPlaceholder1_1x1, color)
-            setTextColor(R.id.textPlaceholder2_1x1, color)
-            setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
-            setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
-            setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
-            manager.updateAppWidget(widget1x1, this)
-        }
+        manager.updateAppWidget(widget1x1, RemoteViews(packageName, R.layout.widget1x1).also {
+            it.setBackgroundColor(R.id.widget_layout1x1)
+            it.setTextColor(R.id.textPlaceholder1_1x1, color)
+            it.setTextColor(R.id.textPlaceholder2_1x1, color)
+            it.setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
+            it.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
+            it.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent)
+        })
     }
     //endregion
 
@@ -149,31 +149,29 @@ fun update(context: Context, updateDate: Boolean) {
         if (enableClock) {
             if (isForcedIranTimeEnabled) {
                 remoteViews4 = RemoteViews(
-                    context.packageName,
+                    packageName,
                     if (isCenterAligned) R.layout.widget4x1_clock_iran_center else R.layout.widget4x1_clock_iran
                 )
                 remoteViews2 = RemoteViews(
-                    context.packageName,
+                    packageName,
                     if (isCenterAligned) R.layout.widget2x2_clock_iran_center else R.layout.widget2x2_clock_iran
                 )
             } else {
                 remoteViews4 = RemoteViews(
-                    context.packageName,
+                    packageName,
                     if (isCenterAligned) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
                 )
                 remoteViews2 = RemoteViews(
-                    context.packageName,
+                    packageName,
                     if (isCenterAligned) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
                 )
             }
         } else {
             remoteViews4 = RemoteViews(
-                context.packageName,
-                if (isCenterAligned) R.layout.widget4x1_center else R.layout.widget4x1
+                packageName, if (isCenterAligned) R.layout.widget4x1_center else R.layout.widget4x1
             )
             remoteViews2 = RemoteViews(
-                context.packageName,
-                if (isCenterAligned) R.layout.widget2x2_center else R.layout.widget2x2
+                packageName, if (isCenterAligned) R.layout.widget2x2_center else R.layout.widget2x2
             )
         }
 
@@ -268,7 +266,7 @@ fun update(context: Context, updateDate: Boolean) {
     //region Widget 4x1 dateOnly
     // if (manager.getAppWidgetIds(widget4x1dateOnly)?.isNotEmpty() == true) {
     //     val remoteViews = RemoteViews(
-    //         context.packageName,
+    //         packageName,
     //         if (enableClock) {
     //             if (isForcedIranTimeEnabled) {
     //                 if (isCenterAligned) R.layout.widget4x1_date_only_clock_iran_center else R.layout.widget4x1_date_only_clock_iran
@@ -304,8 +302,7 @@ fun update(context: Context, updateDate: Boolean) {
     //region Widget 4x2
     if (manager.getAppWidgetIds(widget4x2)?.isNotEmpty() == true) {
         val remoteViews4x2 = RemoteViews(
-            context.packageName,
-            if (enableClock) {
+            packageName, if (enableClock) {
                 if (isForcedIranTimeEnabled) R.layout.widget4x2_clock_iran else R.layout.widget4x2_clock
             } else R.layout.widget4x2
         )
@@ -500,30 +497,30 @@ fun update(context: Context, updateDate: Boolean) {
                 )
             } else {
                 val cv = RemoteViews(
-                    context.packageName,
+                    packageName,
                     if (isRTL) R.layout.custom_notification else R.layout.custom_notification_ltr
-                ).apply {
-                    setTextViewText(R.id.title, title)
-                    setTextViewText(R.id.body, subtitle)
+                ).also {
+                    it.setTextViewText(R.id.title, title)
+                    it.setTextViewText(R.id.body, subtitle)
                 }
 
                 val bcv = RemoteViews(
-                    context.packageName,
+                    packageName,
                     if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
-                ).apply {
-                    setTextViewText(R.id.title, title)
+                ).also {
+                    it.setTextViewText(R.id.title, title)
 
-                    fun RemoteViews.setTextViewTextOrIfEmpty(viewId: Int, text: CharSequence) =
+                    fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) =
                         if (text.trim().isEmpty()) setViewVisibility(viewId, View.GONE)
                         else setTextViewText(viewId, text.trim())
 
-                    setTextViewTextOrIfEmpty(R.id.body, subtitle)
-                    setTextViewTextOrIfEmpty(R.id.holidays, holidays)
-                    setTextViewTextOrIfEmpty(
+                    it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
+                    it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
+                    it.setTextViewTextOrHideIfEmpty(
                         R.id.nonholidays,
                         if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else ""
                     )
-                    setTextViewTextOrIfEmpty(
+                    it.setTextViewTextOrHideIfEmpty(
                         R.id.owghat,
                         if ("owghat" in whatToShowOnWidgets) owghat else ""
                     )
