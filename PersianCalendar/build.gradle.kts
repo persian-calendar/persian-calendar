@@ -76,6 +76,7 @@ android {
         getByName("debug") {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
             applicationIdSuffix = ".debug"
+            multiDexEnabled = true
         }
 
         getByName("release") {
