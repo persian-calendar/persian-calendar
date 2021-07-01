@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAgeWidgetConfigureBinding
-import com.byagowi.persiancalendar.updateAgeWidget
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -19,36 +18,28 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.getThemeFromName
 import com.byagowi.persiancalendar.utils.getThemeFromPreference
 import com.byagowi.persiancalendar.utils.putJdn
+import com.byagowi.persiancalendar.utils.update
 
 class AgeWidgetConfigureActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     private fun confirm(title: String) {
-        val selectedJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId)
         appPrefs.edit {
-            if (selectedJdn == null) {
-                // Put today's jdn if nothing was set
+            // Put today's jdn if it wasn't set by the dialog, maybe a day counter is meant
+            if (appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId) == null)
                 putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today)
-            }
             putString(PREF_TITLE_AGE_WIDGET + appWidgetId, title)
         }
-
-        // It is the responsibility of the configuration activity to update the app widget
-        val appWidgetManager = AppWidgetManager.getInstance(this)
-        updateAgeWidget(this, appWidgetManager, appWidgetId)
-
         // Make sure we pass back the original appWidgetId
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        setResult(RESULT_OK, resultValue)
+        setResult(RESULT_OK, Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId))
+        update(this, false)
         finish()
     }
 
-    override fun onCreate(icicle: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
         applyAppLanguage(this)
-
-        super.onCreate(icicle)
+        super.onCreate(savedInstanceState)
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
@@ -58,13 +49,9 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
             setContentView(it.root)
         }
 
-        val intent = intent
-        val extras = intent?.extras
-        if (extras != null) {
-            appWidgetId = extras.getInt(
-                AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
-            )
-        }
+        appWidgetId = intent?.extras?.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {

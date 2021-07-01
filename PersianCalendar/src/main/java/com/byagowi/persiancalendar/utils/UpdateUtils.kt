@@ -16,7 +16,14 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
+import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
+import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
+import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
@@ -62,6 +69,15 @@ fun update(context: Context, updateDate: Boolean) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
 
+    // RemoteViews helpers
+    fun RemoteViews.setBackgroundColor(
+        @IdRes layoutId: Int, color: String = selectedWidgetBackgroundColor
+    ) = this.setInt(layoutId, "setBackgroundColor", Color.parseColor(color))
+
+    fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) =
+        if (text.isBlank()) setViewVisibility(viewId, View.GONE)
+        else setTextViewText(viewId, text.trim())
+
     //
     // Widgets
     //
@@ -73,16 +89,33 @@ fun update(context: Context, updateDate: Boolean) {
     // en-US is our only real LTR language for now
     val isRTL = isLocaleRTL()
 
-    // Widget 1x1
+    val ageWidget = ComponentName(context, AgeWidget::class.java)
     val widget1x1 = ComponentName(context, Widget1x1::class.java)
     val widget4x1 = ComponentName(context, Widget4x1::class.java)
     val widget4x2 = ComponentName(context, Widget4x2::class.java)
     val widget2x2 = ComponentName(context, Widget2x2::class.java)
     // val widget4x1dateOnly = ComponentName(context, Widget4x1dateOnly::class.java)
 
-    fun RemoteViews.setBackgroundColor(@IdRes layoutId: Int) = this.setInt(
-        layoutId, "setBackgroundColor", Color.parseColor(selectedWidgetBackgroundColor)
-    )
+    //region Age Widgets
+    manager.getAppWidgetIds(ageWidget)?.forEach { widgetId ->
+        val prefs = context.appPrefs
+        val baseJdn = prefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today
+        val title = prefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, "")
+        val subtitleFormatPattern = context.getString(R.string.age_widget_placeholder)
+        val subtitle = calculateDaysDifference(baseJdn, subtitleFormatPattern)
+        val textColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId, null)
+            ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+        val bgColor = prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId, null)
+            ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+        manager.updateAppWidget(widgetId, RemoteViews(packageName, R.layout.widget_age).also {
+            it.setBackgroundColor(R.id.age_widget_root, bgColor)
+            it.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title ?: "")
+            it.setTextColor(R.id.textview_age_widget_title, Color.parseColor(textColor))
+            it.setTextViewText(R.id.textview_age_widget, subtitle)
+            it.setTextColor(R.id.textview_age_widget, Color.parseColor(textColor))
+        })
+    }
+    //endregion
 
     //region Widget 1x1
     if (manager.getAppWidgetIds(widget1x1)?.isNotEmpty() == true) {
@@ -129,9 +162,7 @@ fun update(context: Context, updateDate: Boolean) {
                 getClockFromStringId(nextOwghatId).toFormattedString()
         if ("owghat_location" in whatToShowOnWidgets) {
             val cityName = getCityName(context, false)
-            if (cityName.isNotEmpty()) {
-                owghat = "$owghat ($cityName)"
-            }
+            if (cityName.isNotEmpty()) owghat = "$owghat ($cityName)"
         }
     }
     val events = jdn.getEvents(deviceCalendarEvents)
@@ -509,11 +540,6 @@ fun update(context: Context, updateDate: Boolean) {
                     if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
                 ).also {
                     it.setTextViewText(R.id.title, title)
-
-                    fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) =
-                        if (text.trim().isEmpty()) setViewVisibility(viewId, View.GONE)
-                        else setTextViewText(viewId, text.trim())
-
                     it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
                     it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
                     it.setTextViewTextOrHideIfEmpty(

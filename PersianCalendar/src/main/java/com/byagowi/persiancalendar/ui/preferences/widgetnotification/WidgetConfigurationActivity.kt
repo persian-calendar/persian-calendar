@@ -34,7 +34,6 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
-
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {

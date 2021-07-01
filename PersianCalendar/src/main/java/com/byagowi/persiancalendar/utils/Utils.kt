@@ -435,13 +435,10 @@ fun updateStoredPreference(context: Context) {
     notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
     isCenterAlignWidgets = prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, false)
 
-    selectedWidgetTextColor =
-        prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
-            ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-
-    selectedWidgetBackgroundColor =
-        prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR, null)
-            ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+    selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
+        ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+    selectedWidgetBackgroundColor = prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR, null)
+        ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm
