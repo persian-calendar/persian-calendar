@@ -499,63 +499,45 @@ fun update(context: Context, updateDate: Boolean) {
 
         if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val holidays = getEventsTitle(
-                events,
-                holiday = true,
-                compact = true,
-                showDeviceCalendarEvents = true,
-                insertRLM = isRTL,
+                events, holiday = true,
+                compact = true, showDeviceCalendarEvents = true, insertRLM = isRTL,
                 addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
             )
 
-            val nonHolidays = getEventsTitle(
-                dayEvents = events,
-                holiday = false,
-                compact = true,
-                showDeviceCalendarEvents = true,
-                insertRLM = isRTL,
+            val nonHolidays = if ("non_holiday_events" in whatToShowOnWidgets) getEventsTitle(
+                events, holiday = false,
+                compact = true, showDeviceCalendarEvents = true, insertRLM = isRTL,
                 addIsHoliday = false
-            )
+            ) else ""
+
+            val notificationOwghat = if ("owghat" in whatToShowOnWidgets) owghat else ""
 
             if (shouldDisableCustomNotification) {
-                builder.setStyle(
-                    NotificationCompat.BigTextStyle().bigText(
-                        listOf(
-                            subtitle, holidays.trim(),
-                            if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else "",
-                            if ("owghat" in whatToShowOnWidgets) owghat else ""
-                        ).filter { it.isNotBlank() }.joinToString("\n")
-                    )
-                )
+                val content = listOf(subtitle, holidays.trim(), nonHolidays, notificationOwghat)
+                    .filter { it.isNotBlank() }.joinToString("\n")
+                builder.setStyle(NotificationCompat.BigTextStyle().bigText(content))
             } else {
-                val cv = RemoteViews(
+                builder.setCustomContentView(RemoteViews(
                     packageName,
                     if (isRTL) R.layout.custom_notification else R.layout.custom_notification_ltr
                 ).also {
                     it.setTextViewText(R.id.title, title)
                     it.setTextViewText(R.id.body, subtitle)
-                }
+                })
 
-                val bcv = RemoteViews(
-                    packageName,
-                    if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
-                ).also {
-                    it.setTextViewText(R.id.title, title)
-                    it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
-                    it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
-                    it.setTextViewTextOrHideIfEmpty(
-                        R.id.nonholidays,
-                        if ("non_holiday_events" in whatToShowOnWidgets) nonHolidays else ""
-                    )
-                    it.setTextViewTextOrHideIfEmpty(
-                        R.id.owghat,
-                        if ("owghat" in whatToShowOnWidgets) owghat else ""
-                    )
-                }
+                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
+                    builder.setCustomBigContentView(RemoteViews(
+                        packageName,
+                        if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
+                    ).also {
+                        it.setTextViewText(R.id.title, title)
+                        it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
+                        it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
+                        it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
+                        it.setTextViewTextOrHideIfEmpty(R.id.owghat, notificationOwghat)
+                    })
 
-                builder
-                    .setCustomContentView(cv)
-                    .setCustomBigContentView(bcv)
-                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
             }
         }
 
