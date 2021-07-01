@@ -45,9 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level:
-          - 20 # an API version without vector drawables
-          - 29
+        api-level: [17, 29]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -70,8 +68,9 @@ jobs:
         uses: reactivecircus/android-emulator-runner@ac874f3db5eccbb177697a00f8f609695ac2b15e
         with:
           api-level: ${{ matrix.api-level }}
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          arch: x86
           script: ./gradlew connectedDebugAndroidTest --stacktrace
 
       - name: Upload results
