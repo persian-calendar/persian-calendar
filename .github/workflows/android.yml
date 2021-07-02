@@ -45,7 +45,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [17, 29]
+        api-level: [29]
     steps:
       - uses: actions/checkout@v2
         with:
