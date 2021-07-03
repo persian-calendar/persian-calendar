@@ -10,12 +10,12 @@
     <string name="open">Open</string>
     <string name="accept">OK</string>
     <string name="add">Add</string>
-    <string name="help">Help</string>
-    <string name="more">More</string>
-    <string name="cancel">Cancel</string>
-    <string name="continue_button">Continue</string>
+    <string name="help">Ayuda</string>
+    <string name="more">Más</string>
+    <string name="cancel">Cancelar</string>
+    <string name="continue_button">Continuar</string>
     <string name="outdated_app">Due to being outdated, things can be inaccurate</string>
-    <string name="update">Update</string>
+    <string name="update">Actualizar</string>
     <!--Navigation drawers-->
     <string name="calendar">Calendar</string>
     <string name="date_converter">Date Converter</string>
