@@ -46,7 +46,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resourceConfigurations +=
-            listOf("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr")
+            listOf("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es")
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
         multiDexEnabled = false
     }

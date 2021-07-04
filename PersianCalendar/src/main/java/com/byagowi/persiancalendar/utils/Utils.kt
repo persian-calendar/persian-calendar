@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.LANG_AZB
 import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.LANG_EN_IR
 import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LANG_FA_AF
 import com.byagowi.persiancalendar.LANG_FR
@@ -216,7 +217,7 @@ fun loadEvents(context: Context) {
             IslamicDate.useUmmAlQura = true
         }
         when (language) {
-            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA, LANG_FR ->
+            LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES ->
                 IslamicDate.useUmmAlQura = true
         }
     }
@@ -414,7 +415,7 @@ fun updateStoredPreference(context: Context) {
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
 
     preferredDigits = when (language) {
-        LANG_EN_US, LANG_JA, LANG_FR -> ARABIC_DIGITS
+        LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> ARABIC_DIGITS
         else -> when {
             prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS) -> when (language) {
                 LANG_AR, LANG_CKB -> ARABIC_INDIC_DIGITS

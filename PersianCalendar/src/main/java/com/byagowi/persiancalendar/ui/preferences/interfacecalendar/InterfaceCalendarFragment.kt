@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.LANG_AR
 import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -76,7 +77,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     title(R.string.persian_digits)
                     summary(R.string.enable_persian_digits)
                     when (language) {
-                        LANG_EN_US, LANG_JA, LANG_FR -> isVisible = false
+                        LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> isVisible = false
                     }
                 }
             }

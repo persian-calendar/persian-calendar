@@ -17,6 +17,7 @@ import androidx.core.graphics.withClip
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.LANG_EN_IR
 import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
@@ -103,7 +104,7 @@ class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var prayTimes: PrayTimes? = null
     private var moonPhase = 1.0
     private val fontSize = when (language) {
-        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR -> 12.dp
+        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> 12.dp
         else -> 14.dp
     }.toFloat()
 

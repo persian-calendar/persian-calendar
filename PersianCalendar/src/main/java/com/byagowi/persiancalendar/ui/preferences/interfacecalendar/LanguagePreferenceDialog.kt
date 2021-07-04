@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.LANG_AZB
 import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.LANG_EN_IR
 import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LANG_FA_AF
 import com.byagowi.persiancalendar.LANG_FR
@@ -42,6 +43,7 @@ fun Fragment.showLanguagePreferenceDialog() {
         LANG_EN_IR to "English (Iran)",
         LANG_EN_US to "English",
         LANG_FR to "Français",
+        // LANG_ES to "Español",
         LANG_JA to "日本語"
     )
     val languageKeys = languages.map { it.first }
@@ -62,7 +64,7 @@ private fun SharedPreferences.changeLanguage(language: String) = edit {
     putString(PREF_APP_LANGUAGE, language)
 
     when (language) {
-        LANG_UR, LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR -> false; else -> true
+        LANG_UR, LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> false; else -> true
     }.let { putBoolean(PREF_PERSIAN_DIGITS, it) }
 
     when (language) {
@@ -81,7 +83,7 @@ private fun SharedPreferences.changeLanguage(language: String) = edit {
     }
 
     when (language) {
-        LANG_EN_US, LANG_JA, LANG_FR, LANG_UR -> {
+        LANG_EN_US, LANG_JA, LANG_FR, LANG_ES, LANG_UR -> {
             putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
             putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
             putString(PREF_WEEK_START, "1")
