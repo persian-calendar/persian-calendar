@@ -47,6 +47,7 @@ import com.google.android.material.bottomnavigation.LabelVisibilityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
+import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.tabs.TabLayout
 import kotlinx.html.body
@@ -118,7 +119,7 @@ class DeviceInformationFragment : Fragment() {
                 it.add(Build.MODEL)
                 it.getItem(3).setIcon(R.drawable.ic_device_information_white).isEnabled = false
             }
-            bottomNavigationView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_LABELED
+            bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
             bottomNavigationView.setOnNavigationItemSelectedListener {
                 val activity = activity ?: return@setOnNavigationItemSelectedListener true
                 // Easter egg
