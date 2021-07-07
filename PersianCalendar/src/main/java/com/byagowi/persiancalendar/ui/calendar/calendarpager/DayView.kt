@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Jdn
-import com.byagowi.persiancalendar.utils.appTheme
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
@@ -79,32 +78,16 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         val height = height
         val radius = min(width, height) / 2
 
-        val isModernTheme = appTheme == R.style.ModernTheme
         getDrawingRect(bounds)
         drawingRect.set(bounds)
         drawingRect.inset(radius * 0.1f, radius * 0.1f)
-        val yOffsetToApply = if (isModernTheme) (-height * .07f).toInt() else 0
 
         if (dayIsSelected) {
-            if (isModernTheme) {
-                canvas.drawRoundRect(drawingRect, 0f, 0f, selectedPaint)
-            } else {
-                canvas.drawCircle(
-                    width / 2f, height / 2f, (radius - 5).toFloat(),
-                    selectedPaint
-                )
-            }
+            canvas.drawCircle(width / 2f, height / 2f, (radius - 5).toFloat(), selectedPaint)
         }
 
         if (today) {
-            if (isModernTheme) {
-                canvas.drawRoundRect(drawingRect, 0f, 0f, todayPaint)
-            } else {
-                canvas.drawCircle(
-                    width / 2f, height / 2f, (radius - 5).toFloat(),
-                    todayPaint
-                )
-            }
+            canvas.drawCircle(width / 2f, height / 2f, (radius - 5).toFloat(), todayPaint)
         }
 
         val color: Int = if (isNumber) {
@@ -119,7 +102,7 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             colorTextDayName
         }
 
-        eventBarPaint.color = if (dayIsSelected && !isModernTheme) color else colorEventLine
+        eventBarPaint.color = if (dayIsSelected) color else colorEventLine
 
         // a11y improvement
         if (isHighTextContrastEnabled && holiday)
@@ -127,19 +110,16 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
         if (hasEvent) {
             canvas.drawLine(
-                width / 2f - halfEventBarWidth,
-                (height - eventYOffset + yOffsetToApply).toFloat(),
-                width / 2f + halfEventBarWidth,
-                (height - eventYOffset + yOffsetToApply).toFloat(), eventBarPaint
+                width / 2f - halfEventBarWidth, (height - eventYOffset).toFloat(),
+                width / 2f + halfEventBarWidth, (height - eventYOffset).toFloat(),
+                eventBarPaint
             )
         }
 
         if (hasAppointment) {
             canvas.drawLine(
-                width / 2f - halfEventBarWidth,
-                (height - appointmentYOffset + yOffsetToApply).toFloat(),
-                width / 2f + halfEventBarWidth,
-                (height - appointmentYOffset + yOffsetToApply).toFloat(),
+                width / 2f - halfEventBarWidth, (height - appointmentYOffset).toFloat(),
+                width / 2f + halfEventBarWidth, (height - appointmentYOffset).toFloat(),
                 eventBarPaint
             )
         }
@@ -148,17 +128,11 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         textPaint.color = color
         textPaint.textSize = textSize.toFloat()
 
-        if (isModernTheme) {
-            textPaint.isFakeBoldText = today
-            textPaint.textSize = textSize * .8f
-        }
-
         val xPos = (width - textPaint.measureText(text).toInt()) / 2
         val textToMeasureHeight =
             if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
         textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
-        var yPos = (height + bounds.height()) / 2
-        yPos += yOffsetToApply
+        val yPos = (height + bounds.height()) / 2
         canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), textPaint)
 
         textPaint.color = if (dayIsSelected) colorTextDaySelected else colorTextDay
