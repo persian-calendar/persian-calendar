@@ -28,18 +28,18 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     // private val colorTextToday = context.resolveColor(R.attr.colorTextToday)
     private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
-    private val colorEventLine = context.resolveColor(R.attr.colorEventLine)
+    private val colorEventIndicatorColor = context.resolveColor(R.attr.colorEventIndicator)
 
-    private val halfEventBarWidth =
-        resources.getDimensionPixelSize(R.dimen.day_item_event_bar_width) / 2
-    private val appointmentYOffset =
-        resources.getDimensionPixelSize(R.dimen.day_item_appointment_y_offset)
+    private val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = context.resolveColor(R.attr.colorSecondary)
+    }
     private val eventYOffset =
         resources.getDimensionPixelSize(R.dimen.day_item_event_y_offset)
-    private val eventBarPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        strokeWidth =
-            resources.getDimensionPixelSize(R.dimen.day_item_event_bar_thickness).toFloat()
-    }
+    private val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val eventIndicatorRadius =
+        resources.getDimensionPixelSize(R.dimen.day_item_event_indicator_radius).toFloat()
+    private val eventIndicatorsGap =
+        resources.getDimensionPixelSize(R.dimen.day_item_event_indicators_gap)
     private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = context.resolveColor(R.attr.colorSelectDay)
@@ -95,36 +95,36 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
                 if (dayIsSelected) colorHolidaySelected else colorHoliday
             else
                 if (dayIsSelected) colorTextDaySelected else colorTextDay
-            //            if (today && !selected) {
-            //                color = resource.colorTextToday;
-            //            }
+            // if (today && !selected) {
+            //     color = resource.colorTextToday;
+            // }
         } else {
             colorTextDayName
         }
 
-        eventBarPaint.color = if (dayIsSelected) color else colorEventLine
+        eventIndicatorPaint.color = if (dayIsSelected) color else colorEventIndicatorColor
 
         // a11y improvement
-        if (isHighTextContrastEnabled && holiday)
-            eventBarPaint.color = color
+        if (isHighTextContrastEnabled && holiday) eventIndicatorPaint.color = color
+
+        val indicatorXOffset = if (hasEvent && hasAppointment) eventIndicatorsGap / 2f else 0f
 
         if (hasEvent) {
-            canvas.drawLine(
-                width / 2f - halfEventBarWidth, (height - eventYOffset).toFloat(),
-                width / 2f + halfEventBarWidth, (height - eventYOffset).toFloat(),
-                eventBarPaint
+            canvas.drawCircle(
+                width / 2f + indicatorXOffset, (height - eventYOffset).toFloat(),
+                eventIndicatorRadius, eventIndicatorPaint
             )
         }
 
         if (hasAppointment) {
-            canvas.drawLine(
-                width / 2f - halfEventBarWidth, (height - appointmentYOffset).toFloat(),
-                width / 2f + halfEventBarWidth, (height - appointmentYOffset).toFloat(),
-                eventBarPaint
+            canvas.drawCircle(
+                width / 2f - indicatorXOffset, (height - eventYOffset).toFloat(),
+                eventIndicatorRadius,
+                if (dayIsSelected) eventIndicatorPaint else appointmentIndicatorPaint
             )
         }
 
-        // TODO: Better to not change resource's paint objects, but for now
+        // TODO: Better to not change resource's paint objects
         textPaint.color = color
         textPaint.textSize = textSize.toFloat()
 

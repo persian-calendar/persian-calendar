@@ -164,7 +164,7 @@ class DaysAdapter internal constructor(
                     dayView.setDayOfMonthItem(
                         isToday,
                         originalPosition == selectedDay,
-                        events.isNotEmpty(),
+                        events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
                         isWeekEnd((day + startingDayOfWeek - days[0]) % 7) || events.any { it.isHoliday },
                         if (isArabicDigit) arabicDigitsTextSize else persianDigitsTextSize,

@@ -23,7 +23,7 @@
     <color name="dark_card_background">#202020</color>
     <color name="dark_current_day">#64ffda</color>
     <color name="dark_select_day">#e0e0e0</color>
-    <color name="dark_event_line">#e0e0e0</color>
+    <color name="dark_event_indicator">#e0e0e0</color>
     <color name="dark_drawer_background">#212121</color>
     <color name="dark_drawer_select">#282828</color>
     <color name="dark_icon">#00bfa5</color>
@@ -50,7 +50,7 @@
     <color name="light_card_background">#fafafa</color>
     <color name="light_current_day">#ff7043</color>
     <color name="light_select_day">#eff2f1</color>
-    <color name="light_event_line">#eff2f1</color>
+    <color name="light_event_indicator">#eff2f1</color>
     <color name="light_drawer_background">#f4f4f4</color>
     <color name="light_drawer_select">#eeeeee</color>
     <color name="light_icon">#00897b</color>
@@ -77,7 +77,7 @@
     <color name="blue_card_background">#fafafa</color>
     <color name="blue_current_day">#ff7043</color>
     <color name="blue_select_day">#F5F5F5</color>
-    <color name="blue_event_line">#eff2f1</color>
+    <color name="blue_event_indicator">#eff2f1</color>
     <color name="blue_drawer_background">#f4f4f4</color>
     <color name="blue_drawer_select">#eeeeee</color>
     <color name="blue_icon">#0D47A1</color>
@@ -104,7 +104,7 @@
     <color name="modern_card_background">#fafafa</color>
     <color name="modern_current_day">#42AFBF</color>
     <color name="modern_select_day">#DDDEE2</color>
-    <color name="modern_event_line">#4CB5DE</color>
+    <color name="modern_event_indicator">#000000</color>
     <color name="modern_drawer_background">#f4f4f4</color>
     <color name="modern_drawer_select">#eeeeee</color>
     <color name="modern_icon">#587994</color>
