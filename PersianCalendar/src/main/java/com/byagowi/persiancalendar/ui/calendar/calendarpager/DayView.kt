@@ -61,18 +61,16 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private val bounds = Rect()
     private val drawingRect = RectF()
     private var text = ""
-    private var today: Boolean = false
-    private var dayIsSelected: Boolean = false
-    private var hasEvent: Boolean = false
-    private var hasAppointment: Boolean = false
+    private var today = false
+    private var dayIsSelected = false
     private var indicators = emptyList<Paint>()
-    private var holiday: Boolean = false
-    private var textSize: Int = 0
+    private var holiday = false
+    private var textSize = 0
     var jdn: Jdn? = null
         private set
     var dayOfMonth = -1
         private set
-    private var isNumber: Boolean = false
+    private var isNumber = false
     private var header = ""
 
     private val isRTL = isLocaleRTL()
@@ -81,27 +79,26 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         super.onDraw(canvas)
         val width = width
         val height = height
-        val radius = min(width, height) / 2
+        val radius = min(width, height) / 2f
 
         getDrawingRect(bounds)
         drawingRect.set(bounds)
         drawingRect.inset(radius * 0.1f, radius * 0.1f)
 
         if (dayIsSelected) {
-            canvas.drawCircle(width / 2f, height / 2f, (radius - 5).toFloat(), selectedPaint)
+            canvas.drawCircle(width / 2f, height / 2f, radius - 5, selectedPaint)
         }
 
         if (today) {
-            canvas.drawCircle(width / 2f, height / 2f, (radius - 5).toFloat(), todayPaint)
+            canvas.drawCircle(width / 2f, height / 2f, radius - 5, todayPaint)
         }
 
-        textPaint.color = if (isNumber) {
-            if (holiday)
-                if (dayIsSelected) colorHolidaySelected else colorHoliday
-            else
-                if (dayIsSelected) colorTextDaySelected else colorTextDay
-        } else {
-            colorTextDayName
+        textPaint.color = when {
+            isNumber && holiday && dayIsSelected -> colorHolidaySelected
+            isNumber && holiday && !dayIsSelected -> colorHoliday
+            isNumber && !holiday && dayIsSelected -> colorTextDaySelected
+            isNumber && !holiday && !dayIsSelected -> colorTextDay
+            else -> colorTextDayName
         }
         textPaint.textSize = textSize.toFloat()
 
@@ -141,8 +138,6 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         this.text = text
         this.today = isToday
         this.dayIsSelected = isSelected
-        this.hasEvent = hasEvent
-        this.hasAppointment = hasAppointment
         this.holiday = isHoliday
         this.textSize = textSize
         this.jdn = jdn
