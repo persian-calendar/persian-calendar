@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.utils.isLocaleRTL
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import com.byagowi.persiancalendar.utils.resolveColor
 import kotlin.math.min
@@ -28,14 +29,15 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
 
     // private val colorTextToday = context.resolveColor(R.attr.colorTextToday)
     private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
-    private val colorEventIndicatorColor = context.resolveColor(R.attr.colorEventIndicator)
 
     private val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = context.resolveColor(R.attr.colorSecondary)
     }
+    private val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = context.resolveColor(R.attr.colorEventIndicator)
+    }
     private val eventYOffset =
         resources.getDimensionPixelSize(R.dimen.day_item_event_y_offset)
-    private val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val eventIndicatorRadius =
         resources.getDimensionPixelSize(R.dimen.day_item_event_indicator_radius).toFloat()
     private val eventIndicatorsGap =
@@ -44,7 +46,7 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         style = Paint.Style.FILL
         color = context.resolveColor(R.attr.colorSelectDay)
     }
-    private val todayPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth =
             resources.getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
@@ -63,6 +65,7 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
     private var dayIsSelected: Boolean = false
     private var hasEvent: Boolean = false
     private var hasAppointment: Boolean = false
+    private var indicators = emptyList<Paint>()
     private var holiday: Boolean = false
     private var textSize: Int = 0
     var jdn: Jdn? = null
@@ -71,6 +74,8 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         private set
     private var isNumber: Boolean = false
     private var header = ""
+
+    private val isRTL = isLocaleRTL()
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -90,43 +95,27 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
             canvas.drawCircle(width / 2f, height / 2f, (radius - 5).toFloat(), todayPaint)
         }
 
-        val color: Int = if (isNumber) {
+        textPaint.color = if (isNumber) {
             if (holiday)
                 if (dayIsSelected) colorHolidaySelected else colorHoliday
             else
                 if (dayIsSelected) colorTextDaySelected else colorTextDay
-            // if (today && !selected) {
-            //     color = resource.colorTextToday;
-            // }
         } else {
             colorTextDayName
         }
-
-        eventIndicatorPaint.color = if (dayIsSelected) color else colorEventIndicatorColor
-
-        // a11y improvement
-        if (isHighTextContrastEnabled && holiday) eventIndicatorPaint.color = color
-
-        val indicatorXOffset = if (hasEvent && hasAppointment) eventIndicatorsGap / 2f else 0f
-
-        if (hasEvent) {
-            canvas.drawCircle(
-                width / 2f + indicatorXOffset, (height - eventYOffset).toFloat(),
-                eventIndicatorRadius, eventIndicatorPaint
-            )
-        }
-
-        if (hasAppointment) {
-            canvas.drawCircle(
-                width / 2f - indicatorXOffset, (height - eventYOffset).toFloat(),
-                eventIndicatorRadius,
-                if (dayIsSelected) eventIndicatorPaint else appointmentIndicatorPaint
-            )
-        }
-
-        // TODO: Better to not change resource's paint objects
-        textPaint.color = color
         textPaint.textSize = textSize.toFloat()
+
+        indicators.forEachIndexed { i, paint ->
+            val xOffset = eventIndicatorsGap * (i - (indicators.size - 1) / 2f)
+            val overrideByTextColor = dayIsSelected ||
+                    // use textPaint for holiday event when a11y's high contrast is enabled
+                    (isHighTextContrastEnabled && holiday && paint == eventIndicatorPaint)
+            canvas.drawCircle(
+                width / 2f + xOffset * if (isRTL) -1 else 1, (height - eventYOffset).toFloat(),
+                eventIndicatorRadius,
+                if (overrideByTextColor) textPaint else paint
+            )
+        }
 
         val xPos = (width - textPaint.measureText(text).toInt()) / 2
         val textToMeasureHeight =
@@ -160,6 +149,10 @@ class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? =
         this.dayOfMonth = dayOfMonth
         this.isNumber = isNumber
         this.header = header
+        this.indicators = listOf(
+            hasAppointment to appointmentIndicatorPaint,
+            hasEvent to eventIndicatorPaint
+        ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
         postInvalidate()
     }
 
