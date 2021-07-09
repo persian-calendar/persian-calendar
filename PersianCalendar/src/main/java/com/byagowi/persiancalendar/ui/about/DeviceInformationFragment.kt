@@ -401,6 +401,19 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
         ),
         Item("Display Metrics", activity.resources.displayMetrics.toString(), ""),
         Item(
+            "Display Cutout", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) run {
+                val cutout = activity.window.decorView.rootWindowInsets.displayCutout
+                    ?: return@run "None"
+                listOf(
+                    "Safe Inset Top" to cutout.safeInsetTop,
+                    "Safe Inset Right" to cutout.safeInsetRight,
+                    "Safe Inset Bottom" to cutout.safeInsetBottom,
+                    "Safe Inset Left" to cutout.safeInsetLeft,
+                    "Rects" to (cutout.boundingRects.joinToString(","))
+                ).joinToString("\n") { (key, value) -> "$key: $value" }
+            } else "None", ""
+        ),
+        Item(
             "Sensors", (activity.getSystemService<SensorManager>())
                 ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n"), ""
         ),
