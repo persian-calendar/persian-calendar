@@ -103,6 +103,7 @@ class DeviceInformationFragment : Fragment() {
         }
 
         binding.toolbarLayout.setOnLongClickListener {
+            if (++clickCount % 5 != 0) return@setOnLongClickListener true
             // Easter egg
             runCatching {
                 startActivity(Intent(Intent.ACTION_MAIN).also {
