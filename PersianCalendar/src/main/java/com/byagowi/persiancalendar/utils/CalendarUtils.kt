@@ -156,6 +156,9 @@ fun Jdn.toJavaCalendar(): Calendar = Calendar.getInstance().also {
     it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
 }
 
+// Google Meet generates weird and ugly descriptions with lines having such patterns, let's get rid of them
+private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULTILINE)
+
 private fun readDeviceEvents(
     context: Context, startingDate: Calendar, rangeInMillis: Long
 ): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents ||
@@ -195,7 +198,7 @@ private fun readDeviceEvents(
                         "-${endCalendar.clock()}"
                     else "")
                 })",
-                description = it.getString(2) ?: "",
+                description = it.getString(2)?.replace(descriptionCleaningPattern, "") ?: "",
                 start = startDate,
                 end = endDate,
                 date = startCalendar.toCivilDate(),
