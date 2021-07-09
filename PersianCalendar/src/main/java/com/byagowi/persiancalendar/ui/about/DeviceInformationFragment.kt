@@ -5,7 +5,9 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.graphics.*
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -98,6 +100,19 @@ class DeviceInformationFragment : Fragment() {
             it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_print)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick { context?.also(adapter::print) }
+        }
+
+        binding.toolbarLayout.setOnLongClickListener {
+            // Easter egg
+            runCatching {
+                startActivity(Intent(Intent.ACTION_MAIN).also {
+                    it.component = ComponentName(
+                        "com.android.systemui", "com.android.systemui.egg.MLandActivity"
+                    )
+                    it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                })
+            }.onFailure(logException)
+            true
         }
 
         binding.bottomNavigation.also { bottomNavigationView ->
