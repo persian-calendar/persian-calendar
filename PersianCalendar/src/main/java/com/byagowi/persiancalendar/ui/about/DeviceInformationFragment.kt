@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
@@ -50,6 +49,7 @@ import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.html.body
 import kotlinx.html.h1
@@ -96,25 +96,28 @@ class DeviceInformationFragment : Fragment() {
             )
             it.adapter = adapter
         }
+
+        binding.toolbar.menu.add("Game").also {
+            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_esports)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.onClick {
+            runCatching {
+                startActivity(
+                    Intent(Intent.ACTION_MAIN).setClassName(
+                        "com.android.systemui", "com.android.systemui.egg.MLandActivity"
+                    ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+            }.onFailure(logException).onFailure {
+                Snackbar.make(
+                    binding.root, R.string.device_calendar_does_not_support, Snackbar.LENGTH_SHORT
+                ).show()
+            }
+        }
+
         binding.toolbar.menu.add("Print").also {
             it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_print)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick { context?.also(adapter::print) }
-        }
-
-        binding.toolbarLayout.setOnLongClickListener {
-            if (++clickCount % 5 != 0) return@setOnLongClickListener true
-            // Easter egg
-            runCatching {
-                startActivity(Intent(Intent.ACTION_MAIN).also {
-                    it.component = ComponentName(
-                        "com.android.systemui", "com.android.systemui.egg.MLandActivity"
-                    )
-                    it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                })
-            }.onFailure(logException)
-            true
-        }
+        }.onClick { adapter.print(layoutInflater.context) }
 
         binding.bottomNavigation.also { bottomNavigationView ->
             bottomNavigationView.menu.also {
