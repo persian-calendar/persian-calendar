@@ -206,7 +206,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         coordinatesPreference?.isEnabled = selectedLocation == null
         coordinatesPreference?.summary = coordinates?.let {
             formatCoordinateISO6709(
-                coordinates.latitude, coordinates.latitude,
+                coordinates.latitude, coordinates.longitude,
                 coordinates.elevation.takeIf { it != .0 }
             )
         }
