@@ -204,11 +204,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val selectedLocation = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
             ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }
         coordinatesPreference?.isEnabled = selectedLocation == null
-        coordinatesPreference?.summary = coordinates?.let {
-            formatCoordinateISO6709(
-                coordinates.latitude, coordinates.longitude,
-                coordinates.elevation.takeIf { it != .0 }
-            )
-        }
+        coordinatesPreference?.summary = coordinates
+            ?.run { formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != .0 }) }
     }
 }
