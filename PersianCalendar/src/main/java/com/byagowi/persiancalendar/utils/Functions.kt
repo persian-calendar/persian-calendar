@@ -292,7 +292,7 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String = getStoredC
 fun getCoordinate(context: Context): Coordinate? = getStoredCity(context)?.coordinate ?: run {
     val prefs = context.appPrefs
     listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
-        .map { prefs.getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0 }
+        .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }
         .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
         ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
 }
