@@ -114,10 +114,7 @@ class DeviceInformationFragment : Fragment() {
             }
         }
 
-        binding.toolbar.menu.add("Print").also {
-            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_print)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { adapter.print(layoutInflater.context) }
+        binding.fab.setOnClickListener { adapter.print(layoutInflater.context) }
 
         binding.bottomNavigation.also { bottomNavigationView ->
             bottomNavigationView.menu.also {
