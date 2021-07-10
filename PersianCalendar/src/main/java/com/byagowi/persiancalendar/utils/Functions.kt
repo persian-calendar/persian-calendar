@@ -280,26 +280,22 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
     "%d°%02d′%02d″%s".format(Locale.US, degree.toInt(), minutes, seconds, direction)
 } + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
 
-fun getCityName(context: Context, fallbackToCoord: Boolean): String =
-    getCityFromPreference(context)?.let {
-        when (language) {
-            LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> it.en
-            LANG_CKB -> it.ckb
-            else -> it.fa
-        }
-    } ?: context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
-    ?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
-    ?: ""
-
-fun getCoordinate(context: Context): Coordinate? =
-    getCityFromPreference(context)?.coordinate ?: context.appPrefs.let {
-        Coordinate(
-            it.getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0,
-            it.getString(PREF_LONGITUDE, null)?.toDoubleOrNull() ?: .0,
-            it.getString(PREF_ALTITUDE, null)?.toDoubleOrNull() ?: .0
-        ).takeIf { coordinates -> coordinates.latitude != .0 || coordinates.longitude != .0 }
-        // If latitude and longitude both are zero probably preference is not set yet
+fun getCityName(context: Context, fallbackToCoord: Boolean): String = getStoredCity(context)?.let {
+    when (language) {
+        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> it.en
+        LANG_CKB -> it.ckb
+        else -> it.fa
     }
+} ?: context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
+?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) } ?: ""
+
+fun getCoordinate(context: Context): Coordinate? = getStoredCity(context)?.coordinate ?: run {
+    val prefs = context.appPrefs
+    listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
+        .map { prefs.getString(PREF_LATITUDE, null)?.toDoubleOrNull() ?: .0 }
+        .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
+        ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
+}
 
 fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()
 

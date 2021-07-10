@@ -378,7 +378,7 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
     } ?: Clock.fromInt(0)
 }
 
-fun getCityFromPreference(context: Context): CityItem? {
+internal fun getStoredCity(context: Context): CityItem? {
     val key = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
         ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY } ?: return null
 
