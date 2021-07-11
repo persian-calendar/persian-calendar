@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.utils.isWeekEnd
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 
-class DaysAdapter internal constructor(
+class DaysAdapter(
     private val context: Context, private val calendarPager: CalendarPager,
     private val selectableItemBackground: Int
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {

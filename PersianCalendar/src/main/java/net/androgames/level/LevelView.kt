@@ -40,9 +40,7 @@ import kotlin.math.sqrt
 *  You should have received a copy of the GNU General Public License
 *  along with Level. If not, see <http://www.gnu.org/licenses/>
 */
-class LevelView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
-) : View(context, attrs, defStyleAttr) {
+class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val displayRect = Rect()
 

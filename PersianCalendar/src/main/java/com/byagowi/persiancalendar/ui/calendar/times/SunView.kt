@@ -40,8 +40,8 @@ import kotlin.math.cos
  * MEHDIMYADI
  */
 
-class SunView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    View(context, attrs), ValueAnimator.AnimatorUpdateListener {
+class SunView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
+    ValueAnimator.AnimatorUpdateListener {
 
     private val fullDay = Clock(24, 0).toInt().toFloat()
     private val halfDay = Clock(12, 0).toInt().toFloat()

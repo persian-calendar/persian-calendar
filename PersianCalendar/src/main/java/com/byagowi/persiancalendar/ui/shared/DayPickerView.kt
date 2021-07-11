@@ -23,8 +23,7 @@ import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.monthsNames
 import com.google.android.material.snackbar.Snackbar
 
-class DayPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    FrameLayout(context, attrs) {
+class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     private var mJdn: Jdn? = null
 

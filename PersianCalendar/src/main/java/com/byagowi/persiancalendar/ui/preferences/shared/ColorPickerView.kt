@@ -48,7 +48,7 @@ import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import java.util.*
 
-class ColorPickerView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
+class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
 
     private val colorResultView = TextView(context).apply {

@@ -17,8 +17,7 @@ import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import com.byagowi.persiancalendar.utils.resolveColor
 import kotlin.math.min
 
-class DayView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    View(context, attrs) {
+class DayView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val colorHoliday = context.resolveColor(R.attr.colorHoliday)
     private val colorHolidaySelected = context.resolveColor(R.attr.colorHolidaySelected)

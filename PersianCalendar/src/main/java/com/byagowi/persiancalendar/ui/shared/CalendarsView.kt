@@ -27,8 +27,7 @@ import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 
-class CalendarsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) :
-    FrameLayout(context, attrs) {
+class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     private val changeBoundTransition = ChangeBounds()
     private val arrowRotationAnimationDuration =

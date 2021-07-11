@@ -16,9 +16,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import java.lang.ref.WeakReference
 import java.util.*
 
-class CalendarPager @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null
-) : FrameLayout(context, attrs) {
+class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     // Public API
     var onDayClicked = fun(_: Jdn) {}
