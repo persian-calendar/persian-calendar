@@ -38,6 +38,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
+import com.byagowi.persiancalendar.entities.CityItem
+import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
@@ -280,21 +282,33 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
     "%d°%02d′%02d″%s".format(Locale.US, degree.toInt(), minutes, seconds, direction)
 } + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
 
-fun getCityName(context: Context, fallbackToCoord: Boolean): String = getStoredCity(context)?.let {
-    when (language) {
-        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> it.en
-        LANG_CKB -> it.ckb
-        else -> it.fa
-    }
-} ?: context.appPrefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
-?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) } ?: ""
+private fun SharedPreferences.getStoredCity(): CityItem? {
+    return getString(PREF_SELECTED_LOCATION, null)
+        ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
+}
 
-fun getCoordinate(context: Context): Coordinate? = getStoredCity(context)?.coordinate ?: run {
+fun getCityName(context: Context, fallbackToCoord: Boolean): String {
     val prefs = context.appPrefs
-    listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
-        .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }
-        .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
-        ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
+    return prefs.getStoredCity()?.let {
+        when (language) {
+            LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> it.en
+            LANG_AR -> it.ar
+            LANG_CKB -> it.ckb
+            else -> it.fa
+        }
+    } ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
+    ?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
+    ?: ""
+}
+
+fun getCoordinate(context: Context): Coordinate? {
+    val prefs = context.appPrefs
+    return prefs.getStoredCity()?.coordinate ?: run {
+        listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
+            .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }
+            .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
+            ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
+    }
 }
 
 fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()

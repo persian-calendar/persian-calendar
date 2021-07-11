@@ -10,7 +10,6 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_APP_LANGUAGE
-import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
@@ -53,7 +52,6 @@ import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
-import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -68,10 +66,8 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.generated.EventType
-import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
@@ -162,10 +158,6 @@ var isTalkBackEnabled = false
 var isHighTextContrastEnabled = false
     private set
 var prayTimes: PrayTimes? = null
-    private set
-var cachedCityKey = ""
-    private set
-var cachedCity: CityItem? = null
     private set
 var shiftWorkTitles = emptyMap<String, String>()
     private set
@@ -376,20 +368,6 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
             else -> null
         }
     } ?: Clock.fromInt(0)
-}
-
-internal fun getStoredCity(context: Context): CityItem? {
-    val key = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
-        ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY } ?: return null
-
-    if (key == cachedCityKey)
-        return cachedCity
-
-    // cache last query even if no city available under the key, useful in case invalid
-    // value is somehow inserted on the preference
-    cachedCityKey = key
-    cachedCity = citiesStore[key]
-    return cachedCity
 }
 
 fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
