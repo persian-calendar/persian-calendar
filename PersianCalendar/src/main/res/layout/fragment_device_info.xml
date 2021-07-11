@@ -66,7 +66,7 @@
         android:layout_margin="10dp"
         android:contentDescription="Print"
         app:layout_anchor="@id/appbarLayout"
-        app:layout_anchorGravity="bottom|start"
+        app:layout_anchorGravity="bottom|right"
         app:srcCompat="@drawable/ic_print"
         tools:ignore="HardcodedText" />
 
