@@ -59,6 +59,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.calculationMethod
 import com.byagowi.persiancalendar.utils.calendarType
+import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatDeviceCalendarEventTitle
@@ -67,7 +68,6 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCompatDrawable
-import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
@@ -95,7 +95,6 @@ private const val OWGHAT_TAB = 2
 
 class CalendarFragment : Fragment() {
 
-    private var coordinate: Coordinate? = null
     private var mainBinding: FragmentCalendarBinding? = null
     private var calendarsView: CalendarsView? = null
     private var owghatBinding: OwghatTabContentBinding? = null
@@ -106,7 +105,6 @@ class CalendarFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        coordinate = null
         mainBinding = null
         calendarsView = null
         owghatBinding = null
@@ -132,11 +130,8 @@ class CalendarFragment : Fragment() {
     ): View = FragmentCalendarBinding.inflate(inflater, container, false).also { binding ->
         mainBinding = binding
 
-        val coordinate = getCoordinate(inflater.context)
-        this.coordinate = coordinate
-
         val appPrefs = inflater.context.appPrefs
-        val shouldDisableOwghatTab = coordinate == null && // if coordinates is set, should be shown
+        val shouldDisableOwghatTab = coordinates == null && // if coordinates is set, should be shown
                 (language != LANG_FA || // The placeholder isn't translated to other languages
                         // The user is already dismissed the third tab
                         appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
@@ -159,7 +154,7 @@ class CalendarFragment : Fragment() {
             }.root
         ) + if (shouldDisableOwghatTab) emptyList() else listOf(
             // The optional third tab
-            R.string.owghat to if (coordinate == null) {
+            R.string.owghat to if (coordinates == null) {
                 OwghatTabPlaceholderBinding.inflate(
                     inflater, container, false
                 ).also { owghatBindingPlaceholder ->
@@ -476,7 +471,7 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setOwghat(jdn: Jdn, isToday: Boolean) {
-        val coordinate = coordinate ?: return
+        val coordinate = coordinates ?: return
         val owghatBinding = owghatBinding ?: return
 
         val prayTimes = PrayTimesCalculator.calculate(

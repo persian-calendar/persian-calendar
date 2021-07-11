@@ -17,15 +17,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
+import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCompatDrawable
-import com.byagowi.persiancalendar.utils.getCoordinate
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.snackbar.Snackbar
-import io.github.persiancalendar.praytimes.Coordinate
 import kotlin.math.abs
 
 /**
@@ -39,7 +38,6 @@ class CompassFragment : Fragment() {
     private var sensor: Sensor? = null
     private var orientation = 0f
     private var sensorNotFound = false
-    private var coordinate: Coordinate? = null
 
     private val compassListener = object : SensorEventListener {
         /*
@@ -94,7 +92,6 @@ class CompassFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentCompassBinding.inflate(inflater, container, false).also { binding ->
         this.binding = binding
-        coordinate = getCoordinate(inflater.context)
 
         binding.appBar.toolbar.let {
             it.setTitle(R.string.compass)
@@ -138,7 +135,7 @@ class CompassFragment : Fragment() {
                 .getString(if (stopped) R.string.resume else R.string.stop)
         }
         updateCompassMetrics(binding)
-        coordinate?.also {
+        coordinates?.also {
             binding.compassView.setLongitude(it.longitude)
             binding.compassView.setLatitude(it.latitude)
         }
@@ -177,7 +174,7 @@ class CompassFragment : Fragment() {
                 sensorManager?.registerListener(
                     compassListener, sensor, SensorManager.SENSOR_DELAY_FASTEST
                 )
-                if (coordinate == null) showLongSnackbar(
+                if (coordinates == null) showLongSnackbar(
                     R.string.set_location,
                     Snackbar.LENGTH_SHORT
                 )

@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.LANG_GLK
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.LANG_UR
+import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
@@ -44,6 +45,8 @@ import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_LATITUDE
+import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
@@ -127,7 +130,7 @@ var language = DEFAULT_APP_LANGUAGE
     get() = if (field.isEmpty()) DEFAULT_APP_LANGUAGE else field
 var easternGregorianArabicMonths = false
     private set
-var coordinate: Coordinate? = null
+var coordinates: Coordinate? = null
     private set
 var mainCalendar = CalendarType.SHAMSI
     private set
@@ -326,10 +329,10 @@ fun loadLanguageResource() {
 
 @StringRes
 fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
-    coordinate ?: return 0
+    coordinates ?: return 0
 
     if (prayTimes == null || dateHasChanged)
-        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinate)
+        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
 
     val clock = current.toInt()
 
@@ -351,8 +354,8 @@ fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
 }
 
 fun getClockFromStringId(@StringRes stringId: Int): Clock {
-    if (prayTimes == null && coordinate != null)
-        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinate)
+    if (prayTimes == null && coordinates != null)
+        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
 
     return prayTimes?.let {
         when (stringId) {
@@ -424,7 +427,12 @@ fun updateStoredPreference(context: Context) {
     calculationMethod = CalculationMethod
         .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
 
-    coordinate = getCoordinate(context)
+    coordinates = prefs.getStoredCity()?.coordinate ?: run {
+        listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
+            .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }
+            .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
+            ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
+    }
     runCatching {
         mainCalendar =
             CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI")

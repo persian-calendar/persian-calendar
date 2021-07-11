@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.getCoordinate
+import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.spacedComma
 
 fun Fragment.showCoordinatesDialog() {
@@ -23,9 +23,7 @@ fun Fragment.showCoordinatesDialog() {
     val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
 
     coordinatesEdits.zip(
-        getCoordinate(layoutInflater.context)
-            ?.let { listOf(it.latitude, it.longitude, it.elevation) }
-            ?: listOf(.0, .0, .0)
+        coordinates?.run { listOf(latitude, longitude, elevation) } ?: listOf(.0, .0, .0)
     ) { editable, value -> editable.setText(value.toString()) }
 
     AlertDialog.Builder(layoutInflater.context)

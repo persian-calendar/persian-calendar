@@ -196,7 +196,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val context = context ?: return
         val cityName = getCityName(context, false).takeIf { it.isNotEmpty() }
         selectedLocationPreference?.summary = cityName ?: context.getString(R.string.location_help)
-        val coordinates = getCoordinate(context)
         athanPreferenceCategory?.isEnabled = coordinates != null
         athanPreferenceCategory?.setSummary(
             if (coordinates == null) R.string.athan_disabled_summary else R.string.empty

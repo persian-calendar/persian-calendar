@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 var season = (Jdn.today.toPersianCalendar().month - 1) / 3
 
                 // Southern hemisphere
-                if ((getCoordinate(this)?.latitude ?: 1.0) < .0) season = (season + 2) % 4
+                if ((coordinates?.latitude ?: 1.0) < .0) season = (season + 2) % 4
 
                 when (season) {
                     0 -> R.drawable.spring

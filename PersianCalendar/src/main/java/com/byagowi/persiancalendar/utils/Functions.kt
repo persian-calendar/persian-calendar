@@ -181,15 +181,12 @@ fun loadAlarms(context: Context) {
     val prefString = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
     logDebug(TAG, "reading and loading all alarms from prefs: $prefString")
 
-    if (coordinate != null && prefString.isNotEmpty()) {
+    if (coordinates != null && prefString.isNotEmpty()) {
         val athanGap =
             ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0)
                     * 60.0 * 1000.0).toLong()
 
-        val prayTimes = PrayTimesCalculator.calculate(
-            calculationMethod,
-            Date(), coordinate
-        )
+        val prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
         // convert spacedComma separated string to a set
         prefString.split(",").toSet().forEachIndexed { i, name ->
             val alarmTime: Clock = when (name) {
@@ -282,7 +279,7 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
     "%d°%02d′%02d″%s".format(Locale.US, degree.toInt(), minutes, seconds, direction)
 } + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
 
-private fun SharedPreferences.getStoredCity(): CityItem? {
+fun SharedPreferences.getStoredCity(): CityItem? {
     return getString(PREF_SELECTED_LOCATION, null)
         ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
 }
@@ -297,18 +294,8 @@ fun getCityName(context: Context, fallbackToCoord: Boolean): String {
             else -> it.fa
         }
     } ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
-    ?: coordinate?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
+    ?: coordinates?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
     ?: ""
-}
-
-fun getCoordinate(context: Context): Coordinate? {
-    val prefs = context.appPrefs
-    return prefs.getStoredCity()?.coordinate ?: run {
-        listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
-            .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }
-            .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
-            ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
-    }
 }
 
 fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()
