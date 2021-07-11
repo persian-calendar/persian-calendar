@@ -143,7 +143,7 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
         super.onDraw(canvas)
         val width = width
         val height = height
-        canvas.withScale(x = if (isRTL) -1f else 1f, pivotX = width / 2f, pivotY = height / 2f) {
+        canvas.withScale(x = if (isRTL) -1f else 1f, pivotX = width / 2f) {
             // draw fill of night
             withClip(0f, height * .75f, width * current, height.toFloat()) {
                 paint.also {
