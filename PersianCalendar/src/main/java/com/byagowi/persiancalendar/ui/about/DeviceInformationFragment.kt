@@ -347,14 +347,6 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
     data class Item(val title: String, val content: CharSequence?, val version: String)
 
     private val deviceInformationItems = listOf(
-        Item("Screen Resolution", activity.windowManager.let {
-            "%d*%d pixels".format(Locale.ENGLISH, it.defaultDisplay.width, it.defaultDisplay.height)
-        }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
-        Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
-        Item(
-            "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
-            Build.VERSION.SDK_INT.toString()
-        ),
         Item(
             "CPU Instructions Sets", (when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> Build.SUPPORTED_ABIS
@@ -362,12 +354,20 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
             }).joinToString(", "),
             ""
         ),
+        Item(
+            "Android Version", Build.VERSION.CODENAME + " " + Build.VERSION.RELEASE,
+            Build.VERSION.SDK_INT.toString()
+        ),
+        Item("Model", Build.MODEL, ""),
+        Item("Product", Build.PRODUCT, ""),
+        Item("Screen Resolution", activity.windowManager.let {
+            "%d*%d pixels".format(Locale.ENGLISH, it.defaultDisplay.width, it.defaultDisplay.height)
+        }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
+        Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
         Item("Available Processors", Runtime.getRuntime().availableProcessors().toString(), ""),
         Item("Instruction Architecture", Build.DEVICE, ""),
         Item("Manufacturer", Build.MANUFACTURER, ""),
         Item("Brand", Build.BRAND, ""),
-        Item("Model", Build.MODEL, ""),
-        Item("Product", Build.PRODUCT, ""),
         Item("Android Id", Build.ID, ""),
         Item("Board", Build.BOARD, ""),
         Item("Radio Firmware Version", Build.getRadioVersion(), ""),
