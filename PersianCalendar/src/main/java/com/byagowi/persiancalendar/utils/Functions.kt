@@ -97,19 +97,17 @@ fun isNonArabicScriptSelected() = when (language) {
     else -> false
 }
 
-fun formatNumber(number: Double): String = when (preferredDigits) {
-    ARABIC_DIGITS -> number.toString()
-    else -> formatNumber(number.toString())
-        .replace(".", "٫" /* U+066B, Arabic Decimal Separator */)
+fun formatNumber(number: Double): String {
+    if (isArabicDigitSelected()) return number.toString()
+    return formatNumber(number.toString()).replace(".", "٫") // U+066B, Arabic Decimal Separator
 }
 
 fun formatNumber(number: Int): String = formatNumber(number.toString())
 
-fun formatNumber(number: String): String = when (preferredDigits) {
-    ARABIC_DIGITS -> number
-    else -> number.map {
-        preferredDigits.getOrNull(Character.getNumericValue(it)) ?: it
-    }.joinToString("")
+fun formatNumber(number: String): String {
+    if (isArabicDigitSelected()) return number
+    return number.map { preferredDigits.getOrNull(Character.getNumericValue(it)) ?: it }
+        .joinToString("")
 }
 
 // It should match with calendar_type_abbr array
@@ -167,9 +165,8 @@ fun loadApp(context: Context) = runCatching {
     }
 }.onFailure(logException).let {}
 
-fun getOrderedCalendarTypes(): List<CalendarType> = getEnabledCalendarTypes().let {
-    it + (CalendarType.values().toList() - it)
-}
+fun getOrderedCalendarTypes(): List<CalendarType> =
+    getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it) }
 
 fun loadAlarms(context: Context) {
     val prefString = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
