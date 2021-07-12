@@ -119,7 +119,10 @@ class DeviceInformationFragment : Fragment() {
         binding.bottomNavigation.also { bottomNavigationView ->
             bottomNavigationView.menu.also {
                 it.add(Build.VERSION.RELEASE)
-                it.getItem(0).setIcon(R.drawable.ic_developer).isEnabled = true
+                it.getItem(0).setIcon(R.drawable.ic_developer).also { item ->
+                    item.isEnabled = true
+                    item.onClick { if (++clickCount % 10 == 0) openTestingHiddenDialog() }
+                }
 
                 it.add("API " + Build.VERSION.SDK_INT)
                 it.getItem(1).setIcon(R.drawable.ic_settings).isEnabled = false
@@ -135,119 +138,119 @@ class DeviceInformationFragment : Fragment() {
                 it.getItem(3).setIcon(R.drawable.ic_device_information_white).isEnabled = false
             }
             bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
-            bottomNavigationView.setOnNavigationItemSelectedListener {
-                val activity = activity ?: return@setOnNavigationItemSelectedListener true
-                // Easter egg
-                if (++clickCount % 10 == 0) BottomSheetDialog(activity).also { bottomSheetDialog ->
-                    bottomSheetDialog.setContentView(LinearLayout(activity).also { linearLayout ->
-                        linearLayout.orientation = LinearLayout.VERTICAL
-                        // Add one with CircularProgressIndicator also
-                        linearLayout.addView(LinearProgressIndicator(activity).also { linearProgressIndicator ->
-                            linearProgressIndicator.isIndeterminate = true
-                            linearProgressIndicator.setIndicatorColor(
-                                Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-                            )
-                            linearProgressIndicator.layoutParams =
-                                ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT
-                                )
-                        })
-                        linearLayout.addView(TabLayout(
-                            activity, null, R.style.TabLayoutColored
-                        ).also { tabLayout ->
-                            val tintColor = activity.resolveColor(R.attr.normalTabTextColor)
-                            listOf(
-                                R.drawable.ic_developer to -1,
-                                R.drawable.ic_translator to 0,
-                                R.drawable.ic_motorcycle to 1,
-                                R.drawable.ic_help to 33,
-                                R.drawable.ic_bug to 9999
-                            ).map { (iconId: Int, badgeNumber: Int) ->
-                                tabLayout.addTab(tabLayout.newTab().also { tab ->
-                                    tab.setIcon(iconId)
-                                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                        tab.icon?.setTint(tintColor)
-                                    }
-                                    tab.orCreateBadge.also { badge ->
-                                        badge.isVisible = badgeNumber >= 0
-                                        if (badgeNumber > 0) badge.number = badgeNumber
-                                    }
-                                })
-                            }
-                            tabLayout.addOnTabSelectedListener(object :
-                                TabLayout.OnTabSelectedListener {
-                                override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
-                                override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-                                override fun onTabSelected(tab: TabLayout.Tab?) {
-                                    tab?.orCreateBadge?.isVisible = false
-                                }
-                            })
-                            tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
-                            tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
-                        })
-                        linearLayout.addView(ImageView(activity).also { imageView ->
-                            imageView.minimumHeight = 80.dp
-                            imageView.minimumWidth = 80.dp
-                            imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
-                                ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
-                                    valueAnimator.duration = 3000
-                                    valueAnimator.interpolator = LinearInterpolator()
-                                    valueAnimator.repeatMode = ValueAnimator.REVERSE
-                                    valueAnimator.repeatCount = ValueAnimator.INFINITE
-                                    valueAnimator.addUpdateListener {
-                                        drawable.progress =
-                                            (it.animatedValue as Float).coerceIn(0f, 1f)
-                                    }
-                                }.start()
-                            })
-                        })
-                        linearLayout.addView(ProgressBar(activity).also { progressBar ->
-                            progressBar.isIndeterminate = true
-                            when {
-                                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
-                                    Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-                                ).also { valueAnimator ->
-                                    valueAnimator.duration = 3000
-                                    valueAnimator.interpolator = LinearInterpolator()
-                                    valueAnimator.repeatMode = ValueAnimator.REVERSE
-                                    valueAnimator.repeatCount = ValueAnimator.INFINITE
-                                    valueAnimator.addUpdateListener {
-                                        progressBar.indeterminateDrawable?.colorFilter =
-                                            BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                                                it.animatedValue as Int, BlendModeCompat.SRC_ATOP
-                                            )
-                                    }
-                                }.start()
-                            }
-                            progressBar.layoutParams =
-                                ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    600
-                                )
-                            // setOnLongClickListener {
-                            //     val player = MediaPlayer.create(activity, R.raw.moonlight)
-                            //     runCatching {
-                            //         if (!player.isPlaying) player.start()
-                            //     }.onFailure(logException)
-                            //     AlertDialog.Builder(activity)
-                            //         .setView(AppCompatImageButton(context).also {
-                            //             it.setImageResource(R.drawable.ic_stop)
-                            //             it.setOnClickListener { dismiss() }
-                            //         })
-                            //         .setOnDismissListener {
-                            //             runCatching { player.stop() }.onFailure(logException)
-                            //         }
-                            //         .show()
-                            //     true
-                            // }
-                        })
-                    })
-                }.show()
-                true
-            }
         }
     }.root
+
+    private fun openTestingHiddenDialog() {
+        // Easter egg
+        val activity = activity ?: return
+        BottomSheetDialog(activity).also { bottomSheetDialog ->
+            bottomSheetDialog.setContentView(LinearLayout(activity).also { linearLayout ->
+                linearLayout.orientation = LinearLayout.VERTICAL
+                // Add one with CircularProgressIndicator also
+                linearLayout.addView(LinearProgressIndicator(activity).also { linearProgressIndicator ->
+                    linearProgressIndicator.isIndeterminate = true
+                    linearProgressIndicator.setIndicatorColor(
+                        Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+                    )
+                    linearProgressIndicator.layoutParams =
+                        ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                        )
+                })
+                linearLayout.addView(TabLayout(
+                    activity, null, R.style.TabLayoutColored
+                ).also { tabLayout ->
+                    val tintColor = activity.resolveColor(R.attr.normalTabTextColor)
+                    listOf(
+                        R.drawable.ic_developer to -1,
+                        R.drawable.ic_translator to 0,
+                        R.drawable.ic_motorcycle to 1,
+                        R.drawable.ic_help to 33,
+                        R.drawable.ic_bug to 9999
+                    ).map { (iconId: Int, badgeNumber: Int) ->
+                        tabLayout.addTab(tabLayout.newTab().also { tab ->
+                            tab.setIcon(iconId)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                tab.icon?.setTint(tintColor)
+                            }
+                            tab.orCreateBadge.also { badge ->
+                                badge.isVisible = badgeNumber >= 0
+                                if (badgeNumber > 0) badge.number = badgeNumber
+                            }
+                        })
+                    }
+                    tabLayout.addOnTabSelectedListener(object :
+                        TabLayout.OnTabSelectedListener {
+                        override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+                        override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+                        override fun onTabSelected(tab: TabLayout.Tab?) {
+                            tab?.orCreateBadge?.isVisible = false
+                        }
+                    })
+                    tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
+                    tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
+                })
+                linearLayout.addView(ImageView(activity).also { imageView ->
+                    imageView.minimumHeight = 80.dp
+                    imageView.minimumWidth = 80.dp
+                    imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
+                        ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
+                            valueAnimator.duration = 3000
+                            valueAnimator.interpolator = LinearInterpolator()
+                            valueAnimator.repeatMode = ValueAnimator.REVERSE
+                            valueAnimator.repeatCount = ValueAnimator.INFINITE
+                            valueAnimator.addUpdateListener {
+                                drawable.progress =
+                                    (it.animatedValue as Float).coerceIn(0f, 1f)
+                            }
+                        }.start()
+                    })
+                })
+                linearLayout.addView(ProgressBar(activity).also { progressBar ->
+                    progressBar.isIndeterminate = true
+                    when {
+                        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> ValueAnimator.ofArgb(
+                            Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
+                        ).also { valueAnimator ->
+                            valueAnimator.duration = 3000
+                            valueAnimator.interpolator = LinearInterpolator()
+                            valueAnimator.repeatMode = ValueAnimator.REVERSE
+                            valueAnimator.repeatCount = ValueAnimator.INFINITE
+                            valueAnimator.addUpdateListener {
+                                progressBar.indeterminateDrawable?.colorFilter =
+                                    BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                                        it.animatedValue as Int, BlendModeCompat.SRC_ATOP
+                                    )
+                            }
+                        }.start()
+                    }
+                    progressBar.layoutParams =
+                        ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            600
+                        )
+                    // setOnLongClickListener {
+                    //     val player = MediaPlayer.create(activity, R.raw.moonlight)
+                    //     runCatching {
+                    //         if (!player.isPlaying) player.start()
+                    //     }.onFailure(logException)
+                    //     AlertDialog.Builder(activity)
+                    //         .setView(AppCompatImageButton(context).also {
+                    //             it.setImageResource(R.drawable.ic_stop)
+                    //             it.setOnClickListener { dismiss() }
+                    //         })
+                    //         .setOnDismissListener {
+                    //             runCatching { player.stop() }.onFailure(logException)
+                    //         }
+                    //         .show()
+                    //     true
+                    // }
+                })
+            })
+        }.show()
+    }
 }
 
 // https://stackoverflow.com/a/52557989
