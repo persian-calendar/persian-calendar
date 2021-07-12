@@ -90,11 +90,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
     private var degree = 0f
     private val sunMoonPosition = SunMoonPosition(
-        AstroLib.calculateJulianDay(GregorianCalendar()),
-        coordinates?.latitude ?: 0.0,
-        coordinates?.longitude ?: 0.0,
-        coordinates?.elevation ?: 0.0,
-        0.0
+        AstroLib.calculateJulianDay(GregorianCalendar()), coordinates?.latitude ?: 0.0,
+        coordinates?.longitude ?: 0.0, coordinates?.elevation ?: 0.0, 0.0
     )
     private val qiblaInfo = sunMoonPosition.destinationHeading
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
@@ -219,10 +216,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             drawArc(moonOval, 0f, 360f, false, moonPaintO)
             drawArc(moonRect, 0f, 360f, false, moonPaintD)
             moonPaintD.pathEffect = dashPath
-            drawLine(
-                cx, (cy - radius), cx, (cy + radius),
-                moonPaintD
-            )
+            drawLine(cx, (cy - radius), cx, (cy + radius), moonPaintD)
             moonPaintD.pathEffect = null
         }
     }
@@ -249,47 +243,27 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var isCurrentlyQibla = true
     fun onDirectionAction() {
         // 0=North, 90=East, 180=South, 270=West
-        if (isNearToDegree(0f, degree)) {
-            if (!isCurrentlyNorth) {
-                a11yAnnounceAndClick(this, R.string.north)
-                isCurrentlyNorth = true
-            }
-        } else {
-            isCurrentlyNorth = false
-        }
-        if (isNearToDegree(90f, degree)) {
-            if (!isCurrentlyEast) {
-                a11yAnnounceAndClick(this, R.string.east)
-                isCurrentlyEast = true
-            }
-        } else {
-            isCurrentlyEast = false
-        }
-        if (isNearToDegree(180f, degree)) {
-            if (!isCurrentlySouth) {
-                a11yAnnounceAndClick(this, R.string.south)
-                isCurrentlySouth = true
-            }
-        } else {
-            isCurrentlySouth = false
-        }
-        if (isNearToDegree(270f, degree)) {
-            if (!isCurrentlyWest) {
-                a11yAnnounceAndClick(this, R.string.west)
-                isCurrentlyWest = true
-            }
-        } else {
-            isCurrentlyWest = false
-        }
+        isCurrentlyNorth = if (isNearToDegree(0f, degree)) {
+            if (!isCurrentlyNorth) a11yAnnounceAndClick(this, R.string.north)
+            true
+        } else false
+        isCurrentlyEast = if (isNearToDegree(90f, degree)) {
+            if (!isCurrentlyEast) a11yAnnounceAndClick(this, R.string.east)
+            true
+        } else false
+        isCurrentlySouth = if (isNearToDegree(180f, degree)) {
+            if (!isCurrentlySouth) a11yAnnounceAndClick(this, R.string.south)
+            true
+        } else false
+        isCurrentlyWest = if (isNearToDegree(270f, degree)) {
+            if (!isCurrentlyWest) a11yAnnounceAndClick(this, R.string.west)
+            true
+        } else false
         if (coordinates != null) {
-            if (isNearToDegree(qiblaInfo.heading.toFloat(), degree)) {
-                if (!isCurrentlyQibla) {
-                    a11yAnnounceAndClick(this, R.string.qibla)
-                    isCurrentlyQibla = true
-                }
-            } else {
-                isCurrentlyQibla = false
-            }
+            isCurrentlyQibla = if (isNearToDegree(qiblaInfo.heading.toFloat(), degree)) {
+                if (!isCurrentlyQibla) a11yAnnounceAndClick(this, R.string.qibla)
+                true
+            } else false
         }
     }
 
