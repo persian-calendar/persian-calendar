@@ -86,7 +86,6 @@ import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 
 private const val CALENDARS_TAB = 0
@@ -131,12 +130,13 @@ class CalendarFragment : Fragment() {
         mainBinding = binding
 
         val appPrefs = inflater.context.appPrefs
-        val shouldDisableOwghatTab = coordinates == null && // if coordinates is set, should be shown
-                (language != LANG_FA || // The placeholder isn't translated to other languages
-                        // The user is already dismissed the third tab
-                        appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
-                        // Try to not show the placeholder to established users
-                        PREF_APP_LANGUAGE in appPrefs)
+        val shouldDisableOwghatTab =
+            coordinates == null && // if coordinates is set, should be shown
+                    (language != LANG_FA || // The placeholder isn't translated to other languages
+                            // The user is already dismissed the third tab
+                            appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
+                            // Try to not show the placeholder to established users
+                            PREF_APP_LANGUAGE in appPrefs)
 
         val tabs = listOf(
             // First tab

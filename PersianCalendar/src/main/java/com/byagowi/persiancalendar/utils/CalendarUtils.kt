@@ -141,9 +141,8 @@ fun Clock.toFormattedString(forcedIn12: Boolean = false) =
     else baseFormatClock((hour % 12).takeIf { it != 0 } ?: 12, minute) + " " +
             if (hour >= 12) pmString else amString
 
-fun Calendar.toCivilDate() = CivilDate(
-    this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH]
-)
+fun Calendar.toCivilDate() =
+    CivilDate(this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH])
 
 fun Date.toJavaCalendar(forceLocalTime: Boolean = false): Calendar = Calendar.getInstance().also {
     if (!forceLocalTime && isForcedIranTimeEnabled)
@@ -209,13 +208,11 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun Jdn.readDayDeviceEvents(ctx: Context) = readDeviceEvents(
-    ctx, this.toJavaCalendar(), DAY_IN_MILLIS
-).toEventsStore()
+fun Jdn.readDayDeviceEvents(ctx: Context) =
+    readDeviceEvents(ctx, this.toJavaCalendar(), DAY_IN_MILLIS).toEventsStore()
 
-fun Jdn.readMonthDeviceEvents(ctx: Context) = readDeviceEvents(
-    ctx, this.toJavaCalendar(), 32L * DAY_IN_MILLIS
-).toEventsStore()
+fun Jdn.readMonthDeviceEvents(ctx: Context) =
+    readDeviceEvents(ctx, this.toJavaCalendar(), 32L * DAY_IN_MILLIS).toEventsStore()
 
 fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
     ctx, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
