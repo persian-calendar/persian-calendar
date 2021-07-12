@@ -264,11 +264,11 @@ public class QiblaCompassView extends View {
         sunPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         // Horizontal sunPosition = new Horizontal(225, 45);
 
-        if (sunPosition.getElevation() > -10) {
+        if (sunPosition.getAltitude() > -10) {
             canvas.rotate((float) sunPosition.getAzimuth() - 360, px, py);
             sunPaint.setPathEffect(dashPath);
 
-            int ry = (int) (((90 - sunPosition.getElevation()) / 90) * radius);
+            int ry = (int) (((90 - sunPosition.getAltitude()) / 90) * radius);
             canvas.drawCircle(px, py - ry, r, sunPaint);
             dashedPaint.setColor(Color.YELLOW);
             canvas.drawLine(px, py - radius, px, py + radius, dashedPaint);
@@ -293,9 +293,9 @@ public class QiblaCompassView extends View {
         moonPaintD.setColor(Color.GRAY);
         moonPaintD.setStyle(Paint.Style.STROKE);
         double moonPhase = sunMoonPosition.getMoonPhase();
-        if (moonPosition.getElevation() > -5) {
+        if (moonPosition.getAltitude() > -5) {
             canvas.rotate((float) moonPosition.getAzimuth() - 360, px, py);
-            int eOffset = (int) ((moonPosition.getElevation() / 90) * radius);
+            int eOffset = (int) ((moonPosition.getAltitude() / 90) * radius);
             // elevation Offset 0 for 0 degree; r for 90 degree
             moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r);
             canvas.drawArc(moonRect, 90, 180, false, moonPaint);

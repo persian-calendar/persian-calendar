@@ -41,7 +41,6 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
 
         //Calculate the adjustment in right ascension
         val Δα = MATH.atan2(-ρCosϕPr * sinπ * sinH, cosδ - ρCosϕPr * sinπ * cosH)
-        val horizontal: Horizontal = Horizontal()
         //  CAA2DCoordinate Topocentric;
         //    double αPrime =Math.toRadians(α)+Δα;
         val δPrime = MATH.atan2(
@@ -49,13 +48,14 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
             cosδ - ρCosϕPr * sinπ * cosH
         )
         val HPrime = H - Δα
-        horizontal.Az = Math.toDegrees(
-            MATH.atan2(sin(HPrime), cos(HPrime) * sin(ϕ) - tan(δPrime) * cos(ϕ)) + Math.PI
+        return Horizontal(
+            azimuth = Math.toDegrees(
+                MATH.atan2(sin(HPrime), cos(HPrime) * sin(ϕ) - tan(δPrime) * cos(ϕ)) + Math.PI
+            ),
+            altitude = Math.toDegrees(
+                MATH.asin(sin(ϕ) * sin(δPrime) + cos(ϕ) * cos(δPrime) * cos(HPrime))
+            )
         )
-        horizontal.h = Math.toDegrees(
-            MATH.asin(sin(ϕ) * sin(δPrime) + cos(ϕ) * cos(δPrime) * cos(HPrime))
-        )
-        return horizontal
     }
 
     private fun ρsinϕPrime(ϕ: Double, Height: Double): Double {
