@@ -4,8 +4,6 @@
  */
 package com.cepmuvakkit.times.posAlgo;
 
-import com.cepmuvakkit.conversion.phaseEvents.MoonPhases;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -609,14 +607,14 @@ public class AstroLib {
     // have different signs.
     //
     // ------------------------------------------------------------------------------
-    public static double Pegasus(MoonPhases moonPhase, double LowerBound,
-                                 double UpperBound, double ΔT, double Accuracy, boolean[] Success,
+    public static double Pegasus(double LowerBound, double UpperBound,
+                                 double ΔT, double Accuracy, boolean[] Success,
                                  int phase) {
 
         double x1 = LowerBound;
         double x2 = UpperBound;
-        double f1 = moonPhase.searchPhaseEvent(x1, ΔT, phase);
-        double f2 = moonPhase.searchPhaseEvent(x2, ΔT, phase);
+        double f1 = MoonPhases.INSTANCE.searchPhaseEvent(x1, ΔT, phase);
+        double f2 = MoonPhases.INSTANCE.searchPhaseEvent(x2, ΔT, phase);
         double x3, f3, Root;
         int MaxIterat = 30;
         int Iterat = 0;
@@ -628,7 +626,7 @@ public class AstroLib {
             do {
                 // Approximation of the root by interpolation
                 x3 = x2 - f2 / ((f2 - f1) / (x2 - x1));
-                f3 = moonPhase.searchPhaseEvent(x3, ΔT, phase);
+                f3 = MoonPhases.INSTANCE.searchPhaseEvent(x3, ΔT, phase);
 
                 // Replace (x1,f2) and (x2,f2) by new values, such that
                 // the root is again within the interval [x1,x2]
