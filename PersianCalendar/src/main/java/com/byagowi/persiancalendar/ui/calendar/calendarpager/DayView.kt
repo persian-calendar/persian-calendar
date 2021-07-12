@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
-import com.byagowi.persiancalendar.utils.isLocaleRTL
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import com.byagowi.persiancalendar.utils.resolveColor
 import kotlin.math.min
@@ -72,8 +71,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private var isNumber = false
     private var header = ""
 
-    private val isRTL = isLocaleRTL()
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val width = width
@@ -101,14 +98,14 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         }
         textPaint.textSize = textSize.toFloat()
 
+        val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1
         indicators.forEachIndexed { i, paint ->
-            val xOffset = eventIndicatorsGap * (i - (indicators.size - 1) / 2f)
+            val xOffset = eventIndicatorsGap * (i - (indicators.size - 1) / 2f) * offsetDirection
             val overrideByTextColor = dayIsSelected ||
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     (isHighTextContrastEnabled && holiday && paint == eventIndicatorPaint)
             canvas.drawCircle(
-                width / 2f + xOffset * if (isRTL) -1 else 1, (height - eventYOffset).toFloat(),
-                eventIndicatorRadius,
+                width / 2f + xOffset, (height - eventYOffset).toFloat(), eventIndicatorRadius,
                 if (overrideByTextColor) textPaint else paint
             )
         }

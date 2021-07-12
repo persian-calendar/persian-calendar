@@ -340,7 +340,7 @@ fun getThemeFromName(name: String): Int = when (name) {
     else -> R.style.LightTheme
 }
 
-fun isRTL(context: Context): Boolean =
+fun isResourcesRTL(context: Context): Boolean =
     context.resources.configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
 fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =

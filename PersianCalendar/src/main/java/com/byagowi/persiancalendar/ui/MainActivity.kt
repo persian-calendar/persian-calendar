@@ -237,10 +237,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         initUtils(this)
-        binding.drawer.layoutDirection = when {
-            isRTL(this) -> View.LAYOUT_DIRECTION_RTL
-            else -> View.LAYOUT_DIRECTION_LTR
-        }
+        binding.drawer.layoutDirection = resources.configuration.layoutDirection
     }
 
     override fun onResume() {
@@ -329,7 +326,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun createDrawerListener() = object : DrawerLayout.SimpleDrawerListener() {
-        val slidingDirection = if (isRTL(this@MainActivity)) -1 else +1
+        val slidingDirection = if (isResourcesRTL(this@MainActivity)) -1 else +1
 
         override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
             super.onDrawerSlide(drawerView, slideOffset)

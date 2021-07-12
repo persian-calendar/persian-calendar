@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getAppFont
-import com.byagowi.persiancalendar.utils.isRTL
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.resolveColor
 import com.google.android.material.animation.ArgbEvaluatorCompat
@@ -99,7 +98,6 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private val sunriseString = context.getString(R.string.sunriseSunView)
     private val middayString = context.getString(R.string.middaySunView)
     private val sunsetString = context.getString(R.string.sunsetSunView)
-    private var isRTL = false
     private var segmentByPixel = .0
     private var prayTimes: PrayTimes? = null
     private var moonPhase = 1.0
@@ -143,6 +141,7 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
         super.onDraw(canvas)
         val width = width
         val height = height
+        val isRTL = layoutDirection == LAYOUT_DIRECTION_RTL
         canvas.withScale(x = if (isRTL) -1f else 1f, pivotX = width / 2f) {
             // draw fill of night
             withClip(0f, height * .75f, width * current, height.toFloat()) {
@@ -263,8 +262,6 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
     fun startAnimate() {
         val context = context ?: return
         val prayTimes = prayTimes ?: return
-
-        isRTL = isRTL(context)
 
         val sunset = prayTimes.sunsetClock.toInt().toFloat()
         val sunrise = prayTimes.sunriseClock.toInt().toFloat()

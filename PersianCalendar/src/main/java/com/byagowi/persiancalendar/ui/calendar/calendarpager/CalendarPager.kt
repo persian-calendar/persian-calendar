@@ -111,7 +111,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             var pageRefresh = fun(_: Boolean, _: Jdn?) {}
 
             init {
-                val isRTL = isRTL(binding.root.context)
+                val isRTL = isResourcesRTL(binding.root.context)
 
                 binding.next.let {
                     it.setImageResource(

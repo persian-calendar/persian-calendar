@@ -86,7 +86,6 @@ fun update(context: Context, updateDate: Boolean) {
     val color = Color.parseColor(selectedWidgetTextColor)
     val packageName = context.packageName
 
-    // en-US is our only real LTR language for now
     val isRTL = isLocaleRTL()
 
     val ageWidget = ComponentName(context, AgeWidget::class.java)
