@@ -31,7 +31,7 @@ fun Fragment.showLocationPreferenceDialog() {
         .create()
     recyclerView.setHasFixedSize(true)
     recyclerView.layoutManager = LinearLayoutManager(context)
-    recyclerView.adapter = CitiesListAdapter { result ->
+    recyclerView.adapter = CitiesListAdapter(onItemClicked = { result ->
         dialog.dismiss()
         layoutInflater.context.appPrefs.edit {
             remove(PREF_GEOCODED_CITYNAME)
@@ -41,7 +41,7 @@ fun Fragment.showLocationPreferenceDialog() {
             putString(PREF_SELECTED_LOCATION, result)
         }
         updateStoredPreference(layoutInflater.context)
-    }
+    })
     dialog.show()
 }
 
