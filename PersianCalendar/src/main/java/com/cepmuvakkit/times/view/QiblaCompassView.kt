@@ -14,6 +14,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.withRotation
+import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
 import com.byagowi.persiancalendar.utils.coordinates
@@ -26,7 +28,11 @@ import kotlin.math.min
 class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val mPath = Path()
-    private val trueNorthArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val trueNorthArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = Color.RED
+        it.style = Paint.Style.FILL
+        it.alpha = 100
+    }
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG)
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -42,12 +48,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     @ColorInt
     val qiblaColor = ContextCompat.getColor(context, R.color.qibla_color)
 
-    // deliberately true
-    private var isCurrentlyNorth = true
-    private var isCurrentlyEast = true
-    private var isCurrentlyWest = true
-    private var isCurrentlySouth = true
-    private var isCurrentlyQibla = true
     private var px = 0
     private var py = 0 // Center of Compass (px,py)
     private var radius = 0 // radius of Compass dial
@@ -108,29 +108,19 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         // over here
         textPaint.textAlign = Paint.Align.LEFT
         textPaint.color = qiblaColor
-        canvas.rotate(-bearing, px.toFloat(), py.toFloat()) // Attach and Detach capability lies
-        canvas.save()
-        drawDial(canvas)
-        if (coordinates != null) {
-            canvas.save()
-            drawQibla(canvas)
+        // Attach and Detach capability lies
+        canvas.withRotation(-bearing, px.toFloat(), py.toFloat()) {
+            drawDial()
+            drawTrueNorthArrow()
+            if (coordinates != null) {
+                drawQibla()
+                drawMoon()
+                drawSun()
+            }
         }
-        canvas.save()
-        drawTrueNorthArrow(canvas, bearing)
-        if (coordinates != null) {
-            canvas.save()
-            drawMoon(canvas)
-            canvas.save()
-            drawSun(canvas)
-        }
-        canvas.save()
     }
 
-    private fun drawTrueNorthArrow(canvas: Canvas, drawnAngle: Float) {
-        trueNorthArrowPaint.reset()
-        trueNorthArrowPaint.color = Color.RED
-        trueNorthArrowPaint.style = Paint.Style.FILL
-        trueNorthArrowPaint.alpha = 100
+    private fun Canvas.drawTrueNorthArrow() {
         val r = radius / 12
         // Construct a wedge-shaped path
         mPath.reset()
@@ -140,17 +130,16 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         mPath.lineTo((px + r).toFloat(), py.toFloat())
         mPath.addCircle(px.toFloat(), py.toFloat(), r.toFloat(), Path.Direction.CCW)
         mPath.close()
-        canvas.drawPath(mPath, trueNorthArrowPaint)
+        drawPath(mPath, trueNorthArrowPaint)
         dashedPaint.color = Color.RED
-        canvas.drawLine(
+        drawLine(
             px.toFloat(), (py - radius).toFloat(), px.toFloat(), (py + radius).toFloat(),
             dashedPaint
         )
-        canvas.drawCircle(px.toFloat(), py.toFloat(), 5f, dashedPaint)
-        canvas.restore()
+        drawCircle(px.toFloat(), py.toFloat(), 5f, dashedPaint)
     }
 
-    private fun drawDial(canvas: Canvas) {
+    private fun Canvas.drawDial() {
         // over here
         circlePaint.reset()
         circlePaint.color = ContextCompat.getColor(context, R.color.qibla_color)
@@ -160,8 +149,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         markerPaint.reset()
         markerPaint.color = ContextCompat.getColor(context, R.color.qibla_color)
         // Draw the background
-        canvas.drawCircle(px.toFloat(), py.toFloat(), radius.toFloat(), circlePaint)
-        canvas.drawCircle(px.toFloat(), py.toFloat(), (radius - 20).toFloat(), circlePaint)
+        drawCircle(px.toFloat(), py.toFloat(), radius.toFloat(), circlePaint)
+        drawCircle(px.toFloat(), py.toFloat(), (radius - 20).toFloat(), circlePaint)
         // Rotate our perspective so that the "top" is
         // facing the current bearing.
         val textWidth = textPaint.measureText("W").toInt()
@@ -169,63 +158,61 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         val cardinalY = py - radius + textHeight
 
         // Draw the marker every 15 degrees and text every 45.
-        for (i in 0..23) {
+        (0..23).forEach {
             // Draw a marker.
-            canvas.drawLine(
-                px.toFloat(),
-                (py - radius).toFloat(),
-                px.toFloat(),
-                (py - radius + 10).toFloat(),
+            drawLine(
+                px.toFloat(), (py - radius).toFloat(), px.toFloat(), (py - radius + 10).toFloat(),
                 markerPaint
             )
-            canvas.translate(0f, textHeight.toFloat())
-            // Draw the cardinal points
-            if (i % 6 == 0) {
-                val dirString = when (i) {
-                    0 -> northString
-                    6 -> eastString
-                    12 -> southString
-                    18 -> westString
-                    else -> ""
+            withRotation(15f * it, px.toFloat(), py.toFloat()) {
+                withTranslation(0f, textHeight.toFloat()) {
+                    // Draw the cardinal points
+                    if (it % 6 == 0) {
+                        val dirString = when (it) {
+                            0 -> northString
+                            6 -> eastString
+                            12 -> southString
+                            18 -> westString
+                            else -> ""
+                        }
+                        drawText(dirString, cardinalX.toFloat(), cardinalY.toFloat(), textPaint)
+                    } else if (it % 3 == 0) {
+                        // Draw the text every alternate 45deg
+                        val angle = (it * 15).toString()
+                        val angleTextWidth = textPaint.measureText(angle)
+                        val angleTextX = (px - angleTextWidth / 2).toInt()
+                        val angleTextY = py - radius + textHeight
+                        drawText(angle, angleTextX.toFloat(), angleTextY.toFloat(), textPaint)
+                    }
                 }
-                canvas.drawText(dirString, cardinalX.toFloat(), cardinalY.toFloat(), textPaint)
-            } else if (i % 3 == 0) {
-                // Draw the text every alternate 45deg
-                val angle = (i * 15).toString()
-                val angleTextWidth = textPaint.measureText(angle)
-                val angleTextX = (px - angleTextWidth / 2).toInt()
-                val angleTextY = py - radius + textHeight
-                canvas.drawText(angle, angleTextX.toFloat(), angleTextY.toFloat(), textPaint)
             }
-            canvas.restore()
-            canvas.rotate(15f, px.toFloat(), py.toFloat())
         }
     }
 
-    private fun drawSun(canvas: Canvas) {
+    private fun Canvas.drawSun() {
         sunPaint.reset()
         sunPaint.color = Color.YELLOW
         sunPaint.style = Paint.Style.FILL_AND_STROKE
         // Horizontal sunPosition = new Horizontal(225, 45);
         if (sunMoonPosition.sunPosition.altitude > -10) {
-            canvas.rotate(
+            withRotation(
                 sunMoonPosition.sunPosition.azimuth.toFloat() - 360, px.toFloat(), py.toFloat()
-            )
-            sunPaint.pathEffect = dashPath
-            val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
-            canvas.drawCircle(px.toFloat(), (py - ry).toFloat(), r.toFloat(), sunPaint)
-            dashedPaint.color = Color.YELLOW
-            canvas.drawLine(
-                px.toFloat(), (py - radius).toFloat(),
-                px.toFloat(), (py + radius).toFloat(),
-                dashedPaint
-            )
-            sunPaint.pathEffect = null
-            canvas.restore()
+            ) {
+                sunPaint.pathEffect = dashPath
+                val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
+                drawCircle(px.toFloat(), (py - ry).toFloat(), r.toFloat(), sunPaint)
+                dashedPaint.color = Color.YELLOW
+                drawLine(
+                    px.toFloat(), (py - radius).toFloat(),
+                    px.toFloat(), (py + radius).toFloat(),
+                    dashedPaint
+                )
+                sunPaint.pathEffect = null
+            }
         }
     }
 
-    private fun drawMoon(canvas: Canvas) {
+    private fun Canvas.drawMoon() {
         moonPaint.reset()
         moonPaint.color = Color.WHITE
         moonPaint.style = Paint.Style.FILL_AND_STROKE
@@ -240,55 +227,48 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         moonPaintD.color = Color.GRAY
         moonPaintD.style = Paint.Style.STROKE
         val moonPhase = sunMoonPosition.moonPhase
-        if (sunMoonPosition.moonPosition.altitude > -5) {
-            canvas.rotate(
-                sunMoonPosition.moonPosition.azimuth.toFloat() - 360, px.toFloat(), py.toFloat()
-            )
+        if (sunMoonPosition.moonPosition.altitude <= -5) return
+        withRotation(
+            sunMoonPosition.moonPosition.azimuth.toFloat() - 360, px.toFloat(), py.toFloat()
+        ) {
             val eOffset = (sunMoonPosition.moonPosition.altitude / 90 * radius).toInt()
             // elevation Offset 0 for 0 degree; r for 90 degree
             moonRect[(px - r).toFloat(), (py + eOffset - radius - r).toFloat(), (px + r).toFloat()] =
                 (py + eOffset - radius + r).toFloat()
-            canvas.drawArc(moonRect, 90f, 180f, false, moonPaint)
-            canvas.drawArc(moonRect, 270f, 180f, false, moonPaintB)
+            drawArc(moonRect, 90f, 180f, false, moonPaint)
+            drawArc(moonRect, 270f, 180f, false, moonPaintB)
             val arcWidth = ((moonPhase - 0.5) * (4 * r)).toInt()
             moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
             moonOval[(px - abs(arcWidth) / 2).toFloat(), (py + eOffset - radius - r).toFloat(), (
                     px + abs(arcWidth) / 2).toFloat()] = (py + eOffset - radius + r).toFloat()
-            canvas.drawArc(moonOval, 0f, 360f, false, moonPaintO)
-            canvas.drawArc(moonRect, 0f, 360f, false, moonPaintD)
+            drawArc(moonOval, 0f, 360f, false, moonPaintO)
+            drawArc(moonRect, 0f, 360f, false, moonPaintD)
             moonPaintD.pathEffect = dashPath
-            canvas.drawLine(
-                px.toFloat(),
-                (py - radius).toFloat(),
-                px.toFloat(),
-                (py + radius).toFloat(),
+            drawLine(
+                px.toFloat(), (py - radius).toFloat(), px.toFloat(), (py + radius).toFloat(),
                 moonPaintD
             )
             moonPaintD.pathEffect = null
-            canvas.restore()
         }
     }
 
-    private fun drawQibla(canvas: Canvas) {
-        canvas.rotate(qiblaInfo.heading.toFloat() - 360, px.toFloat(), py.toFloat())
-        qiblaPaint.reset()
-        qiblaPaint.color = Color.GREEN
-        qiblaPaint.style = Paint.Style.FILL_AND_STROKE
-        qiblaPaint.pathEffect = dashPath
-        qiblaPaint.strokeWidth = 5.5f
-        canvas.drawLine(
-            px.toFloat(),
-            (py - radius).toFloat(),
-            px.toFloat(),
-            (py + radius).toFloat(),
-            qiblaPaint
-        )
-        qiblaPaint.pathEffect = null
-        canvas.drawBitmap(
-            kaaba, (px - kaaba.width / 2).toFloat(), (py - radius - kaaba.height / 2).toFloat(),
-            qiblaPaint
-        )
-        canvas.restore()
+    private fun Canvas.drawQibla() {
+        withRotation(qiblaInfo.heading.toFloat() - 360, px.toFloat(), py.toFloat()) {
+            qiblaPaint.reset()
+            qiblaPaint.color = Color.GREEN
+            qiblaPaint.style = Paint.Style.FILL_AND_STROKE
+            qiblaPaint.pathEffect = dashPath
+            qiblaPaint.strokeWidth = 5.5f
+            drawLine(
+                px.toFloat(), (py - radius).toFloat(), px.toFloat(), (py + radius).toFloat(),
+                qiblaPaint
+            )
+            qiblaPaint.pathEffect = null
+            drawBitmap(
+                kaaba, (px - kaaba.width / 2).toFloat(), (py - radius - kaaba.height / 2).toFloat(),
+                qiblaPaint
+            )
+        }
     }
 
     fun setBearing(bearing: Float) {
@@ -296,6 +276,12 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         postInvalidate()
     }
 
+    // deliberately true
+    private var isCurrentlyNorth = true
+    private var isCurrentlyEast = true
+    private var isCurrentlyWest = true
+    private var isCurrentlySouth = true
+    private var isCurrentlyQibla = true
     fun onDirectionAction() {
         // 0=North, 90=East, 180=South, 270=West
         if (isNearToDegree(bearing, 0f)) {
