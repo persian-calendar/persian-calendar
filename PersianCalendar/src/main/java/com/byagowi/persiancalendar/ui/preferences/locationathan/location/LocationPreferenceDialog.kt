@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 /**
  * persian_calendar
@@ -32,13 +33,14 @@ fun Fragment.showLocationPreferenceDialog() {
     recyclerView.layoutManager = LinearLayoutManager(context)
     recyclerView.adapter = CitiesListAdapter { result ->
         dialog.dismiss()
-        this.context?.appPrefs?.edit {
+        layoutInflater.context.appPrefs.edit {
             remove(PREF_GEOCODED_CITYNAME)
             remove(PREF_LATITUDE)
             remove(PREF_LONGITUDE)
             remove(PREF_ALTITUDE)
             putString(PREF_SELECTED_LOCATION, result)
         }
+        updateStoredPreference(layoutInflater.context)
     }
     dialog.show()
 }
