@@ -97,20 +97,24 @@ class DeviceInformationFragment : Fragment() {
             it.adapter = adapter
         }
 
-        binding.toolbar.menu.add("Game").also {
-            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_esports)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
-            runCatching {
-                startActivity(
-                    Intent(Intent.ACTION_MAIN).setClassName(
-                        "com.android.systemui", "com.android.systemui.egg.MLandActivity"
-                    ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                )
-            }.onFailure(logException).onFailure {
-                Snackbar.make(
-                    binding.root, R.string.device_calendar_does_not_support, Snackbar.LENGTH_SHORT
-                ).show()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.toolbar.menu.add("Game").also {
+                it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_esports)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }.onClick {
+                runCatching {
+                    startActivity(
+                        Intent(Intent.ACTION_MAIN).setClassName(
+                            "com.android.systemui", "com.android.systemui.egg.MLandActivity"
+                        ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    )
+                }.onFailure(logException).onFailure {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.device_calendar_does_not_support,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
 
