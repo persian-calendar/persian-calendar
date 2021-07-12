@@ -97,12 +97,6 @@ fun isNonArabicScriptSelected() = when (language) {
     else -> false
 }
 
-// en-US and ja are our only real LTR locales for now
-fun isLocaleRTL(): Boolean = when (language) {
-    LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> false
-    else -> true
-}
-
 fun formatNumber(number: Double): String = when (preferredDigits) {
     ARABIC_DIGITS -> number.toString()
     else -> formatNumber(number.toString())
