@@ -14,6 +14,8 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.localizedCityName
+import com.byagowi.persiancalendar.utils.localizedCountryName
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 /**
@@ -62,26 +64,10 @@ private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :
     inner class ViewHolder(private val binding: ListItemCityNameBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
-        fun bind(cityEntity: CityItem) = binding.let {
-            it.root.setOnClickListener(this)
-            when (language) {
-                LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> {
-                    it.city.text = cityEntity.en
-                    it.country.text = cityEntity.countryEn
-                }
-                LANG_CKB -> {
-                    it.city.text = cityEntity.ckb
-                    it.country.text = cityEntity.countryCkb
-                }
-                LANG_AR -> {
-                    it.city.text = cityEntity.ar
-                    it.country.text = cityEntity.countryAr
-                }
-                else -> {
-                    it.city.text = cityEntity.fa
-                    it.country.text = cityEntity.countryFa
-                }
-            }
+        fun bind(cityEntity: CityItem) {
+            binding.root.setOnClickListener(this)
+            binding.city.text = cityEntity.localizedCityName
+            binding.country.text = cityEntity.localizedCountryName
         }
 
         override fun onClick(view: View) = onItemClicked(cities[bindingAdapterPosition].key)

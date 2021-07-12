@@ -284,18 +284,29 @@ fun SharedPreferences.getStoredCity(): CityItem? {
         ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
 }
 
+val CityItem.localizedCountryName: String
+    get() = when (language) {
+        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> this.countryEn
+        LANG_AR -> this.countryAr
+        LANG_CKB -> this.countryCkb
+        else -> this.countryFa
+    }
+
+val CityItem.localizedCityName: String
+    get() = when (language) {
+        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> this.en
+        LANG_AR -> this.ar
+        LANG_CKB -> this.ckb
+        else -> this.fa
+    }
+
 fun getCityName(context: Context, fallbackToCoord: Boolean): String {
     val prefs = context.appPrefs
-    return prefs.getStoredCity()?.let {
-        when (language) {
-            LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> it.en
-            LANG_AR -> it.ar
-            LANG_CKB -> it.ckb
-            else -> it.fa
-        }
-    } ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
-    ?: coordinates?.takeIf { fallbackToCoord }?.let { formatCoordinate(context, it, spacedComma) }
-    ?: ""
+    return prefs.getStoredCity()?.localizedCityName
+        ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
+        ?: coordinates?.takeIf { fallbackToCoord }
+            ?.let { formatCoordinate(context, it, spacedComma) }
+        ?: ""
 }
 
 fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()
