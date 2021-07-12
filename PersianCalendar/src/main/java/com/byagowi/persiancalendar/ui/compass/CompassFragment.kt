@@ -58,7 +58,7 @@ class CompassFragment : Fragment() {
             if (stopped)
                 angle = 0f
             else
-                binding?.compassView?.isOnDirectionAction()
+                binding?.compassView?.onDirectionAction()
 
             azimuth = lowPass(angle, azimuth)
             binding?.compassView?.setBearing(azimuth)
@@ -135,11 +135,6 @@ class CompassFragment : Fragment() {
                 .getString(if (stopped) R.string.resume else R.string.stop)
         }
         updateCompassMetrics(binding)
-        coordinates?.also {
-            binding.compassView.setLongitude(it.longitude)
-            binding.compassView.setLatitude(it.latitude)
-        }
-        binding.compassView.initCompassView()
     }.root
 
     override fun onConfigurationChanged(newConfig: Configuration) {
