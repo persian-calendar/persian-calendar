@@ -29,8 +29,8 @@ public class SunMoonPosition {
 
         moonPosEq = lunar.calculateMoonEqutarialCoordinates(moonPosEc, jd, ΔT);
         solarPosEq = solar.calculateSunEquatorialCoordinates(solarPosEc, jd, ΔT);
-        moonPosition = moonPosEq.Equ2Topocentric(longitude, latitude, altitude, jd, ΔT);//az=183.5858
-        sunPosition = solarPosEq.Equ2Topocentric(longitude, latitude, altitude, jd, ΔT);
+        moonPosition = moonPosEq.equ2Topocentric(longitude, latitude, altitude, jd, ΔT);//az=183.5858
+        sunPosition = solarPosEq.equ2Topocentric(longitude, latitude, altitude, jd, ΔT);
         //System.out.println(moonPosition.Az);
         // System.out.println(moonPosition.h);
 
