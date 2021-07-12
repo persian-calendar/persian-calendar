@@ -6,7 +6,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.*
 import android.widget.TextView
 import androidx.annotation.StringRes
@@ -61,7 +60,7 @@ class CompassFragment : Fragment() {
                 binding?.compassView?.onDirectionAction()
 
             azimuth = lowPass(angle, azimuth)
-            binding?.compassView?.setBearing(azimuth)
+            binding?.compassView?.setCompassDegree(azimuth)
         }
 
         /**
@@ -134,28 +133,21 @@ class CompassFragment : Fragment() {
             binding.fab.contentDescription = resources
                 .getString(if (stopped) R.string.resume else R.string.stop)
         }
-        updateCompassMetrics(binding)
+        updateCompassOrientation()
     }.root
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        binding?.let(::updateCompassMetrics)
+        updateCompassOrientation()
     }
 
-    private fun updateCompassMetrics(binding: FragmentCompassBinding) {
-        val activity = activity ?: return
-        val displayMetrics = DisplayMetrics()
-
-        activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
-        val width = displayMetrics.widthPixels
-        val height = displayMetrics.heightPixels
-        binding.compassView.setScreenResolution(width, height - 2 * height / 8)
-
-        when (activity.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
-            Surface.ROTATION_0 -> orientation = 0f
-            Surface.ROTATION_90 -> orientation = 90f
-            Surface.ROTATION_180 -> orientation = 180f
-            Surface.ROTATION_270 -> orientation = 270f
+    private fun updateCompassOrientation() {
+        orientation = when (activity?.getSystemService<WindowManager>()?.defaultDisplay?.rotation) {
+            Surface.ROTATION_0 -> 0f
+            Surface.ROTATION_90 -> 90f
+            Surface.ROTATION_180 -> 180f
+            Surface.ROTATION_270 -> 270f
+            else -> 0f
         }
     }
 
