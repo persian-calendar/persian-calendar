@@ -122,31 +122,25 @@ class DeviceInformationFragment : Fragment() {
 
         binding.bottomNavigation.also { bottomNavigationView ->
             bottomNavigationView.menu.also {
-                it.add(Build.VERSION.RELEASE)
-                it.getItem(0).setIcon(R.drawable.ic_developer).also { item ->
-                    item.isEnabled = true
-                    item.onClick { if (++clickCount % 10 == 0) openTestingHiddenDialog() }
-                }
+                it.add(Build.VERSION.RELEASE).setIcon(R.drawable.ic_developer)
+                    .onClick { if (++clickCount % 10 == 0) openTestingHiddenDialog() }
 
-                it.add("API " + Build.VERSION.SDK_INT)
-                it.getItem(1).setIcon(R.drawable.ic_settings).isEnabled = false
+                it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_settings)
+                    .isEnabled = false
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    it.add(Build.SUPPORTED_ABIS[0])
-                } else {
-                    it.add(Build.CPU_ABI)
-                }
-                it.getItem(2).setIcon(R.drawable.ic_motorcycle).isEnabled = false
+                it.add(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
+                    else Build.CPU_ABI
+                ).setIcon(R.drawable.ic_motorcycle).isEnabled = false
 
-                it.add(Build.MODEL)
-                it.getItem(3).setIcon(R.drawable.ic_device_information_white).isEnabled = false
+                it.add(Build.MODEL).setIcon(R.drawable.ic_device_information_white)
+                    .isEnabled = false
             }
             bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
         }
     }.root
 
     private fun openTestingHiddenDialog() {
-        // Easter egg
         val activity = activity ?: return
         BottomSheetDialog(activity).also { bottomSheetDialog ->
             bottomSheetDialog.setContentView(LinearLayout(activity).also { linearLayout ->
