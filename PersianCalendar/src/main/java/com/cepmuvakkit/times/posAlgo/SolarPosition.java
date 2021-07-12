@@ -37,9 +37,9 @@ public class SolarPosition {
     private static final double[][] PETERMS = {
             {-171996, -174.2, 92025, 8.9}, {-13187, -1.6, 5736, -3.1}, {-2274, -0.2, 977, -0.5}, {2062, 0.2, -895, 0.5}, {1426, -3.4, 54, -0.1}, {712, 0.1, -7, 0}, {-517, 1.2, 224, -0.6}, {-386, -0.4, 200, 0}, {-301, 0, 129, -0.1}, {217, -0.5, -95, 0.3}, {-158, 0, 0, 0}, {129, 0.1, -70, 0}, {123, 0, -53, 0}, {63, 0, 0, 0}, {63, 0.1, -33, 0}, {-59, 0, 26, 0}, {-58, -0.1, 32, 0}, {-51, 0, 27, 0}, {48, 0, 0, 0}, {46, 0, -24, 0}, {-38, 0, 16, 0}, {-31, 0, 13, 0}, {29, 0, 0, 0}, {29, 0, -12, 0}, {26, 0, 0, 0}, {-22, 0, 0, 0}, {21, 0, -10, 0}, {17, -0.1, 0, 0}, {16, 0, -8, 0}, {-16, 0.1, 7, 0}, {-15, 0, 9, 0}, {-13, 0, 7, 0}, {-12, 0, 6, 0}, {11, 0, 0, 0}, {-10, 0, 5, 0}, {-8, 0, 3, 0}, {7, 0, -3, 0}, {-7, 0, 0, 0}, {-7, 0, 3, 0}, {-7, 0, 3, 0}, {6, 0, 0, 0}, {6, 0, -3, 0}, {6, 0, -3, 0}, {-6, 0, 3, 0}, {-6, 0, 3, 0}, {5, 0, 0, 0}, {-5, 0, 3, 0}, {-5, 0, 3, 0}, {-5, 0, 3, 0}, {4, 0, 0, 0}, {4, 0, 0, 0}, {4, 0, 0, 0}, {-4, 0, 0, 0}, {-4, 0, 0, 0}, {-4, 0, 0, 0}, {3, 0, 0, 0}, {-3, 0, 0, 0}, {-3, 0, 0, 0}, {-3, 0, 0, 0}, {-3, 0, 0, 0}, {-3, 0, 0, 0}, {-3, 0, 0, 0}, {-3, 0, 0, 0},};
     private static byte L_COUNT, B_COUNT, R_COUNT, Y_COUNT;
-    private final double SUNRADIUS = 0.26667;
-    private final byte FAJR = 0, SUNRISE = 1, SUNTRANSIT = 2, ASR_SHAFI = 3, ASR_HANEFI = 4, SUNSET = 5, ISHA = 6, SUN_COUNT = 7;
-    private final byte FAJR_ = 0, ISRAK = 1, SUNTRANSIT_ = 2, ASRHANEFI = 3, ISFIRAR = 4, SUNSET_ = 5, KERAHAT_COUNT = 6, DUHA = 7, ISTIVA = 8;
+    static private final double SUNRADIUS = 0.26667;
+    static private final byte FAJR = 0, SUNRISE = 1, SUNTRANSIT = 2, ASR_SHAFI = 3, ASR_HANEFI = 4, SUNSET = 5, ISHA = 6, SUN_COUNT = 7;
+    static private final byte FAJR_ = 0, ISRAK = 1, SUNTRANSIT_ = 2, ASRHANEFI = 3, ISFIRAR = 4, SUNSET_ = 5, KERAHAT_COUNT = 6, DUHA = 7, ISTIVA = 8;
 
     static double limitDegrees(double degrees) {
         double limited;
@@ -321,7 +321,7 @@ public class SolarPosition {
      * @param minutes
      * @return limitminutes
      */
-    double limitMinutes(double minutes) {
+    static double limitMinutes(double minutes) {
         double limited = minutes;
         if (limited < -20.0) {
             limited += 1440.0;
@@ -331,7 +331,7 @@ public class SolarPosition {
         return limited;
     }
 
-    double limitDegrees180pm(double degrees) {
+    static double limitDegrees180pm(double degrees) {
         double limited;
 
         degrees /= 360.0;
@@ -345,7 +345,7 @@ public class SolarPosition {
         return limited;
     }
 
-    double limitDegrees180(double degrees) {
+    static double limitDegrees180(double degrees) {
         double limited;
 
         degrees /= 180.0;
@@ -357,7 +357,7 @@ public class SolarPosition {
         return limited;
     }
 
-    double limitZero2one(double value) {
+    static double limitZero2one(double value) {
         double limited;
 
         limited = value - Math.floor(value);
@@ -368,7 +368,7 @@ public class SolarPosition {
         return limited;
     }
 
-    double dayFracToLocalHour(double dayfrac, double timezone) {
+    static double dayFracToLocalHour(double dayfrac, double timezone) {
         return 24.0 * limitZero2one(dayfrac + timezone / 24.0);
     }
 
@@ -386,7 +386,7 @@ public class SolarPosition {
      * @param jme the Julian Ephemeris Millennium (JME) for the 2000 standard epoch.
      * @return the Earth heliocentric longitude, L in degrees.
      */
-    private double earthHeliocentricLongitude(double jme) {
+    static private double earthHeliocentricLongitude(double jme) {
         L_COUNT = (byte) LTERMS.length;
 
         double[] sum = new double[L_COUNT];
@@ -409,7 +409,7 @@ public class SolarPosition {
      * @param jme the Julian Ephemeris Millennium (JME) for the 2000 standard epoch.
      * @return the Earth radius vector, R (in Astronomical Units, AU),
      */
-    private double earthRadiusVector(double jme) {
+    static private double earthRadiusVector(double jme) {
         R_COUNT = (byte) RTERMS.length;
         double[] sum = new double[R_COUNT];
         int i;
@@ -431,7 +431,7 @@ public class SolarPosition {
      * @param jme the Julian Ephemeris Millennium (JME) for the 2000 standard epoch.
      * @return the Earth heliocentric latitude, B (in degrees).
      */
-    private double earthHeliocentricLatitude(double jme) {
+    static private double earthHeliocentricLatitude(double jme) {
         B_COUNT = (byte) BTERMS.length;
 
         double[] sum = new double[B_COUNT];
@@ -458,7 +458,7 @@ public class SolarPosition {
      * @param terms LTERMS, BTERMS,RTERMS
      * @return L0i = Ai *cos ( Bi + Ci* JME )
      */
-    private double earthPeriodicTermSummation(double[][] terms, int count, double jme) {
+    static private double earthPeriodicTermSummation(double[][] terms, int count, double jme) {
         int i;
         double sum = 0;
         for (i = 0; i < count; i++) {
@@ -475,7 +475,7 @@ public class SolarPosition {
      * @param jme the Julian Ephemeris Millennium (JME) for the 2000 standard epoch.
      * @return the L,B and R.
      */
-    private double earthValues(double[] termSum, int count, double jme) {
+    static private double earthValues(double[] termSum, int count, double jme) {
         int i;
         double sum = 0;
 
@@ -495,7 +495,7 @@ public class SolarPosition {
      * @param b is the  geocentric latitude
      * @return β the geocentric latitude (in degrees)
      */
-    double getGeocentricLatitude(double b) {
+    static double getGeocentricLatitude(double b) {
         return -b;
     }
 
@@ -510,7 +510,7 @@ public class SolarPosition {
      * @param L Earth heliocentric longitude,
      * @return the geocentric longitude Θ (in degrees)
      */
-    double geocentricLongitude(double L) {
+    static double geocentricLongitude(double L) {
         double theta = L + 180.0;
 
         if (theta >= 360.0) {
@@ -529,7 +529,7 @@ public class SolarPosition {
      * @param Θ  the geocentric longitude Θ (in degrees).
      * @return the apparent sun longitude, λ (in degrees).
      */
-    private double apparentSunLongitude(double Θ, double Δψ, double Δτ) {
+    static private double apparentSunLongitude(double Θ, double Δψ, double Δτ) {
         return Θ + Δψ + Δτ;
     }
 
@@ -540,7 +540,7 @@ public class SolarPosition {
      * @param r the Earth radius vector, R (in Astronomical Units, AU).
      * @return the aberration correction Δτ (in degrees).
      */
-    private double aberrationCorrection(double r) {
+    static private double aberrationCorrection(double r) {
         return -20.4898 / (3600.0 * r);
     }
 
@@ -552,7 +552,7 @@ public class SolarPosition {
      * @param jc the Julian  Century
      * @return the mean  sidereal time at Greenwich, ν0 (in degrees)
      */
-    double greenwichMeanSiderealTime(double jd, double jc) {
+    static double greenwichMeanSiderealTime(double jd, double jc) {
 
 
         return limitDegrees(280.46061837 + 360.98564736629 * (jd - 2451545.0)
@@ -568,21 +568,21 @@ public class SolarPosition {
      * @param jme JME is the Julian Ephemeris Millennium.
      * @return the  Sun mean longitude.
      */
-    double sunMeanLongitude(double jme) {
+    static double sunMeanLongitude(double jme) {
         return limitDegrees(280.4664567 + jme * (360007.6982779 + jme * (0.03032028
                 + jme * (1 / 49931.0 + jme * (-1 / 15300.0 + jme * (-1 / 2000000.0))))));
     }
 
-    double observerHourAngle(double ν, double longitude, double αDeg) {
+    static double observerHourAngle(double ν, double longitude, double αDeg) {
         return limitDegrees(ν + longitude - αDeg);
     }
 
-    double sunEquatorialHorizontalParallax(double r) {
+    static double sunEquatorialHorizontalParallax(double r) {
         return 8.794 / (3600.0 * r);
     }
 
-    void sunRightAscensionParallaxAndTopocentricDec(double latitude, double elevation,
-                                                    double xi, double h, double δ, double δα, double δPrime) {
+    static void sunRightAscensionParallaxAndTopocentricDec(double latitude, double elevation,
+                                                           double xi, double h, double δ, double δα, double δPrime) {
         double δαRad;
         double latRad = Math.toRadians(latitude);
         double xiRad = Math.toRadians(xi);
@@ -601,15 +601,15 @@ public class SolarPosition {
         δα = Math.toDegrees(δαRad);
     }
 
-    double topocentricSunRightAscension(double αDeg, double δα) {
+    static double topocentricSunRightAscension(double αDeg, double δα) {
         return αDeg + δα;
     }
 
-    double topocentricLocalHourAngle(double h, double δα) {
+    static double topocentricLocalHourAngle(double h, double δα) {
         return h - δα;
     }
 
-    double topocentricElevationAngle(double latitude, double δPrime, double hPrime) {
+    static double topocentricElevationAngle(double latitude, double δPrime, double hPrime) {
         double latRad = Math.toRadians(latitude);
         double δPrimeRad = Math.toRadians(δPrime);
 
@@ -617,8 +617,8 @@ public class SolarPosition {
                 + Math.cos(latRad) * Math.cos(δPrimeRad) * Math.cos(Math.toRadians(hPrime))));
     }
 
-    double atmosphericRefractionCorrection(double pressure, double temperature,
-                                           double atmosRefract, double e0) {
+    static double atmosphericRefractionCorrection(double pressure, double temperature,
+                                                  double atmosRefract, double e0) {
         double Δe = 0;
 
         if (e0 >= -1 * (SUNRADIUS + atmosRefract)) {
@@ -629,15 +629,15 @@ public class SolarPosition {
         return Δe;
     }
 
-    double topocentricElevationAngleCorrected(double e0, double ΔE) {
+    static double topocentricElevationAngleCorrected(double e0, double ΔE) {
         return e0 + ΔE;
     }
 
-    double topocentricZenithAngle(double e) {
+    static double topocentricZenithAngle(double e) {
         return 90.0 - e;
     }
 
-    double topocentricAzimuthAngleNeg180180(double hPrime, double latitude, double δPrime) {
+    static double topocentricAzimuthAngleNeg180180(double hPrime, double latitude, double δPrime) {
         double hPrimeRad = Math.toRadians(hPrime);
         double latRad = Math.toRadians(latitude);
 
@@ -645,12 +645,12 @@ public class SolarPosition {
                 Math.cos(hPrimeRad) * Math.sin(latRad) - Math.tan(Math.toRadians(δPrime)) * Math.cos(latRad)));
     }
 
-    double topocentricAzimuthAngleZero360(double azimuth180) {
+    static double topocentricAzimuthAngleZero360(double azimuth180) {
         return azimuth180 + 180.0;
     }
 
-    double surfaceIncidenceAngle(double zenith, double azimuth180, double azmRotation,
-                                 double slope) {
+    static double surfaceIncidenceAngle(double zenith, double azimuth180, double azmRotation,
+                                        double slope) {
         double zenithRad = Math.toRadians(zenith);
         double slopeRad = Math.toRadians(slope);
 
@@ -658,11 +658,11 @@ public class SolarPosition {
                 + Math.sin(slopeRad) * Math.sin(zenithRad) * Math.cos(Math.toRadians(azimuth180 - azmRotation))));
     }
 
-    double approxSunTransitTime(double αo, double longitude, double ν) {
+    static double approxSunTransitTime(double αo, double longitude, double ν) {
         return (αo - longitude - ν) / 360.0;
     }
 
-    double getHourAngleAtRiseSet(double latitude, double δo, double h0Prime) {
+    static double getHourAngleAtRiseSet(double latitude, double δo, double h0Prime) {
         double h0 = -99999;
         double latitudeRad = Math.toRadians(latitude);
         double δoRad = Math.toRadians(δo);
@@ -676,7 +676,7 @@ public class SolarPosition {
         return h0;
     }
 
-    void approxSunRiseAndSet(double[] mRts, double h0) {
+    static void approxSunRiseAndSet(double[] mRts, double h0) {
         double h0Dfrac = h0 / 360.0;
 
         mRts[1] = limitZero2one(mRts[0] - h0Dfrac);
@@ -685,7 +685,7 @@ public class SolarPosition {
 
     }
 
-    void approxSalatTimes(double[] mRts, double[] h0) {
+    static void approxSalatTimes(double[] mRts, double[] h0) {
         mRts[SUNRISE] = limitZero2one(mRts[SUNTRANSIT] - h0[SUNRISE] / 360.0);
         mRts[SUNSET] = limitZero2one(mRts[SUNTRANSIT] + h0[SUNSET] / 360.0);
         mRts[ASR_SHAFI] = limitZero2one(mRts[SUNTRANSIT] + h0[ASR_SHAFI] / 360.0);
@@ -696,7 +696,7 @@ public class SolarPosition {
 
     }
 
-    void approxKerahatTimes(double[] mRts, double[] h0) {
+    static void approxKerahatTimes(double[] mRts, double[] h0) {
         mRts[FAJR_] = limitZero2one(mRts[SUNTRANSIT_] - h0[FAJR_] / 360.0);
         mRts[ISRAK] = limitZero2one(mRts[SUNTRANSIT_] - h0[ISRAK] / 360.0);
         mRts[ASRHANEFI] = limitZero2one(mRts[SUNTRANSIT_] + h0[ASRHANEFI] / 360.0);
@@ -706,7 +706,7 @@ public class SolarPosition {
 
     }
 
-    double rtsAlphaDeltaPrime(double[] ad, double n) {
+    static double rtsAlphaDeltaPrime(double[] ad, double n) {
         double a = ad[1] - ad[0];
         double b = ad[2] - ad[1];
 
@@ -720,7 +720,7 @@ public class SolarPosition {
         return ad[1] + n * (a + b + (b - a) * n) / 2.0;
     }
 
-    double Interpolate(double n, double[] Y) {
+    static double Interpolate(double n, double[] Y) {
         double a = Y[1] - Y[0];
         double b = Y[2] - Y[1];
         double c = Y[0] + Y[2] - 2 * Y[1];
@@ -728,7 +728,7 @@ public class SolarPosition {
         return Y[1] + n / 2 * (a + b + n * c);
     }
 
-    double rtsSunAltitude(double latitude, double δPrime, double hPrime) {
+    static double rtsSunAltitude(double latitude, double δPrime, double hPrime) {
         double latitudeRad = Math.toRadians(latitude);
         double δPrimeRad = Math.toRadians(δPrime);
 
@@ -736,13 +736,13 @@ public class SolarPosition {
                 + Math.cos(latitudeRad) * Math.cos(δPrimeRad) * Math.cos(Math.toRadians(hPrime))));
     }
 
-    double sunRiseAndSet(double[] mRts, double[] hRts, double[] δPrime, double latitude,
-                         double[] hPrime, double h0Prime, int sun) {
+    static double sunRiseAndSet(double[] mRts, double[] hRts, double[] δPrime, double latitude,
+                                double[] hPrime, double h0Prime, int sun) {
         return mRts[sun] + (hRts[sun] - h0Prime)
                 / (360.0 * Math.cos(Math.toRadians(δPrime[sun])) * Math.cos(Math.toRadians(latitude)) * Math.sin(Math.toRadians(hPrime[sun])));
     }
 
-    public void calculateSunRiseTransitSet(double[] spa, double jd) {
+    static public void calculateSunRiseTransitSet(double[] spa, double jd) {
 
         double[] mRts, hRts, νRts, αPrime, δPrime, hPrime;
         mRts = new double[3];
@@ -793,7 +793,7 @@ public class SolarPosition {
 
     }
 
-    public double[] calculateSunRiseTransitSet(double jd, double latitude, double longitude, double timezone, double ΔT) {
+    static public double[] calculateSunRiseTransitSet(double jd, double latitude, double longitude, double timezone, double ΔT) {
 
         double[] mRts, hRts, νRts, αPrime, δPrime, hPrime, spa;
         mRts = new double[3];
@@ -845,7 +845,7 @@ public class SolarPosition {
 
     }
 
-    public double[] calculateSalatTimes(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude, double fajrAngle, double ishaAngle) {
+    static public double[] calculateSalatTimes(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude, double fajrAngle, double ishaAngle) {
         double[] mRts, hRts, νRts, αPrime, δPrime, HPrime, salatTimes, H0;
         mRts = new double[SUN_COUNT];
         hRts = new double[SUN_COUNT];
@@ -923,7 +923,7 @@ public class SolarPosition {
 
     }
 
-    public double[] calculateKerahetTimes(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude, double fajrAngle, double israkIsfirarAngle) {     //final int FAJR_=0,ISRAK=1,SUNTRANSIT_=2,ASRHANEFI=3,ISFIRAR=4,SUNSET_=5,KERAHAT_COUNT=6,DUHA=7,ISTIVA=8;
+    static public double[] calculateKerahetTimes(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude, double fajrAngle, double israkIsfirarAngle) {     //final int FAJR_=0,ISRAK=1,SUNTRANSIT_=2,ASRHANEFI=3,ISFIRAR=4,SUNSET_=5,KERAHAT_COUNT=6,DUHA=7,ISTIVA=8;
         double[] mRts, hRts, νRts, αPrime, δPrime, HPrime, kerahatTimes, H0;
         mRts = new double[KERAHAT_COUNT];
         hRts = new double[KERAHAT_COUNT];
@@ -994,7 +994,7 @@ public class SolarPosition {
         return kerahatTimes;
     }
 
-    public Equatorial calculateSunEquatorialCoordinates(double jd, double ΔT) {
+    static public Equatorial calculateSunEquatorialCoordinates(double jd, double ΔT) {
         double jce, jme, jde, Δψ, ε, r, l, β, theta, Δτ, λ, b, Δε, ε0;
         double α, δ;
         double[] x = new double[5];
@@ -1030,7 +1030,7 @@ public class SolarPosition {
 
     }
 
-    Equatorial calculateSunEquatorialCoordinates(Ecliptic sunPosEc, double jd, double ΔT) {
+    static Equatorial calculateSunEquatorialCoordinates(Ecliptic sunPosEc, double jd, double ΔT) {
         double jce, jme, jde, ε, Δε, ε0;
         double α, δ;
         double[] x = new double[5];
@@ -1056,7 +1056,7 @@ public class SolarPosition {
 
     }
 
-    public Ecliptic calculateSunEclipticCoordinatesAstronomic(double jd, double ΔT) {
+    static public Ecliptic calculateSunEclipticCoordinatesAstronomic(double jd, double ΔT) {
         double jce, jme, jde, l, β, theta, b;
         jde = AstroLib.getJulianEphemerisDay(jd, ΔT);
         jce = AstroLib.getJulianEphemerisCentury(jde);
@@ -1069,7 +1069,7 @@ public class SolarPosition {
 
     }
 
-    double calculateEclipticTrueObliquity(double jd, double ΔT) {
+    static double calculateEclipticTrueObliquity(double jd, double ΔT) {
         double jce, jme, jde, ε, Δε, ε0;
 
         double[] x = new double[5];
@@ -1106,7 +1106,7 @@ public class SolarPosition {
      * @return Equation of time in minutes of time.
      * TA'DIL-I ZEMAN
      */
-    double calculateEquationOfTime(double M, double α, double Δψ, double ε) {
+    static double calculateEquationOfTime(double M, double α, double Δψ, double ε) {
         return limitMinutes(4.0 * (M - 0.0057183 - α + Δψ * Math.cos(Math.toRadians(ε))));
     }
 }

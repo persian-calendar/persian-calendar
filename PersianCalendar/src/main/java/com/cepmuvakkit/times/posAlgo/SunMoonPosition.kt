@@ -4,11 +4,7 @@ package com.cepmuvakkit.times.posAlgo
  * @author mehmetrg
  */
 class SunMoonPosition(
-    jd: Double,
-    latitude: Double,
-    longitude: Double,
-    altitude: Double,
-    ΔT: Double
+    jd: Double, latitude: Double, longitude: Double, altitude: Double, ΔT: Double
 ) {
     val sunPosition: Horizontal
     val moonPosition: Horizontal
@@ -19,15 +15,13 @@ class SunMoonPosition(
     }
 
     init {
-        val solar = SolarPosition()
-        val lunar = LunarPosition()
         val earth = EarthPosition(latitude, longitude)
         val tau_Sun = 8.32 / 1440.0 // 8.32 min  [cy]
-        val moonPosEc = lunar.calculateMoonEclipticCoordinates(jd, ΔT)
-        val solarPosEc = solar.calculateSunEclipticCoordinatesAstronomic(jd - tau_Sun, ΔT)
+        val moonPosEc = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
+        val solarPosEc = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tau_Sun, ΔT)
         val E = Math.toRadians(solarPosEc.λ - moonPosEc.λ)
-        val moonPosEq = lunar.calculateMoonEqutarialCoordinates(moonPosEc, jd, ΔT)
-        val solarPosEq = solar.calculateSunEquatorialCoordinates(solarPosEc, jd, ΔT)
+        val moonPosEq = LunarPosition.calculateMoonEqutarialCoordinates(moonPosEc, jd, ΔT)
+        val solarPosEq = SolarPosition.calculateSunEquatorialCoordinates(solarPosEc, jd, ΔT)
         moonPosition =
             moonPosEq.equ2Topocentric(longitude, latitude, altitude, jd, ΔT) //az=183.5858
         sunPosition = solarPosEq.equ2Topocentric(longitude, latitude, altitude, jd, ΔT)

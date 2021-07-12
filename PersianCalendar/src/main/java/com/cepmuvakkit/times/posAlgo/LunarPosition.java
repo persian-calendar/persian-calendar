@@ -17,8 +17,8 @@ public class LunarPosition {
             {0, 0, 0, 1}, {0, 0, 1, 1}, {0, 0, 1, -1}, {2, 0, 0, -1}, {2, 0, -1, 1}, {2, 0, -1, -1}, {2, 0, 0, 1}, {0, 0, 2, 1}, {2, 0, 1, -1}, {0, 0, 2, -1}, {2, -1, 0, -1}, {2, 0, -2, -1}, {2, 0, 1, 1}, {2, 1, 0, -1}, {2, -1, -1, 1}, {2, -1, 0, 1}, {2, -1, -1, -1}, {0, 1, -1, -1}, {4, 0, -1, -1}, {0, 1, 0, 1}, {0, 0, 0, 3}, {0, 1, -1, 1}, {1, 0, 0, 1}, {0, 1, 1, 1,}, {0, 1, 1, -1}, {0, 1, 0, -1}, {1, 0, 0, -1}, {0, 0, 3, 1}, {4, 0, 0, -1}, {4, 0, -1, 1,}, {0, 0, 1, -3}, {4, 0, -2, 1}, {2, 0, 0, -3}, {2, 0, 2, -1}, {2, -1, 1, -1}, {2, 0, -2, 1}, {0, 0, 3, -1}, {2, 0, 2, 1}, {2, 0, -3, -1}, {2, 1, -1, 1}, {2, 1, 0, 1}, {4, 0, 0, 1}, {2, -1, 1, 1}, {2, -2, 0, -1}, {0, 0, 1, 3}, {2, 1, 1, -1}, {1, 1, 0, -1}, {1, 1, 0, 1}, {0, 1, -2, -1}, {2, 1, -1, -1}, {1, 0, 1, 1}, {2, -1, -2, -1}, {0, 1, 2, 1}, {4, 0, -2, -1}, {4, -1, -1, -1}, {1, 0, 1, -1}, {4, 0, 1, -1}, {1, 0, -1, -1}, {4, -1, 0, -1}, {2, -2, 0, 1}
     };
     private static final int[] coefSinΣb = {5128122, 280602, 277693, 173237, 55413, 46271, 32573, 17198, 9266, 8822, 8216, 4324, 4200, -3359, 2463, 2211, 2065, -1870, 1828, -1794, -1749, -1565, -1491, -1475, -1410, -1344, -1335, 1107, 1021, 833, 777, 671, 607, 596, 491, -451, 439, 422, 421, -366, -351, 331, 315, 302, -283, -229, 223, 223, -220, -220, -185, 181, -177, 176, 166, -164, 132, -119, 115, 107,};
-    private final byte cD = 0, cM = 1, cMP = 2, cF = 3;
-    private final byte cSin = 0, cCos = 1;
+    static private final byte cD = 0, cM = 1, cMP = 2, cF = 3;
+    static private final byte cSin = 0, cCos = 1;
 
     /**
      * Calculate the mean elongation of the moon from the sun,X0 (in degrees),
@@ -27,7 +27,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean elongation of the moon from the sun,X0 (in degrees).
      */
-    private double meanElongationMoonSun(double jce) {
+    static private double meanElongationMoonSun(double jce) {
         return AstroLib.limitDegrees(AstroLib.fourthOrderPolynomial(1 / 113065000.0, 1.0 / 545868.0, -0.0018819, 445267.1114034, 297.8501921, jce));
     }
 
@@ -40,7 +40,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean Moon Longitude (in degrees).
      */
-    private double meanMoonLongitude(double jce) {
+    static private double meanMoonLongitude(double jce) {
         return AstroLib.limitDegrees(AstroLib.fourthOrderPolynomial(1 / 65194000.0, 1.0 / 538841.0, -0.0015786, 481267.88123421, 218.3164477 + 0.0001944, jce));
         //return AstroLib.limitDegrees(AstroLib.fourthOrderPolynomial(1 / 65194000.0, 1.0 / 538841.0, -0.0015786, 481267.88123421, 218.3164477, jce));
 
@@ -53,7 +53,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean anomaly of the sun (Earth),X1 (in degrees).
      */
-    private double meanAnomalySun(double jce) {
+    static private double meanAnomalySun(double jce) {
         return AstroLib.limitDegrees(AstroLib.thirdOrderPolynomial(1.0 / 24490000.0, -0.0001536, 35999.0502909, 357.5291092, jce));
     }
 
@@ -64,7 +64,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean anomaly of the moon,X2 (in degrees).
      */
-    private double meanAnomalyMoon(double jce) {
+    static private double meanAnomalyMoon(double jce) {
         return AstroLib.limitDegrees(AstroLib.fourthOrderPolynomial(1.0 / 14712000.0, 1 / 69699.0, 0.0087414, 477198.8675055, 134.9633964, jce));
     }
 
@@ -75,7 +75,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the moon’s argument of latitude,X3 (in degrees).
      */
-    private double argumentLatitudeMoon(double jce) {
+    static private double argumentLatitudeMoon(double jce) {
         return AstroLib.limitDegrees(AstroLib.fourthOrderPolynomial(1 / 863310000.0, 1.0 / 3526000.0, -0.0036539, 483202.0175233, 93.2720950, jce));
     }
 
@@ -86,7 +86,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the eccentrity of Earth orbit arround the sun.
      */
-    private double eccentrityOfEarthOrbit(double jce) {
+    static private double eccentrityOfEarthOrbit(double jce) {
         return 1.0 - 0.002516 * jce - 0.0000074 * jce * jce;
     }
 
@@ -97,7 +97,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return A1.
      */
-    private double effectVenus(double jce) {
+    static private double effectVenus(double jce) {
         return AstroLib.limitDegrees(119.75 + 131.849 * jce);
     }
 
@@ -108,7 +108,7 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return A2.
      */
-    private double effectJupiter(double jce) {
+    static private double effectJupiter(double jce) {
         return AstroLib.limitDegrees(53.09 + 479264.290 * jce);
     }
 
@@ -119,11 +119,11 @@ public class LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return A3.
      */
-    private double effectFlatting(double jce) {
+    static private double effectFlatting(double jce) {
         return AstroLib.limitDegrees(313.45 + 481266.484 * jce);
     }
 
-    public Ecliptic calculateMoonEclipticCoordinates(double jd, double ΔT) {
+    static public Ecliptic calculateMoonEclipticCoordinates(double jd, double ΔT) {
         double λ, β, Δ; //λ the ecliptic longitude,latitude and distance from earth in geocentric coordinates
         double Σl, Σb, Σr, L1, A1, A2, A3, M, F, M1, E, D;
         double jde, jce;
@@ -159,7 +159,7 @@ public class LunarPosition {
     }
 
     //Ecliptic coordinates without  earth nutation  factor
-    public Ecliptic calculateMoonEclipticCoordinatesAstronomic(double jd, double ΔT) {
+    static public Ecliptic calculateMoonEclipticCoordinatesAstronomic(double jd, double ΔT) {
         double λ, β;
         double Σl, Σb, L1, A1, A2, A3, M, F, M1, E, D;
         double jde, jce;
@@ -186,7 +186,7 @@ public class LunarPosition {
         return new Ecliptic(λ, β);
     }
 
-    public Equatorial calculateMoonEqutarialCoordinates(double jd, double ΔT) {
+    static public Equatorial calculateMoonEqutarialCoordinates(double jd, double ΔT) {
         Ecliptic moonPos;
         double α, δ, ε0, Δε, ε;
         double jce, jme, jde;
@@ -205,7 +205,7 @@ public class LunarPosition {
 
     }
 
-    Equatorial calculateMoonEqutarialCoordinates(Ecliptic moonPos, double jd, double ΔT) {
+    static Equatorial calculateMoonEqutarialCoordinates(Ecliptic moonPos, double jd, double ΔT) {
         double α, δ, ε0, Δε, ε;
         double jce, jme, jde;
         double[] x = SolarPosition.calculateXArray(jd, ΔT);
@@ -222,7 +222,7 @@ public class LunarPosition {
 
     }
 
-    double[] summationΣlΣr(double L1, double D, double M, double M1, double F, double E) {
+    static double[] summationΣlΣr(double L1, double D, double M, double M1, double F, double E) {
         double arg, L, R, E2 = E * E;
         L = 0;
         R = 0;
@@ -242,7 +242,7 @@ public class LunarPosition {
         return new double[]{L, R};
     }
 
-    double summationΣb(double L1, double D, double M, double M1, double F, double E) {
+    static double summationΣb(double L1, double D, double M, double M1, double F, double E) {
         double arg, Σb, E2 = E * E;
         Σb = 0;
         for (int i = 0; i < argCoefforΣb.length; ++i) {
@@ -259,7 +259,7 @@ public class LunarPosition {
     }
 
 
-    void calculateMoonRiseTransitSetStr(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude) {
+    static void calculateMoonRiseTransitSetStr(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude) {
         double[] m_trs, h_rts, νRts, αPrime, δPrime, HPrime;
         m_trs = new double[3];
         h_rts = new double[3];
@@ -328,7 +328,7 @@ public class LunarPosition {
 
     }
 
-    public double[] calculateMoonRiseTransitSet(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude) {
+    static public double[] calculateMoonRiseTransitSet(double jd, double latitude, double longitude, double timezone, int temperature, int pressure, int altitude) {
         double[] m_trs, h_rts, νRts, αPrime, δPrime, HPrime, moonRiseSet;
         m_trs = new double[3];
         h_rts = new double[3];
@@ -397,11 +397,11 @@ public class LunarPosition {
 
     }
 
-    double getHorizontalParallax(double RadiusVector) {
+    static double getHorizontalParallax(double RadiusVector) {
         return Math.toDegrees(MATH.asin(6378.14 / RadiusVector));
     }
 
-    double getLunarRiseSetAltitude(double Δ, int temperature, int pressure, int altitude) {
+    static double getLunarRiseSetAltitude(double Δ, int temperature, int pressure, int altitude) {
         //double Δinkm=149598000.0*Δ;
         double π = getHorizontalParallax(Δ);
         return 0.7275 * π

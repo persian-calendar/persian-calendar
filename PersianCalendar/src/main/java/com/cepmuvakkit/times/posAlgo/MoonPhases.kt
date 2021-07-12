@@ -4,9 +4,6 @@ import kotlin.math.floor
 import kotlin.math.sqrt
 
 object MoonPhases {
-    private val solar = SolarPosition()
-    private val lunar = LunarPosition()
-
     /**
      * searchPhaseEvent the Goal function for search of phase events [-180, 180]
      * Difference between the longitude of the Moon from the Sun and the nominal
@@ -23,8 +20,8 @@ object MoonPhases {
      */
     fun searchPhaseEvent(jd: Double, ΔT: Double, phase: Int): Double {
         val tauSun = 8.32 / 1440.0 // 8.32 min [cy]
-        val moonPos = lunar.calculateMoonEclipticCoordinates(jd, ΔT)
-        val solarPos = solar.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
+        val moonPos = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
+        val solarPos = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
         val longDiff = moonPos.λ - solarPos.λ
         if (phase == 8) { // Crescent Visibility at 8 degrees Angle
             val elongation = sqrt(longDiff * longDiff + moonPos.β * moonPos.β)
