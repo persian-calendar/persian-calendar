@@ -248,12 +248,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var isCurrentlySouth = true
     private var isCurrentlyQibla = true
     fun onDirectionAction() {
-        fun isNearToDegree(compareTo: Float): Boolean {
-            val difference = abs(degree - compareTo)
-            return if (difference > 180) 360 - difference < 3f else difference < 3f
-        }
         // 0=North, 90=East, 180=South, 270=West
-        if (isNearToDegree(0f)) {
+        if (isNearToDegree(0f, degree)) {
             if (!isCurrentlyNorth) {
                 a11yAnnounceAndClick(this, R.string.north)
                 isCurrentlyNorth = true
@@ -261,7 +257,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         } else {
             isCurrentlyNorth = false
         }
-        if (isNearToDegree(90f)) {
+        if (isNearToDegree(90f, degree)) {
             if (!isCurrentlyEast) {
                 a11yAnnounceAndClick(this, R.string.east)
                 isCurrentlyEast = true
@@ -269,7 +265,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         } else {
             isCurrentlyEast = false
         }
-        if (isNearToDegree(180f)) {
+        if (isNearToDegree(180f, degree)) {
             if (!isCurrentlySouth) {
                 a11yAnnounceAndClick(this, R.string.south)
                 isCurrentlySouth = true
@@ -277,7 +273,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         } else {
             isCurrentlySouth = false
         }
-        if (isNearToDegree(270f)) {
+        if (isNearToDegree(270f, degree)) {
             if (!isCurrentlyWest) {
                 a11yAnnounceAndClick(this, R.string.west)
                 isCurrentlyWest = true
@@ -286,7 +282,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             isCurrentlyWest = false
         }
         if (coordinates != null) {
-            if (isNearToDegree(qiblaInfo.heading.toFloat())) {
+            if (isNearToDegree(qiblaInfo.heading.toFloat(), degree)) {
                 if (!isCurrentlyQibla) {
                     a11yAnnounceAndClick(this, R.string.qibla)
                     isCurrentlyQibla = true
@@ -294,6 +290,13 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             } else {
                 isCurrentlyQibla = false
             }
+        }
+    }
+
+    companion object {
+        fun isNearToDegree(compareTo: Float, degree: Float): Boolean {
+            val difference = abs(degree - compareTo)
+            return if (difference > 180) 360 - difference < 3f else difference < 3f
         }
     }
 }
