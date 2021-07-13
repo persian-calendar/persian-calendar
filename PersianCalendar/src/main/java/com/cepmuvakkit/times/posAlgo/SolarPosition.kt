@@ -379,10 +379,6 @@ object SolarPosition {
         doubleArrayOf(-3.0, 0.0, 0.0, 0.0),
         doubleArrayOf(-3.0, 0.0, 0.0, 0.0)
     )
-    private var L_COUNT: Byte = 0
-    private var B_COUNT: Byte = 0
-    private var R_COUNT: Byte = 0
-    private var Y_COUNT: Byte = 0
     private const val SUNRADIUS = 0.26667
     private const val FAJR: Byte = 0
     private const val SUNRISE: Byte = 1
@@ -480,11 +476,10 @@ object SolarPosition {
      * @param x xj
      * @return ΣXj*Yij  Term Summation
      */
-    private fun xyTermSummation(i: Int, x: DoubleArray?): Double {
+    private fun xyTermSummation(i: Int, x: DoubleArray): Double {
         var sum = 0.0
-        val TERM_Y_COUNT = x!!.size
-        var j: Int = 0
-        while (j < TERM_Y_COUNT) {
+        var j = 0
+        while (j < x.size) {
             sum += x[j] * YTERMS[i][j]
             j++
         }
@@ -500,12 +495,11 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the nutation in obliquity,Δε  in degrees
      */
-    fun nutationObliquity(jce: Double, Δεi: DoubleArray?): Double {
+    fun nutationObliquity(jce: Double, Δεi: DoubleArray): Double {
         var xyTermSum: Double
         var sumε = 0.0
-        Y_COUNT = YTERMS.size.toByte()
-        var i: Int = 0
-        while (i < Y_COUNT) {
+        var i = 0
+        while (i < YTERMS.size) {
             xyTermSum = Math.toRadians(xyTermSummation(i, Δεi))
             sumε += (PETERMS[i][2] + jce * PETERMS[i][3]) * cos(xyTermSum)
             i++
@@ -522,12 +516,11 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the nutation in longitude,  Δψ  (in degrees),
      */
-    fun nutationLongitude(jce: Double, X: DoubleArray?): Double {
+    fun nutationLongitude(jce: Double, X: DoubleArray): Double {
         var xyTermSum: Double
         var sumPsi = 0.0
-        Y_COUNT = YTERMS.size.toByte()
-        var i: Int = 0
-        while (i < Y_COUNT) {
+        var i = 0
+        while (i < YTERMS.size) {
             xyTermSum = Math.toRadians(xyTermSummation(i, X))
             sumPsi += (PETERMS[i][0] + jce * PETERMS[i][1]) * sin(xyTermSum)
             i++
@@ -753,14 +746,13 @@ object SolarPosition {
      * @return the Earth heliocentric longitude, L in degrees.
      */
     private fun earthHeliocentricLongitude(jme: Double): Double {
-        L_COUNT = LTERMS.size.toByte()
-        val sum = DoubleArray(L_COUNT.toInt())
-        var i: Int = 0
-        while (i < L_COUNT) {
+        val sum = DoubleArray(LTERMS.size)
+        var i = 0
+        while (i < LTERMS.size) {
             sum[i] = earthPeriodicTermSummation(LTERMS[i], LTERMS[i].size, jme)
             i++
         }
-        return limitDegrees(Math.toDegrees(earthValues(sum, L_COUNT.toInt(), jme)))
+        return limitDegrees(Math.toDegrees(earthValues(sum, LTERMS.size, jme)))
     }
 
     /**
@@ -773,14 +765,13 @@ object SolarPosition {
      * @return the Earth radius vector, R (in Astronomical Units, AU),
      */
     private fun earthRadiusVector(jme: Double): Double {
-        R_COUNT = RTERMS.size.toByte()
-        val sum = DoubleArray(R_COUNT.toInt())
-        var i: Int = 0
-        while (i < R_COUNT) {
+        val sum = DoubleArray(RTERMS.size)
+        var i = 0
+        while (i < RTERMS.size) {
             sum[i] = earthPeriodicTermSummation(RTERMS[i], RTERMS[i].size, jme)
             i++
         }
-        return earthValues(sum, R_COUNT.toInt(), jme)
+        return earthValues(sum, RTERMS.size, jme)
     }
 
     /**
@@ -793,14 +784,13 @@ object SolarPosition {
      * @return the Earth heliocentric latitude, B (in degrees).
      */
     private fun earthHeliocentricLatitude(jme: Double): Double {
-        B_COUNT = BTERMS.size.toByte()
-        val sum = DoubleArray(B_COUNT.toInt())
-        var i: Int = 0
-        while (i < B_COUNT) {
+        val sum = DoubleArray(BTERMS.size)
+        var i = 0
+        while (i < BTERMS.size) {
             sum[i] = earthPeriodicTermSummation(BTERMS[i], BTERMS[i].size, jme)
             i++
         }
-        return Math.toDegrees(earthValues(sum, B_COUNT.toInt(), jme))
+        return Math.toDegrees(earthValues(sum, BTERMS.size, jme))
     }
     //////////////////////////////////////////////////////////////////////////////////////////////////
     /// Calculate the Earth heliocentric longitude, latitude, and radius vector (L, B, and R): END  ///
@@ -819,7 +809,7 @@ object SolarPosition {
         terms: List<DoubleArray>, count: Int, jme: Double
     ): Double {
         var sum = 0.0
-        var i: Int = 0
+        var i = 0
         while (i < count) {
             sum += terms[i][0] * cos(terms[i][1] + terms[i][2] * jme)
             i++
@@ -837,7 +827,7 @@ object SolarPosition {
      */
     private fun earthValues(termSum: DoubleArray, count: Int, jme: Double): Double {
         var sum = 0.0
-        var i: Int = 0
+        var i = 0
         while (i < count) {
             sum += termSum[i] * pow(jme, i.toDouble())
             i++
@@ -1166,7 +1156,7 @@ object SolarPosition {
         val sunset: Double
         if (h0 >= 0) {
             approxSunRiseAndSet(mRts, h0)
-            for (i in 0..2) {
+            (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * mRts[i]
                 n = mRts[i] + ΔT / 86400.0
                 αPrime[i] = rtsAlphaDeltaPrime(α, n)
@@ -1224,7 +1214,7 @@ object SolarPosition {
         val sunset: Double
         if (h0 >= 0) {
             approxSunRiseAndSet(mRts, h0)
-            for (i in 0..2) {
+            (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * mRts[i]
                 n = mRts[i] + ΔT / 86400.0
                 αPrime[i] = rtsAlphaDeltaPrime(α, n)
@@ -1301,7 +1291,7 @@ object SolarPosition {
         val α = doubleArrayOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         val δ = doubleArrayOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
         approxSalatTimes(mRts, H0)
-        for (i in 0 until SUN_COUNT) {
+        (0 until SUN_COUNT).forEach { i ->
             if (H0[i] >= 0) {
                 νRts[i] = ν + 360.985647 * mRts[i]
                 n = mRts[i] + ΔT / 86400.0
@@ -1454,7 +1444,7 @@ object SolarPosition {
         val α = doubleArrayOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         val δ = doubleArrayOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
         approxKerahatTimes(mRts, H0)
-        for (i in 0 until KERAHAT_COUNT) {
+        (0 until KERAHAT_COUNT).forEach { i ->
             if (H0[i] >= 0) {
                 νRts[i] = ν + 360.985647 * mRts[i]
                 n = mRts[i] + ΔT / 86400.0
@@ -1471,26 +1461,14 @@ object SolarPosition {
             if (H0[ISRAK.toInt()] >= 0) {
                 kerahatTimes[ISRAK.toInt()] = dayFracToLocalHour(
                     sunRiseAndSet(
-                        mRts,
-                        hRts,
-                        δPrime,
-                        latitude,
-                        HPrime,
-                        israkIsfirarAngle,
-                        ISRAK.toInt()
+                        mRts, hRts, δPrime, latitude, HPrime, israkIsfirarAngle, ISRAK.toInt()
                     ), timezone
                 )
             }
             if (H0[SUNSET_.toInt()] >= 0) {
                 kerahatTimes[SUNSET_.toInt()] = dayFracToLocalHour(
                     sunRiseAndSet(
-                        mRts,
-                        hRts,
-                        δPrime,
-                        latitude,
-                        HPrime,
-                        h0Prime,
-                        SUNSET_.toInt()
+                        mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNSET_.toInt()
                     ), timezone
                 )
             }

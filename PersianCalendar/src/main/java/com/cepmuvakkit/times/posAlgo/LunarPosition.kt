@@ -288,11 +288,7 @@ object LunarPosition {
     private fun meanElongationMoonSun(jce: Double): Double {
         return limitDegrees(
             fourthOrderPolynomial(
-                1 / 113065000.0,
-                1.0 / 545868.0,
-                -0.0018819,
-                445267.1114034,
-                297.8501921,
+                1 / 113065000.0, 1.0 / 545868.0, -0.0018819, 445267.1114034, 297.8501921,
                 jce
             )
         )
@@ -310,12 +306,8 @@ object LunarPosition {
     private fun meanMoonLongitude(jce: Double): Double {
         return limitDegrees(
             fourthOrderPolynomial(
-                1 / 65194000.0,
-                1.0 / 538841.0,
-                -0.0015786,
-                481267.88123421,
-                218.3164477 + 0.0001944,
-                jce
+                1 / 65194000.0, 1.0 / 538841.0, -0.0015786, 481267.88123421,
+                218.3164477 + 0.0001944, jce
             )
         )
         //return AstroLib.limitDegrees(AstroLib.fourthOrderPolynomial(1 / 65194000.0, 1.0 / 538841.0, -0.0015786, 481267.88123421, 218.3164477, jce));
@@ -330,13 +322,7 @@ object LunarPosition {
      */
     private fun meanAnomalySun(jce: Double): Double {
         return limitDegrees(
-            thirdOrderPolynomial(
-                1.0 / 24490000.0,
-                -0.0001536,
-                35999.0502909,
-                357.5291092,
-                jce
-            )
+            thirdOrderPolynomial(1.0 / 24490000.0, -0.0001536, 35999.0502909, 357.5291092, jce)
         )
     }
 
@@ -350,12 +336,7 @@ object LunarPosition {
     private fun meanAnomalyMoon(jce: Double): Double {
         return limitDegrees(
             fourthOrderPolynomial(
-                1.0 / 14712000.0,
-                1 / 69699.0,
-                0.0087414,
-                477198.8675055,
-                134.9633964,
-                jce
+                1.0 / 14712000.0, 1 / 69699.0, 0.0087414, 477198.8675055, 134.9633964, jce
             )
         )
     }
@@ -370,12 +351,7 @@ object LunarPosition {
     private fun argumentLatitudeMoon(jce: Double): Double {
         return limitDegrees(
             fourthOrderPolynomial(
-                1 / 863310000.0,
-                1.0 / 3526000.0,
-                -0.0036539,
-                483202.0175233,
-                93.2720950,
-                jce
+                1 / 863310000.0, 1.0 / 3526000.0, -0.0036539, 483202.0175233, 93.2720950, jce
             )
         )
     }
@@ -500,7 +476,7 @@ object LunarPosition {
         A2 = effectJupiter(jce)
         A3 = effectFlatting(jce)
         E = eccentrityOfEarthOrbit(jce)
-        val sum: DoubleArray = summationΣlΣr(L1, D, M, M1, F, E)
+        val sum = summationΣlΣr(L1, D, M, M1, F, E)
         Σl = sum[0]
         Σb = summationΣb(L1, D, M, M1, F, E)
         Σl += 3958.0 * sin(Math.toRadians(A1)) + 1962.0 * sin(Math.toRadians(L1 - F)) + 318.0 * sin(
@@ -556,18 +532,13 @@ object LunarPosition {
     }
 
     fun summationΣlΣr(
-        L1: Double,
-        D: Double,
-        M: Double,
-        M1: Double,
-        F: Double,
-        E: Double
+        L1: Double, D: Double, M: Double, M1: Double, F: Double, E: Double
     ): DoubleArray {
         var arg: Double
         val E2 = E * E
-        var L: Double = 0.0
-        var R: Double = 0.0
-        for (i in argCoefforΣlΣr.indices) {
+        var L = 0.0
+        var R = 0.0
+        argCoefforΣlΣr.indices.forEach { i ->
             arg =
                 Math.toRadians(argCoefforΣlΣr[i][cD.toInt()] * D + argCoefforΣlΣr[i][cM.toInt()] * M + argCoefforΣlΣr[i][cMP.toInt()] * M1 + argCoefforΣlΣr[i][cF.toInt()] * F)
             if (argCoefforΣlΣr[i][cM.toInt()].toDouble() == -2.0 || argCoefforΣlΣr[i][cM.toInt()].toDouble() == 2.0) {
@@ -585,11 +556,10 @@ object LunarPosition {
     }
 
     fun summationΣb(L1: Double, D: Double, M: Double, M1: Double, F: Double, E: Double): Double {
-        var arg: Double
         val E2 = E * E
-        var Σb: Double = 0.0
-        for (i in argCoefforΣb.indices) {
-            arg =
+        var Σb = 0.0
+        argCoefforΣb.indices.forEach { i ->
+            val arg =
                 Math.toRadians(argCoefforΣb[i][cD.toInt()] * D + argCoefforΣb[i][cM.toInt()] * M + argCoefforΣb[i][cMP.toInt()] * M1 + argCoefforΣb[i][cF.toInt()] * F)
             Σb += if (argCoefforΣb[i][cM.toInt()].toDouble() == -2.0 || argCoefforΣb[i][cM.toInt()].toDouble() == 2.0) {
                 coefSinΣb[i] * E2 * sin(arg)
@@ -603,13 +573,8 @@ object LunarPosition {
     }
 
     fun calculateMoonRiseTransitSetStr(
-        jd: Double,
-        latitude: Double,
-        longitude: Double,
-        timezone: Double,
-        temperature: Int,
-        pressure: Int,
-        altitude: Int
+        jd: Double, latitude: Double, longitude: Double, timezone: Double, temperature: Int,
+        pressure: Int, altitude: Int
     ) {
         var jd = jd
         val m_trs = DoubleArray(3)
@@ -651,7 +616,7 @@ object LunarPosition {
         val α = doubleArrayOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         if (H0 >= 0) {
             SolarPosition.approxSunRiseAndSet(m_trs, H0)
-            for (i in 0..2) {
+            (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * m_trs[i]
                 n = m_trs[i] + ΔT / 86400.0
                 αPrime[i] = SolarPosition.Interpolate(n, α)
@@ -676,22 +641,17 @@ object LunarPosition {
     }
 
     fun calculateMoonRiseTransitSet(
-        jd: Double,
-        latitude: Double,
-        longitude: Double,
-        timezone: Double,
-        temperature: Int,
-        pressure: Int,
-        altitude: Int
+        jd: Double, latitude: Double, longitude: Double, timezone: Double, temperature: Int,
+        pressure: Int, altitude: Int
     ): DoubleArray {
         var jd = jd
-        val m_trs: DoubleArray = DoubleArray(3)
-        val h_rts: DoubleArray = DoubleArray(3)
-        val νRts: DoubleArray = DoubleArray(3)
-        val αPrime: DoubleArray = DoubleArray(3)
-        val δPrime: DoubleArray = DoubleArray(3)
-        val HPrime: DoubleArray = DoubleArray(3)
-        val moonRiseSet: DoubleArray = DoubleArray(3)
+        val m_trs = DoubleArray(3)
+        val h_rts = DoubleArray(3)
+        val νRts = DoubleArray(3)
+        val αPrime = DoubleArray(3)
+        val δPrime = DoubleArray(3)
+        val HPrime = DoubleArray(3)
+        val moonRiseSet = DoubleArray(3)
         val ν: Double
         val H0: Double
         var n: Double
@@ -722,7 +682,7 @@ object LunarPosition {
         val α = doubleArrayOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         if (H0 >= 0) {
             SolarPosition.approxSunRiseAndSet(m_trs, H0)
-            for (i in 0..2) {
+            (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * m_trs[i]
                 n = m_trs[i] + ΔT / 86400.0
                 αPrime[i] = SolarPosition.Interpolate(n, α)

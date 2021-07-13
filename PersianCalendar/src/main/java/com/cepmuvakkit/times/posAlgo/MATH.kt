@@ -53,20 +53,20 @@ object MATH {
             sp++
             a = x + SQRT3
             a = 1 / a
-            x = x * SQRT3
-            x = x - 1
-            x = x * a
+            x *= SQRT3
+            x -= 1
+            x *= a
         }
         // calculation core
         val x2: Double = x * x
         a = x2 + 1.4087812
         a = 0.55913709 / a
-        a = a + 0.60310579
-        a = a - x2 * 0.05160454
-        a = a * x
+        a += 0.60310579
+        a -= x2 * 0.05160454
+        a *= x
         // process until sp=0
         while (sp > 0) {
-            a = a + Math.PI / 6
+            a += Math.PI / 6
             sp--
         }
         // invertation took place
@@ -134,8 +134,8 @@ object MATH {
             }
             //
             var result = x
-            for (i in 1 until if (neg) -l else l) {
-                result = result * x
+            (1 until if (neg) -l else l).forEach { i ->
+                result *= x
             }
             //
             if (neg) {
@@ -167,8 +167,8 @@ object MATH {
         }
         k = x / d
         //
-        for (i in 2..49) {
-            f = f + k
+        (2..49).forEach { i ->
+            f += k
             k = k * x / i
         }
         //
@@ -213,7 +213,7 @@ object MATH {
         }
         //
         f *= 2.0
-        for (i in 0 until appendix) {
+        (0 until appendix).forEach { i ->
             f += LOGdiv2
         }
         //
