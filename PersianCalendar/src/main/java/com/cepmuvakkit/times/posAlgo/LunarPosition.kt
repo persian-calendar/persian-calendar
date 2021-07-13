@@ -363,9 +363,7 @@ object LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the eccentrity of Earth orbit arround the sun.
      */
-    private fun eccentrityOfEarthOrbit(jce: Double): Double {
-        return 1.0 - 0.002516 * jce - 0.0000074 * jce * jce
-    }
+    private fun eccentrityOfEarthOrbit(jce: Double) = 1.0 - 0.002516 * jce - 0.0000074 * jce * jce
 
     /**
      * Calculate effect of Venus to the Moon ,
@@ -374,9 +372,7 @@ object LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return A1.
      */
-    private fun effectVenus(jce: Double): Double {
-        return limitDegrees(119.75 + 131.849 * jce)
-    }
+    private fun effectVenus(jce: Double) = limitDegrees(119.75 + 131.849 * jce)
 
     /**
      * Calculate effect of Jupiter to the Moon ,
@@ -385,9 +381,7 @@ object LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return A2.
      */
-    private fun effectJupiter(jce: Double): Double {
-        return limitDegrees(53.09 + 479264.290 * jce)
-    }
+    private fun effectJupiter(jce: Double) = limitDegrees(53.09 + 479264.290 * jce)
 
     /**
      * Calculate effect of Jupiter to the Moon ,
@@ -396,9 +390,7 @@ object LunarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return A3.
      */
-    private fun effectFlatting(jce: Double): Double {
-        return limitDegrees(313.45 + 481266.484 * jce)
-    }
+    private fun effectFlatting(jce: Double) = limitDegrees(313.45 + 481266.484 * jce)
 
     fun calculateMoonEclipticCoordinates(jd: Double, ΔT: Double): Ecliptic {
         val λ: Double
@@ -700,16 +692,13 @@ object LunarPosition {
         return moonRiseSet
     }
 
-    fun getHorizontalParallax(RadiusVector: Double): Double {
-        return Math.toDegrees(asin(6378.14 / RadiusVector))
-    }
+    fun getHorizontalParallax(RadiusVector: Double) = Math.toDegrees(asin(6378.14 / RadiusVector))
 
     fun getLunarRiseSetAltitude(Δ: Double, temperature: Int, pressure: Int, altitude: Int): Double {
         //double Δinkm=149598000.0*Δ;
         val π = getHorizontalParallax(Δ)
-        return 0.7275 * π - getApparentAtmosphericRefraction(0.0) * getWeatherCorrectionCoefficent(
-            temperature,
-            pressure
-        ) - getAltitudeCorrection(altitude)
+        return 0.7275 * π - getApparentAtmosphericRefraction(0.0) *
+                getWeatherCorrectionCoefficent(temperature, pressure) -
+                getAltitudeCorrection(altitude)
     }
 }

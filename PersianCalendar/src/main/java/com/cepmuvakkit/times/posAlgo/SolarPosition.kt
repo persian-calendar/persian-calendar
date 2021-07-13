@@ -418,9 +418,8 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean elongation of the moon from the sun, X0 (in degrees).
      */
-    private fun meanElongationMoonSun(jce: Double): Double {
-        return thirdOrderPolynomial(1.0 / 189474.0, -0.0019142, 445267.11148, 297.85036, jce)
-    }
+    private fun meanElongationMoonSun(jce: Double): Double =
+        thirdOrderPolynomial(1.0 / 189474.0, -0.0019142, 445267.11148, 297.85036, jce)
 
     /**
      * Calculate the mean anomaly of the sun (Earth), X1 (in degrees),
@@ -429,9 +428,8 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean anomaly of the sun (Earth), X1 (in degrees).
      */
-    private fun meanAnomalySun(jce: Double): Double {
-        return thirdOrderPolynomial(-1.0 / 300000.0, -0.0001603, 35999.05034, 357.52772, jce)
-    }
+    private fun meanAnomalySun(jce: Double): Double =
+        thirdOrderPolynomial(-1.0 / 300000.0, -0.0001603, 35999.05034, 357.52772, jce)
 
     /**
      * Calculate the mean anomaly of the moon, X2 (in degrees),
@@ -440,9 +438,8 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean anomaly of the moon, X2 (in degrees).
      */
-    private fun meanAnomalyMoon(jce: Double): Double {
-        return thirdOrderPolynomial(1.0 / 56250.0, 0.0086972, 477198.867398, 134.96298, jce)
-    }
+    private fun meanAnomalyMoon(jce: Double): Double =
+        thirdOrderPolynomial(1.0 / 56250.0, 0.0086972, 477198.867398, 134.96298, jce)
 
     /**
      * Calculate the moon’s argument of latitude, X3 (in degrees),
@@ -451,9 +448,8 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the moon’s argument of latitude, X3 (in degrees).
      */
-    private fun argumentLatitudeMoon(jce: Double): Double {
-        return thirdOrderPolynomial(1.0 / 327270.0, -0.0036825, 483202.017538, 93.27191, jce)
-    }
+    private fun argumentLatitudeMoon(jce: Double): Double =
+        thirdOrderPolynomial(1.0 / 327270.0, -0.0036825, 483202.017538, 93.27191, jce)
 
     /**
      * Calculate the longitude of the ascending node of the moon’s mean orbit on the ecliptic,
@@ -463,9 +459,8 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return mean elongation of the moon from the sun, X0 (in degrees).
      */
-    private fun ascendingLongitudeMoon(jce: Double): Double {
-        return thirdOrderPolynomial(1.0 / 450000.0, 0.0020708, -1934.136261, 125.04452, jce)
-    }
+    private fun ascendingLongitudeMoon(jce: Double) =
+        thirdOrderPolynomial(1.0 / 450000.0, 0.0020708, -1934.136261, 125.04452, jce)
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     /// Calculate the Earth heliocentric longitude, latitude, and radius vector (L, B, and R): BEGIN///
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -480,7 +475,7 @@ object SolarPosition {
      * @param x xj
      * @return ΣXj*Yij  Term Summation
      */
-    private fun xyTermSummation(i: Int, x: DoubleArray): Double {
+    private fun xyTermSummation(i: Int, x: List<Double>): Double {
         var sum = 0.0
         var j = 0
         while (j < x.size) {
@@ -499,7 +494,7 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the nutation in obliquity,Δε  in degrees
      */
-    fun nutationObliquity(jce: Double, Δεi: DoubleArray): Double {
+    fun nutationObliquity(jce: Double, Δεi: List<Double>): Double {
         var xyTermSum: Double
         var sumε = 0.0
         var i = 0
@@ -520,7 +515,7 @@ object SolarPosition {
      * @param jce the Julian Ephemeris Century (JCE) for the 2000 standard epoch.
      * @return the nutation in longitude,  Δψ  (in degrees),
      */
-    fun nutationLongitude(jce: Double, X: DoubleArray): Double {
+    fun nutationLongitude(jce: Double, X: List<Double>): Double {
         var xyTermSum: Double
         var sumPsi = 0.0
         var i = 0
@@ -540,9 +535,7 @@ object SolarPosition {
      * @param Δε the mean obliquity of the ecliptic  ε0 (in arc seconds)
      * @return the true obliquity of the ecliptic, ε(in degrees),
      */
-    fun eclipticTrueObliquity(Δε: Double, ε0: Double): Double {
-        return Δε + ε0 / 3600.0
-    }
+    fun eclipticTrueObliquity(Δε: Double, ε0: Double) = Δε + ε0 / 3600.0
 
     /**
      * Calculate the mean obliquity of the ecliptic, ε0 (in arc seconds)
@@ -578,9 +571,8 @@ object SolarPosition {
      * @param ε JME is the Julian Ephemeris Millennium.
      * @return the apparent sidereal time at Greenwich, ν (in degrees)
      */
-    fun greenwichSiderealTime(ν0: Double, Δψ: Double, ε: Double): Double {
-        return ν0 + Δψ * cos(Math.toRadians(ε))
-    }
+    fun greenwichSiderealTime(ν0: Double, Δψ: Double, ε: Double): Double =
+        ν0 + Δψ * cos(Math.toRadians(ε))
 
     /**
      * Calculate the geocentric sun right ascension, α (in degrees):
@@ -596,13 +588,7 @@ object SolarPosition {
         val εRad = Math.toRadians(ε)
         return limitDegrees(
             Math.toDegrees(
-                atan2(
-                    sin(λRad) * cos(εRad) - tan(
-                        Math.toRadians(
-                            β
-                        ) * sin(εRad)
-                    ), cos(λRad)
-                )
+                atan2(sin(λRad) * cos(εRad) - tan(Math.toRadians(β) * sin(εRad)), cos(λRad))
             )
         )
     }
@@ -629,23 +615,17 @@ object SolarPosition {
 
     ///////////////////////////////////////////////
     fun calculateGreenwichSiderealTime(jd: Double, ΔT: Double): Double {
-        val jce: Double
-        val Δψ: Double
-        val ε: Double
-        val Δε: Double
-        val x = DoubleArray(5)
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
-        val jme: Double = getJulianEphemerisMillennium(jce)
-        x[0] = meanElongationMoonSun(jce)
-        x[1] = meanAnomalySun(jce)
-        x[2] = meanAnomalyMoon(jce)
-        x[3] = argumentLatitudeMoon(jce)
-        x[4] = ascendingLongitudeMoon(jce)
-        val ε0: Double = eclipticMeanObliquity(jme) //
-        Δε = nutationObliquity(jce, x) //
-        Δψ = nutationLongitude(jce, x) //
-        ε = eclipticTrueObliquity(Δε, ε0) //
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
+        val jme = getJulianEphemerisMillennium(jce)
+        val x = listOf(
+            meanElongationMoonSun(jce), meanAnomalySun(jce), meanAnomalyMoon(jce),
+            argumentLatitudeMoon(jce), ascendingLongitudeMoon(jce)
+        )
+        val ε0 = eclipticMeanObliquity(jme) //
+        val Δε = nutationObliquity(jce, x) //
+        val Δψ = nutationLongitude(jce, x) //
+        val ε = eclipticTrueObliquity(Δε, ε0) //
         val ν0: Double = greenwichMeanSiderealTime(jd)
         val ν: Double = greenwichSiderealTime(ν0, Δψ, ε)
         return ν
@@ -671,17 +651,14 @@ object SolarPosition {
     ε[0]=eclipticTrueObliquity(Δε, ε0);//
 
     }*/
-    fun calculateXArray(jd: Double, ΔT: Double): DoubleArray {
+    fun calculateXArray(jd: Double, ΔT: Double): List<Double> {
         val jce: Double
-        val x = DoubleArray(5)
         val jde: Double = getJulianEphemerisDay(jd, ΔT)
         jce = getJulianEphemerisCentury(jde)
-        x[0] = meanElongationMoonSun(jce)
-        x[1] = meanAnomalySun(jce)
-        x[2] = meanAnomalyMoon(jce)
-        x[3] = argumentLatitudeMoon(jce)
-        x[4] = ascendingLongitudeMoon(jce)
-        return x
+        return listOf(
+            meanElongationMoonSun(jce), meanAnomalySun(jce), meanAnomalyMoon(jce),
+            argumentLatitudeMoon(jce), ascendingLongitudeMoon(jce)
+        )
     }
 
     /**
@@ -731,9 +708,8 @@ object SolarPosition {
         return limited
     }
 
-    fun dayFracToLocalHour(dayfrac: Double, timezone: Double): Double {
-        return 24.0 * limitZero2one(dayfrac + timezone / 24.0)
-    }
+    fun dayFracToLocalHour(dayfrac: Double, timezone: Double): Double =
+        24.0 * limitZero2one(dayfrac + timezone / 24.0)
 
     /**
      * Calculate the Earth heliocentric longitude, L in degrees,
@@ -847,9 +823,7 @@ object SolarPosition {
      * @param b is the  geocentric latitude
      * @return β the geocentric latitude (in degrees)
      */
-    fun getGeocentricLatitude(b: Double): Double {
-        return -b
-    }
+    fun getGeocentricLatitude(b: Double) = -b
 
     /**
      * Calculate the geocentric longitude, (in degrees),
@@ -880,9 +854,7 @@ object SolarPosition {
      * @param Θ  the geocentric longitude Θ (in degrees).
      * @return the apparent sun longitude, λ (in degrees).
      */
-    private fun apparentSunLongitude(Θ: Double, Δψ: Double, Δτ: Double): Double {
-        return Θ + Δψ + Δτ
-    }
+    private fun apparentSunLongitude(Θ: Double, Δψ: Double, Δτ: Double): Double = Θ + Δψ + Δτ
 
     /**
      * Calculate the aberration correction Δτ (in degrees):
@@ -891,9 +863,7 @@ object SolarPosition {
      * @param r the Earth radius vector, R (in Astronomical Units, AU).
      * @return the aberration correction Δτ (in degrees).
      */
-    private fun aberrationCorrection(r: Double): Double {
-        return -20.4898 / (3600.0 * r)
-    }
+    private fun aberrationCorrection(r: Double): Double = -20.4898 / (3600.0 * r)
 
     /**
      * Calculate the mean sidereal time at Greenwich, ν0 (in degrees),:
@@ -923,13 +893,10 @@ object SolarPosition {
         )
     }
 
-    fun observerHourAngle(ν: Double, longitude: Double, αDeg: Double): Double {
-        return limitDegrees(ν + longitude - αDeg)
-    }
+    fun observerHourAngle(ν: Double, longitude: Double, αDeg: Double): Double =
+        limitDegrees(ν + longitude - αDeg)
 
-    fun sunEquatorialHorizontalParallax(r: Double): Double {
-        return 8.794 / (3600.0 * r)
-    }
+    fun sunEquatorialHorizontalParallax(r: Double): Double = 8.794 / (3600.0 * r)
 
     fun sunRightAscensionParallaxAndTopocentricDec(
         latitude: Double, elevation: Double,
@@ -946,25 +913,19 @@ object SolarPosition {
         val y = 0.99664719 * sin(u) + elevation * sin(latRad) / 6378140.0
         val x = cos(u) + elevation * cos(latRad) / 6378140.0
         δαRad = atan2(
-            -x * sin(xiRad) * sin(hRad),
-            cos(δRad) - x * sin(xiRad) * cos(hRad)
+            -x * sin(xiRad) * sin(hRad), cos(δRad) - x * sin(xiRad) * cos(hRad)
         )
         δPrime = Math.toDegrees(
             atan2(
-                (sin(δRad) - y * sin(xiRad)) * cos(δαRad),
-                cos(δRad) - x * sin(xiRad) * cos(hRad)
+                (sin(δRad) - y * sin(xiRad)) * cos(δαRad), cos(δRad) - x * sin(xiRad) * cos(hRad)
             )
         )
         δα = Math.toDegrees(δαRad)
     }
 
-    fun topocentricSunRightAscension(αDeg: Double, δα: Double): Double {
-        return αDeg + δα
-    }
+    fun topocentricSunRightAscension(αDeg: Double, δα: Double): Double = αDeg + δα
 
-    fun topocentricLocalHourAngle(h: Double, δα: Double): Double {
-        return h - δα
-    }
+    fun topocentricLocalHourAngle(h: Double, δα: Double): Double = h - δα
 
     fun topocentricElevationAngle(latitude: Double, δPrime: Double, hPrime: Double): Double {
         val latRad = Math.toRadians(latitude)
@@ -978,8 +939,7 @@ object SolarPosition {
     }
 
     fun atmosphericRefractionCorrection(
-        pressure: Double, temperature: Double,
-        atmosRefract: Double, e0: Double
+        pressure: Double, temperature: Double, atmosRefract: Double, e0: Double
     ): Double {
         var Δe = 0.0
         if (e0 >= -1 * (SUNRADIUS + atmosRefract)) {
@@ -989,13 +949,9 @@ object SolarPosition {
         return Δe
     }
 
-    fun topocentricElevationAngleCorrected(e0: Double, ΔE: Double): Double {
-        return e0 + ΔE
-    }
+    fun topocentricElevationAngleCorrected(e0: Double, ΔE: Double): Double = e0 + ΔE
 
-    fun topocentricZenithAngle(e: Double): Double {
-        return 90.0 - e
-    }
+    fun topocentricZenithAngle(e: Double): Double = 90.0 - e
 
     fun topocentricAzimuthAngleNeg180180(hPrime: Double, latitude: Double, δPrime: Double): Double {
         val hPrimeRad = Math.toRadians(hPrime)
@@ -1010,9 +966,7 @@ object SolarPosition {
         )
     }
 
-    fun topocentricAzimuthAngleZero360(azimuth180: Double): Double {
-        return azimuth180 + 180.0
-    }
+    fun topocentricAzimuthAngleZero360(azimuth180: Double): Double = azimuth180 + 180.0
 
     fun surfaceIncidenceAngle(
         zenith: Double, azimuth180: Double, azmRotation: Double,
@@ -1104,12 +1058,8 @@ object SolarPosition {
         val δPrimeRad = Math.toRadians(δPrime)
         return Math.toDegrees(
             asin(
-                sin(latitudeRad) * sin(δPrimeRad)
-                        + cos(latitudeRad) * cos(δPrimeRad) * cos(
-                    Math.toRadians(
-                        hPrime
-                    )
-                )
+                sin(latitudeRad) * sin(δPrimeRad) + cos(latitudeRad) * cos(δPrimeRad) *
+                        cos(Math.toRadians(hPrime))
             )
         )
     }
@@ -1118,23 +1068,18 @@ object SolarPosition {
         mRts: DoubleArray, hRts: DoubleArray, δPrime: DoubleArray, latitude: Double,
         hPrime: DoubleArray, h0Prime: Double, sun: Int
     ): Double {
-        return mRts[sun] + (hRts[sun] - h0Prime) / 360.0 * cos(Math.toRadians(δPrime[sun])) * cos(
-            Math.toRadians(latitude)
-        ) * sin(
-            Math.toRadians(
-                hPrime[sun]
-            )
-        )
+        return mRts[sun] + (hRts[sun] - h0Prime) / 360.0 * cos(Math.toRadians(δPrime[sun])) *
+                cos(Math.toRadians(latitude)) * sin(Math.toRadians(hPrime[sun]))
     }
 
     fun calculateSunRiseTransitSet(spa: DoubleArray, jd: Double) {
         var jd = jd
-        val mRts: DoubleArray = DoubleArray(3)
-        val hRts: DoubleArray = DoubleArray(3)
-        val νRts: DoubleArray = DoubleArray(3)
-        val αPrime: DoubleArray = DoubleArray(3)
-        val δPrime: DoubleArray = DoubleArray(3)
-        val hPrime: DoubleArray = DoubleArray(3)
+        val mRts = DoubleArray(3)
+        val hRts = DoubleArray(3)
+        val νRts = DoubleArray(3)
+        val αPrime = DoubleArray(3)
+        val δPrime = DoubleArray(3)
+        val hPrime = DoubleArray(3)
         val atmosRefract = 0.5667
         val h0Prime = -1 * (SUNRADIUS + atmosRefract)
         val ν: Double
@@ -1186,20 +1131,16 @@ object SolarPosition {
     }
 
     fun calculateSunRiseTransitSet(
-        jd: Double,
-        latitude: Double,
-        longitude: Double,
-        timezone: Double,
-        ΔT: Double
+        jd: Double, latitude: Double, longitude: Double, timezone: Double, ΔT: Double
     ): DoubleArray {
         var jd = jd
-        val mRts: DoubleArray = DoubleArray(3)
-        val hRts: DoubleArray = DoubleArray(3)
-        val νRts: DoubleArray = DoubleArray(3)
-        val αPrime: DoubleArray = DoubleArray(3)
-        val δPrime: DoubleArray = DoubleArray(3)
-        val hPrime: DoubleArray = DoubleArray(3)
-        val spa: DoubleArray = DoubleArray(3)
+        val mRts = DoubleArray(3)
+        val hRts = DoubleArray(3)
+        val νRts = DoubleArray(3)
+        val αPrime = DoubleArray(3)
+        val δPrime = DoubleArray(3)
+        val hPrime = DoubleArray(3)
+        val spa = DoubleArray(3)
         val atmosRefract = 0.5667
         val h0Prime = -1 * (SUNRADIUS + atmosRefract)
         val h0: Double
@@ -1245,33 +1186,23 @@ object SolarPosition {
     }
 
     fun calculateSalatTimes(
-        jd: Double,
-        latitude: Double,
-        longitude: Double,
-        timezone: Double,
-        temperature: Int,
-        pressure: Int,
-        altitude: Int,
-        fajrAngle: Double,
-        ishaAngle: Double
+        jd: Double, latitude: Double, longitude: Double, timezone: Double, temperature: Int,
+        pressure: Int, altitude: Int, fajrAngle: Double, ishaAngle: Double
     ): DoubleArray {
         var jd = jd
-        val mRts: DoubleArray = DoubleArray(SUN_COUNT.toInt())
-        val hRts: DoubleArray = DoubleArray(SUN_COUNT.toInt())
-        val νRts: DoubleArray = DoubleArray(SUN_COUNT.toInt())
-        val H0: DoubleArray = DoubleArray(SUN_COUNT.toInt())
-        val αPrime: DoubleArray = DoubleArray(SUN_COUNT.toInt())
-        val δPrime: DoubleArray = DoubleArray(SUN_COUNT.toInt())
-        val salatTimes: DoubleArray = DoubleArray(SUN_COUNT.toInt())
-        val HPrime: DoubleArray =
-            DoubleArray(SUN_COUNT.toInt()) //Calculate the local hour angle for the sun transit, sunrise, and sunset, H’i (in degrees),
-        //double atmosRefract = 0.5667;
-        val h0Prime =
-            -SUNRADIUS - getApparentAtmosphericRefraction(0.0) * getWeatherCorrectionCoefficent(
-                temperature,
-                pressure
-            ) - getAltitudeCorrection(altitude)
-        val ν: Double
+        val mRts = DoubleArray(SUN_COUNT.toInt())
+        val hRts = DoubleArray(SUN_COUNT.toInt())
+        val νRts = DoubleArray(SUN_COUNT.toInt())
+        val H0 = DoubleArray(SUN_COUNT.toInt())
+        val αPrime = DoubleArray(SUN_COUNT.toInt())
+        val δPrime = DoubleArray(SUN_COUNT.toInt())
+        val salatTimes = DoubleArray(SUN_COUNT.toInt())
+        //Calculate the local hour angle for the sun transit, sunrise, and sunset, H’i (in degrees),
+        val HPrime = DoubleArray(SUN_COUNT.toInt())
+        // double atmosRefract = 0.5667;
+        val h0Prime = -SUNRADIUS - getApparentAtmosphericRefraction(0.0) *
+                getWeatherCorrectionCoefficent(temperature, pressure) -
+                getAltitudeCorrection(altitude)
         var n: Double
         jd = floor(jd + 0.5) - 0.5
         val ΔT: Double = calculateTimeDifference(jd)
@@ -1279,13 +1210,13 @@ object SolarPosition {
         val dayOfInterest: Equatorial = calculateSunEquatorialCoordinates(jd, ΔT)
         val dayAfter: Equatorial = calculateSunEquatorialCoordinates(jd + 1, ΔT)
         //ASR ANGLE CALCULATION******************************///
-        val δnoon =
-            (dayOfInterest.δ + dayAfter.δ) / 2.0 //Arithmetic average for sun declination for midday
+        // Arithmetic average for sun declination for midday
+        val δnoon = (dayOfInterest.δ + dayAfter.δ) / 2.0
         val zenithTransit = Math.toRadians(latitude - δnoon)
         val asrShafiAngle = Math.toDegrees(atan(1 / (1 + tan(zenithTransit))))
         val asrHanafiAngle = Math.toDegrees(atan(1 / (2 + tan(zenithTransit))))
         //**************************************************///
-        ν = calculateGreenwichSiderealTime(jd, ΔT)
+        val ν = calculateGreenwichSiderealTime(jd, ΔT)
         mRts[SUNTRANSIT.toInt()] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
         //Calculate the local hour angle corresponding to the sun elevation equals 0.8333/,H0
         H0[SUNTRANSIT.toInt()] = 0.0
@@ -1310,119 +1241,72 @@ object SolarPosition {
         }
         if (H0[SUNTRANSIT.toInt()] >= 0) {
             salatTimes[SUNTRANSIT.toInt()] = dayFracToLocalHour(
-                mRts[SUNTRANSIT.toInt()] - HPrime[SUNTRANSIT.toInt()] / 360.0,
-                timezone
+                mRts[SUNTRANSIT.toInt()] - HPrime[SUNTRANSIT.toInt()] / 360.0, timezone
             )
         }
         if (H0[SUNRISE.toInt()] >= 0) {
             salatTimes[SUNRISE.toInt()] = dayFracToLocalHour(
                 sunRiseAndSet(
-                    mRts,
-                    hRts,
-                    δPrime,
-                    latitude,
-                    HPrime,
-                    h0Prime,
-                    SUNRISE.toInt()
+                    mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNRISE.toInt()
                 ), timezone
             )
         }
         if (H0[SUNSET.toInt()] >= 0) {
             salatTimes[SUNSET.toInt()] = dayFracToLocalHour(
                 sunRiseAndSet(
-                    mRts,
-                    hRts,
-                    δPrime,
-                    latitude,
-                    HPrime,
-                    h0Prime,
-                    SUNSET.toInt()
+                    mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNSET.toInt()
                 ), timezone
             )
         }
         if (H0[ASR_SHAFI.toInt()] >= 0) {
             salatTimes[ASR_SHAFI.toInt()] = dayFracToLocalHour(
                 sunRiseAndSet(
-                    mRts,
-                    hRts,
-                    δPrime,
-                    latitude,
-                    HPrime,
-                    asrShafiAngle,
-                    ASR_SHAFI.toInt()
+                    mRts, hRts, δPrime, latitude, HPrime, asrShafiAngle, ASR_SHAFI.toInt()
                 ), timezone
             )
         }
         if (H0[ASR_HANEFI.toInt()] >= 0) {
             salatTimes[ASR_HANEFI.toInt()] = dayFracToLocalHour(
                 sunRiseAndSet(
-                    mRts,
-                    hRts,
-                    δPrime,
-                    latitude,
-                    HPrime,
-                    asrHanafiAngle,
-                    ASR_HANEFI.toInt()
+                    mRts, hRts, δPrime, latitude, HPrime, asrHanafiAngle, ASR_HANEFI.toInt()
                 ), timezone
             )
         }
         if (H0[FAJR.toInt()] >= 0) {
             salatTimes[FAJR.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(
-                    mRts,
-                    hRts,
-                    δPrime,
-                    latitude,
-                    HPrime,
-                    fajrAngle,
-                    FAJR.toInt()
-                ), timezone
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, fajrAngle, FAJR.toInt()),
+                timezone
             )
         }
         if (H0[ISHA.toInt()] >= 0) {
             salatTimes[ISHA.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(
-                    mRts,
-                    hRts,
-                    δPrime,
-                    latitude,
-                    HPrime,
-                    ishaAngle,
-                    ISHA.toInt()
-                ), timezone
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, ishaAngle, ISHA.toInt()),
+                timezone
             )
         }
         return salatTimes
     }
 
     fun calculateKerahetTimes(
-        jd: Double,
-        latitude: Double,
-        longitude: Double,
-        timezone: Double,
-        temperature: Int,
-        pressure: Int,
-        altitude: Int,
-        fajrAngle: Double,
-        israkIsfirarAngle: Double
+        jd: Double, latitude: Double, longitude: Double, timezone: Double, temperature: Int,
+        pressure: Int, altitude: Int, fajrAngle: Double, israkIsfirarAngle: Double
     ): DoubleArray {     //final int FAJR_=0,ISRAK=1,SUNTRANSIT_=2,ASRHANEFI=3,ISFIRAR=4,SUNSET_=5,KERAHAT_COUNT=6,DUHA=7,ISTIVA=8;
         var jd = jd
-        val mRts: DoubleArray = DoubleArray(KERAHAT_COUNT.toInt())
-        val hRts: DoubleArray = DoubleArray(KERAHAT_COUNT.toInt())
-        val νRts: DoubleArray = DoubleArray(KERAHAT_COUNT.toInt())
-        val H0: DoubleArray = DoubleArray(KERAHAT_COUNT.toInt())
-        val αPrime: DoubleArray = DoubleArray(KERAHAT_COUNT.toInt())
-        val δPrime: DoubleArray = DoubleArray(KERAHAT_COUNT.toInt())
-        val kerahatTimes: DoubleArray = DoubleArray(KERAHAT_COUNT + 3)
-        val HPrime: DoubleArray =
-            DoubleArray(KERAHAT_COUNT.toInt()) //Calculate the local hour angle for the sun transit, sunrise, and sunset, H’i (in degrees),
+        val mRts = DoubleArray(KERAHAT_COUNT.toInt())
+        val hRts = DoubleArray(KERAHAT_COUNT.toInt())
+        val νRts = DoubleArray(KERAHAT_COUNT.toInt())
+        val H0 = DoubleArray(KERAHAT_COUNT.toInt())
+        val αPrime = DoubleArray(KERAHAT_COUNT.toInt())
+        val δPrime = DoubleArray(KERAHAT_COUNT.toInt())
+        val kerahatTimes = DoubleArray(KERAHAT_COUNT + 3)
+        // Calculate the local hour angle for the sun transit, sunrise, and sunset, H’i (in degrees),
+        val HPrime = DoubleArray(KERAHAT_COUNT.toInt())
         //double atmosRefract = 0.5667;
         val h0Prime =
             -SUNRADIUS - getApparentAtmosphericRefraction(0.0) * getWeatherCorrectionCoefficent(
                 temperature,
                 pressure
             ) - getAltitudeCorrection(altitude)
-        val ν: Double
         var n: Double
         jd = floor(jd + 0.5) - 0.5
         val ΔT: Double = calculateTimeDifference(jd)
@@ -1435,7 +1319,7 @@ object SolarPosition {
         val zenithTransit = Math.toRadians(latitude - δnoon)
         val asrHanafiAngle = Math.toDegrees(atan(1 / (2 + tan(zenithTransit))))
         //-----------------------------------------------------///
-        ν = calculateGreenwichSiderealTime(jd, ΔT)
+        val ν = calculateGreenwichSiderealTime(jd, ΔT)
         mRts[SUNTRANSIT_.toInt()] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
         //Calculate the local hour angle corresponding to the sun elevation equals 0.8333/,H0
         H0[SUNTRANSIT_.toInt()] = 0.0
@@ -1483,10 +1367,7 @@ object SolarPosition {
             if (H0[ASRHANEFI.toInt()] >= 0) {
                 kerahatTimes[ASRHANEFI.toInt()] = dayFracToLocalHour(
                     sunRiseAndSet(
-                        mRts,
-                        hRts,
-                        δPrime,
-                        latitude,
+                        mRts, hRts, δPrime, latitude,
                         HPrime,
                         asrHanafiAngle,
                         ASRHANEFI.toInt()
@@ -1496,27 +1377,14 @@ object SolarPosition {
             if (H0[ISFIRAR.toInt()] >= 0) {
                 kerahatTimes[ISFIRAR.toInt()] = dayFracToLocalHour(
                     sunRiseAndSet(
-                        mRts,
-                        hRts,
-                        δPrime,
-                        latitude,
-                        HPrime,
-                        israkIsfirarAngle,
-                        ISFIRAR.toInt()
+                        mRts, hRts, δPrime, latitude, HPrime, israkIsfirarAngle, ISFIRAR.toInt()
                     ), timezone
                 )
             }
             if (H0[FAJR_.toInt()] >= 0) {
                 kerahatTimes[FAJR_.toInt()] = dayFracToLocalHour(
-                    sunRiseAndSet(
-                        mRts,
-                        hRts,
-                        δPrime,
-                        latitude,
-                        HPrime,
-                        fajrAngle,
-                        FAJR_.toInt()
-                    ), timezone
+                    sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, fajrAngle, FAJR_.toInt()),
+                    timezone
                 )
             }
             kerahatTimes[DUHA.toInt()] =
@@ -1528,37 +1396,30 @@ object SolarPosition {
     }
 
     fun calculateSunEquatorialCoordinates(jd: Double, ΔT: Double): Equatorial {
-        val jce: Double
-        val Δψ: Double
-        val ε: Double
-        val β: Double
-        val Δε: Double
-        val x = DoubleArray(5)
         //jc=getJulianCentury(jd);
         val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
+        val jce = getJulianEphemerisCentury(jde)
         val jme: Double = getJulianEphemerisMillennium(jce)
         // jde=getJulianEphemerisDay(jd,ΔT);
-        x[0] = meanElongationMoonSun(jce)
-        x[1] = meanAnomalySun(jce)
-        x[2] = meanAnomalyMoon(jce)
-        x[3] = argumentLatitudeMoon(jce)
-        x[4] = ascendingLongitudeMoon(jce)
+        val x = listOf(
+            meanElongationMoonSun(jce), meanAnomalySun(jce), meanAnomalyMoon(jce),
+            argumentLatitudeMoon(jce), ascendingLongitudeMoon(jce)
+        )
         val ε0: Double = eclipticMeanObliquity(jme)
-        Δε = nutationObliquity(jce, x)
-        Δψ = nutationLongitude(jce, x)
-        ε = eclipticTrueObliquity(Δε, ε0)
-        val r: Double = earthRadiusVector(jme)
-        val l: Double = earthHeliocentricLongitude(jme)
-        val theta: Double = geocentricLongitude(l)
-        val Δτ: Double = aberrationCorrection(r)
-        val λ: Double = apparentSunLongitude(theta, Δψ, Δτ)
+        val Δε = nutationObliquity(jce, x)
+        val Δψ = nutationLongitude(jce, x)
+        val ε = eclipticTrueObliquity(Δε, ε0)
+        val r = earthRadiusVector(jme)
+        val l = earthHeliocentricLongitude(jme)
+        val theta = geocentricLongitude(l)
+        val Δτ = aberrationCorrection(r)
+        val λ = apparentSunLongitude(theta, Δψ, Δτ)
         // ν0= greenwichMeanSiderealTime (jd,jc);
         //ν= greenwichSiderealTime (ν0,Δψ,ε);
-        val b: Double = earthHeliocentricLatitude(jme)
-        β = getGeocentricLatitude(b)
-        val α: Double = geocentricRightAscension(λ, ε, β)
-        val δ: Double = geocentricDeclination(λ, ε, β)
+        val b = earthHeliocentricLatitude(jme)
+        val β = getGeocentricLatitude(b)
+        val α = geocentricRightAscension(λ, ε, β)
+        val δ = geocentricDeclination(λ, ε, β)
         val Δ = 149597887.5
         return Equatorial(α, δ, Δ)
         //m=sunMeanLongitude(jme);
@@ -1566,56 +1427,44 @@ object SolarPosition {
     }
 
     fun calculateSunEquatorialCoordinates(sunPosEc: Ecliptic, jd: Double, ΔT: Double): Equatorial {
-        val jce: Double
-        val ε: Double
-        val Δε: Double
-        val x = DoubleArray(5)
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
-        val jme: Double = getJulianEphemerisMillennium(jce)
-        x[0] = meanElongationMoonSun(jce)
-        x[1] = meanAnomalySun(jce)
-        x[2] = meanAnomalyMoon(jce)
-        x[3] = argumentLatitudeMoon(jce)
-        x[4] = ascendingLongitudeMoon(jce)
-        val ε0: Double = eclipticMeanObliquity(jme)
-        Δε = nutationObliquity(jce, x)
-        ε = eclipticTrueObliquity(Δε, ε0)
-        val α: Double = geocentricRightAscension(sunPosEc.λ, ε, sunPosEc.β)
-        val δ: Double = geocentricDeclination(sunPosEc.λ, ε, sunPosEc.β)
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
+        val jme = getJulianEphemerisMillennium(jce)
+        val x = listOf(
+            meanElongationMoonSun(jce), meanAnomalySun(jce), meanAnomalyMoon(jce),
+            argumentLatitudeMoon(jce), ascendingLongitudeMoon(jce)
+        )
+        val ε0 = eclipticMeanObliquity(jme)
+        val Δε = nutationObliquity(jce, x)
+        val ε = eclipticTrueObliquity(Δε, ε0)
+        val α = geocentricRightAscension(sunPosEc.λ, ε, sunPosEc.β)
+        val δ = geocentricDeclination(sunPosEc.λ, ε, sunPosEc.β)
         val Δ = 149597887.5
         return Equatorial(α, δ, Δ)
     }
 
     fun calculateSunEclipticCoordinatesAstronomic(jd: Double, ΔT: Double): Ecliptic {
-        val jce: Double
-        val β: Double
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
-        val jme: Double = getJulianEphemerisMillennium(jce)
-        val l: Double = earthHeliocentricLongitude(jme)
-        val theta: Double = geocentricLongitude(l)
-        val b: Double = earthHeliocentricLatitude(jme)
-        β = getGeocentricLatitude(b)
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
+        val jme = getJulianEphemerisMillennium(jce)
+        val l = earthHeliocentricLongitude(jme)
+        val theta = geocentricLongitude(l)
+        val b = earthHeliocentricLatitude(jme)
+        val β = getGeocentricLatitude(b)
         return Ecliptic(theta, β)
     }
 
     fun calculateEclipticTrueObliquity(jd: Double, ΔT: Double): Double {
-        val jce: Double
-        val ε: Double
-        val Δε: Double
-        val x = DoubleArray(5)
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
-        val jme: Double = getJulianEphemerisMillennium(jce)
-        x[0] = meanElongationMoonSun(jce)
-        x[1] = meanAnomalySun(jce)
-        x[2] = meanAnomalyMoon(jce)
-        x[3] = argumentLatitudeMoon(jce)
-        x[4] = ascendingLongitudeMoon(jce)
-        val ε0: Double = eclipticMeanObliquity(jme) //
-        Δε = nutationObliquity(jce, x) //
-        ε = eclipticTrueObliquity(Δε, ε0) //
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
+        val jme = getJulianEphemerisMillennium(jce)
+        val x = listOf(
+            meanElongationMoonSun(jce), meanAnomalySun(jce), meanAnomalyMoon(jce),
+            argumentLatitudeMoon(jce), ascendingLongitudeMoon(jce)
+        )
+        val ε0 = eclipticMeanObliquity(jme) //
+        val Δε = nutationObliquity(jce, x) //
+        val ε = eclipticTrueObliquity(Δε, ε0) //
         return ε
     }
 
@@ -1639,7 +1488,6 @@ object SolarPosition {
      * @return Equation of time in minutes of time.
      * TA'DIL-I ZEMAN
      */
-    fun calculateEquationOfTime(M: Double, α: Double, Δψ: Double, ε: Double): Double {
-        return limitMinutes(4.0 * (M - 0.0057183 - α + Δψ * cos(Math.toRadians(ε))))
-    }
+    fun calculateEquationOfTime(M: Double, α: Double, Δψ: Double, ε: Double): Double =
+        limitMinutes(4.0 * (M - 0.0057183 - α + Δψ * cos(Math.toRadians(ε))))
 }
