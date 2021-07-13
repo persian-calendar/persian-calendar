@@ -221,8 +221,10 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     fun setCompassDegree(degree: Float) {
-        this.degree = degree
-        postInvalidate()
+        if (this.degree != degree) {
+            this.degree = degree
+            postInvalidate()
+        }
     }
 
     // deliberately true
