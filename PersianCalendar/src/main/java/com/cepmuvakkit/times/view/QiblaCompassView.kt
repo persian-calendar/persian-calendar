@@ -72,9 +72,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
     private val kaaba = BitmapFactory.decodeResource(resources, R.drawable.kaaba)
 
-    @ColorInt
-    val qiblaColor = ContextCompat.getColor(context, R.color.qibla_color)
-
     private var cx = 0f
     private var cy = 0f // Center of Compass (cx, cy)
     private var radius = 0f // radius of Compass dial
@@ -86,7 +83,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var dashedPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.pathEffect = dashPath
         it.strokeWidth = 2f
-        it.pathEffect = dashPath
     }
     private var degree = 0f
     private val sunMoonPosition = SunMoonPosition(
@@ -97,6 +93,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
         it.textSize = 20f
+        it.textAlign = Paint.Align.LEFT
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -118,9 +115,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-        // over here
-        textPaint.textAlign = Paint.Align.LEFT
-        textPaint.color = qiblaColor
         // Attach and Detach capability lies
         canvas.withRotation(-degree, cx, cy) {
             drawDial()
@@ -154,10 +148,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         // Draw the marker every 15 degrees and text every 45.
         (0..23).forEach {
             // Draw a marker.
-            drawLine(
-                cx, (cy - radius), cx, (cy - radius + 10),
-                markerPaint
-            )
+            drawLine(cx, (cy - radius), cx, (cy - radius + 10), markerPaint)
             withRotation(15f * it, cx, cy) {
                 withTranslation(0f, textHeight.toFloat()) {
                     // Draw the cardinal points
@@ -205,8 +196,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
             val eOffset = (sunMoonPosition.moonPosition.altitude / 90 * radius).toInt()
             // elevation Offset 0 for 0 degree; r for 90 degree
-            moonRect[(cx - r), (cy + eOffset - radius - r), (cx + r)] =
-                (cy + eOffset - radius + r)
+            moonRect[(cx - r), (cy + eOffset - radius - r), (cx + r)] = cy + eOffset - radius + r
             drawArc(moonRect, 90f, 180f, false, moonPaint)
             drawArc(moonRect, 270f, 180f, false, moonPaintB)
             val arcWidth = ((moonPhase - 0.5) * (4 * r)).toInt()
