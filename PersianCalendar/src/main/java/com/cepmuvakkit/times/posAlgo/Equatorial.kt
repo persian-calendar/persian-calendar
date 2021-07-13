@@ -5,13 +5,8 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Double) {
-    @JvmField
     var α = sunRightAscension //right ascension (α) -also RA-, or hour angle (H) -also HA-
-
-    @JvmField
     var δ = sunDeclination //declination (δ)
-
-    @JvmField
     var Δ = radius //distance to the earth(Δ) in km
 
     fun equ2Topocentric(

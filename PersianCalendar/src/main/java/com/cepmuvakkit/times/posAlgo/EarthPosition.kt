@@ -5,7 +5,7 @@ import kotlin.math.*
 /**
  * @author mgeden
  */
-class EarthPosition @JvmOverloads constructor(
+class EarthPosition(
     val latitude: Double, val longitude: Double,
     val timezone: Double = round(longitude / 15.0),
     val altitude: Int = 0, val temperature: Int = 10, val pressure: Int = 1010

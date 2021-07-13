@@ -118,7 +118,6 @@ object AstroLib {
      * Terrestrial Time (TT). ΔT = TT-UT .
      * @return JDE the Astrolib Ephemeris Day (JDE)
      */
-    @JvmStatic
     fun getJulianEphemerisDay(jd: Double, ΔT: Double): Double {
         return jd + ΔT / 86400.0
     }
@@ -133,7 +132,6 @@ object AstroLib {
      * @param jde is the Astrolib Day
      * @return jme the the Astrolib Ephemeris Millennium (JME)
      */
-    @JvmStatic
     fun getJulianEphemerisCentury(jde: Double): Double {
         return (jde - 2451545.0) / 36525.0
     }
@@ -148,7 +146,6 @@ object AstroLib {
      * @param jce is the Astrolib Day
      * @return jme the the Astrolib Ephemeris Millennium (JME)
      */
-    @JvmStatic
     fun getJulianEphemerisMillennium(jce: Double): Double {
         return jce / 10.0
     }
@@ -169,7 +166,6 @@ object AstroLib {
      * @param jd is the Astrolib Day
      * @return ΔT = TD - UT POLYNOMIAL EXPRESSIONS FOR DELTA T (ΔT) seconds:
      */
-    @JvmStatic
     fun calculateTimeDifference(jd: Double): Double {
         val ymd = getYMDHMSfromJulian(jd.toInt().toDouble())
         // System.out.println("Year: "+ymd[0]);
@@ -293,7 +289,6 @@ object AstroLib {
      * @param hour is the hour with double pressicion
      * @return HH MM SS in String
      */
-    @JvmStatic
     fun getStringHHMMSSS(hour: Double): String {
         val HHMMSS = convertHour2HHMMSS(hour)
         return (intTwoDigit(HHMMSS[0]) + ":" + intTwoDigit(HHMMSS[1]) + ":"
@@ -464,7 +459,6 @@ object AstroLib {
                 + "/" + julian[0])
     }
 
-    @JvmStatic
     fun thirdOrderPolynomial(
         a: Double, b: Double, c: Double, d: Double,
         x: Double
@@ -472,11 +466,7 @@ object AstroLib {
         return ((a * x + b) * x + c) * x + d
     }
 
-    @JvmStatic
-    fun fourthOrderPolynomial(
-        a: Double, b: Double, c: Double, d: Double,
-        e: Double, x: Double
-    ): Double {
+    fun fourthOrderPolynomial(a: Double, b: Double, c: Double, d: Double, e: Double, x: Double): Double {
         return (((a * x + b) * x + c) * x + d) * x + e
     }
 
@@ -488,7 +478,6 @@ object AstroLib {
      * @param angle ho is the apperant altitude for celestial object in degrees.
      * @result corection for altitude angle in Minutes
      */
-    @JvmStatic
     fun getApparentAtmosphericRefraction(ho: Double): Double {
         val R = 1 / tan(Math.toRadians(ho + 7.31 / (ho + 4.4))) + 0.001351521723799
         return R / 60
@@ -550,7 +539,6 @@ object AstroLib {
      * @param P Pressure in milliBars
      * @result Weather Correction Coefficent unitless
      */
-    @JvmStatic
     fun getWeatherCorrectionCoefficent(T: Int, P: Int): Double {
         return P * 283.15 / (1010.0 * (273.15 + T))
     }
@@ -561,12 +549,10 @@ object AstroLib {
      * @param h altitude in meter from sea level
      * @result corection for altitude angle in degrees
      */
-    @JvmStatic
     fun getAltitudeCorrection(h: Int): Double {
         return 0.0347 * sqrt(h.toDouble())
     }
 
-    @JvmStatic
     fun limitDegrees(degrees: Double): Double {
         var degrees = degrees
         degrees /= 360.0

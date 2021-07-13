@@ -15,13 +15,11 @@ object MATH {
 
     fun round(a: Double): Long = floor(a + 0.5).toLong()
 
-    @JvmStatic
     fun acos(x: Double): Double {
         val f = asin(x)
         return if (f.isNaN()) f else Math.PI / 2 - f
     }
 
-    @JvmStatic
     fun asin(x: Double): Double {
         if (x < -1.0 || x > 1.0) {
             return Double.NaN
@@ -34,7 +32,6 @@ object MATH {
         } else atan(x / sqrt(1 - x * x))
     }
 
-    @JvmStatic
     fun atan(x: Double): Double {
         var x = x
         var signChange = false
@@ -84,7 +81,6 @@ object MATH {
         return a
     }
 
-    @JvmStatic
     fun atan2(y: Double, x: Double): Double {
         // if x=y=0
         if (y == 0.0 && x == 0.0) {
@@ -114,7 +110,6 @@ object MATH {
         return x - floor(x)
     }
 
-    @JvmStatic
     fun pow(x: Double, y: Double): Double {
         if (y == 0.0) {
             return 1.0
