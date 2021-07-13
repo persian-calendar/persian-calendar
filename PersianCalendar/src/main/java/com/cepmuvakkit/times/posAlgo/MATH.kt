@@ -83,13 +83,9 @@ object MATH {
 
     fun atan2(y: Double, x: Double): Double {
         // if x=y=0
-        if (y == 0.0 && x == 0.0) {
-            return 0.0
-        }
+        if (y == 0.0 && x == 0.0) return 0.0
         // if x>0 atan(y/x)
-        if (x > 0.0) {
-            return atan(y / x)
-        }
+        if (x > 0.0) return atan(y / x)
         // if x<0 sign(y)*(pi - atan(|y/x|))
         if (x < 0.0) {
             return if (y < 0.0) {
@@ -99,30 +95,16 @@ object MATH {
             }
         }
         // if x=0 y!=0 sign(y)*pi/2
-        return if (y < 0.0) {
-            -Math.PI / 2.0
-        } else {
-            Math.PI / 2.0
-        }
+        return if (y < 0.0) -Math.PI / 2.0 else Math.PI / 2.0
     }
 
-    fun frac(x: Double): Double {
-        return x - floor(x)
-    }
+    fun frac(x: Double) = x - floor(x)
 
     fun pow(x: Double, y: Double): Double {
-        if (y == 0.0) {
-            return 1.0
-        }
-        if (y == 1.0) {
-            return x
-        }
-        if (x == 0.0) {
-            return 0.0
-        }
-        if (x == 1.0) {
-            return 1.0
-        }
+        if (y == 0.0) return 1.0
+        if (y == 1.0) return x
+        if (x == 0.0) return 0.0
+        if (x == 1.0) return 1.0
         //
         val l = floor(y).toLong()
         val integerValue = y == l.toDouble()
@@ -172,18 +154,12 @@ object MATH {
             k = k * x / i
         }
         //
-        return if (isless) {
-            1 / f
-        } else {
-            f
-        }
+        return if (isless) 1 / f else f
     }
 
     private fun _log(x: Double): Double {
         var x = x
-        if (x <= 0.0) {
-            return Double.NaN
-        }
+        if (x <= 0.0) return Double.NaN
         //
         var f = 0.0
         //
@@ -213,22 +189,16 @@ object MATH {
         }
         //
         f *= 2.0
-        (0 until appendix).forEach { i ->
-            f += LOGdiv2
-        }
+        (0 until appendix).forEach { i -> f += LOGdiv2 }
         //
         return f
     }
 
     fun log(x: Double): Double {
         var x = x
-        if (x <= 0.0) {
-            return Double.NaN
-        }
+        if (x <= 0.0) return Double.NaN
         //
-        if (x == 1.0) {
-            return 0.0
-        }
+        if (x == 1.0) return 0.0
         // Argument of _log must be (0; 1]
         if (x > 1.0) {
             x = 1 / x
@@ -238,7 +208,5 @@ object MATH {
         return _log(x)
     }
 
-    fun Frac(x: Double): Double {
-        return x - floor(x)
-    }
+    fun Frac(x: Double): Double = x - floor(x)
 }

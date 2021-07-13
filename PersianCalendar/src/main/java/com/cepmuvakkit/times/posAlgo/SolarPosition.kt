@@ -384,27 +384,27 @@ object SolarPosition {
         listOf(-3.0, 0.0, 0.0, 0.0)
     )
     private const val SUNRADIUS = 0.26667
-    private const val FAJR: Byte = 0
-    private const val SUNRISE: Byte = 1
-    private const val SUNTRANSIT: Byte = 2
-    private const val ASR_SHAFI: Byte = 3
-    private const val ASR_HANEFI: Byte = 4
-    private const val SUNSET: Byte = 5
-    private const val ISHA: Byte = 6
-    private const val SUN_COUNT: Byte = 7
-    private const val FAJR_: Byte = 0
-    private const val ISRAK: Byte = 1
-    private const val SUNTRANSIT_: Byte = 2
-    private const val ASRHANEFI: Byte = 3
-    private const val ISFIRAR: Byte = 4
-    private const val SUNSET_: Byte = 5
-    private const val KERAHAT_COUNT: Byte = 6
-    private const val DUHA: Byte = 7
-    private const val ISTIVA: Byte = 8
+    private const val FAJR = 0
+    private const val SUNRISE = 1
+    private const val SUNTRANSIT = 2
+    private const val ASR_SHAFI = 3
+    private const val ASR_HANEFI = 4
+    private const val SUNSET = 5
+    private const val ISHA = 6
+    private const val SUN_COUNT = 7
+    private const val FAJR_ = 0
+    private const val ISRAK = 1
+    private const val SUNTRANSIT_ = 2
+    private const val ASRHANEFI = 3
+    private const val ISFIRAR = 4
+    private const val SUNSET_ = 5
+    private const val KERAHAT_COUNT = 6
+    private const val DUHA = 7
+    private const val ISTIVA = 8
     fun limitDegrees(degrees: Double): Double {
         var degrees = degrees
         degrees /= 360.0
-        var limited: Double = 360.0 * (degrees - floor(degrees))
+        var limited = 360.0 * (degrees - floor(degrees))
         if (limited < 0) {
             limited += 360.0
         }
@@ -495,11 +495,10 @@ object SolarPosition {
      * @return the nutation in obliquity,Δε  in degrees
      */
     fun nutationObliquity(jce: Double, Δεi: List<Double>): Double {
-        var xyTermSum: Double
         var sumε = 0.0
         var i = 0
         while (i < YTERMS.size) {
-            xyTermSum = Math.toRadians(xyTermSummation(i, Δεi))
+            val xyTermSum = Math.toRadians(xyTermSummation(i, Δεi))
             sumε += (PETERMS[i][2] + jce * PETERMS[i][3]) * cos(xyTermSum)
             i++
         }
@@ -571,8 +570,7 @@ object SolarPosition {
      * @param ε JME is the Julian Ephemeris Millennium.
      * @return the apparent sidereal time at Greenwich, ν (in degrees)
      */
-    fun greenwichSiderealTime(ν0: Double, Δψ: Double, ε: Double): Double =
-        ν0 + Δψ * cos(Math.toRadians(ε))
+    fun greenwichSiderealTime(ν0: Double, Δψ: Double, ε: Double) = ν0 + Δψ * cos(Math.toRadians(ε))
 
     /**
      * Calculate the geocentric sun right ascension, α (in degrees):
@@ -626,8 +624,8 @@ object SolarPosition {
         val Δε = nutationObliquity(jce, x) //
         val Δψ = nutationLongitude(jce, x) //
         val ε = eclipticTrueObliquity(Δε, ε0) //
-        val ν0: Double = greenwichMeanSiderealTime(jd)
-        val ν: Double = greenwichSiderealTime(ν0, Δψ, ε)
+        val ν0 = greenwichMeanSiderealTime(jd)
+        val ν = greenwichSiderealTime(ν0, Δψ, ε)
         return ν
     }
 
@@ -652,9 +650,8 @@ object SolarPosition {
 
     }*/
     fun calculateXArray(jd: Double, ΔT: Double): List<Double> {
-        val jce: Double
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
         return listOf(
             meanElongationMoonSun(jce), meanAnomalySun(jce), meanAnomalyMoon(jce),
             argumentLatitudeMoon(jce), ascendingLongitudeMoon(jce)
@@ -681,7 +678,7 @@ object SolarPosition {
     fun limitDegrees180pm(degrees: Double): Double {
         var degrees = degrees
         degrees /= 360.0
-        var limited: Double = 360.0 * (degrees - floor(degrees))
+        var limited = 360.0 * (degrees - floor(degrees))
         if (limited < -180.0) {
             limited += 360.0
         } else if (limited > 180.0) {
@@ -693,7 +690,7 @@ object SolarPosition {
     fun limitDegrees180(degrees: Double): Double {
         var degrees = degrees
         degrees /= 180.0
-        var limited: Double = 180.0 * (degrees - floor(degrees))
+        var limited = 180.0 * (degrees - floor(degrees))
         if (limited < 0) {
             limited += 180.0
         }
@@ -701,7 +698,7 @@ object SolarPosition {
     }
 
     fun limitZero2one(value: Double): Double {
-        var limited: Double = value - floor(value)
+        var limited = value - floor(value)
         if (limited < 0) {
             limited += 1.0
         }
@@ -904,7 +901,6 @@ object SolarPosition {
     ) {
         var δα = δα
         var δPrime = δPrime
-        val δαRad: Double
         val latRad = Math.toRadians(latitude)
         val xiRad = Math.toRadians(xi)
         val hRad = Math.toRadians(h)
@@ -912,7 +908,7 @@ object SolarPosition {
         val u = atan(0.99664719 * tan(latRad))
         val y = 0.99664719 * sin(u) + elevation * sin(latRad) / 6378140.0
         val x = cos(u) + elevation * cos(latRad) / 6378140.0
-        δαRad = atan2(
+        val δαRad = atan2(
             -x * sin(xiRad) * sin(hRad), cos(δRad) - x * sin(xiRad) * cos(hRad)
         )
         δPrime = Math.toDegrees(
@@ -949,9 +945,9 @@ object SolarPosition {
         return Δe
     }
 
-    fun topocentricElevationAngleCorrected(e0: Double, ΔE: Double): Double = e0 + ΔE
+    fun topocentricElevationAngleCorrected(e0: Double, ΔE: Double) = e0 + ΔE
 
-    fun topocentricZenithAngle(e: Double): Double = 90.0 - e
+    fun topocentricZenithAngle(e: Double) = 90.0 - e
 
     fun topocentricAzimuthAngleNeg180180(hPrime: Double, latitude: Double, δPrime: Double): Double {
         val hPrimeRad = Math.toRadians(hPrime)
@@ -966,7 +962,7 @@ object SolarPosition {
         )
     }
 
-    fun topocentricAzimuthAngleZero360(azimuth180: Double): Double = azimuth180 + 180.0
+    fun topocentricAzimuthAngleZero360(azimuth180: Double) = azimuth180 + 180.0
 
     fun surfaceIncidenceAngle(
         zenith: Double, azimuth180: Double, azmRotation: Double,
@@ -986,20 +982,16 @@ object SolarPosition {
         )
     }
 
-    fun approxSunTransitTime(αo: Double, longitude: Double, ν: Double): Double {
-        return (αo - longitude - ν) / 360.0
-    }
+    fun approxSunTransitTime(αo: Double, longitude: Double, ν: Double): Double =
+        (αo - longitude - ν) / 360.0
 
     fun getHourAngleAtRiseSet(latitude: Double, δo: Double, h0Prime: Double): Double {
         var h0 = -99999.0
         val latitudeRad = Math.toRadians(latitude)
         val δoRad = Math.toRadians(δo)
-        val argument =
-            ((sin(Math.toRadians(h0Prime)) - sin(latitudeRad) * sin(δoRad))
-                    / (cos(latitudeRad) * cos(δoRad)))
-        if (abs(argument) <= 1) {
-            h0 = limitDegrees180(Math.toDegrees(acos(argument)))
-        }
+        val argument = ((sin(Math.toRadians(h0Prime)) - sin(latitudeRad) * sin(δoRad))
+                / (cos(latitudeRad) * cos(δoRad)))
+        if (abs(argument) <= 1) h0 = limitDegrees180(Math.toDegrees(acos(argument)))
         return h0
     }
 
@@ -1011,38 +1003,29 @@ object SolarPosition {
     }
 
     fun approxSalatTimes(mRts: DoubleArray, h0: DoubleArray) {
-        mRts[SUNRISE.toInt()] =
-            limitZero2one(mRts[SUNTRANSIT.toInt()] - h0[SUNRISE.toInt()] / 360.0)
-        mRts[SUNSET.toInt()] = limitZero2one(mRts[SUNTRANSIT.toInt()] + h0[SUNSET.toInt()] / 360.0)
-        mRts[ASR_SHAFI.toInt()] =
-            limitZero2one(mRts[SUNTRANSIT.toInt()] + h0[ASR_SHAFI.toInt()] / 360.0)
-        mRts[ASR_HANEFI.toInt()] =
-            limitZero2one(mRts[SUNTRANSIT.toInt()] + h0[ASR_HANEFI.toInt()] / 360.0)
-        mRts[FAJR.toInt()] = limitZero2one(mRts[SUNTRANSIT.toInt()] - h0[FAJR.toInt()] / 360.0)
-        mRts[ISHA.toInt()] = limitZero2one(mRts[SUNTRANSIT.toInt()] + h0[ISHA.toInt()] / 360.0)
-        mRts[SUNTRANSIT.toInt()] = limitZero2one(mRts[SUNTRANSIT.toInt()])
+        mRts[SUNRISE] = limitZero2one(mRts[SUNTRANSIT] - h0[SUNRISE] / 360.0)
+        mRts[SUNSET] = limitZero2one(mRts[SUNTRANSIT] + h0[SUNSET] / 360.0)
+        mRts[ASR_SHAFI] = limitZero2one(mRts[SUNTRANSIT] + h0[ASR_SHAFI] / 360.0)
+        mRts[ASR_HANEFI] = limitZero2one(mRts[SUNTRANSIT] + h0[ASR_HANEFI] / 360.0)
+        mRts[FAJR] = limitZero2one(mRts[SUNTRANSIT] - h0[FAJR] / 360.0)
+        mRts[ISHA] = limitZero2one(mRts[SUNTRANSIT] + h0[ISHA] / 360.0)
+        mRts[SUNTRANSIT] = limitZero2one(mRts[SUNTRANSIT])
     }
 
     fun approxKerahatTimes(mRts: DoubleArray, h0: DoubleArray) {
-        mRts[FAJR_.toInt()] = limitZero2one(mRts[SUNTRANSIT_.toInt()] - h0[FAJR_.toInt()] / 360.0)
-        mRts[ISRAK.toInt()] = limitZero2one(mRts[SUNTRANSIT_.toInt()] - h0[ISRAK.toInt()] / 360.0)
-        mRts[ASRHANEFI.toInt()] =
-            limitZero2one(mRts[SUNTRANSIT_.toInt()] + h0[ASRHANEFI.toInt()] / 360.0)
-        mRts[ISFIRAR.toInt()] =
-            limitZero2one(mRts[SUNTRANSIT_.toInt()] + h0[ISFIRAR.toInt()] / 360.0)
-        mRts[SUNSET.toInt()] = limitZero2one(mRts[SUNTRANSIT_.toInt()] + h0[SUNSET.toInt()] / 360.0)
-        mRts[SUNTRANSIT_.toInt()] = limitZero2one(mRts[SUNTRANSIT_.toInt()])
+        mRts[FAJR_] = limitZero2one(mRts[SUNTRANSIT_] - h0[FAJR_] / 360.0)
+        mRts[ISRAK] = limitZero2one(mRts[SUNTRANSIT_] - h0[ISRAK] / 360.0)
+        mRts[ASRHANEFI] = limitZero2one(mRts[SUNTRANSIT_] + h0[ASRHANEFI] / 360.0)
+        mRts[ISFIRAR] = limitZero2one(mRts[SUNTRANSIT_] + h0[ISFIRAR] / 360.0)
+        mRts[SUNSET] = limitZero2one(mRts[SUNTRANSIT_] + h0[SUNSET] / 360.0)
+        mRts[SUNTRANSIT_] = limitZero2one(mRts[SUNTRANSIT_])
     }
 
     fun rtsAlphaDeltaPrime(ad: List<Double>, n: Double): Double {
         var a = ad[1] - ad[0]
         var b = ad[2] - ad[1]
-        if (abs(a) >= 2.0) {
-            a = limitZero2one(a)
-        }
-        if (abs(b) >= 2.0) {
-            b = limitZero2one(b)
-        }
+        if (abs(a) >= 2.0) a = limitZero2one(a)
+        if (abs(b) >= 2.0) b = limitZero2one(b)
         return ad[1] + n * (a + b + (b - a) * n) / 2.0
     }
 
@@ -1073,7 +1056,6 @@ object SolarPosition {
     }
 
     fun calculateSunRiseTransitSet(spa: DoubleArray, jd: Double) {
-        var jd = jd
         val mRts = DoubleArray(3)
         val hRts = DoubleArray(3)
         val νRts = DoubleArray(3)
@@ -1082,47 +1064,36 @@ object SolarPosition {
         val hPrime = DoubleArray(3)
         val atmosRefract = 0.5667
         val h0Prime = -1 * (SUNRADIUS + atmosRefract)
-        val ν: Double
-        val h0: Double
-        var n: Double
-        val dayBefore: Equatorial
-        val dayOfInterest: Equatorial
-        val dayAfter: Equatorial
-        jd = floor(jd + 0.5) - 0.5
+        val jd = floor(jd + 0.5) - 0.5
         val ΔT = calculateTimeDifference(jd)
         val longitude = 32.85
         val latitude = 39.95
         val timezone = 2.0 //ANKARA position
         //double longitude =-116.8625, latitude =33.356111111111112, timezone = 0;
-        dayBefore = calculateSunEquatorialCoordinates(jd - 1, ΔT)
-        dayOfInterest = calculateSunEquatorialCoordinates(jd, ΔT)
-        dayAfter = calculateSunEquatorialCoordinates(jd + 1, ΔT)
-        ν = calculateGreenwichSiderealTime(jd, ΔT)
+        val dayBefore = calculateSunEquatorialCoordinates(jd - 1, ΔT)
+        val dayOfInterest = calculateSunEquatorialCoordinates(jd, ΔT)
+        val dayAfter = calculateSunEquatorialCoordinates(jd + 1, ΔT)
+        val ν = calculateGreenwichSiderealTime(jd, ΔT)
         mRts[0] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
-        h0 = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
+        val h0 = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
         val α = listOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         val δ = listOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
-        val suntransit: Double
-        val sunrise: Double
-        val sunset: Double
         if (h0 >= 0) {
             approxSunRiseAndSet(mRts, h0)
             (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * mRts[i]
-                n = mRts[i] + ΔT / 86400.0
+                val n = mRts[i] + ΔT / 86400.0
                 αPrime[i] = rtsAlphaDeltaPrime(α, n)
                 δPrime[i] = rtsAlphaDeltaPrime(δ, n)
                 hPrime[i] = limitDegrees180pm(νRts[i] + longitude - αPrime[i])
                 hRts[i] = rtsSunAltitude(latitude, δPrime[i], hPrime[i])
             }
-            suntransit = dayFracToLocalHour(mRts[0] - hPrime[0] / 360.0, timezone)
-            sunrise = dayFracToLocalHour(
-                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 1),
-                timezone
+            val suntransit = dayFracToLocalHour(mRts[0] - hPrime[0] / 360.0, timezone)
+            val sunrise = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 1), timezone
             )
-            sunset = dayFracToLocalHour(
-                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 2),
-                timezone
+            val sunset = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 2), timezone
             )
             spa[0] = suntransit
             spa[1] = sunrise
@@ -1143,40 +1114,33 @@ object SolarPosition {
         val spa = DoubleArray(3)
         val atmosRefract = 0.5667
         val h0Prime = -1 * (SUNRADIUS + atmosRefract)
-        val h0: Double
-        var n: Double
         jd = floor(jd + 0.5) - 0.5
         //double longitude = 32.85, latitude = 39.95, timezone = 2;//ANKARA position
         //double longitude =-116.8625, latitude =33.356111111111112, timezone = 0;
         val dayBefore: Equatorial = calculateSunEquatorialCoordinates(jd - 1, ΔT)
         val dayOfInterest: Equatorial = calculateSunEquatorialCoordinates(jd, ΔT)
         val dayAfter: Equatorial = calculateSunEquatorialCoordinates(jd + 1, ΔT)
-        val ν: Double = calculateGreenwichSiderealTime(jd, ΔT)
+        val ν = calculateGreenwichSiderealTime(jd, ΔT)
         mRts[0] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
-        h0 = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
+        val h0 = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
         val α = listOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         val δ = listOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
-        val suntransit: Double
-        val sunrise: Double
-        val sunset: Double
         if (h0 >= 0) {
             approxSunRiseAndSet(mRts, h0)
             (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * mRts[i]
-                n = mRts[i] + ΔT / 86400.0
+                val n = mRts[i] + ΔT / 86400.0
                 αPrime[i] = rtsAlphaDeltaPrime(α, n)
                 δPrime[i] = rtsAlphaDeltaPrime(δ, n)
                 hPrime[i] = limitDegrees180pm(νRts[i] + longitude - αPrime[i])
                 hRts[i] = rtsSunAltitude(latitude, δPrime[i], hPrime[i])
             }
-            suntransit = dayFracToLocalHour(mRts[0] - hPrime[0] / 360.0, timezone)
-            sunrise = dayFracToLocalHour(
-                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 1),
-                timezone
+            val suntransit = dayFracToLocalHour(mRts[0] - hPrime[0] / 360.0, timezone)
+            val sunrise = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 1), timezone
             )
-            sunset = dayFracToLocalHour(
-                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 2),
-                timezone
+            val sunset = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 2), timezone
             )
             spa[0] = suntransit
             spa[1] = sunrise
@@ -1190,22 +1154,21 @@ object SolarPosition {
         pressure: Int, altitude: Int, fajrAngle: Double, ishaAngle: Double
     ): DoubleArray {
         var jd = jd
-        val mRts = DoubleArray(SUN_COUNT.toInt())
-        val hRts = DoubleArray(SUN_COUNT.toInt())
-        val νRts = DoubleArray(SUN_COUNT.toInt())
-        val H0 = DoubleArray(SUN_COUNT.toInt())
-        val αPrime = DoubleArray(SUN_COUNT.toInt())
-        val δPrime = DoubleArray(SUN_COUNT.toInt())
-        val salatTimes = DoubleArray(SUN_COUNT.toInt())
+        val mRts = DoubleArray(SUN_COUNT)
+        val hRts = DoubleArray(SUN_COUNT)
+        val νRts = DoubleArray(SUN_COUNT)
+        val H0 = DoubleArray(SUN_COUNT)
+        val αPrime = DoubleArray(SUN_COUNT)
+        val δPrime = DoubleArray(SUN_COUNT)
+        val salatTimes = DoubleArray(SUN_COUNT)
         //Calculate the local hour angle for the sun transit, sunrise, and sunset, H’i (in degrees),
-        val HPrime = DoubleArray(SUN_COUNT.toInt())
+        val HPrime = DoubleArray(SUN_COUNT)
         // double atmosRefract = 0.5667;
         val h0Prime = -SUNRADIUS - getApparentAtmosphericRefraction(0.0) *
                 getWeatherCorrectionCoefficent(temperature, pressure) -
                 getAltitudeCorrection(altitude)
-        var n: Double
         jd = floor(jd + 0.5) - 0.5
-        val ΔT: Double = calculateTimeDifference(jd)
+        val ΔT = calculateTimeDifference(jd)
         val dayBefore: Equatorial = calculateSunEquatorialCoordinates(jd - 1, ΔT)
         val dayOfInterest: Equatorial = calculateSunEquatorialCoordinates(jd, ΔT)
         val dayAfter: Equatorial = calculateSunEquatorialCoordinates(jd + 1, ΔT)
@@ -1217,71 +1180,64 @@ object SolarPosition {
         val asrHanafiAngle = Math.toDegrees(atan(1 / (2 + tan(zenithTransit))))
         //**************************************************///
         val ν = calculateGreenwichSiderealTime(jd, ΔT)
-        mRts[SUNTRANSIT.toInt()] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
+        mRts[SUNTRANSIT] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
         //Calculate the local hour angle corresponding to the sun elevation equals 0.8333/,H0
-        H0[SUNTRANSIT.toInt()] = 0.0
-        H0[SUNRISE.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
-        H0[SUNSET.toInt()] = H0[SUNRISE.toInt()]
-        H0[ASR_SHAFI.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, asrShafiAngle)
-        H0[ASR_HANEFI.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, asrHanafiAngle)
-        H0[FAJR.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, fajrAngle)
-        H0[ISHA.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, ishaAngle)
+        H0[SUNTRANSIT] = 0.0
+        H0[SUNRISE] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
+        H0[SUNSET] = H0[SUNRISE]
+        H0[ASR_SHAFI] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, asrShafiAngle)
+        H0[ASR_HANEFI] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, asrHanafiAngle)
+        H0[FAJR] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, fajrAngle)
+        H0[ISHA] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, ishaAngle)
         val α = listOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         val δ = listOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
         approxSalatTimes(mRts, H0)
         (0 until SUN_COUNT).forEach { i ->
             if (H0[i] >= 0) {
                 νRts[i] = ν + 360.985647 * mRts[i]
-                n = mRts[i] + ΔT / 86400.0
+                val n = mRts[i] + ΔT / 86400.0
                 αPrime[i] = Interpolate(n, α)
                 δPrime[i] = Interpolate(n, δ)
                 HPrime[i] = limitDegrees180pm(νRts[i] + longitude - αPrime[i])
                 hRts[i] = rtsSunAltitude(latitude, δPrime[i], HPrime[i])
             }
         }
-        if (H0[SUNTRANSIT.toInt()] >= 0) {
-            salatTimes[SUNTRANSIT.toInt()] = dayFracToLocalHour(
-                mRts[SUNTRANSIT.toInt()] - HPrime[SUNTRANSIT.toInt()] / 360.0, timezone
-            )
+        if (H0[SUNTRANSIT] >= 0) {
+            salatTimes[SUNTRANSIT] =
+                dayFracToLocalHour(mRts[SUNTRANSIT] - HPrime[SUNTRANSIT] / 360.0, timezone)
         }
-        if (H0[SUNRISE.toInt()] >= 0) {
-            salatTimes[SUNRISE.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(
-                    mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNRISE.toInt()
-                ), timezone
-            )
-        }
-        if (H0[SUNSET.toInt()] >= 0) {
-            salatTimes[SUNSET.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(
-                    mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNSET.toInt()
-                ), timezone
-            )
-        }
-        if (H0[ASR_SHAFI.toInt()] >= 0) {
-            salatTimes[ASR_SHAFI.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(
-                    mRts, hRts, δPrime, latitude, HPrime, asrShafiAngle, ASR_SHAFI.toInt()
-                ), timezone
-            )
-        }
-        if (H0[ASR_HANEFI.toInt()] >= 0) {
-            salatTimes[ASR_HANEFI.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(
-                    mRts, hRts, δPrime, latitude, HPrime, asrHanafiAngle, ASR_HANEFI.toInt()
-                ), timezone
-            )
-        }
-        if (H0[FAJR.toInt()] >= 0) {
-            salatTimes[FAJR.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, fajrAngle, FAJR.toInt()),
+        if (H0[SUNRISE] >= 0) {
+            salatTimes[SUNRISE] = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNRISE),
                 timezone
             )
         }
-        if (H0[ISHA.toInt()] >= 0) {
-            salatTimes[ISHA.toInt()] = dayFracToLocalHour(
-                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, ishaAngle, ISHA.toInt()),
+        if (H0[SUNSET] >= 0) {
+            salatTimes[SUNSET] = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNSET),
                 timezone
+            )
+        }
+        if (H0[ASR_SHAFI] >= 0) {
+            salatTimes[ASR_SHAFI] = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, asrShafiAngle, ASR_SHAFI),
+                timezone
+            )
+        }
+        if (H0[ASR_HANEFI] >= 0) {
+            salatTimes[ASR_HANEFI] = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, asrHanafiAngle, ASR_HANEFI),
+                timezone
+            )
+        }
+        if (H0[FAJR] >= 0) {
+            salatTimes[FAJR] = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, fajrAngle, FAJR), timezone
+            )
+        }
+        if (H0[ISHA] >= 0) {
+            salatTimes[ISHA] = dayFracToLocalHour(
+                sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, ishaAngle, ISHA), timezone
             )
         }
         return salatTimes
@@ -1292,24 +1248,23 @@ object SolarPosition {
         pressure: Int, altitude: Int, fajrAngle: Double, israkIsfirarAngle: Double
     ): DoubleArray {     //final int FAJR_=0,ISRAK=1,SUNTRANSIT_=2,ASRHANEFI=3,ISFIRAR=4,SUNSET_=5,KERAHAT_COUNT=6,DUHA=7,ISTIVA=8;
         var jd = jd
-        val mRts = DoubleArray(KERAHAT_COUNT.toInt())
-        val hRts = DoubleArray(KERAHAT_COUNT.toInt())
-        val νRts = DoubleArray(KERAHAT_COUNT.toInt())
-        val H0 = DoubleArray(KERAHAT_COUNT.toInt())
-        val αPrime = DoubleArray(KERAHAT_COUNT.toInt())
-        val δPrime = DoubleArray(KERAHAT_COUNT.toInt())
+        val mRts = DoubleArray(KERAHAT_COUNT)
+        val hRts = DoubleArray(KERAHAT_COUNT)
+        val νRts = DoubleArray(KERAHAT_COUNT)
+        val H0 = DoubleArray(KERAHAT_COUNT)
+        val αPrime = DoubleArray(KERAHAT_COUNT)
+        val δPrime = DoubleArray(KERAHAT_COUNT)
         val kerahatTimes = DoubleArray(KERAHAT_COUNT + 3)
         // Calculate the local hour angle for the sun transit, sunrise, and sunset, H’i (in degrees),
-        val HPrime = DoubleArray(KERAHAT_COUNT.toInt())
+        val HPrime = DoubleArray(KERAHAT_COUNT)
         //double atmosRefract = 0.5667;
         val h0Prime =
             -SUNRADIUS - getApparentAtmosphericRefraction(0.0) * getWeatherCorrectionCoefficent(
                 temperature,
                 pressure
             ) - getAltitudeCorrection(altitude)
-        var n: Double
         jd = floor(jd + 0.5) - 0.5
-        val ΔT: Double = calculateTimeDifference(jd)
+        val ΔT = calculateTimeDifference(jd)
         val dayBefore: Equatorial = calculateSunEquatorialCoordinates(jd - 1, ΔT)
         val dayOfInterest: Equatorial = calculateSunEquatorialCoordinates(jd, ΔT)
         val dayAfter: Equatorial = calculateSunEquatorialCoordinates(jd + 1, ΔT)
@@ -1320,18 +1275,18 @@ object SolarPosition {
         val asrHanafiAngle = Math.toDegrees(atan(1 / (2 + tan(zenithTransit))))
         //-----------------------------------------------------///
         val ν = calculateGreenwichSiderealTime(jd, ΔT)
-        mRts[SUNTRANSIT_.toInt()] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
+        mRts[SUNTRANSIT_] = approxSunTransitTime(dayOfInterest.α, longitude, ν)
         //Calculate the local hour angle corresponding to the sun elevation equals 0.8333/,H0
-        H0[SUNTRANSIT_.toInt()] = 0.0
-        H0[SUNSET.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
-        H0[ISRAK.toInt()] = getHourAngleAtRiseSet(
+        H0[SUNTRANSIT_] = 0.0
+        H0[SUNSET] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
+        H0[ISRAK] = getHourAngleAtRiseSet(
             latitude,
             dayOfInterest.δ,
             getApparentAtmosphericRefraction(israkIsfirarAngle)
         )
-        H0[ISFIRAR.toInt()] = H0[ISRAK.toInt()]
-        H0[ASRHANEFI.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, asrHanafiAngle)
-        H0[FAJR_.toInt()] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, fajrAngle)
+        H0[ISFIRAR] = H0[ISRAK]
+        H0[ASRHANEFI] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, asrHanafiAngle)
+        H0[FAJR_] = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, fajrAngle)
         //H0[ISHA]= getHourAngleAtRiseSet(latitude,dayOfInterest.δ,ishaAngle);
         val α = listOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         val δ = listOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
@@ -1339,73 +1294,73 @@ object SolarPosition {
         (0 until KERAHAT_COUNT).forEach { i ->
             if (H0[i] >= 0) {
                 νRts[i] = ν + 360.985647 * mRts[i]
-                n = mRts[i] + ΔT / 86400.0
+                val n = mRts[i] + ΔT / 86400.0
                 αPrime[i] = rtsAlphaDeltaPrime(α, n)
                 δPrime[i] = rtsAlphaDeltaPrime(δ, n)
                 HPrime[i] = limitDegrees180pm(νRts[i] + longitude - αPrime[i])
                 hRts[i] = rtsSunAltitude(latitude, δPrime[i], HPrime[i])
             }
-            if (H0[SUNTRANSIT_.toInt()] >= 0) {
-                kerahatTimes[SUNTRANSIT_.toInt()] = dayFracToLocalHour(
-                    mRts[SUNTRANSIT_.toInt()] - HPrime[SUNTRANSIT_.toInt()] / 360.0, timezone
+            if (H0[SUNTRANSIT_] >= 0) {
+                kerahatTimes[SUNTRANSIT_] = dayFracToLocalHour(
+                    mRts[SUNTRANSIT_] - HPrime[SUNTRANSIT_] / 360.0, timezone
                 )
             }
-            if (H0[ISRAK.toInt()] >= 0) {
-                kerahatTimes[ISRAK.toInt()] = dayFracToLocalHour(
+            if (H0[ISRAK] >= 0) {
+                kerahatTimes[ISRAK] = dayFracToLocalHour(
                     sunRiseAndSet(
-                        mRts, hRts, δPrime, latitude, HPrime, israkIsfirarAngle, ISRAK.toInt()
+                        mRts, hRts, δPrime, latitude, HPrime, israkIsfirarAngle, ISRAK
                     ), timezone
                 )
             }
-            if (H0[SUNSET_.toInt()] >= 0) {
-                kerahatTimes[SUNSET_.toInt()] = dayFracToLocalHour(
+            if (H0[SUNSET_] >= 0) {
+                kerahatTimes[SUNSET_] = dayFracToLocalHour(
                     sunRiseAndSet(
-                        mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNSET_.toInt()
+                        mRts, hRts, δPrime, latitude, HPrime, h0Prime, SUNSET_
                     ), timezone
                 )
             }
-            if (H0[ASRHANEFI.toInt()] >= 0) {
-                kerahatTimes[ASRHANEFI.toInt()] = dayFracToLocalHour(
+            if (H0[ASRHANEFI] >= 0) {
+                kerahatTimes[ASRHANEFI] = dayFracToLocalHour(
                     sunRiseAndSet(
                         mRts, hRts, δPrime, latitude,
                         HPrime,
                         asrHanafiAngle,
-                        ASRHANEFI.toInt()
+                        ASRHANEFI
                     ), timezone
                 )
             }
-            if (H0[ISFIRAR.toInt()] >= 0) {
-                kerahatTimes[ISFIRAR.toInt()] = dayFracToLocalHour(
+            if (H0[ISFIRAR] >= 0) {
+                kerahatTimes[ISFIRAR] = dayFracToLocalHour(
                     sunRiseAndSet(
-                        mRts, hRts, δPrime, latitude, HPrime, israkIsfirarAngle, ISFIRAR.toInt()
+                        mRts, hRts, δPrime, latitude, HPrime, israkIsfirarAngle, ISFIRAR
                     ), timezone
                 )
             }
-            if (H0[FAJR_.toInt()] >= 0) {
-                kerahatTimes[FAJR_.toInt()] = dayFracToLocalHour(
-                    sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, fajrAngle, FAJR_.toInt()),
+            if (H0[FAJR_] >= 0) {
+                kerahatTimes[FAJR_] = dayFracToLocalHour(
+                    sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, fajrAngle, FAJR_),
                     timezone
                 )
             }
-            kerahatTimes[DUHA.toInt()] =
-                (3 * kerahatTimes[FAJR_.toInt()] + kerahatTimes[SUNSET.toInt()]) / 4
-            kerahatTimes[ISTIVA.toInt()] =
-                (kerahatTimes[SUNSET.toInt()] + kerahatTimes[FAJR_.toInt()]) / 2
+            kerahatTimes[DUHA] =
+                (3 * kerahatTimes[FAJR_] + kerahatTimes[SUNSET]) / 4
+            kerahatTimes[ISTIVA] =
+                (kerahatTimes[SUNSET] + kerahatTimes[FAJR_]) / 2
         }
         return kerahatTimes
     }
 
     fun calculateSunEquatorialCoordinates(jd: Double, ΔT: Double): Equatorial {
         //jc=getJulianCentury(jd);
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
+        val jde = getJulianEphemerisDay(jd, ΔT)
         val jce = getJulianEphemerisCentury(jde)
-        val jme: Double = getJulianEphemerisMillennium(jce)
+        val jme = getJulianEphemerisMillennium(jce)
         // jde=getJulianEphemerisDay(jd,ΔT);
         val x = listOf(
             meanElongationMoonSun(jce), meanAnomalySun(jce), meanAnomalyMoon(jce),
             argumentLatitudeMoon(jce), ascendingLongitudeMoon(jce)
         )
-        val ε0: Double = eclipticMeanObliquity(jme)
+        val ε0 = eclipticMeanObliquity(jme)
         val Δε = nutationObliquity(jce, x)
         val Δψ = nutationLongitude(jce, x)
         val ε = eclipticTrueObliquity(Δε, ε0)

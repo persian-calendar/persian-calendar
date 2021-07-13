@@ -271,12 +271,12 @@ object LunarPosition {
         115,
         107
     )
-    private const val cD: Byte = 0
-    private const val cM: Byte = 1
-    private const val cMP: Byte = 2
-    private const val cF: Byte = 3
-    private const val cSin: Byte = 0
-    private const val cCos: Byte = 1
+    private const val cD = 0
+    private const val cM = 1
+    private const val cMP = 2
+    private const val cF = 3
+    private const val cSin = 0
+    private const val cCos = 1
 
     /**
      * Calculate the mean elongation of the moon from the sun,X0 (in degrees),
@@ -393,39 +393,23 @@ object LunarPosition {
     private fun effectFlatting(jce: Double) = limitDegrees(313.45 + 481266.484 * jce)
 
     fun calculateMoonEclipticCoordinates(jd: Double, ΔT: Double): Ecliptic {
-        val λ: Double
-        val β: Double
-        val Δ: Double //λ the ecliptic longitude,latitude and distance from earth in geocentric coordinates
-        var Σl: Double
-        var Σb: Double
-        val Σr: Double
-        val L1: Double
-        val A1: Double
-        val A2: Double
-        val A3: Double
-        val M: Double
-        val F: Double
-        val M1: Double
-        val E: Double
-        val D: Double
-
         //jc=AstroLib.getJulianCentury(jd);
         // double ΔT =AstroLib.calculateTimeDifference(jd);
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        val jce: Double = getJulianEphemerisCentury(jde)
-        L1 = meanMoonLongitude(jce)
-        D = meanElongationMoonSun(jce)
-        M = meanAnomalySun(jce)
-        M1 = meanAnomalyMoon(jce)
-        F = argumentLatitudeMoon(jce)
-        A1 = effectVenus(jce)
-        A2 = effectJupiter(jce)
-        A3 = effectFlatting(jce)
-        E = eccentrityOfEarthOrbit(jce)
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
+        val L1 = meanMoonLongitude(jce)
+        val D = meanElongationMoonSun(jce)
+        val M = meanAnomalySun(jce)
+        val M1 = meanAnomalyMoon(jce)
+        val F = argumentLatitudeMoon(jce)
+        val A1 = effectVenus(jce)
+        val A2 = effectJupiter(jce)
+        val A3 = effectFlatting(jce)
+        val E = eccentrityOfEarthOrbit(jce)
         val sum = summationΣlΣr(L1, D, M, M1, F, E)
-        Σl = sum[0]
-        Σr = sum[1]
-        Σb = summationΣb(L1, D, M, M1, F, E)
+        var Σl = sum[0]
+        val Σr = sum[1]
+        var Σb = summationΣb(L1, D, M, M1, F, E)
         Σl += 3958.0 * sin(Math.toRadians(A1)) + 1962.0 * sin(Math.toRadians(L1 - F)) + 318.0 * sin(
             Math.toRadians(A2)
         )
@@ -436,112 +420,86 @@ object LunarPosition {
         ) - 115.0 * sin(Math.toRadians(L1 + M1))
         val x = SolarPosition.calculateXArray(jd, ΔT)
         val Δψ = SolarPosition.nutationLongitude(jce, x) //
-        λ = L1 + Σl / 1000000.0 + Δψ //133.16265468515076//133.162849085666605652
-        β = Σb / 1000000.0
-        Δ = 385000.56 + Σr / 1000.0
+        val λ = L1 + Σl / 1000000.0 + Δψ //133.16265468515076//133.162849085666605652
+        val β = Σb / 1000000.0
+        //λ the ecliptic longitude,latitude and distance from earth in geocentric coordinates
+        val Δ = 385000.56 + Σr / 1000.0
         return Ecliptic(λ, β, Δ)
     }
 
     //Ecliptic coordinates without  earth nutation  factor
     fun calculateMoonEclipticCoordinatesAstronomic(jd: Double, ΔT: Double): Ecliptic {
-        val λ: Double
-        val β: Double
-        var Σl: Double
-        var Σb: Double
-        val L1: Double
-        val A1: Double
-        val A2: Double
-        val A3: Double
-        val M: Double
-        val F: Double
-        val M1: Double
-        val E: Double
-        val D: Double
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        val jce: Double = getJulianEphemerisCentury(jde)
-        L1 = meanMoonLongitude(jce)
-        D = meanElongationMoonSun(jce)
-        M = meanAnomalySun(jce)
-        M1 = meanAnomalyMoon(jce)
-        F = argumentLatitudeMoon(jce)
-        A1 = effectVenus(jce)
-        A2 = effectJupiter(jce)
-        A3 = effectFlatting(jce)
-        E = eccentrityOfEarthOrbit(jce)
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
+        val L1 = meanMoonLongitude(jce)
+        val D = meanElongationMoonSun(jce)
+        val M = meanAnomalySun(jce)
+        val M1 = meanAnomalyMoon(jce)
+        val F = argumentLatitudeMoon(jce)
+        val A1 = effectVenus(jce)
+        val A2 = effectJupiter(jce)
+        val A3 = effectFlatting(jce)
+        val E = eccentrityOfEarthOrbit(jce)
         val sum = summationΣlΣr(L1, D, M, M1, F, E)
-        Σl = sum[0]
-        Σb = summationΣb(L1, D, M, M1, F, E)
-        Σl += 3958.0 * sin(Math.toRadians(A1)) + 1962.0 * sin(Math.toRadians(L1 - F)) + 318.0 * sin(
-            Math.toRadians(A2)
-        )
-        Σb += -2235.0 * sin(Math.toRadians(L1)) + 382.0 * sin(Math.toRadians(A3)) + 175.0 * sin(
-            Math.toRadians(A1 - F)
-        ) + 175.0 * sin(Math.toRadians(A1 + F)) + 127.0 * sin(
-            Math.toRadians(L1 - M1)
-        ) - 115.0 * sin(Math.toRadians(L1 + M1))
-        λ = L1 + Σl / 1000000.0
-        β = Σb / 1000000.0
+        var Σl = sum[0]
+        var Σb = summationΣb(L1, D, M, M1, F, E)
+        Σl += 3958.0 * sin(Math.toRadians(A1)) + 1962.0 * sin(Math.toRadians(L1 - F)) + 318.0 *
+                sin(Math.toRadians(A2))
+        Σb += -2235.0 * sin(Math.toRadians(L1)) + 382.0 * sin(Math.toRadians(A3)) + 175.0 *
+                sin(Math.toRadians(A1 - F)) + 175.0 * sin(Math.toRadians(A1 + F)) + 127.0 *
+                sin(Math.toRadians(L1 - M1)) - 115.0 * sin(Math.toRadians(L1 + M1))
+        val λ = L1 + Σl / 1000000.0
+        val β = Σb / 1000000.0
         return Ecliptic(λ, β)
     }
 
     fun calculateMoonEqutarialCoordinates(jd: Double, ΔT: Double): Equatorial {
-        val α: Double
-        val δ: Double
-        val ε0: Double
-        val Δε: Double
-        val jce: Double
         val moonPos: Ecliptic = calculateMoonEclipticCoordinates(jd, ΔT)
         val x = SolarPosition.calculateXArray(jd, ΔT)
         val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
+        val jce = getJulianEphemerisCentury(jde)
         val jme: Double = getJulianEphemerisMillennium(jce)
-        ε0 = SolarPosition.eclipticMeanObliquity(jme) //
-        Δε = SolarPosition.nutationObliquity(jce, x) //
+        val ε0 = SolarPosition.eclipticMeanObliquity(jme) //
+        val Δε = SolarPosition.nutationObliquity(jce, x) //
         // Δψ=SolarPosition.nutationLongitude(jce,x);//
         val ε: Double = SolarPosition.eclipticTrueObliquity(Δε, ε0) //
-        α = SolarPosition.geocentricRightAscension(moonPos.λ, ε, moonPos.β)
-        δ = SolarPosition.geocentricDeclination(moonPos.λ, ε, moonPos.β)
+        val α = SolarPosition.geocentricRightAscension(moonPos.λ, ε, moonPos.β)
+        val δ = SolarPosition.geocentricDeclination(moonPos.λ, ε, moonPos.β)
         return Equatorial(α, δ, moonPos.Δ)
     }
 
     fun calculateMoonEqutarialCoordinates(moonPos: Ecliptic, jd: Double, ΔT: Double): Equatorial {
-        val α: Double
-        val δ: Double
-        val ε0: Double
-        val Δε: Double
-        val jce: Double
         val x = SolarPosition.calculateXArray(jd, ΔT)
-        val jde: Double = getJulianEphemerisDay(jd, ΔT)
-        jce = getJulianEphemerisCentury(jde)
-        val jme: Double = getJulianEphemerisMillennium(jce)
-        ε0 = SolarPosition.eclipticMeanObliquity(jme) //
-        Δε = SolarPosition.nutationObliquity(jce, x) //
+        val jde = getJulianEphemerisDay(jd, ΔT)
+        val jce = getJulianEphemerisCentury(jde)
+        val jme = getJulianEphemerisMillennium(jce)
+        val ε0 = SolarPosition.eclipticMeanObliquity(jme) //
+        val Δε = SolarPosition.nutationObliquity(jce, x) //
         // Δψ=SolarPosition.nutationLongitude(jce,x);//
-        val ε: Double = SolarPosition.eclipticTrueObliquity(Δε, ε0) //
-        α = SolarPosition.geocentricRightAscension(moonPos.λ, ε, moonPos.β)
-        δ = SolarPosition.geocentricDeclination(moonPos.λ, ε, moonPos.β)
+        val ε = SolarPosition.eclipticTrueObliquity(Δε, ε0) //
+        val α = SolarPosition.geocentricRightAscension(moonPos.λ, ε, moonPos.β)
+        val δ = SolarPosition.geocentricDeclination(moonPos.λ, ε, moonPos.β)
         return Equatorial(α, δ, moonPos.Δ)
     }
 
     fun summationΣlΣr(
         L1: Double, D: Double, M: Double, M1: Double, F: Double, E: Double
     ): List<Double> {
-        var arg: Double
         val E2 = E * E
         var L = 0.0
         var R = 0.0
         argCoefforΣlΣr.indices.forEach { i ->
-            arg =
-                Math.toRadians(argCoefforΣlΣr[i][cD.toInt()] * D + argCoefforΣlΣr[i][cM.toInt()] * M + argCoefforΣlΣr[i][cMP.toInt()] * M1 + argCoefforΣlΣr[i][cF.toInt()] * F)
-            if (argCoefforΣlΣr[i][cM.toInt()].toDouble() == -2.0 || argCoefforΣlΣr[i][cM.toInt()].toDouble() == 2.0) {
-                L += coefSinCosΣlΣr[i][cSin.toInt()] * E2 * sin(arg)
-                R += coefSinCosΣlΣr[i][cCos.toInt()] * E2 * cos(arg)
-            } else if (argCoefforΣlΣr[i][cM.toInt()].toDouble() == -1.0 || argCoefforΣlΣr[i][cM.toInt()].toDouble() == 1.0) {
-                L += coefSinCosΣlΣr[i][cSin.toInt()] * E * sin(arg)
-                R += coefSinCosΣlΣr[i][cCos.toInt()] * E * cos(arg)
+            val arg =
+                Math.toRadians(argCoefforΣlΣr[i][cD] * D + argCoefforΣlΣr[i][cM] * M + argCoefforΣlΣr[i][cMP] * M1 + argCoefforΣlΣr[i][cF] * F)
+            if (argCoefforΣlΣr[i][cM] == -2 || argCoefforΣlΣr[i][cM] == 2) {
+                L += coefSinCosΣlΣr[i][cSin] * E2 * sin(arg)
+                R += coefSinCosΣlΣr[i][cCos] * E2 * cos(arg)
+            } else if (argCoefforΣlΣr[i][cM] == -1 || argCoefforΣlΣr[i][cM] == 1) {
+                L += coefSinCosΣlΣr[i][cSin] * E * sin(arg)
+                R += coefSinCosΣlΣr[i][cCos] * E * cos(arg)
             } else {
-                L += coefSinCosΣlΣr[i][cSin.toInt()] * sin(arg)
-                R += coefSinCosΣlΣr[i][cCos.toInt()] * cos(arg)
+                L += coefSinCosΣlΣr[i][cSin] * sin(arg)
+                R += coefSinCosΣlΣr[i][cCos] * cos(arg)
             }
         }
         return listOf(L, R)
@@ -552,10 +510,10 @@ object LunarPosition {
         var Σb = 0.0
         argCoefforΣb.indices.forEach { i ->
             val arg =
-                Math.toRadians(argCoefforΣb[i][cD.toInt()] * D + argCoefforΣb[i][cM.toInt()] * M + argCoefforΣb[i][cMP.toInt()] * M1 + argCoefforΣb[i][cF.toInt()] * F)
-            Σb += if (argCoefforΣb[i][cM.toInt()].toDouble() == -2.0 || argCoefforΣb[i][cM.toInt()].toDouble() == 2.0) {
+                Math.toRadians(argCoefforΣb[i][cD] * D + argCoefforΣb[i][cM] * M + argCoefforΣb[i][cMP] * M1 + argCoefforΣb[i][cF] * F)
+            Σb += if (argCoefforΣb[i][cM] == -2 || argCoefforΣb[i][cM] == 2) {
                 coefSinΣb[i] * E2 * sin(arg)
-            } else if (argCoefforΣb[i][cM.toInt()].toDouble() == -1.0 || argCoefforΣb[i][cM.toInt()].toDouble() == 1.0) {
+            } else if (argCoefforΣb[i][cM] == -1 || argCoefforΣb[i][cM] == 1) {
                 coefSinΣb[i] * E * sin(arg)
             } else {
                 coefSinΣb[i] * sin(arg)
@@ -575,22 +533,16 @@ object LunarPosition {
         val αPrime = DoubleArray(3)
         val δPrime = DoubleArray(3)
         val HPrime = DoubleArray(3)
-        val ν: Double
-        val H0: Double
-        var n: Double
-        val dayBefore: Equatorial
-        val dayOfInterest: Equatorial
-        val dayAfter: Equatorial
         jd = floor(jd + 0.5) - 0.5
         val ΔT = calculateTimeDifference(jd)
-        dayBefore = calculateMoonEqutarialCoordinates(jd - 1, ΔT)
-        dayOfInterest = calculateMoonEqutarialCoordinates(jd, ΔT)
-        dayAfter = calculateMoonEqutarialCoordinates(jd + 1, ΔT)
+        val dayBefore = calculateMoonEqutarialCoordinates(jd - 1, ΔT)
+        val dayOfInterest = calculateMoonEqutarialCoordinates(jd, ΔT)
+        val dayAfter = calculateMoonEqutarialCoordinates(jd + 1, ΔT)
         // private final int MOONRADIUS=15;
         val h0Prime = getLunarRiseSetAltitude(dayOfInterest.Δ, temperature, pressure, altitude)
-        ν = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
+        val ν = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
         m_trs[0] = SolarPosition.approxSunTransitTime(dayOfInterest.α, longitude, ν)
-        H0 = SolarPosition.getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
+        val H0 = SolarPosition.getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
         val δ = listOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
         val moontransit: Double
         val moonrise: Double
@@ -610,7 +562,7 @@ object LunarPosition {
             SolarPosition.approxSunRiseAndSet(m_trs, H0)
             (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * m_trs[i]
-                n = m_trs[i] + ΔT / 86400.0
+                val n = m_trs[i] + ΔT / 86400.0
                 αPrime[i] = SolarPosition.Interpolate(n, α)
                 δPrime[i] = SolarPosition.Interpolate(n, δ)
                 HPrime[i] = SolarPosition.limitDegrees180pm(νRts[i] + longitude - αPrime[i])
@@ -644,22 +596,16 @@ object LunarPosition {
         val δPrime = DoubleArray(3)
         val HPrime = DoubleArray(3)
         val moonRiseSet = DoubleArray(3)
-        val ν: Double
-        val H0: Double
-        var n: Double
-        val dayBefore: Equatorial
-        val dayOfInterest: Equatorial
-        val dayAfter: Equatorial
         jd = floor(jd + 0.5) - 0.5
         val ΔT = calculateTimeDifference(jd)
-        dayBefore = calculateMoonEqutarialCoordinates(jd - 1, ΔT)
-        dayOfInterest = calculateMoonEqutarialCoordinates(jd, ΔT)
-        dayAfter = calculateMoonEqutarialCoordinates(jd + 1, ΔT)
+        val dayBefore = calculateMoonEqutarialCoordinates(jd - 1, ΔT)
+        val dayOfInterest = calculateMoonEqutarialCoordinates(jd, ΔT)
+        val dayAfter = calculateMoonEqutarialCoordinates(jd + 1, ΔT)
         // private final int MOONRADIUS=15;
         val h0Prime = getLunarRiseSetAltitude(dayOfInterest.Δ, temperature, pressure, altitude)
-        ν = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
+        val ν = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
         m_trs[0] = SolarPosition.approxSunTransitTime(dayOfInterest.α, longitude, ν)
-        H0 = SolarPosition.getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
+        val H0 = SolarPosition.getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
         val δ = listOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
         if (dayOfInterest.α - dayBefore.α > 180.0) {
             dayBefore.α += 360
@@ -676,7 +622,7 @@ object LunarPosition {
             SolarPosition.approxSunRiseAndSet(m_trs, H0)
             (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * m_trs[i]
-                n = m_trs[i] + ΔT / 86400.0
+                val n = m_trs[i] + ΔT / 86400.0
                 αPrime[i] = SolarPosition.Interpolate(n, α)
                 δPrime[i] = SolarPosition.Interpolate(n, δ)
                 HPrime[i] = SolarPosition.limitDegrees180pm(νRts[i] + longitude - αPrime[i])

@@ -64,7 +64,5 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
         return cos(U) + Height / 6378149 * cos(ϕ)
     }
 
-    private fun getHorizontalParallax(RadiusVector: Double): Double {
-        return MATH.asin(6378.14 / RadiusVector)
-    }
+    private fun getHorizontalParallax(RadiusVector: Double) = MATH.asin(6378.14 / RadiusVector)
 }

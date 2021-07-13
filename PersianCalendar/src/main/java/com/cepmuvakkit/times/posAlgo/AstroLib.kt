@@ -38,18 +38,15 @@ object AstroLib {
     ): Double {
         var year = year
         var month = month
-        val dayDecimal: Double
-        var julianDay: Double
-        val a: Double
-        dayDecimal = day + (hour - tz + (minute + second / 60.0) / 60.0) / 24.0
+        val dayDecimal = day + (hour - tz + (minute + second / 60.0) / 60.0) / 24.0
         if (month < 3) {
             month += 12
             year--
         }
-        julianDay = (floor(365.25 * (year + 4716.0))
+        var julianDay = (floor(365.25 * (year + 4716.0))
                 + floor(30.6001 * (month + 1)) + dayDecimal) - 1524.5
         if (julianDay > 2299160.0) {
-            a = floor((year / 100).toDouble())
+            val a = floor((year / 100).toDouble())
             julianDay += 2 - a + floor(a / 4)
         }
         return julianDay
@@ -68,9 +65,6 @@ object AstroLib {
      * the way)
      */
     fun calculateJulianDay(c: Calendar): Double {
-        val dayDecimal: Double
-        var julianDay: Double
-        val a: Double
         var year = c[Calendar.YEAR]
         var month = c[Calendar.MONTH] + 1
         val day = c[Calendar.DAY_OF_MONTH]
@@ -80,15 +74,15 @@ object AstroLib {
         // double tz=(c.getTimeZone().getRawOffset()
         // +c.getTimeZone().getDSTSavings())/ (60 * 60 * 1000);
         val tz = (c.timeZone.getOffset(c.timeInMillis) / 3600000).toDouble()
-        dayDecimal = day + (hour - tz + (minute + second / 60.0) / 60.0) / 24.0
+        val dayDecimal = day + (hour - tz + (minute + second / 60.0) / 60.0) / 24.0
         if (month < 3) {
             month += 12
             year--
         }
-        julianDay = (floor(365.25 * (year + 4716.0))
+        var julianDay = (floor(365.25 * (year + 4716.0))
                 + floor(30.6001 * (month + 1)) + dayDecimal) - 1524.5
         if (julianDay > 2299160.0) {
-            a = floor((year / 100).toDouble())
+            val a = floor((year / 100).toDouble())
             julianDay += 2 - a + floor(a / 4)
         }
         return julianDay
@@ -103,9 +97,7 @@ object AstroLib {
      * @param JD is the Astrolib Day
      * @return the Astrolib century (JC)
      */
-    fun getJulianCentury(jd: Double): Double {
-        return (jd - 2451545.0) / 36525.0
-    }
+    fun getJulianCentury(jd: Double) = (jd - 2451545.0) / 36525.0
 
     /**
      * Calculate the Astrolib Ephemeris Day (JDE),
@@ -118,9 +110,7 @@ object AstroLib {
      * Terrestrial Time (TT). ΔT = TT-UT .
      * @return JDE the Astrolib Ephemeris Day (JDE)
      */
-    fun getJulianEphemerisDay(jd: Double, ΔT: Double): Double {
-        return jd + ΔT / 86400.0
-    }
+    fun getJulianEphemerisDay(jd: Double, ΔT: Double) = jd + ΔT / 86400.0
 
     /**
      * Calculate the Astrolib Ephemeris Millennium (JME) for the 2000 standard
@@ -132,9 +122,7 @@ object AstroLib {
      * @param jde is the Astrolib Day
      * @return jme the the Astrolib Ephemeris Millennium (JME)
      */
-    fun getJulianEphemerisCentury(jde: Double): Double {
-        return (jde - 2451545.0) / 36525.0
-    }
+    fun getJulianEphemerisCentury(jde: Double) = (jde - 2451545.0) / 36525.0
 
     /**
      * Calculate the Astrolib Ephemeris Millennium (JME) for the 2000 standard
@@ -146,9 +134,7 @@ object AstroLib {
      * @param jce is the Astrolib Day
      * @return jme the the Astrolib Ephemeris Millennium (JME)
      */
-    fun getJulianEphemerisMillennium(jce: Double): Double {
-        return jce / 10.0
-    }
+    fun getJulianEphemerisMillennium(jce: Double) = jce / 10.0
 
     /**
      * Calculate orbital positions of the Sun and Moon required by eclipse
@@ -290,8 +276,7 @@ object AstroLib {
      */
     fun getStringHHMMSSS(hour: Double): String {
         val HHMMSS = convertHour2HHMMSS(hour)
-        return (intTwoDigit(HHMMSS[0]) + ":" + intTwoDigit(HHMMSS[1]) + ":"
-                + intTwoDigit(HHMMSS[2]))
+        return "${intTwoDigit(HHMMSS[0])}:${intTwoDigit(HHMMSS[1])}:${intTwoDigit(HHMMSS[2])}"
     }
 
     /**
@@ -458,16 +443,11 @@ object AstroLib {
                 + "/" + julian[0])
     }
 
-    fun thirdOrderPolynomial(
-        a: Double, b: Double, c: Double, d: Double,
-        x: Double
-    ): Double {
-        return ((a * x + b) * x + c) * x + d
-    }
+    fun thirdOrderPolynomial(a: Double, b: Double, c: Double, d: Double, x: Double) =
+        ((a * x + b) * x + c) * x + d
 
-    fun fourthOrderPolynomial(a: Double, b: Double, c: Double, d: Double, e: Double, x: Double): Double {
-        return (((a * x + b) * x + c) * x + d) * x + e
-    }
+    fun fourthOrderPolynomial(a: Double, b: Double, c: Double, d: Double, e: Double, x: Double) =
+        (((a * x + b) * x + c) * x + d) * x + e
 
     /**
      * Compute the Atmospheric Refraction in minutes at apperant angle in
@@ -522,9 +502,7 @@ object AstroLib {
                         * (-518.2 + exoatmElevation
                         * (103.4 + exoatmElevation
                         * (-12.79 + exoatmElevation * 0.711))))
-            } else {
-                -20.774 / te
-            }
+            } else -20.774 / te
         }
         return refractionCorrection / 3600
     }
@@ -538,9 +516,7 @@ object AstroLib {
      * @param P Pressure in milliBars
      * @result Weather Correction Coefficent unitless
      */
-    fun getWeatherCorrectionCoefficent(T: Int, P: Int): Double {
-        return P * 283.15 / (1010.0 * (273.15 + T))
-    }
+    fun getWeatherCorrectionCoefficent(T: Int, P: Int) = P * 283.15 / (1010.0 * (273.15 + T))
 
     /**
      * Compute the elevation correction for sunset an sunrise,
@@ -548,9 +524,7 @@ object AstroLib {
      * @param h altitude in meter from sea level
      * @result corection for altitude angle in degrees
      */
-    fun getAltitudeCorrection(h: Int): Double {
-        return 0.0347 * sqrt(h.toDouble())
-    }
+    fun getAltitudeCorrection(h: Int) = 0.0347 * sqrt(h.toDouble())
 
     fun limitDegrees(degrees: Double): Double {
         var degrees = degrees
@@ -607,12 +581,11 @@ object AstroLib {
         var f2 = searchPhaseEvent(x2, ΔT, phase)
         var x3: Double
         var f3: Double
-        var Root: Double
         val MaxIterat = 30
         var Iterat = 0
         // Initialization
         Success[0] = false
-        Root = x1
+        var Root = x1
         // Iteration
         if (f1 * f2 < 0.0) {
             do {

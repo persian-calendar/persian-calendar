@@ -173,8 +173,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawSun() {
-        sunPaint.color = Color.YELLOW
-        sunPaint.style = Paint.Style.FILL_AND_STROKE
         if (sunMoonPosition.sunPosition.altitude <= -10) return
         withRotation(sunMoonPosition.sunPosition.azimuth.toFloat() - 360, cx, cy) {
             val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
