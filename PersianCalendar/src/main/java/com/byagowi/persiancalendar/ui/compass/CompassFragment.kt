@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
+import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCompatDrawable
@@ -53,14 +54,10 @@ class CompassFragment : Fragment() {
             // angle between the magnetic north direction
             // 0=North, 90=East, 180=South, 270=West
             if (event == null) return
-            var angle = event.values[0] + orientation
-            if (stopped)
-                angle = 0f
-            else
-                binding?.compassView?.onDirectionAction()
-
+            val angle = if (stopped) 0f else event.values[0] + orientation
+            if (!stopped) checkIfA11yAnnounceIsNeeded(angle)
             azimuth = lowPass(angle, azimuth)
-            binding?.compassView?.setCompassDegree(azimuth)
+            binding?.compassView?.setCompassAngle(azimuth)
         }
 
         /**
@@ -176,5 +173,37 @@ class CompassFragment : Fragment() {
     override fun onPause() {
         if (sensor != null) sensorManager?.unregisterListener(compassListener)
         super.onPause()
+    }
+
+    // A11y
+    // deliberately true
+    private var isCurrentlyNorth = true
+    private var isCurrentlyEast = true
+    private var isCurrentlyWest = true
+    private var isCurrentlySouth = true
+    private var isCurrentlyQibla = true
+    fun checkIfA11yAnnounceIsNeeded(angle: Float) {
+        val binding = binding ?: return
+        fun checkIsReachedToDegree(
+            currentState: Boolean, @StringRes directionString: Int, directionAngle: Int
+        ): Boolean {
+            return if (isNearToDegree(directionAngle.toFloat(), angle)) {
+                if (!currentState) a11yAnnounceAndClick(binding.root, directionString)
+                true
+            } else false
+        }
+        isCurrentlyNorth = checkIsReachedToDegree(isCurrentlyNorth, R.string.north, 0)
+        isCurrentlyEast = checkIsReachedToDegree(isCurrentlyEast, R.string.east, 90)
+        isCurrentlySouth = checkIsReachedToDegree(isCurrentlySouth, R.string.south, 180)
+        isCurrentlyWest = checkIsReachedToDegree(isCurrentlyWest, R.string.west, 270)
+        if (coordinates != null)
+            isCurrentlyQibla = checkIsReachedToDegree(isCurrentlyQibla, R.string.west, 270)
+    }
+
+    companion object {
+        fun isNearToDegree(compareTo: Float, degree: Float): Boolean {
+            val difference = abs(degree - compareTo)
+            return if (difference > 180) 360 - difference < 3f else difference < 3f
+        }
     }
 }

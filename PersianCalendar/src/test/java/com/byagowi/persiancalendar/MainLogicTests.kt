@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar
 
+import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.getLastDayOfWeek
@@ -328,24 +329,24 @@ class MainLogicTests {
 
     @Test
     fun test_isNearToDegree() {
-        assertTrue(QiblaCompassView.isNearToDegree(360f, 1f))
-        assertTrue(QiblaCompassView.isNearToDegree(1f, 360f))
+        assertTrue(CompassFragment.isNearToDegree(360f, 1f))
+        assertTrue(CompassFragment.isNearToDegree(1f, 360f))
 
-        assertTrue(QiblaCompassView.isNearToDegree(2f, 360f))
-        assertFalse(QiblaCompassView.isNearToDegree(3f, 360f))
+        assertTrue(CompassFragment.isNearToDegree(2f, 360f))
+        assertFalse(CompassFragment.isNearToDegree(3f, 360f))
 
-        assertTrue(QiblaCompassView.isNearToDegree(360f, 2f))
-        assertFalse(QiblaCompassView.isNearToDegree(360f, 3f))
+        assertTrue(CompassFragment.isNearToDegree(360f, 2f))
+        assertFalse(CompassFragment.isNearToDegree(360f, 3f))
 
-        assertTrue(QiblaCompassView.isNearToDegree(180f, 181f))
-        assertTrue(QiblaCompassView.isNearToDegree(180f, 182f))
-        assertFalse(QiblaCompassView.isNearToDegree(180f, 183f))
-        assertFalse(QiblaCompassView.isNearToDegree(180f, 184f))
+        assertTrue(CompassFragment.isNearToDegree(180f, 181f))
+        assertTrue(CompassFragment.isNearToDegree(180f, 182f))
+        assertFalse(CompassFragment.isNearToDegree(180f, 183f))
+        assertFalse(CompassFragment.isNearToDegree(180f, 184f))
 
-        assertTrue(QiblaCompassView.isNearToDegree(181f, 180f))
-        assertTrue(QiblaCompassView.isNearToDegree(182f, 180f))
-        assertFalse(QiblaCompassView.isNearToDegree(183f, 180f))
-        assertFalse(QiblaCompassView.isNearToDegree(184f, 180f))
+        assertTrue(CompassFragment.isNearToDegree(181f, 180f))
+        assertTrue(CompassFragment.isNearToDegree(182f, 180f))
+        assertFalse(CompassFragment.isNearToDegree(183f, 180f))
+        assertFalse(CompassFragment.isNearToDegree(184f, 180f))
     }
 
     @Test

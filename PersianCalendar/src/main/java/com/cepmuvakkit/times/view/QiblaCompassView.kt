@@ -16,7 +16,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
 import com.byagowi.persiancalendar.utils.coordinates
 import com.cepmuvakkit.times.posAlgo.AstroLib
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
@@ -83,7 +82,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.pathEffect = dashPath
         it.strokeWidth = 2f
     }
-    private var degree = 0f
+    private var angle = 0f
     private val sunMoonPosition = SunMoonPosition(
         AstroLib.calculateJulianDay(GregorianCalendar()), coordinates?.latitude ?: 0.0,
         coordinates?.longitude ?: 0.0, coordinates?.elevation ?: 0.0, 0.0
@@ -115,7 +114,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     override fun onDraw(canvas: Canvas) {
         // Attach and Detach capability lies
-        canvas.withRotation(-degree, cx, cy) {
+        canvas.withRotation(-angle, cx, cy) {
             drawDial()
             drawTrueNorthArrow()
             if (coordinates != null) {
@@ -212,49 +211,10 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         }
     }
 
-    fun setCompassDegree(degree: Float) {
-        if (this.degree != degree) {
-            this.degree = degree
+    fun setCompassAngle(angle: Float) {
+        if (this.angle != angle) {
+            this.angle = angle
             postInvalidate()
-        }
-    }
-
-    // deliberately true
-    private var isCurrentlyNorth = true
-    private var isCurrentlyEast = true
-    private var isCurrentlyWest = true
-    private var isCurrentlySouth = true
-    private var isCurrentlyQibla = true
-    fun onDirectionAction() {
-        // 0=North, 90=East, 180=South, 270=West
-        isCurrentlyNorth = if (isNearToDegree(0f, degree)) {
-            if (!isCurrentlyNorth) a11yAnnounceAndClick(this, R.string.north)
-            true
-        } else false
-        isCurrentlyEast = if (isNearToDegree(90f, degree)) {
-            if (!isCurrentlyEast) a11yAnnounceAndClick(this, R.string.east)
-            true
-        } else false
-        isCurrentlySouth = if (isNearToDegree(180f, degree)) {
-            if (!isCurrentlySouth) a11yAnnounceAndClick(this, R.string.south)
-            true
-        } else false
-        isCurrentlyWest = if (isNearToDegree(270f, degree)) {
-            if (!isCurrentlyWest) a11yAnnounceAndClick(this, R.string.west)
-            true
-        } else false
-        if (coordinates != null) {
-            isCurrentlyQibla = if (isNearToDegree(qiblaInfo.heading.toFloat(), degree)) {
-                if (!isCurrentlyQibla) a11yAnnounceAndClick(this, R.string.qibla)
-                true
-            } else false
-        }
-    }
-
-    companion object {
-        fun isNearToDegree(compareTo: Float, degree: Float): Boolean {
-            val difference = abs(degree - compareTo)
-            return if (difference > 180) 360 - difference < 3f else difference < 3f
         }
     }
 }
