@@ -587,7 +587,7 @@ object LunarPosition {
     fun calculateMoonRiseTransitSet(
         jd: Double, latitude: Double, longitude: Double, timezone: Double, temperature: Int,
         pressure: Int, altitude: Int
-    ): DoubleArray {
+    ): List<Double> {
         var jd = jd
         val m_trs = DoubleArray(3)
         val h_rts = DoubleArray(3)
@@ -618,7 +618,7 @@ object LunarPosition {
             dayAfter.α += 360
         }
         val α = listOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
-        if (H0 >= 0) {
+        return if (H0 >= 0) {
             SolarPosition.approxSunRiseAndSet(m_trs, H0)
             (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * m_trs[i]
@@ -631,11 +631,12 @@ object LunarPosition {
             val T = m_trs[0] - HPrime[0] / 360.0
             val R = SolarPosition.sunRiseAndSet(m_trs, h_rts, δPrime, latitude, HPrime, h0Prime, 1)
             val S = SolarPosition.sunRiseAndSet(m_trs, h_rts, δPrime, latitude, HPrime, h0Prime, 2)
-            moonRiseSet[1] = SolarPosition.dayFracToLocalHour(T, timezone)
-            moonRiseSet[0] = SolarPosition.dayFracToLocalHour(R, timezone)
-            moonRiseSet[2] = SolarPosition.dayFracToLocalHour(S, timezone)
-        }
-        return moonRiseSet
+            listOf(
+                SolarPosition.dayFracToLocalHour(R, timezone),
+                SolarPosition.dayFracToLocalHour(T, timezone),
+                SolarPosition.dayFracToLocalHour(S, timezone)
+            )
+        } else List(3) { 0.0 }
     }
 
     fun getHorizontalParallax(RadiusVector: Double) = Math.toDegrees(asin(6378.14 / RadiusVector))

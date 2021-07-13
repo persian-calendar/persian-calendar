@@ -1103,7 +1103,7 @@ object SolarPosition {
 
     fun calculateSunRiseTransitSet(
         jd: Double, latitude: Double, longitude: Double, timezone: Double, ΔT: Double
-    ): DoubleArray {
+    ): List<Double> {
         var jd = jd
         val mRts = DoubleArray(3)
         val hRts = DoubleArray(3)
@@ -1125,7 +1125,7 @@ object SolarPosition {
         val h0 = getHourAngleAtRiseSet(latitude, dayOfInterest.δ, h0Prime)
         val α = listOf(dayBefore.α, dayOfInterest.α, dayAfter.α)
         val δ = listOf(dayBefore.δ, dayOfInterest.δ, dayAfter.δ)
-        if (h0 >= 0) {
+        return if (h0 >= 0) {
             approxSunRiseAndSet(mRts, h0)
             (0..2).forEach { i ->
                 νRts[i] = ν + 360.985647 * mRts[i]
@@ -1142,17 +1142,14 @@ object SolarPosition {
             val sunset = dayFracToLocalHour(
                 sunRiseAndSet(mRts, hRts, δPrime, latitude, hPrime, h0Prime, 2), timezone
             )
-            spa[0] = suntransit
-            spa[1] = sunrise
-            spa[2] = sunset
-        }
-        return spa
+            listOf(suntransit, sunrise, sunset)
+        } else List(3) { 0.0 }
     }
 
     fun calculateSalatTimes(
         jd: Double, latitude: Double, longitude: Double, timezone: Double, temperature: Int,
         pressure: Int, altitude: Int, fajrAngle: Double, ishaAngle: Double
-    ): DoubleArray {
+    ): List<Double> {
         var jd = jd
         val mRts = DoubleArray(SUN_COUNT)
         val hRts = DoubleArray(SUN_COUNT)
@@ -1240,13 +1237,13 @@ object SolarPosition {
                 sunRiseAndSet(mRts, hRts, δPrime, latitude, HPrime, ishaAngle, ISHA), timezone
             )
         }
-        return salatTimes
+        return salatTimes.toList()
     }
 
     fun calculateKerahetTimes(
         jd: Double, latitude: Double, longitude: Double, timezone: Double, temperature: Int,
         pressure: Int, altitude: Int, fajrAngle: Double, israkIsfirarAngle: Double
-    ): DoubleArray {     //final int FAJR_=0,ISRAK=1,SUNTRANSIT_=2,ASRHANEFI=3,ISFIRAR=4,SUNSET_=5,KERAHAT_COUNT=6,DUHA=7,ISTIVA=8;
+    ): List<Double> {     //final int FAJR_=0,ISRAK=1,SUNTRANSIT_=2,ASRHANEFI=3,ISFIRAR=4,SUNSET_=5,KERAHAT_COUNT=6,DUHA=7,ISTIVA=8;
         var jd = jd
         val mRts = DoubleArray(KERAHAT_COUNT)
         val hRts = DoubleArray(KERAHAT_COUNT)
@@ -1347,7 +1344,7 @@ object SolarPosition {
             kerahatTimes[ISTIVA] =
                 (kerahatTimes[SUNSET] + kerahatTimes[FAJR_]) / 2
         }
-        return kerahatTimes
+        return kerahatTimes.toList()
     }
 
     fun calculateSunEquatorialCoordinates(jd: Double, ΔT: Double): Equatorial {

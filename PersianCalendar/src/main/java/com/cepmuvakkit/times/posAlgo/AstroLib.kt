@@ -285,7 +285,7 @@ object AstroLib {
      */
     fun getStringHHMM(hour: Double): String {
         val HHMM = convertHour2HHMM(hour)
-        return intTwoDigit(HHMM[0]) + ":" + intTwoDigit(HHMM[1])
+        return "${intTwoDigit(HHMM[0])}:${intTwoDigit(HHMM[1])}"
     }
 
     fun intTwoDigit(i: Int): String {
@@ -579,8 +579,6 @@ object AstroLib {
         var x2 = UpperBound
         var f1 = searchPhaseEvent(x1, ΔT, phase)
         var f2 = searchPhaseEvent(x2, ΔT, phase)
-        var x3: Double
-        var f3: Double
         val MaxIterat = 30
         var Iterat = 0
         // Initialization
@@ -590,8 +588,8 @@ object AstroLib {
         if (f1 * f2 < 0.0) {
             do {
                 // Approximation of the root by interpolation
-                x3 = x2 - f2 / ((f2 - f1) / (x2 - x1))
-                f3 = searchPhaseEvent(x3, ΔT, phase)
+                val x3 = x2 - f2 / ((f2 - f1) / (x2 - x1))
+                val f3 = searchPhaseEvent(x3, ΔT, phase)
 
                 // Replace (x1,f2) and (x2,f2) by new values, such that
                 // the root is again within the interval [x1,x2]
