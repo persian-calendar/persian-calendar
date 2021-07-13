@@ -174,9 +174,8 @@ object AstroLib {
         val t: Double
         val u: Double
         var ΔT = 0.0
-        val yearRanges = intArrayOf(
-            500, 1600, 1700, 1800, 1860, 1900, 1920, 1941,
-            1961, 1986, 2005, 2050, 2150
+        val yearRanges = listOf(
+            500, 1600, 1700, 1800, 1860, 1900, 1920, 1941, 1961, 1986, 2005, 2050, 2150
         )
         var range = 0
         while (yearRanges[range] <= y) {
@@ -268,21 +267,21 @@ object AstroLib {
      * @param hour is the hour with double pressicion
      * @return int[] {year, month, day};
      */
-    fun convertHour2HHMMSS(hour: Double): IntArray {
+    fun convertHour2HHMMSS(hour: Double): List<Int> {
         val Seconds = (hour * 3600).toInt() % 3600 % 60
         val Minute = (hour * 60).toInt() % 60
         val Hour = hour.toInt()
-        return intArrayOf(Hour, Minute, Seconds)
+        return listOf(Hour, Minute, Seconds)
     }
 
     /**
      * @param hour is the hour with double pressicion
      * @return int[] {Hour, Minute};;
      */
-    fun convertHour2HHMM(hour: Double): IntArray {
+    fun convertHour2HHMM(hour: Double): List<Int> {
         val Minute = (hour * 60).roundToLong().toInt() % 60
         val Hour = hour.toInt()
-        return intArrayOf(Hour, Minute)
+        return listOf(Hour, Minute)
     }
 
     /**
@@ -315,7 +314,7 @@ object AstroLib {
      * @param injulian is the Astrolib Day
      * @return int[] {year, month, day};
      */
-    fun fromJulian(julianDay: Double): IntArray {
+    fun fromJulian(julianDay: Double): List<Int> {
         // this.julianDay = julianDay;
         val jd = julianDay + 0.5
         val z = floor(jd).toInt()
@@ -341,7 +340,7 @@ object AstroLib {
         val hour = Hour.toInt()
         val seconds = (Hour * 3600) as Int % 3600 % 60
         val minute = (Hour * 60) as Int % 60
-        return intArrayOf(year, month, day, hour, minute, seconds)
+        return listOf(year, month, day, hour, minute, seconds)
     }
 
     /**
@@ -352,7 +351,7 @@ object AstroLib {
      * @return int[] {year, month, day,hour, minute,seconds} output always must
      * be in Universal Time UT;
      */
-    fun getYMDHMSfromJulian(julianDay: Double): IntArray {
+    fun getYMDHMSfromJulian(julianDay: Double): List<Int> {
         // this.julianDay = julianDay;
         val jd = julianDay + 0.5
         val z = floor(jd).toInt()
@@ -378,7 +377,7 @@ object AstroLib {
         val hour = Hour.toInt()
         val seconds = (Hour * 3600) as Int % 3600 % 60
         val minute = (Hour * 60) as Int % 60
-        return intArrayOf(year, month, day, hour, minute, seconds)
+        return listOf(year, month, day, hour, minute, seconds)
     }
 
     /**
