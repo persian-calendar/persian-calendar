@@ -12,7 +12,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
@@ -148,7 +147,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         // Draw the marker every 15 degrees and text every 45.
         (0..23).forEach {
             withRotation(15f * it, cx, cy) {
-                // Draw a marker.
                 drawLine(cx, (cy - radius), cx, (cy - radius * .975f), markerPaint)
                 withTranslation(0f, textHeight.toFloat()) {
                     // Draw the cardinal points
@@ -177,16 +175,12 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private fun Canvas.drawSun() {
         sunPaint.color = Color.YELLOW
         sunPaint.style = Paint.Style.FILL_AND_STROKE
-        // Horizontal sunPosition = new Horizontal(225, 45);
-        if (sunMoonPosition.sunPosition.altitude > -10) {
-            withRotation(
-                sunMoonPosition.sunPosition.azimuth.toFloat() - 360, cx, cy
-            ) {
-                val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
-                drawCircle(cx, (cy - ry), r, sunPaint)
-                dashedPaint.color = Color.YELLOW
-                drawLine(cx, (cy - radius), cx, (cy + radius), dashedPaint)
-            }
+        if (sunMoonPosition.sunPosition.altitude <= -10) return
+        withRotation(sunMoonPosition.sunPosition.azimuth.toFloat() - 360, cx, cy) {
+            val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
+            drawCircle(cx, (cy - ry), r, sunPaint)
+            dashedPaint.color = Color.YELLOW
+            drawLine(cx, (cy - radius), cx, (cy + radius), dashedPaint)
         }
     }
 
