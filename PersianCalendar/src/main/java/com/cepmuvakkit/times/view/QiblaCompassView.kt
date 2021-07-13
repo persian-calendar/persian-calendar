@@ -25,6 +25,14 @@ import kotlin.math.min
 
 class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
+    var angle = 0f
+        set(value) {
+            if (value != field) {
+                field = value
+                postInvalidate()
+            }
+        }
+
     private val dashPath = DashPathEffect(floatArrayOf(2f, 5f), 1f)
     private val northwardShapePath = Path()
     private val trueNorthArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -82,7 +90,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.pathEffect = dashPath
         it.strokeWidth = 2f
     }
-    private var angle = 0f
     private val sunMoonPosition = SunMoonPosition(
         AstroLib.calculateJulianDay(GregorianCalendar()), coordinates?.latitude ?: 0.0,
         coordinates?.longitude ?: 0.0, coordinates?.elevation ?: 0.0, 0.0
@@ -208,13 +215,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)
             qiblaPaint.pathEffect = null
             drawBitmap(kaaba, (cx - kaaba.width / 2), (cy - radius - kaaba.height / 2), qiblaPaint)
-        }
-    }
-
-    fun setCompassAngle(angle: Float) {
-        if (this.angle != angle) {
-            this.angle = angle
-            postInvalidate()
         }
     }
 }

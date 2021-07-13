@@ -57,7 +57,7 @@ class CompassFragment : Fragment() {
             val angle = if (stopped) 0f else event.values[0] + orientation
             if (!stopped) checkIfA11yAnnounceIsNeeded(angle)
             azimuth = lowPass(angle, azimuth)
-            binding?.compassView?.setCompassAngle(azimuth)
+            binding?.compassView?.angle = azimuth
         }
 
         /**
