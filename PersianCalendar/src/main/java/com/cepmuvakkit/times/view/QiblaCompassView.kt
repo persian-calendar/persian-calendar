@@ -147,9 +147,9 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
         // Draw the marker every 15 degrees and text every 45.
         (0..23).forEach {
-            // Draw a marker.
-            drawLine(cx, (cy - radius), cx, (cy - radius + 10), markerPaint)
             withRotation(15f * it, cx, cy) {
+                // Draw a marker.
+                drawLine(cx, (cy - radius), cx, (cy - radius * .975f), markerPaint)
                 withTranslation(0f, textHeight.toFloat()) {
                     // Draw the cardinal points
                     if (it % 6 == 0) {
