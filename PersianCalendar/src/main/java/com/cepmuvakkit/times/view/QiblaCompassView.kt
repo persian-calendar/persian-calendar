@@ -17,6 +17,7 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.coordinates
+import com.byagowi.persiancalendar.utils.sp
 import com.cepmuvakkit.times.posAlgo.AstroLib
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import java.util.*
@@ -82,10 +83,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var cy = 0f // Center of Compass (cx, cy)
     private var radius = 0f // radius of Compass dial
     private var r = 0f // radius of Sun and Moon
-    private val northString = "N"
-    private val eastString = "E"
-    private val southString = "S"
-    private val westString = "W"
     private var dashedPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.pathEffect = dashPath
         it.strokeWidth = 2f
@@ -97,8 +94,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val qiblaInfo = sunMoonPosition.destinationHeading
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
-        it.textSize = 20f
-        it.textAlign = Paint.Align.LEFT
+        it.textSize = 12.sp.toFloat()
+        it.textAlign = Paint.Align.CENTER
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -109,14 +106,16 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         r = radius / 10 // Sun Moon radius
 
         // Construct a wedge-shaped path
-        val r = radius / 12
-        northwardShapePath.reset()
-        northwardShapePath.moveTo(cx, cy - radius)
-        northwardShapePath.lineTo(cx - r, cy)
-        northwardShapePath.lineTo(cx, cy + r)
-        northwardShapePath.lineTo(cx + r, cy)
-        northwardShapePath.addCircle(cx, cy, r, Path.Direction.CCW)
-        northwardShapePath.close()
+        northwardShapePath.also {
+            val r = radius / 12
+            it.reset()
+            it.moveTo(cx, cy - radius)
+            it.lineTo(cx - r, cy)
+            it.lineTo(cx, cy + r)
+            it.lineTo(cx + r, cy)
+            it.addCircle(cx, cy, r, Path.Direction.CCW)
+            it.close()
+        }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -146,8 +145,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         drawCircle(cx, cy, (radius - 20), circlePaint)
         // Rotate our perspective so that the "top" is
         // facing the current bearing.
-        val textWidth = textPaint.measureText("W").toInt()
-        val cardinalX = cx - textWidth / 2
+        val cardinalX = cx
         val cardinalY = cy - radius + textHeight
 
         // Draw the marker every 15 degrees and text every 45.
@@ -158,20 +156,18 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
                     // Draw the cardinal points
                     if (it % 6 == 0) {
                         val dirString = when (it) {
-                            0 -> northString
-                            6 -> eastString
-                            12 -> southString
-                            18 -> westString
+                            0 -> "N"
+                            6 -> "E"
+                            12 -> "S"
+                            18 -> "W"
                             else -> ""
                         }
                         drawText(dirString, cardinalX, cardinalY, textPaint)
                     } else if (it % 3 == 0) {
                         // Draw the text every alternate 45deg
                         val angle = (it * 15).toString()
-                        val angleTextWidth = textPaint.measureText(angle)
-                        val angleTextX = (cx - angleTextWidth / 2).toInt()
                         val angleTextY = cy - radius + textHeight
-                        drawText(angle, angleTextX.toFloat(), angleTextY, textPaint)
+                        drawText(angle, cardinalX, angleTextY, textPaint)
                     }
                 }
             }
