@@ -38,7 +38,6 @@ import kotlin.math.cos
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-
 class SunView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
     ValueAnimator.AnimatorUpdateListener {
 

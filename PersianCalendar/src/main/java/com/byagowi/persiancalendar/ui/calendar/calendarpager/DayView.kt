@@ -105,17 +105,17 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     (isHighTextContrastEnabled && holiday && paint == eventIndicatorPaint)
             canvas.drawCircle(
-                width / 2f + xOffset, (height - eventYOffset).toFloat(), eventIndicatorRadius,
+                width / 2f + xOffset, height - eventYOffset, eventIndicatorRadius,
                 if (overrideByTextColor) textPaint else paint
             )
         }
 
-        val xPos = (width - textPaint.measureText(text).toInt()) / 2
+        val xPos = (width - textPaint.measureText(text)) / 2f
         val textToMeasureHeight =
             if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
         textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
-        val yPos = (height + bounds.height()) / 2
-        canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), textPaint)
+        val yPos = (height + bounds.height()) / 2f
+        canvas.drawText(text, xPos, yPos, textPaint)
 
         textPaint.color = if (dayIsSelected) colorTextDaySelected else colorTextDay
         textPaint.textSize = textSize / 2f

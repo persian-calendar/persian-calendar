@@ -68,7 +68,6 @@ import kotlinx.html.unsafe
 import java.util.*
 import kotlin.math.sqrt
 
-
 /**
  * @author MEHDI DIMYADI
  * MEHDIMYADI

@@ -1,6 +1,10 @@
 package com.cepmuvakkit.times.posAlgo
 
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.round
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 /**
  * @author mgeden
