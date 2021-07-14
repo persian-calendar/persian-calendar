@@ -51,7 +51,7 @@ fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
                 binding.recyclerView.also {
                     it.layoutManager = LinearLayoutManager(context)
                     it.adapter = MonthOverviewItemAdapter(events)
-                    it.setPadding(0, 4.dp, 0, 0)
+                    it.setPadding(0, 4.dp.toInt(), 0, 0)
                 }
             }.root
         )

@@ -191,8 +191,8 @@ class DeviceInformationFragment : Fragment() {
                     tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
                 })
                 linearLayout.addView(ImageView(activity).also { imageView ->
-                    imageView.minimumHeight = 80.dp
-                    imageView.minimumWidth = 80.dp
+                    imageView.minimumHeight = 80.dp.toInt()
+                    imageView.minimumWidth = 80.dp.toInt()
                     imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
                         ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
                             valueAnimator.duration = 3000

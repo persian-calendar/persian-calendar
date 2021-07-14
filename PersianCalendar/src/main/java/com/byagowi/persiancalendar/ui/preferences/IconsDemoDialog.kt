@@ -31,11 +31,11 @@ fun Fragment.showIconsDemoDialog() {
                             0 -> setImageResource(getDayIconResource(day))
                             1 -> setImageBitmap(createStatusIcon(context, day))
                         }
-                        layoutParams = ViewGroup.MarginLayoutParams(36.dp, 36.dp)
-                            .apply { setMargins(4.dp) }
+                        layoutParams = ViewGroup.MarginLayoutParams(36.dp.toInt(), 36.dp.toInt())
+                            .apply { setMargins(4.dp.toInt()) }
                         shapeAppearanceModel = ShapeAppearanceModel().toBuilder()
-                            .setAllCorners(CornerFamily.ROUNDED, 8.dp.toFloat())
-                            .setAllEdges(TriangleEdgeTreatment(4.dp.toFloat(), true))
+                            .setAllCorners(CornerFamily.ROUNDED, 8.dp)
+                            .setAllEdges(TriangleEdgeTreatment(4.dp, true))
                             .build()
                         setBackgroundColor(Color.DKGRAY)
                     }) {}

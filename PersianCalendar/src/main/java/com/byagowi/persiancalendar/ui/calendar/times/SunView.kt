@@ -104,7 +104,7 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private val fontSize = when (language) {
         LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> 12.dp
         else -> 14.dp
-    }.toFloat()
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)

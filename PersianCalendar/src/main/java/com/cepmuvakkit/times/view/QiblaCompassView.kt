@@ -94,7 +94,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val qiblaInfo = sunMoonPosition.destinationHeading
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
-        it.textSize = 12.sp.toFloat()
+        it.textSize = 12.sp
         it.textAlign = Paint.Align.CENTER
     }
 

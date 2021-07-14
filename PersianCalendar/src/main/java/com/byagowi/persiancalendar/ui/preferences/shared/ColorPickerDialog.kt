@@ -30,7 +30,7 @@ private fun Fragment.showColorPickerDialog(
         )
         if (!isBackgroundPick) it.hideAlphaSeekBar()
         it.setPickedColor(Color.parseColor(initialColor))
-        it.setPadding(10.dp)
+        it.setPadding(10.dp.toInt())
     }
     AlertDialog.Builder(layoutInflater.context)
         .setTitle(if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color)

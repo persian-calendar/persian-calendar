@@ -10,10 +10,12 @@ import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
 import com.byagowi.persiancalendar.utils.resolveColor
+import com.byagowi.persiancalendar.utils.sp
 import kotlin.math.min
 
 class DayView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -34,20 +36,17 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = context.resolveColor(R.attr.colorEventIndicator)
     }
-    private val eventYOffset =
-        resources.getDimensionPixelSize(R.dimen.day_item_event_y_offset)
-    private val eventIndicatorRadius =
-        resources.getDimensionPixelSize(R.dimen.day_item_event_indicator_radius).toFloat()
-    private val eventIndicatorsGap =
-        resources.getDimensionPixelSize(R.dimen.day_item_event_indicators_gap)
+    private val eventYOffset = 7.sp
+    private val eventIndicatorRadius = 2.sp
+    private val eventIndicatorsGap = 2.sp
+    private val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
     private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = context.resolveColor(R.attr.colorSelectDay)
     }
     private val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth =
-            resources.getDimensionPixelSize(R.dimen.day_item_today_indicator_thickness).toFloat()
+        strokeWidth = 1.dp
         color = context.resolveColor(R.attr.colorCurrentDay)
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -100,7 +99,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
 
         val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1
         indicators.forEachIndexed { i, paint ->
-            val xOffset = eventIndicatorsGap * (i - (indicators.size - 1) / 2f) * offsetDirection
+            val xOffset = eventIndicatorsCentersDistance *
+                    (i - (indicators.size - 1) / 2f) * offsetDirection
             val overrideByTextColor = dayIsSelected ||
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     (isHighTextContrastEnabled && holiday && paint == eventIndicatorPaint)

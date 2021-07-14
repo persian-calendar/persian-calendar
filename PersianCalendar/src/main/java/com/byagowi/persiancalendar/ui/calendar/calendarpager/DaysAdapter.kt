@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.utils.isTalkBackEnabled
 import com.byagowi.persiancalendar.utils.isWeekEnd
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
+import com.byagowi.persiancalendar.utils.sp
 
 class DaysAdapter(
     private val context: Context, private val calendarPager: CalendarPager,
@@ -38,8 +39,7 @@ class DaysAdapter(
     var weeksCount: Int = 0
 
     private val dayViewLayoutParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT,
-        context.resources.getDimensionPixelSize(R.dimen.day_item_size)
+        ViewGroup.LayoutParams.MATCH_PARENT, 40.sp.toInt()
     )
     private var monthEvents: DeviceCalendarEventsStore = emptyEventsStore()
     private val isArabicDigit: Boolean = isArabicDigitSelected()
@@ -87,14 +87,10 @@ class DaysAdapter(
             itemView.setOnLongClickListener(this)
         }
 
-        private val weekNumberTextSize =
-            context.resources.getDimensionPixelSize(R.dimen.day_item_week_number_text_size)
-        private val weekDaysInitialTextSize =
-            context.resources.getDimensionPixelSize(R.dimen.day_item_week_days_initial_text_size)
-        private val arabicDigitsTextSize =
-            context.resources.getDimensionPixelSize(R.dimen.day_item_arabic_digits_text_size)
-        private val persianDigitsTextSize =
-            context.resources.getDimensionPixelSize(R.dimen.day_item_persian_digits_text_size)
+        private val weekNumberTextSize = 12.sp.toInt()
+        private val weekDaysInitialTextSize = 20.sp.toInt()
+        private val arabicDigitsTextSize = 18.sp.toInt()
+        private val persianDigitsTextSize = 25.sp.toInt()
 
         override fun onClick(v: View) {
             val itemDayView = (v as? DayView).debugAssertNotNull ?: return
@@ -119,10 +115,7 @@ class DaysAdapter(
                     val row = position / 8
                     if (row in 1..weeksCount) {
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
-                        dayView.setNonDayOfMonthItem(
-                            weekNumber,
-                            weekNumberTextSize
-                        )
+                        dayView.setNonDayOfMonthItem(weekNumber, weekNumberTextSize)
                         dayView.contentDescription = if (isTalkBackEnabled)
                             context.getString(R.string.nth_week_of_year).format(weekNumber)
                         else weekNumber
