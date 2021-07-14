@@ -44,8 +44,4 @@
 
     </LinearLayout>
 
-    <com.byagowi.persiancalendar.ui.calendar.times.SunView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
 </LinearLayout>
