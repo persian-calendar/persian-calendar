@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
@@ -15,17 +16,16 @@ class AngleDisplay(context: Context) {
 
     private val displayBackgroundText = "88.8"
     private val lcd = Typeface.createFromAsset(context.assets, "fonts/lcd.ttf")
-    private val lcdForegroundPaint = Paint().also {
+    private val lcdTextSize = 20.dp
+    private val lcdForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resources.getColor(R.color.lcd_front)
-        it.isAntiAlias = true
-        it.textSize = context.resources.getDimensionPixelSize(R.dimen.lcd_text).toFloat()
+        it.textSize = lcdTextSize
         it.typeface = lcd
         it.textAlign = Paint.Align.CENTER
     }
-    private val lcdBackgroundPaint = Paint().also {
+    private val lcdBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resources.getColor(R.color.lcd_back)
-        it.isAntiAlias = true
-        it.textSize = context.resources.getDimensionPixelSize(R.dimen.lcd_text).toFloat()
+        it.textSize = lcdTextSize
         it.typeface = lcd
         it.textAlign = Paint.Align.CENTER
     }
@@ -38,8 +38,8 @@ class AngleDisplay(context: Context) {
     private val displayFormat = DecimalFormat("00.0").also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
-    private val displayPadding = context.resources.getDimensionPixelSize(R.dimen.display_padding)
-    private val displayGap = context.resources.getDimensionPixelSize(R.dimen.display_gap)
+    private val displayPadding = 8.dp.toInt()
+    val displayGap = 20.dp.toInt()
 
     fun updatePlacement(x: Int, y: Int) {
         displayRect.set(

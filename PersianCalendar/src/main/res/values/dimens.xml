@@ -28,27 +28,13 @@
     <dimen name="calendar_item_size">100dp</dimen>
 
     <!-- Level -->
+    <dimen name="display_border">1dip</dimen>
     <dimen name="level_border_width">5dip</dimen>
     <dimen name="level_border_height">0dip</dimen>
-    <!-- Display -->
-    <dimen name="display_padding">8dip</dimen>
-    <dimen name="display_border">1dip</dimen>
-    <dimen name="display_gap">20dip</dimen>
-    <!-- Sensor -->
-    <dimen name="sensor_gap">5dip</dimen>
-    <!-- Marker -->
     <dimen name="marker_thickness">3dip</dimen>
-    <!-- Bubble -->
     <dimen name="bubble_padding">2dip</dimen>
     <dimen name="bubble_padding_top">0dip</dimen>
     <dimen name="bubble_padding_bottom">4dip</dimen>
     <dimen name="bubble_padding_right">2dip</dimen>
     <dimen name="bubble_padding_left">2dip</dimen>
-    <!-- LCD -->
-    <dimen name="lcd_text">20dip</dimen>
-    <!-- LOCK -->
-    <dimen name="lock_text">32dip</dimen>
-    <!-- INFO -->
-    <dimen name="info_text">12dip</dimen>
-
 </resources>

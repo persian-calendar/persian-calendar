@@ -3,12 +3,12 @@ package net.androgames.level
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
+import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import kotlin.math.abs
 import kotlin.math.acos
@@ -40,12 +40,8 @@ import kotlin.math.sqrt
 class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val angleDisplay = AngleDisplay(context)
-    private val infoPaint = Paint().also {
+    private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = resources.getColor(R.color.black)
-        it.isAntiAlias = true
-        it.textSize = resources.getDimensionPixelSize(R.dimen.info_text).toFloat()
-        it.typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL)
-        it.textAlign = Paint.Align.CENTER
     }
     private var isAlreadyLeveled = true // deliberately
 
@@ -72,8 +68,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val markerThickness = resources.getDimensionPixelSize(R.dimen.marker_thickness)
     private val levelBorderWidth = resources.getDimensionPixelSize(R.dimen.level_border_width)
     private val levelBorderHeight = resources.getDimensionPixelSize(R.dimen.level_border_height)
-    private val displayGap = resources.getDimensionPixelSize(R.dimen.display_gap)
-    private val sensorGap = resources.getDimensionPixelSize(R.dimen.sensor_gap)
+    private val sensorGap = 5.dp.toInt()
     private var levelMaxDimension = 0
 
     /**
@@ -132,7 +127,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     levelHeight = levelMaxDimension
                 }
                 Orientation.TOP, Orientation.BOTTOM, Orientation.LEFT, Orientation.RIGHT -> {
-                    levelWidth = canvasWidth - 2 * displayGap
+                    levelWidth = canvasWidth - 2 * angleDisplay.displayGap
                     levelHeight = (levelWidth * LEVEL_ASPECT_RATIO).toInt()
                 }
             }
@@ -238,8 +233,8 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         canvasWidth = w
         canvasHeight = h
         levelMaxDimension = min(
-            min(h, w) - 2 * displayGap,
-            max(h, w) - 2 * (sensorGap + 3 * displayGap + angleDisplay.lcdHeight)
+            min(h, w) - 2 * angleDisplay.displayGap,
+            max(h, w) - 2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight)
         )
         angleDisplay.updatePlacement(canvasWidth / 2, canvasHeight)
     }
@@ -301,8 +296,8 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             bubble2D.draw(canvas)
             marker2D.draw(canvas)
             canvas.drawLine(
-                minLevelX.toFloat(), middleY.toFloat(), (
-                        middleX - halfMarkerGap).toFloat(), middleY.toFloat(), infoPaint
+                minLevelX.toFloat(), middleY.toFloat(),
+                (middleX - halfMarkerGap).toFloat(), middleY.toFloat(), infoPaint
             )
             canvas.drawLine(
                 (middleX + halfMarkerGap).toFloat(), middleY.toFloat(),
