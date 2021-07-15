@@ -22,7 +22,7 @@ fun Fragment.showCalendarPreferenceDialog() {
     val enabledCalendarTypes = getEnabledCalendarTypes()
     val adapter = RecyclerListAdapter(getOrderedCalendarEntities(context).map {
         RecyclerListAdapter.Item(it.title, it.type.name, it.type in enabledCalendarTypes)
-    }) {
+    }, onAllItemsSwipped = {
         dialog?.dismiss()
         // Easter egg when all items are swiped
         val view = activity?.findViewById<View?>(android.R.id.content) ?: return@RecyclerListAdapter
@@ -31,7 +31,7 @@ fun Fragment.showCalendarPreferenceDialog() {
             it.interpolator = android.view.animation.AccelerateDecelerateInterpolator()
             it.addUpdateListener { value -> view.rotation = value.animatedValue as Float }
         }.start()
-    }
+    })
     val recyclerView = RecyclerView(context).also {
         it.setHasFixedSize(true)
         it.layoutManager = LinearLayoutManager(activity)

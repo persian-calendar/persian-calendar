@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.utils.layoutInflater
 
 class RecyclerListAdapter(
-    private var items: List<Item>, private val onAllItemsDismissed: () -> Unit
+    private var items: List<Item>, private val onAllItemsSwipped: () -> Unit
 ) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
     data class Item(val title: String, val key: String, val enabled: Boolean)
@@ -68,7 +68,7 @@ class RecyclerListAdapter(
     fun onItemDismissed(position: Int) {
         items = items.filterIndexed { i, _ -> i != position }
         notifyItemRemoved(position)
-        if (items.isEmpty()) onAllItemsDismissed()
+        if (items.isEmpty()) onAllItemsSwipped()
     }
 
     override fun getItemCount(): Int = items.size
