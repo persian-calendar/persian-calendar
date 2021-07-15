@@ -43,7 +43,6 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = resources.getColor(R.color.black)
     }
-    private var isAlreadyLeveled = true // deliberately
 
     /**
      * Dimensions
@@ -215,14 +214,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             angleX /= l
             angleY /= l
         }
-        if (orientation?.isLevel(newPitch, newRoll, newBalance, .8f) == true) {
-            if (!isAlreadyLeveled) {
-                a11yAnnounceAndClick(this, R.string.level)
-                isAlreadyLeveled = true
-            }
-        } else {
-            isAlreadyLeveled = false
-        }
+        checkIfA11yAnnounceIsNeeded(newOrientation, newPitch, newRoll, newBalance)
         postInvalidate()
     }
 
@@ -340,6 +332,16 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             )
             marker1D.draw(canvas)
         }
+    }
+
+    private var isAlreadyLeveled = true // deliberately
+    private fun checkIfA11yAnnounceIsNeeded(
+        newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float
+    ) {
+        isAlreadyLeveled = if (newOrientation.isLevel(newPitch, newRoll, newBalance, .8f)) {
+            if (!isAlreadyLeveled) a11yAnnounceAndClick(this, R.string.level)
+            true
+        } else false
     }
 
     companion object {

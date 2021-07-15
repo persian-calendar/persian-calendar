@@ -182,7 +182,7 @@ class CompassFragment : Fragment() {
     private var isCurrentlyWest = true
     private var isCurrentlySouth = true
     private var isCurrentlyQibla = true
-    fun checkIfA11yAnnounceIsNeeded(angle: Float) {
+    private fun checkIfA11yAnnounceIsNeeded(angle: Float) {
         val binding = binding ?: return
         fun checkIsReachedToDegree(
             currentState: Boolean, @StringRes directionString: Int, directionAngle: Int
