@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
+import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getCompatDrawable
@@ -34,7 +35,7 @@ class AngleDisplay(context: Context) {
     }
     private val lcdWidth = displayRect.width()
     val lcdHeight = displayRect.height()
-    private val display = context.getCompatDrawable(R.drawable.display)
+    private val displayDrawable = context.getCompatDrawable(R.drawable.display)
     private val displayFormat = DecimalFormat("00.0").also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
@@ -51,20 +52,17 @@ class AngleDisplay(context: Context) {
     }
 
     fun draw(canvas: Canvas, angle: Float, offsetXFactor: Int = 0) {
-        val offsetX = offsetXFactor * (displayRect.width() + displayGap) / 2
-        displayRect.left += offsetX
-        displayRect.right += offsetX
-        display.bounds = displayRect
-        display.draw(canvas)
-        canvas.drawText(
-            displayBackgroundText, displayRect.exactCenterX(),
-            displayRect.centerY() + lcdHeight / 2f, lcdBackgroundPaint
-        )
-        canvas.drawText(
-            displayFormat.format(angle), displayRect.exactCenterX(),
-            displayRect.centerY() + lcdHeight / 2f, lcdForegroundPaint
-        )
-        displayRect.left -= offsetX
-        displayRect.right -= offsetX
+        canvas.withTranslation(x = offsetXFactor * (displayRect.width() + displayGap) / 2f) {
+            displayDrawable.bounds = displayRect
+            displayDrawable.draw(this)
+            drawText(
+                displayBackgroundText, displayRect.exactCenterX(),
+                displayRect.centerY() + lcdHeight / 2f, lcdBackgroundPaint
+            )
+            drawText(
+                displayFormat.format(angle), displayRect.exactCenterX(),
+                displayRect.centerY() + lcdHeight / 2f, lcdForegroundPaint
+            )
+        }
     }
 }
