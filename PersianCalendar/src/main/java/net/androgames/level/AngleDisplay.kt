@@ -29,11 +29,11 @@ class AngleDisplay(context: Context) {
         it.typeface = lcd
         it.textAlign = Paint.Align.CENTER
     }
-    val displayRect = Rect().also {
+    private val displayRect = Rect().also {
         lcdBackgroundPaint.getTextBounds(displayBackgroundText, 0, displayBackgroundText.length, it)
     }
     private val lcdWidth = displayRect.width()
-    private val lcdHeight = displayRect.height()
+    val lcdHeight = displayRect.height()
     private val display = context.getCompatDrawable(R.drawable.display)
     private val displayFormat = DecimalFormat("00.0").also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
@@ -41,17 +41,19 @@ class AngleDisplay(context: Context) {
     private val displayPadding = context.resources.getDimensionPixelSize(R.dimen.display_padding)
     private val displayGap = context.resources.getDimensionPixelSize(R.dimen.display_gap)
 
-    fun onSizeChange(w: Int, h: Int) {
-        // display
+    fun updatePlacement(x: Int, y: Int) {
         displayRect.set(
-            w / 2 - lcdWidth / 2 - displayPadding,
-            h - displayGap - 2 * displayPadding - lcdHeight,
-            w / 2 + lcdWidth / 2 + displayPadding,
-            h - displayGap
+            x - lcdWidth / 2 - displayPadding,
+            y - displayGap - 2 * displayPadding - lcdHeight,
+            x + lcdWidth / 2 + displayPadding,
+            y - displayGap
         )
     }
 
-    fun draw(canvas: Canvas, angle: Float) {
+    fun draw(canvas: Canvas, angle: Float, offsetXFactor: Int = 0) {
+        val offsetX = offsetXFactor * (displayRect.width() + displayGap) / 2
+        displayRect.left += offsetX
+        displayRect.right += offsetX
         display.bounds = displayRect
         display.draw(canvas)
         canvas.drawText(
@@ -62,5 +64,7 @@ class AngleDisplay(context: Context) {
             displayFormat.format(angle), displayRect.exactCenterX(),
             displayRect.centerY() + lcdHeight / 2f, lcdForegroundPaint
         )
+        displayRect.left -= offsetX
+        displayRect.right -= offsetX
     }
 }

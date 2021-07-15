@@ -103,10 +103,10 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        angleDisplay.onSizeChange(w, h)
+        angleDisplay.updatePlacement(w / 2, h)
 
         cx = w / 2f
-        cy = angleDisplay.displayRect.top / 2f
+        cy = (h - angleDisplay.lcdHeight) / 2f
         radius = min(cx - cx / 12, cy - cy / 12)
         r = radius / 10 // Sun Moon radius
 
