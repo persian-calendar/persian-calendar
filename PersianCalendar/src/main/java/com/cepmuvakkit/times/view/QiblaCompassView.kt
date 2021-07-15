@@ -106,7 +106,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         angleDisplay.updatePlacement(w / 2, h)
 
         cx = w / 2f
-        cy = (h - angleDisplay.lcdHeight) / 2f
+        cy = h / 2f - angleDisplay.lcdHeight
         radius = min(cx - cx / 12, cy - cy / 12)
         r = radius / 10 // Sun Moon radius
 

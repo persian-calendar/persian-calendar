@@ -113,14 +113,8 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     ) {
         if (orientation == null || orientation != newOrientation) {
             orientation = newOrientation
-            val infoY: Int = when (newOrientation) {
-                Orientation.LEFT, Orientation.RIGHT -> (canvasHeight - canvasWidth) / 2 + canvasWidth
-                Orientation.TOP, Orientation.BOTTOM -> canvasHeight
-                else -> canvasHeight
-            }
-            val sensorY = infoY - sensorGap
             middleX = canvasWidth / 2
-            middleY = canvasHeight / 2
+            middleY = canvasHeight / 2 - angleDisplay.displayGap
             when (newOrientation) {
                 Orientation.LANDING -> {
                     levelWidth = levelMaxDimension
@@ -146,7 +140,11 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             minBubble = maxBubble - bubbleHeight
 
             // display
-            angleDisplay.updatePlacement(middleX, sensorY)
+            val displayY = when (newOrientation) {
+                Orientation.LEFT, Orientation.RIGHT -> (canvasHeight - canvasWidth) / 2 + canvasWidth
+                else -> canvasHeight
+            }
+            angleDisplay.updatePlacement(middleX, displayY)
 
             // marker
             halfMarkerGap = (levelWidth * MARKER_GAP / 2).toInt()
