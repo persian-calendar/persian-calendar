@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.sp
 import com.cepmuvakkit.times.posAlgo.AstroLib
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import net.androgames.level.AngleDisplay
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.min
@@ -98,10 +99,14 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.textAlign = Paint.Align.CENTER
     }
 
+    private val angleDisplay = AngleDisplay(context)
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
+        angleDisplay.onSizeChange(w, h)
+
         cx = w / 2f
-        cy = (h - h / 4) / 2f
+        cy = angleDisplay.displayRect.top / 2f
         radius = min(cx - cx / 12, cy - cy / 12)
         r = radius / 10 // Sun Moon radius
 
@@ -119,7 +124,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-        // Attach and Detach capability lies
+        angleDisplay.draw(canvas, angle)
         canvas.withRotation(-angle, cx, cy) {
             drawDial()
             drawTrueNorthArrow()
@@ -185,18 +190,22 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawMoon() {
-        val moonPhase = sunMoonPosition.moonPhase
         if (sunMoonPosition.moonPosition.altitude <= -5) return
         withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
             val eOffset = (sunMoonPosition.moonPosition.altitude / 90 * radius).toInt()
             // elevation Offset 0 for 0 degree; r for 90 degree
-            moonRect[(cx - r), (cy + eOffset - radius - r), (cx + r)] = cy + eOffset - radius + r
+            moonRect.set(
+                cx - r, cy + eOffset - radius - r,
+                cx + r, cy + eOffset - radius + r
+            )
             drawArc(moonRect, 90f, 180f, false, moonPaint)
             drawArc(moonRect, 270f, 180f, false, moonPaintB)
-            val arcWidth = ((moonPhase - 0.5) * (4 * r)).toInt()
+            val arcWidth = ((sunMoonPosition.moonPhase - 0.5) * (4 * r)).toInt()
             moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
-            moonOval[(cx - abs(arcWidth) / 2), (cy + eOffset - radius - r),
-                    (cx + abs(arcWidth) / 2)] = (cy + eOffset - radius + r)
+            moonOval.set(
+                cx - abs(arcWidth) / 2, cy + eOffset - radius - r,
+                cx + abs(arcWidth) / 2, cy + eOffset - radius + r
+            )
             drawArc(moonOval, 0f, 360f, false, moonPaintO)
             drawArc(moonRect, 0f, 360f, false, moonPaintD)
             moonPaintD.pathEffect = dashPath
@@ -210,7 +219,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             qiblaPaint.pathEffect = dashPath
             drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)
             qiblaPaint.pathEffect = null
-            drawBitmap(kaaba, (cx - kaaba.width / 2), (cy - radius - kaaba.height / 2), qiblaPaint)
+            drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, qiblaPaint)
         }
     }
 }

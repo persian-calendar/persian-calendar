@@ -42,8 +42,6 @@ import kotlin.math.sqrt
  */
 class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private val displayRect = Rect()
-
     /**
      * Format des angles
      */
@@ -68,8 +66,12 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         it.textSize = resources.getDimensionPixelSize(R.dimen.lcd_text).toFloat()
         it.typeface = lcd
         it.textAlign = Paint.Align.CENTER
-        it.getTextBounds(displayBackgroundText, 0, displayBackgroundText.length, displayRect)
     }
+    private val displayRect = Rect().also {
+        lcdBackgroundPaint.getTextBounds(displayBackgroundText, 0, displayBackgroundText.length, it)
+    }
+    private val lcdWidth = displayRect.width()
+    private val lcdHeight = displayRect.height()
     private val infoPaint = Paint().also {
         it.color = resources.getColor(R.color.black)
         it.isAntiAlias = true
@@ -102,8 +104,6 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val markerThickness = resources.getDimensionPixelSize(R.dimen.marker_thickness)
     private val levelBorderWidth = resources.getDimensionPixelSize(R.dimen.level_border_width)
     private val levelBorderHeight = resources.getDimensionPixelSize(R.dimen.level_border_height)
-    private val lcdWidth = displayRect.width()
-    private val lcdHeight = displayRect.height()
     private val displayPadding = resources.getDimensionPixelSize(R.dimen.display_padding)
     private val displayGap = resources.getDimensionPixelSize(R.dimen.display_gap)
     private val sensorGap = resources.getDimensionPixelSize(R.dimen.sensor_gap)
@@ -185,8 +185,12 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             minBubble = maxBubble - bubbleHeight
 
             // display
-            displayRect[middleX - lcdWidth / 2 - displayPadding, sensorY - displayGap - 2 * displayPadding - lcdHeight, middleX + lcdWidth / 2 + displayPadding] =
+            displayRect.set(
+                middleX - lcdWidth / 2 - displayPadding,
+                sensorY - displayGap - 2 * displayPadding - lcdHeight,
+                middleX + lcdWidth / 2 + displayPadding,
                 sensorY - displayGap
+            )
 
             // marker
             halfMarkerGap = (levelWidth * MARKER_GAP / 2).toInt()
