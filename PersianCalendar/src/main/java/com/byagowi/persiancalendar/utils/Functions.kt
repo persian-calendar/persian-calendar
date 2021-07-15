@@ -8,6 +8,7 @@ import android.app.PendingIntent
 import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Log
 import android.util.TypedValue
@@ -526,7 +527,7 @@ fun NavController.navigateSafe(directions: NavDirections) = runCatching {
 }.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 
 fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
-    AppCompatResources.getDrawable(this, drawableRes)
+    AppCompatResources.getDrawable(this, drawableRes).debugAssertNotNull ?: ShapeDrawable()
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
     this.setOnMenuItemClickListener { action(); true /* it captures the click event */ }.let {}

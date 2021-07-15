@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
-import android.graphics.drawable.ShapeDrawable
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import java.text.DecimalFormat
@@ -35,7 +34,7 @@ class AngleDisplay(context: Context) {
     }
     private val lcdWidth = displayRect.width()
     private val lcdHeight = displayRect.height()
-    private val display = context.getCompatDrawable(R.drawable.display) ?: ShapeDrawable()
+    private val display = context.getCompatDrawable(R.drawable.display)
     private val displayFormat = DecimalFormat("00.0").also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
