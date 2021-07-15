@@ -29,6 +29,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/stop"
         app:layout_anchor="@id/bottom_appbar"
         app:srcCompat="@drawable/ic_stop" />
 
