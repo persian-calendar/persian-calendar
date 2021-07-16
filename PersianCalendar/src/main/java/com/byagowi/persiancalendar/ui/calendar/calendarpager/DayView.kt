@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
+import com.byagowi.persiancalendar.utils.otherCalendars
 import com.byagowi.persiancalendar.utils.resolveColor
 import com.byagowi.persiancalendar.utils.sp
 import kotlin.math.min
@@ -49,7 +50,9 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         strokeWidth = 1.dp
         color = context.resolveColor(R.attr.colorCurrentDay)
     }
-    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textAlign = Paint.Align.CENTER
+    }
 
     fun setTextTypeface(typeface: Typeface) {
         textPaint.typeface = typeface
@@ -110,18 +113,29 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             )
         }
 
-        val xPos = (width - textPaint.measureText(text)) / 2f
         val textToMeasureHeight =
             if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
         textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
         val yPos = (height + bounds.height()) / 2f
-        canvas.drawText(text, xPos, yPos, textPaint)
+        canvas.drawText(text, width / 2f, yPos, textPaint)
 
         textPaint.color = if (dayIsSelected) colorTextDaySelected else colorTextDay
         textPaint.textSize = textSize / 2f
         if (header.isNotEmpty()) {
-            val headerXPos = (width - textPaint.measureText(header).toInt()) / 2F
-            canvas.drawText(header, headerXPos, yPos * 0.87f - bounds.height(), textPaint)
+            canvas.drawText(header, width / 2f, yPos * 0.87f - bounds.height(), textPaint)
+        }
+
+        // Experiment around what happens if we show other calendars day of month
+        if ((false)) jdn?.also {
+            otherCalendars.forEachIndexed { index, calendar ->
+                canvas.drawText(
+                    // better to not calculate this during onDraw
+                    formatNumber(it.toCalendar(calendar).dayOfMonth),
+                    (width - radius * if (index == 1) -offsetDirection else offsetDirection) / 2f,
+                    (height + bounds.height() + radius) / 2f,
+                    textPaint
+                )
+            }
         }
     }
 
