@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.RectF
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
@@ -53,19 +52,20 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textAlign = Paint.Align.CENTER
     }
+    private val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textAlign = Paint.Align.CENTER
+    }
 
     fun setTextTypeface(typeface: Typeface) {
         textPaint.typeface = typeface
+        headerTextPaint.typeface = typeface
     }
 
-    private val bounds = Rect()
-    private val drawingRect = RectF()
     private var text = ""
     private var today = false
     private var dayIsSelected = false
     private var indicators = emptyList<Paint>()
     private var holiday = false
-    private var textSize = 0
     var jdn: Jdn? = null
         private set
     var dayOfMonth = -1
@@ -73,24 +73,16 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private var isNumber = false
     private var header = ""
 
+    private val textBounds = Rect()
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        val width = width
-        val height = height
+
+        // Draw circle around day
         val radius = min(width, height) / 2f
+        if (dayIsSelected) canvas.drawCircle(width / 2f, height / 2f, radius - 5, selectedPaint)
+        if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, todayPaint)
 
-        getDrawingRect(bounds)
-        drawingRect.set(bounds)
-        drawingRect.inset(radius * 0.1f, radius * 0.1f)
-
-        if (dayIsSelected) {
-            canvas.drawCircle(width / 2f, height / 2f, radius - 5, selectedPaint)
-        }
-
-        if (today) {
-            canvas.drawCircle(width / 2f, height / 2f, radius - 5, todayPaint)
-        }
-
+        // Draw day number/label
         textPaint.color = when {
             isNumber && holiday && dayIsSelected -> colorHolidaySelected
             isNumber && holiday && !dayIsSelected -> colorHoliday
@@ -98,8 +90,13 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             isNumber && !holiday && !dayIsSelected -> colorTextDay
             else -> colorTextDayName
         }
-        textPaint.textSize = textSize.toFloat()
+        val textToMeasureHeight =
+            if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
+        textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, textBounds)
+        val yPos = (height + textBounds.height()) / 2f
+        canvas.drawText(text, width / 2f, yPos, textPaint)
 
+        // Draw indicators, whether a day has event or appointment
         val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1
         indicators.forEachIndexed { i, paint ->
             val xOffset = eventIndicatorsCentersDistance *
@@ -113,27 +110,23 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             )
         }
 
-        val textToMeasureHeight =
-            if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
-        textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, bounds)
-        val yPos = (height + bounds.height()) / 2f
-        canvas.drawText(text, width / 2f, yPos, textPaint)
-
-        textPaint.color = if (dayIsSelected) colorTextDaySelected else colorTextDay
-        textPaint.textSize = textSize / 2f
+        // Draw day header which is used for shit work
         if (header.isNotEmpty()) {
-            canvas.drawText(header, width / 2f, yPos * 0.87f - bounds.height(), textPaint)
+            headerTextPaint.color = if (dayIsSelected) colorTextDaySelected else colorTextDay
+            canvas.drawText(header, width / 2f, yPos * 0.87f - textBounds.height(), headerTextPaint)
         }
 
         // Experiment around what happens if we show other calendars day of month
         if ((false)) jdn?.also {
-            otherCalendars.forEachIndexed { index, calendar ->
+            otherCalendars.forEachIndexed { i, calendar ->
+                val offset = (if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1) *
+                        if (i == 1) -1 else 1
                 canvas.drawText(
                     // better to not calculate this during onDraw
                     formatNumber(it.toCalendar(calendar).dayOfMonth),
-                    (width - radius * if (index == 1) -offsetDirection else offsetDirection) / 2f,
-                    (height + bounds.height() + radius) / 2f,
-                    textPaint
+                    (width - radius * offset) / 2f,
+                    (height + textBounds.height() + radius) / 2f,
+                    headerTextPaint
                 )
             }
         }
@@ -149,7 +142,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.today = isToday
         this.dayIsSelected = isSelected
         this.holiday = isHoliday
-        this.textSize = textSize
         this.jdn = jdn
         this.dayOfMonth = dayOfMonth
         this.isNumber = isNumber
@@ -158,6 +150,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             hasAppointment to appointmentIndicatorPaint,
             hasEvent to eventIndicatorPaint
         ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
+        textPaint.textSize = textSize.toFloat()
+        headerTextPaint.textSize = textSize / 2f
         postInvalidate()
     }
 
