@@ -377,8 +377,7 @@ fun Context?.copyToClipboard(label: CharSequence?, text: CharSequence?) = this?.
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
     val message = (if (isResourcesRTL(this)) RLM else "") +
             getString(R.string.date_copied_clipboard).format(text)
-    Toast.makeText(this, message, Toast.LENGTH_SHORT)
-        .show()
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }?.onFailure(logException)?.getOrNull().debugAssertNotNull.let {}
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
