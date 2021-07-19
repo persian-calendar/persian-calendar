@@ -53,5 +53,5 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
     }
 
     override fun onClick(view: View?) =
-        copyToClipboard(view, "converted date", view?.contentDescription)
+        view?.context.copyToClipboard("converted date", view?.contentDescription)
 }

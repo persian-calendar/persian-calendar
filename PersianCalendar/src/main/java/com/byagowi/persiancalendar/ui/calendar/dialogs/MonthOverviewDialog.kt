@@ -95,9 +95,8 @@ private class MonthOverviewItemAdapter(private val rows: List<MonthOverviewRecor
                 record.nonHolidays.isNotEmpty()
         }
 
-        override fun onClick(v: View?) = copyToClipboard(
-            binding.root, "Events", rows[bindingAdapterPosition].toString(),
-            showToastInstead = true
+        override fun onClick(v: View?) = v?.context.copyToClipboard(
+            "Events", rows[bindingAdapterPosition].toString()
         )
     }
 }

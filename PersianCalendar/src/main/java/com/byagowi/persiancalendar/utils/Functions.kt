@@ -44,7 +44,6 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
-import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -372,19 +371,13 @@ fun askForCalendarPermission(activity: Activity?) {
         .show()
 }
 
-fun copyToClipboard(
-    view: View?, label: CharSequence?, text: CharSequence?, showToastInstead: Boolean = false
-) = runCatching {
-    view ?: return@runCatching null
-    val clipboardService = view.context.getSystemService<ClipboardManager>()
+fun Context?.copyToClipboard(label: CharSequence?, text: CharSequence?) = this?.runCatching {
+    val clipboardService = getSystemService<ClipboardManager>()
     if (clipboardService == null || label == null || text == null) return@runCatching null
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
-    val textToShow = view.context.getString(R.string.date_copied_clipboard).format(text)
-    if (showToastInstead)
-        Toast.makeText(view.context, textToShow, Toast.LENGTH_SHORT).show()
-    else
-        Snackbar.make(view, textToShow, Snackbar.LENGTH_SHORT).show()
-}.onFailure(logException).getOrNull().debugAssertNotNull.let {}
+    Toast.makeText(this, getString(R.string.date_copied_clipboard).format(text), Toast.LENGTH_SHORT)
+        .show()
+}?.onFailure(logException)?.getOrNull().debugAssertNotNull.let {}
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
