@@ -67,9 +67,8 @@ fun Fragment.showGPSLocationDialog() {
     var cityName: String? = null
     var countryCode: String? = null
     val binding = GpsLocationDialogBinding.inflate(activity.layoutInflater)
-    listOf(
-        binding.cityName, binding.coordinates, binding.coordinatesIso6709, binding.plusLink
-    ).forEach { it.setOnClickListener { _ -> context?.copyToClipboard("coords", it.text) } }
+    listOf(binding.cityName, binding.coordinates, binding.coordinatesIso6709, binding.plusLink)
+        .forEach { it.setOnClickListener { _ -> it.text.copyToClipboard(context) } }
 
     // This is preference fragment view lifecycle but ideally we should've used
     // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()

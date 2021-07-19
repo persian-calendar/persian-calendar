@@ -371,13 +371,12 @@ fun askForCalendarPermission(activity: Activity?) {
         .show()
 }
 
-fun Context?.copyToClipboard(label: CharSequence?, text: CharSequence?) = this?.runCatching {
-    val clipboardService = getSystemService<ClipboardManager>()
-    if (clipboardService == null || label == null || text == null) return@runCatching null
-    clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
-    val message = (if (isResourcesRTL(this)) RLM else "") +
-            getString(R.string.date_copied_clipboard).format(text)
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+fun CharSequence?.copyToClipboard(context: Context?) = this?.runCatching {
+    context?.getSystemService<ClipboardManager>()
+        ?.setPrimaryClip(ClipData.newPlainText(null, this)) ?: return@runCatching null
+    val message = (if (isResourcesRTL(context)) RLM else "") +
+            context.getString(R.string.date_copied_clipboard).format(this)
+    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
 }?.onFailure(logException)?.getOrNull().debugAssertNotNull.let {}
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =

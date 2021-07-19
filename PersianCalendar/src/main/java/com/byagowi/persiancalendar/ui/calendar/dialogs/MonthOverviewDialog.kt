@@ -95,8 +95,7 @@ private class MonthOverviewItemAdapter(private val rows: List<MonthOverviewRecor
                 record.nonHolidays.isNotEmpty()
         }
 
-        override fun onClick(v: View?) = v?.context.copyToClipboard(
-            "Events", rows[bindingAdapterPosition].toString()
-        )
+        override fun onClick(v: View?) =
+            rows[bindingAdapterPosition].toString().copyToClipboard(v?.context)
     }
 }

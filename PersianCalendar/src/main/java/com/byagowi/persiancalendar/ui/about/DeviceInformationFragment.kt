@@ -531,9 +531,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
             binding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        override fun onClick(v: View?) = v?.context.copyToClipboard(
-            deviceInformationItems[bindingAdapterPosition].title,
-            deviceInformationItems[bindingAdapterPosition].content,
-        )
+        override fun onClick(v: View?) =
+            deviceInformationItems[bindingAdapterPosition].content.copyToClipboard(v?.context)
     }
 }
