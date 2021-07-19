@@ -375,7 +375,9 @@ fun Context?.copyToClipboard(label: CharSequence?, text: CharSequence?) = this?.
     val clipboardService = getSystemService<ClipboardManager>()
     if (clipboardService == null || label == null || text == null) return@runCatching null
     clipboardService.setPrimaryClip(ClipData.newPlainText(label, text))
-    Toast.makeText(this, getString(R.string.date_copied_clipboard).format(text), Toast.LENGTH_SHORT)
+    val message = (if (isResourcesRTL(this)) RLM else "") +
+            getString(R.string.date_copied_clipboard).format(text)
+    Toast.makeText(this, message, Toast.LENGTH_SHORT)
         .show()
 }?.onFailure(logException)?.getOrNull().debugAssertNotNull.let {}
 

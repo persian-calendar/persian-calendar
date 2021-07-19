@@ -99,7 +99,7 @@ const val BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP"
 const val KEY_EXTRA_PRAYER_KEY = "prayer_name"
 const val FONT_PATH = "fonts/NotoNaskhArabic-Regular.ttf"
 
-const val RLM = '\u200F'
+const val RLM = "\u200F"
 const val ZWJ = "\u200D"
 
 const val DEFAULT_AM = "ق.ظ"
