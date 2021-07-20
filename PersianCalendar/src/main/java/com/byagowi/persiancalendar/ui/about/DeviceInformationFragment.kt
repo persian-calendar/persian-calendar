@@ -331,7 +331,7 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
     else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
 }
 
-private class DeviceInformationAdapter(activity: Activity) :
+private class DeviceInformationAdapter(private val activity: Activity) :
     ListAdapter<DeviceInformationAdapter.Item, DeviceInformationAdapter.ViewHolder>(
         object : DiffUtil.ItemCallback<Item>() {
             override fun areItemsTheSame(old: Item, new: Item) = old.title == new.title
@@ -536,16 +536,17 @@ private class DeviceInformationAdapter(activity: Activity) :
             binding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        override fun onClick(v: View) =
-            deviceInformationItems[bindingAdapterPosition].content.copyToClipboard(v.context)
+        override fun onClick(v: View?) =
+            deviceInformationItems[bindingAdapterPosition].content.copyToClipboard(activity)
     }
 
-    fun CharSequence?.copyToClipboard(context: Context?) = this?.runCatching {
-        context?.getSystemService<ClipboardManager>()
+    // TODO: Consider merging it back with Functions.copyToClipboard
+    fun CharSequence?.copyToClipboard(activity: Activity) = this?.runCatching {
+        activity?.getSystemService<ClipboardManager>()
             ?.setPrimaryClip(ClipData.newPlainText(null, this)) ?: return@runCatching null
-        val message = (if (isResourcesRTL(context)) RLM else "") +
-                context.getString(R.string.date_copied_clipboard).format(this)
-        Snackbar.make((context as AppCompatActivity).findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
+        val message = (if (isResourcesRTL(activity)) RLM else "") +
+                activity.getString(R.string.date_copied_clipboard).format(this)
+        val view = activity.findViewById(android.R.id.content) ?: return@runCatching null
+        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
     }?.onFailure(logException)?.getOrNull().debugAssertNotNull.let {}
-
 }
