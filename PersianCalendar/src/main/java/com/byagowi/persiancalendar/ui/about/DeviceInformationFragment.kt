@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
@@ -30,6 +32,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.annotation.ColorInt
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
@@ -41,6 +44,8 @@ import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.RLM
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.DeviceInformationRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.utils.*
@@ -86,7 +91,7 @@ class DeviceInformationFragment : Fragment() {
 
         binding.circularReveal.circularRevealFromMiddle()
 
-        val adapter = DeviceInformationAdapter(activity ?: return@also, binding.root)
+        val adapter = DeviceInformationAdapter(activity ?: return@also)
         binding.recyclerView.let {
             it.setHasFixedSize(true)
             it.layoutManager = LinearLayoutManager(inflater.context)
@@ -326,7 +331,7 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
     else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
 }
 
-private class DeviceInformationAdapter(activity: Activity, private val rootView: View) :
+private class DeviceInformationAdapter(activity: Activity) :
     ListAdapter<DeviceInformationAdapter.Item, DeviceInformationAdapter.ViewHolder>(
         object : DiffUtil.ItemCallback<Item>() {
             override fun areItemsTheSame(old: Item, new: Item) = old.title == new.title
@@ -351,7 +356,7 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
         Item("Model", Build.MODEL, ""),
         Item("Product", Build.PRODUCT, ""),
         Item("Screen Resolution", activity.windowManager.let {
-            "%d*%d pixels".format(Locale.ENGLISH, it.defaultDisplay.width, it.defaultDisplay.height)
+            "%d*%d pixels".format(Locale.ENGLISH, activity.resources.displayMetrics.widthPixels, activity.resources.displayMetrics.heightPixels)
         }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
         Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
         Item("Available Processors", Runtime.getRuntime().availableProcessors().toString(), ""),
@@ -531,7 +536,16 @@ private class DeviceInformationAdapter(activity: Activity, private val rootView:
             binding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        override fun onClick(v: View?) =
-            deviceInformationItems[bindingAdapterPosition].content.copyToClipboard(v?.context)
+        override fun onClick(v: View) =
+            deviceInformationItems[bindingAdapterPosition].content.copyToClipboard(v.context)
     }
+
+    fun CharSequence?.copyToClipboard(context: Context?) = this?.runCatching {
+        context?.getSystemService<ClipboardManager>()
+            ?.setPrimaryClip(ClipData.newPlainText(null, this)) ?: return@runCatching null
+        val message = (if (isResourcesRTL(context)) RLM else "") +
+                context.getString(R.string.date_copied_clipboard).format(this)
+        Snackbar.make((context as AppCompatActivity).findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show()
+    }?.onFailure(logException)?.getOrNull().debugAssertNotNull.let {}
+
 }
