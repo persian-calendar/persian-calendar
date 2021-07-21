@@ -280,7 +280,7 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
 }
 
 class CheckerBoard(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
-    private val checkerBoard = createCheckerRoundedBoard(Color.parseColor("#100A0A0A"))
+    private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawPaint(checkerBoard)
@@ -288,11 +288,10 @@ class CheckerBoard(context: Context, attrs: AttributeSet?) : FrameLayout(context
 }
 
 // https://stackoverflow.com/a/58471997
+@Suppress("SameParameterValue")
 private fun createCheckerRoundedBoard(
-    @ColorInt color: Int
+    tileSize: Float, r: Float, @ColorInt color: Int
 ) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
-    val tileSize = 40f
-    val r = 8f
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return@also
     val tileSize2x = tileSize.toInt() * 2
     val bitmap = Bitmap.createBitmap(tileSize2x, tileSize2x, Bitmap.Config.ARGB_8888)
