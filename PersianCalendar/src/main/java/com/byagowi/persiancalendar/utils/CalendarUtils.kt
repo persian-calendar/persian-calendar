@@ -5,8 +5,8 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
 import android.provider.CalendarContract
-import android.text.Html
 import androidx.core.app.ActivityCompat
+import androidx.core.text.HtmlCompat
 import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
@@ -221,7 +221,7 @@ fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
 
 fun formatDeviceCalendarEventTitle(event: CalendarEvent.DeviceCalendarEvent): String =
     (event.title + if (event.description.isNotBlank())
-        " (" + Html.fromHtml(event.description).toString().trim() + ")"
+        " (" + HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim() + ")"
     else "").replace("\n", " ").trim()
 
 // Move this to strings or somewhere
