@@ -356,7 +356,11 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         Item("Model", Build.MODEL, ""),
         Item("Product", Build.PRODUCT, ""),
         Item("Screen Resolution", activity.windowManager.let {
-            "%d*%d pixels".format(Locale.ENGLISH, activity.resources.displayMetrics.widthPixels, activity.resources.displayMetrics.heightPixels)
+            "%d*%d pixels".format(
+                Locale.ENGLISH,
+                activity.resources.displayMetrics.widthPixels,
+                activity.resources.displayMetrics.heightPixels
+            )
         }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
         Item("DPI", activity.resources.displayMetrics.densityDpi.toString(), ""),
         Item("Available Processors", Runtime.getRuntime().availableProcessors().toString(), ""),
@@ -537,16 +541,9 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         }
 
         override fun onClick(v: View?) =
-            deviceInformationItems[bindingAdapterPosition].content.copyToClipboard(activity)
+            activity.copyToClipboard(deviceInformationItems[bindingAdapterPosition].content) {
+                val view = activity.findViewById<View>(android.R.id.content)
+                Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
+            }
     }
-
-    // TODO: Consider merging it back with Functions.copyToClipboard
-    fun CharSequence?.copyToClipboard(activity: Activity) = this?.runCatching {
-        activity?.getSystemService<ClipboardManager>()
-            ?.setPrimaryClip(ClipData.newPlainText(null, this)) ?: return@runCatching null
-        val message = (if (isResourcesRTL(activity)) RLM else "") +
-                activity.getString(R.string.date_copied_clipboard).format(this)
-        val view = activity.findViewById(android.R.id.content) ?: return@runCatching null
-        Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
-    }?.onFailure(logException)?.getOrNull().debugAssertNotNull.let {}
 }

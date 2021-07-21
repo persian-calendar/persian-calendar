@@ -96,6 +96,6 @@ private class MonthOverviewItemAdapter(private val rows: List<MonthOverviewRecor
         }
 
         override fun onClick(v: View?) =
-            rows[bindingAdapterPosition].toString().copyToClipboard(v?.context)
+            v?.context.copyToClipboard(rows[bindingAdapterPosition].toString())
     }
 }
