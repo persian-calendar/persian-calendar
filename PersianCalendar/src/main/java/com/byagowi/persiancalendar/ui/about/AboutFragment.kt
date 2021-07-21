@@ -161,14 +161,9 @@ class AboutFragment : Fragment() {
     }
 
     private fun launchEmailIntent(defaultMessage: String? = null) {
-        val emailIntent = Intent(
-            Intent.ACTION_SENDTO,
-            Uri.fromParts("mailto", "persian-calendar-admin@googlegroups.com", null)
-        ).apply {
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            putExtra(
-                Intent.EXTRA_TEXT,
-                """$defaultMessage
+        val email = "persian-calendar-admin@googlegroups.com"
+        val subject = getString(R.string.app_name)
+        val body = """$defaultMessage
 
 
 
@@ -178,7 +173,16 @@ Manufacturer: ${Build.MANUFACTURER}
 Model: ${Build.MODEL}
 Android Version: ${Build.VERSION.RELEASE}
 App Version Code: ${appVersionList[0]}"""
-            )
+
+        // https://stackoverflow.com/a/62597382
+        val selectorIntent = Intent(Intent.ACTION_SENDTO).apply {
+            data = "mailto:$email?subject=${Uri.encode(subject)}&body=${Uri.encode(body)}".toUri()
+        }
+        val emailIntent = Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, body)
+            selector = selectorIntent
         }
         runCatching {
             startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
