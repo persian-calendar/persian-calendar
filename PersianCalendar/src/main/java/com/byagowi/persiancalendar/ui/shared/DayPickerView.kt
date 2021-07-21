@@ -62,9 +62,9 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
             return if (day > selectedCalendarType.getMonthLength(year, month)) {
-                Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT)
-                    .setAnchorView(anchorView)
-                    .show()
+                Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).also {
+                    it.anchorView = anchorView
+                }.show()
                 null
             } else Jdn(selectedCalendarType, year, month, day)
         }
