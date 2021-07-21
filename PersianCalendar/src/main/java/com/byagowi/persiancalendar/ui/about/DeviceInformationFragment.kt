@@ -5,8 +5,6 @@ import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.app.Activity
 import android.app.ActivityManager
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.*
@@ -32,7 +30,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.annotation.ColorInt
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
@@ -44,8 +41,6 @@ import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.RLM
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.DeviceInformationRowBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.utils.*
@@ -285,7 +280,7 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
 }
 
 class CheckerBoard(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
-    private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
+    private val checkerBoard = createCheckerRoundedBoard(Color.parseColor("#100A0A0A"))
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawPaint(checkerBoard)
@@ -294,8 +289,10 @@ class CheckerBoard(context: Context, attrs: AttributeSet?) : FrameLayout(context
 
 // https://stackoverflow.com/a/58471997
 private fun createCheckerRoundedBoard(
-    tileSize: Float, r: Float, @ColorInt color: Int
+    @ColorInt color: Int
 ) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
+    val tileSize = 40f
+    val r = 8f
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return@also
     val tileSize2x = tileSize.toInt() * 2
     val bitmap = Bitmap.createBitmap(tileSize2x, tileSize2x, Bitmap.Config.ARGB_8888)

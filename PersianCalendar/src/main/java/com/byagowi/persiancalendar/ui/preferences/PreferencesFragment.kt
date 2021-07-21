@@ -58,8 +58,7 @@ class PreferencesFragment : Fragment() {
     }.root
 }
 
-val PREF_DESTINATION = "DESTINATION"
-
-val INTERFACE_CALENDAR_TAB = 0
-val WIDGET_NOTIFICATION_TAB = 1
-val LOCATION_ATHAN_TAB = 2
+const val PREF_DESTINATION = "DESTINATION"
+const val INTERFACE_CALENDAR_TAB = 0
+const val WIDGET_NOTIFICATION_TAB = 1
+const val LOCATION_ATHAN_TAB = 2
