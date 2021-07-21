@@ -323,8 +323,8 @@ object AstroLib {
         // int minute = (int) Math.round((Hour - (int) (Hour)) * 60.0);
         // Minute =((int)(hour*60))%60;
         val hour = Hour.toInt()
-        val seconds = (Hour * 3600) as Int % 3600 % 60
-        val minute = (Hour * 60) as Int % 60
+        val seconds = (Hour * 3600).toInt() % 3600 % 60
+        val minute = (Hour * 60).toInt() % 60
         return listOf(year, month, day, hour, minute, seconds)
     }
 
@@ -360,8 +360,8 @@ object AstroLib {
         // int minute = (int) Math.round((Hour - (int) (Hour)) * 60.0);
         // Minute =((int)(hour*60))%60;
         val hour = Hour.toInt()
-        val seconds = (Hour * 3600) as Int % 3600 % 60
-        val minute = (Hour * 60) as Int % 60
+        val seconds = (Hour * 3600).toInt() % 3600 % 60
+        val minute = (Hour * 60).toInt() % 60
         return listOf(year, month, day, hour, minute, seconds)
     }
 
@@ -396,8 +396,8 @@ object AstroLib {
         // int minute = (int) Math.round((Hour - (int) (Hour)) * 60.0);
         // Minute =((int)(hour*60))%60;
         val hour = Hour.toInt()
-        val seconds = (Hour * 3600) as Int % 3600 % 60
-        val minute = (Hour * 60) as Int % 60
+        val seconds = (Hour * 3600).toInt() % 3600 % 60
+        val minute = (Hour * 60).toInt() % 60
         return GregorianCalendar(
             year, month - 1, day, hour, minute,
             seconds
