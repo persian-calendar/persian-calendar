@@ -187,22 +187,19 @@ App Version Code: ${appVersionList[0]}"""
         runCatching {
             startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
         }.onFailure(logException).onFailure {
-            Snackbar.make(view ?: return, R.string.about_noClient, Snackbar.LENGTH_SHORT)
-                .show()
+            Snackbar.make(view ?: return, R.string.about_noClient, Snackbar.LENGTH_SHORT).show()
         }
     }
 
     private fun shareApplication() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1)
-            runCatching {
-                startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-                    putExtra(
-                        Intent.EXTRA_TEXT,
-                        "${getString(R.string.app_name)}\nhttps://github.com/persian-calendar/DroidPersianCalendar"
-                    )
-                }, getString(R.string.share)))
-            }.onFailure(logException).onFailure { bringMarketPage(activity ?: return) }
+        runCatching {
+            startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+                val textToShare = """${getString(R.string.app_name)}
+https://github.com/persian-calendar/DroidPersianCalendar"""
+                putExtra(Intent.EXTRA_TEXT, textToShare)
+            }, getString(R.string.share)))
+        }.onFailure(logException).onFailure { bringMarketPage(activity ?: return) }
     }
 }
