@@ -26,22 +26,14 @@
                 android:gravity="center">
 
                 <TextView
+                    android:id="@+id/persian_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="@string/app_name"
-                    android:textColor="?attr/colorTextDrawer"
-                    android:textSize="@dimen/text_size_title"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/version"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_margin="5dp"
                     android:gravity="center"
                     android:paddingBottom="@dimen/padding_item"
-                    android:textSize="@dimen/text_size_description" />
+                    android:textColor="?attr/colorTextDrawer" />
 
             </LinearLayout>
 
