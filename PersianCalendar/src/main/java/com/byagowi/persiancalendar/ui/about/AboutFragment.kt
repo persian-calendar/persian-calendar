@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
@@ -75,24 +76,14 @@ class AboutFragment : Fragment() {
             it.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0)
         }
 
+        fun TextView.putLineStartIcon(@DrawableRes icon: Int) {
+            if (isResourcesRTL(context)) setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
+            else setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
+        }
+
         // licenses
         binding.licenses.setOnClickListener { showLicenceDialog() }
-        binding.licensesTitle.also {
-            if (isResourcesRTL(requireContext()))
-                it.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_licences,
-                    0
-                )
-            else
-                it.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_licences,
-                    0,
-                    0,
-                    0
-                )
-        }
+        binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
 
         // help
         binding.helpTitle.also {
@@ -111,40 +102,10 @@ class AboutFragment : Fragment() {
 
         // report bug
         binding.reportBug.setOnClickListener { launchReportIntent() }
-        binding.reportBugTitle.also {
-            if (isResourcesRTL(requireContext()))
-                it.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_bug,
-                    0
-                )
-            else
-                it.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_bug,
-                    0,
-                    0,
-                    0
-                )
-        }
+        binding.reportBugTitle.putLineStartIcon(R.drawable.ic_bug)
 
         binding.email.setOnClickListener { showEmailDialog() }
-        binding.emailTitle.also {
-            if (isResourcesRTL(requireContext()))
-                it.setCompoundDrawablesWithIntrinsicBounds(
-                    0,
-                    0,
-                    R.drawable.ic_email,
-                    0
-                )
-            else
-                it.setCompoundDrawablesWithIntrinsicBounds(
-                    R.drawable.ic_email,
-                    0,
-                    0,
-                    0
-                )
-        }
+        binding.emailTitle.putLineStartIcon(R.drawable.ic_email)
 
         setupContributorsList(binding)
 
