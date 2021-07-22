@@ -91,7 +91,7 @@ class AboutFragment : Fragment() {
                 formatNumber(supportedYearOfIranCalendar - 1),
                 formatNumber(supportedYearOfIranCalendar)
             )
-            it.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_help, 0)
+            it.putLineStartIcon(R.drawable.ic_help)
         }
         binding.helpCard.isVisible = when (language) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> true
