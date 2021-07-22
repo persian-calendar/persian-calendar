@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannedString
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -16,6 +17,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.scale
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
@@ -54,8 +58,22 @@ class AboutFragment : Fragment() {
             }
         }
 
-        // version
-        binding.version.text = getString(R.string.version).format(appVersionList.joinToString("\n"))
+        // app
+        val version: SpannedString = buildSpannedString {
+            scale(1f) {
+                bold {
+                    append(getString(R.string.app_name))
+                }
+            }
+            append("\n")
+            scale(.8f) {
+                append(getString(R.string.version).format(appVersionList.joinToString("\n")))
+            }
+        }
+        binding.persianCalendar.also {
+            it.text = version
+            it.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0)
+        }
 
         // licenses
         binding.licenses.setOnClickListener { showLicenceDialog() }
