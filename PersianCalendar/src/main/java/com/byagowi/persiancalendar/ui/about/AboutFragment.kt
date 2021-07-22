@@ -77,12 +77,31 @@ class AboutFragment : Fragment() {
 
         // licenses
         binding.licenses.setOnClickListener { showLicenceDialog() }
+        binding.licensesTitle.also {
+            if (isResourcesRTL(requireContext()))
+                it.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_licences,
+                    0
+                )
+            else
+                it.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_licences,
+                    0,
+                    0,
+                    0
+                )
+        }
 
         // help
-        binding.aboutTitle.text = getString(R.string.about_help_subtitle).format(
-            formatNumber(supportedYearOfIranCalendar - 1),
-            formatNumber(supportedYearOfIranCalendar)
-        )
+        binding.helpTitle.also {
+            it.text = getString(R.string.about_help_subtitle).format(
+                formatNumber(supportedYearOfIranCalendar - 1),
+                formatNumber(supportedYearOfIranCalendar)
+            )
+            it.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_help, 0)
+        }
         binding.helpCard.isVisible = when (language) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> true
             else -> false
@@ -92,8 +111,40 @@ class AboutFragment : Fragment() {
 
         // report bug
         binding.reportBug.setOnClickListener { launchReportIntent() }
+        binding.reportBugTitle.also {
+            if (isResourcesRTL(requireContext()))
+                it.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_bug,
+                    0
+                )
+            else
+                it.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_bug,
+                    0,
+                    0,
+                    0
+                )
+        }
 
         binding.email.setOnClickListener { showEmailDialog() }
+        binding.emailTitle.also {
+            if (isResourcesRTL(requireContext()))
+                it.setCompoundDrawablesWithIntrinsicBounds(
+                    0,
+                    0,
+                    R.drawable.ic_email,
+                    0
+                )
+            else
+                it.setCompoundDrawablesWithIntrinsicBounds(
+                    R.drawable.ic_email,
+                    0,
+                    0,
+                    0
+                )
+        }
 
         setupContributorsList(binding)
 
