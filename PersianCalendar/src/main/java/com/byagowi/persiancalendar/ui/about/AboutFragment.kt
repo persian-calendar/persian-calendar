@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
@@ -43,19 +44,20 @@ class AboutFragment : Fragment() {
     ): View {
         val binding = FragmentAboutBinding.inflate(inflater, container, false)
 
-        val toolbar = binding.appBar.toolbar
-        toolbar.setTitle(R.string.about)
-        toolbar.setupUpNavigation()
-        toolbar.menu.add(R.string.share).also {
-            it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick { shareApplication() }
-        }
-        toolbar.menu.add(R.string.device_info).also {
-            it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick {
-                findNavController().navigateSafe(AboutFragmentDirections.actionAboutToDeviceinfo())
+        binding.appBar.toolbar.let { toolbar ->
+            toolbar.setTitle(R.string.about)
+            toolbar.setupUpNavigation()
+            toolbar.menu.add(R.string.share).also {
+                it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                it.onClick { shareApplication() }
+            }
+            toolbar.menu.add(R.string.device_info).also {
+                it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+                it.onClick {
+                    findNavController().navigateSafe(AboutFragmentDirections.actionAboutToDeviceinfo())
+                }
             }
         }
 
@@ -73,6 +75,7 @@ class AboutFragment : Fragment() {
         }
         binding.persianCalendar.also {
             it.text = version
+            it.fadeIn(2500)
             it.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0)
         }
 
@@ -110,6 +113,13 @@ class AboutFragment : Fragment() {
         setupContributorsList(binding)
 
         return binding.root
+    }
+
+    private fun View.fadeIn(durationMillis: Long = 250) {
+        this.startAnimation(AlphaAnimation(0F, 1F).apply {
+            duration = durationMillis
+            fillAfter = true
+        })
     }
 
     private fun setupContributorsList(binding: FragmentAboutBinding) {
