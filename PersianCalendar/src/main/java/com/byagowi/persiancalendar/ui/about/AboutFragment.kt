@@ -105,11 +105,6 @@ class AboutFragment : Fragment() {
             else -> false
         }
 
-        binding.helpSummary.also {
-            //it.setShowingChar(152)
-            it.setShowingLine(7)
-        }
-
         Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
 
         // report bug
