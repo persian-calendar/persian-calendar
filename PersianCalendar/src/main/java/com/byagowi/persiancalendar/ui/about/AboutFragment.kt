@@ -71,7 +71,7 @@ class AboutFragment : Fragment() {
             }
             append("\n")
             scale(.8f) {
-                append(getString(R.string.version).format(appVersionList.joinToString("\n")))
+                append(getString(R.string.version).format(appVersionList.joinToString("-")))
             }
             append("\n")
             scale(.8f) {
