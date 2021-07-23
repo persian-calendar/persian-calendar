@@ -105,11 +105,14 @@
                 android:background="?attr/colorCard">
 
                 <TextView
+                    android:id="@+id/help_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
+                    android:drawablePadding="5dp"
                     android:text="@string/help"
-                    android:textColor="?attr/colorTextDrawer" />
+                    android:textColor="?attr/colorTextDrawer"
+                    android:textStyle="bold"
+                    app:drawableTint="?attr/colorDrawerIcon" />
 
                 <LinearLayout
                     android:id="@+id/help"
@@ -120,16 +123,7 @@
                     android:focusable="true"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/help_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:textColor="?attr/colorTextDrawer"
-                        android:textStyle="bold"
-                        app:drawableTint="?attr/colorDrawerIcon" />
-
-                    <TextView
+                    <com.byagowi.persiancalendar.ui.about.ShowMoreTextView
                         android:id="@+id/helpSummary"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

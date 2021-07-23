@@ -73,6 +73,15 @@ class AboutFragment : Fragment() {
             scale(.8f) {
                 append(getString(R.string.version).format(appVersionList.joinToString("\n")))
             }
+            append("\n")
+            scale(.8f) {
+                append(
+                    getString(R.string.about_help_subtitle).format(
+                        formatNumber(supportedYearOfIranCalendar - 1),
+                        formatNumber(supportedYearOfIranCalendar)
+                    )
+                )
+            }
         }
         binding.persianCalendar.also {
             it.text = version
@@ -90,16 +99,15 @@ class AboutFragment : Fragment() {
         binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
 
         // help
-        binding.helpTitle.also {
-            it.text = getString(R.string.about_help_subtitle).format(
-                formatNumber(supportedYearOfIranCalendar - 1),
-                formatNumber(supportedYearOfIranCalendar)
-            )
-            it.putLineStartIcon(R.drawable.ic_help)
-        }
+        binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
         binding.helpCard.isVisible = when (language) {
             LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> true
             else -> false
+        }
+
+        binding.helpSummary.also {
+            //it.setShowingChar(152)
+            it.setShowingLine(7)
         }
 
         Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
