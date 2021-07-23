@@ -44,6 +44,7 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
+import com.google.android.material.appbar.AppBarLayout
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -524,6 +525,10 @@ fun NavController.navigateSafe(directions: NavDirections) = runCatching {
 
 fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
     AppCompatResources.getDrawable(this, drawableRes).debugAssertNotNull ?: ShapeDrawable()
+
+fun AppBarLayout.hideToolbarBottomShadow() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) outlineProvider = null
+}
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
     this.setOnMenuItemClickListener { action(); true /* it captures the click event */ }.let {}

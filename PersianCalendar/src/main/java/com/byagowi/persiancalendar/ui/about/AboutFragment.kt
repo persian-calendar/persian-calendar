@@ -60,6 +60,7 @@ class AboutFragment : Fragment() {
                 }
             }
         }
+        binding.appBar.appbarLayout.hideToolbarBottomShadow()
 
         // app
         val version: SpannedString = buildSpannedString {

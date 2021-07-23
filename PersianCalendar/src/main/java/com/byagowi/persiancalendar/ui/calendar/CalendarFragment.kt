@@ -72,6 +72,7 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
+import com.byagowi.persiancalendar.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled
@@ -252,10 +253,9 @@ class CalendarFragment : Fragment() {
 
         bringDate(Jdn.today, monthChange = false, highlight = false)
 
-        mainBinding?.let {
-            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, it.appBar.toolbar)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                it.appBar.appbarLayout.outlineProvider = null
+        mainBinding?.appBar?.let { appBar ->
+            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, appBar.toolbar)
+            appBar.appbarLayout.hideToolbarBottomShadow()
         }
 
         Jdn.today.toCalendar(mainCalendar).let { today ->
