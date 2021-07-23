@@ -91,7 +91,7 @@ class AboutFragment : Fragment() {
                 }
             }
         }
-        binding.persianCalendar.also {
+        binding.aboutHeader.also {
             it.text = version
             it.fadeIn(2500)
             it.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0)
