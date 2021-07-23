@@ -62,6 +62,11 @@ class AboutFragment : Fragment() {
         }
         binding.appBar.appbarLayout.hideToolbarBottomShadow()
 
+        val isUserAbleToReadPersian = when (language) {
+            LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> true
+            else -> false
+        }
+
         // app
         val version: SpannedString = buildSpannedString {
             scale(1f) {
@@ -73,14 +78,16 @@ class AboutFragment : Fragment() {
             scale(.8f) {
                 append(getString(R.string.version).format(appVersionList.joinToString("-")))
             }
-            append("\n")
-            scale(.8f) {
-                append(
-                    getString(R.string.about_help_subtitle).format(
-                        formatNumber(supportedYearOfIranCalendar - 1),
-                        formatNumber(supportedYearOfIranCalendar)
+            if (isUserAbleToReadPersian) {
+                append("\n")
+                scale(.8f) {
+                    append(
+                        getString(R.string.about_help_subtitle).format(
+                            formatNumber(supportedYearOfIranCalendar - 1),
+                            formatNumber(supportedYearOfIranCalendar)
+                        )
                     )
-                )
+                }
             }
         }
         binding.persianCalendar.also {
@@ -100,10 +107,7 @@ class AboutFragment : Fragment() {
 
         // help
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
-        binding.helpCard.isVisible = when (language) {
-            LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> true
-            else -> false
-        }
+        binding.helpCard.isVisible = isUserAbleToReadPersian
 
         Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
 
