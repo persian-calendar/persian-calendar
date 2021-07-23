@@ -221,7 +221,8 @@ fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
 
 fun formatDeviceCalendarEventTitle(event: CalendarEvent.DeviceCalendarEvent): String =
     (event.title + if (event.description.isNotBlank())
-        " (" + HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim() + ")"
+        " (" + HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+            .trim() + ")"
     else "").replace("\n", " ").trim()
 
 // Move this to strings or somewhere

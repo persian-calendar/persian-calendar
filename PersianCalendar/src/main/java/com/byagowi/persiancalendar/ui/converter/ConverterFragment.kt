@@ -7,17 +7,17 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
+import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
-import com.byagowi.persiancalendar.utils.setupUpNavigation
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentConverterBinding.inflate(inflater, container, false).also { binding ->
-        binding.appBar.toolbar.let {
-            it.setupUpNavigation()
-            it.setTitle(R.string.date_converter)
+        binding.appBar.toolbar.let { toolbar ->
+            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
+            toolbar.setTitle(R.string.date_converter)
         }
 
         binding.calendarsView.toggle()

@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
+import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getCityName
@@ -23,7 +24,6 @@ import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
-import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.abs
 
@@ -89,10 +89,10 @@ class CompassFragment : Fragment() {
     ) = FragmentCompassBinding.inflate(inflater, container, false).also { binding ->
         this.binding = binding
 
-        binding.appBar.toolbar.let {
-            it.setTitle(R.string.compass)
-            it.subtitle = getCityName(inflater.context, true)
-            it.setupUpNavigation()
+        binding.appBar.toolbar.let { toolbar ->
+            toolbar.setTitle(R.string.compass)
+            toolbar.subtitle = getCityName(inflater.context, true)
+            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
         }
 
         binding.bottomAppbar.menu.add(R.string.help).also {

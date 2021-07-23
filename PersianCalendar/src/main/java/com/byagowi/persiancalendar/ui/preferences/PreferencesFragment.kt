@@ -11,12 +11,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
+import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.onClick
-import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -27,13 +27,13 @@ class PreferencesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ) = FragmentSettingsBinding.inflate(inflater, container, false).also { binding ->
-        binding.appBar.toolbar.let {
-            it.setTitle(R.string.settings)
-            it.setupUpNavigation()
+        binding.appBar.toolbar.let { toolbar ->
+            toolbar.setTitle(R.string.settings)
+            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
             if (BuildConfig.DEBUG) {
-                it.menu.add("Static vs generated icons").onClick { showIconsDemoDialog() }
-                it.menu.add("Clear preferences store")
-                    .onClick { it.context.appPrefs.edit { clear() }; activity?.recreate() }
+                toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog() }
+                toolbar.menu.add("Clear preferences store")
+                    .onClick { toolbar.context.appPrefs.edit { clear() }; activity?.recreate() }
             }
         }
 

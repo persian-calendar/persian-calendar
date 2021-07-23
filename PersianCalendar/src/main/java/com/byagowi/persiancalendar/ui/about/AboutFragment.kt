@@ -29,6 +29,7 @@ import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
+import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
@@ -46,7 +47,7 @@ class AboutFragment : Fragment() {
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.about)
-            toolbar.setupUpNavigation()
+            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
             toolbar.menu.add(R.string.share).also {
                 it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
