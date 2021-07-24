@@ -24,7 +24,6 @@ import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
-import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.abs
 

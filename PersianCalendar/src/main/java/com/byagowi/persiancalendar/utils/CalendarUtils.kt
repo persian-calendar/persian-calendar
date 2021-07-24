@@ -208,20 +208,21 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun Jdn.readDayDeviceEvents(ctx: Context) =
-    readDeviceEvents(ctx, this.toJavaCalendar(), DAY_IN_MILLIS).toEventsStore()
+fun Jdn.readDayDeviceEvents(context: Context) =
+    readDeviceEvents(context, this.toJavaCalendar(), DAY_IN_MILLIS).toEventsStore()
 
-fun Jdn.readMonthDeviceEvents(ctx: Context) =
-    readDeviceEvents(ctx, this.toJavaCalendar(), 32L * DAY_IN_MILLIS).toEventsStore()
+fun Jdn.readMonthDeviceEvents(context: Context) =
+    readDeviceEvents(context, this.toJavaCalendar(), 32L * DAY_IN_MILLIS).toEventsStore()
 
-fun getAllEnabledAppointments(ctx: Context) = readDeviceEvents(
-    ctx, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
+fun getAllEnabledAppointments(context: Context) = readDeviceEvents(
+    context, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
 )
 
 fun formatDeviceCalendarEventTitle(event: CalendarEvent.DeviceCalendarEvent): String =
     (event.title + if (event.description.isNotBlank())
-        " (" + HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim() + ")"
+        " (" + HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+            .trim() + ")"
     else "").replace("\n", " ").trim()
 
 // Move this to strings or somewhere
