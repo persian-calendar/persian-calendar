@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.animation.LayoutTransition
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
@@ -9,14 +11,19 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.databinding.LicenseItemBinding
+import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.setupUpNavigation
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
+
 
 class LicensesFragment : Fragment() {
 
@@ -37,7 +44,11 @@ class LicensesFragment : Fragment() {
                 content = lines.drop(1).joinToString("\n").trim()
             )
         })
+        val layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        binding.recyclerView.addItemDecoration(
+            DividerItemDecoration(context, layoutManager.orientation)
+        )
     }.root
 }
 
@@ -67,19 +78,34 @@ private class LicensesAdapter(private val sections: List<Item>) :
             binding.root.setOnClickListener(this)
             binding.content.movementMethod = LinkMovementMethod.getInstance()
             binding.content.setOnClickListener(this)
+            binding.root.layoutTransition = LayoutTransition().also {
+                it.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
+                it.setAnimateParentHierarchy(false)
+            }
+            binding.license.background =
+                MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(6.dp)).also {
+                    it.tintList = ColorStateList.valueOf(0x10000000)
+                }
         }
 
         fun bind(position: Int) {
             binding.title.text = sections[position].title
             binding.license.text = sections[position].license
+            binding.license.isVisible = !sections[position].license.isNullOrEmpty()
             binding.content.text = sections[position].content
             Linkify.addLinks(binding.content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
             binding.sectionIcon.rotation = -90f
         }
 
+        private val arrowRotationAnimationDuration =
+            binding.root.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+
         override fun onClick(v: View?) {
             binding.content.isVisible = !binding.content.isVisible
-            binding.sectionIcon.rotation = if (binding.content.isVisible) 0f else -90f
+            binding.sectionIcon.animate()
+                .rotation(if (binding.content.isVisible) 0f else -90f)
+                .setDuration(arrowRotationAnimationDuration)
+                .start()
         }
     }
 }

@@ -9,37 +9,47 @@
     android:focusable="true"
     android:layoutDirection="ltr"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:padding="8dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <ImageView
             android:id="@+id/section_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/icon_size"
+            android:layout_height="@dimen/icon_size"
             android:layout_marginStart="4dp"
-            android:text="▼"
+            android:contentDescription="@string/more"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down"
+            app:tint="?attr/colorAccent"
             tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="4dp"
+            android:gravity="center_vertical"
             tools:text="Title" />
 
-        <TextView
-            android:id="@+id/license"
+        <FrameLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:background="#10000000"
-            android:gravity="center_vertical"
-            android:textSize="12sp"
-            app:cornerRadius="8dp"
-            tools:text="LICENSE" />
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/license"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:textSize="12sp"
+                tools:text="LICENSE" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
