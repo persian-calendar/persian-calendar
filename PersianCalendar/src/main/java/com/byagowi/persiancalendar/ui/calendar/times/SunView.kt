@@ -14,6 +14,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withClip
+import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.LANG_EN_IR
 import com.byagowi.persiancalendar.LANG_EN_US
@@ -229,23 +230,20 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
         val radius = 1f
         val px = width * current
         val py = getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt())
-        canvas.rotate(180f, px, py)
-        val eOffset = 0
-        val arcWidth = ((moonPhase - .5) * (4 * r)).toInt()
-        // elevation Offset 0 for 0 degree; r for 90 degree
-        moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r)
-        canvas.also {
-            it.drawArc(moonRect, 90f, 180f, false, moonPaint)
-            it.drawArc(moonRect, 270f, 180f, false, moonPaintB)
-        }
-        moonOval.set(
-            px - abs(arcWidth) / 2f, py + eOffset - radius - r,
-            px + abs(arcWidth) / 2f, py + eOffset - radius + r
-        )
-        canvas.also {
+        canvas.withRotation(180f, px, py) {
+            val eOffset = 0
+            val arcWidth = ((moonPhase - .5) * (4 * r)).toInt()
+            // elevation Offset 0 for 0 degree; r for 90 degree
+            moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r)
+            canvas.drawArc(moonRect, 90f, 180f, false, moonPaint)
+            canvas.drawArc(moonRect, 270f, 180f, false, moonPaintB)
+            moonOval.set(
+                px - abs(arcWidth) / 2f, py + eOffset - radius - r,
+                px + abs(arcWidth) / 2f, py + eOffset - radius + r
+            )
             moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
-            it.drawArc(moonOval, 0f, 360f, false, moonPaintO)
-            it.drawArc(moonRect, 0f, 360f, false, moonPaintD)
+            canvas.drawArc(moonOval, 0f, 360f, false, moonPaintO)
+            canvas.drawArc(moonRect, 0f, 360f, false, moonPaintD)
         }
     }
 
