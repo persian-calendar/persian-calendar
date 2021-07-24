@@ -110,18 +110,16 @@ class AboutFragment : Fragment() {
         binding.helpCard.isVisible = isUserAbleToReadPersian
         binding.helpSummary.also { help ->
             help.maxLines = 7
-            help.setCompoundDrawablesWithIntrinsicBounds(
-                0,
-                0,
-                0,
-                R.drawable.ic_keyboard_arrow_down
-            )
+            val arrowDownIcon = R.drawable.ic_keyboard_arrow_down
+            help.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, arrowDownIcon)
+            var isOpened = false
             help.setOnClickListener {
-                binding.helpSummary.also {
+                if (!isOpened) binding.helpSummary.also {
                     it.maxLines = Integer.MAX_VALUE
                     it.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
                     it.fadeIn()
                 }
+                isOpened = true
             }
         }
 
