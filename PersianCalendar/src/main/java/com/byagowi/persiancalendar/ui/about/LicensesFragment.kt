@@ -3,11 +3,13 @@ package com.byagowi.persiancalendar.ui.about
 import android.animation.LayoutTransition
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.buildSpannedString
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
@@ -39,10 +41,9 @@ class LicensesFragment : Fragment() {
         binding.recyclerView.adapter = LicensesAdapter(Regex("\n-{4}\n").split(text).map {
             val lines = it.lines()
             val parts = lines.first().split(" - ")
-            LicensesAdapter.Item(
-                title = parts[0], license = parts.getOrNull(1),
-                content = lines.drop(1).joinToString("\n").trim()
-            )
+            val content = SpannableString(lines.drop(1).joinToString("\n").trim())
+            Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+            LicensesAdapter.Item(parts[0], parts.getOrNull(1), content)
         })
         val layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
@@ -60,7 +61,7 @@ private class LicensesAdapter(private val sections: List<Item>) :
         }
     ) {
 
-    data class Item(val title: String, val license: String?, val content: String)
+    data class Item(val title: String, val license: String?, val content: CharSequence)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LicenseItemBinding.inflate(parent.context.layoutInflater, parent, false)
@@ -93,7 +94,6 @@ private class LicensesAdapter(private val sections: List<Item>) :
             binding.license.text = sections[position].license
             binding.license.isVisible = !sections[position].license.isNullOrEmpty()
             binding.content.text = sections[position].content
-            Linkify.addLinks(binding.content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
             binding.sectionIcon.rotation = -90f
         }
 

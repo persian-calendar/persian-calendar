@@ -47,7 +47,7 @@ http://code.google.com/p/mobile-persian-calendar/
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ----
-PrayTimes.js, ported to Java - LGPLv3
+PrayTimes.js (ported) - LGPLv3
 http://praytimes.org/
 
   Copyright (C) 2007-2011 PrayTimes.org
@@ -127,7 +127,7 @@ https://github.com/iPaulPro/Android-ItemTouchHelper-Demo
   limitations under the License.
 
 ----
-Ummalqura Calendar - MIT
+Umm-Alqura Calendar - MIT
 https://github.com/msarhan/ummalqura-calendar
 
   The MIT License
@@ -172,9 +172,8 @@ https://github.com/avianey/Level
   along with Level. If not, see <http://www.gnu.org/licenses/>
 
 ----
-Equinox - MIT
+Equinox.go (ported) - MIT
 https://github.com/xyproto/calendar/blob/master/equinox.go
-Ported to Java
 
   The MIT License (MIT)
 
