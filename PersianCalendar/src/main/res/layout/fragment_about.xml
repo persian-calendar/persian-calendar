@@ -107,6 +107,7 @@
                         android:text="@string/about_help_sum"
                         android:textColor="?attr/colorTextSecond"
                         android:textSize="12sp"
+                        app:drawableTint="?attr/colorDrawerIcon"
                         tools:text="short summery" />
 
                 </LinearLayout>
