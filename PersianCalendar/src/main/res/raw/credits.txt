@@ -1,3 +1,5 @@
+License - GPLv3
+
 Copyright (C) 2012-2021  Android Persian Calendar Developers
 
 This program is free software: you can redistribute it and/or modify
@@ -13,8 +15,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see http://www.gnu.org/licenses/.
 
-
-Assets:
+----
+Assets
 * {fajr,dhuhr,asr,maghrib,isha}.jpg by Mehrara Abedi (CC BY SA 4.0)
 * {spring,summer,fall,winter}.jpg by Lotta Nieminen (CC BY NC 4.0)
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
@@ -24,9 +26,9 @@ Assets:
   old and related Egypt laws, anyway just a portion of it used in hope to not be copyvio at least.
 * Noto Naskh Arabic from Noto fonts project https://github.com/googlei18n/noto-fonts (OFL 1.1)
 
-
-Libraries:
-* Calendar converter http://code.google.com/p/mobile-persian-calendar/ (GPLv2)
+----
+Calendar converter - GPLv2
+http://code.google.com/p/mobile-persian-calendar/
 
   Copyright (C) 2006  Amir Khosroshahi (amir.khosroshahi)
 
@@ -44,7 +46,9 @@ Libraries:
   along with this program; if not, write to the Free Software
   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-* PrayTimes.js (ported on this project to Java) http://praytimes.org/ (LGPLv3)
+----
+PrayTimes.js, ported to Java - LGPLv3
+http://praytimes.org/
 
   Copyright (C) 2007-2011 PrayTimes.org
 
@@ -60,7 +64,10 @@ Libraries:
   This program is distributed in the hope that it will
   be useful, but WITHOUT ANY WARRANTY.
 
-* Part of holidays list from https://github.com/ilius/starcal (GPLv3)
+----
+Starcal's Holidays - GPLv3
+https://github.com/ilius/starcal
+
   * Saeed Rasooli <saeed.gnu@gmail.com>
   * Mola Pahnadayan <mola.mp@gmail.com>
   * شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬، و شورای فرهنگ عمومی
@@ -81,7 +88,10 @@ Libraries:
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-* QiblaCompassView.java and its dependencies from https://code.google.com/p/android-salat-times (GPLv3)
+----
+Android Salat Times - GPLv3
+https://code.google.com/p/android-salat-times
+QiblaCompassView.java and its dependencies
 
   Copyright (C) 2012  cepmuvakkit
 
@@ -98,7 +108,9 @@ Libraries:
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-* Android-ItemTouchHelper-Demo https://github.com/iPaulPro/Android-ItemTouchHelper-Demo
+----
+Android-ItemTouchHelper-Demo - Apache 2
+https://github.com/iPaulPro/Android-ItemTouchHelper-Demo
 
   Copyright (C) 2015 Paul Burke
 
@@ -114,7 +126,9 @@ Libraries:
   See the License for the specific language governing permissions and
   limitations under the License.
 
-* UmmalquraGregorianConverter.java https://github.com/msarhan/ummalqura-calendar
+----
+Ummalqura Calendar - MIT
+https://github.com/msarhan/ummalqura-calendar
 
   The MIT License
 
@@ -138,7 +152,9 @@ Libraries:
   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
   THE SOFTWARE.
 
-* An Android bubble level application https://github.com/avianey/Level
+----
+Bubble Level - GPLv2
+https://github.com/avianey/Level
 
   Copyright (C) 2014 Antoine Vianey
 
@@ -155,9 +171,10 @@ Libraries:
   You should have received a copy of the GNU General Public License
   along with Level. If not, see <http://www.gnu.org/licenses/>
 
-* https://gist.github.com/vestrel00/64be913f954989fe52c674247e093218 but adopted with newer changes
-
-* Ported from Calendar package for Go https://github.com/xyproto/calendar/blob/master/equinox.go
+----
+Equinox - MIT
+https://github.com/xyproto/calendar/blob/master/equinox.go
+Ported to Java
 
   The MIT License (MIT)
 

@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
+import com.byagowi.persiancalendar.utils.setupUpNavigation
 
 /*
  * This file is part of Level (an Android Bubble Level).

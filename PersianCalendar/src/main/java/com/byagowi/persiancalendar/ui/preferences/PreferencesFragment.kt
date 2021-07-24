@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFra
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.onClick
+import com.byagowi.persiancalendar.utils.setupUpNavigation
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**

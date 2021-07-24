@@ -6,7 +6,6 @@
     <string name="version">Version %1$s</string>
     <string name="about_license_title">Licence de l’application</string>
     <string name="about_license">Licence</string>
-    <string name="about_license_dialog_close">Fermer</string>
     <string name="about_report_bug_sum">Préférable pour signaler les erreurs ou demander une nouvelle fonctionnalité, ce qui nécessite un compte GitHub</string>
     <string name="about_report_bug">Signaler un erreur sur GitHub</string>
     <string name="about_noClient">Aucun client de messagerie n’est installé</string>

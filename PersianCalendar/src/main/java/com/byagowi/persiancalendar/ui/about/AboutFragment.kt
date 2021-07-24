@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.content.Intent
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,7 +12,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
@@ -23,7 +21,6 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.scale
 import androidx.core.view.isVisible
-import androidx.core.view.setPadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.*
@@ -57,7 +54,7 @@ class AboutFragment : Fragment() {
                 it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 it.onClick {
-                    findNavController().navigateSafe(AboutFragmentDirections.actionAboutToDeviceinfo())
+                    findNavController().navigateSafe(AboutFragmentDirections.actionAboutToDeviceInformation())
                 }
             }
         }
@@ -103,7 +100,9 @@ class AboutFragment : Fragment() {
         }
 
         // licenses
-        binding.licenses.setOnClickListener { showLicenceDialog() }
+        binding.licenses.setOnClickListener {
+            findNavController().navigateSafe(AboutFragmentDirections.actionAboutToLicenses())
+        }
         binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
 
         // help
@@ -169,25 +168,6 @@ class AboutFragment : Fragment() {
                 }
             }
         }.shuffled().forEach(binding.developers::addView)
-    }
-
-    private fun showLicenceDialog() {
-        AlertDialog.Builder(
-            layoutInflater.context,
-            com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
-        )
-            .setTitle(resources.getString(R.string.about_license_title))
-            .setView(ScrollView(context).apply {
-                addView(TextView(context).apply {
-                    text = resources.openRawResource(R.raw.credits).use { String(it.readBytes()) }
-                    setPadding(20)
-                    typeface = Typeface.MONOSPACE
-                    Linkify.addLinks(this, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-                    setTextIsSelectable(true)
-                })
-            })
-            .setNegativeButton(R.string.about_license_dialog_close, null)
-            .show()
     }
 
     private fun launchReportIntent() {

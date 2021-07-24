@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
+import com.byagowi.persiancalendar.utils.setupUpNavigation
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(

@@ -93,8 +93,15 @@
         android:label="About Fragment"
         tools:layout="@layout/fragment_about">
         <action
-            android:id="@+id/action_about_to_deviceinfo"
+            android:id="@+id/action_about_to_device_information"
             app:destination="@id/deviceInformation"
+            app:enterAnim="@anim/nav_enter_anim"
+            app:exitAnim="@anim/nav_exit_anim"
+            app:popEnterAnim="@anim/nav_enter_anim"
+            app:popExitAnim="@anim/nav_exit_anim" />
+        <action
+            android:id="@+id/action_about_to_licenses"
+            app:destination="@id/licenses"
             app:enterAnim="@anim/nav_enter_anim"
             app:exitAnim="@anim/nav_exit_anim"
             app:popEnterAnim="@anim/nav_enter_anim"
@@ -105,5 +112,10 @@
         android:id="@+id/deviceInformation"
         android:name="com.byagowi.persiancalendar.ui.about.DeviceInformationFragment"
         android:label="Device Information Fragment" />
+
+    <fragment
+        android:id="@+id/licenses"
+        android:name="com.byagowi.persiancalendar.ui.about.LicensesFragment"
+        android:label="Licenses Fragment" />
 
 </navigation>

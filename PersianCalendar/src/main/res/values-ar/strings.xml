@@ -220,7 +220,6 @@
     <string name="about_license">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>
     <string name="about_license_sum">راجع رخصة GPL المستخدمة في تطبيق التقويم الفارسي</string>
-    <string name="about_license_dialog_close">إغلاق</string>
 
     <string name="about_support_developers">دعم المطورين</string>
     <string name="about_report_bug">الإبلاغ عن الأخطاء</string>

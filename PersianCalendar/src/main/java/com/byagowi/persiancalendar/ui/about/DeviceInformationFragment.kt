@@ -41,7 +41,7 @@ import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.DeviceInformationRowBinding
+import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -491,7 +491,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
     }.onFailure(logException).getOrDefault(emptyList()))
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        DeviceInformationRowBinding.inflate(parent.context.layoutInflater, parent, false)
+        DeviceInformationItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
@@ -520,7 +520,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         }
     })
 
-    inner class ViewHolder(private val binding: DeviceInformationRowBinding) :
+    inner class ViewHolder(private val binding: DeviceInformationItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
