@@ -108,6 +108,22 @@ class AboutFragment : Fragment() {
         // help
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
         binding.helpCard.isVisible = isUserAbleToReadPersian
+        binding.helpSummary.also { help ->
+            help.maxLines = 7
+            help.setCompoundDrawablesWithIntrinsicBounds(
+                0,
+                0,
+                0,
+                R.drawable.ic_keyboard_arrow_down
+            )
+            help.setOnClickListener {
+                binding.helpSummary.also {
+                    it.maxLines = Integer.MAX_VALUE
+                    it.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+                    it.fadeIn()
+                }
+            }
+        }
 
         Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
 
