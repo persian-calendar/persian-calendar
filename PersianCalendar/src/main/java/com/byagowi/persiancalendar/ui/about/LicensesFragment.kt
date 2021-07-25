@@ -22,8 +22,9 @@ class LicensesFragment : Fragment() {
         }
 
         val text = resources.openRawResource(R.raw.credits).use { String(it.readBytes()) }
-        binding.recyclerView.adapter = ExpandableItemsAdapter(Regex("\n-{4}\n").split(text).map {
-            val lines = it.lines()
+        val splitPattern = Regex("^-{4}$", RegexOption.MULTILINE)
+        binding.recyclerView.adapter = ExpandableItemsAdapter(splitPattern.split(text).map {
+            val lines = it.trim().lines()
             val parts = lines.first().split(" - ")
             val content = SpannableString(lines.drop(1).joinToString("\n").trim())
             Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)

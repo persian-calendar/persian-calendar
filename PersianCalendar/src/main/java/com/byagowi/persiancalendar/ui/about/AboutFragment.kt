@@ -112,7 +112,8 @@ class AboutFragment : Fragment() {
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
         binding.helpSectionsRecyclerView.apply {
             val helpSectionsText = getString(R.string.help_sections)
-            adapter = ExpandableItemsAdapter(Regex("\n={4}\n").split(helpSectionsText).map {
+            val splitPattern = Regex("^={4}$", RegexOption.MULTILINE)
+            adapter = ExpandableItemsAdapter(splitPattern.split(helpSectionsText).map {
                 val lines = it.trim().lines()
                 val content = SpannableString(lines.drop(1).joinToString("\n").trim())
                 Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
