@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannedString
-import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -108,7 +107,7 @@ class AboutFragment : Fragment() {
         // help
         binding.helpCard.also {
             it.isVisible = isUserAbleToReadPersian
-            it.setOnClickListener { showHelpBottomSheet() }
+            it.setOnClickListener { showHelpDialog() }
         }
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
 

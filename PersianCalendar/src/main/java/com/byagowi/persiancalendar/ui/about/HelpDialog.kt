@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentHelpBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-fun Fragment.showHelpBottomSheet() {
+fun Fragment.showHelpDialog() {
     val binding = FragmentHelpBottomSheetBinding.inflate(layoutInflater)
     Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
     BottomSheetDialog(layoutInflater.context).also { it.setContentView(binding.root) }.show()
