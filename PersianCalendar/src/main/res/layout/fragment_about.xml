@@ -29,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:textColor="?attr/coloredTabTextColor" />
+                    android:textColor="?attr/colorTextDay" />
 
             </FrameLayout>
 
