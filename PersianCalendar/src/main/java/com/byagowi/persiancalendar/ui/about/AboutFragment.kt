@@ -111,14 +111,15 @@ class AboutFragment : Fragment() {
         binding.helpCard.isVisible = isUserAbleToReadPersian
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
         binding.helpSectionsRecyclerView.apply {
-            val helpSectionsText = getString(R.string.help_sections)
-            val splitPattern = Regex("^={4}$", RegexOption.MULTILINE)
-            adapter = ExpandableItemsAdapter(splitPattern.split(helpSectionsText).map {
-                val lines = it.trim().lines()
-                val content = SpannableString(lines.drop(1).joinToString("\n").trim())
-                Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-                ExpandableItemsAdapter.Item(lines.first(), null, content)
-            }, isRTL = true)
+            val sections = getString(R.string.help_sections)
+                .split(Regex("^={4}$", RegexOption.MULTILINE))
+                .map { it.trim().lines() }
+                .map { lines ->
+                    val content = SpannableString(lines.drop(1).joinToString("\n").trim())
+                    Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                    ExpandableItemsAdapter.Item(lines.first(), null, content)
+                }
+            adapter = ExpandableItemsAdapter(sections, isRTL = true)
             layoutManager = LinearLayoutManager(context)
         }
 

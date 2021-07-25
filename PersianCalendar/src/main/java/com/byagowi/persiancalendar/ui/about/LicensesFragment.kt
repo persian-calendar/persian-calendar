@@ -21,15 +21,17 @@ class LicensesFragment : Fragment() {
             it.setupUpNavigation()
         }
 
-        val text = resources.openRawResource(R.raw.credits).use { String(it.readBytes()) }
-        val splitPattern = Regex("^-{4}$", RegexOption.MULTILINE)
-        binding.recyclerView.adapter = ExpandableItemsAdapter(splitPattern.split(text).map {
-            val lines = it.trim().lines()
-            val parts = lines.first().split(" - ")
-            val content = SpannableString(lines.drop(1).joinToString("\n").trim())
-            Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-            ExpandableItemsAdapter.Item(parts[0], parts.getOrNull(1), content)
-        }, isRTL = false)
+        val sections = resources.openRawResource(R.raw.credits).use { String(it.readBytes()) }
+            .split(Regex("^-{4}$", RegexOption.MULTILINE))
+            .map { it.trim().lines() }
+            .map { lines ->
+                val parts = lines.first().split(" - ")
+                val content = SpannableString(lines.drop(1).joinToString("\n").trim())
+                Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                ExpandableItemsAdapter.Item(parts[0], parts.getOrNull(1), content)
+            }
+        binding.recyclerView.adapter = ExpandableItemsAdapter(sections, isRTL = false)
+
         val layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
         binding.recyclerView.addItemDecoration(
