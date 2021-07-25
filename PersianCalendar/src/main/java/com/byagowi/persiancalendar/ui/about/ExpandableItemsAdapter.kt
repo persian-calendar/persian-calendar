@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.databinding.LicenseItemBinding
+import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
@@ -20,7 +20,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRTL: Boolean) :
     data class Item(val title: String, val tag: String?, val content: CharSequence)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        LicenseItemBinding.inflate(parent.context.layoutInflater, parent, false)
+        ExpandableItemBinding.inflate(parent.context.layoutInflater, parent, false)
     )
 
     override fun onBindViewHolder(holder: ExpandableItemsAdapter.ViewHolder, position: Int) =
@@ -30,7 +30,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRTL: Boolean) :
 
     val notExpandedArrowDegree = if (isRTL) 90f else -90f
 
-    inner class ViewHolder(private val binding: LicenseItemBinding) :
+    inner class ViewHolder(private val binding: ExpandableItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
         init {
@@ -40,7 +40,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRTL: Boolean) :
                 it.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
                 it.setAnimateParentHierarchy(false)
             }
-            binding.license.background =
+            binding.tag.background =
                 MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(6.dp)).also {
                     it.tintList = ColorStateList.valueOf(0x10000000)
                 }
@@ -51,8 +51,8 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRTL: Boolean) :
 
         fun bind(position: Int) {
             binding.title.text = sections[position].title
-            binding.license.text = sections[position].tag
-            binding.license.isVisible = !sections[position].tag.isNullOrEmpty()
+            binding.tag.text = sections[position].tag
+            binding.tag.isVisible = !sections[position].tag.isNullOrEmpty()
             binding.content.text = sections[position].content
             binding.sectionIcon.rotation = notExpandedArrowDegree
         }
