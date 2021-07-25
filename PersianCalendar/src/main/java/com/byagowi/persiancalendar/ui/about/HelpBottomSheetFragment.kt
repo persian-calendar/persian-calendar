@@ -24,8 +24,6 @@ class HelpBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         Linkify.addLinks(mainBinding?.helpSummary!!, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
         (view.parent as View).setBackgroundColor(Color.TRANSPARENT)
-        val resources = resources
-
         if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             val parent = view.parent as View
             val layoutParams = parent.layoutParams as CoordinatorLayout.LayoutParams
