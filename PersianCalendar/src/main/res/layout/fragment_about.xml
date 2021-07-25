@@ -1,6 +1,5 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?android:attr/windowBackground">
@@ -90,27 +89,6 @@
                     android:textColor="?attr/colorTextDrawer"
                     android:textStyle="bold"
                     app:drawableTint="?attr/colorDrawerIcon" />
-
-                <LinearLayout
-                    android:id="@+id/help"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?android:attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/helpSummary"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/about_help_sum"
-                        android:textColor="?attr/colorTextSecond"
-                        android:textSize="12sp"
-                        app:drawableTint="?attr/colorDrawerIcon"
-                        tools:text="short summery" />
-
-                </LinearLayout>
 
             </LinearLayout>
 

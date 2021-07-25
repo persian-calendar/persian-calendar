@@ -106,24 +106,14 @@ class AboutFragment : Fragment() {
         binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
 
         // help
-        binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
-        binding.helpCard.isVisible = isUserAbleToReadPersian
-        binding.helpSummary.also { help ->
-            help.maxLines = 7
-            val arrowDownIcon = R.drawable.ic_keyboard_arrow_down
-            help.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, arrowDownIcon)
-            var isOpened = false
-            help.setOnClickListener {
-                if (!isOpened) binding.helpSummary.also {
-                    it.maxLines = Integer.MAX_VALUE
-                    it.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
-                    it.fadeIn()
-                }
-                isOpened = true
+        binding.helpCard.also {
+            it.isVisible = isUserAbleToReadPersian
+            it.setOnClickListener {
+                val helpBottomSheet = HelpBottomSheetFragment()
+                helpBottomSheet.show(childFragmentManager,helpBottomSheet.tag)
             }
         }
-
-        Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+        binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
 
         // report bug
         binding.reportBug.setOnClickListener { launchReportIntent() }
