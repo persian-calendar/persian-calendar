@@ -4,7 +4,9 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.SpannableString
 import android.text.SpannedString
+import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -22,6 +24,7 @@ import androidx.core.text.scale
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
@@ -105,11 +108,18 @@ class AboutFragment : Fragment() {
         binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
 
         // help
-        binding.helpCard.also {
-            it.isVisible = isUserAbleToReadPersian
-            it.setOnClickListener { showHelpDialog() }
-        }
+        binding.helpCard.isVisible = isUserAbleToReadPersian
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
+        binding.helpSectionsRecyclerView.apply {
+            val helpSectionsText = getString(R.string.help_sections)
+            adapter = ExpandableItemsAdapter(Regex("\n={4}\n").split(helpSectionsText).map {
+                val lines = it.trim().lines()
+                val content = SpannableString(lines.drop(1).joinToString("\n").trim())
+                Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                ExpandableItemsAdapter.Item(lines.first(), null, content)
+            }, isRTL = true)
+            layoutManager = LinearLayoutManager(context)
+        }
 
         // report bug
         binding.reportBug.setOnClickListener { launchReportIntent() }

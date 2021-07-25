@@ -16,6 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layoutDirection="ltr"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
         android:scrollbars="vertical"
         android:textDirection="ltr"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
