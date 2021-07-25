@@ -97,7 +97,7 @@ class AboutFragment : Fragment() {
         }
 
         fun TextView.putLineStartIcon(@DrawableRes icon: Int) {
-            if (resources.isRTL) setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
+            if (resources.isRtl) setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
             else setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
         }
 
@@ -119,7 +119,7 @@ class AboutFragment : Fragment() {
                     Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                     ExpandableItemsAdapter.Item(lines.first(), null, content)
                 }
-            adapter = ExpandableItemsAdapter(sections, isRTL = true)
+            adapter = ExpandableItemsAdapter(sections, isRtl = true)
             layoutManager = LinearLayoutManager(context)
         }
 

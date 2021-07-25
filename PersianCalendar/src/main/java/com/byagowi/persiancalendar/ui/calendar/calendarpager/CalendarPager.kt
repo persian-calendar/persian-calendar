@@ -113,7 +113,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             init {
                 binding.next.let {
                     it.setImageResource(R.drawable.ic_keyboard_arrow_down)
-                    it.rotation = if (resources.isRTL) 90f else -90f
+                    it.rotation = if (resources.isRtl) 90f else -90f
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
                     }
@@ -125,7 +125,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
                 binding.prev.let {
                     it.setImageResource(R.drawable.ic_keyboard_arrow_down)
-                    it.rotation = if (resources.isRTL) -90f else 90f
+                    it.rotation = if (resources.isRtl) -90f else 90f
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem - 1, true)
                     }

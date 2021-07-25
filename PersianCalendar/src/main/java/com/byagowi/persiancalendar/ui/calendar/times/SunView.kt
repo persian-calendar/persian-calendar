@@ -141,8 +141,8 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
         super.onDraw(canvas)
         val width = width
         val height = height
-        val isRTL = layoutDirection == LAYOUT_DIRECTION_RTL
-        canvas.withScale(x = if (isRTL) -1f else 1f, pivotX = width / 2f) {
+        val isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
+        canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = width / 2f) {
             // draw fill of night
             withClip(0f, height * .75f, width * current, height.toFloat()) {
                 paint.also {
@@ -201,13 +201,13 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
             it.color = sunriseTextColor
         }
         canvas.drawText(
-            sunriseString, width * if (isRTL) .83f else .17f, height * .2f, paint
+            sunriseString, width * if (isRtl) .83f else .17f, height * .2f, paint
         )
         paint.color = middayTextColor
         canvas.drawText(middayString, width / 2f, height * .94f, paint)
         paint.color = sunsetTextColor
         canvas.drawText(
-            sunsetString, width * if (isRTL) .17f else .83f, height * .2f, paint
+            sunsetString, width * if (isRtl) .17f else .83f, height * .2f, paint
         )
 
         // draw remaining time
@@ -218,10 +218,10 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
             it.color = colorTextSecond
         }
         canvas.drawText(
-            dayLengthString, width * if (isRTL) .70f else .30f, height * .94f, paint
+            dayLengthString, width * if (isRtl) .70f else .30f, height * .94f, paint
         )
         canvas.drawText(
-            remainingString, width * if (isRTL) .30f else .70f, height * .94f, paint
+            remainingString, width * if (isRtl) .30f else .70f, height * .94f, paint
         )
     }
 

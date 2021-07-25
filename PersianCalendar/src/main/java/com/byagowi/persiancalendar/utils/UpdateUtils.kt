@@ -86,7 +86,7 @@ fun update(context: Context, updateDate: Boolean) {
     val color = Color.parseColor(selectedWidgetTextColor)
     val packageName = context.packageName
 
-    val isRTL = context.resources.isRTL
+    val isRtl = context.resources.isRtl
 
     val ageWidget = ComponentName(context, AgeWidget::class.java)
     val widget1x1 = ComponentName(context, Widget1x1::class.java)
@@ -252,7 +252,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             val holidays = getEventsTitle(
                 events, holiday = true, compact = true, showDeviceCalendarEvents = true,
-                insertRLM = isRTL, addIsHoliday = isHighTextContrastEnabled
+                insertRLM = isRtl, addIsHoliday = isHighTextContrastEnabled
             )
             if (holidays.isNotEmpty()) {
                 it.setTextViewText(R.id.holiday_2x2, holidays)
@@ -266,7 +266,7 @@ fun update(context: Context, updateDate: Boolean) {
 
             val nonHolidays = getEventsTitle(
                 events, holiday = false, compact = true, showDeviceCalendarEvents = true,
-                insertRLM = isRTL, addIsHoliday = false
+                insertRLM = isRtl, addIsHoliday = false
             )
             if ("non_holiday_events" in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
                 it.setTextViewText(R.id.event_2x2, nonHolidays)
@@ -431,7 +431,7 @@ fun update(context: Context, updateDate: Boolean) {
     // Prepend a right-to-left mark character to Android with sane text rendering stack
     // to resolve a bug seems some Samsung devices have with characters with weak direction,
     // digits being at the first of string on
-    if (isRTL && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+    if (isRtl && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
         title = RLM + title
         if (subtitle.isNotEmpty()) {
             subtitle = RLM + subtitle
@@ -499,13 +499,13 @@ fun update(context: Context, updateDate: Boolean) {
         if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val holidays = getEventsTitle(
                 events, holiday = true,
-                compact = true, showDeviceCalendarEvents = true, insertRLM = isRTL,
+                compact = true, showDeviceCalendarEvents = true, insertRLM = isRtl,
                 addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
             )
 
             val nonHolidays = if ("non_holiday_events" in whatToShowOnWidgets) getEventsTitle(
                 events, holiday = false,
-                compact = true, showDeviceCalendarEvents = true, insertRLM = isRTL,
+                compact = true, showDeviceCalendarEvents = true, insertRLM = isRtl,
                 addIsHoliday = false
             ) else ""
 
@@ -518,7 +518,7 @@ fun update(context: Context, updateDate: Boolean) {
             } else {
                 builder.setCustomContentView(RemoteViews(
                     packageName,
-                    if (isRTL) R.layout.custom_notification else R.layout.custom_notification_ltr
+                    if (isRtl) R.layout.custom_notification else R.layout.custom_notification_ltr
                 ).also {
                     it.setTextViewText(R.id.title, title)
                     it.setTextViewText(R.id.body, subtitle)
@@ -527,7 +527,7 @@ fun update(context: Context, updateDate: Boolean) {
                 if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
                     builder.setCustomBigContentView(RemoteViews(
                         packageName,
-                        if (isRTL) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
+                        if (isRtl) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
                     ).also {
                         it.setTextViewText(R.id.title, title)
                         it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)

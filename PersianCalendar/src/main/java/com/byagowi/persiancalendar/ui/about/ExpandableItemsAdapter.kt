@@ -14,7 +14,7 @@ import com.byagowi.persiancalendar.utils.layoutInflater
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 
-class ExpandableItemsAdapter(private val sections: List<Item>, isRTL: Boolean) :
+class ExpandableItemsAdapter(private val sections: List<Item>, isRtl: Boolean) :
     RecyclerView.Adapter<ExpandableItemsAdapter.ViewHolder>() {
 
     data class Item(val title: String, val tag: String?, val content: CharSequence)
@@ -28,7 +28,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRTL: Boolean) :
 
     override fun getItemCount() = sections.size
 
-    val notExpandedArrowDegree = if (isRTL) 90f else -90f
+    val notExpandedArrowDegree = if (isRtl) 90f else -90f
 
     inner class ViewHolder(private val binding: ExpandableItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {

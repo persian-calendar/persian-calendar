@@ -332,7 +332,7 @@ fun getThemeFromName(name: String): Int = when (name) {
     else -> R.style.LightTheme
 }
 
-val Resources.isRTL get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
 fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
     context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable) }
@@ -377,7 +377,7 @@ fun Context?.copyToClipboard(
 ) = runCatching {
     this?.getSystemService<ClipboardManager>()
         ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
-    val message = (if (resources.isRTL) RLM else "") +
+    val message = (if (resources.isRtl) RLM else "") +
             getString(R.string.date_copied_clipboard).format(text)
     onSuccess(message)
 }.onFailure(logException).getOrNull().debugAssertNotNull.let {}
