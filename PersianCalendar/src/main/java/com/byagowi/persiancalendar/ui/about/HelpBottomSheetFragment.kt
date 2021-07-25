@@ -14,10 +14,10 @@ fun Fragment.showHelpBottomSheet() {
     val binding = FragmentHelpBottomSheetBinding.inflate(layoutInflater)
     Linkify.addLinks(binding.helpSummary, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
     BottomSheetDialog(layoutInflater.context).also { it.setContentView(binding.root) }.show()
-    val root = (binding.root.parent as? View).debugAssertNotNull ?: return
-    root.setBackgroundColor(Color.TRANSPARENT)
+    val rootParent = (binding.root.parent as? View).debugAssertNotNull ?: return
+    rootParent.setBackgroundColor(Color.TRANSPARENT)
     if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-        (root.layoutParams as? CoordinatorLayout.LayoutParams).debugAssertNotNull
+        (rootParent.layoutParams as? CoordinatorLayout.LayoutParams).debugAssertNotNull
             ?.setMargins(16, 0, 16, 0)
     }
 }
