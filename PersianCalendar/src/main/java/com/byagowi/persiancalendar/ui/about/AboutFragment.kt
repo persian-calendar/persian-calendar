@@ -108,10 +108,7 @@ class AboutFragment : Fragment() {
         // help
         binding.helpCard.also {
             it.isVisible = isUserAbleToReadPersian
-            it.setOnClickListener {
-                val helpBottomSheet = HelpBottomSheetFragment()
-                helpBottomSheet.show(childFragmentManager,helpBottomSheet.tag)
-            }
+            it.setOnClickListener { showHelpBottomSheet() }
         }
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
 
