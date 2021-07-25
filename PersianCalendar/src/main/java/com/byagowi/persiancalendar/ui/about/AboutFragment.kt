@@ -97,7 +97,7 @@ class AboutFragment : Fragment() {
         }
 
         fun TextView.putLineStartIcon(@DrawableRes icon: Int) {
-            if (isResourcesRTL(context)) setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
+            if (resources.isRTL) setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
             else setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
         }
 

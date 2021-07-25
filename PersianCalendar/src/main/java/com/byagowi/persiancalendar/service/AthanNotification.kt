@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getClockFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeText
-import com.byagowi.persiancalendar.utils.isResourcesRTL
+import com.byagowi.persiancalendar.utils.isRTL
 import com.byagowi.persiancalendar.utils.toFormattedString
 import java.util.concurrent.TimeUnit
 
@@ -80,7 +80,7 @@ class AthanNotification : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(
-                applicationContext?.packageName, if (isResourcesRTL(this))
+                applicationContext?.packageName, if (resources.isRTL)
                     R.layout.custom_notification
                 else
                     R.layout.custom_notification_ltr

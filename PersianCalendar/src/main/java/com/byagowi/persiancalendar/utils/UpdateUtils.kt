@@ -86,7 +86,7 @@ fun update(context: Context, updateDate: Boolean) {
     val color = Color.parseColor(selectedWidgetTextColor)
     val packageName = context.packageName
 
-    val isRTL = isResourcesRTL(context)
+    val isRTL = context.resources.isRTL
 
     val ageWidget = ComponentName(context, AgeWidget::class.java)
     val widget1x1 = ComponentName(context, Widget1x1::class.java)

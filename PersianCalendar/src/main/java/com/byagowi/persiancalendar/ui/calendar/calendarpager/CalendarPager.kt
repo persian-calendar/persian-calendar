@@ -111,13 +111,9 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             var pageRefresh = fun(_: Boolean, _: Jdn?) {}
 
             init {
-                val isRTL = isResourcesRTL(binding.root.context)
-
                 binding.next.let {
-                    it.setImageResource(
-                        if (isRTL) R.drawable.ic_keyboard_arrow_left
-                        else R.drawable.ic_keyboard_arrow_right
-                    )
+                    it.setImageResource(R.drawable.ic_keyboard_arrow_down)
+                    it.rotation = if (resources.isRTL) 90f else -90f
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
                     }
@@ -128,10 +124,8 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 }
 
                 binding.prev.let {
-                    it.setImageResource(
-                        if (isRTL) R.drawable.ic_keyboard_arrow_right
-                        else R.drawable.ic_keyboard_arrow_left
-                    )
+                    it.setImageResource(R.drawable.ic_keyboard_arrow_down)
+                    it.rotation = if (resources.isRTL) -90f else 90f
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem - 1, true)
                     }
