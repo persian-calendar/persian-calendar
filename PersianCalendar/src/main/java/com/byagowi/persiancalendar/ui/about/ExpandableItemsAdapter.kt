@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
+import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 
-class ExpandableItemsAdapter(private val sections: List<Item>, isRtl: Boolean) :
+class ExpandableItemsAdapter(private val sections: List<Item>) :
     RecyclerView.Adapter<ExpandableItemsAdapter.ViewHolder>() {
 
     data class Item(val title: String, val tag: String?, val content: CharSequence)
@@ -27,8 +28,6 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRtl: Boolean) :
         holder.bind(position)
 
     override fun getItemCount() = sections.size
-
-    val notExpandedArrowDegree = if (isRtl) 90f else -90f
 
     inner class ViewHolder(private val binding: ExpandableItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
@@ -53,19 +52,15 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRtl: Boolean) :
             binding.tag.text = sections[position].tag
             binding.tag.isVisible = !sections[position].tag.isNullOrEmpty()
             binding.content.text = sections[position].content
-            binding.sectionIcon.rotation = notExpandedArrowDegree
+            binding.expansionArrow.changeTo(ArrowView.Direction.END)
             binding.content.isVisible = false
         }
 
-        private val arrowRotationAnimationDuration =
-            binding.root.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-
         override fun onClick(v: View?) {
-            binding.content.isVisible = !binding.content.isVisible
-            binding.sectionIcon.animate()
-                .rotation(if (binding.content.isVisible) 0f else notExpandedArrowDegree)
-                .setDuration(arrowRotationAnimationDuration)
-                .start()
+            val state = !binding.content.isVisible
+            binding.content.isVisible = state
+            binding.expansionArrow
+                .animateTo(if (state) ArrowView.Direction.DOWN else ArrowView.Direction.END)
         }
     }
 }

@@ -31,8 +31,6 @@ import java.util.*
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     private val changeBoundTransition = ChangeBounds()
-    private val arrowRotationAnimationDuration =
-        resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).also {
         it.root.setOnClickListener { toggle() }
         it.root.setupExpandableAccessibilityDescription()
@@ -43,18 +41,15 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     fun toggle() {
         isExpanded = !isExpanded
 
-        // Rotate expansion arrow
-        binding.moreCalendar.animate()
-            .rotation(if (isExpanded) 180f else 0f)
-            .setDuration(arrowRotationAnimationDuration)
-            .start()
+        binding.expansionArrow
+            .animateTo(if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN)
 
         TransitionManager.beginDelayedTransition(binding.calendarsTabContent, changeBoundTransition)
         binding.extraInformationContainer.isVisible = isExpanded
     }
 
     fun hideMoreIcon() {
-        binding.moreCalendar.isVisible = false
+        binding.expansionArrow.isVisible = false
     }
 
     fun showCalendars(

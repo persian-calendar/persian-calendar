@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
+import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.calendar.AbstractDate
 import java.lang.ref.WeakReference
@@ -112,8 +113,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
             init {
                 binding.next.let {
-                    it.setImageResource(R.drawable.ic_keyboard_arrow_down)
-                    it.rotation = if (resources.isRtl) 90f else -90f
+                    it.changeTo(ArrowView.Direction.END)
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
                     }
@@ -124,8 +124,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 }
 
                 binding.prev.let {
-                    it.setImageResource(R.drawable.ic_keyboard_arrow_down)
-                    it.rotation = if (resources.isRtl) -90f else 90f
+                    it.changeTo(ArrowView.Direction.START)
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem - 1, true)
                     }

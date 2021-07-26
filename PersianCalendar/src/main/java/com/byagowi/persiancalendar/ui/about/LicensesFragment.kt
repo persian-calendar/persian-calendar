@@ -30,7 +30,7 @@ class LicensesFragment : Fragment() {
                 Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                 ExpandableItemsAdapter.Item(parts[0], parts.getOrNull(1), content)
             }
-        binding.recyclerView.adapter = ExpandableItemsAdapter(sections, isRtl = false)
+        binding.recyclerView.adapter = ExpandableItemsAdapter(sections)
 
         val layoutManager = LinearLayoutManager(context)
         binding.recyclerView.layoutManager = LinearLayoutManager(context)

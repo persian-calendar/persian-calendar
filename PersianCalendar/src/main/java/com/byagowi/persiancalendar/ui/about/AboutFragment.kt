@@ -119,7 +119,7 @@ class AboutFragment : Fragment() {
                     Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                     ExpandableItemsAdapter.Item(lines.first(), null, content)
                 }
-            adapter = ExpandableItemsAdapter(sections, isRtl = true)
+            adapter = ExpandableItemsAdapter(sections)
             layoutManager = LinearLayoutManager(context)
         }
 

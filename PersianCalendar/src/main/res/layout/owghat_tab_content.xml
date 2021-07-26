@@ -49,12 +49,11 @@
             android:textSize="@dimen/text_size_title"
             tools:text="City" />
 
-        <ImageView
-            android:id="@+id/more_owghat"
+        <com.byagowi.persiancalendar.ui.shared.ArrowView
+            android:id="@+id/expansion_arrow"
             android:layout_width="@dimen/icon_size"
             android:layout_height="@dimen/icon_size"
             android:importantForAccessibility="no"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down"
             app:tint="?attr/colorAccent" />
 
     </LinearLayout>

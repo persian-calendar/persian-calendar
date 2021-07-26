@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
+import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.allEnabledEvents
@@ -181,13 +182,9 @@ class CalendarFragment : Fragment() {
                     owghatBinding.root.setOnClickListener {
                         isExpanded = !isExpanded
                         owghatBinding.timesFlow.toggle()
-                        owghatBinding.moreOwghat.animate()
-                            .rotation(if (isExpanded) 180f else 0f)
-                            .setDuration(
-                                resources.getInteger(android.R.integer.config_shortAnimTime)
-                                    .toLong()
-                            )
-                            .start()
+                        owghatBinding.expansionArrow.animateTo(
+                            if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN
+                        )
                     }
                     owghatBinding.root.setupExpandableAccessibilityDescription()
                     owghatBinding.cityName.also {
