@@ -326,7 +326,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun createDrawerListener() = object : DrawerLayout.SimpleDrawerListener() {
-        val slidingDirection = if (resources.isRtl) -1 else +1
+        val slidingDirection = if (resources.isRtl) -1f else +1f
 
         override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
             super.onDrawerSlide(drawerView, slideOffset)
@@ -335,7 +335,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
             binding.navHostFragment.translationX =
-                slideOffset * drawerView.width.toFloat() * slidingDirection.toFloat()
+                slideOffset * drawerView.width.toFloat() * slidingDirection
             binding.drawer.bringChildToFront(drawerView)
             binding.drawer.requestLayout()
         }
