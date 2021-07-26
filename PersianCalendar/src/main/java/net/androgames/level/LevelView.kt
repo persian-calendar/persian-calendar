@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
+import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import kotlin.math.abs
@@ -214,9 +214,11 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             angleX /= l
             angleY /= l
         }
-        checkIfA11yAnnounceIsNeeded(newOrientation, newPitch, newRoll, newBalance)
+        announcer.check(context, newOrientation.isLevel(newPitch, newRoll, newBalance, .8f))
         postInvalidate()
     }
+
+    val announcer = SensorEventAnnouncer(R.string.level)
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -332,16 +334,6 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             )
             marker1D.draw(canvas)
         }
-    }
-
-    private var isAlreadyLeveled = true // deliberately
-    private fun checkIfA11yAnnounceIsNeeded(
-        newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float
-    ) {
-        isAlreadyLeveled = if (newOrientation.isLevel(newPitch, newRoll, newBalance, .8f)) {
-            if (!isAlreadyLeveled) a11yAnnounceAndClick(this, R.string.level)
-            true
-        } else false
     }
 
     companion object {

@@ -1,0 +1,29 @@
+package com.byagowi.persiancalendar.utils
+
+import android.content.Context
+import android.media.AudioManager
+import android.widget.Toast
+import androidx.annotation.StringRes
+import androidx.core.content.getSystemService
+
+// a11y related state machine that starts in true state and announce if a transition to true happens
+class SensorEventAnnouncer(@StringRes private val text: Int) {
+
+    private var state = true
+    private var lastAnnounce = -1L
+
+    fun check(context: Context, newState: Boolean) {
+        if (!isTalkBackEnabled) return
+        if (newState && !state) {
+            val now = System.currentTimeMillis()
+            if (now - lastAnnounce > 2000L) { // 2 seconds
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                // https://stackoverflow.com/a/29423018
+                context.getSystemService<AudioManager>()
+                    ?.playSoundEffect(AudioManager.FX_KEY_CLICK)
+                lastAnnounce = now
+            }
+        }
+        state = newState
+    }
+}

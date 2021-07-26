@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
-import android.media.AudioManager
-import android.view.View
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -75,7 +73,6 @@ import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.persianEvents
-import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -89,7 +86,6 @@ import java.util.*
 const val TAG = "Utils"
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
-const val TWO_SECONDS_IN_MILLIS = 2000L
 const val HALF_SECOND_IN_MILLIS = 500L
 const val DAY_IN_SECOND = 86400L
 const val DAY_IN_MILLIS = 86400000L
@@ -177,8 +173,6 @@ var isIranHolidaysEnabled = true
 var amString = DEFAULT_AM
     private set
 var pmString = DEFAULT_PM
-    private set
-var latestToastShowTime = -1L
     private set
 var numericalDatePreferred = false
     private set
@@ -371,20 +365,6 @@ fun getClockFromStringId(@StringRes stringId: Int): Clock {
             else -> null
         }
     } ?: Clock.fromInt(0)
-}
-
-fun a11yAnnounceAndClick(view: View, @StringRes resId: Int) {
-    if (!isTalkBackEnabled) return
-
-    val context = view.context ?: return
-
-    val now = System.currentTimeMillis()
-    if (now - latestToastShowTime > TWO_SECONDS_IN_MILLIS) {
-        Snackbar.make(view, resId, Snackbar.LENGTH_SHORT).show()
-        // https://stackoverflow.com/a/29423018
-        context.getSystemService<AudioManager>()?.playSoundEffect(AudioManager.FX_KEY_CLICK)
-        latestToastShowTime = now
-    }
 }
 
 private fun getOnlyLanguage(string: String): String = string.replace(Regex("-(IR|AF|US)"), "")

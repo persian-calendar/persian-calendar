@@ -17,7 +17,7 @@ import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.ui.DrawerHost
-import com.byagowi.persiancalendar.utils.a11yAnnounceAndClick
+import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCompatDrawable
@@ -177,27 +177,19 @@ class CompassFragment : Fragment() {
 
     // A11y
     // deliberately true
-    private var isCurrentlyNorth = true
-    private var isCurrentlyEast = true
-    private var isCurrentlyWest = true
-    private var isCurrentlySouth = true
-    private var isCurrentlyQibla = true
+    private var northAnnouncer = SensorEventAnnouncer(R.string.north)
+    private var eastAnnouncer = SensorEventAnnouncer(R.string.east)
+    private var westAnnouncer = SensorEventAnnouncer(R.string.west)
+    private var southAnnouncer = SensorEventAnnouncer(R.string.south)
+    private var qiblaAnnouncer = SensorEventAnnouncer(R.string.qibla)
     private fun checkIfA11yAnnounceIsNeeded(angle: Float) {
         val binding = binding ?: return
-        fun checkIsReachedToDegree(
-            currentState: Boolean, @StringRes directionString: Int, directionAngle: Int
-        ): Boolean {
-            return if (isNearToDegree(directionAngle.toFloat(), angle)) {
-                if (!currentState) a11yAnnounceAndClick(binding.root, directionString)
-                true
-            } else false
-        }
-        isCurrentlyNorth = checkIsReachedToDegree(isCurrentlyNorth, R.string.north, 0)
-        isCurrentlyEast = checkIsReachedToDegree(isCurrentlyEast, R.string.east, 90)
-        isCurrentlySouth = checkIsReachedToDegree(isCurrentlySouth, R.string.south, 180)
-        isCurrentlyWest = checkIsReachedToDegree(isCurrentlyWest, R.string.west, 270)
+        northAnnouncer.check(binding.root.context, isNearToDegree(0f, angle))
+        eastAnnouncer.check(binding.root.context, isNearToDegree(90f, angle))
+        southAnnouncer.check(binding.root.context, isNearToDegree(180f, angle))
+        westAnnouncer.check(binding.root.context, isNearToDegree(270f, angle))
         if (coordinates != null)
-            isCurrentlyQibla = checkIsReachedToDegree(isCurrentlyQibla, R.string.west, 270)
+            qiblaAnnouncer.check(binding.root.context, isNearToDegree(270f, angle))
     }
 
     companion object {
