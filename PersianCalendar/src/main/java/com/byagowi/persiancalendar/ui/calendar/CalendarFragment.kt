@@ -30,6 +30,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.ChangeBounds
+import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
@@ -179,12 +181,14 @@ class CalendarFragment : Fragment() {
                     this.owghatBinding = owghatBinding
 
                     var isExpanded = false
+                    val changeBound = ChangeBounds()
                     owghatBinding.root.setOnClickListener {
                         isExpanded = !isExpanded
                         owghatBinding.timesFlow.toggle()
                         owghatBinding.expansionArrow.animateTo(
                             if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN
                         )
+                        TransitionManager.beginDelayedTransition(owghatBinding.root, changeBound)
                     }
                     owghatBinding.root.setupExpandableAccessibilityDescription()
                     owghatBinding.cityName.also {

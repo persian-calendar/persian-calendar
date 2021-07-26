@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.ChangeBounds
+import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.utils.dp
@@ -28,6 +30,8 @@ class ExpandableItemsAdapter(private val sections: List<Item>) :
         holder.bind(position)
 
     override fun getItemCount() = sections.size
+
+    private val changeBounds = ChangeBounds()
 
     inner class ViewHolder(private val binding: ExpandableItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
@@ -61,6 +65,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>) :
             binding.content.isVisible = state
             binding.expansionArrow
                 .animateTo(if (state) ArrowView.Direction.DOWN else ArrowView.Direction.END)
+            if (state) TransitionManager.beginDelayedTransition(binding.root, changeBounds)
         }
     }
 }
