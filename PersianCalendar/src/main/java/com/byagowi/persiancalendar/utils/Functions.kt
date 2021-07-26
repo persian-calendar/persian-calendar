@@ -16,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
@@ -538,7 +537,10 @@ inline fun MenuItem.onClick(crossinline action: () -> Unit) =
 
 fun View.setupExpandableAccessibilityDescription() {
     ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
-        override fun onInitializeAccessibilityNodeInfo(host: View?, info: AccessibilityNodeInfoCompat?) {
+        override fun onInitializeAccessibilityNodeInfo(
+            host: View?,
+            info: AccessibilityNodeInfoCompat?
+        ) {
             super.onInitializeAccessibilityNodeInfo(host, info)
             info?.addAction(
                 AccessibilityNodeInfoCompat.AccessibilityActionCompat(
