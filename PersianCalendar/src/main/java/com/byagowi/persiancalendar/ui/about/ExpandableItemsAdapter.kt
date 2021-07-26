@@ -9,10 +9,12 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.resolveColor
 import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -45,8 +47,10 @@ class ExpandableItemsAdapter(private val sections: List<Item>) :
             }
             binding.tag.background =
                 MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(6.dp)).also {
-                    it.tintList = ColorStateList.valueOf(0x10000000)
+                    val tagColor = binding.root.context.resolveColor(R.attr.colorDivider)
+                    it.tintList = ColorStateList.valueOf(tagColor)
                 }
+            binding.tag.setTextColor(binding.root.context.resolveColor(R.attr.colorTextDrawer))
             binding.root.setOnClickListener(this)
             binding.root.setupExpandableAccessibilityDescription()
         }
