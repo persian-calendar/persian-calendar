@@ -106,9 +106,8 @@ class DaysAdapter(
             return false
         }
 
-        fun bind(position: Int) {
-            var position = position
-            val originalPosition = position
+        fun bind(pos: Int) {
+            var position = pos
             val dayView = (itemView as? DayView).debugAssertNotNull ?: return
             if (isShowWeekOfYearEnabled) {
                 if (position % 8 == 0) {
@@ -156,7 +155,7 @@ class DaysAdapter(
                     val dayOfMonth = position - 6 - fixedStartingDayOfWeek
                     dayView.setDayOfMonthItem(
                         isToday,
-                        originalPosition == selectedDay,
+                        pos == selectedDay,
                         events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
                         isWeekEnd((day + startingDayOfWeek - days[0]) % 7) || events.any { it.isHoliday },
