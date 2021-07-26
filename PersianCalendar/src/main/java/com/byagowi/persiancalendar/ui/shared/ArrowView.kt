@@ -13,10 +13,10 @@ class ArrowView(context: Context, attrs: AttributeSet? = null) :
         setImageResource(R.drawable.ic_keyboard_arrow_down)
     }
 
-    var lastState = 0f
-    var isRtl = false
+    private var lastDegree = 0f
+    private var isRtl = false
     private fun changeTo(degree: Float) {
-        lastState = degree
+        lastDegree = degree
         rotation = if (isRtl) -degree else degree
     }
 
@@ -25,11 +25,11 @@ class ArrowView(context: Context, attrs: AttributeSet? = null) :
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
-        changeTo(lastState)
+        changeTo(lastDegree)
     }
 
     fun animateTo(direction: Direction) {
-        ValueAnimator.ofFloat(lastState, direction.toDegree()).also { valueAnimator ->
+        ValueAnimator.ofFloat(lastDegree, direction.toDegree()).also { valueAnimator ->
             valueAnimator.duration = arrowRotationAnimationDuration
             valueAnimator.addUpdateListener(this)
         }.start()
