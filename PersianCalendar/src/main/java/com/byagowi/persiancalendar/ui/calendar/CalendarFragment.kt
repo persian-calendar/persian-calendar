@@ -82,6 +82,7 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
+import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
@@ -180,9 +181,6 @@ class CalendarFragment : Fragment() {
                     owghatBinding.root.setOnClickListener {
                         isExpanded = !isExpanded
                         owghatBinding.timesFlow.toggle()
-                        owghatBinding.moreOwghat.contentDescription = resources.getString(
-                            if (isExpanded) R.string.close else R.string.open
-                        )
                         owghatBinding.moreOwghat.animate()
                             .rotation(if (isExpanded) 180f else 0f)
                             .setDuration(
@@ -191,6 +189,7 @@ class CalendarFragment : Fragment() {
                             )
                             .start()
                     }
+                    owghatBinding.root.setupExpandableAccessibilityDescription()
                     owghatBinding.cityName.also {
                         val cityName = getCityName(it.context, false)
                         if (cityName.isNotEmpty()) it.text = cityName

@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
@@ -29,6 +30,9 @@ import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import androidx.core.view.AccessibilityDelegateCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
@@ -531,6 +535,19 @@ fun AppBarLayout.hideToolbarBottomShadow() {
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
     this.setOnMenuItemClickListener { action(); true /* it captures the click event */ }.let {}
+
+fun View.setupExpandableAccessibilityDescription() {
+    ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
+        override fun onInitializeAccessibilityNodeInfo(host: View?, info: AccessibilityNodeInfoCompat?) {
+            super.onInitializeAccessibilityNodeInfo(host, info)
+            info?.addAction(
+                AccessibilityNodeInfoCompat.AccessibilityActionCompat(
+                    AccessibilityNodeInfoCompat.ACTION_CLICK, resources.getString(R.string.more)
+                )
+            )
+        }
+    })
+}
 
 fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,

@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.Clock
@@ -34,16 +35,13 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).also {
         it.root.setOnClickListener { toggle() }
+        it.root.setupExpandableAccessibilityDescription()
         it.extraInformationContainer.isVisible = false
     }
     private var isExpanded = false
 
     fun toggle() {
         isExpanded = !isExpanded
-
-        binding.moreCalendar.contentDescription = context.getString(
-            if (isExpanded) R.string.close else R.string.open
-        )
 
         // Rotate expansion arrow
         binding.moreCalendar.animate()

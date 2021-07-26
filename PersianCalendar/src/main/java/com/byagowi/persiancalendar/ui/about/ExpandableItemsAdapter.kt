@@ -9,8 +9,8 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
 import com.byagowi.persiancalendar.utils.dp
-import com.byagowi.persiancalendar.utils.isTalkBackEnabled
 import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 
@@ -44,9 +44,8 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRtl: Boolean) :
                 MaterialShapeDrawable(ShapeAppearanceModel().withCornerSize(6.dp)).also {
                     it.tintList = ColorStateList.valueOf(0x10000000)
                 }
-
-            if (!isTalkBackEnabled) binding.root.setOnClickListener(this)
-            else binding.content.isVisible = true // make it expanded if user got talkback
+            binding.root.setOnClickListener(this)
+            binding.root.setupExpandableAccessibilityDescription()
         }
 
         fun bind(position: Int) {
@@ -55,6 +54,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>, isRtl: Boolean) :
             binding.tag.isVisible = !sections[position].tag.isNullOrEmpty()
             binding.content.text = sections[position].content
             binding.sectionIcon.rotation = notExpandedArrowDegree
+            binding.content.isVisible = false
         }
 
         private val arrowRotationAnimationDuration =
