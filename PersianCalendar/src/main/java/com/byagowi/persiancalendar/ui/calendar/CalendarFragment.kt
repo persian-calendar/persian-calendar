@@ -163,7 +163,7 @@ class CalendarFragment : Fragment() {
                     inflater, container, false
                 ).also { owghatBindingPlaceholder ->
                     // As mentioned above is Persian only so i18n is not a concern
-                    owghatBindingPlaceholder.buttonsBar.text.text =
+                    owghatBindingPlaceholder.buttonsBar.header.text =
                         "اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید."
                     owghatBindingPlaceholder.buttonsBar.settings.setOnClickListener {
                         findNavController().navigateSafe(
@@ -442,7 +442,7 @@ class CalendarFragment : Fragment() {
         val enabledTypes = activity.appPrefs
             .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
         if (enabledTypes.isEmpty()) {
-            eventsBinding.buttonsBar.text.setText(R.string.warn_if_events_not_set)
+            eventsBinding.buttonsBar.header.setText(R.string.warn_if_events_not_set)
             eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
                     CalendarFragmentDirections.navigateToSettings(
