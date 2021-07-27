@@ -33,8 +33,6 @@ class ExpandableItemsAdapter(private val sections: List<Item>) :
 
     override fun getItemCount() = sections.size
 
-    private val changeBounds = ChangeBounds()
-
     inner class ViewHolder(private val binding: ExpandableItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {
 
@@ -69,7 +67,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>) :
             binding.content.isVisible = state
             binding.expansionArrow
                 .animateTo(if (state) ArrowView.Direction.DOWN else ArrowView.Direction.END)
-            if (state) TransitionManager.beginDelayedTransition(binding.root, changeBounds)
+            if (state) TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
         }
     }
 }

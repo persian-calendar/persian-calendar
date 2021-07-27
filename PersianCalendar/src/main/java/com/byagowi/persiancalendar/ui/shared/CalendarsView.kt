@@ -37,13 +37,12 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     }
     private var isExpanded = false
 
-    private val changeBounds = ChangeBounds()
     fun toggle() {
         isExpanded = !isExpanded
 
         binding.expansionArrow
             .animateTo(if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN)
-        TransitionManager.beginDelayedTransition(binding.calendarsTabContent, changeBounds)
+        TransitionManager.beginDelayedTransition(binding.calendarsTabContent, ChangeBounds())
 
         binding.extraInformationContainer.isVisible = isExpanded
     }

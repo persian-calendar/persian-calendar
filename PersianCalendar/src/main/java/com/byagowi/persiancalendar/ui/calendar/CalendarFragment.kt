@@ -212,14 +212,13 @@ class CalendarFragment : Fragment() {
         owghatBinding = binding
 
         var isExpanded = false
-        val changeBound = ChangeBounds()
         binding.root.setOnClickListener {
             isExpanded = !isExpanded
             binding.timesFlow.toggle()
             binding.expansionArrow.animateTo(
                 if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN
             )
-            TransitionManager.beginDelayedTransition(binding.root, changeBound)
+            TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
         }
         binding.root.setupExpandableAccessibilityDescription()
         binding.cityName.also {
