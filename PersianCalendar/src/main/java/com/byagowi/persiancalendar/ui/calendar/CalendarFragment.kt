@@ -128,84 +128,29 @@ class CalendarFragment : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(this, onBackPressedCloseSearchCallback)
     }
 
+    private fun enableOwghatTab(context: Context): Boolean {
+        val appPrefs = context.appPrefs
+        return coordinates != null || // if coordinates is set, should be shown
+                (language == LANG_FA && // The placeholder isn't translated to other languages
+                        // The user is already dismissed the third tab
+                        !appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) &&
+                        // Try to not show the placeholder to established users
+                        PREF_APP_LANGUAGE !in appPrefs)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View = FragmentCalendarBinding.inflate(inflater, container, false).also { binding ->
+    ): View {
+        val binding = FragmentCalendarBinding.inflate(inflater, container, false)
         mainBinding = binding
 
-        val appPrefs = inflater.context.appPrefs
-        val shouldDisableOwghatTab =
-            coordinates == null && // if coordinates is set, should be shown
-                    (language != LANG_FA || // The placeholder isn't translated to other languages
-                            // The user is already dismissed the third tab
-                            appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) ||
-                            // Try to not show the placeholder to established users
-                            PREF_APP_LANGUAGE in appPrefs)
-
         val tabs = listOf(
-            // First tab
-            R.string.calendar to CalendarsView(inflater.context).also { this.calendarsView = it },
-
-            // Second tab
-            R.string.events to EventsTabContentBinding.inflate(
-                inflater, container, false
-            ).also { eventsBinding ->
-                this.eventsBinding = eventsBinding
-                eventsBinding.eventsContent.layoutTransition = LayoutTransition().also {
-                    it.enableTransitionType(LayoutTransition.CHANGING)
-                    it.setAnimateParentHierarchy(false)
-                }
-            }.root
-        ) + if (shouldDisableOwghatTab) emptyList() else listOf(
+            R.string.calendar to CalendarsView(inflater.context).also { calendarsView = it },
+            R.string.events to createEventsTab(inflater, container)
+        ) + if (enableOwghatTab(inflater.context)) listOf(
             // The optional third tab
-            R.string.owghat to if (coordinates == null) {
-                OwghatTabPlaceholderBinding.inflate(
-                    inflater, container, false
-                ).also { owghatBindingPlaceholder ->
-                    // As mentioned above is Persian only so i18n is not a concern
-                    owghatBindingPlaceholder.buttonsBar.header.text =
-                        "اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید"
-                    owghatBindingPlaceholder.buttonsBar.settings.setOnClickListener {
-                        findNavController().navigateSafe(
-                            CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
-                        )
-                    }
-                    owghatBindingPlaceholder.buttonsBar.discard.setOnClickListener {
-                        context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
-                        findNavController().navigateSafe(
-                            CalendarFragmentDirections.navigateToSelf()
-                        )
-                    }
-                }.root
-            } else {
-                OwghatTabContentBinding.inflate(
-                    inflater, container, false
-                ).also { owghatBinding ->
-                    this.owghatBinding = owghatBinding
-
-                    var isExpanded = false
-                    val changeBound = ChangeBounds()
-                    owghatBinding.root.setOnClickListener {
-                        isExpanded = !isExpanded
-                        owghatBinding.timesFlow.toggle()
-                        owghatBinding.expansionArrow.animateTo(
-                            if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN
-                        )
-                        TransitionManager.beginDelayedTransition(owghatBinding.root, changeBound)
-                    }
-                    owghatBinding.root.setupExpandableAccessibilityDescription()
-                    owghatBinding.cityName.also {
-                        val cityName = getCityName(it.context, false)
-                        if (cityName.isNotEmpty()) it.text = cityName
-                    }
-                    owghatBinding.times.layoutTransition = LayoutTransition().also {
-                        it.enableTransitionType(LayoutTransition.APPEARING)
-                        it.setAnimateParentHierarchy(false)
-                    }
-                    owghatBinding.timesFlow.setup()
-                }.root
-            }
-        )
+            R.string.owghat to createOwghatTab(inflater, container)
+        ) else emptyList()
 
         // tabs should fill their parent otherwise view pager can't handle it
         tabs.forEach { (_: Int, tabView: ViewGroup) ->
@@ -248,7 +193,67 @@ class CalendarFragment : Fragment() {
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
         binding.viewPager.setCurrentItem(lastTab, false)
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
-    }.root
+        return binding.root
+    }
+
+    private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): ViewGroup {
+        val binding = EventsTabContentBinding.inflate(inflater, container, false)
+        eventsBinding = binding
+        binding.eventsContent.layoutTransition = LayoutTransition().also {
+            it.enableTransitionType(LayoutTransition.CHANGING)
+            it.setAnimateParentHierarchy(false)
+        }
+        return binding.root
+    }
+
+    private fun createOwghatTab(inflater: LayoutInflater, container: ViewGroup?): ViewGroup {
+        if (coordinates == null) return createOwghatTabPlaceholder(inflater, container)
+        val binding = OwghatTabContentBinding.inflate(inflater, container, false)
+        owghatBinding = binding
+
+        var isExpanded = false
+        val changeBound = ChangeBounds()
+        binding.root.setOnClickListener {
+            isExpanded = !isExpanded
+            binding.timesFlow.toggle()
+            binding.expansionArrow.animateTo(
+                if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN
+            )
+            TransitionManager.beginDelayedTransition(binding.root, changeBound)
+        }
+        binding.root.setupExpandableAccessibilityDescription()
+        binding.cityName.also {
+            val cityName = getCityName(it.context, false)
+            if (cityName.isNotEmpty()) it.text = cityName
+        }
+        binding.times.layoutTransition = LayoutTransition().also {
+            it.enableTransitionType(LayoutTransition.APPEARING)
+            it.setAnimateParentHierarchy(false)
+        }
+        binding.timesFlow.setup()
+        return binding.root
+    }
+
+    private fun createOwghatTabPlaceholder(
+        inflater: LayoutInflater, container: ViewGroup?
+    ): ViewGroup {
+        val binding = OwghatTabPlaceholderBinding.inflate(inflater, container, false)
+        // As mentioned above is Persian only so i18n is not a concern
+        binding.buttonsBar.header.text =
+            "اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید"
+        binding.buttonsBar.settings.setOnClickListener {
+            findNavController().navigateSafe(
+                CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
+            )
+        }
+        binding.buttonsBar.discard.setOnClickListener {
+            context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
+            findNavController().navigateSafe(
+                CalendarFragmentDirections.navigateToSelf()
+            )
+        }
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -492,7 +497,7 @@ class CalendarFragment : Fragment() {
     private fun setupMenu(toolbar: Toolbar, calendarPager: CalendarPager) {
         val context = toolbar.context
 
-        val searchView = SearchView(context)
+        val searchView = SearchView(context).also { searchView = it }
         searchView.setOnCloseListener {
             onBackPressedCloseSearchCallback.isEnabled = false
             false // don't prevent the event cascade
@@ -523,7 +528,6 @@ class CalendarFragment : Fragment() {
                 searchView.onActionViewCollapsed()
             }
         }
-        this.searchView = searchView
 
         toolbar.menu.add(R.string.return_to_today).also {
             it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
