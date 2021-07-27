@@ -162,12 +162,15 @@ class CalendarFragment : Fragment() {
                 OwghatTabPlaceholderBinding.inflate(
                     inflater, container, false
                 ).also { owghatBindingPlaceholder ->
-                    owghatBindingPlaceholder.activate.setOnClickListener {
+                    // As mentioned above is Persian only so i18n is not a concern
+                    owghatBindingPlaceholder.buttonsBar.text.text =
+                        "اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید."
+                    owghatBindingPlaceholder.buttonsBar.settings.setOnClickListener {
                         findNavController().navigateSafe(
                             CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
                         )
                     }
-                    owghatBindingPlaceholder.discard.setOnClickListener {
+                    owghatBindingPlaceholder.buttonsBar.discard.setOnClickListener {
                         context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
                         findNavController().navigateSafe(
                             CalendarFragmentDirections.navigateToSelf()
@@ -439,18 +442,19 @@ class CalendarFragment : Fragment() {
         val enabledTypes = activity.appPrefs
             .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
         if (enabledTypes.isEmpty()) {
-            eventsBinding.settings.setOnClickListener {
+            eventsBinding.buttonsBar.text.setText(R.string.warn_if_events_not_set)
+            eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
                     CalendarFragmentDirections.navigateToSettings(
                         INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                     )
                 )
             }
-            eventsBinding.discard.setOnClickListener {
+            eventsBinding.buttonsBar.discard.setOnClickListener {
                 activity.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays")) }
-                eventsBinding.notSet.isVisible = false
+                eventsBinding.buttonsBar.root.isVisible = false
             }
-        } else eventsBinding.notSet.isVisible = false
+        } else eventsBinding.buttonsBar.root.isVisible = false
 
         if (messageToShow.isNotEmpty()) {
             eventsBinding.eventMessage.let {
