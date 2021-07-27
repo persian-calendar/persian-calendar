@@ -471,7 +471,7 @@ private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequ
     if (text.isBlank()) setViewVisibility(viewId, View.GONE)
     else setTextViewText(viewId, text.trim())
 
-private fun IntArray?.isNullOrEmpty() = this?.isEmpty() ?: false
+private fun IntArray?.isNullOrEmpty() = this?.isEmpty() ?: true
 
 private fun Context.launchAppPendingIntent(): PendingIntent? = PendingIntent.getActivity(
     this, 0,
