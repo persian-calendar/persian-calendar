@@ -164,7 +164,7 @@ class CalendarFragment : Fragment() {
                 ).also { owghatBindingPlaceholder ->
                     // As mentioned above is Persian only so i18n is not a concern
                     owghatBindingPlaceholder.buttonsBar.header.text =
-                        "اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید."
+                        "اگر مایل به دیدن اوقات شرعی هستید مکان را در تنظیمات مشخص کنید"
                     owghatBindingPlaceholder.buttonsBar.settings.setOnClickListener {
                         findNavController().navigateSafe(
                             CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
