@@ -439,24 +439,18 @@ class CalendarFragment : Fragment() {
         val enabledTypes = activity.appPrefs
             .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
         if (enabledTypes.isEmpty()) {
-            eventsBinding.noEvent.isVisible = false
-            if (messageToShow.isNotEmpty()) messageToShow.append("\n")
-
-            val title = getString(R.string.warn_if_events_not_set)
-            messageToShow.append(buildSpannedString {
-                inSpans(object : ClickableSpan() {
-                    override fun onClick(textView: View) = findNavController().navigateSafe(
-                        CalendarFragmentDirections.navigateToSettings(
-                            INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
-                        )
+            eventsBinding.settings.setOnClickListener {
+                findNavController().navigateSafe(
+                    CalendarFragmentDirections.navigateToSettings(
+                        INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                     )
-                }) { append(title) }
-            })
-
-            contentDescription
-                .append("\n")
-                .append(title)
-        }
+                )
+            }
+            eventsBinding.discard.setOnClickListener {
+                activity.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays")) }
+                eventsBinding.notSet.isVisible = false
+            }
+        } else eventsBinding.notSet.isVisible = false
 
         if (messageToShow.isNotEmpty()) {
             eventsBinding.eventMessage.let {

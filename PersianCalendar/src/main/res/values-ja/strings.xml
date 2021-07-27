@@ -236,5 +236,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="select_date">Select date</string>
     <string name="age_widget_placeholder">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
     <string name="preview">プレビュ</string>
+    <string name="ignore">無視</string>
 
 </resources>

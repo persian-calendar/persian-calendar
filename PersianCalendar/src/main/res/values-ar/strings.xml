@@ -268,5 +268,6 @@
     <string name="select_date">اختيار التاريخ</string>
     <string name="age_widget_placeholder">%1$s يوم (~%2$s سنة، %3$s شهر، %4$s يوم)</string>
     <string name="preview">معاينة</string>
+    <string name="ignore">تجاهل</string>
 
 </resources>

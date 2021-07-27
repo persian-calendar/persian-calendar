@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_item"
             android:layout_weight="1"
-            android:text="در نظر نگرفتن"
+            android:text="@string/ignore"
             app:cornerRadius="@dimen/button_radius" />
 
         <Button
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_item"
             android:layout_weight="1"
-            android:text="رفتن به تنظیمات"
+            android:text="@string/settings"
             app:cornerRadius="@dimen/button_radius" />
 
     </LinearLayout>

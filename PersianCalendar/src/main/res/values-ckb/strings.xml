@@ -233,5 +233,6 @@
     <string name="select_date">انتخاب تاریخ</string>
     <string name="age_widget_placeholder">%1$s ڕۆژ (~%2$s ساڵ، %3$s مانگ، %4$s ڕۆژ)</string>
     <string name="preview">پێشبینین</string>
+    <string name="ignore">گوێ مەدە</string>
 
 </resources>
