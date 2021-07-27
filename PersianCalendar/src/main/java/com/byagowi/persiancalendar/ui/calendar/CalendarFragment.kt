@@ -153,7 +153,7 @@ class CalendarFragment : Fragment() {
         ) else emptyList()
 
         // tabs should fill their parent otherwise view pager can't handle it
-        tabs.forEach { (_: Int, tabView: ViewGroup) ->
+        tabs.forEach { (_: Int, tabView: View) ->
             tabView.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
             )
@@ -196,7 +196,7 @@ class CalendarFragment : Fragment() {
         return binding.root
     }
 
-    private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): ViewGroup {
+    private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding = EventsTabContentBinding.inflate(inflater, container, false)
         eventsBinding = binding
         binding.eventsContent.layoutTransition = LayoutTransition().also {
@@ -206,7 +206,7 @@ class CalendarFragment : Fragment() {
         return binding.root
     }
 
-    private fun createOwghatTab(inflater: LayoutInflater, container: ViewGroup?): ViewGroup {
+    private fun createOwghatTab(inflater: LayoutInflater, container: ViewGroup?): View {
         if (coordinates == null) return createOwghatTabPlaceholder(inflater, container)
         val binding = OwghatTabContentBinding.inflate(inflater, container, false)
         owghatBinding = binding
@@ -234,9 +234,7 @@ class CalendarFragment : Fragment() {
         return binding.root
     }
 
-    private fun createOwghatTabPlaceholder(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): ViewGroup {
+    private fun createOwghatTabPlaceholder(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding = OwghatTabPlaceholderBinding.inflate(inflater, container, false)
         // As mentioned above is Persian only so i18n is not a concern
         binding.buttonsBar.header.text =
