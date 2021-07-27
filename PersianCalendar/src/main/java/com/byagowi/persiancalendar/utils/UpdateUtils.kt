@@ -47,7 +47,7 @@ fun setDeviceCalendarEvents(context: Context) = runCatching {
     deviceCalendarEvents = Jdn.today.readDayDeviceEvents(context)
 }.onFailure(logException).let {}
 
-var latestFiredUpdate = 0L
+private var latestFiredUpdate = 0L
 
 fun update(context: Context, updateDate: Boolean) {
     val now = System.currentTimeMillis()
