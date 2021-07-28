@@ -25,7 +25,7 @@
             android:format12Hour="H:mm"
             android:format24Hour="H:mm"
             android:textColor="@android:color/white"
-            android:textSize="36dp"
+            android:textSize="36sp"
             android:timeZone="Asia/Tehran" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:textColor="@android:color/white"
-            android:textSize="12dp" />
+            android:textSize="12sp" />
     </LinearLayout>
 
     <TextView
@@ -45,6 +45,6 @@
         android:layout_height="wrap_content"
         android:gravity="end"
         android:textColor="@android:color/white"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
 </LinearLayout>
