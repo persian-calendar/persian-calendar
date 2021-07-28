@@ -18,8 +18,8 @@ sealed interface AppLocalesData {
         fun getGregorianCalendarMonths(locale: String, isEasternArabicMonth: Boolean) =
             when (locale) {
                 LANG_AR -> {
-                    if (isEasternArabicMonth) ar.easternGregorianCalendarMonths
-                    else ar.gregorianCalendarMonths
+                    if (isEasternArabicMonth) AR.easternGregorianCalendarMonths
+                    else AR.gregorianCalendarMonths
                 }
                 else -> localeFinder(locale).gregorianCalendarMonths
             }
@@ -28,23 +28,23 @@ sealed interface AppLocalesData {
         fun getWeekDaysInitials(locale: String) = localeFinder(locale).weekDaysInitials
 
         private fun localeFinder(locale: String): AppLocalesData = when (locale) {
-            LANG_FA_AF -> fa_af
-            LANG_PS -> ps
-            LANG_GLK -> glk
-            LANG_AR -> ar
-            LANG_CKB -> ckb
-            LANG_UR -> ur
-            LANG_EN_US -> en
-            LANG_JA -> ja
-            LANG_FR -> fr
-            LANG_ES -> es
-            LANG_AZB -> azb
-            LANG_EN_IR, LANG_FA -> fa
-            else -> fa
+            LANG_FA_AF -> FaAF
+            LANG_PS -> PS
+            LANG_GLK -> GLK
+            LANG_AR -> AR
+            LANG_CKB -> CKB
+            LANG_UR -> UR
+            LANG_EN_US -> EN
+            LANG_JA -> JA
+            LANG_FR -> FR
+            LANG_ES -> ES
+            LANG_AZB -> AZB
+            LANG_EN_IR, LANG_FA -> FA
+            else -> FA
         }
     }
 
-    private object fa : AppLocalesData {
+    private object FA : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی",
             "بهمن", "اسفند"
@@ -62,7 +62,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object fa_af : AppLocalesData {
+    private object FaAF : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله", "میزان", "عقرب", "قوس", "جدی", "دلو",
             "حوت"
@@ -80,7 +80,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object ps : AppLocalesData {
+    private object PS : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "وری", "غویی", "غبرګولی", "چنګاښ", "زمری", "وږی", "تله", "لړم", "لیندۍ", "مرغومی",
             "سلواغه", "کب"
@@ -98,7 +98,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object glk : AppLocalesData {
+    private object GLK : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "فروردین", "اؤردیبهشت", "خؤرداد", "تیر", "مۊرداد", "شاریور", "مهر", "آبان", "آذر",
             "دی", "بهمن", "ايسفند"
@@ -116,7 +116,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object ar : AppLocalesData {
+    private object AR : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "الحمل", "الثور", "الجوزاء", "السرطان", "الأسد", "السنبلة", "المیزان", "العقرب",
             "القوس", "الجدي", "الدلو", "الحوت"
@@ -141,7 +141,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object ckb : AppLocalesData {
+    private object CKB : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "خاکەلێوە", "گوڵان", "جۆزەردان", "پووشپەڕ", "گەلاوێژ", "خەرمانان", "ڕەزبەر", "خەزەڵوەر",
             "سەرماوەز", "بەفرانبار", "ڕێبەندان", "ڕەشەمە"
@@ -159,7 +159,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object azb : AppLocalesData {
+    private object AZB : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "فروردین", "اوردیبهشت", "خورداد", "تیر", "مورداد", "شهریور", "مهر", "آبان", "آذر",
             "دی", "بهمن", "اسفند"
@@ -180,7 +180,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object ur : AppLocalesData {
+    private object UR : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "فروردی", "اردیبہشت", "خرداد", "تیر", "امرداد", "شہریور", "مہر", "آبان", "آذر",
             "دی", "بہمن", "اسفندر"
@@ -198,7 +198,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object en : AppLocalesData {
+    private object EN : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "Farvardin", "Ordibehesht", "Khordad", "Tir", "Mordad", "Shahrivar", "Mehr", "Aban",
             "Azar", "Dey", "Bahman", "Esfand"
@@ -217,7 +217,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object fr : AppLocalesData {
+    private object FR : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "Farvardin", "Ordibehesht", "Khordad", "Tir", "Mordad", "Shahrivar",
             "Mehr", "Aban", "Azar", "Dey", "Bahman", "Esfand"
@@ -236,7 +236,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object es : AppLocalesData {
+    private object ES : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "Farvardín", "Ordibehesht", "Jordad", "Tir", "Mordad", "Shahrivar",
             "Mehr", "Abán", "Azar", "Dey", "Bahmán", "Esfand"
@@ -255,7 +255,7 @@ sealed interface AppLocalesData {
         )
     }
 
-    private object ja : AppLocalesData {
+    private object JA : AppLocalesData {
         override val persianCalendarMonths = listOf12Items(
             "ファルヴァルディーン", "オルディーベヘシト", "ホルダード", "ティール", "モルダード",
             "シャハリーヴァル", "メフル", "アーバーン", "アーザル", "デイ", "バフマン", "エスファンド"
