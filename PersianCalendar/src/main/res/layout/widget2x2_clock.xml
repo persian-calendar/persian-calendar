@@ -17,7 +17,7 @@
         android:fontFamily="sans-serif-thin"
         android:format12Hour="H:mm"
         android:format24Hour="H:mm"
-        android:gravity="right"
+        android:gravity="end"
         android:textColor="@android:color/white"
         android:textSize="34sp" />
 
@@ -26,7 +26,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
@@ -35,7 +35,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
@@ -44,7 +44,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textColor="@color/widget_holiday"
         android:textSize="14sp" />
 
@@ -53,7 +53,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="end"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
