@@ -28,18 +28,20 @@ class PersianCalendarTileService : TileService() {
     }.onFailure(logException).let {}
 
     override fun onStartListening() = runCatching {
-        qsTile?.also { tile ->
-            val jdn = Jdn.today
-            val today = jdn.toCalendar(mainCalendar)
-            if ((false)) { // Maybe increases quick tile start time? It already gives ANRs so we should be careful
-                tile.icon = Icon.createWithBitmap(createStatusIcon(this, today.dayOfMonth))
-            } else {
-                tile.icon = Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
-            }
-            tile.label = jdn.dayOfWeekName
-            tile.contentDescription = today.monthName
-            // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
-            tile.state = Tile.STATE_ACTIVE
-        }?.updateTile()
+        val tile = qsTile ?: return@runCatching
+        val jdn = Jdn.today
+        val today = jdn.toCalendar(mainCalendar)
+        tile.icon = if ((false)) {
+            // The disabled path of runtime creation of day icon as maybe it increases its boot as
+            // it already gives ANRs
+            Icon.createWithBitmap(createStatusIcon(this, today.dayOfMonth))
+        } else {
+            Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
+        }
+        tile.label = jdn.dayOfWeekName
+        tile.contentDescription = today.monthName
+        // explicitly set Tile state to Active, fixes tile not being lit on some Samsung devices
+        tile.state = Tile.STATE_ACTIVE
+        tile.updateTile()
     }.onFailure(logException).let {}
 }
