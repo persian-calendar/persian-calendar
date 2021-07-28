@@ -218,7 +218,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         postInvalidate()
     }
 
-    val announcer = SensorEventAnnouncer(R.string.level)
+    private val announcer = SensorEventAnnouncer(R.string.level)
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

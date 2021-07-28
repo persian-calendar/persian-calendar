@@ -32,7 +32,7 @@ import kotlin.math.abs
  */
 class CompassFragment : Fragment() {
 
-    var stopped = false
+    private var stopped = false
     private var binding: FragmentCompassBinding? = null
     private var sensorManager: SensorManager? = null
     private var sensor: Sensor? = null
