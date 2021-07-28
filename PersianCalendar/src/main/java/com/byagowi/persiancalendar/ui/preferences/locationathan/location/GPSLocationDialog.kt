@@ -162,15 +162,18 @@ fun Fragment.showGPSLocationDialog() {
         }
     }
 
+    var unregisterListener = fun() {}
     if (LocationManager.GPS_PROVIDER in locationManager.allProviders) {
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 0, 0f, locationListener
         )
+        unregisterListener = { locationManager.removeUpdates(locationListener) }
     }
     if (LocationManager.NETWORK_PROVIDER in locationManager.allProviders) {
         locationManager.requestLocationUpdates(
             LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener
         )
+        unregisterListener = { locationManager.removeUpdates(locationListener) }
     }
 
     handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
@@ -199,12 +202,7 @@ fun Fragment.showGPSLocationDialog() {
             }
         }
 
-        if (ActivityCompat.checkSelfPermission(
-                activity, Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
-                activity, Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) locationManager.removeUpdates(locationListener)
+        unregisterListener()
 
         handler.removeCallbacks(checkGPSProviderCallback)
         lifecycle.removeObserver(lifeCycleObserver)
