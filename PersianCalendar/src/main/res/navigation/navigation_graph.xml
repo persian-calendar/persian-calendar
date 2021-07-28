@@ -61,7 +61,7 @@
 
     <fragment
         android:id="@+id/level"
-        android:name="net.androgames.level.LevelFragment"
+        android:name="com.byagowi.persiancalendar.ui.level.LevelFragment"
         android:label="Level Fragment">
         <action
             android:id="@+id/action_level_to_compass"
