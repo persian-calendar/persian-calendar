@@ -31,7 +31,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
 
     private val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = context.resolveColor(R.attr.colorSecondary)
+        color = context.resolveColor(com.google.android.material.R.attr.colorSecondary)
     }
     private val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = context.resolveColor(R.attr.colorEventIndicator)
