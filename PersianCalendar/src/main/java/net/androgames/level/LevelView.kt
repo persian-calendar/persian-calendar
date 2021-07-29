@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.dp
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import kotlin.math.abs
@@ -214,11 +213,11 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             angleX /= l
             angleY /= l
         }
-        announcer.check(context, newOrientation.isLevel(newPitch, newRoll, newBalance, .8f))
+        onIsLevel(newOrientation.isLevel(newPitch, newRoll, newBalance, .8f))
         postInvalidate()
     }
 
-    private val announcer = SensorEventAnnouncer(R.string.level)
+    var onIsLevel = fun(_: Boolean) {}
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

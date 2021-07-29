@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
 import com.byagowi.persiancalendar.ui.DrawerHost
+import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
@@ -29,6 +30,8 @@ class LevelFragment : Fragment() {
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         }
         provider = OrientationProvider(activity, binding.levelView)
+        val announcer = SensorEventAnnouncer(R.string.level)
+        binding.levelView.onIsLevel = { isLevel -> announcer.check(activity, isLevel) }
         binding.bottomAppbar.menu.add(R.string.level).also {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
@@ -53,8 +56,7 @@ class LevelFragment : Fragment() {
         super.onResume()
         provider?.startListening()
         // https://stackoverflow.com/a/20017878
-        val rotation = (activity ?: return).windowManager.defaultDisplay.rotation
-        activity?.requestedOrientation = when (rotation) {
+        activity?.requestedOrientation = when (activity?.windowManager?.defaultDisplay?.rotation) {
             Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
             Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
             Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
