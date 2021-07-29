@@ -1,4 +1,4 @@
-+--- androidx.databinding:viewbinding:4.2.2
++--- androidx.databinding:viewbinding:7.0.0
 |    \--- androidx.annotation:annotation:1.0.0 -> 1.2.0
 +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.21
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21
@@ -30,7 +30,7 @@
 |    |    \--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
 |    +--- androidx.cursoradapter:cursoradapter:1.0.0
 |    |    \--- androidx.annotation:annotation:1.0.0 -> 1.2.0
-|    +--- androidx.activity:activity:1.2.4
+|    +--- androidx.activity:activity:1.2.4 -> 1.3.0
 |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.2.0
 |    |    +--- androidx.core:core:1.1.0 -> 1.6.0 (*)
 |    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 (*)
@@ -70,7 +70,7 @@
 |    |    |    |    +--- androidx.lifecycle:lifecycle-livedata-core:2.1.0 -> 2.3.1 (*)
 |    |    |    |    \--- androidx.arch.core:core-common:2.1.0 (*)
 |    |    |    \--- androidx.lifecycle:lifecycle-viewmodel:2.0.0 -> 2.3.1 (*)
-|    |    +--- androidx.activity:activity:1.2.4 (*)
+|    |    +--- androidx.activity:activity:1.2.4 -> 1.3.0 (*)
 |    |    +--- androidx.lifecycle:lifecycle-livedata-core:2.3.1 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.1 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1 (*)
@@ -116,8 +116,8 @@
 |    |    \--- androidx.core:core:1.6.0 (*)
 |    \--- androidx.fragment:fragment-ktx:1.2.4 -> 1.3.6
 |         +--- androidx.fragment:fragment:1.3.6 (*)
-|         +--- androidx.activity:activity-ktx:1.2.2 -> 1.2.4
-|         |    +--- androidx.activity:activity:1.2.4 (*)
+|         +--- androidx.activity:activity-ktx:1.2.2 -> 1.3.0
+|         |    +--- androidx.activity:activity:1.3.0 (*)
 |         |    +--- androidx.core:core-ktx:1.1.0 -> 1.6.0 (*)
 |         |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1
 |         |    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 (*)
@@ -136,7 +136,7 @@
 |         |    +--- androidx.savedstate:savedstate-ktx:1.1.0
 |         |    |    +--- androidx.savedstate:savedstate:1.1.0 (*)
 |         |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.4.20 -> 1.5.21 (*)
-|         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.4.20 -> 1.5.21 (*)
+|         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.10 -> 1.5.21 (*)
 |         +--- androidx.core:core-ktx:1.1.0 -> 1.6.0 (*)
 |         +--- androidx.collection:collection-ktx:1.1.0
 |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.20 -> 1.5.21 (*)
@@ -203,7 +203,7 @@
 |    |         |    +--- androidx.annotation:annotation:1.1.0 -> 1.2.0
 |    |         |    +--- androidx.core:core:1.1.0 -> 1.6.0 (*)
 |    |         |    \--- androidx.collection:collection:1.1.0 (*)
-|    |         +--- androidx.activity:activity:1.1.0 -> 1.2.4 (*)
+|    |         +--- androidx.activity:activity:1.1.0 -> 1.3.0 (*)
 |    |         +--- androidx.lifecycle:lifecycle-viewmodel:2.2.0 -> 2.3.1 (*)
 |    |         +--- androidx.savedstate:savedstate:1.0.0 -> 1.1.0 (*)
 |    |         \--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0 -> 2.3.1 (*)
@@ -214,7 +214,7 @@
 |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.5.21 (*)
 |    |    |    +--- androidx.core:core-ktx:1.1.0 -> 1.6.0 (*)
 |    |    |    \--- androidx.collection:collection:1.1.0 (*)
-|    |    +--- androidx.activity:activity-ktx:1.1.0 -> 1.2.4 (*)
+|    |    +--- androidx.activity:activity-ktx:1.1.0 -> 1.3.0 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0 -> 2.3.1 (*)
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.5.21 (*)
 |    +--- androidx.fragment:fragment-ktx:1.2.4 -> 1.3.6 (*)
@@ -231,7 +231,7 @@
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.5.21 (*)
 +--- androidx.core:core-ktx:1.6.0 (*)
 +--- androidx.fragment:fragment-ktx:1.3.6 (*)
-+--- androidx.activity:activity-ktx:1.2.4 (*)
++--- androidx.activity:activity-ktx:1.3.0 (*)
 +--- androidx.browser:browser:1.3.0
 |    +--- androidx.collection:collection:1.1.0 (*)
 |    +--- androidx.concurrent:concurrent-futures:1.0.0
