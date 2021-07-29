@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.preferences
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
@@ -26,7 +27,8 @@ import com.google.android.material.tabs.TabLayoutMediator
 class PreferencesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentSettingsBinding.inflate(inflater, container, false).also { binding ->
+    ): View {
+        val binding = FragmentSettingsBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
@@ -55,7 +57,8 @@ class PreferencesFragment : Fragment() {
             tab.setText(tabs[i].first)
         }.attach()
         binding.viewPager.currentItem = args.tab
-    }.root
+        return binding.root
+    }
 }
 
 const val PREF_DESTINATION = "DESTINATION"

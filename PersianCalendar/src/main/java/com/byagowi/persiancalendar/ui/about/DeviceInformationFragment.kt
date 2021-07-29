@@ -78,7 +78,8 @@ class DeviceInformationFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentDeviceInfoBinding.inflate(inflater, container, false).also { binding ->
+    ): View {
+        val binding = FragmentDeviceInfoBinding.inflate(inflater, container, false)
         binding.toolbar.let {
             it.setTitle(R.string.device_info)
             it.setupUpNavigation()
@@ -86,14 +87,15 @@ class DeviceInformationFragment : Fragment() {
 
         binding.circularReveal.circularRevealFromMiddle()
 
-        val adapter = DeviceInformationAdapter(activity ?: return@also)
         binding.recyclerView.let {
             it.setHasFixedSize(true)
             it.layoutManager = LinearLayoutManager(inflater.context)
             it.addItemDecoration(
                 DividerItemDecoration(inflater.context, LinearLayoutManager.VERTICAL)
             )
+            val adapter = DeviceInformationAdapter(activity ?: return@let)
             it.adapter = adapter
+            binding.fab.setOnClickListener { adapter.print(layoutInflater.context) }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -117,8 +119,6 @@ class DeviceInformationFragment : Fragment() {
             }
         }
 
-        binding.fab.setOnClickListener { adapter.print(layoutInflater.context) }
-
         binding.bottomNavigation.also { bottomNavigationView ->
             bottomNavigationView.menu.also {
                 it.add(Build.VERSION.RELEASE).setIcon(R.drawable.ic_developer)
@@ -137,7 +137,8 @@ class DeviceInformationFragment : Fragment() {
             }
             bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
         }
-    }.root
+        return binding.root
+    }
 
     private fun openTestingHiddenDialog() {
         val activity = activity ?: return

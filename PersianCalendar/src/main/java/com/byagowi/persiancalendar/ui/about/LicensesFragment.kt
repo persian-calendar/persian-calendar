@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.util.Linkify
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -15,7 +16,8 @@ import com.byagowi.persiancalendar.utils.setupUpNavigation
 class LicensesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentLicensesBinding.inflate(inflater, container, false).also { binding ->
+    ): View {
+        val binding = FragmentLicensesBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.let {
             it.setTitle(R.string.about_license_title)
             it.setupUpNavigation()
@@ -37,5 +39,6 @@ class LicensesFragment : Fragment() {
         binding.recyclerView.addItemDecoration(
             DividerItemDecoration(context, layoutManager.orientation)
         )
-    }.root
+        return binding.root
+    }
 }

@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.converter
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -14,7 +15,8 @@ import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
 class ConverterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentConverterBinding.inflate(inflater, container, false).also { binding ->
+    ): View {
+        val binding = FragmentConverterBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.let { toolbar ->
             (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
             toolbar.setTitle(R.string.date_converter)
@@ -44,5 +46,6 @@ class ConverterFragment : Fragment() {
             it.jdn = Jdn.today
             it.anchorView = binding.todayButton
         }
-    }.root
+        return binding.root
+    }
 }

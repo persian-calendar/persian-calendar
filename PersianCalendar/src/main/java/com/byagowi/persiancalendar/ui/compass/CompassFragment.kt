@@ -86,7 +86,8 @@ class CompassFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ) = FragmentCompassBinding.inflate(inflater, container, false).also { binding ->
+    ): View {
+        val binding = FragmentCompassBinding.inflate(inflater, container, false)
         this.binding = binding
 
         binding.appBar.toolbar.let { toolbar ->
@@ -131,7 +132,8 @@ class CompassFragment : Fragment() {
                 .getString(if (stopped) R.string.resume else R.string.stop)
         }
         updateCompassOrientation()
-    }.root
+        return binding.root
+    }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
