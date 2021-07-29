@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -162,18 +163,15 @@ fun Fragment.showGPSLocationDialog() {
         }
     }
 
-    var unregisterListener = fun() {}
     if (LocationManager.GPS_PROVIDER in locationManager.allProviders) {
         locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 0, 0f, locationListener
         )
-        unregisterListener = { locationManager.removeUpdates(locationListener) }
     }
     if (LocationManager.NETWORK_PROVIDER in locationManager.allProviders) {
         locationManager.requestLocationUpdates(
             LocationManager.NETWORK_PROVIDER, 0, 0f, locationListener
         )
-        unregisterListener = { locationManager.removeUpdates(locationListener) }
     }
 
     handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
@@ -202,7 +200,16 @@ fun Fragment.showGPSLocationDialog() {
             }
         }
 
-        unregisterListener()
+        // AGP 7 has false alarms claims removeUpdates can't be called here
+        // but that's incorrect and we are exactly checking permission before
+        // trying to remove the listener
+        @SuppressLint("MissingPermission")
+        if (ActivityCompat.checkSelfPermission(
+                activity, Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                activity, Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) locationManager.removeUpdates(locationListener)
 
         handler.removeCallbacks(checkGPSProviderCallback)
         lifecycle.removeObserver(lifeCycleObserver)
