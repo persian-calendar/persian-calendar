@@ -125,7 +125,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-        angleDisplay.draw(canvas, round((angle + 360f) % 360f))
+        angleDisplay.draw(canvas, (round(angle) + 360f) % 360f)
         canvas.withRotation(-angle, cx, cy) {
             drawDial()
             drawTrueNorthArrow()
