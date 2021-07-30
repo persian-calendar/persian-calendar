@@ -139,7 +139,8 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
             // display
             val displayY = when (newOrientation) {
-                Orientation.LEFT, Orientation.RIGHT -> (canvasHeight - canvasWidth) / 2 + canvasWidth
+                Orientation.LEFT, Orientation.RIGHT ->
+                    (canvasHeight - canvasWidth) / 2 + canvasWidth - angleDisplay.displayGap
                 else -> canvasHeight
             }
             angleDisplay.updatePlacement(middleX, displayY)
