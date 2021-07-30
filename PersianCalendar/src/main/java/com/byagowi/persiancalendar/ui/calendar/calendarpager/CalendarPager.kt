@@ -179,7 +179,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     } else daysAdapter.selectDay(-1)
                 }
 
-                pageRefresh(false, null)
+                pageRefresh(false, selectedJdn)
             }
         }
     }
