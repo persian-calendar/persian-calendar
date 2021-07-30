@@ -13,9 +13,11 @@ import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.*
 
-class AngleDisplay(context: Context) {
+class AngleDisplay(
+    context: Context, defaultFormat: String = "00.0",
+    private val backgroundText: String = "88.8"
+) {
 
-    private val displayBackgroundText = "88.8"
     private val lcd = Typeface.createFromAsset(context.assets, "fonts/lcd.ttf")
     private val lcdTextSize = 20.dp
     private val lcdForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -31,12 +33,12 @@ class AngleDisplay(context: Context) {
         it.textAlign = Paint.Align.CENTER
     }
     private val displayRect = Rect().also {
-        lcdBackgroundPaint.getTextBounds(displayBackgroundText, 0, displayBackgroundText.length, it)
+        lcdBackgroundPaint.getTextBounds(backgroundText, 0, backgroundText.length, it)
     }
     private val lcdWidth = displayRect.width()
     val lcdHeight = displayRect.height()
     private val displayDrawable = context.getCompatDrawable(R.drawable.display)
-    private val displayFormat = DecimalFormat("00.0").also {
+    private val displayFormat = DecimalFormat(defaultFormat).also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
     private val displayPadding = 8.dp.toInt()
@@ -56,12 +58,14 @@ class AngleDisplay(context: Context) {
             displayDrawable.bounds = displayRect
             displayDrawable.draw(this)
             drawText(
-                displayBackgroundText, displayRect.exactCenterX(),
-                displayRect.centerY() + lcdHeight / 2f, lcdBackgroundPaint
+                backgroundText,
+                displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
+                lcdBackgroundPaint
             )
             drawText(
-                displayFormat.format(angle), displayRect.exactCenterX(),
-                displayRect.centerY() + lcdHeight / 2f, lcdForegroundPaint
+                displayFormat.format(angle).padStart(backgroundText.length),
+                displayRect.exactCenterX(), displayRect.centerY() + lcdHeight / 2f,
+                lcdForegroundPaint
             )
         }
     }

@@ -24,6 +24,7 @@ import net.androgames.level.AngleDisplay
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.min
+import kotlin.math.round
 
 class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
@@ -99,7 +100,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.textAlign = Paint.Align.CENTER
     }
 
-    private val angleDisplay = AngleDisplay(context)
+    private val angleDisplay = AngleDisplay(context, "0", "888")
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -124,7 +125,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     override fun onDraw(canvas: Canvas) {
-        angleDisplay.draw(canvas, angle)
+        angleDisplay.draw(canvas, round((angle + 360f) % 360f))
         canvas.withRotation(-angle, cx, cy) {
             drawDial()
             drawTrueNorthArrow()
