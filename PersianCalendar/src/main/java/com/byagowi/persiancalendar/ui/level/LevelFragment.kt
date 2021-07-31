@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
-import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
+import com.byagowi.persiancalendar.utils.setupMenuNavigation
 import net.androgames.level.OrientationProvider
 
 class LevelFragment : Fragment() {
@@ -26,7 +26,7 @@ class LevelFragment : Fragment() {
         val binding = FragmentLevelBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.also { toolbar ->
             toolbar.setTitle(R.string.level)
-            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
+            toolbar.setupMenuNavigation(this)
             toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
         }
         provider = OrientationProvider(activity, binding.levelView)

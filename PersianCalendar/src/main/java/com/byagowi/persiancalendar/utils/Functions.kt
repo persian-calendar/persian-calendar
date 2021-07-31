@@ -32,6 +32,7 @@ import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
@@ -47,6 +48,7 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
+import com.byagowi.persiancalendar.ui.DrawerHost
 import com.google.android.material.appbar.AppBarLayout
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
@@ -493,6 +495,11 @@ fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).apply { progress = 1f }
     setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
     setNavigationOnClickListener { findNavController().navigateUp() }
+}
+
+fun Toolbar.setupMenuNavigation(fragment: Fragment) {
+    (fragment.activity as? DrawerHost).debugAssertNotNull
+        ?.setupToolbarWithDrawer(fragment.viewLifecycleOwner, this)
 }
 
 @ColorInt

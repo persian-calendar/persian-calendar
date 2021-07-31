@@ -45,7 +45,6 @@ import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
@@ -86,6 +85,7 @@ import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
+import com.byagowi.persiancalendar.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
@@ -258,7 +258,7 @@ class CalendarFragment : Fragment() {
         bringDate(Jdn.today, monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let { appBar ->
-            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, appBar.toolbar)
+            appBar.toolbar.setupMenuNavigation(this)
             appBar.appbarLayout.hideToolbarBottomShadow()
         }
 

@@ -12,12 +12,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
-import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.onClick
+import com.byagowi.persiancalendar.utils.setupMenuNavigation
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -31,7 +31,7 @@ class PreferencesFragment : Fragment() {
         val binding = FragmentSettingsBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
-            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
+            toolbar.setupMenuNavigation(this)
             if (BuildConfig.DEBUG) {
                 toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog() }
                 toolbar.menu.add("Clear preferences store")

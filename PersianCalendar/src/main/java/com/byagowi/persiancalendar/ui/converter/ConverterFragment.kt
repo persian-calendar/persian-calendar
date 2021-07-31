@@ -8,9 +8,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
-import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
+import com.byagowi.persiancalendar.utils.setupMenuNavigation
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
@@ -18,7 +18,7 @@ class ConverterFragment : Fragment() {
     ): View {
         val binding = FragmentConverterBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.let { toolbar ->
-            (activity as? DrawerHost)?.setupToolbarWithDrawer(viewLifecycleOwner, toolbar)
+            toolbar.setupMenuNavigation(this)
             toolbar.setTitle(R.string.date_converter)
         }
 
