@@ -306,6 +306,18 @@ fun loadEvents(context: Context) {
                 isHoliday = false
             )
         } else null
+    }.let { list ->
+        list + irregularRecurringEvents.filter { event ->
+            international && event["calendar"] == "Gregorian"
+        }.flatMap { event ->
+            // This adds only this years' event, hacky but enough for now
+            if (event["rule"] != "nth day of year") return@flatMap emptyList()
+            val nth = event["nth"]?.toIntOrNull() ?: return@flatMap emptyList()
+            val title = event["title"] ?: return@flatMap emptyList()
+            val year = Jdn.today.toGregorianCalendar().year
+            val date = CivilDate(CivilDate(year, 1, 1).toJdn() + nth - 1)
+            listOf(CalendarEvent.GregorianCalendarEvent(title, isHoliday = false, date))
+        }
     }.also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
 
     allEnabledEvents = allEnabledEventsBuilder
