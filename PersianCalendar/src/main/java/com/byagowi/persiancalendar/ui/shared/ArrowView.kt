@@ -20,7 +20,7 @@ class ArrowView(context: Context, attrs: AttributeSet? = null) :
         rotation = if (isRtl) -degree else degree
     }
 
-    fun changeTo(direction: Direction) = changeTo(direction.toDegree())
+    fun changeTo(direction: Direction) = changeTo(direction.degree)
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
@@ -29,7 +29,7 @@ class ArrowView(context: Context, attrs: AttributeSet? = null) :
     }
 
     fun animateTo(direction: Direction) {
-        ValueAnimator.ofFloat(lastDegree, direction.toDegree()).also { valueAnimator ->
+        ValueAnimator.ofFloat(lastDegree, direction.degree).also { valueAnimator ->
             valueAnimator.duration = arrowRotationAnimationDuration
             valueAnimator.addUpdateListener(this)
         }.start()
@@ -38,13 +38,8 @@ class ArrowView(context: Context, attrs: AttributeSet? = null) :
     override fun onAnimationUpdate(animation: ValueAnimator?) =
         changeTo((animation?.animatedValue as? Float) ?: 0f)
 
-    enum class Direction { START, END, UP, DOWN }
-
-    private fun Direction.toDegree() = when (this) {
-        Direction.DOWN -> 0f
-        Direction.UP -> 180f
-        Direction.START -> 90f
-        Direction.END -> -90f
+    enum class Direction(val degree: Float) {
+        START(90f), END(-90f), UP(180f), DOWN(0f)
     }
 
     private val arrowRotationAnimationDuration =
