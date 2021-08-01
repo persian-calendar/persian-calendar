@@ -16,7 +16,7 @@ operator fun File.div(child: String) = File(this, child)
 val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
 android {
     sourceSets {
-        getByName("main").java.srcDir(generatedAppSrcDir)
+        getByName("main").kotlin.srcDir(generatedAppSrcDir)
     }
 
     compileSdk = 30
