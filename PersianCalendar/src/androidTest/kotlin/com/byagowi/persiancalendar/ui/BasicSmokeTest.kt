@@ -40,17 +40,16 @@ class BasicSmokeTest {
         )
         appCompatImageButton.perform(click())
 
-        val navigationMenuItemView = onView(
-            allOf(
-                withId(R.id.exit), childAtPosition(
-                    allOf(
-                        withId(R.id.design_navigation_view),
-                        childAtPosition(withId(R.id.navigation), 0)
-                    ), 6
-                ), isDisplayed()
-            )
-        )
-        navigationMenuItemView.perform(click())
+//        onView(
+//            allOf(
+//                withId(R.id.exit), childAtPosition(
+//                    allOf(
+//                        withId(R.id.design_navigation_view),
+//                        childAtPosition(withId(R.id.navigation), 0)
+//                    ), 6
+//                ), isDisplayed()
+//            )
+//        ).perform(click())
     }
 
     private fun childAtPosition(
