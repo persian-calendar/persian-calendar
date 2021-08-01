@@ -233,6 +233,6 @@
     <string name="select_date">انتخاب تاریخ</string>
     <string name="age_widget_placeholder">%1$s روز (~%2$s سال، %3$s ماه، %4$s روز)</string>
     <string name="preview">نمائش</string>
-    <string name="ignore">در نظر نگرفتن</string>
+    <string name="ignore">نادیده گرفتن</string>
 
 </resources>
