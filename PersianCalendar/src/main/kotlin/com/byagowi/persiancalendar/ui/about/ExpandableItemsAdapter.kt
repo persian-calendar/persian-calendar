@@ -58,7 +58,7 @@ class ExpandableItemsAdapter(private val sections: List<Item>) :
             binding.tag.text = sections[position].tag
             binding.tag.isVisible = !sections[position].tag.isNullOrEmpty()
             binding.content.text = sections[position].content
-            binding.expansionArrow.changeTo(ArrowView.Direction.END)
+            binding.expansionArrow.rotateTo(ArrowView.Direction.END)
             binding.content.isVisible = false
         }
 

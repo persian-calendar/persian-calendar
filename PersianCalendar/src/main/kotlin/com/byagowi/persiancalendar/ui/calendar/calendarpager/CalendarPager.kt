@@ -112,7 +112,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
             init {
                 binding.next.let {
-                    it.changeTo(ArrowView.Direction.END)
+                    it.rotateTo(ArrowView.Direction.END)
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 1, true)
                     }
@@ -123,7 +123,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 }
 
                 binding.prev.let {
-                    it.changeTo(ArrowView.Direction.START)
+                    it.rotateTo(ArrowView.Direction.START)
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem - 1, true)
                     }
