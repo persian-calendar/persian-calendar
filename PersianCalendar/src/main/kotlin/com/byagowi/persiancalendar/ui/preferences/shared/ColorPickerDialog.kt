@@ -25,7 +25,7 @@ private fun Fragment.showColorPickerDialog(
 ) {
     val colorPickerView = ColorPickerView(layoutInflater.context).also {
         it.setColorsToPick(
-            if (isBackgroundPick) listOf(0x00000000L, 0x50000000L, 0xFF000000L)
+            if (isBackgroundPick) listOf(0x00000000L, 0x20000000L, 0x50000000L, 0xFF000000L)
             else listOf(0xFFFFFFFFL, 0xFFE65100L, 0xFF00796bL, 0xFFFEF200L, 0xFF202020L)
         )
         if (!isBackgroundPick) it.hideAlphaSeekBar()
