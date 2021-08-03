@@ -41,6 +41,7 @@ import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.utils.*
@@ -536,10 +537,12 @@ private class DeviceInformationAdapter(private val activity: Activity) :
             binding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        override fun onClick(v: View?) =
+        override fun onClick(v: View?) {
             activity.copyToClipboard(deviceInformationItems[bindingAdapterPosition].content) {
-                val view = activity.findViewById<View>(android.R.id.content)
+                val view = activity.findViewById<View?>(android.R.id.content).debugAssertNotNull
+                    ?: return@copyToClipboard
                 Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
             }
+        }
     }
 }

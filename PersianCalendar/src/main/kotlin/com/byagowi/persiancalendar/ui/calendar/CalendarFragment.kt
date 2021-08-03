@@ -502,7 +502,7 @@ class CalendarFragment : Fragment() {
         searchView.setOnSearchClickListener {
             onBackPressedCloseSearchCallback.isEnabled = true
             // Remove search edit view below bar
-            searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate)
+            searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull
                 ?.setBackgroundColor(Color.TRANSPARENT)
 
             val searchAutoComplete = searchView.findViewById<SearchAutoComplete?>(

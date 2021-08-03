@@ -15,6 +15,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.coordinates
@@ -74,7 +75,8 @@ class CompassFragment : Fragment() {
         val rootView = view ?: return
         Snackbar.make(rootView, messageId, duration).apply {
             view.setOnClickListener { dismiss() }
-            view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text).maxLines = 5
+            view.findViewById<TextView?>(com.google.android.material.R.id.snackbar_text)
+                .debugAssertNotNull?.maxLines = 5
             anchorView = binding?.fab
         }.show()
     }
