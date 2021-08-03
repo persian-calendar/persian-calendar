@@ -93,7 +93,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         AstroLib.calculateJulianDay(GregorianCalendar()), coordinates?.latitude ?: 0.0,
         coordinates?.longitude ?: 0.0, coordinates?.elevation ?: 0.0, 0.0
     )
-    private val qiblaInfo = sunMoonPosition.destinationHeading
+    val qiblaHeading = sunMoonPosition.destinationHeading.heading.toFloat()
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
         it.textSize = 12.sp
@@ -216,7 +216,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawQibla() {
-        withRotation(qiblaInfo.heading.toFloat() - 360, cx, cy) {
+        withRotation(qiblaHeading - 360, cx, cy) {
             qiblaPaint.pathEffect = dashPath
             drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)
             qiblaPaint.pathEffect = null

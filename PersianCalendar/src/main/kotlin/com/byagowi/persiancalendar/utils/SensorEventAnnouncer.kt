@@ -7,9 +7,9 @@ import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 
 // a11y related state machine that starts in true state and announce if a transition to true happens
-class SensorEventAnnouncer(@StringRes private val text: Int) {
+class SensorEventAnnouncer(@StringRes private val text: Int, startState: Boolean = true) {
 
-    private var state = true
+    private var state = startState
     private var lastAnnounce = -1L
 
     fun check(context: Context, newState: Boolean) {

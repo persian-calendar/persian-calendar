@@ -179,21 +179,22 @@ class CompassFragment : Fragment() {
         super.onPause()
     }
 
-    // A11y
-    // deliberately true
+    // Accessibility announcing helpers on when the phone is headed on a specific direction
     private var northAnnouncer = SensorEventAnnouncer(R.string.north)
-    private var eastAnnouncer = SensorEventAnnouncer(R.string.east)
-    private var westAnnouncer = SensorEventAnnouncer(R.string.west)
-    private var southAnnouncer = SensorEventAnnouncer(R.string.south)
-    private var qiblaAnnouncer = SensorEventAnnouncer(R.string.qibla)
+    private var eastAnnouncer = SensorEventAnnouncer(R.string.east, false)
+    private var westAnnouncer = SensorEventAnnouncer(R.string.west, false)
+    private var southAnnouncer = SensorEventAnnouncer(R.string.south, false)
+    private var qiblaAnnouncer = SensorEventAnnouncer(R.string.qibla, false)
     private fun checkIfA11yAnnounceIsNeeded(angle: Float) {
         val binding = binding ?: return
         northAnnouncer.check(binding.root.context, isNearToDegree(0f, angle))
         eastAnnouncer.check(binding.root.context, isNearToDegree(90f, angle))
         southAnnouncer.check(binding.root.context, isNearToDegree(180f, angle))
         westAnnouncer.check(binding.root.context, isNearToDegree(270f, angle))
-        if (coordinates != null)
-            qiblaAnnouncer.check(binding.root.context, isNearToDegree(270f, angle))
+        if (coordinates != null) {
+            val qiblaAngle = binding.compassView.qiblaHeading
+            qiblaAnnouncer.check(binding.root.context, isNearToDegree(qiblaAngle, angle))
+        }
     }
 
     companion object {
