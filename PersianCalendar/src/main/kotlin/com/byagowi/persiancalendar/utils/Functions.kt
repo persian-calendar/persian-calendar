@@ -39,7 +39,6 @@ import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CalendarTypeItem

@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
-import com.byagowi.persiancalendar.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.setupUpNavigation
 import net.androgames.level.OrientationProvider
 
