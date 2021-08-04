@@ -34,7 +34,6 @@ class AthanActivity : AppCompatActivity() {
 
     private val ascendingVolumeStep = 6
     private var currentVolumeSteps = 1
-    private var audioManager: AudioManager? = null
     private val handler = Handler(Looper.getMainLooper())
     private var ringtone: Ringtone? = null
     private var mediaPlayer: MediaPlayer? = null
@@ -56,7 +55,8 @@ class AthanActivity : AppCompatActivity() {
     private val ascendVolume = object : Runnable {
         override fun run() {
             currentVolumeSteps++
-            audioManager?.setStreamVolume(AudioManager.STREAM_ALARM, currentVolumeSteps, 0)
+            getSystemService<AudioManager>()
+                ?.setStreamVolume(AudioManager.STREAM_ALARM, currentVolumeSteps, 0)
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(ascendingVolumeStep.toLong()))
             if (currentVolumeSteps == 10) handler.removeCallbacks(this)
         }
@@ -80,13 +80,11 @@ class AthanActivity : AppCompatActivity() {
         lastStart = currentMillis
         //
 
-        audioManager = getSystemService()
-        audioManager?.let { am ->
-            am.setStreamVolume(
+        getSystemService<AudioManager>()?.let { audioManager ->
+            audioManager.setStreamVolume(
                 AudioManager.STREAM_ALARM,
-                athanVolume.takeIf { it != DEFAULT_ATHAN_VOLUME } ?: am.getStreamVolume(
-                    AudioManager.STREAM_ALARM
-                ),
+                athanVolume.takeIf { it != DEFAULT_ATHAN_VOLUME }
+                    ?: audioManager.getStreamVolume(AudioManager.STREAM_ALARM),
                 0
             )
         }
@@ -210,7 +208,7 @@ class AthanActivity : AppCompatActivity() {
         }.onFailure(logException)
 
         handler.removeCallbacks(stopTask)
-        handler.removeCallbacks(ascendVolume)
+        if (isAscendingAthanVolumeEnabled) handler.removeCallbacks(ascendVolume)
         finish()
     }
 
