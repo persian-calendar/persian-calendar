@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.utils.setupUpNavigation
 import net.androgames.level.OrientationProvider
 
 class LevelFragment : Fragment() {
@@ -26,8 +27,7 @@ class LevelFragment : Fragment() {
         val binding = FragmentLevelBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.also { toolbar ->
             toolbar.setTitle(R.string.level)
-            toolbar.setupMenuNavigation(this)
-            toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+            toolbar.setupUpNavigation()
         }
         provider = OrientationProvider(activity, binding.levelView)
         val announcer = SensorEventAnnouncer(R.string.level)
