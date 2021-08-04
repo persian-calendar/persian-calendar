@@ -74,9 +74,9 @@ class AthanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Workaround AlarmManager (or the way we use it) that calls it multiple times,
-        // don't run if it is ran less than 10 seconds ago
+        // don't run if it is ran less than 4 seconds ago
         val currentMillis = System.currentTimeMillis()
-        if (currentMillis - lastStart < TimeUnit.SECONDS.toMillis(10)) return finish()
+        if (currentMillis - lastStart < TimeUnit.SECONDS.toMillis(4)) return finish()
         lastStart = currentMillis
         //
 
