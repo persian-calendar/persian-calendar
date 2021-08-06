@@ -410,9 +410,6 @@
       "title": "روز حقوق بشر اسلامی و کرامت انسانی" },
 
     { "holiday": false, "month": 5, "day": 15, "type": "Iran",
-      "title": "انفجار بمب اتمی آمریکا در هیروشیما با بیش از ۱۶۰هزار کشته و مجروح در سال ۱۹۴۵ میلادی" },
-
-    { "holiday": false, "month": 5, "day": 15, "type": "Iran",
       "title": "سالروز شهادت امیر سرلشکر خلبان عباس بابایی (۱۳۶۶ ه‍.ش)" },
 
     { "holiday": false, "month": 5, "day": 16, "type": "Iran",
@@ -1208,7 +1205,7 @@
     { "holiday": false, "month": 6, "day": 17, "title": "روز جهانی بیابان‌زدایی", "type": "Iran" },
     { "holiday": false, "month": 6, "day": 26, "title": "روز جهانی مبارزه با مواد مخدر", "type": "Iran" },
     { "holiday": false, "month": 8, "day": 1, "title": "روز جهانی شیر مادر", "type": "Iran" },
-    { "holiday": false, "month": 8, "day": 6, "title": "انفجار بمب اتمی آمریکا در هیروشیما با بیش از ۱۶۰ هزار کشته و مجروح (۱۹۴۵ میلادی)", "type": "Iran" },
+    { "holiday": false, "month": 8, "day": 6, "title": "انفجار بمب اتمی آمریکا در هیروشیما با بیش از ۱۶۰هزار کشته و مجروح (۱۹۴۵ میلادی)", "type": "Iran" },
     { "holiday": false, "month": 8, "day": 21, "title": "روز جهانی مسجد", "type": "Iran" },
     { "holiday": false, "month": 9, "day": 27, "title": "روز جهانی جهانگردی", "type": "Iran" },
     { "holiday": false, "month": 9, "day": 30, "title": "روز جهانی دریانوردی", "type": "Iran" },
