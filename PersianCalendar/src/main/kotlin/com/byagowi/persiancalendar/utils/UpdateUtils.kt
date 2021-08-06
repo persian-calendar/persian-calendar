@@ -44,7 +44,7 @@ private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyEventsStore()
 
 fun setDeviceCalendarEvents(context: Context) = runCatching {
-    deviceCalendarEvents = Jdn.today.readDayDeviceEvents(context)
+    deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today)
 }.onFailure(logException).let {}
 
 private var latestFiredUpdate = 0L
@@ -207,7 +207,7 @@ private fun Context.update2x2Widget(
     remoteViews.setTextColor(R.id.event_2x2, color)
     remoteViews.setTextColor(R.id.owghat_2x2, color)
 
-    val events = jdn.getEvents(deviceCalendarEvents)
+    val events = deviceCalendarEvents.getEvents(jdn)
     val isRtl = resources.isRtl
     val holidays = getEventsTitle(
         events, holiday = true, compact = true, showDeviceCalendarEvents = true,
@@ -411,7 +411,7 @@ private fun Context.updateNotification(
     }
 
     if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val events = jdn.getEvents(deviceCalendarEvents)
+        val events = deviceCalendarEvents.getEvents(jdn)
         val holidays = getEventsTitle(
             events, holiday = true,
             compact = true, showDeviceCalendarEvents = true, insertRLM = resources.isRtl,

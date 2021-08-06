@@ -46,7 +46,7 @@ class DaysAdapter(
     private var selectedDay = -1
 
     fun initializeMonthEvents() {
-        if (isShowDeviceCalendarEvents) monthEvents = days[0].readMonthDeviceEvents(context)
+        if (isShowDeviceCalendarEvents) monthEvents = context.readMonthDeviceEvents(days[0])
     }
 
     internal fun selectDay(dayOfMonth: Int) {
@@ -148,7 +148,7 @@ class DaysAdapter(
             } else {
                 if (position - 7 - fixedStartingDayOfWeek >= 0) {
                     val day = days[position - 7 - fixedStartingDayOfWeek]
-                    val events = day.getEvents(monthEvents)
+                    val events = monthEvents.getEvents(day)
 
                     val isToday = day == todayJdn
 

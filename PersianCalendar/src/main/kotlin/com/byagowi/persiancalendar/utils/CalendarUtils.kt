@@ -93,7 +93,7 @@ fun getA11yDaySummary(
         }
     }
 
-    val events = jdn.getEvents(deviceCalendarEvents)
+    val events = deviceCalendarEvents.getEvents(jdn)
     val holidays = getEventsTitle(
         events, true,
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
@@ -210,21 +210,20 @@ private fun readDeviceEvents(
     }
 }.onFailure(logException).getOrNull() ?: emptyList()
 
-fun Jdn.readDayDeviceEvents(context: Context) =
-    readDeviceEvents(context, this.toJavaCalendar(), DAY_IN_MILLIS).toEventsStore()
+fun Context.readDayDeviceEvents(jdn: Jdn) =
+    readDeviceEvents(this, jdn.toJavaCalendar(), DAY_IN_MILLIS).toEventsStore()
 
-fun Jdn.readMonthDeviceEvents(context: Context) =
-    readDeviceEvents(context, this.toJavaCalendar(), 32L * DAY_IN_MILLIS).toEventsStore()
+fun Context.readMonthDeviceEvents(jdn: Jdn) =
+    readDeviceEvents(this, jdn.toJavaCalendar(), 32L * DAY_IN_MILLIS).toEventsStore()
 
-fun getAllEnabledAppointments(context: Context) = readDeviceEvents(
-    context, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
+fun Context.getAllEnabledAppointments() = readDeviceEvents(
+    this, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
 )
 
-fun formatDeviceCalendarEventTitle(event: CalendarEvent.DeviceCalendarEvent): String =
-    (event.title + if (event.description.isNotBlank())
-        " (" + HtmlCompat.fromHtml(event.description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
-            .trim() + ")"
+fun CalendarEvent.DeviceCalendarEvent.formatTitle(): String =
+    (title + if (description.isNotBlank())
+        " (${HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim()})"
     else "").replace("\n", " ").trim()
 
 // Move this to strings or somewhere
@@ -242,7 +241,7 @@ fun getEventsTitle(
     .filter { it.isHoliday == holiday && (it !is CalendarEvent.DeviceCalendarEvent || showDeviceCalendarEvents) }
     .map {
         val title = when {
-            it is CalendarEvent.DeviceCalendarEvent && !compact -> formatDeviceCalendarEventTitle(it)
+            it is CalendarEvent.DeviceCalendarEvent && !compact -> it.formatTitle()
             compact -> it.title.replace(Regex(" \\([^)]+\\)$"), "")
             else -> it.title
         }
@@ -291,16 +290,16 @@ fun Jdn.getWeekOfYear(startOfYear: Jdn): Int {
 
 val Jdn.dayOfWeekName: String get() = weekDays[dayOfWeek]
 
-fun Jdn.getEvents(deviceCalendarEvents: DeviceCalendarEventsStore): List<CalendarEvent<*>> =
+fun DeviceCalendarEventsStore.getEvents(jdn: Jdn): List<CalendarEvent<*>> =
     ArrayList<CalendarEvent<*>>().apply {
-        addAll(persianCalendarEvents.getEvents(toPersianCalendar()))
-        val islamic = toIslamicCalendar()
+        addAll(persianCalendarEvents.getEvents(jdn.toPersianCalendar()))
+        val islamic = jdn.toIslamicCalendar()
         addAll(islamicCalendarEvents.getEvents(islamic))
         // Special case Islamic events happening in 30th day but the month has only 29 days
         if (islamic.dayOfMonth == 29 &&
             CalendarType.ISLAMIC.getMonthLength(islamic.year, islamic.month) == 29
         ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
-        val civil = toGregorianCalendar()
-        addAll(deviceCalendarEvents.getEvents(civil)) // Passed by caller
+        val civil = jdn.toGregorianCalendar()
+        addAll(getEvents(civil)) // Passed by caller
         addAll(gregorianCalendarEvents.getEvents(civil))
     }

@@ -63,7 +63,7 @@ import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.emptyEventsStore
-import com.byagowi.persiancalendar.utils.formatDeviceCalendarEventTitle
+import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
@@ -343,7 +343,7 @@ class CalendarFragment : Fragment() {
                         if (event.color.isNotEmpty()) ds.color = event.color.toLong().toInt()
                     }.onFailure(logException)
                 }
-            }) { append(formatDeviceCalendarEventTitle(event)) }
+            }) { append(event.formatTitle()) }
         }
     }
 
@@ -380,7 +380,7 @@ class CalendarFragment : Fragment() {
         val eventsBinding = eventsBinding ?: return
 
         eventsBinding.shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
-        val events = jdn.getEvents(jdn.readDayDeviceEvents(activity))
+        val events = activity.readDayDeviceEvents(jdn).getEvents(jdn)
         val holidays = getEventsTitle(
             events,
             holiday = true, compact = false, showDeviceCalendarEvents = false, insertRLM = false,
@@ -509,7 +509,7 @@ class CalendarFragment : Fragment() {
                 androidx.appcompat.R.id.search_src_text
             ).debugAssertNotNull
             searchAutoComplete?.setHint(R.string.search_in_events)
-            val events = allEnabledEvents + getAllEnabledAppointments(context)
+            val events = allEnabledEvents + context.getAllEnabledAppointments()
             searchAutoComplete?.setAdapter(SearchEventsAdapter(context, events))
             searchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
                 val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date

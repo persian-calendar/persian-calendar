@@ -25,10 +25,10 @@ import io.github.persiancalendar.calendar.AbstractDate
 
 fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
     val baseJdn = Jdn(date)
-    val deviceEvents = baseJdn.readMonthDeviceEvents(context ?: return)
+    val deviceEvents = (context ?: return).readMonthDeviceEvents(baseJdn)
     val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
         val jdn = baseJdn + it
-        val events = jdn.getEvents(deviceEvents)
+        val events = deviceEvents.getEvents(jdn)
         val holidays = getEventsTitle(
             events, holiday = true, compact = false, showDeviceCalendarEvents = false,
             insertRLM = false, addIsHoliday = isHighTextContrastEnabled
