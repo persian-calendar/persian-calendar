@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
-import com.byagowi.persiancalendar.generated.eventsSource
+import com.byagowi.persiancalendar.generated.EventsSource
 import com.byagowi.persiancalendar.utils.appPrefs
 
 fun Fragment.showHolidaysTypesDialog() {
@@ -23,11 +23,11 @@ fun Fragment.showHolidaysTypesDialog() {
     // TODO: i18n, maybe
     val pattern = "%s، <a href=\"%s\">مشاهده منبع</a>"
     binding.iran.text = HtmlCompat.fromHtml(
-        pattern.format("مرکز تقویم دانشگاه تهران", eventsSource["Iran"]),
+        pattern.format("مرکز تقویم دانشگاه تهران", EventsSource.Iran.link),
         HtmlCompat.FROM_HTML_MODE_COMPACT
     )
     binding.afghanistan.text = HtmlCompat.fromHtml(
-        pattern.format("افغانستان", eventsSource["Afghanistan"]),
+        pattern.format("افغانستان", EventsSource.Afghanistan.link),
         HtmlCompat.FROM_HTML_MODE_COMPACT
     )
     binding.other.setText(R.string.other_holidays)

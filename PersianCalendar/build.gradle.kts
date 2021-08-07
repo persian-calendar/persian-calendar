@@ -184,7 +184,7 @@ val generateAppSrcTask by tasks.registering {
             }
         val eventsSource = (events["Source"] as Map<*, *>).toList()
             .filter { (_, v) -> v is String }
-            .joinToString(",\n    ") { (k, v) -> """"$k" to "$v"""" }
+            .joinToString(",\n    ") { (k, v) -> """$k("$v")""" }
         eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
@@ -208,9 +208,9 @@ val irregularRecurringEvents = listOf(
     $irregularRecurringEvents
 )
 
-val eventsSource = mapOf(
+enum class EventsSource(val link: String) {
     $eventsSource
-)
+}
 """
         )
 
