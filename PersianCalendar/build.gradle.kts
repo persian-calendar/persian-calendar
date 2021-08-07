@@ -188,7 +188,9 @@ val generateAppSrcTask by tasks.registering {
         eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
-enum class EventType { Afghanistan, Iran, AncientIran, International }
+enum class EventType(val source: String) {
+    $eventsSource
+}
 
 class CalendarRecord(val title: String, val type: EventType, val isHoliday: Boolean, val month: Int, val day: Int)
 
@@ -207,10 +209,6 @@ val gregorianEvents = listOf(
 val irregularRecurringEvents = listOf(
     $irregularRecurringEvents
 )
-
-enum class EventsSource(val link: String) {
-    $eventsSource
-}
 """
         )
 
