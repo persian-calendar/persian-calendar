@@ -186,6 +186,15 @@ class CalendarFragment : Fragment() {
                 if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                 else owghatBinding?.sunView?.clear()
                 context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+
+                // Make sure view pager's height at least matches with the shown tab
+                binding.viewPager.width.takeIf { it != 0 }?.let { width ->
+                    tabs[position].second.measure(
+                        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                    )
+                    binding.viewPager.minimumHeight = tabs[position].second.measuredHeight
+                }
             }
         })
 
