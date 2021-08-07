@@ -17,8 +17,6 @@
     <string name="outdated_app">Due to being outdated, things can be inaccurate</string>
     <string name="update">Update</string>
     <!-- No need for translation, remove the section from your translation -->
-    <string name="iran_holidays" translatable="false">مرکز تقویم دانشگاه تهران، <a href="https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201400-Full.pdf">مشاهده منبع</a></string>
-    <string name="afghanistan_holidays" translatable="false">افغانستان، <a href="https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf">مشاهده منبع</a></string>
     <string name="other_holidays" translatable="false">سایر</string>
     <string name="about_developers_list" translatable="false">"ebraminio: Ebrahim Byagowi
 hamidsafdari: Hamid Safdari

@@ -4,10 +4,12 @@ import android.os.Build
 import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
+import com.byagowi.persiancalendar.generated.eventsSource
 import com.byagowi.persiancalendar.utils.appPrefs
 
 fun Fragment.showHolidaysTypesDialog() {
@@ -18,8 +20,16 @@ fun Fragment.showHolidaysTypesDialog() {
         binding.iranHolidays, null, binding.iranAncient, binding.iranOthers,
         binding.international, binding.afghanistanHolidays, binding.afghanistanOthers
     ).zip(resources.getStringArray(R.array.holidays_types)) { view, title -> view?.text = title }
-    binding.iran.setText(R.string.iran_holidays)
-    binding.afghanistan.setText(R.string.afghanistan_holidays)
+    // TODO: i18n, maybe
+    val pattern = "%s، <a href=\"%s\">مشاهده منبع</a>"
+    binding.iran.text = HtmlCompat.fromHtml(
+        pattern.format("مرکز تقویم دانشگاه تهران", eventsSource["Iran"]),
+        HtmlCompat.FROM_HTML_MODE_COMPACT
+    )
+    binding.afghanistan.text = HtmlCompat.fromHtml(
+        pattern.format("افغانستان", eventsSource["Afghanistan"]),
+        HtmlCompat.FROM_HTML_MODE_COMPACT
+    )
     binding.other.setText(R.string.other_holidays)
 
     // Make links work

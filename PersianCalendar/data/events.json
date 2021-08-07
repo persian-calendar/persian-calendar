@@ -1,37 +1,35 @@
 {
-  "#source": [
-    "https://github.com/persian-calendar",
-    "فهرست مناسبت‌های ایران و افغانستان که در پروژهٔ تقویم فارسی، توسط توسعه‌دهندگان آن و به کمک منابع زیر",
-    "تهیه و نگه‌داری می‌شود. با توجه به زحمتی که برای گردآوردی آن کشیده شده است",
-    "پیشنهاد می‌شود آن را فقط در پروژه‌های متن‌باز و یا با ارجاع مناسب به منبع استفادهٔ مجدد کنید",
-    "و اگر اشکالی در یکی از مناسبت‌ها، عنوان یا تاریخ یا عدم وجود مناسبتی دیدید سریعاً پروژه را مطلع کنید، با تشکر",
+  "Source": {
+    "Afghanistan": "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
+    "Iran": "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201400-Full.pdf",
+    "#meta": [
+      "https://github.com/persian-calendar",
+      "فهرست مناسبت‌های ایران و افغانستان که در پروژهٔ تقویم فارسی، توسط توسعه‌دهندگان آن و به کمک منابع زیر",
+      "تهیه و نگه‌داری می‌شود. با توجه به زحمتی که برای گردآوردی آن کشیده شده است",
+      "پیشنهاد می‌شود آن را فقط در پروژه‌های متن‌باز و یا با ارجاع مناسب به منبع استفادهٔ مجدد کنید",
+      "و اگر اشکالی در یکی از مناسبت‌ها، عنوان یا تاریخ یا عدم وجود مناسبتی دیدید سریعاً پروژه را مطلع کنید، با تشکر",
 
-    "توجه:",
-    "در استفاده از این داده‌ها، به قسمت مناسبت‌های که دارای الگوی متفاوتی متفاوت و خاص هستند که در بخشی جدا گذاشته شده‌اند توجه کنید",
-    "از آنجایی که ماه‌های قمری می‌توانند ۲۹ روزه باشند هنگام استفاده از داده‌ها در ماه ۲۹ روزهٔ قمری مناسبت روز ۳۰م را باید در نظر گرفت",
-    "این داده‌ها از منابع رسمی زیر گردآوری شده‌اند، خود این گردآوردی رسمی و دارای تضمین بی‌نقص بودن نیست ولی محتویات آن به منابع زیر بر می‌گردد",
+      "توجه:",
+      "در استفاده از این داده‌ها، به قسمت مناسبت‌های که دارای الگوی متفاوتی متفاوت و خاص هستند که در بخشی جدا گذاشته شده‌اند توجه کنید",
+      "از آنجایی که ماه‌های قمری می‌توانند ۲۹ روزه باشند هنگام استفاده از داده‌ها در ماه ۲۹ روزهٔ قمری مناسبت روز ۳۰م را باید در نظر گرفت",
+      "این داده‌ها از منابع رسمی زیر گردآوری شده‌اند، خود این گردآوردی رسمی و دارای تضمین بی‌نقص بودن نیست ولی محتویات آن به منابع زیر بر می‌گردد",
 
-    "افغانستان",
-    "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
+      "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt",
+      "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-2-data.txt",
+      "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-data.txt",
+      "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-2-data.txt",
+      "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-hijri-data.txt",
+      "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-hijri-2-data.txt",
+      "مطابق با استخراج و تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران (مناسبت‌ها از شورای فرهنگ عمومی)",
+      "گردآوری، فرمت‌بندی و به روزآوری: سعید رسولی <saeed.gnu@gmail.com>، مولا پهنادایان <mola.mp@gmail.com>",
 
-    "مرکز تقویم دانشگاه تهران",
-    "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201400-Full.pdf",
+      "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
+      "جشن‌های باستانی ایران",
+      "رضا مرادی غیاث‌آبادی (www.ghiasabadi.com) سعید رسولی <saeed.gnu@gmail.com>",
 
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-2-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-gregorian-2-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-hijri-data.txt",
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-hijri-2-data.txt",
-    "مطابق با استخراج و تنظیم شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران (مناسبت‌ها از شورای فرهنگ عمومی)",
-    "گردآوری، فرمت‌بندی و به روزآوری: سعید رسولی <saeed.gnu@gmail.com>، مولا پهنادایان <mola.mp@gmail.com>",
-
-    "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
-    "جشن‌های باستانی ایران",
-    "رضا مرادی غیاث‌آبادی (www.ghiasabadi.com) سعید رسولی <saeed.gnu@gmail.com>",
-
-    "http://www.un.org/en/sections/observances/international-days/"
-  ],
+      "http://www.un.org/en/sections/observances/international-days/"
+    ]
+  },
 
   "Persian Calendar": [
     { "holiday": true, "month": 1, "day": 1, "type": "Afghanistan",

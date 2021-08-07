@@ -182,6 +182,9 @@ val generateAppSrcTask by tasks.registering {
             .joinToString(",\n    ") { event ->
                 "mapOf(${event.map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
             }
+        val eventsSource = (events["Source"] as Map<*, *>).toList()
+            .filter { (_, v) -> v is String }
+            .joinToString(",\n    ") { (k, v) -> """"$k" to "$v"""" }
         eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
 
@@ -203,6 +206,10 @@ val gregorianEvents = listOf(
 
 val irregularRecurringEvents = listOf(
     $irregularRecurringEvents
+)
+
+val eventsSource = mapOf(
+    $eventsSource
 )
 """
         )
