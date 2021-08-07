@@ -54,13 +54,15 @@ fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
 
     binding.description.text = getString(
         if (isFirstSetup) R.string.shift_work_starting_date
-        else R.string.shift_work_starting_date_edit
-    ).format(formatDate(jdn.toCalendar(mainCalendar)))
+        else R.string.shift_work_starting_date_edit,
+        formatDate(jdn.toCalendar(mainCalendar))
+    )
 
     binding.resetLink.setOnClickListener {
         jdn = selectedJdn
-        binding.description.text = getString(R.string.shift_work_starting_date)
-            .format(formatDate(jdn.toCalendar(mainCalendar)))
+        binding.description.text = getString(
+            R.string.shift_work_starting_date, formatDate(jdn.toCalendar(mainCalendar))
+        )
         shiftWorkItemAdapter.reset()
     }
     binding.recurs.isChecked = shiftWorkRecurs
@@ -99,8 +101,10 @@ private class ShiftWorkItemsAdapter(
 
     private fun updateShiftWorkResult() =
         rows.filter { it.length != 0 }.joinToString(spacedComma) {
-            binding.root.context.getString(R.string.shift_work_record_title)
-                .format(formatNumber(it.length), shiftWorkKeyToString(it.type))
+            binding.root.context.getString(
+                R.string.shift_work_record_title,
+                formatNumber(it.length), shiftWorkKeyToString(it.type)
+            )
         }.also {
             binding.result.text = it
             binding.result.isVisible = it.isNotEmpty()

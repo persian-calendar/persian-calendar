@@ -81,7 +81,8 @@ class AboutFragment : Fragment() {
                 append("\n")
                 scale(.8f) {
                     append(
-                        getString(R.string.about_help_subtitle).format(
+                        getString(
+                            R.string.about_help_subtitle,
                             formatNumber(supportedYearOfIranCalendar - 1),
                             formatNumber(supportedYearOfIranCalendar)
                         )

@@ -121,7 +121,7 @@ fun getA11yDaySummary(
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn)
         result.append("\n\n")
             .append(
-                context.getString(R.string.nth_week_of_year).format(formatNumber(weekOfYearStart))
+                context.getString(R.string.nth_week_of_year, formatNumber(weekOfYearStart))
             )
     }
 

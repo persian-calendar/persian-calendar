@@ -116,7 +116,7 @@ class DaysAdapter(
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
                         dayView.setNonDayOfMonthItem(weekNumber, weekNumberTextSize)
                         dayView.contentDescription = if (isTalkBackEnabled)
-                            context.getString(R.string.nth_week_of_year).format(weekNumber)
+                            context.getString(R.string.nth_week_of_year, weekNumber)
                         else weekNumber
 
                         dayView.isVisible = true
@@ -139,8 +139,10 @@ class DaysAdapter(
                 )
 
                 dayView.contentDescription = if (isTalkBackEnabled)
-                    context.getString(R.string.week_days_name_column)
-                        .format(getWeekDayName(revertWeekStartOffsetFromWeekDay(position)))
+                    context.getString(
+                        R.string.week_days_name_column,
+                        getWeekDayName(revertWeekStartOffsetFromWeekDay(position))
+                    )
                 else weekDayInitial
 
                 dayView.isVisible = true

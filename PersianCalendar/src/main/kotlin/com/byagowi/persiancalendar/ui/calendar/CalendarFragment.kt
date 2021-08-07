@@ -63,8 +63,8 @@ import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.emptyEventsStore
-import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.getCityName

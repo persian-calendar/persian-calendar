@@ -84,12 +84,14 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         val currentWeek = jdn.getWeekOfYear(startOfYearJdn)
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
 
-        val startOfYearText = context.getString(R.string.start_of_year_diff).format(
+        val startOfYearText = context.getString(
+            R.string.start_of_year_diff,
             formatNumber(jdn - startOfYearJdn + 1),
             formatNumber(currentWeek),
             formatNumber(mainDate.month)
         )
-        val endOfYearText = context.getString(R.string.end_of_year_diff).format(
+        val endOfYearText = context.getString(
+            R.string.end_of_year_diff,
             formatNumber(endOfYearJdn - jdn),
             formatNumber(weeksCount - currentWeek),
             formatNumber(12 - mainDate.month)
@@ -102,7 +104,8 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
                 val addition = if (mainDate.month == 12) 1 else 0
                 val springEquinox = jdn.toGregorianCalendar().getSpringEquinox()
-                equinox = context.getString(R.string.spring_equinox).format(
+                equinox = context.getString(
+                    R.string.spring_equinox,
                     formatNumber(mainDate.year + addition),
                     Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
                         .toFormattedString(forcedIn12 = true) + " " +
