@@ -168,7 +168,7 @@ val generateAppSrcTask by tasks.registering {
             (events[key] as List<*>).joinToString(",\n    ") {
                 val record = it as Map<*, *>
                 "CalendarRecord(title = \"${record["title"]}\"," +
-                        " type = EventType.${record["type"].toString().replace(" ", "")}," +
+                        " type = EventType.${record["type"]}," +
                         " isHoliday = ${record["holiday"]}," +
                         " month = ${record["month"]}, day = ${record["day"]})"
             }
