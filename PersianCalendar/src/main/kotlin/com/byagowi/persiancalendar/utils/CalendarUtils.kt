@@ -271,17 +271,17 @@ fun CalendarType.getMonthLength(year: Int, month: Int): Int {
 }
 
 fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
-    val selectedDayAbsoluteDistance = abs(Jdn.today - jdn)
+    val daysAbsoluteDistance = abs(Jdn.today - jdn)
     val civilBase = CivilDate(2000, 1, 1)
-    val civilOffset = CivilDate(civilBase.toJdn() + selectedDayAbsoluteDistance)
-    val yearsDiff = civilOffset.year - 2000
-    val monthsDiff = civilOffset.month - 1
-    val daysOfMonthDiff = civilOffset.dayOfMonth - 1
-    val days = resources.getString(R.string.n_days, formatNumber(selectedDayAbsoluteDistance))
-    return if (monthsDiff == 0 && yearsDiff == 0) days else ("$days (~" + listOf(
-        yearsDiff to R.string.n_years,
-        monthsDiff to R.string.n_months,
-        daysOfMonthDiff to R.string.n_days,
+    val civilOffset = CivilDate(civilBase.toJdn() + daysAbsoluteDistance)
+    val yearsDifference = civilOffset.year - civilBase.year
+    val monthsDifference = civilOffset.month - civilBase.month
+    val daysOfMonthDifference = civilOffset.dayOfMonth - civilBase.dayOfMonth
+    val days = resources.getString(R.string.n_days, formatNumber(daysAbsoluteDistance))
+    return if (monthsDifference == 0 && yearsDifference == 0) "" else ("$days (~" + listOf(
+        yearsDifference to R.string.n_years,
+        monthsDifference to R.string.n_months,
+        daysOfMonthDifference to R.string.n_days,
     ).filter { (n, _) -> n != 0 }.joinToString(spacedComma) { (n, stringId) ->
         resources.getString(stringId, formatNumber(n))
     } + ")")
