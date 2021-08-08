@@ -232,7 +232,9 @@
     <string name="widget_age_name">تقویم فارسی (سن)</string>
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="select_date">انتخاب تاریخ</string>
-    <string name="days_distance_pattern">%1$s رۊز (~%2$s سال، %3$s ما، %4$s رۊز)</string>
+    <string name="n_days">%1$s رۊز</string>
+    <string name="n_months">%1$s ما</string>
+    <string name="n_years">%1$s سال</string>
     <string name="preview">پيشادئن</string>
     <string name="ignore">چشم‌پوشی</string>
 

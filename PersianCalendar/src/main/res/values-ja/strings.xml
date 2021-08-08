@@ -234,7 +234,9 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_age_name">ペルシャ暦</string>
     <string name="age_widget_title">Widget title</string>
     <string name="select_date">Select date</string>
-    <string name="days_distance_pattern">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
+    <string name="n_days">%1$s days</string>
+    <string name="n_months">%1$s months</string>
+    <string name="n_years">%1$s years</string>
     <string name="preview">プレビュ</string>
     <string name="ignore">無視</string>
 

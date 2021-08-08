@@ -34,7 +34,9 @@
     <string name="map">Carte</string>
     <string name="month_overview">Évènements du mois</string>
     <string name="prefer_linear_date">Préférer la forme numérique des dates</string>
-    <string name="days_distance_pattern">%1$s jours (~%2$s années, %3$s mois, %4$s jours)</string>
+    <string name="n_days">%1$s jours</string>
+    <string name="n_months">%1$s mois</string>
+    <string name="n_years">%1$s années</string>
     <string name="age_widget_title">Titre du widget</string>
     <string name="select_date">Sélectionnez la date</string>
     <string name="enable_location_services">Les services de localisation sont désactivés, veuillez les activer pour utiliser cette fonction.</string>
