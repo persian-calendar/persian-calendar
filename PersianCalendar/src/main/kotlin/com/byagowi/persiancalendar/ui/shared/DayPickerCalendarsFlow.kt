@@ -6,16 +6,15 @@ import android.util.AttributeSet
 import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SingleChipLayoutBinding
-import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.CalendarType
 
 class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
-    fun setup(calendarTypes: List<CalendarTypeItem>, onItemClick: (CalendarType) -> Unit) {
-        val chips = calendarTypes.map { calendarTypeItem ->
+    fun setup(calendarTypes: List<Pair<CalendarType, String>>, onItemClick: (CalendarType) -> Unit) {
+        val chips = calendarTypes.map { (_, title) ->
             SingleChipLayoutBinding.inflate(context.layoutInflater).also {
-                it.chip.text = calendarTypeItem.title
+                it.chip.text = title
                 when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
                         it.chip.elevation = resources.getDimension(R.dimen.chip_elevation)
@@ -25,7 +24,7 @@ class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(cont
         }
         addViewsToFlow(chips.mapIndexed { i, chip ->
             chip.setOnClickListener {
-                onItemClick(calendarTypes[i].type)
+                onItemClick(calendarTypes[i].first)
                 chips.forEachIndexed { j, chipView ->
                     chipView.isClickable = i != j
                     chipView.isSelected = i == j

@@ -22,7 +22,6 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
-import com.byagowi.persiancalendar.entities.CalendarTypeItem
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.citiesStore
@@ -225,7 +224,7 @@ private fun setAlarm(
 
 fun getOrderedCalendarEntities(
     context: Context, abbreviation: Boolean = false
-): List<CalendarTypeItem> {
+): List<Pair<CalendarType, String>> {
     applyAppLanguage(context)
     val typeTitleMap =
         context.resources.getStringArray(R.array.calendar_values)
@@ -233,7 +232,7 @@ fun getOrderedCalendarEntities(
             .zip(context.resources.getStringArray(if (abbreviation) R.array.calendar_type_abbr else R.array.calendar_type))
             .toMap()
     return getOrderedCalendarTypes().mapNotNull { calendarType ->
-        typeTitleMap[calendarType]?.let { CalendarTypeItem(calendarType, it) }
+        typeTitleMap[calendarType]?.let { calendarType to it }
     }
 }
 
