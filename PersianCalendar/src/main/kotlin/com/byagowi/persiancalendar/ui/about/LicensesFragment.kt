@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
-import com.byagowi.persiancalendar.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 
 class LicensesFragment : Fragment() {
     override fun onCreateView(

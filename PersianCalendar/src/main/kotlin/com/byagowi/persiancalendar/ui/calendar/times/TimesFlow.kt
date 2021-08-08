@@ -7,8 +7,8 @@ import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
-import com.byagowi.persiancalendar.utils.addViewsToFlow
-import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.PrayTimes
 

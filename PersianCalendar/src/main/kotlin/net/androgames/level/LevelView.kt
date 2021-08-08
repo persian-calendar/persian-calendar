@@ -7,8 +7,8 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.dp
-import com.byagowi.persiancalendar.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.cos

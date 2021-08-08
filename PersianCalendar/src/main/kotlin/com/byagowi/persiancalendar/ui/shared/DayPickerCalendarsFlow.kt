@@ -7,9 +7,9 @@ import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SingleChipLayoutBinding
 import com.byagowi.persiancalendar.entities.CalendarTypeItem
+import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.addViewsToFlow
-import com.byagowi.persiancalendar.utils.layoutInflater
 
 class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
     fun setup(calendarTypes: List<CalendarTypeItem>, onItemClick: (CalendarType) -> Unit) {

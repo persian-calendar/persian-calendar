@@ -11,9 +11,9 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.generated.citiesStore
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.localizedCityName
 import com.byagowi.persiancalendar.utils.localizedCountryName
 import com.byagowi.persiancalendar.utils.updateStoredPreference

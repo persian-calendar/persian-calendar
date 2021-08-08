@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
+import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.SensorEventAnnouncer
-import com.byagowi.persiancalendar.utils.getCompatDrawable
-import com.byagowi.persiancalendar.utils.navigateSafe
-import com.byagowi.persiancalendar.utils.onClick
-import com.byagowi.persiancalendar.utils.setupUpNavigation
 import net.androgames.level.OrientationProvider
 
 class LevelFragment : Fragment() {

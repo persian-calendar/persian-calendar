@@ -8,6 +8,8 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -20,9 +22,7 @@ import com.byagowi.persiancalendar.utils.getSpringEquinox
 import com.byagowi.persiancalendar.utils.getWeekOfYear
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.isForcedIranTimeEnabled
-import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.mainCalendar
-import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.Clock

@@ -49,12 +49,13 @@ import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
-import com.byagowi.persiancalendar.utils.bringMarketPage
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.getThemeFromName
@@ -65,7 +66,6 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.mainCalendar
-import com.byagowi.persiancalendar.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.overrideFont
 import com.byagowi.persiancalendar.utils.setDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker

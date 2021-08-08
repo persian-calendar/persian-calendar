@@ -24,7 +24,7 @@ import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
-import com.byagowi.persiancalendar.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
 class RecyclerListAdapter(
     private var items: List<Item>, private val onAllItemsSwipped: () -> Unit

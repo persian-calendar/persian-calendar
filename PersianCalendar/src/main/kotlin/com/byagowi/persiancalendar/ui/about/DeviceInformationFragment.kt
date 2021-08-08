@@ -44,6 +44,14 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
+import com.byagowi.persiancalendar.ui.utils.copyToClipboard
+import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.circularreveal.CircularRevealCompat

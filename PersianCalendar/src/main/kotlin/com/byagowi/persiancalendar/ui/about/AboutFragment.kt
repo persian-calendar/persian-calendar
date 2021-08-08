@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
-import android.text.SpannedString
 import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -28,6 +27,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
+import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
+import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar

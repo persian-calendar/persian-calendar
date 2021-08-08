@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.dp
 import java.util.*
 
 fun Fragment.showColorPickerDialog(isBackgroundPick: Boolean, key: String) {

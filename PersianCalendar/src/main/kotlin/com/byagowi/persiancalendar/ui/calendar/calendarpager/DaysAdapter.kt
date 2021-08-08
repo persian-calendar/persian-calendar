@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
@@ -26,7 +27,6 @@ import com.byagowi.persiancalendar.utils.isTalkBackEnabled
 import com.byagowi.persiancalendar.utils.isWeekEnd
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
-import com.byagowi.persiancalendar.utils.sp
 
 class DaysAdapter(
     private val context: Context, private val calendarPager: CalendarPager,

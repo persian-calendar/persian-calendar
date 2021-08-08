@@ -8,34 +8,14 @@ import android.app.PendingIntent
 import android.content.*
 import android.content.res.Configuration
 import android.content.res.Resources
-import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Log
-import android.util.TypedValue
-import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
-import androidx.appcompat.widget.Toolbar
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.net.toUri
-import androidx.core.view.AccessibilityDelegateCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavController
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
@@ -48,8 +28,6 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
-import com.byagowi.persiancalendar.ui.DrawerHost
-import com.google.android.material.appbar.AppBarLayout
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -59,7 +37,6 @@ import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
-import java.io.File
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -376,17 +353,6 @@ fun askForCalendarPermission(activity: Activity?) {
         .show()
 }
 
-fun Context?.copyToClipboard(
-    text: CharSequence?,
-    onSuccess: ((String) -> Unit) = { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
-) = runCatching {
-    this?.getSystemService<ClipboardManager>()
-        ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
-    val message = (if (resources.isRtl) RLM else "") +
-            getString(R.string.date_copied_clipboard).format(text)
-    onSuccess(message)
-}.onFailure(logException).getOrNull().debugAssertNotNull.let {}
-
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
 
@@ -473,90 +439,7 @@ fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn?) {
 fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
     getLong(key, -1).takeIf { it != -1L }?.let(::Jdn)
 
-val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
-
-fun bringMarketPage(activity: Activity): Unit = runCatching {
-    activity.startActivity(
-        Intent(Intent.ACTION_VIEW, "market://details?id=${activity.packageName}".toUri())
-    )
-}.onFailure(logException).onFailure {
-    runCatching {
-        val uri = "https://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
-        activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
-    }.onFailure(logException)
-}.let {}
-
-val Number.dp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.density
-val Number.sp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.scaledDensity
-
 val logException = fun(e: Throwable) { Log.e("Persian Calendar", e.message, e) }
-
-fun Toolbar.setupUpNavigation() {
-    navigationIcon = DrawerArrowDrawable(context).apply { progress = 1f }
-    setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
-    setNavigationOnClickListener { findNavController().navigateUp() }
-}
-
-fun Toolbar.setupMenuNavigation(fragment: Fragment) {
-    (fragment.activity as? DrawerHost).debugAssertNotNull
-        ?.setupToolbarWithDrawer(fragment.viewLifecycleOwner, this)
-}
-
-@ColorInt
-fun Context.resolveColor(attr: Int) = TypedValue().let {
-    theme.resolveAttribute(attr, it, true)
-    ContextCompat.getColor(this, it.resourceId)
-}
-
-fun Context.showHtml(html: String) = runCatching {
-    val uri = FileProvider.getUriForFile(
-        applicationContext, "$packageName.provider",
-        File(externalCacheDir, "temp.html").also { it.writeText(html) }
-    )
-    CustomTabsIntent.Builder().build()
-        .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-        .launchUrl(this, uri)
-}.onFailure(logException).let {}
-
-fun Flow.addViewsToFlow(viewList: List<View>) {
-    val parentView = (this.parent as? ViewGroup).debugAssertNotNull ?: return
-    this.referencedIds = viewList.map {
-        View.generateViewId().also { id ->
-            it.id = id
-            parentView.addView(it)
-        }
-    }.toIntArray()
-}
-
-fun NavController.navigateSafe(directions: NavDirections) = runCatching {
-    navigate(directions)
-}.onFailure(logException).getOrNull().debugAssertNotNull.let {}
-
-fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
-    AppCompatResources.getDrawable(this, drawableRes).debugAssertNotNull ?: ShapeDrawable()
-
-fun AppBarLayout.hideToolbarBottomShadow() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) outlineProvider = null
-}
-
-inline fun MenuItem.onClick(crossinline action: () -> Unit) =
-    this.setOnMenuItemClickListener { action(); true /* it captures the click event */ }.let {}
-
-fun View.setupExpandableAccessibilityDescription() {
-    ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
-        override fun onInitializeAccessibilityNodeInfo(
-            host: View?,
-            info: AccessibilityNodeInfoCompat?
-        ) {
-            super.onInitializeAccessibilityNodeInfo(host, info)
-            info?.addAction(
-                AccessibilityNodeInfoCompat.AccessibilityActionCompat(
-                    AccessibilityNodeInfoCompat.ACTION_CLICK, resources.getString(R.string.more)
-                )
-            )
-        }
-    })
-}
 
 fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,

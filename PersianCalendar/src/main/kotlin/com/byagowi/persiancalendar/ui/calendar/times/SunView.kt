@@ -22,11 +22,11 @@ import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.dp
+import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.resolveColor
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes

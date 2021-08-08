@@ -12,10 +12,10 @@ import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
 import com.byagowi.persiancalendar.ui.shared.ArrowView
-import com.byagowi.persiancalendar.utils.dp
-import com.byagowi.persiancalendar.utils.layoutInflater
-import com.byagowi.persiancalendar.utils.resolveColor
-import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
+import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 

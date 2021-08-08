@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.calendarType
@@ -19,7 +20,6 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.monthsNames
 import com.google.android.material.snackbar.Snackbar
 

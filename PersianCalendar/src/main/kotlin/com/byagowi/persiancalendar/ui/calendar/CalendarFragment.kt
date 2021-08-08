@@ -54,6 +54,12 @@ import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
+import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
+import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -68,12 +74,10 @@ import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.getCityName
-import com.byagowi.persiancalendar.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
-import com.byagowi.persiancalendar.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled
@@ -81,11 +85,7 @@ import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.navigateSafe
-import com.byagowi.persiancalendar.utils.onClick
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
-import com.byagowi.persiancalendar.utils.setupExpandableAccessibilityDescription
-import com.byagowi.persiancalendar.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
