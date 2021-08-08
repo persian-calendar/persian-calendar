@@ -281,7 +281,7 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     return if (monthsDifference == 0 && yearsDifference == 0) days else ("$days (~" + listOf(
         yearsDifference to R.string.n_years,
         monthsDifference to R.string.n_months,
-        daysOfMonthDifference to R.string.n_days,
+        daysOfMonthDifference to R.string.n_days
     ).filter { (n, _) -> n != 0 }.joinToString(spacedComma) { (n, stringId) ->
         resources.getString(stringId, formatNumber(n))
     } + ")")

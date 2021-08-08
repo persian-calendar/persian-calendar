@@ -87,16 +87,12 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
 
         val startOfYearText = context.getString(
-            R.string.start_of_year_diff,
-            formatNumber(jdn - startOfYearJdn + 1),
-            formatNumber(currentWeek),
-            formatNumber(mainDate.month)
+            R.string.start_of_year_diff, formatNumber(jdn - startOfYearJdn + 1),
+            formatNumber(currentWeek), formatNumber(mainDate.month)
         )
         val endOfYearText = context.getString(
-            R.string.end_of_year_diff,
-            formatNumber(endOfYearJdn - jdn),
-            formatNumber(weeksCount - currentWeek),
-            formatNumber(12 - mainDate.month)
+            R.string.end_of_year_diff, formatNumber(endOfYearJdn - jdn),
+            formatNumber(weeksCount - currentWeek), formatNumber(12 - mainDate.month)
         )
         binding.startAndEndOfYearDiff.text =
             listOf(startOfYearText, endOfYearText).joinToString("\n")

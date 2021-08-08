@@ -53,7 +53,7 @@ fun Context?.copyToClipboard(
     this?.getSystemService<ClipboardManager>()
         ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
     val message = (if (resources.isRtl) RLM else "") +
-            getString(R.string.date_copied_clipboard).format(text)
+            getString(R.string.date_copied_clipboard, text)
     onSuccess(message)
 }.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 

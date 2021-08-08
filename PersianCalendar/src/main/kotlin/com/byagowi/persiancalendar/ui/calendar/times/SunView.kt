@@ -279,8 +279,7 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
             if (now > sunset || now < sunrise) 0 else (sunset - now).toInt()
         )
         dayLengthString = context.getString(
-            R.string.length_of_day,
-            formatNumber(dayLength.hour), formatNumber(dayLength.minute)
+            R.string.length_of_day, formatNumber(dayLength.hour), formatNumber(dayLength.minute)
         )
         remainingString = when {
             remaining.toInt() == 0 -> ""

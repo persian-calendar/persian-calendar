@@ -60,9 +60,8 @@ fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
 
     binding.resetLink.setOnClickListener {
         jdn = selectedJdn
-        binding.description.text = getString(
-            R.string.shift_work_starting_date, formatDate(jdn.toCalendar(mainCalendar))
-        )
+        binding.description.text =
+            getString(R.string.shift_work_starting_date, formatDate(jdn.toCalendar(mainCalendar)))
         shiftWorkItemAdapter.reset()
     }
     binding.recurs.isChecked = shiftWorkRecurs

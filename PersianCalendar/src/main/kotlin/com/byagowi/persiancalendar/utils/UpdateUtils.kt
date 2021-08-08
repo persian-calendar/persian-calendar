@@ -320,15 +320,14 @@ private fun Context.update4x2Widget(
         val min = (MINUTES.toMinutes(difference) % 60).toInt()
 
         val remainingTime = when {
-            hrs == 0 -> getString(R.string.n_minutes).format(formatNumber(min))
-            min == 0 -> getString(R.string.n_hours).format(formatNumber(hrs))
-            else -> getString(R.string.n_minutes_and_hours)
-                .format(formatNumber(hrs), formatNumber(min))
+            hrs == 0 -> getString(R.string.n_minutes, formatNumber(min))
+            min == 0 -> getString(R.string.n_hours, formatNumber(hrs))
+            else -> getString(R.string.n_minutes_and_hours, formatNumber(hrs), formatNumber(min))
         }
 
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2,
-            getString(R.string.n_till).format(remainingTime, getString(nextOwghatId))
+            getString(R.string.n_till, remainingTime, getString(nextOwghatId))
         )
         remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     } else {

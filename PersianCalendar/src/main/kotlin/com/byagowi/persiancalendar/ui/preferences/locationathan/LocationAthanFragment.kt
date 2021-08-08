@@ -40,11 +40,7 @@ import com.google.android.material.snackbar.Snackbar
 class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private val defaultAthanName: String
-        get() {
-            val context = context ?: return ""
-            return context.getString(R.string.default_athan_name)
-        }
+    private val defaultAthanName get() = context?.getString(R.string.default_athan_name) ?: ""
 
     private var coordinatesPreference: Preference? = null
     private var ringtonePreference: Preference? = null
