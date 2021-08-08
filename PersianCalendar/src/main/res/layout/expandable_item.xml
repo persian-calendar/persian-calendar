@@ -17,8 +17,8 @@
 
         <com.byagowi.persiancalendar.ui.shared.ArrowView
             android:id="@+id/expansion_arrow"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="@dimen/icon_size"
+            android:layout_width="@dimen/arrow_size"
+            android:layout_height="@dimen/arrow_size"
             android:importantForAccessibility="no"
             app:tint="?attr/colorAccent"
             tools:ignore="HardcodedText" />

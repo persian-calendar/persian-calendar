@@ -5,7 +5,7 @@
     <dimen name="view_padding">16dp</dimen>
     <dimen name="converter_padding">8dp</dimen>
     <dimen name="icon_margin">16dp</dimen>
-    <dimen name="icon_size">28dp</dimen>
+    <dimen name="arrow_size">28dp</dimen>
     <dimen name="padding_item">8dp</dimen>
     <dimen name="drawer_header_height">190dp</dimen>
 
