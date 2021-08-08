@@ -83,7 +83,7 @@
     <string name="notify_date_lock_screen">画面ロックで通知を表示</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
-    <string name="date_diff_text">Distance: %1$s days (~%2$s years and %3$s months and %4$s days)</string>
+    <string name="days_distance">Distance</string>
     <string name="calendars_priority">Calendars Priority</string>
     <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
     <string name="week_of_year">Week of Year</string>
@@ -234,7 +234,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_age_name">ペルシャ暦</string>
     <string name="age_widget_title">Widget title</string>
     <string name="select_date">Select date</string>
-    <string name="age_widget_placeholder">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
+    <string name="days_distance_pattern">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
     <string name="preview">プレビュ</string>
     <string name="ignore">無視</string>
 

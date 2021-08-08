@@ -37,7 +37,7 @@
 
     <string name="search_in_events">البحث في المناسبات</string>
 
-    <string name="date_diff_text">الفرق: %1$s يوماً (~%2$s سنة و %3$s شهر و %4$s يوم)</string>
+    <string name="days_distance">الفرق</string>
     <string name="start_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) من بداية السنة</string>
     <string name="end_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) إلى آخر السنة</string>
     <string name="date_copied_clipboard">«%1$s» تم النسخ إلى المحفظة</string>
@@ -266,7 +266,7 @@
     <string name="widget_age_name">التقويم الفارسي (عمر)</string>
     <string name="age_widget_title">عنوان المصغر</string>
     <string name="select_date">اختيار التاريخ</string>
-    <string name="age_widget_placeholder">%1$s يوم (~%2$s سنة، %3$s شهر، %4$s يوم)</string>
+    <string name="days_distance_pattern">%1$s يوم (~%2$s سنة، %3$s شهر، %4$s يوم)</string>
     <string name="preview">معاينة</string>
     <string name="ignore">تجاهل</string>
 

@@ -76,7 +76,7 @@
             android:textColor="?attr/colorTextNormal"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description"
-            tools:text="@string/date_diff_text" />
+            tools:text="@string/days_distance" />
 
         <TextView
             android:id="@+id/start_and_end_of_year_diff"
@@ -87,7 +87,7 @@
             android:textColor="?attr/colorTextNormal"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description"
-            tools:text="@string/date_diff_text" />
+            tools:text="@string/days_distance" />
 
     </LinearLayout>
 

@@ -109,8 +109,7 @@ private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
     manager.getAppWidgetIds(ComponentName(this, AgeWidget::class.java))?.forEach { widgetId ->
         val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today
         val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, "")
-        val subtitleFormatPattern = getString(R.string.age_widget_placeholder)
-        val subtitle = calculateDaysDifference(baseJdn, subtitleFormatPattern)
+        val subtitle = calculateDaysDifference(resources, baseJdn)
         val textColor = appPrefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId, null)
             ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
         val bgColor = appPrefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId, null)

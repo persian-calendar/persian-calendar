@@ -31,7 +31,7 @@
     <string name="goto_date">Go to date</string>
     <string name="go">Go</string>
     <string name="search_in_events">Search in events</string>
-    <string name="date_diff_text">Distance: %1$s days (~%2$s years and %3$s months and %4$s days)</string>
+    <string name="days_distance">Distance</string>
     <string name="start_of_year_diff">%1$s days (~%2$s weeks or %3$s months) from start of the year</string>
     <string name="end_of_year_diff">%1$s days (~%2$s weeks or %3$s months) to end of the year</string>
     <string name="date_copied_clipboard">"%1$s" copied to clipboard.</string>
@@ -235,7 +235,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
     <string name="select_date">Select date</string>
     <string name="age_widget_title">Widget title</string>
-    <string name="age_widget_placeholder">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
+    <string name="days_distance_pattern">%1$s days (~%2$s years, %3$s months, %4$s days)</string>
     <string name="preview">Previsualización</string>
     <string name="ignore">Ignorar</string>
 </resources>

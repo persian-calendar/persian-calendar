@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.provider.CalendarContract
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
@@ -269,7 +270,8 @@ fun CalendarType.getMonthLength(year: Int, month: Int): Int {
     return nextMonthStartingDay - thisMonthStartingDay
 }
 
-fun calculateDaysDifference(jdn: Jdn, messageToFormat: String): String {
+fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
+    val messageToFormat = resources.getString(R.string.days_distance_pattern)
     val selectedDayAbsoluteDistance = abs(Jdn.today - jdn)
     val civilBase = CivilDate(2000, 1, 1)
     val civilOffset = CivilDate(civilBase.toJdn() + selectedDayAbsoluteDistance)

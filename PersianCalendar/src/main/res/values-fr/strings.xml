@@ -34,7 +34,7 @@
     <string name="map">Carte</string>
     <string name="month_overview">Évènements du mois</string>
     <string name="prefer_linear_date">Préférer la forme numérique des dates</string>
-    <string name="age_widget_placeholder">%1$s jours (~%2$s années, %3$s mois, %4$s jours)</string>
+    <string name="days_distance_pattern">%1$s jours (~%2$s années, %3$s mois, %4$s jours)</string>
     <string name="age_widget_title">Titre du widget</string>
     <string name="select_date">Sélectionnez la date</string>
     <string name="enable_location_services">Les services de localisation sont désactivés, veuillez les activer pour utiliser cette fonction.</string>
@@ -160,7 +160,7 @@
     <string name="date_copied_clipboard">%1$s copié dans le presse-papier.</string>
     <string name="end_of_year_diff">%1$s jours (~%2$s semaines ou %3$s mois) jusqu’à la fin de l’année</string>
     <string name="start_of_year_diff">%1$s jours (~%2$s semaines ou %3$s mois) depuis le début de l’année</string>
-    <string name="date_diff_text">Distance : %1$s jours (~%2$s ans et %3$s mois et %4$s jours)</string>
+    <string name="days_distance">Distance</string>
     <string name="search_in_events">Chercher dans les évènements</string>
     <string name="go">Aller</string>
     <string name="goto_date">Aller à la date</string>

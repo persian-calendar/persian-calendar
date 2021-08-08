@@ -83,7 +83,7 @@
     <string name="notify_date_lock_screen">صفه کي قؤفلˈبؤسته أ اعلانانيشان بده</string>
     <string name="notify_date_lock_screen_summary">فقد اۊ وخته کي مؤحافظتˇگۊشي ره تنظيم ببه کار کۊنه</string>
     <string name="warn_if_events_not_set">رۊيدادان ؤ مۊناسبتانˇفعالˈکۊدنˇوأسي ؤ هتؤ شيمي مۊهيمˇمۊناسبتانˇره بيشيد تنظيماتˇسروخت</string>
-    <string name="date_diff_text">فاصله: %1$s رۊز (~%2$s سال ؤ %3$s ما ؤ %4$s رۊز)</string>
+    <string name="days_distance">فاصله</string>
     <string name="calendars_priority">کؤيتأ تقويم اول نيشان بدأ ببه</string>
     <string name="calendars_priority_summary">تقويمˇتنظيم کۊدن ؤ اولویتˇتقويمانˇنيشان دأن یا نيشان ندأن</string>
     <string name="week_of_year">هفته-يه سال</string>
@@ -232,7 +232,7 @@
     <string name="widget_age_name">تقویم فارسی (سن)</string>
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="select_date">انتخاب تاریخ</string>
-    <string name="age_widget_placeholder">%1$s رۊز (~%2$s سال، %3$s ما، %4$s رۊز)</string>
+    <string name="days_distance_pattern">%1$s رۊز (~%2$s سال، %3$s ما، %4$s رۊز)</string>
     <string name="preview">پيشادئن</string>
     <string name="ignore">چشم‌پوشی</string>
 

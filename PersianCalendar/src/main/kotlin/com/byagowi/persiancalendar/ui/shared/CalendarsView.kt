@@ -73,8 +73,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         } else {
             binding.also {
                 it.diffDate.isVisible = true
-                it.diffDate.text =
-                    calculateDaysDifference(jdn, context.getString(R.string.date_diff_text))
+                it.diffDate.text = listOf(
+                    context.getString(R.string.days_distance), ": ",
+                    calculateDaysDifference(resources, jdn)
+                ).joinToString("")
             }
         }
 

@@ -83,7 +83,7 @@
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
     <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
     <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
-    <string name="date_diff_text">مەودا: %1$s ڕۆژ (~%2$s ساڵ و %3$s مانگ و %4$s ڕۆژ)</string>
+    <string name="days_distance">مەودا</string>
     <string name="calendars_priority">ڕۆژژمێری سەرەکی</string>
     <string name="calendars_priority_summary">گۆڕینی ڕۆژژمێری سەرەکی، ڕیزبەندی و چالاکیی ڕۆژژمێرەکان</string>
     <string name="week_of_year">ژمارەی حەفتە</string>
@@ -231,7 +231,7 @@
     <string name="widget_age_name">ڕۆژژمێری فارسی (سن)</string>
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="select_date">انتخاب تاریخ</string>
-    <string name="age_widget_placeholder">%1$s ڕۆژ (~%2$s ساڵ، %3$s مانگ، %4$s ڕۆژ)</string>
+    <string name="days_distance_pattern">%1$s ڕۆژ (~%2$s ساڵ، %3$s مانگ، %4$s ڕۆژ)</string>
     <string name="preview">پێشبینین</string>
     <string name="ignore">گوێ مەدە</string>
 
