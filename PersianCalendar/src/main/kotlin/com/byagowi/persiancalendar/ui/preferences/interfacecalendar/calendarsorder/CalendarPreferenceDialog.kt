@@ -20,8 +20,8 @@ fun Fragment.showCalendarPreferenceDialog() {
 
     updateStoredPreference(context)
     val enabledCalendarTypes = getEnabledCalendarTypes()
-    val adapter = RecyclerListAdapter(getOrderedCalendarEntities(context).map {
-        RecyclerListAdapter.Item(it.title, it.type.name, it.type in enabledCalendarTypes)
+    val adapter = RecyclerListAdapter(getOrderedCalendarEntities(context).map { (type, title) ->
+        RecyclerListAdapter.Item(title, type.name, type in enabledCalendarTypes)
     }, onAllItemsSwipped = {
         dialog?.dismiss()
         // Easter egg when all items are swiped

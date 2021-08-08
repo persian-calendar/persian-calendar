@@ -40,7 +40,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 LANG_EN_US, LANG_JA, LANG_FR, LANG_ES, LANG_AR -> true
                 else -> false
             }
-        ).also { selectedCalendarType = it[0].type }
+        ).also { selectedCalendarType = it[0].first }
         binding.calendarsFlow.setup(calendarTypes) {
             selectedCalendarType = it
             jdn = mJdn
