@@ -98,7 +98,7 @@ private class ShiftWorkItemsAdapter(
 
     private fun shiftWorkKeyToString(type: String): String = shiftWorkTitles[type] ?: type
 
-    private fun updateShiftWorkResult() =
+    private fun updateShiftWorkResult() {
         rows.filter { it.length != 0 }.joinToString(spacedComma) {
             binding.root.context.getString(
                 R.string.shift_work_record_title,
@@ -108,6 +108,7 @@ private class ShiftWorkItemsAdapter(
             binding.result.text = it
             binding.result.isVisible = it.isNotEmpty()
         }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         ShiftWorkItemBinding.inflate(parent.context.layoutInflater, parent, false)
@@ -123,7 +124,7 @@ private class ShiftWorkItemsAdapter(
         updateShiftWorkResult()
     }
 
-    private inner class ViewHolder(private val binding: ShiftWorkItemBinding) :
+    inner class ViewHolder(private val binding: ShiftWorkItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         init {
