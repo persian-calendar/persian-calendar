@@ -316,13 +316,12 @@ private fun Context.update4x2Widget(
 
         val difference = (getClockFromStringId(nextOwghatId).toInt() - owghatClock.toInt())
             .let { if (it > 0) it else it + 60 * 24 }.toLong()
-        val hrs = (MINUTES.toHours(difference) % 24).toInt()
-        val min = (MINUTES.toMinutes(difference) % 60).toInt()
 
-        val remainingTime = when {
-            hrs == 0 -> getString(R.string.n_minutes, formatNumber(min))
-            min == 0 -> getString(R.string.n_hours, formatNumber(hrs))
-            else -> getString(R.string.n_minutes_and_hours, formatNumber(hrs), formatNumber(min))
+        val remainingTime = listOf(
+            R.string.n_hours to (MINUTES.toHours(difference) % 24).toInt(),
+            R.string.n_minutes to (MINUTES.toMinutes(difference) % 60).toInt()
+        ).filter { (_, n) -> n != 0 }.joinToString(getString(R.string.and)) { (stringId, n) ->
+            getString(stringId, formatNumber(n))
         }
 
         remoteViews.setTextViewText(

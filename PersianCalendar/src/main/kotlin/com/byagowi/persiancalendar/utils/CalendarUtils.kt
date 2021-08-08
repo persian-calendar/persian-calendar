@@ -279,10 +279,10 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     val daysOfMonthDifference = civilOffset.dayOfMonth - civilBase.dayOfMonth
     val days = resources.getString(R.string.n_days, formatNumber(daysAbsoluteDistance))
     return if (monthsDifference == 0 && yearsDifference == 0) days else ("$days (~" + listOf(
-        yearsDifference to R.string.n_years,
-        monthsDifference to R.string.n_months,
-        daysOfMonthDifference to R.string.n_days
-    ).filter { (n, _) -> n != 0 }.joinToString(spacedComma) { (n, stringId) ->
+        R.string.n_years to yearsDifference,
+        R.string.n_months to monthsDifference,
+        R.string.n_days to daysOfMonthDifference
+    ).filter { (_, n) -> n != 0 }.joinToString(resources.getString(R.string.and)) { (stringId, n) ->
         resources.getString(stringId, formatNumber(n))
     } + ")")
 }

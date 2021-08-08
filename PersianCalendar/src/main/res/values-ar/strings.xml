@@ -245,7 +245,7 @@
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
     <string name="n_minutes">%1$s دقائق</string>
     <string name="n_hours">%1$s ساعات</string>
-    <string name="n_minutes_and_hours">%1$s ساعات و %2$s دقائق</string>
+    <string name="and">" و "</string>
     <string name="device_info">معلومات الجهاز</string>
     <string name="center_align_widgets_summary">توسيط المصغر 4x1 و 2x2</string>
     <string name="center_align_widgets">توسيط المصغر</string>
