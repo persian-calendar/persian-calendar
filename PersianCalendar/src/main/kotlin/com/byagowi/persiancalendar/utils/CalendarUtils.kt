@@ -278,15 +278,13 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     val monthsDiff = civilOffset.month - 1
     val daysOfMonthDiff = civilOffset.dayOfMonth - 1
     val days = resources.getString(R.string.n_days, formatNumber(selectedDayAbsoluteDistance))
-    return days + if (monthsDiff == 0 && yearsDiff == 0) "" else {
-        " (" + listOf(
-            yearsDiff to R.string.n_years,
-            monthsDiff to R.string.n_months,
-            daysOfMonthDiff to R.string.n_days,
-        ).filter { (n, _) -> n != 0 }.joinToString(spacedComma) { (n, stringId) ->
-            resources.getString(stringId, formatNumber(n))
-        } + ")"
-    }
+    return if (monthsDiff == 0 && yearsDiff == 0) days else ("$days (~" + listOf(
+        yearsDiff to R.string.n_years,
+        monthsDiff to R.string.n_months,
+        daysOfMonthDiff to R.string.n_days,
+    ).filter { (n, _) -> n != 0 }.joinToString(spacedComma) { (n, stringId) ->
+        resources.getString(stringId, formatNumber(n))
+    } + ")")
 }
 
 fun Jdn.getWeekOfYear(startOfYear: Jdn): Int {
