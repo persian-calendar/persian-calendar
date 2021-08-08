@@ -8,10 +8,10 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.Jdn
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected

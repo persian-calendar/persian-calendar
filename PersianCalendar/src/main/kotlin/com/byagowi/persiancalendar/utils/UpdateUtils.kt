@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
 import com.byagowi.persiancalendar.Widget4x2
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.AbstractDate

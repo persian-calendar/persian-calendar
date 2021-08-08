@@ -2,11 +2,10 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.Jdn
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.utils.getLastDayOfWeek
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
-import com.cepmuvakkit.times.view.QiblaCompassView
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
