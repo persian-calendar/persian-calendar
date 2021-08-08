@@ -113,6 +113,17 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             var pageRefresh = fun(_: Boolean, _: Jdn?) {}
 
             init {
+                binding.previous.let {
+                    it.rotateTo(ArrowView.Direction.START)
+                    it.setOnClickListener {
+                        viewPager.setCurrentItem(viewPager.currentItem - 1, true)
+                    }
+                    it.setOnLongClickListener {
+                        viewPager.setCurrentItem(viewPager.currentItem - 12, false)
+                        true
+                    }
+                }
+
                 binding.next.let {
                     it.rotateTo(ArrowView.Direction.END)
                     it.setOnClickListener {
@@ -120,17 +131,6 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     }
                     it.setOnLongClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 12, false)
-                        true
-                    }
-                }
-
-                binding.prev.let {
-                    it.rotateTo(ArrowView.Direction.START)
-                    it.setOnClickListener {
-                        viewPager.setCurrentItem(viewPager.currentItem - 1, true)
-                    }
-                    it.setOnLongClickListener {
-                        viewPager.setCurrentItem(viewPager.currentItem - 12, false)
                         true
                     }
                 }

@@ -6,7 +6,7 @@
     android:orientation="horizontal">
 
     <com.byagowi.persiancalendar.ui.shared.ArrowView
-        android:id="@+id/prev"
+        android:id="@+id/previous"
         android:layout_width="@dimen/icon_size"
         android:layout_height="@dimen/icon_size"
         android:layout_marginStart="10dp"
