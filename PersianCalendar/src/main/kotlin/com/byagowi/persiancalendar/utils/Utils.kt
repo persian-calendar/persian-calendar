@@ -437,7 +437,11 @@ fun updateStoredPreference(context: Context) {
         otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     }
 
-    spacedComma = if (isNonArabicScriptSelected()) ", " else "، "
+    spacedComma = when {
+        language == LANG_JA -> "、"
+        isNonArabicScriptSelected() -> ", "
+        else -> "، "
+    }
     isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =
         (prefs.getString(PREF_WEEK_START, null) ?: DEFAULT_WEEK_START).toIntOrNull() ?: 0
