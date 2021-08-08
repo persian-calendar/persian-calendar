@@ -289,10 +289,10 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
 
 fun Jdn.getWeekOfYear(startOfYear: Jdn): Int {
     val dayOfYear = this - startOfYear
-    return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(dayOfWeek)) / 7.0).toInt()
+    return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(this.dayOfWeek)) / 7.0).toInt()
 }
 
-val Jdn.dayOfWeekName: String get() = weekDays[dayOfWeek]
+val Jdn.dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
 fun DeviceCalendarEventsStore.getEvents(jdn: Jdn): List<CalendarEvent<*>> =
     ArrayList<CalendarEvent<*>>().apply {
