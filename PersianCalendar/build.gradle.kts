@@ -183,7 +183,6 @@ val generateAppSrcTask by tasks.registering {
                 "mapOf(${event.map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
             }
         val eventsSource = (events["Source"] as Map<*, *>).toList()
-            .filter { (_, v) -> v is String }
             .joinToString(",\n    ") { (k, v) -> """$k("$v")""" }
         eventsOutput.writeText(
             """package ${android.defaultConfig.applicationId}.generated
