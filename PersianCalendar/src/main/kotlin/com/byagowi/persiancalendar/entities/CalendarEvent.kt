@@ -1,11 +1,9 @@
 package com.byagowi.persiancalendar.entities
 
-import com.byagowi.persiancalendar.utils.CalendarType
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.praytimes.Coordinate
 import java.util.*
 
 sealed class CalendarEvent<T : AbstractDate>(
@@ -25,13 +23,3 @@ sealed class CalendarEvent<T : AbstractDate>(
         val start: Date, val end: Date, val color: String
     ) : CalendarEvent<CivilDate>(title, isHoliday, date)
 }
-
-data class ShiftWorkRecord(val type: String, val length: Int)
-
-data class CityItem(
-    val key: String, val en: String, val fa: String, val ckb: String, val ar: String,
-    val countryCode: String, val countryEn: String, val countryFa: String, val countryCkb: String,
-    val countryAr: String, val coordinate: Coordinate
-)
-
-data class CalendarTypeItem(val type: CalendarType, val title: String)
