@@ -4,12 +4,11 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
-import com.byagowi.persiancalendar.R
 
 class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageView(context, attr) {
 
     init {
-        setImageResource(R.drawable.ic_keyboard_arrow_down)
+        setImageResource(androidx.preference.R.drawable.ic_arrow_down_24dp)
     }
 
     private var lastDegree = 0f
