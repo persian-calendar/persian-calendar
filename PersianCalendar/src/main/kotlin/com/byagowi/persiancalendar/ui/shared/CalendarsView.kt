@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.utils.getWeekOfYear
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.spacedColon
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.Clock
@@ -74,7 +75,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             binding.also {
                 it.diffDate.isVisible = true
                 it.diffDate.text = listOf(
-                    context.getString(R.string.days_distance), ": ",
+                    context.getString(R.string.days_distance), spacedColon,
                     calculateDaysDifference(resources, jdn)
                 ).joinToString("")
             }

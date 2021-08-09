@@ -135,6 +135,8 @@ var otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
 var spacedComma = "، "
     private set
+var spacedColon = ": "
+    private set
 var isShowWeekOfYearEnabled = false
     private set
 var isCenterAlignWidgets = false
@@ -441,6 +443,10 @@ fun updateStoredPreference(context: Context) {
         language == LANG_JA -> "、"
         isNonArabicScriptSelected() -> ", "
         else -> "، "
+    }
+    spacedColon = when (language) {
+        LANG_JA -> "："
+        else -> ": "
     }
     isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =
