@@ -17,12 +17,8 @@ class SharedDayViewData(context: Context) {
     val colorHoliday = context.resolveColor(R.attr.colorHoliday)
     val colorHolidaySelected = context.resolveColor(R.attr.colorHolidaySelected)
 
-    // private val colorTextHoliday = context.resolveColor(R.attr.colorTextHoliday)
     val colorTextDay = context.resolveColor(R.attr.colorTextDay)
     val colorTextDaySelected = context.resolveColor(R.attr.colorTextDaySelected)
-
-    // private val colorTextToday = context.resolveColor(R.attr.colorTextToday)
-    val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(com.google.android.material.R.attr.colorSecondary)
@@ -48,22 +44,35 @@ class SharedDayViewData(context: Context) {
     }
 
     private val typeface = getCalendarFragmentFont(context)
-    val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+    val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
+        it.textSize = if (isArabicDigitSelected) 18.sp else 25.sp
+        it.color = colorTextDay
     }
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
+        it.textSize = 12.sp
+        it.color = colorTextDay
+    }
+    private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
+    val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.textAlign = Paint.Align.CENTER
+        it.typeface = typeface
+        it.textSize = 12.sp
+        it.color = colorTextDayName
+    }
+    val weekDayInitialsTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.textAlign = Paint.Align.CENTER
+        it.typeface = typeface
+        it.textSize = 20.sp
+        it.color = colorTextDayName
     }
 
     val layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT, 40.sp.toInt()
     )
-
-    val weekNumberTextSize = 12.sp.toInt()
-    val weekDaysInitialTextSize = 20.sp.toInt()
-    val digitsTextSize = if (isArabicDigitSelected) 18.sp.toInt() else 25.sp.toInt()
 
     val selectableItemBackground = TypedValue().also {
         context.theme.resolveAttribute(

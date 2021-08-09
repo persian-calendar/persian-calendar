@@ -26,8 +26,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     var dayOfMonth = -1
         private set
     private var isDayOfMonth = false
+    private var isWeekOfYearNumber = false
     private var header = ""
-    private var textSize = 0
 
     var sharedDayViewData: SharedDayViewData? = null
 
@@ -35,8 +35,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val shared = sharedDayViewData ?: return
-        shared.textPaint.textSize = textSize.toFloat()
-        shared.headerTextPaint.textSize = textSize / 2f
 
         // Draw circle around day
         val radius = min(width, height) / 2f
@@ -45,20 +43,26 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.todayPaint)
 
         // Draw day number/label
-        shared.textPaint.color = when {
-            isDayOfMonth && holiday && dayIsSelected -> shared.colorHolidaySelected
-            isDayOfMonth && holiday && !dayIsSelected -> shared.colorHoliday
-            isDayOfMonth && !holiday && dayIsSelected -> shared.colorTextDaySelected
-            isDayOfMonth && !holiday && !dayIsSelected -> shared.colorTextDay
-            else -> shared.colorTextDayName
+        shared.dayOfMonthNumberTextPaint.color = when {
+            holiday && dayIsSelected -> shared.colorHolidaySelected
+            holiday && !dayIsSelected -> shared.colorHoliday
+            !holiday && dayIsSelected -> shared.colorTextDaySelected
+            else /*!holiday && !dayIsSelected*/ -> shared.colorTextDay
         }
         val textToMeasureHeight =
             if (isDayOfMonth) text else if (isNonArabicScriptSelected) "Y" else "شچ"
-        shared.textPaint.getTextBounds(
+        shared.dayOfMonthNumberTextPaint.getTextBounds(
             textToMeasureHeight, 0, textToMeasureHeight.length, textBounds
         )
         val yPos = (height + textBounds.height()) / 2f
-        canvas.drawText(text, width / 2f, yPos, shared.textPaint)
+        run {
+            val textPaint = when {
+                isDayOfMonth -> shared.dayOfMonthNumberTextPaint
+                isWeekOfYearNumber -> shared.weekNumberTextPaint
+                else -> shared.weekDayInitialsTextPaint
+            }
+            canvas.drawText(text, width / 2f, yPos, textPaint)
+        }
 
         // Draw indicators, whether a day has event or appointment
         val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1
@@ -69,8 +73,10 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     (isHighTextContrastEnabled && holiday && paint == shared.eventIndicatorPaint)
             canvas.drawCircle(
-                width / 2f + xOffset, height - shared.eventYOffset,
-                shared.eventIndicatorRadius, if (overrideByTextColor) shared.textPaint else paint
+                width / 2f + xOffset,
+                height - shared.eventYOffset,
+                shared.eventIndicatorRadius,
+                if (overrideByTextColor) shared.dayOfMonthNumberTextPaint else paint
             )
         }
 
@@ -101,10 +107,10 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     }
 
     private fun setAll(
-        text: String, isToday: Boolean, isSelected: Boolean,
-        hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        textSize: Int, jdn: Jdn?, dayOfMonth: Int, isDayOfMonth: Boolean,
-        header: String
+        text: String, isToday: Boolean = false, isSelected: Boolean = false,
+        hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
+        jdn: Jdn? = null, dayOfMonth: Int = -1, header: String = "",
+        isDayOfMonth: Boolean = false, isWeekOfYearNumber: Boolean = false
     ) {
         this.text = text
         this.today = isToday
@@ -113,8 +119,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.jdn = jdn
         this.dayOfMonth = dayOfMonth
         this.isDayOfMonth = isDayOfMonth
+        this.isWeekOfYearNumber = isWeekOfYearNumber
         this.header = header
-        this.textSize = textSize
         sharedDayViewData.debugAssertNotNull?.also { shared ->
             this.indicators = listOf(
                 hasAppointment to shared.appointmentIndicatorPaint,
@@ -130,19 +136,11 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
         jdn: Jdn, dayOfMonth: Int, header: String
     ) = setAll(
-        formatNumber(dayOfMonth), isToday, isSelected, hasEvent, hasAppointment,
-        isHoliday, sharedDayViewData?.digitsTextSize ?: 0, jdn, dayOfMonth, true, header
+        text = formatNumber(dayOfMonth), isToday = isToday, isSelected = isSelected,
+        hasEvent = hasEvent, hasAppointment = hasAppointment, isHoliday = isHoliday, jdn = jdn,
+        dayOfMonth = dayOfMonth, header = header, isDayOfMonth = true
     )
 
-    private fun setNonDayOfMonthItem(text: String, textSize: Int) = setAll(
-        text, isToday = false, isSelected = false, hasEvent = false, hasAppointment = false,
-        isHoliday = false, textSize = textSize, jdn = null, dayOfMonth = -1,
-        isDayOfMonth = false, header = ""
-    )
-
-    fun setWeekOfYearNumber(text: String) =
-        setNonDayOfMonthItem(text, sharedDayViewData?.weekNumberTextSize ?: 0)
-
-    fun setInitialOfWeekDay(text: String) =
-        setNonDayOfMonthItem(text, sharedDayViewData?.weekDaysInitialTextSize ?: 0)
+    fun setInitialOfWeekDay(text: String) = setAll(text)
+    fun setWeekOfYearNumber(text: String) = setAll(text, isWeekOfYearNumber = true)
 }
