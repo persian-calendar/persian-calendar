@@ -81,12 +81,15 @@ class AthanActivity : AppCompatActivity() {
         //
 
         getSystemService<AudioManager>()?.let { audioManager ->
-            audioManager.setStreamVolume(
-                AudioManager.STREAM_ALARM,
-                athanVolume.takeIf { it != DEFAULT_ATHAN_VOLUME }
-                    ?: audioManager.getStreamVolume(AudioManager.STREAM_ALARM),
-                0
-            )
+            // Apply volume setting only if normal ringer mode is set otherwise leave it to system settings
+            if (audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                audioManager.setStreamVolume(
+                    AudioManager.STREAM_ALARM,
+                    athanVolume.takeIf { it != DEFAULT_ATHAN_VOLUME }
+                        ?: audioManager.getStreamVolume(AudioManager.STREAM_ALARM),
+                    0
+                )
+            }
         }
 
         val customAthanUri = getCustomAthanUri(this)
