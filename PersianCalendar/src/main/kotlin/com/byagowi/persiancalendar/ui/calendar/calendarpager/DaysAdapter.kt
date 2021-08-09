@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.emptyEventsStore
@@ -19,7 +18,6 @@ import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
-import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled
@@ -38,7 +36,6 @@ class DaysAdapter(
     var weeksCount: Int = 0
 
     private var monthEvents: DeviceCalendarEventsStore = emptyEventsStore()
-    private val isArabicDigit: Boolean = isArabicDigitSelected()
     private var selectedDay = -1
 
     fun initializeMonthEvents() {
@@ -81,11 +78,6 @@ class DaysAdapter(
             itemView.setOnLongClickListener(this)
         }
 
-        private val weekNumberTextSize = 12.sp.toInt()
-        private val weekDaysInitialTextSize = 20.sp.toInt()
-        private val arabicDigitsTextSize = 18.sp.toInt()
-        private val persianDigitsTextSize = 25.sp.toInt()
-
         override fun onClick(v: View) {
             val itemDayView = (v as? DayView).debugAssertNotNull ?: return
             val jdn = itemDayView.jdn ?: return
@@ -108,7 +100,9 @@ class DaysAdapter(
                     val row = position / 8
                     if (row in 1..weeksCount) {
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
-                        dayView.setNonDayOfMonthItem(weekNumber, weekNumberTextSize)
+                        dayView.setNonDayOfMonthItem(
+                            weekNumber, sharedDayViewData.weekNumberTextSize
+                        )
                         dayView.contentDescription = if (isTalkBackEnabled)
                             context.getString(R.string.nth_week_of_year, weekNumber)
                         else weekNumber
@@ -129,7 +123,7 @@ class DaysAdapter(
                 val weekDayInitial = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position))
                 dayView.setNonDayOfMonthItem(
                     getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position)),
-                    weekDaysInitialTextSize
+                    sharedDayViewData.weekDaysInitialTextSize
                 )
 
                 dayView.contentDescription = if (isTalkBackEnabled)
@@ -155,7 +149,7 @@ class DaysAdapter(
                         events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
                         isWeekEnd((day + startingDayOfWeek - days[0]) % 7) || events.any { it.isHoliday },
-                        if (isArabicDigit) arabicDigitsTextSize else persianDigitsTextSize,
+                        sharedDayViewData.digitsTextSize,
                         day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
 

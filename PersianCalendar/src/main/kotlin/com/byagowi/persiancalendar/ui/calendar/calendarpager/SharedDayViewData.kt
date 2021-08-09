@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
+import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
 class SharedDayViewData(context: Context) {
 
@@ -59,6 +60,10 @@ class SharedDayViewData(context: Context) {
     val layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT, 40.sp.toInt()
     )
+
+    val weekNumberTextSize = 12.sp.toInt()
+    val weekDaysInitialTextSize = 20.sp.toInt()
+    val digitsTextSize = if (isArabicDigitSelected()) 18.sp.toInt() else 25.sp.toInt()
 
     val selectableItemBackground = TypedValue().also {
         context.theme.resolveAttribute(
