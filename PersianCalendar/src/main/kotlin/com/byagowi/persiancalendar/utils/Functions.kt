@@ -52,12 +52,9 @@ fun initUtils(context: Context) {
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
-fun isArabicDigitSelected(): Boolean = when (preferredDigits) {
-    ARABIC_DIGITS -> true
-    else -> false
-}
+val isArabicDigitSelected: Boolean get() = preferredDigits === ARABIC_DIGITS
 
-fun goForWorker(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+val goForWorker: Boolean get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
 fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
     formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)
@@ -75,20 +72,21 @@ else when (language) {
     else -> "%s %s %s"
 }.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
 
-fun isNonArabicScriptSelected() = when (language) {
-    LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> true
-    else -> false
-}
+val isNonArabicScriptSelected
+    get() = when (language) {
+        LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> true
+        else -> false
+    }
 
 fun formatNumber(number: Double): String {
-    if (isArabicDigitSelected()) return number.toString()
+    if (isArabicDigitSelected) return number.toString()
     return formatNumber(number.toString()).replace(".", "٫") // U+066B, Arabic Decimal Separator
 }
 
 fun formatNumber(number: Int): String = formatNumber(number.toString())
 
 fun formatNumber(number: String): String {
-    if (isArabicDigitSelected()) return number
+    if (isArabicDigitSelected) return number
     return number.map { preferredDigits.getOrNull(Character.getNumericValue(it)) ?: it }
         .joinToString("")
 }
@@ -110,7 +108,7 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
 fun loadApp(context: Context) = runCatching {
-    if (goForWorker()) return@runCatching
+    if (goForWorker) return@runCatching
     val alarmManager = context.getSystemService<AlarmManager>() ?: return@runCatching
 
     val startTime = Calendar.getInstance().apply {
@@ -378,7 +376,7 @@ fun setChangeDateWorker(context: Context) {
 fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNotEmpty() }
 
 fun startEitherServiceOrWorker(context: Context) {
-    if (goForWorker()) {
+    if (goForWorker) {
         runCatching {
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 UPDATE_TAG, ExistingPeriodicWorkPolicy.REPLACE,

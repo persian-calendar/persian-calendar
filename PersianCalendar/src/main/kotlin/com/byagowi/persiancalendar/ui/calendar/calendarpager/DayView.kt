@@ -53,7 +53,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             else -> shared.colorTextDayName
         }
         val textToMeasureHeight =
-            if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
+            if (isNumber) text else if (isNonArabicScriptSelected) "Y" else "شچ"
         shared.textPaint.getTextBounds(
             textToMeasureHeight, 0, textToMeasureHeight.length, textBounds
         )

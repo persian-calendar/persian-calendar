@@ -63,7 +63,7 @@ class SharedDayViewData(context: Context) {
 
     val weekNumberTextSize = 12.sp.toInt()
     val weekDaysInitialTextSize = 20.sp.toInt()
-    val digitsTextSize = if (isArabicDigitSelected()) 18.sp.toInt() else 25.sp.toInt()
+    val digitsTextSize = if (isArabicDigitSelected) 18.sp.toInt() else 25.sp.toInt()
 
     val selectableItemBackground = TypedValue().also {
         context.theme.resolveAttribute(

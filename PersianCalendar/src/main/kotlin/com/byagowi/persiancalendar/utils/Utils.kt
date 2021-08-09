@@ -441,7 +441,7 @@ fun updateStoredPreference(context: Context) {
 
     spacedComma = when {
         language == LANG_JA -> "、"
-        isNonArabicScriptSelected() -> ", "
+        isNonArabicScriptSelected -> ", "
         else -> "، "
     }
     spacedColon = when (language) {
