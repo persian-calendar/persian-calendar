@@ -100,9 +100,7 @@ class DaysAdapter(
                     val row = position / 8
                     if (row in 1..weeksCount) {
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
-                        dayView.setNonDayOfMonthItem(
-                            weekNumber, sharedDayViewData.weekNumberTextSize
-                        )
+                        dayView.setWeekOfYearNumber(weekNumber)
                         dayView.contentDescription = if (isTalkBackEnabled)
                             context.getString(R.string.nth_week_of_year, weekNumber)
                         else weekNumber
@@ -121,9 +119,8 @@ class DaysAdapter(
                 setEmpty()
             } else if (position < 7) {
                 val weekDayInitial = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position))
-                dayView.setNonDayOfMonthItem(
-                    getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position)),
-                    sharedDayViewData.weekDaysInitialTextSize
+                dayView.setInitialOfWeekDay(
+                    getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position))
                 )
 
                 dayView.contentDescription = if (isTalkBackEnabled)
@@ -149,7 +146,6 @@ class DaysAdapter(
                         events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
                         isWeekEnd((day + startingDayOfWeek - days[0]) % 7) || events.any { it.isHoliday },
-                        sharedDayViewData.digitsTextSize,
                         day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
 
