@@ -97,6 +97,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    bundle {
+        language {
+            // We have in app locale change and don't want Google Play's dependency so better
+            // to disable this.
+            enableSplit = false
+        }
+    }
 }
 
 tasks.withType<KotlinCompile> {
