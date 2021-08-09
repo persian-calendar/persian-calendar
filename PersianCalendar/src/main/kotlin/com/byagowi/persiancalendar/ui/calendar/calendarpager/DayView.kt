@@ -4,14 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
-import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
@@ -19,47 +15,6 @@ import com.byagowi.persiancalendar.utils.otherCalendars
 import kotlin.math.min
 
 class DayView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
-
-    private val colorHoliday = context.resolveColor(R.attr.colorHoliday)
-    private val colorHolidaySelected = context.resolveColor(R.attr.colorHolidaySelected)
-
-    // private val colorTextHoliday = context.resolveColor(R.attr.colorTextHoliday)
-    private val colorTextDay = context.resolveColor(R.attr.colorTextDay)
-    private val colorTextDaySelected = context.resolveColor(R.attr.colorTextDaySelected)
-
-    // private val colorTextToday = context.resolveColor(R.attr.colorTextToday)
-    private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
-
-    private val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = context.resolveColor(com.google.android.material.R.attr.colorSecondary)
-    }
-    private val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        color = context.resolveColor(R.attr.colorEventIndicator)
-    }
-    private val eventYOffset = 7.sp
-    private val eventIndicatorRadius = 2.sp
-    private val eventIndicatorsGap = 2.sp
-    private val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
-    private val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
-        color = context.resolveColor(R.attr.colorSelectDay)
-    }
-    private val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.STROKE
-        strokeWidth = 1.dp
-        color = context.resolveColor(R.attr.colorCurrentDay)
-    }
-    private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textAlign = Paint.Align.CENTER
-    }
-    private val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        textAlign = Paint.Align.CENTER
-    }
-
-    fun setTextTypeface(typeface: Typeface) {
-        textPaint.typeface = typeface
-        headerTextPaint.typeface = typeface
-    }
 
     private var text = ""
     private var today = false
@@ -72,48 +27,61 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         private set
     private var isNumber = false
     private var header = ""
+    private var textSize = 0
+
+    var sharedDayViewData: SharedDayViewData? = null
 
     private val textBounds = Rect()
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        val shared = sharedDayViewData ?: return
+        shared.textPaint.textSize = textSize.toFloat()
+        shared.headerTextPaint.textSize = textSize / 2f
 
         // Draw circle around day
         val radius = min(width, height) / 2f
-        if (dayIsSelected) canvas.drawCircle(width / 2f, height / 2f, radius - 5, selectedPaint)
-        if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, todayPaint)
+        if (dayIsSelected)
+            canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.selectedPaint)
+        if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.todayPaint)
 
         // Draw day number/label
-        textPaint.color = when {
-            isNumber && holiday && dayIsSelected -> colorHolidaySelected
-            isNumber && holiday && !dayIsSelected -> colorHoliday
-            isNumber && !holiday && dayIsSelected -> colorTextDaySelected
-            isNumber && !holiday && !dayIsSelected -> colorTextDay
-            else -> colorTextDayName
+        shared.textPaint.color = when {
+            isNumber && holiday && dayIsSelected -> shared.colorHolidaySelected
+            isNumber && holiday && !dayIsSelected -> shared.colorHoliday
+            isNumber && !holiday && dayIsSelected -> shared.colorTextDaySelected
+            isNumber && !holiday && !dayIsSelected -> shared.colorTextDay
+            else -> shared.colorTextDayName
         }
         val textToMeasureHeight =
             if (isNumber) text else if (isNonArabicScriptSelected()) "Y" else "شچ"
-        textPaint.getTextBounds(textToMeasureHeight, 0, textToMeasureHeight.length, textBounds)
+        shared.textPaint.getTextBounds(
+            textToMeasureHeight, 0, textToMeasureHeight.length, textBounds
+        )
         val yPos = (height + textBounds.height()) / 2f
-        canvas.drawText(text, width / 2f, yPos, textPaint)
+        canvas.drawText(text, width / 2f, yPos, shared.textPaint)
 
         // Draw indicators, whether a day has event or appointment
         val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1
         indicators.forEachIndexed { i, paint ->
-            val xOffset = eventIndicatorsCentersDistance *
+            val xOffset = shared.eventIndicatorsCentersDistance *
                     (i - (indicators.size - 1) / 2f) * offsetDirection
             val overrideByTextColor = dayIsSelected ||
                     // use textPaint for holiday event when a11y's high contrast is enabled
-                    (isHighTextContrastEnabled && holiday && paint == eventIndicatorPaint)
+                    (isHighTextContrastEnabled && holiday && paint == shared.eventIndicatorPaint)
             canvas.drawCircle(
-                width / 2f + xOffset, height - eventYOffset, eventIndicatorRadius,
-                if (overrideByTextColor) textPaint else paint
+                width / 2f + xOffset, height - shared.eventYOffset,
+                shared.eventIndicatorRadius, if (overrideByTextColor) shared.textPaint else paint
             )
         }
 
         // Draw day header which is used for shit work
         if (header.isNotEmpty()) {
-            headerTextPaint.color = if (dayIsSelected) colorTextDaySelected else colorTextDay
-            canvas.drawText(header, width / 2f, yPos * 0.87f - textBounds.height(), headerTextPaint)
+            shared.headerTextPaint.color =
+                if (dayIsSelected) shared.colorTextDaySelected else shared.colorTextDay
+            canvas.drawText(
+                header, width / 2f, yPos * 0.87f - textBounds.height(),
+                shared.headerTextPaint
+            )
         }
 
         // Experiment around what happens if we show other calendars day of month
@@ -126,7 +94,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                     formatNumber(it.toCalendar(calendar).dayOfMonth),
                     (width - radius * offset) / 2f,
                     (height + textBounds.height() + radius) / 2f,
-                    headerTextPaint
+                    shared.headerTextPaint
                 )
             }
         }
@@ -146,12 +114,14 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.dayOfMonth = dayOfMonth
         this.isNumber = isNumber
         this.header = header
-        this.indicators = listOf(
-            hasAppointment to appointmentIndicatorPaint,
-            hasEvent to eventIndicatorPaint
-        ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
-        textPaint.textSize = textSize.toFloat()
-        headerTextPaint.textSize = textSize / 2f
+        this.textSize = textSize
+        sharedDayViewData.debugAssertNotNull?.also { shared ->
+            this.indicators = listOf(
+                hasAppointment to shared.appointmentIndicatorPaint,
+                hasEvent to shared.eventIndicatorPaint
+            ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
+            if (isNumber) setBackgroundResource(shared.selectableItemBackground)
+        }
         postInvalidate()
     }
 

@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.GridLayoutManager
@@ -94,21 +92,12 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         override fun getItemCount() = monthsLimit
 
+        private val sharedDayViewData = SharedDayViewData(context)
+
         inner class ViewHolder(val binding: FragmentMonthBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
-            private val selectableItemBackground = TypedValue().also {
-                context.theme.resolveAttribute(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                        android.R.attr.selectableItemBackgroundBorderless
-                    else android.R.attr.selectableItemBackground,
-                    it, true
-                )
-            }.resourceId
-
-            private val daysAdapter = DaysAdapter(
-                binding.root.context, this@CalendarPager, selectableItemBackground
-            )
+            private val daysAdapter = DaysAdapter(context, sharedDayViewData, this@CalendarPager)
 
             var pageRefresh = fun(_: Boolean, _: Jdn?) {}
 

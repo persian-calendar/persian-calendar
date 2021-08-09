@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -29,8 +28,8 @@ import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 
 class DaysAdapter(
-    private val context: Context, private val calendarPager: CalendarPager,
-    private val selectableItemBackground: Int
+    private val context: Context, private val sharedDayViewData: SharedDayViewData,
+    private val calendarPager: CalendarPager
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
     var days = emptyList<Jdn>()
@@ -38,9 +37,6 @@ class DaysAdapter(
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0
 
-    private val dayViewLayoutParams: ViewGroup.LayoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT, 40.sp.toInt()
-    )
     private var monthEvents: DeviceCalendarEventsStore = emptyEventsStore()
     private val isArabicDigit: Boolean = isArabicDigitSelected()
     private var selectedDay = -1
@@ -63,12 +59,10 @@ class DaysAdapter(
         notifyItemChanged(selectedDay)
     }
 
-    private val typeface = getCalendarFragmentFont(context)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-        DayView(parent.context).apply {
-            layoutParams = dayViewLayoutParams
-            setTextTypeface(typeface)
+        DayView(parent.context).also {
+            it.layoutParams = sharedDayViewData.layoutParams
+            it.sharedDayViewData = sharedDayViewData
         }
     )
 
@@ -171,7 +165,6 @@ class DaysAdapter(
                     ) else dayOfMonth.toString()
 
                     dayView.isVisible = true
-                    dayView.setBackgroundResource(selectableItemBackground)
                 } else {
                     setEmpty()
                 }
