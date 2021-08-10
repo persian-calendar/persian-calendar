@@ -96,10 +96,11 @@ class AthanActivity : AppCompatActivity() {
             val isNormalRingerMode = audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL
             // Apply volume setting only if normal ringer mode is set or is Fajr otherwise
             // leave it to system settings
-            if (isNormalRingerMode || isFajr) {
+            if (isNormalRingerMode || isFajr)
                 if (athanVolume != DEFAULT_ATHAN_VOLUME) // Don't change alarm volume if isn't set in-app
                     audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanVolume, 0)
-            } else if (originalVolume == 1) goMute = true // mute if system alarm is set to lowest
+            // Mute if system alarm is set to lowest and it isn't Fajr
+            if (originalVolume == 1 && !isFajr) goMute = true
         }
 
         val customAthanUri = getCustomAthanUri(this)
