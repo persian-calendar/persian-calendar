@@ -24,6 +24,7 @@ fun Fragment.showAthanVolumeDialog() {
     var mediaPlayer: MediaPlayer? = null
 
     val audioManager = context.getSystemService<AudioManager>() ?: return
+    val originalAlarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
     audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
 
     val customAthanUri = getCustomAthanUri(context)
@@ -86,6 +87,7 @@ fun Fragment.showAthanVolumeDialog() {
                     mediaPlayer?.release()
                 }
             }.onFailure(logException)
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, originalAlarmVolume, 0)
         }
         .show()
 }

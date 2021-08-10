@@ -39,6 +39,7 @@ class AthanActivity : AppCompatActivity() {
     private var mediaPlayer: MediaPlayer? = null
     private var alreadyStopped = false
     private var spentSeconds = 0
+    private var originalVolume = -1
     private val stopTask = object : Runnable {
         override fun run() = runCatching {
             spentSeconds += 5
@@ -70,6 +71,12 @@ class AthanActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (originalVolume != -1) getSystemService<AudioManager>()
+            ?.setStreamVolume(AudioManager.STREAM_ALARM, originalVolume, 0)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,20 +87,23 @@ class AthanActivity : AppCompatActivity() {
         lastStart = currentMillis
         //
 
+        val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
+        val isFajr = prayerKey == "FAJR"
+        var goMute = false
+
         getSystemService<AudioManager>()?.let { audioManager ->
-            // Apply volume setting only if normal ringer mode is set otherwise leave it to system settings
-            if (audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL) {
-                audioManager.setStreamVolume(
-                    AudioManager.STREAM_ALARM,
-                    athanVolume.takeIf { it != DEFAULT_ATHAN_VOLUME }
-                        ?: audioManager.getStreamVolume(AudioManager.STREAM_ALARM),
-                    0
-                )
-            }
+            originalVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+            val isNormalRingerMode = audioManager.ringerMode == AudioManager.RINGER_MODE_NORMAL
+            // Apply volume setting only if normal ringer mode is set or is Fajr otherwise
+            // leave it to system settings
+            if (isNormalRingerMode || isFajr) {
+                if (athanVolume != DEFAULT_ATHAN_VOLUME) // Don't change alarm volume if isn't set in-app
+                    audioManager.setStreamVolume(AudioManager.STREAM_ALARM, athanVolume, 0)
+            } else if (originalVolume == 1) goMute = true // mute if system alarm is set to lowest
         }
 
         val customAthanUri = getCustomAthanUri(this)
-        runCatching {
+        if (!goMute) runCatching {
             if (customAthanUri != null) {
                 runCatching {
                     MediaPlayer.create(this, customAthanUri).duration // is in milliseconds
@@ -155,8 +165,6 @@ class AthanActivity : AppCompatActivity() {
                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
             )
         }
-
-        val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
 
         ActivityAthanBinding.inflate(layoutInflater).also { binding ->
             setContentView(binding.root)
