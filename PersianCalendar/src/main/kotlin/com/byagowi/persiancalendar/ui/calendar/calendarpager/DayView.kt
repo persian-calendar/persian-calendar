@@ -42,11 +42,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.todayPaint)
 
         // Draw day number/label
-        shared.dayOfMonthNumberTextPaint.color = when {
-            holiday -> shared.colorHoliday
-            dayIsSelected -> shared.colorTextDaySelected
-            else /*!dayIsSelected*/ -> shared.colorTextDay
-        }
         val textToMeasureHeight =
             if (jdn != null) text else if (isNonArabicScriptSelected) "Y" else "شچ"
         shared.dayOfMonthNumberTextPaint.getTextBounds(
@@ -55,7 +50,11 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         val yPos = (height + textBounds.height()) / 2f
         run {
             val textPaint = when {
-                jdn != null -> shared.dayOfMonthNumberTextPaint
+                jdn != null -> when {
+                    holiday -> shared.dayOfMonthNumberTextHolidayPaint
+                    dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
+                    else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint
+                }
                 isWeekOfYearNumber -> shared.weekNumberTextPaint
                 else -> shared.weekDayInitialsTextPaint
             }
@@ -67,24 +66,23 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         indicators.forEachIndexed { i, paint ->
             val xOffset = shared.eventIndicatorsCentersDistance *
                     (i - (indicators.size - 1) / 2f) * offsetDirection
-            val overrideByTextColor = dayIsSelected ||
-                    // use textPaint for holiday event when a11y's high contrast is enabled
-                    (isHighTextContrastEnabled && holiday && paint == shared.eventIndicatorPaint)
             canvas.drawCircle(
-                width / 2f + xOffset,
-                height - shared.eventYOffset,
-                shared.eventIndicatorRadius,
-                if (overrideByTextColor) shared.dayOfMonthNumberTextPaint else paint
+                width / 2f + xOffset, height - shared.eventYOffset, shared.eventIndicatorRadius,
+                when {
+                    dayIsSelected -> shared.headerTextSelectedPaint
+                    // use textPaint for holiday event when a11y's high contrast is enabled
+                    isHighTextContrastEnabled && holiday && paint == shared.eventIndicatorPaint ->
+                        shared.dayOfMonthNumberTextPaint
+                    else -> paint
+                }
             )
         }
 
         // Draw day header which is used for shit work
         if (header.isNotEmpty()) {
-            shared.headerTextPaint.color =
-                if (dayIsSelected) shared.colorTextDaySelected else shared.colorTextDay
             canvas.drawText(
                 header, width / 2f, yPos * 0.87f - textBounds.height(),
-                shared.headerTextPaint
+                if (dayIsSelected) shared.headerTextSelectedPaint else shared.headerTextPaint
             )
         }
 
