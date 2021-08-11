@@ -43,10 +43,9 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
 
         // Draw day number/label
         shared.dayOfMonthNumberTextPaint.color = when {
-            holiday && dayIsSelected -> shared.colorHolidaySelected
-            holiday && !dayIsSelected -> shared.colorHoliday
-            !holiday && dayIsSelected -> shared.colorTextDaySelected
-            else /*!holiday && !dayIsSelected*/ -> shared.colorTextDay
+            holiday -> shared.colorHoliday
+            dayIsSelected -> shared.colorTextDaySelected
+            else /*!dayIsSelected*/ -> shared.colorTextDay
         }
         val textToMeasureHeight =
             if (jdn != null) text else if (isNonArabicScriptSelected) "Y" else "شچ"

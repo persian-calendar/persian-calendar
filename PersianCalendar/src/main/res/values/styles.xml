@@ -11,7 +11,6 @@
     <attr name="colorTextSecond" format="reference" />
     <attr name="colorTextHoliday" format="reference" />
     <attr name="colorHoliday" format="reference" />
-    <attr name="colorHolidaySelected" format="reference" />
     <attr name="colorTextDrawer" format="reference" />
     <attr name="colorTextDay" format="reference" />
     <attr name="colorTextToday" format="reference" />
@@ -65,7 +64,6 @@
         <item name="colorTextSecond">@color/dark_text_second</item>
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
         <item name="colorHoliday">@color/dark_holiday</item>
-        <item name="colorHolidaySelected">@color/dark_holiday</item>
         <item name="colorTextDrawer">@color/dark_text_drawer</item>
         <item name="colorTextDay">@color/dark_text_day</item>
         <item name="colorTextToday">@color/dark_text_today</item>
@@ -126,7 +124,6 @@
         <item name="colorTextSecond">@color/light_text_second</item>
         <item name="colorTextHoliday">@color/light_text_holiday</item>
         <item name="colorHoliday">@color/light_holiday</item>
-        <item name="colorHolidaySelected">@color/light_holiday</item>
         <item name="colorTextDrawer">@color/light_text_drawer</item>
         <item name="colorTextDay">@color/light_text_day</item>
         <item name="colorTextToday">@color/light_text_today</item>
@@ -188,7 +185,6 @@
         <item name="colorTextSecond">@color/blue_text_second</item>
         <item name="colorTextHoliday">@color/blue_text_holiday</item>
         <item name="colorHoliday">@color/blue_holiday</item>
-        <item name="colorHolidaySelected">@color/blue_holiday</item>
         <item name="colorTextDrawer">@color/blue_text_drawer</item>
         <item name="colorTextDay">@color/blue_text_day</item>
         <item name="colorTextToday">@color/blue_text_today</item>
@@ -252,7 +248,6 @@
         <item name="colorTextSecond">@color/modern_text_second</item>
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
         <item name="colorHoliday">@color/modern_holiday</item>
-        <item name="colorHolidaySelected">@color/modern_holiday</item>
         <item name="colorTextDrawer">@color/modern_text_drawer</item>
         <item name="colorTextDay">@color/modern_text_day</item>
         <item name="colorTextToday">@color/modern_text_today</item>

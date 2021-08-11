@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 class SharedDayViewData(context: Context) {
 
     val colorHoliday = context.resolveColor(R.attr.colorHoliday)
-    val colorHolidaySelected = context.resolveColor(R.attr.colorHolidaySelected)
 
     val colorTextDay = context.resolveColor(R.attr.colorTextDay)
     val colorTextDaySelected = context.resolveColor(R.attr.colorTextDaySelected)
