@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -17,9 +18,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.PREF_ALTITUDE
@@ -51,9 +52,8 @@ import kotlinx.coroutines.flow.onEach
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-fun showGPSLocationDialog(fragment: Fragment) {
-    val activity = fragment.activity ?: return
-
+fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwner) {
+    activity ?: return
     if (ActivityCompat.checkSelfPermission(
             activity, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
@@ -69,12 +69,12 @@ fun showGPSLocationDialog(fragment: Fragment) {
     var countryCode: String? = null
     val binding = GpsLocationDialogBinding.inflate(activity.layoutInflater)
     listOf(binding.cityName, binding.coordinates, binding.coordinatesIso6709, binding.plusLink)
-        .forEach { it.setOnClickListener { _ -> fragment.context.copyToClipboard(it.text) } }
+        .forEach { it.setOnClickListener { _ -> activity.copyToClipboard(it.text) } }
 
     // This is preference fragment view lifecycle but ideally we should've used
     // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
     // won't give it to us probably because AlertDialog isn't fragment based
-    val viewLifeCycle = fragment.viewLifecycleOwner.lifecycleScope
+    val viewLifecycleScope = viewLifecycleOwner.lifecycleScope
 
     val distinctCoordinatesFlow = coordinatesFlow
         .filterNotNull()
@@ -99,12 +99,12 @@ fun showGPSLocationDialog(fragment: Fragment) {
         }
         .flowOn(Dispatchers.Main.immediate)
         .catch { logException(it) }
-        .launchIn(viewLifeCycle)
+        .launchIn(viewLifecycleScope)
 
     val updateGeocoderResultJob = distinctCoordinatesFlow
         .mapNotNull { coordinates ->
             runCatching {
-                val result = Geocoder(fragment.context, Locale(language))
+                val result = Geocoder(activity, Locale(language))
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()
                 countryCode = result?.countryCode
@@ -122,7 +122,7 @@ fun showGPSLocationDialog(fragment: Fragment) {
         }
         .flowOn(Dispatchers.Main.immediate)
         .catch { logException(it) }
-        .launchIn(viewLifeCycle)
+        .launchIn(viewLifecycleScope)
 
     val locationManager = activity.getSystemService<LocationManager>() ?: return
 
@@ -184,8 +184,8 @@ fun showGPSLocationDialog(fragment: Fragment) {
     val lifeCycleObserver = LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) dialog.dismiss()
     }
-    // This is fragment's lifecycle
-    fragment.lifecycle.addObserver(lifeCycleObserver)
+
+    viewLifecycleOwner.lifecycle.addObserver(lifeCycleObserver)
     dialog.setOnDismissListener {
         logDebug("GPSLocationDialog", "Dialog is dismissed")
         coordinatesFlow.value?.let { coordinate ->
@@ -212,7 +212,7 @@ fun showGPSLocationDialog(fragment: Fragment) {
         ) locationManager.removeUpdates(locationListener)
 
         handler.removeCallbacks(checkGPSProviderCallback)
-        fragment.lifecycle.removeObserver(lifeCycleObserver)
+        viewLifecycleOwner.lifecycle.removeObserver(lifeCycleObserver)
 
         // This wasn't necessary if we had a proper view lifecycle scope, yet, this is more
         // preferred than going for a fragment based dialog for now.

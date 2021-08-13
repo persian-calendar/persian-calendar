@@ -51,7 +51,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.location) {
-                clickable(onClick = { showGPSLocationDialog(this@LocationAthanFragment) }) {
+                clickable(onClick = { showGPSLocationDialog(activity, viewLifecycleOwner) }) {
                     title(R.string.gps_location)
                     summary(R.string.gps_location_help)
                 }
