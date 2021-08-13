@@ -73,11 +73,10 @@ class AboutFragment : Fragment() {
 
         // app
         val version = buildSpannedString {
-            scale(1f) { bold { append(getString(R.string.app_name)) } }
-            append("\n")
+            scale(1f) { bold { appendLine(getString(R.string.app_name)) } }
             scale(.8f) { append(getString(R.string.version, appVersionList.joinToString("-"))) }
             if (isUserAbleToReadPersian) {
-                append("\n")
+                appendLine()
                 scale(.8f) {
                     append(
                         getString(

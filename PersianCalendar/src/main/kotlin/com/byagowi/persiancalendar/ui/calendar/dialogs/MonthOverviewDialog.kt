@@ -1,18 +1,18 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.MonthOverviewDialogBinding
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
@@ -23,9 +23,10 @@ import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.persiancalendar.calendar.AbstractDate
 
-fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
+fun showMonthOverviewDialog(context: Context, date: AbstractDate) {
     val baseJdn = Jdn(date)
-    val deviceEvents = (context ?: return).readMonthDeviceEvents(baseJdn)
+    val deviceEvents = context.readMonthDeviceEvents(baseJdn)
+    val colorTextHoliday = context.resolveColor(R.attr.colorTextHoliday)
     val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
         val jdn = baseJdn + it
         val events = deviceEvents.getEvents(jdn)
@@ -38,33 +39,26 @@ fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
             insertRLM = false, addIsHoliday = false
         )
         if (holidays.isEmpty() && nonHolidays.isEmpty()) null
-        else MonthOverviewRecord(
-            dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)), holidays, nonHolidays
-        )
-    }.takeIf { it.isNotEmpty() } ?: listOf(
-        MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
-    )
+        else dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)) to buildSpannedString {
+            if (holidays.isNotEmpty()) color(colorTextHoliday) { append(holidays) }
+            if (nonHolidays.isNotEmpty()) {
+                if (holidays.isNotEmpty()) appendLine()
+                append(nonHolidays)
+            }
+        }
+    }.takeIf { it.isNotEmpty() } ?: listOf(context.getString(R.string.warn_if_events_not_set) to "")
 
-    BottomSheetDialog(layoutInflater.context, R.style.BottomSheetDialog).also { dialog ->
+    BottomSheetDialog(context, R.style.BottomSheetDialog).also { dialog ->
         dialog.setContentView(
-            MonthOverviewDialogBinding.inflate(layoutInflater).also { binding ->
-                binding.recyclerView.also {
-                    it.layoutManager = LinearLayoutManager(context)
-                    it.adapter = MonthOverviewItemAdapter(events)
-                }
-            }.root
+            RecyclerView(context).also {
+                it.layoutManager = LinearLayoutManager(context)
+                it.adapter = MonthOverviewItemAdapter(events)
+            }
         )
     }.show()
 }
 
-private class MonthOverviewRecord(
-    val title: String, val holidays: String, val nonHolidays: String
-) {
-    override fun toString() = listOf(title, holidays, nonHolidays)
-        .filter { it.isNotEmpty() }.joinToString("\n")
-}
-
-private class MonthOverviewItemAdapter(private val rows: List<MonthOverviewRecord>) :
+private class MonthOverviewItemAdapter(private val rows: List<Pair<String, CharSequence>>) :
     RecyclerView.Adapter<MonthOverviewItemAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -82,16 +76,12 @@ private class MonthOverviewItemAdapter(private val rows: List<MonthOverviewRecor
             binding.root.setOnClickListener(this)
         }
 
-        fun bind(position: Int) = binding.let {
-            val record = rows[position]
-            it.title.text = record.title
-            it.holidays.text = record.holidays
-            it.holidays.isVisible = record.holidays.isNotEmpty()
-            it.nonHolidays.text = record.nonHolidays
-            it.nonHolidays.isVisible = record.nonHolidays.isNotEmpty()
+        fun bind(position: Int) = rows[position].let { (title, body) ->
+            binding.title.text = title
+            binding.body.text = body
         }
 
-        override fun onClick(v: View?) =
-            v?.context.copyToClipboard(rows[bindingAdapterPosition].toString())
+        override fun onClick(v: View?) = v?.context.copyToClipboard(rows[bindingAdapterPosition]
+            .let { (title, body) -> listOf(title, body).joinToString("\n") })
     }
 }

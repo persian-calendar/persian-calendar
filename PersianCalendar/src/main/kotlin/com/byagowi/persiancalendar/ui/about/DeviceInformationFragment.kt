@@ -480,7 +480,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
                     val extensions = GLES20.glGetString(GLES20.GL_EXTENSIONS).trim().split(" ")
                     val regex = Regex("GL_([a-zA-Z]+)_(.+)")
                     extensions.forEachIndexed { i, it ->
-                        if (i != 0) append("\n")
+                        if (i != 0) appendLine()
 
                         if (!regex.matches(it)) append(it)
                         else inSpans(object : ClickableSpan() {

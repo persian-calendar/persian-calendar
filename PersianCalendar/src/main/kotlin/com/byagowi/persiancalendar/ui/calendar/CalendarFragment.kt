@@ -333,7 +333,7 @@ class CalendarFragment : Fragment() {
 
     private fun getDeviceEventsTitle(dayEvents: List<CalendarEvent<*>>) = buildSpannedString {
         dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>().forEachIndexed { i, event ->
-            if (i != 0) append("\n")
+            if (i != 0) appendLine()
             inSpans(object : ClickableSpan() {
                 override fun onClick(textView: View) = runCatching {
                     viewEvent.launch(event.id.toLong())
@@ -560,7 +560,7 @@ class CalendarFragment : Fragment() {
         }
         toolbar.menu.add(R.string.month_overview).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showMonthOverviewDialog(calendarPager.selectedMonth) }
+            it.onClick { showMonthOverviewDialog(context, calendarPager.selectedMonth) }
         }
     }
 }

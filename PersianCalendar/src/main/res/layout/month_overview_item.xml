@@ -25,14 +25,7 @@
             tools:text="Title" />
 
         <TextView
-            android:id="@+id/holidays"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorTextHoliday"
-            tools:text="Content" />
-
-        <TextView
-            android:id="@+id/non_holidays"
+            android:id="@+id/body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="?attr/colorTextNormal"
