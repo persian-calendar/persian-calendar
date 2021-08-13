@@ -528,23 +528,11 @@ class MainLogicTests {
         listOf(
             // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
             listOf(2020, 3, 20, 7, 20/*should be 19*/, 43/* should be 37*/),
-
-            // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
             listOf(2019, 3, 21, 1, 28, 13/*should be 27*/),
-
-            // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201397-Full.pdf
             listOf(2018, 3, 20, 19, 45, 53/*should be 28*/),
-
-            // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201396-Full.pdf
             listOf(2017, 3, 20, 13, 59/*should be 58*/, 38/*should be 40*/),
-
-            // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201395-Full.pdf
             listOf(2016, 3, 20, 8, 0, 55/*should be 12*/),
-
-            // http://vetmed.uk.ac.ir/documents/203998/204600/calendar-1394.pdf
             listOf(2015, 3, 21, 2, 16/*should be 15*/, 0/*should be 11*/),
-
-            // https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-jalali-data.txt
             listOf(2014, 3, 20, 20, 27, 41/*should be 7*/),
             listOf(2013, 3, 20, 14, 32/*should be 31*/, 41/*should be 56*/),
             listOf(2012, 3, 20, 8, 44, 19/*should be 27*/),

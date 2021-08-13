@@ -143,10 +143,10 @@ object AstroLib {
      * based on Universal Time[1] (UT). In order to convert eclipse predictions
      * from TD to UT, the difference between these two time scales must be
      * known. The parameter delta-T (ΔT) is the arithmetic difference, in
-     * seconds, between the two as: <A HREF="http://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html">DELTA T
+     * seconds, between the two as: <A HREF="https://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html">DELTA T
      * (ΔT)</A>.
      *
-     * http://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html
+     * https://eclipse.gsfc.nasa.gov/SEcat5/deltatpoly.html
      *
      *
      * @param jd is the Astrolib Day

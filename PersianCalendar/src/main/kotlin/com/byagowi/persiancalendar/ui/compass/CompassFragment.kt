@@ -44,7 +44,7 @@ class CompassFragment : Fragment() {
         /*
          * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
          * value basically means more smoothing See:
-         * http://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
+         * https://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
          */
         val ALPHA = 0.15f
         var azimuth: Float = 0f
@@ -63,7 +63,7 @@ class CompassFragment : Fragment() {
 
         /**
          * https://en.wikipedia.org/wiki/Low-pass_filter#Algorithmic_implementation
-         * http://developer.android.com/reference/android/hardware/SensorEvent.html#values
+         * https://developer.android.com/reference/android/hardware/SensorEvent.html#values
          */
         private fun lowPass(input: Float, output: Float): Float = when {
             abs(180 - input) > 170 -> input
