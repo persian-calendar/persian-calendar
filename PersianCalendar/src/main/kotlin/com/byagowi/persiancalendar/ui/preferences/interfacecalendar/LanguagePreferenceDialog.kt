@@ -1,9 +1,9 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.LANG_AR
@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 
-fun Fragment.showLanguagePreferenceDialog() {
+fun showLanguagePreferenceDialog(context: Context) {
     val languages = listOf(
         LANG_FA to "فارسی",
         LANG_FA_AF to "دری",
@@ -48,11 +48,11 @@ fun Fragment.showLanguagePreferenceDialog() {
     )
     val languageKeys = languages.map { it.first }
     val languageNames = languages.map { it.second }.toTypedArray()
-    AlertDialog.Builder(layoutInflater.context)
+    AlertDialog.Builder(context)
         .setTitle(R.string.language)
         .setSingleChoiceItems(languageNames, languageKeys.indexOf(language)) { dialog, which ->
             val chosenLanguage = languageKeys[which]
-            if (language != chosenLanguage) context?.appPrefs?.changeLanguage(chosenLanguage)
+            if (language != chosenLanguage) changeLanguage(context.appPrefs, chosenLanguage)
             dialog.cancel()
         }
         .setNegativeButton(R.string.cancel, null)
@@ -60,7 +60,7 @@ fun Fragment.showLanguagePreferenceDialog() {
 }
 
 // Preferences changes be applied automatically when user requests a language change
-private fun SharedPreferences.changeLanguage(language: String) = edit {
+private fun changeLanguage(prefs: SharedPreferences, language: String) = prefs.edit {
     putString(PREF_APP_LANGUAGE, language)
 
     when (language) {
@@ -69,13 +69,13 @@ private fun SharedPreferences.changeLanguage(language: String) = edit {
 
     when (language) {
         LANG_FA_AF, LANG_PS -> {
-            val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+            val currentHolidays = prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
             if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
                 "iran_holidays" in currentHolidays
             ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
         }
         LANG_AZB, LANG_GLK, LANG_FA, LANG_EN_IR -> {
-            val currentHolidays = getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
+            val currentHolidays = prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
             if (currentHolidays.isEmpty() || currentHolidays.size == 1
                 && "afghanistan_holidays" in currentHolidays
             ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))

@@ -1,8 +1,11 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
 import android.Manifest
+import android.animation.ValueAnimator
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
@@ -47,12 +50,13 @@ import com.byagowi.persiancalendar.utils.language
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        val context = context ?: return
         val destination = arguments?.getString(PREF_DESTINATION)
-        if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog()
+        if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(context)
 
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.pref_interface) {
-                clickable(onClick = { showLanguagePreferenceDialog() }) {
+                clickable(onClick = { showLanguagePreferenceDialog(context) }) {
                     if (destination == PREF_APP_LANGUAGE) {
                         title = "Language"
                         icon = context.getCompatDrawable(R.drawable.ic_translator)
@@ -85,7 +89,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
             section(R.string.calendar) {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 6
-                clickable(onClick = { showHolidaysTypesDialog() }) {
+                clickable(onClick = { showHolidaysTypesDialog(context) }) {
                     title(R.string.events)
                     summary(R.string.events_summary)
                 }
@@ -106,7 +110,20 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                         false
                     }
                 }
-                clickable(onClick = { showCalendarPreferenceDialog() }) {
+                clickable(onClick = {
+                    showCalendarPreferenceDialog(context) {
+                        // Easter egg when all items are swiped
+                        val view = activity?.findViewById<View?>(android.R.id.content)
+                            ?: return@showCalendarPreferenceDialog
+                        ValueAnimator.ofFloat(0f, 360f).also {
+                            it.duration = 3000L
+                            it.interpolator = AccelerateDecelerateInterpolator()
+                            it.addUpdateListener { value ->
+                                view.rotation = value.animatedValue as Float
+                            }
+                        }.start()
+                    }
+                }) {
                     title(R.string.calendars_priority)
                     summary(R.string.calendars_priority_summary)
                 }

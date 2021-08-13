@@ -31,20 +31,22 @@ class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
                 clickable(onClick = {
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
                     val jdn = activity?.appPrefs?.getJdnOrNull(key) ?: Jdn.today
-                    showDayPickerDialog(jdn, R.string.accept) { result ->
+                    showDayPickerDialog(context, jdn, R.string.accept) { result ->
                         activity?.appPrefs?.edit { putJdn(key, result) }
                     }
-                }) {
-                    title(R.string.select_date)
-                }
+                }) { title(R.string.select_date) }
                 clickable(onClick = {
-                    showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId)
+                    showColorPickerDialog(
+                        context, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
+                    )
                 }) {
                     title(R.string.widget_text_color)
                     summary(R.string.select_widgets_text_color)
                 }
                 clickable(onClick = {
-                    showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId)
+                    showColorPickerDialog(
+                        context, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId
+                    )
                 }) {
                     title(R.string.widget_background_color)
                     summary(R.string.select_widgets_background_color)

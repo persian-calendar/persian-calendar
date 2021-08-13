@@ -51,8 +51,8 @@ import kotlinx.coroutines.flow.onEach
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-fun Fragment.showGPSLocationDialog() {
-    val activity = activity ?: return
+fun showGPSLocationDialog(fragment: Fragment) {
+    val activity = fragment.activity ?: return
 
     if (ActivityCompat.checkSelfPermission(
             activity, Manifest.permission.ACCESS_FINE_LOCATION
@@ -69,12 +69,12 @@ fun Fragment.showGPSLocationDialog() {
     var countryCode: String? = null
     val binding = GpsLocationDialogBinding.inflate(activity.layoutInflater)
     listOf(binding.cityName, binding.coordinates, binding.coordinatesIso6709, binding.plusLink)
-        .forEach { it.setOnClickListener { _ -> context.copyToClipboard(it.text) } }
+        .forEach { it.setOnClickListener { _ -> fragment.context.copyToClipboard(it.text) } }
 
     // This is preference fragment view lifecycle but ideally we should've used
     // dialog's view lifecycle which resultTextView.findViewTreeLifecycleOwner()
     // won't give it to us probably because AlertDialog isn't fragment based
-    val viewLifeCycle = this.viewLifecycleOwner.lifecycleScope
+    val viewLifeCycle = fragment.viewLifecycleOwner.lifecycleScope
 
     val distinctCoordinatesFlow = coordinatesFlow
         .filterNotNull()
@@ -104,7 +104,7 @@ fun Fragment.showGPSLocationDialog() {
     val updateGeocoderResultJob = distinctCoordinatesFlow
         .mapNotNull { coordinates ->
             runCatching {
-                val result = Geocoder(context, Locale(language))
+                val result = Geocoder(fragment.context, Locale(language))
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()
                 countryCode = result?.countryCode
@@ -185,7 +185,7 @@ fun Fragment.showGPSLocationDialog() {
         if (event == Lifecycle.Event.ON_PAUSE) dialog.dismiss()
     }
     // This is fragment's lifecycle
-    lifecycle.addObserver(lifeCycleObserver)
+    fragment.lifecycle.addObserver(lifeCycleObserver)
     dialog.setOnDismissListener {
         logDebug("GPSLocationDialog", "Dialog is dismissed")
         coordinatesFlow.value?.let { coordinate ->
@@ -212,7 +212,7 @@ fun Fragment.showGPSLocationDialog() {
         ) locationManager.removeUpdates(locationListener)
 
         handler.removeCallbacks(checkGPSProviderCallback)
-        lifecycle.removeObserver(lifeCycleObserver)
+        fragment.lifecycle.removeObserver(lifeCycleObserver)
 
         // This wasn't necessary if we had a proper view lifecycle scope, yet, this is more
         // preferred than going for a fragment based dialog for now.

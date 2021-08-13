@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar.ui.preferences.shared
 
+import android.content.Context
 import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.view.setPadding
-import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
@@ -12,18 +12,18 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.*
 
-fun Fragment.showColorPickerDialog(isBackgroundPick: Boolean, key: String) {
-    val initialColor = activity?.appPrefs?.getString(key, null)
+fun showColorPickerDialog(context: Context, isBackgroundPick: Boolean, key: String) {
+    val initialColor = context.appPrefs.getString(key, null)
         ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-    showColorPickerDialog(isBackgroundPick, initialColor) { colorResult ->
-        activity?.appPrefs?.edit { putString(key, colorResult) }
+    showColorPickerDialog(context, isBackgroundPick, initialColor) { colorResult ->
+        context.appPrefs.edit { this.putString(key, colorResult) }
     }
 }
 
-private fun Fragment.showColorPickerDialog(
-    isBackgroundPick: Boolean, initialColor: String, onResult: (String) -> Unit
+private fun showColorPickerDialog(
+    context: Context, isBackgroundPick: Boolean, initialColor: String, onResult: (String) -> Unit
 ) {
-    val colorPickerView = ColorPickerView(layoutInflater.context).also {
+    val colorPickerView = ColorPickerView(context).also {
         it.setColorsToPick(
             if (isBackgroundPick) listOf(0x00000000L, 0x20000000L, 0x50000000L, 0xFF000000L)
             else listOf(0xFFFFFFFFL, 0xFFE65100L, 0xFF00796bL, 0xFFFEF200L, 0xFF202020L)
@@ -32,7 +32,7 @@ private fun Fragment.showColorPickerDialog(
         it.setPickedColor(Color.parseColor(initialColor))
         it.setPadding(10.dp.toInt())
     }
-    AlertDialog.Builder(layoutInflater.context)
+    AlertDialog.Builder(context)
         .setTitle(if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color)
         .setView(colorPickerView)
         .setPositiveButton(R.string.accept) { _, _ ->

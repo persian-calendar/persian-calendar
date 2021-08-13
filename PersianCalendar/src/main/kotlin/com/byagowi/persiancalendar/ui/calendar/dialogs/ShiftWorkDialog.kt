@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
+import android.content.Context
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
@@ -10,8 +11,6 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -22,9 +21,7 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -37,14 +34,14 @@ import com.byagowi.persiancalendar.utils.shiftWorks
 import com.byagowi.persiancalendar.utils.spacedComma
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
-fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
+fun showShiftWorkDialog(context: Context, selectedJdn: Jdn, onSuccess: () -> Unit) {
     var isFirstSetup = false
     var jdn = shiftWorkStartingJdn ?: run {
         isFirstSetup = true
         selectedJdn
     }
 
-    val binding = ShiftWorkSettingsBinding.inflate(layoutInflater, null, false)
+    val binding = ShiftWorkSettingsBinding.inflate(context.layoutInflater, null, false)
     binding.recyclerView.layoutManager = LinearLayoutManager(context)
     val shiftWorkItemAdapter = ShiftWorkItemsAdapter(
         if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("d", 0)) else shiftWorks,
@@ -52,7 +49,7 @@ fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
     )
     binding.recyclerView.adapter = shiftWorkItemAdapter
 
-    binding.description.text = getString(
+    binding.description.text = context.getString(
         if (isFirstSetup) R.string.shift_work_starting_date
         else R.string.shift_work_starting_date_edit,
         formatDate(jdn.toCalendar(mainCalendar))
@@ -60,29 +57,29 @@ fun Fragment.showShiftWorkDialog(selectedJdn: Jdn) {
 
     binding.resetLink.setOnClickListener {
         jdn = selectedJdn
-        binding.description.text =
-            getString(R.string.shift_work_starting_date, formatDate(jdn.toCalendar(mainCalendar)))
+        binding.description.text = context.getString(
+            R.string.shift_work_starting_date, formatDate(jdn.toCalendar(mainCalendar))
+        )
         shiftWorkItemAdapter.reset()
     }
     binding.recurs.isChecked = shiftWorkRecurs
     binding.root.onCheckIsTextEditor()
 
-    AlertDialog.Builder(layoutInflater.context)
+    AlertDialog.Builder(context)
         .setView(binding.root)
-        .setTitle(null)
         .setPositiveButton(R.string.accept) { _, _ ->
             val result = shiftWorkItemAdapter.rows.filter { it.length != 0 }.joinToString(",") {
                 "${it.type.replace("=", "").replace(",", "")}=${it.length}"
             }
 
-            this.context?.appPrefs?.edit {
+            context.appPrefs.edit {
                 putJdn(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) null else jdn)
                 putString(PREF_SHIFT_WORK_SETTING, result)
                 putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
             }
 
-            updateStoredPreference(this.context ?: return@setPositiveButton)
-            findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
+            updateStoredPreference(context)
+            onSuccess()
         }
         .setNegativeButton(R.string.cancel, null)
         .show()

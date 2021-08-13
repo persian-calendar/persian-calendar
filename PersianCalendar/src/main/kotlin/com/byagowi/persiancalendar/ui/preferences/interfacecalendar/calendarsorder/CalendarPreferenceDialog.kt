@@ -1,9 +1,8 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
-import android.view.View
+import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
@@ -14,8 +13,7 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
-fun Fragment.showCalendarPreferenceDialog() {
-    val context = context ?: return
+fun showCalendarPreferenceDialog(context: Context, onAllItemsSwipped: () -> Unit) {
     var dialog: AlertDialog? = null
 
     updateStoredPreference(context)
@@ -24,17 +22,11 @@ fun Fragment.showCalendarPreferenceDialog() {
         RecyclerListAdapter.Item(title, type.name, type in enabledCalendarTypes)
     }, onAllItemsSwipped = {
         dialog?.dismiss()
-        // Easter egg when all items are swiped
-        val view = activity?.findViewById<View?>(android.R.id.content) ?: return@RecyclerListAdapter
-        android.animation.ValueAnimator.ofFloat(0f, 360f).also {
-            it.duration = 3000L
-            it.interpolator = android.view.animation.AccelerateDecelerateInterpolator()
-            it.addUpdateListener { value -> view.rotation = value.animatedValue as Float }
-        }.start()
+        onAllItemsSwipped()
     })
     val recyclerView = RecyclerView(context).also {
         it.setHasFixedSize(true)
-        it.layoutManager = LinearLayoutManager(activity)
+        it.layoutManager = LinearLayoutManager(context)
         it.adapter = adapter
     }
     adapter.itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -45,7 +37,7 @@ fun Fragment.showCalendarPreferenceDialog() {
         .setNegativeButton(R.string.cancel, null)
         .setPositiveButton(R.string.accept) { _, _ ->
             adapter.result.takeIf { it.isNotEmpty() }?.let { ordering ->
-                this.context?.appPrefs?.edit {
+                context.appPrefs.edit {
                     putString(PREF_MAIN_CALENDAR_KEY, ordering.first())
                     putString(
                         PREF_OTHER_CALENDARS_KEY, ordering.drop(1).joinToString(",")

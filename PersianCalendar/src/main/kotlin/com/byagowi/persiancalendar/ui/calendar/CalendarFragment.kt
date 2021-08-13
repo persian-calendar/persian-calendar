@@ -501,9 +501,10 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setupMenu(toolbar: Toolbar, calendarPager: CalendarPager) {
-        val context = toolbar.context
+        val toolbarContext = toolbar.context // context wrapped with toolbar related theme
+        val context = calendarPager.context // context usable for normal dialogs
 
-        val searchView = SearchView(context).also { searchView = it }
+        val searchView = SearchView(toolbarContext).also { searchView = it }
         searchView.setOnCloseListener {
             onBackPressedCloseSearchCallback.isEnabled = false
             false // don't prevent the event cascade
@@ -536,7 +537,7 @@ class CalendarFragment : Fragment() {
         }
 
         toolbar.menu.add(R.string.return_to_today).also {
-            it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
+            it.icon = toolbarContext.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.isVisible = false
             it.onClick { bringDate(Jdn.today, highlight = false) }
@@ -548,7 +549,11 @@ class CalendarFragment : Fragment() {
         }
         toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showDayPickerDialog(selectedJdn, R.string.go) { jdn -> bringDate(jdn) } }
+            it.onClick {
+                showDayPickerDialog(context, selectedJdn, R.string.go) { jdn ->
+                    bringDate(jdn)
+                }
+            }
         }
         toolbar.menu.add(R.string.add_event).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
@@ -556,7 +561,11 @@ class CalendarFragment : Fragment() {
         }
         toolbar.menu.add(R.string.shift_work_settings).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showShiftWorkDialog(selectedJdn) }
+            it.onClick {
+                showShiftWorkDialog(context, selectedJdn) {
+                    findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                }
+            }
         }
         toolbar.menu.add(R.string.month_overview).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)

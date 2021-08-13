@@ -51,16 +51,16 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.location) {
-                clickable(onClick = { showGPSLocationDialog() }) {
+                clickable(onClick = { showGPSLocationDialog(this@LocationAthanFragment) }) {
                     title(R.string.gps_location)
                     summary(R.string.gps_location_help)
                 }
-                clickable(onClick = { showLocationPreferenceDialog() }) {
+                clickable(onClick = { showLocationPreferenceDialog(context) }) {
                     title(R.string.location)
                     summary(R.string.location_help)
                     this@LocationAthanFragment.selectedLocationPreference = this
                 }
-                clickable(onClick = { showCoordinatesDialog() }) {
+                clickable(onClick = { showCoordinatesDialog(context) }) {
                     title(R.string.coordination)
                     this@LocationAthanFragment.coordinatesPreference = this
                 }
@@ -77,11 +77,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     dialogTitle(R.string.pray_methods_calculation)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
-                clickable(onClick = { showAthanGapDialog() }) {
+                clickable(onClick = { showAthanGapDialog(context) }) {
                     title(R.string.athan_gap)
                     summary(R.string.athan_gap_summary)
                 }
-                clickable(onClick = { showPrayerSelectDialog() }) {
+                clickable(onClick = { showPrayerSelectDialog(context) }) {
                     title(R.string.athan_alarm)
                     summary(R.string.athan_alarm_summary)
                 }
@@ -119,12 +119,14 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     disableDependentsState = true
                     handler.post { dependency = PREF_NOTIFICATION_ATHAN }
                 }
-                clickable(onClick = { showAthanVolumeDialog() }) {
+                clickable(onClick = { showAthanVolumeDialog(context) }) {
                     title(R.string.athan_volume)
                     summary(R.string.athan_volume_summary)
                     handler.post { dependency = PREF_ASCENDING_ATHAN_VOLUME }
                 }
-                clickable(onClick = { showPrayerSelectPreviewDialog() }) { title(R.string.preview) }
+                clickable(onClick = { showPrayerSelectPreviewDialog(context) }) {
+                    title(R.string.preview)
+                }
             }
         }
 
@@ -148,12 +150,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     Settings.System.DEFAULT_NOTIFICATION_URI
                 )
                 .also { intent ->
-                    input?.let {
-                        intent.putExtra(
-                            RingtoneManager.EXTRA_RINGTONE_EXISTING_URI,
-                            it
-                        )
-                    }
+                    input?.let { intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it) }
                 }
 
         override fun parseResult(resultCode: Int, intent: Intent?): String? =

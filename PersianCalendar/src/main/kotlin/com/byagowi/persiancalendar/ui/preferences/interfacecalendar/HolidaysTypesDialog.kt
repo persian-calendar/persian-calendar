@@ -1,25 +1,28 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
+import android.content.Context
 import android.os.Build
 import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.text.HtmlCompat
-import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.appPrefs
 
-fun Fragment.showHolidaysTypesDialog() {
-    val binding = HolidaysTypesDialogBinding.inflate(layoutInflater)
+fun showHolidaysTypesDialog(context: Context) {
+    val binding = HolidaysTypesDialogBinding.inflate(context.layoutInflater)
 
     // Update labels
     listOf(
         binding.iranHolidays, null, binding.iranAncient, binding.iranOthers,
         binding.international, binding.afghanistanHolidays, binding.afghanistanOthers
-    ).zip(resources.getStringArray(R.array.holidays_types)) { view, title -> view?.text = title }
+    ).zip(context.resources.getStringArray(R.array.holidays_types)) { view, title ->
+        view?.text = title
+    }
     // TODO: i18n, maybe
     val pattern = "%s، <a href=\"%s\">مشاهده منبع</a>"
     binding.iran.text = HtmlCompat.fromHtml(
@@ -37,8 +40,7 @@ fun Fragment.showHolidaysTypesDialog() {
     binding.afghanistan.movementMethod = LinkMovementMethod.getInstance()
 
     // Update view from stored settings
-    val initial =
-        context?.appPrefs?.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
+    val initial = context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
     binding.iranHolidays.isChecked = "iran_holidays" in initial
     binding.iranOthers.isChecked = "iran_others" in initial || /*legacy*/ "iran_islamic" in initial
     binding.afghanistanHolidays.isChecked = "afghanistan_holidays" in initial
@@ -76,7 +78,7 @@ fun Fragment.showHolidaysTypesDialog() {
     }
 
     // Run the dialog
-    AlertDialog.Builder(layoutInflater.context)
+    AlertDialog.Builder(context)
         .setTitle(R.string.events)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
@@ -86,7 +88,7 @@ fun Fragment.showHolidaysTypesDialog() {
                 binding.afghanistanOthers to "afghanistan_others",
                 binding.iranAncient to "iran_ancient", binding.international to "international"
             ).mapNotNull { (checkBox, key) -> if (checkBox.isChecked) key else null }.toSet()
-            this.context?.appPrefs?.edit { putStringSet(PREF_HOLIDAY_TYPES, result) }
+            context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, result) }
         }
         .setNegativeButton(R.string.cancel, null)
         .show()

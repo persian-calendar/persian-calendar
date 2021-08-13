@@ -47,13 +47,13 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 5
                 clickable(onClick = {
-                    showColorPickerDialog(false, PREF_SELECTED_WIDGET_TEXT_COLOR)
+                    showColorPickerDialog(context, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }) {
                     title(R.string.widget_text_color)
                     summary(R.string.select_widgets_text_color)
                 }
                 clickable(onClick = {
-                    showColorPickerDialog(true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
+                    showColorPickerDialog(context, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
                 }) {
                     title(R.string.widget_background_color)
                     summary(R.string.select_widgets_background_color)

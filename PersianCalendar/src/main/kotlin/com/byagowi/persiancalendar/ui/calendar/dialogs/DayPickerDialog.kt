@@ -1,16 +1,16 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
+import android.content.Context
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.shared.DayPickerView
 
-fun Fragment.showDayPickerDialog(
-    jdn: Jdn, @StringRes positiveButtonTitle: Int, onSuccess: (jdn: Jdn) -> Unit
+fun showDayPickerDialog(
+    context: Context, jdn: Jdn, @StringRes positiveButtonTitle: Int, onSuccess: (jdn: Jdn) -> Unit
 ) {
-    val dayPickerView = DayPickerView(layoutInflater.context).also { it.jdn = jdn }
-    AlertDialog.Builder(layoutInflater.context)
+    val dayPickerView = DayPickerView(context).also { it.jdn = jdn }
+    AlertDialog.Builder(context)
         .setView(dayPickerView)
         .setPositiveButton(positiveButtonTitle) { _, _ -> dayPickerView.jdn?.also(onSuccess) }
         .show()

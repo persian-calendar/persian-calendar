@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
+import android.content.Context
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
@@ -8,7 +9,6 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -17,8 +17,7 @@ import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import com.byagowi.persiancalendar.utils.logException
 
-fun Fragment.showAthanVolumeDialog() {
-    val context = context ?: return
+fun showAthanVolumeDialog(context: Context) {
     var volume = context.athanVolume
     var ringtone: Ringtone? = null
     var mediaPlayer: MediaPlayer? = null
@@ -76,7 +75,7 @@ fun Fragment.showAthanVolumeDialog() {
         .setTitle(R.string.athan_volume)
         .setView(seekBar)
         .setPositiveButton(R.string.accept) { _, _ ->
-            this.context?.appPrefs?.edit { putInt(PREF_ATHAN_VOLUME, volume) }
+            context.appPrefs.edit { putInt(PREF_ATHAN_VOLUME, volume) }
         }
         .setNegativeButton(R.string.cancel, null)
         .setOnDismissListener {

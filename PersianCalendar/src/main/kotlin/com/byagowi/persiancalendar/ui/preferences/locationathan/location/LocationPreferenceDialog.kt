@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.*
@@ -23,9 +23,9 @@ import com.byagowi.persiancalendar.utils.updateStoredPreference
  * Author: hamidsafdari22@gmail.com
  * Date: 1/17/16
  */
-fun Fragment.showLocationPreferenceDialog() {
-    val recyclerView = RecyclerView(layoutInflater.context)
-    val dialog = AlertDialog.Builder(layoutInflater.context)
+fun showLocationPreferenceDialog(context: Context) {
+    val recyclerView = RecyclerView(context)
+    val dialog = AlertDialog.Builder(context)
         .setTitle(R.string.location)
         .setView(recyclerView)
         .setPositiveButton("", null)
@@ -35,14 +35,14 @@ fun Fragment.showLocationPreferenceDialog() {
     recyclerView.layoutManager = LinearLayoutManager(context)
     recyclerView.adapter = CitiesListAdapter(onItemClicked = { result ->
         dialog.dismiss()
-        layoutInflater.context.appPrefs.edit {
+        context.appPrefs.edit {
             remove(PREF_GEOCODED_CITYNAME)
             remove(PREF_LATITUDE)
             remove(PREF_LONGITUDE)
             remove(PREF_ALTITUDE)
             putString(PREF_SELECTED_LOCATION, result)
         }
-        updateStoredPreference(layoutInflater.context)
+        updateStoredPreference(context)
     })
     dialog.show()
 }
