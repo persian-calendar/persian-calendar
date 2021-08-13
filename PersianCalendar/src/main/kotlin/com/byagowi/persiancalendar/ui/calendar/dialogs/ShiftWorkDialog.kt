@@ -214,6 +214,7 @@ private class ShiftWorkItemsAdapter(
         fun remove() {
             rows = rows.filterIndexed { i, _ -> i != bindingAdapterPosition }
             notifyItemRemoved(bindingAdapterPosition)
+            notifyItemRangeChanged(0, rows.size)
             updateShiftWorkResult()
         }
 
