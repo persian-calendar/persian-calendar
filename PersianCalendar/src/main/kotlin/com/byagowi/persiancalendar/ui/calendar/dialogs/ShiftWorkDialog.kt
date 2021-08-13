@@ -119,8 +119,10 @@ private class ShiftWorkItemsAdapter(
     override fun getItemCount(): Int = rows.size + 1
 
     fun reset() {
+        val previousSize = rows.size
         rows = listOf(ShiftWorkRecord("d", 0))
-        notifyDataSetChanged()
+        notifyItemRangeChanged(0, 2)
+        if (previousSize > 1) notifyItemRangeRemoved(2, previousSize + 1)
         updateShiftWorkResult()
     }
 
@@ -204,14 +206,14 @@ private class ShiftWorkItemsAdapter(
 
             binding.addButton.setOnClickListener {
                 rows = rows + ShiftWorkRecord("r", 0)
-                notifyDataSetChanged()
+                notifyItemInserted(bindingAdapterPosition)
                 updateShiftWorkResult()
             }
         }
 
         fun remove() {
             rows = rows.filterIndexed { i, _ -> i != bindingAdapterPosition }
-            notifyDataSetChanged()
+            notifyItemRemoved(bindingAdapterPosition)
             updateShiftWorkResult()
         }
 
