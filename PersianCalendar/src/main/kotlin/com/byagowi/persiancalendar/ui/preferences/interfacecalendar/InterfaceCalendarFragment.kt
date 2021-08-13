@@ -43,8 +43,8 @@ import com.byagowi.persiancalendar.ui.preferences.singleSelect
 import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
+import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.language
 
@@ -102,7 +102,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                                 activity, Manifest.permission.READ_CALENDAR
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
-                            askForCalendarPermission(activity)
+                            activity.askForCalendarPermission()
                             false
                         } else {
                             !isChecked

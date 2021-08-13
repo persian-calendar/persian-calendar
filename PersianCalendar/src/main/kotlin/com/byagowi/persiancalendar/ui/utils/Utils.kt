@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
+import android.Manifest
 import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -16,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.appcompat.widget.Toolbar
@@ -32,6 +34,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
+import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
@@ -57,14 +61,12 @@ fun Context?.copyToClipboard(
     onSuccess(message)
 }.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 
-fun bringMarketPage(activity: Activity): Unit = runCatching {
-    activity.startActivity(
-        Intent(Intent.ACTION_VIEW, "market://details?id=${activity.packageName}".toUri())
-    )
+fun Activity.bringMarketPage() = runCatching {
+    startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
 }.onFailure(logException).onFailure {
     runCatching {
-        val uri = "https://play.google.com/store/apps/details?id=${activity.packageName}".toUri()
-        activity.startActivity(Intent(Intent.ACTION_VIEW, uri))
+        val uri = "https://play.google.com/store/apps/details?id=$packageName".toUri()
+        startActivity(Intent(Intent.ACTION_VIEW, uri))
     }.onFailure(logException)
 }.let {}
 
@@ -133,4 +135,36 @@ fun View.setupExpandableAccessibilityDescription() {
             )
         }
     })
+}
+
+fun Activity.askForLocationPermission() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+    AlertDialog.Builder(this)
+        .setTitle(R.string.location_access)
+        .setMessage(R.string.phone_location_required)
+        .setPositiveButton(R.string.continue_button) { _, _ ->
+            requestPermissions(
+                arrayOf(
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        }
+        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+        .show()
+}
+
+fun Activity.askForCalendarPermission() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
+    AlertDialog.Builder(this)
+        .setTitle(R.string.calendar_access)
+        .setMessage(R.string.phone_calendar_required)
+        .setPositiveButton(R.string.continue_button) { _, _ ->
+            requestPermissions(
+                arrayOf(Manifest.permission.READ_CALENDAR), CALENDAR_READ_PERMISSION_REQUEST_CODE
+            )
+        }
+        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
+        .show()
 }

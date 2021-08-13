@@ -50,12 +50,12 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.getThemeFromName
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         if (isShowDeviceCalendarEvents && ActivityCompat.checkSelfPermission(
                 this, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
-        ) askForCalendarPermission(this)
+        ) askForCalendarPermission()
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
@@ -231,7 +231,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     && ActivityCompat.checkSelfPermission(
                         this, Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
-                ) askForCalendarPermission(this)
+                ) askForCalendarPermission()
             }
             PREF_APP_LANGUAGE -> restartToSettings()
             PREF_THEME -> {
@@ -344,7 +344,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private fun showAppIsOutDatedSnackbar() = Snackbar.make(
         binding.root, getString(R.string.outdated_app), 10000
     ).also {
-        it.setAction(getString(R.string.update)) { bringMarketPage(this) }
+        it.setAction(getString(R.string.update)) { bringMarketPage() }
         it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
     }.show()
 

@@ -239,6 +239,6 @@ App Version Code: ${appVersionList[0]}"""
 https://github.com/persian-calendar/DroidPersianCalendar"""
                 putExtra(Intent.EXTRA_TEXT, textToShare)
             }, getString(R.string.share)))
-        }.onFailure(logException).onFailure { bringMarketPage(activity ?: return) }
+        }.onFailure(logException).onFailure { (activity ?: return).bringMarketPage() }
     }
 }

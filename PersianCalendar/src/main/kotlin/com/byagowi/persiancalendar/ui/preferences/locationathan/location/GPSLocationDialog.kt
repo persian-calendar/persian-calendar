@@ -31,9 +31,9 @@ import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
+import com.byagowi.persiancalendar.ui.utils.askForLocationPermission
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.askForLocationPermission
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.language
@@ -60,7 +60,7 @@ fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwne
             activity, Manifest.permission.ACCESS_COARSE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED
     ) {
-        askForLocationPermission(activity)
+        activity.askForLocationPermission()
         return
     }
 

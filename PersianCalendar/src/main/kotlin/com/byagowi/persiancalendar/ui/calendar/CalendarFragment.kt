@@ -55,6 +55,7 @@ import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
+import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -64,7 +65,6 @@ import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.CalendarStore
 import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.calculationMethod
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.coordinates
@@ -281,7 +281,7 @@ class CalendarFragment : Fragment() {
         if (ActivityCompat.checkSelfPermission(
                 activity, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
-        ) askForCalendarPermission(activity) else {
+        ) activity.askForCalendarPermission() else {
             runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
                 Snackbar.make(
                     mainBinding?.root ?: return, R.string.device_calendar_does_not_support,

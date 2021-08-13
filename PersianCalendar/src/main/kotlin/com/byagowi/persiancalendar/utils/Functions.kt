@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.utils
 
-import android.Manifest
-import android.app.Activity
 import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -12,7 +10,6 @@ import android.os.Build
 import android.util.Log
 import android.view.View
 import androidx.annotation.*
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -316,40 +313,6 @@ val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTI
 
 fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
     context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable) }
-
-fun askForLocationPermission(activity: Activity?) {
-    if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-
-    AlertDialog.Builder(activity)
-        .setTitle(R.string.location_access)
-        .setMessage(R.string.phone_location_required)
-        .setPositiveButton(R.string.continue_button) { _, _ ->
-            activity.requestPermissions(
-                arrayOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                LOCATION_PERMISSION_REQUEST_CODE
-            )
-        }
-        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
-        .show()
-}
-
-fun askForCalendarPermission(activity: Activity?) {
-    if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-
-    AlertDialog.Builder(activity)
-        .setTitle(R.string.calendar_access)
-        .setMessage(R.string.phone_calendar_required)
-        .setPositiveButton(R.string.continue_button) { _, _ ->
-            activity.requestPermissions(
-                arrayOf(Manifest.permission.READ_CALENDAR), CALENDAR_READ_PERMISSION_REQUEST_CODE
-            )
-        }
-        .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
-        .show()
-}
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
