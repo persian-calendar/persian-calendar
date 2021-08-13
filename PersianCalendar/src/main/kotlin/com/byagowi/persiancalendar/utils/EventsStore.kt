@@ -6,7 +6,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 @JvmInline
 value class EventsStore<T : CalendarEvent<out AbstractDate>>
 private constructor(private val store: Map<Int, List<T>>) {
-    constructor(list: List<T>) : this(list.groupBy { it.date.hash })
+    constructor(eventsList: List<T>) : this(eventsList.groupBy { it.date.hash })
 
     fun getEvents(date: AbstractDate) = store[date.hash]?.filter {
         // dayOfMonth and month are already checked with hashing so only check year equality here
