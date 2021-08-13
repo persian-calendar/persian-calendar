@@ -5,15 +5,15 @@ import io.github.persiancalendar.calendar.AbstractDate
 
 @JvmInline
 value class CalendarStore<T : CalendarEvent<out AbstractDate>> private constructor(val value: Map<Int, List<T>>) {
-    constructor(list: List<T>) : this(list.groupBy { it.date.entry() })
+    constructor(list: List<T>) : this(list.groupBy { it.date.hash })
 
-    fun getEvents(date: AbstractDate) = value[date.entry()]?.filter {
-        // dayOfMonth and month are already checked with #entry() so only checking year equality here
+    fun getEvents(date: AbstractDate) = value[date.hash]?.filter {
+        // dayOfMonth and month are already checked with hashing so only check year equality here
         it.date.year == date.year || it.date.year == -1 // -1 means it is occurring every year
     } ?: emptyList()
 
     companion object {
-        private fun AbstractDate.entry() = month * 100 + dayOfMonth
+        private val AbstractDate.hash get() = this.month * 100 + this.dayOfMonth
         fun <T : CalendarEvent<out AbstractDate>> empty() = CalendarStore<T>(emptyMap())
     }
 }
