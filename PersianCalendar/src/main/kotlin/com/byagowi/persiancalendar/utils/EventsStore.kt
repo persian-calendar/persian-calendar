@@ -4,7 +4,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
 
 @JvmInline
-value class CalendarStore<T : CalendarEvent<out AbstractDate>>
+value class EventsStore<T : CalendarEvent<out AbstractDate>>
 private constructor(private val store: Map<Int, List<T>>) {
     constructor(list: List<T>) : this(list.groupBy { it.date.hash })
 
@@ -15,11 +15,11 @@ private constructor(private val store: Map<Int, List<T>>) {
 
     companion object {
         private val AbstractDate.hash get() = this.month * 100 + this.dayOfMonth
-        fun <T : CalendarEvent<out AbstractDate>> empty() = CalendarStore<T>(emptyMap())
+        fun <T : CalendarEvent<out AbstractDate>> empty() = EventsStore<T>(emptyMap())
     }
 }
 
-typealias PersianCalendarEventsStore = CalendarStore<CalendarEvent.PersianCalendarEvent>
-typealias IslamicCalendarEventsStore = CalendarStore<CalendarEvent.IslamicCalendarEvent>
-typealias GregorianCalendarEventsStore = CalendarStore<CalendarEvent.GregorianCalendarEvent>
-typealias DeviceCalendarEventsStore = CalendarStore<CalendarEvent.DeviceCalendarEvent>
+typealias PersianCalendarEventsStore = EventsStore<CalendarEvent.PersianCalendarEvent>
+typealias IslamicCalendarEventsStore = EventsStore<CalendarEvent.IslamicCalendarEvent>
+typealias GregorianCalendarEventsStore = EventsStore<CalendarEvent.GregorianCalendarEvent>
+typealias DeviceCalendarEventsStore = EventsStore<CalendarEvent.DeviceCalendarEvent>

@@ -183,11 +183,11 @@ var calendarTypesTitleAbbr = emptyList<String>()
     private set
 var allEnabledEvents = emptyList<CalendarEvent<*>>()
     private set
-var persianCalendarEvents: PersianCalendarEventsStore = CalendarStore.empty()
+var persianCalendarEvents: PersianCalendarEventsStore = EventsStore.empty()
     private set
-var islamicCalendarEvents: IslamicCalendarEventsStore = CalendarStore.empty()
+var islamicCalendarEvents: IslamicCalendarEventsStore = EventsStore.empty()
     private set
-var gregorianCalendarEvents: GregorianCalendarEventsStore = CalendarStore.empty()
+var gregorianCalendarEvents: GregorianCalendarEventsStore = EventsStore.empty()
     private set
 
 fun loadEvents(context: Context) {
