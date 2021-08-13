@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit.MINUTES
 
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
-private var deviceCalendarEvents: DeviceCalendarEventsStore = emptyEventsStore()
+private var deviceCalendarEvents: DeviceCalendarEventsStore = CalendarStore.empty()
 
 fun setDeviceCalendarEvents(context: Context) = runCatching {
     deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today)

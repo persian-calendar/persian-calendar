@@ -61,6 +61,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.utils.CalendarStore
 import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.askForCalendarPermission
@@ -68,7 +69,6 @@ import com.byagowi.persiancalendar.utils.calculationMethod
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.dayTitleSummary
-import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
@@ -377,7 +377,7 @@ class CalendarFragment : Fragment() {
         if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
             mainBinding?.root ?: return,
             getA11yDaySummary(
-                context ?: return, jdn, false, emptyEventsStore(),
+                context ?: return, jdn, false, CalendarStore.empty(),
                 withZodiac = true, withOtherCalendars = true, withTitle = true
             ),
             Snackbar.LENGTH_SHORT

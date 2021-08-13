@@ -11,10 +11,10 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
+import com.byagowi.persiancalendar.utils.CalendarStore
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dayOfWeekName
-import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
@@ -121,7 +121,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         }
 
         binding.root.contentDescription = getA11yDaySummary(
-            context, jdn, isToday, emptyEventsStore(),
+            context, jdn, isToday, CalendarStore.empty(),
             withZodiac = true, withOtherCalendars = true, withTitle = true
         )
     }

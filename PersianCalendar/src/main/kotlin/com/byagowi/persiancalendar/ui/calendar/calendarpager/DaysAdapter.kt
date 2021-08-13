@@ -9,9 +9,9 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.CalendarStore
 import com.byagowi.persiancalendar.utils.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
-import com.byagowi.persiancalendar.utils.emptyEventsStore
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getEvents
@@ -35,7 +35,7 @@ class DaysAdapter(
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0
 
-    private var monthEvents: DeviceCalendarEventsStore = emptyEventsStore()
+    private var monthEvents: DeviceCalendarEventsStore = CalendarStore.empty()
     private var selectedDay = -1
 
     fun initializeMonthEvents() {
@@ -150,7 +150,7 @@ class DaysAdapter(
                     )
 
                     dayView.contentDescription = if (isTalkBackEnabled) getA11yDaySummary(
-                        context, day, isToday, emptyEventsStore(),
+                        context, day, isToday, CalendarStore.empty(),
                         withZodiac = isToday, withOtherCalendars = false, withTitle = true
                     ) else dayOfMonth.toString()
 

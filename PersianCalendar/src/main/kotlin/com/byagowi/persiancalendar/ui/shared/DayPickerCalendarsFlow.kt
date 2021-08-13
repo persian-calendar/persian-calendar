@@ -11,7 +11,10 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.CalendarType
 
 class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
-    fun setup(calendarTypes: List<Pair<CalendarType, String>>, onItemClick: (CalendarType) -> Unit) {
+    fun setup(
+        calendarTypes: List<Pair<CalendarType, String>>,
+        onItemClick: (CalendarType) -> Unit
+    ) {
         val chips = calendarTypes.map { (_, title) ->
             SingleChipLayoutBinding.inflate(context.layoutInflater).also {
                 it.chip.text = title

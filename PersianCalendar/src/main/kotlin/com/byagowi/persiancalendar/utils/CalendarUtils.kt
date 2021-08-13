@@ -213,10 +213,10 @@ private fun readDeviceEvents(
 }.onFailure(logException).getOrNull() ?: emptyList()
 
 fun Context.readDayDeviceEvents(jdn: Jdn) =
-    readDeviceEvents(this, jdn.toJavaCalendar(), DAY_IN_MILLIS).toEventsStore()
+    DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toJavaCalendar(), DAY_IN_MILLIS))
 
 fun Context.readMonthDeviceEvents(jdn: Jdn) =
-    readDeviceEvents(this, jdn.toJavaCalendar(), 32L * DAY_IN_MILLIS).toEventsStore()
+    DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toJavaCalendar(), 32L * DAY_IN_MILLIS))
 
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
     this, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },

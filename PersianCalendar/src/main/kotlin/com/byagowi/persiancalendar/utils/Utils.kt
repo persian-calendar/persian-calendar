@@ -183,11 +183,11 @@ var calendarTypesTitleAbbr = emptyList<String>()
     private set
 var allEnabledEvents = emptyList<CalendarEvent<*>>()
     private set
-var persianCalendarEvents: PersianCalendarEventsStore = emptyEventsStore()
+var persianCalendarEvents: PersianCalendarEventsStore = CalendarStore.empty()
     private set
-var islamicCalendarEvents: IslamicCalendarEventsStore = emptyEventsStore()
+var islamicCalendarEvents: IslamicCalendarEventsStore = CalendarStore.empty()
     private set
-var gregorianCalendarEvents: GregorianCalendarEventsStore = emptyEventsStore()
+var gregorianCalendarEvents: GregorianCalendarEventsStore = CalendarStore.empty()
     private set
 
 fun loadEvents(context: Context) {
@@ -221,7 +221,7 @@ fun loadEvents(context: Context) {
 
     val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
 
-    persianCalendarEvents = persianEvents.mapNotNull {
+    persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull {
         var holiday = it.isHoliday
         var addOrNot = false
 
@@ -247,9 +247,9 @@ fun loadEvents(context: Context) {
                 date = PersianDate(-1, it.month, it.day), title = title, isHoliday = holiday
             )
         } else null
-    }.also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+    }.also { allEnabledEventsBuilder.addAll(it) })
 
-    islamicCalendarEvents = islamicEvents.mapNotNull {
+    islamicCalendarEvents = IslamicCalendarEventsStore(islamicEvents.mapNotNull {
         var holiday = it.isHoliday
         var addOrNot = false
 
@@ -291,9 +291,9 @@ fun loadEvents(context: Context) {
                 )
             }
         }
-    }.also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+    }.also { allEnabledEventsBuilder.addAll(it) })
 
-    gregorianCalendarEvents = gregorianEvents.mapNotNull {
+    gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull {
         val isOfficialInIran = it.type == EventType.Iran
         val isOfficialInAfghanistan = it.type == EventType.Afghanistan
         val isOthers = !isOfficialInIran && !isOfficialInAfghanistan
@@ -321,7 +321,7 @@ fun loadEvents(context: Context) {
             val date = CivilDate(CivilDate(year, 1, 1).toJdn() + nth - 1)
             listOf(CalendarEvent.GregorianCalendarEvent(title, isHoliday = false, date))
         }
-    }.also { allEnabledEventsBuilder.addAll(it) }.toEventsStore()
+    }.also { allEnabledEventsBuilder.addAll(it) })
 
     allEnabledEvents = allEnabledEventsBuilder
 }
