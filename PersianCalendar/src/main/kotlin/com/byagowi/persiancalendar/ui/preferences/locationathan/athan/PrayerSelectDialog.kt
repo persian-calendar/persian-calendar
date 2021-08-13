@@ -32,6 +32,7 @@ fun Fragment.showPrayerSelectDialog() {
 
 fun Fragment.showPrayerSelectPreviewDialog() {
     AlertDialog.Builder(layoutInflater.context)
+        .setTitle(R.string.athan)
         .setItems(R.array.prayerTimeNames) { _, which ->
             val entriesKeys = resources.getStringArray(R.array.prayerTimeKeys)
             startAthan(layoutInflater.context, entriesKeys.getOrNull(which) ?: "FAJR")
