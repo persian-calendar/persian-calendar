@@ -45,18 +45,15 @@ fun Fragment.showMonthOverviewDialog(date: AbstractDate) {
         MonthOverviewRecord(getString(R.string.warn_if_events_not_set), "", "")
     )
 
-    BottomSheetDialog(layoutInflater.context).also { dialog ->
+    BottomSheetDialog(layoutInflater.context, R.style.BottomSheetDialog).also { dialog ->
         dialog.setContentView(
             MonthOverviewDialogBinding.inflate(layoutInflater).also { binding ->
                 binding.recyclerView.also {
                     it.layoutManager = LinearLayoutManager(context)
                     it.adapter = MonthOverviewItemAdapter(events)
-                    it.setPadding(0, 4.dp.toInt(), 0, 0)
                 }
             }.root
         )
-        dialog.setCancelable(true)
-        dialog.setCanceledOnTouchOutside(true)
     }.show()
 }
 
@@ -91,8 +88,7 @@ private class MonthOverviewItemAdapter(private val rows: List<MonthOverviewRecor
             it.holidays.text = record.holidays
             it.holidays.isVisible = record.holidays.isNotEmpty()
             it.nonHolidays.text = record.nonHolidays
-            it.nonHolidays.isVisible =
-                record.nonHolidays.isNotEmpty()
+            it.nonHolidays.isVisible = record.nonHolidays.isNotEmpty()
         }
 
         override fun onClick(v: View?) =
