@@ -244,7 +244,7 @@ private fun Context.update2x2Widget(
     if (!enableClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
     remoteViews.setTextViewText(R.id.date_2x2, buildString {
         append(if (enableClock) widgetTitle else mainDateString)
-        if (showOtherCalendars) append("\n" + subtitle)
+        if (showOtherCalendars) appendLine().append(subtitle)
     })
 
     remoteViews.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent())
@@ -282,7 +282,7 @@ private fun Context.update4x2Widget(
     remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
         if (enableClock) append(jdn.dayOfWeekName + "\n")
         append(formatDate(date, calendarNameInLinear = showOtherCalendars))
-        if (showOtherCalendars) append("\n" + dateStringOfOtherCalendars(jdn, "\n"))
+        if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })
 
     if (nextOwghatId != 0) {

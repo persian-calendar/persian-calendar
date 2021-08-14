@@ -421,9 +421,8 @@ class CalendarFragment : Fragment() {
             eventsBinding.noEvent.isVisible = false
             eventsBinding.deviceEventTitle.text = deviceEvents
             contentDescription
-                .append("\n")
-                .append(getString(R.string.show_device_calendar_events))
-                .append("\n")
+                .appendLine()
+                .appendLine(getString(R.string.show_device_calendar_events))
                 .append(deviceEvents)
 
             eventsBinding.deviceEventTitle.let {
@@ -438,9 +437,8 @@ class CalendarFragment : Fragment() {
             eventsBinding.noEvent.isVisible = false
             eventsBinding.eventTitle.text = nonHolidays
             contentDescription
-                .append("\n")
-                .append(getString(R.string.events))
-                .append("\n")
+                .appendLine()
+                .appendLine(getString(R.string.events))
                 .append(nonHolidays)
 
             eventsBinding.eventTitle.isVisible = true
