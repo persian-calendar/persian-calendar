@@ -61,25 +61,23 @@ val CalendarType.monthsNames: List<String>
 fun getA11yDaySummary(
     context: Context, jdn: Jdn, isToday: Boolean, deviceCalendarEvents: DeviceCalendarEventsStore,
     withZodiac: Boolean, withOtherCalendars: Boolean, withTitle: Boolean
-): String {
+): String = buildString {
     // It has some expensive calculations, lets not do that when not needed
-    if (!isTalkBackEnabled) return ""
+    if (!isTalkBackEnabled) return@buildString
 
-    val result = StringBuilder()
-
-    if (isToday) result.appendLine(context.getString(R.string.today))
+    if (isToday) appendLine(context.getString(R.string.today))
 
     val mainDate = jdn.toCalendar(mainCalendar)
 
-    if (withTitle) result.appendLine().append(dayTitleSummary(jdn, mainDate))
+    if (withTitle) appendLine().append(dayTitleSummary(jdn, mainDate))
 
     val shift = getShiftWorkTitle(jdn, false)
-    if (shift.isNotEmpty()) result.appendLine().append(shift)
+    if (shift.isNotEmpty()) appendLine().append(shift)
 
     if (withOtherCalendars) {
         val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
         if (otherCalendars.isNotEmpty()) {
-            result.appendLine().appendLine()
+            appendLine().appendLine()
                 .append(context.getString(R.string.equivalent_to))
                 .append(" ")
                 .append(otherCalendars)
@@ -92,7 +90,7 @@ fun getA11yDaySummary(
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
     )
     if (holidays.isNotEmpty()) {
-        result.appendLine().appendLine()
+        appendLine().appendLine()
             .appendLine(context.getString(R.string.holiday_reason))
             .append(holidays)
     }
@@ -102,7 +100,7 @@ fun getA11yDaySummary(
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
     )
     if (nonHolidays.isNotEmpty()) {
-        result.appendLine().appendLine()
+        appendLine().appendLine()
             .appendLine(context.getString(R.string.events))
             .append(nonHolidays)
     }
@@ -110,18 +108,14 @@ fun getA11yDaySummary(
     if (isShowWeekOfYearEnabled) {
         val startOfYearJdn = Jdn(mainCalendar, mainDate.year, 1, 1)
         val weekOfYearStart = jdn.getWeekOfYear(startOfYearJdn)
-        result.appendLine().appendLine()
+        appendLine().appendLine()
             .append(context.getString(R.string.nth_week_of_year, formatNumber(weekOfYearStart)))
     }
 
     if (withZodiac) {
         val zodiac = getZodiacInfo(context, jdn, withEmoji = false, short = false)
-        if (zodiac.isNotEmpty()) {
-            result.appendLine().appendLine().append(zodiac)
-        }
+        if (zodiac.isNotEmpty()) appendLine().appendLine().append(zodiac)
     }
-
-    return result.toString()
 }
 
 private fun baseFormatClock(hour: Int, minute: Int): String =
