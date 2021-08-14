@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.text.SpannableStringBuilder
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
@@ -403,7 +402,6 @@ class CalendarFragment : Fragment() {
         val deviceEvents = getDeviceEventsTitle(events)
         val contentDescription = StringBuilder()
 
-        eventsBinding.eventMessage.isVisible = false
         eventsBinding.noEvent.isVisible = true
 
         if (holidays.isNotEmpty()) {
@@ -446,8 +444,6 @@ class CalendarFragment : Fragment() {
             eventsBinding.eventTitle.isVisible = false
         }
 
-        val messageToShow = SpannableStringBuilder()
-
         val enabledTypes = activity.appPrefs
             .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
         if (enabledTypes.isEmpty()) {
@@ -464,14 +460,6 @@ class CalendarFragment : Fragment() {
                 eventsBinding.buttonsBar.root.isVisible = false
             }
         } else eventsBinding.buttonsBar.root.isVisible = false
-
-        if (messageToShow.isNotEmpty()) {
-            eventsBinding.eventMessage.let {
-                it.text = messageToShow
-                it.movementMethod = LinkMovementMethod.getInstance()
-                it.isVisible = true
-            }
-        }
 
         eventsBinding.root.contentDescription = contentDescription
     }
