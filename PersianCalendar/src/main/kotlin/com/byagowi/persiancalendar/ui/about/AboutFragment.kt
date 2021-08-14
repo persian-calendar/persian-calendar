@@ -113,9 +113,9 @@ class AboutFragment : Fragment() {
                 .split(Regex("^={4}$", RegexOption.MULTILINE))
                 .map { it.trim().lines() }
                 .map { lines ->
-                    val content = SpannableString(lines.drop(1).joinToString("\n").trim())
-                    Linkify.addLinks(content, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-                    ExpandableItemsAdapter.Item(lines.first(), null, content)
+                    val body = SpannableString(lines.drop(1).joinToString("\n").trim())
+                    Linkify.addLinks(body, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+                    lines.first() to body
                 }
             adapter = ExpandableItemsAdapter(sections)
             layoutManager = LinearLayoutManager(context)
