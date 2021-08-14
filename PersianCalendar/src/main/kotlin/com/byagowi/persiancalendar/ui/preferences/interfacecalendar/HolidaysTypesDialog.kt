@@ -24,7 +24,7 @@ fun showHolidaysTypesDialog(context: Context) {
         view?.text = title
     }
     // TODO: i18n, maybe
-    val pattern = "%s، <a href=\"%s\">مشاهده منبع</a>"
+    val pattern = "%s، رسمی، <a href=\"%s\">مشاهده منبع</a>"
     binding.iran.text = HtmlCompat.fromHtml(
         pattern.format("مرکز تقویم دانشگاه تهران", EventType.Iran.source),
         HtmlCompat.FROM_HTML_MODE_COMPACT
