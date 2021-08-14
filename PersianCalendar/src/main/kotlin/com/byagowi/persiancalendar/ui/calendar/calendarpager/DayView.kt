@@ -25,7 +25,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         private set
     var dayOfMonth = -1
         private set
-    private var isWeekOfYearNumber = false
+    private var isWeekNumber = false
     private var header = ""
 
     var sharedDayViewData: SharedDayViewData? = null
@@ -43,8 +43,11 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
 
         // Draw day number/label
         val textToMeasureHeight =
-            if (jdn != null) text else if (isNonArabicScriptSelected) "Y" else "شچ"
-        shared.dayOfMonthNumberTextPaint.getTextBounds(
+            if (jdn != null) text else if (isNonArabicScriptSelected) "Yy" else "س"
+        when {
+            isWeekNumber -> shared.weekNumberTextPaint
+            else -> shared.dayOfMonthNumberTextPaint
+        }.getTextBounds(
             textToMeasureHeight, 0, textToMeasureHeight.length, textBounds
         )
         val yPos = (height + textBounds.height()) / 2f
@@ -55,7 +58,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                     dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
                     else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint
                 }
-                isWeekOfYearNumber -> shared.weekNumberTextPaint
+                isWeekNumber -> shared.weekNumberTextPaint
                 else -> shared.weekDayInitialsTextPaint
             }
             canvas.drawText(text, width / 2f, yPos, textPaint)
@@ -106,7 +109,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         text: String, isToday: Boolean = false, isSelected: Boolean = false,
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
         jdn: Jdn? = null, dayOfMonth: Int = -1, header: String = "",
-        isWeekOfYearNumber: Boolean = false
+        isWeekNumber: Boolean = false
     ) {
         this.text = text
         this.today = isToday
@@ -114,7 +117,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.holiday = isHoliday
         this.jdn = jdn
         this.dayOfMonth = dayOfMonth
-        this.isWeekOfYearNumber = isWeekOfYearNumber
+        this.isWeekNumber = isWeekNumber
         this.header = header
         sharedDayViewData.debugAssertNotNull?.also { shared ->
             this.indicators = listOf(
@@ -137,5 +140,5 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     )
 
     fun setInitialOfWeekDay(text: String) = setAll(text)
-    fun setWeekOfYearNumber(text: String) = setAll(text, isWeekOfYearNumber = true)
+    fun setWeekNumber(text: String) = setAll(text, isWeekNumber = true)
 }

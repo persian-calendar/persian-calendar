@@ -100,7 +100,7 @@ class DaysAdapter(
                     val row = position / 8
                     if (row in 1..weeksCount) {
                         val weekNumber = formatNumber(weekOfYearStart + row - 1)
-                        dayView.setWeekOfYearNumber(weekNumber)
+                        dayView.setWeekNumber(weekNumber)
                         dayView.contentDescription = if (isTalkBackEnabled)
                             context.getString(R.string.nth_week_of_year, weekNumber)
                         else weekNumber
