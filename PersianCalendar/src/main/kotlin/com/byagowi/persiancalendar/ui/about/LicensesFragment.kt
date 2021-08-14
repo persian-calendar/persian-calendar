@@ -70,16 +70,18 @@ class LicensesFragment : Fragment() {
             .split(Regex("^-{4}$", RegexOption.MULTILINE))
             .map { it.trim().lines() }
             .map { lines ->
-                buildSpannedString {
+                val title = buildSpannedString {
                     val parts = lines.first().split(" - ")
                     append(parts[0])
                     if (parts.size > 1) {
                         append("  ")
                         scale(.7f) { inSpans(tagSpan) { append(parts.getOrNull(1)) } }
                     }
-                } to SpannableString(lines.drop(1).joinToString("\n").trim()).also {
+                }
+                val body = SpannableString(lines.drop(1).joinToString("\n").trim()).also {
                     Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
                 }
+                title to body
             }
         binding.recyclerView.adapter = ExpandableItemsAdapter(sections)
 
