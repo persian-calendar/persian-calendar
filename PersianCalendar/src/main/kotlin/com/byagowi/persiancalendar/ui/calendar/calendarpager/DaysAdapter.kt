@@ -35,11 +35,11 @@ class DaysAdapter(
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0
 
-    private var monthEvents: DeviceCalendarEventsStore = EventsStore.empty()
+    private var monthDeviceEvents: DeviceCalendarEventsStore = EventsStore.empty()
     private var selectedDay = -1
 
     fun initializeMonthEvents() {
-        if (isShowDeviceCalendarEvents) monthEvents = context.readMonthDeviceEvents(days[0])
+        if (isShowDeviceCalendarEvents) monthDeviceEvents = context.readMonthDeviceEvents(days[0])
     }
 
     internal fun selectDay(dayOfMonth: Int) {
@@ -135,7 +135,7 @@ class DaysAdapter(
             } else {
                 if (position - 7 - fixedStartingDayOfWeek >= 0) {
                     val day = days[position - 7 - fixedStartingDayOfWeek]
-                    val events = monthEvents.getEvents(day)
+                    val events = getEvents(day, monthDeviceEvents)
 
                     val isToday = day == todayJdn
 

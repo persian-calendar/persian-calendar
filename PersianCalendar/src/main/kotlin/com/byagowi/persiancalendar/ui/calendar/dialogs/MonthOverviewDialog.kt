@@ -29,7 +29,7 @@ fun showMonthOverviewDialog(context: Context, date: AbstractDate) {
     val colorTextHoliday = context.resolveColor(R.attr.colorTextHoliday)
     val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
         val jdn = baseJdn + it
-        val events = deviceEvents.getEvents(jdn)
+        val events = getEvents(jdn, deviceEvents)
         val holidays = getEventsTitle(
             events, holiday = true, compact = false, showDeviceCalendarEvents = false,
             insertRLM = false, addIsHoliday = isHighTextContrastEnabled

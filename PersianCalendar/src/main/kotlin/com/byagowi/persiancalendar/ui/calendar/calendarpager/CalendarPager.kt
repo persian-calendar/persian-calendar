@@ -65,7 +65,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             month += 12
         }
         month += 1
-        return Jdn(calendar, year, month, 1).toCalendar(calendar)
+        return calendar.createDate(year, month, 1)
     }
 
     private fun applyOffset(position: Int) = monthsLimit / 2 - position

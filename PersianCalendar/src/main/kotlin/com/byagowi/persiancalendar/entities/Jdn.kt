@@ -14,13 +14,8 @@ import java.util.*
 @JvmInline
 value class Jdn(val value: Long) {
     constructor(value: AbstractDate) : this(value.toJdn())
-    constructor(calendar: CalendarType, year: Int, month: Int, day: Int) : this(
-        when (calendar) {
-            CalendarType.ISLAMIC -> IslamicDate(year, month, day)
-            CalendarType.GREGORIAN -> CivilDate(year, month, day)
-            CalendarType.SHAMSI -> PersianDate(year, month, day)
-        }
-    )
+    constructor(calendar: CalendarType, year: Int, month: Int, day: Int) :
+            this(calendar.createDate(year, month, day))
 
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
     val dayOfWeek: Int get() = ((value + 2L) % 7L).toInt()

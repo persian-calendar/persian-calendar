@@ -42,7 +42,7 @@ fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
 // 1 means Saturday on it and 7 means Friday
-fun CalendarType.getLastDayOfWeek(year: Int, month: Int, dayOfWeek: Int): Int {
+fun CalendarType.getLastWeekDayOfMonth(year: Int, month: Int, dayOfWeek: Int): Int {
     val monthLength = this.getMonthLength(year, month)
     val endOfMonthJdn = Jdn(this, year, month, monthLength)
     return monthLength - ((endOfMonthJdn.value - dayOfWeek + 3L) % 7).toInt()
@@ -84,7 +84,7 @@ fun getA11yDaySummary(
         }
     }
 
-    val events = deviceCalendarEvents.getEvents(jdn)
+    val events = getEvents(jdn, deviceCalendarEvents)
     val holidays = getEventsTitle(
         events, true,
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
@@ -275,16 +275,8 @@ fun Jdn.getWeekOfYear(startOfYear: Jdn): Int {
 
 val Jdn.dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
-fun DeviceCalendarEventsStore.getEvents(jdn: Jdn): List<CalendarEvent<*>> =
-    ArrayList<CalendarEvent<*>>().apply {
-        addAll(persianCalendarEvents.getEvents(jdn.toPersianCalendar()))
-        val islamic = jdn.toIslamicCalendar()
-        addAll(islamicCalendarEvents.getEvents(islamic))
-        // Special case Islamic events happening in 30th day but the month has only 29 days
-        if (islamic.dayOfMonth == 29 &&
-            CalendarType.ISLAMIC.getMonthLength(islamic.year, islamic.month) == 29
-        ) addAll(islamicCalendarEvents.getEvents(IslamicDate(islamic.year, islamic.month, 30)))
-        val civil = jdn.toGregorianCalendar()
-        addAll(getEvents(civil)) // Passed by caller
-        addAll(gregorianCalendarEvents.getEvents(civil))
-    }
+fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(
+    persianCalendarEvents.getEvents(jdn.toPersianCalendar()),
+    islamicCalendarEvents.getEvents(jdn.toIslamicCalendar()),
+    gregorianCalendarEvents.getEvents(jdn.toGregorianCalendar(), deviceEvents)
+).flatten()

@@ -66,6 +66,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
@@ -74,6 +75,7 @@ import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.generated.islamicEvents
 import com.byagowi.persiancalendar.generated.persianEvents
+import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -221,6 +223,13 @@ fun loadEvents(context: Context) {
 
     val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
 
+    val today = Jdn.today
+    // Creates irregular recurring events instances of this year and the next year, a bit hacky
+    val irregularEventsInstances = listOf(
+        createIrregularEventsInstances(today, international, iranHolidays, iranOthers, iranAncient),
+        createIrregularEventsInstances(today + 365, international, iranHolidays, iranOthers, iranAncient)
+    ).flatten()
+
     persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull {
         var holiday = it.isHoliday
         var addOrNot = false
@@ -247,7 +256,8 @@ fun loadEvents(context: Context) {
                 date = PersianDate(-1, it.month, it.day), title = title, isHoliday = holiday
             )
         } else null
-    }.also { allEnabledEventsBuilder.addAll(it) })
+    }.also { allEnabledEventsBuilder.addAll(it) } +
+            irregularEventsInstances.filterIsInstance<CalendarEvent.PersianCalendarEvent>())
 
     islamicCalendarEvents = IslamicCalendarEventsStore(islamicEvents.mapNotNull {
         var holiday = it.isHoliday
@@ -274,24 +284,8 @@ fun loadEvents(context: Context) {
                 date = IslamicDate(-1, it.month, it.day), title = title, isHoliday = holiday
             )
         } else null
-    }.let { list ->
-        list + irregularRecurringEvents.filter { event ->
-            iranOthers && event["calendar"] == "Hijri" && event["type"] == "Iran"
-        }.flatMap { event ->
-            // This adds only this, next and previous years' events, hacky but enough for now
-            if (event["rule"] != "last weekday of month") return@flatMap emptyList()
-            val dayOfWeek = event["weekday"]?.toIntOrNull() ?: return@flatMap emptyList()
-            val month = event["month"]?.toIntOrNull() ?: return@flatMap emptyList()
-            val title = event["title"] ?: return@flatMap emptyList()
-            val year = Jdn.today.toIslamicCalendar().year
-            (-1..1).map { offset ->
-                val day = CalendarType.ISLAMIC.getLastDayOfWeek(year + offset, month, dayOfWeek)
-                CalendarEvent.IslamicCalendarEvent(
-                    date = IslamicDate(year + offset, month, day), title = title, isHoliday = false
-                )
-            }
-        }
-    }.also { allEnabledEventsBuilder.addAll(it) })
+    }.also { allEnabledEventsBuilder.addAll(it) }
+            + irregularEventsInstances.filterIsInstance<CalendarEvent.IslamicCalendarEvent>())
 
     gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull {
         val isOfficialInIran = it.type == EventType.Iran
@@ -309,21 +303,54 @@ fun loadEvents(context: Context) {
                 isHoliday = false
             )
         } else null
-    }.let { list ->
-        list + irregularRecurringEvents.filter { event ->
-            international && event["calendar"] == "Gregorian"
-        }.flatMap { event ->
-            // This adds only this years' event, hacky but enough for now
-            if (event["rule"] != "nth day of year") return@flatMap emptyList()
-            val nth = event["nth"]?.toIntOrNull() ?: return@flatMap emptyList()
-            val title = event["title"] ?: return@flatMap emptyList()
-            val year = Jdn.today.toGregorianCalendar().year
-            val date = CivilDate(CivilDate(year, 1, 1).toJdn() + nth - 1)
-            listOf(CalendarEvent.GregorianCalendarEvent(title, isHoliday = false, date))
-        }
-    }.also { allEnabledEventsBuilder.addAll(it) })
+    }.also { allEnabledEventsBuilder.addAll(it) }
+            + irregularEventsInstances.filterIsInstance<CalendarEvent.GregorianCalendarEvent>())
 
-    allEnabledEvents = allEnabledEventsBuilder
+    allEnabledEvents = allEnabledEventsBuilder + irregularEventsInstances
+}
+
+// Create actually usable irregular event of a year based on defined rules and enabled holidays
+private fun createIrregularEventsInstances(
+    jdn: Jdn,
+    international: Boolean, iranHolidays: Boolean, iranOthers: Boolean, iranAncient: Boolean
+): List<CalendarEvent<out AbstractDate>> {
+    return irregularRecurringEvents.filter { event ->
+        when {
+            event["type"] == "International" && international -> true
+            event["type"] == "Iran" && iranHolidays && event["holiday"] == "true" -> true
+            event["type"] == "Iran" && iranOthers -> true
+            event["type"] == "AncientIran" && iranAncient -> true
+            else -> false
+        }
+    }.mapNotNull { event ->
+        val type = when (event["calendar"]) {
+            "Gregorian" -> CalendarType.GREGORIAN
+            "Persian" -> CalendarType.SHAMSI
+            "Hijri" -> CalendarType.ISLAMIC
+            else -> null
+        } ?: return@mapNotNull null
+        val year = jdn.toCalendar(type).year
+        val date = when (event["rule"]) {
+            "nth day of year" -> { // Handle nth day of year
+                val nth = event["nth"]?.toIntOrNull() ?: return@mapNotNull null
+                (Jdn(type, year, 1, 1) + nth - 1).toCalendar(type)
+            }
+            "last weekday of month" -> { // Handle last weekday of month
+                val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
+                val weekDay = event["weekday"]?.toIntOrNull() ?: return@mapNotNull null
+                type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay))
+            }
+            else -> return@mapNotNull null
+        }
+        val title = "${(event["title"] ?: return@mapNotNull null)} (${formatNumber(year)})"
+        val isHoliday = event["holiday"] == "true"
+        when (date) {
+            is PersianDate -> CalendarEvent.PersianCalendarEvent(title, isHoliday, date)
+            is IslamicDate -> CalendarEvent.IslamicCalendarEvent(title, isHoliday, date)
+            is CivilDate -> CalendarEvent.GregorianCalendarEvent(title, isHoliday, date)
+            else -> null
+        }.debugAssertNotNull
+    }
 }
 
 fun loadLanguageResource() {

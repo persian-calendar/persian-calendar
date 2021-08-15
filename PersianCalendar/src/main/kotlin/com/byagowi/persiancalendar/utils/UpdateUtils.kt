@@ -207,7 +207,7 @@ private fun Context.update2x2Widget(
     remoteViews.setTextColor(R.id.event_2x2, color)
     remoteViews.setTextColor(R.id.owghat_2x2, color)
 
-    val events = deviceCalendarEvents.getEvents(jdn)
+    val events = getEvents(jdn, deviceCalendarEvents)
     val isRtl = resources.isRtl
     val holidays = getEventsTitle(
         events, holiday = true, compact = true, showDeviceCalendarEvents = true,
@@ -409,7 +409,7 @@ private fun Context.updateNotification(
     }
 
     if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val events = deviceCalendarEvents.getEvents(jdn)
+        val events = getEvents(jdn, deviceCalendarEvents)
         val holidays = getEventsTitle(
             events, holiday = true,
             compact = true, showDeviceCalendarEvents = true, insertRLM = resources.isRtl,
