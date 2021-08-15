@@ -33,7 +33,6 @@ class LicensesFragment : Fragment() {
             it.setTitle(R.string.about_license_title)
             it.setupUpNavigation()
         }
-        val context = binding.root.context
 
         // Based on https://stackoverflow.com/a/34623367
         class BadgeSpan : ReplacementSpan() {
@@ -52,9 +51,9 @@ class LicensesFragment : Fragment() {
                     x, top + verticalReduce,
                     x + getSize(paint, text, start, end, null), bottom - verticalReduce
                 )
-                paint.color = context.resolveColor(R.attr.colorDivider)
+                paint.color = inflater.context.resolveColor(R.attr.colorDivider)
                 canvas.drawRoundRect(rect, 5.sp, 5.sp, paint)
-                paint.color = context.resolveColor(R.attr.colorTextDrawer)
+                paint.color = inflater.context.resolveColor(R.attr.colorTextDrawer)
                 canvas.drawText(text ?: "", start, end, x + sidePadding, y.toFloat(), paint)
             }
         }
@@ -76,13 +75,12 @@ class LicensesFragment : Fragment() {
                 }
                 title to body
             }
-        binding.recyclerView.adapter = ExpandableItemsAdapter(sections)
 
+        binding.recyclerView.adapter = ExpandableItemsAdapter(sections)
         val layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.layoutManager = LinearLayoutManager(context)
-        binding.recyclerView.addItemDecoration(
-            DividerItemDecoration(context, layoutManager.orientation)
-        )
+        val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
+        binding.recyclerView.layoutManager = layoutManager
+        binding.recyclerView.addItemDecoration(itemDecoration)
         return binding.root
     }
 }
