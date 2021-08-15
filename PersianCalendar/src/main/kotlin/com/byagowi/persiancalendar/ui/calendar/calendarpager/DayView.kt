@@ -41,16 +41,15 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.selectedPaint)
         if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.todayPaint)
 
-        // Draw day number/label
-        val textToMeasureHeight =
-            if (jdn != null) text else if (isNonArabicScriptSelected) "Yy" else "س"
-        when {
-            isWeekNumber -> shared.weekNumberTextPaint
-            else -> shared.dayOfMonthNumberTextPaint
-        }.getTextBounds(
-            textToMeasureHeight, 0, textToMeasureHeight.length, textBounds
-        )
+        // Measure a sample text to find height for vertical center aligning of the text to draw
+        (if (jdn != null) text else if (isNonArabicScriptSelected) "Yy" else "س").let { sample ->
+            when {
+                isWeekNumber -> shared.weekNumberTextPaint
+                else -> shared.dayOfMonthNumberTextPaint
+            }.getTextBounds(sample, 0, sample.length, textBounds)
+        }
         val yPos = (height + textBounds.height()) / 2f
+        // Draw day number/label
         run {
             val textPaint = when {
                 jdn != null -> when {
