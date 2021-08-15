@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ReplacementSpan
@@ -21,8 +21,6 @@ import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import kotlin.math.roundToInt
 
 
@@ -35,34 +33,29 @@ class LicensesFragment : Fragment() {
             it.setTitle(R.string.about_license_title)
             it.setupUpNavigation()
         }
+        val context = binding.root.context
 
-        val tagSpan = object : ReplacementSpan() {
-            private val reduceHeight = 10.sp
-            private val widthPadding = 3.sp
-            private val roundedDrawable = MaterialShapeDrawable(
-                ShapeAppearanceModel().withCornerSize(5.sp)
-            ).also {
-                val tagColor = binding.root.context.resolveColor(R.attr.colorDivider)
-                it.tintList = ColorStateList.valueOf(tagColor)
-            }
+        // Based on https://stackoverflow.com/a/34623367
+        class BadgeSpan : ReplacementSpan() {
+            private val sidePadding = 3.sp
 
             override fun getSize(
-                paint: Paint, text: CharSequence?, start: Int, end: Int,
-                fm: Paint.FontMetricsInt?
-            ) = paint.measureText(text, start, end).roundToInt() + 6.sp.toInt()
+                paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?
+            ) = (paint.measureText(text, start, end) + sidePadding * 2).roundToInt()
 
             override fun draw(
-                canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float,
-                top: Int, y: Int, bottom: Int, paint: Paint
+                canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int,
+                y: Int, bottom: Int, paint: Paint
             ) {
-                roundedDrawable.setBounds(
-                    x.toInt(), top + (reduceHeight / 2).toInt(),
-                    x.toInt() + getSize(paint, text, start, end, null),
-                    bottom - (reduceHeight / 2).toInt()
+                val verticalReduce = 5.sp
+                val rect = RectF(
+                    x, top + verticalReduce,
+                    x + getSize(paint, text, start, end, null), bottom - verticalReduce
                 )
-                roundedDrawable.draw(canvas)
-                paint.color = binding.root.context.resolveColor(R.attr.colorTextDrawer)
-                canvas.drawText(text ?: "", start, end, x + widthPadding, y.toFloat(), paint)
+                paint.color = context.resolveColor(R.attr.colorDivider)
+                canvas.drawRoundRect(rect, 5.sp, 5.sp, paint)
+                paint.color = context.resolveColor(R.attr.colorTextDrawer)
+                canvas.drawText(text ?: "", start, end, x + sidePadding, y.toFloat(), paint)
             }
         }
 
@@ -75,7 +68,7 @@ class LicensesFragment : Fragment() {
                     append(parts[0])
                     if (parts.size > 1) {
                         append("  ")
-                        scale(.7f) { inSpans(tagSpan) { append(parts.getOrNull(1)) } }
+                        scale(.7f) { inSpans(BadgeSpan()) { append(parts.getOrNull(1)) } }
                     }
                 }
                 val body = SpannableString(lines.drop(1).joinToString("\n").trim()).also {
