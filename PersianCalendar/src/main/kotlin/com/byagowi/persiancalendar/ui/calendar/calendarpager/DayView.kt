@@ -41,27 +41,22 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.selectedPaint)
         if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.todayPaint)
 
-        // Measure a sample text to find height for vertical center aligning of the text to draw
-        (if (jdn != null) text else if (isNonArabicScriptSelected) "Yy" else "س").let { sample ->
-            when {
-                isWeekNumber -> shared.weekNumberTextPaint
-                else -> shared.dayOfMonthNumberTextPaint
-            }.getTextBounds(sample, 0, sample.length, textBounds)
+        val textPaint = when {
+            jdn != null -> when {
+                holiday -> shared.dayOfMonthNumberTextHolidayPaint
+                dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
+                else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint
+            }
+            isWeekNumber -> shared.weekNumberTextPaint
+            else -> shared.weekDayInitialsTextPaint
         }
+
+        // Measure a sample text to find height for vertical center aligning of the text to draw
+        val sample = if (jdn != null) text else if (isNonArabicScriptSelected) "Yy" else "س"
+        textPaint.getTextBounds(sample, 0, sample.length, textBounds)
         val yPos = (height + textBounds.height()) / 2f
         // Draw day number/label
-        run {
-            val textPaint = when {
-                jdn != null -> when {
-                    holiday -> shared.dayOfMonthNumberTextHolidayPaint
-                    dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
-                    else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint
-                }
-                isWeekNumber -> shared.weekNumberTextPaint
-                else -> shared.weekDayInitialsTextPaint
-            }
-            canvas.drawText(text, width / 2f, yPos, textPaint)
-        }
+        canvas.drawText(text, width / 2f, yPos, textPaint)
 
         // Draw indicators, whether a day has event or appointment
         val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1
