@@ -62,7 +62,7 @@ fun loadEvents(e: EnabledHolidays) {
     }
 }
 
-private fun <T : CalendarEvent<out AbstractDate>> createEvent(
+private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
     e: EnabledHolidays, record: CalendarRecord, calendarType: CalendarType
 ): T? {
     when { // skip not enabled events if none of the rules matches
@@ -95,8 +95,7 @@ private fun <T : CalendarEvent<out AbstractDate>> createEvent(
         } else ""
     }${formatDayAndMonth(calendarType, record.day, record.month)})"""
 
-    @Suppress("UNCHECKED_CAST")
-    return when (calendarType) {
+    return (when (calendarType) {
         CalendarType.SHAMSI -> {
             val date = PersianDate(-1, record.month, record.day)
             CalendarEvent.PersianCalendarEvent(title, holiday, date)
@@ -109,7 +108,7 @@ private fun <T : CalendarEvent<out AbstractDate>> createEvent(
             val date = IslamicDate(-1, record.month, record.day)
             CalendarEvent.IslamicCalendarEvent(title, holiday, date)
         }
-    } as? T
+    } as? T).debugAssertNotNull
 }
 
 private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int): String {
