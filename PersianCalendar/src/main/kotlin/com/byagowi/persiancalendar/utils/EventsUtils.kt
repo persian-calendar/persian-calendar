@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
+import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
@@ -45,6 +46,7 @@ fun loadEvents(enabledTypes: Set<String>) {
             else -> return null
         }
 
+        // Don't mark holidays as holiday if it isn't chosen
         val holiday = when {
             !iranHolidays && record.type == EventType.Iran -> false
             !afghanistanHolidays && record.type == EventType.Afghanistan -> false
@@ -59,7 +61,7 @@ fun loadEvents(enabledTypes: Set<String>) {
                     else -> ""
                 } + spacedComma
             } else ""
-        }${formatDayAndMonth(record.day, persianMonths[record.month - 1])})"""
+        }${formatDayAndMonth(calendarType, record.day, record.month)})"""
 
         @Suppress("UNCHECKED_CAST")
         return when (calendarType) {
@@ -113,6 +115,18 @@ fun loadEvents(enabledTypes: Set<String>) {
             gregorianCalendarEvents = GregorianCalendarEventsStore(events)
             events
         }
+}
+
+private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int): String {
+    val monthName = when (calendarType) {
+        CalendarType.SHAMSI -> persianMonths
+        CalendarType.GREGORIAN -> gregorianMonths
+        CalendarType.ISLAMIC -> islamicMonths
+    }[month - 1]
+    return when (language) {
+        LANG_CKB -> "%sی %s"
+        else -> "%s %s"
+    }.format(formatNumber(day), monthName)
 }
 
 // Create actually usable irregular event of a year based on defined rules and enabled holidays

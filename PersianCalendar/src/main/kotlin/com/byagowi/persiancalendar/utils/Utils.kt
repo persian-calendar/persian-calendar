@@ -195,7 +195,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     IslamicDate.islamicOffset = context.appPrefs
         .getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
-    // It is vital to load events after configuration of calendars
+    // It is vital to configure calendar before loading of the events
     loadEvents(enabledEventsTypes)
 }
 

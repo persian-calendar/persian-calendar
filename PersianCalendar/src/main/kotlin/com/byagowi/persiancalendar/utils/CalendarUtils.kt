@@ -8,7 +8,6 @@ import android.content.res.Resources
 import android.provider.CalendarContract
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
-import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.LANG_FA_AF
 import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.R
@@ -30,11 +29,6 @@ fun applyWeekStartOffsetToWeekDay(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekSt
 fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekStartOffset) % 7
 
 fun getWeekDayName(position: Int) = weekDays[position % 7]
-
-fun formatDayAndMonth(day: Int, month: String): String = when (language) {
-    LANG_CKB -> "%sی %s"
-    else -> "%s %s"
-}.format(formatNumber(day), month)
 
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
     jdn.dayOfWeekName + spacedComma + formatDate(date, calendarNameInLinear)
