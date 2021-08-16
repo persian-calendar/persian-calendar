@@ -2,8 +2,8 @@
   "Source": {
     "Afghanistan": "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
     "Iran": "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201400-Full.pdf",
-    "AncientIran": "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
-    "International": "http://www.un.org/en/sections/observances/international-days/"
+    "AncientIran": "~https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
+    "International": "~http://www.un.org/en/sections/observances/international-days/"
   },
 
   "#meta": [
@@ -14,8 +14,7 @@
     "و اگر اشکالی در یکی از مناسبت‌ها، عنوان یا تاریخ یا عدم وجود مناسبتی دیدید سریعاً پروژه را مطلع کنید، با تشکر",
 
     "توجه:",
-    "در استفاده از این داده‌ها، به قسمت مناسبت‌های که دارای الگوی متفاوتی متفاوت و خاص هستند که در بخشی جدا گذاشته شده‌اند توجه کنید",
-    "از آنجایی که ماه‌های قمری می‌توانند ۲۹ روزه باشند هنگام استفاده از داده‌ها در ماه ۲۹ روزهٔ قمری مناسبت روز ۳۰م را باید در نظر گرفت",
+    "به مناسبت‌هایی که در انتهای صفحه قرار دارند و الگوی تکرارشان متفاوت است توجه ویژه کنید",
     "این داده‌ها از منابع رسمی زیر گردآوری شده‌اند، خود این گردآوردی رسمی و دارای تضمین بی‌نقص بودن نیست ولی محتویات آن به منابع زیر بر می‌گردد",
 
     "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
