@@ -178,14 +178,13 @@ var calendarTypesTitleAbbr = emptyList<String>()
 fun configureCalendarsAndLoadEvents(context: Context) {
     val enabledEventsTypes =
         context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
+    val enabledHolidays = EnabledHolidays(enabledEventsTypes)
 
-    isIranHolidaysEnabled = "iran_holidays" in enabledEventsTypes
+    isIranHolidaysEnabled = enabledHolidays.iranHolidays
 
     IslamicDate.useUmmAlQura = false
-    if ("iran_holidays" !in enabledEventsTypes) {
-        if ("afghanistan_holidays" in enabledEventsTypes) {
-            IslamicDate.useUmmAlQura = true
-        }
+    if (enabledHolidays.iranHolidays) {
+        if (enabledHolidays.afghanistanHolidays) IslamicDate.useUmmAlQura = true
         when (language) {
             LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES ->
                 IslamicDate.useUmmAlQura = true
@@ -196,7 +195,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
         .getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
     // It is vital to configure calendar before loading of the events
-    loadEvents(enabledEventsTypes)
+    loadEvents(enabledHolidays)
 }
 
 fun loadLanguageResource() {

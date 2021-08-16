@@ -24,97 +24,92 @@ var islamicCalendarEvents: IslamicCalendarEventsStore = EventsStore.empty()
 var gregorianCalendarEvents: GregorianCalendarEventsStore = EventsStore.empty()
     private set
 
-fun loadEvents(enabledTypes: Set<String>) {
+class EnabledHolidays(enabledTypes: Set<String>) {
     val afghanistanHolidays = "afghanistan_holidays" in enabledTypes
     val afghanistanOthers = "afghanistan_others" in enabledTypes
     val iranHolidays = "iran_holidays" in enabledTypes
     val iranAncient = "iran_ancient" in enabledTypes
     val iranOthers = "iran_others" in enabledTypes || /*legacy*/ "iran_islamic" in enabledTypes
     val international = "international" in enabledTypes
+}
 
-    fun <T> createEvent(record: CalendarRecord, calendarType: CalendarType): T? {
-        when { // skip not enabled events if none of the rules matches
-            record.type == EventType.Iran && record.isHoliday && iranHolidays -> Unit
-            record.type == EventType.Iran && iranOthers -> Unit
-            record.type == EventType.Afghanistan && record.isHoliday && afghanistanHolidays -> Unit
-            record.type == EventType.Afghanistan && afghanistanOthers -> Unit
-            record.type == EventType.AncientIran && iranAncient -> Unit
-            record.type == EventType.International && international -> Unit
-            // Enable Iranian events of Gregorian calendar even if itself isn't enabled
-            record.type == EventType.Iran && international && calendarType == CalendarType.GREGORIAN ->
-                Unit
-            else -> return null
-        }
-
-        // Don't mark holidays as holiday if it isn't chosen
-        val holiday = when {
-            !iranHolidays && record.type == EventType.Iran -> false
-            !afghanistanHolidays && record.type == EventType.Afghanistan -> false
-            else -> record.isHoliday
-        }
-
-        val title = """${record.title} (${
-            if (holiday && afghanistanHolidays && iranHolidays) {
-                when (record.type) {
-                    EventType.Iran -> "ایران"
-                    EventType.Afghanistan -> "افغانستان"
-                    else -> ""
-                } + spacedComma
-            } else ""
-        }${formatDayAndMonth(calendarType, record.day, record.month)})"""
-
-        @Suppress("UNCHECKED_CAST")
-        return when (calendarType) {
-            CalendarType.SHAMSI -> {
-                val date = PersianDate(-1, record.month, record.day)
-                CalendarEvent.PersianCalendarEvent(title, holiday, date)
-            }
-            CalendarType.GREGORIAN -> {
-                val date = CivilDate(-1, record.month, record.day)
-                CalendarEvent.GregorianCalendarEvent(title, holiday, date)
-            }
-            CalendarType.ISLAMIC -> {
-                val date = IslamicDate(-1, record.month, record.day)
-                CalendarEvent.IslamicCalendarEvent(title, holiday, date)
-            }
-        } as? T
-    }
-
+fun loadEvents(e: EnabledHolidays) {
     // Creates irregular recurring events instances of this years, the previous and the next year
     // a bit hacky and probably will be replaced with a caching mechanism instead
     val today = Jdn.today
-    val irregularEventsInstances = listOf(
-        createIrregularRecurringEventsInstances(
-            international, iranHolidays, iranOthers, iranAncient, today
-        ),
-        createIrregularRecurringEventsInstances(
-            international, iranHolidays, iranOthers, iranAncient, today, -1
-        ),
-        createIrregularRecurringEventsInstances(
-            international, iranHolidays, iranOthers, iranAncient, today, +1
-        )
-    ).flatten()
+    val irregularEventsInstances = createIrregularRecurringEventsInstances(e, today) +
+            createIrregularRecurringEventsInstances(e, today, -1) +
+            createIrregularRecurringEventsInstances(e, today, +1)
 
-    allEnabledEvents =
-        run {
-            val events = persianEvents.mapNotNull { record ->
-                createEvent<CalendarEvent.PersianCalendarEvent>(record, CalendarType.SHAMSI)
-            } + irregularEventsInstances.filterIsInstance<CalendarEvent.PersianCalendarEvent>()
-            persianCalendarEvents = PersianCalendarEventsStore(events)
-            events
-        } + run {
-            val events = islamicEvents.mapNotNull { record ->
-                createEvent<CalendarEvent.IslamicCalendarEvent>(record, CalendarType.ISLAMIC)
-            } + irregularEventsInstances.filterIsInstance<CalendarEvent.IslamicCalendarEvent>()
-            islamicCalendarEvents = IslamicCalendarEventsStore(events)
-            events
-        } + run {
-            val events = gregorianEvents.mapNotNull { record ->
-                createEvent<CalendarEvent.GregorianCalendarEvent>(record, CalendarType.GREGORIAN)
-            } + irregularEventsInstances.filterIsInstance<CalendarEvent.GregorianCalendarEvent>()
-            gregorianCalendarEvents = GregorianCalendarEventsStore(events)
-            events
+    allEnabledEvents = run {
+        val events = persianEvents.mapNotNull { record ->
+            createEvent<CalendarEvent.PersianCalendarEvent>(e, record, CalendarType.SHAMSI)
+        } + irregularEventsInstances.filterIsInstance<CalendarEvent.PersianCalendarEvent>()
+        persianCalendarEvents = PersianCalendarEventsStore(events)
+        events
+    } + run {
+        val events = islamicEvents.mapNotNull { record ->
+            createEvent<CalendarEvent.IslamicCalendarEvent>(e, record, CalendarType.ISLAMIC)
+        } + irregularEventsInstances.filterIsInstance<CalendarEvent.IslamicCalendarEvent>()
+        islamicCalendarEvents = IslamicCalendarEventsStore(events)
+        events
+    } + run {
+        val events = gregorianEvents.mapNotNull { record ->
+            createEvent<CalendarEvent.GregorianCalendarEvent>(e, record, CalendarType.GREGORIAN)
+        } + irregularEventsInstances.filterIsInstance<CalendarEvent.GregorianCalendarEvent>()
+        gregorianCalendarEvents = GregorianCalendarEventsStore(events)
+        events
+    }
+}
+
+private fun <T : CalendarEvent<out AbstractDate>> createEvent(
+    e: EnabledHolidays, record: CalendarRecord, calendarType: CalendarType
+): T? {
+    when { // skip not enabled events if none of the rules matches
+        record.type == EventType.Iran && record.isHoliday && e.iranHolidays -> Unit
+        record.type == EventType.Iran && e.iranOthers -> Unit
+        record.type == EventType.Afghanistan && record.isHoliday && e.afghanistanHolidays -> Unit
+        record.type == EventType.Afghanistan && e.afghanistanOthers -> Unit
+        record.type == EventType.AncientIran && e.iranAncient -> Unit
+        record.type == EventType.International && e.international -> Unit
+        // Enable Iranian events of Gregorian calendar even if itself isn't enabled
+        record.type == EventType.Iran && e.international && calendarType == CalendarType.GREGORIAN ->
+            Unit
+        else -> return null
+    }
+
+    // Don't mark holidays as holiday if it isn't chosen
+    val holiday = when {
+        record.type == EventType.Iran && !e.iranHolidays -> false
+        record.type == EventType.Afghanistan && !e.afghanistanHolidays -> false
+        else -> record.isHoliday
+    }
+
+    val title = """${record.title} (${
+        if (holiday && e.afghanistanHolidays && e.iranHolidays) {
+            when (record.type) {
+                EventType.Iran -> "ایران"
+                EventType.Afghanistan -> "افغانستان"
+                else -> ""
+            } + spacedComma
+        } else ""
+    }${formatDayAndMonth(calendarType, record.day, record.month)})"""
+
+    @Suppress("UNCHECKED_CAST")
+    return when (calendarType) {
+        CalendarType.SHAMSI -> {
+            val date = PersianDate(-1, record.month, record.day)
+            CalendarEvent.PersianCalendarEvent(title, holiday, date)
         }
+        CalendarType.GREGORIAN -> {
+            val date = CivilDate(-1, record.month, record.day)
+            CalendarEvent.GregorianCalendarEvent(title, holiday, date)
+        }
+        CalendarType.ISLAMIC -> {
+            val date = IslamicDate(-1, record.month, record.day)
+            CalendarEvent.IslamicCalendarEvent(title, holiday, date)
+        }
+    } as? T
 }
 
 private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int): String {
@@ -122,7 +117,7 @@ private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int):
         CalendarType.SHAMSI -> persianMonths
         CalendarType.GREGORIAN -> gregorianMonths
         CalendarType.ISLAMIC -> islamicMonths
-    }[month - 1]
+    }.getOrNull(month - 1).debugAssertNotNull ?: ""
     return when (language) {
         LANG_CKB -> "%sی %s"
         else -> "%s %s"
@@ -131,15 +126,14 @@ private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int):
 
 // Create actually usable irregular event of a year based on defined rules and enabled holidays
 private fun createIrregularRecurringEventsInstances(
-    international: Boolean, iranHolidays: Boolean, iranOthers: Boolean, iranAncient: Boolean,
-    jdn: Jdn, yearOffset: Int = 0,
+    e: EnabledHolidays, jdn: Jdn, yearOffset: Int = 0
 ): List<CalendarEvent<out AbstractDate>> {
     return irregularRecurringEvents.filter { event ->
         when {
-            event["type"] == "International" && international -> true
-            event["type"] == "Iran" && iranHolidays && event["holiday"] == "true" -> true
-            event["type"] == "Iran" && iranOthers -> true
-            event["type"] == "AncientIran" && iranAncient -> true
+            event["type"] == "International" && e.international -> true
+            event["type"] == "Iran" && e.iranHolidays && event["holiday"] == "true" -> true
+            event["type"] == "Iran" && e.iranOthers -> true
+            event["type"] == "AncientIran" && e.iranAncient -> true
             else -> false
         }
     }.mapNotNull { event ->
