@@ -1042,8 +1042,6 @@
       "title": "روز وقف" },
     { "holiday": true, "month": 2, "day": 28, "type": "Iran",
       "title": "رحلت حضرت رسول اکرم (ص) (۱۱ ه‍.ق) – شهادت امام حسن مجتبی (ع) (۵۰ ه‍.ق)" },
-    { "holiday": true, "month": 2, "day": 30, "type": "Iran",
-      "title": "شهادت امام رضا (ع) (۲۰۳ ه‍.ق)" },
     { "holiday": false, "month": 3, "day": 1, "type": "Iran",
       "title": "هجرت رسول اکرم (ص) از مکه به مدینه" },
     { "holiday": true, "month": 3, "day": 8, "type": "Iran",
@@ -1136,8 +1134,6 @@
       "title": "روز بزرگداشت حضرت احمدبن‌موسی شاهچراغ (ع)" },
     { "holiday": false, "month": 11, "day": 11, "type": "Iran",
       "title": "ولادت امام رضا (ع) (۱۴۸ ه‍.ق)" },
-    { "holiday": false, "month": 11, "day": 30, "type": "Iran",
-      "title": "شهادت امام محمد تقی (ع) (۲۲۰ ه‍.ق)" },
     { "holiday": false, "month": 12, "day": 1, "type": "Iran",
       "title": "سالروز ازدواج امام علی (ع) و حضرت فاطمه (س) (۲ ه‍.ق) – روز ازدواج" },
     { "holiday": false, "month": 12, "day": 6, "type": "Iran",
@@ -1300,6 +1296,10 @@
     { "calendar": "Persian", "rule": "last weekday of month", "weekday": 4, "month": 12, "type": "AncientIran",
       "title": "چهارشنبه‌سوری (آخرین سه‌شنبه سال)", "holiday": false },
     { "calendar": "Gregorian", "rule": "nth day of year", "nth": 256, "type": "International",
-      "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "holiday": false }
+      "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "holiday": false },
+    { "calendar": "Hijri", "rule": "end of month", "month": 2, "type": "Iran",
+      "title": "شهادت امام رضا (ع) (۲۰۳ ه‍.ق) (انتهای ماه صَفَر)", "holiday": true },
+    { "calendar": "Hijri", "rule": "end of month", "month": 11, "type": "Iran",
+      "title": "شهادت امام محمد تقی (ع) (۲۲۰ ه‍.ق) (انتهای ماه ذی‌القعده)", "holiday": false }
   ]
 }

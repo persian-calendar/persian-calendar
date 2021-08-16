@@ -223,11 +223,19 @@ fun loadEvents(context: Context) {
 
     val allEnabledEventsBuilder = ArrayList<CalendarEvent<*>>()
 
+    // Creates irregular recurring events instances of this years, the previous and the next year
+    // a bit hacky and probably will be replaced with a caching mechanism instead
     val today = Jdn.today
-    // Creates irregular recurring events instances of this year and the next year, a bit hacky
     val irregularEventsInstances = listOf(
-        createIrregularEventsInstances(today, international, iranHolidays, iranOthers, iranAncient),
-        createIrregularEventsInstances(today + 365, international, iranHolidays, iranOthers, iranAncient)
+        createIrregularRecurringEventsInstances(
+            international, iranHolidays, iranOthers, iranAncient, today
+        ),
+        createIrregularRecurringEventsInstances(
+            international, iranHolidays, iranOthers, iranAncient, today, -1
+        ),
+        createIrregularRecurringEventsInstances(
+            international, iranHolidays, iranOthers, iranAncient, today, +1
+        )
     ).flatten()
 
     persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull {
@@ -310,9 +318,9 @@ fun loadEvents(context: Context) {
 }
 
 // Create actually usable irregular event of a year based on defined rules and enabled holidays
-private fun createIrregularEventsInstances(
-    jdn: Jdn,
-    international: Boolean, iranHolidays: Boolean, iranOthers: Boolean, iranAncient: Boolean
+private fun createIrregularRecurringEventsInstances(
+    international: Boolean, iranHolidays: Boolean, iranOthers: Boolean, iranAncient: Boolean,
+    jdn: Jdn, yearOffset: Int = 0,
 ): List<CalendarEvent<out AbstractDate>> {
     return irregularRecurringEvents.filter { event ->
         when {
@@ -327,15 +335,19 @@ private fun createIrregularEventsInstances(
             "Gregorian" -> CalendarType.GREGORIAN
             "Persian" -> CalendarType.SHAMSI
             "Hijri" -> CalendarType.ISLAMIC
-            else -> null
-        } ?: return@mapNotNull null
-        val year = jdn.toCalendar(type).year
+            else -> return@mapNotNull null
+        }
+        val year = jdn.toCalendar(type).year + yearOffset
         val date = when (event["rule"]) {
-            "nth day of year" -> { // Handle nth day of year
+            "nth day of year" -> {
                 val nth = event["nth"]?.toIntOrNull() ?: return@mapNotNull null
                 (Jdn(type, year, 1, 1) + nth - 1).toCalendar(type)
             }
-            "last weekday of month" -> { // Handle last weekday of month
+            "end of month" -> {
+                val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
+                type.createDate(year, month, type.getMonthLength(year, month))
+            }
+            "last weekday of month" -> {
                 val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
                 val weekDay = event["weekday"]?.toIntOrNull() ?: return@mapNotNull null
                 type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay))
