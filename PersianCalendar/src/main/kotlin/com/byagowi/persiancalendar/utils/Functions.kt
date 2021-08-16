@@ -44,11 +44,7 @@ fun initUtils(context: Context) {
     applyAppLanguage(context)
     loadLanguageResource()
     loadAlarms(context)
-
-    val enabledEventsTypes =
-        context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
-    configureCalendars(context, enabledEventsTypes)
-    updateEventsStores(enabledEventsTypes)
+    configureCalendarsAndLoadEvents(context)
 }
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran

@@ -23,7 +23,7 @@ var islamicCalendarEvents: IslamicCalendarEventsStore = EventsStore.empty()
 var gregorianCalendarEvents: GregorianCalendarEventsStore = EventsStore.empty()
     private set
 
-fun updateEventsStores(enabledTypes: Set<String>) {
+fun loadEvents(enabledTypes: Set<String>) {
     val afghanistanHolidays = "afghanistan_holidays" in enabledTypes
     val afghanistanOthers = "afghanistan_others" in enabledTypes
     val iranHolidays = "iran_holidays" in enabledTypes

@@ -40,6 +40,7 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
+import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LATITUDE
@@ -172,17 +173,17 @@ var numericalDatePreferred = false
     private set
 var calendarTypesTitleAbbr = emptyList<String>()
     private set
-// Some more are in EventsStore
+// Some more are in EventsUtils
 
-fun configureCalendars(context: Context, enabledEventsTypes: Set<String>) {
-    val afghanistanHolidays = "afghanistan_holidays" in enabledEventsTypes
-    val iranHolidays = "iran_holidays" in enabledEventsTypes
+fun configureCalendarsAndLoadEvents(context: Context) {
+    val enabledEventsTypes =
+        context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
 
-    isIranHolidaysEnabled = iranHolidays
+    isIranHolidaysEnabled = "iran_holidays" in enabledEventsTypes
 
     IslamicDate.useUmmAlQura = false
-    if (!iranHolidays) {
-        if (afghanistanHolidays) {
+    if ("iran_holidays" !in enabledEventsTypes) {
+        if ("afghanistan_holidays" in enabledEventsTypes) {
             IslamicDate.useUmmAlQura = true
         }
         when (language) {
@@ -193,6 +194,9 @@ fun configureCalendars(context: Context, enabledEventsTypes: Set<String>) {
 
     IslamicDate.islamicOffset = context.appPrefs
         .getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
+
+    // It is vital to load events after configuration of calendars
+    loadEvents(enabledEventsTypes)
 }
 
 fun loadLanguageResource() {
