@@ -205,18 +205,18 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="next_month">Siguiente mes</string>
     <string name="week_days_name_column">%1$s column in days table</string>
     <string name="equivalent_to">Equivalente a</string>
-    <string name="holiday_reason">Holiday because of</string>
-    <string name="nth_week_of_year">%1$s week of year</string>
+    <string name="holiday_reason">Vacaciones debido a</string>
+    <string name="nth_week_of_year">%1$s semana del año</string>
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="shift_work_settings">Shift work settings</string>
-    <string name="remove">Remove</string>
+    <string name="remove">Eliminar</string>
     <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
     <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
-    <string name="shift_work_reset_button">Disable or reprogram</string>
-    <string name="n_minutes">%1$s minutes</string>
-    <string name="n_hours">%1$s hours</string>
-    <string name="and">" and "</string>
-    <string name="device_info">Device Information</string>
+    <string name="shift_work_reset_button">Deshabilitar o reprogramar</string>
+    <string name="n_minutes">%1$s minutos</string>
+    <string name="n_hours">%1$s horas</string>
+    <string name="and">" Y "</string>
+    <string name="device_info">Información del dispositivo</string>
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%1$s till to %2$s</string>
@@ -232,7 +232,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_background_color">Widget Background Color</string>
     <string name="select_widgets_background_color">Select custom color for widgets background</string>
     <string name="share">Compartir</string>
-    <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
+    <string name="enable_location_services">servicios de ubicación están deshabilitados, actívelos para usar la función</string>
     <string name="select_date">Elegir fecha</string>
     <string name="age_widget_title">Título del widget</string>
     <string name="n_days">%1$s días</string>
