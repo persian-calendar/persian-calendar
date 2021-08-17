@@ -28,7 +28,6 @@
 
     <string-array name="holidays_types">
         <item>عُطل إيران</item>
-        <item>المناسبات الإسلامية (إيران)</item>
         <item>المناسبات القومية (إيران)</item>
         <item>المناسبات الأخرى (إيران)</item>
         <item>المناسبات الدولية والعالمية</item>

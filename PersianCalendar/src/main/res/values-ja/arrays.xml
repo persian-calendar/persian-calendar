@@ -28,7 +28,6 @@
 
     <string-array name="holidays_types">
         <item>イラン祝日</item>
-        <item>イスラム教イベント</item>
         <item>古代イランのイベント</item>
         <item>他のイランのイベント</item>
         <item>国際のイベントイベント</item>

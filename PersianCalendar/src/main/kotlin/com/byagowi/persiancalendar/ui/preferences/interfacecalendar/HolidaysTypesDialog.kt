@@ -19,10 +19,10 @@ fun showHolidaysTypesDialog(context: Context) {
 
     // Update labels
     listOf(
-        binding.iranHolidays, null, binding.iranAncient, binding.iranOthers,
+        binding.iranHolidays, binding.iranAncient, binding.iranOthers,
         binding.international, binding.afghanistanHolidays, binding.afghanistanOthers
     ).zip(context.resources.getStringArray(R.array.holidays_types)) { view, title ->
-        view?.text = title
+        view.text = title
     }
     // TODO: i18n, maybe
     val pattern = "%s، رسمی، <a href=\"%s\">مشاهده منبع</a>"
