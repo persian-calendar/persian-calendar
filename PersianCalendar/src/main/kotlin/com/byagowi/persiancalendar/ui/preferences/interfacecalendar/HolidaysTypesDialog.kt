@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.isRtl
 
 fun showHolidaysTypesDialog(context: Context) {
     val binding = HolidaysTypesDialogBinding.inflate(context.layoutInflater)
@@ -21,11 +22,9 @@ fun showHolidaysTypesDialog(context: Context) {
     listOf(
         binding.iranHolidays, binding.iranAncient, binding.iranOthers,
         binding.international, binding.afghanistanHolidays, binding.afghanistanOthers
-    ).zip(context.resources.getStringArray(R.array.holidays_types)) { view, title ->
-        view.text = title
-    }
+    ).zip(context.resources.getStringArray(R.array.holidays_types)) { v, title -> v.text = title }
     // TODO: i18n, maybe
-    val pattern = "%s، رسمی، <a href=\"%s\">مشاهده منبع</a>"
+    val pattern = if (context.resources.isRtl) "%s، رسمی، <a href=\"%s\">مشاهده منبع</a>" else "%s"
     binding.iran.text = HtmlCompat.fromHtml(
         pattern.format("مرکز تقویم دانشگاه تهران", EventType.Iran.source),
         HtmlCompat.FROM_HTML_MODE_COMPACT
