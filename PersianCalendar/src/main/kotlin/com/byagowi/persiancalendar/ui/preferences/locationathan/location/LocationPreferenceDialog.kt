@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.localizedCityName
 import com.byagowi.persiancalendar.utils.localizedCountryName
-import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 /**
  * persian_calendar
@@ -42,7 +41,6 @@ fun showLocationPreferenceDialog(context: Context) {
             remove(PREF_ALTITUDE)
             putString(PREF_SELECTED_LOCATION, result)
         }
-        updateStoredPreference(context)
     })
     dialog.show()
 }
