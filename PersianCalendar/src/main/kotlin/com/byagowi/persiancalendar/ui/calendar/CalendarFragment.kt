@@ -61,6 +61,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -444,9 +445,7 @@ class CalendarFragment : Fragment() {
             eventsBinding.eventTitle.isVisible = false
         }
 
-        val enabledTypes = activity.appPrefs
-            .getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-        if (enabledTypes.isEmpty()) {
+        if (EnabledHolidays(activity.appPrefs, emptySet()).isEmpty) {
             eventsBinding.buttonsBar.header.setText(R.string.warn_if_events_not_set)
             eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
@@ -456,7 +455,9 @@ class CalendarFragment : Fragment() {
                 )
             }
             eventsBinding.buttonsBar.discard.setOnClickListener {
-                activity.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays")) }
+                activity.appPrefs.edit {
+                    putStringSet(PREF_HOLIDAY_TYPES, EnabledHolidays.iranDefault)
+                }
                 eventsBinding.buttonsBar.root.isVisible = false
             }
         } else eventsBinding.buttonsBar.root.isVisible = false

@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 
@@ -69,16 +70,14 @@ private fun changeLanguage(prefs: SharedPreferences, language: String) = prefs.e
 
     when (language) {
         LANG_FA_AF, LANG_PS -> {
-            val currentHolidays = prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-            if (currentHolidays.isEmpty() || currentHolidays.size == 1 &&
-                "iran_holidays" in currentHolidays
-            ) putStringSet(PREF_HOLIDAY_TYPES, setOf("afghanistan_holidays"))
+            val enabledHolidays = EnabledHolidays(prefs, emptySet())
+            if (enabledHolidays.isEmpty || enabledHolidays.onlyIranHolidaysIsEnabled)
+                putStringSet(PREF_HOLIDAY_TYPES, EnabledHolidays.afghanistanDefault)
         }
         LANG_AZB, LANG_GLK, LANG_FA, LANG_EN_IR -> {
-            val currentHolidays = prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: emptySet()
-            if (currentHolidays.isEmpty() || currentHolidays.size == 1
-                && "afghanistan_holidays" in currentHolidays
-            ) putStringSet(PREF_HOLIDAY_TYPES, setOf("iran_holidays"))
+            val enabledHolidays = EnabledHolidays(prefs, emptySet())
+            if (enabledHolidays.isEmpty || enabledHolidays.onlyAfghanistanHolidaysIsEnabled)
+                putStringSet(PREF_HOLIDAY_TYPES, EnabledHolidays.iranDefault)
         }
     }
 

@@ -40,7 +40,6 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
-import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LATITUDE
@@ -176,9 +175,7 @@ var calendarTypesTitleAbbr = emptyList<String>()
 // Some more are in EventsUtils
 
 fun configureCalendarsAndLoadEvents(context: Context) {
-    val enabledEventsTypes =
-        context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
-    val enabledHolidays = EnabledHolidays(enabledEventsTypes)
+    val enabledHolidays = EnabledHolidays(context.appPrefs)
 
     isIranHolidaysEnabled = enabledHolidays.iranHolidays
 

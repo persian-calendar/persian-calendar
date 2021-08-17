@@ -1,15 +1,12 @@
 package com.byagowi.persiancalendar.utils
 
+import android.content.SharedPreferences
 import com.byagowi.persiancalendar.LANG_CKB
+import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.generated.CalendarRecord
-import com.byagowi.persiancalendar.generated.EventType
-import com.byagowi.persiancalendar.generated.gregorianEvents
-import com.byagowi.persiancalendar.generated.irregularRecurringEvents
-import com.byagowi.persiancalendar.generated.islamicEvents
-import com.byagowi.persiancalendar.generated.persianEvents
+import com.byagowi.persiancalendar.generated.*
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -24,13 +21,60 @@ var islamicCalendarEvents: IslamicCalendarEventsStore = EventsStore.empty()
 var gregorianCalendarEvents: GregorianCalendarEventsStore = EventsStore.empty()
     private set
 
-class EnabledHolidays(enabledTypes: Set<String>) {
-    val afghanistanHolidays = "afghanistan_holidays" in enabledTypes
-    val afghanistanOthers = "afghanistan_others" in enabledTypes
-    val iranHolidays = "iran_holidays" in enabledTypes
-    val iranAncient = "iran_ancient" in enabledTypes
-    val iranOthers = "iran_others" in enabledTypes || /*legacy*/ "iran_islamic" in enabledTypes
-    val international = "international" in enabledTypes
+class EnabledHolidays private constructor(val enabledTypes: Set<String>) {
+    constructor(prefs: SharedPreferences, defaultSet: Set<String> = iranDefault) :
+            this(prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: defaultSet)
+
+    val afghanistanHolidays = afghanistanHolidaysKey in enabledTypes
+    val afghanistanOthers = afghanistanOthersKey in enabledTypes
+    val iranHolidays = iranHolidaysKey in enabledTypes
+    val iranAncient = iranAncientKey in enabledTypes
+    val iranOthers = iranOthersKey in enabledTypes || /*legacy*/ "iran_islamic" in enabledTypes
+    val international = internationalKey in enabledTypes
+    val isEmpty get() = enabledTypes.isEmpty()
+    val onlyIranHolidaysIsEnabled get() = enabledTypes.size == 1 && iranHolidays
+    val onlyAfghanistanHolidaysIsEnabled get() = enabledTypes.size == 1 && afghanistanHolidays
+
+    fun skipEvent(record: CalendarRecord, calendarType: CalendarType) = when {
+        record.type == EventType.Iran && record.isHoliday && iranHolidays -> false
+        record.type == EventType.Iran && iranOthers -> false
+        record.type == EventType.Afghanistan && record.isHoliday && afghanistanHolidays -> false
+        record.type == EventType.Afghanistan && afghanistanOthers -> false
+        record.type == EventType.AncientIran && iranAncient -> false
+        record.type == EventType.International && international -> false
+        // Enable Iranian events of Gregorian calendar even if itself isn't enabled
+        record.type == EventType.Iran && international && calendarType == CalendarType.GREGORIAN ->
+            false
+        else -> true
+    }
+
+    // Don't mark holidays as holiday if holiday isn't enabled explicitly
+    fun determineIsHoliday(record: CalendarRecord) = when {
+        record.type == EventType.Iran && !iranHolidays -> false
+        record.type == EventType.Afghanistan && !afghanistanHolidays -> false
+        else -> record.isHoliday
+    }
+
+    fun multiCountryComment(calendarRecord: CalendarRecord): String {
+        return if (calendarRecord.isHoliday && iranHolidays && afghanistanOthers) {
+            when (calendarRecord.type) {
+                EventType.Iran -> "ایران"
+                EventType.Afghanistan -> "افغانستان"
+                else -> ""
+            } + spacedComma
+        } else ""
+    }
+
+    companion object {
+        const val iranHolidaysKey = "iran_holidays"
+        const val iranOthersKey = "iran_others"
+        const val afghanistanHolidaysKey = "afghanistan_holidays"
+        const val afghanistanOthersKey = "afghanistan_others"
+        const val iranAncientKey = "iran_ancient"
+        const val internationalKey = "international"
+        val iranDefault = setOf(iranHolidaysKey)
+        val afghanistanDefault = setOf(afghanistanHolidaysKey)
+    }
 }
 
 fun loadEvents(e: EnabledHolidays) {
@@ -43,19 +87,19 @@ fun loadEvents(e: EnabledHolidays) {
 
     allEnabledEvents = run {
         val events = persianEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.PersianCalendarEvent>(e, record, CalendarType.SHAMSI)
+            createEvent<CalendarEvent.PersianCalendarEvent>(record, e, CalendarType.SHAMSI)
         } + irregularEventsInstances.filterIsInstance<CalendarEvent.PersianCalendarEvent>()
         persianCalendarEvents = PersianCalendarEventsStore(events)
         events
     } + run {
         val events = islamicEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.IslamicCalendarEvent>(e, record, CalendarType.ISLAMIC)
+            createEvent<CalendarEvent.IslamicCalendarEvent>(record, e, CalendarType.ISLAMIC)
         } + irregularEventsInstances.filterIsInstance<CalendarEvent.IslamicCalendarEvent>()
         islamicCalendarEvents = IslamicCalendarEventsStore(events)
         events
     } + run {
         val events = gregorianEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.GregorianCalendarEvent>(e, record, CalendarType.GREGORIAN)
+            createEvent<CalendarEvent.GregorianCalendarEvent>(record, e, CalendarType.GREGORIAN)
         } + irregularEventsInstances.filterIsInstance<CalendarEvent.GregorianCalendarEvent>()
         gregorianCalendarEvents = GregorianCalendarEventsStore(events)
         events
@@ -63,38 +107,14 @@ fun loadEvents(e: EnabledHolidays) {
 }
 
 private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
-    e: EnabledHolidays, record: CalendarRecord, calendarType: CalendarType
+    record: CalendarRecord, enabledHolidays: EnabledHolidays, calendarType: CalendarType
 ): T? {
-    when { // skip not enabled events if none of the rules matches
-        record.type == EventType.Iran && record.isHoliday && e.iranHolidays -> Unit
-        record.type == EventType.Iran && e.iranOthers -> Unit
-        record.type == EventType.Afghanistan && record.isHoliday && e.afghanistanHolidays -> Unit
-        record.type == EventType.Afghanistan && e.afghanistanOthers -> Unit
-        record.type == EventType.AncientIran && e.iranAncient -> Unit
-        record.type == EventType.International && e.international -> Unit
-        // Enable Iranian events of Gregorian calendar even if itself isn't enabled
-        record.type == EventType.Iran && e.international && calendarType == CalendarType.GREGORIAN ->
-            Unit
-        else -> return null
-    }
+    if (enabledHolidays.skipEvent(record, calendarType)) return null
+    val multiCountryComment = enabledHolidays.multiCountryComment(record)
+    val dayAndMonth = formatDayAndMonth(calendarType, record.day, record.month)
+    val title = "${record.title} ($multiCountryComment$dayAndMonth)"
 
-    // Don't mark holidays as holiday if it isn't chosen
-    val holiday = when {
-        record.type == EventType.Iran && !e.iranHolidays -> false
-        record.type == EventType.Afghanistan && !e.afghanistanHolidays -> false
-        else -> record.isHoliday
-    }
-
-    val title = """${record.title} (${
-        if (holiday && e.afghanistanHolidays && e.iranHolidays) {
-            when (record.type) {
-                EventType.Iran -> "ایران"
-                EventType.Afghanistan -> "افغانستان"
-                else -> ""
-            } + spacedComma
-        } else ""
-    }${formatDayAndMonth(calendarType, record.day, record.month)})"""
-
+    val holiday = enabledHolidays.determineIsHoliday(record)
     return (when (calendarType) {
         CalendarType.SHAMSI -> {
             val date = PersianDate(-1, record.month, record.day)
@@ -108,7 +128,7 @@ private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
             val date = IslamicDate(-1, record.month, record.day)
             CalendarEvent.IslamicCalendarEvent(title, holiday, date)
         }
-    } as? T).debugAssertNotNull
+    } as T?).debugAssertNotNull
 }
 
 private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int): String {

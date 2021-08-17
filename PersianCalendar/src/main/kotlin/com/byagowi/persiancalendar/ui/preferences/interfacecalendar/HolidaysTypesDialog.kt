@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
 
 fun showHolidaysTypesDialog(context: Context) {
@@ -40,13 +41,17 @@ fun showHolidaysTypesDialog(context: Context) {
     binding.afghanistan.movementMethod = LinkMovementMethod.getInstance()
 
     // Update view from stored settings
-    val initial = context.appPrefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: setOf("iran_holidays")
-    binding.iranHolidays.isChecked = "iran_holidays" in initial
-    binding.iranOthers.isChecked = "iran_others" in initial || /*legacy*/ "iran_islamic" in initial
-    binding.afghanistanHolidays.isChecked = "afghanistan_holidays" in initial
-    binding.afghanistanOthers.isChecked = "afghanistan_others" in initial
-    binding.iranAncient.isChecked = "iran_ancient" in initial
-    binding.international.isChecked = "international" in initial
+    val checkboxToKeyPairs = listOf(
+        binding.iranHolidays to EnabledHolidays.iranHolidaysKey,
+        binding.iranOthers to EnabledHolidays.iranOthersKey,
+        binding.afghanistanHolidays to EnabledHolidays.afghanistanHolidaysKey,
+        binding.afghanistanOthers to EnabledHolidays.afghanistanOthersKey,
+        binding.iranAncient to EnabledHolidays.iranAncientKey,
+        binding.international to EnabledHolidays.internationalKey
+    )
+    val enabledHolidays = EnabledHolidays(context.appPrefs)
+    checkboxToKeyPairs
+        .forEach { (checkbox, key) -> checkbox.isChecked = key in enabledHolidays.enabledTypes }
 
     // Check boxes hierarchy
     val hierarchy = listOf(
@@ -82,12 +87,8 @@ fun showHolidaysTypesDialog(context: Context) {
         .setTitle(R.string.events)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
-            val result = listOf(
-                binding.iranHolidays to "iran_holidays", binding.iranOthers to "iran_others",
-                binding.afghanistanHolidays to "afghanistan_holidays",
-                binding.afghanistanOthers to "afghanistan_others",
-                binding.iranAncient to "iran_ancient", binding.international to "international"
-            ).mapNotNull { (checkBox, key) -> if (checkBox.isChecked) key else null }.toSet()
+            val result = checkboxToKeyPairs
+                .mapNotNull { (checkBox, key) -> if (checkBox.isChecked) key else null }.toSet()
             context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, result) }
         }
         .setNegativeButton(R.string.cancel, null)
