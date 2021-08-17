@@ -52,9 +52,9 @@
     <string name="imsak">امساک</string>
     <string name="fajr">اذان صبح</string>
     <string name="dhuhr">اذان ظهر</string>
-    <string name="asr">عصر</string>
+    <string name="asr">اذان عصر</string>
     <string name="maghrib">اذان مغرب</string>
-    <string name="isha">عشاء</string>
+    <string name="isha">اذان عشاء</string>
     <string name="sunrise">طلوع</string>
     <string name="sunset">غروب</string>
     <string name="midnight">نیمه‌شب</string>

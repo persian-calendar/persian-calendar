@@ -294,8 +294,8 @@ private fun Context.update4x2Widget(
         ).zip(
             when (calculationMethod) {
                 CalculationMethod.Tehran, CalculationMethod.Jafari -> listOf(
-                    R.string.fajr, R.string.dhuhr,
-                    R.string.sunset, R.string.maghrib,
+                    R.string.fajr, R.string.sunrise,
+                    R.string.dhuhr, R.string.maghrib,
                     R.string.midnight
                 )
                 else -> listOf(

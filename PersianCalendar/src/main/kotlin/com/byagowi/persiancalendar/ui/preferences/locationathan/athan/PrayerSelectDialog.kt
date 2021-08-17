@@ -36,7 +36,7 @@ fun showPrayerSelectDialog(context: Context) {
 fun showPrayerSelectPreviewDialog(context: Context) {
     val prayerTimesNames = prayerTimesNames.map(context::getString).toTypedArray()
     AlertDialog.Builder(context)
-        .setTitle(R.string.athan)
+        .setTitle(R.string.preview)
         .setItems(prayerTimesNames) { _, which ->
             startAthan(context, prayerTimesKeys.getOrNull(which) ?: "FAJR")
         }
