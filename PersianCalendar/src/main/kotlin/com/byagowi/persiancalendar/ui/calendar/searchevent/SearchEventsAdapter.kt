@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 
@@ -60,7 +61,8 @@ class SearchEventsAdapter(
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
             // Suppress unchecked cast just as ArrayAdapter.ArrayFilter.publishResults
             @Suppress("UNCHECKED_CAST")
-            showingItems = results.values as List<CalendarEvent<*>>
+            showingItems =
+                (results.values as? List<CalendarEvent<*>>).debugAssertNotNull ?: emptyList()
             if (results.count > 0)
                 notifyDataSetChanged()
             else

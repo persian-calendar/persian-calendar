@@ -128,7 +128,7 @@ private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
             val date = IslamicDate(-1, record.month, record.day)
             CalendarEvent.IslamicCalendarEvent(title, holiday, date)
         }
-    } as T?).debugAssertNotNull
+    } as? T).debugAssertNotNull
 }
 
 private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int): String {
