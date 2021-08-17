@@ -18,14 +18,6 @@
         <item>地球物理学研究所、テヘラン大学</item>
     </string-array>
 
-    <string-array name="prayerTimeNames">
-        <item>朝</item>
-        <item>昼</item>
-        <item>夕</item>
-        <item>マグレブ</item>
-        <item>エシャー</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>イラン祝日</item>
         <item>古代イランのイベント</item>

@@ -36,22 +36,6 @@
         <item>Tehran</item>
     </string-array>
 
-    <string-array name="prayerTimeNames">
-        <item>Morning</item>
-        <item>Dhohr</item>
-        <item>Asr</item>
-        <item>Maghrib</item>
-        <item>Isha</item>
-    </string-array>
-
-    <string-array name="prayerTimeKeys" translatable="false">
-        <item>FAJR</item>
-        <item>DHUHR</item>
-        <item>ASR</item>
-        <item>MAGHRIB</item>
-        <item>ISHA</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>تعطیلات در ایران</item>
         <item>مناسبت‌های ایران باستان</item>

@@ -18,14 +18,6 @@
         <item>قسم الجيوفيزياء ، جامعة طهران</item>
     </string-array>
 
-    <string-array name="prayerTimeNames">
-        <item>الفجر</item>
-        <item>الظهر</item>
-        <item>العصر</item>
-        <item>المغرب</item>
-        <item>العِشاء</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>عُطل إيران</item>
         <item>المناسبات القومية (إيران)</item>

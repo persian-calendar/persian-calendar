@@ -18,14 +18,6 @@
         <item>Institute of Geophysics, University of Tehran</item>
     </string-array>
 
-    <string-array name="prayerTimeNames">
-        <item>Morning</item>
-        <item>Dhohr</item>
-        <item>Asr</item>
-        <item>Maghrib</item>
-        <item>Isha</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>تعطیلات در ایران</item>
         <item>مناسبت‌های ایران باستان</item>
