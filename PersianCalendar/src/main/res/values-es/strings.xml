@@ -6,10 +6,10 @@
     <string name="widget_name">Persian Calendar</string>
     <string name="widget_mini_name">Persian Calendar (mini)</string>
     <string name="widget_age_name">Persian Calendar (age)</string>
-    <string name="close">Close</string>
-    <string name="open">Open</string>
+    <string name="close">Cerrar</string>
+    <string name="open">Abrir</string>
     <string name="accept">OK</string>
-    <string name="add">Add</string>
+    <string name="add">Añadir</string>
     <string name="help">Ayuda</string>
     <string name="more">Más</string>
     <string name="cancel">Cancelar</string>
@@ -79,28 +79,28 @@
     <string name="sunset">Sunset</string>
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
-    <string name="midnight">Midnight</string>
+    <string name="midnight">Medianoche</string>
     <string name="spring_equinox">Spring equinox time of year %1$s: %2$s</string>
     <!--Date Converter-->
     <string name="select_type_date">Select date type</string>
     <string name="year">Year</string>
-    <string name="select_year">Select year</string>
+    <string name="select_year">Elegir año</string>
     <string name="month">Month</string>
-    <string name="select_month">Select month</string>
-    <string name="day">Day</string>
-    <string name="select_day">Select day</string>
-    <string name="date_exception">"The entered day isn't valid."</string>
+    <string name="select_month">Elegir mes</string>
+    <string name="day">Día</string>
+    <string name="select_day">Elegir día</string>
+    <string name="date_exception">El día elegido no es válido.</string>
     <!--Compass-->
-    <string name="compass_not_found">Compass sensor not found</string>
+    <string name="compass_not_found">Sensor de brujula no encontrado</string>
     <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
     <string name="level">Level</string>
     <string name="stop">Stop</string>
-    <string name="resume">Resume</string>
+    <string name="resume">Reanudar</string>
     <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
-    <string name="north">North</string>
-    <string name="east">East</string>
-    <string name="south">South</string>
-    <string name="west">West</string>
+    <string name="north">Norte</string>
+    <string name="east">Este</string>
+    <string name="south">Sur</string>
+    <string name="west">Oeste</string>
     <string name="qibla">Qibla</string>
     <!-- Settings -->
     <string name="pref_header_interface_calendar">Interface and Calendar</string>
@@ -110,12 +110,12 @@
     <string name="pref_header_location_athan">Location and Athan</string>
     <!--Interface and Calendar Settings-->
     <string name="pref_interface">Interface</string>
-    <string name="language">Language</string>
+    <string name="language">Idioma</string>
     <string name="skin">Skin</string>
     <string name="select_skin">Select a skin</string>
-    <string name="persian_digits">Persian Digits</string>
+    <string name="persian_digits">Dígitos persas</string>
     <string name="enable_persian_digits">Enable Persian Digits</string>
-    <string name="events_summary">Events to show</string>
+    <string name="events_summary">Eventos para mostrar</string>
     <string name="show_device_calendar_events">Personal Calendar Events</string>
     <string name="show_device_calendar_events_summary">Show personal calendar events</string>
     <string name="calendars_priority">Calendars Priority</string>
