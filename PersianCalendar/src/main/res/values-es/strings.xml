@@ -199,12 +199,12 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="about_sendMail">Correo electrónico</string>
     <string name="about_email_sum">Enviar un correo electrónico personal a los autores de la aplicación</string>
     <string name="about_noClient">No hay ningún cliente de correo electrónico instalado</string>
-    <string name="about_developers">Developers (randomly ordered)</string>
+    <string name="about_developers">Desarrolladores (aleatoriamente)</string>
     <!--TalkBack, a11y-->
-    <string name="previous_month">Previous Month</string>
-    <string name="next_month">Next Month</string>
+    <string name="previous_month">Mes anterior</string>
+    <string name="next_month">Siguiente mes</string>
     <string name="week_days_name_column">%1$s column in days table</string>
-    <string name="equivalent_to">Equivalent to</string>
+    <string name="equivalent_to">Equivalente a</string>
     <string name="holiday_reason">Holiday because of</string>
     <string name="nth_week_of_year">%1$s week of year</string>
     <!-- New additions, to be categorized, keep the section on your translation -->
