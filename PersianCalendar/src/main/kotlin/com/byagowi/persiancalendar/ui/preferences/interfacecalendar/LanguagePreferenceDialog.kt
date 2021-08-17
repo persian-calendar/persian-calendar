@@ -42,8 +42,8 @@ fun showLanguagePreferenceDialog(context: Context) {
         LANG_UR to "اردو",
         LANG_EN_IR to "English (Iran)",
         LANG_EN_US to "English",
+        LANG_ES to "Español",
         LANG_FR to "Français",
-        // LANG_ES to "Español",
         LANG_JA to "日本語"
     )
     val languageKeys = languages.map { it.first }
