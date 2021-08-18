@@ -56,7 +56,7 @@ class EnabledHolidays private constructor(val enabledTypes: Set<String>) {
     }
 
     fun multiCountryComment(calendarRecord: CalendarRecord): String {
-        return if (calendarRecord.isHoliday && iranHolidays && afghanistanOthers) {
+        return if (calendarRecord.isHoliday && iranHolidays && afghanistanHolidays) {
             when (calendarRecord.type) {
                 EventType.Iran -> "ایران"
                 EventType.Afghanistan -> "افغانستان"
