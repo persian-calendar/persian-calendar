@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="code">ckb</string>
-
     <string name="app_name">ڕۆژژمێری فارسی</string>
     <string name="cancel">ھەڵوەشاندنەوە</string>
     <string name="widget_name">ڕۆژژمێری فارسی</string>
@@ -31,7 +29,6 @@
     <string name="altitude">بەرزاییی جوگرافی</string>
     <string name="altitude_praytime">بە مەتر (دڵخواز)</string>
     <string name="coordination">مختصات جغرافیایی</string>
-
     <string name="gps_location">وەرگرتنی شوێن لە GPS یان تۆڕ</string>
     <string name="gps_location_help">ئەگەر ئەمە بلوێ، ھیچی تر پێویست نییە</string>
     <string name="location">شوێن</string>
@@ -176,13 +173,11 @@
     <string name="pref_interface">ڕووکار</string>
     <string name="resume">درێژەپێدان</string>
     <string name="continue_button">بەردەوامبوون</string>
-
     <!--Permissions-->
     <string name="location_access">دەستڕاگەیشتن بە شوێن</string>
     <string name="phone_location_required">ئەم بەشەی بەرنامە پێویستی بە دەستەڵاتی شوێنە، دەنا دەبێ بەدەست درێژایی و پانایی جوگرافی تێ‌بخەن.</string>
     <string name="calendar_access">دەستڕاگەیشتن بە ڕۆژژمێری ئامراز</string>
     <string name="phone_calendar_required">ئەم بەشەی بەرنامە پێویستی بە دەستەڵاتی ڕۆژژمێری ئامرازە، بە پێدانی ئەم دەستەڵاتە بەرنامە دەتوانێ ڕووداوە کەسییەکانت لە ڕۆژژمێردا نیشان بدا.</string>
-
     <!--TalkBack, a11y-->
     <string name="previous_month">مانگی پاشەوە</string>
     <string name="next_month">مانگی پێشەوە</string>
@@ -195,7 +190,6 @@
     <string name="south">باشوور</string>
     <string name="west">ڕۆژاوا</string>
     <string name="qibla">ڕووگە</string>
-
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="outdated_app">ڕوژژمێر بەڕۆژ نییە؛ لەوانەیە بۆنەکان دروست نەبن</string>
     <string name="update">نوێکردنەوە</string>
@@ -236,5 +230,4 @@
     <string name="n_years">%1$s ساڵ</string>
     <string name="preview">پێشبینین</string>
     <string name="ignore">گوێ مەدە</string>
-
 </resources>
