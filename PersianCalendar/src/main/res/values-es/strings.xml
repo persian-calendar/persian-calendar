@@ -64,7 +64,7 @@
     <string name="moonInScorpio">Luna en Escorpio</string>
     <string name="events">Eventos</string>
     <string name="no_event">No hay evento ni cita para este día.</string>
-    <string name="warn_if_events_not_set">To select and show preferred holidays and events, visit the Settings</string>
+    <string name="warn_if_events_not_set">Para seleccionar y mostrar los días festivos y eventos preferidos, visite los ajustes</string>
     <string name="sunriseSunView">Amanecer</string>
     <string name="middaySunView">Mediodía</string>
     <string name="sunsetSunView">Atardecer</string>
@@ -80,7 +80,7 @@
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="midnight">Medianoche</string>
-    <string name="spring_equinox">Spring equinox time of year %1$s: %2$s</string>
+    <string name="spring_equinox">Momento del equinoccio de primavera del año %1$s: %2$s</string>
     <!--Date Converter-->
     <string name="select_type_date">Elegir la forma de fecha</string>
     <string name="year">Año</string>
@@ -121,7 +121,7 @@
     <string name="calendars_priority">Prioridades del calendario</string>
     <string name="calendars_priority_summary">Configurar calendarios para mostrar prioridad u ocultarlos</string>
     <string name="astronomical_info">Información astronómica</string>
-    <string name="astronomical_info_summary">"Show additional information like constellation, ancient names of years and moon in scorpio"</string>
+    <string name="astronomical_info_summary">Show additional information like constellation, ancient names of years and moon in scorpio</string>
     <string name="week_of_year">Semana del año</string>
     <string name="week_of_year_summary">Mostrar la semana del año en calendario</string>
     <string name="week_start">Inicio de semana</string>
@@ -133,14 +133,14 @@
     <string name="clock_in_24">Reloj de 24 horas</string>
     <string name="showing_clock_in_24">Mostrar el reloj de 24 horas</string>
     <!--Widget and Notification Settings-->
-    <string name="widget_text_color">Color de texto de Widget</string>
+    <string name="widget_text_color">Color de texto de widget</string>
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
     <string name="clock_on_widget">Reloj en el widget</string>
     <string name="showing_clock_on_widget">Mostrar reloj en el widget</string>
     <string name="iran_time">Hora de irán</string>
     <string name="showing_iran_time">Widgets and notifications in Iran time zone</string>
     <string name="customize_widget">Widget Customization</string>
-    <string name="which_one_to_show">Which ones to show</string>
+    <string name="which_one_to_show">Cuál para mostrar</string>
     <string name="customize_widget_summary">What to show from notification and widgets to make them more compact</string>
     <string name="ask_user_to_set_location">Set the location in the settings in order to see pray times here</string>
     <string name="notify_date">Habilitar notificación de fecha</string>
@@ -150,9 +150,9 @@
     <!--Location and Athan-->
     <string name="gps_location">Obtener la ubicación de GPS o de la red</string>
     <string name="gps_location_help">Other options are not needed if this is possible</string>
-    <string name="gps_internet_desc">"Enable device's GPS and Internet connection to find your location, please.
-
-The app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again."</string>
+    <string name="gps_internet_desc">Enable device\'s GPS and Internet connection to find your location, please.
+\n
+\nThe app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again.</string>
     <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
     <string name="location">Ubicación</string>
     <string name="location_help">If none of them, specify it below</string>
@@ -205,10 +205,10 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="next_month">Siguiente mes</string>
     <string name="week_days_name_column">%1$s columnas en tabla de días</string>
     <string name="equivalent_to">Equivalente a</string>
-    <string name="holiday_reason">Vacaciones debido a</string>
+    <string name="holiday_reason">Festivo debido a</string>
     <string name="nth_week_of_year">%1$s semana del año</string>
     <!-- New additions, to be categorized, keep the section on your translation -->
-    <string name="shift_work_settings">Shift work settings</string>
+    <string name="shift_work_settings">Ajustes del turno de trabajo</string>
     <string name="remove">Eliminar</string>
     <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
     <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
@@ -221,16 +221,16 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%1$s till to %2$s</string>
     <string name="shift_work_record_title">%1$s día(s) %2$s</string>
-    <string name="recurs">Recurs</string>
+    <string name="recurs">Recurre</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
-    <string name="shift_work_days_head">Length</string>
-    <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
+    <string name="shift_work_days_head">Longitud</string>
+    <string name="prefer_linear_date_summary">Usar 2000/1/1 en lugar de enero 2000 en widget y notificación</string>
     <string name="prefer_linear_date">Preferir la forma numérica de fechas</string>
     <string name="month_overview">Eventos del mes</string>
     <string name="map">Mapa</string>
-    <string name="widget_background_color">Widget Background Color</string>
-    <string name="select_widgets_background_color">Select custom color for widgets background</string>
+    <string name="widget_background_color">Color de fondo del widget</string>
+    <string name="select_widgets_background_color">Elija un color personalizado para el fondo de los widgets</string>
     <string name="share">Compartir</string>
     <string name="enable_location_services">servicios de ubicación están deshabilitados, actívelos para usar la función</string>
     <string name="select_date">Elegir fecha</string>
