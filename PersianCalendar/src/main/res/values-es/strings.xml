@@ -14,7 +14,7 @@
     <string name="more">Más</string>
     <string name="cancel">Cancelar</string>
     <string name="continue_button">Continuar</string>
-    <string name="outdated_app">Due to being outdated, things can be inaccurate</string>
+    <string name="outdated_app">Debido a estar desactualizado, las cosas pueden ser incorrectas</string>
     <string name="update">Actualizar</string>
     <!--Navigation drawers-->
     <string name="calendar">Calendario</string>
@@ -96,7 +96,7 @@
     <string name="level">Level</string>
     <string name="stop">Stop</string>
     <string name="resume">Reanudar</string>
-    <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings</string>
+    <string name="set_location">Para la ubicación del Sol y la Luna, y la dirección de Qibla, establezca la ubicación en la configuración.</string>
     <string name="north">Norte</string>
     <string name="east">Este</string>
     <string name="south">Sur</string>
