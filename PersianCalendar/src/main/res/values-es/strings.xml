@@ -53,39 +53,39 @@
     <string name="aquarius">Aquarius</string>
     <string name="pisces">Pisces</string>
     <string name="aries">Aries</string>
-    <string name="taurus">Taurus</string>
-    <string name="gemini">Gemini</string>
+    <string name="taurus">Tauro</string>
+    <string name="gemini">Geminis</string>
     <string name="cancer">Cáncer</string>
     <string name="leo">Leo</string>
     <string name="virgo">Virgo</string>
     <string name="libra">Libra</string>
-    <string name="scorpio">Scorpion</string>
-    <string name="sagittarius">Sagittarius</string>
-    <string name="moonInScorpio">Moon is in Scorpio</string>
+    <string name="scorpio">Escorpio</string>
+    <string name="sagittarius">Sagitario</string>
+    <string name="moonInScorpio">Luna en Escorpio</string>
     <string name="events">Eventos</string>
-    <string name="no_event">No event or appointment for this day.</string>
+    <string name="no_event">No hay evento ni cita para este día.</string>
     <string name="warn_if_events_not_set">To select and show preferred holidays and events, visit the Settings</string>
-    <string name="sunriseSunView">Sunrise</string>
-    <string name="middaySunView">Midday</string>
-    <string name="sunsetSunView">Sunset</string>
-    <string name="length_of_day">Daytime: %1$sh %2$sm</string>
-    <string name="remaining_daylight">Remaining: %1$sh %2$sm</string>
-    <string name="owghat">Pray times</string>
+    <string name="sunriseSunView">Amanecer</string>
+    <string name="middaySunView">Mediodía</string>
+    <string name="sunsetSunView">Atardecer</string>
+    <string name="length_of_day">Duración del día : %1$sh %2$sm</string>
+    <string name="remaining_daylight">Restante: %1$sh %2$sm</string>
+    <string name="owghat">Tiempos de oración</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>
-    <string name="sunrise">Sunrise</string>
+    <string name="sunrise">Amanecer</string>
     <string name="dhuhr">Dhuhr</string>
     <string name="asr">Asr</string>
-    <string name="sunset">Sunset</string>
+    <string name="sunset">Atardecer</string>
     <string name="maghrib">Maghrib</string>
     <string name="isha">Isha</string>
     <string name="midnight">Medianoche</string>
     <string name="spring_equinox">Spring equinox time of year %1$s: %2$s</string>
     <!--Date Converter-->
-    <string name="select_type_date">Select date type</string>
+    <string name="select_type_date">Elegir la forma de fecha</string>
     <string name="year">Año</string>
     <string name="select_year">Elegir año</string>
-    <string name="month">Month</string>
+    <string name="month">Mes</string>
     <string name="select_month">Elegir mes</string>
     <string name="day">Día</string>
     <string name="select_day">Elegir día</string>
@@ -103,11 +103,11 @@
     <string name="west">Oeste</string>
     <string name="qibla">Qibla</string>
     <!-- Settings -->
-    <string name="pref_header_interface_calendar">Interface and Calendar</string>
-    <string name="pref_header_notification_widget">Notification and Widget</string>
-    <string name="pref_widget">Widget</string>
-    <string name="pref_notification">Notification</string>
-    <string name="pref_header_location_athan">Location and Athan</string>
+    <string name="pref_header_interface_calendar">Interfaz y calendario</string>
+    <string name="pref_header_notification_widget">Notificación y widget</string>
+    <string name="pref_widget">Widget y notificación</string>
+    <string name="pref_notification">Widget y Notificación</string>
+    <string name="pref_header_location_athan">Ubicación y azan</string>
     <!--Interface and Calendar Settings-->
     <string name="pref_interface">Interfaz</string>
     <string name="language">Idioma</string>
@@ -119,8 +119,8 @@
     <string name="show_device_calendar_events">Eventos del calendario personal</string>
     <string name="show_device_calendar_events_summary">Mostrar los eventos del calendario personal</string>
     <string name="calendars_priority">Prioridades del calendario</string>
-    <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
-    <string name="astronomical_info">Astronomical Information</string>
+    <string name="calendars_priority_summary">Configurar calendarios para mostrar prioridad u ocultarlos</string>
+    <string name="astronomical_info">Información astronómica</string>
     <string name="astronomical_info_summary">"Show additional information like constellation, ancient names of years and moon in scorpio"</string>
     <string name="week_of_year">Semana del año</string>
     <string name="week_of_year_summary">Mostrar la semana del año en calendario</string>
@@ -133,11 +133,11 @@
     <string name="clock_in_24">Reloj de 24 horas</string>
     <string name="showing_clock_in_24">Mostrar el reloj de 24 horas</string>
     <!--Widget and Notification Settings-->
-    <string name="widget_text_color">Widget Text Color</string>
+    <string name="widget_text_color">Color de texto de Widget</string>
     <string name="select_widgets_text_color">Select custom color for widgets texts</string>
-    <string name="clock_on_widget">Clock on the Widget</string>
-    <string name="showing_clock_on_widget">Show clock on the widget</string>
-    <string name="iran_time">Iran Time</string>
+    <string name="clock_on_widget">Reloj en el widget</string>
+    <string name="showing_clock_on_widget">Mostrar reloj en el widget</string>
+    <string name="iran_time">Hora de irán</string>
     <string name="showing_iran_time">Widgets and notifications in Iran time zone</string>
     <string name="customize_widget">Widget Customization</string>
     <string name="which_one_to_show">Which ones to show</string>
@@ -145,7 +145,7 @@
     <string name="ask_user_to_set_location">Set the location in the settings in order to see pray times here</string>
     <string name="notify_date">Habilitar notificación de fecha</string>
     <string name="enable_notify">Persistent notification for all date types</string>
-    <string name="notify_date_lock_screen">Show notification on the lock screen</string>
+    <string name="notify_date_lock_screen">Mostrar notificación en la pantalla de bloqueo</string>
     <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
     <!--Location and Athan-->
     <string name="gps_location">Obtener la ubicación de GPS o de la red</string>
@@ -160,20 +160,20 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="longitude">Longitud</string>
     <string name="altitude">Altitud</string>
     <string name="altitude_praytime">in meter (optional)</string>
-    <string name="coordination">Coordination</string>
-    <string name="athan">Athan</string>
+    <string name="coordination">Coordinación</string>
+    <string name="athan">Azan</string>
     <string name="in_city_time">En</string>
     <string name="pray_methods">Método de cálculo</string>
     <string name="pray_methods_calculation">Calculation methods for pray times and Qibla compass</string>
     <string name="athan_gap">Athan Gap</string>
     <string name="athan_gap_summary">How long ahead of the Athan should the alarm be triggered (in minutes)</string>
-    <string name="athan_alarm">Athan Alarm</string>
+    <string name="athan_alarm">Alarma de azan</string>
     <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
-    <string name="notification_athan">Athan Notification</string>
+    <string name="notification_athan">Notificación de azan</string>
     <string name="enable_notification_athan">Show Athan as a notification and device vibration</string>
     <string name="ascending_athan_volume">Ascending athan volume</string>
     <string name="enable_ascending_athan_volume">Athan volume reaches to maximum value in one minute</string>
-    <string name="custom_athan">Select Athan</string>
+    <string name="custom_athan">Elegir azan</string>
     <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
     <string name="custom_notification_is_set">Custom notification is just set</string>
     <string name="default_athan">Default Athan</string>
@@ -183,9 +183,9 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="athan_volume_summary">Set the volume for the alarm</string>
     <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
     <!--Permissions-->
-    <string name="location_access">Location Access</string>
+    <string name="location_access">Acceso a ubicación</string>
     <string name="phone_location_required">This part of the app needs location permission, if you choose deny you have to enter your latitude and longitude manually.</string>
-    <string name="calendar_access">Calendar Access</string>
+    <string name="calendar_access">Acceso al calendario</string>
     <string name="phone_calendar_required">This part of the app needs calendar permission, if you allow it your personal events will be shown on the calendar.</string>
     <!--About-->
     <string name="gpl_logo">GPL Logo</string>
@@ -193,7 +193,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="about_license">Licencia</string>
     <string name="about_license_title">Licencia de aplicación</string>
     <string name="about_license_sum">Check GPL3 License and other license terms used on Persian Calendar.</string>
-    <string name="about_support_developers">Developer Support</string>
+    <string name="about_support_developers">Soporte para desarrolladores</string>
     <string name="about_report_bug">Informar error en Github</string>
     <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
     <string name="about_sendMail">Correo electrónico</string>
@@ -203,7 +203,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!--TalkBack, a11y-->
     <string name="previous_month">Mes anterior</string>
     <string name="next_month">Siguiente mes</string>
-    <string name="week_days_name_column">%1$s column in days table</string>
+    <string name="week_days_name_column">%1$s columnas en tabla de días</string>
     <string name="equivalent_to">Equivalente a</string>
     <string name="holiday_reason">Vacaciones debido a</string>
     <string name="nth_week_of_year">%1$s semana del año</string>
