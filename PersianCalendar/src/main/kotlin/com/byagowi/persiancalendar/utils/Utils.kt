@@ -180,7 +180,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     isIranHolidaysEnabled = enabledHolidays.iranHolidays
 
     IslamicDate.useUmmAlQura = false
-    if (enabledHolidays.iranHolidays) {
+    if (!enabledHolidays.iranHolidays) {
         if (enabledHolidays.afghanistanHolidays) IslamicDate.useUmmAlQura = true
         when (language) {
             LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES ->
