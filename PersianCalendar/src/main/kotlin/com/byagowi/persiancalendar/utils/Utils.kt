@@ -179,14 +179,13 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 
     isIranHolidaysEnabled = enabledHolidays.iranHolidays
 
-    IslamicDate.useUmmAlQura = false
-    if (!enabledHolidays.iranHolidays) {
-        if (enabledHolidays.afghanistanHolidays) IslamicDate.useUmmAlQura = true
-        when (language) {
+    IslamicDate.useUmmAlQura =
+        if (enabledHolidays.iranHolidays || enabledHolidays.iranOthers) false
+        else enabledHolidays.afghanistanHolidays || when (language) {
             LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES ->
-                IslamicDate.useUmmAlQura = true
+                true
+            else -> false
         }
-    }
 
     IslamicDate.islamicOffset = context.appPrefs
         .getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
