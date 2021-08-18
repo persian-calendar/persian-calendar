@@ -1,10 +1,11 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.ui.utils
 
 import android.content.Context
 import android.media.AudioManager
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
+import com.byagowi.persiancalendar.utils.isTalkBackEnabled
 
 // a11y related state machine that starts in true state and announce if a transition to true happens
 class SensorEventAnnouncer(@StringRes private val text: Int, initialState: Boolean = true) {
