@@ -78,6 +78,7 @@ import java.util.*
 const val TAG = "Utils"
 const val CHANGE_DATE_TAG = "changeDate"
 const val UPDATE_TAG = "update"
+const val ALARM_TAG = "alarmTag"
 const val HALF_SECOND_IN_MILLIS = 500L
 const val DAY_IN_SECOND = 86400L
 const val DAY_IN_MILLIS = 86400000L

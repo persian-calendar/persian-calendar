@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
+import com.byagowi.persiancalendar.service.EmptyWorker
 import com.byagowi.persiancalendar.service.UpdateWorker
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
@@ -180,7 +181,17 @@ private fun setAlarm(
     context: Context, alarmTimeName: String, timeInMillis: Long, ord: Int, athanGap: Long
 ) {
     val triggerTime = Calendar.getInstance()
-    triggerTime.timeInMillis = timeInMillis - athanGap
+    val actualTrigTime = timeInMillis - athanGap
+    if (goForWorker) {
+        val remainedSeconds = (triggerTime.timeInMillis - actualTrigTime) / 1000
+        val emptyWorker = OneTimeWorkRequest.Builder(EmptyWorker::class.java)
+            .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)
+            .build()
+        WorkManager.getInstance(context)
+            .beginUniqueWork(ALARM_TAG + ord, ExistingWorkPolicy.REPLACE, emptyWorker)
+            .enqueue()
+    }
+    triggerTime.timeInMillis = actualTrigTime
     val alarmManager = context.getSystemService<AlarmManager>()
 
     // don't set an alarm in the past
