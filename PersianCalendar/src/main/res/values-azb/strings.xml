@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="code">azb</string>
-
     <string name="app_name">فارسجا تقویم</string>
     <string name="cancel">لغو</string>
     <string name="widget_name">فارسجا تقویم</string>
@@ -31,7 +29,6 @@
     <string name="altitude">ائنلم</string>
     <string name="altitude_praytime">متیر (ایستدینیز)</string>
     <string name="coordination">جوگرافی مختصاتلار</string>
-
     <string name="gps_location">جی‌پی‌اس‌دن مختصات آلماق</string>
     <string name="gps_location_help">اوتوماتیک تنظیم اؤلور موقعیت‌ینیز</string>
     <string name="location">شهر</string>
@@ -161,7 +158,7 @@
     <string name="year12">قویون</string>
     <string name="level">تاراز</string>
     <string name="calibrate_compass_summary">وسیله‌نین دوز عملکردینه‌گوره مغناطیس سنسورلاردان اوزاق توتون و بیر کئز دولانین</string>
-    <string name="set_location">آی و گۆنو گؤسترمک اۆچون موقعیت تنظیم ائلین</string>
+    <string name="set_location">آی و گۆنو گؤسترمک اۆچون موقعیت تنظیم ائلین.</string>
     <string name="moonInScorpio">عقربه‌دکی آی گون‌لری</string>
     <string name="astronomical_info">آسترونومیا حاقیندا معلومات</string>
     <string name="astronomical_info_summary">آسترونومیا ایطلاعات‌ین گؤسترمک</string>
@@ -175,13 +172,11 @@
     <string name="pref_interface">آرا اۆز</string>
     <string name="resume">داوام</string>
     <string name="continue_button">داوام</string>
-
     <!--Permissions-->
     <string name="location_access">مکان قونومونا ایجازه</string>
     <string name="phone_location_required">برنامه‌نین بوراسی مکان قونومونا ایجازه ایستر یوخسا اؤزونوز موقعیت ورین</string>
     <string name="calendar_access">وسیله‌زین تقویم‌ینه ایجازه ایستر</string>
     <string name="phone_calendar_required">اول‌جه وسیله تقویمی‌نه داخیل اولماق اوچون ایجازه ورملی‌سینیز، اگر بو ایجازه وریلسه، برنامه شخصی اولای‌لاردا تقویم‌ده گؤستره بیلر</string>
-
     <!--TalkBack, a11y-->
     <string name="previous_month">قاباق‌کی آی</string>
     <string name="next_month">سونراکی آی</string>
@@ -189,19 +184,16 @@
     <string name="equivalent_to">برابردی</string>
     <string name="holiday_reason">تعطیل بو موناسیبته</string>
     <string name="nth_week_of_year">هفته‌سی %1$s ایل</string>
-
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">قوزئی</string>
     <string name="east">دوغو</string>
     <string name="south">گۆنئی</string>
     <string name="west">باتی</string>
     <string name="qibla">قیبله</string>
-
     <string name="outdated_app">تقویم آپدیت دئیل؛ موناسیبت‌لرین دوغرو اولماماق ایمکانی وار</string>
     <string name="update">آپدیت</string>
     <string name="spring_equinox">یئنی ایلین تحویل لحظه‌سی %1$s: %2$s</string>
     <string name="shift_work_settings">ایشلمه شیفت‌ین تنظیمی</string>
-
     <string name="ask_user_to_set_location">شرعی اوقات‌ین گؤستریش‌ینه موقعیت‌یزی تنظیم ائدین</string>
     <string name="remove">سیل</string>
     <string name="shift_work_starting_date">ایش شیفتی‌نین باشلانق‌یجی تقویم‌ده، %1$s سئچ‌یلن گۆندن اولاجاق‌دیر.</string>
@@ -237,5 +229,4 @@
     <string name="n_years">%1$s ایل</string>
     <string name="preview">سیناق گؤستریش</string>
     <string name="ignore">خبردارلیقلارا</string>
-
 </resources>
