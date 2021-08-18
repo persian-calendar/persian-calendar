@@ -93,7 +93,7 @@
     <!--Compass-->
     <string name="compass_not_found">Sensor de brujula no encontrado</string>
     <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
-    <string name="level">Level</string>
+    <string name="level">Nivel</string>
     <string name="stop">Stop</string>
     <string name="resume">Reanudar</string>
     <string name="set_location">Para la ubicación del Sol y la Luna, y la dirección de Qibla, establezca la ubicación en la configuración.</string>
