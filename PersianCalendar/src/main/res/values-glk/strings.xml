@@ -1,8 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="code">glk</string>
-
     <string name="app_name">فارسي تقويم</string>
     <string name="cancel">لغو</string>
     <string name="widget_name">فارسي تقويم</string>
@@ -31,7 +29,6 @@
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (ديلبخا)</string>
     <string name="coordination">مختصات جغرافیایی</string>
-
     <string name="gps_location">مؤختصاتˇ فأگيفتن جي‌پي‌اسˇجأ</string>
     <string name="gps_location_help">أگه أيأ جأ بتأنيد, تنظيماتˇباقي بخشانأ نيازي ني-يه</string>
     <string name="location">مؤقعیت</string>
@@ -175,13 +172,11 @@
     <string name="pref_interface">رابط</string>
     <string name="resume">ايدامه</string>
     <string name="continue_button">ايدامه</string>
-
     <!--Permissions-->
     <string name="location_access">دس‌فارسˇمؤقعيتˇمکاني</string>
     <string name="phone_location_required">برنامه أ قسمت دسترسي-يه مکان خأيه, نيويره وا شيمي جؤغرافيائي طۊل ؤ عرضˈ دستي وارد بۊکۊنيد.</string>
     <string name="calendar_access">دزگا تقويمˈفارسئن</string>
     <string name="phone_calendar_required">اول وا وهأليد دزگا تقويمˇدۊرۊن بشه, أگه دزگا تقويمˈوهأليد برنامه تأنه شيمي شخصي رۊيدادانأ فارسي تقويمˇدۊرۊن نيشان بده.</string>
-
     <!--TalkBack, a11y-->
     <string name="previous_month">ماىˇقبل</string>
     <string name="next_month">ماىˇبعد</string>
@@ -189,19 +184,16 @@
     <string name="equivalent_to">برابره</string>
     <string name="holiday_reason">أنˇوأستي تعطيله</string>
     <string name="nth_week_of_year">هفته-يه %1$s سال</string>
-
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">شۊمال</string>
     <string name="east">شرق</string>
     <string name="south">جۊنۊب</string>
     <string name="west">غرب</string>
     <string name="qibla">قبله</string>
-
     <string name="outdated_app">تقویم به‌رۊز ني-يه؛ مؤمکنˇمۊناسبتان ساب ببه</string>
     <string name="update">به رۊز کۊدن</string>
     <string name="spring_equinox">لحظه-يه اعتدالˇبهاری ؤ تحویلˇسال %1$s: %2$s</string>
     <string name="shift_work_settings">شيفتˇکاري-يأ تنظيم کۊدن</string>
-
     <string name="ask_user_to_set_location">اؤقاتˇشرعي نيشان دأنˇوأسي شيمي جايأ مالۊم بۊکۊنيد</string>
     <string name="remove">پاکۊدن</string>
     <string name="shift_work_starting_date">شيفتˇکاري شۊرۊ بؤن تقويمˇدؤجين بؤبؤسته رۊزˇجأ، %1$s به.</string>
@@ -237,5 +229,4 @@
     <string name="n_years">%1$s سال</string>
     <string name="preview">پيشادئن</string>
     <string name="ignore">چشم‌پوشی</string>
-
 </resources>

@@ -26,7 +26,7 @@
     <string name="center_align_widgets_summary">Alignement central des widgets 4x1 et 2x2</string>
     <string name="device_info">Informations sur l’appareil</string>
     <string name="select_widgets_background_color">Sélectionnez une couleur personnalisée pour l’arrière-plan des widgets</string>
-    <string name="shift_work_days_head">Longueur</string>
+    <string name="shift_work_days_head">Durée</string>
     <string name="pm">PM</string>
     <string name="am">AM</string>
     <string name="prefer_linear_date_summary">Utiliser 2000/1/1 au lieu de 1er janvier 2000 dans les widgets et les notifications</string>
