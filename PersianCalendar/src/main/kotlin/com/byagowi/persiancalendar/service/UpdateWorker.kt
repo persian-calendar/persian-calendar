@@ -9,8 +9,7 @@ import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 import kotlinx.coroutines.coroutineScope
 
-class UpdateWorker(context: Context, workerParams: WorkerParameters) :
-    CoroutineWorker(context, workerParams) {
+class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = coroutineScope {
         runCatching {
             setChangeDateWorker(applicationContext)
