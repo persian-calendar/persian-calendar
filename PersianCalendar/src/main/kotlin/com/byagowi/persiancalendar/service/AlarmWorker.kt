@@ -7,10 +7,10 @@ import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
 import com.byagowi.persiancalendar.utils.startAthan
 import kotlinx.coroutines.coroutineScope
 
-class AlarmWorker(private val context: Context, private val workerParams: WorkerParameters) :
+class AlarmWorker(context: Context, workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = coroutineScope {
-        startAthan(context, workerParams.inputData.getString(KEY_EXTRA_PRAYER_KEY) ?: "FAJR")
+        startAthan(applicationContext, inputData.getString(KEY_EXTRA_PRAYER_KEY) ?: "FAJR")
         Result.success()
     }
 }
