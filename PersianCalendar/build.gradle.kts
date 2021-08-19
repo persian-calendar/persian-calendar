@@ -1,6 +1,5 @@
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.runtime.ProcessGroovyMethods
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.utils.addToStdlib.firstNotNullResult
 import java.net.URL
 
@@ -93,11 +92,6 @@ android {
         exclude("DebugProbesKt.bin")
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
     bundle {
         language {
             // We have in app locale change and don't want Google Play's dependency so better
@@ -105,10 +99,15 @@ android {
             enableSplit = false
         }
     }
-}
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
