@@ -18,7 +18,6 @@ import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.citiesStore
@@ -147,32 +146,38 @@ fun loadApp(context: Context) = runCatching {
 fun getOrderedCalendarTypes(): List<CalendarType> =
     getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it) }
 
+fun getEnabledAlarm(context: Context): Set<String> {
+    if (coordinates == null) return emptySet()
+    return (context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: return emptySet())
+        .splitIgnoreEmpty(",")
+        .toSet()
+}
+
 fun loadAlarms(context: Context) {
-    val enabledAlarms = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
+    val enabledAlarms = getEnabledAlarm(context)
 
-    if (coordinates != null && enabledAlarms.isNotEmpty()) {
-        val athanGap =
-            ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0)
-                    * 60.0 * 1000.0).toLong()
+    if (enabledAlarms.isEmpty()) return
+    val athanGap =
+        ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
+            ?: .0) * 60.0 * 1000.0).toLong()
 
-        val prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
-        // convert spacedComma separated string to a set
-        enabledAlarms.split(",").toSet().forEachIndexed { i, name ->
-            val alarmTime: Clock = when (name) {
-                "DHUHR" -> prayTimes.dhuhrClock
-                "ASR" -> prayTimes.asrClock
-                "MAGHRIB" -> prayTimes.maghribClock
-                "ISHA" -> prayTimes.ishaClock
-                "FAJR" -> prayTimes.fajrClock
-                // a better to have default
-                else -> prayTimes.fajrClock
-            }
-
-            setAlarm(context, name, Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, alarmTime.hour)
-                set(Calendar.MINUTE, alarmTime.minute)
-            }.timeInMillis - athanGap, i)
+    val prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
+    // convert spacedComma separated string to a set
+    enabledAlarms.forEachIndexed { i, name ->
+        val alarmTime: Clock = when (name) {
+            "DHUHR" -> prayTimes.dhuhrClock
+            "ASR" -> prayTimes.asrClock
+            "MAGHRIB" -> prayTimes.maghribClock
+            "ISHA" -> prayTimes.ishaClock
+            "FAJR" -> prayTimes.fajrClock
+            // a better to have default
+            else -> prayTimes.fajrClock
         }
+
+        setAlarm(context, name, Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, alarmTime.hour)
+            set(Calendar.MINUTE, alarmTime.minute)
+        }.timeInMillis - athanGap, i)
     }
 }
 
