@@ -22,9 +22,9 @@ import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.citiesStore
+import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
-import com.byagowi.persiancalendar.service.EmptyWorker
 import com.byagowi.persiancalendar.service.UpdateWorker
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
@@ -183,12 +183,15 @@ private fun setAlarm(
     val triggerTime = Calendar.getInstance()
     val actualTrigTime = timeInMillis - athanGap
     if (goForWorker) {
+        // We schedule this both on WorkManager and AlarmManager
+        // startAthan has the logic to make sure we don't call the same alarm twice
         val remainedSeconds = (triggerTime.timeInMillis - actualTrigTime) / 1000
-        val emptyWorker = OneTimeWorkRequest.Builder(EmptyWorker::class.java)
+        val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
             .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)
+            .setInputData(Data.Builder().putString(KEY_EXTRA_PRAYER_KEY, alarmTimeName).build())
             .build()
         WorkManager.getInstance(context)
-            .beginUniqueWork(ALARM_TAG + ord, ExistingWorkPolicy.REPLACE, emptyWorker)
+            .beginUniqueWork(ALARM_TAG + ord, ExistingWorkPolicy.REPLACE, alarmWorker)
             .enqueue()
     }
     triggerTime.timeInMillis = actualTrigTime

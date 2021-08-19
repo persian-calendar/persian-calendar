@@ -80,13 +80,6 @@ class AthanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Workaround AlarmManager (or the way we use it) that calls it multiple times,
-        // don't run if it is ran less than 4 seconds ago
-        val currentMillis = System.currentTimeMillis()
-        if (currentMillis - lastStart < TimeUnit.SECONDS.toMillis(4)) return finish()
-        lastStart = currentMillis
-        //
-
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
         val isFajr = prayerKey == "FAJR"
         var goMute = false
@@ -218,9 +211,5 @@ class AthanActivity : AppCompatActivity() {
         handler.removeCallbacks(stopTask)
         if (isAscendingAthanVolumeEnabled) handler.removeCallbacks(ascendVolume)
         finish()
-    }
-
-    companion object {
-        private var lastStart = 0L
     }
 }

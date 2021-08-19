@@ -3,15 +3,14 @@ package com.byagowi.persiancalendar.service
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.utils.setChangeDateWorker
-import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.utils.updateStoredPreference
+import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
+import com.byagowi.persiancalendar.utils.startAthan
 import kotlinx.coroutines.coroutineScope
 
-class EmptyWorker(context: Context, workerParams: WorkerParameters) :
+class AlarmWorker(private val context: Context, private val workerParams: WorkerParameters) :
     CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = coroutineScope {
+        startAthan(context, workerParams.inputData.getString(KEY_EXTRA_PRAYER_KEY) ?: "FAJR")
         Result.success()
     }
 }

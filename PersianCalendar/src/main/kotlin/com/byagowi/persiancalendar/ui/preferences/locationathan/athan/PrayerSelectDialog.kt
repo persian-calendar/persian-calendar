@@ -38,7 +38,7 @@ fun showPrayerSelectPreviewDialog(context: Context) {
     AlertDialog.Builder(context)
         .setTitle(R.string.preview)
         .setItems(prayerTimesNames) { _, which ->
-            startAthan(context, prayerTimesKeys.getOrNull(which) ?: "FAJR")
+            startAthan(context, prayerTimesKeys.getOrNull(which) ?: "FAJR", isTesting = true)
         }
         .setNegativeButton(R.string.cancel, null)
         .show()
