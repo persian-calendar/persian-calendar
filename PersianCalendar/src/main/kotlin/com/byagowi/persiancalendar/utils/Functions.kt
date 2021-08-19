@@ -319,18 +319,14 @@ fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
 
-private fun calculateDiffToChangeDate(): Long = Calendar.getInstance().apply {
-    set(Calendar.HOUR_OF_DAY, 0)
-    set(Calendar.MINUTE, 0)
-    set(Calendar.SECOND, 1)
-}.timeInMillis / 1000 + DAY_IN_SECOND - Calendar.getInstance().time.time / 1000
-
 fun setChangeDateWorker(context: Context) {
-    val remainedSeconds = calculateDiffToChangeDate()
+    val remainedMillis = Calendar.getInstance().also {
+        it.set(Calendar.HOUR_OF_DAY, 0)
+        it.set(Calendar.MINUTE, 0)
+        it.set(Calendar.SECOND, 1)
+    }.timeInMillis + DAY_IN_MILLIS - Calendar.getInstance().timeInMillis
     val changeDateWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
-        // Use this when you want to add initial delay or schedule initial work
-        // to `OneTimeWorkRequest` e.g. setInitialDelay(2, TimeUnit.HOURS)
-        .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)
+        .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
         .build()
 
     WorkManager.getInstance(context).beginUniqueWork(
