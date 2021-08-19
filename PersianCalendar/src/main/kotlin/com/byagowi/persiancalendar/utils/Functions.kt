@@ -148,17 +148,16 @@ fun getOrderedCalendarTypes(): List<CalendarType> =
     getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it) }
 
 fun loadAlarms(context: Context) {
-    val prefString = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
-    logDebug(TAG, "reading and loading all alarms from prefs: $prefString")
+    val enabledAlarms = context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: ""
 
-    if (coordinates != null && prefString.isNotEmpty()) {
+    if (coordinates != null && enabledAlarms.isNotEmpty()) {
         val athanGap =
             ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0)
                     * 60.0 * 1000.0).toLong()
 
         val prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
         // convert spacedComma separated string to a set
-        prefString.split(",").toSet().forEachIndexed { i, name ->
+        enabledAlarms.split(",").toSet().forEachIndexed { i, name ->
             val alarmTime: Clock = when (name) {
                 "DHUHR" -> prayTimes.dhuhrClock
                 "ASR" -> prayTimes.asrClock
@@ -172,62 +171,46 @@ fun loadAlarms(context: Context) {
             setAlarm(context, name, Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, alarmTime.hour)
                 set(Calendar.MINUTE, alarmTime.minute)
-            }.timeInMillis, i, athanGap)
+            }.timeInMillis - athanGap, i)
         }
     }
 }
 
-private fun setAlarm(
-    context: Context, alarmTimeName: String, timeInMillis: Long, ord: Int, athanGap: Long
-) {
-    val triggerTime = Calendar.getInstance()
-    val actualTrigTime = timeInMillis - athanGap
+private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, ord: Int) {
+    val remainedMillis = timeInMillis - Calendar.getInstance().timeInMillis
+    if (remainedMillis < 0) return // Don't set alarm in past
+
     if (goForWorker) {
-        // We schedule this both on WorkManager and AlarmManager
+        // We schedule alarm both in WorkManager and AlarmManager
         // startAthan has the logic to make sure we don't call the same alarm twice
-        val remainedSeconds = (triggerTime.timeInMillis - actualTrigTime) / 1000
         val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
-            .setInitialDelay(remainedSeconds, TimeUnit.SECONDS)
+            .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
             .setInputData(Data.Builder().putString(KEY_EXTRA_PRAYER_KEY, alarmTimeName).build())
             .build()
         WorkManager.getInstance(context)
             .beginUniqueWork(ALARM_TAG + ord, ExistingWorkPolicy.REPLACE, alarmWorker)
             .enqueue()
     }
-    triggerTime.timeInMillis = actualTrigTime
-    val alarmManager = context.getSystemService<AlarmManager>()
 
-    // don't set an alarm in the past
-    if (alarmManager != null && !triggerTime.before(Calendar.getInstance())) {
-        logDebug(TAG, "setting alarm for: " + triggerTime.time)
+    val alarmManager = context.getSystemService<AlarmManager>() ?: return
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        ALARMS_BASE_ID + ord,
+        Intent(context, BroadcastReceivers::class.java)
+            .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
+            .setAction(BROADCAST_ALARM),
+        PendingIntent.FLAG_UPDATE_CURRENT or
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+    )
 
-        val pendingIntent = PendingIntent.getBroadcast(
-            context,
-            ALARMS_BASE_ID + ord,
-            Intent(context, BroadcastReceivers::class.java)
-                .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
-                .setAction(BROADCAST_ALARM),
-            PendingIntent.FLAG_UPDATE_CURRENT or
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
-        )
-
-        when {
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 -> alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime.timeInMillis,
-                pendingIntent
+    when {
+        Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ->
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent
             )
-            Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2 -> alarmManager.setExact(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime.timeInMillis,
-                pendingIntent
-            )
-            else -> alarmManager.set(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime.timeInMillis,
-                pendingIntent
-            )
-        }
+        Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2 ->
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+        else -> alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 }
 
