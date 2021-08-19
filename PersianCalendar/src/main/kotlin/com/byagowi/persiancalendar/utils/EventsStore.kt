@@ -9,16 +9,17 @@ value class EventsStore<T : CalendarEvent<out AbstractDate>>
 private constructor(private val store: Map<Int, List<T>>) {
     constructor(eventsList: List<T>) : this(eventsList.groupBy { it.date.hash })
 
-    private fun getEventsEntry(date: AbstractDate) = store[date.hash]?.filter {
-        // dayOfMonth and month are already checked with hashing so only check year equality here
-        it.date.year == date.year || it.date.year == -1 // -1 means it is occurring every year
-    } ?: emptyList()
+    // Year and month equality is checked by hash function and
+    // we don't care about year as we expect eventsList to not have
+    // any year specific event so we ignore year field.
+    private fun getEventsEntry(date: AbstractDate) = store[date.hash] ?: emptyList()
 
-    fun getEvents(date: AbstractDate) = getEventsEntry(date)
+    fun getEvents(date: AbstractDate) = getEventsEntry(date) +
+            irregularCalendarEventsStore.getEvents<T>(date).filter { it.date == date }
 
     fun getEvents(
         date: CivilDate, deviceEvents: DeviceCalendarEventsStore
-    ): List<CalendarEvent<*>> = deviceEvents.getEventsEntry(date) + getEventsEntry(date)
+    ): List<CalendarEvent<*>> = deviceEvents.getEventsEntry(date) + getEvents(date)
 
     companion object {
         private val AbstractDate.hash get() = this.month * 100 + this.dayOfMonth
