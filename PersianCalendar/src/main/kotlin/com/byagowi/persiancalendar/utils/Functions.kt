@@ -146,7 +146,7 @@ fun loadApp(context: Context) = runCatching {
 fun getOrderedCalendarTypes(): List<CalendarType> =
     getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it) }
 
-fun getEnabledAlarm(context: Context): Set<String> {
+fun getEnabledAlarms(context: Context): Set<String> {
     if (coordinates == null) return emptySet()
     return (context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: return emptySet())
         .splitIgnoreEmpty(",")
@@ -154,7 +154,7 @@ fun getEnabledAlarm(context: Context): Set<String> {
 }
 
 fun loadAlarms(context: Context) {
-    val enabledAlarms = getEnabledAlarm(context).takeIf { it.isNotEmpty() } ?: return
+    val enabledAlarms = getEnabledAlarms(context).takeIf { it.isNotEmpty() } ?: return
     val athanGap =
         ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
             ?: .0) * 60.0 * 1000.0).toLong()

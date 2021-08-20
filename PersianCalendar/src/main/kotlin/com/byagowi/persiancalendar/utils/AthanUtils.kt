@@ -35,7 +35,7 @@ private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTimeKey: String, isTesting: Boolean = false) {
     if (!isTesting) { // skips if already called through either WorkManager or alarmManager
-        if (prayTimeKey !in getEnabledAlarm(context)) return
+        if (prayTimeKey !in getEnabledAlarms(context)) return
         val today = Jdn.today
         if (lastAthanJdn == today && lastAthanKey == prayTimeKey) return
         lastAthanJdn = today; lastAthanKey = prayTimeKey
