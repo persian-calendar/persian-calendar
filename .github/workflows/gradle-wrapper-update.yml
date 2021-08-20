@@ -2,7 +2,7 @@ name: Gradle wrapper update
 
 on:
   schedule:
-    - cron: '0 6 * * *'
+    - cron: '0 12 * * *'
 
 jobs:
   update:
@@ -14,7 +14,9 @@ jobs:
 
       - name: update gradle
         id: gradleUpdate
-        uses: EdwarDDay/upgrade-gradle-action@v1
+        uses: EdwarDDay/upgrade-gradle-action@cf7c844debb1f1af2b685f0d5bda1553fd01574d
+        with:
+          distribution-type: all
 
       - name: create pull request
         uses: peter-evans/create-pull-request@v3
