@@ -51,7 +51,7 @@ val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestS
 
 val isArabicDigitSelected: Boolean get() = preferredDigits === ARABIC_DIGITS
 
-val goForWorker: Boolean get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+val enableWorkManager: Boolean get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
 fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
     formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)
@@ -105,7 +105,7 @@ fun getThemeFromPreference(context: Context, prefs: SharedPreferences): String =
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
 fun loadApp(context: Context) = runCatching {
-    if (goForWorker) return@runCatching
+    if (enableWorkManager) return@runCatching
     val alarmManager = context.getSystemService<AlarmManager>() ?: return@runCatching
 
     val startTime = Calendar.getInstance().apply {
@@ -154,9 +154,7 @@ fun getEnabledAlarm(context: Context): Set<String> {
 }
 
 fun loadAlarms(context: Context) {
-    val enabledAlarms = getEnabledAlarm(context)
-
-    if (enabledAlarms.isEmpty()) return
+    val enabledAlarms = getEnabledAlarm(context).takeIf { it.isNotEmpty() } ?: return
     val athanGap =
         ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
             ?: .0) * 60.0 * 1000.0).toLong()
@@ -181,41 +179,35 @@ fun loadAlarms(context: Context) {
     }
 }
 
-private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, ord: Int) {
+private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, i: Int) {
     val remainedMillis = timeInMillis - Calendar.getInstance().timeInMillis
     if (remainedMillis < 0) return // Don't set alarm in past
 
-    if (goForWorker) {
-        // We schedule alarm both in WorkManager and AlarmManager
-        // startAthan has the logic to make sure we don't call the same alarm twice
+    if (enableWorkManager) { // Schedule in both, startAthan has the logic to skip duplicated calls
         val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
             .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
             .setInputData(Data.Builder().putString(KEY_EXTRA_PRAYER_KEY, alarmTimeName).build())
             .build()
         WorkManager.getInstance(context)
-            .beginUniqueWork(ALARM_TAG + ord, ExistingWorkPolicy.REPLACE, alarmWorker)
+            .beginUniqueWork(ALARM_TAG + i, ExistingWorkPolicy.REPLACE, alarmWorker)
             .enqueue()
     }
 
-    val alarmManager = context.getSystemService<AlarmManager>() ?: return
+    val am = context.getSystemService<AlarmManager>() ?: return
     val pendingIntent = PendingIntent.getBroadcast(
-        context,
-        ALARMS_BASE_ID + ord,
+        context, ALARMS_BASE_ID + i,
         Intent(context, BroadcastReceivers::class.java)
             .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
             .setAction(BROADCAST_ALARM),
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
-
     when {
         Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ->
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent
-            )
+            am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
         Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2 ->
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
-        else -> alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+            am.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+        else -> am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 }
 
@@ -337,7 +329,7 @@ fun setChangeDateWorker(context: Context) {
 fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNotEmpty() }
 
 fun startEitherServiceOrWorker(context: Context) {
-    if (goForWorker) {
+    if (enableWorkManager) {
         runCatching {
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 UPDATE_TAG, ExistingPeriodicWorkPolicy.REPLACE,

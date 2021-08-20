@@ -344,7 +344,7 @@ private fun Context.updateNotification(
     title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
 ) {
     if (!isNotifyDate) {
-        if (goForWorker) getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
+        if (enableWorkManager) getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
         return
     }
 
@@ -455,7 +455,7 @@ private fun Context.updateNotification(
 
     if (BuildConfig.DEBUG) builder.setWhen(Calendar.getInstance().timeInMillis)
 
-    if (goForWorker) notificationManager?.notify(NOTIFICATION_ID, builder.build())
+    if (enableWorkManager) notificationManager?.notify(NOTIFICATION_ID, builder.build())
     else runCatching {
         ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
     }.onFailure(logException)
