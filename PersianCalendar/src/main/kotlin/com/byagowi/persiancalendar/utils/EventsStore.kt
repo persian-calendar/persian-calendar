@@ -15,7 +15,7 @@ private constructor(private val store: Map<Int, List<T>>) {
     private fun getEventsEntry(date: AbstractDate) = store[date.hash] ?: emptyList()
 
     fun getEvents(date: AbstractDate) = getEventsEntry(date) +
-            irregularCalendarEventsStore.getEvents<T>(date).filter { it.date == date }
+            irregularCalendarEventsStore.getEvents(date)
 
     fun getEvents(
         date: CivilDate, deviceEvents: DeviceCalendarEventsStore

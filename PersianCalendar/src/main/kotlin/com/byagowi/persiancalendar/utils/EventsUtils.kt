@@ -1,7 +1,15 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.SharedPreferences
+import com.byagowi.persiancalendar.LANG_AR
 import com.byagowi.persiancalendar.LANG_CKB
+import com.byagowi.persiancalendar.LANG_EN_US
+import com.byagowi.persiancalendar.LANG_ES
+import com.byagowi.persiancalendar.LANG_FA_AF
+import com.byagowi.persiancalendar.LANG_FR
+import com.byagowi.persiancalendar.LANG_JA
+import com.byagowi.persiancalendar.LANG_PS
+import com.byagowi.persiancalendar.LANG_UR
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -78,28 +86,42 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
     }
 }
 
-fun loadEvents(e: EnabledHolidays) {
+fun loadEvents(enabledTypes: EnabledHolidays, language: String) {
+    // It is vital to configure calendar before loading of the events
+    IslamicDate.useUmmAlQura = if (enabledTypes.iranHolidays || enabledTypes.iranOthers) false
+    else enabledTypes.afghanistanHolidays || when (language) {
+        LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES ->
+            true
+        else -> false
+    }
+
     val today = Jdn.today
 
-    irregularCalendarEventsStore = IrregularCalendarEventsStore(e)
+    irregularCalendarEventsStore = IrregularCalendarEventsStore(enabledTypes)
     allEnabledEvents = run {
+        val date = today.toPersianCalendar()
+        val type = date.calendarType
         val events = persianEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.PersianCalendarEvent>(record, e, CalendarType.SHAMSI)
+            createEvent<CalendarEvent.PersianCalendarEvent>(record, enabledTypes, type)
         }
         persianCalendarEvents = PersianCalendarEventsStore(events)
-        events + irregularCalendarEventsStore.getEvents(today.toPersianCalendar())
+        events + irregularCalendarEventsStore.getEventsList(date.year, type)
     } + run {
+        val date = today.toIslamicCalendar()
+        val type = date.calendarType
         val events = islamicEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.IslamicCalendarEvent>(record, e, CalendarType.ISLAMIC)
+            createEvent<CalendarEvent.IslamicCalendarEvent>(record, enabledTypes, type)
         }
         islamicCalendarEvents = IslamicCalendarEventsStore(events)
-        events + irregularCalendarEventsStore.getEvents(today.toIslamicCalendar())
+        events + irregularCalendarEventsStore.getEventsList(date.year, type)
     } + run {
+        val date = today.toGregorianCalendar()
+        val type = date.calendarType
         val events = gregorianEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.GregorianCalendarEvent>(record, e, CalendarType.GREGORIAN)
+            createEvent<CalendarEvent.GregorianCalendarEvent>(record, enabledTypes, type)
         }
         gregorianCalendarEvents = GregorianCalendarEventsStore(events)
-        events + irregularCalendarEventsStore.getEvents(today.toGregorianCalendar())
+        events + irregularCalendarEventsStore.getEventsList(date.year, type)
     }
 }
 
@@ -146,16 +168,17 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
     private val gregorianEvents = mutableMapOf<Int, List<CalendarEvent.GregorianCalendarEvent>>()
 
     @Suppress("UNCHECKED_CAST")
-    fun <T : CalendarEvent<out AbstractDate>> getEvents(date: AbstractDate): List<T> {
-        fun <T2 : CalendarEvent<out AbstractDate>> generate() =
-            generateEntry(date.year, date.calendarType) as? List<T2> ?: emptyList()
-        return when (date) {
-            is PersianDate -> persianEvents.getOrPut(date.year, ::generate)
-            is IslamicDate -> islamicEvents.getOrPut(date.year, ::generate)
-            is CivilDate -> gregorianEvents.getOrPut(date.year, ::generate)
-            else -> emptyList()
+    fun <T : CalendarEvent<*>> getEventsList(year: Int, type: CalendarType): List<T> {
+        fun <T : CalendarEvent<*>> generate() = generateEntry(year, type) as? List<T> ?: emptyList()
+        return when (type) {
+            CalendarType.SHAMSI -> persianEvents.getOrPut(year, ::generate)
+            CalendarType.ISLAMIC -> islamicEvents.getOrPut(year, ::generate)
+            CalendarType.GREGORIAN -> gregorianEvents.getOrPut(year, ::generate)
         } as? List<T> ?: emptyList()
     }
+
+    fun <T : CalendarEvent<out AbstractDate>> getEvents(date: AbstractDate): List<T> =
+        getEventsList<T>(date.year, date.calendarType).filter { it.date == date }
 
     // Create actually usable irregular event of a year based on defined rules and enabled holidays
     private fun generateEntry(year: Int, type: CalendarType): List<CalendarEvent<*>> {

@@ -1,11 +1,17 @@
 package com.byagowi.persiancalendar
 
+import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.EnabledHolidays
+import com.byagowi.persiancalendar.utils.EventsStore
+import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getLastWeekDayOfMonth
 import com.byagowi.persiancalendar.utils.getMonthLength
+import com.byagowi.persiancalendar.utils.irregularCalendarEventsStore
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
+import com.byagowi.persiancalendar.utils.loadEvents
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -570,5 +576,67 @@ class MainLogicTests {
         assertEquals(4, Jdn(PersianDate(1398, 9, 20)).dayOfWeek)
         assertEquals(5, Jdn(PersianDate(1398, 9, 21)).dayOfWeek)
         assertEquals(6, Jdn(PersianDate(1398, 9, 22)).dayOfWeek)
+    }
+
+    @Test
+    fun `test calendar configuration and events holidays load`() {
+        loadEvents(EnabledHolidays(EnabledHolidays.iranDefault), LANG_FA)
+        assertEquals(IslamicDate.useUmmAlQura, false)
+
+        (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
+            irregularCalendarEventsStore.getEvents<CalendarEvent.IslamicCalendarEvent>(it)
+        }.let {
+            assertEquals(1, it.size)
+            assertEquals(true, it[0].isHoliday)
+        }
+
+        irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
+            1400, CalendarType.SHAMSI
+        ).let { assertEquals(0, it.size) }
+
+        //
+        loadEvents(EnabledHolidays(setOf(EnabledHolidays.iranAncientKey)), LANG_FA)
+        assertEquals(IslamicDate.useUmmAlQura, false)
+
+        (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
+            irregularCalendarEventsStore.getEvents<CalendarEvent.IslamicCalendarEvent>(it)
+        }.let { assertEquals(0, it.size) }
+
+        irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
+            1400, CalendarType.SHAMSI
+        ).let { assertEquals(1, it.size) }
+
+        assertEquals(1, getEvents(Jdn(PersianDate(1400, 12, 24)), EventsStore.empty()).size)
+        assertEquals(1, getEvents(Jdn(PersianDate(1400, 12, 1)), EventsStore.empty()).size)
+
+        //
+        loadEvents(EnabledHolidays(setOf(EnabledHolidays.internationalKey)), LANG_UR)
+        assertEquals(IslamicDate.useUmmAlQura, true)
+        irregularCalendarEventsStore.getEventsList<CalendarEvent.GregorianCalendarEvent>(
+            2021, CalendarType.GREGORIAN
+        ).let {
+            assertEquals(1, it.size)
+            assertEquals(false, it[0].isHoliday)
+        }
+
+        //
+        loadEvents(EnabledHolidays(EnabledHolidays.afghanistanDefault), LANG_FA)
+        assertEquals(IslamicDate.useUmmAlQura, true)
+
+        (1..31).map { IslamicDate(1400, 2, it) }.flatMap {
+            irregularCalendarEventsStore.getEvents<CalendarEvent.IslamicCalendarEvent>(it)
+        }.let { assertEquals(0, it.size) }
+
+        //
+        loadEvents(EnabledHolidays(), LANG_FA_AF)
+        assertEquals(IslamicDate.useUmmAlQura, true)
+
+        //
+        loadEvents(EnabledHolidays(), LANG_PS)
+        assertEquals(IslamicDate.useUmmAlQura, true)
+
+        //
+        loadEvents(EnabledHolidays(), LANG_FA)
+        assertEquals(IslamicDate.useUmmAlQura, false)
     }
 }
