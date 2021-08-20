@@ -89,7 +89,7 @@ android {
     }
 
     packagingOptions {
-        exclude("DebugProbesKt.bin")
+        resources.excludes += "DebugProbesKt.bin"
     }
 
     bundle {
