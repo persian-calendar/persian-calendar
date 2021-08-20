@@ -34,7 +34,7 @@ fun getCustomAthanUri(context: Context): Uri? =
 private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTimeKey: String, isTesting: Boolean = false) {
-    if (!isTesting) { // skips if already called through either WorkManager or alarmManager
+    if (!isTesting) { // skips if already called through either WorkManager or AlarmManager
         if (prayTimeKey !in getEnabledAlarms(context)) return
         val today = Jdn.today
         if (lastAthanJdn == today && lastAthanKey == prayTimeKey) return
