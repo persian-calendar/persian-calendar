@@ -639,4 +639,11 @@ class MainLogicTests {
         loadEvents(EnabledHolidays(), LANG_FA)
         assertEquals(IslamicDate.useUmmAlQura, false)
     }
+
+    @Test
+    fun `EventsStore hash is unique for each day of year`() {
+        (1..12).flatMap { month -> (1..31).map { day -> CivilDate(2000, month, day) } }
+            .map { EventsStore.hash(it) }.toSet().toList()
+            .also { assertEquals(372, it.size) }
+    }
 }
