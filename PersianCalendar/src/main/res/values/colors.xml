@@ -20,7 +20,7 @@
     <color name="dark_text_athan">#ffffff</color>
     <color name="dark_divider">#1E252A</color>
     <color name="dark_background">#1E252A</color>
-    <color name="dark_card_background">#1E252A</color>
+    <color name="dark_card_background">#21282E</color>
     <color name="dark_current_day">#64ffda</color>
     <color name="dark_select_day">#e0e0e0</color>
     <color name="dark_event_indicator">#e0e0e0</color>
@@ -157,7 +157,7 @@
     <color name="sViewSunsetTextColorLight">#B71C1C</color>
     <color name="sViewSunriseTextColorDark">#FF9800</color>
     <color name="sViewMiddayTextColorDark">#FFC107</color>
-    <color name="sViewSunsetTextColorDark">#B71C1C</color>
+    <color name="sViewSunsetTextColorDark">#F22424</color>
 
 
     <!-- General colors -->
