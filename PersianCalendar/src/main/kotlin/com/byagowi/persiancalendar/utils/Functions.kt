@@ -184,9 +184,11 @@ private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long
     if (remainedMillis < 0) return // Don't set alarm in past
 
     if (enableWorkManager) { // Schedule in both, startAthan has the logic to skip duplicated calls
+        val workerInputData = Data.Builder().putLong(KEY_EXTRA_PRAYER_TIME, timeInMillis)
+            .putString(KEY_EXTRA_PRAYER, alarmTimeName).build()
         val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
             .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
-            .setInputData(Data.Builder().putString(KEY_EXTRA_PRAYER_KEY, alarmTimeName).build())
+            .setInputData(workerInputData)
             .build()
         WorkManager.getInstance(context)
             .beginUniqueWork(ALARM_TAG + i, ExistingWorkPolicy.REPLACE, alarmWorker)
@@ -197,7 +199,8 @@ private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long
     val pendingIntent = PendingIntent.getBroadcast(
         context, ALARMS_BASE_ID + i,
         Intent(context, BroadcastReceivers::class.java)
-            .putExtra(KEY_EXTRA_PRAYER_KEY, alarmTimeName)
+            .putExtra(KEY_EXTRA_PRAYER, alarmTimeName)
+            .putExtra(KEY_EXTRA_PRAYER_TIME, timeInMillis)
             .setAction(BROADCAST_ALARM),
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0

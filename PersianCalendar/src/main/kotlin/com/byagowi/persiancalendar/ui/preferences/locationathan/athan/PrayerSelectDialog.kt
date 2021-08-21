@@ -7,7 +7,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
-import com.byagowi.persiancalendar.utils.startAthan
+import com.byagowi.persiancalendar.utils.startAthanBody
 
 private val prayerTimesNames = listOf(
     R.string.fajr, R.string.dhuhr, R.string.asr, R.string.maghrib, R.string.isha
@@ -38,7 +38,7 @@ fun showPrayerSelectPreviewDialog(context: Context) {
     AlertDialog.Builder(context)
         .setTitle(R.string.preview)
         .setItems(prayerTimesNames) { _, which ->
-            startAthan(context, prayerTimesKeys.getOrNull(which) ?: "FAJR", isTesting = true)
+            startAthanBody(context, prayerTimesKeys.getOrNull(which) ?: "FAJR")
         }
         .setNegativeButton(R.string.cancel, null)
         .show()

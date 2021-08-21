@@ -13,7 +13,7 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
+import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getClockFromStringId
@@ -48,7 +48,7 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
+        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
         val cityName = getCityName(this, false)
         val title =
             if (cityName.isNotEmpty()) getString(getPrayTimeText(athanKey))

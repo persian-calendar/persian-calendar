@@ -16,7 +16,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
-import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_KEY
+import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -80,7 +80,7 @@ class AthanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER_KEY)
+        val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
         val isFajr = prayerKey == "FAJR"
         var goMute = false
 
