@@ -6,6 +6,7 @@
         <item>تاریک</item>
         <item>مدرن</item>
         <item>آبی</item>
+        <item>کالا</item>
     </string-array>
 
     <string-array name="prayMethodsNames">

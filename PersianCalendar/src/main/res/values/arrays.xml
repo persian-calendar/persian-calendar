@@ -6,6 +6,7 @@
         <item>Dark</item>
         <item>Modern</item>
         <item>Blue</item>
+        <item>Black</item>
     </string-array>
 
     <string-array name="themeKeys" translatable="false">
@@ -14,6 +15,7 @@
         <item>DarkTheme</item>
         <item>ClassicTheme</item> <!-- its name is Modern however -->
         <item>BlueTheme</item>
+        <item>BlackTheme</item>
     </string-array>
 
     <string-array name="prayMethodsNames">

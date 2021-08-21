@@ -85,6 +85,7 @@ val DEFAULT_WEEK_ENDS = setOf("6")
 
 const val LIGHT_THEME = "LightTheme"
 const val DARK_THEME = "DarkTheme"
+const val BLACK_THEME = "BlackTheme"
 const val BLUE_THEME = "BlueTheme"
 const val MODERN_THEME = "ClassicTheme" // don't change it, for legacy reasons
 const val SYSTEM_DEFAULT_THEME = "SystemDefault"

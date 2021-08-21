@@ -297,6 +297,7 @@ fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
 @StyleRes
 fun getThemeFromName(name: String): Int = when (name) {
     DARK_THEME -> R.style.DarkTheme
+    BLACK_THEME -> R.style.BlackTheme
     MODERN_THEME -> R.style.ModernTheme
     BLUE_THEME -> R.style.BlueTheme
     LIGHT_THEME -> R.style.LightTheme
