@@ -14,7 +14,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.AthanActivity
-import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
@@ -39,7 +38,7 @@ private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long) {
     // if alarm is off by 5 minutes, just skip
-    if (abs(Calendar.getInstance().timeInMillis - intendedTime) > fifteenMinutesInMillis) return
+    if (abs(System.currentTimeMillis() - intendedTime) > fifteenMinutesInMillis) return
 
     // If at the of being is disabled by user, skip
     if (prayTimeKey !in getEnabledAlarms(context)) return

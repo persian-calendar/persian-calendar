@@ -11,7 +11,7 @@ import kotlinx.coroutines.coroutineScope
 class AlarmWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result = coroutineScope {
         val key = inputData.getString(KEY_EXTRA_PRAYER) ?: "FAJR"
-        val intendedTime = inputData.getLong(KEY_EXTRA_PRAYER_TIME, 0)
+        val intendedTime = inputData.getLong(KEY_EXTRA_PRAYER_TIME, System.currentTimeMillis())
         startAthan(applicationContext, key, intendedTime)
         Result.success()
     }

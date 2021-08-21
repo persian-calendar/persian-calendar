@@ -137,7 +137,7 @@ fun loadApp(context: Context) = runCatching {
         alarmManager.setInexactRepeating(
             AlarmManager.RTC,
             // Start from one hour from now
-            Calendar.getInstance().timeInMillis + TimeUnit.HOURS.toMillis(1),
+            System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1),
             TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
         )
     }
@@ -180,7 +180,7 @@ fun loadAlarms(context: Context) {
 }
 
 private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, i: Int) {
-    val remainedMillis = timeInMillis - Calendar.getInstance().timeInMillis
+    val remainedMillis = timeInMillis - System.currentTimeMillis()
     if (remainedMillis < 0) return // Don't set alarm in past
 
     if (enableWorkManager) { // Schedule in both, startAthan has the logic to skip duplicated calls
@@ -320,7 +320,7 @@ fun setChangeDateWorker(context: Context) {
         it.set(Calendar.HOUR_OF_DAY, 0)
         it.set(Calendar.MINUTE, 0)
         it.set(Calendar.SECOND, 1)
-    }.timeInMillis + DAY_IN_MILLIS - Calendar.getInstance().timeInMillis
+    }.timeInMillis + DAY_IN_MILLIS - System.currentTimeMillis()
     val changeDateWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
         .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)
         .build()

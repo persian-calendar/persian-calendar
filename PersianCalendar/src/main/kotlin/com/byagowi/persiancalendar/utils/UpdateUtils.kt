@@ -453,7 +453,7 @@ private fun Context.updateNotification(
         }
     }
 
-    if (BuildConfig.DEBUG) builder.setWhen(Calendar.getInstance().timeInMillis)
+    if (BuildConfig.DEBUG) builder.setWhen(System.currentTimeMillis())
 
     if (enableWorkManager) notificationManager?.notify(NOTIFICATION_ID, builder.build())
     else runCatching {

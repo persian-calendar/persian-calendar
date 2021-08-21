@@ -37,7 +37,8 @@ class BroadcastReceivers : BroadcastReceiver() {
 
             BROADCAST_ALARM -> {
                 val key = intent.getStringExtra(KEY_EXTRA_PRAYER) ?: return
-                val intendedTime = intent.getLongExtra(KEY_EXTRA_PRAYER_TIME, 0)
+                val currentTimeInMillis = System.currentTimeMillis()
+                val intendedTime = intent.getLongExtra(KEY_EXTRA_PRAYER_TIME, currentTimeInMillis)
                 startAthan(context, key, intendedTime)
             }
         }
