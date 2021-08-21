@@ -44,6 +44,7 @@
     </style>
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@color/dark_primary</item>
         <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
 
         <item name="colorMonthsBackground">@color/dark_primary</item>
