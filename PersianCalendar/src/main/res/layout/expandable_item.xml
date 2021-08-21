@@ -27,8 +27,8 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="@dimen/arrow_size"
-            android:layout_marginStart="4dp"
             android:gravity="center_vertical"
+            android:scrollbars="none"
             android:textSize="16sp"
             tools:text="Title" />
 
