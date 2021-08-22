@@ -52,13 +52,13 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.getThemeFromName
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getAppFont
-import com.byagowi.persiancalendar.ui.utils.getThemeFromName
 import com.byagowi.persiancalendar.utils.getThemeFromPreference
 import com.byagowi.persiancalendar.utils.initUtils
 import com.byagowi.persiancalendar.utils.isIranHolidaysEnabled
