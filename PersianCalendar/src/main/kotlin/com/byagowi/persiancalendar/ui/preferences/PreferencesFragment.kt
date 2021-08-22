@@ -4,14 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
+import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
@@ -19,6 +24,7 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.tabs.TabLayoutMediator
+import java.util.concurrent.TimeUnit
 
 /**
  * @author MEHDI DIMYADI
@@ -32,11 +38,20 @@ class PreferencesFragment : Fragment() {
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation(this)
-            if (BuildConfig.DEBUG) {
+            if (BuildConfig.BUILD_TYPE == "debug" || BuildConfig.BUILD_TYPE == "nightly") {
                 toolbar.menu.add("Static vs generated icons")
-                    .onClick { showIconsDemoDialog(context ?: return@onClick) }
+                    .onClick { showIconsDemoDialog(binding.root.context) }
                 toolbar.menu.add("Clear preferences store")
                     .onClick { toolbar.context.appPrefs.edit { clear() }; activity?.recreate() }
+                toolbar.menu.add("Schedule an alarm in 5 seconds").onClick {
+                    val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
+                        .setInitialDelay(TimeUnit.SECONDS.toMillis(5), TimeUnit.MILLISECONDS)
+                        .build()
+                    WorkManager.getInstance(binding.root.context)
+                        .beginUniqueWork("TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker)
+                        .enqueue()
+                    Toast.makeText(binding.root.context, "Alarm in 5s", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

@@ -58,8 +58,9 @@ fun getCustomAthanUri(context: Context): Uri? =
 private val fifteenMinutesInMillis = TimeUnit.MINUTES.toMillis(15)
 private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
-fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long) {
+fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
     logDebug("Alarms", "startAthan for $prayTimeKey")
+    if (intendedTime == null) return startAthanBody(context, prayTimeKey)
     // if alarm is off by 5 minutes, just skip
     if (abs(System.currentTimeMillis() - intendedTime) > fifteenMinutesInMillis) return
 
@@ -74,7 +75,7 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long) {
     startAthanBody(context, prayTimeKey)
 }
 
-fun startAthanBody(context: Context, prayTimeKey: String) = runCatching {
+private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching {
     logDebug("Alarms", "startAthanBody for $prayTimeKey")
     if (notificationAthan) {
         context.startService(

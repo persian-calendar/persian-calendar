@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
 
 @Suppress("UNUSED_PARAMETER")
 object Variants {
