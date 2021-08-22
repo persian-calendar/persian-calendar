@@ -11,40 +11,27 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
-import com.byagowi.persiancalendar.utils.updateStoredPreference
 
-fun showCalendarPreferenceDialog(context: Context, onAllItemsSwipped: () -> Unit) {
-    var dialog: AlertDialog? = null
-
-    updateStoredPreference(context)
+fun showCalendarPreferenceDialog(context: Context, onEmpty: () -> Unit) {
     val enabledCalendarTypes = getEnabledCalendarTypes()
     val adapter = RecyclerListAdapter(getOrderedCalendarEntities(context).map { (type, title) ->
         RecyclerListAdapter.Item(title, type.name, type in enabledCalendarTypes)
-    }, onAllItemsSwipped = {
-        dialog?.dismiss()
-        onAllItemsSwipped()
     })
-    val recyclerView = RecyclerView(context).also {
-        it.setHasFixedSize(true)
-        it.layoutManager = LinearLayoutManager(context)
-        it.adapter = adapter
-    }
-    adapter.itemTouchHelper.attachToRecyclerView(recyclerView)
 
-    dialog = AlertDialog.Builder(context)
-        .setView(recyclerView)
+    AlertDialog.Builder(context)
+        .setView(RecyclerView(context).also {
+            it.setHasFixedSize(true)
+            it.layoutManager = LinearLayoutManager(context)
+            it.adapter = adapter
+        })
         .setTitle(R.string.calendars_priority)
         .setNegativeButton(R.string.cancel, null)
-        .setPositiveButton(R.string.accept) { _, _ ->
-            adapter.result.takeIf { it.isNotEmpty() }?.let { ordering ->
-                context.appPrefs.edit {
-                    putString(PREF_MAIN_CALENDAR_KEY, ordering.first())
-                    putString(
-                        PREF_OTHER_CALENDARS_KEY, ordering.drop(1).joinToString(",")
-                    )
-                }
+        .setPositiveButton(R.string.accept) accept@{ _, _ ->
+            val ordering = adapter.result.takeIf { it.isNotEmpty() } ?: return@accept onEmpty()
+            context.appPrefs.edit {
+                putString(PREF_MAIN_CALENDAR_KEY, ordering.first())
+                putString(PREF_OTHER_CALENDARS_KEY, ordering.drop(1).joinToString(","))
             }
         }
-        .create()
-    dialog.show()
+        .show()
 }

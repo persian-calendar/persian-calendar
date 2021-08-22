@@ -26,15 +26,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
-class RecyclerListAdapter(
-    private var items: List<Item>, private val onAllItemsSwipped: () -> Unit
-) : RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
+class RecyclerListAdapter(private var items: List<Item>) :
+    RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>() {
 
     data class Item(val title: String, val key: String, val enabled: Boolean)
 
     val result: List<String> get() = items.filter { it.enabled }.map { it.key }
 
-    val itemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(this))
+    private val itemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(this))
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ItemViewHolder(
         CalendarTypeItemBinding.inflate(parent.context.layoutInflater, parent, false)
@@ -68,7 +72,6 @@ class RecyclerListAdapter(
     fun onItemDismissed(position: Int) {
         items = items.filterIndexed { i, _ -> i != position }
         notifyItemRemoved(position)
-        if (items.isEmpty()) onAllItemsSwipped()
     }
 
     override fun getItemCount(): Int = items.size

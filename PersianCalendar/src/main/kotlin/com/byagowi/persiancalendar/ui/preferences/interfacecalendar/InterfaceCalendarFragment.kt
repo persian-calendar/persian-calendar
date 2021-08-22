@@ -4,7 +4,6 @@ import android.Manifest
 import android.animation.ValueAnimator
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.preference.ListPreference
@@ -111,10 +110,9 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     }
                 }
                 clickable(onClick = {
-                    showCalendarPreferenceDialog(context) {
-                        // Easter egg when all items are swiped
-                        val view = activity?.findViewById<View?>(android.R.id.content)
-                            ?: return@showCalendarPreferenceDialog
+                    showCalendarPreferenceDialog(context, onEmpty = {
+                        // Easter egg when empty result is rejected
+                        val view = view?.rootView ?: return@showCalendarPreferenceDialog
                         ValueAnimator.ofFloat(0f, 360f).also {
                             it.duration = 3000L
                             it.interpolator = AccelerateDecelerateInterpolator()
@@ -122,7 +120,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                                 view.rotation = value.animatedValue as Float
                             }
                         }.start()
-                    }
+                    })
                 }) {
                     title(R.string.calendars_priority)
                     summary(R.string.calendars_priority_summary)
