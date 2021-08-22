@@ -130,10 +130,8 @@ private class ShiftWorkItemsAdapter(
             val context = binding.root.context
 
             binding.lengthSpinner.adapter = ArrayAdapter(
-                context,
-                android.R.layout.simple_spinner_dropdown_item,
-                (0..14).map {
-                    if (it == 0) binding.root.context.getString(R.string.shift_work_days_head)
+                context, android.R.layout.simple_spinner_dropdown_item, (0..14).map {
+                    if (it == 0) context.getString(R.string.shift_work_days_head)
                     else formatNumber(it)
                 }
             )
