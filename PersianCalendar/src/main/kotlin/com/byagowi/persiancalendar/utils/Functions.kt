@@ -18,6 +18,7 @@ import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
+import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.citiesStore
@@ -172,15 +173,17 @@ fun loadAlarms(context: Context) {
             else -> prayTimes.fajrClock
         }
 
-        setAlarm(context, name, Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, alarmTime.hour)
-            set(Calendar.MINUTE, alarmTime.minute)
+        setAlarm(context, name, Calendar.getInstance().also {
+            it.set(Calendar.HOUR_OF_DAY, alarmTime.hour)
+            it.set(Calendar.MINUTE, alarmTime.minute)
+            it.set(Calendar.SECOND, 0)
         }.timeInMillis - athanGap, i)
     }
 }
 
 private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, i: Int) {
     val remainedMillis = timeInMillis - System.currentTimeMillis()
+    logDebug("Alarms", "$alarmTimeName in ${remainedMillis / 60000} minutes")
     if (remainedMillis < 0) return // Don't set alarm in past
 
     if (enableWorkManager) { // Schedule in both, startAthan has the logic to skip duplicated calls

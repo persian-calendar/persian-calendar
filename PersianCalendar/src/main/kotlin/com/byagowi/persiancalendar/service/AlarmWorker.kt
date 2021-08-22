@@ -5,6 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
+import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.utils.startAthan
 import kotlinx.coroutines.coroutineScope
 
@@ -12,6 +13,7 @@ class AlarmWorker(context: Context, params: WorkerParameters) : CoroutineWorker(
     override suspend fun doWork(): Result = coroutineScope {
         val key = inputData.getString(KEY_EXTRA_PRAYER) ?: "FAJR"
         val intendedTime = inputData.getLong(KEY_EXTRA_PRAYER_TIME, System.currentTimeMillis())
+        logDebug("Alarms", "WorkManager for $key")
         startAthan(applicationContext, key, intendedTime)
         Result.success()
     }

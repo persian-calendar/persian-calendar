@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.AthanActivity
@@ -37,6 +38,7 @@ private val fifteenMinutesInMillis = TimeUnit.MINUTES.toMillis(15)
 private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long) {
+    logDebug("Alarms", "startAthan for $prayTimeKey")
     // if alarm is off by 5 minutes, just skip
     if (abs(System.currentTimeMillis() - intendedTime) > fifteenMinutesInMillis) return
 
@@ -52,6 +54,7 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long) {
 }
 
 fun startAthanBody(context: Context, prayTimeKey: String) {
+    logDebug("Alarms", "startAthanBody for $prayTimeKey")
     if (notificationAthan) {
         context.startService(
             Intent(context, AthanNotification::class.java)
