@@ -74,7 +74,7 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long) {
     startAthanBody(context, prayTimeKey)
 }
 
-fun startAthanBody(context: Context, prayTimeKey: String) {
+fun startAthanBody(context: Context, prayTimeKey: String) = runCatching {
     logDebug("Alarms", "startAthanBody for $prayTimeKey")
     if (notificationAthan) {
         context.startService(
@@ -88,7 +88,7 @@ fun startAthanBody(context: Context, prayTimeKey: String) {
                 .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
         )
     }
-}
+}.onFailure(logException).let {}
 
 fun getEnabledAlarms(context: Context): Set<String> {
     if (coordinates == null) return emptySet()
