@@ -41,9 +41,9 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
 import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
+import com.byagowi.persiancalendar.Variants
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.Jdn
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
-        ReleaseDebugDifference.startLynxListenerIfIsDebug(this)
+        Variants.startLynxListenerIfIsDebug(this)
         initUtils(this)
 
         // Don't apply font override to English and Japanese locales

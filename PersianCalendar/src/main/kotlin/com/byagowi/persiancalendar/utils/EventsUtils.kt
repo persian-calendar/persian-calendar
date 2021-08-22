@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.LANG_UR
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.*

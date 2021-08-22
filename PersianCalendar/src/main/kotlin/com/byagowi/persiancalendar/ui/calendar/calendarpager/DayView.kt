@@ -6,7 +6,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled

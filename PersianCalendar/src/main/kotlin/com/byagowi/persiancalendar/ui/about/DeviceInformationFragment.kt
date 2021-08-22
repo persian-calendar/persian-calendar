@@ -41,7 +41,7 @@ import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard

@@ -17,8 +17,8 @@ import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.generated.citiesStore

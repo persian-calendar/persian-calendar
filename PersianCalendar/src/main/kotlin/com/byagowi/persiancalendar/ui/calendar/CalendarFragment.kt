@@ -38,7 +38,7 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding

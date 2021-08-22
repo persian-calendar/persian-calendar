@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.utils.loadApp
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.update

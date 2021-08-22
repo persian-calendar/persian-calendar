@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
 import com.byagowi.persiancalendar.ui.utils.askForLocationPermission
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard

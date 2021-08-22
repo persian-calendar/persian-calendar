@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.util.Log
 
-object ReleaseDebugDifference {
+object Variants {
     fun mainApplication(app: Application?) {
 //        // This process is dedicated to LeakCanary for heap analysis.
 //        // You should not init your app in this process.

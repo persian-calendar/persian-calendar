@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.BROADCAST_RESTART_APP
 import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.utils.loadApp
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker

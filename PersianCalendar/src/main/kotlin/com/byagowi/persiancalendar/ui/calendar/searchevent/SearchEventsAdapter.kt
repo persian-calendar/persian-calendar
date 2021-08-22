@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.debugAssertNotNull
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 

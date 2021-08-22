@@ -5,7 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.utils.startAthan
 import kotlinx.coroutines.coroutineScope
 

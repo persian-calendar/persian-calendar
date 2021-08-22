@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ReleaseDebugDifference.logDebug
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.ui.AthanActivity
