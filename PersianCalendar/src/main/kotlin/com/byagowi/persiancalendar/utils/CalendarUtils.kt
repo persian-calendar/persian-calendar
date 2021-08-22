@@ -8,19 +8,25 @@ import android.content.res.Resources
 import android.provider.CalendarContract
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
+import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.LANG_FA_AF
 import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.ceil
+
+val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
 fun isWeekEnd(dayOfWeek: Int) = weekEnds[dayOfWeek]
 
@@ -274,3 +280,31 @@ fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(
     islamicCalendarEvents.getEvents(jdn.toIslamicCalendar()),
     gregorianCalendarEvents.getEvents(jdn.toGregorianCalendar(), deviceEvents)
 ).flatten()
+
+fun formatDate(
+    date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false
+): String = if (numericalDatePreferred && !forceNonNumerical)
+    (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
+else when (language) {
+    LANG_CKB -> "%sی %sی %s"
+    else -> "%s %s %s"
+}.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
+
+fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
+    formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)
+)
+
+// It should match with calendar_type_abbr array
+fun getCalendarNameAbbr(date: AbstractDate) = calendarTypesTitleAbbr.getOrNull(
+    when (date) {
+        is PersianDate -> 0
+        is IslamicDate -> 1
+        is CivilDate -> 2
+        else -> -1
+    }
+) ?: ""
+
+fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
+    otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
+
+fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()

@@ -58,7 +58,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getAppFont
-import com.byagowi.persiancalendar.utils.getThemeFromName
+import com.byagowi.persiancalendar.ui.utils.getThemeFromName
 import com.byagowi.persiancalendar.utils.getThemeFromPreference
 import com.byagowi.persiancalendar.utils.initUtils
 import com.byagowi.persiancalendar.utils.isIranHolidaysEnabled
@@ -67,7 +67,7 @@ import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.overrideFont
-import com.byagowi.persiancalendar.utils.setDeviceCalendarEvents
+import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.toggleShowDeviceCalendarOnPreference
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         startEitherServiceOrWorker(this)
 
-        setDeviceCalendarEvents(applicationContext)
+        readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
         binding = ActivityMainBinding.inflate(layoutInflater).also {

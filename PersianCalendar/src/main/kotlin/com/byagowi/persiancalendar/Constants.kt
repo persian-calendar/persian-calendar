@@ -106,3 +106,8 @@ const val ZWJ = "\u200D"
 
 const val DEFAULT_AM = "ق.ظ"
 const val DEFAULT_PM = "ب.ظ"
+
+// WorkManager tags, should be unique
+const val CHANGE_DATE_TAG = "changeDate"
+const val ALARM_TAG = "alarmTag"
+const val UPDATE_TAG = "update"

@@ -15,7 +15,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.getJdnOrNull
-import com.byagowi.persiancalendar.utils.getThemeFromName
+import com.byagowi.persiancalendar.ui.utils.getThemeFromName
 import com.byagowi.persiancalendar.utils.getThemeFromPreference
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update

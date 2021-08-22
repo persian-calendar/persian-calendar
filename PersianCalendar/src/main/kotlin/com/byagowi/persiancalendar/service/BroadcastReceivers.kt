@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
 import com.byagowi.persiancalendar.Variants.logDebug
-import com.byagowi.persiancalendar.utils.loadApp
+import com.byagowi.persiancalendar.utils.scheduleAlarmManagerUpdates
 import com.byagowi.persiancalendar.utils.startAthan
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.update
@@ -28,12 +28,12 @@ class BroadcastReceivers : BroadcastReceiver() {
 
             Intent.ACTION_DATE_CHANGED, Intent.ACTION_TIMEZONE_CHANGED -> {
                 update(context, true)
-                loadApp(context)
+                scheduleAlarmManagerUpdates(context)
             }
 
             Intent.ACTION_TIME_CHANGED, Intent.ACTION_SCREEN_ON, BROADCAST_UPDATE_APP -> {
                 update(context, false)
-                loadApp(context)
+                scheduleAlarmManagerUpdates(context)
             }
 
             BROADCAST_ALARM -> {

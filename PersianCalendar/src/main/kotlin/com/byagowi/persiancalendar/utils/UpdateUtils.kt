@@ -44,7 +44,8 @@ private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
 
-fun setDeviceCalendarEvents(context: Context) = runCatching {
+// Is called from MainActivity to make sure is updated, probably should be removed however
+fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) = runCatching {
     deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today)
 }.onFailure(logException).let {}
 
@@ -70,7 +71,7 @@ fun update(context: Context, updateDate: Boolean) {
         logDebug("UpdateUtils", "date has changed")
         loadAlarms(context)
         pastDate = date
-        setDeviceCalendarEvents(context)
+        readAndStoreDeviceCalendarEventsOfTheDay(context)
         true
     } else false
 
@@ -89,7 +90,7 @@ fun update(context: Context, updateDate: Boolean) {
     val owghat = if (nextOwghatId == 0) "" else buildString {
         append(context.getString(nextOwghatId))
         append(": ")
-        append(getClockFromStringId(nextOwghatId).toFormattedString())
+        append(getOwghatTimeOfStringId(nextOwghatId).toFormattedString())
         if ("owghat_location" in whatToShowOnWidgets) {
             getCityName(context, false).takeIf { it.isNotEmpty() }.also {
                 append(" ($it)")
@@ -307,14 +308,14 @@ private fun Context.update4x2Widget(
         ) { textHolderViewId, owghatStringId ->
             remoteViews.setTextViewText(
                 textHolderViewId, getString(owghatStringId) + "\n" +
-                        getClockFromStringId(owghatStringId).toFormattedString()
+                        getOwghatTimeOfStringId(owghatStringId).toFormattedString()
             )
             remoteViews.setTextColor(
                 textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
             )
         }
 
-        val difference = (getClockFromStringId(nextOwghatId).toInt() - owghatClock.toInt())
+        val difference = (getOwghatTimeOfStringId(nextOwghatId).toInt() - owghatClock.toInt())
             .let { if (it > 0) it else it + 60 * 24 }.toLong()
 
         val remainingTime = listOf(

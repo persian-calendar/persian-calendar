@@ -31,8 +31,6 @@ fun getDayIconResource(day: Int): Int = when (preferredDigits) {
     else -> DAYS_ICONS_PERSIAN
 }.getOrNull(day - 1) ?: 0
 
-// See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
-val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
 private val DAYS_ICONS_PERSIAN = listOf31Items(
     R.drawable.day1, R.drawable.day2, R.drawable.day3, R.drawable.day4, R.drawable.day5,
     R.drawable.day6, R.drawable.day7, R.drawable.day8, R.drawable.day9, R.drawable.day10,
@@ -43,9 +41,7 @@ private val DAYS_ICONS_PERSIAN = listOf31Items(
     R.drawable.day31
 )
 
-// No Urdu ones as they don't use them commonly nowadays
-///
-val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+// No Urdu ones are provided as they use Arabic ones nowadays
 private val DAYS_ICONS_ARABIC = listOf31Items(
     R.drawable.day1_ar, R.drawable.day2_ar, R.drawable.day3_ar, R.drawable.day4_ar,
     R.drawable.day5_ar, R.drawable.day6_ar, R.drawable.day7_ar, R.drawable.day8_ar,
@@ -57,11 +53,6 @@ private val DAYS_ICONS_ARABIC = listOf31Items(
     R.drawable.day29_ar, R.drawable.day30_ar, R.drawable.day31_ar
 )
 
-// Not that great to have charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
-private val CJK_DIGITS = ARABIC_DIGITS
-
-///
-val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
 private val DAYS_ICONS_ARABIC_INDIC = listOf31Items(
     R.drawable.day1, R.drawable.day2, R.drawable.day3, R.drawable.day4_ckb, R.drawable.day5_ckb,
     R.drawable.day6_ckb, R.drawable.day7, R.drawable.day8, R.drawable.day9, R.drawable.day10,

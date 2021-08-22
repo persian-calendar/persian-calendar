@@ -5,7 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import com.byagowi.persiancalendar.Variants.logDebug
-import com.byagowi.persiancalendar.utils.loadApp
+import com.byagowi.persiancalendar.utils.scheduleAlarmManagerUpdates
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
@@ -35,7 +35,7 @@ class ApplicationService : Service() {
         registerReceiver(receiver, intentFilter)
 
         updateStoredPreference(applicationContext)
-        loadApp(this)
+        scheduleAlarmManagerUpdates(this)
         update(applicationContext, true)
 
         return START_STICKY

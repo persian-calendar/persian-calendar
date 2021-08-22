@@ -16,7 +16,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.getCityName
-import com.byagowi.persiancalendar.utils.getClockFromStringId
+import com.byagowi.persiancalendar.utils.getOwghatTimeOfStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeText
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toFormattedString
@@ -62,7 +62,7 @@ class AthanNotification : Service() {
             "ISHA" -> listOf(R.string.midnight)
             else -> listOf(R.string.midnight)
         }.joinToString(" - ") {
-            "${getString(it)}: ${getClockFromStringId(it).toFormattedString()}"
+            "${getString(it)}: ${getOwghatTimeOfStringId(it).toFormattedString()}"
         }
 
         val notificationBuilder = NotificationCompat.Builder(
