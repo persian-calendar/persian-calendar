@@ -78,7 +78,11 @@
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleTop"
-            android:theme="@style/FullscreenTheme" />
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:theme="@style/FullscreenTheme"
+            android:turnScreenOn="true" />
 
         <receiver
             android:name=".service.BroadcastReceivers"
