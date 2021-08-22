@@ -69,7 +69,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     val dateHasChanged = if (pastDate == null || pastDate != date || updateDate) {
         logDebug("UpdateUtils", "date has changed")
-        loadAlarms(context)
+        scheduleAlarms(context)
         pastDate = date
         readAndStoreDeviceCalendarEventsOfTheDay(context)
         true

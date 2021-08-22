@@ -97,7 +97,7 @@ fun getEnabledAlarms(context: Context): Set<String> {
         .toSet()
 }
 
-fun loadAlarms(context: Context) {
+fun scheduleAlarms(context: Context) {
     val enabledAlarms = getEnabledAlarms(context).takeIf { it.isNotEmpty() } ?: return
     val athanGap =
         ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
@@ -116,7 +116,7 @@ fun loadAlarms(context: Context) {
             else -> prayTimes.fajrClock
         }
 
-        setAlarm(context, name, Calendar.getInstance().also {
+        scheduleAlarm(context, name, Calendar.getInstance().also {
             it.set(Calendar.HOUR_OF_DAY, alarmTime.hour)
             it.set(Calendar.MINUTE, alarmTime.minute)
             it.set(Calendar.SECOND, 0)
@@ -124,7 +124,7 @@ fun loadAlarms(context: Context) {
     }
 }
 
-private fun setAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, i: Int) {
+private fun scheduleAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, i: Int) {
     val remainedMillis = timeInMillis - System.currentTimeMillis()
     logDebug("Alarms", "$alarmTimeName in ${remainedMillis / 60000} minutes")
     if (remainedMillis < 0) return // Don't set alarm in past

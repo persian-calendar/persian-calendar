@@ -171,8 +171,8 @@ var calendarTypesTitleAbbr = emptyList<String>()
 fun initUtils(context: Context) {
     updateStoredPreference(context)
     applyAppLanguage(context)
-    loadLanguageResource()
-    loadAlarms(context)
+    loadLanguageResources()
+    scheduleAlarms(context)
     configureCalendarsAndLoadEvents(context)
 }
 
@@ -184,7 +184,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     loadEvents(enabledHolidays, language)
 }
 
-fun loadLanguageResource() {
+fun loadLanguageResources() {
     val language = language
     persianMonths = AppLocalesData.getPersianCalendarMonths(language)
     islamicMonths = AppLocalesData.getIslamicCalendarMonths(language)
