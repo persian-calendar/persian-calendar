@@ -11,4 +11,5 @@ object Variants {
     fun logDebug(tag: String, msg: String) = Log.d(tag, msg)
     inline val <T> T.debugAssertNotNull: T
         inline get() = this ?: throw NullPointerException("A debug only assert has happened")
+    inline val enableDevelopmentFeatures get() = true
 }

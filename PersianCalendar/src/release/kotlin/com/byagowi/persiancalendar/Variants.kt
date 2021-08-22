@@ -9,4 +9,5 @@ object Variants {
     fun startLynxListenerIfIsDebug(context: Context?) {} // Nothing here
     fun logDebug(tag: String, msg: String) {} // Nothing Here
     inline val <T> T.debugAssertNotNull: T inline get() = this // Nothing here
+    inline val enableDevelopmentFeatures get() = false
 }

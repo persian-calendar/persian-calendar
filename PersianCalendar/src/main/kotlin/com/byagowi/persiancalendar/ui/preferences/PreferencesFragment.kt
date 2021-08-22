@@ -13,8 +13,8 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.Variants.enableDevelopmentFeatures
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
@@ -38,7 +38,7 @@ class PreferencesFragment : Fragment() {
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation(this)
-            if (BuildConfig.BUILD_TYPE == "debug" || BuildConfig.BUILD_TYPE == "nightly") {
+            if (enableDevelopmentFeatures) {
                 toolbar.menu.add("Static vs generated icons")
                     .onClick { showIconsDemoDialog(binding.root.context) }
                 toolbar.menu.add("Clear preferences store")
