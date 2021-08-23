@@ -14,7 +14,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CalendarTests {
-    
+
     @Test
     fun `Islamic calendar calculations correctness`() {
         listOf(

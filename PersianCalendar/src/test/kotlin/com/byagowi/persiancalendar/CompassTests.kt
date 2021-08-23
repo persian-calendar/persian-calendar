@@ -1,30 +1,9 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
-import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.EnabledHolidays
-import com.byagowi.persiancalendar.utils.EventsStore
-import com.byagowi.persiancalendar.utils.getEvents
-import com.byagowi.persiancalendar.utils.getLastWeekDayOfMonth
-import com.byagowi.persiancalendar.utils.getMonthLength
-import com.byagowi.persiancalendar.utils.irregularCalendarEventsStore
-import com.byagowi.persiancalendar.utils.isMoonInScorpio
-import com.byagowi.persiancalendar.utils.loadEvents
-import io.github.persiancalendar.Equinox
-import io.github.persiancalendar.calendar.CivilDate
-import io.github.persiancalendar.calendar.IslamicDate
-import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.praytimes.CalculationMethod
-import io.github.persiancalendar.praytimes.Clock
-import io.github.persiancalendar.praytimes.Coordinate
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.*
 
 class CompassTests {
     @Test
