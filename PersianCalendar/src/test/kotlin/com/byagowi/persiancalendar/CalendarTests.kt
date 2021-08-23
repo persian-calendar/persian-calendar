@@ -1,34 +1,22 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.utils.CalendarType
-import com.byagowi.persiancalendar.utils.EnabledHolidays
-import com.byagowi.persiancalendar.utils.EventsStore
-import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getLastWeekDayOfMonth
 import com.byagowi.persiancalendar.utils.getMonthLength
-import com.byagowi.persiancalendar.utils.irregularCalendarEventsStore
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
-import com.byagowi.persiancalendar.utils.loadEvents
-import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import io.github.persiancalendar.praytimes.CalculationMethod
-import io.github.persiancalendar.praytimes.Clock
-import io.github.persiancalendar.praytimes.Coordinate
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import java.util.*
 
-class MainLogicTests {
+class CalendarTests {
+    
     @Test
-    fun islamic_converter_test() {
+    fun `Islamic calendar calculations correctness`() {
         listOf(
             listOf(2453767, 1427, 1, 1), listOf(2455658, 1432, 5, 2)
 //            listOf(2458579, 1440, 7, 29), listOf(2458580, 1440, 8, 1)
@@ -141,7 +129,7 @@ class MainLogicTests {
     }
 
     @Test
-    fun practice_persian_converting_back_and_forth() {
+    fun `Persian calendar converting to and from Jdn practice`() {
         assertEquals(PersianDate(1398, 1, 1).toJdn(), 2458564)
         val startJdn = CivilDate(1750, 1, 1).toJdn()
         val endJdn = CivilDate(2350, 1, 1).toJdn()
@@ -149,14 +137,14 @@ class MainLogicTests {
     }
 
     @Test
-    fun practice_islamic_converting_back_and_forth() {
+    fun `Islamic calendar converting to and from Jdn practice`() {
         val startJdn = CivilDate(1750, 1, 1).toJdn()
         val endJdn = CivilDate(2350, 1, 1).toJdn()
         (startJdn..endJdn).forEach { assertEquals(it, IslamicDate(it).toJdn()) }
     }
 
     @Test
-    fun practice_ummalqara_converting_back_and_forth() {
+    fun `UmmAlqara calendar converting to and from Jdn practice`() {
         IslamicDate.useUmmAlQura = true
         val startJdn = CivilDate(1750, 1, 1).toJdn()
         val endJdn = CivilDate(2350, 1, 1).toJdn()
@@ -165,14 +153,14 @@ class MainLogicTests {
     }
 
     @Test
-    fun practice_civil_converting_back_and_forth() {
+    fun `Gregorian calendar converting to and from Jdn practice`() {
         val startJdn = CivilDate(1750, 1, 1).toJdn()
         val endJdn = CivilDate(2350, 1, 1).toJdn()
         (startJdn..endJdn).forEach { assertEquals(it, CivilDate(it).toJdn()) }
     }
 
     @Test
-    fun practice_moon_in_scorpio() {
+    fun `moon in scorpio calculation correctness`() {
         val positiveJdn = listOf(
             listOf(1397, 1, 14), listOf(1397, 1, 15), listOf(1397, 2, 10),
             listOf(1397, 2, 11), listOf(1397, 2, 12), listOf(1397, 3, 6),
@@ -203,7 +191,7 @@ class MainLogicTests {
     }
 
     @Test
-    fun test_getMonthLength() {
+    fun `getMonthLength calcuating correctness`() {
         assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 1))
         assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 2))
         assertEquals(31, CalendarType.SHAMSI.getMonthLength(1397, 3))
@@ -218,142 +206,6 @@ class MainLogicTests {
         assertEquals(29, CalendarType.SHAMSI.getMonthLength(1397, 12))
     }
 
-    private fun getDate(year: Int, month: Int, dayOfMonth: Int): Date =
-        Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
-            set(year, month - 1, dayOfMonth)
-        }.time
-
-    @Test
-    fun test_praytimes() {
-        // http://praytimes.org/code/v2/js/examples/monthly.htm
-        var prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.MWL,
-            getDate(2018, 9, 5),
-            Coordinate(43.0, -80.0, 0.0),
-            -5.0, true
-        )
-
-        assertEquals(Clock(5, 9).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(21, 21).toInt(), prayTimes.ishaClock.toInt())
-
-        prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.ISNA,
-            getDate(2018, 9, 5),
-            Coordinate(43.0, -80.0, 0.0),
-            -5.0, true
-        )
-        assertEquals(Clock(5, 27).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(21, 9).toInt(), prayTimes.ishaClock.toInt())
-
-        prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.Egypt,
-            getDate(2018, 9, 5),
-            Coordinate(43.0, -80.0, 0.0),
-            -5.0, true
-        )
-        assertEquals(Clock(5, 0).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(21, 24).toInt(), prayTimes.ishaClock.toInt())
-
-        prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.Makkah,
-            getDate(2018, 9, 5),
-            Coordinate(43.0, -80.0, 0.0),
-            -5.0, true
-        )
-        assertEquals(Clock(5, 6).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(21, 18).toInt(), prayTimes.ishaClock.toInt())
-
-        prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.Karachi,
-            getDate(2018, 9, 5),
-            Coordinate(43.0, -80.0, 0.0),
-            -5.0, true
-        )
-        assertEquals(Clock(5, 9).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(19, 48).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(21, 27).toInt(), prayTimes.ishaClock.toInt())
-
-        prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.Jafari,
-            getDate(2018, 9, 5),
-            Coordinate(43.0, -80.0, 0.0),
-            -5.0, true
-        )
-        assertEquals(Clock(5, 21).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(20, 5).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(21, 3).toInt(), prayTimes.ishaClock.toInt())
-
-        prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.Tehran,
-            getDate(2018, 9, 5),
-            Coordinate(43.0, -80.0, 0.0),
-            -5.0, true
-        )
-        assertEquals(Clock(5, 11).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(6, 49).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 19).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 57).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(20, 8).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(21, 3).toInt(), prayTimes.ishaClock.toInt())
-
-        prayTimes = PrayTimesCalculator.calculate(
-            CalculationMethod.Tehran,
-            getDate(2019, 6, 9),
-            Coordinate(3.147778, 101.695278, 0.0),
-            8.0, false
-        )
-        assertEquals(Clock(5, 49).toInt(), prayTimes.fajrClock.toInt())
-        assertEquals(Clock(7, 3).toInt(), prayTimes.sunriseClock.toInt())
-        assertEquals(Clock(13, 12).toInt(), prayTimes.dhuhrClock.toInt())
-        assertEquals(Clock(16, 39).toInt(), prayTimes.asrClock.toInt())
-        assertEquals(Clock(19, 37).toInt(), prayTimes.maghribClock.toInt())
-        assertEquals(Clock(20, 19).toInt(), prayTimes.ishaClock.toInt())
-    }
-
-    @Test
-    fun test_isNearToDegree() {
-        assertTrue(CompassFragment.isNearToDegree(360f, 1f))
-        assertTrue(CompassFragment.isNearToDegree(1f, 360f))
-
-        assertTrue(CompassFragment.isNearToDegree(2f, 360f))
-        assertFalse(CompassFragment.isNearToDegree(3f, 360f))
-
-        assertTrue(CompassFragment.isNearToDegree(360f, 2f))
-        assertFalse(CompassFragment.isNearToDegree(360f, 3f))
-
-        assertTrue(CompassFragment.isNearToDegree(180f, 181f))
-        assertTrue(CompassFragment.isNearToDegree(180f, 182f))
-        assertFalse(CompassFragment.isNearToDegree(180f, 183f))
-        assertFalse(CompassFragment.isNearToDegree(180f, 184f))
-
-        assertTrue(CompassFragment.isNearToDegree(181f, 180f))
-        assertTrue(CompassFragment.isNearToDegree(182f, 180f))
-        assertFalse(CompassFragment.isNearToDegree(183f, 180f))
-        assertFalse(CompassFragment.isNearToDegree(184f, 180f))
-    }
-
     @Test
     fun test_it_different_date_object_equal() {
         assertFalse(CivilDate(2000, 1, 1) == PersianDate(2000, 1, 1))
@@ -361,8 +213,9 @@ class MainLogicTests {
         assertFalse(CivilDate(2000, 1, 1) == CivilDate(2000, 2, 1))
     }
 
+
     @Test
-    fun tests_imported_from_calendariale() {
+    fun `partially conforming with calendariale tests`() {
         val J0000 = 1721425L // Ours is different apparently
         listOf(
 //        listOf(-214193, -1208, 5, 1),
@@ -492,7 +345,7 @@ class MainLogicTests {
     }
 
     @Test
-    fun test_leap_years() {
+    fun `leap years correctness`() {
         // Doesn't match with https://calendar.ut.ac.ir/Fa/News/Data/Doc/KabiseShamsi1206-1498.pdf
         val leapYears = listOf(
             1210, 1214, 1218, 1222, 1226, 1230, 1234, 1238, 1243, 1247, 1251, 1255, 1259, 1263,
@@ -512,7 +365,7 @@ class MainLogicTests {
     }
 
     @Test
-    fun test_getLastDayOfWeekOfMonth() {
+    fun `getLastDayOfWeekOfMonth calculations correctness`() {
         listOf(
             2 to 29, 1 to 28, 7 to 27, 6 to 26, 5 to 25, 4 to 24, 3 to 23
         ).forEach { (dayOfWeek, day) ->
@@ -528,40 +381,7 @@ class MainLogicTests {
     }
 
     @Test
-    fun test_equinox_time() {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"))
-
-        listOf(
-            // https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201398-Full.pdf
-            listOf(2020, 3, 20, 7, 20/*should be 19*/, 43/* should be 37*/),
-            listOf(2019, 3, 21, 1, 28, 13/*should be 27*/),
-            listOf(2018, 3, 20, 19, 45, 53/*should be 28*/),
-            listOf(2017, 3, 20, 13, 59/*should be 58*/, 38/*should be 40*/),
-            listOf(2016, 3, 20, 8, 0, 55/*should be 12*/),
-            listOf(2015, 3, 21, 2, 16/*should be 15*/, 0/*should be 11*/),
-            listOf(2014, 3, 20, 20, 27, 41/*should be 7*/),
-            listOf(2013, 3, 20, 14, 32/*should be 31*/, 41/*should be 56*/),
-            listOf(2012, 3, 20, 8, 44, 19/*should be 27*/),
-            listOf(2011, 3, 21, 2, 51/*should be 50*/, 38/*should be 25*/),
-            listOf(2010, 3, 20, 21, 2, 49/*should be 13*/),
-            listOf(2009, 3, 20, 15, 14/*should be 13*/, 50/*should be 39*/),
-            listOf(2008, 3, 20, 9, 18, 17/*should be 19*/)
-        ).forEach {
-            calendar.time = Equinox.northwardEquinox(it[0])
-            assertEquals(it[0].toString(), it[0], calendar[Calendar.YEAR])
-            assertEquals(it[0].toString(), it[1], calendar[Calendar.MONTH] + 1)
-            assertEquals(it[0].toString(), it[2], calendar[Calendar.DAY_OF_MONTH])
-            assertEquals(it[0].toString(), it[3], calendar[Calendar.HOUR_OF_DAY])
-            assertEquals(it[0].toString(), it[4], calendar[Calendar.MINUTE])
-            assertEquals(it[0].toString(), it[5], calendar[Calendar.SECOND])
-        }
-
-        // And not having random crashes
-        (-2000..10000).forEach { Equinox.northwardEquinox(it) }
-    }
-
-    @Test
-    fun `test day of week from jdn`() {
+    fun `dayOfWeek calculations correctness`() {
         assertEquals(0, Jdn(PersianDate(1398, 9, 9)).dayOfWeek)
         assertEquals(1, Jdn(PersianDate(1398, 9, 10)).dayOfWeek)
         assertEquals(2, Jdn(PersianDate(1398, 9, 11)).dayOfWeek)
@@ -576,74 +396,5 @@ class MainLogicTests {
         assertEquals(4, Jdn(PersianDate(1398, 9, 20)).dayOfWeek)
         assertEquals(5, Jdn(PersianDate(1398, 9, 21)).dayOfWeek)
         assertEquals(6, Jdn(PersianDate(1398, 9, 22)).dayOfWeek)
-    }
-
-    @Test
-    fun `test calendar configuration and events holidays load`() {
-        loadEvents(EnabledHolidays(EnabledHolidays.iranDefault), LANG_FA)
-        assertEquals(IslamicDate.useUmmAlQura, false)
-
-        (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
-            irregularCalendarEventsStore.getEvents<CalendarEvent.IslamicCalendarEvent>(it)
-        }.let {
-            assertEquals(1, it.size)
-            assertEquals(true, it[0].isHoliday)
-        }
-
-        irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
-            1400, CalendarType.SHAMSI
-        ).let { assertEquals(0, it.size) }
-
-        //
-        loadEvents(EnabledHolidays(setOf(EnabledHolidays.iranAncientKey)), LANG_FA)
-        assertEquals(IslamicDate.useUmmAlQura, false)
-
-        (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
-            irregularCalendarEventsStore.getEvents<CalendarEvent.IslamicCalendarEvent>(it)
-        }.let { assertEquals(0, it.size) }
-
-        irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
-            1400, CalendarType.SHAMSI
-        ).let { assertEquals(1, it.size) }
-
-        assertEquals(1, getEvents(Jdn(PersianDate(1400, 12, 24)), EventsStore.empty()).size)
-        assertEquals(1, getEvents(Jdn(PersianDate(1400, 12, 1)), EventsStore.empty()).size)
-
-        //
-        loadEvents(EnabledHolidays(setOf(EnabledHolidays.internationalKey)), LANG_UR)
-        assertEquals(IslamicDate.useUmmAlQura, true)
-        irregularCalendarEventsStore.getEventsList<CalendarEvent.GregorianCalendarEvent>(
-            2021, CalendarType.GREGORIAN
-        ).let {
-            assertEquals(1, it.size)
-            assertEquals(false, it[0].isHoliday)
-        }
-
-        //
-        loadEvents(EnabledHolidays(EnabledHolidays.afghanistanDefault), LANG_FA)
-        assertEquals(IslamicDate.useUmmAlQura, true)
-
-        (1..31).map { IslamicDate(1400, 2, it) }.flatMap {
-            irregularCalendarEventsStore.getEvents<CalendarEvent.IslamicCalendarEvent>(it)
-        }.let { assertEquals(0, it.size) }
-
-        //
-        loadEvents(EnabledHolidays(), LANG_FA_AF)
-        assertEquals(IslamicDate.useUmmAlQura, true)
-
-        //
-        loadEvents(EnabledHolidays(), LANG_PS)
-        assertEquals(IslamicDate.useUmmAlQura, true)
-
-        //
-        loadEvents(EnabledHolidays(), LANG_FA)
-        assertEquals(IslamicDate.useUmmAlQura, false)
-    }
-
-    @Test
-    fun `EventsStore hash is unique for each day of year`() {
-        (1..12).flatMap { month -> (1..31).map { day -> CivilDate(2000, month, day) } }
-            .map { EventsStore.hash(it) }.toSet().toList()
-            .also { assertEquals(372, it.size) }
     }
 }
