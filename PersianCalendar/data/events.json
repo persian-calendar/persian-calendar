@@ -1297,8 +1297,8 @@
     { "calendar": "Gregorian", "rule": "nth day of year", "nth": 256, "type": "International",
       "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "holiday": false },
     { "calendar": "Hijri", "rule": "end of month", "month": 2, "type": "Iran",
-      "title": "شهادت امام رضا (ع) (۲۰۳ ه‍.ق) (انتهای ماه صَفَر)", "holiday": true },
+      "title": "شهادت امام رضا (ع) (۲۰۳ ه‍.ق) (۳۰ صَفَر یا انتهای ماه)", "holiday": true },
     { "calendar": "Hijri", "rule": "end of month", "month": 11, "type": "Iran",
-      "title": "شهادت امام محمد تقی (ع) (۲۲۰ ه‍.ق) (انتهای ماه ذی‌القعده)", "holiday": false }
+      "title": "شهادت امام محمد تقی (ع) (۲۲۰ ه‍.ق) (۳۰ ذی‌القعده یا انتهای ماه)", "holiday": false }
   ]
 }
