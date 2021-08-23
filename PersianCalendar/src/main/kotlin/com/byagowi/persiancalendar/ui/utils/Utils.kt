@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.drawable.ShapeDrawable
@@ -31,7 +32,6 @@ import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
@@ -87,15 +87,18 @@ fun Context.showHtml(html: String) = runCatching {
 }.onFailure(logException).let {}
 
 fun Toolbar.setupUpNavigation() {
-    navigationIcon = DrawerArrowDrawable(context).apply { progress = 1f }
+    navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
     setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
     setNavigationOnClickListener { findNavController().navigateUp() }
 }
 
-fun Toolbar.setupMenuNavigation(fragment: Fragment) {
-    (fragment.activity as? DrawerHost).debugAssertNotNull
-        ?.setupToolbarWithDrawer(fragment.viewLifecycleOwner, this)
+fun Toolbar.setupMenuNavigation() {
+    (context.getActivity() as? DrawerHost).debugAssertNotNull?.setupToolbarWithDrawer(this)
 }
+
+// https://stackoverflow.com/a/58249983
+private tailrec fun Context.getActivity(): Activity? = this as? Activity
+    ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 @ColorInt
 fun Context.resolveColor(attr: Int) = TypedValue().let {

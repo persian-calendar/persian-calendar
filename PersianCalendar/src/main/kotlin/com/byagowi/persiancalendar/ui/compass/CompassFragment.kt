@@ -95,7 +95,7 @@ class CompassFragment : Fragment() {
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.compass)
             toolbar.subtitle = getCityName(inflater.context, true)
-            toolbar.setupMenuNavigation(this)
+            toolbar.setupMenuNavigation()
         }
 
         binding.bottomAppbar.menu.add(R.string.help).also {

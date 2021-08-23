@@ -37,7 +37,7 @@ class PreferencesFragment : Fragment() {
         val binding = FragmentSettingsBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
-            toolbar.setupMenuNavigation(this)
+            toolbar.setupMenuNavigation()
             if (enableDevelopmentFeatures) {
                 toolbar.menu.add("Static vs generated icons")
                     .onClick { showIconsDemoDialog(binding.root.context) }

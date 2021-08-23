@@ -267,7 +267,7 @@ class CalendarFragment : Fragment() {
         bringDate(Jdn.today, monthChange = false, highlight = false)
 
         mainBinding?.appBar?.let { appBar ->
-            appBar.toolbar.setupMenuNavigation(this)
+            appBar.toolbar.setupMenuNavigation()
             appBar.appbarLayout.hideToolbarBottomShadow()
         }
 

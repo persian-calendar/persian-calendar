@@ -18,7 +18,7 @@ class ConverterFragment : Fragment() {
     ): View {
         val binding = FragmentConverterBinding.inflate(inflater, container, false)
         binding.appBar.toolbar.let { toolbar ->
-            toolbar.setupMenuNavigation(this)
+            toolbar.setupMenuNavigation()
             toolbar.setTitle(R.string.date_converter)
         }
 

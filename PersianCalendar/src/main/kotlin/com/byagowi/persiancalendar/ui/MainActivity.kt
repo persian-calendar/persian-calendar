@@ -25,7 +25,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
@@ -348,7 +348,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
     }.show()
 
-    override fun setupToolbarWithDrawer(viewLifecycleOwner: LifecycleOwner, toolbar: Toolbar) {
+    override fun setupToolbarWithDrawer(toolbar: Toolbar) {
         val listener = ActionBarDrawerToggle(
             this, binding.drawer, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description, R.string.close
@@ -356,7 +356,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.drawer.addDrawerListener(listener)
         toolbar.setNavigationOnClickListener { binding.drawer.openDrawer(GravityCompat.START) }
-        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+        toolbar.findViewTreeLifecycleOwner()?.lifecycle?.addObserver(LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_DESTROY) {
                 binding.drawer.removeDrawerListener(listener)
                 toolbar.setNavigationOnClickListener(null)

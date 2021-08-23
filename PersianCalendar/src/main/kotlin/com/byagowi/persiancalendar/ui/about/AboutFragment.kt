@@ -50,7 +50,7 @@ class AboutFragment : Fragment() {
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.about)
-            toolbar.setupMenuNavigation(this)
+            toolbar.setupMenuNavigation()
             toolbar.menu.add(R.string.share).also {
                 it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
