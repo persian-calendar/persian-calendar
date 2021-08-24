@@ -212,6 +212,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="recurs">繰り返す</string>
     <string name="am">午前</string>
     <string name="pm">午後</string>
+    <string name="holiday">holiday</string>
     <string name="shift_work_days_head">長さ</string>
     <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
     <string name="prefer_linear_date">Prefer numerical form of dates</string>

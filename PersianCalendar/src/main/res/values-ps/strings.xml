@@ -211,6 +211,7 @@
     <string name="recurs">تکرار شود</string>
     <string name="am">ق.ظ</string>
     <string name="pm">ب.ظ</string>
+    <string name="holiday">رخصتی</string>
     <string name="shift_work_days_head">طول</string>
     <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان</string>
     <string name="prefer_linear_date">ترجیح نمایش عددی تاریخ</string>

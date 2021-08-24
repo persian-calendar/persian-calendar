@@ -8,6 +8,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_APP_LANGUAGE
+import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
@@ -161,6 +162,8 @@ var isIranHolidaysEnabled = true
 var amString = DEFAULT_AM
     private set
 var pmString = DEFAULT_PM
+    private set
+var holidayString = DEFAULT_HOLIDAY
     private set
 var numericalDatePreferred = false
     private set
@@ -334,10 +337,12 @@ fun updateStoredPreference(context: Context) {
         LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
             amString = DEFAULT_AM
             pmString = DEFAULT_PM
+            holidayString = if (language == LANG_FA_AF) "رخصتی" else DEFAULT_HOLIDAY
         }
         else -> {
             amString = context.getString(R.string.am)
             pmString = context.getString(R.string.pm)
+            holidayString = context.getString(R.string.holiday)
         }
     }
 

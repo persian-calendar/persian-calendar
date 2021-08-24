@@ -340,6 +340,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="recurs">Recurs</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
+    <string name="holiday">holiday</string>
     <string name="shift_work_days_head">Duration</string>
     <string name="prefer_linear_date_summary">Use 2000/1/1 instead 1 January 2000 in widget and notification</string>
     <string name="prefer_linear_date">Prefer numerical form of dates</string>

@@ -211,6 +211,7 @@
     <string name="recurs">پاتەکردنەوە</string>
     <string name="am">ب.ن</string>
     <string name="pm">د.ن</string>
+    <string name="holiday">تعطیل</string>
     <string name="shift_work_days_head">درێژایی</string>
     <string name="prefer_linear_date_summary">بەکارھێنانی ١٣٩٠/١/١ ک.ھ لە بڕی ١ی خاکەلێوەی ١٣٩٠ لە ویجیت و ئاگاداریدا</string>
     <string name="prefer_linear_date">نیشاندانی ڕێککەوت بە ژمارە</string>

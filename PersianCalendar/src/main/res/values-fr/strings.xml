@@ -29,6 +29,7 @@
     <string name="shift_work_days_head">Durée</string>
     <string name="pm">PM</string>
     <string name="am">AM</string>
+    <string name="holiday">holiday</string>
     <string name="prefer_linear_date_summary">Utiliser 2000/1/1 au lieu de 1er janvier 2000 dans les widgets et les notifications</string>
     <string name="widget_background_color">Couleur d’arrière-plan du widget</string>
     <string name="map">Carte</string>

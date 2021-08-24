@@ -9,8 +9,6 @@ import android.provider.CalendarContract
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
 import com.byagowi.persiancalendar.LANG_CKB
-import com.byagowi.persiancalendar.LANG_FA_AF
-import com.byagowi.persiancalendar.LANG_PS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -208,13 +206,6 @@ fun CalendarEvent.DeviceCalendarEvent.formatTitle(): String =
         " (${HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim()})"
     else "").replace("\n", " ").trim()
 
-// Move this to strings or somewhere
-fun addIsHoliday(title: String) = "$title (${
-    when (language) {
-        LANG_PS, LANG_FA_AF -> "رخصتی"
-        else -> "تعطیل"
-    }
-})"
 
 fun getEventsTitle(
     dayEvents: List<CalendarEvent<*>>, holiday: Boolean, compact: Boolean,
@@ -228,10 +219,7 @@ fun getEventsTitle(
             else -> it.title
         }
 
-        if (addIsHoliday && it.isHoliday)
-            addIsHoliday(title)
-        else
-            title
+        if (addIsHoliday && it.isHoliday) "$title ($holidayString)" else title
     }
     .joinToString("\n") { if (insertRLM) RLM + it else it }
 
