@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.os.PowerManager
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.view.WindowManager
@@ -30,6 +31,7 @@ import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
+
 
 class AthanActivity : AppCompatActivity() {
 
@@ -147,7 +149,10 @@ class AthanActivity : AppCompatActivity() {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
             getSystemService<KeyguardManager>()?.requestDismissKeyguard(this, null)
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+            window.addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON
+            )
         } else {
             @Suppress("DEPRECATION")
             window.addFlags(
@@ -156,6 +161,11 @@ class AthanActivity : AppCompatActivity() {
                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
             )
         }
+
+        getSystemService<PowerManager>()?.newWakeLock(
+            PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
+            "persiancalendar:alarm"
+        )?.acquire(TimeUnit.SECONDS.toMillis(20))
 
         ActivityAthanBinding.inflate(layoutInflater).also { binding ->
             setContentView(binding.root)
