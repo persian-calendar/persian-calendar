@@ -204,7 +204,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         if (settingHasChanged) { // update when checked menu item is changed
-            initUtils(this)
+            applyAppLanguage(this)
             update(applicationContext, true)
             settingHasChanged = false // reset for the next time
         }
@@ -278,7 +278,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        initUtils(this)
+        applyAppLanguage(this)
         binding.drawer.layoutDirection = resources.configuration.layoutDirection
     }
 
