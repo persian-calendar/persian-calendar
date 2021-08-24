@@ -247,4 +247,11 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shift_work_off">休み</string>
     <string name="shift_work_evening">夕方勤</string>
     <string name="shift_work_night">夜勤</string>
+    <string name="method_jafari">十二イマームシーア、ラヴァ社会、コム</string>
+    <string name="method_mwl">イスラム世界連合、サウジアラビア</string>
+    <string name="method_isna">アメリカイスラム社会</string>
+    <string name="method_egypt">エジプトの総合調査研究</string>
+    <string name="method_makkah">オッモルグラー大学、メッカ</string>
+    <string name="method_karachi">イスラム研究大学、カラチ</string>
+    <string name="method_tehran">地球物理学研究所、テヘラン大学</string>
 </resources>

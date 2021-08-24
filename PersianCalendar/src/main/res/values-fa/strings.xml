@@ -247,4 +247,11 @@
     <string name="shift_work_off">استراحت</string>
     <string name="shift_work_evening">عصرکاری</string>
     <string name="shift_work_night">شب‌کاری</string>
+    <string name="method_jafari">شیعهٔ دوازده امامی، انجمن لوا، قم</string>
+    <string name="method_mwl">اتّحادیهٔ جهانی اسلام، عربستان سعودی</string>
+    <string name="method_isna">جامعهٔ اسلامی آمریکای شمالی</string>
+    <string name="method_egypt">مرجع عمومی تحقیقات مصر</string>
+    <string name="method_makkah">دانشگاه امّ‌القریٰ، مکه</string>
+    <string name="method_karachi">دانشگاه علوم اسلامی، کراچی</string>
+    <string name="method_tehran">انجمن ژئوفیزیک، دانشگاه تهران</string>
 </resources>

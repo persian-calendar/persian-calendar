@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="prayMethodsNames">
-        <item>十二イマームシーア、ラヴァ社会、コム</item>
-        <item>イスラム世界連合、サウジアラビア</item>
-        <item>アメリカイスラム社会</item>
-        <item>エジプトの総合調査研究</item>
-        <item>オッモルグラー大学、メッカ</item>
-        <item>イスラム研究大学、カラチ</item>
-        <item>地球物理学研究所、テヘラン大学</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>イラン祝日</item>
         <item>古代イランのイベント</item>

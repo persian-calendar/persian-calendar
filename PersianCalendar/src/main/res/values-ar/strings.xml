@@ -262,4 +262,12 @@
     <string name="shift_work_off">إستراحة</string>
     <string name="shift_work_evening">مساء</string>
     <string name="shift_work_night">ليل</string>
+    <!--Pray Time Calculation Methods-->
+    <string name="method_jafari">الاثني عشرية الشيعية، جامعة ليوا، قم</string>
+    <string name="method_mwl">رابطة العالم الإسلامي</string>
+    <string name="method_isna">الجمعية الإسلامية لأمريكا الشمالية</string>
+    <string name="method_egypt">الهيئة المصرية العامة للمساحة</string>
+    <string name="method_makkah">جامعة أم القرى، المكة المكرمة</string>
+    <string name="method_karachi">جامعة العلوم الإسلامية، كراتشي</string>
+    <string name="method_tehran">قسم الجيوفيزياء، جامعة طهران</string>
 </resources>

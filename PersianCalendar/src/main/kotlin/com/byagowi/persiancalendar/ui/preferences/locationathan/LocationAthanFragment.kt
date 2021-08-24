@@ -36,6 +36,7 @@ import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
+import io.github.persiancalendar.praytimes.CalculationMethod
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -46,6 +47,16 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var ringtonePreference: Preference? = null
     private var selectedLocationPreference: Preference? = null
     private var athanPreferenceCategory: PreferenceCategory? = null
+
+    private val prayTimeCalculationMethods = listOf(
+        CalculationMethod.Jafari to R.string.method_jafari,
+        CalculationMethod.MWL to R.string.method_mwl,
+        CalculationMethod.ISNA to R.string.method_isna,
+        CalculationMethod.Egypt to R.string.method_egypt,
+        CalculationMethod.Makkah to R.string.method_makkah,
+        CalculationMethod.Karachi to R.string.method_karachi,
+        CalculationMethod.Tehran to R.string.method_tehran
+    )
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
@@ -69,8 +80,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 this@LocationAthanFragment.athanPreferenceCategory = this
                 singleSelect(
                     PREF_PRAY_TIME_METHOD,
-                    resources.getStringArray(R.array.prayMethodsNames).toList(),
-                    resources.getStringArray(R.array.prayMethodsKeys).toList(),
+                    prayTimeCalculationMethods.map { (_, title) -> getString(title) },
+                    prayTimeCalculationMethods.map { (method, _) -> method.name },
                     DEFAULT_PRAY_TIME_METHOD
                 ) {
                     title(R.string.pray_methods)

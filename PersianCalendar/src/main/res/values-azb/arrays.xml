@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="prayMethodsNames">
-        <item>اون‌ایکی ایماملی شیعه‌لری، لوا انجمنی، قم</item>
-        <item>ایسلام بین‌الخالق بیرلیگی، عربیستان سعودی</item>
-        <item>قوزئی آمریکا ایسلام اهالی‌سی</item>
-        <item>میصر مدنیت مرکزی</item>
-        <item>مکه ام‌القرا بیلیم‌یوردو</item>
-        <item>کراچی ایسلام بیلیم‌یوردو</item>
-        <item>تهران ژئوفیزیک بیلیم‌یوردو</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>ایران خصوصی گون‌لری</item>
         <item>ایران تاریخی خصوصی گون‌لری</item>

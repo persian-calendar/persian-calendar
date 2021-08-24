@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="prayMethodsNames">
-        <item>الاثني عشرية الشيعية، جامعة ليوا، قم</item>
-        <item>رابطة العالم الإسلامي</item>
-        <item>الجمعية الإسلامية لأمريكا الشمالية</item>
-        <item>الهيئة المصرية العامة للمساحة</item>
-        <item>جامعة أم القرى، المكة المكرمة</item>
-        <item>جامعة العلوم الإسلامية، كراتشي</item>
-        <item>قسم الجيوفيزياء ، جامعة طهران</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>عُطل إيران</item>
         <item>المناسبات القومية (إيران)</item>

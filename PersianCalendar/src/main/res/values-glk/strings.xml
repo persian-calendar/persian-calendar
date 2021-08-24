@@ -245,4 +245,11 @@
     <string name="shift_work_off">ايستراحت</string>
     <string name="shift_work_evening">عصرکاري</string>
     <string name="shift_work_night">شب‌کاري</string>
+    <string name="method_jafari">دؤنزه ايمامي شیعه، لوا أنجۊمن، قؤم</string>
+    <string name="method_mwl">ايسلام ٚ جهاني ايتحادیه، عربستانˇسۊعۊدي</string>
+    <string name="method_isna">شۊمالي آمریکای ٚ ايسلامي جامعه</string>
+    <string name="method_egypt">مصر ٚ عۊمۊمي وارسي-سانˇسربس</string>
+    <string name="method_makkah">مککه، اؤمّ‌القری دانشگا</string>
+    <string name="method_karachi">کراچي، ايسلامي دانشانˇدانشگا</string>
+    <string name="method_tehran">تهران ٚ دانشگا، ژئؤفیزیک ٚ انجؤمن</string>
 </resources>

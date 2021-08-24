@@ -375,4 +375,12 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shift_work_off">Off</string>
     <string name="shift_work_evening">Evening</string>
     <string name="shift_work_night">Night</string>
+    <!--Pray Time Calculation Methods-->
+    <string name="method_jafari">Shia Ithna-Ashari, Leva Institute, Qum</string>
+    <string name="method_mwl">Muslim World League</string>
+    <string name="method_isna">Islamic Society of North America</string>
+    <string name="method_egypt">Egyptian General Authority of Survey</string>
+    <string name="method_makkah">Umm Al-Qura University, Makkah</string>
+    <string name="method_karachi">University of Islamic Sciences, Karachi</string>
+    <string name="method_tehran">Institute of Geophysics, University of Tehran</string>
 </resources>

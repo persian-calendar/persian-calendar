@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="prayMethodsNames">
-        <item>شیعەی دوازدە ئیمامی، ئەنستیتیووتی لیوا، قوم</item>
-        <item>یەکیەتیی جیھانیی ئیسلام، عەربستانی سعوودی</item>
-        <item>کۆمەڵگای ئیسلامیی ئەمریکای باکوور</item>
-        <item>دەسەڵاتی گشتیی ڕووپێویی میسر</item>
-        <item>زانستگای ئوممەلقورا، مەککە</item>
-        <item>زانستگای زانستە ئیسلامییەکان، کەراچی</item>
-        <item>ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</item>
-    </string-array>
-
     <string-array name="holidays_types">
         <item>پشوودانەکانی ئێران</item>
         <item>بۆنەکانی ئێرانی کەونار</item>

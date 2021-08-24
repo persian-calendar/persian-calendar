@@ -246,4 +246,11 @@
     <string name="shift_work_off">پشوو</string>
     <string name="shift_work_evening">ئێوارەکاری</string>
     <string name="shift_work_night">شەوکاری</string>
+    <string name="method_jafari">شیعەی دوازدە ئیمامی، ئەنستیتیووتی لیوا، قوم</string>
+    <string name="method_mwl">یەکیەتیی جیھانیی ئیسلام، عەربستانی سعوودی</string>
+    <string name="method_isna">کۆمەڵگای ئیسلامیی ئەمریکای باکوور</string>
+    <string name="method_egypt">دەسەڵاتی گشتیی ڕووپێویی میسر</string>
+    <string name="method_makkah">زانستگای ئوممەلقورا، مەککە</string>
+    <string name="method_karachi">زانستگای زانستە ئیسلامییەکان، کەراچی</string>
+    <string name="method_tehran">ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</string>
 </resources>

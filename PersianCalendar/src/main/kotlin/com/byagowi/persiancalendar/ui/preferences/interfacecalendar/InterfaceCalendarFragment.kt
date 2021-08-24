@@ -58,6 +58,15 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         val destination = arguments?.getString(PREF_DESTINATION)
         if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(context)
 
+        val themesNames = listOf(
+            SYSTEM_DEFAULT_THEME to R.string.theme_default,
+            LIGHT_THEME to R.string.theme_light,
+            DARK_THEME to R.string.theme_dark,
+            MODERN_THEME to R.string.theme_modern,
+            BLUE_THEME to R.string.theme_blue,
+            BLACK_THEME to R.string.theme_black
+        )
+
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.pref_interface) {
                 clickable(onClick = { showLanguagePreferenceDialog(context) }) {
@@ -68,14 +77,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 singleSelect(
                     PREF_THEME,
-                    listOf(
-                        R.string.theme_default, R.string.theme_light, R.string.theme_dark,
-                        R.string.theme_modern, R.string.theme_blue, R.string.theme_black
-                    ).map(::getString),
-                    listOf(
-                        SYSTEM_DEFAULT_THEME, LIGHT_THEME, DARK_THEME,
-                        MODERN_THEME, BLUE_THEME, BLACK_THEME
-                    ),
+                    themesNames.map { (_, title) -> getString(title) },
+                    themesNames.map { (key, _) -> key },
                     SYSTEM_DEFAULT_THEME
                 ) {
                     title(R.string.select_skin)
