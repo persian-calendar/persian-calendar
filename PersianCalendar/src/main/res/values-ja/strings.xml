@@ -256,11 +256,15 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="method_karachi">イスラム研究大学、カラチ</string>
     <string name="method_tehran">地球物理学研究所、テヘラン大学</string>
     <string name="iran_holidays">イラン祝日</string>
-    <string name="iran_ancient">古代イランのイベント</string>
+    <string name="iran_ancient">古代イランのイベント (in Persian)</string>
     <string name="iran_others">他のイランのイベント</string>
-    <string name="international">国際のイベントイベント</string>
+    <string name="international">国際のイベントイベント (in Persian)</string>
     <string name="afghanistan_holidays">アフガニスタンの休日</string>
     <string name="afghanistan_others">他のアフガニスタンのイベント</string>
+    <string name="iran_official_events">Iran, official</string>
+    <string name="afghanistan_events">Afghanistan (in Persian)</string>
+    <string name="other_holidays">Others</string>
+    <string name="view_source">view source</string>
     <string name="widget_customization_other_calendars">2×2及び1×4ウィジェットの他のカレンダー</string>
     <string name="widget_customization_non_holiday_events">2×2ウィジェットの非休日祝日と通知</string>
     <string name="widget_customization_owghat">2×2ウィジェットでの礼拝時刻と通知（設定されている場合）</string>

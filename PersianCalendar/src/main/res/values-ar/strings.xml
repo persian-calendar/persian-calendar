@@ -278,6 +278,10 @@
     <string name="international">المناسبات الدولية والعالمية</string>
     <string name="afghanistan_holidays">عُطل أفعانستان</string>
     <string name="afghanistan_others">المناسبات الأخرى (أفعانستان)</string>
+    <string name="iran_official_events">مرکز تقویم دانشگاه تهران، رسمی</string>
+    <string name="afghanistan_events">افغانستان</string>
+    <string name="other_holidays">سایر</string>
+    <string name="view_source">مشاهده منبع</string>
     <!--Widget customizations-->
     <string name="widget_customization_other_calendars">التقاويم الأخرى على مصغر 1×4 أو 2×2</string>
     <string name="widget_customization_non_holiday_events">المناسبات (غير العُطل) على مصغر 2×2 والتنبه</string>

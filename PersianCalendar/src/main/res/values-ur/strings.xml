@@ -266,6 +266,10 @@
     <string name="international">بین الاقوامی تقریبات</string>
     <string name="afghanistan_holidays">افغانی تعطیلات</string>
     <string name="afghanistan_others">افغانستان کی تمام تقریبات</string>
+    <string name="iran_official_events">مرکز تقویم دانشگاه تهران، رسمی</string>
+    <string name="afghanistan_events">افغانستان</string>
+    <string name="other_holidays">سایر</string>
+    <string name="view_source">مشاهده منبع</string>
     <string name="widget_customization_other_calendars">سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</string>
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>

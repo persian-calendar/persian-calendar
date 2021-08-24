@@ -252,11 +252,15 @@
     <string name="method_karachi">University of Islamic Sciences, Karachi</string>
     <string name="method_tehran">Institute of Geophysics, University of Tehran</string>
     <string name="iran_holidays">Holidays in Iran</string>
-    <string name="iran_ancient">Ancient Iran</string>
+    <string name="iran_ancient">Ancient Iran (in Persian)</string>
     <string name="iran_others">Other Iran events</string>
     <string name="international">International events (in Persian)</string>
     <string name="afghanistan_holidays">Holidays in Afghanistan</string>
     <string name="afghanistan_others">Other Afghanistan events</string>
+    <string name="iran_official_events">Iran, official (in Persian)</string>
+    <string name="afghanistan_events">Afghanistan (in Persian)</string>
+    <string name="other_holidays">Others</string>
+    <string name="view_source">view source</string>
     <string name="widget_customization_other_calendars">Other calendars on 1x4 and 2x2 widgets</string>
     <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
     <string name="widget_customization_owghat">Pray times on 2x2 and notification (if is set)</string>

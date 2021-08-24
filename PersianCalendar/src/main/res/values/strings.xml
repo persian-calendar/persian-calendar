@@ -17,7 +17,6 @@
     <string name="outdated_app">Due to being outdated, things can be inaccurate</string>
     <string name="update">Update</string>
     <!-- No need for translation, remove the section from your translation -->
-    <string name="other_holidays" translatable="false">سایر</string>
     <string name="about_developers_list" translatable="false">"ebraminio: Ebrahim Byagowi
 hamidsafdari: Hamid Safdari
 behdad222: Behdad Abedi
@@ -386,11 +385,15 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="method_tehran">Institute of Geophysics, University of Tehran</string>
     <!--Events-->
     <string name="iran_holidays">Holidays in Iran</string>
-    <string name="iran_ancient">Ancient Iran</string>
+    <string name="iran_ancient">Ancient Iran (in Persian)</string>
     <string name="iran_others">Other Iran events</string>
     <string name="international">International events (in Persian)</string>
     <string name="afghanistan_holidays">Holidays in Afghanistan</string>
     <string name="afghanistan_others">Other Afghanistan events</string>
+    <string name="iran_official_events">Iran, official (in Persian)</string>
+    <string name="afghanistan_events">Afghanistan (in Persian)</string>
+    <string name="other_holidays">Others</string>
+    <string name="view_source">view source</string>
     <!--Widget customizations-->
     <string name="widget_customization_other_calendars">Other calendars on 1x4 and 2x2 widgets</string>
     <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
