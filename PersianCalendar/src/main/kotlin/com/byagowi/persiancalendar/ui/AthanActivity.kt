@@ -162,10 +162,12 @@ class AthanActivity : AppCompatActivity() {
             )
         }
 
-        getSystemService<PowerManager>()?.newWakeLock(
-            PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
-            "persiancalendar:alarm"
-        )?.acquire(TimeUnit.SECONDS.toMillis(20))
+        runCatching {
+            getSystemService<PowerManager>()?.newWakeLock(
+                PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
+                "persiancalendar:alarm"
+            )?.acquire(TimeUnit.SECONDS.toMillis(20))
+        }.onFailure(logException)
 
         ActivityAthanBinding.inflate(layoutInflater).also { binding ->
             setContentView(binding.root)
