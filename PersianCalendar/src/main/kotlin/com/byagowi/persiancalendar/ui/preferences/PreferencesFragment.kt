@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.work.WorkManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.enableDevelopmentFeatures
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
+import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
@@ -43,14 +45,28 @@ class PreferencesFragment : Fragment() {
                     .onClick { showIconsDemoDialog(binding.root.context) }
                 toolbar.menu.add("Clear preferences store")
                     .onClick { toolbar.context.appPrefs.edit { clear() }; activity?.recreate() }
-                toolbar.menu.add("Schedule an alarm in 5 seconds").onClick {
-                    val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
-                        .setInitialDelay(TimeUnit.SECONDS.toMillis(5), TimeUnit.MILLISECONDS)
-                        .build()
-                    WorkManager.getInstance(binding.root.context)
-                        .beginUniqueWork("TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker)
-                        .enqueue()
-                    Toast.makeText(binding.root.context, "Alarm in 5s", Toast.LENGTH_SHORT).show()
+                toolbar.menu.add("Schedule an alarm").onClick {
+                    val numericBinding = NumericBinding.inflate(inflater)
+                    numericBinding.edit.setText("5")
+                    AlertDialog.Builder(context)
+                        .setTitle("Enter seconds to schedule alarm")
+                        .setView(numericBinding.root)
+                        .setPositiveButton(R.string.accept) { _, _ ->
+                            val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
+                            val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
+                                .setInitialDelay(
+                                    TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
+                                )
+                                .build()
+                            WorkManager.getInstance(binding.root.context)
+                                .beginUniqueWork(
+                                    "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
+                                )
+                                .enqueue()
+                            Toast.makeText(context, "Alarm in ${seconds}s", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                        .show()
                 }
             }
         }
