@@ -26,13 +26,4 @@
         <item>Location of pray times on 2x2 and notification (if is set)</item>
         <!--<item>Show weekday in 4x1 date only widget</item>-->
     </string-array>
-
-
-    <string-array name="shift_work">
-        <item>Morning</item>
-        <item>Off</item>
-        <item>Evening</item>
-        <item>Night</item>
-    </string-array>
-
 </resources>

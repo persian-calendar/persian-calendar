@@ -26,12 +26,4 @@
         <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
         <!--<item>نمایش روز هفته در ویجت ۴×۱ فقط تاریخ</item>-->
     </string-array>
-
-    <string-array name="shift_work">
-        <item>روزکاری</item>
-        <item>استراحت</item>
-        <item>عصرکاری</item>
-        <item>شب‌کاری</item>
-    </string-array>
-
 </resources>

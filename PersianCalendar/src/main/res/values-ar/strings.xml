@@ -257,4 +257,9 @@
     <string name="shamsi_calendar_short">فارسي</string>
     <string name="islamic_calendar_short">هجري</string>
     <string name="gregorian_calendar_short">ميلادي</string>
+    <!--Shift Work-->
+    <string name="shift_work_morning">نهار</string>
+    <string name="shift_work_off">إستراحة</string>
+    <string name="shift_work_evening">مساء</string>
+    <string name="shift_work_night">ليل</string>
 </resources>

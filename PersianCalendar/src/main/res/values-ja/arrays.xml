@@ -26,12 +26,4 @@
         <item>2×2ウィジェットでの場所と礼拝時刻と通知（設定されている場合）</item>
         <!--<item>Show weekday in 4x1 date only widget</item>-->
     </string-array>
-
-    <string-array name="shift_work">
-        <item>昼勤</item>
-        <item>休み</item>
-        <item>夕方勤</item>
-        <item>夜勤</item>
-    </string-array>
-
 </resources>

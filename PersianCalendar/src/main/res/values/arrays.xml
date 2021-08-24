@@ -52,19 +52,4 @@
         <item>owghat_location</item>
         <!--<item>show_weekday</item>-->
     </string-array>
-
-    <string-array name="shift_work">
-        <item>Morning</item>
-        <item>Off</item>
-        <item>Evening</item>
-        <item>Night</item>
-    </string-array>
-
-    <string-array name="shift_work_keys" translatable="false">
-        <item>d</item> <!-- day work -->
-        <item>r</item> <!-- rest -->
-        <item>e</item>
-        <item>n</item>
-    </string-array>
-
 </resources>

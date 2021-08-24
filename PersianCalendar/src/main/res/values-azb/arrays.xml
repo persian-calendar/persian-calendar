@@ -26,12 +26,4 @@
         <item>مکان، شرعی واخت‌لار یانین‌دا ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</item>
         <!--<item>نمایش روز هفته در ویجت ۴×۱ فقط تاریخ</item>-->
     </string-array>
-
-    <string-array name="shift_work">
-        <item>ایش گونو</item>
-        <item>ایستراحت گونو</item>
-        <item>آخشام‌لار</item>
-        <item>گئجه‌لر</item>
-    </string-array>
-
 </resources>

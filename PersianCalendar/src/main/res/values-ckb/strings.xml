@@ -242,4 +242,8 @@
     <string name="shamsi_calendar_short">ھەتاوی</string>
     <string name="islamic_calendar_short">مانگی</string>
     <string name="gregorian_calendar_short">زایینی</string>
+    <string name="shift_work_morning">ڕۆژکاری</string>
+    <string name="shift_work_off">پشوو</string>
+    <string name="shift_work_evening">ئێوارەکاری</string>
+    <string name="shift_work_night">شەوکاری</string>
 </resources>

@@ -243,4 +243,9 @@
     <string name="shamsi_calendar_short">گونش</string>
     <string name="islamic_calendar_short">هیجری</string>
     <string name="gregorian_calendar_short">میلادی</string>
+    <!--Shift Work-->
+    <string name="shift_work_morning">ایش گونو</string>
+    <string name="shift_work_off">ایستراحت گونو</string>
+    <string name="shift_work_evening">آخشام‌لار</string>
+    <string name="shift_work_night">گئجه‌لر</string>
 </resources>

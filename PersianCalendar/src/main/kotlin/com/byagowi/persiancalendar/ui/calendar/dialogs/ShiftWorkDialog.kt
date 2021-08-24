@@ -139,7 +139,7 @@ private class ShiftWorkItemsAdapter(
             binding.typeAutoCompleteTextView.also { editText ->
                 val adapter = ArrayAdapter(
                     context, android.R.layout.simple_spinner_dropdown_item,
-                    editText.resources.getStringArray(R.array.shift_work)
+                    shiftWorkTitles.values.toList()
                 )
                 editText.setAdapter(adapter)
                 editText.setOnClickListener {

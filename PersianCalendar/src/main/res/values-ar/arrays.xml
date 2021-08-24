@@ -26,12 +26,4 @@
         <item>مكان أوقات الصلوات على مصغر 2×2  والتنبيه (إذا تم تحديد المكان)</item>
         <!--<item>عرض أيام الأسبوع في مصغر 4x1 فقط تاریخ</item>-->
     </string-array>
-
-    <string-array name="shift_work">
-        <item>نهار</item>
-        <item>إستراحة</item>
-        <item>مساء</item>
-        <item>ليل</item>
-    </string-array>
-
 </resources>

@@ -370,4 +370,9 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shamsi_calendar_short">Persian</string>
     <string name="islamic_calendar_short">Islamic</string>
     <string name="gregorian_calendar_short">Gregorian</string>
+    <!--Shift Work-->
+    <string name="shift_work_morning">Morning</string>
+    <string name="shift_work_off">Off</string>
+    <string name="shift_work_evening">Evening</string>
+    <string name="shift_work_night">Night</string>
 </resources>

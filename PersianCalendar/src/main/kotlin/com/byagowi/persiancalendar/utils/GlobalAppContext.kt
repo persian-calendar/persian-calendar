@@ -335,9 +335,12 @@ fun updateStoredPreference(context: Context) {
     shiftWorkPeriod = shiftWorks.sumOf { it.length }
     shiftWorkStartingJdn = prefs.getJdnOrNull(PREF_SHIFT_WORK_STARTING_JDN)
     shiftWorkRecurs = prefs.getBoolean(PREF_SHIFT_WORK_RECURS, true)
-    shiftWorkTitles = resources.getStringArray(R.array.shift_work_keys)
-        .zip(resources.getStringArray(R.array.shift_work))
-        .toMap()
+    shiftWorkTitles = mapOf(
+        "d" to context.getString(R.string.shift_work_morning), // d -> day work, legacy key
+        "r" to context.getString(R.string.shift_work_off), // r -> rest, legacy key
+        "e" to context.getString(R.string.shift_work_evening),
+        "n" to context.getString(R.string.shift_work_night)
+    )
 
     when (language) {
         LANG_FA, LANG_FA_AF, LANG_EN_IR -> {
