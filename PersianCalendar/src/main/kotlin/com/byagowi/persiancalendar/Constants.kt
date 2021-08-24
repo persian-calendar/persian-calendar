@@ -111,3 +111,13 @@ const val DEFAULT_PM = "ب.ظ"
 const val CHANGE_DATE_TAG = "changeDate"
 const val ALARM_TAG = "alarmTag"
 const val UPDATE_TAG = "update"
+
+const val OTHER_CALENDARS_KEY = "other_calendars"
+const val NON_HOLIDAYS_EVENTS_KEY = "non_holiday_events"
+const val OWGHAT_KEY = "owghat"
+const val OWGHAT_LOCATION_KEY = "owghat_location"
+
+// A new one can't be added and should be default off unfortunately as users might have set it already
+val DEFAULT_WIDGET_CUSTOMIZATIONS = setOf(
+    OTHER_CALENDARS_KEY, NON_HOLIDAYS_EVENTS_KEY, OWGHAT_KEY, OWGHAT_LOCATION_KEY
+)

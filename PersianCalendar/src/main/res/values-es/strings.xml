@@ -269,4 +269,8 @@
     <string name="international">International events (in Persian)</string>
     <string name="afghanistan_holidays">Holidays in Afghanistan</string>
     <string name="afghanistan_others">Other Afghanistan events</string>
+    <string name="widget_customization_other_calendars">Other calendars on 1x4 and 2x2 widgets</string>
+    <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
+    <string name="widget_customization_owghat">Pray times on 2x2 and notification (if is set)</string>
+    <string name="widget_customization_owghat_location">Location of pray times on 2x2 and notification (if is set)</string>
 </resources>

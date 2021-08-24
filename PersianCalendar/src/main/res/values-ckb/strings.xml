@@ -259,4 +259,8 @@
     <string name="international">بۆنە نێونەتەوەیییەکان</string>
     <string name="afghanistan_holidays">پشوودانەکانی ئەفغانستان</string>
     <string name="afghanistan_others">بۆنەکانی تری ئەفغانستان</string>
+    <string name="widget_customization_other_calendars">ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</string>
+    <string name="widget_customization_non_holiday_events">ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</string>
+    <string name="widget_customization_owghat">کاتی شەرعی لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
+    <string name="widget_customization_owghat_location">شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
 </resources>

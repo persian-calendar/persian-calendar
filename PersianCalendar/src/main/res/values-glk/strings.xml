@@ -258,4 +258,8 @@
     <string name="international">بین‌المللی ؤ جهاني مۊناسبتان</string>
     <string name="afghanistan_holidays">افغانستانˇ رؤخصتي-يان</string>
     <string name="afghanistan_others">افغانستانˇباقي مۊناسبتان</string>
+    <string name="widget_customization_other_calendars">باقي تقويمان ويجتˇدۊرۊن ۴×۱ و ۲×۲</string>
+    <string name="widget_customization_non_holiday_events">جغرزˇتعطيلي مۊناسبتان ویجتˇدۊرۊن ۲×۲ ؤ اعلانˇدۊرۊن</string>
+    <string name="widget_customization_owghat">اؤقات شرعي ویجتˇدۊرۊن ۲×۲ ؤ اعلانˇدۊرۊن (أگه تنظيم ببه)</string>
+    <string name="widget_customization_owghat_location">مکان در کنار اؤقات شرعي ویجتˇدۊرۊن ۲×۲ ؤ اعلانˇدۊرۊن (أگه تنظيم ببه)</string>
 </resources>

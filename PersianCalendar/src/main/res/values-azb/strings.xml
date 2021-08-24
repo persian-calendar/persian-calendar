@@ -263,4 +263,9 @@
     <string name="international">بین‌الخالق خصوصی گون‌لری</string>
     <string name="afghanistan_holidays">افغانیستان خصوصی گون‌لری</string>
     <string name="afghanistan_others">افغانیستان دیگر خصوصی گون‌لری</string>
+    <!--Widget customizations-->
+    <string name="widget_customization_other_calendars">دیگر تقویم‌لر ویجت‌ده ۴×۱ و ۲×۲</string>
+    <string name="widget_customization_non_holiday_events">تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</string>
+    <string name="widget_customization_owghat">شرعی واخت‌لار ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</string>
+    <string name="widget_customization_owghat_location">مکان، شرعی واخت‌لار یانین‌دا ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</string>
 </resources>

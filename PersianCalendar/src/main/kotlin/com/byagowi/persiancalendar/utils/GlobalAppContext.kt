@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
 import com.byagowi.persiancalendar.LANG_AR
 import com.byagowi.persiancalendar.LANG_AZB
@@ -317,7 +318,7 @@ fun updateStoredPreference(context: Context) {
     isShowDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)
     val resources = context.resources
     whatToShowOnWidgets = prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null)
-        ?: resources.getStringArray(R.array.what_to_show_default).toSet()
+        ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
     isAstronomicalFeaturesEnabled = prefs.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
     numericalDatePreferred = prefs.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)

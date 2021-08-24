@@ -20,6 +20,10 @@ import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
+import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
+import com.byagowi.persiancalendar.OWGHAT_KEY
+import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
@@ -79,7 +83,7 @@ fun update(context: Context, updateDate: Boolean) {
     val title = dayTitleSummary(jdn, date) +
             if (shiftWorkTitle.isEmpty()) "" else " ($shiftWorkTitle)"
     val widgetTitle = dayTitleSummary(
-        jdn, date, calendarNameInLinear = "other_calendars" in whatToShowOnWidgets
+        jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     ) + if (shiftWorkTitle.isEmpty()) "" else " ($shiftWorkTitle)"
     val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
@@ -91,7 +95,7 @@ fun update(context: Context, updateDate: Boolean) {
         append(context.getString(nextOwghatId))
         append(": ")
         append(getOwghatTimeOfStringId(nextOwghatId).toFormattedString())
-        if ("owghat_location" in whatToShowOnWidgets) {
+        if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) {
             getCityName(context, false).takeIf { it.isNotEmpty() }.also {
                 append(" ($it)")
             }
@@ -147,7 +151,7 @@ private fun Context.update4x1Widget(
     val weekDayName = jdn.dayOfWeekName
     val enableClock =
         isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
-    val showOtherCalendars = "other_calendars" in whatToShowOnWidgets
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         packageName, if (enableClock) {
@@ -188,7 +192,7 @@ private fun Context.update2x2Widget(
     val weekDayName = jdn.dayOfWeekName
     val enableClock =
         isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
-    val showOtherCalendars = "other_calendars" in whatToShowOnWidgets
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         packageName, if (enableClock) {
@@ -228,14 +232,14 @@ private fun Context.update2x2Widget(
         events, holiday = false, compact = true, showDeviceCalendarEvents = true,
         insertRLM = isRtl, addIsHoliday = false
     )
-    if ("non_holiday_events" in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
+    if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
         remoteViews.setTextViewText(R.id.event_2x2, nonHolidays)
         remoteViews.setViewVisibility(R.id.event_2x2, View.VISIBLE)
     } else {
         remoteViews.setViewVisibility(R.id.event_2x2, View.GONE)
     }
 
-    if ("owghat" in whatToShowOnWidgets && owghat.isNotEmpty()) {
+    if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
         remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
         remoteViews.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
     } else {
@@ -259,7 +263,7 @@ private fun Context.update4x2Widget(
     if (manager.getAppWidgetIds(widget4x2).isNullOrEmpty()) return
 
     val weekDayName = jdn.dayOfWeekName
-    val showOtherCalendars = "other_calendars" in whatToShowOnWidgets
+    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val enableClock = isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val remoteViews = RemoteViews(
         packageName, if (enableClock) {
@@ -417,13 +421,13 @@ private fun Context.updateNotification(
             addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
         )
 
-        val nonHolidays = if ("non_holiday_events" in whatToShowOnWidgets) getEventsTitle(
+        val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
             events, holiday = false,
             compact = true, showDeviceCalendarEvents = true, insertRLM = resources.isRtl,
             addIsHoliday = false
         ) else ""
 
-        val notificationOwghat = if ("owghat" in whatToShowOnWidgets) owghat else ""
+        val notificationOwghat = if (OWGHAT_KEY in whatToShowOnWidgets) owghat else ""
 
         if (shouldDisableCustomNotification) {
             val content = listOf(subtitle, holidays.trim(), nonHolidays, notificationOwghat)

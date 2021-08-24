@@ -4,6 +4,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.preference.PreferenceFragmentCompat
+import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
+import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
+import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
+import com.byagowi.persiancalendar.OWGHAT_KEY
+import com.byagowi.persiancalendar.OWGHAT_LOCATION_KEY
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
@@ -74,11 +79,17 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                     title(R.string.iran_time)
                     summary(R.string.showing_iran_time)
                 }
+                val widgetCustomizations = listOf(
+                    OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
+                    NON_HOLIDAYS_EVENTS_KEY to R.string.widget_customization_non_holiday_events,
+                    OWGHAT_KEY to R.string.widget_customization_owghat,
+                    OWGHAT_LOCATION_KEY to R.string.widget_customization_owghat_location
+                )
                 multiSelect(
                     PREF_WHAT_TO_SHOW_WIDGETS,
-                    resources.getStringArray(R.array.what_to_show).toList(),
-                    resources.getStringArray(R.array.what_to_show_keys).toList(),
-                    resources.getStringArray(R.array.what_to_show_default).toSet()
+                    widgetCustomizations.map { (_, title) -> getString(title) },
+                    widgetCustomizations.map { (key, _) -> key },
+                    DEFAULT_WIDGET_CUSTOMIZATIONS
                 ) {
                     title(R.string.customize_widget)
                     summary(R.string.customize_widget_summary)

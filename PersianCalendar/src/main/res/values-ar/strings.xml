@@ -277,4 +277,9 @@
     <string name="international">المناسبات الدولية والعالمية</string>
     <string name="afghanistan_holidays">عُطل أفعانستان</string>
     <string name="afghanistan_others">المناسبات الأخرى (أفعانستان)</string>
+    <!--Widget customizations-->
+    <string name="widget_customization_other_calendars">التقاويم الأخرى على مصغر 1×4 أو 2×2</string>
+    <string name="widget_customization_non_holiday_events">المناسبات (غير العُطل) على مصغر 2×2 والتنبه</string>
+    <string name="widget_customization_owghat">أوقات الصلوات على مصغر 2×2 (إذا تم تحديد المكان)</string>
+    <string name="widget_customization_owghat_location">مكان أوقات الصلوات على مصغر 2×2  والتنبيه (إذا تم تحديد المكان)</string>
 </resources>
