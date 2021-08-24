@@ -6,7 +6,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
-enum class CalendarType(@StringRes val title: Int, @StringRes val titleShort: Int) {
+enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: Int) {
     // So vital, don't ever change names of these
     SHAMSI(R.string.shamsi_calendar, R.string.shamsi_calendar_short),
     ISLAMIC(R.string.islamic_calendar, R.string.islamic_calendar_short),

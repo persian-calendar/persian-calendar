@@ -47,7 +47,7 @@ fun getOrderedCalendarEntities(
     applyAppLanguage(context)
     return getOrderedCalendarTypes().map { calendarType ->
         calendarType to context.getString(
-            if (abbreviation) calendarType.titleShort else calendarType.title
+            if (abbreviation) calendarType.shortTitle else calendarType.title
         )
     }
 }
