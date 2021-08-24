@@ -9,6 +9,9 @@ import androidx.core.app.ActivityCompat
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.AppLocalesData
+import com.byagowi.persiancalendar.BLACK_THEME
+import com.byagowi.persiancalendar.BLUE_THEME
+import com.byagowi.persiancalendar.DARK_THEME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
@@ -17,6 +20,8 @@ import com.byagowi.persiancalendar.LANG_EN_US
 import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
+import com.byagowi.persiancalendar.LIGHT_THEME
+import com.byagowi.persiancalendar.MODERN_THEME
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -63,8 +68,14 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 singleSelect(
                     PREF_THEME,
-                    resources.getStringArray(R.array.themeNames).toList(),
-                    resources.getStringArray(R.array.themeKeys).toList(),
+                    listOf(
+                        R.string.theme_default, R.string.theme_light, R.string.theme_dark,
+                        R.string.theme_modern, R.string.theme_blue, R.string.theme_black
+                    ).map(::getString),
+                    listOf(
+                        SYSTEM_DEFAULT_THEME, LIGHT_THEME, DARK_THEME,
+                        MODERN_THEME, BLUE_THEME, BLACK_THEME
+                    ),
                     SYSTEM_DEFAULT_THEME
                 ) {
                     title(R.string.select_skin)

@@ -229,4 +229,11 @@
     <string name="n_years">%1$s ایل</string>
     <string name="preview">سیناق گؤستریش</string>
     <string name="ignore">خبردارلیقلارا</string>
+    <!--Theme-->
+    <string name="theme_default">سیستم سِچیمی</string>
+    <string name="theme_light">ایشیق</string>
+    <string name="theme_dark">توخ</string>
+    <string name="theme_modern">معاصیر</string>
+    <string name="theme_blue">آراز</string>
+    <string name="theme_black">قارا</string>
 </resources>

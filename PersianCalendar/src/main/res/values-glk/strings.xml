@@ -229,4 +229,10 @@
     <string name="n_years">%1$s سال</string>
     <string name="preview">پيشادئن</string>
     <string name="ignore">چشم‌پوشی</string>
+    <string name="theme_default">سيستم ٚ دؤجين</string>
+    <string name="theme_light">رؤشن</string>
+    <string name="theme_dark">تارکینا</string>
+    <string name="theme_modern">سيويليزه</string>
+    <string name="theme_blue">رۊدبار</string>
+    <string name="theme_black">سیاه</string>
 </resources>

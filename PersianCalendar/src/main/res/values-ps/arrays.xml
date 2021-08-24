@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="themeNames">
-        <item>سیسټم اصلي</item>
-        <item>روښان</item>
-        <item>تیاره</item>
-        <item>عصري</item>
-        <item>آبي</item>
-        <item>تور</item>
-    </string-array>
-
     <string-array name="prayMethodsNames">
         <item>شیعه دوازده امامی، انجمن لوا، قم</item>
         <item>اتحادیه جهانی اسلام،‌ عربستان سعودی</item>
@@ -45,7 +36,7 @@
         <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>
         <item>اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
         <item>مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</item>
-<!--        <item>نمایش روز هفته در ویجت ۴×۱ فقط تاریخ</item>-->
+        <!--<item>نمایش روز هفته در ویجت ۴×۱ فقط تاریخ</item>-->
     </string-array>
 
     <string-array name="shift_work">

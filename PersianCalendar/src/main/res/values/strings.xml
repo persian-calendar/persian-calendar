@@ -356,4 +356,11 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="n_years">%1$s years</string>
     <string name="preview">Preview</string>
     <string name="ignore">Ignore</string>
+    <!--Theme-->
+    <string name="theme_default">System Default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_modern">Modern</string>
+    <string name="theme_blue">Blue</string>
+    <string name="theme_black">Black</string>
 </resources>

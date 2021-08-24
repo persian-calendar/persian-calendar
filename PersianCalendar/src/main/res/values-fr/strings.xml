@@ -227,4 +227,10 @@
     <string name="shift_work_record_title">%1$s jour(s) %2$s</string>
     <string name="preview">Prévisualiser</string>
     <string name="ignore">Ignorer</string>
+    <string name="theme_default">System Default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_modern">Modern</string>
+    <string name="theme_blue">Blue</string>
+    <string name="theme_black">Black</string>
 </resources>

@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="themeNames">
-        <item>System Default</item>
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Modern</item>
-        <item>Blue</item>
-        <item>Black</item>
-    </string-array>
-
     <string-array name="prayMethodsNames">
         <item>Shia Ithna-Ashari, Leva Institute, Qum</item>
         <item>Muslim World League</item>
@@ -45,7 +36,7 @@
         <item>Non-holidays on 2x2 widget and notification</item>
         <item>Pray times on 2x2 and notification (if is set)</item>
         <item>Location of pray times on 2x2 and notification (if is set)</item>
-<!--        <item>Show weekday in 4x1 date only widget</item>-->
+        <!--<item>Show weekday in 4x1 date only widget</item>-->
     </string-array>
 
     <string-array name="shift_work">
