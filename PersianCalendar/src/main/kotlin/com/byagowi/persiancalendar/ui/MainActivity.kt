@@ -36,6 +36,7 @@ import com.byagowi.persiancalendar.LANG_EN_US
 import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
+import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
@@ -223,6 +224,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == LAST_CHOSEN_TAB_KEY) return // don't do anything special on tab changes
+
         settingHasChanged = true
 
         when (key) {
