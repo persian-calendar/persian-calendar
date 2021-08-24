@@ -65,6 +65,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.utils.getThemeFromName
@@ -173,6 +174,7 @@ var calendarTypesTitleAbbr = emptyList<String>()
 
 // This should be called before any use of Utils on the activity and services
 fun initUtils(context: Context) {
+    logDebug("Utils", "initUtils is called")
     updateStoredPreference(context)
     applyAppLanguage(context)
     loadLanguageResources()
@@ -181,6 +183,7 @@ fun initUtils(context: Context) {
 }
 
 fun configureCalendarsAndLoadEvents(context: Context) {
+    logDebug("Utils", "configureCalendarsAndLoadEvents is called")
     IslamicDate.islamicOffset = context.appPrefs
         .getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
     val enabledHolidays = EnabledHolidays(context.appPrefs)
@@ -189,6 +192,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 }
 
 fun loadLanguageResources() {
+    logDebug("Utils", "loadLanguageResources is called")
     val language = language
     persianMonths = AppLocalesData.getPersianCalendarMonths(language)
     islamicMonths = AppLocalesData.getIslamicCalendarMonths(language)
@@ -234,6 +238,7 @@ fun getOwghatTimeOfStringId(@StringRes stringId: Int): Clock {
 private fun getOnlyLanguage(string: String): String = string.replace(Regex("-(IR|AF|US)"), "")
 
 fun updateStoredPreference(context: Context) {
+    logDebug("Utils", "updateStoredPreference is called")
     val prefs = context.appPrefs
 
     language = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
@@ -364,6 +369,7 @@ fun updateStoredPreference(context: Context) {
 
 // Context preferably should be activity context not application
 fun applyAppLanguage(context: Context) {
+    logDebug("Utils", "applyAppLanguage is called")
     val localeCode = getOnlyLanguage(language)
     val locale = Locale(localeCode)
     Locale.setDefault(locale)
