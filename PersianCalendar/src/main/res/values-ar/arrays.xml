@@ -19,18 +19,6 @@
         <item>المناسبات الأخرى (أفعانستان)</item>
     </string-array>
 
-    <string-array name="calendar_type">
-        <item>التقويم الفارسي</item>
-        <item>التقويم الهجري</item>
-        <item>التقويم الميلادي</item>
-    </string-array>
-
-    <string-array name="calendar_type_abbr">
-        <item>فارسي</item>
-        <item>هجري</item>
-        <item>ميلادي</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>التقاويم الأخرى على مصغر 1×4 أو 2×2</item>
         <item>المناسبات (غير العُطل) على مصغر 2×2 والتنبه</item>

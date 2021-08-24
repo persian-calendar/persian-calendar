@@ -236,4 +236,11 @@
     <string name="theme_modern">معاصیر</string>
     <string name="theme_blue">آراز</string>
     <string name="theme_black">قارا</string>
+    <!--Calendars-->
+    <string name="shamsi_calendar">گونش تقویمی</string>
+    <string name="islamic_calendar">هیجری تقویمی</string>
+    <string name="gregorian_calendar">میلادی تقویمی</string>
+    <string name="shamsi_calendar_short">گونش</string>
+    <string name="islamic_calendar_short">هیجری</string>
+    <string name="gregorian_calendar_short">میلادی</string>
 </resources>

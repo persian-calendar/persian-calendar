@@ -29,26 +29,6 @@
         <item>سایر مناسبت‌های افغانستان</item>
     </string-array>
 
-    <string-array name="calendar_type">
-        <item>Persian Calendar</item>
-        <item>Islamic Calendar</item>
-        <item>Gregorian Calendar</item>
-    </string-array>
-
-    <!-- I don't know a suitable equivalent to this, see the other languages for the use -->
-    <string-array name="calendar_type_abbr">
-        <item>Persian</item>
-        <item>Islamic</item>
-        <item>Gregorian</item>
-    </string-array>
-
-    <!-- Should be matched with CalendarType -->
-    <string-array name="calendar_values" translatable="false">
-        <item>SHAMSI</item>
-        <item>ISLAMIC</item>
-        <item>GREGORIAN</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>Other calendars on 1x4 and 2x2 widgets</item>
         <item>Non-holidays on 2x2 widget and notification</item>

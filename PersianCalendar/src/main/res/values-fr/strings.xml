@@ -233,4 +233,10 @@
     <string name="theme_modern">Modern</string>
     <string name="theme_blue">Blue</string>
     <string name="theme_black">Black</string>
+    <string name="shamsi_calendar">Persian Calendar</string>
+    <string name="islamic_calendar">Islamic Calendar</string>
+    <string name="gregorian_calendar">Gregorian Calendar</string>
+    <string name="shamsi_calendar_short">Persian</string>
+    <string name="islamic_calendar_short">Islamic</string>
+    <string name="gregorian_calendar_short">Gregorian</string>
 </resources>

@@ -19,18 +19,6 @@
         <item>افغانیستان دیگر خصوصی گون‌لری</item>
     </string-array>
 
-    <string-array name="calendar_type">
-        <item>گونش تقویمی</item>
-        <item>هیجری تقویمی</item>
-        <item>میلادی تقویمی</item>
-    </string-array>
-
-    <string-array name="calendar_type_abbr">
-        <item>گونش</item>
-        <item>هیجری</item>
-        <item>میلادی</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>دیگر تقویم‌لر ویجت‌ده ۴×۱ و ۲×۲</item>
         <item>تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</item>

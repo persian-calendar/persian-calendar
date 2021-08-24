@@ -7,7 +7,6 @@ import com.byagowi.persiancalendar.LANG_EN_US
 import com.byagowi.persiancalendar.LANG_ES
 import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
-import com.byagowi.persiancalendar.R
 
 // See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
 val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
@@ -46,13 +45,10 @@ fun getOrderedCalendarEntities(
     context: Context, abbreviation: Boolean = false
 ): List<Pair<CalendarType, String>> {
     applyAppLanguage(context)
-    val typeTitleMap =
-        context.resources.getStringArray(R.array.calendar_values)
-            .map(CalendarType::valueOf)
-            .zip(context.resources.getStringArray(if (abbreviation) R.array.calendar_type_abbr else R.array.calendar_type))
-            .toMap()
-    return getOrderedCalendarTypes().mapNotNull { calendarType ->
-        typeTitleMap[calendarType]?.let { calendarType to it }
+    return getOrderedCalendarTypes().map { calendarType ->
+        calendarType to context.getString(
+            if (abbreviation) calendarType.titleShort else calendarType.title
+        )
     }
 }
 

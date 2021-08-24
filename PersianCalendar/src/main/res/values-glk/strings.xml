@@ -235,4 +235,10 @@
     <string name="theme_modern">سيويليزه</string>
     <string name="theme_blue">رۊدبار</string>
     <string name="theme_black">سیاه</string>
+    <string name="shamsi_calendar">هجري-يه شمسي</string>
+    <string name="islamic_calendar">هجري-يه قمري</string>
+    <string name="gregorian_calendar">میلادي</string>
+    <string name="shamsi_calendar_short">شمسي</string>
+    <string name="islamic_calendar_short">قمري</string>
+    <string name="gregorian_calendar_short">میلادي</string>
 </resources>

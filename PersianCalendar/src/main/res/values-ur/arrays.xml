@@ -19,18 +19,6 @@
         <item>افغانستان کی تمام تقریبات</item>
     </string-array>
 
-    <string-array name="calendar_type">
-        <item>ہجری شمسی</item>
-        <item>ہجری قمری</item>
-        <item>عیسوی</item>
-    </string-array>
-
-    <string-array name="calendar_type_abbr">
-        <item>شمسی</item>
-        <item>قمری</item>
-        <item>عیسوی</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</item>
         <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>

@@ -250,4 +250,11 @@
     <string name="theme_modern">حديث</string>
     <string name="theme_blue">أزرق</string>
     <string name="theme_black">أَسود</string>
+    <!--Calendars-->
+    <string name="shamsi_calendar">التقويم الفارسي</string>
+    <string name="islamic_calendar">التقويم الهجري</string>
+    <string name="gregorian_calendar">التقويم الميلادي</string>
+    <string name="shamsi_calendar_short">فارسي</string>
+    <string name="islamic_calendar_short">هجري</string>
+    <string name="gregorian_calendar_short">ميلادي</string>
 </resources>

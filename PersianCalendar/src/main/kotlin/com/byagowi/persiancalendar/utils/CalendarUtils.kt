@@ -19,7 +19,6 @@ import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
-import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
@@ -294,15 +293,8 @@ fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
     formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)
 )
 
-// It should match with calendar_type_abbr array
-fun getCalendarNameAbbr(date: AbstractDate) = calendarTypesTitleAbbr.getOrNull(
-    when (date) {
-        is PersianDate -> 0
-        is IslamicDate -> 1
-        is CivilDate -> 2
-        else -> -1
-    }
-) ?: ""
+private fun getCalendarNameAbbr(date: AbstractDate) =
+    calendarTypesTitleAbbr.getOrNull(date.calendarType.ordinal) ?: ""
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }

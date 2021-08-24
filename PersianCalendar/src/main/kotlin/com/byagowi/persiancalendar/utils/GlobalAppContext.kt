@@ -325,7 +325,7 @@ fun updateStoredPreference(context: Context) {
     if (getOnlyLanguage(language) != resources.getString(R.string.code))
         applyAppLanguage(context)
 
-    calendarTypesTitleAbbr = context.resources.getStringArray(R.array.calendar_type_abbr).toList()
+    calendarTypesTitleAbbr = CalendarType.values().map { context.getString(it.titleShort) }
 
     shiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "")
         .splitIgnoreEmpty(",")

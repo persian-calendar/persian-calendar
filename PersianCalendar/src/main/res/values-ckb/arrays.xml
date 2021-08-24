@@ -19,18 +19,6 @@
         <item>بۆنەکانی تری ئەفغانستان</item>
     </string-array>
 
-    <string-array name="calendar_type">
-        <item>کۆچیی ھەتاوی</item>
-        <item>کۆچیی مانگی</item>
-        <item>زایینی</item>
-    </string-array>
-
-    <string-array name="calendar_type_abbr">
-        <item>ھەتاوی</item>
-        <item>مانگی</item>
-        <item>زایینی</item>
-    </string-array>
-
     <string-array name="what_to_show" translatable="false">
         <item>ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</item>
         <item>ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</item>

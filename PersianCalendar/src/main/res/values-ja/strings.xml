@@ -237,4 +237,10 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="theme_modern">モダン</string>
     <string name="theme_blue">青い</string>
     <string name="theme_black">黒</string>
+    <string name="shamsi_calendar">カレンダー</string>
+    <string name="islamic_calendar">月面にスラム暦カレンダー</string>
+    <string name="gregorian_calendar">グレゴリオ暦</string>
+    <string name="shamsi_calendar_short">太陽イスラム暦</string>
+    <string name="islamic_calendar_short">月面にスラム暦</string>
+    <string name="gregorian_calendar_short">グレゴリオ暦</string>
 </resources>
