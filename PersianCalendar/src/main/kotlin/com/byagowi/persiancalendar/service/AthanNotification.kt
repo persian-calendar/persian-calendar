@@ -13,11 +13,16 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import com.byagowi.persiancalendar.ASR_KEY
+import com.byagowi.persiancalendar.DHUHR_KEY
+import com.byagowi.persiancalendar.FAJR_KEY
+import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
+import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getOwghatTimeOfStringId
-import com.byagowi.persiancalendar.utils.getPrayTimeText
+import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toFormattedString
 import java.util.concurrent.TimeUnit
@@ -50,16 +55,17 @@ class AthanNotification : Service() {
 
         val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
         val cityName = getCityName(this, false)
+        val prayTimeName = getString(getPrayTimeName(athanKey))
         val title =
-            if (cityName.isNotEmpty()) getString(getPrayTimeText(athanKey))
-            else "${getString(getPrayTimeText(athanKey))} - ${getString(R.string.in_city_time)} $cityName"
+            if (cityName.isNotEmpty()) prayTimeName
+            else "$prayTimeName - ${getString(R.string.in_city_time)} $cityName"
 
         val subtitle = when (athanKey) {
-            "FAJR" -> listOf(R.string.sunrise)
-            "DHUHR" -> listOf(R.string.asr, R.string.sunset)
-            "ASR" -> listOf(R.string.sunset)
-            "MAGHRIB" -> listOf(R.string.isha, R.string.midnight)
-            "ISHA" -> listOf(R.string.midnight)
+            FAJR_KEY -> listOf(R.string.sunrise)
+            DHUHR_KEY -> listOf(R.string.asr, R.string.sunset)
+            ASR_KEY -> listOf(R.string.sunset)
+            MAGHRIB_KEY -> listOf(R.string.isha, R.string.midnight)
+            ISHA_KEY -> listOf(R.string.midnight)
             else -> listOf(R.string.midnight)
         }.joinToString(" - ") {
             "${getString(it)}: ${getOwghatTimeOfStringId(it).toFormattedString()}"

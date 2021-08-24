@@ -225,20 +225,7 @@ fun getOwghatTimeOfStringId(@StringRes stringId: Int): Clock {
     if (prayTimes == null && coordinates != null)
         prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
 
-    return prayTimes?.let {
-        when (stringId) {
-            R.string.imsak -> it.imsakClock
-            R.string.fajr -> it.fajrClock
-            R.string.sunrise -> it.sunriseClock
-            R.string.dhuhr -> it.dhuhrClock
-            R.string.asr -> it.asrClock
-            R.string.sunset -> it.sunsetClock
-            R.string.maghrib -> it.maghribClock
-            R.string.isha -> it.ishaClock
-            R.string.midnight -> it.midnightClock
-            else -> null
-        }
-    } ?: Clock.fromInt(0)
+    return prayTimes?.getFromStringId(stringId) ?: Clock.fromInt(0)
 }
 
 private fun getOnlyLanguage(string: String): String = string.replace(Regex("-(IR|AF|US)"), "")

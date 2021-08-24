@@ -17,10 +17,15 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.ALARMS_BASE_ID
 import com.byagowi.persiancalendar.ALARM_TAG
+import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.BROADCAST_ALARM
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
+import com.byagowi.persiancalendar.DHUHR_KEY
+import com.byagowi.persiancalendar.FAJR_KEY
+import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER_TIME
+import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.PREF_ATHAN_GAP
@@ -33,7 +38,7 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.ui.AthanActivity
-import io.github.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.PrayTimes
 import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -107,17 +112,9 @@ fun scheduleAlarms(context: Context) {
     val prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
     // convert spacedComma separated string to a set
     enabledAlarms.forEachIndexed { i, name ->
-        val alarmTime: Clock = when (name) {
-            "DHUHR" -> prayTimes.dhuhrClock
-            "ASR" -> prayTimes.asrClock
-            "MAGHRIB" -> prayTimes.maghribClock
-            "ISHA" -> prayTimes.ishaClock
-            "FAJR" -> prayTimes.fajrClock
-            // a better to have default
-            else -> prayTimes.fajrClock
-        }
-
         scheduleAlarm(context, name, Calendar.getInstance().also {
+            // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
+            val alarmTime = prayTimes.getFromStringId(getPrayTimeName(name)) ?: prayTimes.fajrClock
             it.set(Calendar.HOUR_OF_DAY, alarmTime.hour)
             it.set(Calendar.MINUTE, alarmTime.minute)
             it.set(Calendar.SECOND, 0)
@@ -161,22 +158,36 @@ private fun scheduleAlarm(context: Context, alarmTimeName: String, timeInMillis:
     }
 }
 
+private val prayTimesNames = mapOf(
+    FAJR_KEY to R.string.fajr,
+    DHUHR_KEY to R.string.dhuhr,
+    ASR_KEY to R.string.asr,
+    MAGHRIB_KEY to R.string.maghrib,
+    ISHA_KEY to R.string.isha
+)
+
 @StringRes
-fun getPrayTimeText(athanKey: String?): Int = when (athanKey) {
-    "FAJR" -> R.string.fajr
-    "DHUHR" -> R.string.dhuhr
-    "ASR" -> R.string.asr
-    "MAGHRIB" -> R.string.maghrib
-    "ISHA" -> R.string.isha
-    else -> R.string.isha
+fun getPrayTimeName(athanKey: String?): Int = prayTimesNames[athanKey] ?: R.string.fajr
+
+fun PrayTimes.getFromStringId(@StringRes stringId: Int) = when (stringId) {
+    R.string.imsak -> imsakClock
+    R.string.fajr -> fajrClock
+    R.string.sunrise -> sunriseClock
+    R.string.dhuhr -> dhuhrClock
+    R.string.asr -> asrClock
+    R.string.sunset -> sunsetClock
+    R.string.maghrib -> maghribClock
+    R.string.isha -> ishaClock
+    R.string.midnight -> midnightClock
+    else -> null
 }
 
 @DrawableRes
 fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
-    "FAJR" -> R.drawable.fajr
-    "DHUHR" -> R.drawable.dhuhr
-    "ASR" -> R.drawable.asr
-    "MAGHRIB" -> R.drawable.maghrib
-    "ISHA" -> R.drawable.isha
+    FAJR_KEY -> R.drawable.fajr
+    DHUHR_KEY -> R.drawable.dhuhr
+    ASR_KEY -> R.drawable.asr
+    MAGHRIB_KEY -> R.drawable.maghrib
+    ISHA_KEY -> R.drawable.isha
     else -> R.drawable.isha
 }

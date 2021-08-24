@@ -16,6 +16,7 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
+import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
@@ -25,7 +26,7 @@ import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import com.byagowi.persiancalendar.utils.getPrayTimeImage
-import com.byagowi.persiancalendar.utils.getPrayTimeText
+import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
@@ -81,7 +82,7 @@ class AthanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
-        val isFajr = prayerKey == "FAJR"
+        val isFajr = prayerKey == FAJR_KEY
         var goMute = false
 
         getSystemService<AudioManager>()?.let { audioManager ->
@@ -158,7 +159,7 @@ class AthanActivity : AppCompatActivity() {
 
         ActivityAthanBinding.inflate(layoutInflater).also { binding ->
             setContentView(binding.root)
-            binding.athanName.setText(getPrayTimeText(prayerKey))
+            binding.athanName.setText(getPrayTimeName(prayerKey))
 
             binding.root.setOnClickListener { stop() }
             binding.root.setBackgroundResource(getPrayTimeImage(prayerKey))
