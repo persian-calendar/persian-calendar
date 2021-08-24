@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="holidays_types">
-        <item>ایران خصوصی گون‌لری</item>
-        <item>ایران تاریخی خصوصی گون‌لری</item>
-        <item>ایران دیگر خصوصی گون‌لری</item>
-        <item>بین‌الخالق خصوصی گون‌لری</item>
-        <item>افغانیستان خصوصی گون‌لری</item>
-        <item>افغانیستان دیگر خصوصی گون‌لری</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>دیگر تقویم‌لر ویجت‌ده ۴×۱ و ۲×۲</item>
         <item>تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</item>

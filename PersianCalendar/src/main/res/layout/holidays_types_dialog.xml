@@ -23,14 +23,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            tools:text="iran_holidays" />
+            android:text="@string/iran_holidays" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/iran_others"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            tools:text="iran_others" />
+            android:text="@string/iran_others" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/afghanistan"
@@ -43,35 +43,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            tools:text="afghanistan_holidays" />
+            android:text="@string/afghanistan_holidays" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/afghanistan_others"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            tools:text="afghanistan_others" />
+            android:text="@string/afghanistan_others" />
 
         <TextView
             android:id="@+id/other"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            tools:text="other" />
+            android:text="@string/other_holidays" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/iran_ancient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            tools:text="iran_ancient" />
+            android:text="@string/iran_ancient" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/international"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
-            tools:text="iran_others" />
+            android:text="@string/international" />
 
     </LinearLayout>
 

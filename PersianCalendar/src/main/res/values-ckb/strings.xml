@@ -253,4 +253,10 @@
     <string name="method_makkah">زانستگای ئوممەلقورا، مەککە</string>
     <string name="method_karachi">زانستگای زانستە ئیسلامییەکان، کەراچی</string>
     <string name="method_tehran">ئەنستیتیووتی جیۆفیزیک، زانستگای تاران</string>
+    <string name="iran_holidays">پشوودانەکانی ئێران</string>
+    <string name="iran_ancient">بۆنەکانی ئێرانی کەونار</string>
+    <string name="iran_others">بۆنەکانی تری ئێران</string>
+    <string name="international">بۆنە نێونەتەوەیییەکان</string>
+    <string name="afghanistan_holidays">پشوودانەکانی ئەفغانستان</string>
+    <string name="afghanistan_others">بۆنەکانی تری ئەفغانستان</string>
 </resources>

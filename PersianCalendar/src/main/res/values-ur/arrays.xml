@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="holidays_types">
-        <item>ایرانی تعطیلات</item>
-        <item>قدیم ایران کی تقریبات</item>
-        <item>ایران کی تمام تقریبات</item>
-        <item>بین الاقوامی تقریبات</item>
-        <item>افغانی تعطیلات</item>
-        <item>افغانستان کی تمام تقریبات</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</item>
         <item>مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</item>

@@ -254,4 +254,10 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="method_makkah">オッモルグラー大学、メッカ</string>
     <string name="method_karachi">イスラム研究大学、カラチ</string>
     <string name="method_tehran">地球物理学研究所、テヘラン大学</string>
+    <string name="iran_holidays">イラン祝日</string>
+    <string name="iran_ancient">古代イランのイベント</string>
+    <string name="iran_others">他のイランのイベント</string>
+    <string name="international">国際のイベントイベント</string>
+    <string name="afghanistan_holidays">アフガニスタンの休日</string>
+    <string name="afghanistan_others">他のアフガニスタンのイベント</string>
 </resources>

@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="holidays_types">
-        <item>پشوودانەکانی ئێران</item>
-        <item>بۆنەکانی ئێرانی کەونار</item>
-        <item>بۆنەکانی تری ئێران</item>
-        <item>بۆنە نێونەتەوەیییەکان</item>
-        <item>پشوودانەکانی ئەفغانستان</item>
-        <item>بۆنەکانی تری ئەفغانستان</item>
-    </string-array>
-
     <string-array name="what_to_show" translatable="false">
         <item>ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</item>
         <item>ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</item>

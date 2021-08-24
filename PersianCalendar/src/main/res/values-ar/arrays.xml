@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="holidays_types">
-        <item>عُطل إيران</item>
-        <item>المناسبات القومية (إيران)</item>
-        <item>المناسبات الأخرى (إيران)</item>
-        <item>المناسبات الدولية والعالمية</item>
-        <item>عُطل أفعانستان</item>
-        <item>المناسبات الأخرى (أفعانستان)</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>التقاويم الأخرى على مصغر 1×4 أو 2×2</item>
         <item>المناسبات (غير العُطل) على مصغر 2×2 والتنبه</item>

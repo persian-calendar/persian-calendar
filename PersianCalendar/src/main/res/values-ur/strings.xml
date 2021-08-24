@@ -259,4 +259,10 @@
     <string name="method_makkah">ام القریٰ یونیورسٹی، مکہ</string>
     <string name="method_karachi">جامعہ علوم اسلامیہ، کراچی</string>
     <string name="method_tehran">انجمن جیوفیزیک، یونیورسٹی</string>
+    <string name="iran_holidays">ایرانی تعطیلات</string>
+    <string name="iran_ancient">قدیم ایران کی تقریبات</string>
+    <string name="iran_others">ایران کی تمام تقریبات</string>
+    <string name="international">بین الاقوامی تقریبات</string>
+    <string name="afghanistan_holidays">افغانی تعطیلات</string>
+    <string name="afghanistan_others">افغانستان کی تمام تقریبات</string>
 </resources>

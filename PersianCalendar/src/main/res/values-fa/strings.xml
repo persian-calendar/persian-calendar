@@ -254,4 +254,10 @@
     <string name="method_makkah">دانشگاه امّ‌القریٰ، مکه</string>
     <string name="method_karachi">دانشگاه علوم اسلامی، کراچی</string>
     <string name="method_tehran">انجمن ژئوفیزیک، دانشگاه تهران</string>
+    <string name="iran_holidays">تعطیلات در ایران</string>
+    <string name="iran_ancient">مناسبت‌های ایران باستان</string>
+    <string name="iran_others">سایر مناسبت‌های ایران</string>
+    <string name="international">مناسبت‌های بین‌المللی و جهانی</string>
+    <string name="afghanistan_holidays">رخصتی‌های افغانستان</string>
+    <string name="afghanistan_others">سایر مناسبت‌های افغانستان</string>
 </resources>

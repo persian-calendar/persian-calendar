@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="holidays_types">
-        <item>イラン祝日</item>
-        <item>古代イランのイベント</item>
-        <item>他のイランのイベント</item>
-        <item>国際のイベントイベント</item>
-        <item>アフガニスタンの休日</item>
-        <item>他のアフガニスタンのイベント</item>
-    </string-array>
-
     <string-array name="what_to_show">
         <item>2×2及び1×4ウィジェットの他のカレンダー</item>
         <item>2×2ウィジェットの非休日祝日と通知</item>

@@ -252,4 +252,10 @@
     <string name="method_makkah">مککه، اؤمّ‌القری دانشگا</string>
     <string name="method_karachi">کراچي، ايسلامي دانشانˇدانشگا</string>
     <string name="method_tehran">تهران ٚ دانشگا، ژئؤفیزیک ٚ انجؤمن</string>
+    <string name="iran_holidays">ايرانˇتعطيلي-يان</string>
+    <string name="iran_ancient">ایرانˇباستانˇمۊناسبتان</string>
+    <string name="iran_others">ايرانˇ باقي مۊناسبتان</string>
+    <string name="international">بین‌المللی ؤ جهاني مۊناسبتان</string>
+    <string name="afghanistan_holidays">افغانستانˇ رؤخصتي-يان</string>
+    <string name="afghanistan_others">افغانستانˇباقي مۊناسبتان</string>
 </resources>

@@ -18,11 +18,6 @@ import com.byagowi.persiancalendar.utils.isRtl
 fun showHolidaysTypesDialog(context: Context) {
     val binding = HolidaysTypesDialogBinding.inflate(context.layoutInflater)
 
-    // Update labels
-    listOf(
-        binding.iranHolidays, binding.iranAncient, binding.iranOthers,
-        binding.international, binding.afghanistanHolidays, binding.afghanistanOthers
-    ).zip(context.resources.getStringArray(R.array.holidays_types)) { v, title -> v.text = title }
     // TODO: i18n, maybe
     val pattern = if (context.resources.isRtl) "%s، رسمی، <a href=\"%s\">مشاهده منبع</a>" else "%s"
     binding.iran.text = HtmlCompat.fromHtml(
@@ -33,7 +28,6 @@ fun showHolidaysTypesDialog(context: Context) {
         pattern.format("افغانستان", EventType.Afghanistan.source),
         HtmlCompat.FROM_HTML_MODE_COMPACT
     )
-    binding.other.setText(R.string.other_holidays)
 
     // Make links work
     binding.iran.movementMethod = LinkMovementMethod.getInstance()

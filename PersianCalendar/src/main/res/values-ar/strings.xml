@@ -270,4 +270,11 @@
     <string name="method_makkah">جامعة أم القرى، المكة المكرمة</string>
     <string name="method_karachi">جامعة العلوم الإسلامية، كراتشي</string>
     <string name="method_tehran">قسم الجيوفيزياء، جامعة طهران</string>
+    <!--Events-->
+    <string name="iran_holidays">عُطل إيران</string>
+    <string name="iran_ancient">المناسبات القومية (إيران)</string>
+    <string name="iran_others">المناسبات الأخرى (إيران)</string>
+    <string name="international">المناسبات الدولية والعالمية</string>
+    <string name="afghanistan_holidays">عُطل أفعانستان</string>
+    <string name="afghanistan_others">المناسبات الأخرى (أفعانستان)</string>
 </resources>
