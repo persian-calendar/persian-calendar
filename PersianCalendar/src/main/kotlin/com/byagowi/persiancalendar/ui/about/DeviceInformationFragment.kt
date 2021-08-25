@@ -419,15 +419,16 @@ private class DeviceInformationAdapter(private val activity: Activity) :
             } else "None", ""
         ),
         Item(
-            "Install Source",
+            "Install Source of ${activity.packageName}",
             runCatching {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    activity.packageManager.getInstallSourceInfo(activity.packageName).let {
+                    activity.packageManager.getInstallSourceInfo(activity.packageName).run {
                         """
-                        |Initiating Package Name: ${it.initiatingPackageName}
-                        |Installing Package Name: ${it.installingPackageName}
-                        |Originating Package Name: ${it.originatingPackageName}
-                        |Initiating Package Signing Info: ${it.initiatingPackageSigningInfo}
+                        |Initiating Package Name: $initiatingPackageName
+                        |Installing Package Name: $installingPackageName
+                        |Originating Package Name: $originatingPackageName
+                        |Initiating Package Signing Info: $initiatingPackageSigningInfo
+                        |Installer Package Name: ${activity.packageManager.getInstallerPackageName(activity.packageName)}
                         """.trimMargin("|").trim()
                     }
                 } else activity.packageManager.getInstallerPackageName(activity.packageName)
