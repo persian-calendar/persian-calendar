@@ -7,8 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.PowerManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.work.Data
@@ -82,6 +84,14 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
 
 private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching {
     logDebug("Alarms", "startAthanBody for $prayTimeKey")
+
+    runCatching {
+        context.getSystemService<PowerManager>()?.newWakeLock(
+            PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
+            "persiancalendar:alarm"
+        )?.acquire(TimeUnit.SECONDS.toMillis(20))
+    }.onFailure(logException)
+
     if (notificationAthan) {
         context.startService(
             Intent(context, AthanNotification::class.java)

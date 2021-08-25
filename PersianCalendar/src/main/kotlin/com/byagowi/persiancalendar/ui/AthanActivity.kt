@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PowerManager
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.view.WindowManager
@@ -161,13 +160,6 @@ class AthanActivity : AppCompatActivity() {
                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
             )
         }
-
-        runCatching {
-            getSystemService<PowerManager>()?.newWakeLock(
-                PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
-                "persiancalendar:alarm"
-            )?.acquire(TimeUnit.SECONDS.toMillis(20))
-        }.onFailure(logException)
 
         ActivityAthanBinding.inflate(layoutInflater).also { binding ->
             setContentView(binding.root)
