@@ -212,7 +212,7 @@ class AboutFragment : Fragment() {
 Manufacturer: ${Build.MANUFACTURER}
 Model: ${Build.MODEL}
 Android Version: ${Build.VERSION.RELEASE}
-App Version Code: ${appVersionList[0]}"""
+App Version Code: ${context?.packageName} ${appVersionList[0]}"""
 
         // https://stackoverflow.com/a/62597382
         val selectorIntent = Intent(Intent.ACTION_SENDTO).apply {
