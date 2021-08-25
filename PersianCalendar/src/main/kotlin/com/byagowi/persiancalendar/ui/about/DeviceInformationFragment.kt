@@ -313,27 +313,14 @@ private fun createCheckerRoundedBoard(
     paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
 }
 
-// https://stackoverflow.com/a/59234917
+
+// https://stackoverflow.com/a/68822715
 // instead android.text.format.Formatter.formatShortFileSize() to control its locale
 private fun humanReadableByteCountBin(bytes: Long): String = when {
-    bytes == Long.MIN_VALUE || bytes < 0 -> "N/A"
-    bytes < 1024L -> "$bytes B"
-    bytes <= 0xfffccccccccccccL shr 40 -> "%.1f KiB".format(
-        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 10)
-    )
-    bytes <= 0xfffccccccccccccL shr 30 -> "%.1f MiB".format(
-        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 20)
-    )
-    bytes <= 0xfffccccccccccccL shr 20 -> "%.1f GiB".format(
-        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 30)
-    )
-    bytes <= 0xfffccccccccccccL shr 10 -> "%.1f TiB".format(
-        Locale.ENGLISH, bytes.toDouble() / (0x1 shl 40)
-    )
-    bytes <= 0xfffccccccccccccL -> "%.1f PiB".format(
-        Locale.ENGLISH, (bytes shr 10).toDouble() / (0x1 shl 40)
-    )
-    else -> "%.1f EiB".format(Locale.ENGLISH, (bytes shr 20).toDouble() / (0x1 shl 40))
+    bytes >= 1 shl 30 -> "%.1f GB".format(Locale.ENGLISH, bytes.toDouble() / (1 shl 30))
+    bytes >= 1 shl 20 -> "%.1f MB".format(Locale.ENGLISH, bytes.toDouble() / (1 shl 20))
+    bytes >= 1 shl 10 -> "%.0f kB".format(Locale.ENGLISH, bytes.toDouble() / (1 shl 10))
+    else -> "$bytes bytes"
 }
 
 private class DeviceInformationAdapter(private val activity: Activity) :
