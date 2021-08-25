@@ -262,29 +262,24 @@ class DeviceInformationFragment : Fragment() {
 
 // https://stackoverflow.com/a/52557989
 fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        post {
-            val viewWidth = width
-            val viewHeight = height
-
-            val viewDiagonal =
-                sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
-
-            AnimatorSet().also {
-                it.playTogether(
-                    CircularRevealCompat.createCircularReveal(
-                        this, viewWidth / 2f, viewHeight / 2f, 10f, viewDiagonal / 2f
-                    ),
-                    ObjectAnimator.ofArgb(
-                        this,
-                        CircularRevealWidget.CircularRevealScrimColorProperty
-                            .CIRCULAR_REVEAL_SCRIM_COLOR,
-                        Color.GRAY, Color.TRANSPARENT
-                    )
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
+    post {
+        val viewWidth = width
+        val viewHeight = height
+        val diagonal = sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
+        AnimatorSet().also {
+            it.playTogether(
+                CircularRevealCompat.createCircularReveal(
+                    this, viewWidth / 2f, viewHeight / 2f, 10f, diagonal / 2f
+                ),
+                ObjectAnimator.ofArgb(
+                    this,
+                    CircularRevealWidget.CircularRevealScrimColorProperty.CIRCULAR_REVEAL_SCRIM_COLOR,
+                    Color.GRAY, Color.TRANSPARENT
                 )
-                it.duration = 500
-            }.start()
-        }
+            )
+            it.duration = 500
+        }.start()
     }
 }
 
@@ -419,7 +414,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
             }.onFailure(logException).getOrNull()
         ),
         Item(
-            "Sensors", (activity.getSystemService<SensorManager>())
+            "Sensors", activity.getSystemService<SensorManager>()
                 ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n")
         ),
         Item(
