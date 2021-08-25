@@ -20,12 +20,14 @@ fun showHolidaysTypesDialog(context: Context) {
 
     val pattern = """%s$spacedComma<a href="%s">${context.getString(R.string.view_source)}</a>"""
     binding.iran.text = HtmlCompat.fromHtml(
-        pattern.format(context.getString(R.string.iran_official_events), EventType.Iran.source),
-        HtmlCompat.FROM_HTML_MODE_COMPACT
+        pattern.format(
+            context.getString(R.string.iran_official_events), EventType.Iran.source
+        ), HtmlCompat.FROM_HTML_MODE_COMPACT
     )
     binding.afghanistan.text = HtmlCompat.fromHtml(
-        pattern.format(context.getString(R.string.afghanistan_events), EventType.Afghanistan.source),
-        HtmlCompat.FROM_HTML_MODE_COMPACT
+        pattern.format(
+            context.getString(R.string.afghanistan_events), EventType.Afghanistan.source
+        ), HtmlCompat.FROM_HTML_MODE_COMPACT
     )
 
     // Make links work

@@ -419,8 +419,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
             } else "None", ""
         ),
         Item(
-            "Install Source of ${activity.packageName}",
-            runCatching {
+            "Install Source of ${activity.packageName}", runCatching {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     activity.packageManager.getInstallSourceInfo(activity.packageName).run {
                         """
@@ -428,12 +427,13 @@ private class DeviceInformationAdapter(private val activity: Activity) :
                         |Installing Package Name: $installingPackageName
                         |Originating Package Name: $originatingPackageName
                         |Initiating Package Signing Info: $initiatingPackageSigningInfo
-                        |Installer Package Name: ${activity.packageManager.getInstallerPackageName(activity.packageName)}
+                        |Installer Package Name: ${
+                            activity.packageManager.getInstallerPackageName(activity.packageName)
+                        }
                         """.trimMargin("|").trim()
                     }
                 } else activity.packageManager.getInstallerPackageName(activity.packageName)
-            }.onFailure(logException).getOrNull(),
-            ""
+            }.onFailure(logException).getOrNull(), ""
         ),
         Item(
             "Sensors", (activity.getSystemService<SensorManager>())
