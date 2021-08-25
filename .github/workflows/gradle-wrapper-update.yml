@@ -12,19 +12,5 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: update gradle
-        id: gradleUpdate
-        uses: EdwarDDay/upgrade-gradle-action@cf7c844debb1f1af2b685f0d5bda1553fd01574d
-
-      - name: create pull request
-        uses: peter-evans/create-pull-request@v3
-        with:
-          commit-message: "Update gradle to ${{ steps.gradleUpdate.outputs.gradle-version }}"
-          branch: "gradle_update/version_${{ steps.gradleUpdate.outputs.gradle-version }}"
-          delete-branch: true
-          title: "Update gradle to ${{ steps.gradleUpdate.outputs.gradle-version }}"
-          body: |
-            ${{ steps.gradleUpdate.outputs.version-information }}
-
-            Automated changes by [create-pull-request](https://github.com/peter-evans/create-pull-request) GitHub action
-          labels: "dependencies,gradle"
+      - name: Update Gradle Wrapper
+        uses: gradle-update/update-gradle-wrapper-action@a116d8b533be6c4e71a8b3c3871b7344ca72bf12
