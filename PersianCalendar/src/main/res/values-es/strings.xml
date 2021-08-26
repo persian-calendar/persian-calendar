@@ -92,7 +92,7 @@
     <string name="date_exception">El día elegido no es válido.</string>
     <!--Compass-->
     <string name="compass_not_found">Sensor de brujula no encontrado</string>
-    <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
+    <string name="calibrate_compass_summary">Para mejorar la precisión del sensor de la brújula, aleje el móvil de cualquier objeto magnético, incline y gire el dispositivo hacia adelante y hacia atrás en cada eje.</string>
     <string name="level">Nivel</string>
     <string name="stop">Stop</string>
     <string name="resume">Reanudar</string>
@@ -121,7 +121,7 @@
     <string name="calendars_priority">Prioridades del calendario</string>
     <string name="calendars_priority_summary">Configurar calendarios para mostrar prioridad u ocultarlos</string>
     <string name="astronomical_info">Información astronómica</string>
-    <string name="astronomical_info_summary">Show additional information like constellation, ancient names of years and moon in scorpio</string>
+    <string name="astronomical_info_summary">Mostrar información adicional como constelación, nombres antiguos de años y la luna en escorpio</string>
     <string name="week_of_year">Semana del año</string>
     <string name="week_of_year_summary">Mostrar la semana del año en calendario</string>
     <string name="week_start">Inicio de semana</string>
@@ -134,7 +134,7 @@
     <string name="showing_clock_in_24">Mostrar el reloj de 24 horas</string>
     <!--Widget and Notification Settings-->
     <string name="widget_text_color">Color de texto de widget</string>
-    <string name="select_widgets_text_color">Select custom color for widgets texts</string>
+    <string name="select_widgets_text_color">Elija un color personalizado para los textos de los widgets</string>
     <string name="clock_on_widget">Reloj en el widget</string>
     <string name="showing_clock_on_widget">Mostrar reloj en el widget</string>
     <string name="iran_time">Hora de irán</string>
