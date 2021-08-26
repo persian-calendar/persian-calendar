@@ -36,7 +36,7 @@
     <string name="showing_iran_time">نمایش ویجت، نوار اعلان و برنامه به وقت ایران در همه جا، مناسب ایرانیان خارج</string>
     <string name="iran_time">وقت ایران</string>
     <string name="compass">قطب‌نما</string>
-    <string name="compass_not_found">حسگر قطب‌نما پیدا نشد</string>
+    <string name="compass_not_found">ظاهراً دستگاه شما دارای سنسور قطب‌نما نیست</string>
     <string name="language">زبان</string>
     <string name="version">نگارش %1$s</string>
     <string name="athan">اذان</string>
