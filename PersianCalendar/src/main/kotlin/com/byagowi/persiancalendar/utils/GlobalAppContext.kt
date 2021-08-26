@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -42,6 +43,7 @@ import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
@@ -184,9 +186,12 @@ fun initUtils(context: Context) {
 
 fun configureCalendarsAndLoadEvents(context: Context) {
     logDebug("Utils", "configureCalendarsAndLoadEvents is called")
-    IslamicDate.islamicOffset = context.appPrefs
-        .getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
-    val enabledHolidays = EnabledHolidays(context.appPrefs)
+    val appPrefs = context.appPrefs
+
+    IslamicDate.islamicOffset = if (isIslamicOffsetExpired(appPrefs)) 0 else
+        appPrefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
+
+    val enabledHolidays = EnabledHolidays(appPrefs)
     isIranHolidaysEnabled = enabledHolidays.iranHolidays
     loadEvents(enabledHolidays, language)
 }

@@ -38,6 +38,8 @@ import com.byagowi.persiancalendar.LANG_FR
 import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
@@ -58,6 +60,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.getThemeFromPreference
@@ -68,6 +71,7 @@ import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.overrideFont
+import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
@@ -224,11 +228,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        if (key == LAST_CHOSEN_TAB_KEY) return // don't do anything special on tab changes
-
         settingHasChanged = true
 
         when (key) {
+            LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
+            PREF_ISLAMIC_OFFSET ->
+                sharedPreferences?.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today) }
             PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
                 if (sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
                     && ActivityCompat.checkSelfPermission(
@@ -253,6 +258,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
+        configureCalendarsAndLoadEvents(this)
         updateStoredPreference(this)
         update(applicationContext, true)
     }

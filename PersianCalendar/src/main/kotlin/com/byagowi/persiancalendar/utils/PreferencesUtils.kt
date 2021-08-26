@@ -8,6 +8,7 @@ import com.byagowi.persiancalendar.DARK_THEME
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.LIGHT_THEME
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
+import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
@@ -47,3 +48,7 @@ fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
 fun toggleShowDeviceCalendarOnPreference(context: Context, enable: Boolean) =
     context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable) }
+
+// Ignore offset if it isn't set in less than month ago
+fun isIslamicOffsetExpired(appPrefs: SharedPreferences) =
+    appPrefs.getJdnOrNull(PREF_ISLAMIC_OFFSET_SET_DATE)?.let { Jdn.today - it > 30 } ?: true

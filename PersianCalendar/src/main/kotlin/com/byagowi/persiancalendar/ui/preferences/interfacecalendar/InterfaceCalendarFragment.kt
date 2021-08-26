@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.AppLocalesData
@@ -49,7 +50,9 @@ import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.language
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
@@ -150,6 +153,11 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 switch(PREF_WIDGET_IN_24, true) {
                     title(R.string.clock_in_24)
                     summary(R.string.showing_clock_in_24)
+                }
+                run { // reset Islamic offset if is already expired
+                    val appPrefs = context.appPrefs
+                    if (PREF_ISLAMIC_OFFSET in appPrefs && isIslamicOffsetExpired(appPrefs))
+                        appPrefs.edit { putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET) }
                 }
                 singleSelect(
                     PREF_ISLAMIC_OFFSET,
