@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <!-- Effets sonores -->
-
-    <!-- Rates -->
-    <integer name="frame_rate">60</integer>
-
-</resources>
