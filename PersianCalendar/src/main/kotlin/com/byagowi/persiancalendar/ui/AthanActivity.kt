@@ -20,6 +20,9 @@ import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
+import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getCityName
@@ -50,7 +53,7 @@ class AthanActivity : AppCompatActivity() {
                 mediaPlayer?.isPlaying == false ||
                 spentSeconds > 360 ||
                 (stopAtHalfMinute && spentSeconds > 30)
-            ) finish() else handler.postDelayed(this, TimeUnit.SECONDS.toMillis(5))
+            ) finish() else handler.postDelayed(this, FIVE_SECONDS_IN_MILLIS)
         }.onFailure(logException).onFailure { finish() }.let {}
     }
     private var stopAtHalfMinute = false
@@ -102,9 +105,7 @@ class AthanActivity : AppCompatActivity() {
                 }.onFailure(logException).onSuccess {
                     // if the URIs duration is less than half a minute, it is probably a looping one
                     // so stop on half a minute regardless
-                    if (it < TimeUnit.SECONDS.toMillis(30)) {
-                        stopAtHalfMinute = true
-                    }
+                    if (it < THIRTY_SECONDS_IN_MILLIS) stopAtHalfMinute = true
                 }
                 ringtone = RingtoneManager.getRingtone(this, customAthanUri).also {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -173,7 +174,7 @@ class AthanActivity : AppCompatActivity() {
             ).joinToString(" ")
         }
 
-        handler.postDelayed(stopTask, TimeUnit.SECONDS.toMillis(10))
+        handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 
         if (isAscendingAthanVolumeEnabled) handler.post(ascendVolume)
 

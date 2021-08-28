@@ -20,12 +20,12 @@ import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getOwghatTimeOfStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toFormattedString
-import java.util.concurrent.TimeUnit
 
 private const val NOTIFICATION_ID = 1002
 private const val NOTIFICATION_CHANNEL_ID = NOTIFICATION_ID.toString()
@@ -108,7 +108,7 @@ class AthanNotification : Service() {
         Handler(Looper.getMainLooper()).postDelayed({
             notificationManager?.cancel(NOTIFICATION_ID)
             stopSelf()
-        }, TimeUnit.MINUTES.toMillis(5))
+        }, FIFTEEN_MINUTES_IN_MILLIS)
 
         return super.onStartCommand(intent, flags, startId)
     }

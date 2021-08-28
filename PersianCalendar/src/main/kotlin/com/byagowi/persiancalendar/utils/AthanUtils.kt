@@ -61,14 +61,13 @@ val Context.isAscendingAthanVolumeEnabled: Boolean
 fun getCustomAthanUri(context: Context): Uri? =
     context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }?.toUri()
 
-private val fifteenMinutesInMillis = TimeUnit.MINUTES.toMillis(15)
 private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
     logDebug("Alarms", "startAthan for $prayTimeKey")
     if (intendedTime == null) return startAthanBody(context, prayTimeKey)
-    // if alarm is off by 5 minutes, just skip
-    if (abs(System.currentTimeMillis() - intendedTime) > fifteenMinutesInMillis) return
+    // if alarm is off by 15 minutes, just skip
+    if (abs(System.currentTimeMillis() - intendedTime) > FIFTEEN_MINUTES_IN_MILLIS) return
 
     // If at the of being is disabled by user, skip
     if (prayTimeKey !in getEnabledAlarms(context)) return
@@ -88,7 +87,7 @@ private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching 
         context.getSystemService<PowerManager>()?.newWakeLock(
             PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
             "persiancalendar:alarm"
-        )?.acquire(TimeUnit.SECONDS.toMillis(20))
+        )?.acquire(THIRTY_SECONDS_IN_MILLIS)
     }.onFailure(logException)
 
     if (notificationAthan) {

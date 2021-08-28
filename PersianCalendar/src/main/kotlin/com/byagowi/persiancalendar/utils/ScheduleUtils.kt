@@ -51,8 +51,8 @@ fun scheduleAlarmManagerUpdates(context: Context) = runCatching {
         alarmManager.setInexactRepeating(
             AlarmManager.RTC,
             // Start from one hour from now
-            System.currentTimeMillis() + TimeUnit.HOURS.toMillis(1),
-            TimeUnit.HOURS.toMillis(3), threeHoursPendingIntent
+            System.currentTimeMillis() + ONE_HOUR_IN_MILLIS,
+            THREE_HOURS_IN_MILLIS, threeHoursPendingIntent
         )
     }
 }.onFailure(logException).let {}

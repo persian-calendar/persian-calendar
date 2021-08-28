@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
 import com.byagowi.persiancalendar.ui.utils.askForLocationPermission
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
+import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
@@ -50,7 +51,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwner) {
     activity ?: return
@@ -174,7 +174,7 @@ fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwne
         )
     }
 
-    handler.postDelayed(checkGPSProviderCallback, TimeUnit.SECONDS.toMillis(30))
+    handler.postDelayed(checkGPSProviderCallback, THIRTY_SECONDS_IN_MILLIS)
     val dialog = AlertDialog.Builder(activity)
         .setPositiveButton("", null)
         .setNegativeButton("", null)
