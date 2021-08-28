@@ -43,8 +43,8 @@ class PreferencesFragment : Fragment() {
             if (enableDevelopmentFeatures) {
                 toolbar.menu.add("Static vs generated icons")
                     .onClick { showIconsDemoDialog(binding.root.context) }
-                toolbar.menu.add("Clear preferences store")
-                    .onClick { toolbar.context.appPrefs.edit { clear() }; activity?.recreate() }
+                toolbar.menu.add("Clear preferences store and exit")
+                    .onClick { toolbar.context.appPrefs.edit { clear() }; activity?.finish() }
                 toolbar.menu.add("Schedule an alarm").onClick {
                     val numericBinding = NumericBinding.inflate(inflater)
                     numericBinding.edit.setText("5")
