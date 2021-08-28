@@ -40,7 +40,6 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
 import com.byagowi.persiancalendar.Variants
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
@@ -51,15 +50,14 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
-import com.byagowi.persiancalendar.ui.utils.getThemeFromName
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.utils.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getAppFont
-import com.byagowi.persiancalendar.utils.getThemeFromPreference
 import com.byagowi.persiancalendar.utils.initUtils
 import com.byagowi.persiancalendar.utils.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.utils.isRtl
@@ -93,8 +91,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
-
+        Theme.apply(this)
         applyAppLanguage(this)
 
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -220,15 +217,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         )
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
         settingHasChanged = true
 
         when (key) {
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET ->
-                sharedPreferences?.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today) }
+                prefs?.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today) }
             PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
-                if (sharedPreferences?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
+                if (prefs?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
                     && ActivityCompat.checkSelfPermission(
                         this, Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
@@ -239,12 +236,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 // Restart activity if theme is changed and don't if app theme
                 // has just got a default value by preferences as going
                 // from null => SystemDefault which makes no difference
-                if (previousAppThemeValue != null ||
-                    sharedPreferences?.getString(PREF_THEME, null) != SYSTEM_DEFAULT_THEME
-                ) restartToSettings()
+                if (previousAppThemeValue != null || Theme.isNonDefault(prefs)) restartToSettings()
             }
             PREF_NOTIFY_DATE -> {
-                if (sharedPreferences?.getBoolean(PREF_NOTIFY_DATE, true) == false) {
+                if (prefs?.getBoolean(PREF_NOTIFY_DATE, true) == false) {
                     stopService(Intent(this, ApplicationService::class.java))
                     startEitherServiceOrWorker(applicationContext)
                 }

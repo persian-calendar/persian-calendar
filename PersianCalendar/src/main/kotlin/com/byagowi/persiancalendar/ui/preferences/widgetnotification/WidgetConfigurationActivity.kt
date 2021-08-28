@@ -9,10 +9,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
-import com.byagowi.persiancalendar.ui.utils.getThemeFromName
-import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.Theme
 import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.getThemeFromPreference
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
@@ -33,7 +31,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(getThemeFromName(getThemeFromPreference(this, appPrefs)))
+        Theme.apply(this)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {

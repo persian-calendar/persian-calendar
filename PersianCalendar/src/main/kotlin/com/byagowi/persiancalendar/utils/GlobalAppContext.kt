@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
-import androidx.annotation.StyleRes
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_AM
@@ -57,7 +56,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.ui.utils.getThemeFromName
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
@@ -121,10 +119,6 @@ var isShowDeviceCalendarEvents = false
 var whatToShowOnWidgets = emptySet<String>()
     private set
 var isAstronomicalFeaturesEnabled = false
-    private set
-
-@StyleRes
-var appTheme = R.style.LightTheme
     private set
 var isTalkBackEnabled = false
     private set
@@ -323,10 +317,6 @@ fun updateStoredPreference(context: Context) {
         }
     }
     holidayString = if (language.isDari) "رخصتی" else context.getString(R.string.holiday)
-
-    appTheme = runCatching {
-        getThemeFromName(getThemeFromPreference(context, prefs))
-    }.onFailure(logException).getOrDefault(R.style.LightTheme)
 
     isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.let {
         it.isEnabled && it.isTouchExplorationEnabled

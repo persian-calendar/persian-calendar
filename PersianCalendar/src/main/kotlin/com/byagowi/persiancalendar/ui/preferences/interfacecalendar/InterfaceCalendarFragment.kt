@@ -10,14 +10,9 @@ import androidx.core.content.edit
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.AppLocalesData
-import com.byagowi.persiancalendar.BLACK_THEME
-import com.byagowi.persiancalendar.BLUE_THEME
-import com.byagowi.persiancalendar.DARK_THEME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
-import com.byagowi.persiancalendar.LIGHT_THEME
-import com.byagowi.persiancalendar.MODERN_THEME
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -31,7 +26,6 @@ import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.SYSTEM_DEFAULT_THEME
 import com.byagowi.persiancalendar.ui.preferences.PREF_DESTINATION
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
@@ -44,6 +38,7 @@ import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
+import com.byagowi.persiancalendar.utils.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
@@ -55,15 +50,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         val destination = arguments?.getString(PREF_DESTINATION)
         if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(context)
 
-        val themesNames = listOf(
-            SYSTEM_DEFAULT_THEME to R.string.theme_default,
-            LIGHT_THEME to R.string.theme_light,
-            DARK_THEME to R.string.theme_dark,
-            MODERN_THEME to R.string.theme_modern,
-            BLUE_THEME to R.string.theme_blue,
-            BLACK_THEME to R.string.theme_black
-        )
-
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.pref_interface) {
                 clickable(onClick = { showLanguagePreferenceDialog(context) }) {
@@ -72,9 +58,9 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 singleSelect(
                     PREF_THEME,
-                    themesNames.map { (_, title) -> getString(title) },
-                    themesNames.map { (key, _) -> key },
-                    SYSTEM_DEFAULT_THEME
+                    Theme.values().map { getString(it.title) },
+                    Theme.values().map { it.key },
+                    Theme.SYSTEM_DEFAULT.key
                 ) {
                     title(R.string.select_skin)
                     dialogTitle(R.string.select_skin)

@@ -18,7 +18,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.annotation.StyleRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
@@ -35,13 +34,8 @@ import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
-import com.byagowi.persiancalendar.BLACK_THEME
-import com.byagowi.persiancalendar.BLUE_THEME
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
-import com.byagowi.persiancalendar.DARK_THEME
-import com.byagowi.persiancalendar.LIGHT_THEME
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
-import com.byagowi.persiancalendar.MODERN_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
@@ -176,14 +170,4 @@ fun Activity.askForCalendarPermission() {
         }
         .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
         .show()
-}
-
-@StyleRes
-fun getThemeFromName(name: String): Int = when (name) {
-    DARK_THEME -> R.style.DarkTheme
-    BLACK_THEME -> R.style.BlackTheme
-    MODERN_THEME -> R.style.ModernTheme
-    BLUE_THEME -> R.style.BlueTheme
-    LIGHT_THEME -> R.style.LightTheme
-    else -> R.style.LightTheme
 }
