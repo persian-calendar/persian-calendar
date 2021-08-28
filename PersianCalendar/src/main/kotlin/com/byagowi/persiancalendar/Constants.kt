@@ -3,20 +3,6 @@ package com.byagowi.persiancalendar
 const val LOCATION_PERMISSION_REQUEST_CODE = 23
 const val CALENDAR_READ_PERMISSION_REQUEST_CODE = 55
 
-const val LANG_FA = "fa"
-const val LANG_FA_AF = "fa-AF"
-const val LANG_PS = "ps"
-const val LANG_GLK = "glk"
-const val LANG_AR = "ar"
-const val LANG_EN_IR = "en"
-const val LANG_FR = "fr"
-const val LANG_ES = "es"
-const val LANG_EN_US = "en-US"
-const val LANG_JA = "ja"
-const val LANG_AZB = "azb"
-const val LANG_CKB = "ckb"
-const val LANG_UR = "ur"
-
 const val LAST_CHOSEN_TAB_KEY = "LastChosenTab"
 
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"

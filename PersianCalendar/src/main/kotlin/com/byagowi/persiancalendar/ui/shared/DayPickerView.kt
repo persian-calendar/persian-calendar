@@ -5,11 +5,6 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.NumberPicker
-import com.byagowi.persiancalendar.LANG_AR
-import com.byagowi.persiancalendar.LANG_EN_US
-import com.byagowi.persiancalendar.LANG_ES
-import com.byagowi.persiancalendar.LANG_FR
-import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.Jdn
@@ -35,12 +30,9 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     private val inflater = context.layoutInflater
     val binding = DayPickerViewBinding.inflate(inflater, this, true).also { binding ->
-        val calendarTypes = getOrderedCalendarEntities(
-            context, abbreviation = when (language) {
-                LANG_EN_US, LANG_JA, LANG_FR, LANG_ES, LANG_AR -> true
-                else -> false
-            }
-        ).also { selectedCalendarType = it[0].first }
+        val calendarTypes =
+            getOrderedCalendarEntities(context, short = language.betterToUseShortCalendarName)
+                .also { selectedCalendarType = it[0].first }
         binding.calendarsFlow.setup(calendarTypes) {
             selectedCalendarType = it
             jdn = mJdn

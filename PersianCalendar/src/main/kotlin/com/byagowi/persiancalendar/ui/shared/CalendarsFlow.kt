@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
-import com.byagowi.persiancalendar.utils.isCustomFontEnabled
+import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toLinearDate
 
@@ -28,11 +28,10 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
         // the view lifecycle
         if (bindings.isEmpty()) {
             bindings = calendarsToShow.map { CalendarItemBinding.inflate(context.layoutInflater) }
-            val applyLineMultiplier = !isCustomFontEnabled
             addViewsToFlow(bindings.map {
                 it.monthYear.typeface = calendarFont
                 it.day.typeface = calendarFont
-                if (applyLineMultiplier) it.monthYear.setLineSpacing(0f, .6f)
+                if (language.isArabicScript) it.monthYear.setLineSpacing(0f, .6f)
                 it.container.setOnClickListener(this)
                 it.linear.setOnClickListener(this)
                 it.root

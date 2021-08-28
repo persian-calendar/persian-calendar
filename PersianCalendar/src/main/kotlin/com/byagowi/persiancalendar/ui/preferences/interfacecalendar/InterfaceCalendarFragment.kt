@@ -16,11 +16,6 @@ import com.byagowi.persiancalendar.DARK_THEME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
-import com.byagowi.persiancalendar.LANG_AR
-import com.byagowi.persiancalendar.LANG_EN_US
-import com.byagowi.persiancalendar.LANG_ES
-import com.byagowi.persiancalendar.LANG_FR
-import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.LIGHT_THEME
 import com.byagowi.persiancalendar.MODERN_THEME
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -89,7 +84,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
                 switch(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false) {
-                    if (language == LANG_AR) {
+                    if (language.isArabic) {
                         title = "السنة الميلادية بالاسماء الشرقية"
                         summary = "كانون الثاني، شباط، آذار، …"
                     } else isVisible = false
@@ -97,9 +92,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 switch(PREF_PERSIAN_DIGITS, true) {
                     title(R.string.persian_digits)
                     summary(R.string.enable_persian_digits)
-                    when (language) {
-                        LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> isVisible = false
-                    }
+                    // Don't even show the option as the option is pointless for non Arabic script locales
+                    if (!language.isArabicScript) isVisible = false
                 }
             }
             section(R.string.calendar) {

@@ -5,7 +5,6 @@ import android.graphics.Typeface
 import com.byagowi.persiancalendar.FONT_PATH
 
 // https://gist.github.com/artem-zinnatullin/7749076
-val isCustomFontEnabled: Boolean get() = isArabicDigitSelected || isNonArabicScriptSelected
 
 /**
  * Using reflection to override default typeface
@@ -21,5 +20,5 @@ fun overrideFont(defaultFontNameToOverride: String, face: Typeface): Unit = runC
 fun getAppFont(context: Context): Typeface = Typeface.createFromAsset(context.assets, FONT_PATH)
 
 fun getCalendarFragmentFont(context: Context): Typeface =
-    if (isCustomFontEnabled) Typeface.create("sans-serif", Typeface.NORMAL)
+    if (!language.isArabicScript) Typeface.create("sans-serif", Typeface.NORMAL)
     else getAppFont(context)

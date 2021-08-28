@@ -32,10 +32,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
-import com.byagowi.persiancalendar.LANG_EN_US
-import com.byagowi.persiancalendar.LANG_ES
-import com.byagowi.persiancalendar.LANG_FR
-import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
@@ -107,11 +103,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Variants.startLynxListenerIfIsDebug(this)
         initUtils(this)
 
-        // Don't apply font override to English and Japanese locales
-        when (language) {
-            LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> Unit
-            else -> overrideFont("SANS_SERIF", getAppFont(applicationContext))
-        }
+        // Don't apply font override to non Arabic script languages
+        if (language.isArabicScript) overrideFont("SANS_SERIF", getAppFont(applicationContext))
 
         startEitherServiceOrWorker(this)
 

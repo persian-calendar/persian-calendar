@@ -31,7 +31,7 @@ fun getCityName(context: Context, fallbackToCoordinates: Boolean): String {
     return prefs.getStoredCity()?.localizedCityName
         ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
         ?: coordinates?.takeIf { fallbackToCoordinates }
-            ?.let { formatCoordinate(context, it, spacedComma) }
+            ?.let { formatCoordinate(context, it, language.spacedComma) }
         ?: ""
 }
 

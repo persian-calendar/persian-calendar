@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar
 
+import com.byagowi.persiancalendar.utils.Language
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 
@@ -13,33 +14,34 @@ sealed interface AppLocalesData {
     val weekDaysInitials: List<String> get() = weekDays.map { it.substring(0, 1) }
 
     companion object {
-        fun getPersianCalendarMonths(locale: String) = localeFinder(locale).persianCalendarMonths
-        fun getIslamicCalendarMonths(locale: String) = localeFinder(locale).islamicCalendarMonths
-        fun getGregorianCalendarMonths(locale: String, isEasternArabicMonth: Boolean) =
-            when (locale) {
-                LANG_AR -> {
-                    if (isEasternArabicMonth) AR.easternGregorianCalendarMonths
-                    else AR.gregorianCalendarMonths
-                }
-                else -> localeFinder(locale).gregorianCalendarMonths
-            }
+        fun getPersianCalendarMonths(language: Language) =
+            localeFinder(language).persianCalendarMonths
 
-        fun getWeekDays(locale: String) = localeFinder(locale).weekDays
-        fun getWeekDaysInitials(locale: String) = localeFinder(locale).weekDaysInitials
+        fun getIslamicCalendarMonths(language: Language) =
+            localeFinder(language).islamicCalendarMonths
 
-        private fun localeFinder(locale: String): AppLocalesData = when (locale) {
-            LANG_FA_AF -> FaAF
-            LANG_PS -> PS
-            LANG_GLK -> GLK
-            LANG_AR -> AR
-            LANG_CKB -> CKB
-            LANG_UR -> UR
-            LANG_EN_US -> EN
-            LANG_JA -> JA
-            LANG_FR -> FR
-            LANG_ES -> ES
-            LANG_AZB -> AZB
-            LANG_EN_IR, LANG_FA -> FA
+        fun getGregorianCalendarMonths(language: Language, isEasternArabicMonth: Boolean) =
+            if (language.isArabic) {
+                if (isEasternArabicMonth) AR.easternGregorianCalendarMonths
+                else AR.gregorianCalendarMonths
+            } else localeFinder(language).gregorianCalendarMonths
+
+        fun getWeekDays(language: Language) = localeFinder(language).weekDays
+        fun getWeekDaysInitials(language: Language) = localeFinder(language).weekDaysInitials
+
+        private fun localeFinder(language: Language): AppLocalesData = when (language) {
+            Language.fa_af -> FaAF
+            Language.ps -> PS
+            Language.glk -> GLK
+            Language.ar -> AR
+            Language.ckb -> CKB
+            Language.ur -> UR
+            Language.en_us -> EN
+            Language.ja -> JA
+            Language.fr -> FR
+            Language.es -> ES
+            Language.azb -> AZB
+            Language.en_ir, Language.fa -> FA
             else -> FA
         }
     }

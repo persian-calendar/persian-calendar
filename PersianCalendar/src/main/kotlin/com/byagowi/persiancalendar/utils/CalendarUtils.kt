@@ -8,7 +8,6 @@ import android.content.res.Resources
 import android.provider.CalendarContract
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
-import com.byagowi.persiancalendar.LANG_CKB
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -34,7 +33,7 @@ fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekSta
 fun getWeekDayName(position: Int) = weekDays[position % 7]
 
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
-    jdn.dayOfWeekName + spacedComma + formatDate(date, calendarNameInLinear)
+    jdn.dayOfWeekName + language.spacedComma + formatDate(date, calendarNameInLinear)
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
@@ -72,7 +71,7 @@ fun getA11yDaySummary(
     if (shift.isNotEmpty()) appendLine().append(shift)
 
     if (withOtherCalendars) {
-        val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
+        val otherCalendars = dateStringOfOtherCalendars(jdn, language.spacedComma)
         if (otherCalendars.isNotEmpty()) {
             appendLine().appendLine()
                 .append(context.getString(R.string.equivalent_to))
@@ -272,10 +271,7 @@ fun formatDate(
     date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false
 ): String = if (numericalDatePreferred && !forceNonNumerical)
     (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
-else when (language) {
-    LANG_CKB -> "%sی %sی %s"
-    else -> "%s %s %s"
-}.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
+else language.dmy.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
 
 fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
     formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)

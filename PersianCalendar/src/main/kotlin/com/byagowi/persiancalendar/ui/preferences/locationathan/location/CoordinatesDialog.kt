@@ -11,14 +11,14 @@ import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.coordinates
-import com.byagowi.persiancalendar.utils.spacedComma
+import com.byagowi.persiancalendar.utils.language
 
 fun showCoordinatesDialog(context: Context) {
     val binding = DialogCoordinatesBinding.inflate(context.layoutInflater)
 
     // As we don't already a string concatenated of the two, let's do in code
     binding.altitudeLabel.text = listOf(R.string.altitude, R.string.altitude_praytime)
-        .joinToString(spacedComma) { context.getString(it) }
+        .joinToString(language.spacedComma) { context.getString(it) }
 
     val coordinatesEdits = listOf(binding.latitude, binding.longitude, binding.altitude)
     val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)

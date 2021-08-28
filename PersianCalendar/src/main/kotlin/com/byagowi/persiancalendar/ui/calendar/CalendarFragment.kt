@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
-import com.byagowi.persiancalendar.LANG_FA
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
@@ -131,7 +130,7 @@ class CalendarFragment : Fragment() {
     private fun enableOwghatTab(context: Context): Boolean {
         val appPrefs = context.appPrefs
         return coordinates != null || // if coordinates is set, should be shown
-                (language == LANG_FA && // The placeholder isn't translated to other languages
+                (language.isPersian && // The placeholder isn't translated to other languages
                         // The user is already dismissed the third tab
                         !appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) &&
                         // Try to not show the placeholder to established users

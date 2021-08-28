@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.utils
 
-import com.byagowi.persiancalendar.LANG_AR
 import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Jdn
 
@@ -24,7 +23,7 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
     if (shiftWorkRecurs && abbreviated && (type == "r" || type == shiftWorkTitles["r"])) return ""
 
     val title = shiftWorkTitles[type] ?: type
-    return if (abbreviated && title.isNotEmpty()) title.substring(0, 1) +
-            (if (language != LANG_AR) ZWJ else "")
+    return if (abbreviated && title.isNotEmpty())
+        title.substring(0, 1) + (if (language.isArabic) ZWJ else "")
     else title
 }

@@ -25,13 +25,13 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.shiftWorkRecurs
 import com.byagowi.persiancalendar.utils.shiftWorkStartingJdn
 import com.byagowi.persiancalendar.utils.shiftWorkTitles
 import com.byagowi.persiancalendar.utils.shiftWorks
-import com.byagowi.persiancalendar.utils.spacedComma
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 fun showShiftWorkDialog(context: Context, selectedJdn: Jdn, onSuccess: () -> Unit) {
@@ -96,7 +96,7 @@ private class ShiftWorkItemsAdapter(
     private fun shiftWorkKeyToString(type: String): String = shiftWorkTitles[type] ?: type
 
     private fun updateShiftWorkResult() {
-        rows.filter { it.length != 0 }.joinToString(spacedComma) {
+        rows.filter { it.length != 0 }.joinToString(language.spacedComma) {
             binding.root.context.getString(
                 R.string.shift_work_record_title,
                 formatNumber(it.length), shiftWorkKeyToString(it.type)

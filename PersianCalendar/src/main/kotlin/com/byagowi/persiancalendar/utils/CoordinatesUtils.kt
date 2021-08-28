@@ -1,13 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
-import com.byagowi.persiancalendar.LANG_AR
-import com.byagowi.persiancalendar.LANG_CKB
-import com.byagowi.persiancalendar.LANG_EN_IR
-import com.byagowi.persiancalendar.LANG_EN_US
-import com.byagowi.persiancalendar.LANG_ES
-import com.byagowi.persiancalendar.LANG_FR
-import com.byagowi.persiancalendar.LANG_JA
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CityItem
 import io.github.persiancalendar.praytimes.Coordinate
@@ -32,17 +25,17 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
 } + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
 
 val CityItem.localizedCountryName: String
-    get() = when (language) {
-        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> this.countryEn
-        LANG_AR -> this.countryAr
-        LANG_CKB -> this.countryCkb
+    get() = when {
+        !language.isArabicScript -> this.countryEn
+        language.isArabic -> this.countryAr
+        language.isKurdish -> this.countryCkb
         else -> this.countryFa
     }
 
 val CityItem.localizedCityName: String
-    get() = when (language) {
-        LANG_EN_IR, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> this.en
-        LANG_AR -> this.ar
-        LANG_CKB -> this.ckb
+    get() = when {
+        !language.isArabicScript -> this.en
+        language.isArabic -> this.ar
+        language.isKurdish -> this.ckb
         else -> this.fa
     }

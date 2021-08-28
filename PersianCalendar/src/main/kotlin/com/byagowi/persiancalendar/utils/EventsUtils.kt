@@ -1,15 +1,6 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.SharedPreferences
-import com.byagowi.persiancalendar.LANG_AR
-import com.byagowi.persiancalendar.LANG_CKB
-import com.byagowi.persiancalendar.LANG_EN_US
-import com.byagowi.persiancalendar.LANG_ES
-import com.byagowi.persiancalendar.LANG_FA_AF
-import com.byagowi.persiancalendar.LANG_FR
-import com.byagowi.persiancalendar.LANG_JA
-import com.byagowi.persiancalendar.LANG_PS
-import com.byagowi.persiancalendar.LANG_UR
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -70,7 +61,7 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
                 EventType.Iran -> "ایران"
                 EventType.Afghanistan -> "افغانستان"
                 else -> ""
-            } + spacedComma
+            } + language.spacedComma
         } else ""
     }
 
@@ -86,14 +77,10 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
     }
 }
 
-fun loadEvents(enabledTypes: EnabledHolidays, language: String) {
+fun loadEvents(enabledTypes: EnabledHolidays, language: Language) {
     // It is vital to configure calendar before loading of the events
     IslamicDate.useUmmAlQura = if (enabledTypes.iranHolidays || enabledTypes.iranOthers) false
-    else enabledTypes.afghanistanHolidays || when (language) {
-        LANG_FA_AF, LANG_PS, LANG_UR, LANG_AR, LANG_CKB, LANG_EN_US, LANG_JA, LANG_FR, LANG_ES ->
-            true
-        else -> false
-    }
+    else enabledTypes.afghanistanHolidays || language.mightPreferNonLocalIslamicCalendar
 
     val today = Jdn.today
 
@@ -156,10 +143,7 @@ private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int):
         CalendarType.GREGORIAN -> gregorianMonths
         CalendarType.ISLAMIC -> islamicMonths
     }.getOrNull(month - 1).debugAssertNotNull ?: ""
-    return when (language) {
-        LANG_CKB -> "%sی %s"
-        else -> "%s %s"
-    }.format(formatNumber(day), monthName)
+    return language.dm.format(formatNumber(day), monthName)
 }
 
 class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays) {

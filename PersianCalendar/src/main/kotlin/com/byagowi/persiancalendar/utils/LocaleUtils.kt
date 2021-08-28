@@ -3,10 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
-import com.byagowi.persiancalendar.LANG_EN_US
-import com.byagowi.persiancalendar.LANG_ES
-import com.byagowi.persiancalendar.LANG_FR
-import com.byagowi.persiancalendar.LANG_JA
 
 // See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
 val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
@@ -16,12 +12,6 @@ val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', 
 // but they weren't looking nice in the UI
 
 val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
-
-val isNonArabicScriptSelected
-    get() = when (language) {
-        LANG_EN_US, LANG_JA, LANG_FR, LANG_ES -> true
-        else -> false
-    }
 
 fun formatNumber(number: Double): String {
     if (isArabicDigitSelected) return number.toString()
@@ -41,14 +31,11 @@ val isArabicDigitSelected: Boolean get() = preferredDigits === ARABIC_DIGITS
 fun getOrderedCalendarTypes(): List<CalendarType> =
     getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it) }
 
-fun getOrderedCalendarEntities(
-    context: Context, abbreviation: Boolean = false
-): List<Pair<CalendarType, String>> {
+fun getOrderedCalendarEntities(context: Context, short: Boolean = false):
+        List<Pair<CalendarType, String>> {
     applyAppLanguage(context)
     return getOrderedCalendarTypes().map { calendarType ->
-        calendarType to context.getString(
-            if (abbreviation) calendarType.shortTitle else calendarType.title
-        )
+        calendarType to context.getString(if (short) calendarType.shortTitle else calendarType.title)
     }
 }
 

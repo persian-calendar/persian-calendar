@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
-import com.byagowi.persiancalendar.utils.isNonArabicScriptSelected
+import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.otherCalendars
 import kotlin.math.min
 
@@ -52,7 +52,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         }
 
         // Measure a sample text to find height for vertical center aligning of the text to draw
-        val sample = if (jdn != null) text else if (isNonArabicScriptSelected) "Yy" else "س"
+        val sample = if (jdn != null) text else if (language.isArabicScript) "س" else "Yy"
         textPaint.getTextBounds(sample, 0, sample.length, textBounds)
         val yPos = (height + textBounds.height()) / 2f
         // Draw day number/label

@@ -104,7 +104,7 @@ fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwne
     val updateGeocoderResultJob = distinctCoordinatesFlow
         .mapNotNull { coordinates ->
             runCatching {
-                val result = Geocoder(activity, Locale(language))
+                val result = Geocoder(activity, language.asSystemLocale())
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()
                 countryCode = result?.countryCode

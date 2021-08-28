@@ -66,16 +66,11 @@ class AboutFragment : Fragment() {
         }
         binding.appBar.appbarLayout.hideToolbarBottomShadow()
 
-        val isUserAbleToReadPersian = when (language) {
-            LANG_FA, LANG_GLK, LANG_AZB, LANG_FA_AF, LANG_EN_IR -> true
-            else -> false
-        }
-
         // app
         val version = buildSpannedString {
             scale(1f) { bold { appendLine(getString(R.string.app_name)) } }
             scale(.8f) { append(getString(R.string.version, appVersionList.joinToString("-"))) }
-            if (isUserAbleToReadPersian) {
+            if (language.isUserAbleToReadPersian) {
                 appendLine()
                 scale(.8f) {
                     append(
@@ -106,7 +101,7 @@ class AboutFragment : Fragment() {
         binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
 
         // help
-        binding.helpCard.isVisible = isUserAbleToReadPersian
+        binding.helpCard.isVisible = language.isUserAbleToReadPersian
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
         binding.helpSectionsRecyclerView.apply {
             val sections = getString(R.string.help_sections)

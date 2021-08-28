@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.databinding.ListItemCityNameBinding
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.Language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.localizedCityName
@@ -76,10 +77,9 @@ private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :
         private val afCodeOrder = listOf("zz", "af", "ir", "iq")
         private val arCodeOrder = listOf("zz", "iq", "ir", "af")
 
-        private fun getCountryCodeOrder(countryCode: String): Int = when (language) {
-            LANG_FA_AF, LANG_PS -> afCodeOrder.indexOf(countryCode)
-            LANG_AR -> arCodeOrder.indexOf(countryCode)
-            LANG_FA, LANG_GLK, LANG_AZB -> irCodeOrder.indexOf(countryCode)
+        private fun getCountryCodeOrder(countryCode: String): Int = when {
+            language.isAfghanistanExclusive -> afCodeOrder.indexOf(countryCode)
+            language.isArabic -> arCodeOrder.indexOf(countryCode)
             else -> irCodeOrder.indexOf(countryCode)
         }
 
@@ -98,7 +98,7 @@ private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :
             .replace("ھ", "نی")
             .replace("ە", "هی")
 
-        private fun getCitiesList(language: String): List<CityItem> {
+        private fun getCitiesList(language: Language): List<CityItem> {
             return citiesStore.values.sortedWith(kotlin.Comparator { l, r ->
                 if (l.key == "") return@Comparator -1
 
@@ -108,10 +108,11 @@ private class CitiesListAdapter(val onItemClicked: (key: String) -> Unit) :
                     getCountryCodeOrder(l.countryCode) - getCountryCodeOrder(r.countryCode)
                 if (compare != 0) return@Comparator compare
 
-                return@Comparator when (language) {
-                    LANG_EN_US, LANG_JA, LANG_FR, LANG_ES, LANG_EN_IR -> l.en.compareTo(r.en)
-                    LANG_AR -> l.ar.compareTo(r.ar)
-                    LANG_CKB -> prepareForArabicSort(l.ckb).compareTo(prepareForArabicSort(r.ckb))
+                return@Comparator when {
+                    !language.isArabicScript -> l.en.compareTo(r.en)
+                    language.isArabic -> l.ar.compareTo(r.ar)
+                    language.isKurdish ->
+                        prepareForArabicSort(l.ckb).compareTo(prepareForArabicSort(r.ckb))
                     else -> prepareForArabicSort(l.fa).compareTo(prepareForArabicSort(r.fa))
                 }
             })
