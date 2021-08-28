@@ -44,7 +44,6 @@ import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
@@ -68,10 +67,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.pref_interface) {
                 clickable(onClick = { showLanguagePreferenceDialog(context) }) {
-                    if (destination == PREF_APP_LANGUAGE) {
-                        title = "Language"
-                        icon = context.getCompatDrawable(R.drawable.ic_translator)
-                    } else title(R.string.language)
+                    if (destination == PREF_APP_LANGUAGE) title = "Language"
+                    else title(R.string.language)
                 }
                 singleSelect(
                     PREF_THEME,
