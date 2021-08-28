@@ -21,10 +21,8 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
 
         fun apply(activity: AppCompatActivity) {
             val key = activity.appPrefs.theme
-            val theme = if (key == SYSTEM_DEFAULT.key) {
-                if (isNightModeEnabled(activity)) DARK else LIGHT
-            } else values().find { it.key == key } ?: LIGHT
-            activity.setTheme(theme.styleRes)
+            activity.setTheme((values().find { it.key == key }?.takeIf { it != SYSTEM_DEFAULT }
+                ?: if (isNightModeEnabled(activity)) DARK else LIGHT).styleRes)
         }
 
         fun isNonDefault(appPrefs: SharedPreferences?) = appPrefs.theme != SYSTEM_DEFAULT.key
