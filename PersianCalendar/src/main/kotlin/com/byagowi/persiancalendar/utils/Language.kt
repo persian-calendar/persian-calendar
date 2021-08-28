@@ -2,18 +2,31 @@ package com.byagowi.persiancalendar.utils
 
 import java.util.*
 
-@JvmInline
-value class Language(val code: String) {
+enum class Language(val code: String, val nativeName: String) {
+    // The following order is used for language change dialog also
+    FA("fa", "فارسی"),
+    FA_AF("fa-AF", "دری"),
+    PS("ps", "پښتو"),
+    CKB("ckb", "کوردی"),
+    AR("ar", "العربية"),
+    GLK("glk", "گيلکي"),
+    AZB("azb", "تۆرکجه"),
+    UR("ur", "اردو"),
+    EN_IR("en", "English (Iran)"),
+    EN_US("en-US", "English"),
+    ES("es", "Español"),
+    FR("fr", "Français"),
+    JA("ja", "日本語");
 
-    val isArabic get() = this == ar
-    val isDari get() = this == fa_af
-    val isKurdish get() = this == ckb
-    val isPersian get() = this == fa
-    private val isJapanese get() = this == ja
+    val isArabic get() = this == AR
+    val isDari get() = this == FA_AF
+    val isKurdish get() = this == CKB
+    val isPersian get() = this == FA
+    private val isJapanese get() = this == JA
 
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
 
-    // en-IR and fa-AF aren't recognized by system, let's handle that here
+    // en-IR and fa-AF aren't recognized by system, that's handled by #language
     fun asSystemLocale() = Locale(language)
 
     // Formatting "Day Month Year" considerations
@@ -22,7 +35,7 @@ value class Language(val code: String) {
 
     val isLessKnownRtl: Boolean
         get() = when (this) {
-            azb, glk -> true
+            AZB, GLK -> true
             else -> false
         }
 
@@ -35,7 +48,7 @@ value class Language(val code: String) {
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            en_us, ja, fr, es, ar -> true
+            EN_US, JA, FR, ES, AR -> true
             else -> false
         }
 
@@ -43,109 +56,77 @@ value class Language(val code: String) {
 
     val mightPreferNonLocalIslamicCalendar: Boolean
         get() = when (this) {
-            fa_af, ps, ur, ar, ckb, en_us, ja, fr, es -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES -> true
             else -> false
         }
 
     // Based on locale, we can presume user is able to read Persian
     val isUserAbleToReadPersian: Boolean
         get() = when (this) {
-            fa, glk, azb, fa_af, en_ir -> true
+            FA, GLK, AZB, FA_AF, EN_IR -> true
             else -> false
         }
 
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            en_us, ja, fr, es, en_ir -> false
+            EN_US, JA, FR, ES, EN_IR -> false
             else -> true
         }
 
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
     val prefersLocalDigits: Boolean
         get() = when (this) {
-            ur, en_ir, en_us, ja, fr, es -> false
+            UR, EN_IR, EN_US, JA, FR, ES -> false
             else -> true
         }
 
     // Prefers ٤٥٦ over ۴۵۶
     val prefersArabicIndicDigits: Boolean
         get() = when (this) {
-            ar, ckb -> true
+            AR, CKB -> true
             else -> false
         }
 
     // We can presume user is from Afghanistan
     val isAfghanistanExclusive: Boolean
         get() = when (this) {
-            fa_af, ps -> true
+            FA_AF, PS -> true
             else -> false
         }
 
     // We can presume user is from Iran
     val isIranExclusive: Boolean
         get() = when (this) {
-            azb, glk, fa, en_ir -> true
+            AZB, GLK, FA, EN_IR -> true
             else -> false
         }
 
     // We can presume user would prefer Gregorian calendar at least initially
     val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            en_us, ja, fr, es, ur -> true
+            EN_US, JA, FR, ES, UR -> true
             else -> false
         }
 
     // We can presume user would prefer Gregorian calendar at least initially
     val prefersIslamicCalendar: Boolean
         get() = when (this) {
-            ar -> true
+            AR -> true
             else -> false
         }
 
     // We can presume user would prefer Gregorian calendar at least initially
     val prefersPersianCalendar: Boolean
         get() = when (this) {
-            azb, glk, fa, fa_af, ps, en_ir -> true
+            AZB, GLK, FA, FA_AF, PS, EN_IR -> true
             else -> false
         }
 
-    // Languages use same string from AM/PM/
+    // Languages use same string from AM/PM
     val isDerivedFromPersian: Boolean
         get() = when (this) {
-            fa, fa_af, en_ir -> true
+            FA, FA_AF, EN_IR -> true
             else -> false
         }
-
-    companion object {
-        val fa = Language("fa")
-        val fa_af = Language("fa-AF")
-        val ps = Language("ps")
-        val glk = Language("glk")
-        val ar = Language("ar")
-        val en_ir = Language("en")
-        val fr = Language("fr")
-        val es = Language("es")
-        val en_us = Language("en-US")
-        val ja = Language("ja")
-        val azb = Language("azb")
-        val ckb = Language("ckb")
-        val ur = Language("ur")
-
-        val values = listOf( // Akin to enums' values() static method
-            fa to "فارسی",
-            fa_af to "دری",
-            ps to "پښتو",
-            ckb to "کوردی",
-            ar to "العربية",
-            glk to "گيلکي",
-            azb to "تۆرکجه",
-            ur to "اردو",
-            en_ir to "English (Iran)",
-            en_us to "English",
-            es to "Español",
-            fr to "Français",
-            ja to "日本語"
-        )
-    }
 }

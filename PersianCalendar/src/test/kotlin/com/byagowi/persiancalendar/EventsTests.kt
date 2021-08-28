@@ -19,7 +19,7 @@ class EventsTests {
 
     @Test
     fun `holidays load correctness`() {
-        loadEvents(EnabledHolidays(EnabledHolidays.iranDefault), Language.fa)
+        loadEvents(EnabledHolidays(EnabledHolidays.iranDefault), Language.FA)
         assertEquals(IslamicDate.useUmmAlQura, false)
 
         (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
@@ -34,7 +34,7 @@ class EventsTests {
         ).let { assertEquals(0, it.size) }
 
         //
-        loadEvents(EnabledHolidays(setOf(EnabledHolidays.iranAncientKey)), Language.fa)
+        loadEvents(EnabledHolidays(setOf(EnabledHolidays.iranAncientKey)), Language.FA)
         assertEquals(IslamicDate.useUmmAlQura, false)
 
         (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
@@ -49,7 +49,7 @@ class EventsTests {
         assertEquals(1, getEvents(Jdn(PersianDate(1400, 12, 1)), EventsStore.empty()).size)
 
         //
-        loadEvents(EnabledHolidays(setOf(EnabledHolidays.internationalKey)), Language.ur)
+        loadEvents(EnabledHolidays(setOf(EnabledHolidays.internationalKey)), Language.UR)
         assertEquals(IslamicDate.useUmmAlQura, true)
         irregularCalendarEventsStore.getEventsList<CalendarEvent.GregorianCalendarEvent>(
             2021, CalendarType.GREGORIAN
@@ -59,7 +59,7 @@ class EventsTests {
         }
 
         //
-        loadEvents(EnabledHolidays(EnabledHolidays.afghanistanDefault), Language.fa)
+        loadEvents(EnabledHolidays(EnabledHolidays.afghanistanDefault), Language.FA)
         assertEquals(IslamicDate.useUmmAlQura, true)
 
         (1..31).map { IslamicDate(1400, 2, it) }.flatMap {
@@ -67,15 +67,15 @@ class EventsTests {
         }.let { assertEquals(0, it.size) }
 
         //
-        loadEvents(EnabledHolidays(), Language.fa_af)
+        loadEvents(EnabledHolidays(), Language.FA_AF)
         assertEquals(IslamicDate.useUmmAlQura, true)
 
         //
-        loadEvents(EnabledHolidays(), Language.ps)
+        loadEvents(EnabledHolidays(), Language.PS)
         assertEquals(IslamicDate.useUmmAlQura, true)
 
         //
-        loadEvents(EnabledHolidays(), Language.fa)
+        loadEvents(EnabledHolidays(), Language.FA)
         assertEquals(IslamicDate.useUmmAlQura, false)
     }
 

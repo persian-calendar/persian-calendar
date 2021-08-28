@@ -20,12 +20,12 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 
 fun showLanguagePreferenceDialog(context: Context) {
-    val keys = Language.values.map { (code, _) -> code }
-    val names = Language.values.map { (_, name) -> name }.toTypedArray()
+    val languages = Language.values().toList()
+    val names = languages.map { it.nativeName }.toTypedArray()
     AlertDialog.Builder(context)
         .setTitle(R.string.language)
-        .setSingleChoiceItems(names, keys.indexOf(language)) { dialog, which ->
-            val chosenLanguage = keys[which]
+        .setSingleChoiceItems(names, languages.indexOf(language)) { dialog, which ->
+            val chosenLanguage = languages[which]
             if (language != chosenLanguage) changeLanguage(context.appPrefs, chosenLanguage)
             dialog.cancel()
         }

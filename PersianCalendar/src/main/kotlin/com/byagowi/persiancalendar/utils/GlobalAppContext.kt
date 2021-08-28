@@ -98,7 +98,7 @@ var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     private set
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
     private set
-var language = Language.fa
+var language = Language.FA
     private set
 var easternGregorianArabicMonths = false
     private set
@@ -225,7 +225,8 @@ fun updateStoredPreference(context: Context) {
     logDebug("Utils", "updateStoredPreference is called")
     val prefs = context.appPrefs
 
-    language = Language(prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE)
+    val languageCode = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
+    language = Language.values().find { it.code == languageCode } ?: Language.FA
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
 
     preferredDigits = when {
@@ -347,7 +348,7 @@ fun applyAppLanguage(context: Context) {
     val resources = context.resources
     val config = resources.configuration
     config.setLocale(locale)
-    config.setLayoutDirection(if (language.isLessKnownRtl) Language.fa.asSystemLocale() else locale)
+    config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
     resources.updateConfiguration(config, resources.displayMetrics)
 }
 
