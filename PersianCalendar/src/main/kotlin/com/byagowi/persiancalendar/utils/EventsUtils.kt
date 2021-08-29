@@ -61,7 +61,7 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
                 EventType.Iran -> "ایران"
                 EventType.Afghanistan -> "افغانستان"
                 else -> ""
-            } + language.spacedComma
+            } + spacedComma
         } else ""
     }
 

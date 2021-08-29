@@ -209,7 +209,9 @@
     <string name="shift_work_reset_button">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
     <string name="n_minutes">%1$s دقیقه</string>
     <string name="n_hours">%1$s ساعت</string>
-    <string name="and">" و "</string>
+    <string name="spaced_and">" و "</string>
+    <string name="spaced_comma">"، "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_info">اطلاعات دستگاه</string>
     <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>

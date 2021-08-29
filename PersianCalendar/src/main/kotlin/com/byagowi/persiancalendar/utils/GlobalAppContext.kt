@@ -142,6 +142,12 @@ var amString = DEFAULT_AM
     private set
 var pmString = DEFAULT_PM
     private set
+var spacedAnd = " و "
+    private set
+var spacedColon = ": "
+    private set
+var spacedComma = "، "
+    private set
 var holidayString = DEFAULT_HOLIDAY
     private set
 var numericalDatePreferred = false
@@ -317,6 +323,9 @@ fun updateStoredPreference(context: Context) {
         }
     }
     holidayString = if (language.isDari) "رخصتی" else context.getString(R.string.holiday)
+    spacedAnd = context.getString(R.string.spaced_and)
+    spacedColon = context.getString(R.string.spaced_colon)
+    spacedComma = context.getString(R.string.spaced_comma)
 
     isTalkBackEnabled = context.getSystemService<AccessibilityManager>()?.let {
         it.isEnabled && it.isTouchExplorationEnabled

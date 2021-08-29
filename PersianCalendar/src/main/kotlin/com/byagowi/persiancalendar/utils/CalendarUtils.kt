@@ -33,7 +33,7 @@ fun revertWeekStartOffsetFromWeekDay(dayOfWeek: Int): Int = (dayOfWeek + weekSta
 fun getWeekDayName(position: Int) = weekDays[position % 7]
 
 fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean = true): String =
-    jdn.dayOfWeekName + language.spacedComma + formatDate(date, calendarNameInLinear)
+    jdn.dayOfWeekName + spacedComma + formatDate(date, calendarNameInLinear)
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
@@ -71,7 +71,7 @@ fun getA11yDaySummary(
     if (shift.isNotEmpty()) appendLine().append(shift)
 
     if (withOtherCalendars) {
-        val otherCalendars = dateStringOfOtherCalendars(jdn, language.spacedComma)
+        val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)
         if (otherCalendars.isNotEmpty()) {
             appendLine().appendLine()
                 .append(context.getString(R.string.equivalent_to))
@@ -127,7 +127,7 @@ fun Clock.asRemainingTime(context: Context, short: Boolean = false): String {
         .filter { (_, n) -> n != 0 }
     if (pairs.size == 2 && short) // if both present special casing the short form makes sense
         return context.getString(R.string.n_hours_minutes, formatNumber(hour), formatNumber(minute))
-    return pairs.joinToString(context.getString(R.string.and)) { (stringId, n) ->
+    return pairs.joinToString(spacedAnd) { (stringId, n) ->
         context.getString(stringId, formatNumber(n))
     }
 }
@@ -259,7 +259,7 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
         R.string.n_years to yearsDifference,
         R.string.n_months to monthsDifference,
         R.string.n_days to daysOfMonthDifference
-    ).filter { (_, n) -> n != 0 }.joinToString(resources.getString(R.string.and)) { (stringId, n) ->
+    ).filter { (_, n) -> n != 0 }.joinToString(spacedAnd) { (stringId, n) ->
         resources.getString(stringId, formatNumber(n))
     } + ")")
 }

@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.asRemainingTime
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.spacedColon
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -266,20 +267,19 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
             else -> (now - sunset).safeDiv(fullDay + midnight - sunset) * .17f + .17f + .66f
         }
 
-        val colon = language.spacedColon
         val dayLength = Clock.fromInt((sunset - sunrise).toInt())
         val remaining = Clock.fromInt(
             if (now > sunset || now < sunrise) 0 else (sunset - now).toInt()
         )
-        dayLengthString = context.getString(R.string.length_of_day) + colon +
+        dayLengthString = context.getString(R.string.length_of_day) + spacedColon +
                 dayLength.asRemainingTime(context, short = true)
         remainingString = if (remaining.toInt() == 0) "" else
-            context.getString(R.string.remaining_daylight) + colon +
+            context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(context, short = true)
         // a11y
-        contentDescription = context.getString(R.string.length_of_day) + colon +
+        contentDescription = context.getString(R.string.length_of_day) + spacedColon +
                 dayLength.asRemainingTime(context) + if (remaining.toInt() == 0) "" else
-            ("\n\n" + context.getString(R.string.remaining_daylight) + colon +
+            ("\n\n" + context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(context))
 
         ValueAnimator.ofFloat(0F, c).also {

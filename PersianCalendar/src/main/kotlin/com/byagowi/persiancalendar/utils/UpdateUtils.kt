@@ -84,7 +84,7 @@ fun update(context: Context, updateDate: Boolean) {
     val widgetTitle = dayTitleSummary(
         jdn, date, calendarNameInLinear = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     ) + if (shiftWorkTitle.isEmpty()) "" else " ($shiftWorkTitle)"
-    val subtitle = dateStringOfOtherCalendars(jdn, language.spacedComma)
+    val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
     val nowClock = Clock(Date().toJavaCalendar(forceLocalTime = true))
 
@@ -172,7 +172,7 @@ private fun Context.update4x1Widget(
     if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, buildString {
         append(if (enableClock) widgetTitle else mainDateString)
-        if (showOtherCalendars) append(language.spacedComma + subtitle)
+        if (showOtherCalendars) append(spacedComma + subtitle)
     })
     remoteViews.setTextViewText(
         R.id.textPlaceholder3_4x1,
@@ -383,7 +383,7 @@ private fun Context.updateNotification(
                     isToday = false, // Don't set isToday, per a feedback
                     deviceCalendarEvents = deviceCalendarEvents, withZodiac = true,
                     withOtherCalendars = true, withTitle = false
-                ) + if (owghat.isEmpty()) "" else language.spacedComma + owghat
+                ) + if (owghat.isEmpty()) "" else spacedComma + owghat
                 subtitle.isEmpty() -> subtitle
                 else -> toPrepend + subtitle
             }

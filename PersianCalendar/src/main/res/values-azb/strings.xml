@@ -202,7 +202,9 @@
     <string name="shift_work_reset_button">ائتکی‌سیزلشتیرمک یادا یئنی‌دن تنظیم ائتمک</string>
     <string name="n_minutes">%1$s دقیقه</string>
     <string name="n_hours">%1$s ساعات</string>
-    <string name="and">" و "</string>
+    <string name="spaced_and">" و "</string>
+    <string name="spaced_comma">"، "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_info">وسیله‌نین اطلاعاتی</string>
     <string name="center_align_widgets_summary">ویجتی آرادا سالماق ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">ویجتی آرادا سالماق</string>

@@ -39,20 +39,11 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    val spacedComma: String
-        get() = when {
-            isJapanese -> "、"
-            isArabicScript -> "، "
-            else -> ", "
-        }
-
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
             EN_US, JA, FR, ES, AR -> true
             else -> false
         }
-
-    val spacedColon: String get() = if (isJapanese) "：" else ": "
 
     val mightPreferNonLocalIslamicCalendar: Boolean
         get() = when (this) {

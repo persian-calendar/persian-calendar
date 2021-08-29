@@ -13,13 +13,12 @@ import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.spacedComma
 
 fun showHolidaysTypesDialog(context: Context) {
     val binding = HolidaysTypesDialogBinding.inflate(context.layoutInflater)
 
-    val pattern =
-        """%s${language.spacedComma}<a href="%s">${context.getString(R.string.view_source)}</a>"""
+    val pattern = """%s$spacedComma<a href="%s">${context.getString(R.string.view_source)}</a>"""
     binding.iran.text = HtmlCompat.fromHtml(
         pattern.format(
             context.getString(R.string.iran_official_events), EventType.Iran.source

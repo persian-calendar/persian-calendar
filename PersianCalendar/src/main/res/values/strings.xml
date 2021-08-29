@@ -331,7 +331,9 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shift_work_reset_button">Disable or reprogram</string>
     <string name="n_minutes">%1$s minutes</string>
     <string name="n_hours">%1$s hours</string>
-    <string name="and">" and "</string>
+    <string name="spaced_and">" and "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_info">Device Information</string>
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>

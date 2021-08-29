@@ -202,7 +202,9 @@
     <string name="shift_work_reset_button">غیرفعال کۊدن یا دۊمرتبه برنامه‌ریزي کۊدن</string>
     <string name="n_minutes">%1$s ديقه</string>
     <string name="n_hours">%1$s ساعت</string>
-    <string name="and">" ؤ "</string>
+    <string name="spaced_and">" ؤ "</string>
+    <string name="spaced_comma">"، "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_info">دزگا ايطلاعات</string>
     <string name="center_align_widgets_summary">ابزراکانأ وسط‌چین کۊدن ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">ويجتˈوسط‌چین کۊدن</string>

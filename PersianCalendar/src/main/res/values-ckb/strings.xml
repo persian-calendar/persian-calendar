@@ -203,7 +203,9 @@
     <string name="shift_work_reset_button">ناچالاککردن یان ڕێکخستنەوە</string>
     <string name="n_minutes">%1$s خولەک</string>
     <string name="n_hours">%1$s کاتکۆ</string>
-    <string name="and">" و "</string>
+    <string name="spaced_and">" و "</string>
+    <string name="spaced_comma">"، "</string>
+    <string name="spaced_colon">": "</string>
     <string name="device_info">زانیاریی ئامراز</string>
     <string name="center_align_widgets_summary">ھێنانە ناوەڕاستی ویجتەکانی ٢×٢ و ٤×١</string>
     <string name="center_align_widgets">ھێنانە ناوەڕاستی ویجت</string>
