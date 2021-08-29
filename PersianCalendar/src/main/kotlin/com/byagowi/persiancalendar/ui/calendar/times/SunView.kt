@@ -19,8 +19,7 @@ import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.utils.formatClock
-import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.asRemainingTime
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.language
 import com.google.android.material.animation.ArgbEvaluatorCompat
@@ -272,19 +271,16 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
         val remaining = Clock.fromInt(
             if (now > sunset || now < sunrise) 0 else (sunset - now).toInt()
         )
-        dayLengthString = context.getString(R.string.length_of_day) + colon + context.getString(
-            R.string.n_hours_minutes, formatNumber(dayLength.hour), formatNumber(dayLength.minute)
-        )
+        dayLengthString = context.getString(R.string.length_of_day) + colon +
+                dayLength.asRemainingTime(context, short = true)
         remainingString = if (remaining.toInt() == 0) "" else
-            context.getString(R.string.remaining_daylight) + colon + context.getString(
-                R.string.n_hours_minutes,
-                formatNumber(remaining.hour), formatNumber(remaining.minute)
-            )
+            context.getString(R.string.remaining_daylight) + colon +
+                    remaining.asRemainingTime(context, short = true)
         // a11y
         contentDescription = context.getString(R.string.length_of_day) + colon +
-                dayLength.formatClock(context) + if (remaining.toInt() == 0) "" else
+                dayLength.asRemainingTime(context) + if (remaining.toInt() == 0) "" else
             ("\n\n" + context.getString(R.string.remaining_daylight) + colon +
-                    remaining.formatClock(context))
+                    remaining.asRemainingTime(context))
 
         ValueAnimator.ofFloat(0F, c).also {
             it.duration = 1500L

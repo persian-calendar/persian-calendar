@@ -122,12 +122,14 @@ fun Clock.toFormattedString(forcedIn12: Boolean = false) =
     else baseFormatClock((hour % 12).takeIf { it != 0 } ?: 12, minute) + " " +
             if (hour >= 12) pmString else amString
 
-fun Clock.formatClock(context: Context): String {
-    return listOf(R.string.n_hours to hour, R.string.n_minutes to minute)
+fun Clock.asRemainingTime(context: Context, short: Boolean = false): String {
+    val pairs = listOf(R.string.n_hours to hour, R.string.n_minutes to minute)
         .filter { (_, n) -> n != 0 }
-        .joinToString(context.getString(R.string.and)) { (stringId, n) ->
-            context.getString(stringId, formatNumber(n))
-        }
+    if (pairs.size == 2 && short) // if both present special casing the short form makes sense
+        return context.getString(R.string.n_hours_minutes, formatNumber(hour), formatNumber(minute))
+    return pairs.joinToString(context.getString(R.string.and)) { (stringId, n) ->
+        context.getString(stringId, formatNumber(n))
+    }
 }
 
 fun Calendar.toCivilDate() =
