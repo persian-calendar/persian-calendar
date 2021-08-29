@@ -122,6 +122,14 @@ fun Clock.toFormattedString(forcedIn12: Boolean = false) =
     else baseFormatClock((hour % 12).takeIf { it != 0 } ?: 12, minute) + " " +
             if (hour >= 12) pmString else amString
 
+fun Clock.formatClock(context: Context): String {
+    return listOf(R.string.n_hours to hour, R.string.n_minutes to minute)
+        .filter { (_, n) -> n != 0 }
+        .joinToString(context.getString(R.string.and)) { (stringId, n) ->
+            context.getString(stringId, formatNumber(n))
+        }
+}
+
 fun Calendar.toCivilDate() =
     CivilDate(this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH])
 

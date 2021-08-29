@@ -68,8 +68,9 @@
     <string name="sunriseSunView">Amanecer</string>
     <string name="middaySunView">Mediodía</string>
     <string name="sunsetSunView">Atardecer</string>
-    <string name="length_of_day">Duración del día : %1$sh %2$sm</string>
-    <string name="remaining_daylight">Restante: %1$sh %2$sm</string>
+    <string name="length_of_day">Duración del día</string>
+    <string name="remaining_daylight">Restante</string>
+    <string name="n_hours_minutes">%1$sh %2$sm</string>
     <string name="owghat">Tiempos de oración</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>

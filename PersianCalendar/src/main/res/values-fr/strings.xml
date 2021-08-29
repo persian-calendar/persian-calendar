@@ -125,8 +125,9 @@
     <string name="fajr">Fajr</string>
     <string name="imsak">Imsak</string>
     <string name="owghat">Heures de prière</string>
-    <string name="remaining_daylight">Restant : %1$s h %2$s min</string>
-    <string name="length_of_day">En journée : %1$s h %2$s min</string>
+    <string name="remaining_daylight">Restant</string>
+    <string name="length_of_day">En journée</string>
+    <string name="n_hours_minutes">%1$s h %2$s min</string>
     <string name="sunsetSunView">Coucher du soleil</string>
     <string name="middaySunView">Midi</string>
     <string name="sunriseSunView">Lever du soleil</string>

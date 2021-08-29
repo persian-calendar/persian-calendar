@@ -129,8 +129,9 @@
     <string name="middaySunView">正午</string>
     <string name="sunsetSunView">日没</string>
     <string name="no_event">No event or appointment for this day.</string>
-    <string name="length_of_day">Daytime: %1$sh %2$sm</string>
-    <string name="remaining_daylight">Remaining: %1$sh %2$sm</string>
+    <string name="length_of_day">Daytime</string>
+    <string name="remaining_daylight">Remaining</string>
+    <string name="n_hours_minutes">%1$sh %2$sm</string>
     <string name="more">More</string>
     <string name="zodiac">天宮図</string>
     <string name="capricorn">磨羯宮</string>

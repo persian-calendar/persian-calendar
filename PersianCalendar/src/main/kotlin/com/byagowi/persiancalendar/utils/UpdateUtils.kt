@@ -42,7 +42,6 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
 import java.util.*
-import java.util.concurrent.TimeUnit.MINUTES
 
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
@@ -319,19 +318,12 @@ private fun Context.update4x2Widget(
             )
         }
 
-        val difference = (getOwghatTimeOfStringId(nextOwghatId).toInt() - owghatClock.toInt())
-            .let { if (it > 0) it else it + 60 * 24 }.toLong()
-
-        val remainingTime = listOf(
-            R.string.n_hours to (MINUTES.toHours(difference) % 24).toInt(),
-            R.string.n_minutes to (MINUTES.toMinutes(difference) % 60).toInt()
-        ).filter { (_, n) -> n != 0 }.joinToString(getString(R.string.and)) { (stringId, n) ->
-            getString(stringId, formatNumber(n))
-        }
-
+        val remaining = Clock.fromInt(
+            (getOwghatTimeOfStringId(nextOwghatId).toInt() - owghatClock.toInt())
+                .let { if (it > 0) it else it + 60 * 24 })
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2,
-            getString(R.string.n_till, remainingTime, getString(nextOwghatId))
+            getString(R.string.n_till, remaining.formatClock(this), getString(nextOwghatId))
         )
         remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     } else {

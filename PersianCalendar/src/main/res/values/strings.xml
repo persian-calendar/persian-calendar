@@ -182,8 +182,9 @@ MMeshkiny: Mohsen Meshkini"</string>
     <string name="sunriseSunView">Sunrise</string>
     <string name="middaySunView">Midday</string>
     <string name="sunsetSunView">Sunset</string>
-    <string name="length_of_day">Daytime: %1$sh %2$sm</string>
-    <string name="remaining_daylight">Remaining: %1$sh %2$sm</string>
+    <string name="length_of_day">Daytime</string>
+    <string name="remaining_daylight">Remaining</string>
+    <string name="n_hours_minutes">%1$sh %2$sm</string>
     <string name="owghat">Pray times</string>
     <string name="imsak">Imsak</string>
     <string name="fajr">Fajr</string>

@@ -127,8 +127,9 @@
     <string name="middaySunView">گۆن اورتا</string>
     <string name="sunsetSunView">گۆن باتان</string>
     <string name="no_event">موناسیبت یوخدور</string>
-    <string name="length_of_day">گۆن سۆره‌سی: %1$sس %2$sد</string>
-    <string name="remaining_daylight">قالان: %1$sس %2$sد</string>
+    <string name="length_of_day">گۆن سۆره‌سی</string>
+    <string name="remaining_daylight">قالان</string>
+    <string name="n_hours_minutes">%1$sس %2$sد</string>
     <string name="more">چوخ</string>
     <string name="zodiac">اولدوزلار شکیلی</string>
     <string name="capricorn">اوغلاق</string>
