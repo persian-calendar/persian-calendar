@@ -86,10 +86,10 @@ fun update(context: Context, updateDate: Boolean) {
     ) + if (shiftWorkTitle.isEmpty()) "" else " ($shiftWorkTitle)"
     val subtitle = dateStringOfOtherCalendars(jdn, language.spacedComma)
 
-    val owghatClock = Clock(Date().toJavaCalendar(forceLocalTime = true))
+    val nowClock = Clock(Date().toJavaCalendar(forceLocalTime = true))
 
     @StringRes
-    val nextOwghatId = getNextOwghatTimeId(owghatClock, dateHasChanged)
+    val nextOwghatId = getNextOwghatTimeId(nowClock, dateHasChanged)
     val owghat = if (nextOwghatId == 0) "" else buildString {
         append(context.getString(nextOwghatId))
         append(": ")
@@ -105,7 +105,7 @@ fun update(context: Context, updateDate: Boolean) {
     context.update1x1Widget(manager, date)
     context.update4x1Widget(manager, jdn, date, widgetTitle, subtitle)
     context.update2x2Widget(manager, jdn, date, widgetTitle, subtitle, owghat)
-    context.update4x2Widget(manager, jdn, date, nextOwghatId, owghatClock)
+    context.update4x2Widget(manager, jdn, date, nextOwghatId, nowClock)
     context.updateNotification(title, subtitle, jdn, date, owghat)
 }
 
@@ -256,7 +256,7 @@ private fun Context.update2x2Widget(
 }
 
 private fun Context.update4x2Widget(
-    manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nextOwghatId: Int, owghatClock: Clock
+    manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nextOwghatId: Int, nowClock: Clock
 ) {
     val widget4x2 = ComponentName(this, Widget4x2::class.java)
     if (manager.getAppWidgetIds(widget4x2).isNullOrEmpty()) return
@@ -319,7 +319,7 @@ private fun Context.update4x2Widget(
         }
 
         val remaining = Clock.fromInt(
-            (getOwghatTimeOfStringId(nextOwghatId).toInt() - owghatClock.toInt())
+            (getOwghatTimeOfStringId(nextOwghatId).toInt() - nowClock.toInt())
                 .let { if (it > 0) it else it + 60 * 24 })
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2,
