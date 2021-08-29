@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -324,7 +325,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private fun showChangeLanguageSnackbar() = Snackbar.make(
-        binding.root, "✖  Change app language?", 7000
+        binding.root, "✖  Change app language?", Snackbar.LENGTH_INDEFINITE
     ).also {
         it.view.layoutDirection = View.LAYOUT_DIRECTION_LTR
         it.view.setOnClickListener { _ -> it.dismiss() }
@@ -335,7 +336,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 )
             )
         }
-        it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
+        it.setActionTextColor(it.context.resolveColor(R.attr.colorDrawerIcon))
     }.show()
 
     private fun showAppIsOutDatedSnackbar() = Snackbar.make(
