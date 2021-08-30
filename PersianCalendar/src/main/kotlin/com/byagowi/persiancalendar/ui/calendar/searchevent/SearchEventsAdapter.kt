@@ -5,22 +5,43 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.utils.logException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
 class SearchEventsAdapter(
-    context: Context, private val originalItems: List<CalendarEvent<*>>
+    context: Context, lifecycleOwner: LifecycleOwner,
+    private val originalItems: List<CalendarEvent<*>>
 ) : ArrayAdapter<CalendarEvent<*>>(context, R.layout.suggestion, R.id.text, originalItems) {
 
     private var showingItems: List<CalendarEvent<*>> = originalItems
-    private val itemsWords: List<Pair<CalendarEvent<*>, List<String>>> by lazy {
-        val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
-        originalItems.map { it to it.formattedTitle.split(*delimiters) }
+    private var itemsWords: List<Pair<CalendarEvent<*>, List<String>>> = emptyList()
+
+    init {
+        flowOf(Unit)
+            .map {
+                val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
+                originalItems.map { it to it.formattedTitle.split(*delimiters) }
+            }
+            .flowOn(Dispatchers.IO)
+            .onEach { itemsWords = it }
+            .flowOn(Dispatchers.Main.immediate)
+            .catch { logException(it) }
+            .launchIn(lifecycleOwner.lifecycleScope)
     }
 
     override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
