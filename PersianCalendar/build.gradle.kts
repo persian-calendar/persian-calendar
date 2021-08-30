@@ -112,7 +112,7 @@ android {
 
 dependencies {
     implementation("com.github.persian-calendar:equinox:1.0.1")
-    implementation("com.github.persian-calendar:calendar:1.0.3")
+    implementation("com.github.persian-calendar:calendar:1.0.4")
     implementation("com.github.persian-calendar:praytimes:1.0.3")
 
     implementation("androidx.appcompat:appcompat:1.3.1")
