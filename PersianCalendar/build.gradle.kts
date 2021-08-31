@@ -40,8 +40,8 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 17
         targetSdk = 30
-        versionCode = 662
-        versionName = "6.6.2"
+        versionCode = 670
+        versionName = "6.7.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resourceConfigurations +=
