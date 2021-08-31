@@ -11,14 +11,9 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.utils.logException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
@@ -32,16 +27,11 @@ class SearchEventsAdapter(
     private var itemsWords: List<Pair<CalendarEvent<*>, List<String>>> = emptyList()
 
     init {
-        flowOf(Unit)
-            .map {
-                val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
-                originalItems.map { it to it.formattedTitle.split(*delimiters) }
-            }
-            .flowOn(Dispatchers.IO)
-            .onEach { itemsWords = it }
-            .flowOn(Dispatchers.Main.immediate)
-            .catch { logException(it) }
-            .launchIn(lifecycleOwner.lifecycleScope)
+        lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
+            val result = originalItems.map { it to it.formattedTitle.split(*delimiters) }
+            withContext(Dispatchers.Main.immediate) { itemsWords = result }
+        }
     }
 
     override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
