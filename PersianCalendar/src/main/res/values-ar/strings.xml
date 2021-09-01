@@ -152,13 +152,13 @@
     <!--Location and Athan-->
     <string name="gps_location">تحديد المكان باستخدام الـGPS</string>
     <string name="gps_location_help">لا تحتاج إلى الخيارات الأخرى إذا كان هذا الخيار مفعل</string>
-    <string name="gps_internet_desc">"يرجى تفعيل الـGPS أو الإتصال بالشبكة ليتم تحديد المكان.
-
-التطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل الـGPS والشبكة لتحديد المكان الجديد."</string>
-    <string name="pleasewaitgps">"جارٍ البحث يرجى الانتظار …
-
-
-تأكد أن الـGPS فعال، إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى."</string>
+    <string name="gps_internet_desc">يرجى تفعيل الـGPS أو الإتصال بالشبكة ليتم تحديد المكان.
+\n
+\nالتطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل الـGPS والشبكة لتحديد المكان الجديد.</string>
+    <string name="pleasewaitgps">جارٍ البحث يرجى الانتظار …
+\n
+\n
+\nتأكد أن الـGPS فعال، إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى.</string>
     <string name="location">المكان</string>
     <string name="location_help">إذا لم يكن أسم مدينتك موجوداً، حدد الإحداثيات اللازمة أدناه</string>
     <string name="latitude">خط العرض</string>
@@ -289,7 +289,7 @@
     <string name="widget_customization_other_calendars">التقاويم الأخرى على مصغر 1×4 أو 2×2</string>
     <string name="widget_customization_non_holiday_events">المناسبات (غير العُطل) على مصغر 2×2 والتنبه</string>
     <string name="widget_customization_owghat">أوقات الصلوات على مصغر 2×2 (إذا تم تحديد المكان)</string>
-    <string name="widget_customization_owghat_location">مكان أوقات الصلوات على مصغر 2×2  والتنبيه (إذا تم تحديد المكان)</string>
+    <string name="widget_customization_owghat_location">مكان أوقات الصلوات على مصغر 2×2 والتنبيه (إذا تم تحديد المكان)</string>
     <!--Persian Calendar months-->
     <string name="farvardin">الحمل</string>
     <string name="ordibehesht">الثور</string>
