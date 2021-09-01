@@ -365,4 +365,6 @@
     <string name="widget_prefer_system_colors"></string>
     <string name="close"></string>
     <string name="jupiter"></string>
+    <string name="open"></string>
+    <string name="athan_alarm_summary"></string>
 </resources>
