@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
+import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.CityItem
 import java.util.*
 
 enum class Language(val code: String, val nativeName: String) {
@@ -22,8 +24,8 @@ enum class Language(val code: String, val nativeName: String) {
 
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
-    val isKurdish get() = this == CKB
     val isPersian get() = this == FA
+    private val isKurdish get() = this == CKB
 
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
 
@@ -215,4 +217,69 @@ enum class Language(val code: String, val nativeName: String) {
             "یئل", "سۆد", "دۇز", "آرا", "اوْد", "سۇ", "آینی"
         )
     }
+
+    // region city name utilities
+    fun getCountryName(cityItem: CityItem): String = when {
+        !isArabicScript -> cityItem.countryEn
+        isArabic -> cityItem.countryAr
+        isKurdish -> cityItem.countryCkb
+        else -> cityItem.countryFa
+    }
+
+    fun getCityName(cityItem: CityItem): String = when {
+        !isArabicScript -> cityItem.en
+        isArabic -> cityItem.ar
+        isKurdish -> cityItem.ckb
+        else -> cityItem.fa
+    }
+
+    fun createCitiesComparator(): Comparator<in CityItem> = Comparator { l, r ->
+        if (l.key == "") return@Comparator -1
+        if (r.key == DEFAULT_CITY) return@Comparator 1
+        CityComparator.compareCity(this, l, r)
+    }
+
+    private object CityComparator {
+        private fun prepareForArabicSort(text: String) = text
+            .replace("ی", "ي")
+            .replace("ک", "ك")
+            .replace("گ", "كی")
+            .replace("ژ", "زی")
+            .replace("چ", "جی")
+            .replace("پ", "بی")
+            .replace("ڕ", "ری")
+            .replace("ڵ", "لی")
+            .replace("ڤ", "فی")
+            .replace("ۆ", "وی")
+            .replace("ێ", "یی")
+            .replace("ھ", "نی")
+            .replace("ە", "هی")
+
+        private val irCodeOrder = listOf("zz", "ir", "af", "iq")
+        private val afCodeOrder = listOf("zz", "af", "ir", "iq")
+        private val arCodeOrder = listOf("zz", "iq", "ir", "af")
+
+        fun compareCity(language: Language, l: CityItem, r: CityItem): Int {
+            return getCountryCodeOrder(language, l.countryCode).compareTo(
+                getCountryCodeOrder(language, r.countryCode)
+            ).takeIf { it != 0 } ?: compareCityNames(language, l, r)
+        }
+
+        private fun getCountryCodeOrder(language: Language, countryCode: String): Int = when {
+            language.isAfghanistanExclusive -> afCodeOrder
+            language.isArabic -> arCodeOrder
+            else -> irCodeOrder
+        }.indexOf(countryCode)
+
+        private fun compareCityNames(language: Language, l: CityItem, r: CityItem): Int {
+            return when {
+                !language.isArabicScript -> l.en.compareTo(r.en)
+                language.isArabic -> l.ar.compareTo(r.ar)
+                language.isKurdish ->
+                    prepareForArabicSort(l.ckb).compareTo(prepareForArabicSort(r.ckb))
+                else -> prepareForArabicSort(l.fa).compareTo(prepareForArabicSort(r.fa))
+            }
+        }
+    }
+    // endregion
 }

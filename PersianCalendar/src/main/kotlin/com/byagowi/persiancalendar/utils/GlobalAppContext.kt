@@ -255,7 +255,7 @@ fun updateStoredPreference(context: Context) {
     calculationMethod = CalculationMethod
         .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
 
-    coordinates = prefs.getStoredCity()?.coordinate ?: run {
+    coordinates = prefs.storedCity?.coordinate ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
             .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }
             .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet

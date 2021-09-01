@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CityItem
 import io.github.persiancalendar.praytimes.Coordinate
 import java.util.*
 import kotlin.math.abs
@@ -23,19 +22,3 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
     val seconds = ((degree - degree.toInt()) * 3600 % 60).toInt()
     "%d°%02d′%02d″%s".format(Locale.US, degree.toInt(), minutes, seconds, direction)
 } + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
-
-val CityItem.localizedCountryName: String
-    get() = when {
-        !language.isArabicScript -> this.countryEn
-        language.isArabic -> this.countryAr
-        language.isKurdish -> this.countryCkb
-        else -> this.countryFa
-    }
-
-val CityItem.localizedCityName: String
-    get() = when {
-        !language.isArabicScript -> this.en
-        language.isArabic -> this.ar
-        language.isKurdish -> this.ckb
-        else -> this.fa
-    }

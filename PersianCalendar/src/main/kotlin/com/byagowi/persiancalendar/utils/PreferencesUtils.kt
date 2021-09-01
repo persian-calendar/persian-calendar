@@ -24,17 +24,16 @@ fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
 
 fun getCityName(context: Context, fallbackToCoordinates: Boolean): String {
     val prefs = context.appPrefs
-    return prefs.getStoredCity()?.localizedCityName
+    return prefs.storedCity?.let(language::getCityName)
         ?: prefs.getString(PREF_GEOCODED_CITYNAME, null)?.takeIf { it.isNotEmpty() }
         ?: coordinates?.takeIf { fallbackToCoordinates }
             ?.let { formatCoordinate(context, it, spacedComma) }
         ?: ""
 }
 
-fun SharedPreferences.getStoredCity(): CityItem? {
-    return getString(PREF_SELECTED_LOCATION, null)
+val SharedPreferences.storedCity: CityItem?
+    get() = getString(PREF_SELECTED_LOCATION, null)
         ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }?.let { citiesStore[it] }
-}
 
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
