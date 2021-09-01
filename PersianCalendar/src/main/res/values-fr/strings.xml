@@ -268,7 +268,6 @@
     <string name="widget_customization_non_holiday_events">Jours non fériés sur le gadget logiciel 2×2 et la notification</string>
     <string name="widget_customization_owghat">Temps de prière sur 2×2 et notification (si défini)</string>
     <string name="widget_customization_owghat_location">Localisation des temps de prière sur 2×2 et notification (si défini)</string>
-
     <string name="farvardin">Farvardin</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">Khordad</string>
@@ -281,7 +280,6 @@
     <string name="dey">Dey</string>
     <string name="bahman">Bahman</string>
     <string name="esfand">Esfand</string>
-
     <string name="muharram">Mouharram</string>
     <string name="safar">Safar</string>
     <string name="rabi_al_awwal">Rabia al awal</string>
@@ -294,7 +292,6 @@
     <string name="shawwal">Chawwal</string>
     <string name="dhu_al_qidah">Dhou al qi`da</string>
     <string name="dhu_al_hijjah">Dhou al-hijja</string>
-
     <string name="january">Janvier</string>
     <string name="february">Février</string>
     <string name="march">Mars</string>
@@ -308,7 +305,6 @@
     <string name="november">Novembre</string>
     <string name="december">Décembre</string>
     <string name="saturday">Samedi</string>
-
     <string name="sunday">Dimanche</string>
     <string name="monday">Lundi</string>
     <string name="tuesday">Mardi</string>
