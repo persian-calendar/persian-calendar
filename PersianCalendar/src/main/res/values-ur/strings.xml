@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="code">ur</string>
-
     <string name="app_name">فارسی تقویم</string>
     <string name="cancel">بند کریں</string>
     <string name="widget_name">فارسی تقویم</string>
@@ -31,7 +29,6 @@
     <string name="altitude">ارتفاع</string>
     <string name="altitude_praytime">به متر (اختیاری)</string>
     <string name="coordination">جغرافیائی نقاط</string>
-
     <string name="gps_location">دریافت مختصات از جی‌پی‌اس</string>
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">مقام</string>
@@ -122,8 +119,7 @@
     <string name="about_developers">توسعه‌دهندگان</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسندگان برنامه</string>
-    <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
-برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است."</string>
+    <string name="gps_internet_desc">لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید. برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
@@ -177,13 +173,11 @@
     <string name="pref_interface">رابط</string>
     <string name="resume">ادامه</string>
     <string name="continue_button">ادامه</string>
-
     <!--Permissions-->
     <string name="location_access">دسترسی به موقعیت مکانی</string>
     <string name="phone_location_required">این قسمت از برنامه نیازمند گرفتن دسترسی مکان است، در غیر است می‌بایست طول و عرض جفرافیایی خود را به صورت دستی وارد کنید.</string>
     <string name="calendar_access">دسترسی به تقویم دستگاه</string>
     <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم دستگاه را بدهید، اگر اجازه دسترسی به تقویم دستگاه دهید برنامه می‌تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
-
     <!--Talkback, a11y-->
     <string name="previous_month">ماه قبل</string>
     <string name="next_month">ماه بعد</string>
@@ -191,7 +185,6 @@
     <string name="equivalent_to">برابر با</string>
     <string name="holiday_reason">تعطیل به مناسبت</string>
     <string name="nth_week_of_year">هفتهٔ %1$s سال</string>
-
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">شمال</string>
     <string name="east">شرق</string>
@@ -277,7 +270,6 @@
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
     <string name="widget_customization_owghat_location">مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
-
     <string name="farvardin">فروردی</string>
     <string name="ordibehesht">اردیبہشت</string>
     <string name="khordad">خرداد</string>
@@ -290,7 +282,6 @@
     <string name="dey">دی</string>
     <string name="bahman">بہمن</string>
     <string name="esfand">اسفندر</string>
-
     <string name="muharram">محرم</string>
     <string name="safar">صفر</string>
     <string name="rabi_al_awwal">ربيع الأول</string>
@@ -303,7 +294,6 @@
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذو القعده</string>
     <string name="dhu_al_hijjah">ذو الحجه</string>
-
     <string name="january">جنوری</string>
     <string name="february">فروری</string>
     <string name="march">مارچ</string>
@@ -317,7 +307,6 @@
     <string name="november">نومبر</string>
     <string name="december">دسمبر</string>
     <string name="saturday">سنیچر</string>
-
     <string name="sunday">اتوار</string>
     <string name="monday">پیر</string>
     <string name="tuesday">منگل</string>
