@@ -354,4 +354,6 @@
     <string name="spring"></string>
     <string name="enable_new_interface"></string>
     <string name="high_latitudes_method"></string>
+    <string name="open"></string>
+    <string name="athan_alarm_summary"></string>
 </resources>
