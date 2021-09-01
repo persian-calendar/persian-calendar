@@ -404,4 +404,6 @@
     <string name="lock"></string>
     <string name="exit_full_screen"></string>
     <string name="exempt_app_battery_optimization"></string>
+    <string name="open"></string>
+    <string name="athan_alarm_summary"></string>
 </resources>
