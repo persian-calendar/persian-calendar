@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.entities
 
 import android.content.SharedPreferences
 import androidx.annotation.StringRes
@@ -6,6 +6,8 @@ import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.isNightModeEnabled
 
 enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private val styleRes: Int) {
     SYSTEM_DEFAULT("SystemDefault", R.string.theme_default, R.style.LightTheme),

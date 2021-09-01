@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
+import com.byagowi.persiancalendar.entities.CalendarType
 
 // See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
 val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')

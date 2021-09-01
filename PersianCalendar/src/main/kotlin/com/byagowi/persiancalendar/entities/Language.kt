@@ -1,9 +1,10 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.entities
 
 import android.content.Context
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.CityItem
+import com.byagowi.persiancalendar.utils.listOf12Items
+import com.byagowi.persiancalendar.utils.listOf7Items
 import java.util.*
 
 enum class Language(val code: String, val nativeName: String) {

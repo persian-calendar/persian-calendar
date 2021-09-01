@@ -14,8 +14,8 @@ import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.utils.EnabledHolidays
-import com.byagowi.persiancalendar.utils.Language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 

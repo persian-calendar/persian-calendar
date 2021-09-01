@@ -11,6 +11,7 @@ import androidx.core.text.HtmlCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate

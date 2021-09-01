@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.entities
 
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R

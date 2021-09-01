@@ -53,7 +53,9 @@ import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.logDebug
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.CalculationMethod

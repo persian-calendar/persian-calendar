@@ -8,10 +8,10 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
-import com.byagowi.persiancalendar.utils.CalendarType
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dayOfWeekName

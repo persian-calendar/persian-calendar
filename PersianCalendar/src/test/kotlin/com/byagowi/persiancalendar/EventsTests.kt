@@ -2,10 +2,10 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.utils.CalendarType
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
-import com.byagowi.persiancalendar.utils.Language
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.irregularCalendarEventsStore
 import com.byagowi.persiancalendar.utils.loadEvents
