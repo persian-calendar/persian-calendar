@@ -9,7 +9,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
-import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
 import com.byagowi.persiancalendar.DEFAULT_WEEK_START
@@ -43,6 +42,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.weekDays
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -146,7 +146,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     summary(R.string.islamic_offset_summary)
                     dialogTitle(R.string.islamic_offset)
                 }
-                val weekDays = AppLocalesData.getWeekDays(language)
                 val weekDaysValues = (0..6).map { it.toString() }
                 singleSelect(PREF_WEEK_START, weekDays, weekDaysValues, DEFAULT_WEEK_START) {
                     title(R.string.week_start)

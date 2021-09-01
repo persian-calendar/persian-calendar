@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.AppLocalesData
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_APP_LANGUAGE
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
@@ -161,7 +160,7 @@ fun initUtils(context: Context) {
     logDebug("Utils", "initUtils is called")
     updateStoredPreference(context)
     applyAppLanguage(context)
-    loadLanguageResources()
+    loadLanguageResources(context)
     scheduleAlarms(context)
     configureCalendarsAndLoadEvents(context)
 }
@@ -178,14 +177,13 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     loadEvents(enabledHolidays, language)
 }
 
-fun loadLanguageResources() {
+fun loadLanguageResources(context: Context) {
     logDebug("Utils", "loadLanguageResources is called")
-    persianMonths = AppLocalesData.getPersianCalendarMonths(language)
-    islamicMonths = AppLocalesData.getIslamicCalendarMonths(language)
-    gregorianMonths =
-        AppLocalesData.getGregorianCalendarMonths(language, easternGregorianArabicMonths)
-    weekDays = AppLocalesData.getWeekDays(language)
-    weekDaysInitials = AppLocalesData.getWeekDaysInitials(language)
+    persianMonths = language.getPersianMonths(context)
+    islamicMonths = language.getIslamicMonths(context)
+    gregorianMonths = language.getGregorianMonths(context, easternGregorianArabicMonths)
+    weekDays = language.getWeekDays(context)
+    weekDaysInitials = language.getWeekDaysInitials(context)
 }
 
 @StringRes

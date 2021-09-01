@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
+import android.content.Context
+import com.byagowi.persiancalendar.R
 import java.util.*
 
 enum class Language(val code: String, val nativeName: String) {
@@ -22,7 +24,6 @@ enum class Language(val code: String, val nativeName: String) {
     val isDari get() = this == FA_AF
     val isKurdish get() = this == CKB
     val isPersian get() = this == FA
-    private val isJapanese get() = this == JA
 
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
 
@@ -120,4 +121,98 @@ enum class Language(val code: String, val nativeName: String) {
             FA, FA_AF, EN_IR -> true
             else -> false
         }
+
+    fun getPersianMonths(context: Context): List<String> = when (this) {
+        FA, EN_IR -> persianCalendarMonthsInPersian
+        FA_AF -> persianCalendarMonthsInDari
+        else -> persianCalendarMonths.map(context::getString)
+    }
+
+    fun getIslamicMonths(context: Context): List<String> = when (this) {
+        FA, EN_IR, FA_AF -> islamicCalendarMonthsInPersian
+        else -> islamicCalendarMonths.map(context::getString)
+    }
+
+    fun getGregorianMonths(context: Context, easternGregorianArabicMonths: Boolean) = when (this) {
+        FA, EN_IR -> gregorianCalendarMonthsInPersian
+        FA_AF -> gregorianCalendarMonthsInDari
+        AR -> {
+            if (easternGregorianArabicMonths) easternGregorianCalendarMonths
+            else gregorianCalendarMonths.map(context::getString)
+        }
+        else -> gregorianCalendarMonths.map(context::getString)
+    }
+
+    fun getWeekDays(context: Context): List<String> = when (this) {
+        FA, EN_IR, FA_AF -> weekDaysInPersian
+        else -> weekDays.map(context::getString)
+    }
+
+    fun getWeekDaysInitials(context: Context): List<String> = when (this) {
+        AR -> weekDaysInitialsInArabic
+        AZB -> weekDaysInitialsInAzerbaijani
+        else -> getWeekDays(context).map { it.substring(0, 1) }
+    }
+
+    companion object {
+        private val persianCalendarMonths = listOf12Items(
+            R.string.farvardin, R.string.ordibehesht, R.string.khordad,
+            R.string.tir, R.string.mordad, R.string.shahrivar,
+            R.string.mehr, R.string.aban, R.string.azar, R.string.dey,
+            R.string.bahman, R.string.esfand
+        )
+        private val islamicCalendarMonths = listOf12Items(
+            R.string.muharram, R.string.safar, R.string.rabi_al_awwal,
+            R.string.rabi_al_thani, R.string.jumada_al_awwal, R.string.jumada_al_thani,
+            R.string.rajab, R.string.shaban, R.string.ramadan, R.string.shawwal,
+            R.string.dhu_al_qidah, R.string.dhu_al_hijjah
+        )
+        private val gregorianCalendarMonths = listOf12Items(
+            R.string.january, R.string.february, R.string.march,
+            R.string.april, R.string.may, R.string.june, R.string.july,
+            R.string.august, R.string.september, R.string.october,
+            R.string.november, R.string.december
+        )
+        private val weekDays = listOf7Items(
+            R.string.saturday, R.string.sunday, R.string.monday, R.string.tuesday,
+            R.string.wednesday, R.string.thursday, R.string.friday
+        )
+
+        // These are special cases and new ones should be translated in strings.xml of the language
+        private val persianCalendarMonthsInPersian = listOf12Items(
+            "فروردین", "اردیبهشت", "خرداد", "تیر", "مرداد",
+            "شهریور", "مهر", "آبان", "آذر", "دی",
+            "بهمن", "اسفند"
+        )
+        private val islamicCalendarMonthsInPersian = listOf12Items(
+            "مُحَرَّم", "صَفَر", "ربیع‌الاول", "ربیع‌الثانی", "جمادى‌الاولى", "جمادی‌الثانیه",
+            "رجب", "شعبان", "رمضان", "شوال", "ذی‌القعده", "ذی‌الحجه"
+        )
+        private val gregorianCalendarMonthsInPersian = listOf12Items(
+            "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر",
+            "نوامبر", "دسامبر"
+        )
+        private val persianCalendarMonthsInDari = listOf12Items(
+            "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله",
+            "میزان", "عقرب", "قوس", "جدی", "دلو",
+            "حوت"
+        )
+        private val gregorianCalendarMonthsInDari = listOf12Items(
+            "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون", "جولای", "آگست", "سپتمبر", "اکتبر",
+            "نومبر", "دیسمبر"
+        )
+        private val easternGregorianCalendarMonths = listOf12Items(
+            "كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول",
+            "تشرين الأول", "تشرين الثاني", "كانون الأول"
+        )
+        private val weekDaysInPersian = listOf7Items(
+            "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
+        )
+        private val weekDaysInitialsInArabic = listOf7Items(
+            "سب", "أح", "اث", "ثل", "أر", "خم", "جم"
+        )
+        private val weekDaysInitialsInAzerbaijani = listOf7Items(
+            "یئل", "سۆد", "دۇز", "آرا", "اوْد", "سۇ", "آینی"
+        )
+    }
 }

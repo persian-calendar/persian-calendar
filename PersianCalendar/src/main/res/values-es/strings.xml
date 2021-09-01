@@ -281,4 +281,52 @@
     <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
     <string name="widget_customization_owghat">Pray times on 2x2 and notification (if is set)</string>
     <string name="widget_customization_owghat_location">Location of pray times on 2x2 and notification (if is set)</string>
+
+    <string name="farvardin">Farvardín</string>
+    <string name="ordibehesht">Ordibehesht</string>
+    <string name="khordad">Jordad</string>
+    <string name="tir">Tir</string>
+    <string name="mordad">Mordad</string>
+    <string name="shahrivar">Shahrivar</string>
+    <string name="mehr">Mehr</string>
+    <string name="aban">Abán</string>
+    <string name="azar">Azar</string>
+    <string name="dey">Dey</string>
+    <string name="bahman">Bahmán</string>
+    <string name="esfand">Esfand</string>
+
+    <string name="muharram">Muharram</string>
+    <string name="safar">Safar</string>
+    <string name="rabi_al_awwal">Rabi\' al-Awwal</string>
+    <string name="rabi_al_thani">Rabi\' al-Thani</string>
+    <string name="jumada_al_awwal">Jumada al-Awwal</string>
+    <string name="jumada_al_thani">Jumada al-Thani</string>
+    <string name="rajab">Rajab</string>
+    <string name="shaban">Sha\'ban</string>
+    <string name="ramadan">Ramadán</string>
+    <string name="shawwal">Shawwal</string>
+    <string name="dhu_al_qidah">Dhu al-Qadah</string>
+    <string name="dhu_al_hijjah">Dhu al-Hijjah</string>
+
+    <string name="january">Enero</string>
+    <string name="february">Febrero</string>
+    <string name="march">Marzo</string>
+    <string name="april">Abril</string>
+    <string name="may">Mayo</string>
+    <string name="june">Junio</string>
+    <string name="july">Julio</string>
+    <string name="august">Agosto</string>
+    <string name="september">Septiembre</string>
+    <string name="october">Octubre</string>
+    <string name="november">Noviembre</string>
+    <string name="december">Diciembre</string>
+
+    <string name="saturday">Sábado</string>
+    <string name="sunday">Domingo</string>
+    <string name="monday">Lunes</string>
+    <string name="tuesday">Martes</string>
+    <string name="wednesday">Miércoles</string>
+    <string name="thursday">Jueves</string>
+    <string name="friday">Viernes</string>
+
 </resources>

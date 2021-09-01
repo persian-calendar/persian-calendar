@@ -276,4 +276,51 @@
     <string name="widget_customization_non_holiday_events">تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">شرعی واخت‌لار ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</string>
     <string name="widget_customization_owghat_location">مکان، شرعی واخت‌لار یانین‌دا ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</string>
+
+    <string name="farvardin">فروردین</string>
+    <string name="ordibehesht">اوردیبهشت</string>
+    <string name="khordad">خورداد</string>
+    <string name="tir">تیر</string>
+    <string name="mordad">مورداد</string>
+    <string name="shahrivar">شهریور</string>
+    <string name="mehr">مهر</string>
+    <string name="aban">آبان</string>
+    <string name="azar">آذر</string>
+    <string name="dey">دی</string>
+    <string name="bahman">بهمن</string>
+    <string name="esfand">اسفند</string>
+
+    <string name="muharram">موحررم</string>
+    <string name="safar">صفر</string>
+    <string name="rabi_al_awwal">ربيع الاوول</string>
+    <string name="rabi_al_thani">ربيع الآخیر</string>
+    <string name="jumada_al_awwal">جمادى الاوول</string>
+    <string name="jumada_al_thani">جمادى الآخیر</string>
+    <string name="rajab">رجب</string>
+    <string name="shaban">شعبان</string>
+    <string name="ramadan">رمضان</string>
+    <string name="shawwal">شوال</string>
+    <string name="dhu_al_qidah">ذیقعده</string>
+    <string name="dhu_al_hijjah">ذیحججه</string>
+
+    <string name="january">ژانویه</string>
+    <string name="february">فوریه</string>
+    <string name="march">مارس</string>
+    <string name="april">آوریل</string>
+    <string name="may">مئی</string>
+    <string name="june">ژوئن</string>
+    <string name="july">ژوئیه</string>
+    <string name="august">آقوست</string>
+    <string name="september">سپتامبر</string>
+    <string name="october">اوْکتوبر</string>
+    <string name="november">نوْوامبر</string>
+    <string name="december">دسامبر</string>
+
+    <string name="saturday">يئل‌گونو</string>
+    <string name="sunday">سۆدگونو</string>
+    <string name="monday">دۇزگونو</string>
+    <string name="tuesday">آراگون</string>
+    <string name="wednesday">اوْدگونو</string>
+    <string name="thursday">سۇگونو</string>
+    <string name="friday">آینی‌گون</string>
 </resources>

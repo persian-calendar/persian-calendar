@@ -277,4 +277,51 @@
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
     <string name="widget_customization_owghat_location">مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
+
+    <string name="farvardin">فروردی</string>
+    <string name="ordibehesht">اردیبہشت</string>
+    <string name="khordad">خرداد</string>
+    <string name="tir">تیر</string>
+    <string name="mordad">امرداد</string>
+    <string name="shahrivar">شہریور</string>
+    <string name="mehr">مہر</string>
+    <string name="aban">آبان</string>
+    <string name="azar">آذر</string>
+    <string name="dey">دی</string>
+    <string name="bahman">بہمن</string>
+    <string name="esfand">اسفندر</string>
+
+    <string name="muharram">محرم</string>
+    <string name="safar">صفر</string>
+    <string name="rabi_al_awwal">ربيع الأول</string>
+    <string name="rabi_al_thani">ربیع الثاني</string>
+    <string name="jumada_al_awwal">جمادى الأولى</string>
+    <string name="jumada_al_thani">جمادی الثانية</string>
+    <string name="rajab">رجب</string>
+    <string name="shaban">شعبان</string>
+    <string name="ramadan">رمضان</string>
+    <string name="shawwal">شوال</string>
+    <string name="dhu_al_qidah">ذو القعده</string>
+    <string name="dhu_al_hijjah">ذو الحجه</string>
+
+    <string name="january">جنوری</string>
+    <string name="february">فروری</string>
+    <string name="march">مارچ</string>
+    <string name="april">اپریل</string>
+    <string name="may">مئی</string>
+    <string name="june">جون</string>
+    <string name="july">جولائی</string>
+    <string name="august">اگست</string>
+    <string name="september">ستمبر</string>
+    <string name="october">اکتوبر</string>
+    <string name="november">نومبر</string>
+    <string name="december">دسمبر</string>
+    <string name="saturday">سنیچر</string>
+
+    <string name="sunday">اتوار</string>
+    <string name="monday">پیر</string>
+    <string name="tuesday">منگل</string>
+    <string name="wednesday">بدھ</string>
+    <string name="thursday">جمعرات</string>
+    <string name="friday">جمعہ</string>
 </resources>
