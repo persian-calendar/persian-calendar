@@ -113,13 +113,13 @@
     <string name="about_license_sum">مؤجویز GPL3، کیتاب‌خانا مؤجویزلرین شرایط‌ین بررسی ائلین</string>
     <string name="help">یاردیم</string>
     <string name="about_report_bug">خطالاری بیلدیرین</string>
-    <string name="about_report_bug_sum">"خطالاری بیلدیرمک اوچون بوردا یازین"</string>
+    <string name="about_report_bug_sum">خطالاری بیلدیرمک اوچون بوردا یازین</string>
     <string name="about_sendMail">ایمیل</string>
     <string name="about_noClient">!ایمیله گوره برنامه یوخدور</string>
     <string name="about_developers">گلیشتیر‌ن‌لر حاقیندا</string>
     <string name="about_support_developers">گلیشتیر‌ن‌لری دستک‌لئین</string>
     <string name="about_email_sum">شخصی ایمیل برنامه صاحیب‌ینه گؤندرمک</string>
-    <string name="gps_internet_desc">"اینترنت و جی‌پی‌اس‌ی آچیق بیراخین، برنامه هر مکاندا بیر کئز بو اریشیم‌لره احتیاجی اولاجاق‌دیر، مکانیز دئیش‌یلن دورومدا یئنی‌دن تنظیم گرکلی‌دیر"</string>
+    <string name="gps_internet_desc">اینترنت و جی‌پی‌اس‌ی آچیق بیراخین، برنامه هر مکاندا بیر کئز بو اریشیم‌لره احتیاجی اولاجاق‌دیر، مکانیز دئیش‌یلن دورومدا یئنی‌دن تنظیم گرکلی‌دیر</string>
     <string name="start_of_year_diff">%1$s گۆن (~%2$s هفته یا %3$s آی) ایل‌ین باشیندان</string>
     <string name="end_of_year_diff">%1$s گۆن (~%2$s هفته یا %3$s آی) ایل‌ین سونونا</string>
     <!-- Sun Info -->
@@ -276,7 +276,6 @@
     <string name="widget_customization_non_holiday_events">تعطیل‌سیز گون‌لری ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">شرعی واخت‌لار ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</string>
     <string name="widget_customization_owghat_location">مکان، شرعی واخت‌لار یانین‌دا ویجت‌ده ۲×۲ و اعلان (اگر تنظیم اولسا)</string>
-
     <string name="farvardin">فروردین</string>
     <string name="ordibehesht">اوردیبهشت</string>
     <string name="khordad">خورداد</string>
@@ -289,7 +288,6 @@
     <string name="dey">دی</string>
     <string name="bahman">بهمن</string>
     <string name="esfand">اسفند</string>
-
     <string name="muharram">موحررم</string>
     <string name="safar">صفر</string>
     <string name="rabi_al_awwal">ربيع الاوول</string>
@@ -302,7 +300,6 @@
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذیقعده</string>
     <string name="dhu_al_hijjah">ذیحججه</string>
-
     <string name="january">ژانویه</string>
     <string name="february">فوریه</string>
     <string name="march">مارس</string>
@@ -315,7 +312,6 @@
     <string name="october">اوْکتوبر</string>
     <string name="november">نوْوامبر</string>
     <string name="december">دسامبر</string>
-
     <string name="saturday">يئل‌گونو</string>
     <string name="sunday">سۆدگونو</string>
     <string name="monday">دۇزگونو</string>
