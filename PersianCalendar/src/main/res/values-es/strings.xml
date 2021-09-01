@@ -281,7 +281,6 @@
     <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
     <string name="widget_customization_owghat">Pray times on 2x2 and notification (if is set)</string>
     <string name="widget_customization_owghat_location">Location of pray times on 2x2 and notification (if is set)</string>
-
     <string name="farvardin">Farvardín</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">Jordad</string>
@@ -294,7 +293,6 @@
     <string name="dey">Dey</string>
     <string name="bahman">Bahmán</string>
     <string name="esfand">Esfand</string>
-
     <string name="muharram">Muharram</string>
     <string name="safar">Safar</string>
     <string name="rabi_al_awwal">Rabi\' al-Awwal</string>
@@ -307,7 +305,6 @@
     <string name="shawwal">Shawwal</string>
     <string name="dhu_al_qidah">Dhu al-Qadah</string>
     <string name="dhu_al_hijjah">Dhu al-Hijjah</string>
-
     <string name="january">Enero</string>
     <string name="february">Febrero</string>
     <string name="march">Marzo</string>
@@ -320,7 +317,6 @@
     <string name="october">Octubre</string>
     <string name="november">Noviembre</string>
     <string name="december">Diciembre</string>
-
     <string name="saturday">Sábado</string>
     <string name="sunday">Domingo</string>
     <string name="monday">Lunes</string>
@@ -328,5 +324,4 @@
     <string name="wednesday">Miércoles</string>
     <string name="thursday">Jueves</string>
     <string name="friday">Viernes</string>
-
 </resources>
