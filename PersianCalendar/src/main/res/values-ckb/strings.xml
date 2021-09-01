@@ -13,7 +13,7 @@
     <string name="persian_digits">ژمارەی کوردی</string>
     <string name="showing_clock_on_widget">نیشاندانی کاتژمێر لە ویجیتدا</string>
     <string name="clock_on_widget">کاتژمێر لە ویجیتدا</string>
-    <string name="showing_clock_in_24"> نیشاندانی کاتژمێر بە ٢٤ کاتکۆ</string>
+    <string name="showing_clock_in_24">نیشاندانی کاتژمێر بە ٢٤ کاتکۆ</string>
     <string name="clock_in_24">کاتژمێر بە ٢٤ کاتکۆ</string>
     <string name="about">لەبارە</string>
     <string name="gpl_logo">لۆگۆی GPL</string>
@@ -118,9 +118,8 @@
     <string name="about_developers">پەرەپێدەران</string>
     <string name="about_support_developers">پشتیوانی لە پەرەپێدەر</string>
     <string name="about_email_sum">ناردنی ئیمەیلی کەسی بۆ دانەری بەرنامە</string>
-    <string name="about_report_bug_sum">"ڕێگەی بەھێندتر بۆ ڕاپۆرتی ھەڵە و داخوازی تایبەتمەندیی نوێ؛ ھەژمارێکی GitHubی پێ‌دەوێ."</string>
-    <string name="gps_internet_desc">"تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە.
-بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە."</string>
+    <string name="about_report_bug_sum">ڕێگەی بەھێندتر بۆ ڕاپۆرتی ھەڵە و داخوازی تایبەتمەندیی نوێ؛ ھەژمارێکی GitHubی پێ‌دەوێ.</string>
+    <string name="gps_internet_desc">تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە. بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە.</string>
     <string name="start_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) لە سەرەتای ساڵەوە</string>
     <string name="end_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) بۆ کۆتای ساڵ</string>
     <!-- Sun Info -->
@@ -271,7 +270,6 @@
     <string name="widget_customization_non_holiday_events">ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</string>
     <string name="widget_customization_owghat">کاتی شەرعی لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
     <string name="widget_customization_owghat_location">شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
-
     <string name="farvardin">خاکەلێوە</string>
     <string name="ordibehesht">گوڵان</string>
     <string name="khordad">جۆزەردان</string>
@@ -284,7 +282,6 @@
     <string name="dey">بەفرانبار</string>
     <string name="bahman">ڕێبەندان</string>
     <string name="esfand">ڕەشەمە</string>
-
     <string name="muharram">موحەڕڕەم</string>
     <string name="safar">سەفەر</string>
     <string name="rabi_al_awwal">ڕەبیعەلئەووەڵ</string>
@@ -297,7 +294,6 @@
     <string name="shawwal">شەووال</string>
     <string name="dhu_al_qidah">زولقەعدە</string>
     <string name="dhu_al_hijjah">زولحەججە</string>
-
     <string name="january">جانواری</string>
     <string name="february">فێبرواری</string>
     <string name="march">مارچ</string>
@@ -310,7 +306,6 @@
     <string name="october">ئۆکتۆبەر</string>
     <string name="november">نۆڤەمبەر</string>
     <string name="december">دیسەمبەر</string>
-
     <string name="saturday">شەممە</string>
     <string name="sunday">یەکشەممە</string>
     <string name="monday">دووشەممە</string>

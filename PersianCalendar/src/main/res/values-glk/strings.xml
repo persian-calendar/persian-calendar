@@ -119,7 +119,7 @@
     <string name="about_developers">تؤسعه‌دهندهان</string>
     <string name="about_support_developers">تؤسعه‌دهنده پۊشتين</string>
     <string name="about_email_sum">شخصي رايانامهˈ برنامه نيويسˇره اۊسه کۊدن</string>
-    <string name="gps_internet_desc">"موقعیت‌یاب لؤطفن (GPS) ؤ اينترنتˈ قبله يا جهتˇجؤغرافيائي يافتنˇوأستي رؤشنˈکۊنيد. برنامه ايتأ جا ره فقد ايدفأ أ دسترسي-يانˈلازيم دأره, ولي أگه شيمي جأ عوضˈبه وا دۊمرتبه اۊنˈتنظيم بۊکۊنيد."</string>
+    <string name="gps_internet_desc">موقعیت‌یاب لؤطفن (GPS) ؤ اينترنتˈ قبله يا جهتˇجؤغرافيائي يافتنˇوأستي رؤشنˈکۊنيد. برنامه ايتأ جا ره فقد ايدفأ أ دسترسي-يانˈلازيم دأره, ولي أگه شيمي جأ عوضˈبه وا دۊمرتبه اۊنˈتنظيم بۊکۊنيد.</string>
     <string name="start_of_year_diff">%1$s رۊز (~%2$s هفته یا %3$s ماه) اولˇسال</string>
     <string name="end_of_year_diff">%1$s رۊز (~%2$s هفته یا %3$s ما) تا آخرˇسال</string>
     <!-- Sun Info -->
@@ -162,7 +162,7 @@
     <string name="set_location">أنˇوأستي کي خؤرشيد ؤ ما ؤ قبله مؤقعيتˈ بداريد, تأنيدي شيمي مؤقعيتˈتنظيماتˇدۊرۊن وارد بۊکۊنيد.</string>
     <string name="moonInScorpio">قمر در عقربˇرۊزان</string>
     <string name="astronomical_info">اخترشناسي ايطلاعات</string>
-    <string name="astronomical_info_summary"> ايطلاعاتˇنيشان دأن صورتˇفلکی، سالˇنام ؤ قمر در عقربˇمانستن</string>
+    <string name="astronomical_info_summary">ايطلاعاتˇنيشان دأن صورتˇفلکی، سالˇنام ؤ قمر در عقربˇمانستن</string>
     <string name="islamic_offset">ايسلامي تقويمˇتنظيم</string>
     <string name="islamic_offset_summary">واگردستن تقويمˇچاکۊدنˇره</string>
     <string name="pref_header_interface_calendar">رابط ؤ تقویم</string>
@@ -270,7 +270,6 @@
     <string name="widget_customization_non_holiday_events">جغرزˇتعطيلي مۊناسبتان ویجتˇدۊرۊن ۲×۲ ؤ اعلانˇدۊرۊن</string>
     <string name="widget_customization_owghat">اؤقات شرعي ویجتˇدۊرۊن ۲×۲ ؤ اعلانˇدۊرۊن (أگه تنظيم ببه)</string>
     <string name="widget_customization_owghat_location">مکان در کنار اؤقات شرعي ویجتˇدۊرۊن ۲×۲ ؤ اعلانˇدۊرۊن (أگه تنظيم ببه)</string>
-
     <string name="farvardin">فروردین</string>
     <string name="ordibehesht">اؤردیبهشت</string>
     <string name="khordad">خؤرداد</string>
@@ -283,7 +282,6 @@
     <string name="dey">دی</string>
     <string name="bahman">بهمن</string>
     <string name="esfand">ايسفند</string>
-
     <string name="muharram">مُحَرَّم</string>
     <string name="safar">صَفَر</string>
     <string name="rabi_al_awwal">ربيع الأول</string>
@@ -296,7 +294,6 @@
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذؤ القعده</string>
     <string name="dhu_al_hijjah">ذؤ الحجه</string>
-
     <string name="january">ژانویه</string>
     <string name="february">فوریه</string>
     <string name="march">مارس</string>
@@ -309,7 +306,6 @@
     <string name="october">اؤکتؤبر</string>
     <string name="november">نؤوامبر</string>
     <string name="december">دسامبر</string>
-
     <string name="saturday">شمبه</string>
     <string name="sunday">یکشمبه</string>
     <string name="monday">دۊشمبه</string>

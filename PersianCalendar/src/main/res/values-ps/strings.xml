@@ -119,8 +119,7 @@
     <string name="about_developers">توسعه‌دهندگان</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
     <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسندگان برنامه</string>
-    <string name="gps_internet_desc">"لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
-برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است."</string>
+    <string name="gps_internet_desc">لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید. برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا انتهای سال</string>
     <!-- Sun Info -->
@@ -271,7 +270,6 @@
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
     <string name="widget_customization_owghat_location">مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
-
     <string name="farvardin">وری</string>
     <string name="ordibehesht">غویی</string>
     <string name="khordad">غبرګولی</string>
@@ -284,7 +282,6 @@
     <string name="dey">مرغومی</string>
     <string name="bahman">سلواغه</string>
     <string name="esfand">کب</string>
-
     <string name="muharram">مُحَرَّم</string>
     <string name="safar">صَفَر</string>
     <string name="rabi_al_awwal">ربیع‌الاول</string>
@@ -297,7 +294,6 @@
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذی‌القعده</string>
     <string name="dhu_al_hijjah">ذی‌الحجه</string>
-
     <string name="january">جنوری</string>
     <string name="february">فبروری</string>
     <string name="march">مارچ</string>
@@ -310,7 +306,6 @@
     <string name="october">اکتبر</string>
     <string name="november">نومبر</string>
     <string name="december">دیسمبر</string>
-
     <string name="saturday">شنبه</string>
     <string name="sunday">یکشنبه</string>
     <string name="monday">دوشنبه</string>
@@ -318,5 +313,4 @@
     <string name="wednesday">چهارشنبه</string>
     <string name="thursday">پنجشنبه</string>
     <string name="friday">جمعه</string>
-
 </resources>

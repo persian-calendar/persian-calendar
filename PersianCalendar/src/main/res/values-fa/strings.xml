@@ -272,7 +272,6 @@
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
     <string name="widget_customization_owghat_location">مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
-
     <string name="farvardin">فروردین</string>
     <string name="ordibehesht">اردیبهشت</string>
     <string name="khordad">خرداد</string>
@@ -285,7 +284,6 @@
     <string name="dey">دی</string>
     <string name="bahman">بهمن</string>
     <string name="esfand">اسفند</string>
-
     <string name="muharram">مُحَرَّم</string>
     <string name="safar">صَفَر</string>
     <string name="rabi_al_awwal">ربیع‌الاول</string>
@@ -298,7 +296,6 @@
     <string name="shawwal">شوال</string>
     <string name="dhu_al_qidah">ذی‌القعده</string>
     <string name="dhu_al_hijjah">ذی‌الحجه</string>
-
     <string name="january">ژانویه</string>
     <string name="february">فوریه</string>
     <string name="march">مارس</string>
@@ -311,7 +308,6 @@
     <string name="october">اکتبر</string>
     <string name="november">نوامبر</string>
     <string name="december">دسامبر</string>
-
     <string name="saturday">شنبه</string>
     <string name="sunday">یکشنبه</string>
     <string name="monday">دوشنبه</string>
