@@ -104,8 +104,8 @@
     <string name="west">Oeste</string>
     <string name="qibla">Qibla</string>
     <!-- Settings -->
-    <string name="pref_widget">Widget y notificación</string>
-    <string name="pref_notification">Widget y Notificación</string>
+    <string name="pref_widget">Widget</string>
+    <string name="pref_notification">Notificación</string>
     <!--Interface and Calendar Settings-->
     <string name="pref_interface">Interfaz</string>
     <string name="language">Idioma</string>
@@ -213,7 +213,7 @@
     <string name="shift_work_reset_button">Deshabilitar o reprogramar</string>
     <string name="n_minutes">%1$s minutos</string>
     <string name="n_hours">%1$s horas</string>
-    <string name="spaced_and">" Y "</string>
+    <string name="spaced_and">" y "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_info">Información del dispositivo</string>
