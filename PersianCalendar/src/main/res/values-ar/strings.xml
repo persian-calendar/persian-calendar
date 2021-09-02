@@ -103,11 +103,8 @@
     <string name="west">الغرب</string>
     <string name="qibla">القبلة</string>
     <!-- Settings -->
-    <string name="pref_header_interface_calendar">الواجهة والتقويم</string>
-    <string name="pref_header_notification_widget">التنبيهات والمصغر</string>
     <string name="pref_widget">المصغر</string>
     <string name="pref_notification">التنبيهات</string>
-    <string name="pref_header_location_athan">المكان والأذان</string>
     <!--Interface and Calendar Settings-->
     <string name="pref_interface">الواجهة</string>
     <string name="language">اللغة</string>
@@ -218,7 +215,7 @@
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
     <string name="n_minutes">%1$s دقائق</string>
     <string name="n_hours">%1$s ساعات</string>
-    <string name="spaced_and">" و "</string>
+    <string name="spaced_and">" و"</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_info">معلومات الجهاز</string>

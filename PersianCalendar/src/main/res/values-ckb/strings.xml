@@ -165,11 +165,8 @@
     <string name="astronomical_info_summary">نیشاندانی زانیاریگەلێک وەک کەلوو، ناوی ساڵ و مانگ لە دووپشکدا</string>
     <string name="islamic_offset">چاکسازیی ڕێککەوتی کۆچیی مانگی</string>
     <string name="islamic_offset_summary">وەدوا یان وەپێشخستنی ڕێککەوتی کۆچیی مانگی</string>
-    <string name="pref_header_interface_calendar">ڕووکار و ڕۆژژمێر</string>
-    <string name="pref_header_notification_widget">ئاگاداری و ویجیت</string>
     <string name="pref_widget">ویجیت</string>
     <string name="pref_notification">ئاگاداری</string>
-    <string name="pref_header_location_athan">شوێن و بانگ</string>
     <string name="pref_interface">ڕووکار</string>
     <string name="resume">درێژەپێدان</string>
     <string name="continue_button">بەردەوامبوون</string>

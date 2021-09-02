@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotif
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.spacedAnd
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.concurrent.TimeUnit
 
@@ -71,26 +72,27 @@ class PreferencesFragment : Fragment() {
             }
         }
 
-        val tabs = listOf(
-            R.string.pref_header_interface_calendar to InterfaceCalendarFragment::class.java,
-            R.string.pref_header_notification_widget to WidgetNotificationFragment::class.java,
-            R.string.pref_header_location_athan to LocationAthanFragment::class.java
-        )
         val args: PreferencesFragmentArgs by navArgs()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = tabs.size
-            override fun createFragment(position: Int) = tabs[position].second.newInstance().also {
+            override fun createFragment(position: Int) = tabs[position].first().also {
                 if (position == args.tab && args.preferenceKey.isNotEmpty()) {
                     it.arguments = bundleOf(PREF_DESTINATION to args.preferenceKey)
                 }
             }
         }
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, i ->
-            tab.setText(tabs[i].first)
+            tab.text = tabs[i].second.joinToString(spacedAnd) { getString(it) }
         }.attach()
         binding.viewPager.currentItem = args.tab
         return binding.root
     }
+
+    private val tabs = listOf(
+        ::InterfaceCalendarFragment to listOf(R.string.pref_interface, R.string.calendar),
+        ::WidgetNotificationFragment to listOf(R.string.pref_notification, R.string.pref_widget),
+        ::LocationAthanFragment to listOf(R.string.location, R.string.athan)
+    )
 }
 
 const val PREF_DESTINATION = "DESTINATION"

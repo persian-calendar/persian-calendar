@@ -104,11 +104,8 @@
     <string name="west">Oeste</string>
     <string name="qibla">Qibla</string>
     <!-- Settings -->
-    <string name="pref_header_interface_calendar">Interfaz y calendario</string>
-    <string name="pref_header_notification_widget">Notificación y widget</string>
     <string name="pref_widget">Widget y notificación</string>
     <string name="pref_notification">Widget y Notificación</string>
-    <string name="pref_header_location_athan">Ubicación y azan</string>
     <!--Interface and Calendar Settings-->
     <string name="pref_interface">Interfaz</string>
     <string name="language">Idioma</string>

@@ -167,11 +167,8 @@
     <string name="astronomical_info_summary">Show additional information like constellation, years names and moon in scorpio</string>
     <string name="islamic_offset">Islamic offset</string>
     <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
-    <string name="pref_header_interface_calendar">界面と暦</string>
-    <string name="pref_header_notification_widget">ウィジェットと通知</string>
     <string name="pref_widget">Widget</string>
     <string name="pref_notification">Notification</string>
-    <string name="pref_header_location_athan">Location and Athan</string>
     <string name="pref_interface">界面</string>
     <string name="resume">続ける</string>
     <string name="continue_button">続ける</string>

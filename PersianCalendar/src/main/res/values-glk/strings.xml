@@ -165,11 +165,8 @@
     <string name="astronomical_info_summary">ايطلاعاتˇنيشان دأن صورتˇفلکی، سالˇنام ؤ قمر در عقربˇمانستن</string>
     <string name="islamic_offset">ايسلامي تقويمˇتنظيم</string>
     <string name="islamic_offset_summary">واگردستن تقويمˇچاکۊدنˇره</string>
-    <string name="pref_header_interface_calendar">رابط ؤ تقویم</string>
-    <string name="pref_header_notification_widget">ویجت و اعلان</string>
     <string name="pref_widget">ویجت</string>
     <string name="pref_notification">ویجت</string>
-    <string name="pref_header_location_athan">مؤقعیت ؤ اذان</string>
     <string name="pref_interface">رابط</string>
     <string name="resume">ايدامه</string>
     <string name="continue_button">ايدامه</string>
