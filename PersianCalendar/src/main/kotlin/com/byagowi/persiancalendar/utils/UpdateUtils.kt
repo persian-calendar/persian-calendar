@@ -41,6 +41,7 @@ import com.byagowi.persiancalendar.ui.MainActivity
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
+import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 
 private const val NOTIFICATION_ID = 1001
@@ -70,13 +71,12 @@ fun update(context: Context, updateDate: Boolean) {
     val jdn = Jdn.today
     val date = jdn.toCalendar(mainCalendar)
 
-    val dateHasChanged = if (pastDate == null || pastDate != date || updateDate) {
+    if (pastDate == null || pastDate != date || updateDate) {
         logDebug("UpdateUtils", "date has changed")
         scheduleAlarms(context)
         pastDate = date
         readAndStoreDeviceCalendarEventsOfTheDay(context)
-        true
-    } else false
+    }
 
     val shiftWorkTitle = getShiftWorkTitle(jdn, false)
     val title = dayTitleSummary(jdn, date) +
@@ -86,27 +86,47 @@ fun update(context: Context, updateDate: Boolean) {
     ) + if (shiftWorkTitle.isEmpty()) "" else " ($shiftWorkTitle)"
     val subtitle = dateStringOfOtherCalendars(jdn, spacedComma)
 
+    // region owghat calculations
     val nowClock = Clock(Date().toJavaCalendar(forceLocalTime = true))
+    val prayTimes = coordinates?.calculatePrayTimes()
 
     @StringRes
-    val nextOwghatId = getNextOwghatTimeId(nowClock, dateHasChanged)
-    val owghat = if (nextOwghatId == 0) "" else buildString {
+    val nextOwghatId = prayTimes?.getNextOwghatTimeId(nowClock)
+    val owghat = if (nextOwghatId == null) "" else buildString {
         append(context.getString(nextOwghatId))
         append(": ")
-        append(getOwghatTimeOfStringId(nextOwghatId).toFormattedString())
+        append(prayTimes.getFromStringId(nextOwghatId)?.toFormattedString() ?: "")
         if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) {
             getCityName(context, false).takeIf { it.isNotEmpty() }.also {
                 append(" ($it)")
             }
         }
     }
+    // endregion
 
     context.updateAgeWidgets(manager)
     context.update1x1Widget(manager, date)
     context.update4x1Widget(manager, jdn, date, widgetTitle, subtitle)
     context.update2x2Widget(manager, jdn, date, widgetTitle, subtitle, owghat)
-    context.update4x2Widget(manager, jdn, date, nextOwghatId, nowClock)
+    context.update4x2Widget(manager, jdn, date, nextOwghatId, nowClock, prayTimes)
     context.updateNotification(title, subtitle, jdn, date, owghat)
+}
+
+@StringRes
+private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
+    val clock = current.toInt()
+    return when {
+        fajrClock.toInt() > clock -> R.string.fajr
+        sunriseClock.toInt() > clock -> R.string.sunrise
+        dhuhrClock.toInt() > clock -> R.string.dhuhr
+        asrClock.toInt() > clock -> R.string.asr
+        sunsetClock.toInt() > clock -> R.string.sunset
+        maghribClock.toInt() > clock -> R.string.maghrib
+        ishaClock.toInt() > clock -> R.string.isha
+        midnightClock.toInt() > clock -> R.string.midnight
+        // TODO: this is today's, not tomorrow
+        else -> R.string.fajr
+    }
 }
 
 private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
@@ -256,7 +276,8 @@ private fun Context.update2x2Widget(
 }
 
 private fun Context.update4x2Widget(
-    manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nextOwghatId: Int, nowClock: Clock
+    manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nextOwghatId: Int?, nowClock: Clock,
+    prayTimes: PrayTimes?
 ) {
     val widget4x2 = ComponentName(this, Widget4x2::class.java)
     if (manager.getAppWidgetIds(widget4x2).isNullOrEmpty()) return
@@ -289,7 +310,7 @@ private fun Context.update4x2Widget(
         if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
     })
 
-    if (nextOwghatId != 0) {
+    if (nextOwghatId != null && prayTimes != null) {
         // Set text of owghats
         listOf(
             R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
@@ -311,7 +332,7 @@ private fun Context.update4x2Widget(
         ) { textHolderViewId, owghatStringId ->
             remoteViews.setTextViewText(
                 textHolderViewId, getString(owghatStringId) + "\n" +
-                        getOwghatTimeOfStringId(owghatStringId).toFormattedString()
+                        prayTimes.getFromStringId(owghatStringId)?.toFormattedString()
             )
             remoteViews.setTextColor(
                 textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
@@ -319,11 +340,14 @@ private fun Context.update4x2Widget(
         }
 
         val remaining = Clock.fromInt(
-            (getOwghatTimeOfStringId(nextOwghatId).toInt() - nowClock.toInt())
+            (prayTimes.getFromStringId(nextOwghatId)?.toInt() ?: 0 - nowClock.toInt())
                 .let { if (it > 0) it else it + 60 * 24 })
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2,
-            getString(R.string.n_till, remaining.asRemainingTime(this), getString(nextOwghatId))
+            getString(
+                R.string.n_till, remaining.asRemainingTime(this),
+                getString(nextOwghatId ?: R.string.empty)
+            )
         )
         remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     } else {

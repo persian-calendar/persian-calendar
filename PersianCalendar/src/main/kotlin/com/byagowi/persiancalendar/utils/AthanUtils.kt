@@ -40,7 +40,6 @@ import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.ui.AthanActivity
 import io.github.persiancalendar.praytimes.PrayTimes
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -117,7 +116,7 @@ fun scheduleAlarms(context: Context) {
         ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
             ?: .0) * 60.0 * 1000.0).toLong()
 
-    val prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
+    val prayTimes = coordinates?.calculatePrayTimes() ?: return
     // convert spacedComma separated string to a set
     enabledAlarms.forEachIndexed { i, name ->
         scheduleAlarm(context, name, Calendar.getInstance().also {

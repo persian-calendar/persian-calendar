@@ -64,6 +64,7 @@ import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calculationMethod
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.coordinates
@@ -89,7 +90,6 @@ import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
 
 private const val CALENDARS_TAB = 0
 private const val EVENTS_TAB = 1
@@ -468,9 +468,7 @@ class CalendarFragment : Fragment() {
         val coordinate = coordinates ?: return
         val owghatBinding = owghatBinding ?: return
 
-        val prayTimes = PrayTimesCalculator.calculate(
-            calculationMethod, jdn.toJavaCalendar().time, coordinate
-        )
+        val prayTimes = coordinate.calculatePrayTimes(jdn.toJavaCalendar().time)
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->
             sunView.isVisible = if (isToday) {

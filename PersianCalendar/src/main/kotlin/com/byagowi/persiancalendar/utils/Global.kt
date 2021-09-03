@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
-import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_APP_LANGUAGE
@@ -59,10 +58,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.CalculationMethod
-import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.Coordinate
-import io.github.persiancalendar.praytimes.PrayTimes
-import io.github.persiancalendar.praytimes.PrayTimesCalculator
 import java.util.*
 
 val monthNameEmptyList = List(12) { "" }
@@ -125,8 +121,6 @@ var isTalkBackEnabled = false
     private set
 var isHighTextContrastEnabled = false
     private set
-var prayTimes: PrayTimes? = null
-    private set
 var shiftWorkTitles = emptyMap<String, String>()
     private set
 var shiftWorkStartingJdn: Jdn? = null
@@ -186,39 +180,6 @@ fun loadLanguageResources(context: Context) {
     gregorianMonths = language.getGregorianMonths(context, easternGregorianArabicMonths)
     weekDays = language.getWeekDays(context)
     weekDaysInitials = language.getWeekDaysInitials(context)
-}
-
-@StringRes
-fun getNextOwghatTimeId(current: Clock, dateHasChanged: Boolean): Int {
-    coordinates ?: return 0
-
-    if (prayTimes == null || dateHasChanged)
-        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
-
-    val clock = current.toInt()
-
-    return prayTimes?.let {
-        //TODO We like to show Imsak only in Ramadan
-        when {
-            it.fajrClock.toInt() > clock -> R.string.fajr
-            it.sunriseClock.toInt() > clock -> R.string.sunrise
-            it.dhuhrClock.toInt() > clock -> R.string.dhuhr
-            it.asrClock.toInt() > clock -> R.string.asr
-            it.sunsetClock.toInt() > clock -> R.string.sunset
-            it.maghribClock.toInt() > clock -> R.string.maghrib
-            it.ishaClock.toInt() > clock -> R.string.isha
-            it.midnightClock.toInt() > clock -> R.string.midnight
-            // TODO: this is today's, not tomorrow
-            else -> R.string.fajr
-        }
-    } ?: 0
-}
-
-fun getOwghatTimeOfStringId(@StringRes stringId: Int): Clock {
-    if (prayTimes == null && coordinates != null)
-        prayTimes = PrayTimesCalculator.calculate(calculationMethod, Date(), coordinates)
-
-    return prayTimes?.getFromStringId(stringId) ?: Clock.fromInt(0)
 }
 
 fun updateStoredPreference(context: Context) {
