@@ -87,22 +87,13 @@ class SearchEventsAdapter private constructor(
             lifecycleOwner: LifecycleOwner,
         ) {
             lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                val today = Jdn.today
+                val jdn = Jdn.today
                 val events = listOf(
-                    context.getAllEnabledAppointments(),
-                    persianCalendarEvents.getAllEvents(),
-                    islamicCalendarEvents.getAllEvents(),
-                    gregorianCalendarEvents.getAllEvents(),
-                    today.toPersianCalendar().let {
-                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
-                    },
-                    today.toGregorianCalendar().let {
-                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
-                    },
-                    today.toIslamicCalendar().let {
-                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
-                    }
-                ).flatten()
+                    context.getAllEnabledAppointments(), persianCalendarEvents.getAllEvents(),
+                    islamicCalendarEvents.getAllEvents(), gregorianCalendarEvents.getAllEvents()
+                ).flatten() + listOf(
+                    jdn.toPersianCalendar(), jdn.toGregorianCalendar(), jdn.toIslamicCalendar()
+                ).flatMap { irregularCalendarEventsStore.getEventsList(it.year, it.calendarType) }
                 val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
                 val itemsWords = events.map { it to it.formattedTitle.split(*delimiters) }
                 withContext(Dispatchers.Main.immediate) {
