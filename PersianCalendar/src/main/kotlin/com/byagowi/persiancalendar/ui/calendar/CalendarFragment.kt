@@ -65,7 +65,6 @@ import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
-import com.byagowi.persiancalendar.utils.calculationMethod
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.dayTitleSummary

@@ -344,10 +344,7 @@ private fun Context.update4x2Widget(
                 .let { if (it > 0) it else it + 60 * 24 })
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2,
-            getString(
-                R.string.n_till, remaining.asRemainingTime(this),
-                getString(nextOwghatId ?: R.string.empty)
-            )
+            getString(R.string.n_till, remaining.asRemainingTime(this), getString(nextOwghatId))
         )
         remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     } else {
