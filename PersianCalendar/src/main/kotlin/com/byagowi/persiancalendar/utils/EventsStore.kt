@@ -22,6 +22,8 @@ private constructor(private val store: Map<Int, List<T>>) {
         date: CivilDate, deviceEvents: DeviceCalendarEventsStore
     ): List<CalendarEvent<*>> = deviceEvents.getEventsEntry(date) + getEvents(date)
 
+    fun getAllEvents(): List<T> = store.values.flatten()
+
     companion object {
         @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
         fun hash(date: AbstractDate) = date.month * 100 + date.dayOfMonth

@@ -62,7 +62,6 @@ import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescript
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
-import com.byagowi.persiancalendar.utils.allEnabledEvents
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendarType
@@ -71,7 +70,6 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.getCityName
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
@@ -497,25 +495,24 @@ class CalendarFragment : Fragment() {
             // Remove search edit view below bar
             searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull
                 ?.setBackgroundColor(Color.TRANSPARENT)
-
-            val searchAutoComplete = searchView.findViewById<SearchAutoComplete?>(
+            searchView.findViewById<SearchAutoComplete?>(
                 androidx.appcompat.R.id.search_src_text
-            ).debugAssertNotNull
-            searchAutoComplete?.setHint(R.string.search_in_events)
-            val events = allEnabledEvents + context.getAllEnabledAppointments()
-            searchAutoComplete?.setAdapter(SearchEventsAdapter(context, viewLifecycleOwner, events))
-            searchAutoComplete?.setOnItemClickListener { parent, _, position, _ ->
-                val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
-                val type = date.calendarType
-                val today = Jdn.today.toCalendar(type)
-                bringDate(
-                    Jdn(
-                        type, if (date.year == -1)
-                            (today.year + if (date.month < today.month) 1 else 0)
-                        else date.year, date.month, date.dayOfMonth
+            ).debugAssertNotNull?.let {
+                it.setHint(R.string.search_in_events)
+                it.setOnItemClickListener { parent, _, position, _ ->
+                    val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
+                    val type = date.calendarType
+                    val today = Jdn.today.toCalendar(type)
+                    bringDate(
+                        Jdn(
+                            type, if (date.year == -1)
+                                (today.year + if (date.month < today.month) 1 else 0)
+                            else date.year, date.month, date.dayOfMonth
+                        )
                     )
-                )
-                searchView.onActionViewCollapsed()
+                    searchView.onActionViewCollapsed()
+                }
+                SearchEventsAdapter.attachEventsAdapter(it, context, viewLifecycleOwner)
             }
         }
 

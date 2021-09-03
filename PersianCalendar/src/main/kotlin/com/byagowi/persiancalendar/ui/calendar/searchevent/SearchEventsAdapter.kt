@@ -5,12 +5,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
+import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.calendarType
+import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
+import com.byagowi.persiancalendar.utils.gregorianCalendarEvents
+import com.byagowi.persiancalendar.utils.irregularCalendarEventsStore
+import com.byagowi.persiancalendar.utils.islamicCalendarEvents
+import com.byagowi.persiancalendar.utils.persianCalendarEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -18,21 +26,13 @@ import kotlinx.coroutines.withContext
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
-class SearchEventsAdapter(
-    context: Context, lifecycleOwner: LifecycleOwner,
-    private val originalItems: List<CalendarEvent<*>>
+class SearchEventsAdapter private constructor(
+    context: Context,
+    private val originalItems: List<CalendarEvent<*>>,
+    private val itemsWords: List<Pair<CalendarEvent<*>, List<String>>>
 ) : ArrayAdapter<CalendarEvent<*>>(context, R.layout.suggestion, R.id.text, originalItems) {
 
     private var showingItems: List<CalendarEvent<*>> = originalItems
-    private var itemsWords: List<Pair<CalendarEvent<*>, List<String>>> = emptyList()
-
-    init {
-        lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
-            val result = originalItems.map { it to it.formattedTitle.split(*delimiters) }
-            withContext(Dispatchers.Main.immediate) { itemsWords = result }
-        }
-    }
 
     override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
     override fun getCount(): Int = showingItems.size
@@ -41,15 +41,6 @@ class SearchEventsAdapter(
             it.text.text = getItem(position).formattedTitle
         }.root
     }
-
-    private val CalendarEvent<*>.formattedTitle
-        get() = when (this) {
-            is CalendarEvent.GregorianCalendarEvent,
-            is CalendarEvent.IslamicCalendarEvent,
-            is CalendarEvent.PersianCalendarEvent -> title
-            is CalendarEvent.DeviceCalendarEvent ->
-                if (description.isBlank()) title else "$title ($description)"
-        }
 
     private val filterInstance = ArrayFilter()
     override fun getFilter() = filterInstance
@@ -78,6 +69,46 @@ class SearchEventsAdapter(
                 notifyDataSetChanged()
             else
                 notifyDataSetInvalidated()
+        }
+    }
+
+    companion object {
+        private val CalendarEvent<*>.formattedTitle
+            get() = when (this) {
+                is CalendarEvent.GregorianCalendarEvent,
+                is CalendarEvent.IslamicCalendarEvent,
+                is CalendarEvent.PersianCalendarEvent -> title
+                is CalendarEvent.DeviceCalendarEvent ->
+                    if (description.isBlank()) title else "$title ($description)"
+            }
+
+        fun attachEventsAdapter(
+            searchAutoComplete: SearchView.SearchAutoComplete, context: Context,
+            lifecycleOwner: LifecycleOwner,
+        ) {
+            lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                val today = Jdn.today
+                val events = listOf(
+                    context.getAllEnabledAppointments(),
+                    persianCalendarEvents.getAllEvents(),
+                    islamicCalendarEvents.getAllEvents(),
+                    gregorianCalendarEvents.getAllEvents(),
+                    today.toPersianCalendar().let {
+                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
+                    },
+                    today.toGregorianCalendar().let {
+                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
+                    },
+                    today.toIslamicCalendar().let {
+                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
+                    }
+                ).flatten()
+                val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
+                val itemsWords = events.map { it to it.formattedTitle.split(*delimiters) }
+                withContext(Dispatchers.Main.immediate) {
+                    searchAutoComplete.setAdapter(SearchEventsAdapter(context, events, itemsWords))
+                }
+            }
         }
     }
 }

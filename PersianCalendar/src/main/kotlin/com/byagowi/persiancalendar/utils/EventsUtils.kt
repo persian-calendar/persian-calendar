@@ -13,8 +13,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
-var allEnabledEvents = emptyList<CalendarEvent<*>>()
-    private set
 var persianCalendarEvents: PersianCalendarEventsStore = EventsStore.empty()
     private set
 var islamicCalendarEvents: IslamicCalendarEventsStore = EventsStore.empty()
@@ -81,37 +79,20 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
 
 fun loadEvents(enabledTypes: EnabledHolidays, language: Language) {
     // It is vital to configure calendar before loading of the events
-    IslamicDate.useUmmAlQura = if (enabledTypes.iranHolidays || enabledTypes.iranOthers) false
-    else enabledTypes.afghanistanHolidays || language.mightPreferNonLocalIslamicCalendar
-
-    val today = Jdn.today
+    IslamicDate.useUmmAlQura =
+        if (enabledTypes.iranHolidays || enabledTypes.iranOthers) false
+        else enabledTypes.afghanistanHolidays || language.mightPreferNonLocalIslamicCalendar
 
     irregularCalendarEventsStore = IrregularCalendarEventsStore(enabledTypes)
-    allEnabledEvents = run {
-        val date = today.toPersianCalendar()
-        val type = date.calendarType
-        val events = persianEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.PersianCalendarEvent>(record, enabledTypes, type)
-        }
-        persianCalendarEvents = PersianCalendarEventsStore(events)
-        events + irregularCalendarEventsStore.getEventsList(date.year, type)
-    } + run {
-        val date = today.toIslamicCalendar()
-        val type = date.calendarType
-        val events = islamicEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.IslamicCalendarEvent>(record, enabledTypes, type)
-        }
-        islamicCalendarEvents = IslamicCalendarEventsStore(events)
-        events + irregularCalendarEventsStore.getEventsList(date.year, type)
-    } + run {
-        val date = today.toGregorianCalendar()
-        val type = date.calendarType
-        val events = gregorianEvents.mapNotNull { record ->
-            createEvent<CalendarEvent.GregorianCalendarEvent>(record, enabledTypes, type)
-        }
-        gregorianCalendarEvents = GregorianCalendarEventsStore(events)
-        events + irregularCalendarEventsStore.getEventsList(date.year, type)
-    }
+    persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull { record ->
+        createEvent(record, enabledTypes, CalendarType.SHAMSI)
+    })
+    islamicCalendarEvents = IslamicCalendarEventsStore(islamicEvents.mapNotNull { record ->
+        createEvent(record, enabledTypes, CalendarType.ISLAMIC)
+    })
+    gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull { record ->
+        createEvent(record, enabledTypes, CalendarType.GREGORIAN)
+    })
 }
 
 private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
