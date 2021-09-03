@@ -20,7 +20,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.putJdn
 
-class WidgetAgeConfigureFragment : PreferenceFragmentCompat() {
+class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val appWidgetId = arguments
             ?.takeIf { it.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID) }

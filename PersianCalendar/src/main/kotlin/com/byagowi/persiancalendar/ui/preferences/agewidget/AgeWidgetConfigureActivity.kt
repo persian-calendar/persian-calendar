@@ -60,7 +60,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
 
         supportFragmentManager.commit {
             add(
-                R.id.preference_fragment_holder, WidgetAgeConfigureFragment::class.java,
+                R.id.preference_fragment_holder, AgeWidgetConfigureFragment::class.java,
                 bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to appWidgetId), "TAG"
             )
         }
