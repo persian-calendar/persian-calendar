@@ -49,8 +49,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
-import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
-import com.byagowi.persiancalendar.ui.preferences.LOCATION_ATHAN_TAB
+import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.CalendarsView
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
@@ -87,10 +86,6 @@ import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
-
-private const val CALENDARS_TAB = 0
-private const val EVENTS_TAB = 1
-private const val OWGHAT_TAB = 2
 
 class CalendarFragment : Fragment() {
 
@@ -245,7 +240,7 @@ class CalendarFragment : Fragment() {
             "اگر مایل به دیدن خورشیدنما و اوقات شرعی هستید مکان را در تنظیمات مشخص کنید"
         binding.buttonsBar.settings.setOnClickListener {
             findNavController().navigateSafe(
-                CalendarFragmentDirections.navigateToSettings(LOCATION_ATHAN_TAB)
+                CalendarFragmentDirections.navigateToSettings(PreferencesFragment.LOCATION_ATHAN_TAB)
             )
         }
         binding.buttonsBar.discard.setOnClickListener {
@@ -446,7 +441,7 @@ class CalendarFragment : Fragment() {
             eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
                     CalendarFragmentDirections.navigateToSettings(
-                        INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
+                        PreferencesFragment.INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                     )
                 )
             }
@@ -551,5 +546,11 @@ class CalendarFragment : Fragment() {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick { showMonthOverviewDialog(context, calendarPager.selectedMonth) }
         }
+    }
+
+    companion object {
+        private const val CALENDARS_TAB = 0
+        private const val EVENTS_TAB = 1
+        private const val OWGHAT_TAB = 2
     }
 }

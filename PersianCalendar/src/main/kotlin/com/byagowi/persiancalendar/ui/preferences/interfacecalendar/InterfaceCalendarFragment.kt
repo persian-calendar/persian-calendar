@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
-import com.byagowi.persiancalendar.ui.preferences.PREF_DESTINATION
+import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
 import com.byagowi.persiancalendar.ui.preferences.dialogTitle
@@ -47,7 +47,7 @@ import com.byagowi.persiancalendar.utils.weekDays
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val context = context ?: return
-        val destination = arguments?.getString(PREF_DESTINATION)
+        val destination = arguments?.getString(PreferencesFragment.PREF_DESTINATION)
         if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(context)
 
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {

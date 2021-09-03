@@ -49,7 +49,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
-import com.byagowi.persiancalendar.ui.preferences.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -332,7 +332,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         it.setAction("Settings") {
             navHostFragment?.navController?.navigateSafe(
                 CalendarFragmentDirections.navigateToSettings(
-                    INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
+                    PreferencesFragment.INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
                 )
             )
         }

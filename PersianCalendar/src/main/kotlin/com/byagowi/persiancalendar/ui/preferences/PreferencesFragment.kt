@@ -93,9 +93,11 @@ class PreferencesFragment : Fragment() {
         ::WidgetNotificationFragment to listOf(R.string.pref_notification, R.string.pref_widget),
         ::LocationAthanFragment to listOf(R.string.location, R.string.athan)
     )
-}
 
-const val PREF_DESTINATION = "DESTINATION"
-const val INTERFACE_CALENDAR_TAB = 0
-const val WIDGET_NOTIFICATION_TAB = 1
-const val LOCATION_ATHAN_TAB = 2
+    companion object {
+        const val PREF_DESTINATION = "DESTINATION"
+        const val INTERFACE_CALENDAR_TAB = 0
+        const val WIDGET_NOTIFICATION_TAB = 1
+        const val LOCATION_ATHAN_TAB = 2
+    }
+}
