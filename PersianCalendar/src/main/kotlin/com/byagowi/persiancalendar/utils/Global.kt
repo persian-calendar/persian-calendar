@@ -152,8 +152,8 @@ var calendarTypesTitleAbbr = emptyList<String>()
 // Some more are in EventsUtils
 
 // This should be called before any use of Utils on the activity and services
-fun initUtils(context: Context) {
-    logDebug("Utils", "initUtils is called")
+fun initGlobal(context: Context) {
+    logDebug("Utils", "initGlobal is called")
     updateStoredPreference(context)
     applyAppLanguage(context)
     loadLanguageResources(context)
@@ -173,7 +173,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     loadEvents(enabledHolidays, language)
 }
 
-fun loadLanguageResources(context: Context) {
+private fun loadLanguageResources(context: Context) {
     logDebug("Utils", "loadLanguageResources is called")
     persianMonths = language.getPersianMonths(context)
     islamicMonths = language.getIslamicMonths(context)
@@ -299,24 +299,3 @@ fun updateStoredPreference(context: Context) {
         }
     }.onFailure(logException).getOrNull() ?: false
 }
-
-// Context preferably should be activity context not application
-fun applyAppLanguage(context: Context) {
-    logDebug("Utils", "applyAppLanguage is called")
-    val locale = language.asSystemLocale()
-    Locale.setDefault(locale)
-    val resources = context.resources
-    val config = resources.configuration
-    config.setLocale(locale)
-    config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
-    resources.updateConfiguration(config, resources.displayMetrics)
-}
-
-//fun Context.withLocale(): Context {
-//    val config = resources.configuration
-//    val locale = language.asSystemLocale()
-//    Locale.setDefault(locale)
-//    config.setLocale(locale)
-//    config.setLayoutDirection(if (language.isLessKnownRtl) Language.fa.asSystemLocale() else locale)
-//    return createConfigurationContext(config)
-//}

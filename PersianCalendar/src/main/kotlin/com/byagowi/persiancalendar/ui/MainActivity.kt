@@ -59,7 +59,7 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getAppFont
-import com.byagowi.persiancalendar.utils.initUtils
+import com.byagowi.persiancalendar.utils.initGlobal
 import com.byagowi.persiancalendar.utils.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
@@ -99,7 +99,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onCreate(savedInstanceState)
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         Variants.startLynxListenerIfIsDebug(this)
-        initUtils(this)
+        initGlobal(this)
 
         // Don't apply font override to non Arabic script languages
         if (language.isArabicScript) overrideFont("SANS_SERIF", getAppFont(applicationContext))

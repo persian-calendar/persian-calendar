@@ -3,7 +3,31 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Language
+import java.util.*
+
+// Context preferably should be activity context not application
+fun applyAppLanguage(context: Context) {
+    logDebug("Utils", "applyAppLanguage is called")
+    val locale = language.asSystemLocale()
+    Locale.setDefault(locale)
+    val resources = context.resources
+    val config = resources.configuration
+    config.setLocale(locale)
+    config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
+    resources.updateConfiguration(config, resources.displayMetrics)
+}
+
+//fun Context.withLocale(): Context {
+//    val config = resources.configuration
+//    val locale = language.asSystemLocale()
+//    Locale.setDefault(locale)
+//    config.setLocale(locale)
+//    config.setLayoutDirection(if (language.isLessKnownRtl) Language.fa.asSystemLocale() else locale)
+//    return createConfigurationContext(config)
+//}
 
 // See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
 val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
