@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
@@ -24,7 +26,6 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFra
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.spacedAnd
@@ -72,14 +73,20 @@ class PreferencesFragment : Fragment() {
                         }
                         .show()
                 }
-                fun viewCommandResult(command: String): Unit = context?.showHtml(
-                    """<meta name="viewport" content="width=device-width, initial-scale=1">
-                    |<pre id="messages" style="white-space: pre-wrap;">${
-                        Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
-                    }</pre><script>
-                    |window.onload = () => document.getElementById('messages').scrollIntoView(false);
-                    |</script>""".trimMargin()
-                ).let {}
+                fun viewCommandResult(command: String) = AlertDialog.Builder(
+                    context,
+                    com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
+                ).also {
+                    it.setTitle("Logs")
+                    it.setView(
+                        ScrollView(context).apply {
+                            addView(TextView(context).apply {
+                                text = Runtime.getRuntime().exec(command)
+                                    .inputStream.bufferedReader().readText()
+                            })
+                        }
+                    )
+                }.show().let {}
                 toolbar.menu.add("View logs").onClick {
                     viewCommandResult("logcat -v raw -t 500 *:S PersianCalendar:V AndroidRuntime:E")
                 }
