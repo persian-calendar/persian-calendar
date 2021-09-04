@@ -98,7 +98,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
-        Variants.startLynxListenerIfIsDebug(this)
         initGlobal(this)
 
         // Don't apply font override to non Arabic script languages

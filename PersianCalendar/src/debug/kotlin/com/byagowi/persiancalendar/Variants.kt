@@ -17,7 +17,6 @@ object Variants {
 //        LeakCanary.install(app)
     }
 
-    fun startLynxListenerIfIsDebug(context: Context?) = Unit // LynxShakeDetector(context).init()
     fun logDebug(tag: String, msg: String) = Log.d(tag, msg)
     inline val <T> T.debugAssertNotNull: T
         inline get() = this ?: throw NullPointerException("A debug only assert has happened")

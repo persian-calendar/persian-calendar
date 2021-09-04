@@ -139,7 +139,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
-    // debugImplementation("com.github.pedrovgs:lynx:1.1.0")
 
     testImplementation("junit:junit:4.13.2")
     // Scratch.kt only dependencies
