@@ -159,6 +159,8 @@ private fun scheduleAlarm(context: Context, alarmTimeName: String, timeInMillis:
     when {
         Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ->
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+        Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2 ->
+            am.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
         else -> am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 }
