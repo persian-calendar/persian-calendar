@@ -10,6 +10,16 @@ plugins {
 
 operator fun File.div(child: String) = File(this, child)
 
+val versionMajor = 6
+val versionMinor = 7
+val versionPatch = 0
+val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
+if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
+    error("Use one digit numbers for minor and patch")
+if (versionPatch % 2 != 0)
+    error("As current Api based flavors scheme, use even number for patch numbers")
+val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
+
 val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
 android {
     sourceSets {
@@ -38,8 +48,8 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 17
         targetSdk = 30
-        versionCode = 670
-        versionName = "6.7.0"
+        versionCode = versionNumber
+        versionName = baseVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         resourceConfigurations +=
@@ -94,7 +104,7 @@ android {
         create("minApi21") {
             dimension = "api"
             minSdk = 21
-            versionCode = 1000 + android.defaultConfig.versionCode!!
+            versionCode = versionNumber + 1
         }
     }
 
