@@ -69,7 +69,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                     dayIsSelected -> shared.headerTextSelectedPaint
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     isHighTextContrastEnabled && holiday && paint == shared.eventIndicatorPaint ->
-                        shared.dayOfMonthNumberTextPaint
+                        shared.dayOfMonthNumberTextHolidayPaint
                     else -> paint
                 }
             )
@@ -116,7 +116,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         sharedDayViewData.debugAssertNotNull?.also { shared ->
             this.indicators = listOf(
                 hasAppointment to shared.appointmentIndicatorPaint,
-                hasEvent to shared.eventIndicatorPaint
+                (hasEvent || (isHighTextContrastEnabled && holiday)) to shared.eventIndicatorPaint
             ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
             if (jdn != null) setBackgroundResource(shared.selectableItemBackground)
         }
