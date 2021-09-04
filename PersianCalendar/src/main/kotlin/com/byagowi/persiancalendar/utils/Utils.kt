@@ -16,4 +16,4 @@ fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNot
 fun Coordinate.calculatePrayTimes(date: Date = Date()): PrayTimes =
     PrayTimesCalculator.calculate(calculationMethod, date, this)
 
-val logException = fun(e: Throwable) { Log.e("Persian Calendar", e.message, e) }
+val logException = fun(e: Throwable) { Log.e("PersianCalendar", e.message, e) }

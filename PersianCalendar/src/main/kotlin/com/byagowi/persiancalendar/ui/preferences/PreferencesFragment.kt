@@ -24,7 +24,9 @@ import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFra
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.spacedAnd
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.concurrent.TimeUnit
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
+
 class PreferencesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -69,6 +72,22 @@ class PreferencesFragment : Fragment() {
                         }
                         .show()
                 }
+                fun viewCommandResult(command: String): Unit = context?.showHtml(
+                    """<meta name="viewport" content="width=device-width, initial-scale=1">
+                    |<pre id="messages" style="white-space: pre-wrap;">${
+                        Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
+                    }</pre><script>
+                    |window.onload = () => document.getElementById('messages').scrollIntoView(false);
+                    |</script>""".trimMargin()
+                ).let {}
+                toolbar.menu.add("View logs").onClick {
+                    viewCommandResult("logcat -v raw -t 500 *:S PersianCalendar:V AndroidRuntime:E")
+                }
+                toolbar.menu.add("View unfiltered logs").onClick {
+                    viewCommandResult("logcat -v raw -t 500")
+                }
+                toolbar.menu.add("Log a crash").onClick { logException(Exception("Logged Crash!")) }
+                toolbar.menu.add("Crash!").onClick { throw Exception("Unhandled Crash!") }
             }
         }
 

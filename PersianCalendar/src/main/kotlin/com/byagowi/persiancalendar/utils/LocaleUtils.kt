@@ -10,7 +10,6 @@ import java.util.*
 
 // Context preferably should be activity context not application
 fun applyAppLanguage(context: Context) {
-    logDebug("Utils", "applyAppLanguage is called")
     val locale = language.asSystemLocale()
     Locale.setDefault(locale)
     val resources = context.resources
