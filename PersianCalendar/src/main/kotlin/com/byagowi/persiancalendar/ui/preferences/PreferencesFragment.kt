@@ -19,6 +19,7 @@ import androidx.work.WorkManager
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.enableDevelopmentFeatures
+import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
@@ -74,30 +75,33 @@ class PreferencesFragment : Fragment() {
                         }
                         .show()
                 }
-                fun viewCommandResult(command: String) = AlertDialog.Builder(
-                    context,
-                    com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
-                ).also { dialog ->
-                    dialog.setTitle("Logs")
-                    dialog.setView(
-                        ScrollView(context).also { scrollView ->
-                            scrollView.addView(TextView(context).also {
-                                it.text = Runtime.getRuntime().exec(command)
-                                    .inputStream.bufferedReader().readText()
-                            })
-                            // Scroll to bottom, https://stackoverflow.com/a/3080483
-                            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-                        }
-                    )
-                }.show().let {}
-                toolbar.menu.add("View logs").onClick {
-                    viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
+                toolbar.menu.addSubMenu("Log Viewer").also {
+                    fun viewCommandResult(command: String) = AlertDialog.Builder(
+                        context,
+                        com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
+                    ).also { dialog ->
+                        dialog.setTitle("Logs")
+                        dialog.setView(
+                            ScrollView(context).also { scrollView ->
+                                scrollView.addView(TextView(context).also { textView ->
+                                    textView.text = Runtime.getRuntime().exec(command)
+                                        .inputStream.bufferedReader().readText()
+                                })
+                                // Scroll to bottom, https://stackoverflow.com/a/3080483
+                                scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+                            }
+                        )
+                    }.show().let {}
+                    it.add("Filtered").onClick {
+                        viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
+                    }
+                    it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
                 }
-                toolbar.menu.add("View unfiltered logs").onClick {
-                    viewCommandResult("logcat -v raw -t 500")
+                toolbar.menu.addSubMenu("Log").also {
+                    it.add("Log 'Hello'").onClick { logDebug("Hello!") }
+                    it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
+                    it.add("Crash!").onClick { throw Exception("Unhandled Crash!") }
                 }
-                toolbar.menu.add("Log a crash").onClick { logException(Exception("Logged Crash!")) }
-                toolbar.menu.add("Crash!").onClick { throw Exception("Unhandled Crash!") }
             }
         }
 
