@@ -16,9 +16,11 @@ val versionPatch = 0
 val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
 if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
     error("Use one digit numbers for minor and patch")
-// if (versionPatch % 2 != 0)
-//    error("As current Api based flavors scheme, use even number for patch numbers")
+//if (versionPatch % 2 != 0)
+//   error("As current Api based flavors scheme, use even number for patch numbers")
 val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
+
+val composeVersion = "1.0.2"
 
 val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
 android {
@@ -96,20 +98,22 @@ android {
         }
     }
 
-    // flavorDimensions("api")
-    // productFlavors {
-    //     create("minApi17") {
-    //         dimension = "api"
-    //     }
-    //     create("minApi21") {
-    //         dimension = "api"
-    //         minSdk = 21
-    //         versionCode = versionNumber + 1
-    //     }
-    // }
+    flavorDimensions("api")
+    productFlavors {
+        create("minApi17") {
+            dimension = "api"
+        }
+        create("minApi21") {
+            applicationIdSuffix = ".minApi21"
+            dimension = "api"
+            minSdk = 21
+            // versionCode = versionNumber + 1
+        }
+    }
 
     packagingOptions {
         resources.excludes += "DebugProbesKt.bin"
+        resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
 
     bundle {
@@ -118,6 +122,14 @@ android {
             // to disable this.
             enableSplit = false
         }
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = composeVersion
+    }
+
+    buildFeatures {
+        compose = true
     }
 
     compileOptions {
@@ -129,6 +141,8 @@ android {
         jvmTarget = "11"
     }
 }
+
+val minApi21Implementation by configurations
 
 dependencies {
     implementation("com.github.persian-calendar:equinox:1.0.1")
@@ -157,6 +171,14 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
+
+    implementation("androidx.compose.runtime:runtime:$composeVersion")
+    minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
+    minApi21Implementation("androidx.compose.material:material:$composeVersion")
+    minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
+    //"minApi21AndroidTestImplementation"("androidx.compose.ui:ui-test-junit4:$composeVersion")
+    // XXX: The following should be debug implementation
+    minApi21Implementation("androidx.compose.ui:ui-tooling:$composeVersion")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
 
