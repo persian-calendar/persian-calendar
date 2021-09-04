@@ -86,6 +86,18 @@ android {
         }
     }
 
+    flavorDimensions("api")
+    productFlavors {
+        create("minApi17") {
+            dimension = "api"
+        }
+        create("minApi21") {
+            dimension = "api"
+            minSdk = 21
+            versionCode = 1000 + android.defaultConfig.versionCode!!
+        }
+    }
+
     packagingOptions {
         resources.excludes += "DebugProbesKt.bin"
     }
