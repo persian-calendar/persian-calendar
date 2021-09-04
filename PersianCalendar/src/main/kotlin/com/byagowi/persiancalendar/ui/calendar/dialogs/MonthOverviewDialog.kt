@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -79,6 +80,7 @@ private class MonthOverviewItemAdapter(private val rows: List<Pair<String, CharS
         fun bind(position: Int) = rows[position].let { (title, body) ->
             binding.title.text = title
             binding.body.text = body
+            binding.body.isVisible = body.isNotEmpty()
         }
 
         override fun onClick(v: View?) = v?.context.copyToClipboard(rows[bindingAdapterPosition]
