@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar
 
+const val LOG_TAG = "PersianCalendar"
+
 const val LOCATION_PERMISSION_REQUEST_CODE = 23
 const val CALENDAR_READ_PERMISSION_REQUEST_CODE = 55
 

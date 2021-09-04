@@ -78,7 +78,7 @@ fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwne
 
     val distinctCoordinatesFlow = coordinatesFlow
         .filterNotNull()
-        .onEach { logDebug("GPSLocationDialog", "A location is received") }
+        .onEach { logDebug("GPSLocationDialog: A location is received") }
         .distinctUntilChanged { old, new ->
             old.latitude == new.latitude && old.longitude == new.longitude &&
                     old.elevation == new.elevation
@@ -108,14 +108,14 @@ fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwne
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()
                 countryCode = result?.countryCode
-                logDebug("Geocoder country code", countryCode ?: "empty")
-                logDebug("Geocoder locality", result?.locality ?: "empty")
+                logDebug("Geocoder country code ${countryCode ?: "empty"}")
+                logDebug("Geocoder locality ${result?.locality ?: "empty"}")
                 result?.locality?.takeIf { it.isNotEmpty() }
             }.onFailure(logException).getOrNull()
         }
         .flowOn(Dispatchers.IO)
         .onEach { locality ->
-            logDebug("GPSLocationDialog", "A geocoder locality result is received")
+            logDebug("GPSLocationDialog: A geocoder locality result is received")
             binding.cityName.isVisible = true
             binding.cityName.text = locality
             cityName = locality
@@ -187,7 +187,7 @@ fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwne
 
     viewLifecycleOwner.lifecycle.addObserver(lifeCycleObserver)
     dialog.setOnDismissListener {
-        logDebug("GPSLocationDialog", "Dialog is dismissed")
+        logDebug("GPSLocationDialog: Dialog is dismissed")
         coordinatesFlow.value?.let { coordinate ->
             activity.appPrefs.edit {
                 putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinate.latitude))

@@ -63,7 +63,7 @@ fun getCustomAthanUri(context: Context): Uri? =
 private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
-    logDebug("Alarms", "startAthan for $prayTimeKey")
+    logDebug("Alarms: startAthan for $prayTimeKey")
     if (intendedTime == null) return startAthanBody(context, prayTimeKey)
     // if alarm is off by 15 minutes, just skip
     if (abs(System.currentTimeMillis() - intendedTime) > FIFTEEN_MINUTES_IN_MILLIS) return
@@ -80,7 +80,7 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
 }
 
 private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching {
-    logDebug("Alarms", "startAthanBody for $prayTimeKey")
+    logDebug("Alarms: startAthanBody for $prayTimeKey")
 
     runCatching {
         context.getSystemService<PowerManager>()?.newWakeLock(
@@ -131,7 +131,7 @@ fun scheduleAlarms(context: Context) {
 
 private fun scheduleAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, i: Int) {
     val remainedMillis = timeInMillis - System.currentTimeMillis()
-    logDebug("Alarms", "$alarmTimeName in ${remainedMillis / 60000} minutes")
+    logDebug("Alarms: $alarmTimeName in ${remainedMillis / 60000} minutes")
     if (remainedMillis < 0) return // Don't set alarm in past
 
     if (enableWorkManager) { // Schedule in both, startAthan has the logic to skip duplicated calls

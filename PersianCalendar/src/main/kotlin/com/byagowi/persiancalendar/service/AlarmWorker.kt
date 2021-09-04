@@ -14,7 +14,7 @@ class AlarmWorker(context: Context, params: WorkerParameters) : CoroutineWorker(
     override suspend fun doWork(): Result = coroutineScope {
         val key = inputData.getString(KEY_EXTRA_PRAYER) ?: FAJR_KEY
         val intendedTime = inputData.getLong(KEY_EXTRA_PRAYER_TIME, 0).takeIf { it != 0L }
-        logDebug("Alarms", "WorkManager for $key")
+        logDebug("Alarms: WorkManager for $key")
         startAthan(applicationContext, key, intendedTime)
         Result.success()
     }

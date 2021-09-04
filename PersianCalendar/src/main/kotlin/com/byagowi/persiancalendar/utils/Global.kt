@@ -59,7 +59,6 @@ import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinate
-import java.util.*
 
 val monthNameEmptyList = List(12) { "" }
 var persianMonths = monthNameEmptyList
@@ -153,7 +152,7 @@ var calendarTypesTitleAbbr = emptyList<String>()
 
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
-    logDebug("Utils", "initGlobal is called")
+    logDebug("Utils: initGlobal is called")
     updateStoredPreference(context)
     applyAppLanguage(context)
     loadLanguageResources(context)
@@ -162,7 +161,7 @@ fun initGlobal(context: Context) {
 }
 
 fun configureCalendarsAndLoadEvents(context: Context) {
-    logDebug("Utils", "configureCalendarsAndLoadEvents is called")
+    logDebug("Utils: configureCalendarsAndLoadEvents is called")
     val appPrefs = context.appPrefs
 
     IslamicDate.islamicOffset = if (isIslamicOffsetExpired(appPrefs)) 0 else
@@ -174,7 +173,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 }
 
 private fun loadLanguageResources(context: Context) {
-    logDebug("Utils", "loadLanguageResources is called")
+    logDebug("Utils: loadLanguageResources is called")
     persianMonths = language.getPersianMonths(context)
     islamicMonths = language.getIslamicMonths(context)
     gregorianMonths = language.getGregorianMonths(context, easternGregorianArabicMonths)
@@ -183,7 +182,7 @@ private fun loadLanguageResources(context: Context) {
 }
 
 fun updateStoredPreference(context: Context) {
-    logDebug("Utils", "updateStoredPreference is called")
+    logDebug("Utils: updateStoredPreference is called")
     val prefs = context.appPrefs
 
     val languageCode = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE

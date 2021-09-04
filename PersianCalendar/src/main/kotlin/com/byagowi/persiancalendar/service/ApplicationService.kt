@@ -23,7 +23,7 @@ class ApplicationService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         instance = WeakReference(this)
-        logDebug(ApplicationService::class.java.name, "start")
+        logDebug("${ApplicationService::class.java.name} start")
 
         val intentFilter = IntentFilter().apply {
             addAction(Intent.ACTION_DATE_CHANGED)

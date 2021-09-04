@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
-import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Language
 import java.util.*

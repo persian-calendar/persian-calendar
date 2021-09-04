@@ -58,12 +58,12 @@ private var latestFiredUpdate = 0L
 fun update(context: Context, updateDate: Boolean) {
     val now = System.currentTimeMillis()
     if (!updateDate && now - latestFiredUpdate < HALF_SECOND_IN_MILLIS) {
-        logDebug("UpdateUtils", "skip update")
+        logDebug("UpdateUtils: skip update")
         return
     }
     latestFiredUpdate = now
 
-    logDebug("UpdateUtils", "update")
+    logDebug("UpdateUtils: update")
     applyAppLanguage(context)
 
     val manager = AppWidgetManager.getInstance(context)
@@ -72,7 +72,7 @@ fun update(context: Context, updateDate: Boolean) {
     val date = jdn.toCalendar(mainCalendar)
 
     if (pastDate == null || pastDate != date || updateDate) {
-        logDebug("UpdateUtils", "date has changed")
+        logDebug("UpdateUtils: date has changed")
         scheduleAlarms(context)
         pastDate = date
         readAndStoreDeviceCalendarEventsOfTheDay(context)

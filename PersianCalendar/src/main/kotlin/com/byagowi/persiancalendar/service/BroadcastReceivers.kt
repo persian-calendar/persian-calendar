@@ -39,7 +39,7 @@ class BroadcastReceivers : BroadcastReceiver() {
             BROADCAST_ALARM -> {
                 val key = intent.getStringExtra(KEY_EXTRA_PRAYER) ?: return
                 val intendedTime = intent.getLongExtra(KEY_EXTRA_PRAYER_TIME, 0).takeIf { it != 0L }
-                logDebug("Alarms", "AlarmManager for $key")
+                logDebug("Alarms: AlarmManager for $key")
                 startAthan(context, key, intendedTime)
             }
         }

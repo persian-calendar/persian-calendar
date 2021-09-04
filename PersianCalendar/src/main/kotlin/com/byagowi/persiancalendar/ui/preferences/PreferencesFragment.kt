@@ -16,6 +16,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.enableDevelopmentFeatures
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
@@ -90,7 +91,7 @@ class PreferencesFragment : Fragment() {
                     )
                 }.show().let {}
                 toolbar.menu.add("View logs").onClick {
-                    viewCommandResult("logcat -v raw -t 500 *:S PersianCalendar:V AndroidRuntime:E")
+                    viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
                 }
                 toolbar.menu.add("View unfiltered logs").onClick {
                     viewCommandResult("logcat -v raw -t 500")
