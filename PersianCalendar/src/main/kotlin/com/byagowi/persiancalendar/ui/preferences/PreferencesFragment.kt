@@ -76,14 +76,16 @@ class PreferencesFragment : Fragment() {
                 fun viewCommandResult(command: String) = AlertDialog.Builder(
                     context,
                     com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
-                ).also {
-                    it.setTitle("Logs")
-                    it.setView(
-                        ScrollView(context).apply {
-                            addView(TextView(context).apply {
-                                text = Runtime.getRuntime().exec(command)
+                ).also { dialog ->
+                    dialog.setTitle("Logs")
+                    dialog.setView(
+                        ScrollView(context).also { scrollView ->
+                            scrollView.addView(TextView(context).also {
+                                it.text = Runtime.getRuntime().exec(command)
                                     .inputStream.bufferedReader().readText()
                             })
+                            // Scroll to bottom, https://stackoverflow.com/a/3080483
+                            scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
                         }
                     )
                 }.show().let {}
