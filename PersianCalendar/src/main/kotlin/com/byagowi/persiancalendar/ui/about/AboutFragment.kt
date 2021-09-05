@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import androidx.annotation.DrawableRes
-import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
 import androidx.core.text.bold
@@ -25,7 +24,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.*
-import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -121,7 +119,9 @@ class AboutFragment : Fragment() {
         binding.reportBug.setOnClickListener { launchReportIntent() }
         binding.reportBugTitle.putLineStartIcon(R.drawable.ic_bug)
 
-        binding.email.setOnClickListener { showEmailDialog() }
+        binding.email.setOnClickListener click@{
+            showEmailDialog(activity ?: return@click, ::launchEmailIntent)
+        }
         binding.emailTitle.putLineStartIcon(R.drawable.ic_email)
 
         setupContributorsList(binding)
@@ -183,22 +183,10 @@ class AboutFragment : Fragment() {
         }.onFailure(logException)
     }
 
-    private fun showEmailDialog() {
-        val emailBinding = DialogEmailBinding.inflate(layoutInflater)
-        AlertDialog.Builder(layoutInflater.context)
-            .setView(emailBinding.root)
-            .setTitle(R.string.about_email_sum)
-            .setPositiveButton(R.string.continue_button) { _, _ ->
-                launchEmailIntent(emailBinding.inputText.text?.toString())
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
-    }
-
-    private fun launchEmailIntent(defaultMessage: String? = null) {
+    private fun launchEmailIntent(message: String) {
         val email = "persian-calendar-admin@googlegroups.com"
         val subject = getString(R.string.app_name)
-        val body = """$defaultMessage
+        val body = """$message
 
 
 
