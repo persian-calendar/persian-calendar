@@ -16,8 +16,8 @@ val versionPatch = 0
 val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
 if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
     error("Use one digit numbers for minor and patch")
-if (versionPatch % 2 != 0)
-    error("As current Api based flavors scheme, use even number for patch numbers")
+// if (versionPatch % 2 != 0)
+//    error("As current Api based flavors scheme, use even number for patch numbers")
 val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
@@ -96,17 +96,17 @@ android {
         }
     }
 
-    flavorDimensions("api")
-    productFlavors {
-        create("minApi17") {
-            dimension = "api"
-        }
-        create("minApi21") {
-            dimension = "api"
-            minSdk = 21
-            versionCode = versionNumber + 1
-        }
-    }
+    // flavorDimensions("api")
+    // productFlavors {
+    //     create("minApi17") {
+    //         dimension = "api"
+    //     }
+    //     create("minApi21") {
+    //         dimension = "api"
+    //         minSdk = 21
+    //         versionCode = versionNumber + 1
+    //     }
+    // }
 
     packagingOptions {
         resources.excludes += "DebugProbesKt.bin"

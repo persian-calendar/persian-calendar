@@ -25,13 +25,13 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Build debug APK and run JVM tests
-        run: ./gradlew assembleDebug lintMinApi17Debug lintMinApi21Debug testMinApi17DebugUnitTest testMinApi21DebugUnitTest --stacktrace
+        run: ./gradlew assembleDebug lintDebug testDebugUnitTest --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: PersianCalendar
-          path: PersianCalendar/build/outputs/apk/minApi21/debug/*.apk
+          path: PersianCalendar/build/outputs/apk/debug/*.apk
 
       - name: Archive reports for failed build
         if: ${{ failure() }}
