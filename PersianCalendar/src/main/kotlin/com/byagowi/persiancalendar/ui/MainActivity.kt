@@ -249,24 +249,21 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         update(applicationContext, true)
     }
 
-    private fun toggleShowDeviceCalendarOnPreference(enable: Boolean) =
-        appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable) }
-
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            CALENDAR_READ_PERMISSION_REQUEST_CODE -> when (PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.checkSelfPermission(
+            CALENDAR_READ_PERMISSION_REQUEST_CODE -> {
+                val isGranted = ActivityCompat.checkSelfPermission(
                     this, Manifest.permission.READ_CALENDAR
-                ) -> {
-                    toggleShowDeviceCalendarOnPreference(true)
+                ) == PackageManager.PERMISSION_GRANTED
+                appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
+                if (isGranted) {
                     val navController = navHostFragment?.navController
                     if (navController?.currentDestination?.id == R.id.calendar)
                         navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
-                else -> toggleShowDeviceCalendarOnPreference(false)
             }
         }
     }
