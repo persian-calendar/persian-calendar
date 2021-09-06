@@ -23,8 +23,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
-import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.cityName
+import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.isRtl
