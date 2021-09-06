@@ -23,9 +23,10 @@ import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
-import com.byagowi.persiancalendar.utils.getCityName
+import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import com.byagowi.persiancalendar.utils.getPrayTimeImage
@@ -170,7 +171,7 @@ class AthanActivity : AppCompatActivity() {
             binding.root.setBackgroundResource(getPrayTimeImage(prayerKey))
 
             binding.place.text = listOf(
-                getString(R.string.in_city_time), getCityName(this, true)
+                "${getString(R.string.in_city_time)} ${this.appPrefs.cityName ?: ""}"
             ).joinToString(" ")
         }
 

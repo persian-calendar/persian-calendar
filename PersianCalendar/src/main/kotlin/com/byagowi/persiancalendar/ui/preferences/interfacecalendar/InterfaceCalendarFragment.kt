@@ -133,7 +133,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 run { // reset Islamic offset if is already expired
                     val appPrefs = context.appPrefs
-                    if (PREF_ISLAMIC_OFFSET in appPrefs && isIslamicOffsetExpired(appPrefs))
+                    if (PREF_ISLAMIC_OFFSET in appPrefs && appPrefs.isIslamicOffsetExpired)
                         appPrefs.edit { putString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET) }
                 }
                 singleSelect(

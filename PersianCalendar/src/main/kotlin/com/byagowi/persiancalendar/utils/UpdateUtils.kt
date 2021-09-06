@@ -96,11 +96,8 @@ fun update(context: Context, updateDate: Boolean) {
         append(context.getString(nextOwghatId))
         append(": ")
         append(prayTimes.getFromStringId(nextOwghatId)?.toFormattedString() ?: "")
-        if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets) {
-            getCityName(context, false).takeIf { it.isNotEmpty() }?.also {
-                append(" ($it)")
-            }
-        }
+        if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets)
+            context.appPrefs.cityName?.also { append(" ($it)") }
     }
     // endregion
 

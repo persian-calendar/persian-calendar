@@ -51,6 +51,8 @@ fun formatNumber(number: String): String {
 
 val isArabicDigitSelected: Boolean get() = preferredDigits === ARABIC_DIGITS
 
+fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
+
 fun getOrderedCalendarTypes(): List<CalendarType> =
     getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it) }
 

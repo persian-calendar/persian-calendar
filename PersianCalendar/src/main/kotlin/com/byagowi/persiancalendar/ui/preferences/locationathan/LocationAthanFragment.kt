@@ -199,7 +199,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private fun updateLocationOnSummaries() {
         val context = context ?: return
         updateStoredPreference(context) // So vital to have this to have updated preferences here
-        val cityName = getCityName(context, false).takeIf { it.isNotEmpty() }
+        val cityName = context.appPrefs.cityName
         selectedLocationPreference?.summary = cityName ?: context.getString(R.string.location_help)
         athanPreferenceCategory?.isEnabled = coordinates != null
         athanPreferenceCategory?.setSummary(

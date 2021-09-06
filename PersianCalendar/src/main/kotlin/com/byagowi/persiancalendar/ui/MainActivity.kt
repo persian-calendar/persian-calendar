@@ -69,7 +69,6 @@ import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
-import com.byagowi.persiancalendar.utils.toggleShowDeviceCalendarOnPreference
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 import com.google.android.material.navigation.NavigationView
@@ -250,6 +249,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         update(applicationContext, true)
     }
 
+    private fun toggleShowDeviceCalendarOnPreference(enable: Boolean) =
+        appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, enable) }
+
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
@@ -259,12 +261,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 ActivityCompat.checkSelfPermission(
                     this, Manifest.permission.READ_CALENDAR
                 ) -> {
-                    toggleShowDeviceCalendarOnPreference(this, true)
+                    toggleShowDeviceCalendarOnPreference(true)
                     val navController = navHostFragment?.navController
                     if (navController?.currentDestination?.id == R.id.calendar)
                         navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
-                else -> toggleShowDeviceCalendarOnPreference(this, false)
+                else -> toggleShowDeviceCalendarOnPreference(false)
             }
         }
     }

@@ -69,7 +69,7 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getCityName
+import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
@@ -221,10 +221,7 @@ class CalendarFragment : Fragment() {
             TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
         }
         binding.root.setupExpandableAccessibilityDescription()
-        binding.cityName.also {
-            val cityName = getCityName(it.context, false)
-            if (cityName.isNotEmpty()) it.text = cityName
-        }
+        binding.cityName.text = binding.root.context.appPrefs.cityName
         binding.times.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.APPEARING)
             it.setAnimateParentHierarchy(false)

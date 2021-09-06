@@ -164,7 +164,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     logDebug("Utils: configureCalendarsAndLoadEvents is called")
     val appPrefs = context.appPrefs
 
-    IslamicDate.islamicOffset = if (isIslamicOffsetExpired(appPrefs)) 0 else
+    IslamicDate.islamicOffset = if (appPrefs.isIslamicOffsetExpired) 0 else
         appPrefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
     val enabledHolidays = EnabledHolidays(appPrefs)
