@@ -169,10 +169,8 @@ class AthanActivity : AppCompatActivity() {
 
             binding.root.setOnClickListener { stop() }
             binding.root.setBackgroundResource(getPrayTimeImage(prayerKey))
-
-            binding.place.text = listOf(
-                "${getString(R.string.in_city_time)} ${this.appPrefs.cityName ?: ""}"
-            ).joinToString(" ")
+            binding.place.text =
+                this.appPrefs.cityName?.let { getString(R.string.in_city_time, it) }
         }
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)

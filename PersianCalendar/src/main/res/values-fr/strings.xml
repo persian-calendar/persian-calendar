@@ -45,7 +45,7 @@
     <string name="enable_location_services">Les services de localisation sont désactivés, veuillez les activer pour utiliser cette fonction.</string>
     <string name="share">Partager</string>
     <string name="pray_methods">Méthodes de calcul</string>
-    <string name="in_city_time">à</string>
+    <string name="in_city_time">à %1$s</string>
     <string name="athan">Athan</string>
     <string name="altitude_praytime">en mètre (facultatif)</string>
     <string name="altitude">Altitude</string>

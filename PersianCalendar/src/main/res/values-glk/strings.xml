@@ -71,7 +71,7 @@
     <string name="select_month">مايأ دؤجين کۊدن</string>
     <string name="select_day">رۊزˈدؤجين کۊدن</string>
     <string name="date_exception">تاریخˇدۊرۊن ساب بؤبؤ!</string>
-    <string name="in_city_time">به اؤفؤقˇ</string>
+    <string name="in_city_time">به اؤفؤقˇ %1$s</string>
     <string name="date_copied_clipboard">«%1$s»حافظه دۊرۊنم ذخيره بؤبؤ</string>
     <string name="stop">بئس</string>
     <string name="goto_date">برو به تاریخ</string>

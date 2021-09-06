@@ -61,7 +61,7 @@ class AthanNotification : Service() {
         val prayTimeName = getString(getPrayTimeName(athanKey))
         val title =
             if (cityName == null) prayTimeName
-            else "$prayTimeName - ${getString(R.string.in_city_time)} $cityName"
+            else "$prayTimeName - ${getString(R.string.in_city_time, cityName)}"
 
         val prayTimes = coordinates?.calculatePrayTimes()
         val subtitle = when (athanKey) {

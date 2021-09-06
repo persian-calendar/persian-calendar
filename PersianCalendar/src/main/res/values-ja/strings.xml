@@ -71,7 +71,7 @@
     <string name="select_month">月を選ぶ</string>
     <string name="select_day">日を選ぶ</string>
     <string name="date_exception">日付は違います</string>
-    <string name="in_city_time">現地時間</string>
+    <string name="in_city_time">現地時間%1$s</string>
     <string name="date_copied_clipboard">«%1$s»メモリに保存しました</string>
     <string name="stop">ストップ</string>
     <string name="goto_date">別の日に行く</string>

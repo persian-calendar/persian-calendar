@@ -71,7 +71,7 @@
     <string name="select_month">ھەڵبژاردنی مانگ</string>
     <string name="select_day">ھەڵبژاردنی ڕۆژ</string>
     <string name="date_exception">ڕێککەوتی پێدراو ھەڵەیە!</string>
-    <string name="in_city_time">بە ئاسۆی</string>
+    <string name="in_city_time">بە ئاسۆی %1$s</string>
     <string name="date_copied_clipboard">«%1$s» لە کلیپبۆرددا کۆپی کرا</string>
     <string name="stop">ڕاگرتن</string>
     <string name="goto_date">بڕۆ بۆ ڕێککەوت</string>

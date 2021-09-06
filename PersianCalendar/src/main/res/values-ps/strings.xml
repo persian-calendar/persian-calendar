@@ -71,7 +71,7 @@
     <string name="select_month">انتخاب ماه</string>
     <string name="select_day">انتخاب روز</string>
     <string name="date_exception">تاریخی که وارد کردید اشتباه بود!</string>
-    <string name="in_city_time">در</string>
+    <string name="in_city_time">در %1$s</string>
     <string name="date_copied_clipboard">«%1$s» به کلیپ بودر کپی شد</string>
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>

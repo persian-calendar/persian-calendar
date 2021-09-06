@@ -164,7 +164,7 @@
     <string name="altitude_praytime">وحدة القياس: المتر (إختياري)</string>
     <string name="coordination">الإحداثيات الجغرافية</string>
     <string name="athan">الأذان</string>
-    <string name="in_city_time">بتوقيت</string>
+    <string name="in_city_time">بتوقيت %1$s</string>
     <string name="pray_methods">طرق الحساب</string>
     <string name="pray_methods_calculation">طرق حساب أوقات الصلاة والقبلة</string>
     <string name="athan_gap">تقديم الأذان</string>

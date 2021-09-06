@@ -160,7 +160,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="altitude_praytime">in meter (optional)</string>
     <string name="coordination">Coordination</string>
     <string name="athan">Athan</string>
-    <string name="in_city_time">in</string>
+    <string name="in_city_time">in %1$s</string>
     <string name="pray_methods">Calculation methods</string>
     <string name="pray_methods_calculation">Calculation methods for pray times and Qibla compass</string>
     <string name="athan_gap">Athan Gap</string>

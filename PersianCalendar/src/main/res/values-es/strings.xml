@@ -160,7 +160,7 @@
     <string name="altitude_praytime">in meter (optional)</string>
     <string name="coordination">Coordinación</string>
     <string name="athan">Azan</string>
-    <string name="in_city_time">En</string>
+    <string name="in_city_time">En %1$s</string>
     <string name="pray_methods">Método de cálculo</string>
     <string name="pray_methods_calculation">Calculation methods for pray times and Qibla compass</string>
     <string name="athan_gap">Athan Gap</string>

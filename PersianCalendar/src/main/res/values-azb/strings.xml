@@ -71,7 +71,7 @@
     <string name="select_month">آی سئچ</string>
     <string name="select_day">گۆن سئچ</string>
     <string name="date_exception">بو تاریخ یانلیشدیر!</string>
-    <string name="in_city_time">افق</string>
+    <string name="in_city_time">افق %1$s</string>
     <string name="date_copied_clipboard">«%1$s» حافیظه‌یه یازیلدی</string>
     <string name="stop">ساخلاندی</string>
     <string name="goto_date">بو تاریخه گئت</string>
