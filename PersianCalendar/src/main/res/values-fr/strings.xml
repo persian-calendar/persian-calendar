@@ -308,4 +308,5 @@
     <string name="wednesday">Mercredi</string>
     <string name="thursday">Jeudi</string>
     <string name="friday">Vendredi</string>
+    <string name="sun_view">Sun View</string>
 </resources>

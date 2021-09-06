@@ -194,7 +194,7 @@
     <string name="update">Update</string>
     <string name="spring_equinox">Spring equinox time of year %1$s: %2$s</string>
     <string name="shift_work_settings">Shift work settings</string>
-    <string name="ask_user_to_set_location">Set the location in the settings in order to see pray times here</string>
+    <string name="ask_user_to_set_location">Set the location in the settings in order to view pray times here</string>
     <string name="remove">消す</string>
     <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
     <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
@@ -312,4 +312,5 @@
     <string name="wednesday">水曜日</string>
     <string name="thursday">木曜日</string>
     <string name="friday">金曜日</string>
+    <string name="sun_view">Sun View</string>
 </resources>

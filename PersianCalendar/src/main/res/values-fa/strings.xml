@@ -194,7 +194,7 @@
     <string name="update">بروزرسانی</string>
     <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
-    <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
+    <string name="ask_user_to_set_location">برای نمایش صحیح این قسمت مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">حذف</string>
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب‌شده در تقویم، %1$s خواهد بود.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
@@ -312,4 +312,5 @@
     <string name="wednesday">چهارشنبه</string>
     <string name="thursday">پنجشنبه</string>
     <string name="friday">جمعه</string>
+    <string name="sun_view">خورشیدنما</string>
 </resources>

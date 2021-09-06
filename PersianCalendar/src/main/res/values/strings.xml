@@ -140,7 +140,7 @@
     <string name="customize_widget">Widget Customization</string>
     <string name="which_one_to_show">Which ones to show</string>
     <string name="customize_widget_summary">What to show from notification and widgets to make them more compact</string>
-    <string name="ask_user_to_set_location">Set the location in the settings in order to see pray times here</string>
+    <string name="ask_user_to_set_location">Set the location in the settings in order to view this place correctly</string>
     <string name="notify_date">Enable Date Notification</string>
     <string name="enable_notify">Persistent notification for all date types</string>
     <string name="notify_date_lock_screen">Show notification on the lock screen</string>
@@ -331,4 +331,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="wednesday">Wednesday</string>
     <string name="thursday">Thursday</string>
     <string name="friday">Friday</string>
+    <!--Title of a widget that shows how much of a day is passed-->
+    <string name="sun_view">Sun View</string>
 </resources>

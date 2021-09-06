@@ -62,6 +62,7 @@ import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.calculateMoonPhase
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.cityName
@@ -83,7 +84,6 @@ import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.toJavaCalendar
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -454,19 +454,14 @@ class CalendarFragment : Fragment() {
     }
 
     private fun setOwghat(jdn: Jdn, isToday: Boolean) {
-        val coordinate = coordinates ?: return
+        val coordinates = coordinates ?: return
         val owghatBinding = owghatBinding ?: return
 
-        val prayTimes = coordinate.calculatePrayTimes(jdn.toJavaCalendar().time)
+        val prayTimes = coordinates.calculatePrayTimes(jdn.toJavaCalendar().time)
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->
             sunView.isVisible = if (isToday) {
-                sunView.setSunriseSunsetMoonPhase(prayTimes, runCatching {
-                    SunMoonPosition(
-                        jdn.value.toDouble(), coordinate.latitude, coordinate.longitude,
-                        coordinate.elevation, 0.0
-                    ).moonPhase
-                }.onFailure(logException).getOrNull() ?: 1.0)
+                sunView.setPrayTimesAndMoonPhase(prayTimes, coordinates.calculateMoonPhase(jdn))
                 true
             } else false
             if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()

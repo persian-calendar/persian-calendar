@@ -243,14 +243,13 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun getY(x: Int, segment: Double, height: Int): Float =
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
 
-    fun setSunriseSunsetMoonPhase(prayTimes: PrayTimes, moonPhase: Double) {
+    fun setPrayTimesAndMoonPhase(prayTimes: PrayTimes, moonPhase: Double) {
         this.prayTimes = prayTimes
         this.moonPhase = moonPhase
         postInvalidate()
     }
 
-    fun startAnimate() {
-        val context = context ?: return
+    fun initiate() {
         val prayTimes = prayTimes ?: return
 
         val sunset = prayTimes.sunsetClock.toInt().toFloat()
@@ -261,7 +260,7 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
         val now = Clock(Calendar.getInstance(Locale.getDefault())).toInt().toFloat()
 
         fun Float.safeDiv(other: Float) = if (other == 0f) 0f else this / other
-        val c = when {
+        current = when {
             now <= sunrise -> (now - midnight).safeDiv(sunrise) * .17f
             now <= sunset -> (now - sunrise).safeDiv(sunset - sunrise) * .66f + .17f
             else -> (now - sunset).safeDiv(fullDay + midnight - sunset) * .17f + .17f + .66f
@@ -281,8 +280,12 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
                 dayLength.asRemainingTime(context) + if (remaining.toInt() == 0) "" else
             ("\n\n" + context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(context))
+    }
 
-        ValueAnimator.ofFloat(0F, c).also {
+    fun startAnimate() {
+        initiate()
+        // "current" has the final value after #initiate() call, let's animate from zero to it.
+        ValueAnimator.ofFloat(0F, current).also {
             it.duration = 1500L
             it.interpolator = DecelerateInterpolator()
             it.addUpdateListener(this)

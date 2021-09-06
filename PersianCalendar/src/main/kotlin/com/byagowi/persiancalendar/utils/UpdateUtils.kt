@@ -7,8 +7,10 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.os.Build
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.RemoteViews
 import androidx.annotation.IdRes
@@ -16,6 +18,7 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
@@ -35,9 +38,12 @@ import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
 import com.byagowi.persiancalendar.Widget4x2
+import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.calendar.times.SunView
+import com.byagowi.persiancalendar.ui.utils.dp
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
@@ -106,6 +112,7 @@ fun update(context: Context, updateDate: Boolean) {
     context.update4x1Widget(manager, jdn, date, widgetTitle, subtitle)
     context.update2x2Widget(manager, jdn, date, widgetTitle, subtitle, owghat)
     context.update4x2Widget(manager, jdn, date, nextOwghatId, nowClock, prayTimes)
+    context.updateSunViewWidget(manager, jdn, prayTimes)
     context.updateNotification(title, subtitle, jdn, date, owghat)
 }
 
@@ -141,6 +148,42 @@ private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
         remoteViews.setTextColor(R.id.textview_age_widget_title, Color.parseColor(textColor))
         remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
         remoteViews.setTextColor(R.id.textview_age_widget, Color.parseColor(textColor))
+        manager.updateAppWidget(widgetId, remoteViews)
+    }
+}
+
+private fun Context.updateSunViewWidget(
+    manager: AppWidgetManager, jdn: Jdn, prayTimes: PrayTimes?
+) {
+    manager.getAppWidgetIds(ComponentName(this, WidgetSunView::class.java))?.forEach { widgetId ->
+        manager.getAppWidgetInfo(widgetId).minHeight
+        val remoteViews = RemoteViews(packageName, R.layout.widget_sun_view)
+        val sunView = SunView(ContextThemeWrapper(this, R.style.DarkTheme))
+        run {
+            sunView.layoutDirection = resources.configuration.layoutDirection
+            // https://stackoverflow.com/a/69080699
+            val isPortrait = resources.configuration.orientation == ORIENTATION_PORTRAIT
+            val (width, height) = listOf(
+                if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
+                else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
+                if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
+                else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+            ).map { manager.getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
+            // https://stackoverflow.com/a/69080742
+            sunView.measure(
+                View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
+                View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
+            )
+            sunView.layout(0, 0, width, height)
+        }
+        prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
+        sunView.initiate()
+        if (prayTimes == null) {
+            remoteViews.setTextViewText(R.id.message, getString(R.string.ask_user_to_set_location))
+        }
+        remoteViews.setImageViewBitmap(R.id.image, sunView.drawToBitmap())
+        remoteViews.setContentDescription(R.id.image, sunView.contentDescription)
+        remoteViews.setOnClickPendingIntent(R.id.widget_layout_sun_view, launchAppPendingIntent())
         manager.updateAppWidget(widgetId, remoteViews)
     }
 }

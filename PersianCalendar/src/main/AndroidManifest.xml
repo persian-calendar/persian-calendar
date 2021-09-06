@@ -203,6 +203,20 @@
         <!--        </receiver>-->
 
         <receiver
+            android:name=".WidgetSunView"
+            android:exported="false"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/sun_view">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/persiancalendar_provider_sun_view" />
+        </receiver>
+
+        <receiver
             android:name=".AgeWidget"
             android:exported="false"
             android:icon="@mipmap/ic_launcher"

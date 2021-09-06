@@ -20,6 +20,7 @@ class Widget1x1 : WidgetProvider()
 class Widget2x2 : WidgetProvider()
 class Widget4x1 : WidgetProvider()
 class Widget4x2 : WidgetProvider()
+class WidgetSunView : WidgetProvider()
 //class Widget4x1dateOnly : WidgetProvider()
 
 class AgeWidget : WidgetProvider() {
