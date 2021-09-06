@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.content.Context
-import android.text.Editable
 import android.text.InputFilter
-import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -11,6 +9,7 @@ import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -160,23 +159,13 @@ private class ShiftWorkItemsAdapter(
 
                     override fun onNothingSelected(parent: AdapterView<*>) {}
                 }
-                editText.addTextChangedListener(object : TextWatcher {
-                    override fun afterTextChanged(s: Editable?) = Unit
-                    override fun beforeTextChanged(
-                        s: CharSequence?, start: Int, count: Int, after: Int
-                    ) = Unit
-
-                    override fun onTextChanged(
-                        s: CharSequence?, start: Int, before: Int, count: Int
-                    ) {
-                        rows = rows.mapIndexed { i, x ->
-                            if (i == bindingAdapterPosition)
-                                ShiftWorkRecord(editText.text.toString(), x.length)
-                            else x
-                        }
-                        updateShiftWorkResult()
+                editText.doOnTextChanged { text, _, _, _ ->
+                    rows = rows.mapIndexed { i, x ->
+                        if (i == bindingAdapterPosition) ShiftWorkRecord(text.toString(), x.length)
+                        else x
                     }
-                })
+                    updateShiftWorkResult()
+                }
                 // Don't allow inserting '=' or ',' as they have special meaning
                 editText.filters = arrayOf(InputFilter { source, _, _, _, _, _ ->
                     if (Regex("[=,]") in (source ?: "")) "" else null
