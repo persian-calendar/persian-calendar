@@ -19,6 +19,3 @@ ij_continuation_indent_size = 8
 # Disable star imports
 ij_kotlin_name_count_to_use_star_import = 99
 ij_kotlin_name_count_to_use_star_import_for_members = 99
-
-[*.java]
-ij_continuation_indent_size = 8
