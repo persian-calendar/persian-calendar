@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui
+package com.byagowi.persiancalendar.ui.athan
 
 import android.app.KeyguardManager
 import android.media.AudioAttributes
@@ -13,30 +13,23 @@ import android.os.Looper
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
-import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
-import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
-import com.byagowi.persiancalendar.utils.getPrayTimeImage
-import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
 
-
-class AthanActivity : AppCompatActivity() {
+class AthanActivity : ComponentActivity() {
 
     private val ascendingVolumeStep = 6
     private var currentVolumeSteps = 1
@@ -86,7 +79,7 @@ class AthanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
+        val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER) ?: ""
         val isFajr = prayerKey == FAJR_KEY
         var goMute = false
 
@@ -163,15 +156,7 @@ class AthanActivity : AppCompatActivity() {
             )
         }
 
-        ActivityAthanBinding.inflate(layoutInflater).also { binding ->
-            setContentView(binding.root)
-            binding.athanName.setText(getPrayTimeName(prayerKey))
-
-            binding.root.setOnClickListener { stop() }
-            binding.root.setBackgroundResource(getPrayTimeImage(prayerKey))
-            binding.place.text =
-                this.appPrefs.cityName?.let { getString(R.string.in_city_time, it) }
-        }
+        setAthanActivityContent(this, prayerKey, onClick = ::stop)
 
         handler.postDelayed(stopTask, TEN_SECONDS_IN_MILLIS)
 

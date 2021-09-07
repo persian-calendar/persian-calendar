@@ -76,7 +76,7 @@
         </activity>
 
         <activity
-            android:name=".ui.AthanActivity"
+            android:name=".ui.athan.AthanActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:excludeFromRecents="true"
             android:exported="false"

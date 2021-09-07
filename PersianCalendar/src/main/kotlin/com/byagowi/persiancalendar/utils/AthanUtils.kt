@@ -38,7 +38,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.service.BroadcastReceivers
-import com.byagowi.persiancalendar.ui.AthanActivity
+import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import java.util.concurrent.TimeUnit
