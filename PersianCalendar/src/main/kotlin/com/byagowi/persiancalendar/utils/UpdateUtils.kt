@@ -178,9 +178,9 @@ private fun Context.updateSunViewWidget(
         }
         prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
         sunView.initiate()
-        if (prayTimes == null) {
-            remoteViews.setTextViewText(R.id.message, getString(R.string.ask_user_to_set_location))
-        }
+        remoteViews.setTextViewTextOrHideIfEmpty(
+            R.id.message, coordinates?.let { getString(R.string.ask_user_to_set_location) } ?: ""
+        )
         remoteViews.setImageViewBitmap(R.id.image, sunView.drawToBitmap())
         remoteViews.setContentDescription(R.id.image, sunView.contentDescription)
         remoteViews.setOnClickPendingIntent(R.id.widget_layout_sun_view, launchAppPendingIntent())
@@ -523,9 +523,13 @@ private fun RemoteViews.setBackgroundColor(
     @IdRes layoutId: Int, color: String = selectedWidgetBackgroundColor
 ) = setInt(layoutId, "setBackgroundColor", Color.parseColor(color))
 
-private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) =
+private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) {
     if (text.isBlank()) setViewVisibility(viewId, View.GONE)
-    else setTextViewText(viewId, text.trim())
+    else {
+        setViewVisibility(viewId, View.VISIBLE)
+        setTextViewText(viewId, text.trim())
+    }
+}
 
 private fun IntArray?.isNullOrEmpty() = this?.isEmpty() ?: true
 
