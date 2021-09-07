@@ -30,7 +30,7 @@ fun showEmailDialog(activity: Activity, onSuccess: (String) -> Unit) {
 }
 
 @Composable
-fun EmailAlertDialog(onSuccess: (String) -> Unit) {
+private fun EmailAlertDialog(onSuccess: (String) -> Unit) {
     val isDialogOpen = remember { mutableStateOf(true) }
     if (!isDialogOpen.value) return
     Surface(color = Color.Transparent) {
