@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
+import android.content.Context
 import android.content.SharedPreferences
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -21,10 +22,12 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
         private val SharedPreferences?.theme
             get() = this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
 
-        fun apply(activity: AppCompatActivity) {
-            val key = activity.appPrefs.theme
-            activity.setTheme((values().find { it.key == key }?.takeIf { it != SYSTEM_DEFAULT }
-                ?: if (isNightModeEnabled(activity)) DARK else LIGHT).styleRes)
+        fun apply(activity: AppCompatActivity) = activity.setTheme(getCurrent(activity).styleRes)
+
+        fun getCurrent(context: Context): Theme {
+            val key = context.appPrefs.theme
+            return (values().find { it.key == key }?.takeIf { it != SYSTEM_DEFAULT }
+                ?: if (isNightModeEnabled(context)) DARK else LIGHT)
         }
 
         fun isNonDefault(appPrefs: SharedPreferences?) = appPrefs.theme != SYSTEM_DEFAULT.key
