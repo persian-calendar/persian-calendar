@@ -66,7 +66,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     title(R.string.gps_location)
                     summary(R.string.gps_location_help)
                 }
-                clickable(onClick = { showLocationPreferenceDialog(context) }) {
+                clickable(onClick = { activity?.let { showLocationPreferenceDialog(it) } }) {
                     title(R.string.location)
                     summary(R.string.location_help)
                     this@LocationAthanFragment.selectedLocationPreference = this
