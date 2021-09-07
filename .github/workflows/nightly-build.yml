@@ -19,16 +19,19 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Build with Gradle
-        run: ./gradlew assembleNightly
-
-      - name: Send apk to telegram
+      - name: Build and send apks to telegram
         run: |
-          apk_dir="$(find -type f -iname *.apk)"
+          # TODO: Clean up the duplication here
+          ./gradlew assembleMinApi17Nightly
+          apk_dir="$(find . -type f -iname *.apk)"
+          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
+          rm "$apk_dir"
+          ./gradlew assembleMinApi21Nightly
+          apk_dir="$(find . -type f -iname *.apk)"
           curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
 
       - name: Update the runtime dependencies report
-        run: ./gradlew PersianCalendar:dependencies --configuration releaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
+        run: ./gradlew PersianCalendar:dependencies --configuration minApi21ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
 
       - name: Add and commit the report
         uses: EndBug/add-and-commit@2d7c2e89fcb436f8e139cc80813bd030bdd40c4b
