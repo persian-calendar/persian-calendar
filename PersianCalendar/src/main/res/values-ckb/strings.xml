@@ -70,16 +70,16 @@
     <string name="select_year">ھەڵبژاردنی ساڵ</string>
     <string name="select_month">ھەڵبژاردنی مانگ</string>
     <string name="select_day">ھەڵبژاردنی ڕۆژ</string>
-    <string name="date_exception">ڕێککەوتی پێدراو ھەڵەیە!</string>
+    <string name="date_exception">ڕێککەوتی پێدراو ھەڵەیە.</string>
     <string name="in_city_time">بە ئاسۆی %1$s</string>
-    <string name="date_copied_clipboard">«%1$s» لە کلیپبۆرددا کۆپی کرا</string>
+    <string name="date_copied_clipboard">«%1$s» لە کلیپبۆرددا کۆپی کرا.</string>
     <string name="stop">ڕاگرتن</string>
     <string name="goto_date">بڕۆ بۆ ڕێککەوت</string>
     <string name="go">بڕۆ</string>
-    <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە.</string>
+    <string name="pleasewaitgps">کەمێک ڕاوەستن… ئەگەر پاش خولەکێک ئاکامێک نەبوو دڵنیا بن GPSی ئامرازەکە چالاکە. ئەگەر بەمەش دەرجی نەھات، لەوانەیە پێویست بێ ڕێگەیەکی تر تاقی بکەنەوە</string>
     <string name="notify_date_lock_screen">نیشاندانی ئاگاداری لە قفڵی شاشەدا</string>
-    <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا</string>
-    <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن.</string>
+    <string name="notify_date_lock_screen_summary">تەنیا کاتێک کە شێوازێکی قفڵی شاشە ڕێک‌خرابێ کار دەکا.</string>
+    <string name="warn_if_events_not_set">بۆ چالاککردن و ھەروەھا ھەڵبژاردنی بۆنە دڵخوازەکانتان بچنە سەر بەشی ڕێکخستن</string>
     <string name="days_distance">مەودا</string>
     <string name="calendars_priority">ڕۆژژمێری سەرەکی</string>
     <string name="calendars_priority_summary">گۆڕینی ڕۆژژمێری سەرەکی، ڕیزبەندی و چالاکیی ڕۆژژمێرەکان</string>
@@ -99,7 +99,7 @@
     <string name="customize_widget_summary">چ شتگەلێک لە ویجیتەکان و ئاگاداریدا نیشان بدرێ</string>
     <string name="customize_widget">تایبەتیکردنی ویجیتەکان و ئاگاداری</string>
     <string name="add">زیادکردن</string>
-    <string name="which_one_to_show">کامەیان نیشان بدرێ؟</string>
+    <string name="which_one_to_show">کامەیان نیشان بدرێ</string>
     <string name="notification_athan">ئاگاداریی بانگ</string>
     <string name="enable_notification_athan">ڕاگەیاندنی بانگ بە ئاگاداری و لەرینەوەی ئامراز</string>
     <string name="returned_to_default">گەڕایەوە بۆ ڕێکخستنی بنەڕەتی</string>
@@ -114,12 +114,14 @@
     <string name="help">یارمەتی</string>
     <string name="about_report_bug">ڕاپۆرتی ھەڵە</string>
     <string name="about_sendMail">ئیمەیل</string>
-    <string name="about_noClient">بەرنامەیەک بۆ ناردنی ئیمەیل نەدۆزرایەوە!</string>
-    <string name="about_developers">پەرەپێدەران</string>
+    <string name="about_noClient">بەرنامەیەک بۆ ناردنی ئیمەیل نەدۆزرایەوە</string>
+    <string name="about_developers">پەرەپێدەران (بە شێوەیەکی هەڕەمەکی ریزکراون)</string>
     <string name="about_support_developers">پشتیوانی لە پەرەپێدەر</string>
-    <string name="about_email_sum">ناردنی ئیمەیلی کەسی بۆ دانەری بەرنامە</string>
-    <string name="about_report_bug_sum">ڕێگەی بەھێندتر بۆ ڕاپۆرتی ھەڵە و داخوازی تایبەتمەندیی نوێ؛ ھەژمارێکی GitHubی پێ‌دەوێ.</string>
-    <string name="gps_internet_desc">تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە. بەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە.</string>
+    <string name="about_email_sum">ناردنی ئیمەیلی کەسی بۆ دانەرانی بەرنامە</string>
+    <string name="about_report_bug_sum">ڕێگەی بەھێندتر بۆ ڕاپۆرتی ھەڵە و داخوازی تایبەتمەندیی نوێ؛ ھەژمارێکی GitHubی پێ‌دەوێ</string>
+    <string name="gps_internet_desc">تکایە بۆ دۆزینەوەی ڕووگە یان ئاراستەی جوگرافی، GPS و ئینتەرنێتی ئامرازەکە چالاک بکە.
+\n
+\nبەرنامە ھەر جارێک پێویستی بەمەیە، بەڵام ئەگەر شوێنەکەت بگۆڕدرێ ئەم دەستەڵاتانە پێویست دەبێتەوە.</string>
     <string name="start_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) لە سەرەتای ساڵەوە</string>
     <string name="end_of_year_diff">%1$s ڕۆژ (~%2$s حەفتە یان %3$s مانگ) بۆ کۆتای ساڵ</string>
     <!-- Sun Info -->
@@ -192,7 +194,7 @@
     <string name="update">نوێکردنەوە</string>
     <string name="spring_equinox">کاتی نوێبوونەوەی ساڵ و دەستپێکردنی سەری ساڵی %1$s: %2$s</string>
     <string name="shift_work_settings">ڕێکخستنی نۆرەکار</string>
-    <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه.</string>
+    <string name="ask_user_to_set_location">بۆ نیشاندانی کاتە شەرعیبەکان، شوێنەکەت لە ڕێکخستندا دیاری بکه</string>
     <string name="remove">سڕینەوە</string>
     <string name="shift_work_starting_date">ڕۆژی ھەڵبژێردراو لە ڕۆژژمێردا (%1$s) سەرەتای نۆرەکارە.</string>
     <string name="shift_work_starting_date_edit">ڕۆژی دیاریکراوی پێشوو (%1$s) سەرەتای نۆرەکارە.</string>
