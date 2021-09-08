@@ -12,11 +12,11 @@ import com.byagowi.persiancalendar.ui.ComposeTheme
 
 fun showComposeDialog(activity: Activity, dialog: @Composable ((MutableState<Boolean>) -> Unit)) {
     val decorView = (activity.window.decorView as? ViewGroup)?.debugAssertNotNull ?: return
-    decorView.addView(ComposeView(activity).also {
-        it.setContent {
+    decorView.addView(ComposeView(activity).also { composeView ->
+        composeView.setContent {
             val isDialogOpen = remember { mutableStateOf(true) }
             if (isDialogOpen.value) ComposeTheme { dialog(isDialogOpen) }
-            else decorView.post { decorView.removeView(it) }
+            else decorView.post { decorView.removeView(composeView) }
         }
     })
 }
