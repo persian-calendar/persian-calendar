@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.ui.ComposeTheme
 
 fun showComposeDialog(activity: Activity, dialog: @Composable ((closeDialog: () -> Unit) -> Unit)) {
-    val decorView = (activity.window.decorView as? ViewGroup)?.debugAssertNotNull ?: return
+    val decorView = (activity.window.decorView as? ViewGroup).debugAssertNotNull ?: return
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {
             val isDialogOpen = remember { mutableStateOf(true) }
