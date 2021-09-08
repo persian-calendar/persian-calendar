@@ -9,7 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.ui.ComposeTheme
 
-fun showComposeDialog(activity: Activity, dialog: @Composable ((() -> Unit) -> Unit)) {
+fun showComposeDialog(activity: Activity, dialog: @Composable ((closeDialog: () -> Unit) -> Unit)) {
     val decorView = (activity.window.decorView as? ViewGroup)?.debugAssertNotNull ?: return
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {
