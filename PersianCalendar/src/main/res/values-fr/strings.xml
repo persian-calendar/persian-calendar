@@ -342,7 +342,7 @@
     <string name="sun_view">Vue Soleil</string>
     <string name="asr_hanafi_juristic">Méthode juridique Hanafi Asr</string>
     <string name="enable_new_interface">Activer la nouvelle interface</string>
-    <string name="are_you_sure">Êtes-vous sûr·e \?</string>
+    <string name="are_you_sure">Êtes-vous sûr·e ?</string>
     <string name="month_pray_times">Heures de prière du mois</string>
     <string name="high_latitudes_method">Méthode des hautes latitudes</string>
     <string name="high_latitudes_night_middle">Milieu de nuit</string>
@@ -380,7 +380,7 @@
     <string name="pluto">Pluton</string>
     <string name="screensaver_settings">Paramètres de l’économiseur d’écran</string>
     <string name="live_wallpaper_settings">Paramètres du fond d’écran animé</string>
-    <string name="enable_notification">Voulez-vous activer la notification de la date \?</string>
+    <string name="enable_notification">Voulez-vous activer la notification de la date ?</string>
     <string name="add_quick_settings_tile">Ajouter une tuile de réglages rapides</string>
     <string name="true_north">Vrai Nord</string>
     <string name="lock">Verrouiller</string>
