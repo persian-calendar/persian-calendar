@@ -7,14 +7,16 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.ui.ComposeTheme
 
 fun showComposeDialog(activity: Activity, dialog: @Composable ((MutableState<Boolean>) -> Unit)) {
-    (activity.window.decorView as? ViewGroup)?.addView(ComposeView(activity).also { composeView ->
-        composeView.setContent {
+    val decorView = (activity.window.decorView as? ViewGroup)?.debugAssertNotNull ?: return
+    decorView.addView(ComposeView(activity).also {
+        it.setContent {
             val isDialogOpen = remember { mutableStateOf(true) }
-            if (!isDialogOpen.value) return@setContent
-            ComposeTheme { dialog(isDialogOpen) }
+            if (isDialogOpen.value) ComposeTheme { dialog(isDialogOpen) }
+            else decorView.post { decorView.removeView(it) }
         }
     })
 }
