@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="?android:attr/windowBackground"
     android:fitsSystemWindows="true">
 
@@ -17,6 +18,7 @@
         android:paddingStart="4dp"
         android:paddingEnd="4dp"
         android:scrollbars="vertical"
-        android:textDirection="ltr" />
+        android:textDirection="ltr"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

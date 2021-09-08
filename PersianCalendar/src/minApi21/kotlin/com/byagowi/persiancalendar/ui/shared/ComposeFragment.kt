@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.databinding.FragmentComposeBinding
@@ -34,7 +35,9 @@ abstract class ComposeFragment : Fragment() {
             subtitle.onEach { toolbar.subtitle = it }.launchIn(viewLifecycleOwner.lifecycleScope)
             if (isUpNavigation) toolbar.setupUpNavigation() else toolbar.setupMenuNavigation()
         }
-        binding.content.setContent { ComposeTheme { Content() } }
+        val composeView = ComposeView(inflater.context)
+        composeView.setContent { ComposeTheme { Content() } }
+        binding.root.addView(composeView)
         return binding.root
     }
 }
