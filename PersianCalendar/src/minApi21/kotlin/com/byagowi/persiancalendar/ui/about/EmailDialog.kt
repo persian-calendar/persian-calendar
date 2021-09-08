@@ -9,7 +9,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -25,18 +24,18 @@ fun showEmailDialog(activity: Activity, onSuccess: (String) -> Unit) =
     showComposeDialog(activity) { EmailAlertDialog(it, onSuccess) }
 
 @Composable
-private fun EmailAlertDialog(isDialogOpen: MutableState<Boolean>, onSuccess: (String) -> Unit) {
+private fun EmailAlertDialog(closeDialog: () -> Unit, onSuccess: (String) -> Unit) {
     val message = remember { mutableStateOf("") }
     AlertDialog(
-        onDismissRequest = { isDialogOpen.value = false },
+        onDismissRequest = { closeDialog() },
         confirmButton = {
             TextButton(onClick = {
-                isDialogOpen.value = false
+                closeDialog()
                 onSuccess(message.value)
             }) { Text(stringResource(R.string.continue_button)) }
         },
         dismissButton = {
-            TextButton(onClick = { isDialogOpen.value = false }) {
+            TextButton(onClick = { closeDialog() }) {
                 Text(stringResource(R.string.cancel))
             }
         },
@@ -62,4 +61,4 @@ private fun EmailAlertDialog(isDialogOpen: MutableState<Boolean>, onSuccess: (St
 @Preview(showBackground = true)
 @Composable
 fun EmailAlertDialogPreview() =
-    ComposeTheme { EmailAlertDialog(remember { mutableStateOf(true) }) {} }
+    ComposeTheme { EmailAlertDialog({}, {}) }

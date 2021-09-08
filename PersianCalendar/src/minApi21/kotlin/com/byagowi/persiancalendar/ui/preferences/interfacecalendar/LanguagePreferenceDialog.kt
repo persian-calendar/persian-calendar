@@ -14,7 +14,6 @@ import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,13 +29,13 @@ fun showLanguagePreferenceDialog(activity: Activity) =
     showComposeDialog(activity) { LanguagePreferenceDialog(it) }
 
 @Composable
-private fun LanguagePreferenceDialog(isDialogOpen: MutableState<Boolean>) {
+private fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
     AlertDialog(
-        onDismissRequest = { isDialogOpen.value = false },
+        onDismissRequest = { closeDialog() },
         title = { Text(stringResource(R.string.language)) },
         confirmButton = {},
         dismissButton = {
-            TextButton(onClick = { isDialogOpen.value = false }) {
+            TextButton(onClick = { closeDialog() }) {
                 Text(stringResource(R.string.cancel))
             }
         },
@@ -44,7 +43,7 @@ private fun LanguagePreferenceDialog(isDialogOpen: MutableState<Boolean>) {
             val context = LocalContext.current
             fun onClick(item: Language) {
                 if (item != language) changeLanguage(context.appPrefs, item)
-                isDialogOpen.value = false
+                closeDialog()
             }
             LazyColumn {
                 items(Language.values()) { item ->

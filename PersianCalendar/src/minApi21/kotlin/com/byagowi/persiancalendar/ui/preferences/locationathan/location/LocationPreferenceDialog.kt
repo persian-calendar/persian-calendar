@@ -11,8 +11,6 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,10 +39,10 @@ fun showLocationPreferenceDialog(activity: Activity) =
     showComposeDialog(activity) { LocationPreferenceDialog(it) }
 
 @Composable
-private fun LocationPreferenceDialog(isDialogOpen: MutableState<Boolean>) {
+private fun LocationPreferenceDialog(closeDialog: () -> Unit) {
     val cities = remember { citiesStore.values.sortedWith(language.createCitiesComparator()) }
     AlertDialog(
-        onDismissRequest = { isDialogOpen.value = false },
+        onDismissRequest = { closeDialog() },
         title = { Text(stringResource(R.string.location)) },
         text = {
             LazyColumn {
@@ -56,7 +54,7 @@ private fun LocationPreferenceDialog(isDialogOpen: MutableState<Boolean>) {
                             .fillMaxWidth()
                             .height(50.dp)
                             .clickable {
-                                isDialogOpen.value = false
+                                closeDialog()
                                 context.appPrefs.edit {
                                     listOf(
                                         PREF_GEOCODED_CITYNAME,
@@ -90,4 +88,4 @@ private fun LocationPreferenceDialog(isDialogOpen: MutableState<Boolean>) {
 @Preview
 @Composable
 fun LocationPreferenceDialogPreview() =
-    ComposeTheme { LocationPreferenceDialog(remember { mutableStateOf(true) }) }
+    ComposeTheme { LocationPreferenceDialog {} }
