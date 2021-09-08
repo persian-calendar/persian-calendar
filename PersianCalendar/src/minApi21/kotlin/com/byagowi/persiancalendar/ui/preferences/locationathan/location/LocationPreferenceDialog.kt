@@ -2,11 +2,12 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
 import android.app.Activity
 import android.view.ViewGroup
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -14,6 +15,7 @@ import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
@@ -57,34 +59,38 @@ fun LocationPreferenceDialog() {
                     LazyColumn {
                         items(cities) { city ->
                             val context = LocalContext.current
-                            ClickableText(
+                            Box(
+                                contentAlignment = Alignment.CenterStart,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(50.dp),
-                                text = buildAnnotatedString {
-                                    withStyle(
-                                        SpanStyle(
-                                            // TODO: Retrieve dark/light text color better
-                                            color = LocalRippleTheme.current.defaultColor(),
-                                            fontSize = 18.sp
-                                        )
-                                    ) { append(language.getCityName(city)) }
-                                    append(" ")
-                                    withStyle(SpanStyle(color = Color(0xFFAAAAAA))) {
-                                        append(language.getCountryName(city))
+                                    .height(50.dp)
+                                    .clickable {
+                                        isDialogOpen.value = false
+                                        context.appPrefs.edit {
+                                            listOf(
+                                                PREF_GEOCODED_CITYNAME,
+                                                PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE
+                                            ).forEach(::remove)
+                                            putString(PREF_SELECTED_LOCATION, city.key)
+                                        }
                                     }
-                                },
-                                onClick = {
-                                    isDialogOpen.value = false
-                                    context.appPrefs.edit {
-                                        listOf(
-                                            PREF_GEOCODED_CITYNAME,
-                                            PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE
-                                        ).forEach(::remove)
-                                        putString(PREF_SELECTED_LOCATION, city.key)
-                                    }
-                                }
-                            )
+                            ) {
+                                Text(
+                                    buildAnnotatedString {
+                                        withStyle(
+                                            SpanStyle(
+                                                // TODO: Fina a better way to retrieve dark/light text color
+                                                color = LocalRippleTheme.current.defaultColor(),
+                                                fontSize = 18.sp
+                                            )
+                                        ) { append(language.getCityName(city)) }
+                                        append(" ")
+                                        withStyle(SpanStyle(color = Color(0xFFAAAAAA))) {
+                                            append(language.getCountryName(city))
+                                        }
+                                    },
+                                )
+                            }
                         }
                     }
                 },
