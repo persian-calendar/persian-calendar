@@ -46,13 +46,13 @@ import com.byagowi.persiancalendar.utils.weekDays
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val context = context ?: return
+        val activity = activity ?: return
         val destination = arguments?.getString(PreferencesFragment.PREF_DESTINATION)
-        if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(context)
+        if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(activity)
 
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.pref_interface) {
-                clickable(onClick = { showLanguagePreferenceDialog(context) }) {
+                clickable(onClick = { showLanguagePreferenceDialog(activity) }) {
                     if (destination == PREF_APP_LANGUAGE) title = "Language"
                     else title(R.string.language)
                 }
@@ -90,7 +90,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     title(R.string.show_device_calendar_events)
                     summary(R.string.show_device_calendar_events_summary)
                     setOnPreferenceChangeListener { _, _ ->
-                        val activity = activity ?: return@setOnPreferenceChangeListener false
                         isChecked = if (ActivityCompat.checkSelfPermission(
                                 activity, Manifest.permission.READ_CALENDAR
                             ) != PackageManager.PERMISSION_GRANTED
