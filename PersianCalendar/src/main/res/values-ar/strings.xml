@@ -33,7 +33,7 @@
     <string name="days_distance">الفرق</string>
     <string name="start_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) من بداية السنة</string>
     <string name="end_of_year_diff">%1$s يوماً (~%2$s أسبوعاً أو %3$s شهراً) إلى آخر السنة</string>
-    <string name="date_copied_clipboard">«%1$s» تم النسخ إلى المحفظة</string>
+    <string name="date_copied_clipboard">«%1$s» تم النسخ إلى المحفظة.</string>
     <string name="year_name">أسم السنة</string>
     <string name="year1">القرد</string>
     <string name="year2">الديك</string>
@@ -62,7 +62,7 @@
     <string name="sagittarius">قوس</string>
     <string name="moonInScorpio">القمر في العقرب</string>
     <string name="events">المناسبات</string>
-    <string name="no_event">تعذّر العثور على أحداث أو مناسبات أو عُطل لليوم</string>
+    <string name="no_event">تعذّر العثور على أحداث أو مناسبات أو عُطل لليوم.</string>
     <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطل إذهب إلى الإعدادات &gt; المناسبات</string>
     <string name="sunriseSunView">الشروق</string>
     <string name="middaySunView">الظهر</string>
@@ -89,9 +89,9 @@
     <string name="select_month">إختيار الشهر</string>
     <string name="day">اليوم</string>
     <string name="select_day">إختيار اليوم</string>
-    <string name="date_exception">عذرًا، التاريخ الذي أدخلته غير صالح!</string>
+    <string name="date_exception">عذرًا، التاريخ الذي أدخلته غير صالح.</string>
     <!--Compass-->
-    <string name="compass_not_found">تعذّر الوصول لمستشعر البوصلة!</string>
+    <string name="compass_not_found">تعذّر الوصول لمستشعر البوصلة</string>
     <string name="calibrate_compass_summary">لتحسين دقة مستشعر البوصلة أبعد الجهاز عن الأجسام المغناطيسية، وحرك الجهاز بكل الإتجاهات.</string>
     <string name="level">المستوى</string>
     <string name="stop">إيقاف</string>
@@ -139,23 +139,20 @@
     <string name="customize_widget">تخصيص المصغر</string>
     <string name="which_one_to_show">إظهار/إخفاء العناصر</string>
     <string name="customize_widget_summary">إختيار العناصر الظاهرة في التنبيهات والمصغر (الودجت)</string>
-    <string name="ask_user_to_set_location">حدد مكانك من الإعدادات &gt; المكان والأذان، لإظهار أوقات الصلوات هنا</string>
+    <string name="ask_user_to_set_location">حدد مكانك من الإعدادات &gt; المكان والأذان، لإظهار هذا المكان بشكل صحيح</string>
     <string name="notify_date">تاريخ اليوم في تنبيه</string>
     <string name="enable_notify">إظهار التواريخ في تنبيهٍ دائمي</string>
     <string name="notify_date_lock_screen">إظهار التنبيه في شاشة القفل</string>
-    <string name="notify_date_lock_screen_summary">فقط إذا كانت الشاشة محميّة</string>
+    <string name="notify_date_lock_screen_summary">فقط إذا كانت الشاشة محميّة.</string>
     <string name="widget_background_color">لون خلفية المصغر</string>
     <string name="select_widgets_background_color">إختيار لونٍ لخلفية المصغر</string>
     <!--Location and Athan-->
-    <string name="gps_location">تحديد المكان باستخدام الـGPS</string>
+    <string name="gps_location">تحديد المكان باستخدام ال GPS</string>
     <string name="gps_location_help">لا تحتاج إلى الخيارات الأخرى إذا كان هذا الخيار مفعل</string>
-    <string name="gps_internet_desc">يرجى تفعيل الـGPS أو الإتصال بالشبكة ليتم تحديد المكان.
+    <string name="gps_internet_desc">يرجى تفعيل ال GPS أو الإتصال بالشبكة ليتم تحديد المكان.
 \n
-\nالتطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل الـGPS والشبكة لتحديد المكان الجديد.</string>
-    <string name="pleasewaitgps">جارٍ البحث يرجى الانتظار …
-\n
-\n
-\nتأكد أن الـGPS فعال، إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى.</string>
+\nالتطبيق يحتاج هذا مرة واحدة، ولكن إذا تم تغير المكان يجب إعادة تفعيل ال GPS والشبكة لتحديد المكان الجديد.</string>
+    <string name="pleasewaitgps">جارٍ البحث يرجى الانتظار … تأكد أن ال GPS فعال، إذا لم يظهر أسم مدينتك خلال دقائق جرب الخيارات الأخرى</string>
     <string name="location">المكان</string>
     <string name="location_help">إذا لم يكن أسم مدينتك موجوداً، حدد الإحداثيات اللازمة أدناه</string>
     <string name="latitude">خط العرض</string>
@@ -178,28 +175,28 @@
     <string name="custom_notification_is_set">تم تخصيص صوت المؤذن</string>
     <string name="default_athan">صوت المؤذن الإفتراضي</string>
     <string name="default_athan_summary">الرجوع إلى صوت المؤذن الإفتراضي</string>
-    <string name="returned_to_default">تم الرجوع إلى إلى صوت المؤذن الإفتراضي</string>
+    <string name="returned_to_default">تم الرجوع إلى صوت المؤذن الإفتراضي</string>
     <string name="athan_volume">التحكم بمستوى صوت الأذان</string>
     <string name="athan_volume_summary">مستوى الصوت</string>
     <string name="athan_disabled_summary">لتفعيل منبه الأذان، حدد المكان أو أدخل الإحداثيات اللازمة</string>
     <!--Permissions-->
     <string name="location_access">الوصول للموقع</string>
-    <string name="phone_location_required">يحتاج هذا الجزء من التطبيق إذن الوصول للموقع الجغرافي وإلا يجب عليك إدخال خط الطول وخط العرض يدويًا</string>
+    <string name="phone_location_required">يحتاج هذا الجزء من التطبيق إذن الوصول للموقع الجغرافي وإلا يجب عليك إدخال خط الطول وخط العرض يدويًا.</string>
     <string name="calendar_access">الوصول إلى التقويم</string>
-    <string name="phone_calendar_required">يحتاج هذا الجزء من التطبيق إذن الوصول للتقويم الخاص بك، إذا تم السماح يمكنك إظهار الأحداث الخاصة في التقويم</string>
+    <string name="phone_calendar_required">يحتاج هذا الجزء من التطبيق إذن الوصول للتقويم الخاص بك، إذا تم السماح يمكنك إظهار الأحداث الخاصة في التقويم.</string>
     <!--About-->
     <string name="gpl_logo">شعار GPL</string>
     <string name="version">الإصدار %1$s</string>
     <string name="about_license">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>
-    <string name="about_license_sum">راجع رخصة GPL المستخدمة في تطبيق التقويم الفارسي</string>
+    <string name="about_license_sum">راجع رخصة GPL المستخدمة في تطبيق التقويم الفارسي.</string>
     <string name="about_support_developers">دعم المطورين</string>
     <string name="about_report_bug">الإبلاغ عن الأخطاء</string>
     <string name="about_report_bug_sum">للإبلاغ عن الأخطاء وطلب ميزات جديدة يرجى إستخدام خدمة Github</string>
     <string name="about_sendMail">البريد الإلكتروني</string>
-    <string name="about_email_sum">إرسال بريد إلكتروني لمطور التطبيق</string>
+    <string name="about_email_sum">إرسال بريد إلكتروني لمطوري التطبيق</string>
     <string name="about_noClient">تعذّر العثور على تطبيق البريد الإلكتروني</string>
-    <string name="about_developers">المطوّرون</string>
+    <string name="about_developers">المطوّرون (مرتب عشوائيا)</string>
     <!--TalkBack, a11y-->
     <string name="previous_month">الشهر السابق</string>
     <string name="next_month">الشهر القادم</string>
@@ -215,7 +212,7 @@
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
     <string name="n_minutes">%1$s دقائق</string>
     <string name="n_hours">%1$s ساعات</string>
-    <string name="spaced_and">" و"</string>
+    <string name="spaced_and">" و "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_info">معلومات الجهاز</string>
@@ -235,7 +232,7 @@
     <string name="enable_ascending_athan_volume">يصل صوت أذان إلى ذروته خلال دقيقة</string>
     <string name="ascending_athan_volume">زيادة صوت الأذان</string>
     <string name="share">مشاركة</string>
-    <string name="enable_location_services">خدمات الموقع غير مفعلة، يرجى تشغيلها لاستخدام الميزة</string>
+    <string name="enable_location_services">خدمات الموقع غير مفعلة، يرجى تشغيلها لاستخدام الميزة.</string>
     <string name="widget_age_name">التقويم الفارسي (عمر)</string>
     <string name="age_widget_title">عنوان المصغر</string>
     <string name="select_date">اختيار التاريخ</string>
