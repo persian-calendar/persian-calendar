@@ -22,6 +22,8 @@ val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 val composeVersion = "1.0.2"
 
+val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
+
 val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
 android {
     sourceSets {
@@ -128,8 +130,10 @@ android {
         kotlinCompilerExtensionVersion = composeVersion
     }
 
-    buildFeatures {
-        compose = true
+    if (isMinApi21Build) {
+        buildFeatures {
+            compose = true
+        }
     }
 
     compileOptions {
@@ -172,14 +176,15 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
-    implementation("androidx.compose.runtime:runtime:$composeVersion")
     minApi21Implementation("androidx.activity:activity-compose:1.3.1")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
     minApi21Implementation("androidx.compose.material:material:$composeVersion")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
-    //"minApi21AndroidTestImplementation"("androidx.compose.ui:ui-test-junit4:$composeVersion")
-    // XXX: The following should be debug implementation
-    minApi21Implementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    if (isMinApi21Build) {
+        implementation("androidx.compose.runtime:runtime:$composeVersion")
+        androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
+        debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+    }
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
 

@@ -8,9 +8,6 @@
         android:name="android.permission.ACCESS_NETWORK_STATE"
         tools:node="remove" />
 
-    <!-- Ignore compose runtime minSdk requirement -->
-    <uses-sdk tools:overrideLibrary="androidx.compose.runtime" />
-
     <!-- don't ever add requiredFeature to them even the fact the app functions without them anyway,
          this is how 6.6.1 permissions getting was ruined -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />

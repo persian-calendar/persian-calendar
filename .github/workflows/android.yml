@@ -25,7 +25,9 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Build debug APK and run JVM tests
-        run: ./gradlew assembleDebug lintMinApi17Debug lintMinApi21Debug testMinApi17DebugUnitTest testMinApi21DebugUnitTest --stacktrace
+        run: |
+          ./gradlew assembleMinApi17Debug lintMinApi17Debug testMinApi17DebugUnitTest --stacktrace
+          ./gradlew assembleMinApi21Debug lintMinApi21Debug testMinApi21DebugUnitTest --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v2
