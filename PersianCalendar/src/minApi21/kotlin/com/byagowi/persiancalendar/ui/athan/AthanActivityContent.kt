@@ -59,4 +59,4 @@ private fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: 
 
 @Preview
 @Composable
-fun AthanActivityContentPreview() = AthanActivityContent(FAJR_KEY, "CITY NAME") {}
+private fun AthanActivityContentPreview() = AthanActivityContent(FAJR_KEY, "CITY NAME") {}

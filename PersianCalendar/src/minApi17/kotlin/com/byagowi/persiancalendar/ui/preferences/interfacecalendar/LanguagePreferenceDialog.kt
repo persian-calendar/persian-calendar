@@ -6,6 +6,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.saveLanguage
 
 fun showLanguagePreferenceDialog(context: Context) {
     val languages = Language.values().toList()
@@ -14,7 +15,7 @@ fun showLanguagePreferenceDialog(context: Context) {
         .setTitle(R.string.language)
         .setSingleChoiceItems(names, languages.indexOf(language)) { dialog, which ->
             val chosenLanguage = languages[which]
-            if (language != chosenLanguage) changeLanguage(context.appPrefs, chosenLanguage)
+            if (language != chosenLanguage) context.appPrefs.saveLanguage(chosenLanguage)
             dialog.cancel()
         }
         .setNegativeButton(R.string.cancel, null)

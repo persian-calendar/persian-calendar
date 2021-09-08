@@ -22,18 +22,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.edit
-import com.byagowi.persiancalendar.PREF_ALTITUDE
-import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
-import com.byagowi.persiancalendar.PREF_LATITUDE
-import com.byagowi.persiancalendar.PREF_LONGITUDE
-import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.ui.ComposeTheme
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.saveCity
 
 fun showLocationPreferenceDialog(activity: Activity) =
     showComposeDialog(activity) { LocationPreferenceDialog(it) }
@@ -55,13 +50,7 @@ private fun LocationPreferenceDialog(closeDialog: () -> Unit) {
                             .height(50.dp)
                             .clickable {
                                 closeDialog()
-                                context.appPrefs.edit {
-                                    listOf(
-                                        PREF_GEOCODED_CITYNAME,
-                                        PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE
-                                    ).forEach(::remove)
-                                    putString(PREF_SELECTED_LOCATION, city.key)
-                                }
+                                context.appPrefs.saveCity(city)
                             }
                     ) {
                         Text(
@@ -87,5 +76,4 @@ private fun LocationPreferenceDialog(closeDialog: () -> Unit) {
 
 @Preview
 @Composable
-fun LocationPreferenceDialogPreview() =
-    ComposeTheme { LocationPreferenceDialog {} }
+private fun LocationPreferenceDialogPreview() = ComposeTheme { LocationPreferenceDialog {} }

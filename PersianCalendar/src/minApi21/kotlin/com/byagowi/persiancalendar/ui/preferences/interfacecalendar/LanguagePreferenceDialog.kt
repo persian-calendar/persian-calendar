@@ -18,12 +18,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.ui.ComposeTheme
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.utils.saveLanguage
 
 fun showLanguagePreferenceDialog(activity: Activity) =
     showComposeDialog(activity) { LanguagePreferenceDialog(it) }
@@ -35,14 +38,12 @@ private fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
         title = { Text(stringResource(R.string.language)) },
         confirmButton = {},
         dismissButton = {
-            TextButton(onClick = { closeDialog() }) {
-                Text(stringResource(R.string.cancel))
-            }
+            TextButton(onClick = { closeDialog() }) { Text(stringResource(R.string.cancel)) }
         },
         text = {
             val context = LocalContext.current
             fun onClick(item: Language) {
-                if (item != language) changeLanguage(context.appPrefs, item)
+                if (item != language) context.appPrefs.saveLanguage(item)
                 closeDialog()
             }
             LazyColumn {
@@ -63,3 +64,7 @@ private fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
         }
     )
 }
+
+@Preview
+@Composable
+private fun LanguagePreferenceDialogPreview() = ComposeTheme { LanguagePreferenceDialog {} }

@@ -35,9 +35,7 @@ private fun EmailAlertDialog(closeDialog: () -> Unit, onSuccess: (String) -> Uni
             }) { Text(stringResource(R.string.continue_button)) }
         },
         dismissButton = {
-            TextButton(onClick = { closeDialog() }) {
-                Text(stringResource(R.string.cancel))
-            }
+            TextButton(onClick = { closeDialog() }) { Text(stringResource(R.string.cancel)) }
         },
         title = { Text(stringResource(R.string.about_email_sum)) },
         text = {
@@ -58,7 +56,6 @@ private fun EmailAlertDialog(closeDialog: () -> Unit, onSuccess: (String) -> Uni
     )
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun EmailAlertDialogPreview() =
-    ComposeTheme { EmailAlertDialog({}, {}) }
+private fun EmailAlertDialogPreview() = ComposeTheme { EmailAlertDialog({}, {}) }
