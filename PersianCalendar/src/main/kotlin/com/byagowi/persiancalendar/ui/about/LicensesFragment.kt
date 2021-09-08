@@ -58,23 +58,17 @@ class LicensesFragment : Fragment() {
             }
         }
 
-        val sections = resources.openRawResource(R.raw.credits).use { String(it.readBytes()) }
-            .split(Regex("^-{4}$", RegexOption.MULTILINE))
-            .map { it.trim().lines() }
-            .map { lines ->
-                val title = buildSpannedString {
-                    val parts = lines.first().split(" - ")
-                    append(parts[0])
-                    if (parts.size > 1) {
-                        append("  ")
-                        scale(.7f) { inSpans(BadgeSpan()) { append(parts.getOrNull(1)) } }
-                    }
+        val sections = resources.getCreditsSections().map { (title, license, text) ->
+            buildSpannedString {
+                append(title)
+                if (license != null) {
+                    append("  ")
+                    scale(.7f) { inSpans(BadgeSpan()) { append(license) } }
                 }
-                val body = SpannableString(lines.drop(1).joinToString("\n").trim()).also {
-                    Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
-                }
-                title to body
+            } to SpannableString(text).also {
+                Linkify.addLinks(it, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
             }
+        }
 
         binding.recyclerView.adapter = ExpandableItemsAdapter(sections)
         val layoutManager = LinearLayoutManager(context)
