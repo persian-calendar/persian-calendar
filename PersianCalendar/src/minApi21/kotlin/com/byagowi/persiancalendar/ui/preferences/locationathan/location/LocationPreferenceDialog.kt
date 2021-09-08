@@ -10,6 +10,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -18,8 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,40 +49,48 @@ fun LocationPreferenceDialog() {
     val cities = remember { citiesStore.values.sortedWith(language.createCitiesComparator()) }
     if (!isDialogOpen.value) return
     Surface(color = Color.Transparent) {
-        AlertDialog(
-            onDismissRequest = { isDialogOpen.value = false },
-            title = { Text(stringResource(R.string.location)) },
-            text = {
-                LazyColumn {
-                    items(cities) { city ->
-                        val context = LocalContext.current
-                        ClickableText(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp),
-                            text = AnnotatedString.Builder("").also {
-                                it.pushStyle(SpanStyle(fontSize = 18.sp))
-                                it.append(language.getCityName(city))
-                                it.pop()
-                                it.append(" ")
-                                it.append(language.getCountryName(city))
-                            }.toAnnotatedString(),
-                            onClick = {
-                                isDialogOpen.value = false
-                                context.appPrefs.edit {
-                                    remove(PREF_GEOCODED_CITYNAME)
-                                    remove(PREF_LATITUDE)
-                                    remove(PREF_LONGITUDE)
-                                    remove(PREF_ALTITUDE)
-                                    putString(PREF_SELECTED_LOCATION, city.key)
+        ComposeTheme {
+            AlertDialog(
+                onDismissRequest = { isDialogOpen.value = false },
+                title = { Text(stringResource(R.string.location)) },
+                text = {
+                    LazyColumn {
+                        items(cities) { city ->
+                            val context = LocalContext.current
+                            ClickableText(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
+                                text = buildAnnotatedString {
+                                    withStyle(
+                                        SpanStyle(
+                                            // TODO: Retrieve dark/light text color better
+                                            color = LocalRippleTheme.current.defaultColor(),
+                                            fontSize = 18.sp
+                                        )
+                                    ) { append(language.getCityName(city)) }
+                                    append(" ")
+                                    withStyle(SpanStyle(color = Color(0xFFAAAAAA))) {
+                                        append(language.getCountryName(city))
+                                    }
+                                },
+                                onClick = {
+                                    isDialogOpen.value = false
+                                    context.appPrefs.edit {
+                                        listOf(
+                                            PREF_GEOCODED_CITYNAME,
+                                            PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE
+                                        ).forEach(::remove)
+                                        putString(PREF_SELECTED_LOCATION, city.key)
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
-                }
-            },
-            buttons = {}
-        )
+                },
+                buttons = {}
+            )
+        }
     }
 }
 
