@@ -16,30 +16,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 
 @Composable
 fun ComposeTheme(content: @Composable () -> Unit) {
-    val colors = when (Theme.getCurrent(LocalContext.current)) {
-        Theme.DARK, Theme.BLACK -> remember {
-            darkColors(
-                primary = Color(0xFF00BF50),
-                primaryVariant = Color(0xFF009688),
-                secondary = Color(0xFF03DAC5)
+    val context = LocalContext.current
+    val colors = remember {
+        val primary =
+            Color(context.resolveColor(com.google.android.material.R.attr.colorPrimary))
+        val primaryVariant =
+            Color(context.resolveColor(com.google.android.material.R.attr.colorPrimaryVariant))
+        val secondary =
+            Color(context.resolveColor(com.google.android.material.R.attr.colorSecondary))
+        val surface =
+            Color(context.resolveColor(com.google.android.material.R.attr.colorPrimaryDark))
+        when (Theme.getCurrent(context)) {
+            Theme.DARK, Theme.BLACK -> darkColors(
+                primary = primary, primaryVariant = primaryVariant, secondary = secondary,
+                surface = surface
             )
-        }
-        else -> remember {
-            lightColors(
-                primary = Color(0xFF00695c),
-                primaryVariant = Color(0xFF004D40),
-                secondary = Color(0xFF00796B)
-                /* Other default colors to override
-                background = Color.White,
-                surface = Color.White,
-                onPrimary = Color.White,
-                onSecondary = Color.Black,
-                onBackground = Color.Black,
-                onSurface = Color.Black,
-                */
+            else -> lightColors(
+                primary = primary, primaryVariant = primaryVariant, secondary = secondary,
+                surface = surface
             )
         }
     }
