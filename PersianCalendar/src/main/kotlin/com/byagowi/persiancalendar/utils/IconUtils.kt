@@ -11,9 +11,7 @@ import com.byagowi.persiancalendar.R
 // Dynamic icon generation, currently unused
 fun createStatusIcon(context: Context, dayOfMonth: Int): Bitmap {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    paint.textSize = when (preferredDigits) {
-        ARABIC_DIGITS -> 75f; else -> 90f
-    }
+    paint.textSize = if (isArabicDigitSelected) 75f else 90f
     paint.textAlign = Paint.Align.CENTER
     paint.typeface = getAppFont(context)
     val text = formatNumber(dayOfMonth)
