@@ -52,15 +52,15 @@ class LicensesFragment : Fragment() {
         val context = LocalContext.current
         val sections = remember { context.resources.getCreditsSections() }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            val expandedItem = remember { mutableStateOf(-1) }
+            val expandedItemIndex = remember { mutableStateOf(-1) }
             val initialDegree =
                 if (LocalLayoutDirection.current == LayoutDirection.Rtl) 90f else -90f
             LazyColumn {
                 itemsIndexed(sections) { i, (title, license, text) ->
-                    val isExpanded = expandedItem.value == i
+                    val isExpanded = expandedItemIndex.value == i
                     val angle = animateFloatAsState(if (isExpanded) 0f else initialDegree).value
                     Column(modifier = Modifier
-                        .clickable { expandedItem.value = if (isExpanded) -1 else i }
+                        .clickable { expandedItemIndex.value = if (isExpanded) -1 else i }
                         .padding(6.dp)
                         .fillMaxWidth()
                         .animateContentSize()
