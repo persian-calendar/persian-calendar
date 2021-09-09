@@ -21,8 +21,8 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,11 +45,12 @@ class LicensesFragment : Fragment() {
         val context = LocalContext.current
         val sections = remember { context.resources.getCreditsSections() }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            val isOpened = remember { List(sections.size) { false }.toMutableStateList() }
+            val isOpened = remember { mutableStateOf(-1) }
             LazyColumn {
                 itemsIndexed(sections) { i, (title, license, text) ->
                     Column(modifier = Modifier
-                        .clickable { isOpened[i] = !isOpened[i] }
+                        .clickable { isOpened.value = if (isOpened.value == i) -1 else i }
+                        .padding(horizontal = 4.dp)
                         .animateContentSize()
                     ) {
                         Row(
@@ -68,7 +69,7 @@ class LicensesFragment : Fragment() {
                                 style = TextStyle(Color.DarkGray, 12.sp)
                             )
                         }
-                        if (isOpened[i]) Text(text)
+                        if (isOpened.value == i) Text(text)
                         Divider(color = Color.LightGray)
                     }
                 }
