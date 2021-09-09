@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,13 +52,15 @@ class LicensesFragment : Fragment() {
         val context = LocalContext.current
         val sections = remember { context.resources.getCreditsSections() }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            val isOpened = remember { mutableStateOf(-1) }
+            val expandedItem = remember { mutableStateOf(-1) }
             val initialDegree =
                 if (LocalLayoutDirection.current == LayoutDirection.Rtl) 90f else -90f
             LazyColumn {
                 itemsIndexed(sections) { i, (title, license, text) ->
+                    val isExpanded = expandedItem.value == i
+                    val angle = animateFloatAsState(if (isExpanded) 0f else initialDegree).value
                     Column(modifier = Modifier
-                        .clickable { isOpened.value = if (isOpened.value == i) -1 else i }
+                        .clickable { expandedItem.value = if (isExpanded) -1 else i }
                         .padding(6.dp)
                         .fillMaxWidth()
                         .animateContentSize()
@@ -69,9 +72,7 @@ class LicensesFragment : Fragment() {
                             Image(
                                 painter = painterResource(androidx.preference.R.drawable.ic_arrow_down_24dp),
                                 contentDescription = stringResource(R.string.more),
-                                modifier = Modifier.rotate(
-                                    if (isOpened.value == i) 0f else initialDegree
-                                ),
+                                modifier = Modifier.rotate(angle),
                                 colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
@@ -87,7 +88,7 @@ class LicensesFragment : Fragment() {
                                 style = TextStyle(Color.DarkGray, 12.sp)
                             )
                         }
-                        if (isOpened.value == i) Text(text)
+                        if (isExpanded) Text(text)
                     }
                     Divider(color = Color.LightGray)
                 }
