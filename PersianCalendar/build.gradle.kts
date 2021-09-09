@@ -55,7 +55,7 @@ android {
         versionCode = versionNumber
         versionName = baseVersionName
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
+        if (!isMinApi21Build) vectorDrawables.useSupportLibrary = true
         resourceConfigurations +=
             listOf("en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es")
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
