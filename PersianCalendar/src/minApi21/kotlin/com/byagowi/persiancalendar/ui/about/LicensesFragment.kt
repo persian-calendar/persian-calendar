@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,7 +48,10 @@ class LicensesFragment : Fragment() {
             val isOpened = remember { List(sections.size) { false }.toMutableStateList() }
             LazyColumn {
                 itemsIndexed(sections) { i, (title, license, text) ->
-                    Column(modifier = Modifier.clickable { isOpened[i] = !isOpened[i] }) {
+                    Column(modifier = Modifier
+                        .clickable { isOpened[i] = !isOpened[i] }
+                        .animateContentSize()
+                    ) {
                         Row(
                             horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.CenterVertically
