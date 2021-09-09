@@ -25,8 +25,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
@@ -52,15 +52,15 @@ class LicensesFragment : Fragment() {
         val context = LocalContext.current
         val sections = remember { context.resources.getCreditsSections() }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-            val expandedItemIndex = remember { mutableStateOf(-1) }
+            val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
             val initialDegree =
                 if (LocalLayoutDirection.current == LayoutDirection.Rtl) 90f else -90f
             LazyColumn {
                 itemsIndexed(sections) { i, (title, license, text) ->
-                    val isExpanded = expandedItemIndex.value == i
+                    val isExpanded = expansionsState[i]
                     val angle = animateFloatAsState(if (isExpanded) 0f else initialDegree).value
                     Column(modifier = Modifier
-                        .clickable { expandedItemIndex.value = if (isExpanded) -1 else i }
+                        .clickable { expansionsState[i] = !expansionsState[i] }
                         .padding(6.dp)
                         .fillMaxWidth()
                         .animateContentSize()
