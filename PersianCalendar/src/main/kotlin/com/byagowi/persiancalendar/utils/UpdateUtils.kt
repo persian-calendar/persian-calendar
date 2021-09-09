@@ -20,7 +20,6 @@ import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
@@ -33,6 +32,7 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
+import com.byagowi.persiancalendar.Variants
 import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
@@ -511,7 +511,7 @@ private fun Context.updateNotification(
         }
     }
 
-    if (BuildConfig.DEBUG) builder.setWhen(System.currentTimeMillis())
+    if (Variants.enableDevelopmentFeatures) builder.setWhen(System.currentTimeMillis())
 
     if (enableWorkManager) notificationManager?.notify(NOTIFICATION_ID, builder.build())
     else runCatching {
