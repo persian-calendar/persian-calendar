@@ -34,6 +34,9 @@ private fun createComposeView(
     val setSubtitle = { value: String -> toolbar.subtitle = value }
     if (isUpNavigation) toolbar.setupUpNavigation() else toolbar.setupMenuNavigation()
     val composeView = ComposeView(layoutInflater.context)
+    composeView.layoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+    )
     composeView.setContent { ComposeTheme { Surface { content(setTitle, setSubtitle) } } }
     binding.root.addView(composeView)
     return binding.root
