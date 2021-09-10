@@ -1,14 +1,16 @@
 import groovy.json.JsonSlurper
 import org.codehaus.groovy.runtime.ProcessGroovyMethods
 
+operator fun File.div(child: String) = File(this, child)
+fun String.execute() = ProcessGroovyMethods.execute(this)
+val Process.text: String? get() = ProcessGroovyMethods.getText(this)
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
 }
-
-operator fun File.div(child: String) = File(this, child)
 
 val versionMajor = 6
 val versionMinor = 7
@@ -43,8 +45,7 @@ android {
         "git rev-parse --short HEAD", // git hash, e.g. 2426d51f
         "git status -s" // i == 3, whether repo's dir is clean, -dirty is appended if smt is uncommitted
     ).mapIndexedNotNull { i, cmd ->
-        // https://stackoverflow.com/a/52441962 equivalent to Groovy's "".execute().text
-        ProcessGroovyMethods.getText(ProcessGroovyMethods.execute(cmd))?.trim()
+        cmd.execute().text?.trim()
             ?.takeIf { it.isNotEmpty() }.let { if (i == 3 && it != null) "dirty" else it }
     }.joinToString("-")
 
@@ -332,3 +333,21 @@ tasks.named("preBuild").configure { dependsOn(generateAppSrcTask) }
 //        dependenciesURLs.forEach { (dependency: String, url: URL?) -> println("$dependency => $url") }
 //    }
 //}
+
+// Called like: ./gradlew moveToApiFlavors -PfileName=
+tasks.register("moveToApiFlavors") {
+    doLast {
+        val source = gradle.startParameter.projectProperties["fileName"]
+            ?: error("Moves a source file to api flavors\nPass -P fileName=FILENAME to this")
+        if ("/main/" !in source) error("File name should be a source file in the main flavor")
+        if (!File(source).isFile) error("Source file name doesn't exist")
+        val minApi17Target = source.replace("/main/", "/minApi17/")
+        File(File(minApi17Target).parent).mkdirs()
+        val minApi21Target = source.replace("/main/", "/minApi21/")
+        File(File(minApi21Target).parent).mkdirs()
+        println("cp $source $minApi21Target".execute().text)
+        println("git add $minApi21Target".execute().text)
+        println("git mv $source $minApi17Target".execute().text)
+        println("git status".execute().text)
+    }
+}
