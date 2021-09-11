@@ -154,7 +154,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     it.notifyItemRangeChanged(0, daysAdapter.itemCount)
                 }
 
-                pageRefresh = fun(isEventsModification: Boolean, jdn: Jdn?) {
+                pageRefresh = { isEventsModification: Boolean, jdn: Jdn? ->
                     if (viewPager.currentItem == position) {
                         if (isEventsModification && jdn != null) {
                             daysAdapter.initializeMonthEvents()

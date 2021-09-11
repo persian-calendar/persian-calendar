@@ -30,7 +30,7 @@ class ConverterFragment : Fragment() {
         binding.todayButton.setOnClickListener { binding.dayPickerView.jdn = todayJdn }
 
         binding.dayPickerView.also {
-            it.selectedDayListener = fun(jdn) {
+            it.selectedDayListener = { jdn ->
                 if (jdn == null) {
                     binding.resultCard.isVisible = false
                 } else {

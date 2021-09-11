@@ -151,9 +151,9 @@ class CalendarFragment : Fragment() {
         }
 
         binding.calendarPager.also {
-            it.onDayClicked = fun(jdn: Jdn) { bringDate(jdn, monthChange = false) }
-            it.onDayLongClicked = fun(jdn: Jdn) { addEventOnCalendar(jdn) }
-            it.onMonthSelected = fun() {
+            it.onDayClicked = { jdn -> bringDate(jdn, monthChange = false) }
+            it.onDayLongClicked = ::addEventOnCalendar
+            it.onMonthSelected = {
                 it.selectedMonth.let { date ->
                     updateToolbar(date.monthName, formatNumber(date.year))
                     todayButton?.isVisible =
