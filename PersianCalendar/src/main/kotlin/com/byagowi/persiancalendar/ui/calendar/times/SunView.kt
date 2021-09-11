@@ -30,6 +30,7 @@ import java.util.*
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
+import kotlin.math.sqrt
 
 /**
  * @author MEHDI DIMYADI
@@ -182,7 +183,7 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
             drawLine(width / 2f, height * .7f, width / 2f, height * .8f, paint)
 
             // draw sun
-            val sunMoonRadius = height * .09f
+            val sunMoonRadius = sqrt(width * height * .002f)
             if (current in .17f..0.83f) {
                 sunPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
                     current, sunBeforeMiddayColor, sunAfterMiddayColor
