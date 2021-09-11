@@ -179,7 +179,8 @@ private fun Context.updateSunViewWidget(
         prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
         sunView.initiate()
         remoteViews.setTextViewTextOrHideIfEmpty(
-            R.id.message, coordinates?.let { getString(R.string.ask_user_to_set_location) } ?: ""
+            R.id.message,
+            if (coordinates == null) getString(R.string.ask_user_to_set_location) else ""
         )
         remoteViews.setImageViewBitmap(R.id.image, sunView.drawToBitmap())
         remoteViews.setContentDescription(R.id.image, sunView.contentDescription)
