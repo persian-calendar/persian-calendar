@@ -45,9 +45,9 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL }
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
-    private val horizonColor = context.resolveColor(R.attr.SunViewHorizonColor)
-    private val timelineColor = context.resolveColor(R.attr.SunViewTimelineColor)
-    private val taggingColor = context.resolveColor(R.attr.SunViewTaglineColor)
+    private var horizonColor = context.resolveColor(R.attr.SunViewHorizonColor)
+    private var timelineColor = context.resolveColor(R.attr.SunViewTimelineColor)
+    private var taggingColor = context.resolveColor(R.attr.SunViewTaglineColor)
     private val nightColor = ContextCompat.getColor(context, R.color.sViewNightColor)
     private val dayColor = ContextCompat.getColor(context, R.color.sViewDayColor)
     private val daySecondColor = ContextCompat.getColor(context, R.color.sViewDaySecondColor)
@@ -55,10 +55,20 @@ class SunView(context: Context, attrs: AttributeSet? = null) : View(context, att
         ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
     private val sunAfterMiddayColor =
         ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
-    private val sunriseTextColor = context.resolveColor(R.attr.SunViewSunriseTextColor)
-    private val middayTextColor = context.resolveColor(R.attr.SunViewMiddayTextColor)
-    private val sunsetTextColor = context.resolveColor(R.attr.SunViewSunsetTextColor)
-    private val colorTextSecond = context.resolveColor(R.attr.colorTextSecond)
+    private var sunriseTextColor = context.resolveColor(R.attr.SunViewSunriseTextColor)
+    private var middayTextColor = context.resolveColor(R.attr.SunViewMiddayTextColor)
+    private var sunsetTextColor = context.resolveColor(R.attr.SunViewSunsetTextColor)
+    private var colorTextSecond = context.resolveColor(R.attr.colorTextSecond)
+
+    fun overrideTextColor(color: Int) {
+        horizonColor = color
+        timelineColor = color
+        taggingColor = color
+        sunriseTextColor = color
+        middayTextColor = color
+        sunsetTextColor = color
+        colorTextSecond = color
+    }
 
     internal var width: Int = 0
     internal var height: Int = 0

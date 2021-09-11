@@ -160,6 +160,9 @@ private fun Context.updateSunViewWidget(
         val remoteViews = RemoteViews(packageName, R.layout.widget_sun_view)
         val sunView = SunView(ContextThemeWrapper(this, R.style.DarkTheme))
         run {
+            // #80A0A0A0 is the color used for previews
+            sunView.setBackgroundColor(Color.parseColor(selectedWidgetBackgroundColor)) //
+            sunView.overrideTextColor(Color.parseColor(selectedWidgetTextColor))
             sunView.layoutDirection = resources.configuration.layoutDirection
             // https://stackoverflow.com/a/69080699
             val isPortrait = resources.configuration.orientation == ORIENTATION_PORTRAIT
@@ -182,6 +185,11 @@ private fun Context.updateSunViewWidget(
             R.id.message,
             if (coordinates == null) getString(R.string.ask_user_to_set_location) else ""
         )
+        // These are used to generate preview,
+        // val outStream = ByteArrayOutputStream()
+        // sunView.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, outStream)
+        // copyToClipboard(Base64.encodeToString(outStream.toByteArray(), Base64.DEFAULT)) {}
+        // $ zopflipng --iterations=15 --filters=01234mepb --lossy_8bit --lossy_transparent a.png a.png
         remoteViews.setImageViewBitmap(R.id.image, sunView.drawToBitmap())
         remoteViews.setContentDescription(R.id.image, sunView.contentDescription)
         remoteViews.setOnClickPendingIntent(R.id.widget_layout_sun_view, launchAppPendingIntent())

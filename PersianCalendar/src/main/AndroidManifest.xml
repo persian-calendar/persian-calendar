@@ -214,6 +214,10 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/persiancalendar_provider_sun_view" />
+
+            <meta-data
+                android:name="android.appwidget.provider.semConfigureActivity"
+                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
