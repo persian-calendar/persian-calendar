@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
-import android.content.Context
+import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -20,19 +20,19 @@ import com.byagowi.persiancalendar.utils.saveCity
  * Author: hamidsafdari22@gmail.com
  * Date: 1/17/16
  */
-fun showLocationPreferenceDialog(context: Context) {
-    val recyclerView = RecyclerView(context)
-    val dialog = AlertDialog.Builder(context)
+fun showLocationPreferenceDialog(activity: Activity) {
+    val recyclerView = RecyclerView(activity)
+    val dialog = AlertDialog.Builder(activity)
         .setTitle(R.string.location)
         .setView(recyclerView)
         .setPositiveButton("", null)
         .setNegativeButton("", null)
         .create()
     recyclerView.setHasFixedSize(true)
-    recyclerView.layoutManager = LinearLayoutManager(context)
+    recyclerView.layoutManager = LinearLayoutManager(activity)
     recyclerView.adapter = CitiesListAdapter(onItemClicked = { city ->
         dialog.dismiss()
-        context.appPrefs.saveCity(city)
+        activity.appPrefs.saveCity(city)
     })
     dialog.show()
 }

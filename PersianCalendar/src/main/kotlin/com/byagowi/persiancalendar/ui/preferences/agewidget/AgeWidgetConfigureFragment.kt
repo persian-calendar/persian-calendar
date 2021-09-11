@@ -26,18 +26,19 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
             ?.takeIf { it.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID) }
             ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, 0) ?: return
 
+        val activity = activity ?: return
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.empty) {
                 clickable(onClick = {
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                    val jdn = activity?.appPrefs?.getJdnOrNull(key) ?: Jdn.today
-                    showDayPickerDialog(context, jdn, R.string.accept) { result ->
-                        activity?.appPrefs?.edit { putJdn(key, result) }
+                    val jdn = activity.appPrefs.getJdnOrNull(key) ?: Jdn.today
+                    showDayPickerDialog(activity, jdn, R.string.accept) { result ->
+                        activity.appPrefs.edit { putJdn(key, result) }
                     }
                 }) { title(R.string.select_date) }
                 clickable(onClick = {
                     showColorPickerDialog(
-                        context, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
+                        activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
                     )
                 }) {
                     title(R.string.widget_text_color)
@@ -45,7 +46,7 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
                 }
                 clickable(onClick = {
                     showColorPickerDialog(
-                        context, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId
+                        activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + appWidgetId
                     )
                 }) {
                     title(R.string.widget_background_color)

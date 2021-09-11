@@ -82,7 +82,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
             section(R.string.calendar) {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 6
-                clickable(onClick = { showHolidaysTypesDialog(context) }) {
+                clickable(onClick = { showHolidaysTypesDialog(activity) }) {
                     title(R.string.events)
                     summary(R.string.events_summary)
                 }
@@ -103,7 +103,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     }
                 }
                 clickable(onClick = {
-                    showCalendarPreferenceDialog(context, onEmpty = {
+                    showCalendarPreferenceDialog(activity, onEmpty = {
                         // Easter egg when empty result is rejected
                         val view = view?.rootView ?: return@showCalendarPreferenceDialog
                         ValueAnimator.ofFloat(0f, 360f).also {

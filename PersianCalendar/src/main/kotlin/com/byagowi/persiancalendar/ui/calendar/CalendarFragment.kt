@@ -517,7 +517,7 @@ class CalendarFragment : Fragment() {
         toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showDayPickerDialog(context, selectedJdn, R.string.go) { jdn ->
+                showDayPickerDialog(activity ?: return@onClick, selectedJdn, R.string.go) { jdn ->
                     bringDate(jdn)
                 }
             }
@@ -529,14 +529,16 @@ class CalendarFragment : Fragment() {
         toolbar.menu.add(R.string.shift_work_settings).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showShiftWorkDialog(context, selectedJdn) {
+                showShiftWorkDialog(activity ?: return@onClick, selectedJdn) {
                     findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
             }
         }
         toolbar.menu.add(R.string.month_overview).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showMonthOverviewDialog(context, calendarPager.selectedMonth) }
+            it.onClick {
+                showMonthOverviewDialog(activity ?: return@onClick, calendarPager.selectedMonth)
+            }
         }
     }
 

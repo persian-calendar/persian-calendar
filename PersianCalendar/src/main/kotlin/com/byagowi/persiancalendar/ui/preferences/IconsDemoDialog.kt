@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences
 
-import android.content.Context
+import android.app.Activity
 import android.graphics.Color
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
@@ -17,15 +17,15 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.TriangleEdgeTreatment
 
 // Debug only dialog to check validity of dynamic icons generation
-fun showIconsDemoDialog(context: Context) {
-    AlertDialog.Builder(context)
-        .setView(RecyclerView(context).also {
+fun showIconsDemoDialog(activity: Activity) {
+    AlertDialog.Builder(activity)
+        .setView(RecyclerView(activity).also {
             it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
                 override fun getItemCount() = 62
                 override fun getItemViewType(position: Int) = position
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                    object : RecyclerView.ViewHolder(ShapeableImageView(context).apply {
+                    object : RecyclerView.ViewHolder(ShapeableImageView(activity).apply {
                         val day = viewType / 2 + 1
                         when (viewType % 2) {
                             0 -> setImageResource(getDayIconResource(day))
@@ -40,7 +40,7 @@ fun showIconsDemoDialog(context: Context) {
                         setBackgroundColor(Color.DKGRAY)
                     }) {}
             }
-            it.layoutManager = GridLayoutManager(context, 8)
+            it.layoutManager = GridLayoutManager(activity, 8)
             it.setBackgroundColor(Color.WHITE)
         })
         .setNegativeButton(R.string.cancel, null)

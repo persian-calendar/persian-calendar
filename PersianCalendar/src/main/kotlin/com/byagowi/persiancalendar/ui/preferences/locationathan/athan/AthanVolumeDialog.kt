@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
-import android.content.Context
+import android.app.Activity
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.Ringtone
@@ -17,25 +17,25 @@ import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import com.byagowi.persiancalendar.utils.logException
 
-fun showAthanVolumeDialog(context: Context) {
-    var volume = context.athanVolume
+fun showAthanVolumeDialog(activity: Activity) {
+    var volume = activity.athanVolume
     var ringtone: Ringtone? = null
     var mediaPlayer: MediaPlayer? = null
 
-    val audioManager = context.getSystemService<AudioManager>() ?: return
+    val audioManager = activity.getSystemService<AudioManager>() ?: return
     val originalAlarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
     audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
 
-    val customAthanUri = getCustomAthanUri(context)
+    val customAthanUri = getCustomAthanUri(activity)
     if (customAthanUri != null) {
-        ringtone = RingtoneManager.getRingtone(context, customAthanUri).also {
+        ringtone = RingtoneManager.getRingtone(activity, customAthanUri).also {
             it.streamType = AudioManager.STREAM_ALARM
             it.play()
         }
     } else {
         val player = MediaPlayer()
         runCatching {
-            player.setDataSource(context, getDefaultAthanUri(context))
+            player.setDataSource(activity, getDefaultAthanUri(activity))
             player.setAudioStreamType(AudioManager.STREAM_ALARM)
             player.prepare()
         }.onFailure(logException)
@@ -46,7 +46,7 @@ fun showAthanVolumeDialog(context: Context) {
         }.onFailure(logException)
     }
 
-    val seekBar = SeekBar(context)
+    val seekBar = SeekBar(activity)
     seekBar.max = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
     seekBar.progress = volume
     seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -71,11 +71,11 @@ fun showAthanVolumeDialog(context: Context) {
         }
     })
 
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(activity)
         .setTitle(R.string.athan_volume)
         .setView(seekBar)
         .setPositiveButton(R.string.accept) { _, _ ->
-            context.appPrefs.edit { putInt(PREF_ATHAN_VOLUME, volume) }
+            activity.appPrefs.edit { putInt(PREF_ATHAN_VOLUME, volume) }
         }
         .setNegativeButton(R.string.cancel, null)
         .setOnDismissListener {

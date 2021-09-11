@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
-import android.content.Context
+import android.app.Activity
 import android.os.Build
 import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AlertDialog
@@ -10,23 +10,22 @@ import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.generated.EventType
-import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.spacedComma
 
-fun showHolidaysTypesDialog(context: Context) {
-    val binding = HolidaysTypesDialogBinding.inflate(context.layoutInflater)
+fun showHolidaysTypesDialog(activity: Activity) {
+    val binding = HolidaysTypesDialogBinding.inflate(activity.layoutInflater)
 
-    val pattern = """%s$spacedComma<a href="%s">${context.getString(R.string.view_source)}</a>"""
+    val pattern = """%s$spacedComma<a href="%s">${activity.getString(R.string.view_source)}</a>"""
     binding.iran.text = HtmlCompat.fromHtml(
         pattern.format(
-            context.getString(R.string.iran_official_events), EventType.Iran.source
+            activity.getString(R.string.iran_official_events), EventType.Iran.source
         ), HtmlCompat.FROM_HTML_MODE_COMPACT
     )
     binding.afghanistan.text = HtmlCompat.fromHtml(
         pattern.format(
-            context.getString(R.string.afghanistan_events), EventType.Afghanistan.source
+            activity.getString(R.string.afghanistan_events), EventType.Afghanistan.source
         ), HtmlCompat.FROM_HTML_MODE_COMPACT
     )
 
@@ -43,7 +42,7 @@ fun showHolidaysTypesDialog(context: Context) {
         binding.iranAncient to EnabledHolidays.iranAncientKey,
         binding.international to EnabledHolidays.internationalKey
     )
-    val enabledHolidays = EnabledHolidays(context.appPrefs)
+    val enabledHolidays = EnabledHolidays(activity.appPrefs)
     checkboxToKeyPairs
         .forEach { (checkbox, key) -> checkbox.isChecked = key in enabledHolidays.enabledTypes }
 
@@ -77,13 +76,13 @@ fun showHolidaysTypesDialog(context: Context) {
     }
 
     // Run the dialog
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(activity)
         .setTitle(R.string.events)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
             val result = checkboxToKeyPairs
                 .mapNotNull { (checkBox, key) -> if (checkBox.isChecked) key else null }.toSet()
-            context.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, result) }
+            activity.appPrefs.edit { putStringSet(PREF_HOLIDAY_TYPES, result) }
         }
         .setNegativeButton(R.string.cancel, null)
         .show()

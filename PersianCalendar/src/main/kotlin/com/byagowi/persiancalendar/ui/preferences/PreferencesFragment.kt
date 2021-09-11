@@ -48,10 +48,11 @@ class PreferencesFragment : Fragment() {
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation()
             if (enableDevelopmentFeatures) {
+                val activity = activity ?: return@let
                 toolbar.menu.add("Static vs generated icons")
-                    .onClick { showIconsDemoDialog(binding.root.context) }
+                    .onClick { showIconsDemoDialog(activity) }
                 toolbar.menu.add("Clear preferences store and exit")
-                    .onClick { toolbar.context.appPrefs.edit { clear() }; activity?.finish() }
+                    .onClick { toolbar.context.appPrefs.edit { clear() }; activity.finish() }
                 toolbar.menu.add("Schedule an alarm").onClick {
                     val numericBinding = NumericBinding.inflate(inflater)
                     numericBinding.edit.setText("5")

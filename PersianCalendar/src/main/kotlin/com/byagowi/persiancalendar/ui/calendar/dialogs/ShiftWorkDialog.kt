@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import android.content.Context
+import android.app.Activity
 import android.text.InputFilter
 import android.view.View
 import android.view.ViewGroup
@@ -33,22 +33,22 @@ import com.byagowi.persiancalendar.utils.shiftWorks
 import com.byagowi.persiancalendar.utils.spacedComma
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
-fun showShiftWorkDialog(context: Context, selectedJdn: Jdn, onSuccess: () -> Unit) {
+fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> Unit) {
     var isFirstSetup = false
     var jdn = shiftWorkStartingJdn ?: run {
         isFirstSetup = true
         selectedJdn
     }
 
-    val binding = ShiftWorkSettingsBinding.inflate(context.layoutInflater, null, false)
-    binding.recyclerView.layoutManager = LinearLayoutManager(context)
+    val binding = ShiftWorkSettingsBinding.inflate(activity.layoutInflater, null, false)
+    binding.recyclerView.layoutManager = LinearLayoutManager(activity)
     val shiftWorkItemAdapter = ShiftWorkItemsAdapter(
         if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("d", 0)) else shiftWorks,
         binding
     )
     binding.recyclerView.adapter = shiftWorkItemAdapter
 
-    binding.description.text = context.getString(
+    binding.description.text = activity.getString(
         if (isFirstSetup) R.string.shift_work_starting_date
         else R.string.shift_work_starting_date_edit,
         formatDate(jdn.toCalendar(mainCalendar))
@@ -56,7 +56,7 @@ fun showShiftWorkDialog(context: Context, selectedJdn: Jdn, onSuccess: () -> Uni
 
     binding.resetLink.setOnClickListener {
         jdn = selectedJdn
-        binding.description.text = context.getString(
+        binding.description.text = activity.getString(
             R.string.shift_work_starting_date, formatDate(jdn.toCalendar(mainCalendar))
         )
         shiftWorkItemAdapter.reset()
@@ -64,20 +64,20 @@ fun showShiftWorkDialog(context: Context, selectedJdn: Jdn, onSuccess: () -> Uni
     binding.recurs.isChecked = shiftWorkRecurs
     binding.root.onCheckIsTextEditor()
 
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
             val result = shiftWorkItemAdapter.rows.filter { it.length != 0 }.joinToString(",") {
                 "${it.type.replace("=", "").replace(",", "")}=${it.length}"
             }
 
-            context.appPrefs.edit {
+            activity.appPrefs.edit {
                 putJdn(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) null else jdn)
                 putString(PREF_SHIFT_WORK_SETTING, result)
                 putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
             }
 
-            updateStoredPreference(context)
+            updateStoredPreference(activity)
             onSuccess()
         }
         .setNegativeButton(R.string.cancel, null)

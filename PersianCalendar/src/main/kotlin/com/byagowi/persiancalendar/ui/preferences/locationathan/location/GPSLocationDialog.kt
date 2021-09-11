@@ -52,8 +52,7 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import java.util.*
 
-fun showGPSLocationDialog(activity: Activity?, viewLifecycleOwner: LifecycleOwner) {
-    activity ?: return
+fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner) {
     if (ActivityCompat.checkSelfPermission(
             activity, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(

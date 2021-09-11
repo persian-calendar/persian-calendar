@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
-import android.content.Context
+import android.app.Activity
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,23 +12,23 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 
-fun showCalendarPreferenceDialog(context: Context, onEmpty: () -> Unit) {
+fun showCalendarPreferenceDialog(activity: Activity, onEmpty: () -> Unit) {
     val enabledCalendarTypes = getEnabledCalendarTypes()
-    val adapter = RecyclerListAdapter(getOrderedCalendarEntities(context).map { (type, title) ->
+    val adapter = RecyclerListAdapter(getOrderedCalendarEntities(activity).map { (type, title) ->
         RecyclerListAdapter.Item(title, type.name, type in enabledCalendarTypes)
     })
 
-    AlertDialog.Builder(context)
-        .setView(RecyclerView(context).also {
+    AlertDialog.Builder(activity)
+        .setView(RecyclerView(activity).also {
             it.setHasFixedSize(true)
-            it.layoutManager = LinearLayoutManager(context)
+            it.layoutManager = LinearLayoutManager(activity)
             it.adapter = adapter
         })
         .setTitle(R.string.calendars_priority)
         .setNegativeButton(R.string.cancel, null)
         .setPositiveButton(R.string.accept) accept@{ _, _ ->
             val ordering = adapter.result.takeIf { it.isNotEmpty() } ?: return@accept onEmpty()
-            context.appPrefs.edit {
+            activity.appPrefs.edit {
                 putString(PREF_MAIN_CALENDAR_KEY, ordering.first())
                 putString(PREF_OTHER_CALENDARS_KEY, ordering.drop(1).joinToString(","))
             }

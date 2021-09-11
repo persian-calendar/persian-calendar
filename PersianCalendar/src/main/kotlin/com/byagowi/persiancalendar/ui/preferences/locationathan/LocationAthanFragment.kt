@@ -60,6 +60,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
+        val activity = activity ?: return
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.location) {
                 clickable(onClick = { showGPSLocationDialog(activity, viewLifecycleOwner) }) {
@@ -71,7 +72,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.location_help)
                     this@LocationAthanFragment.selectedLocationPreference = this
                 }
-                clickable(onClick = { showCoordinatesDialog(context) }) {
+                clickable(onClick = { showCoordinatesDialog(activity) }) {
                     title(R.string.coordination)
                     this@LocationAthanFragment.coordinatesPreference = this
                 }
@@ -88,11 +89,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     dialogTitle(R.string.pray_methods_calculation)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
-                clickable(onClick = { showAthanGapDialog(context) }) {
+                clickable(onClick = { showAthanGapDialog(activity) }) {
                     title(R.string.athan_gap)
                     summary(R.string.athan_gap_summary)
                 }
-                clickable(onClick = { showPrayerSelectDialog(context) }) {
+                clickable(onClick = { showPrayerSelectDialog(activity) }) {
                     title(R.string.athan_alarm)
                     summary(R.string.athan_alarm_summary)
                 }
@@ -130,12 +131,12 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     disableDependentsState = true
                     handler.post { dependency = PREF_NOTIFICATION_ATHAN }
                 }
-                clickable(onClick = { showAthanVolumeDialog(context) }) {
+                clickable(onClick = { showAthanVolumeDialog(activity) }) {
                     title(R.string.athan_volume)
                     summary(R.string.athan_volume_summary)
                     handler.post { dependency = PREF_ASCENDING_ATHAN_VOLUME }
                 }
-                clickable(onClick = { showPrayerSelectPreviewDialog(context) }) {
+                clickable(onClick = { showPrayerSelectPreviewDialog(activity) }) {
                     title(R.string.preview)
                 }
             }

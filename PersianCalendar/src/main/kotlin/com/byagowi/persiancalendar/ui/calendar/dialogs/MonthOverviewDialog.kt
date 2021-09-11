@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import android.content.Context
+import android.app.Activity
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.buildSpannedString
@@ -24,10 +24,10 @@ import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.github.persiancalendar.calendar.AbstractDate
 
-fun showMonthOverviewDialog(context: Context, date: AbstractDate) {
+fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
     val baseJdn = Jdn(date)
-    val deviceEvents = context.readMonthDeviceEvents(baseJdn)
-    val colorTextHoliday = context.resolveColor(R.attr.colorTextHoliday)
+    val deviceEvents = activity.readMonthDeviceEvents(baseJdn)
+    val colorTextHoliday = activity.resolveColor(R.attr.colorTextHoliday)
     val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
         val jdn = baseJdn + it
         val events = getEvents(jdn, deviceEvents)
@@ -47,12 +47,13 @@ fun showMonthOverviewDialog(context: Context, date: AbstractDate) {
                 append(nonHolidays)
             }
         }
-    }.takeIf { it.isNotEmpty() } ?: listOf(context.getString(R.string.warn_if_events_not_set) to "")
+    }.takeIf { it.isNotEmpty() }
+        ?: listOf(activity.getString(R.string.warn_if_events_not_set) to "")
 
-    BottomSheetDialog(context, R.style.BottomSheetDialog).also { dialog ->
+    BottomSheetDialog(activity, R.style.BottomSheetDialog).also { dialog ->
         dialog.setContentView(
-            RecyclerView(context).also {
-                it.layoutManager = LinearLayoutManager(context)
+            RecyclerView(activity).also {
+                it.layoutManager = LinearLayoutManager(activity)
                 it.adapter = MonthOverviewItemAdapter(events)
             }
         )

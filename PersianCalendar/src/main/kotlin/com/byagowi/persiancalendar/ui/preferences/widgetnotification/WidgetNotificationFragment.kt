@@ -33,6 +33,7 @@ import com.byagowi.persiancalendar.ui.preferences.title
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val handler = Handler(Looper.getMainLooper())
+        val activity = activity ?: return
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.pref_notification) {
                 // Hide notification category if we are in widgets configuration
@@ -52,13 +53,13 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 5
                 clickable(onClick = {
-                    showColorPickerDialog(context, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
+                    showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }) {
                     title(R.string.widget_text_color)
                     summary(R.string.select_widgets_text_color)
                 }
                 clickable(onClick = {
-                    showColorPickerDialog(context, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
+                    showColorPickerDialog(activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
                 }) {
                     title(R.string.widget_background_color)
                     summary(R.string.select_widgets_background_color)
