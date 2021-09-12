@@ -433,7 +433,7 @@ class CalendarFragment : Fragment() {
             eventsBinding.eventTitle.isVisible = false
         }
 
-        if (EnabledHolidays(activity.appPrefs, emptySet()).isEmpty) {
+        if (EnabledHolidays(activity.appPrefs, emptySet()).isEmpty && language.isIranExclusive) {
             eventsBinding.buttonsBar.header.setText(R.string.warn_if_events_not_set)
             eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
