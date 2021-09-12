@@ -9,20 +9,22 @@ import java.util.*
 
 enum class Language(val code: String, val nativeName: String) {
     // The following order is used for language change dialog also
+    // Official languages
     FA("fa", "فارسی"),
     FA_AF("fa-AF", "دری"),
     PS("ps", "پښتو"),
-    CKB("ckb", "کوردی"),
+    // Rest, sorted by their language code
     AR("ar", "العربية"),
-    GLK("glk", "گيلکي"),
     AZB("azb", "تۆرکجه"),
-    UR("ur", "اردو"),
+    CKB("ckb", "کوردی"),
     EN_IR("en", "English (Iran)"),
     EN_US("en-US", "English"),
     ES("es", "Español"),
     FR("fr", "Français"),
+    GLK("glk", "گيلکي"),
+    JA("ja", "日本語"),
     TR("tr", "Türkçe"),
-    JA("ja", "日本語");
+    UR("ur", "اردو");
 
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
