@@ -81,7 +81,7 @@ fun loadEvents(enabledTypes: EnabledHolidays, language: Language) {
     // It is vital to configure calendar before loading of the events
     IslamicDate.useUmmAlQura =
         if (enabledTypes.iranHolidays || enabledTypes.iranOthers) false
-        else enabledTypes.afghanistanHolidays || language.mightPreferNonLocalIslamicCalendar
+        else enabledTypes.afghanistanHolidays || language.mightPreferUmmAlquraIslamicCalendar
 
     irregularCalendarEventsStore = IrregularCalendarEventsStore(enabledTypes)
     persianCalendarEvents = PersianCalendarEventsStore(persianEvents.mapNotNull { record ->
