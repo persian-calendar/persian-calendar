@@ -22,8 +22,10 @@ var gregorianCalendarEvents: GregorianCalendarEventsStore = EventsStore.empty()
 var irregularCalendarEventsStore = IrregularCalendarEventsStore(EnabledHolidays())
 
 class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
-    constructor(prefs: SharedPreferences, defaultSet: Set<String> = iranDefault) :
-            this(prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: defaultSet)
+    constructor(
+        prefs: SharedPreferences,
+        defaultSet: Set<String> = if (language.isIranExclusive) iranDefault else emptySet()
+    ) : this(prefs.getStringSet(PREF_HOLIDAY_TYPES, null) ?: defaultSet)
 
     val afghanistanHolidays = afghanistanHolidaysKey in enabledTypes
     val afghanistanOthers = afghanistanOthersKey in enabledTypes
