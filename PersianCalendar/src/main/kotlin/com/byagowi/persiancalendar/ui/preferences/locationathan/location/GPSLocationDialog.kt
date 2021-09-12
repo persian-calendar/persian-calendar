@@ -15,19 +15,12 @@ import android.os.Looper
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.byagowi.persiancalendar.DEFAULT_CITY
-import com.byagowi.persiancalendar.PREF_ALTITUDE
-import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
-import com.byagowi.persiancalendar.PREF_LATITUDE
-import com.byagowi.persiancalendar.PREF_LONGITUDE
-import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.logDebug
 import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
@@ -39,6 +32,7 @@ import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.saveLocation
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinate
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +44,6 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
-import java.util.*
 
 fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner) {
     if (ActivityCompat.checkSelfPermission(
@@ -188,15 +181,7 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
     dialog.setOnDismissListener {
         logDebug("GPSLocationDialog: Dialog is dismissed")
         coordinatesFlow.value?.let { coordinate ->
-            activity.appPrefs.edit {
-                putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinate.latitude))
-                putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinate.longitude))
-                // Don't store elevation on Iranian cities, it degrades the calculations quality
-                val elevation = if (countryCode == "IR") .0 else coordinate.elevation
-                putString(PREF_ALTITUDE, "%f".format(Locale.ENGLISH, elevation))
-                putString(PREF_GEOCODED_CITYNAME, cityName ?: "")
-                putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
-            }
+            activity.appPrefs.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
         }
 
         // AGP 7 has false alarms claims removeUpdates can't be called here

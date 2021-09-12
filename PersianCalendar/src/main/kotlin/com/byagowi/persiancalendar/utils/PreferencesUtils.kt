@@ -24,6 +24,8 @@ import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.generated.citiesStore
+import io.github.persiancalendar.praytimes.Coordinate
+import java.util.*
 
 val Context.appPrefs: SharedPreferences get() = PreferenceManager.getDefaultSharedPreferences(this)
 
@@ -49,6 +51,18 @@ val SharedPreferences.isIslamicOffsetExpired
 fun SharedPreferences.saveCity(city: CityItem) = edit {
     listOf(PREF_GEOCODED_CITYNAME, PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE).forEach(::remove)
     putString(PREF_SELECTED_LOCATION, city.key)
+}
+
+fun SharedPreferences.saveLocation(
+    coordinates: Coordinate, cityName: String, countryCode: String = "IR"
+) = edit {
+    putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinates.latitude))
+    putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinates.longitude))
+    // Don't store elevation on Iranian cities, it degrades the calculations quality
+    val elevation = if (countryCode == "IR") .0 else coordinates.elevation
+    putString(PREF_ALTITUDE, "%f".format(Locale.ENGLISH, elevation))
+    putString(PREF_GEOCODED_CITYNAME, cityName)
+    putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
 }
 
 // Preferences changes be applied automatically when user requests a language change

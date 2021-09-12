@@ -207,11 +207,13 @@ dependencies {
 val generateAppSrcTask by tasks.registering {
     val eventsJson = projectDir / "data" / "events.json"
     val citiesJson = projectDir / "data" / "cities.json"
+    val districtsJson = projectDir / "data" / "districts.json"
     inputs.files(eventsJson, citiesJson)
     val generateDir = generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
     val eventsOutput = generateDir / "Events.kt"
     val citiesOutput = generateDir / "Cities.kt"
-    outputs.files(eventsOutput, citiesOutput)
+    val districtsOutput = generateDir / "Districts.kt"
+    outputs.files(eventsOutput, citiesOutput, districtsOutput)
     doLast {
         generateDir.mkdirs()
 
@@ -299,8 +301,34 @@ import io.github.persiancalendar.praytimes.Coordinate
 val citiesStore = mapOf(
     $cities
 )
-"""
-        )
+""")
+
+        // Districts
+        val districts = (JsonSlurper().parse(districtsJson) as Map<*, *>).mapNotNull { province ->
+            val provinceName = province.key as String
+            if (provinceName.startsWith("#")) return@mapNotNull null
+            "\"$provinceName\" to listOf(\n" + (province.value as Map<*, *>).map { county ->
+                val key = county.key as String
+                """       "$key;""" + (county.value as Map<*, *>).map { district ->
+                    val coordinates = district.value as Map<*, *>
+                    val latitude = (coordinates["lat"] as Number).toDouble()
+                    val longitude = (coordinates["long"] as Number).toDouble()
+                    // Remove what is in the parenthesis
+                    val name = district.key.toString().split("(")[0]
+                    "$name:$latitude:$longitude"
+                }.joinToString(";") + "\""
+            }.joinToString(",\n") + "\n    )"
+        }.joinToString(",\n    ")
+        districtsOutput.writeText(
+            """package ${android.defaultConfig.applicationId}.generated
+
+import com.byagowi.persiancalendar.entities.CityItem
+import io.github.persiancalendar.praytimes.Coordinate
+
+val distrcitsStore = listOf(
+    $districts
+)
+""")
     }
 }
 tasks.named("preBuild").configure { dependsOn(generateAppSrcTask) }

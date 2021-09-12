@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.preferences
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -52,11 +52,11 @@ class PreferencesFragment : Fragment() {
                 toolbar.menu.add("Static vs generated icons")
                     .onClick { showIconsDemoDialog(activity) }
                 toolbar.menu.add("Clear preferences store and exit")
-                    .onClick { toolbar.context.appPrefs.edit { clear() }; activity.finish() }
+                    .onClick { activity.appPrefs.edit { clear() }; activity.finish() }
                 toolbar.menu.add("Schedule an alarm").onClick {
                     val numericBinding = NumericBinding.inflate(inflater)
                     numericBinding.edit.setText("5")
-                    AlertDialog.Builder(context)
+                    AlertDialog.Builder(activity)
                         .setTitle("Enter seconds to schedule alarm")
                         .setView(numericBinding.root)
                         .setPositiveButton(R.string.accept) { _, _ ->
@@ -78,7 +78,7 @@ class PreferencesFragment : Fragment() {
                 }
                 toolbar.menu.addSubMenu("Log Viewer").also {
                     fun viewCommandResult(command: String) = AlertDialog.Builder(
-                        context,
+                        activity,
                         com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
                     ).also { dialog ->
                         dialog.setTitle("Logs")

@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,10 +32,10 @@ import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.saveCity
 
 fun showLocationPreferenceDialog(activity: Activity) =
-    showComposeDialog(activity) { LocationPreferenceDialog(it) }
+    showComposeDialog(activity) { LocationPreferenceDialog(it) { showProvinceDialog(activity) } }
 
 @Composable
-private fun LocationPreferenceDialog(closeDialog: () -> Unit) {
+private fun LocationPreferenceDialog(closeDialog: () -> Unit, onMoreButtonClick: () -> Unit) {
     val cities = remember { citiesStore.values.sortedWith(language.createCitiesComparator()) }
     AlertDialog(
         onDismissRequest = { closeDialog() },
@@ -70,10 +71,17 @@ private fun LocationPreferenceDialog(closeDialog: () -> Unit) {
                 }
             }
         },
-        buttons = {}
+        buttons = {
+            if (language.isIranExclusive) {
+                TextButton(onClick = {
+                    closeDialog()
+                    onMoreButtonClick()
+                }) { Text(stringResource(R.string.more)) }
+            }
+        }
     )
 }
 
 @Preview
 @Composable
-private fun LocationPreferenceDialogPreview() = ComposeTheme { LocationPreferenceDialog {} }
+private fun LocationPreferenceDialogPreview() = ComposeTheme { LocationPreferenceDialog({}, {}) }

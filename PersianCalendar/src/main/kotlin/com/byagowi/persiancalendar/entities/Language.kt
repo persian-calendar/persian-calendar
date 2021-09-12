@@ -240,8 +240,8 @@ enum class Language(val code: String, val nativeName: String) {
         CityComparator.compareCity(this, l, r)
     }
 
-    private object CityComparator {
-        private fun prepareForArabicSort(text: String) = text
+    object CityComparator {
+        fun prepareForArabicSort(text: String) = text
             .replace("ی", "ي")
             .replace("ک", "ك")
             .replace("گ", "كی")
