@@ -1,2 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="cancel">Betalkirin</string>
+    <string name="more">Zêdetir</string>
+    <string name="help">Alîkarî</string>
+    <string name="add">Zêdekirin</string>
+    <string name="day">Roj</string>
+    <string name="imsak">Îmsak</string>
+    <string name="n_hours_minutes">%1$ss %2$sd</string>
+    <string name="remaining_daylight">Mayî</string>
+    <string name="length_of_day">Rojgar</string>
+    <string name="sunsetSunView">Rojavabûn</string>
+    <string name="middaySunView">Nîvro</string>
+    <string name="sunriseSunView">Rojderketin</string>
+    <string name="events">Bûyer</string>
+    <string name="moonInScorpio">Heyv di dûpişk</string>
+    <string name="sagittarius">Kevan</string>
+    <string name="scorpio">Dûpişk</string>
+    <string name="libra">Terazû</string>
+    <string name="leo">Şêr</string>
+    <string name="gemini">Cemik</string>
+    <string name="taurus">Ga</string>
+    <string name="aries">Berx</string>
+    <string name="pisces">Hût (Masî)</string>
+    <string name="aquarius">Dewlik</string>
+    <string name="capricorn">Gîsk</string>
+    <string name="zodiac">Zodiyak (Çerxa burcan)</string>
+    <string name="year12">Pez</string>
+    <string name="year11">Hesp</string>
+    <string name="year10">Mar</string>
+    <string name="year9">Ejdeha</string>
+    <string name="year8">Kivroşk</string>
+    <string name="year7">Piling</string>
+    <string name="year6">Ga</string>
+    <string name="year5">Mişk</string>
+    <string name="year4">Xinzîr</string>
+    <string name="year3">Se</string>
+    <string name="year2">Dîk</string>
+    <string name="year1">Meymûn</string>
+    <string name="year_name">Navê salê</string>
+    <string name="date_copied_clipboard">%1$ Hate kopîkirin.</string>
+    <string name="start_of_year_diff">%1$ roj (~%2$ heftî yan ~%3$ heyv) ji destpêka salê</string>
+    <string name="search_in_events">Lêgerîn di nav bûyeran de</string>
+    <string name="go">Here</string>
+    <string name="goto_date">Here Dîrokê</string>
+    <string name="today">Îro</string>
+    <string name="device_calendar_does_not_support">Rojhejmêra amûrê vî karî piştevanî nake</string>
+    <string name="add_event">Zêdekirina bûyerê</string>
+    <string name="exit">Derkevtin</string>
+    <string name="about">Derbare</string>
+    <string name="settings">Eyar</string>
+    <string name="calendar">Rojhejmêr</string>
+    <string name="widget_mini_name">Rojhejmîra Farsî (piçûk)</string>
+    <string name="widget_name">Rojhejmêra Farsî</string>
+    <string name="app_name">Rojhejmêra Farsî</string>
+</resources>
