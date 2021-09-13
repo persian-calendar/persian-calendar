@@ -158,11 +158,10 @@ private fun Context.updateSunViewWidget(
     manager.getAppWidgetIds(ComponentName(this, WidgetSunView::class.java))?.forEach { widgetId ->
         manager.getAppWidgetInfo(widgetId).minHeight
         val remoteViews = RemoteViews(packageName, R.layout.widget_sun_view)
-        val sunView = SunView(ContextThemeWrapper(this, R.style.DarkTheme))
+        val sunView = SunView(this, textColor = Color.parseColor(selectedWidgetTextColor))
         run {
             // #80A0A0A0 is the color used for previews
             sunView.setBackgroundColor(Color.parseColor(selectedWidgetBackgroundColor)) //
-            sunView.overrideTextColor(Color.parseColor(selectedWidgetTextColor))
             sunView.layoutDirection = resources.configuration.layoutDirection
             // https://stackoverflow.com/a/69080699
             val isPortrait = resources.configuration.orientation == ORIENTATION_PORTRAIT
