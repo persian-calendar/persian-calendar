@@ -5,6 +5,7 @@ import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
+import io.github.persiancalendar.praytimes.CalculationMethod
 import java.util.*
 
 enum class Language(val code: String, val nativeName: String) {
@@ -58,6 +59,12 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when (this) {
             FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR, KMR -> true
             else -> false
+        }
+
+    val preferredCalculationMethod: CalculationMethod
+        get() = when (this) {
+            FA_AF, PS, UR, AR, CKB, TR, KMR -> CalculationMethod.Makkah
+            else -> CalculationMethod.Tehran
         }
 
     // Based on locale, we can presume user is able to read Persian

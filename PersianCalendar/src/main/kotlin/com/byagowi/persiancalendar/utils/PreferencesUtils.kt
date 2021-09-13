@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
+import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
@@ -109,4 +110,6 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
             putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
         }
     }
+
+    putString(PREF_PRAY_TIME_METHOD, language.preferredCalculationMethod.name)
 }

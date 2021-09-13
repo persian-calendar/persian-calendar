@@ -48,13 +48,14 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var selectedLocationPreference: Preference? = null
     private var athanPreferenceCategory: PreferenceCategory? = null
 
+    // Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
     private val prayTimeCalculationMethods = listOf(
-        CalculationMethod.Jafari to R.string.method_jafari,
         CalculationMethod.MWL to R.string.method_mwl,
         CalculationMethod.ISNA to R.string.method_isna,
         CalculationMethod.Egypt to R.string.method_egypt,
         CalculationMethod.Makkah to R.string.method_makkah,
         CalculationMethod.Karachi to R.string.method_karachi,
+        CalculationMethod.Jafari to R.string.method_jafari,
         CalculationMethod.Tehran to R.string.method_tehran
     )
 
