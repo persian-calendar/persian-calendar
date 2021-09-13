@@ -39,7 +39,7 @@
     <string name="year1">Meymûn</string>
     <string name="year_name">Navê salê</string>
     <string name="date_copied_clipboard">%1$s Hate kopîkirin.</string>
-    <string name="start_of_year_diff">%1$s roj (~%2$ heftî yan ~%3$ heyv) ji destpêka salê</string>
+    <string name="start_of_year_diff">%1$s roj (~%2$s heftî yan ~%3$s heyv) ji destpêka salê</string>
     <string name="search_in_events">Lêgerîn di nav bûyeran de</string>
     <string name="go">Here</string>
     <string name="goto_date">Here Dîrokê</string>
