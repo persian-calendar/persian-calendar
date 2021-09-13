@@ -23,6 +23,7 @@ enum class Language(val code: String, val nativeName: String) {
     FR("fr", "Français"),
     GLK("glk", "گيلکي"),
     JA("ja", "日本語"),
+    KMR("kmr", "Kurdî"),
     TR("tr", "Türkçe"),
     UR("ur", "اردو");
 
@@ -55,7 +56,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR, KMR -> true
             else -> false
         }
 
@@ -76,7 +77,7 @@ enum class Language(val code: String, val nativeName: String) {
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
     val prefersLocalDigits: Boolean
         get() = when (this) {
-            UR, EN_IR, EN_US, JA, FR, ES, TR -> false
+            UR, EN_IR, EN_US, JA, FR, ES, TR, KMR -> false
             else -> true
         }
 
@@ -104,7 +105,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, UR, TR -> true
+            EN_US, JA, FR, ES, UR, TR, KMR -> true
             else -> false
         }
 
