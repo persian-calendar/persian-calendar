@@ -55,4 +55,23 @@
     <string name="app_name">Rojhejmêra Farsî</string>
     <string name="date_converter">Guhervana Dîrokê</string>
     <string name="compass">Rûgehnas</string>
+    <string name="n_years">%1$s sal</string>
+    <string name="n_months">%1$s meh</string>
+    <string name="n_days">%1$s roj</string>
+    <string name="select_date">Bijartina dîrokê</string>
+    <string name="athan_volume">Dengê bangê</string>
+    <string name="default_athan">Banga pêşferz</string>
+    <string name="default_athan_name">Ebdulbasit Ebdussemed</string>
+    <string name="athan_alarm">Lîsteya bangan</string>
+    <string name="athan_gap">Navbera banga rastî û banga bernameyê&lt;</string>
+    <string name="pray_methods">Terzên hesabkirinê</string>
+    <string name="iran_time">Dema Îranê</string>
+    <string name="islamic_offset">Eyarkirina rojhehmêra Îslamê</string>
+    <string name="week_start">Destpêka heftiyê</string>
+    <string name="astronomical_info">Agehdariyên stêrnasiyê</string>
+    <string name="calendars_priority">Ewlewîyeta rojhejmêran</string>
+    <string name="persian_digits">Hejmarên Aramî</string>
+    <string name="select_day">Bijartina rojê</string>
+    <string name="select_month">Bijartina heyvê</string>
+    <string name="select_year">Bijartina salê</string>
 </resources>
