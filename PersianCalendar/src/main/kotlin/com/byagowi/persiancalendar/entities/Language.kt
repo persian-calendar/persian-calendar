@@ -222,7 +222,7 @@ enum class Language(val code: String, val nativeName: String) {
             "یئل", "سۆد", "دۇز", "آرا", "اوْد", "سۇ", "آینی"
         )
         private val weekDaysInitialsInTurkish = listOf7Items(
-            "Pz", "Pt", "Sa", "Ça", "Pe", "Cu", "Ct"
+            "Ct", "Pz", "Pt", "Sa", "Ça", "Pe", "Cu"
         )
     }
 
