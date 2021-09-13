@@ -136,7 +136,7 @@
     <string name="clock_on_widget">Reloj en el widget</string>
     <string name="showing_clock_on_widget">Mostrar reloj en el widget</string>
     <string name="iran_time">Hora de irán</string>
-    <string name="showing_iran_time">Widgets and notifications in Iran time zone</string>
+    <string name="showing_iran_time">Widgets y notificaciones en la zona horaria de Irán</string>
     <string name="customize_widget">Personalización de widgets</string>
     <string name="which_one_to_show">Cuál para mostrar</string>
     <string name="customize_widget_summary">What to show from notification and widgets to make them more compact</string>
@@ -151,7 +151,7 @@
     <string name="gps_internet_desc">Enable device\'s GPS and Internet connection to find your location, please.
 \n
 \nThe app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again.</string>
-    <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
+    <string name="pleasewaitgps">Espere ... Si no aparece nada después de un minuto, quiza debería probar otras opciones</string>
     <string name="location">Ubicación</string>
     <string name="location_help">If none of them, specify it below</string>
     <string name="latitude">Latitud</string>
