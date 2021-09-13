@@ -29,6 +29,7 @@ enum class Language(val code: String, val nativeName: String) {
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
+    val isTurkish get() = this == TR
     private val isKurdish get() = this == CKB
 
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
