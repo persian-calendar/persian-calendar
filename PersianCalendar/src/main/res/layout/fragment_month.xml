@@ -16,8 +16,8 @@
         android:gravity="center"
         app:tint="?attr/colorMonthSwitch" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/monthDays"
+    <com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
+        android:id="@+id/month_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

@@ -5,6 +5,8 @@ import android.graphics.Paint
 import android.os.Build
 import android.util.TypedValue
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
+import androidx.annotation.IdRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -12,7 +14,7 @@ import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
-class SharedDayViewData(context: Context) {
+class SharedDayViewData(context: Context, @ColorInt widgetTextColor: Int? = null) {
 
     val eventYOffset = 7.sp
     val eventIndicatorRadius = 2.sp
@@ -23,20 +25,21 @@ class SharedDayViewData(context: Context) {
         ViewGroup.LayoutParams.MATCH_PARENT, 40.sp.toInt()
     )
 
-    val selectableItemBackground = TypedValue().also {
+    @IdRes
+    val selectableItemBackground = if (widgetTextColor == null) TypedValue().also {
         context.theme.resolveAttribute(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                 android.R.attr.selectableItemBackgroundBorderless
             else android.R.attr.selectableItemBackground,
             it, true
         )
-    }.resourceId
+    }.resourceId else 0
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(com.google.android.material.R.attr.colorSecondary)
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resolveColor(R.attr.colorEventIndicator)
+        it.color = widgetTextColor ?: context.resolveColor(R.attr.colorEventIndicator)
     }
 
     val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -47,7 +50,7 @@ class SharedDayViewData(context: Context) {
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1.dp
-        it.color = context.resolveColor(R.attr.colorCurrentDay)
+        it.color = widgetTextColor ?: context.resolveColor(R.attr.colorCurrentDay)
     }
 
     private val typeface = getCalendarFragmentFont(context)
@@ -59,7 +62,7 @@ class SharedDayViewData(context: Context) {
         it.color = context.resolveColor(R.attr.colorHoliday)
     }
 
-    private val colorTextDay = context.resolveColor(R.attr.colorTextDay)
+    private val colorTextDay = widgetTextColor ?: context.resolveColor(R.attr.colorTextDay)
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
@@ -73,7 +76,8 @@ class SharedDayViewData(context: Context) {
         it.color = colorTextDay
     }
 
-    private val colorTextDaySelected = context.resolveColor(R.attr.colorTextDaySelected)
+    private val colorTextDaySelected =
+        widgetTextColor ?: context.resolveColor(R.attr.colorTextDaySelected)
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
@@ -87,7 +91,7 @@ class SharedDayViewData(context: Context) {
         it.color = colorTextDaySelected
     }
 
-    private val colorTextDayName = context.resolveColor(R.attr.colorTextDayName)
+    private val colorTextDayName = widgetTextColor ?: context.resolveColor(R.attr.colorTextDayName)
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface

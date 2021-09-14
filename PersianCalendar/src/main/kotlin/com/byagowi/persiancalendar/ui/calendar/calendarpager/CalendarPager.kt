@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
@@ -49,7 +48,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
     private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
 
     // Package API, to be rewritten with viewPager.adapter.notifyItemChanged()
-    fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
+    private fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
 
     private val monthsLimit = 5000 // this should be an even number
 
@@ -98,11 +97,11 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         inner class ViewHolder(val binding: FragmentMonthBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
-            private val daysAdapter = DaysAdapter(context, sharedDayViewData, this@CalendarPager)
-
             var pageRefresh = fun(_: Boolean, _: Jdn?) {}
 
             init {
+                binding.monthView.initialize(sharedDayViewData, this@CalendarPager)
+
                 binding.previous.let {
                     it.rotateTo(ArrowView.Direction.START)
                     it.setOnClickListener {
@@ -125,50 +124,32 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     }
                 }
 
-                binding.monthDays.let {
-                    it.setHasFixedSize(true)
-                    it.layoutManager = GridLayoutManager(
-                        binding.root.context, if (isShowWeekOfYearEnabled) 8 else 7
-                    )
-                }
-
                 addViewHolder(this)
-
-                binding.monthDays.adapter = daysAdapter
             }
 
             fun bind(position: Int) {
                 val offset = applyOffset(position)
-                val date = getDateFromOffset(mainCalendar, offset)
-                val baseJdn = Jdn(date)
-                val monthLength = mainCalendar.getMonthLength(date.year, date.month)
-                val startOfYearJdn = Jdn(mainCalendar, date.year, 1, 1)
-
-                daysAdapter.let {
-                    it.startingDayOfWeek = baseJdn.dayOfWeek
-                    it.weekOfYearStart = baseJdn.getWeekOfYear(startOfYearJdn)
-                    it.weeksCount = (baseJdn + monthLength - 1).getWeekOfYear(startOfYearJdn) -
-                            it.weekOfYearStart + 1
-                    it.days = baseJdn.createMonthDaysList(monthLength)
-                    it.initializeMonthEvents()
-                    it.notifyItemRangeChanged(0, daysAdapter.itemCount)
-                }
+                val monthStartDate = getDateFromOffset(mainCalendar, offset)
+                val monthStartJdn = Jdn(monthStartDate)
+                val monthLength =
+                    mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
+                binding.monthView.bind(monthStartJdn, monthStartDate)
 
                 pageRefresh = { isEventsModification: Boolean, jdn: Jdn? ->
                     if (viewPager.currentItem == position) {
                         if (isEventsModification && jdn != null) {
-                            daysAdapter.initializeMonthEvents()
+                            binding.monthView.initializeMonthEvents()
                             onDayClicked(jdn)
                         } else {
                             onMonthSelected()
                         }
 
-                        daysAdapter.selectDay(
-                            if (jdn != null && jdn >= baseJdn && jdn - baseJdn + 1 <= monthLength)
-                                jdn - baseJdn + 1
+                        binding.monthView.selectDay(
+                            if (jdn != null && jdn >= monthStartJdn && jdn - monthStartJdn + 1 <= monthLength)
+                                jdn - monthStartJdn + 1
                             else -1
                         )
-                    } else daysAdapter.selectDay(-1)
+                    } else binding.monthView.selectDay(-1)
                 }
 
                 pageRefresh(false, selectedJdn)

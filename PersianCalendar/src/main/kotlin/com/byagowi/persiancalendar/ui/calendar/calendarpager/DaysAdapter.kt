@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 
 class DaysAdapter(
     private val context: Context, private val sharedDayViewData: SharedDayViewData,
-    private val calendarPager: CalendarPager
+    private val calendarPager: CalendarPager?
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
     var days = emptyList<Jdn>()
@@ -81,14 +81,14 @@ class DaysAdapter(
         override fun onClick(v: View) {
             val itemDayView = (v as? DayView).debugAssertNotNull ?: return
             val jdn = itemDayView.jdn ?: return
-            calendarPager.onDayClicked(jdn)
+            calendarPager?.let { it.onDayClicked(jdn) }
             selectDay(itemDayView.dayOfMonth)
         }
 
         override fun onLongClick(v: View): Boolean {
             onClick(v)
             val jdn = (v as? DayView).debugAssertNotNull?.jdn ?: return false
-            calendarPager.onDayLongClicked(jdn)
+            calendarPager?.let { it.onDayLongClicked(jdn) }
             return false
         }
 
