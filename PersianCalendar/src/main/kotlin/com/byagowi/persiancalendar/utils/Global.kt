@@ -274,7 +274,7 @@ fun updateStoredPreference(context: Context) {
     when {
         // This is mostly pointless except we want to make sure even on broken language resources state
         // which might happen in widgets updates we don't have wrong values for these important two
-        language.isDerivedFromPersian -> {
+        language.isPersian -> {
             amString = DEFAULT_AM
             pmString = DEFAULT_PM
         }
