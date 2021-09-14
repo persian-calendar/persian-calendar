@@ -77,7 +77,7 @@ enum class Language(val code: String, val nativeName: String) {
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, EN_IR -> false
+            EN_US, JA, FR, ES, TR, KMR, EN_IR -> false
             else -> true
         }
 

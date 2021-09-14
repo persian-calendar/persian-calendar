@@ -147,6 +147,7 @@ private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
             ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
         val remoteViews = RemoteViews(packageName, R.layout.widget_age)
         remoteViews.setBackgroundColor(R.id.age_widget_root, bgColor)
+        remoteViews.setDirection(R.id.age_widget_root, this)
         remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title ?: "")
         remoteViews.setTextColor(R.id.textview_age_widget_title, Color.parseColor(textColor))
         remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
@@ -229,6 +230,7 @@ private fun Context.update1x1Widget(manager: AppWidgetManager, date: AbstractDat
     val color = Color.parseColor(selectedWidgetTextColor)
     val remoteViews = RemoteViews(packageName, R.layout.widget1x1)
     remoteViews.setBackgroundColor(R.id.widget_layout1x1)
+    remoteViews.setDirection(R.id.widget_layout1x1, this)
     remoteViews.setTextColor(R.id.textPlaceholder1_1x1, color)
     remoteViews.setTextColor(R.id.textPlaceholder2_1x1, color)
     remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
@@ -260,6 +262,7 @@ private fun Context.update4x1Widget(
     )
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setBackgroundColor(R.id.widget_layout4x1)
+    remoteViews.setDirection(R.id.widget_layout4x1, this)
     remoteViews.setTextColor(R.id.textPlaceholder1_4x1, color)
     remoteViews.setTextColor(R.id.textPlaceholder2_4x1, color)
     remoteViews.setTextColor(R.id.textPlaceholder3_4x1, color)
@@ -301,6 +304,7 @@ private fun Context.update2x2Widget(
     )
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setBackgroundColor(R.id.widget_layout2x2)
+    remoteViews.setDirection(R.id.widget_layout2x2, this)
     remoteViews.setTextColor(R.id.time_2x2, color)
     remoteViews.setTextColor(R.id.date_2x2, color)
     remoteViews.setTextColor(R.id.event_2x2, color)
@@ -367,6 +371,7 @@ private fun Context.update4x2Widget(
     )
 
     remoteViews.setBackgroundColor(R.id.widget_layout4x2)
+    remoteViews.setDirection(R.id.widget_layout4x2, this)
 
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setTextColor(R.id.textPlaceholder0_4x2, color)
@@ -557,6 +562,13 @@ private fun Context.updateNotification(
 private fun RemoteViews.setBackgroundColor(
     @IdRes layoutId: Int, color: String = selectedWidgetBackgroundColor
 ) = setInt(layoutId, "setBackgroundColor", Color.parseColor(color))
+
+private fun RemoteViews.setDirection(@IdRes layoutId: Int, context: Context) {
+    val direction =
+        if (language.isArabicScript) View.LAYOUT_DIRECTION_RTL // just in case something went wrong
+        else context.resources.configuration.layoutDirection
+    setInt(layoutId, "setLayoutDirection", direction)
+}
 
 private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) {
     if (text.isBlank()) setViewVisibility(viewId, View.GONE)

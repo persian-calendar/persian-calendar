@@ -4,7 +4,6 @@
     android:id="@+id/widget_layout2x2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl"
     android:orientation="vertical"
     android:padding="3dp"
     tools:context=".Widget2x2">
@@ -17,7 +16,7 @@
         android:fontFamily="sans-serif-thin"
         android:format12Hour="H:mm"
         android:format24Hour="H:mm"
-        android:gravity="right"
+        android:gravity="start"
         android:textColor="@android:color/white"
         android:textSize="34sp"
         android:timeZone="Asia/Tehran" />
@@ -27,7 +26,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="start"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
@@ -36,7 +35,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="start"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
@@ -45,7 +44,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="start"
         android:textColor="@color/widget_holiday"
         android:textSize="14sp" />
 
@@ -54,7 +53,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="start"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 

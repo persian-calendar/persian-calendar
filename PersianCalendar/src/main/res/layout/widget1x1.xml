@@ -17,7 +17,6 @@
         android:layout_marginTop="-3dp"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:textDirection="rtl"
         android:textSize="40dp" />
 
     <TextView
@@ -28,7 +27,6 @@
         android:layout_gravity="center_horizontal|bottom"
         android:gravity="center_horizontal|bottom"
         android:textColor="@android:color/white"
-        android:textDirection="rtl"
         android:textSize="15dp" />
 
 </LinearLayout>

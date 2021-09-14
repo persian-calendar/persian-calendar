@@ -4,7 +4,6 @@
     android:id="@+id/widget_layout2x2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl"
     android:orientation="vertical"
     android:padding="3dp"
     tools:context=".Widget2x2">

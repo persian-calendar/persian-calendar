@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:gravity="center"
         android:text=""
         android:textColor="@android:color/white"
@@ -16,7 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="start"
         android:gravity="center"
         android:minHeight="35dp"
         android:orientation="horizontal">
@@ -107,5 +107,7 @@
             android:text="@string/not_set_time"
             android:textColor="@android:color/white"
             android:textSize="14sp" />
+
     </LinearLayout>
+
 </merge>

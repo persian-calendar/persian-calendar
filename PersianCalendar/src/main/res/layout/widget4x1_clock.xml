@@ -4,7 +4,6 @@
     android:id="@+id/widget_layout4x1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="rtl"
     android:orientation="vertical"
     android:padding="2dp"
     tools:context=".Widget4x1">
@@ -12,8 +11,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:gravity="right"
+        android:layout_gravity="start"
+        android:gravity="start"
         android:orientation="horizontal">
 
         <TextClock
@@ -24,7 +23,7 @@
             android:fontFamily="sans-serif-thin"
             android:format12Hour="H:mm"
             android:format24Hour="H:mm"
-            android:gravity="right"
+            android:gravity="start"
             android:textColor="@android:color/white"
             android:textSize="36dp" />
 
@@ -33,8 +32,8 @@
             style="@style/ShadowTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:gravity="right"
+            android:layout_marginStart="5dp"
+            android:gravity="start"
             android:textColor="@android:color/white"
             android:textSize="12dp" />
     </LinearLayout>
@@ -44,7 +43,7 @@
         style="@style/ShadowTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="right"
+        android:gravity="start"
         android:textColor="@android:color/white"
         android:textSize="14dp" />
 
