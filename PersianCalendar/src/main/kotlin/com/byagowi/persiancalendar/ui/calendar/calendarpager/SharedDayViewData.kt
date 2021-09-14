@@ -11,20 +11,19 @@ import androidx.annotation.IdRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
-class SharedDayViewData(context: Context, @ColorInt private val widgetTextColor: Int? = null) {
+class SharedDayViewData(
+    context: Context, height: Float, @ColorInt private val widgetTextColor: Int? = null
+) {
 
-    val eventYOffset = 7.sp
-    val eventIndicatorRadius = 2.sp
-    private val eventIndicatorsGap = 2.sp
+    val eventYOffset = height * 7 / 40
+    val eventIndicatorRadius = height * 2 / 40
+    private val eventIndicatorsGap = height * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
 
-    val layoutParams = ViewGroup.LayoutParams(
-        ViewGroup.LayoutParams.MATCH_PARENT, 40.sp.toInt()
-    )
+    val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
 
     private fun addShadowIfNeeded(paint: Paint) {
         if (widgetTextColor != null) paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
@@ -60,10 +59,13 @@ class SharedDayViewData(context: Context, @ColorInt private val widgetTextColor:
 
     private val typeface = getCalendarFragmentFont(context)
 
+    private val textSize = height * (if (isArabicDigitSelected) 18 else 25) / 40
+    private val headerTextSize = height * 12 / 40
+
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
-        it.textSize = if (isArabicDigitSelected) 18.sp else 25.sp
+        it.textSize = textSize
         it.color = context.resolveColor(R.attr.colorHoliday)
         addShadowIfNeeded(it)
     }
@@ -72,14 +74,14 @@ class SharedDayViewData(context: Context, @ColorInt private val widgetTextColor:
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
-        it.textSize = if (isArabicDigitSelected) 18.sp else 25.sp
+        it.textSize = textSize
         it.color = colorTextDay
         addShadowIfNeeded(it)
     }
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
-        it.textSize = 12.sp
+        it.textSize = headerTextSize
         it.color = colorTextDay
         addShadowIfNeeded(it)
     }
@@ -89,14 +91,14 @@ class SharedDayViewData(context: Context, @ColorInt private val widgetTextColor:
     val dayOfMonthNumberTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
-        it.textSize = if (isArabicDigitSelected) 18.sp else 25.sp
+        it.textSize = textSize
         it.color = colorTextDaySelected
         addShadowIfNeeded(it)
     }
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
-        it.textSize = 12.sp
+        it.textSize = headerTextSize
         it.color = colorTextDaySelected
         addShadowIfNeeded(it)
     }
@@ -105,14 +107,14 @@ class SharedDayViewData(context: Context, @ColorInt private val widgetTextColor:
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
-        it.textSize = 12.sp
+        it.textSize = headerTextSize
         it.color = colorTextDayName
         addShadowIfNeeded(it)
     }
     val weekDayInitialsTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
-        it.textSize = 20.sp
+        it.textSize = height * 20 / 40
         it.color = colorTextDayName
         addShadowIfNeeded(it)
     }

@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.calendar.AbstractDate
 import java.lang.ref.WeakReference
@@ -92,7 +93,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         override fun getItemCount() = monthsLimit
 
-        private val sharedDayViewData = SharedDayViewData(context)
+        private val sharedDayViewData = SharedDayViewData(context, 40.sp)
 
         inner class ViewHolder(val binding: FragmentMonthBinding) :
             RecyclerView.ViewHolder(binding.root) {

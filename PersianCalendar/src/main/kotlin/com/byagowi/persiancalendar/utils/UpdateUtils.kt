@@ -155,23 +155,29 @@ private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
     }
 }
 
-private fun prepareViewForWidget(view: View, manager: AppWidgetManager, widgetId: Int) {
-    view.setBackgroundColor(Color.parseColor(selectedWidgetBackgroundColor))
-    view.layoutDirection = view.context.resources.configuration.layoutDirection
+private fun getWidgetSize(
+    context: Context, manager: AppWidgetManager, widgetId: Int
+): Pair<Int, Int> {
     // https://stackoverflow.com/a/69080699
-    val isPortrait = view.context.resources.configuration.orientation == ORIENTATION_PORTRAIT
+    val isPortrait = context.resources.configuration.orientation == ORIENTATION_PORTRAIT
     val (width, height) = listOf(
         if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
         else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
         if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
         else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
     ).map { manager.getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
+    return width to height
+}
+
+private fun prepareViewForWidget(view: View, size: Pair<Int, Int>) {
+    view.setBackgroundColor(Color.parseColor(selectedWidgetBackgroundColor))
+    view.layoutDirection = view.context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
     view.measure(
-        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
-        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
+        View.MeasureSpec.makeMeasureSpec(size.first, View.MeasureSpec.AT_MOST),
+        View.MeasureSpec.makeMeasureSpec(size.second, View.MeasureSpec.AT_MOST)
     )
-    view.layout(0, 0, width, height)
+    view.layout(0, 0, size.first, size.second)
 }
 
 private fun Context.updateSunViewWidget(
@@ -180,7 +186,7 @@ private fun Context.updateSunViewWidget(
     manager.getAppWidgetIds(ComponentName(this, WidgetSunView::class.java))?.forEach { widgetId ->
         val remoteViews = RemoteViews(packageName, R.layout.widget_sun_view)
         val sunView = SunView(this, textColor = Color.parseColor(selectedWidgetTextColor))
-        prepareViewForWidget(sunView, manager, widgetId)
+        prepareViewForWidget(sunView, getWidgetSize(this, manager, widgetId))
         prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
         sunView.initiate()
         remoteViews.setTextViewTextOrHideIfEmpty(
@@ -207,8 +213,9 @@ private fun Context.updateMonthViewWidget(manager: AppWidgetManager, date: Abstr
     manager.getAppWidgetIds(ComponentName(this, WidgetMonthView::class.java))?.forEach { widgetId ->
         val remoteViews = RemoteViews(packageName, R.layout.widget_image_view)
         val monthView = MonthView(ContextThemeWrapper(this, R.style.ModernTheme))
-        monthView.initializeForWidget(Color.parseColor(selectedWidgetTextColor), date)
-        prepareViewForWidget(monthView, manager, widgetId)
+        val size = getWidgetSize(this, manager, widgetId)
+        monthView.initializeForWidget(Color.parseColor(selectedWidgetTextColor), size.second, date)
+        prepareViewForWidget(monthView, size)
         remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())
         // TODO: a11y, remoteViews.setContentDescription(R.id.image, monthView.contentDescription)
         remoteViews.setOnClickPendingIntent(R.id.image, launchAppPendingIntent())

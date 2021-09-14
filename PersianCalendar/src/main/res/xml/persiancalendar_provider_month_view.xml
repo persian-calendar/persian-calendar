@@ -5,7 +5,7 @@
     android:minWidth="250dp"
     android:minHeight="180dp"
     android:minResizeWidth="180dp"
-    android:minResizeHeight="180dp"
+    android:minResizeHeight="110dp"
     android:previewImage="@drawable/widget_month_view_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="600000"

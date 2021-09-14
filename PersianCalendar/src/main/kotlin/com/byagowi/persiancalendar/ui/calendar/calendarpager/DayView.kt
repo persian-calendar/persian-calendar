@@ -64,8 +64,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             val xOffset = shared.eventIndicatorsCentersDistance *
                     (i - (indicators.size - 1) / 2f) * offsetDirection
             canvas.drawCircle(
-                width / 2f + xOffset, height - shared.eventYOffset, shared.eventIndicatorRadius,
-                when {
+                width / 2f + xOffset, height - shared.eventYOffset,
+                shared.eventIndicatorRadius, when {
                     dayIsSelected -> shared.headerTextSelectedPaint
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     isHighTextContrastEnabled && holiday && paint == shared.eventIndicatorPaint ->

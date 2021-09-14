@@ -26,8 +26,9 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         adapter = daysAdapter
     }
 
-    fun initializeForWidget(@ColorInt textColor: Int, today: AbstractDate) {
-        daysAdapter = DaysAdapter(context, SharedDayViewData(context, textColor), null)
+    fun initializeForWidget(@ColorInt textColor: Int, height: Int, today: AbstractDate) {
+        daysAdapter =
+            DaysAdapter(context, SharedDayViewData(context, height / 7f, textColor), null)
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)
         bind(jdn, jdn.toCalendar(mainCalendar))
