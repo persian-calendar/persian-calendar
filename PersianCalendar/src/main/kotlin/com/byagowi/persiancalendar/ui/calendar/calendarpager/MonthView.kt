@@ -31,7 +31,6 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)
         bind(jdn, jdn.toCalendar(mainCalendar))
-//        selectDay(today.dayOfMonth)
     }
 
     fun bind(monthStartJdn: Jdn, monthStartDate: AbstractDate) {
