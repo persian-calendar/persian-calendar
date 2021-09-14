@@ -167,6 +167,7 @@ enum class Language(val code: String, val nativeName: String) {
         AR -> weekDaysInitialsInArabic
         AZB -> weekDaysInitialsInAzerbaijani
         TR -> weekDaysInitialsInTurkish
+        EN_IR -> weekDaysInitialsInEnglishIran
         else -> getWeekDays(context).map { it.substring(0, 1) }
     }
 
@@ -232,6 +233,9 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val weekDaysInitialsInTurkish = listOf7Items(
             "Ct", "Pz", "Pt", "Sa", "Ça", "Pe", "Cu"
+        )
+        private val weekDaysInitialsInEnglishIran = listOf7Items(
+            "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo"
         )
     }
 
