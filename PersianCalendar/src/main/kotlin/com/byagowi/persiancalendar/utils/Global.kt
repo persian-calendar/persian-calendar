@@ -197,7 +197,8 @@ fun updateStoredPreference(context: Context) {
     }
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
-    isForcedIranTimeEnabled = prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
+    isForcedIranTimeEnabled =
+        language.isIranExclusive && prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
     isNotifyDateOnLockScreen = prefs.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN,
         DEFAULT_NOTIFY_DATE_LOCK_SCREEN

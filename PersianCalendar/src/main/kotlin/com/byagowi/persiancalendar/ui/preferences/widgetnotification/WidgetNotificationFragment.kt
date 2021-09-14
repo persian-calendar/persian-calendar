@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
+import com.byagowi.persiancalendar.utils.language
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
@@ -79,6 +80,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 switch(PREF_IRAN_TIME, false) {
                     title(R.string.iran_time)
                     summary(R.string.showing_iran_time)
+                    isVisible = language.isIranExclusive
                 }
                 val widgetCustomizations = listOf(
                     OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
