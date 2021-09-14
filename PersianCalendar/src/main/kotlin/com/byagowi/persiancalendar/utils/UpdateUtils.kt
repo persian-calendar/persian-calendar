@@ -251,15 +251,12 @@ private fun Context.update4x1Widget(
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         packageName, if (enableClock) {
-            if (isForcedIranTimeEnabled) {
-                if (isCenterAlignWidgets) R.layout.widget4x1_clock_iran_center else R.layout.widget4x1_clock_iran
-            } else {
-                if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
-            }
+            if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
         } else {
             if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
         }
     )
+    if (enableClock) remoteViews.setClockTimeZone(R.id.textPlaceholder1_4x1)
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setBackgroundColor(R.id.widget_layout4x1)
     remoteViews.setDirection(R.id.widget_layout4x1, this)
@@ -293,15 +290,12 @@ private fun Context.update2x2Widget(
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
         packageName, if (enableClock) {
-            if (isForcedIranTimeEnabled) {
-                if (isCenterAlignWidgets) R.layout.widget2x2_clock_iran_center else R.layout.widget2x2_clock_iran
-            } else {
-                if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
-            }
+            if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
         } else {
             if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
+    if (enableClock) remoteViews.setClockTimeZone(R.id.time_2x2)
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setBackgroundColor(R.id.widget_layout2x2)
     remoteViews.setDirection(R.id.widget_layout2x2, this)
@@ -365,11 +359,10 @@ private fun Context.update4x2Widget(
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val enableClock = isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val remoteViews = RemoteViews(
-        packageName, if (enableClock) {
-            if (isForcedIranTimeEnabled) R.layout.widget4x2_clock_iran else R.layout.widget4x2_clock
-        } else R.layout.widget4x2
+        packageName, if (enableClock) R.layout.widget4x2_clock else R.layout.widget4x2
     )
 
+    if (enableClock) remoteViews.setClockTimeZone(R.id.textPlaceholder0_4x2)
     remoteViews.setBackgroundColor(R.id.widget_layout4x2)
     remoteViews.setDirection(R.id.widget_layout4x2, this)
 
@@ -568,6 +561,10 @@ private fun RemoteViews.setDirection(@IdRes layoutId: Int, context: Context) {
         if (language.isArabicScript) View.LAYOUT_DIRECTION_RTL // just in case something went wrong
         else context.resources.configuration.layoutDirection
     setInt(layoutId, "setLayoutDirection", direction)
+}
+
+private fun RemoteViews.setClockTimeZone(@IdRes layoutId: Int) {
+    if (isForcedIranTimeEnabled) setString(layoutId, "setTimeZone", "Asia/Tehran")
 }
 
 private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) {
