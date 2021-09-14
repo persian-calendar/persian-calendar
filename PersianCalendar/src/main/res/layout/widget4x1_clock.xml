@@ -21,8 +21,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
-            android:format12Hour="H:mm"
-            android:format24Hour="H:mm"
             android:gravity="start"
             android:textColor="@android:color/white"
             android:textSize="36dp" />

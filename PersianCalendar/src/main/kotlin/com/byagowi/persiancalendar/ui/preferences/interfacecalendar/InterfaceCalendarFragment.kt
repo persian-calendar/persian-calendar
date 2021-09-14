@@ -81,7 +81,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
             }
             section(R.string.calendar) {
                 // Mark the rest of options as advanced
-                initialExpandedChildrenCount = 6
+                initialExpandedChildrenCount = 5
                 clickable(onClick = { showHolidaysTypesDialog(activity) }) {
                     title(R.string.events)
                     summary(R.string.events_summary)
@@ -125,10 +125,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 switch(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false) {
                     title(R.string.week_of_year)
                     summary(R.string.week_of_year_summary)
-                }
-                switch(PREF_WIDGET_IN_24, true) {
-                    title(R.string.clock_in_24)
-                    summary(R.string.showing_clock_in_24)
                 }
                 run { // reset Islamic offset if is already expired
                     val appPrefs = context.appPrefs

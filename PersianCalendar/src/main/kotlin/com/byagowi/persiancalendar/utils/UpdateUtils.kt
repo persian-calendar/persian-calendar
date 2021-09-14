@@ -256,7 +256,7 @@ private fun Context.update4x1Widget(
             if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
         }
     )
-    if (enableClock) remoteViews.setClockTimeZone(R.id.textPlaceholder1_4x1)
+    if (enableClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setBackgroundColor(R.id.widget_layout4x1)
     remoteViews.setDirection(R.id.widget_layout4x1, this)
@@ -295,7 +295,7 @@ private fun Context.update2x2Widget(
             if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
         }
     )
-    if (enableClock) remoteViews.setClockTimeZone(R.id.time_2x2)
+    if (enableClock) remoteViews.configureClock(R.id.time_2x2)
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setBackgroundColor(R.id.widget_layout2x2)
     remoteViews.setDirection(R.id.widget_layout2x2, this)
@@ -362,7 +362,7 @@ private fun Context.update4x2Widget(
         packageName, if (enableClock) R.layout.widget4x2_clock else R.layout.widget4x2
     )
 
-    if (enableClock) remoteViews.setClockTimeZone(R.id.textPlaceholder0_4x2)
+    if (enableClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
     remoteViews.setBackgroundColor(R.id.widget_layout4x2)
     remoteViews.setDirection(R.id.widget_layout4x2, this)
 
@@ -563,8 +563,11 @@ private fun RemoteViews.setDirection(@IdRes layoutId: Int, context: Context) {
     setInt(layoutId, "setLayoutDirection", direction)
 }
 
-private fun RemoteViews.setClockTimeZone(@IdRes layoutId: Int) {
+private fun RemoteViews.configureClock(@IdRes layoutId: Int) {
     if (isForcedIranTimeEnabled) setString(layoutId, "setTimeZone", "Asia/Tehran")
+    val clockFormat = if (clockIn24) "H:mm" else "h:mm"
+    setCharSequence(layoutId, "setFormat12Hour", clockFormat)
+    setCharSequence(layoutId, "setFormat24Hour", clockFormat)
 }
 
 private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequence) {

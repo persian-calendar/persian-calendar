@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
+import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
@@ -52,7 +53,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             }
             section(R.string.pref_widget) {
                 // Mark the rest of options as advanced
-                initialExpandedChildrenCount = 5
+                initialExpandedChildrenCount = 6
                 clickable(onClick = {
                     showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }) {
@@ -72,6 +73,10 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 switch(PREF_WIDGET_CLOCK, true) {
                     title(R.string.clock_on_widget)
                     summary(R.string.showing_clock_on_widget)
+                }
+                switch(PREF_WIDGET_IN_24, false) {
+                    title(R.string.clock_in_24)
+                    summary(R.string.showing_clock_in_24)
                 }
                 switch(PREF_CENTER_ALIGN_WIDGETS, false) {
                     title(R.string.center_align_widgets)
