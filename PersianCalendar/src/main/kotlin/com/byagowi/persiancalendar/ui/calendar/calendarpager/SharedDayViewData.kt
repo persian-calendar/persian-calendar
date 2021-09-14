@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Paint
 import android.os.Build
 import android.util.TypedValue
@@ -14,7 +15,7 @@ import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
-class SharedDayViewData(context: Context, @ColorInt widgetTextColor: Int? = null) {
+class SharedDayViewData(context: Context, @ColorInt private val widgetTextColor: Int? = null) {
 
     val eventYOffset = 7.sp
     val eventIndicatorRadius = 2.sp
@@ -24,6 +25,10 @@ class SharedDayViewData(context: Context, @ColorInt widgetTextColor: Int? = null
     val layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT, 40.sp.toInt()
     )
+
+    private fun addShadowIfNeeded(paint: Paint) {
+        if (widgetTextColor != null) paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
+    }
 
     @IdRes
     val selectableItemBackground = if (widgetTextColor == null) TypedValue().also {
@@ -60,6 +65,7 @@ class SharedDayViewData(context: Context, @ColorInt widgetTextColor: Int? = null
         it.typeface = typeface
         it.textSize = if (isArabicDigitSelected) 18.sp else 25.sp
         it.color = context.resolveColor(R.attr.colorHoliday)
+        addShadowIfNeeded(it)
     }
 
     private val colorTextDay = widgetTextColor ?: context.resolveColor(R.attr.colorTextDay)
@@ -68,12 +74,14 @@ class SharedDayViewData(context: Context, @ColorInt widgetTextColor: Int? = null
         it.typeface = typeface
         it.textSize = if (isArabicDigitSelected) 18.sp else 25.sp
         it.color = colorTextDay
+        addShadowIfNeeded(it)
     }
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
         it.textSize = 12.sp
         it.color = colorTextDay
+        addShadowIfNeeded(it)
     }
 
     private val colorTextDaySelected =
@@ -83,12 +91,14 @@ class SharedDayViewData(context: Context, @ColorInt widgetTextColor: Int? = null
         it.typeface = typeface
         it.textSize = if (isArabicDigitSelected) 18.sp else 25.sp
         it.color = colorTextDaySelected
+        addShadowIfNeeded(it)
     }
     val headerTextSelectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
         it.textSize = 12.sp
         it.color = colorTextDaySelected
+        addShadowIfNeeded(it)
     }
 
     private val colorTextDayName = widgetTextColor ?: context.resolveColor(R.attr.colorTextDayName)
@@ -97,11 +107,13 @@ class SharedDayViewData(context: Context, @ColorInt widgetTextColor: Int? = null
         it.typeface = typeface
         it.textSize = 12.sp
         it.color = colorTextDayName
+        addShadowIfNeeded(it)
     }
     val weekDayInitialsTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
         it.textSize = 20.sp
         it.color = colorTextDayName
+        addShadowIfNeeded(it)
     }
 }
