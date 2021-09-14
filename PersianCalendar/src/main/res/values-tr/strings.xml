@@ -107,7 +107,7 @@
     <string name="am">ÖÖ</string>
     <string name="recurs">Tekrarlar</string>
     <string name="shift_work_record_title">%1$s gün %2$s</string>
-    <string name="n_till">%1$s ile %2$s arası</string>
+    <string name="n_till">%1$s var %2$s \'na</string>
     <string name="center_align_widgets">Widget\'ları ortaya hizalayın</string>
     <string name="center_align_widgets_summary">4x1 ve 2x2 widget\'larını merkeze hizala</string>
     <string name="device_info">Cihaz Bilgisi</string>
