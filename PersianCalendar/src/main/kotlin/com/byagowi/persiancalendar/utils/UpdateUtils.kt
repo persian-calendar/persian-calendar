@@ -174,15 +174,15 @@ private fun getWidgetSize(
 }
 
 private fun prepareViewForWidget(view: View, size: Pair<Int, Int>) {
-    view.background =
-        if (selectedWidgetBackgroundColor == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) null
-        else MaterialShapeDrawable().also {
+    if (selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
+        view.background = MaterialShapeDrawable().also {
             it.fillColor = ColorStateList.valueOf(Color.parseColor(selectedWidgetBackgroundColor))
             // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
             // Apply a 16dp round corner for background which is the default in Android 12 also
             it.shapeAppearanceModel =
                 ShapeAppearanceModel.builder().setAllCornerSizes(16.dp).build()
         }
+    }
     view.layoutDirection = view.context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
     view.measure(
