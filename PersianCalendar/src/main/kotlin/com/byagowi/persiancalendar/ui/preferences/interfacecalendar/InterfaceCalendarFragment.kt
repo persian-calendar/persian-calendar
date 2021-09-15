@@ -55,6 +55,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 clickable(onClick = { showLanguagePreferenceDialog(activity) }) {
                     if (destination == PREF_APP_LANGUAGE) title = "Language"
                     else title(R.string.language)
+                    summary = language.nativeName
                 }
                 singleSelect(
                     PREF_THEME,
