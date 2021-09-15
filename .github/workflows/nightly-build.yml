@@ -40,4 +40,4 @@ jobs:
         with:
           default_author: github_actions
           message: 'Update the runtime dependencies report'
-          add: PersianCalendar/runtime-dependencies-report.txt
+          add: PersianCalendar/*.txt
