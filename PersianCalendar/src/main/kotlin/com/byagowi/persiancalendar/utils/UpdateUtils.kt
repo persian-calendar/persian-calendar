@@ -159,9 +159,10 @@ private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
     }
 }
 
-private fun getWidgetSize(
-    context: Context, manager: AppWidgetManager, widgetId: Int
-): Pair<Int, Int> {
+// To be replaced with android.util.Size in minApi21
+private data class Size(val width: Int, val height: Int)
+
+private fun getWidgetSize(context: Context, manager: AppWidgetManager, widgetId: Int): Size {
     // https://stackoverflow.com/a/69080699
     val isPortrait = context.resources.configuration.orientation == ORIENTATION_PORTRAIT
     val (width, height) = listOf(
@@ -170,26 +171,25 @@ private fun getWidgetSize(
         if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
         else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
     ).map { manager.getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
-    return width to height
+    return Size(width = width, height = height)
 }
 
-private fun prepareViewForWidget(view: View, size: Pair<Int, Int>) {
+private fun prepareViewForWidget(view: View, size: Size) {
     if (selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
         view.background = MaterialShapeDrawable().also {
             it.fillColor = ColorStateList.valueOf(Color.parseColor(selectedWidgetBackgroundColor))
             // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
-            // Apply a 16dp round corner for background which is the default in Android 12 also
-            it.shapeAppearanceModel =
-                ShapeAppearanceModel.builder().setAllCornerSizes(16.dp).build()
+            // Apply a 16dp round corner for background which is somehow minimum in Android 12 apparently
+            it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
         }
     }
     view.layoutDirection = view.context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
     view.measure(
-        View.MeasureSpec.makeMeasureSpec(size.first, View.MeasureSpec.AT_MOST),
-        View.MeasureSpec.makeMeasureSpec(size.second, View.MeasureSpec.AT_MOST)
+        View.MeasureSpec.makeMeasureSpec(size.width, View.MeasureSpec.AT_MOST),
+        View.MeasureSpec.makeMeasureSpec(size.height, View.MeasureSpec.AT_MOST)
     )
-    view.layout(0, 0, size.first, size.second)
+    view.layout(0, 0, size.width, size.height)
 }
 
 private fun Context.updateSunViewWidget(
@@ -226,7 +226,7 @@ private fun Context.updateMonthViewWidget(manager: AppWidgetManager, date: Abstr
         val remoteViews = RemoteViews(packageName, R.layout.widget_image_view)
         val monthView = MonthView(ContextThemeWrapper(this, R.style.ModernTheme))
         val size = getWidgetSize(this, manager, widgetId)
-        monthView.initializeForWidget(Color.parseColor(selectedWidgetTextColor), size.second, date)
+        monthView.initializeForWidget(Color.parseColor(selectedWidgetTextColor), size.height, date)
         prepareViewForWidget(monthView, size)
         remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())
         // TODO: a11y, remoteViews.setContentDescription(R.id.image, monthView.contentDescription)

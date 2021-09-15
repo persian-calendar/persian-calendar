@@ -33,7 +33,7 @@ fun showIconsDemoDialog(activity: Activity) {
                         }
                         layoutParams = ViewGroup.MarginLayoutParams(36.dp.toInt(), 36.dp.toInt())
                             .apply { setMargins(4.dp.toInt()) }
-                        shapeAppearanceModel = ShapeAppearanceModel().toBuilder()
+                        shapeAppearanceModel = ShapeAppearanceModel.Builder()
                             .setAllCorners(CornerFamily.ROUNDED, 8.dp)
                             .setAllEdges(TriangleEdgeTreatment(4.dp, true))
                             .build()
