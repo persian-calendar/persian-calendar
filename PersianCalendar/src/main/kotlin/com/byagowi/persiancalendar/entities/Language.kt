@@ -130,13 +130,6 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    // Languages use same string from AM/PM
-    val isDerivedFromPersian: Boolean
-        get() = when (this) {
-            FA, FA_AF, EN_IR -> true
-            else -> false
-        }
-
     fun getPersianMonths(context: Context): List<String> = when (this) {
         FA, EN_IR -> persianCalendarMonthsInPersian
         FA_AF -> persianCalendarMonthsInDari
