@@ -107,4 +107,16 @@
     <string name="monday">Duşem</string>
     <string name="sunday">Yekşem</string>
     <string name="saturday">Şemî</string>
+    <string name="december">Kanûna pêşîn</string>
+    <string name="november">Çiriya paşîn</string>
+    <string name="october">Çiriya pêşîn</string>
+    <string name="september">Îlon</string>
+    <string name="august">Tebax</string>
+    <string name="july">Tîrmeh</string>
+    <string name="june">Hezîran</string>
+    <string name="may">Gulan</string>
+    <string name="april">Nîsan</string>
+    <string name="march">Adar</string>
+    <string name="february">Sibat</string>
+    <string name="january">Kanûna paşîn</string>
 </resources>
