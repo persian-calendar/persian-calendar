@@ -118,7 +118,7 @@ fun update(context: Context, updateDate: Boolean) {
     context.update1x1Widget(manager, date)
     context.update4x1Widget(manager, jdn, date, widgetTitle, subtitle)
     context.update2x2Widget(manager, jdn, date, widgetTitle, subtitle, owghat)
-    context.update4x2Widget(manager, jdn, date, nextOwghatId, nowClock, prayTimes)
+    context.update4x2Widget(manager, jdn, date, nowClock, prayTimes)
     context.updateSunViewWidget(manager, jdn, prayTimes)
     context.updateMonthViewWidget(manager, date)
     context.updateNotification(title, subtitle, jdn, date, owghat)
@@ -338,8 +338,7 @@ private fun Context.update2x2Widget(
 }
 
 private fun Context.update4x2Widget(
-    manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nextOwghatId: Int?, nowClock: Clock,
-    prayTimes: PrayTimes?
+    manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nowClock: Clock, prayTimes: PrayTimes?
 ) {
     manager.getAppWidgetIds(ComponentName(this, Widget4x2::class.java))?.forEach { widgetId ->
         val weekDayName = jdn.dayOfWeekName
@@ -372,7 +371,7 @@ private fun Context.update4x2Widget(
             if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
         })
 
-        if (nextOwghatId != null && prayTimes != null) {
+        if (prayTimes != null) {
             // Set text of owghats
             listOf(
                 R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
@@ -392,14 +391,15 @@ private fun Context.update4x2Widget(
                     )
                 }
             ) { textHolderViewId, owghatStringId ->
+                val timeClock = prayTimes.getFromStringId(owghatStringId) ?: Clock.fromInt(0)
                 remoteViews.setTextViewText(
-                    textHolderViewId, getString(owghatStringId) + "\n" + prayTimes
-                        .getFromStringId(owghatStringId)?.toFormattedString(printAmPm = false)
+                    textHolderViewId, getString(owghatStringId) + "\n" +
+                            timeClock?.toFormattedString(printAmPm = false)
                 )
-                remoteViews.setTextColor(
-                    textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
-                )
-            }
+                remoteViews.setTextColor(textHolderViewId, color)
+                textHolderViewId to timeClock
+            }.firstOrNull { (_, timeClock) -> timeClock.toInt() > nowClock.toInt() }
+                ?.let { (viewId, _) -> remoteViews.setTextColor(viewId, Color.RED) }
         } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
         setEventsInWidget(jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
