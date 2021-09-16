@@ -203,7 +203,7 @@
     <string name="next_month">Siguiente mes</string>
     <string name="week_days_name_column">%1$s columnas en tabla de días</string>
     <string name="equivalent_to">Equivalente a</string>
-    <string name="holiday_reason">Festivo debido a</string>
+    <string name="holiday_reason">Festivo debido a %1$s</string>
     <string name="nth_week_of_year">%1$s semana del año</string>
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="shift_work_settings">Ajustes del turno de trabajo</string>

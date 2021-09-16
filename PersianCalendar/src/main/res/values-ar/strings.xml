@@ -202,7 +202,7 @@
     <string name="next_month">الشهر القادم</string>
     <string name="week_days_name_column">عمود %1$s في جدول التواريخ</string>
     <string name="equivalent_to">ما يعادل</string>
-    <string name="holiday_reason">عطلة لأن</string>
+    <string name="holiday_reason">عطلة لأن %1$s</string>
     <string name="nth_week_of_year">الأسبوع %1$s من السنة</string>
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="shift_work_settings">إعدادات إزاحة وقت العمل</string>

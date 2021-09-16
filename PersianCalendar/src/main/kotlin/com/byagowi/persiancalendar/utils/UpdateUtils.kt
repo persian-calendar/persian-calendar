@@ -315,32 +315,7 @@ private fun Context.update2x2Widget(
     remoteViews.setTextColor(R.id.event_2x2, color)
     remoteViews.setTextColor(R.id.owghat_2x2, color)
 
-    val events = getEvents(jdn, deviceCalendarEvents)
-    val isRtl = resources.isRtl
-    val holidays = getEventsTitle(
-        events, holiday = true, compact = true, showDeviceCalendarEvents = true,
-        insertRLM = isRtl, addIsHoliday = isHighTextContrastEnabled
-    )
-    if (holidays.isNotEmpty()) {
-        remoteViews.setTextViewText(R.id.holiday_2x2, holidays)
-        if (isTalkBackEnabled) remoteViews.setContentDescription(
-            R.id.holiday_2x2, getString(R.string.holiday_reason) + " " + holidays
-        )
-        remoteViews.setViewVisibility(R.id.holiday_2x2, View.VISIBLE)
-    } else {
-        remoteViews.setViewVisibility(R.id.holiday_2x2, View.GONE)
-    }
-
-    val nonHolidays = getEventsTitle(
-        events, holiday = false, compact = true, showDeviceCalendarEvents = true,
-        insertRLM = isRtl, addIsHoliday = false
-    )
-    if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets && nonHolidays.isNotEmpty()) {
-        remoteViews.setTextViewText(R.id.event_2x2, nonHolidays)
-        remoteViews.setViewVisibility(R.id.event_2x2, View.VISIBLE)
-    } else {
-        remoteViews.setViewVisibility(R.id.event_2x2, View.GONE)
-    }
+    setEventsInWidget(jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
 
     if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
         remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
@@ -385,6 +360,7 @@ private fun Context.update4x2Widget(
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_2_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_5_4x2, color)
+    remoteViews.setTextColor(R.id.event_4x2, color)
 
     if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
@@ -423,8 +399,29 @@ private fun Context.update4x2Widget(
         }
     } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
+    setEventsInWidget(jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
+
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent())
     manager.updateAppWidget(widget4x2, remoteViews)
+}
+
+private fun Context.setEventsInWidget(
+    jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
+) {
+    val events = getEvents(jdn, deviceCalendarEvents)
+    val holidays = getEventsTitle(
+        events, holiday = true, compact = true, showDeviceCalendarEvents = true,
+        insertRLM = resources.isRtl, addIsHoliday = isHighTextContrastEnabled
+    )
+    remoteViews.setTextViewTextOrHideIfEmpty(holidaysId, holidays)
+    if (isTalkBackEnabled)
+        remoteViews.setContentDescription(holidaysId, getString(R.string.holiday_reason, holidays))
+
+    val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
+        events, holiday = false, compact = true, showDeviceCalendarEvents = true,
+        insertRLM = resources.isRtl, addIsHoliday = false
+    ) else ""
+    remoteViews.setTextViewTextOrHideIfEmpty(eventsId, nonHolidays)
 }
 
 private fun Context.updateNotification(

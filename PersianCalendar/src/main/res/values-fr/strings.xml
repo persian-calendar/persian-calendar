@@ -16,7 +16,7 @@
     <string name="previous_month">Mois précédent</string>
     <string name="next_month">Mois suivant</string>
     <string name="nth_week_of_year">%1$s semaine de l’année</string>
-    <string name="holiday_reason">Férié à cause de</string>
+    <string name="holiday_reason">Férié à cause de %1$s</string>
     <string name="remove">Retirer</string>
     <string name="n_minutes">%1$s minutes</string>
     <string name="shift_work_reset_button">Désactiver ou reprogrammer</string>

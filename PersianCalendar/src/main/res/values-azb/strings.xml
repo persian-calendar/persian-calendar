@@ -180,7 +180,7 @@
     <string name="next_month">سونراکی آی</string>
     <string name="week_days_name_column">ستون %1$s گۆن‌لرین جدول‌ینده</string>
     <string name="equivalent_to">برابردی</string>
-    <string name="holiday_reason">تعطیل بو موناسیبته</string>
+    <string name="holiday_reason">تعطیل بو موناسیبته %1$s</string>
     <string name="nth_week_of_year">هفته‌سی %1$s ایل</string>
     <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">قوزئی</string>

@@ -396,7 +396,7 @@ class CalendarFragment : Fragment() {
         if (holidays.isNotEmpty()) {
             eventsBinding.noEvent.isVisible = false
             eventsBinding.holidayTitle.text = holidays
-            val holidayContent = getString(R.string.holiday_reason) + "\n" + holidays
+            val holidayContent = getString(R.string.holiday_reason, holidays)
             eventsBinding.holidayTitle.contentDescription = holidayContent
             contentDescription.append(holidayContent)
             eventsBinding.holidayTitle.isVisible = true
