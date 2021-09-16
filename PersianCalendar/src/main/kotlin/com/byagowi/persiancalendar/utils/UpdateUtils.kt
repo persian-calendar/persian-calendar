@@ -430,12 +430,10 @@ private fun Context.update4x2Widget(
             R.id.textPlaceholder2_4x2,
             getString(R.string.n_till, remaining.asRemainingTime(this), getString(nextOwghatId))
         )
-        remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     } else {
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2, getString(R.string.ask_user_to_set_location)
         )
-        remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     }
 
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent())
