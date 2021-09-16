@@ -294,46 +294,47 @@ private fun Context.update2x2Widget(
     manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, widgetTitle: String, subtitle: String,
     owghat: String
 ) {
-    val widget2x2 = ComponentName(this, Widget2x2::class.java)
-    if (manager.getAppWidgetIds(widget2x2).isNullOrEmpty()) return
-    val weekDayName = jdn.dayOfWeekName
-    val enableClock =
-        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
-    val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
-    val remoteViews = RemoteViews(
-        packageName, if (enableClock) {
-            if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
+    manager.getAppWidgetIds(ComponentName(this, Widget2x2::class.java))?.forEach { widgetId ->
+        val weekDayName = jdn.dayOfWeekName
+        val enableClock =
+            isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
+        val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+        val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
+        val remoteViews = RemoteViews(
+            packageName, if (enableClock) {
+                if (isCenterAlignWidgets) R.layout.widget2x2_clock_center else R.layout.widget2x2_clock
+            } else {
+                if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
+            }
+        )
+        if (enableClock) remoteViews.configureClock(R.id.time_2x2)
+        val color = Color.parseColor(selectedWidgetTextColor)
+        val size = getWidgetSize(this, manager, widgetId)
+        remoteViews.setRoundBackground(R.id.widget_layout2x2_background, size)
+        remoteViews.setDirection(R.id.widget_layout2x2, this)
+        remoteViews.setTextColor(R.id.time_2x2, color)
+        remoteViews.setTextColor(R.id.date_2x2, color)
+        remoteViews.setTextColor(R.id.event_2x2, color)
+        remoteViews.setTextColor(R.id.owghat_2x2, color)
+
+        setEventsInWidget(jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
+
+        if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
+            remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
+            remoteViews.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
         } else {
-            if (isCenterAlignWidgets) R.layout.widget2x2_center else R.layout.widget2x2
+            remoteViews.setViewVisibility(R.id.owghat_2x2, View.GONE)
         }
-    )
-    if (enableClock) remoteViews.configureClock(R.id.time_2x2)
-    val color = Color.parseColor(selectedWidgetTextColor)
-    remoteViews.setBackgroundColor(R.id.widget_layout2x2)
-    remoteViews.setDirection(R.id.widget_layout2x2, this)
-    remoteViews.setTextColor(R.id.time_2x2, color)
-    remoteViews.setTextColor(R.id.date_2x2, color)
-    remoteViews.setTextColor(R.id.event_2x2, color)
-    remoteViews.setTextColor(R.id.owghat_2x2, color)
 
-    setEventsInWidget(jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
+        if (!enableClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
+        remoteViews.setTextViewText(R.id.date_2x2, buildString {
+            append(if (enableClock) widgetTitle else mainDateString)
+            if (showOtherCalendars) appendLine().append(subtitle)
+        })
 
-    if (OWGHAT_KEY in whatToShowOnWidgets && owghat.isNotEmpty()) {
-        remoteViews.setTextViewText(R.id.owghat_2x2, owghat)
-        remoteViews.setViewVisibility(R.id.owghat_2x2, View.VISIBLE)
-    } else {
-        remoteViews.setViewVisibility(R.id.owghat_2x2, View.GONE)
+        remoteViews.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent())
+        manager.updateAppWidget(widgetId, remoteViews)
     }
-
-    if (!enableClock) remoteViews.setTextViewText(R.id.time_2x2, weekDayName)
-    remoteViews.setTextViewText(R.id.date_2x2, buildString {
-        append(if (enableClock) widgetTitle else mainDateString)
-        if (showOtherCalendars) appendLine().append(subtitle)
-    })
-
-    remoteViews.setOnClickPendingIntent(R.id.widget_layout2x2, launchAppPendingIntent())
-    manager.updateAppWidget(widget2x2, remoteViews)
 }
 
 private fun Context.update4x2Widget(
