@@ -151,7 +151,8 @@ private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
         val bgColor = appPrefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId, null)
             ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
         val remoteViews = RemoteViews(packageName, R.layout.widget_age)
-        remoteViews.setBackgroundColor(R.id.age_widget_root, bgColor)
+        val size = getWidgetSize(this, manager, widgetId)
+        remoteViews.setRoundBackground(R.id.age_widget_background, size, bgColor)
         remoteViews.setDirection(R.id.age_widget_root, this)
         remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title ?: "")
         remoteViews.setTextColor(R.id.textview_age_widget_title, Color.parseColor(textColor))
