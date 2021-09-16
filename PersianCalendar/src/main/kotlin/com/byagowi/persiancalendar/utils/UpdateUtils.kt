@@ -19,6 +19,7 @@ import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
@@ -236,18 +237,20 @@ private fun Context.updateMonthViewWidget(manager: AppWidgetManager, date: Abstr
 }
 
 private fun Context.update1x1Widget(manager: AppWidgetManager, date: AbstractDate) {
-    val widget1x1 = ComponentName(this, Widget1x1::class.java)
-    if (manager.getAppWidgetIds(widget1x1).isNullOrEmpty()) return
-    val color = Color.parseColor(selectedWidgetTextColor)
-    val remoteViews = RemoteViews(packageName, R.layout.widget1x1)
-    remoteViews.setBackgroundColor(R.id.widget_layout1x1)
-    remoteViews.setDirection(R.id.widget_layout1x1, this)
-    remoteViews.setTextColor(R.id.textPlaceholder1_1x1, color)
-    remoteViews.setTextColor(R.id.textPlaceholder2_1x1, color)
-    remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
-    remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
-    remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent())
-    manager.updateAppWidget(widget1x1, remoteViews)
+    manager.getAppWidgetIds(ComponentName(this, Widget1x1::class.java))?.forEach { widgetId ->
+        val color = Color.parseColor(selectedWidgetTextColor)
+        val remoteViews = RemoteViews(packageName, R.layout.widget1x1)
+        remoteViews.setRoundBackground(
+            R.id.widget_layout1x1_background, getWidgetSize(this, manager, widgetId)
+        )
+        remoteViews.setDirection(R.id.widget_layout1x1, this)
+        remoteViews.setTextColor(R.id.textPlaceholder1_1x1, color)
+        remoteViews.setTextColor(R.id.textPlaceholder2_1x1, color)
+        remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
+        remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
+        remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, launchAppPendingIntent())
+        manager.updateAppWidget(widgetId, remoteViews)
+    }
 }
 
 private fun Context.update4x1Widget(
@@ -548,6 +551,19 @@ private fun Context.updateNotification(
 private fun RemoteViews.setBackgroundColor(
     @IdRes layoutId: Int, color: String = selectedWidgetBackgroundColor
 ) = setInt(layoutId, "setBackgroundColor", Color.parseColor(color))
+
+private fun RemoteViews.setRoundBackground(
+    @IdRes viewId: Int, size: Size, color: String = selectedWidgetBackgroundColor
+) {
+    if (color != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
+        setImageViewBitmap(viewId, MaterialShapeDrawable().also {
+            it.fillColor = ColorStateList.valueOf(Color.parseColor(color))
+            // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
+            // Apply a 16dp round corner which is the default in Android 12 apparently
+            it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
+        }.toBitmap(width = size.width, height = size.height))
+    } else setImageViewResource(viewId, 0)
+}
 
 private fun RemoteViews.setDirection(@IdRes layoutId: Int, context: Context) {
     val direction =
