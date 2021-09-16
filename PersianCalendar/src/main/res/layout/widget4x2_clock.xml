@@ -1,35 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_layout4x2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="1dp"
-    android:layout_marginRight="1dp"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context=".Widget4x2">
+
+    <ImageView
+        android:id="@+id/widget_layout4x2_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
         android:gravity="center"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <TextClock
-            android:id="@+id/textPlaceholder0_4x2"
-            style="@style/ShadowTextStyle"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:fontFamily="sans-serif-thin"
-            android:layout_weight="1"
-            android:gravity="end|center_vertical"
-            android:maxLines="1"
-            android:textColor="@android:color/white"
-            android:textSize="56sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp">
+
+            <TextClock
+                android:id="@+id/textPlaceholder0_4x2"
+                style="@style/ShadowTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-thin"
+                android:gravity="end|center_vertical"
+                android:maxLines="1"
+                android:textColor="@android:color/white"
+                android:textSize="56sp" />
 
         <FrameLayout
             android:layout_width="1dp"
@@ -51,10 +61,12 @@
             android:textColor="@android:color/white"
             android:textSize="13sp" />
 
+        </LinearLayout>
+
+        <include layout="@layout/widget4x2_owghat_layout" />
+
+        <include layout="@layout/widget4x2_events" />
+
     </LinearLayout>
 
-    <include layout="@layout/widget4x2_owghat_layout" />
-
-    <include layout="@layout/widget4x2_events" />
-
-</LinearLayout>
+</FrameLayout>

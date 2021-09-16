@@ -341,71 +341,72 @@ private fun Context.update4x2Widget(
     manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nextOwghatId: Int?, nowClock: Clock,
     prayTimes: PrayTimes?
 ) {
-    val widget4x2 = ComponentName(this, Widget4x2::class.java)
-    if (manager.getAppWidgetIds(widget4x2).isNullOrEmpty()) return
+    manager.getAppWidgetIds(ComponentName(this, Widget4x2::class.java))?.forEach { widgetId ->
+        val weekDayName = jdn.dayOfWeekName
+        val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+        val enableClock =
+            isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
+        val remoteViews = RemoteViews(
+            packageName, if (enableClock) R.layout.widget4x2_clock else R.layout.widget4x2
+        )
 
-    val weekDayName = jdn.dayOfWeekName
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
-    val enableClock = isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
-    val remoteViews = RemoteViews(
-        packageName, if (enableClock) R.layout.widget4x2_clock else R.layout.widget4x2
-    )
+        if (enableClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
+        val size = getWidgetSize(this, manager, widgetId)
+        remoteViews.setRoundBackground(R.id.widget_layout4x2_background, size)
+        remoteViews.setDirection(R.id.widget_layout4x2, this)
 
-    if (enableClock) remoteViews.configureClock(R.id.textPlaceholder0_4x2)
-    remoteViews.setBackgroundColor(R.id.widget_layout4x2)
-    remoteViews.setDirection(R.id.widget_layout4x2, this)
+        val color = Color.parseColor(selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder0_4x2, color)
+        remoteViews.setTextColor(R.id.textPlaceholder1_4x2, color)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_3_4x2, color)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_1_4x2, color)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_2_4x2, color)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_5_4x2, color)
+        remoteViews.setTextColor(R.id.event_4x2, color)
 
-    val color = Color.parseColor(selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder0_4x2, color)
-    remoteViews.setTextColor(R.id.textPlaceholder1_4x2, color)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_3_4x2, color)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_1_4x2, color)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_2_4x2, color)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_5_4x2, color)
-    remoteViews.setTextColor(R.id.event_4x2, color)
+        if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
+        remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
+            if (enableClock) append(jdn.dayOfWeekName + "\n")
+            append(formatDate(date, calendarNameInLinear = showOtherCalendars))
+            if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
+        })
 
-    if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
-    remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
-        if (enableClock) append(jdn.dayOfWeekName + "\n")
-        append(formatDate(date, calendarNameInLinear = showOtherCalendars))
-        if (showOtherCalendars) appendLine().append(dateStringOfOtherCalendars(jdn, "\n"))
-    })
-
-    if (nextOwghatId != null && prayTimes != null) {
-        // Set text of owghats
-        listOf(
-            R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
-            R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
-            R.id.textPlaceholder4owghat_5_4x2
-        ).zip(
-            when (calculationMethod) {
-                CalculationMethod.Tehran, CalculationMethod.Jafari -> listOf(
-                    R.string.fajr, R.string.sunrise,
-                    R.string.dhuhr, R.string.maghrib,
-                    R.string.midnight
+        if (nextOwghatId != null && prayTimes != null) {
+            // Set text of owghats
+            listOf(
+                R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
+                R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
+                R.id.textPlaceholder4owghat_5_4x2
+            ).zip(
+                when (calculationMethod) {
+                    CalculationMethod.Tehran, CalculationMethod.Jafari -> listOf(
+                        R.string.fajr, R.string.sunrise,
+                        R.string.dhuhr, R.string.maghrib,
+                        R.string.midnight
+                    )
+                    else -> listOf(
+                        R.string.fajr, R.string.dhuhr,
+                        R.string.asr, R.string.maghrib,
+                        R.string.isha
+                    )
+                }
+            ) { textHolderViewId, owghatStringId ->
+                remoteViews.setTextViewText(
+                    textHolderViewId, getString(owghatStringId) + "\n" + prayTimes
+                        .getFromStringId(owghatStringId)?.toFormattedString(printAmPm = false)
                 )
-                else -> listOf(
-                    R.string.fajr, R.string.dhuhr,
-                    R.string.asr, R.string.maghrib,
-                    R.string.isha
+                remoteViews.setTextColor(
+                    textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
                 )
             }
-        ) { textHolderViewId, owghatStringId ->
-            remoteViews.setTextViewText(
-                textHolderViewId, getString(owghatStringId) + "\n" + prayTimes
-                    .getFromStringId(owghatStringId)?.toFormattedString(printAmPm = false)
-            )
-            remoteViews.setTextColor(
-                textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
-            )
-        }
-    } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
+        } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
-    setEventsInWidget(jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
+        setEventsInWidget(jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
 
-    remoteViews.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent())
-    manager.updateAppWidget(widget4x2, remoteViews)
+        remoteViews.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent())
+        manager.updateAppWidget(widgetId, remoteViews)
+    }
 }
 
 private fun Context.setEventsInWidget(
@@ -547,10 +548,6 @@ private fun Context.updateNotification(
         ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
     }.onFailure(logException)
 }
-
-private fun RemoteViews.setBackgroundColor(
-    @IdRes layoutId: Int, color: String = selectedWidgetBackgroundColor
-) = setInt(layoutId, "setBackgroundColor", Color.parseColor(color))
 
 private fun RemoteViews.setRoundBackground(
     @IdRes viewId: Int, size: Size, color: String = selectedWidgetBackgroundColor
