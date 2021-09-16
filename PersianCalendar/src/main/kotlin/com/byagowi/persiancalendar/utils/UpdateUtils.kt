@@ -390,8 +390,8 @@ private fun Context.update4x2Widget(
             }
         ) { textHolderViewId, owghatStringId ->
             remoteViews.setTextViewText(
-                textHolderViewId, getString(owghatStringId) + "\n" +
-                        prayTimes.getFromStringId(owghatStringId)?.toFormattedString()
+                textHolderViewId, getString(owghatStringId) + "\n" + prayTimes
+                    .getFromStringId(owghatStringId)?.toFormattedString(printAmPm = false)
             )
             remoteViews.setTextColor(
                 textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
