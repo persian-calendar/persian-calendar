@@ -256,39 +256,41 @@ private fun Context.update1x1Widget(manager: AppWidgetManager, date: AbstractDat
 private fun Context.update4x1Widget(
     manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, widgetTitle: String, subtitle: String
 ) {
-    val widget4x1 = ComponentName(this, Widget4x1::class.java)
-    if (manager.getAppWidgetIds(widget4x1).isNullOrEmpty()) return
-    val weekDayName = jdn.dayOfWeekName
-    val enableClock =
-        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
-    val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
-    val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
-    val remoteViews = RemoteViews(
-        packageName, if (enableClock) {
-            if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
-        } else {
-            if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
-        }
-    )
-    if (enableClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
-    val color = Color.parseColor(selectedWidgetTextColor)
-    remoteViews.setBackgroundColor(R.id.widget_layout4x1)
-    remoteViews.setDirection(R.id.widget_layout4x1, this)
-    remoteViews.setTextColor(R.id.textPlaceholder1_4x1, color)
-    remoteViews.setTextColor(R.id.textPlaceholder2_4x1, color)
-    remoteViews.setTextColor(R.id.textPlaceholder3_4x1, color)
+    manager.getAppWidgetIds(ComponentName(this, Widget4x1::class.java))?.forEach { widgetId ->
+        val weekDayName = jdn.dayOfWeekName
+        val enableClock =
+            isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
+        val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
+        val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
+        val remoteViews = RemoteViews(
+            packageName, if (enableClock) {
+                if (isCenterAlignWidgets) R.layout.widget4x1_clock_center else R.layout.widget4x1_clock
+            } else {
+                if (isCenterAlignWidgets) R.layout.widget4x1_center else R.layout.widget4x1
+            }
+        )
+        if (enableClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
+        val color = Color.parseColor(selectedWidgetTextColor)
+        remoteViews.setRoundBackground(
+            R.id.widget_layout4x1_background, getWidgetSize(this, manager, widgetId)
+        )
+        remoteViews.setDirection(R.id.widget_layout4x1, this)
+        remoteViews.setTextColor(R.id.textPlaceholder1_4x1, color)
+        remoteViews.setTextColor(R.id.textPlaceholder2_4x1, color)
+        remoteViews.setTextColor(R.id.textPlaceholder3_4x1, color)
 
-    if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
-    remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, buildString {
-        append(if (enableClock) widgetTitle else mainDateString)
-        if (showOtherCalendars) append(spacedComma + subtitle)
-    })
-    remoteViews.setTextViewText(
-        R.id.textPlaceholder3_4x1,
-        if (enableClock && isForcedIranTimeEnabled) "(" + getString(R.string.iran_time) + ")" else ""
-    )
-    remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent())
-    manager.updateAppWidget(widget4x1, remoteViews)
+        if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
+        remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, buildString {
+            append(if (enableClock) widgetTitle else mainDateString)
+            if (showOtherCalendars) append(spacedComma + subtitle)
+        })
+        remoteViews.setTextViewText(
+            R.id.textPlaceholder3_4x1,
+            if (enableClock && isForcedIranTimeEnabled) "(" + getString(R.string.iran_time) + ")" else ""
+        )
+        remoteViews.setOnClickPendingIntent(R.id.widget_layout4x1, launchAppPendingIntent())
+        manager.updateAppWidget(widgetId, remoteViews)
+    }
 }
 
 private fun Context.update2x2Widget(

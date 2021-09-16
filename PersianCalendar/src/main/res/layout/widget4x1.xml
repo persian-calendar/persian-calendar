@@ -1,47 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_layout4x1"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="2dp"
     tools:context=".Widget4x1">
+
+    <ImageView
+        android:id="@+id/widget_layout4x1_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:gravity="start"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="6dp"
+        android:paddingTop="2dp"
+        android:paddingRight="6dp"
+        android:paddingBottom="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textPlaceholder1_4x1"
+                style="@style/ShadowTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textColor="@android:color/white"
+                android:textSize="36dp" />
+
+            <TextView
+                android:id="@+id/textPlaceholder3_4x1"
+                style="@style/ShadowTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:gravity="start"
+                android:textColor="@android:color/white"
+                android:textSize="12dp" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/textPlaceholder1_4x1"
+            android:id="@+id/textPlaceholder2_4x1"
             style="@style/ShadowTextStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
+            android:gravity="start"
             android:textColor="@android:color/white"
-            android:textSize="36dp" />
+            android:textSize="14dp" />
 
-        <TextView
-            android:id="@+id/textPlaceholder3_4x1"
-            style="@style/ShadowTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:gravity="right"
-            android:textColor="@android:color/white"
-            android:textSize="12dp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textPlaceholder2_4x1"
-        style="@style/ShadowTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="right"
-        android:textColor="@android:color/white"
-        android:textSize="14dp" />
-
-</LinearLayout>
+</FrameLayout>
