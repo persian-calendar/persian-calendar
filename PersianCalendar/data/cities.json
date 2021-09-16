@@ -498,5 +498,31 @@
         "elevation": 837.00
       }
     }
+  },
+  "tr": {
+    "en": "Turkey",
+    "fa": "ترکیه",
+    "ckb": "تورکیا",
+    "ar": "تركيا",
+    "cities": {
+      "ANKARA": {
+        "en": "Ankara",
+        "fa": "آنکارا",
+        "ckb": "ئەنقەرە",
+        "ar": "أنقرة",
+        "latitude": 39.93,
+        "longitude": 32.85,
+        "elevation": 938
+      },
+      "ISTANBUL": {
+        "en": "Istanbul",
+        "fa": "استانبول",
+        "ckb": "ئەستەمبوڵ",
+        "ar": "إسطنبول",
+        "latitude": 41.013611,
+        "longitude": 28.955,
+        "elevation": 40
+      }
+    }
   }
 }

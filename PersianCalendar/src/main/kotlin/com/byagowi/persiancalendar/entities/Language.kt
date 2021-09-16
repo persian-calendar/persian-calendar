@@ -269,9 +269,10 @@ enum class Language(val code: String, val nativeName: String) {
             .replace("ھ", "نی")
             .replace("ە", "هی")
 
-        private val irCodeOrder = listOf("zz", "ir", "af", "iq")
-        private val afCodeOrder = listOf("zz", "af", "ir", "iq")
-        private val arCodeOrder = listOf("zz", "iq", "ir", "af")
+        private val irCodeOrder = listOf("zz", "ir", "tr", "af", "iq")
+        private val afCodeOrder = listOf("zz", "af", "ir", "tr", "iq")
+        private val arCodeOrder = listOf("zz", "iq", "tr", "ir", "af")
+        private val trCodeOrder = listOf("zz", "tr", "ir", "iq", "af")
 
         fun compareCity(language: Language, l: CityItem, r: CityItem): Int {
             return getCountryCodeOrder(language, l.countryCode).compareTo(
@@ -282,6 +283,7 @@ enum class Language(val code: String, val nativeName: String) {
         private fun getCountryCodeOrder(language: Language, countryCode: String): Int = when {
             language.isAfghanistanExclusive -> afCodeOrder
             language.isArabic -> arCodeOrder
+            language.isTurkish -> trCodeOrder
             else -> irCodeOrder
         }.indexOf(countryCode)
 
