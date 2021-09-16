@@ -141,8 +141,11 @@ private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
     }
 }
 
+private inline fun <reified T> AppWidgetManager.getWidgetIds(context: Context): IntArray =
+    getAppWidgetIds(ComponentName(context, T::class.java)) ?: IntArray(0)
+
 private fun Context.updateAgeWidgets(manager: AppWidgetManager) {
-    manager.getAppWidgetIds(ComponentName(this, AgeWidget::class.java))?.forEach { widgetId ->
+    manager.getWidgetIds<AgeWidget>(this).forEach { widgetId ->
         val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today
         val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, "")
         val subtitle = calculateDaysDifference(resources, baseJdn)
@@ -193,7 +196,7 @@ private fun prepareViewForWidget(view: View, size: Size) {
 private fun Context.updateSunViewWidget(
     manager: AppWidgetManager, jdn: Jdn, prayTimes: PrayTimes?
 ) {
-    manager.getAppWidgetIds(ComponentName(this, WidgetSunView::class.java))?.forEach { widgetId ->
+    manager.getWidgetIds<WidgetSunView>(this).forEach { widgetId ->
         val remoteViews = RemoteViews(packageName, R.layout.widget_sun_view)
         val sunView = SunView(this, textColor = Color.parseColor(selectedWidgetTextColor))
         prepareViewForWidget(sunView, getWidgetSize(this, manager, widgetId))
@@ -218,9 +221,8 @@ private fun Context.updateSunViewWidget(
     }
 }
 
-
 private fun Context.updateMonthViewWidget(manager: AppWidgetManager, date: AbstractDate) {
-    manager.getAppWidgetIds(ComponentName(this, WidgetMonthView::class.java))?.forEach { widgetId ->
+    manager.getWidgetIds<WidgetMonthView>(this).forEach { widgetId ->
         val remoteViews = RemoteViews(packageName, R.layout.widget_image_view)
         val monthView = MonthView(ContextThemeWrapper(this, R.style.ModernTheme))
         val size = getWidgetSize(this, manager, widgetId)
@@ -234,7 +236,7 @@ private fun Context.updateMonthViewWidget(manager: AppWidgetManager, date: Abstr
 }
 
 private fun Context.update1x1Widget(manager: AppWidgetManager, date: AbstractDate) {
-    manager.getAppWidgetIds(ComponentName(this, Widget1x1::class.java))?.forEach { widgetId ->
+    manager.getWidgetIds<Widget1x1>(this).forEach { widgetId ->
         val color = Color.parseColor(selectedWidgetTextColor)
         val remoteViews = RemoteViews(packageName, R.layout.widget1x1)
         remoteViews.setRoundBackground(
@@ -253,7 +255,7 @@ private fun Context.update1x1Widget(manager: AppWidgetManager, date: AbstractDat
 private fun Context.update4x1Widget(
     manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, widgetTitle: String, subtitle: String
 ) {
-    manager.getAppWidgetIds(ComponentName(this, Widget4x1::class.java))?.forEach { widgetId ->
+    manager.getWidgetIds<Widget4x1>(this).forEach { widgetId ->
         val weekDayName = jdn.dayOfWeekName
         val enableClock =
             isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
@@ -294,7 +296,7 @@ private fun Context.update2x2Widget(
     manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, widgetTitle: String, subtitle: String,
     owghat: String
 ) {
-    manager.getAppWidgetIds(ComponentName(this, Widget2x2::class.java))?.forEach { widgetId ->
+    manager.getWidgetIds<Widget2x2>(this).forEach { widgetId ->
         val weekDayName = jdn.dayOfWeekName
         val enableClock =
             isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
@@ -340,7 +342,7 @@ private fun Context.update2x2Widget(
 private fun Context.update4x2Widget(
     manager: AppWidgetManager, jdn: Jdn, date: AbstractDate, nowClock: Clock, prayTimes: PrayTimes?
 ) {
-    manager.getAppWidgetIds(ComponentName(this, Widget4x2::class.java))?.forEach { widgetId ->
+    manager.getWidgetIds<Widget4x2>(this).forEach { widgetId ->
         val weekDayName = jdn.dayOfWeekName
         val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
         val enableClock =
