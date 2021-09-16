@@ -590,8 +590,6 @@ private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequ
     }
 }
 
-private fun IntArray?.isNullOrEmpty() = this?.isEmpty() ?: true
-
 private fun Context.launchAppPendingIntent(): PendingIntent? = PendingIntent.getActivity(
     this, 0,
     Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
