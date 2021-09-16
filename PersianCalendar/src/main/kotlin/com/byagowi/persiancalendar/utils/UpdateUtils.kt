@@ -380,7 +380,6 @@ private fun Context.update4x2Widget(
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setTextColor(R.id.textPlaceholder0_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder1_4x2, color)
-    remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_3_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_1_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
@@ -422,13 +421,7 @@ private fun Context.update4x2Widget(
                 textHolderViewId, if (owghatStringId == nextOwghatId) Color.RED else color
             )
         }
-
-        remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.GONE)
-    } else {
-        remoteViews.setTextViewText(
-            R.id.textPlaceholder2_4x2, getString(R.string.ask_user_to_set_location)
-        )
-    }
+    } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
     remoteViews.setOnClickPendingIntent(R.id.widget_layout4x2, launchAppPendingIntent())
     manager.updateAppWidget(widget4x2, remoteViews)
