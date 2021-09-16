@@ -423,13 +423,7 @@ private fun Context.update4x2Widget(
             )
         }
 
-        val remaining = Clock.fromInt(
-            (prayTimes.getFromStringId(nextOwghatId)?.toInt() ?: 0 - nowClock.toInt())
-                .let { if (it > 0) it else it + 60 * 24 })
-        remoteViews.setTextViewText(
-            R.id.textPlaceholder2_4x2,
-            getString(R.string.n_till, remaining.asRemainingTime(this), getString(nextOwghatId))
-        )
+        remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.GONE)
     } else {
         remoteViews.setTextViewText(
             R.id.textPlaceholder2_4x2, getString(R.string.ask_user_to_set_location)
