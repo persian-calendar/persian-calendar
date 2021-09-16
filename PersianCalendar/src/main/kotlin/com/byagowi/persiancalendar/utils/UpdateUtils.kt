@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.View
@@ -177,12 +178,7 @@ private fun getWidgetSize(context: Context, manager: AppWidgetManager, widgetId:
 
 private fun prepareViewForWidget(view: View, size: Size) {
     if (selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
-        view.background = MaterialShapeDrawable().also {
-            it.fillColor = ColorStateList.valueOf(Color.parseColor(selectedWidgetBackgroundColor))
-            // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
-            // Apply a 16dp round corner for background which is somehow minimum in Android 12 apparently
-            it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
-        }
+        view.background = createRoundDrawable(selectedWidgetBackgroundColor)
     }
     view.layoutDirection = view.context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
@@ -557,14 +553,20 @@ private fun RemoteViews.setBackgroundColor(
 private fun RemoteViews.setRoundBackground(
     @IdRes viewId: Int, size: Size, color: String = selectedWidgetBackgroundColor
 ) {
-    if (color != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
-        setImageViewBitmap(viewId, MaterialShapeDrawable().also {
-            it.fillColor = ColorStateList.valueOf(Color.parseColor(color))
-            // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
-            // Apply a 16dp round corner which is the default in Android 12 apparently
-            it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
-        }.toBitmap(width = size.width, height = size.height))
-    } else setImageViewResource(viewId, 0)
+    if (color != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR)
+        setImageViewBitmap(
+            viewId, createRoundDrawable(color).toBitmap(width = size.width, height = size.height)
+        )
+    else setImageViewResource(viewId, 0)
+}
+
+private fun createRoundDrawable(color: String): Drawable {
+    return MaterialShapeDrawable().also {
+        it.fillColor = ColorStateList.valueOf(Color.parseColor(color))
+        // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
+        // Apply a 16dp round corner which is the default in Android 12 apparently
+        it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
+    }
 }
 
 private fun RemoteViews.setDirection(@IdRes layoutId: Int, context: Context) {
