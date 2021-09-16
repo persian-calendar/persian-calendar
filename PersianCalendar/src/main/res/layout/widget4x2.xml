@@ -15,16 +15,19 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textPlaceholder0_4x2"
             style="@style/ShadowTextStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="end|center_vertical"
             android:textColor="@android:color/white"
-            android:textSize="56sp" />
+            android:textSize="40sp" />
 
         <FrameLayout
             android:layout_width="1dp"
@@ -36,10 +39,11 @@
         <TextView
             android:id="@+id/textPlaceholder1_4x2"
             style="@style/ShadowTextStyle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:gravity="start|center_vertical"
-            android:lineSpacingExtra="4dp"
+            android:lineSpacingExtra="1dp"
             android:minLines="4"
             android:text=""
             android:textColor="@android:color/white"
