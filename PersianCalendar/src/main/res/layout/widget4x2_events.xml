@@ -7,6 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/widget_holiday"
         android:textSize="14sp" />
 
@@ -16,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
 
