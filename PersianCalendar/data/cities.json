@@ -522,6 +522,15 @@
         "latitude": 41.013611,
         "longitude": 28.955,
         "elevation": 40
+      },
+      "IZMIR": {
+        "en": "İzmir",
+        "fa": "ازمیر",
+        "ckb": "ئیزمیر",
+        "ar": "إزمير",
+        "latitude": 38.42,
+        "longitude": 27.14,
+        "elevation": 2
       }
     }
   }
