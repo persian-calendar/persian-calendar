@@ -27,20 +27,28 @@
                 android:layout_height="@dimen/grid_calendar_height"
                 android:background="?attr/colorMonthsBackground" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                style="@style/TabLayout"
+            <LinearLayout
+                android:id="@+id/details"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/colorCard"
-                app:tabBackground="?attr/selectableItemBackground" />
+                android:orientation="vertical">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.0"
-                android:minHeight="220sp" />
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/TabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorCard"
+                    app:tabBackground="?attr/selectableItemBackground" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1.0"
+                    android:minHeight="220sp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
