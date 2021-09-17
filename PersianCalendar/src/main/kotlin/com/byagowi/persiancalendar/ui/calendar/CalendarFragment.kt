@@ -6,6 +6,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.provider.CalendarContract
@@ -16,6 +17,9 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
@@ -107,6 +111,34 @@ class CalendarFragment : Fragment() {
         todayButton = null
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        applyScreenOrientationConsiderations(mainBinding ?: return, newConfig)
+    }
+
+    private fun applyScreenOrientationConsiderations(
+        mainBinding: FragmentCalendarBinding, configuration: Configuration
+    ) {
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mainBinding.contentParent.orientation = LinearLayout.VERTICAL
+            mainBinding.calendarPager.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                resources.getDimension(R.dimen.grid_calendar_height).toInt()
+            )
+            mainBinding.details.layoutParams = LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        } else if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mainBinding.contentParent.orientation = LinearLayout.HORIZONTAL
+            mainBinding.calendarPager.layoutParams = LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, 1f
+            )
+            mainBinding.details.layoutParams = LinearLayout.LayoutParams(
+                0, ViewGroup.LayoutParams.MATCH_PARENT, 1f
+            )
+        }
+    }
+
     private val onBackPressedCloseSearchCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             searchView?.takeIf { !it.isIconified }?.onActionViewCollapsed()
@@ -134,6 +166,7 @@ class CalendarFragment : Fragment() {
     ): View {
         val binding = FragmentCalendarBinding.inflate(inflater, container, false)
         mainBinding = binding
+        applyScreenOrientationConsiderations(binding, resources.configuration)
 
         val tabs = listOf(
             R.string.calendar to CalendarsView(inflater.context).also { calendarsView = it },

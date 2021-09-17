@@ -16,7 +16,11 @@
         android:orientation="vertical"
         android:scrollbars="none">
 
+        <!-- Layout parameters here are heavily tweaked
+             by CalendarFragment#applyScreenOrientationConsiderations()
+             for both vertical and horizontal considerations -->
         <LinearLayout
+            android:id="@+id/content_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
