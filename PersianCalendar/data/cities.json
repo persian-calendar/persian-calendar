@@ -514,6 +514,15 @@
         "longitude": 32.85,
         "elevation": 938
       },
+      "DIYARBAKIR": {
+        "en": "Diyarbakır",
+        "fa": "دیاربکر",
+        "ckb": "ئامەد",
+        "ar": "ديار بكر",
+        "latitude": 37.91,
+        "longitude": 40.24,
+        "elevation": 675
+      },
       "ISTANBUL": {
         "en": "Istanbul",
         "fa": "استانبول",

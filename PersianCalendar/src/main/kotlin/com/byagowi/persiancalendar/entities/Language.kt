@@ -32,6 +32,7 @@ enum class Language(val code: String, val nativeName: String) {
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
     val isTurkish get() = this == TR
+    private val isNorthernKurdish get() = this == KMR
     private val isKurdish get() = this == CKB
 
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
@@ -283,7 +284,7 @@ enum class Language(val code: String, val nativeName: String) {
         private fun getCountryCodeOrder(language: Language, countryCode: String): Int = when {
             language.isAfghanistanExclusive -> afCodeOrder
             language.isArabic -> arCodeOrder
-            language.isTurkish -> trCodeOrder
+            language.isTurkish || language.isNorthernKurdish -> trCodeOrder
             else -> irCodeOrder
         }.indexOf(countryCode)
 
