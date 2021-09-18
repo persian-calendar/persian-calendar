@@ -276,6 +276,7 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteVi
     remoteViews.setTextColor(R.id.sample_clock_replacement, color)
     if (isWidgetClock) {
         remoteViews.setViewVisibility(R.id.sample_clock, View.VISIBLE)
+        remoteViews.configureClock(R.id.sample_clock)
         remoteViews.setTextViewTextOrHideIfEmpty(R.id.sample_clock_replacement, "")
     } else {
         remoteViews.setViewVisibility(R.id.sample_clock, View.GONE)
