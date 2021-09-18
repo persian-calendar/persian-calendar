@@ -189,9 +189,10 @@ private fun updateAgeWidget(
     remoteViews.setRoundBackground(R.id.age_widget_background, width, height, bgColor)
     remoteViews.setDirection(R.id.age_widget_root, context)
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title ?: "")
-    remoteViews.setTextColor(R.id.textview_age_widget_title, Color.parseColor(textColor))
     remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
-    remoteViews.setTextColor(R.id.textview_age_widget, Color.parseColor(textColor))
+    val color = Color.parseColor(textColor)
+    remoteViews.setTextColor(R.id.textview_age_widget_title, color)
+    remoteViews.setTextColor(R.id.textview_age_widget, color)
     return remoteViews
 }
 
