@@ -261,7 +261,7 @@ private fun createMonthViewRemoteViews(
     monthView.initializeForWidget(Color.parseColor(selectedWidgetTextColor), height, date)
     prepareViewForWidget(monthView, width, height)
     remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())
-    // TODO: a11y, remoteViews.setContentDescription(R.id.image, monthView.contentDescription)
+    remoteViews.setContentDescription(R.id.image, monthView.contentDescription)
     remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
     return remoteViews
 }

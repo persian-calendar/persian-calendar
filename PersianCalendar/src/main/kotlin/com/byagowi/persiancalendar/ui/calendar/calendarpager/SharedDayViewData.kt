@@ -11,6 +11,7 @@ import androidx.annotation.IdRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
@@ -117,5 +118,14 @@ class SharedDayViewData(
         it.textSize = height * 20 / 40
         it.color = colorTextDayName
         addShadowIfNeeded(it)
+    }
+
+    val widgetFooterTextPaint = widgetTextColor?.let { widgetTextColor ->
+        Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.textAlign = Paint.Align.CENTER
+            it.textSize = height * 20 / 40
+            it.color = widgetTextColor
+            it.alpha = 90
+        }
     }
 }

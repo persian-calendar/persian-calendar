@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 
 class DaysAdapter(
-    private val context: Context, private val sharedDayViewData: SharedDayViewData,
+    private val context: Context, val sharedDayViewData: SharedDayViewData,
     private val calendarPager: CalendarPager?
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 

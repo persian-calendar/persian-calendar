@@ -1,15 +1,18 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
+import android.graphics.Canvas
 import android.util.AttributeSet
 import androidx.annotation.ColorInt
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.getWeekOfYear
 import com.byagowi.persiancalendar.utils.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.utils.mainCalendar
+import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
 
 class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(context, attrs) {
@@ -34,9 +37,22 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         bind(jdn, jdn.toCalendar(mainCalendar))
     }
 
+    private var monthName = ""
+
+    override fun onDraw(c: Canvas) {
+        super.onDraw(c)
+
+        // Widget only tweak
+        val widgetFooterTextPaint = daysAdapter?.sharedDayViewData?.widgetFooterTextPaint ?: return
+        c.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
+    }
+
     fun bind(monthStartJdn: Jdn, monthStartDate: AbstractDate) {
+        val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
+        monthName = monthStartDate.monthName + " " + formatNumber(monthStartDate.year)
+        contentDescription = monthName
+
         daysAdapter?.let {
-            val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
             val startOfYearJdn = Jdn(mainCalendar, monthStartDate.year, 1, 1)
             it.startingDayOfWeek = monthStartJdn.dayOfWeek
             it.weekOfYearStart = monthStartJdn.getWeekOfYear(startOfYearJdn)
