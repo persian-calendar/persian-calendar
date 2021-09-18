@@ -168,7 +168,8 @@ fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, I
         if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
         else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
     ).map { getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
-    return width to height
+    // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
+    return width.coerceAtLeast(10) to height.coerceAtLeast(10)
 }
 
 private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
