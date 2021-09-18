@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.getWeekOfYear
 import com.byagowi.persiancalendar.utils.isShowWeekOfYearEnabled
+import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
@@ -49,7 +50,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
 
     fun bind(monthStartJdn: Jdn, monthStartDate: AbstractDate) {
         val monthLength = mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)
-        monthName = monthStartDate.monthName + " " + formatNumber(monthStartDate.year)
+        monthName = language.my.format(monthStartDate.monthName, formatNumber(monthStartDate.year))
         contentDescription = monthName
 
         daysAdapter?.let {

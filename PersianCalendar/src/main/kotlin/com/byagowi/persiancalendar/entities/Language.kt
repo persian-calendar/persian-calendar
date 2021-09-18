@@ -43,6 +43,7 @@ enum class Language(val code: String, val nativeName: String) {
     // Formatting "Day Month Year" considerations
     val dmy: String get() = if (isKurdish) "%sی %sی %s" else "%s %s %s"
     val dm: String get() = if (isKurdish) "%sی %s" else "%s %s"
+    val my: String get() = if (isKurdish) "%sی %s" else "%s %s"
 
     val isLessKnownRtl: Boolean
         get() = when (this) {
