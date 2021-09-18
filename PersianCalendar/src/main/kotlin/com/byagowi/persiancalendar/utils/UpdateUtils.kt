@@ -15,6 +15,7 @@ import android.os.Build
 import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.RemoteViews
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -173,9 +174,19 @@ fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, I
 private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
     context: Context, widgetUpdateAction: (width: Int, height: Int, widgetId: Int) -> RemoteViews
 ) {
-    getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
-        val (width, height) = getWidgetSize(context, widgetId)
-        updateAppWidget(widgetId, widgetUpdateAction(width, height, widgetId))
+    runCatching {
+        getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
+            val (width, height) = getWidgetSize(context, widgetId)
+            updateAppWidget(widgetId, widgetUpdateAction(width, height, widgetId))
+        }
+    }.onFailure(logException).onFailure {
+        if (Variants.enableDevelopmentFeatures) {
+            Toast.makeText(
+                context,
+                "An error has happened while widgets update, see the in-app log and post it to me",
+                Toast.LENGTH_LONG
+            ).show()
+        }
     }
 }
 
