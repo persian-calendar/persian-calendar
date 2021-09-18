@@ -183,7 +183,7 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
         if (Variants.enableDevelopmentFeatures) {
             Toast.makeText(
                 context,
-                "An error has happened while widgets update, see the in-app log and post it to me",
+                "An error has happened, see the in-app log and post it to me",
                 Toast.LENGTH_LONG
             ).show()
         }
