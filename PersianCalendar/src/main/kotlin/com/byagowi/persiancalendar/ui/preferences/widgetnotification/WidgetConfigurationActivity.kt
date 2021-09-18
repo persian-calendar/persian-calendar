@@ -14,7 +14,10 @@ import androidx.fragment.app.commit
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
 import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 
@@ -47,6 +50,25 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
         val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {
             setContentView(it.root)
+        }
+
+        val width = 200.dp.toInt()
+        val height = 60.dp.toInt()
+        fun updateWidget() {
+            binding.preview.addView(
+                createSampleRemoteViews(this, width, height)
+                    .apply(applicationContext, binding.preview)
+            )
+        }
+        updateWidget()
+
+        val appPrefs = appPrefs
+        appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
+            // TODO: Investigate why sometimes gets out of sync
+            binding.preview.post {
+                binding.preview.removeAllViews()
+                updateWidget()
+            }
         }
 
         supportFragmentManager.commit {

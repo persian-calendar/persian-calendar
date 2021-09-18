@@ -254,6 +254,16 @@ private fun createMonthViewRemoteViews(
     return remoteViews
 }
 
+fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_sample)
+    remoteViews.setRoundBackground(R.id.widget_sample_background, width, height)
+    remoteViews.setDirection(R.id.widget_sample, context)
+    val color = Color.parseColor(selectedWidgetTextColor)
+    remoteViews.setTextColor(R.id.sample_text, color)
+    remoteViews.setTextViewText(R.id.sample_text, context.getString(R.string.widget_text_color))
+    return remoteViews
+}
+
 private fun create1x1RemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate
 ): RemoteViews {
