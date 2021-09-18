@@ -114,26 +114,26 @@ fun update(context: Context, updateDate: Boolean) {
 
     // Widgets
     AppWidgetManager.getInstance(context).run {
-        each<AgeWidget>(context) { width, height, widgetId ->
+        updateFromRemoteViews<AgeWidget>(context) { width, height, widgetId ->
             createAgeRemoteViews(context, width, height, widgetId)
         }
-        each<Widget1x1>(context) { width, height, _ ->
-            update1x1Widget(context, width, height, date)
+        updateFromRemoteViews<Widget1x1>(context) { width, height, _ ->
+            create1x1RemoteViews(context, width, height, date)
         }
-        each<Widget4x1>(context) { width, height, _ ->
-            update4x1Widget(context, width, height, jdn, date, widgetTitle, subtitle)
+        updateFromRemoteViews<Widget4x1>(context) { width, height, _ ->
+            create4x1RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle)
         }
-        each<Widget2x2>(context) { width, height, _ ->
-            update2x2Widget(context, width, height, jdn, date, widgetTitle, subtitle, owghat)
+        updateFromRemoteViews<Widget2x2>(context) { width, height, _ ->
+            create2x2RemoteViews(context, width, height, jdn, date, widgetTitle, subtitle, owghat)
         }
-        each<Widget4x2>(context) { width, height, _ ->
-            update4x2Widget(context, width, height, jdn, date, nowClock, prayTimes)
+        updateFromRemoteViews<Widget4x2>(context) { width, height, _ ->
+            create4x2RemoteViews(context, width, height, jdn, date, nowClock, prayTimes)
         }
-        each<WidgetSunView>(context) { width, height, _ ->
-            updateSunViewWidget(context, width, height, jdn, prayTimes)
+        updateFromRemoteViews<WidgetSunView>(context) { width, height, _ ->
+            createSunViewRemoteViews(context, width, height, jdn, prayTimes)
         }
-        each<WidgetMonthView>(context) { width, height, _ ->
-            updateMonthViewWidget(context, width, height, date)
+        updateFromRemoteViews<WidgetMonthView>(context) { width, height, _ ->
+            createMonthViewRemoteViews(context, width, height, date)
         }
     }
 
@@ -170,7 +170,7 @@ fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, I
     return width to height
 }
 
-private inline fun <reified T> AppWidgetManager.each(
+private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
     context: Context, widgetUpdateAction: (width: Int, height: Int, widgetId: Int) -> RemoteViews
 ) {
     getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
@@ -212,7 +212,7 @@ private fun prepareViewForWidget(view: View, width: Int, height: Int) {
     view.layout(0, 0, width, height)
 }
 
-private fun updateSunViewWidget(
+private fun createSunViewRemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, prayTimes: PrayTimes?
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
@@ -241,7 +241,7 @@ private fun updateSunViewWidget(
     return remoteViews
 }
 
-private fun updateMonthViewWidget(
+private fun createMonthViewRemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_image_view)
@@ -254,7 +254,7 @@ private fun updateMonthViewWidget(
     return remoteViews
 }
 
-private fun update1x1Widget(
+private fun create1x1RemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate
 ): RemoteViews {
     val color = Color.parseColor(selectedWidgetTextColor)
@@ -269,7 +269,7 @@ private fun update1x1Widget(
     return remoteViews
 }
 
-private fun update4x1Widget(
+private fun create4x1RemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, widgetTitle: String,
     subtitle: String
 ): RemoteViews {
@@ -306,7 +306,7 @@ private fun update4x1Widget(
     return remoteViews
 }
 
-private fun update2x2Widget(
+private fun create2x2RemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, widgetTitle: String,
     subtitle: String, owghat: String
 ): RemoteViews {
@@ -350,7 +350,7 @@ private fun update2x2Widget(
     return remoteViews
 }
 
-private fun update4x2Widget(
+private fun create4x2RemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, date: AbstractDate, nowClock: Clock,
     prayTimes: PrayTimes?
 ): RemoteViews {
