@@ -3,7 +3,10 @@ package com.byagowi.persiancalendar.ui.preferences.widgetnotification
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.commit
@@ -34,6 +37,13 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         Theme.apply(this)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
+
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER,
+            WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
+        )
+        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }

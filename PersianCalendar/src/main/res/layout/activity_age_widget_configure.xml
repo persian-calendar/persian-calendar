@@ -21,12 +21,13 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="match_parent"
+            android:padding="8dp">
 
             <Button
                 android:id="@+id/add_widget_button"
+                android:layout_margin="8dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
@@ -41,6 +42,7 @@
                 <EditText
                     android:id="@+id/edit_widget_title"
                     android:layout_width="match_parent"
+                    android:layout_margin="8dp"
                     android:layout_height="wrap_content"
                     android:autofillHints="@string/age_widget_title"
                     android:hint="@string/age_widget_title"
