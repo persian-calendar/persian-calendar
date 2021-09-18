@@ -23,14 +23,12 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingBottom="4dp"
-            android:text="@string/widget_age_name"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/textview_age_widget"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/widget_age_name"
             android:textSize="18sp" />
 
     </LinearLayout>

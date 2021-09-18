@@ -115,7 +115,7 @@ fun update(context: Context, updateDate: Boolean) {
     // Widgets
     AppWidgetManager.getInstance(context).run {
         each<AgeWidget>(context) { width, height, widgetId ->
-            updateAgeWidget(context, width, height, widgetId)
+            createAgeRemoteViews(context, width, height, widgetId)
         }
         each<Widget1x1>(context) { width, height, _ ->
             update1x1Widget(context, width, height, date)
@@ -158,37 +158,40 @@ private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
     }
 }
 
+fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, Int> {
+    // https://stackoverflow.com/a/69080699
+    val isPortrait = context.resources.configuration.orientation == ORIENTATION_PORTRAIT
+    val (width, height) = listOf(
+        if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
+        else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
+        if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
+        else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
+    ).map { getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
+    return width to height
+}
+
 private inline fun <reified T> AppWidgetManager.each(
     context: Context, widgetUpdateAction: (width: Int, height: Int, widgetId: Int) -> RemoteViews
 ) {
     getAppWidgetIds(ComponentName(context, T::class.java))?.forEach { widgetId ->
-        // https://stackoverflow.com/a/69080699
-        val isPortrait = context.resources.configuration.orientation == ORIENTATION_PORTRAIT
-        val (width, height) = listOf(
-            if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
-            else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
-            if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
-            else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
-        ).map { getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
+        val (width, height) = getWidgetSize(context, widgetId)
         updateAppWidget(widgetId, widgetUpdateAction(width, height, widgetId))
     }
 }
 
-private fun updateAgeWidget(
-    context: Context, width: Int, height: Int, widgetId: Int
-): RemoteViews {
-    val baseJdn =
-        context.appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today
-    val title = context.appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, "")
+fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: Int): RemoteViews {
+    val appPrefs = context.appPrefs
+    val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today
+    val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
     val subtitle = calculateDaysDifference(context.resources, baseJdn)
-    val textColor = context.appPrefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId, null)
+    val textColor = appPrefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId, null)
         ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-    val bgColor = context.appPrefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId, null)
+    val backgroundColor = appPrefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId, null)
         ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_age)
-    remoteViews.setRoundBackground(R.id.age_widget_background, width, height, bgColor)
+    remoteViews.setRoundBackground(R.id.age_widget_background, width, height, backgroundColor)
     remoteViews.setDirection(R.id.age_widget_root, context)
-    remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title ?: "")
+    remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title)
     remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
     val color = Color.parseColor(textColor)
     remoteViews.setTextColor(R.id.textview_age_widget_title, color)
