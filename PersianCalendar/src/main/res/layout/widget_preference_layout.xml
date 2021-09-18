@@ -27,7 +27,6 @@
             android:padding="8dp">
 
             <Button
-                android:layout_margin="8dp"
                 android:id="@+id/add_widget_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
