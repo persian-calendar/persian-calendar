@@ -6,7 +6,9 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
+import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -40,8 +42,17 @@ class WidgetConfigurationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
         applyAppLanguage(this)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window?.also { window ->
+            // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
+            window.attributes = window.attributes.also {
+                it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+            }
+            window.statusBarColor = Color.TRANSPARENT
+            window.navigationBarColor = Color.TRANSPARENT
+        }
         window.setFlags(
             WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER,
             WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
