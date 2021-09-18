@@ -271,6 +271,15 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteVi
     remoteViews.setDirection(R.id.widget_sample, context)
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setTextColor(R.id.sample_text, color)
+    remoteViews.setTextColor(R.id.sample_clock, color)
+    remoteViews.setTextColor(R.id.sample_clock_replacement, color)
+    if (isWidgetClock) {
+        remoteViews.setViewVisibility(R.id.sample_clock, View.VISIBLE)
+        remoteViews.setTextViewTextOrHideIfEmpty(R.id.sample_clock_replacement, "")
+    } else {
+        remoteViews.setViewVisibility(R.id.sample_clock, View.GONE)
+        remoteViews.setTextViewTextOrHideIfEmpty(R.id.sample_clock_replacement, getWeekDayName(0))
+    }
     remoteViews.setTextViewText(R.id.sample_text, context.getString(R.string.widget_text_color))
     return remoteViews
 }
