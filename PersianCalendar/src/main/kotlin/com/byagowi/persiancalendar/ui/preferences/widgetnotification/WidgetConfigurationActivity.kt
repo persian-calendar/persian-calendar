@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.preferences.widgetnotification
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
+import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -55,5 +56,10 @@ class WidgetConfigurationActivity : AppCompatActivity() {
             )
         }
         binding.addWidgetButton.setOnClickListener { finishAndSuccess() }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        applyAppLanguage(this)
     }
 }
