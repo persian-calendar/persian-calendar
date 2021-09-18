@@ -67,20 +67,20 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
 
         val widgetManager = AppWidgetManager.getInstance(this)
         val (width, height) = widgetManager.getWidgetSize(this, appWidgetId)
-        binding.preview.addView(
-            createAgeRemoteViews(this, width, height, appWidgetId)
-                .apply(applicationContext, binding.preview)
-        )
+        fun updateWidget() {
+            binding.preview.addView(
+                createAgeRemoteViews(this, width, height, appWidgetId)
+                    .apply(applicationContext, binding.preview)
+            )
+        }
+        updateWidget()
 
         val appPrefs = appPrefs
         appPrefs.registerOnSharedPreferenceChangeListener { _, _ ->
             // TODO: Investigate why sometimes gets out of sync
             binding.preview.post {
                 binding.preview.removeAllViews()
-                binding.preview.addView(
-                    createAgeRemoteViews(this, width, height, appWidgetId)
-                        .apply(applicationContext, binding.preview)
-                )
+                updateWidget()
             }
         }
 
