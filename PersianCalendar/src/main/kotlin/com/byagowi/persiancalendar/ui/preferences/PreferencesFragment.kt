@@ -101,7 +101,7 @@ class PreferencesFragment : Fragment() {
                 toolbar.menu.addSubMenu("Log").also {
                     it.add("Log 'Hello'").onClick { logDebug("Hello!") }
                     it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
-                    it.add("Crash!").onClick { throw Exception("Unhandled Crash!") }
+                    it.add("Crash!").onClick { error("Unhandled Crash!") }
                 }
             }
         }
