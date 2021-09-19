@@ -496,6 +496,15 @@
         "latitude": 35.55,
         "longitude": 45.43,
         "elevation": 837.00
+      },
+      "ZAKHO": {
+        "en": "Zakho",
+        "fa": "زاخو",
+        "ckb": "زاخۆ",
+        "ar": "زاخو",
+        "latitude": 37.15,
+        "longitude": 42.683,
+        "elevation": 440
       }
     }
   },
