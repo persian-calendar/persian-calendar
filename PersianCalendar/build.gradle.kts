@@ -13,7 +13,7 @@ plugins {
 }
 
 val versionMajor = 6
-val versionMinor = 7
+val versionMinor = 8
 val versionPatch = 0
 val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
 if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
