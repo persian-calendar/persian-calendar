@@ -1,18 +1,33 @@
 package com.byagowi.persiancalendar
 
+import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.update
 
 abstract class WidgetProvider : AppWidgetProvider() {
+
+    // onReceive will be called on any kind of calls to widget provider
+    // such as onUpdate so no need to implement that specifically
     override fun onReceive(context: Context?, intent: Intent?) {
+        super.onReceive(context, intent)
         context ?: return
         startEitherServiceOrWorker(context)
         update(context, false)
+    }
+
+    override fun onAppWidgetOptionsChanged(
+        context: Context?, appWidgetManager: AppWidgetManager?, appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        // set updateDate to make sure it passes throttle and gets updated
+        update(context ?: return, true)
     }
 }
 
