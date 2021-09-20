@@ -1,11 +1,13 @@
 package com.byagowi.persiancalendar.ui
 
 import android.Manifest
+import android.app.ActivityManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -21,6 +23,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
@@ -51,6 +54,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -72,6 +76,8 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -110,12 +116,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(it.root)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window?.also { window ->
-            // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-            window.attributes = window.attributes.also {
-                it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+            getSystemService<ActivityManager>()?.isLowRamDevice == false
+        ) {
+            binding.drawer.background = MaterialShapeDrawable().also {
+                it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
             }
-            window.statusBarColor = Color.TRANSPARENT
+            binding.drawer.clipToOutline = true
+            binding.drawer.alpha = 0.96f
         }
 
         binding.drawer.addDrawerListener(createDrawerListener())

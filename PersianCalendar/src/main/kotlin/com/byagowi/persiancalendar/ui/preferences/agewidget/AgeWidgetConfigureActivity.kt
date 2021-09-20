@@ -44,20 +44,6 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window?.also { window ->
-            // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-            window.attributes = window.attributes.also {
-                it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-            }
-            window.statusBarColor = Color.TRANSPARENT
-            window.navigationBarColor = Color.TRANSPARENT
-        }
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER,
-            WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
-        )
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
