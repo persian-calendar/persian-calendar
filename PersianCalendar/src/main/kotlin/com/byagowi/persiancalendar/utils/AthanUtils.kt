@@ -33,7 +33,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.logDebug
+import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.AthanNotification
@@ -63,7 +63,7 @@ fun getCustomAthanUri(context: Context): Uri? =
 private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null
 fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
-    logDebug("Alarms: startAthan for $prayTimeKey")
+    debugLog("Alarms: startAthan for $prayTimeKey")
     if (intendedTime == null) return startAthanBody(context, prayTimeKey)
     // if alarm is off by 15 minutes, just skip
     if (abs(System.currentTimeMillis() - intendedTime) > FIFTEEN_MINUTES_IN_MILLIS) return
@@ -80,7 +80,7 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
 }
 
 private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching {
-    logDebug("Alarms: startAthanBody for $prayTimeKey")
+    debugLog("Alarms: startAthanBody for $prayTimeKey")
 
     runCatching {
         context.getSystemService<PowerManager>()?.newWakeLock(
@@ -131,7 +131,7 @@ fun scheduleAlarms(context: Context) {
 
 private fun scheduleAlarm(context: Context, alarmTimeName: String, timeInMillis: Long, i: Int) {
     val remainedMillis = timeInMillis - System.currentTimeMillis()
-    logDebug("Alarms: $alarmTimeName in ${remainedMillis / 60000} minutes")
+    debugLog("Alarms: $alarmTimeName in ${remainedMillis / 60000} minutes")
     if (remainedMillis < 0) return // Don't set alarm in past
 
     if (enableWorkManager) { // Schedule in both, startAthan has the logic to skip duplicated calls

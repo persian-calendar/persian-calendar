@@ -37,7 +37,7 @@ import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.Variants
-import com.byagowi.persiancalendar.Variants.logDebug
+import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
@@ -72,19 +72,19 @@ private var latestFiredUpdate = 0L
 fun update(context: Context, updateDate: Boolean) {
     val now = System.currentTimeMillis()
     if (!updateDate && now - latestFiredUpdate < HALF_SECOND_IN_MILLIS) {
-        logDebug("UpdateUtils: skip update")
+        debugLog("UpdateUtils: skip update")
         return
     }
     latestFiredUpdate = now
 
-    logDebug("UpdateUtils: update")
+    debugLog("UpdateUtils: update")
     applyAppLanguage(context)
 
     val jdn = Jdn.today
     val date = jdn.toCalendar(mainCalendar)
 
     if (pastDate == null || pastDate != date || updateDate) {
-        logDebug("UpdateUtils: date has changed")
+        debugLog("UpdateUtils: date has changed")
         scheduleAlarms(context)
         pastDate = date
         readAndStoreDeviceCalendarEventsOfTheDay(context)

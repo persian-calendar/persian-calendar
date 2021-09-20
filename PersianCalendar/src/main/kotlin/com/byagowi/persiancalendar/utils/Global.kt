@@ -51,7 +51,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.logDebug
+import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -152,7 +152,7 @@ var calendarTypesTitleAbbr = emptyList<String>()
 
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
-    logDebug("Utils: initGlobal is called")
+    debugLog("Utils: initGlobal is called")
     updateStoredPreference(context)
     applyAppLanguage(context)
     loadLanguageResources(context)
@@ -161,7 +161,7 @@ fun initGlobal(context: Context) {
 }
 
 fun configureCalendarsAndLoadEvents(context: Context) {
-    logDebug("Utils: configureCalendarsAndLoadEvents is called")
+    debugLog("Utils: configureCalendarsAndLoadEvents is called")
     val appPrefs = context.appPrefs
 
     IslamicDate.islamicOffset = if (appPrefs.isIslamicOffsetExpired) 0 else
@@ -173,7 +173,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
 }
 
 private fun loadLanguageResources(context: Context) {
-    logDebug("Utils: loadLanguageResources is called")
+    debugLog("Utils: loadLanguageResources is called")
     persianMonths = language.getPersianMonths(context)
     islamicMonths = language.getIslamicMonths(context)
     gregorianMonths = language.getGregorianMonths(context, easternGregorianArabicMonths)
@@ -182,7 +182,7 @@ private fun loadLanguageResources(context: Context) {
 }
 
 fun updateStoredPreference(context: Context) {
-    logDebug("Utils: updateStoredPreference is called")
+    debugLog("Utils: updateStoredPreference is called")
     val prefs = context.appPrefs
 
     val languageCode = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE

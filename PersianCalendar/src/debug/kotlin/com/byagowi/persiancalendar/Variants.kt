@@ -16,7 +16,7 @@ object Variants {
 //        LeakCanary.install(app)
     }
 
-    fun logDebug(message: String) = Log.d(LOG_TAG, message)
+    fun debugLog(message: String) = Log.d(LOG_TAG, message)
     inline val <T> T.debugAssertNotNull: T inline get() = checkNotNull(this)
     inline val enableDevelopmentFeatures get() = true
 }

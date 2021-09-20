@@ -19,7 +19,7 @@ import androidx.work.WorkManager
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.enableDevelopmentFeatures
-import com.byagowi.persiancalendar.Variants.logDebug
+import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
@@ -99,7 +99,7 @@ class PreferencesFragment : Fragment() {
                     it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
                 }
                 toolbar.menu.addSubMenu("Log").also {
-                    it.add("Log 'Hello'").onClick { logDebug("Hello!") }
+                    it.add("Log 'Hello'").onClick { debugLog("Hello!") }
                     it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
                     it.add("Crash!").onClick { error("Unhandled Crash!") }
                 }

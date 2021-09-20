@@ -22,7 +22,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.logDebug
+import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
 import com.byagowi.persiancalendar.ui.utils.askForLocationPermission
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
@@ -70,7 +70,7 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
 
     val distinctCoordinatesFlow = coordinatesFlow
         .filterNotNull()
-        .onEach { logDebug("GPSLocationDialog: A location is received") }
+        .onEach { debugLog("GPSLocationDialog: A location is received") }
         .distinctUntilChanged { old, new ->
             old.latitude == new.latitude && old.longitude == new.longitude &&
                     old.elevation == new.elevation
@@ -100,14 +100,14 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()
                 countryCode = result?.countryCode
-                logDebug("Geocoder country code ${countryCode ?: "empty"}")
-                logDebug("Geocoder locality ${result?.locality ?: "empty"}")
+                debugLog("Geocoder country code ${countryCode ?: "empty"}")
+                debugLog("Geocoder locality ${result?.locality ?: "empty"}")
                 result?.locality?.takeIf { it.isNotEmpty() }
             }.onFailure(logException).getOrNull()
         }
         .flowOn(Dispatchers.IO)
         .onEach { locality ->
-            logDebug("GPSLocationDialog: A geocoder locality result is received")
+            debugLog("GPSLocationDialog: A geocoder locality result is received")
             binding.cityName.isVisible = true
             binding.cityName.text = locality
             cityName = locality
@@ -179,7 +179,7 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
 
     viewLifecycleOwner.lifecycle.addObserver(lifeCycleObserver)
     dialog.setOnDismissListener {
-        logDebug("GPSLocationDialog: Dialog is dismissed")
+        debugLog("GPSLocationDialog: Dialog is dismissed")
         coordinatesFlow.value?.let { coordinate ->
             activity.appPrefs.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
         }
