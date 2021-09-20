@@ -84,12 +84,14 @@ android {
             )
             isMinifyEnabled = true
             isShrinkResources = true
+            buildConfigField("boolean", "DEVELOPMENT", "true")
         }
 
         getByName("debug") {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
             applicationIdSuffix = ".debug"
             multiDexEnabled = true
+            buildConfigField("boolean", "DEVELOPMENT", "true")
         }
 
         getByName("release") {
@@ -99,6 +101,7 @@ android {
             )
             isMinifyEnabled = true
             isShrinkResources = true
+            buildConfigField("boolean", "DEVELOPMENT", "false")
         }
     }
 

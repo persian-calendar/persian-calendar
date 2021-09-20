@@ -16,9 +16,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.enableDevelopmentFeatures
 import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
@@ -47,7 +47,7 @@ class PreferencesFragment : Fragment() {
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation()
-            if (enableDevelopmentFeatures) {
+            if (BuildConfig.DEVELOPMENT) {
                 val activity = activity ?: return@let
                 toolbar.menu.add("Static vs generated icons")
                     .onClick { showIconsDemoDialog(activity) }
