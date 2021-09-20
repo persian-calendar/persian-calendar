@@ -120,7 +120,9 @@ private fun baseFormatClock(hour: Int, minute: Int): String =
 fun Clock.toFormattedString(forcedIn12: Boolean = false, printAmPm: Boolean = true) =
     if (clockIn24 && !forcedIn12) baseFormatClock(hour, minute)
     else baseFormatClock((hour % 12).takeIf { it != 0 } ?: 12, minute) +
-            if (printAmPm) { " " + if (hour >= 12) pmString else amString } else ""
+            if (printAmPm) {
+                " " + if (hour >= 12) pmString else amString
+            } else ""
 
 fun Clock.asRemainingTime(context: Context, short: Boolean = false): String {
     val pairs = listOf(R.string.n_hours to hour, R.string.n_minutes to minute)

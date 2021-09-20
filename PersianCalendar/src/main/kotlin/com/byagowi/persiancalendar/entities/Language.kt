@@ -14,6 +14,7 @@ enum class Language(val code: String, val nativeName: String) {
     FA("fa", "فارسی"),
     FA_AF("fa-AF", "دری"),
     PS("ps", "پښتو"),
+
     // Rest, sorted by their language code
     AR("ar", "العربية"),
     AZB("azb", "تۆرکجه"),
