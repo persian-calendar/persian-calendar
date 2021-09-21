@@ -228,6 +228,7 @@
     <string name="n_till">%1$s till to %2$s</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s día %2$s</item>
+        <item quantity="many"></item>
         <item quantity="other">%1$s días %2$s</item>
     </plurals>
     <string name="recurs">Recurre</string>
@@ -345,7 +346,7 @@
     <string name="nepal">Nepal</string>
     <string name="view_source">Ver fuente</string>
     <string name="shift_work_night">Noche</string>
-    <string name="are_you_sure">¿Está usted seguro\?</string>
+    <string name="are_you_sure">¿Está usted seguro?</string>
     <string name="nepali_calendar_short">Nepalí</string>
     <string name="shift_work_morning">La mañana</string>
     <string name="summer">Verano</string>
@@ -391,7 +392,7 @@
     <string name="live_wallpaper_settings">Ajustes de fondo de pantalla en vivo</string>
     <string name="screensaver_settings">Ajustes del salvapantallas</string>
     <string name="true_north">Norte verdadero</string>
-    <string name="enable_notification">¿Desea habilitar la notificación de la fecha\?</string>
+    <string name="enable_notification">¿Desea habilitar la notificación de la fecha?</string>
     <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
     <string name="lock">Bloquear</string>
     <string name="exit_full_screen">Salir de la pantalla completa</string>
