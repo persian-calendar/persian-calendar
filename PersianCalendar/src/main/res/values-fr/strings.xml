@@ -263,7 +263,7 @@
     <string name="view_source">voir la source</string>
     <string name="widget_customization_other_calendars">Autres calendriers sur les gadgets logiciels 1×4 et 2×2</string>
     <string name="widget_customization_non_holiday_events">Jours non fériés sur le gadget logiciel 2×2 et la notification</string>
-    <string name="widget_customization_owghat">Temps de prière sur 2×2 et notification (si défini)</string>
+    <string name="widget_customization_owghat">Temps de prière sur les gadgets logiciels et notification (si défini)</string>
     <string name="widget_customization_owghat_location">Localisation des temps de prière sur 2×2 et notification (si défini)</string>
     <string name="farvardin">farvardin</string>
     <string name="ordibehesht">ordibehešt</string>
