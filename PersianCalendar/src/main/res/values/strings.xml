@@ -283,7 +283,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!--Widget customizations-->
     <string name="widget_customization_other_calendars">Other calendars on 1x4 and 2x2 widgets</string>
     <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
-    <string name="widget_customization_owghat">Pray times on 2x2 and notification (if is set)</string>
+    <string name="widget_customization_owghat">Pray times on widgets and notification (if is set)</string>
     <string name="widget_customization_owghat_location">Location of pray times on 2x2 and notification (if is set)</string>
     <!--Persian Calendar months-->
     <string name="farvardin">Farvardin</string>

@@ -267,7 +267,7 @@
     <string name="view_source">مشاهده منبع</string>
     <string name="widget_customization_other_calendars">سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</string>
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
-    <string name="widget_customization_owghat">اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
+    <string name="widget_customization_owghat">اوقات شرعی در ویجت و اعلان (در صورت تنظیم بودن)</string>
     <string name="widget_customization_owghat_location">مکان در کنار اوقات شرعی در ویجت ۲×۲ و اعلان (در صورت تنظیم بودن)</string>
     <string name="farvardin">فروردین</string>
     <string name="ordibehesht">اردیبهشت</string>
