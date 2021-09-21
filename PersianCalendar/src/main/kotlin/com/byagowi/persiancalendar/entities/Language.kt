@@ -264,6 +264,7 @@ enum class Language(val code: String, val nativeName: String) {
             .replace("ژ", "زی")
             .replace("چ", "جی")
             .replace("پ", "بی")
+            .replace("و", "نی")
             .replace("ڕ", "ری")
             .replace("ڵ", "لی")
             .replace("ڤ", "فی")
