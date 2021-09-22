@@ -5,17 +5,21 @@
     android:id="@+id/circular_reveal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorCard">
+    android:background="?android:attr/windowBackground"
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?attr/navigationBarColor"
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
             android:theme="?attr/toolbarTheme"
             app:contentScrim="?attr/navigationBarColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">

@@ -1,37 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
+    android:id="@+id/drawer"
     android:layout_width="match_parent"
-    android:padding="4dp">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="start">
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation_graph" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/navHostFragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/navigation_graph" />
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigation"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="?attr/colorDrawerBackground"
+        app:headerLayout="@layout/navigation_header"
+        app:itemIconTint="?attr/colorDrawerIcon"
+        app:itemShapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Nav"
+        app:itemTextColor="?attr/colorTextNormal"
+        app:menu="@menu/navigation_items" />
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="?attr/colorDrawerBackground"
-            app:headerLayout="@layout/navigation_header"
-            app:itemIconTint="?attr/colorDrawerIcon"
-            app:itemShapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Nav"
-            app:itemTextColor="?attr/colorTextNormal"
-            app:menu="@menu/navigation_items" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
-
-</FrameLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
