@@ -180,7 +180,7 @@ enum class Language(val code: String, val nativeName: String) {
         else -> cityItem.fa
     }
 
-    val countryOrderCodes
+    val countriesOrder
         get() = when {
             isAfghanistanExclusive -> afCodeOrder
             isArabic -> arCodeOrder

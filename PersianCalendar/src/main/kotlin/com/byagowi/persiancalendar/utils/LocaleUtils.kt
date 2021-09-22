@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
-import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
@@ -70,8 +69,8 @@ val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->
         city to language.getCityName(city).let { language.prepareForSort(it) }
     }.sortedWith { (leftCity, leftSortName), (rightCity, rightSortName) ->
-        language.countryOrderCodes.indexOf(leftCity.countryCode).compareTo(
-            language.countryOrderCodes.indexOf(rightCity.countryCode)
+        language.countriesOrder.indexOf(leftCity.countryCode).compareTo(
+            language.countriesOrder.indexOf(rightCity.countryCode)
         ).takeIf { it != 0 } ?: leftSortName.compareTo(rightSortName)
     }.map { (city, _) -> city }
 
