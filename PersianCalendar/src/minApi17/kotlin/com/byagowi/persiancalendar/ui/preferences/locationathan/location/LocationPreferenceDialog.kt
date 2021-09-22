@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.saveCity
+import com.byagowi.persiancalendar.utils.sortCityNames
 
 /**
  * persian_calendar
@@ -26,7 +27,7 @@ fun showLocationPreferenceDialog(activity: Activity) {
         .create()
     binding.recyclerView.setHasFixedSize(true)
     binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-    val cities = citiesStore.values.sortedWith(language.createCitiesComparator())
+    val cities = citiesStore.values.sortCityNames
     binding.recyclerView.adapter = PairsListAdapter(onItemClicked = { index ->
         dialog.dismiss()
         activity.appPrefs.saveCity(cities[index])

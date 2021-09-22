@@ -30,13 +30,14 @@ import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.saveCity
+import com.byagowi.persiancalendar.utils.sortCityNames
 
 fun showLocationPreferenceDialog(activity: Activity) =
     showComposeDialog(activity) { LocationPreferenceDialog(it) { showProvinceDialog(activity) } }
 
 @Composable
 private fun LocationPreferenceDialog(closeDialog: () -> Unit, onMoreButtonClick: () -> Unit) {
-    val cities = remember { citiesStore.values.sortedWith(language.createCitiesComparator()) }
+    val cities = remember { citiesStore.values.sortCityNames }
     AlertDialog(
         onDismissRequest = { closeDialog() },
         title = { Text(stringResource(R.string.location)) },

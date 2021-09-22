@@ -8,6 +8,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.generated.distrcitsStore
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.saveLocation
 import io.github.persiancalendar.praytimes.Coordinate
 
@@ -42,12 +43,12 @@ private fun showDistrictsDialog(activity: Activity, provinceDetails: List<String
     val districts = provinceDetails.flatMap { county ->
         val countyDetails = county.split(";")
         countyDetails.drop(1).map { it.split(":") to countyDetails[0] }
-    }.sortedBy { Language.CityComparator.prepareForArabicSort(it.first[0]) }
+    }.sortedBy { (district, _) -> language.prepareForSort(district[0/*district name*/]) }
     recyclerView.adapter = PairsListAdapter(onItemClicked = { index ->
         dialog.dismiss()
         val coordinates = Coordinate(
-            districts[index].first[1].toDoubleOrNull() ?: 0.0,
-            districts[index].first[2].toDoubleOrNull() ?: 0.0,
+            districts[index].first[1/*latitude*/].toDoubleOrNull() ?: 0.0,
+            districts[index].first[2/*longitude*/].toDoubleOrNull() ?: 0.0,
             0.0
         )
         activity.appPrefs.saveLocation(coordinates, districts[index].first[0])

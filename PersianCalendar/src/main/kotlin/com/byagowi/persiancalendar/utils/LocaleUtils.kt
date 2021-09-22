@@ -3,7 +3,9 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.content.res.Resources
 import android.view.View
+import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
 import java.util.*
 
@@ -63,6 +65,15 @@ fun getOrderedCalendarEntities(context: Context, short: Boolean = false):
         calendarType to context.getString(if (short) calendarType.shortTitle else calendarType.title)
     }
 }
+
+val Collection<CityItem>.sortCityNames: List<CityItem>
+    get() = this.map { city ->
+        city to language.getCityName(city).let { language.prepareForSort(it) }
+    }.sortedWith { (leftCity, leftSortName), (rightCity, rightSortName) ->
+        language.countryOrderCodes.indexOf(leftCity.countryCode).compareTo(
+            language.countryOrderCodes.indexOf(rightCity.countryCode)
+        ).takeIf { it != 0 } ?: leftSortName.compareTo(rightSortName)
+    }.map { (city, _) -> city }
 
 fun <T> listOf31Items(
     x1: T, x2: T, x3: T, x4: T, x5: T, x6: T, x7: T, x8: T, x9: T, x10: T, x11: T, x12: T,
