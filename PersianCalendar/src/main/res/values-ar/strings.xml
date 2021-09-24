@@ -282,7 +282,7 @@
     <!--Widget customizations-->
     <string name="widget_customization_other_calendars">التقاويم الأخرى على مصغر 1×4 أو 2×2</string>
     <string name="widget_customization_non_holiday_events">المناسبات (غير العُطل) على مصغر 2×2 والتنبه</string>
-    <string name="widget_customization_owghat">أوقات الصلوات على مصغر 2×2 (إذا تم تحديد المكان)</string>
+    <string name="widget_customization_owghat">أوقات الصلوات على مصغر (إذا تم تحديد المكان)</string>
     <string name="widget_customization_owghat_location">مكان أوقات الصلوات على مصغر 2×2 والتنبيه (إذا تم تحديد المكان)</string>
     <!--Persian Calendar months-->
     <string name="farvardin">الحمل</string>
