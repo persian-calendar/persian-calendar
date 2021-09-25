@@ -12,15 +12,15 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
-val versionMajor = 6
-val versionMinor = 8
-val versionPatch = 2
-val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
-if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
-    error("Use one digit numbers for minor and patch")
+//val versionMajor = 1
+//val versionMinor = 1
+//val versionPatch = 1
+//val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
+//if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
+//    error("Use one digit numbers for minor and patch")
 //if (versionPatch % 2 != 0)
 //   error("As current Api based flavors scheme, use even number for patch numbers")
-val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
+//val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 val composeVersion = "1.0.2"
 
@@ -53,8 +53,8 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 17
         targetSdk = 30
-        versionCode = versionNumber
-        versionName = baseVersionName
+        versionCode = 682
+        versionName = "6.8.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         if (!isMinApi21Build) vectorDrawables.useSupportLibrary = true
         resourceConfigurations += listOf(
