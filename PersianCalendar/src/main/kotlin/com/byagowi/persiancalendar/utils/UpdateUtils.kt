@@ -416,7 +416,7 @@ private fun create4x2RemoteViews(
 
     if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         // Set text of owghats
-        listOf(
+        val viewIdClockPairs = listOf(
             R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
             R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
             R.id.textPlaceholder4owghat_5_4x2
@@ -438,8 +438,11 @@ private fun create4x2RemoteViews(
             )
             remoteViews.setTextColor(textHolderViewId, color)
             textHolderViewId to timeClock
-        }.firstOrNull { (_, timeClock) -> timeClock.toInt() > nowClock.toInt() }
-            ?.let { (viewId, _) -> remoteViews.setTextColor(viewId, Color.RED) }
+        }
+        val nextViewId = (viewIdClockPairs.firstOrNull { (_, timeClock) ->
+            timeClock.toInt() > nowClock.toInt()
+        } ?: viewIdClockPairs.first()).first
+        remoteViews.setTextColor(nextViewId, Color.RED)
         remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
     } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
