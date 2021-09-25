@@ -53,7 +53,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import io.github.persiancalendar.calendar.AbstractDate
-import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -422,18 +421,15 @@ private fun create4x2RemoteViews(
             R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
             R.id.textPlaceholder4owghat_5_4x2
         ).zip(
-            when (calculationMethod) {
-                CalculationMethod.Tehran, CalculationMethod.Jafari -> listOf(
-                    R.string.fajr, R.string.sunrise,
-                    R.string.dhuhr, R.string.maghrib,
-                    R.string.midnight
-                )
-                else -> listOf(
-                    R.string.fajr, R.string.dhuhr,
-                    R.string.asr, R.string.maghrib,
-                    R.string.isha
-                )
-            }
+            if (calculationMethod.isShia) listOf(
+                R.string.fajr, R.string.sunrise,
+                R.string.dhuhr, R.string.maghrib,
+                R.string.midnight
+            ) else listOf(
+                R.string.fajr, R.string.dhuhr,
+                R.string.asr, R.string.maghrib,
+                R.string.isha
+            )
         ) { textHolderViewId, owghatStringId ->
             val timeClock = prayTimes.getFromStringId(owghatStringId) ?: Clock.fromInt(0)
             remoteViews.setTextViewText(

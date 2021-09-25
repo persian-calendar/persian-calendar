@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -91,6 +92,8 @@ var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     private set
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
+    private set
+var asrJuristic = CalculationMethod.AsrJuristics.Standard
     private set
 var language = Language.FA
     private set
@@ -217,6 +220,12 @@ fun updateStoredPreference(context: Context) {
     // so switched to "Tehran" method as default calculation algorithm
     calculationMethod = CalculationMethod
         .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
+    asrJuristic =
+        if (calculationMethod.isShia || !prefs.getBoolean(PREF_ASR_HANAFI_JURISTIC, false))
+            CalculationMethod.AsrJuristics.Standard
+        else
+            CalculationMethod.AsrJuristics.Hanafi
+
 
     coordinates = prefs.storedCity?.coordinate ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)

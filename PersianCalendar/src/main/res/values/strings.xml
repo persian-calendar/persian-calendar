@@ -334,4 +334,5 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="friday">Friday</string>
     <!--Title of a widget that shows how much of a day is passed-->
     <string name="sun_view">Sun View</string>
+    <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
 </resources>

@@ -47,6 +47,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var ringtonePreference: Preference? = null
     private var selectedLocationPreference: Preference? = null
     private var athanPreferenceCategory: PreferenceCategory? = null
+    private var asrCalculationHanafiJuristic: Preference? = null
 
     // Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
     private val prayTimeCalculationMethods = listOf(
@@ -89,6 +90,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     title(R.string.pray_methods)
                     dialogTitle(R.string.pray_methods_calculation)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                }
+                switch(PREF_ASR_HANAFI_JURISTIC, false) {
+                    asrCalculationHanafiJuristic = this
+                    title(R.string.asr_hanafi_juristic)
+                    isVisible = !calculationMethod.isShia
                 }
                 clickable(onClick = { showAthanGapDialog(activity) }) {
                     title(R.string.athan_gap)
@@ -195,8 +201,10 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         ringtonePreference?.summary = athanName
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         updateLocationOnSummaries()
+        asrCalculationHanafiJuristic?.isVisible = !calculationMethod.isShia
+    }
 
     private fun updateLocationOnSummaries() {
         val context = context ?: return
