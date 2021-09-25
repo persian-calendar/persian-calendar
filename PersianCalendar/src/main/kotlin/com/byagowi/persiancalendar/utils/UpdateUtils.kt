@@ -169,7 +169,7 @@ fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, I
         else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
     ).map { getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
-    return width.coerceAtLeast(10) to height.coerceAtLeast(10)
+    return if (width > 10 && height > 10) width to height else 250 to 250
 }
 
 private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
