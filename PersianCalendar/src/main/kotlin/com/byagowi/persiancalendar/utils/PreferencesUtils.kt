@@ -89,13 +89,13 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
             putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
             putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
             putString(PREF_WEEK_START, "2") // Monday
-            putStringSet(PREF_WEEK_ENDS, setOf("1"))
+            putStringSet(PREF_WEEK_ENDS, setOf("0", "1")) // Saturday and Sunday
         }
         language.prefersGregorianCalendar -> {
             putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
             putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-            putString(PREF_WEEK_START, "1")
-            putStringSet(PREF_WEEK_ENDS, setOf("0"))
+            putString(PREF_WEEK_START, "1") // Sunday
+            putStringSet(PREF_WEEK_ENDS, setOf("0", "1")) // Saturday and Sunday
         }
         language.prefersIslamicCalendar -> {
             putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
