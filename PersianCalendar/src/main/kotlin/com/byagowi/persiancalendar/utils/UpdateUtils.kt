@@ -439,9 +439,9 @@ private fun create4x2RemoteViews(
             remoteViews.setTextColor(textHolderViewId, color)
             textHolderViewId to timeClock
         }
-        val nextViewId = (viewIdClockPairs.firstOrNull { (_, timeClock) ->
+        val (nextViewId, _) = viewIdClockPairs.firstOrNull { (_, timeClock) ->
             timeClock.toInt() > nowClock.toInt()
-        } ?: viewIdClockPairs.first()).first
+        } ?: viewIdClockPairs[0]
         remoteViews.setTextColor(nextViewId, Color.RED)
         remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
     } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
