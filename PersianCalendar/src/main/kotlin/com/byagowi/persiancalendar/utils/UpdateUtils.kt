@@ -444,6 +444,7 @@ private fun create4x2RemoteViews(
             textHolderViewId to timeClock
         }.firstOrNull { (_, timeClock) -> timeClock.toInt() > nowClock.toInt() }
             ?.let { (viewId, _) -> remoteViews.setTextColor(viewId, Color.RED) }
+        remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
     } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
     setEventsInWidget(context, jdn, remoteViews, R.id.holiday_4x2, R.id.event_4x2)
