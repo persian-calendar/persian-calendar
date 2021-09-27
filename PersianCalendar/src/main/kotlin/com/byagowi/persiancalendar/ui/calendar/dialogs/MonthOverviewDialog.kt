@@ -50,7 +50,7 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
     }.takeIf { it.isNotEmpty() }
         ?: listOf(activity.getString(R.string.warn_if_events_not_set) to "")
 
-    BottomSheetDialog(activity, R.style.BottomSheetDialog).also { dialog ->
+    BottomSheetDialog(activity, R.style.TransparentBottomSheetDialog).also { dialog ->
         dialog.setContentView(
             RecyclerView(activity).also {
                 it.layoutManager = LinearLayoutManager(activity)
