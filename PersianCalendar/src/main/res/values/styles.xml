@@ -39,13 +39,23 @@
         <item name="cornerSize">12dp</item>
     </style>
 
-    <style name="AppTheme.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="dialogCornerRadius">@dimen/common_radius</item>
+    </style>
+
+    <style name="ButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearanceOverlay">@style/ButtonAppearance</item>
+    </style>
+
+    <style name="ButtonAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/button_radius</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@color/dark_primary</item>
-        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/ButtonTheme</item>
 
         <item name="colorMonthsBackground">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_accent</item>
@@ -106,7 +116,8 @@
 
     <style name="BlackTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@color/black_primary</item>
-        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/ButtonTheme</item>
 
         <item name="colorMonthsBackground">@color/black_primary</item>
         <item name="colorPrimary">@color/black_accent</item>
@@ -166,7 +177,8 @@
     </style>
 
     <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/ButtonTheme</item>
 
         <item name="colorMonthsBackground">@color/light_primary</item>
         <item name="colorPrimary">@color/light_primary</item>
@@ -226,7 +238,8 @@
     </style>
 
     <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/ButtonTheme</item>
 
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
@@ -287,7 +300,8 @@
     </style>
 
     <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="alertDialogTheme">@style/AppTheme.AlertDialogTheme</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/ButtonTheme</item>
 
         <item name="colorMonthsBackground">@color/modern_primary</item>
         <item name="colorPrimary">@color/modern_accent</item>

@@ -17,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
-        android:text="@string/more"
-        app:cornerRadius="@dimen/button_radius" />
+        android:text="@string/more" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

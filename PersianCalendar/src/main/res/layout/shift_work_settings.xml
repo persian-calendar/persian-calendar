@@ -26,8 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/shift_work_reset_button"
-        app:cornerRadius="@dimen/button_radius" />
+        android:text="@string/shift_work_reset_button" />
 
     <TextView
         android:id="@+id/result"
