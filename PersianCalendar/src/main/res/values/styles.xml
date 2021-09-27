@@ -52,10 +52,25 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="BottomSheetAppearance">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/common_radius</item>
+        <item name="cornerSizeTopRight">@dimen/common_radius</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/BottomSheetAppearance</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@color/dark_primary</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="materialButtonStyle">@style/ButtonTheme</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
 
         <item name="colorMonthsBackground">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_accent</item>
@@ -118,6 +133,7 @@
         <item name="android:windowBackground">@color/black_primary</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="materialButtonStyle">@style/ButtonTheme</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
 
         <item name="colorMonthsBackground">@color/black_primary</item>
         <item name="colorPrimary">@color/black_accent</item>
@@ -179,6 +195,7 @@
     <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="materialButtonStyle">@style/ButtonTheme</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
 
         <item name="colorMonthsBackground">@color/light_primary</item>
         <item name="colorPrimary">@color/light_primary</item>
@@ -240,6 +257,7 @@
     <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="materialButtonStyle">@style/ButtonTheme</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
 
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
@@ -302,6 +320,7 @@
     <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="materialButtonStyle">@style/ButtonTheme</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
 
         <item name="colorMonthsBackground">@color/modern_primary</item>
         <item name="colorPrimary">@color/modern_accent</item>
