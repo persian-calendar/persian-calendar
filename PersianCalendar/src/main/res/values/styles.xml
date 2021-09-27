@@ -49,7 +49,7 @@
 
     <style name="ButtonAppearance">
         <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/button_radius</item>
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
