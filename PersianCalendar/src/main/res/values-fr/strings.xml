@@ -310,4 +310,5 @@
     <string name="friday">vendredi</string>
     <string name="sun_view">Vue Soleil</string>
     <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
+    <string name="enable_new_interface">Enable the new interface</string>
 </resources>

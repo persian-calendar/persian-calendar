@@ -332,4 +332,6 @@
     <string name="thursday">الخميس</string>
     <string name="friday">الجمعة</string>
     <string name="sun_view">عرض الشمس</string>
+    <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
+    <string name="enable_new_interface">Enable the new interface</string>
 </resources>
