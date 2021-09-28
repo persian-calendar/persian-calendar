@@ -8,6 +8,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -44,6 +45,7 @@ import java.util.concurrent.TimeUnit
  */
 
 class PreferencesFragment : Fragment() {
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -52,73 +54,7 @@ class PreferencesFragment : Fragment() {
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation()
-            if (BuildConfig.DEVELOPMENT) {
-                val activity = activity ?: return@let
-                if (canEnableNewInterface) {
-                    toolbar.menu.add(R.string.enable_new_interface).also {
-                        it.isCheckable = true
-                        it.isChecked = enableNewInterface
-                    }.onClick {
-                        binding.root.context.appPrefs.edit {
-                            putBoolean(PREF_NEW_INTERFACE, !enableNewInterface)
-                        }
-                    }
-                }
-                toolbar.menu.add("Static vs generated icons")
-                    .onClick { showIconsDemoDialog(activity) }
-                toolbar.menu.add("Clear preferences store and exit")
-                    .onClick { activity.appPrefs.edit { clear() }; activity.finish() }
-                toolbar.menu.add("Schedule an alarm").onClick {
-                    val numericBinding = NumericBinding.inflate(inflater)
-                    numericBinding.edit.setText("5")
-                    AlertDialog.Builder(activity)
-                        .setTitle("Enter seconds to schedule alarm")
-                        .setView(numericBinding.root)
-                        .setPositiveButton(R.string.accept) { _, _ ->
-                            val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
-                            val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
-                                .setInitialDelay(
-                                    TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
-                                )
-                                .build()
-                            WorkManager.getInstance(binding.root.context)
-                                .beginUniqueWork(
-                                    "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
-                                )
-                                .enqueue()
-                            Toast.makeText(context, "Alarm in ${seconds}s", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                        .show()
-                }
-                toolbar.menu.addSubMenu("Log Viewer").also {
-                    fun viewCommandResult(command: String) = AlertDialog.Builder(
-                        activity,
-                        com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
-                    ).also { dialog ->
-                        dialog.setTitle("Logs")
-                        dialog.setView(
-                            ScrollView(context).also { scrollView ->
-                                scrollView.addView(TextView(context).also { textView ->
-                                    textView.text = Runtime.getRuntime().exec(command)
-                                        .inputStream.bufferedReader().readText()
-                                })
-                                // Scroll to bottom, https://stackoverflow.com/a/3080483
-                                scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-                            }
-                        )
-                    }.show().let {}
-                    it.add("Filtered").onClick {
-                        viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
-                    }
-                    it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
-                }
-                toolbar.menu.addSubMenu("Log").also {
-                    it.add("Log 'Hello'").onClick { debugLog("Hello!") }
-                    it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
-                    it.add("Crash!").onClick { error("Unhandled Crash!") }
-                }
-            }
+            setupDevelopmentMenu(toolbar, binding, inflater)
         }
 
         val args: PreferencesFragmentArgs by navArgs()
@@ -148,5 +84,78 @@ class PreferencesFragment : Fragment() {
         const val INTERFACE_CALENDAR_TAB = 0
         const val WIDGET_NOTIFICATION_TAB = 1
         const val LOCATION_ATHAN_TAB = 2
+    }
+
+    // Development only functionalities
+    private fun setupDevelopmentMenu(
+        toolbar: Toolbar, binding: FragmentSettingsBinding, inflater: LayoutInflater
+    ) {
+        if (!BuildConfig.DEVELOPMENT) return
+        val activity = activity ?: return
+        if (canEnableNewInterface) {
+            toolbar.menu.add(R.string.enable_new_interface).also {
+                it.isCheckable = true
+                it.isChecked = enableNewInterface
+            }.onClick {
+                binding.root.context.appPrefs.edit {
+                    putBoolean(PREF_NEW_INTERFACE, !enableNewInterface)
+                }
+            }
+        }
+        toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog(activity) }
+        toolbar.menu.add("Clear preferences store and exit").onClick {
+            activity.appPrefs.edit { clear() }
+            activity.finish()
+        }
+        toolbar.menu.add("Schedule an alarm").onClick {
+            val numericBinding = NumericBinding.inflate(inflater)
+            numericBinding.edit.setText("5")
+            AlertDialog.Builder(activity)
+                .setTitle("Enter seconds to schedule alarm")
+                .setView(numericBinding.root)
+                .setPositiveButton(R.string.accept) { _, _ ->
+                    val seconds = numericBinding.edit.text.toString().toLongOrNull() ?: 0L
+                    val alarmWorker = OneTimeWorkRequest.Builder(AlarmWorker::class.java)
+                        .setInitialDelay(
+                            TimeUnit.SECONDS.toMillis(seconds), TimeUnit.MILLISECONDS
+                        )
+                        .build()
+                    WorkManager.getInstance(binding.root.context)
+                        .beginUniqueWork(
+                            "TestAlarm", ExistingWorkPolicy.REPLACE, alarmWorker
+                        )
+                        .enqueue()
+                    Toast.makeText(context, "Alarm in ${seconds}s", Toast.LENGTH_SHORT)
+                        .show()
+                }
+                .show()
+        }
+        toolbar.menu.addSubMenu("Log Viewer").also {
+            fun viewCommandResult(command: String) = AlertDialog.Builder(
+                activity,
+                com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
+            ).also { dialog ->
+                dialog.setTitle("Logs")
+                dialog.setView(
+                    ScrollView(context).also { scrollView ->
+                        scrollView.addView(TextView(context).also { textView ->
+                            textView.text = Runtime.getRuntime().exec(command)
+                                .inputStream.bufferedReader().readText()
+                        })
+                        // Scroll to bottom, https://stackoverflow.com/a/3080483
+                        scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+                    }
+                )
+            }.show().let {}
+            it.add("Filtered").onClick {
+                viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
+            }
+            it.add("Unfiltered").onClick { viewCommandResult("logcat -v raw -t 500") }
+        }
+        toolbar.menu.addSubMenu("Log").also {
+            it.add("Log 'Hello'").onClick { debugLog("Hello!") }
+            it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
+            it.add("Crash!").onClick { error("Unhandled Crash!") }
+        }
     }
 }
