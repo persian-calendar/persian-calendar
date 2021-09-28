@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
+import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -44,6 +45,7 @@ class PreferencesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentSettingsBinding.inflate(inflater, container, false)
+        binding.appBar.appbarLayout.hideToolbarBottomShadow()
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation()
