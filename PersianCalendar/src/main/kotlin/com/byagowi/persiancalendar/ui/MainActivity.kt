@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.ui
 
 import android.Manifest
+import android.app.ActivityManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
@@ -32,6 +35,7 @@ import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
+import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
@@ -47,13 +51,16 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.makeStatusBarTransparent
+import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.utils.coordinates
+import com.byagowi.persiancalendar.utils.enableNewInterface
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.initGlobal
 import com.byagowi.persiancalendar.utils.isIranHolidaysEnabled
@@ -69,6 +76,8 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.utils.updateStoredPreference
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.snackbar.Snackbar
 
 /**
@@ -91,7 +100,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
 
-        window.makeStatusBarTransparent()
+        window?.makeStatusBarTransparent()
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         initGlobal(this)
@@ -106,6 +115,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
+        }
+
+        if (enableNewInterface &&
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+            getSystemService<ActivityManager>()?.isLowRamDevice == false
+        ) {
+            window?.makeWallpaperTransparency()
+            binding.drawer.fitsSystemWindows = false
+            binding.drawer.background = MaterialShapeDrawable().also {
+                it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
+            }
+            binding.drawer.clipToOutline = true
+            binding.drawer.alpha = 0.96f
+            binding.root.fitsSystemWindows = false
         }
 
         binding.drawer.addDrawerListener(createDrawerListener())
@@ -220,6 +243,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 ) askForCalendarPermission()
             }
             PREF_APP_LANGUAGE -> restartToSettings()
+            PREF_NEW_INTERFACE -> restartToSettings()
             PREF_THEME -> {
                 // Restart activity if theme is changed and don't if app theme
                 // has just got a default value by preferences as going

@@ -309,4 +309,5 @@
     <string name="widget_name">Farsça Takvim</string>
     <string name="app_name">İran Takvimi</string>
     <string name="code">tr</string>
+    <string name="enable_new_interface">Enable the new interface</string>
 </resources>

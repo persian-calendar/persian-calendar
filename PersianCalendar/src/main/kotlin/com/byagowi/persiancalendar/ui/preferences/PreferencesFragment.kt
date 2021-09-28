@@ -18,6 +18,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LOG_TAG
+import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
@@ -26,10 +27,13 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
+import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.shouldEnableNewInterface
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.enableNewInterface
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.spacedAnd
 import com.google.android.material.tabs.TabLayoutMediator
@@ -51,6 +55,16 @@ class PreferencesFragment : Fragment() {
             toolbar.setupMenuNavigation()
             if (BuildConfig.DEVELOPMENT) {
                 val activity = activity ?: return@let
+                if (canEnableNewInterface) {
+                    toolbar.menu.add(R.string.enable_new_interface).also {
+                        it.isCheckable = true
+                        it.isChecked = enableNewInterface
+                    }.onClick {
+                        binding.root.context.appPrefs.edit {
+                            putBoolean(PREF_NEW_INTERFACE, !enableNewInterface)
+                        }
+                    }
+                }
                 toolbar.menu.add("Static vs generated icons")
                     .onClick { showIconsDemoDialog(activity) }
                 toolbar.menu.add("Clear preferences store and exit")

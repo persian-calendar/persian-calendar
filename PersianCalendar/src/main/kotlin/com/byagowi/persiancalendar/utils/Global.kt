@@ -32,6 +32,7 @@ import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
+import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
@@ -57,6 +58,8 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
+import com.byagowi.persiancalendar.ui.utils.shouldEnableNewInterface
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinate
@@ -94,6 +97,8 @@ var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
     private set
 var asrJuristic = CalculationMethod.AsrJuristics.Standard
+    private set
+var enableNewInterface = false
     private set
 var language = Language.FA
     private set
@@ -191,6 +196,9 @@ fun updateStoredPreference(context: Context) {
     val languageCode = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
     language = Language.values().find { it.code == languageCode } ?: Language.FA
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
+
+    enableNewInterface = canEnableNewInterface &&
+            prefs.getBoolean(PREF_NEW_INTERFACE, false) //shouldEnableNewInterface)
 
     preferredDigits = when {
         !prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS) ||

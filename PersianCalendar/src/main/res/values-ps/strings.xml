@@ -312,4 +312,5 @@
     <string name="friday">جمعه</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
+    <string name="enable_new_interface">Enable the new interface</string>
 </resources>
