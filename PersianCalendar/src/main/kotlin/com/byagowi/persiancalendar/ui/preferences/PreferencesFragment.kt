@@ -31,7 +31,6 @@ import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.ui.utils.shouldEnableNewInterface
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableNewInterface
 import com.byagowi.persiancalendar.utils.logException

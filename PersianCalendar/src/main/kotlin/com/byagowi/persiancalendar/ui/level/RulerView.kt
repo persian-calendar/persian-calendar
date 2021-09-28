@@ -1,11 +1,11 @@
-package com.byagowi.persiancalendar.ui.level;
+package com.byagowi.persiancalendar.ui.level
 
-import android.content.Context;
+import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.util.AttributeSet;
+import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.ui.utils.dp
 

@@ -195,5 +195,6 @@ fun Window.makeWallpaperTransparency() {
 
 // Whether we can enable the new interface
 val canEnableNewInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+
 // Make the new interface for Android 12 opt-out instead of opt-in
 val shouldEnableNewInterface = Build.VERSION.SDK_INT > Build.VERSION_CODES.R

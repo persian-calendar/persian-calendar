@@ -59,7 +59,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
-import com.byagowi.persiancalendar.ui.utils.shouldEnableNewInterface
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinate
