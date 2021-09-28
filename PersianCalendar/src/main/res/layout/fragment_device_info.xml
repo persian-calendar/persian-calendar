@@ -5,7 +5,7 @@
     android:id="@+id/circular_reveal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/windowBackground"
+    android:background="?attr/colorCard"
     android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
