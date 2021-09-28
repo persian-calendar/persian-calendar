@@ -8,6 +8,8 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.TypedValue
@@ -15,6 +17,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
@@ -170,4 +174,17 @@ fun Activity.askForCalendarPermission() {
         }
         .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
         .show()
+}
+
+fun Window.makeTransparent() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
+        this.attributes = this.attributes.also {
+            it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
+        }
+        this.statusBarColor = Color.TRANSPARENT
+        this.navigationBarColor = Color.TRANSPARENT
+    }
+    this.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
+    this.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 }

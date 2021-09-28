@@ -3,12 +3,7 @@ package com.byagowi.persiancalendar.ui.preferences.agewidget
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
@@ -20,6 +15,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAgeWidgetConfigureBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.utils.makeTransparent
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
@@ -42,20 +38,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         Theme.apply(this)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window?.also { window ->
-            // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-            window.attributes = window.attributes.also {
-                it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-            }
-            window.statusBarColor = Color.TRANSPARENT
-            window.navigationBarColor = Color.TRANSPARENT
-        }
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER,
-            WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER
-        )
-        window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window?.makeTransparent()
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
