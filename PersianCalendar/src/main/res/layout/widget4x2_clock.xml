@@ -37,29 +37,30 @@
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-thin"
                 android:gravity="end|center_vertical"
+                android:textAlignment="viewEnd"
                 android:maxLines="1"
                 android:textColor="@android:color/white"
                 android:textSize="56sp" />
 
-        <FrameLayout
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_margin="8dp"
-            android:background="@color/widget_divider" />
+            <FrameLayout
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:background="@color/widget_divider" />
 
-        <TextView
-            android:id="@+id/textPlaceholder1_4x2"
-            style="@style/ShadowTextStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="1dp"
-            android:gravity="start|center_vertical"
-            android:minLines="4"
-            android:text=""
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
+            <TextView
+                android:id="@+id/textPlaceholder1_4x2"
+                style="@style/ShadowTextStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start|center_vertical"
+                android:lineSpacingExtra="1dp"
+                android:minLines="4"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
 
         </LinearLayout>
 
