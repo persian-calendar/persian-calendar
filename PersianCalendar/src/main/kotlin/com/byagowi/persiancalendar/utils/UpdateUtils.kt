@@ -400,6 +400,7 @@ private fun create4x2RemoteViews(
     val color = Color.parseColor(selectedWidgetTextColor)
     remoteViews.setTextColor(R.id.textPlaceholder0_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder1_4x2, color)
+    remoteViews.setTextColor(R.id.textPlaceholder2_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_3_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_1_4x2, color)
     remoteViews.setTextColor(R.id.textPlaceholder4owghat_4_4x2, color)
@@ -416,7 +417,7 @@ private fun create4x2RemoteViews(
 
     if (prayTimes != null && OWGHAT_KEY in whatToShowOnWidgets) {
         // Set text of owghats
-        val viewIdClockPairs = listOf(
+        val owghats = listOf(
             R.id.textPlaceholder4owghat_1_4x2, R.id.textPlaceholder4owghat_2_4x2,
             R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
             R.id.textPlaceholder4owghat_5_4x2
@@ -437,12 +438,27 @@ private fun create4x2RemoteViews(
                         timeClock?.toFormattedString(printAmPm = false)
             )
             remoteViews.setTextColor(textHolderViewId, color)
-            textHolderViewId to timeClock
+            Triple(textHolderViewId, owghatStringId, timeClock)
         }
-        val (nextViewId, _) = viewIdClockPairs.firstOrNull { (_, timeClock) ->
+        val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
             timeClock.toInt() > nowClock.toInt()
-        } ?: viewIdClockPairs[0]
+        } ?: owghats[0]
         remoteViews.setTextColor(nextViewId, Color.RED)
+
+        if (enableWorkManager) { // we can't have 1 minutes updates in work manager
+            remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.GONE)
+        } else {
+            val difference = timeClock.toInt() - nowClock.toInt()
+            remoteViews.setTextViewText(
+                R.id.textPlaceholder2_4x2, context.getString(
+                    R.string.n_till,
+                    Clock.fromInt(if (difference > 0) difference else difference + 60 * 24)
+                        .asRemainingTime(context),
+                    context.getString(nextOwghatId)
+                )
+            )
+        }
+
         remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
     } else remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.GONE)
 
