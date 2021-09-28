@@ -92,8 +92,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
         applyAppLanguage(this)
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
         super.onCreate(savedInstanceState)
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         initGlobal(this)
