@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="?attr/colorCard"
-    android:fitsSystemWindows="true">
+    android:background="?attr/colorCard">
 
     <include
         android:id="@+id/app_bar"
