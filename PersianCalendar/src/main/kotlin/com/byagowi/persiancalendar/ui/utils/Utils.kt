@@ -176,15 +176,19 @@ fun Activity.askForCalendarPermission() {
         .show()
 }
 
-fun Window.makeTransparent() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-        this.attributes = this.attributes.also {
-            it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-        }
-        this.statusBarColor = Color.TRANSPARENT
-        this.navigationBarColor = Color.TRANSPARENT
+fun Window.makeStatusBarTransparent() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
+    // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
+    this.attributes = this.attributes.also {
+        it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
     }
+    this.statusBarColor = Color.TRANSPARENT
+}
+
+fun Window.makeWallpaperTransparency() {
+    makeStatusBarTransparent()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        this.navigationBarColor = Color.TRANSPARENT
     this.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
     this.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 }

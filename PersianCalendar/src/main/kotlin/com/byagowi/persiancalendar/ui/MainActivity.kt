@@ -5,14 +5,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -51,6 +47,7 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.makeStatusBarTransparent
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -93,6 +90,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Theme.apply(this)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
+
+        window.makeStatusBarTransparent()
+
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         initGlobal(this)
 
@@ -106,14 +106,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) window?.also { window ->
-            // https://learnpainless.com/android/material/make-fully-android-transparent-status-bar
-            window.attributes = window.attributes.also {
-                it.flags and WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS.inv()
-            }
-            window.statusBarColor = Color.TRANSPARENT
         }
 
         binding.drawer.addDrawerListener(createDrawerListener())

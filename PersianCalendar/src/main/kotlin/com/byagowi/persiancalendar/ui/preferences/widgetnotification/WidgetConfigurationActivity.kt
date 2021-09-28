@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.WidgetPreferenceLayoutBinding
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.makeTransparent
+import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
@@ -39,7 +39,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         Theme.apply(this)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
-        window?.makeTransparent()
+        window?.makeWallpaperTransparency()
 
         val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {
             setContentView(it.root)
