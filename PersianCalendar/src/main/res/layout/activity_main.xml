@@ -23,7 +23,6 @@
         android:background="?attr/colorDrawerBackground"
         app:headerLayout="@layout/navigation_header"
         app:itemIconTint="?attr/colorDrawerIcon"
-        app:itemShapeAppearanceOverlay="@style/ShapeAppearanceOverlay.Nav"
         app:itemTextColor="?attr/colorTextNormal"
         app:menu="@menu/navigation_items" />
 

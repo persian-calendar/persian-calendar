@@ -9,10 +9,10 @@ import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.android.material.color.DynamicColors
 
 enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private val styleRes: Int) {
     SYSTEM_DEFAULT("SystemDefault", R.string.theme_default, R.style.LightTheme),
@@ -26,20 +26,24 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
         private val SharedPreferences?.theme
             get() = this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
 
-        fun apply(activity: AppCompatActivity) = activity.setTheme(getCurrent(activity))
+        fun apply(activity: AppCompatActivity) {
+            val theme = getCurrent(activity)
+            if (theme != SYSTEM_DEFAULT) return activity.setTheme(theme.styleRes)
+            val isNightModeEnabled = isNightModeEnabled(activity)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                activity.setTheme(
+                    if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
+                )
+                DynamicColors.applyIfAvailable(activity)
+            } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
+        }
 
-        @StyleRes
-        private fun getCurrent(context: Context): Int {
+        private fun getCurrent(context: Context): Theme {
             val key = context.appPrefs.theme
             val userTheme = values().find { it.key == key } ?: SYSTEM_DEFAULT
-            if (userTheme != SYSTEM_DEFAULT) return userTheme.styleRes
-            if (isPowerSaveMode(context)) return BLACK.styleRes
-            val isNightModeEnabled = isNightModeEnabled(context)
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
-            } else {
-                if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes
-            }
+            if (userTheme != SYSTEM_DEFAULT) return userTheme
+            if (isPowerSaveMode(context)) return BLACK
+            return SYSTEM_DEFAULT
         }
 
         @StyleRes

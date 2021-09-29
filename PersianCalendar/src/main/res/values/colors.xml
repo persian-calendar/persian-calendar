@@ -3,6 +3,12 @@
     <color name="ic_launcher_background">#26A69A</color>
     <color name="splashscreen_background_color">#48000000</color>
 
+    <color name="primary_container_light">#E0E0E0</color>
+    <color name="primary_container_dark">#404040</color>
+
+    <color name="secondary_container_light">#E0E0E0</color>
+    <color name="secondary_container_dark">#404040</color>
+
     <color name="qibla_color">#888</color>
     <color name="widget_holiday">#ff8a65</color>
     <color name="widget_divider">#46ffffff</color>
