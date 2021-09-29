@@ -235,12 +235,7 @@ val generateAppSrcTask by tasks.registering {
             }
         }
         val irregularRecurringEvents = (events["Irregular Recurring"] as List<*>)
-            .mapNotNull {
-                (it as Map<*, *>).takeIf { event ->
-                    event["rule"] in
-                            listOf("last weekday of month", "nth day from", "end of month")
-                }
-            }
+            .mapNotNull { it as Map<*, *> }
             .joinToString(",\n    ") { event ->
                 "mapOf(${event.map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
             }
