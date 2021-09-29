@@ -238,7 +238,7 @@ val generateAppSrcTask by tasks.registering {
             .mapNotNull {
                 (it as Map<*, *>).takeIf { event ->
                     event["rule"] in
-                            listOf("last weekday of month", "nth day of year", "end of month")
+                            listOf("last weekday of month", "nth day from", "end of month")
                 }
             }
             .joinToString(",\n    ") { event ->

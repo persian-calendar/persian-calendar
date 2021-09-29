@@ -1294,7 +1294,7 @@
       "title": "روز جهانی قدس (آخرین جمعهٔ ماه رمضان)", "holiday": false },
     { "calendar": "Persian", "rule": "last weekday of month", "weekday": 4, "month": 12, "type": "AncientIran",
       "title": "چهارشنبه‌سوری (آخرین سه‌شنبه سال)", "holiday": false },
-    { "calendar": "Gregorian", "rule": "nth day of year", "nth": 256, "type": "International",
+    { "calendar": "Gregorian", "rule": "nth day from", "nth": 256, "month": 1, "day": 1, "type": "International",
       "title": "روز جهانی برنامه‌نویس (روز ۲۵۶م سال میلادی)", "holiday": false },
     { "calendar": "Hijri", "rule": "end of month", "month": 2, "type": "Iran",
       "title": "شهادت امام رضا (ع) (۲۰۳ ه‍.ق) (۳۰ صَفَر یا انتهای ماه)", "holiday": true },

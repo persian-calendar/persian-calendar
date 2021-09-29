@@ -168,9 +168,11 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
             }
         }.mapNotNull { event ->
             val date = when (event["rule"]) {
-                "nth day of year" -> {
+                "nth day from" -> {
                     val nth = event["nth"]?.toIntOrNull() ?: return@mapNotNull null
-                    (Jdn(type, year, 1, 1) + nth - 1).toCalendar(type)
+                    val day = event["day"]?.toIntOrNull() ?: return@mapNotNull null
+                    val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
+                    (Jdn(type, year, month, day) + nth - 1).toCalendar(type)
                 }
                 "end of month" -> {
                     val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
