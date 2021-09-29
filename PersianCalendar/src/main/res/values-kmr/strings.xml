@@ -119,4 +119,7 @@
     <string name="march">Adar</string>
     <string name="february">Sibat</string>
     <string name="january">Kanûna paşîn</string>
+    <string name="shift_work_night">Şevkarî</string>
+    <string name="week_of_year_summary">Nîşandana heftiya salê di rojhejmêrê de</string>
+    <string name="week_of_year">Heftiya salê</string>
 </resources>
