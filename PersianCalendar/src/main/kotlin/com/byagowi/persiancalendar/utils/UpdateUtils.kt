@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
@@ -555,7 +556,7 @@ private fun updateNotification(
 
     // Night mode doesn't like our custom notification in Samsung and HTC One UI
     val shouldDisableCustomNotification = when (Build.BRAND) {
-        "samsung", "htc" -> isNightModeEnabled(context)
+        "samsung", "htc" -> Theme.isNightModeEnabled(context)
         else -> false
     }
 
