@@ -42,7 +42,7 @@ class AngleDisplay(
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
     private val displayPadding = 8.dp.toInt()
-    val displayGap = 20.dp.toInt()
+    val displayGap = 24.dp.toInt()
 
     fun updatePlacement(x: Int, y: Int) {
         displayRect.set(
