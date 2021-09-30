@@ -50,6 +50,7 @@ import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
+import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -208,6 +209,10 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
     val color = Color.parseColor(textColor)
     remoteViews.setTextColor(R.id.textview_age_widget_title, color)
     remoteViews.setTextColor(R.id.textview_age_widget, color)
+    remoteViews.setOnClickPendingIntent(
+        R.id.age_widget_root,
+        context.launchAgeWidgetConfigurationAppPendingIntent(widgetId)
+    )
     return remoteViews
 }
 
@@ -657,3 +662,13 @@ private fun Context.launchAppPendingIntent(): PendingIntent? = PendingIntent.get
     PendingIntent.FLAG_UPDATE_CURRENT or
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
 )
+
+private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int): PendingIntent? =
+    PendingIntent.getActivity(
+        this, 0,
+        Intent(this, AgeWidgetConfigureActivity::class.java)
+            .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        PendingIntent.FLAG_UPDATE_CURRENT or
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+    )
