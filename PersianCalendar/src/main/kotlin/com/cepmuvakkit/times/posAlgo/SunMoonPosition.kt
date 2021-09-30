@@ -1,5 +1,7 @@
 package com.cepmuvakkit.times.posAlgo
 
+import kotlin.math.cos
+
 /**
  * @author mehmetrg
  */
@@ -32,7 +34,7 @@ class SunMoonPosition(
         val qibla = EarthPosition(21.416666667, 39.816666)
         destinationHeading = earth.toEarthHeading(qibla)
         // moonPhase = (1 + cos(pi - E)) / 2;
-        moonPhase = (1 + Math.cos(Math.PI - E)) / 2 //48694254279852139 e-17
+        moonPhase = (1 + cos(Math.PI - E)) / 2 //48694254279852139 e-17
         //System.out.println(qiblaInfo.getKiloMetres());
     }
 }
