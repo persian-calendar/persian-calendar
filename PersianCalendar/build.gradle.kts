@@ -22,7 +22,7 @@ plugins {
 //   error("As current Api based flavors scheme, use even number for patch numbers")
 //val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
-val composeVersion = "1.0.2"
+val composeVersion = "1.0.3"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
