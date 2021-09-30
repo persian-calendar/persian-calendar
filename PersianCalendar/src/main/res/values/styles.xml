@@ -66,6 +66,11 @@
         <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
     </style>
 
+    <style name="SplashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
+    </style>
+
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowBackground">@color/dark_primary</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
