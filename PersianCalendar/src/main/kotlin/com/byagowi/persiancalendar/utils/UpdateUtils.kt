@@ -587,18 +587,18 @@ private fun updateNotification(
             builder.setStyle(NotificationCompat.BigTextStyle().bigText(content))
         } else {
             builder.setCustomContentView(RemoteViews(
-                context.packageName,
-                if (context.resources.isRtl) R.layout.custom_notification else R.layout.custom_notification_ltr
+                context.packageName, R.layout.custom_notification
             ).also {
+                it.setDirection(R.id.custom_notification_root, context)
                 it.setTextViewText(R.id.title, title)
                 it.setTextViewText(R.id.body, subtitle)
             })
 
             if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
                 builder.setCustomBigContentView(RemoteViews(
-                    context.packageName,
-                    if (context.resources.isRtl) R.layout.custom_notification_big else R.layout.custom_notification_big_ltr
+                    context.packageName, R.layout.custom_notification_big
                 ).also {
+                    it.setDirection(R.id.custom_notification_root, context)
                     it.setTextViewText(R.id.title, title)
                     it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
                     it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
@@ -634,7 +634,7 @@ private fun createRoundDrawable(color: String): Drawable {
     }
 }
 
-private fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
+fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
     val direction =
         if (language.isArabicScript) View.LAYOUT_DIRECTION_RTL // just in case something went wrong
         else context.resources.configuration.layoutDirection

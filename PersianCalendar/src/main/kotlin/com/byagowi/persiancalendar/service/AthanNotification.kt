@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.isRtl
+import com.byagowi.persiancalendar.utils.setDirection
 import com.byagowi.persiancalendar.utils.toFormattedString
 
 private const val NOTIFICATION_ID = 1002
@@ -90,11 +91,9 @@ class AthanNotification : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(
-                applicationContext?.packageName, if (resources.isRtl)
-                    R.layout.custom_notification
-                else
-                    R.layout.custom_notification_ltr
+                applicationContext?.packageName, R.layout.custom_notification
             )
+            cv.setDirection(R.id.custom_notification_root, this)
             cv.setTextViewText(R.id.title, title)
             if (subtitle.isEmpty()) {
                 cv.setViewVisibility(R.id.body, View.GONE)
