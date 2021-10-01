@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.gregorianCalendarEvents
@@ -22,6 +23,7 @@ import com.byagowi.persiancalendar.utils.persianCalendarEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
@@ -87,17 +89,23 @@ class SearchEventsAdapter private constructor(
             lifecycleOwner: LifecycleOwner,
         ) {
             lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                val jdn = Jdn.today
-                val events = listOf(
-                    context.getAllEnabledAppointments(), persianCalendarEvents.getAllEvents(),
-                    islamicCalendarEvents.getAllEvents(), gregorianCalendarEvents.getAllEvents()
-                ).flatten() + listOf(
-                    jdn.toPersianCalendar(), jdn.toGregorianCalendar(), jdn.toIslamicCalendar()
-                ).flatMap { irregularCalendarEventsStore.getEventsList(it.year, it.calendarType) }
-                val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
-                val itemsWords = events.map { it to it.formattedTitle.split(*delimiters) }
-                withContext(Dispatchers.Main.immediate) {
-                    searchAutoComplete.setAdapter(SearchEventsAdapter(context, events, itemsWords))
+                withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) {
+                    val jdn = Jdn.today
+                    val events = listOf(
+                        context.getAllEnabledAppointments(), persianCalendarEvents.getAllEvents(),
+                        islamicCalendarEvents.getAllEvents(), gregorianCalendarEvents.getAllEvents()
+                    ).flatten() + listOf(
+                        jdn.toPersianCalendar(), jdn.toGregorianCalendar(), jdn.toIslamicCalendar()
+                    ).flatMap {
+                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
+                    }
+                    val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
+                    val itemsWords = events.map { it to it.formattedTitle.split(*delimiters) }
+                    withContext(Dispatchers.Main.immediate) {
+                        searchAutoComplete.setAdapter(
+                            SearchEventsAdapter(context, events, itemsWords)
+                        )
+                    }
                 }
             }
         }
