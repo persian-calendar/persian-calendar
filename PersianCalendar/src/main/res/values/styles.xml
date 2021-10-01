@@ -87,6 +87,7 @@
         <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorDark</item>
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
+        <item name="popupMenuBackground">@color/dark_card_background</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -104,6 +105,7 @@
         <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
+        <item name="popupMenuBackground">@color/light_card_background</item>
     </style>
 
     <style name="DarkTheme" parent="BaseDarkTheme">
@@ -381,19 +383,19 @@
         <item name="tabIndicatorHeight">3dp</item>
         <item name="android:textSize">@dimen/text_size_title</item>
         <item name="tabIconTint">?attr/colorTextSecond</item>
-        <item name="tabTextAppearance">@style/customTabTextAppearance</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabBackground">?attr/colorCard</item>
         <item name="tabTextColor">?attr/normalTabTextColor</item>
     </style>
 
     <style name="TabLayoutColored" parent="Widget.MaterialComponents.TabLayout.Colored">
         <item name="tabIndicatorColor">?attr/coloredTabIndicatorColor</item>
-        <item name="tabTextAppearance">@style/customTabTextAppearance</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabBackground">?attr/coloredTabBackground</item>
         <item name="tabTextColor">?attr/coloredTabTextColor</item>
     </style>
 
-    <style name="customTabTextAppearance" parent="TextAppearance.MaterialComponents.Button">
+    <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
         <!--<item name="textAllCaps">false</item>-->
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
     </style>
@@ -406,5 +408,15 @@
     <style name="TransparentBottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+    <style name="AppOutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton" />
+
+    <style name="AppTextButton" parent="Widget.MaterialComponents.Button.TextButton" />
+
+    <style name="AppChipChoice" parent="Widget.MaterialComponents.Chip.Choice" />
+
+    <style name="AppFullscreenAlertDialog" parent="Widget.MaterialComponents.MaterialCalendar.Fullscreen" />
+
+    <style name="AppTextInputLayoutFilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox" />
 
 </resources>

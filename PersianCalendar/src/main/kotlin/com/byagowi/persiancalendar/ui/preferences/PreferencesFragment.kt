@@ -132,8 +132,7 @@ class PreferencesFragment : Fragment() {
         }
         toolbar.menu.addSubMenu("Log Viewer").also {
             fun viewCommandResult(command: String) = AlertDialog.Builder(
-                activity,
-                com.google.android.material.R.style.Widget_MaterialComponents_MaterialCalendar_Fullscreen
+                activity, R.style.AppFullscreenAlertDialog
             ).also { dialog ->
                 dialog.setTitle("Logs")
                 dialog.setView(

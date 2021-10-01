@@ -13,7 +13,7 @@
 
     <Button
         android:id="@+id/more"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/AppTextButton"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
