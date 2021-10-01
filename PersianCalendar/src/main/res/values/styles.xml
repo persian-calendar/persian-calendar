@@ -28,7 +28,7 @@
     <attr name="coloredTabTextColor" format="reference" />
     <attr name="normalTabTextColor" format="reference" />
     <attr name="appDivider" format="reference" />
-    <attr name="toolbarTheme" format="reference" />
+    <attr name="appToolbarTheme" format="reference" />
     <attr name="menuIconColor" format="reference" />
     <attr name="dragIconColor" format="reference" />
     <attr name="coloredTabIndicatorColor" format="reference" />
@@ -78,6 +78,7 @@
         <item name="materialButtonStyle">@style/ButtonTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="appToolbarTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
         <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
         <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
@@ -94,6 +95,7 @@
         <item name="materialButtonStyle">@style/ButtonTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="appToolbarTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
         <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
         <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
@@ -146,8 +148,6 @@
         <item name="coloredTabTextColor">@color/dark_accent</item>
         <item name="normalTabTextColor">@color/tab_background_select_dark</item>
 
-        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
-
         <item name="menuIconColor">@color/dark_menu_icon_color</item>
         <item name="dragIconColor">@color/dark_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/dark_accent</item>
@@ -196,8 +196,6 @@
         <item name="coloredTabTextColor">@color/black_accent</item>
         <item name="normalTabTextColor">@color/tab_background_select_dark</item>
 
-        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
-
         <item name="menuIconColor">@color/black_menu_icon_color</item>
         <item name="dragIconColor">@color/black_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/black_accent</item>
@@ -243,8 +241,6 @@
         <item name="coloredTabBackground">@color/light_accent</item>
         <item name="coloredTabTextColor">@color/light_card_background</item>
         <item name="normalTabTextColor">@color/tab_background_select</item>
-
-        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
 
         <item name="menuIconColor">@color/light_menu_icon_color</item>
         <item name="dragIconColor">@color/light_drag_icon_color</item>
@@ -293,8 +289,6 @@
         <item name="coloredTabTextColor">@color/blue_card_background</item>
         <item name="normalTabTextColor">@color/tab_background_select</item>
 
-        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Dark</item>
-
         <item name="menuIconColor">@color/blue_menu_icon_color</item>
         <item name="dragIconColor">@color/blue_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/blue_background</item>
@@ -342,14 +336,13 @@
         <item name="coloredTabTextColor">@color/tab_background_select</item>
         <item name="normalTabTextColor">@color/tab_background_select</item>
 
-        <item name="toolbarTheme">@style/ThemeOverlay.AppCompat.Light</item>
-
         <item name="menuIconColor">@color/modern_menu_icon_color</item>
         <item name="dragIconColor">@color/modern_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
 
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="appToolbarTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
     </style>
 
     <style name="FullscreenTheme" parent="LightTheme">
