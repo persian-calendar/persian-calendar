@@ -11,13 +11,13 @@
         style="@style/TextAppearance.Compat.Notification.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="آزمایش" />
+        tools:text="Title" />
 
     <TextView
         android:id="@+id/body"
         style="@style/TextAppearance.Compat.Notification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:text="آزمایش" />
+        tools:text="Body" />
 
 </LinearLayout>
