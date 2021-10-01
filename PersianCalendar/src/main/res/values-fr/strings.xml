@@ -309,7 +309,7 @@
     <string name="thursday">jeudi</string>
     <string name="friday">vendredi</string>
     <string name="sun_view">Vue Soleil</string>
-    <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
-    <string name="enable_new_interface">Enable the new interface</string>
+    <string name="asr_hanafi_juristic">Méthode juridique Hanafi Asr</string>
+    <string name="enable_new_interface">Activer la nouvelle interface</string>
     <string name="are_you_sure">Are you sure?</string>
 </resources>
