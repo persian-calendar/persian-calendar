@@ -84,7 +84,7 @@ class AboutFragment : Fragment() {
         binding.aboutHeader.also {
             it.text = version
             it.fadeIn(2500)
-            it.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.ic_launcher, 0, 0)
+            it.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.ic_launcher_round, 0, 0)
         }
 
         fun TextView.putLineStartIcon(@DrawableRes icon: Int) {

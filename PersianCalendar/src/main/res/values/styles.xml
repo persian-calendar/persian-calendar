@@ -69,6 +69,7 @@
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
+        <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen</item>
     </style>
 
     <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
