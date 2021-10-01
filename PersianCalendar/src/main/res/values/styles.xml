@@ -72,12 +72,40 @@
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen</item>
     </style>
 
-    <style name="DarkTheme" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="BaseDarkTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:windowBackground">@color/dark_primary</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
         <item name="materialButtonStyle">@style/ButtonTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
+        <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
+        <item name="SunViewTimelineColor">@color/sViewTimelineColorDark</item>
+        <item name="SunViewTaglineColor">@color/sViewTaglineColorDark</item>
+        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorDark</item>
+        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
+        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
+    </style>
+
+    <style name="BaseLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialButtonStyle">@style/ButtonTheme</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="android:typeface">sans</item>
+        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
+        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
+        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
+        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
+        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
+        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
+        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
+    </style>
+
+    <style name="DarkTheme" parent="BaseDarkTheme">
+        <item name="android:windowBackground">@color/dark_primary</item>
 
         <item name="colorMonthsBackground">@color/dark_primary</item>
         <item name="colorPrimary">@color/dark_accent</item>
@@ -87,7 +115,6 @@
             @color/dark_primary_dark
         </item>
         <item name="navigationBarColor">@color/dark_primary</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/dark_card_background</item>
         <item name="colorBackground">@color/dark_background</item>
@@ -112,15 +139,6 @@
         <item name="colorMonthSwitch">@color/dark_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_dark</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorDark</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorDark</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorDark</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
 
         <item name="android:textColor">@color/dark_text_normal</item>
 
@@ -136,12 +154,8 @@
         <item name="colorTextDaySelected">@color/dark_primary</item>
     </style>
 
-    <style name="BlackTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    <style name="BlackTheme" parent="BaseDarkTheme">
         <item name="android:windowBackground">@color/black_primary</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="materialButtonStyle">@style/ButtonTheme</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
 
         <item name="colorMonthsBackground">@color/black_primary</item>
         <item name="colorPrimary">@color/black_accent</item>
@@ -151,7 +165,6 @@
             @color/black_primary_dark
         </item>
         <item name="navigationBarColor">@color/black_primary</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/black_card_background</item>
         <item name="colorBackground">@color/black_background</item>
@@ -176,15 +189,6 @@
         <item name="colorMonthSwitch">@color/black_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_dark</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorDark</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorDark</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorDark</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
 
         <item name="android:textColor">@color/black_text_normal</item>
 
@@ -200,12 +204,7 @@
         <item name="colorTextDaySelected">@color/black_primary</item>
     </style>
 
-    <style name="LightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="materialButtonStyle">@style/ButtonTheme</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
-
+    <style name="LightTheme" parent="BaseLightTheme">
         <item name="colorMonthsBackground">@color/light_primary</item>
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
@@ -214,7 +213,6 @@
             @color/light_primary_dark
         </item>
         <item name="navigationBarColor">@color/light_primary</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/light_card_background</item>
         <item name="colorBackground">@color/light_background</item>
@@ -239,15 +237,6 @@
         <item name="colorMonthSwitch">@color/light_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_light</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
         <item name="android:textColor">@color/light_text_normal</item>
 
@@ -263,12 +252,7 @@
         <item name="colorTextDaySelected">@color/dark_primary</item>
     </style>
 
-    <style name="BlueTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="materialButtonStyle">@style/ButtonTheme</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
-
+    <style name="BlueTheme" parent="BaseLightTheme">
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorPrimaryDark">@color/blue_primary</item>
@@ -278,7 +262,6 @@
         </item>
         <item name="navigationBarColor">@color/blue_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/blue_card_background</item>
         <item name="colorBackground">@color/blue_background</item>
@@ -303,15 +286,6 @@
         <item name="colorMonthSwitch">@color/blue_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_light</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
         <item name="android:textColor">@color/blue_text_normal</item>
 
@@ -327,12 +301,7 @@
         <item name="colorTextDaySelected">@color/dark_primary</item>
     </style>
 
-    <style name="ModernTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="materialButtonStyle">@style/ButtonTheme</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
-
+    <style name="ModernTheme" parent="BaseLightTheme">
         <item name="colorMonthsBackground">@color/modern_primary</item>
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorPrimaryDark">@color/modern_primary</item>
@@ -342,9 +311,6 @@
         </item>
         <item name="navigationBarColor">@color/modern_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
-
-        <!-- Customize your theme here. -->
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
 
         <item name="colorCard">@color/modern_card_background</item>
         <item name="colorBackground">@color/modern_background</item>
@@ -369,15 +335,6 @@
         <item name="colorMonthSwitch">@color/modern_month_switch</item>
 
         <item name="appDivider">@drawable/app_divider_light</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
 
         <item name="android:textColor">@color/modern_text_normal</item>
 
