@@ -32,7 +32,7 @@ android {
         getByName("main").kotlin.srcDir(generatedAppSrcDir)
     }
 
-    compileSdk = 30
+    compileSdk = 31
     buildToolsVersion = "30.0.3"
 
     buildFeatures {
