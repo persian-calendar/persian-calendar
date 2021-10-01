@@ -1,14 +1,18 @@
 package com.byagowi.persiancalendar.ui.preferences
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -29,6 +33,7 @@ import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCal
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
@@ -37,6 +42,7 @@ import com.byagowi.persiancalendar.utils.enableNewInterface
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.spacedAnd
 import com.google.android.material.tabs.TabLayoutMediator
+import java.io.File
 import java.util.concurrent.TimeUnit
 
 /**
@@ -130,22 +136,39 @@ class PreferencesFragment : Fragment() {
                 }
                 .show()
         }
+        fun viewCommandResult(command: String) = AlertDialog.Builder(
+            activity, R.style.AppFullscreenAlertDialog
+        ).also { dialog ->
+            val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
+            val button = ImageButton(activity).also { button ->
+                button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
+                button.setOnClickListener { _ ->
+                    val uri = FileProvider.getUriForFile(
+                        activity.applicationContext, "${activity.packageName}.provider",
+                        File(activity.externalCacheDir, "log.txt").also { it.writeText(result) }
+                    )
+                    activity.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
+                        it.type = "text/plain"
+                        it.putExtra(Intent.EXTRA_STREAM, uri)
+                        it.putExtra(Intent.EXTRA_SUBJECT, "Log")
+                    }, getString(R.string.share)))
+                }
+            }
+            dialog.setCustomTitle(
+                LinearLayout(activity).also {
+                    it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+                    it.addView(button)
+                }
+            )
+            dialog.setView(
+                ScrollView(context).also { scrollView ->
+                    scrollView.addView(TextView(context).also { it.text = result })
+                    // Scroll to bottom, https://stackoverflow.com/a/3080483
+                    scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
+                }
+            )
+        }.show().let {}
         toolbar.menu.addSubMenu("Log Viewer").also {
-            fun viewCommandResult(command: String) = AlertDialog.Builder(
-                activity, R.style.AppFullscreenAlertDialog
-            ).also { dialog ->
-                dialog.setTitle("Logs")
-                dialog.setView(
-                    ScrollView(context).also { scrollView ->
-                        scrollView.addView(TextView(context).also { textView ->
-                            textView.text = Runtime.getRuntime().exec(command)
-                                .inputStream.bufferedReader().readText()
-                        })
-                        // Scroll to bottom, https://stackoverflow.com/a/3080483
-                        scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
-                    }
-                )
-            }.show().let {}
             it.add("Filtered").onClick {
                 viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")
             }
