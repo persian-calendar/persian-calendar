@@ -61,7 +61,6 @@ android {
             "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr"
         )
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
-        multiDexEnabled = false
     }
 
     signingConfigs {
@@ -89,9 +88,10 @@ android {
 
         getByName("debug") {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
-            applicationIdSuffix = ".debug"
-            multiDexEnabled = true
             buildConfigField("boolean", "DEVELOPMENT", "true")
+
+            // Commented out To make it work in older Android version, feel free to undo
+            // applicationIdSuffix = ".debug"
         }
 
         getByName("release") {
@@ -101,6 +101,7 @@ android {
             )
             isMinifyEnabled = true
             isShrinkResources = true
+            multiDexEnabled = false
             buildConfigField("boolean", "DEVELOPMENT", "false")
         }
     }
