@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.preferences
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.FileProvider
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -37,12 +35,12 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.enableNewInterface
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.spacedAnd
 import com.google.android.material.tabs.TabLayoutMediator
-import java.io.File
 import java.util.concurrent.TimeUnit
 
 /**
@@ -142,17 +140,7 @@ class PreferencesFragment : Fragment() {
             val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
             val button = ImageButton(activity).also { button ->
                 button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
-                button.setOnClickListener { _ ->
-                    val uri = FileProvider.getUriForFile(
-                        activity.applicationContext, "${activity.packageName}.provider",
-                        File(activity.externalCacheDir, "log.txt").also { it.writeText(result) }
-                    )
-                    activity.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
-                        it.type = "text/plain"
-                        it.putExtra(Intent.EXTRA_STREAM, uri)
-                        it.putExtra(Intent.EXTRA_SUBJECT, "Log")
-                    }, getString(R.string.share)))
-                }
+                button.setOnClickListener { activity.shareText(result, "log.txt", "text/plain") }
             }
             dialog.setCustomTitle(
                 LinearLayout(activity).also {

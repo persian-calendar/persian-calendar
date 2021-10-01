@@ -51,6 +51,7 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -104,7 +105,11 @@ class DeviceInformationFragment : Fragment() {
             )
             val adapter = DeviceInformationAdapter(activity ?: return@let)
             it.adapter = adapter
-            binding.fab.setOnClickListener { adapter.print(layoutInflater.context) }
+            binding.fab.setOnClickListener { context?.showHtml(adapter.asHtml()) }
+            binding.toolbar.menu.add(R.string.share).also { menu ->
+                menu.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
+                menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }.onClick { activity?.shareText(adapter.asHtml(), "device.html", "text/html") }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -500,7 +505,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
 
     override fun getItemCount() = deviceInformationItems.size
 
-    fun print(context: Context) = context.showHtml(createHTML().html {
+    fun asHtml() = createHTML().html {
         head {
             meta(charset = "utf8")
             style { unsafe { +"td { padding: .5em; border-top: 1px solid lightgray }" } }
@@ -520,7 +525,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
             }
             script { unsafe { +"print()" } }
         }
-    })
+    }
 
     inner class ViewHolder(private val binding: DeviceInformationItemBinding) :
         RecyclerView.ViewHolder(binding.root), View.OnClickListener {

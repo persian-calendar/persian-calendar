@@ -84,6 +84,17 @@ fun Context.showHtml(html: String) = runCatching {
         .launchUrl(this, uri)
 }.onFailure(logException).let {}
 
+fun Activity.shareText(text: String, fileName: String, mime: String) = runCatching {
+    val uri = FileProvider.getUriForFile(
+        applicationContext, "$packageName.provider",
+        File(externalCacheDir, fileName).also { it.writeText(text) }
+    )
+    startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
+        it.type = mime
+        it.putExtra(Intent.EXTRA_STREAM, uri)
+    }, getString(R.string.share)))
+}.onFailure(logException).let {}
+
 fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
     setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
