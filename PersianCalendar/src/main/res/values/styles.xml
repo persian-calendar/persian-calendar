@@ -29,6 +29,7 @@
     <attr name="normalTabTextColor" format="reference" />
     <attr name="appDivider" format="reference" />
     <attr name="appToolbarTheme" format="reference" />
+    <attr name="appToolbarPopupTheme" format="reference" />
     <attr name="menuIconColor" format="reference" />
     <attr name="dragIconColor" format="reference" />
     <attr name="coloredTabIndicatorColor" format="reference" />
@@ -87,7 +88,7 @@
         <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorDark</item>
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
-        <item name="popupMenuBackground">@color/dark_card_background</item>
+        <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -105,7 +106,7 @@
         <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
-        <item name="popupMenuBackground">@color/light_card_background</item>
+        <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
     </style>
 
     <style name="DarkTheme" parent="BaseDarkTheme">
