@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
@@ -335,20 +336,23 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         return true
     }
 
-    private fun showChangeLanguageSnackbar() = Snackbar.make(
-        binding.root, "✖  Change app language?", Snackbar.LENGTH_INDEFINITE
-    ).also {
-        it.view.layoutDirection = View.LAYOUT_DIRECTION_LTR
-        it.view.setOnClickListener { _ -> it.dismiss() }
-        it.setAction("Settings") {
-            navHostFragment?.navController?.navigateSafe(
-                CalendarFragmentDirections.navigateToSettings(
-                    PreferencesFragment.INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
+    private fun showChangeLanguageSnackbar() {
+        if (Language.userDeviceLanguage == Language.FA.language) return
+        Snackbar.make(
+            binding.root, "✖  Change app language?", Snackbar.LENGTH_INDEFINITE
+        ).also {
+            it.view.layoutDirection = View.LAYOUT_DIRECTION_LTR
+            it.view.setOnClickListener { _ -> it.dismiss() }
+            it.setAction("Settings") {
+                navHostFragment?.navController?.navigateSafe(
+                    CalendarFragmentDirections.navigateToSettings(
+                        PreferencesFragment.INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
+                    )
                 )
-            )
-        }
-        it.setActionTextColor(it.context.resolveColor(R.attr.colorDrawerIcon))
-    }.show()
+            }
+            it.setActionTextColor(it.context.resolveColor(R.attr.colorDrawerIcon))
+        }.show()
+    }
 
     private fun showAppIsOutDatedSnackbar() = Snackbar.make(
         binding.root, getString(R.string.outdated_app), 10000

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
+import android.annotation.SuppressLint
 import android.content.Context
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.listOf12Items
@@ -214,6 +215,15 @@ enum class Language(val code: String, val nativeName: String) {
         .replace("ە", "هی")
 
     companion object {
+        @SuppressLint("ConstantLocale")
+        val userDeviceLanguage = Locale.getDefault().language ?: EN_US.language
+
+        // Preferred app language for certain locale
+        fun preferredDefaultLanguage() = when (userDeviceLanguage) {
+            FA.code, "en", EN_US.code -> FA.code
+            else -> values().find { it.code == userDeviceLanguage }?.code ?: EN_US.code
+        }
+
         private val persianCalendarMonths = listOf12Items(
             R.string.farvardin, R.string.ordibehesht, R.string.khordad,
             R.string.tir, R.string.mordad, R.string.shahrivar,

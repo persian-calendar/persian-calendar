@@ -4,7 +4,6 @@ import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
-import com.byagowi.persiancalendar.DEFAULT_APP_LANGUAGE
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
@@ -192,7 +191,8 @@ fun updateStoredPreference(context: Context) {
     debugLog("Utils: updateStoredPreference is called")
     val prefs = context.appPrefs
 
-    val languageCode = prefs.getString(PREF_APP_LANGUAGE, null) ?: DEFAULT_APP_LANGUAGE
+    val languageCode = prefs.getString(PREF_APP_LANGUAGE, null)
+        ?: Language.preferredDefaultLanguage()
     language = Language.values().find { it.code == languageCode } ?: Language.FA
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
 
