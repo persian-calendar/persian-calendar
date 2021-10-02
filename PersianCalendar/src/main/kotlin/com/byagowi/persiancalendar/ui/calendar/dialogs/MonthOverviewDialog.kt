@@ -84,7 +84,9 @@ private class MonthOverviewItemAdapter(private val rows: List<Pair<String, CharS
             binding.body.isVisible = body.isNotEmpty()
         }
 
-        override fun onClick(v: View?) = v?.context.copyToClipboard(rows[bindingAdapterPosition]
-            .let { (title, body) -> listOf(title, body).joinToString("\n") })
+        override fun onClick(v: View?) {
+            val (title, body) = rows[bindingAdapterPosition]
+            if (body.isNotEmpty()) v?.context.copyToClipboard(title + "\n" + body)
+        }
     }
 }
