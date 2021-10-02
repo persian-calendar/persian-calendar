@@ -386,3 +386,12 @@ tasks.register("moveToApiFlavors") {
         println("git status".execute().text)
     }
 }
+
+tasks.register("mergeWeblate") {
+    doLast {
+        val weblateRepository = "https://hosted.weblate.org/git/persian-calendar/persian-calendar/"
+        println("git remote add weblate $weblateRepository".execute().text)
+        println("git remote update weblate".execute().text)
+        println("git merge weblate/main".execute().text)
+    }
+}
