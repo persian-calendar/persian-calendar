@@ -15,8 +15,6 @@ import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
-import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
@@ -52,6 +50,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
@@ -241,22 +240,24 @@ fun updateStoredPreference(context: Context) {
             ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
     }
     runCatching {
-        mainCalendar =
-            CalendarType.valueOf(prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: "SHAMSI")
-
-        otherCalendars = (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: "GREGORIAN,ISLAMIC")
-            .splitIgnoreEmpty(",").map(CalendarType::valueOf)
+        mainCalendar = CalendarType.valueOf(
+            prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultMainCalendar
+        )
+        otherCalendars =
+            (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: language.defaultOtherCalendars)
+                .splitIgnoreEmpty(",").map(CalendarType::valueOf)
     }.onFailure(logException).onFailure {
+        // This really shouldn't happen, just in case
         mainCalendar = CalendarType.SHAMSI
         otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
-    }
+    }.getOrNull().debugAssertNotNull
 
     isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =
-        (prefs.getString(PREF_WEEK_START, null) ?: DEFAULT_WEEK_START).toIntOrNull() ?: 0
+        (prefs.getString(PREF_WEEK_START, null) ?: language.defaultWeekStart).toIntOrNull() ?: 0
 
     weekEnds = BooleanArray(7)
-    (prefs.getStringSet(PREF_WEEK_ENDS, null) ?: DEFAULT_WEEK_ENDS)
+    (prefs.getStringSet(PREF_WEEK_ENDS, null) ?: language.defaultWeekEnds)
         .mapNotNull(String::toIntOrNull).forEach { weekEnds[it] = true }
 
     isShowDeviceCalendarEvents = prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false)

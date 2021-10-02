@@ -67,11 +67,7 @@ const val DEFAULT_NOTIFY_DATE = true
 const val DEFAULT_NOTIFICATION_ATHAN = false
 const val DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true
 const val DEFAULT_ATHAN_VOLUME = 1
-const val DEFAULT_WEEK_START = "0"
 const val DEFAULT_ISLAMIC_OFFSET = "0"
-
-// WeekEnds, 6 means Friday
-val DEFAULT_WEEK_ENDS = setOf("6")
 
 const val LOAD_APP_ID = 1000
 const val THREE_HOURS_APP_ID = 1010

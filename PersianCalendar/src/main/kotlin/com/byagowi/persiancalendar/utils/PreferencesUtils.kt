@@ -5,8 +5,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.DEFAULT_CITY
-import com.byagowi.persiancalendar.DEFAULT_WEEK_ENDS
-import com.byagowi.persiancalendar.DEFAULT_WEEK_START
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
@@ -84,32 +82,10 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
         }
     }
 
-    when {
-        language.isTurkish -> {
-            putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
-            putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-            putString(PREF_WEEK_START, "2") // Monday
-            putStringSet(PREF_WEEK_ENDS, setOf("0", "1")) // Saturday and Sunday
-        }
-        language.prefersGregorianCalendar -> {
-            putString(PREF_MAIN_CALENDAR_KEY, "GREGORIAN")
-            putString(PREF_OTHER_CALENDARS_KEY, "ISLAMIC,SHAMSI")
-            putString(PREF_WEEK_START, "1") // Sunday
-            putStringSet(PREF_WEEK_ENDS, setOf("0", "1")) // Saturday and Sunday
-        }
-        language.prefersIslamicCalendar -> {
-            putString(PREF_MAIN_CALENDAR_KEY, "ISLAMIC")
-            putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,SHAMSI")
-            putString(PREF_WEEK_START, DEFAULT_WEEK_START)
-            putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
-        }
-        language.prefersPersianCalendar -> {
-            putString(PREF_MAIN_CALENDAR_KEY, "SHAMSI")
-            putString(PREF_OTHER_CALENDARS_KEY, "GREGORIAN,ISLAMIC")
-            putString(PREF_WEEK_START, DEFAULT_WEEK_START)
-            putStringSet(PREF_WEEK_ENDS, DEFAULT_WEEK_ENDS)
-        }
-    }
+    putString(PREF_MAIN_CALENDAR_KEY, language.defaultMainCalendar)
+    putString(PREF_OTHER_CALENDARS_KEY, language.defaultOtherCalendars)
+    putString(PREF_WEEK_START, language.defaultWeekStart)
+    putStringSet(PREF_WEEK_ENDS, language.defaultWeekEnds)
 
     putString(PREF_PRAY_TIME_METHOD, language.preferredCalculationMethod.name)
 }

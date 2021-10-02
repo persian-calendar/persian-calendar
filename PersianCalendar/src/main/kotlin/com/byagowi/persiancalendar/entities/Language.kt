@@ -113,25 +113,54 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     // We can presume user would prefer Gregorian calendar at least initially
-    val prefersGregorianCalendar: Boolean
+    private val prefersGregorianCalendar: Boolean
         get() = when (this) {
             EN_US, JA, FR, ES, UR, TR, KMR -> true
             else -> false
         }
 
     // We can presume user would prefer Gregorian calendar at least initially
-    val prefersIslamicCalendar: Boolean
+    private val prefersIslamicCalendar: Boolean
         get() = when (this) {
             AR -> true
             else -> false
         }
 
     // We can presume user would prefer Gregorian calendar at least initially
-    val prefersPersianCalendar: Boolean
+    private val prefersPersianCalendar: Boolean
         get() = when (this) {
             AZB, GLK, FA, FA_AF, PS, EN_IR -> true
             else -> false
         }
+
+    val defaultMainCalendar get() = when {
+        this == FA -> CalendarType.SHAMSI.name
+        prefersGregorianCalendar -> CalendarType.GREGORIAN.name
+        prefersIslamicCalendar -> CalendarType.ISLAMIC.name
+        prefersPersianCalendar -> CalendarType.SHAMSI.name
+        else -> CalendarType.SHAMSI.name
+    }
+
+    val defaultOtherCalendars get() = when {
+        this == FA -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
+        prefersGregorianCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
+        prefersIslamicCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
+        prefersPersianCalendar -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
+        else -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
+    }
+
+    val defaultWeekStart get() = when {
+        this == FA -> "0"
+        isTurkish -> "2" // Monday
+        prefersGregorianCalendar -> "1" // Sunday
+        else -> "0"
+    }
+
+    val defaultWeekEnds get() = when {
+        this == FA -> setOf("6")
+        prefersGregorianCalendar -> setOf("0", "1") // Saturday and Sunday
+        else -> setOf("6") // 6 means Friday
+    }
 
     fun getPersianMonths(context: Context): List<String> = when (this) {
         FA, EN_IR -> persianCalendarMonthsInPersian
