@@ -167,7 +167,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
-                putAthanNameOnSummary(null)
+                putAthanNameOnSummary(defaultAthanName)
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
@@ -213,7 +213,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {
-        ringtonePreference?.summary = athanName ?: defaultAthanName
+        ringtonePreference?.summary = athanName
         defaultAthanPreference?.isVisible = PREF_ATHAN_URI in (context ?: return).appPrefs
     }
 
