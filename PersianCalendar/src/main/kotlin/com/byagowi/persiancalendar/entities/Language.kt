@@ -245,12 +245,15 @@ enum class Language(val code: String, val nativeName: String) {
 
     companion object {
         @SuppressLint("ConstantLocale")
-        val userDeviceLanguage = Locale.getDefault().language ?: EN_US.language
+        val userDeviceLanguage = Locale.getDefault().language ?: "en"
+
+        @SuppressLint("ConstantLocale")
+        private val userDeviceCountry = Locale.getDefault().country ?: "IR"
 
         // Preferred app language for certain locale
         val preferredDefaultLanguage
             get() = when (userDeviceLanguage) {
-                FA.code, "en", EN_US.code -> FA
+                FA.code, "en", EN_US.code -> if (userDeviceCountry == "AF") FA_AF else FA
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
 
