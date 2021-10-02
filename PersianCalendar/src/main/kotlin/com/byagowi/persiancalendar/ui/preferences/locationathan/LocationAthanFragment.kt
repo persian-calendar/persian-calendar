@@ -12,6 +12,7 @@ import android.os.Looper
 import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.ListPreference
@@ -48,6 +49,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var selectedLocationPreference: Preference? = null
     private var athanPreferenceCategory: PreferenceCategory? = null
     private var asrCalculationHanafiJuristic: Preference? = null
+    private var defaultAthanPreference: Preference? = null
 
     // Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
     private val prayTimeCalculationMethods = listOf(
@@ -117,20 +119,12 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     this@LocationAthanFragment.ringtonePreference = this
                     handler.post { dependency = PREF_NOTIFICATION_ATHAN }
                 }
-                clickable(onClick = {
-                    context?.appPrefs?.edit {
-                        remove(PREF_ATHAN_URI)
-                        remove(PREF_ATHAN_NAME)
-                    }
-                    view?.let { v ->
-                        Snackbar.make(v, R.string.returned_to_default, Snackbar.LENGTH_SHORT)
-                            .show()
-                    }
-                    putAthanNameOnSummary(defaultAthanName)
-                }) {
+                clickable(onClick = ::restoreDefaultAthanClick) {
+                    defaultAthanPreference = this
                     title(R.string.default_athan)
                     summary(R.string.default_athan_summary)
                     handler.post { dependency = PREF_NOTIFICATION_ATHAN }
+                    isVisible = PREF_ATHAN_URI in activity.appPrefs
                 }
                 switch(PREF_ASCENDING_ATHAN_VOLUME, false) {
                     title(R.string.ascending_athan_volume)
@@ -152,10 +146,31 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         onSharedPreferenceChanged(null, null)
         layoutInflater.context.appPrefs.registerOnSharedPreferenceChangeListener(this)
 
-        putAthanNameOnSummary(
-            layoutInflater.context.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName)
-        )
+        putAthanNameOnSummary(activity.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName))
         updateLocationOnSummaries()
+    }
+
+    private fun restoreDefaultAthanClick() {
+        val activity = activity ?: return
+        AlertDialog.Builder(activity)
+            .setTitle(R.string.default_athan_summary)
+            .setMessage(R.string.are_you_sure)
+            .setPositiveButton(R.string.accept) { _, _ ->
+                activity.appPrefs.edit {
+                    remove(PREF_ATHAN_URI)
+                    remove(PREF_ATHAN_NAME)
+                }
+                view?.let { v ->
+                    Snackbar.make(
+                        v,
+                        R.string.returned_to_default,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+                putAthanNameOnSummary(null)
+            }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
     }
 
     private class PickRingtoneContract : ActivityResultContract<Uri?, String>() {
@@ -198,7 +213,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     }
 
     private fun putAthanNameOnSummary(athanName: String?) {
-        ringtonePreference?.summary = athanName
+        ringtonePreference?.summary = athanName ?: defaultAthanName
+        defaultAthanPreference?.isVisible = PREF_ATHAN_URI in (context ?: return).appPrefs
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

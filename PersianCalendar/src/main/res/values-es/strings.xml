@@ -324,4 +324,5 @@
     <string name="sun_view">Sun View</string>
     <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
     <string name="enable_new_interface">Enable the new interface</string>
+    <string name="are_you_sure">Are you sure?</string>
 </resources>
