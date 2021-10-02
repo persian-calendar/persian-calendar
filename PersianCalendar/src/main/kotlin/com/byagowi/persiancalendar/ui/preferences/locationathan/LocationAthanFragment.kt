@@ -119,7 +119,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     this@LocationAthanFragment.ringtonePreference = this
                     handler.post { dependency = PREF_NOTIFICATION_ATHAN }
                 }
-                clickable(onClick = ::restoreDefaultAthanClick) {
+                clickable(onClick = ::restoreDefaultAthan) {
                     defaultAthanPreference = this
                     title(R.string.default_athan)
                     summary(R.string.default_athan_summary)
@@ -146,11 +146,11 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         onSharedPreferenceChanged(null, null)
         layoutInflater.context.appPrefs.registerOnSharedPreferenceChangeListener(this)
 
-        putAthanNameOnSummary(activity.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName))
+        updateAthanSummaries(activity.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName))
         updateLocationOnSummaries()
     }
 
-    private fun restoreDefaultAthanClick() {
+    private fun restoreDefaultAthan() {
         val activity = activity ?: return
         AlertDialog.Builder(activity)
             .setTitle(R.string.default_athan_summary)
@@ -167,7 +167,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }
-                putAthanNameOnSummary(defaultAthanName)
+                updateAthanSummaries(defaultAthanName)
             }
             .setNegativeButton(R.string.cancel, null)
             .show()
@@ -209,10 +209,10 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         view?.let {
             Snackbar.make(it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT).show()
         }
-        putAthanNameOnSummary(ringtoneTitle)
+        updateAthanSummaries(ringtoneTitle)
     }
 
-    private fun putAthanNameOnSummary(athanName: String?) {
+    private fun updateAthanSummaries(athanName: String?) {
         ringtonePreference?.summary = athanName
         defaultAthanPreference?.isVisible = PREF_ATHAN_URI in (context ?: return).appPrefs
     }
