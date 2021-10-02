@@ -248,10 +248,14 @@ enum class Language(val code: String, val nativeName: String) {
         val userDeviceLanguage = Locale.getDefault().language ?: EN_US.language
 
         // Preferred app language for certain locale
-        fun preferredDefaultLanguage() = when (userDeviceLanguage) {
-            FA.code, "en", EN_US.code -> FA.code
-            else -> values().find { it.code == userDeviceLanguage }?.code ?: EN_US.code
-        }
+        val preferredDefaultLanguage
+            get() = when (userDeviceLanguage) {
+                FA.code, "en", EN_US.code -> FA
+                else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
+            }
+
+        fun valueOfLanguageCode(languageCode: String): Language? =
+            values().find { it.code == languageCode }
 
         private val persianCalendarMonths = listOf12Items(
             R.string.farvardin, R.string.ordibehesht, R.string.khordad,

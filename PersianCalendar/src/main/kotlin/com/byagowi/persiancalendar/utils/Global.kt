@@ -190,9 +190,8 @@ fun updateStoredPreference(context: Context) {
     debugLog("Utils: updateStoredPreference is called")
     val prefs = context.appPrefs
 
-    val languageCode = prefs.getString(PREF_APP_LANGUAGE, null)
-        ?: Language.preferredDefaultLanguage()
-    language = Language.values().find { it.code == languageCode } ?: Language.FA
+    language = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
+        ?: Language.preferredDefaultLanguage
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
 
     enableNewInterface = canEnableNewInterface &&
