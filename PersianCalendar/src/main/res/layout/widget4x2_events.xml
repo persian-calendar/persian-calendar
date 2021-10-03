@@ -3,7 +3,7 @@
 
     <TextView
         android:id="@+id/textPlaceholder2_4x2"
-        style="@style/ShadowTextStyle"
+        style="@style/WidgetTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -13,7 +13,7 @@
 
     <TextView
         android:id="@+id/holiday_4x2"
-        style="@style/ShadowTextStyle"
+        style="@style/WidgetTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
@@ -24,7 +24,7 @@
 
     <TextView
         android:id="@+id/event_4x2"
-        style="@style/ShadowTextStyle"
+        style="@style/WidgetTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"

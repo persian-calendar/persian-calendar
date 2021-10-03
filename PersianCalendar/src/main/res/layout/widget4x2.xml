@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/textPlaceholder0_4x2"
-                style="@style/ShadowTextStyle"
+                style="@style/WidgetTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -49,7 +49,7 @@
 
             <TextView
                 android:id="@+id/textPlaceholder1_4x2"
-                style="@style/ShadowTextStyle"
+                style="@style/WidgetTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

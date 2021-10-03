@@ -20,7 +20,7 @@
 
         <TextClock
             android:id="@+id/time_2x2"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
@@ -30,7 +30,7 @@
 
         <TextView
             android:id="@+id/date_2x2"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/owghat_2x2"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -48,7 +48,7 @@
 
         <TextView
             android:id="@+id/holiday_2x2"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -57,7 +57,7 @@
 
         <TextView
             android:id="@+id/event_2x2"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"

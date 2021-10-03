@@ -18,7 +18,7 @@
 
         <TextClock
             android:id="@+id/sample_clock"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
@@ -28,7 +28,7 @@
 
         <TextView
             android:id="@+id/sample_clock_replacement"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
@@ -38,7 +38,7 @@
 
         <TextView
             android:id="@+id/sample_text"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

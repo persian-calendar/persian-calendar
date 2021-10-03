@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="ShadowTextStyle" parent="android:Theme.DeviceDefault.DayNight" />
+
     <style name="DynamicLightTheme" parent="ModernTheme">
         <item name="colorAccent">@android:color/system_accent2_800</item>
         <item name="colorMonthsBackground">@android:color/system_accent1_50</item>

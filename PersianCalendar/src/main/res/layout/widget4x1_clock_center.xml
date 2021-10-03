@@ -30,7 +30,7 @@
 
             <TextClock
                 android:id="@+id/textPlaceholder1_4x1"
-                style="@style/ShadowTextStyle"
+                style="@style/WidgetTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-thin"
@@ -40,7 +40,7 @@
 
             <TextView
                 android:id="@+id/textPlaceholder3_4x1"
-                style="@style/ShadowTextStyle"
+                style="@style/WidgetTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -52,7 +52,7 @@
 
         <TextView
             android:id="@+id/textPlaceholder2_4x1"
-            style="@style/ShadowTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
