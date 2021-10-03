@@ -156,6 +156,11 @@ var calendarTypesTitleAbbr = emptyList<String>()
     private set
 // Some more are in EventsUtils
 
+val defaultWidgetBackground
+    get() =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) "#20000000"
+        else DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
     debugLog("Utils: initGlobal is called")
@@ -220,7 +225,7 @@ fun updateStoredPreference(context: Context) {
     selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
         ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     selectedWidgetBackgroundColor = prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR, null)
-        ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+        ?: defaultWidgetBackground
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm

@@ -214,7 +214,7 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
     val textColor = appPrefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId, null)
         ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     val backgroundColor = appPrefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId, null)
-        ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+        ?: defaultWidgetBackground
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_age)
     remoteViews.setRoundBackground(R.id.age_widget_background, width, height, backgroundColor)
     remoteViews.setDirection(R.id.age_widget_root, context)

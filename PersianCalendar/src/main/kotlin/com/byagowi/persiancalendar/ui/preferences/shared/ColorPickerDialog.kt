@@ -10,11 +10,12 @@ import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.defaultWidgetBackground
 import java.util.*
 
 fun showColorPickerDialog(activity: Activity, isBackgroundPick: Boolean, key: String) {
     val initialColor = activity.appPrefs.getString(key, null)
-        ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+        ?: if (isBackgroundPick) defaultWidgetBackground else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
     showColorPickerDialog(activity, isBackgroundPick, initialColor) { colorResult ->
         activity.appPrefs.edit { this.putString(key, colorResult) }
     }
