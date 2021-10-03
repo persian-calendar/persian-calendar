@@ -34,10 +34,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
             if (userTheme != SYSTEM_DEFAULT) return userTheme.styleRes
             if (isPowerSaveMode(context)) return BLACK.styleRes
             val isNightModeEnabled = isNightModeEnabled(context)
-            // https://stackoverflow.com/a/67933556
-            val isDynamicThemeEnabled = // Check for Android 12 availability
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.CODENAME == "S"
-            return if (isDynamicThemeEnabled) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
             } else {
                 if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes
