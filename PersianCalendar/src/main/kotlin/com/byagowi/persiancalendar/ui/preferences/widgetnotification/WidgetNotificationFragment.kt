@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
+import com.byagowi.persiancalendar.utils.isAlwaysCenterAlignWidgets
 import com.byagowi.persiancalendar.utils.language
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
@@ -81,6 +82,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                 switch(PREF_CENTER_ALIGN_WIDGETS, false) {
                     title(R.string.center_align_widgets)
                     summary(R.string.center_align_widgets_summary)
+                    isVisible = !isAlwaysCenterAlignWidgets
                 }
                 switch(PREF_IRAN_TIME, false) {
                     title(R.string.iran_time)
