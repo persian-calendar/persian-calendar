@@ -70,6 +70,9 @@ fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) = runCatching {
 
 private var latestFiredUpdate = 0L
 
+// 16dp on pre-12, but Android 12 is more, is a bit ugly to have it as a global variable
+private var roundPixelSize = 0f
+
 fun update(context: Context, updateDate: Boolean) {
     val now = System.currentTimeMillis()
     if (!updateDate && now - latestFiredUpdate < HALF_SECOND_IN_MILLIS) {
@@ -113,6 +116,12 @@ fun update(context: Context, updateDate: Boolean) {
             context.appPrefs.cityName?.also { append(" ($it)") }
     }
     // endregion
+
+    roundPixelSize =
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 16.dp
+        else context.resources.getDimensionPixelSize(
+            android.R.dimen.system_app_widget_background_radius
+        ).toFloat()
 
     // Widgets
     AppWidgetManager.getInstance(context).run {
@@ -630,7 +639,7 @@ private fun createRoundDrawable(color: String): Drawable {
         it.fillColor = ColorStateList.valueOf(Color.parseColor(color))
         // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
         // Apply a 16dp round corner which is the default in Android 12 apparently
-        it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
+        it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundPixelSize)
     }
 }
 
