@@ -33,6 +33,7 @@
     <attr name="dragIconColor" format="reference" />
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
+    <attr name="isDarkTheme" format="boolean" />
 
     <style name="ShapeAppearanceOverlay.Nav">
         <item name="cornerFamily">rounded</item>
@@ -88,6 +89,7 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="isDarkTheme">true</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -106,6 +108,7 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
+        <item name="isDarkTheme">false</item>
     </style>
 
     <!-- Their actual definition is in v31/styles.xml -->

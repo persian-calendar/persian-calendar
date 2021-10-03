@@ -16,7 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.utils.isDarkTheme
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 
 @Composable
@@ -29,16 +29,13 @@ fun ComposeTheme(content: @Composable () -> Unit) {
         val secondary =
             Color(context.resolveColor(com.google.android.material.R.attr.colorSecondary))
         val surface = Color(context.resolveColor(R.attr.colorBackground))
-        when (Theme.getCurrent(context)) {
-            Theme.DARK, Theme.BLACK -> darkColors(
-                primary = primary, primaryVariant = primaryVariant, secondary = secondary,
-                surface = surface
-            )
-            else -> lightColors(
-                primary = primary, primaryVariant = primaryVariant, secondary = secondary,
-                surface = surface
-            )
-        }
+        if (context.isDarkTheme) darkColors(
+            primary = primary, primaryVariant = primaryVariant, secondary = secondary,
+            surface = surface
+        ) else lightColors(
+            primary = primary, primaryVariant = primaryVariant, secondary = secondary,
+            surface = surface
+        )
     }
 
     MaterialTheme(

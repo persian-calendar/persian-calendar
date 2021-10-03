@@ -115,6 +115,11 @@ fun Context.resolveColor(attr: Int) = TypedValue().let {
     ContextCompat.getColor(this, it.resourceId)
 }
 
+val Context.isDarkTheme get() = TypedValue().let {
+    theme.resolveAttribute(R.attr.isDarkTheme, it, false)
+    it.data != 0 // https://stackoverflow.com/a/60667225
+}
+
 fun Flow.addViewsToFlow(viewList: List<View>) {
     val parentView = (this.parent as? ViewGroup).debugAssertNotNull ?: return
     this.referencedIds = viewList.map {

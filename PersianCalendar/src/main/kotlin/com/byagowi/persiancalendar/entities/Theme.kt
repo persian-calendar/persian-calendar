@@ -25,14 +25,22 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
         private val SharedPreferences?.theme
             get() = this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
 
-        fun apply(activity: AppCompatActivity) = activity.setTheme(getCurrent(activity).styleRes)
+        fun apply(activity: AppCompatActivity) = activity.setTheme(getCurrent(activity))
 
-        fun getCurrent(context: Context): Theme {
+        @StyleRes
+        private fun getCurrent(context: Context): Int {
             val key = context.appPrefs.theme
-            return values().find { it.key == key }?.takeIf { it != SYSTEM_DEFAULT } ?: when {
-                isPowerSaving(context) -> BLACK
-                isNightModeEnabled(context) -> DARK
-                else -> LIGHT
+            val userTheme = values().find { it.key == key } ?: SYSTEM_DEFAULT
+            if (userTheme != SYSTEM_DEFAULT) return userTheme.styleRes
+            if (isPowerSaveMode(context)) return BLACK.styleRes
+            val isNightModeEnabled = isNightModeEnabled(context)
+            // https://stackoverflow.com/a/67933556
+            val isDynamicThemeEnabled = // Check for Android 12 availability
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S || Build.VERSION.CODENAME == "S"
+            return if (isDynamicThemeEnabled) {
+                if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
+            } else {
+                if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes
             }
         }
 
@@ -41,7 +49,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
         fun isNightModeEnabled(context: Context): Boolean =
             context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
-        private fun isPowerSaving(context: Context): Boolean {
+        private fun isPowerSaveMode(context: Context): Boolean {
             return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
                     context.getSystemService<PowerManager>()?.isPowerSaveMode == true
         }
