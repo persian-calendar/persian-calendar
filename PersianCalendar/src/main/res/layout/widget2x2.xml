@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textColor="@android:color/white"
             android:textSize="34sp" />
 
         <TextView
@@ -33,7 +32,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textColor="@android:color/white"
             android:textSize="14sp" />
 
         <TextView
@@ -42,7 +40,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textColor="@android:color/white"
             android:textSize="14sp" />
 
         <TextView
@@ -60,7 +57,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:textColor="@android:color/white"
             android:textSize="14sp" />
 
     </LinearLayout>

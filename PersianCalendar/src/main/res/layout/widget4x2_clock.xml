@@ -39,7 +39,6 @@
                 android:gravity="end|center_vertical"
                 android:textAlignment="viewEnd"
                 android:maxLines="1"
-                android:textColor="@android:color/white"
                 android:textSize="56sp" />
 
             <FrameLayout
@@ -59,7 +58,6 @@
                 android:lineSpacingExtra="1dp"
                 android:minLines="4"
                 android:text=""
-                android:textColor="@android:color/white"
                 android:textSize="13sp" />
 
         </LinearLayout>

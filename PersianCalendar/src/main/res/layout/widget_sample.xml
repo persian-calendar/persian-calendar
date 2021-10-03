@@ -23,7 +23,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
             android:gravity="center"
-            android:textColor="@android:color/white"
             android:textSize="34sp" />
 
         <TextView
@@ -33,7 +32,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
             android:gravity="center"
-            android:textColor="@android:color/white"
             android:textSize="34sp" />
 
         <TextView

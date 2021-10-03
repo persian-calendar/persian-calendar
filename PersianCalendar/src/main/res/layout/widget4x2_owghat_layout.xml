@@ -17,7 +17,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/not_set_time"
-        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
     <FrameLayout
@@ -36,7 +35,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/not_set_time"
-        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
     <FrameLayout
@@ -55,7 +53,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/not_set_time"
-        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
     <FrameLayout
@@ -74,7 +71,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/not_set_time"
-        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
     <FrameLayout
@@ -93,7 +89,6 @@
         android:layout_weight="1"
         android:gravity="center"
         android:text="@string/not_set_time"
-        android:textColor="@android:color/white"
         android:textSize="14sp" />
 
 </LinearLayout>
