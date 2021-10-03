@@ -8,4 +8,4 @@
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="600000"
     android:widgetCategory="keyguard|home_screen"
-    android:widgetFeatures="reconfigurable" />
+    android:widgetFeatures="reconfigurable|configuration_optional" />
