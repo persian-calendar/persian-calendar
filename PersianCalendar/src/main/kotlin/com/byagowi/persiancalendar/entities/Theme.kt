@@ -9,6 +9,7 @@ import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -34,7 +35,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
             if (userTheme != SYSTEM_DEFAULT) return userTheme.styleRes
             if (isPowerSaveMode(context)) return BLACK.styleRes
             val isNightModeEnabled = isNightModeEnabled(context)
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && BuildConfig.DEVELOPMENT) {
                 if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
             } else {
                 if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes
