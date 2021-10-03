@@ -27,7 +27,6 @@
     <attr name="coloredTabBackground" format="reference" />
     <attr name="coloredTabTextColor" format="reference" />
     <attr name="normalTabTextColor" format="reference" />
-    <attr name="appDivider" format="reference" />
     <attr name="appToolbarTheme" format="reference" />
     <attr name="appToolbarPopupTheme" format="reference" />
     <attr name="menuIconColor" format="reference" />
@@ -143,8 +142,6 @@
         <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
         <item name="colorMonthSwitch">@color/dark_month_switch</item>
 
-        <item name="appDivider">@drawable/app_divider_dark</item>
-
         <item name="android:textColor">@color/dark_text_normal</item>
 
         <item name="coloredTabBackground">@color/dark_card_background</item>
@@ -191,8 +188,6 @@
         <item name="colorDrawerIcon">@color/black_icon_drawer</item>
         <item name="colorMonthSwitch">@color/black_month_switch</item>
 
-        <item name="appDivider">@drawable/app_divider_dark</item>
-
         <item name="android:textColor">@color/black_text_normal</item>
 
         <item name="coloredTabBackground">@color/black_card_background</item>
@@ -236,8 +231,6 @@
         <item name="colorDrawerSelect">@color/light_drawer_select</item>
         <item name="colorDrawerIcon">@color/light_icon_drawer</item>
         <item name="colorMonthSwitch">@color/light_month_switch</item>
-
-        <item name="appDivider">@drawable/app_divider_light</item>
 
         <item name="android:textColor">@color/light_text_normal</item>
 
@@ -284,8 +277,6 @@
         <item name="colorDrawerIcon">@color/blue_icon_drawer</item>
         <item name="colorMonthSwitch">@color/blue_month_switch</item>
 
-        <item name="appDivider">@drawable/app_divider_light</item>
-
         <item name="android:textColor">@color/blue_text_normal</item>
 
         <item name="coloredTabBackground">@color/blue_primary</item>
@@ -329,9 +320,7 @@
         <item name="colorDrawerBackground">@color/modern_drawer_background</item>
         <item name="colorDrawerSelect">@color/modern_drawer_select</item>
         <item name="colorDrawerIcon">@color/modern_icon_drawer</item>
-        <item name="colorMonthSwitch">@color/modern_month_switch</item>
-
-        <item name="appDivider">@drawable/app_divider_light</item>
+        <item name="colorMonthSwitch">@color/modern_month_switch</item>>
 
         <item name="android:textColor">@color/modern_text_normal</item>
 
