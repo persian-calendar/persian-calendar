@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DynamicLightTheme" parent="ModernTheme">
+        <item name="colorAccent">@android:color/system_accent2_800</item>
+        <item name="colorMonthsBackground">@android:color/system_accent1_50</item>
+        <item name="android:navigationBarColor">@android:color/system_accent1_50</item>
+        <item name="navigationBarColor">@android:color/system_accent1_50</item>
+        <item name="colorPrimary">@android:color/system_accent3_800</item>
+        <item name="colorPrimaryDark">@android:color/system_accent1_50</item>
+        <item name="colorCard">@android:color/system_accent1_50</item>
+        <item name="coloredTabBackground">@android:color/system_accent1_50</item>
+        <item name="coloredTabIndicatorColor">@android:color/system_accent2_600</item>
+        <item name="colorMonthSwitch">@android:color/system_accent3_600</item>
+        <item name="colorDrawerBackground">@android:color/system_accent1_50</item>
+        <item name="colorDrawerIcon">@android:color/system_accent3_900</item>
+        <item name="colorTextToday">@android:color/system_accent3_900</item>
+        <item name="colorCurrentDay">@android:color/system_accent2_600</item>
+    </style>
+
+    <style name="DynamicDarkTheme" parent="BlackTheme">
+        <item name="colorAccent">@android:color/system_accent2_200</item>
+        <item name="colorMonthsBackground">@android:color/system_accent2_900</item>
+        <item name="android:navigationBarColor">@android:color/system_accent2_900</item>
+        <item name="navigationBarColor">@android:color/system_accent2_900</item>
+        <item name="colorPrimary">@android:color/system_accent3_200</item>
+        <item name="colorPrimaryDark">@android:color/system_accent2_900</item>
+        <item name="colorCard">@android:color/system_accent2_900</item>v
+        <item name="coloredTabTextColor">@android:color/system_accent2_50</item>
+        <item name="coloredTabBackground">@android:color/system_accent2_900</item>
+        <item name="coloredTabIndicatorColor">@android:color/system_accent2_50</item>
+        <item name="colorMonthSwitch">@android:color/system_accent3_400</item>
+        <item name="colorDrawerBackground">@android:color/system_accent2_900</item>
+        <item name="colorDrawerIcon">@android:color/system_accent3_200</item>
+        <item name="colorTextToday">@android:color/system_accent3_50</item>
+        <item name="colorCurrentDay">@android:color/system_accent2_400</item>
+    </style>
+
+</resources>

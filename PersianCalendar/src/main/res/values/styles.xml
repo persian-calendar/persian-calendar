@@ -108,6 +108,10 @@
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
     </style>
 
+    <!-- Their actual definition is in v31/styles.xml -->
+    <style name="DynamicLightTheme" parent="LightTheme" />
+    <style name="DynamicDarkTheme" parent="DarkTheme" />
+
     <style name="DarkTheme" parent="BaseDarkTheme">
         <item name="android:windowBackground">@color/dark_primary</item>
 
