@@ -110,8 +110,7 @@ var otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
 var isShowWeekOfYearEnabled = false
     private set
-val isAlwaysCenterAlignWidgets get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-var isCenterAlignWidgets = isAlwaysCenterAlignWidgets
+var isCenterAlignWidgets = true
     private set
 var weekStartOffset = 0
     private set
@@ -216,7 +215,7 @@ fun updateStoredPreference(context: Context) {
     isWidgetClock = prefs.getBoolean(PREF_WIDGET_CLOCK, DEFAULT_WIDGET_CLOCK)
     isNotifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
-    isCenterAlignWidgets = isAlwaysCenterAlignWidgets || prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, false)
+    isCenterAlignWidgets = prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
 
     selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
         ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
