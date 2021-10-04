@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         binding = ActivityMainBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
+        ensureDirectionality()
 
         if (enableNewInterface &&
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
@@ -186,6 +187,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         applyAppLanguage(this)
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
+    }
+
+    // This shouldn't be needed but as a the last resort
+    private fun ensureDirectionality() {
+        binding.root.layoutDirection =
+            if (language.isArabicScript) View.LAYOUT_DIRECTION_RTL // just in case resources isn't correct
+            else resources.configuration.layoutDirection
     }
 
     private var previousAppThemeValue: String? = null
@@ -286,7 +294,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         applyAppLanguage(this)
-        binding.drawer.layoutDirection = resources.configuration.layoutDirection
+        ensureDirectionality()
     }
 
     override fun onResume() {
