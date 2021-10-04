@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
+import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -40,7 +41,7 @@ class SharedDayViewData(
     }.resourceId else 0
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resolveColor(com.google.android.material.R.attr.colorSecondary)
+        it.color = context.resolveColor(R.attr.colorAppointment)
     }
     val eventIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = widgetTextColor ?: context.resolveColor(R.attr.colorEventIndicator)

@@ -4,6 +4,7 @@
     <attr name="navigationBarColor" format="reference" />
     <attr name="colorMonthsBackground" format="reference" />
     <attr name="colorCard" format="reference" />
+    <attr name="colorAppointment" format="reference" />
     <attr name="colorBackground" format="reference" />
     <attr name="colorTextPrimary" format="reference" />
     <attr name="colorIcon" format="reference" />
@@ -159,6 +160,7 @@
         <item name="dragIconColor">@color/dark_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/dark_accent</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
+        <item name="colorAppointment">@color/dark_accent</item>
     </style>
 
     <style name="BlackTheme" parent="BaseDarkTheme">
@@ -205,6 +207,7 @@
         <item name="dragIconColor">@color/black_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/black_accent</item>
         <item name="colorTextDaySelected">@color/black_primary</item>
+        <item name="colorAppointment">@color/dark_accent</item>
     </style>
 
     <style name="LightTheme" parent="BaseLightTheme">
@@ -249,6 +252,7 @@
         <item name="dragIconColor">@color/light_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/light_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
+        <item name="colorAppointment">@color/dark_accent</item>
     </style>
 
     <style name="BlueTheme" parent="BaseLightTheme">
@@ -294,6 +298,7 @@
         <item name="dragIconColor">@color/blue_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/blue_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
+        <item name="colorAppointment">@color/dark_accent</item>
     </style>
 
     <style name="ModernTheme" parent="BaseLightTheme">
@@ -339,6 +344,7 @@
         <item name="dragIconColor">@color/modern_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
+        <item name="colorAppointment">@color/modern_accent</item>
 
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
         <item name="appToolbarTheme">@style/ThemeOverlay.MaterialComponents.Light</item>

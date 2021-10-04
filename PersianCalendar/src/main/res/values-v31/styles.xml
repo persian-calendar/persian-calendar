@@ -23,6 +23,7 @@
         <item name="colorTextHoliday">?android:attr/colorError</item>
         <item name="colorSelectDay">@android:color/system_accent2_100</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_900</item>
+        <item name="colorAppointment">@android:color/system_accent1_400</item>
     </style>
 
     <style name="DynamicDarkTheme" parent="BlackTheme">
@@ -44,6 +45,7 @@
         <item name="colorTextHoliday">?android:attr/colorError</item>
         <item name="colorSelectDay">@android:color/system_accent2_300</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_50</item>
+        <item name="colorAppointment">@android:color/system_accent1_300</item>
     </style>
 
 </resources>
