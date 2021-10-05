@@ -37,10 +37,6 @@ import com.google.android.material.snackbar.Snackbar
 
 class AboutFragment : Fragment() {
 
-    private val appVersionList
-        get() = BuildConfig.VERSION_NAME.split("-")
-            .mapIndexed { i, x -> if (i == 0) formatNumber(x) else x }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -67,7 +63,13 @@ class AboutFragment : Fragment() {
         // app
         val version = buildSpannedString {
             scale(1f) { bold { appendLine(getString(R.string.app_name)) } }
-            scale(.8f) { append(getString(R.string.version, appVersionList.joinToString("-"))) }
+            scale(.8f) {
+                val version =
+                    // Don't formatNumber it if is multi-parted
+                    if ("-" in BuildConfig.VERSION_NAME) BuildConfig.VERSION_NAME
+                    else formatNumber(BuildConfig.VERSION_NAME)
+                append(getString(R.string.version, version))
+            }
             if (language.isUserAbleToReadPersian) {
                 appendLine()
                 scale(.8f) {
@@ -195,7 +197,7 @@ class AboutFragment : Fragment() {
 Manufacturer: ${Build.MANUFACTURER}
 Model: ${Build.MODEL}
 Android Version: ${Build.VERSION.RELEASE}
-App Version Code: ${context?.packageName} ${appVersionList[0]}"""
+App Version Code: ${context?.packageName} ${BuildConfig.VERSION_NAME}"""
 
         // https://stackoverflow.com/a/62597382
         val selectorIntent = Intent(Intent.ACTION_SENDTO).apply {
