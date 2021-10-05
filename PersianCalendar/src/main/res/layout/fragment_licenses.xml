@@ -9,15 +9,30 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="ltr"
-        android:paddingStart="4dp"
-        android:paddingEnd="4dp"
-        android:scrollbars="vertical"
-        android:textDirection="ltr"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <com.google.android.material.navigationrail.NavigationRailView
+            android:id="@+id/rail_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="?attr/colorCard"
+            app:labelVisibilityMode="labeled"
+            app:menuGravity="top" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:scrollbars="vertical"
+            android:textDirection="ltr" />
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

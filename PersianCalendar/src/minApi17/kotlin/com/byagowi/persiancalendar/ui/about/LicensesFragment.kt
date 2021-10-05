@@ -1,8 +1,15 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ReplacementSpan
@@ -21,6 +28,7 @@ import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
+import com.byagowi.persiancalendar.utils.getAppFont
 import kotlin.math.roundToInt
 
 
@@ -32,6 +40,25 @@ class LicensesFragment : Fragment() {
         binding.appBar.toolbar.let {
             it.setTitle(R.string.about_license_title)
             it.setupUpNavigation()
+        }
+
+        binding.railView.menu.also {
+            fun createTextIcon(text: String): Drawable {
+                val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+                paint.textSize = 40f
+                paint.typeface = getAppFont(layoutInflater.context)
+                val bounds = Rect()
+                paint.color = Color.WHITE
+                paint.getTextBounds(text, 0, text.length, bounds)
+                val height = bounds.height()
+                val bitmap = Bitmap.createBitmap(bounds.width(), height, Bitmap.Config.ARGB_8888)
+                Canvas(bitmap).drawText(text, 0f, height.toFloat(), paint)
+                return BitmapDrawable(layoutInflater.context.resources, bitmap)
+            }
+
+            it.add("GPLv3").setIcon(R.drawable.ic_info)
+            it.add("" + KotlinVersion.CURRENT).icon = createTextIcon("Kotlin")
+            it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_motorcycle)
         }
 
         // Based on https://stackoverflow.com/a/34623367
