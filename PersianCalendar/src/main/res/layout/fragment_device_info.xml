@@ -55,6 +55,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        app:labelVisibilityMode="labeled"
         app:itemIconTint="?attr/normalTabTextColor"
         app:itemTextColor="?attr/normalTabTextColor"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior" />

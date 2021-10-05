@@ -57,7 +57,6 @@ import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
-import com.google.android.material.navigation.NavigationBarView
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
@@ -133,23 +132,15 @@ class DeviceInformationFragment : Fragment() {
             }
         }
 
-        binding.bottomNavigation.also { bottomNavigationView ->
-            bottomNavigationView.menu.also {
-                it.add(Build.VERSION.RELEASE).setIcon(R.drawable.ic_developer)
-                    .onClick { if (++clickCount % 10 == 0) openTestingHiddenDialog() }
-
-                it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_settings)
-                    .isEnabled = false
-
-                it.add(
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
-                    else Build.CPU_ABI
-                ).setIcon(R.drawable.ic_motorcycle).isEnabled = false
-
-                it.add(Build.MODEL).setIcon(R.drawable.ic_device_information_white)
-                    .isEnabled = false
-            }
-            bottomNavigationView.labelVisibilityMode = NavigationBarView.LABEL_VISIBILITY_LABELED
+        binding.bottomNavigation.menu.also {
+            val click = { if (++clickCount % 10 == 0) openTestingHiddenDialog() }
+            it.add(Build.VERSION.RELEASE).setIcon(R.drawable.ic_developer).onClick(click)
+            it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_settings).onClick(click)
+            it.add(
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
+                else Build.CPU_ABI
+            ).setIcon(R.drawable.ic_motorcycle).onClick(click)
+            it.add(Build.MODEL).setIcon(R.drawable.ic_device_information_white).onClick(click)
         }
         return binding.root
     }

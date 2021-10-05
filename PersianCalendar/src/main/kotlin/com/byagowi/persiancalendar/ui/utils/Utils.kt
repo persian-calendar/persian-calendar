@@ -142,7 +142,7 @@ fun AppBarLayout.hideToolbarBottomShadow() {
 }
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
-    this.setOnMenuItemClickListener { action(); true /* it captures the click event */ }.let {}
+    this.setOnMenuItemClickListener { action(); false /* let it handle selected menu */ }.let {}
 
 fun View.setupExpandableAccessibilityDescription() {
     ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
