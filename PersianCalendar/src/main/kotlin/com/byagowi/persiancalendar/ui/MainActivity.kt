@@ -358,7 +358,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     )
                 )
             }
-            it.setActionTextColor(it.context.resolveColor(R.attr.colorDrawerIcon))
         }.show()
     }
 
