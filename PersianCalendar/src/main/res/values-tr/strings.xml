@@ -57,7 +57,7 @@
     <string name="other_holidays">Diğer</string>
     <string name="afghanistan_events">Afganistan (Farsça)</string>
     <string name="iran_official_events">İran, resmi (Farsça)</string>
-    <string name="afghanistan_others">Diğer Afganistan Olayları</string>
+    <string name="afghanistan_others">Diğer Afganistan Etkinlikleri</string>
     <string name="afghanistan_holidays">Afganistan Tatilleri</string>
     <string name="international">Uluslararası Etkinlikler (Farsça)</string>
     <string name="iran_others">Diğer İran Olayları</string>
@@ -140,7 +140,7 @@
     <string name="gpl_logo">GPL Logosu</string>
     <string name="phone_calendar_required">Uygulamanın bu bölümünün takvim iznine ihtiyacı vardır, izin verirseniz kişisel etkinlikleriniz takvimde gösterilir.</string>
     <string name="calendar_access">Takvim Erişimi</string>
-    <string name="phone_location_required">Uygulamanın bu kısmının, konumunuzu erişim iznine ihtiyacı vardır. Reddet\'i seçerseniz enleminizi ve boylamınızı manuel olarak girmeniz gerekir.</string>
+    <string name="phone_location_required">Uygulamanın bu kısmının, konumunuza erişmesi gerekmektedir. Reddet\'i seçerseniz enlemin ve boylam bilgilerini manuel olarak girmeniz gerekir.</string>
     <string name="location_access">Konum Erişimi</string>
     <string name="athan_disabled_summary">Ezan alarmını kurmak için bir konum seçin veya yukarıdaki koordinatları girin</string>
     <string name="athan_volume_summary">Alarmın sesini ayarlayın</string>
@@ -278,8 +278,8 @@
     <string name="year1">Maymun</string>
     <string name="year_name">Yıl Adı</string>
     <string name="date_copied_clipboard">%1$s panoya kopyalanmıştır.</string>
-    <string name="end_of_year_diff">Yıl sonuna kalan gün %1$s (~%2$s hafta veya %3$s ay)</string>
-    <string name="start_of_year_diff">Yıl başından itibaren geçen gün %1$s (~%2$s hafta veya %3$s ay)</string>
+    <string name="end_of_year_diff">Yıl sonuna %1$s gün var (~%2$s hafta veya %3$s ay)</string>
+    <string name="start_of_year_diff">Yıl başından itibaren %1$s gün geçmiştir (~%2$s hafta veya %3$s ay)</string>
     <string name="days_distance">Yaklaşan Etkinliğe Kalan Gün</string>
     <string name="search_in_events">Etkinliklerde Ara</string>
     <string name="go">Git</string>
