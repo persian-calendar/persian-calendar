@@ -21,6 +21,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LOG_TAG
+import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugLog
@@ -75,6 +76,11 @@ class PreferencesFragment : Fragment() {
         }.attach()
         binding.viewPager.currentItem = args.tab
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.post { view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
     }
 
     private val tabs = listOf(

@@ -39,6 +39,7 @@ import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
@@ -56,7 +57,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.makeStatusBarTransparent
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.configureCalendarsAndLoadEvents
@@ -240,13 +240,18 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
         settingHasChanged = true
 
+        prefs ?: return
+
+        // If it is the first initiation of preference, don't call the rest multiple times
+        if (key == PREF_HAS_EVER_VISITED || PREF_HAS_EVER_VISITED !in prefs) return
+
         when (key) {
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET ->
-                prefs?.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today) }
+                prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today) }
             PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
-                if (prefs?.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) == true
-                    && ActivityCompat.checkSelfPermission(
+                if (prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) &&
+                    ActivityCompat.checkSelfPermission(
                         this, Manifest.permission.READ_CALENDAR
                     ) != PackageManager.PERMISSION_GRANTED
                 ) askForCalendarPermission()
@@ -260,7 +265,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (previousAppThemeValue != null || Theme.isNonDefault(prefs)) restartToSettings()
             }
             PREF_NOTIFY_DATE -> {
-                if (prefs?.getBoolean(PREF_NOTIFY_DATE, true) == false) {
+                if (!prefs.getBoolean(PREF_NOTIFY_DATE, true)) {
                     stopService(Intent(this, ApplicationService::class.java))
                     startEitherServiceOrWorker(applicationContext)
                 }
