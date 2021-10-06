@@ -36,6 +36,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-thin"
                 android:gravity="start"
+                android:textAlignment="viewStart"
                 android:textSize="36dp" />
 
             <TextView
@@ -45,7 +46,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:gravity="start"
+                android:textAlignment="viewStart"
                 android:textSize="12dp" />
+
         </LinearLayout>
 
         <TextView
@@ -54,6 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textAlignment="viewStart"
             android:textSize="14dp" />
 
     </LinearLayout>

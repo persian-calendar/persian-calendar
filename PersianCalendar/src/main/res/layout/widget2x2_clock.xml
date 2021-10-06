@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"
             android:gravity="start"
+            android:textAlignment="viewStart"
             android:textSize="34sp" />
 
         <TextView
@@ -34,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textAlignment="viewStart"
             android:textSize="14sp" />
 
         <TextView
@@ -42,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textAlignment="viewStart"
             android:textSize="14sp" />
 
         <TextView
@@ -50,6 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textAlignment="viewStart"
             android:textColor="@color/widget_holiday"
             android:textSize="14sp" />
 
@@ -59,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
+            android:textAlignment="viewStart"
             android:textSize="14sp" />
 
     </LinearLayout>
