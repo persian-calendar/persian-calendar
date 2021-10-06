@@ -205,7 +205,7 @@ fun updateStoredPreference(context: Context) {
 
     preferredDigits = when {
         !prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS) ||
-                !language.isArabicScript -> ARABIC_DIGITS
+                !language.canHaveLocalDigits -> ARABIC_DIGITS
         language.prefersArabicIndicDigits -> ARABIC_INDIC_DIGITS
         else -> PERSIAN_DIGITS
     }

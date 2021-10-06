@@ -93,6 +93,9 @@ enum class Language(val code: String, val nativeName: String) {
             else -> true
         }
 
+    // Local digits (۱۲۳) make sense for the locale
+    val canHaveLocalDigits get() = isArabicScript || this == EN_IR
+
     // Prefers ٤٥٦ over ۴۵۶
     val prefersArabicIndicDigits: Boolean
         get() = when (this) {

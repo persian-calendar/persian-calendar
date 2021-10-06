@@ -73,8 +73,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 switch(PREF_PERSIAN_DIGITS, true) {
                     title(R.string.persian_digits)
                     summary(R.string.enable_persian_digits)
-                    // Don't even show the option as the option is pointless for non Arabic script locales
-                    if (!language.isArabicScript) isVisible = false
+                    if (!language.canHaveLocalDigits) isVisible = false
                 }
             }
             section(R.string.calendar) {
