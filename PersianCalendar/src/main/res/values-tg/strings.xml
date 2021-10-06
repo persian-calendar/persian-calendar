@@ -129,7 +129,7 @@
     <string name="n_till">%1$s то %2$s</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s рӯз %2$s</item>
-        <item quantity="other">%1$s рӯз %2$s</item>
+        <item quantity="other"></item>
     </plurals>
     <string name="am">AM</string>
     <string name="pm">PM</string>
@@ -270,7 +270,7 @@
     <string name="wednesday_short">Чш</string>
     <string name="thursday_short">Пш</string>
     <string name="friday_short">Ҷм</string>
-    <string name="are_you_sure">Шумо мутмаъин ҳастед\?</string>
+    <string name="are_you_sure">Шумо мутмаъин ҳастед?</string>
     <string name="method_mwl">Лигаи ҷаҳонии мусалмонон</string>
     <string name="method_isna">Ҷамъияти исломии Амрикои Шимолӣ</string>
     <string name="method_egypt">Маъмурияти умумии тадқиқоти Миср</string>
