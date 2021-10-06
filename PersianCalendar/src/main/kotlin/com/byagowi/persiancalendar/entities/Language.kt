@@ -33,6 +33,7 @@ enum class Language(val code: String, val nativeName: String) {
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
+    val isIranianEnglish get() = this == EN_IR
     private val isTurkish get() = this == TR
     private val isNorthernKurdish get() = this == KMR
     private val isKurdish get() = this == CKB

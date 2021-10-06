@@ -645,9 +645,11 @@ private fun createRoundDrawable(color: String): Drawable {
 }
 
 fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
-    val direction =
-        if (language.isArabicScript) View.LAYOUT_DIRECTION_RTL // just in case something went wrong
-        else context.resources.configuration.layoutDirection
+    val direction = when {
+        language.isIranianEnglish -> View.LAYOUT_DIRECTION_LTR // Most text in en-IR are RTL
+        language.isArabicScript -> View.LAYOUT_DIRECTION_RTL // just in case something went wrong
+        else -> context.resources.configuration.layoutDirection
+    }
     setInt(viewId, "setLayoutDirection", direction)
 }
 
