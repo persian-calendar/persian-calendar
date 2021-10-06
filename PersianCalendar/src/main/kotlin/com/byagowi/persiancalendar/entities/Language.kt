@@ -26,13 +26,14 @@ enum class Language(val code: String, val nativeName: String) {
     GLK("glk", "گيلکي"),
     JA("ja", "日本語"),
     KMR("kmr", "Kurdî"),
+    TG("tg", "Тоҷикӣ"),
     TR("tr", "Türkçe"),
     UR("ur", "اردو");
 
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
-    val isTurkish get() = this == TR
+    private val isTurkish get() = this == TR
     private val isNorthernKurdish get() = this == KMR
     private val isKurdish get() = this == CKB
 
@@ -54,19 +55,19 @@ enum class Language(val code: String, val nativeName: String) {
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, AR, TR -> true
+            EN_US, JA, FR, ES, AR, TR, TG -> true
             else -> false
         }
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR, KMR -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR, KMR, TG -> true
             else -> false
         }
 
     val preferredCalculationMethod: CalculationMethod
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, TR, KMR -> CalculationMethod.MWL
+            FA_AF, PS, UR, AR, CKB, TR, KMR, TG -> CalculationMethod.MWL
             else -> CalculationMethod.Tehran
         }
 
@@ -87,7 +88,7 @@ enum class Language(val code: String, val nativeName: String) {
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
     val prefersLocalDigits: Boolean
         get() = when (this) {
-            UR, EN_IR, EN_US, JA, FR, ES, TR, KMR -> false
+            UR, EN_IR, EN_US, JA, FR, ES, TR, KMR, TG -> false
             else -> true
         }
 
@@ -115,7 +116,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, UR, TR, KMR -> true
+            EN_US, JA, FR, ES, UR, TR, KMR, TG -> true
             else -> false
         }
 
