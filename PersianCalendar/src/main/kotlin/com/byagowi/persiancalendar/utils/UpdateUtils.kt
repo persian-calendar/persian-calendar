@@ -16,7 +16,6 @@ import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
-import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.core.app.NotificationCompat
@@ -646,8 +645,10 @@ private fun createRoundDrawable(color: String): Drawable {
 
 fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
     val direction = when {
-        language.isIranianEnglish -> View.LAYOUT_DIRECTION_LTR // Most text in en-IR are RTL
-        language.isArabicScript -> View.LAYOUT_DIRECTION_RTL // just in case something went wrong
+        // Apply RTL for Arabic script locales anyway just in case something went wrong
+        language.isArabicScript -> View.LAYOUT_DIRECTION_RTL
+        // Most text in en-IR are RTL
+        language.isIranianEnglish -> View.LAYOUT_DIRECTION_RTL
         else -> context.resources.configuration.layoutDirection
     }
     setInt(viewId, "setLayoutDirection", direction)
