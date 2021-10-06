@@ -20,6 +20,8 @@
     <attr name="colorTextAthan" format="reference" />
     <attr name="colorDivider" format="reference" />
     <attr name="colorCurrentDay" format="reference" />
+    <attr name="colorTextDayCurrent" format="reference" />
+    <attr name="colorCurrentDayIsOutlineOnly" format="boolean" />
     <attr name="colorSelectDay" format="reference" />
     <attr name="colorEventIndicator" format="reference" />
     <attr name="colorDrawerBackground" format="reference" />
@@ -91,6 +93,7 @@
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
         <item name="isDarkTheme">true</item>
+        <item name="colorCurrentDayIsOutlineOnly">true</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -110,6 +113,7 @@
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
         <item name="isDarkTheme">false</item>
+        <item name="colorCurrentDayIsOutlineOnly">true</item>
     </style>
 
     <!-- Their actual definition is in v31/styles.xml -->
@@ -138,6 +142,7 @@
         <item name="colorHoliday">@color/dark_holiday</item>
         <item name="colorTextDrawer">@color/dark_text_drawer</item>
         <item name="colorTextDay">@color/dark_text_day</item>
+        <item name="colorTextDayCurrent">@color/dark_text_day</item>
         <item name="colorTextToday">@color/dark_text_today</item>
         <item name="colorTextDayName">@color/dark_text_day_name</item>
         <item name="colorTextAthan">@color/dark_text_athan</item>
@@ -185,6 +190,7 @@
         <item name="colorHoliday">@color/black_holiday</item>
         <item name="colorTextDrawer">@color/black_text_drawer</item>
         <item name="colorTextDay">@color/black_text_day</item>
+        <item name="colorTextDayCurrent">@color/black_text_day</item>
         <item name="colorTextToday">@color/black_text_today</item>
         <item name="colorTextDayName">@color/black_text_day_name</item>
         <item name="colorTextAthan">@color/black_text_athan</item>
@@ -230,6 +236,7 @@
         <item name="colorHoliday">@color/light_holiday</item>
         <item name="colorTextDrawer">@color/light_text_drawer</item>
         <item name="colorTextDay">@color/light_text_day</item>
+        <item name="colorTextDayCurrent">@color/light_text_day</item>
         <item name="colorTextToday">@color/light_text_today</item>
         <item name="colorTextDayName">@color/light_text_day_name</item>
         <item name="colorTextAthan">@color/light_text_athan</item>
@@ -276,6 +283,7 @@
         <item name="colorHoliday">@color/blue_holiday</item>
         <item name="colorTextDrawer">@color/blue_text_drawer</item>
         <item name="colorTextDay">@color/blue_text_day</item>
+        <item name="colorTextDayCurrent">@color/blue_text_day</item>
         <item name="colorTextToday">@color/blue_text_today</item>
         <item name="colorTextDayName">@color/blue_text_day_name</item>
         <item name="colorTextAthan">@color/blue_text_athan</item>
@@ -322,6 +330,7 @@
         <item name="colorHoliday">@color/modern_holiday</item>
         <item name="colorTextDrawer">@color/modern_text_drawer</item>
         <item name="colorTextDay">@color/modern_text_day</item>
+        <item name="colorTextDayCurrent">@color/modern_text_day</item>
         <item name="colorTextToday">@color/modern_text_today</item>
         <item name="colorTextDayName">@color/modern_text_day_name</item>
         <item name="colorTextAthan">@color/modern_text_athan</item>

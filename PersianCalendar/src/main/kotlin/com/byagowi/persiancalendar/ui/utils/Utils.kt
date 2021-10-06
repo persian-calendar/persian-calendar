@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
@@ -110,13 +111,13 @@ private tailrec fun Context.getActivity(): Activity? = this as? Activity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 @ColorInt
-fun Context.resolveColor(attr: Int) = TypedValue().let {
-    theme.resolveAttribute(attr, it, true)
+fun Context.resolveColor(@AttrRes attribute: Int) = TypedValue().let {
+    theme.resolveAttribute(attribute, it, true)
     ContextCompat.getColor(this, it.resourceId)
 }
 
-val Context.isDarkTheme get() = TypedValue().let {
-    theme.resolveAttribute(R.attr.isDarkTheme, it, false)
+fun Context.resolveAttribute(@AttrRes attribute: Int) = TypedValue().let {
+    theme.resolveAttribute(attribute, it, false)
     it.data != 0 // https://stackoverflow.com/a/60667225
 }
 

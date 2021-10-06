@@ -43,6 +43,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
 
         val textPaint = when {
             jdn != null -> when {
+                today && !shared.isCurrentDayOutlineOnly -> shared.dayOfMonthNumberCurrentTextPaint
                 holiday -> shared.dayOfMonthNumberTextHolidayPaint
                 dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
                 else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint

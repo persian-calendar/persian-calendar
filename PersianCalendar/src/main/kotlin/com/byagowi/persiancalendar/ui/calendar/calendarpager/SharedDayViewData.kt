@@ -8,9 +8,9 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
-import androidx.core.content.ContextCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.resolveAttribute
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
@@ -52,8 +52,9 @@ class SharedDayViewData(
         it.color = context.resolveColor(R.attr.colorSelectDay)
     }
 
+    val isCurrentDayOutlineOnly = context.resolveAttribute(R.attr.colorCurrentDayIsOutlineOnly)
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.STROKE
+        it.style = if (isCurrentDayOutlineOnly) Paint.Style.STROKE else Paint.Style.FILL
         it.strokeWidth = 1.dp
         it.color = widgetTextColor ?: context.resolveColor(R.attr.colorCurrentDay)
     }
@@ -79,6 +80,15 @@ class SharedDayViewData(
         it.color = colorTextDay
         addShadowIfNeeded(it)
     }
+    val dayOfMonthNumberCurrentTextPaint =
+        if (isCurrentDayOutlineOnly) dayOfMonthNumberTextPaint
+        else Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.textAlign = Paint.Align.CENTER
+            it.typeface = typeface
+            it.textSize = textSize
+            it.color = context.resolveColor(R.attr.colorTextDayCurrent)
+            addShadowIfNeeded(it)
+        }
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.typeface = typeface
