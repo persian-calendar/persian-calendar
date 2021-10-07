@@ -7,6 +7,7 @@ import androidx.preference.PreferenceManager
 import com.byagowi.persiancalendar.DEFAULT_CITY
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
+import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_GEOCODED_CITYNAME
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
@@ -88,4 +89,5 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
     putStringSet(PREF_WEEK_ENDS, language.defaultWeekEnds)
 
     putString(PREF_PRAY_TIME_METHOD, language.preferredCalculationMethod.name)
+    putBoolean(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority)
 }

@@ -72,6 +72,12 @@ enum class Language(val code: String, val nativeName: String) {
             else -> CalculationMethod.Tehran
         }
 
+    val isHanafiMajority: Boolean
+        get() = when (this) {
+            TR, FA_AF, PS, TG -> true
+            else -> false
+        }
+
     // Based on locale, we can presume user is able to read Persian
     val isUserAbleToReadPersian: Boolean
         get() = when (this) {
@@ -161,11 +167,12 @@ enum class Language(val code: String, val nativeName: String) {
         else -> "0"
     }
 
-    val defaultWeekEnds get() = when {
-        this == FA -> setOf("6")
-        prefersGregorianCalendar -> setOf("0", "1") // Saturday and Sunday
-        else -> setOf("6") // 6 means Friday
-    }
+    val defaultWeekEnds
+        get() = when {
+            this == FA -> setOf("6")
+            prefersGregorianCalendar -> setOf("0", "1") // Saturday and Sunday
+            else -> setOf("6") // 6 means Friday
+        }
 
     fun getPersianMonths(context: Context): List<String> = when (this) {
         FA, EN_IR -> persianCalendarMonthsInPersian

@@ -93,7 +93,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     dialogTitle(R.string.pray_methods_calculation)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
-                switch(PREF_ASR_HANAFI_JURISTIC, false) {
+                switch(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority) {
                     asrCalculationHanafiJuristic = this
                     title(R.string.asr_hanafi_juristic)
                     isVisible = !calculationMethod.isShia

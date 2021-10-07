@@ -232,7 +232,9 @@ fun updateStoredPreference(context: Context) {
     calculationMethod = CalculationMethod
         .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
     asrJuristic =
-        if (calculationMethod.isShia || !prefs.getBoolean(PREF_ASR_HANAFI_JURISTIC, false))
+        if (calculationMethod.isShia ||
+            !prefs.getBoolean(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority)
+        )
             CalculationMethod.AsrJuristics.Standard
         else
             CalculationMethod.AsrJuristics.Hanafi
