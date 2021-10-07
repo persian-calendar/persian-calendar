@@ -144,28 +144,31 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
-    val defaultMainCalendar get() = when {
-        this == FA -> CalendarType.SHAMSI.name
-        prefersGregorianCalendar -> CalendarType.GREGORIAN.name
-        prefersIslamicCalendar -> CalendarType.ISLAMIC.name
-        prefersPersianCalendar -> CalendarType.SHAMSI.name
-        else -> CalendarType.SHAMSI.name
-    }
+    val defaultMainCalendar
+        get() = when {
+            this == FA -> CalendarType.SHAMSI.name
+            prefersGregorianCalendar -> CalendarType.GREGORIAN.name
+            prefersIslamicCalendar -> CalendarType.ISLAMIC.name
+            prefersPersianCalendar -> CalendarType.SHAMSI.name
+            else -> CalendarType.SHAMSI.name
+        }
 
-    val defaultOtherCalendars get() = when {
-        this == FA -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
-        prefersGregorianCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
-        prefersIslamicCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
-        prefersPersianCalendar -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
-        else -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
-    }
+    val defaultOtherCalendars
+        get() = when {
+            this == FA -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
+            prefersGregorianCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
+            prefersIslamicCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
+            prefersPersianCalendar -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
+            else -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
+        }
 
-    val defaultWeekStart get() = when {
-        this == FA -> "0"
-        isTurkish -> "2" // Monday
-        prefersGregorianCalendar -> "1" // Sunday
-        else -> "0"
-    }
+    val defaultWeekStart
+        get() = when {
+            this == FA -> "0"
+            isTurkish -> "2" // Monday
+            prefersGregorianCalendar -> "1" // Sunday
+            else -> "0"
+        }
 
     val defaultWeekEnds
         get() = when {

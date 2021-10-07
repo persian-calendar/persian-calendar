@@ -5,7 +5,6 @@ import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.view.setPadding
-import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp

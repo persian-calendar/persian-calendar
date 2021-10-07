@@ -27,7 +27,6 @@ import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
-import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.setDirection
 import com.byagowi.persiancalendar.utils.toFormattedString
 
