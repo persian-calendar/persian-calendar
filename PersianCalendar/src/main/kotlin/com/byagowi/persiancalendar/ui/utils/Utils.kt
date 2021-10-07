@@ -116,7 +116,7 @@ fun Context.resolveColor(@AttrRes attribute: Int) = TypedValue().let {
     ContextCompat.getColor(this, it.resourceId)
 }
 
-fun Context.resolveAttribute(@AttrRes attribute: Int) = TypedValue().let {
+fun Context.resolveBoolean(@AttrRes attribute: Int) = TypedValue().let {
     theme.resolveAttribute(attribute, it, false)
     it.data != 0 // https://stackoverflow.com/a/60667225
 }

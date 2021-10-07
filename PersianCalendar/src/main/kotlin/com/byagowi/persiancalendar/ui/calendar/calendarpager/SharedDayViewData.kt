@@ -10,7 +10,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.resolveAttribute
+import com.byagowi.persiancalendar.ui.utils.resolveBoolean
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
@@ -52,7 +52,7 @@ class SharedDayViewData(
         it.color = context.resolveColor(R.attr.colorSelectDay)
     }
 
-    val isCurrentDayOutlineOnly = context.resolveAttribute(R.attr.colorCurrentDayIsOutlineOnly)
+    val isCurrentDayOutlineOnly = context.resolveBoolean(R.attr.colorCurrentDayIsOutlineOnly)
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = if (isCurrentDayOutlineOnly) Paint.Style.STROKE else Paint.Style.FILL
         it.strokeWidth = 1.dp
