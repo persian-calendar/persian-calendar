@@ -116,11 +116,11 @@
     <string name="about_noClient">Ягон барнома барои фиристодани почтаи электронӣ вуҷуд надорад</string>
     <plurals name="n_minutes">
         <item quantity="one">%1$s дақиқа</item>
-        <item quantity="other">%1$s дақиқа</item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="n_hours">
         <item quantity="one">%1$s соат</item>
-        <item quantity="other">%1$s соат</item>
+        <item quantity="other"></item>
     </plurals>
     <string name="spaced_and">" ва "</string>
     <string name="spaced_comma">", "</string>
@@ -130,7 +130,7 @@
     <string name="n_till">%1$s то %2$s</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s рӯз %2$s</item>
-        <item quantity="other">%1$s рӯз %2$s</item>
+        <item quantity="other"></item>
     </plurals>
     <string name="am">AM</string>
     <string name="pm">PM</string>
@@ -202,15 +202,15 @@
     <string name="shamsi_calendar_short">форсӣ</string>
     <plurals name="n_days">
         <item quantity="one">%1$s pӯз</item>
-        <item quantity="other">%1$s pӯз</item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s моҳ</item>
-        <item quantity="other">%1$s моҳ</item>
+        <item quantity="other"></item>
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s сол</item>
-        <item quantity="other">%1$s сол</item>
+        <item quantity="other"></item>
     </plurals>
     <string name="islamic_calendar_short">исломӣ</string>
     <string name="shift_work_off">Хомӯш</string>
