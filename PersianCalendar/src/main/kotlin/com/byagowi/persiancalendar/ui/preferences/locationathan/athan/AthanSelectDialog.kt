@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
+import com.byagowi.persiancalendar.utils.getDefaultAthanUri
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.snackbar.Snackbar
 
@@ -22,6 +23,13 @@ fun showAthanSelectDialog(activity: Activity, pickRingtone: ActivityResultLaunch
             if (PREF_ATHAN_URI !in prefs && PREF_ATHAN_NAME !in prefs) return@callback
             prefs.edit { remove(PREF_ATHAN_URI); remove(PREF_ATHAN_NAME) }
             Toast.makeText(activity, R.string.returned_to_default, Toast.LENGTH_SHORT).show()
+        },
+        R.string.default_athan_name to {
+            val prefs = activity.appPrefs
+            prefs.edit {
+                putString(PREF_ATHAN_URI, getDefaultAthanUri(activity).toString())
+                putString(PREF_ATHAN_NAME, activity.getString(R.string.default_athan_name))
+            }
         },
         R.string.more to {
             runCatching {
