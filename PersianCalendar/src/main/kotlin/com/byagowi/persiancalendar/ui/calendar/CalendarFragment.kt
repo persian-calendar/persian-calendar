@@ -66,6 +66,7 @@ import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculateMoonPhase
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
+import com.byagowi.persiancalendar.utils.calculationMethod
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.coordinates
@@ -89,6 +90,7 @@ import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.spacedComma
+import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
@@ -104,6 +106,7 @@ import kotlinx.html.style
 import kotlinx.html.table
 import kotlinx.html.tbody
 import kotlinx.html.td
+import kotlinx.html.tfoot
 import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.tr
@@ -612,6 +615,11 @@ class CalendarFragment : Fragment() {
                                 td { +prayTimes.getFromStringId(it).toBasicFormatString() }
                             }
                         }
+                    }
+                }
+                if (calculationMethod != language.preferredCalculationMethod) {
+                    tfoot {
+                        tr { td { colSpan = "10"; +getString(calculationMethod.titleStringId) } }
                     }
                 }
             }

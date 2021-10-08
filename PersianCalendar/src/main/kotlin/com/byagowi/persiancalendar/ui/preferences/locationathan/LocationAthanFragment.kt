@@ -7,8 +7,6 @@ import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
@@ -52,19 +50,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var ascendingAthanVolumePreference: Preference? = null
     private var athanVolumeDialogPreference: Preference? = null
 
-    // Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
-    private val prayTimeCalculationMethods = listOf(
-        CalculationMethod.MWL to R.string.method_mwl,
-        CalculationMethod.ISNA to R.string.method_isna,
-        CalculationMethod.Egypt to R.string.method_egypt,
-        CalculationMethod.Makkah to R.string.method_makkah,
-        CalculationMethod.Karachi to R.string.method_karachi,
-        CalculationMethod.Jafari to R.string.method_jafari,
-        CalculationMethod.Tehran to R.string.method_tehran
-    )
-
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val handler = Handler(Looper.getMainLooper()) // for deferred dependency wire ups
         val activity = activity ?: return
         preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
             section(R.string.location) {
@@ -86,8 +72,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 this@LocationAthanFragment.athanPreferenceCategory = this
                 singleSelect(
                     PREF_PRAY_TIME_METHOD,
-                    prayTimeCalculationMethods.map { (_, title) -> getString(title) },
-                    prayTimeCalculationMethods.map { (method, _) -> method.name },
+                    CalculationMethod.values().map { getString(it.titleStringId) },
+                    CalculationMethod.values().map { it.name },
                     DEFAULT_PRAY_TIME_METHOD
                 ) {
                     title(R.string.pray_methods)
