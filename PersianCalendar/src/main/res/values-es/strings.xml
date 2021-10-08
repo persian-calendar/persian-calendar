@@ -325,4 +325,5 @@
     <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
     <string name="enable_new_interface">Enable the new interface</string>
     <string name="are_you_sure">¿Estás seguro/a\?</string>
+    <string name="pray_time_table">Pray time table</string>
 </resources>

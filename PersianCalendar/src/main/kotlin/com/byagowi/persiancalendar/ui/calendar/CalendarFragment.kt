@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.TIME_NAMES
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
@@ -59,6 +60,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -74,8 +76,11 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
+import com.byagowi.persiancalendar.utils.getFromStringId
+import com.byagowi.persiancalendar.utils.getMonthLength
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.utils.isTalkBackEnabled
 import com.byagowi.persiancalendar.utils.language
@@ -83,9 +88,26 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
+import com.byagowi.persiancalendar.utils.spacedComma
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
+import io.github.persiancalendar.calendar.AbstractDate
+import kotlinx.html.body
+import kotlinx.html.h1
+import kotlinx.html.head
+import kotlinx.html.html
+import kotlinx.html.meta
+import kotlinx.html.script
+import kotlinx.html.stream.createHTML
+import kotlinx.html.style
+import kotlinx.html.table
+import kotlinx.html.tbody
+import kotlinx.html.td
+import kotlinx.html.th
+import kotlinx.html.thead
+import kotlinx.html.tr
+import kotlinx.html.unsafe
 
 class CalendarFragment : Fragment() {
 
@@ -539,6 +561,61 @@ class CalendarFragment : Fragment() {
             it.onClick {
                 showMonthOverviewDialog(activity ?: return@onClick, calendarPager.selectedMonth)
             }
+        }
+        if (coordinates != null) {
+            toolbar.menu.add(R.string.pray_time_table).also {
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                it.onClick { context.showHtml(createOwghatHtmlReport(calendarPager.selectedMonth)) }
+            }
+        }
+    }
+
+    private fun createOwghatHtmlReport(date: AbstractDate): String = createHTML().html {
+        val coordinates = coordinates ?: return@html
+        attributes["lang"] = language.language
+        attributes["dir"] = if (resources.isRtl) "rtl" else "ltr"
+        head {
+            meta(charset = "utf8")
+            style {
+                unsafe {
+                    +"""
+                    |th, td { padding: 0 .5em; text-align: center }
+                    |td { border-top: 1px solid lightgray; font-size: 95% }
+                    |h1 { text-align: center; font-size: 110% }
+                    |table { margin: 0 auto; }""".trimMargin("|")
+                }
+            }
+        }
+        body {
+            h1 {
+                +listOfNotNull(
+                    context?.appPrefs?.cityName,
+                    language.my.format(date.monthName, formatNumber(date.year))
+                ).joinToString(spacedComma)
+            }
+            table {
+                thead {
+                    tr {
+                        th { +getString(R.string.day) }
+                        TIME_NAMES.forEach { th { +getString(it) } }
+                    }
+                }
+                tbody {
+                    (0 until mainCalendar.getMonthLength(date.year, date.month)).forEach { day ->
+                        tr {
+                            val prayTimes = coordinates.calculatePrayTimes(
+                                Jdn(mainCalendar.createDate(date.year, date.month, day))
+                                    .toJavaCalendar()
+                            )
+                            th { +formatNumber(day + 1) }
+                            TIME_NAMES.forEach {
+                                td { +prayTimes.getFromStringId(it).toBasicFormatString() }
+                            }
+                        }
+                    }
+                }
+            }
+            script { unsafe { +"print()" } }
         }
     }
 

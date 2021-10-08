@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.TIME_NAMES
 import com.byagowi.persiancalendar.databinding.TimeItemBinding
 import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
@@ -16,7 +17,7 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
 
     private var times = emptyList<Pair<@StringRes Int, TimeItemBinding>>()
     fun setup() {
-        times = timeNames.map { name -> name to TimeItemBinding.inflate(context.layoutInflater) }
+        times = TIME_NAMES.map { name -> name to TimeItemBinding.inflate(context.layoutInflater) }
         addViewsToFlow(times.map { (timeId: Int, timeItemBinding: TimeItemBinding) ->
             timeItemBinding.name.setText(timeId)
             timeItemBinding.root
@@ -39,12 +40,5 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
                 else -> timeItemBinding.root.isVisible = visibility
             }
         }
-    }
-
-    companion object {
-        private val timeNames = listOf<@StringRes Int>(
-            R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
-            R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
-        )
     }
 }

@@ -312,4 +312,5 @@
     <string name="asr_hanafi_juristic">Méthode juridique Hanafi Asr</string>
     <string name="enable_new_interface">Activer la nouvelle interface</string>
     <string name="are_you_sure">Êtes-vous sûr·e \?</string>
+    <string name="pray_time_table">Pray time table</string>
 </resources>
