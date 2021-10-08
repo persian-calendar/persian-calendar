@@ -337,5 +337,5 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
     <string name="enable_new_interface">Enable the new interface</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="pray_time_table">Pray time table</string>
+    <string name="pray_times_table">Pray times table</string>
 </resources>

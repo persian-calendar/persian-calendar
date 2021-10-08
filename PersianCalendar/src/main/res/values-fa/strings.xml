@@ -316,5 +316,5 @@
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
     <string name="enable_new_interface">فعال‌سازی ظاهر جدید</string>
     <string name="are_you_sure">آیا اطمینان دارید؟</string>
-    <string name="pray_time_table">جدول اوقات شرعی</string>
+    <string name="pray_times_table">جدول اوقات شرعی</string>
 </resources>
