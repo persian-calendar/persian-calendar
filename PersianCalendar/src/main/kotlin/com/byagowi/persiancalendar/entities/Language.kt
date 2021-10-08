@@ -34,9 +34,6 @@ enum class Language(val code: String, val nativeName: String) {
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
     val isIranianEnglish get() = this == EN_IR
-    private val isTurkish get() = this == TR
-    private val isNorthernKurdish get() = this == KMR
-    private val isKurdish get() = this == CKB
 
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
 
@@ -44,9 +41,9 @@ enum class Language(val code: String, val nativeName: String) {
     fun asSystemLocale() = Locale(language)
 
     // Formatting "Day Month Year" considerations
-    val dmy: String get() = if (isKurdish) "%sی %sی %s" else "%s %s %s"
-    val dm: String get() = if (isKurdish) "%sی %s" else "%s %s"
-    val my: String get() = if (isKurdish) "%sی %s" else "%s %s"
+    val dmy: String get() = if (this == CKB) "%sی %sی %s" else "%s %s %s"
+    val dm: String get() = if (this == CKB) "%sی %s" else "%s %s"
+    val my: String get() = if (this == CKB) "%sی %s" else "%s %s"
 
     val isLessKnownRtl: Boolean
         get() = when (this) {
@@ -214,14 +211,14 @@ enum class Language(val code: String, val nativeName: String) {
     fun getCountryName(cityItem: CityItem): String = when {
         !isArabicScript -> cityItem.countryEn
         isArabic -> cityItem.countryAr
-        isKurdish -> cityItem.countryCkb
+        this == CKB -> cityItem.countryCkb
         else -> cityItem.countryFa
     }
 
     fun getCityName(cityItem: CityItem): String = when {
         !isArabicScript -> cityItem.en
         isArabic -> cityItem.ar
-        isKurdish -> cityItem.ckb
+        this == CKB -> cityItem.ckb
         else -> cityItem.fa
     }
 
