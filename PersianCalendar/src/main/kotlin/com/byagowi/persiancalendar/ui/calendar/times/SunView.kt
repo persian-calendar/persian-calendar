@@ -99,7 +99,7 @@ class SunView @JvmOverloads constructor(
     private var segmentByPixel = .0
     private var prayTimes: PrayTimes? = null
     private var moonPhase = 1.0
-    private val fontSize = if (language.isArabicScript) 14.dp else 12.dp
+    private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
