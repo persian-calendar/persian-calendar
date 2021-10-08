@@ -163,11 +163,10 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     val defaultWeekStart
-        get() = when {
-            this == FA -> "0"
-            isTurkish -> "2" // Monday
-            prefersGregorianCalendar -> "1" // Sunday
-            else -> "0"
+        get() = when (this) {
+            FA -> "0"
+            TR, TG -> "2" // Monday
+            else -> if (prefersGregorianCalendar) "1"/*Sunday*/ else "0"
         }
 
     val defaultWeekEnds
@@ -208,6 +207,7 @@ enum class Language(val code: String, val nativeName: String) {
         AZB -> weekDaysInitialsInAzerbaijani
         TR -> weekDaysInitialsInTurkish
         EN_IR -> weekDaysInitialsInEnglishIran
+        TG -> weekDaysInitialsInTajiki
         else -> getWeekDays(context).map { it.substring(0, 1) }
     }
 
@@ -229,7 +229,7 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when {
             isAfghanistanExclusive -> afCodeOrder
             isArabic -> arCodeOrder
-            isTurkish || isNorthernKurdish -> trCodeOrder
+            this == TR || this == KMR -> trCodeOrder
             else -> irCodeOrder
         }
 
@@ -339,6 +339,9 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val weekDaysInitialsInEnglishIran = listOf7Items(
             "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo"
+        )
+        private val weekDaysInitialsInTajiki = listOf7Items(
+            "Шн", "Як", "Дш", "Сш", "Чш", "Пш", "Ҷм"
         )
 
         private val irCodeOrder = listOf("zz", "ir", "tr", "af", "iq")
