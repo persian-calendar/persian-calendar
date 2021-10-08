@@ -34,6 +34,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.AthanNotification
@@ -121,9 +122,9 @@ fun scheduleAlarms(context: Context) {
     enabledAlarms.forEachIndexed { i, name ->
         scheduleAlarm(context, name, Calendar.getInstance().also {
             // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
-            val alarmTime = prayTimes.getFromStringId(getPrayTimeName(name)) ?: prayTimes.fajrClock
-            it.set(Calendar.HOUR_OF_DAY, alarmTime.hour)
-            it.set(Calendar.MINUTE, alarmTime.minute)
+            val alarmTime = prayTimes.getFromStringId(getPrayTimeName(name))
+            it.set(Calendar.HOUR_OF_DAY, alarmTime.hours)
+            it.set(Calendar.MINUTE, alarmTime.minutes)
             it.set(Calendar.SECOND, 0)
         }.timeInMillis - athanGap, i)
     }
@@ -176,18 +177,20 @@ private val prayTimesNames = mapOf(
 @StringRes
 fun getPrayTimeName(athanKey: String?): Int = prayTimesNames[athanKey] ?: R.string.fajr
 
-fun PrayTimes.getFromStringId(@StringRes stringId: Int) = when (stringId) {
-    R.string.imsak -> imsakClock
-    R.string.fajr -> fajrClock
-    R.string.sunrise -> sunriseClock
-    R.string.dhuhr -> dhuhrClock
-    R.string.asr -> asrClock
-    R.string.sunset -> sunsetClock
-    R.string.maghrib -> maghribClock
-    R.string.isha -> ishaClock
-    R.string.midnight -> midnightClock
-    else -> null
-}
+fun PrayTimes.getFromStringId(@StringRes stringId: Int) = Clock.fromDouble(
+    when (stringId) {
+        R.string.imsak -> imsak
+        R.string.fajr -> fajr
+        R.string.sunrise -> sunrise
+        R.string.dhuhr -> dhuhr
+        R.string.asr -> asr
+        R.string.sunset -> sunset
+        R.string.maghrib -> maghrib
+        R.string.isha -> isha
+        R.string.midnight -> midnight
+        else -> .0
+    }
+)
 
 @DrawableRes
 fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {

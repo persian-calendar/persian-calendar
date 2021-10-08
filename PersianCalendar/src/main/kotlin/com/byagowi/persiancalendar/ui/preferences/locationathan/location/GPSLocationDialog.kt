@@ -34,7 +34,7 @@ import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.saveLocation
 import com.google.openlocationcode.OpenLocationCode
-import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.catch
@@ -56,7 +56,7 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
         return
     }
 
-    val coordinatesFlow = MutableStateFlow<Coordinate?>(null)
+    val coordinatesFlow = MutableStateFlow<Coordinates?>(null)
     var cityName: String? = null
     var countryCode: String? = null
     val binding = GpsLocationDialogBinding.inflate(activity.layoutInflater)
@@ -142,7 +142,7 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
         override fun onLocationChanged(location: Location) {
             coordinatesFlow.value =
-                Coordinate(location.latitude, location.longitude, location.altitude)
+                Coordinates(location.latitude, location.longitude, location.altitude)
         }
 
         override fun onProviderEnabled(provider: String) {

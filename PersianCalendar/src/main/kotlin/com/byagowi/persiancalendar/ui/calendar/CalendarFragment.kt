@@ -457,7 +457,7 @@ class CalendarFragment : Fragment() {
         val coordinates = coordinates ?: return
         val owghatBinding = owghatBinding ?: return
 
-        val prayTimes = coordinates.calculatePrayTimes(jdn.toJavaCalendar().time)
+        val prayTimes = coordinates.calculatePrayTimes(jdn.toJavaCalendar())
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->
             sunView.isVisible = if (isToday) {

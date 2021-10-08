@@ -28,7 +28,6 @@ import com.byagowi.persiancalendar.utils.coordinates
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.setDirection
-import com.byagowi.persiancalendar.utils.toFormattedString
 
 private const val NOTIFICATION_ID = 1002
 private const val NOTIFICATION_CHANNEL_ID = NOTIFICATION_ID.toString()

@@ -2,15 +2,15 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import com.byagowi.persiancalendar.R
-import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 import kotlin.math.abs
 
-fun formatCoordinate(context: Context, coordinate: Coordinate, separator: String) =
+fun formatCoordinate(context: Context, coordinates: Coordinates, separator: String) =
     "%s: %.7f%s%s: %.7f".format(
         Locale.getDefault(),
-        context.getString(R.string.latitude), coordinate.latitude, separator,
-        context.getString(R.string.longitude), coordinate.longitude
+        context.getString(R.string.latitude), coordinates.latitude, separator,
+        context.getString(R.string.longitude), coordinates.longitude
     )
 
 // https://stackoverflow.com/a/62499553

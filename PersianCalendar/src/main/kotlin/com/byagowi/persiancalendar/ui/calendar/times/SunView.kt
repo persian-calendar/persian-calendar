@@ -18,14 +18,13 @@ import androidx.core.graphics.withClip
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.utils.asRemainingTime
 import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.language
 import com.byagowi.persiancalendar.utils.spacedColon
 import com.google.android.material.animation.ArgbEvaluatorCompat
-import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import kotlin.math.PI
@@ -41,8 +40,8 @@ class SunView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, @ColorInt textColor: Int? = null
 ) : View(context, attrs), ValueAnimator.AnimatorUpdateListener {
 
-    private val fullDay = Clock(24, 0).toInt().toFloat()
-    private val halfDay = Clock(12, 0).toInt().toFloat()
+    private val fullDay = Clock(24, 0).toMinutes().toFloat()
+    private val halfDay = Clock(12, 0).toMinutes().toFloat()
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.typeface = getAppFont(context) }
     private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL }
@@ -255,12 +254,12 @@ class SunView @JvmOverloads constructor(
     fun initiate() {
         val prayTimes = prayTimes ?: return
 
-        val sunset = prayTimes.sunsetClock.toInt().toFloat()
-        val sunrise = prayTimes.sunriseClock.toInt().toFloat()
-        var midnight = prayTimes.midnightClock.toInt().toFloat()
+        val sunset = Clock.fromDouble(prayTimes.sunset).toMinutes().toFloat()
+        val sunrise = Clock.fromDouble(prayTimes.sunrise).toMinutes().toFloat()
+        var midnight = Clock.fromDouble(prayTimes.midnight).toMinutes().toFloat()
 
         if (midnight > halfDay) midnight -= fullDay
-        val now = Clock(Calendar.getInstance(Locale.getDefault())).toInt().toFloat()
+        val now = Clock(Calendar.getInstance(Locale.getDefault())).toMinutes().toFloat()
 
         fun Float.safeDiv(other: Float) = if (other == 0f) 0f else this / other
         current = when {
@@ -275,12 +274,12 @@ class SunView @JvmOverloads constructor(
         )
         dayLengthString = context.getString(R.string.length_of_day) + spacedColon +
                 dayLength.asRemainingTime(context, short = true)
-        remainingString = if (remaining.toInt() == 0) "" else
+        remainingString = if (remaining.toMinutes() == 0) "" else
             context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(context, short = true)
         // a11y
         contentDescription = context.getString(R.string.length_of_day) + spacedColon +
-                dayLength.asRemainingTime(context) + if (remaining.toInt() == 0) "" else
+                dayLength.asRemainingTime(context) + if (remaining.toMinutes() == 0) "" else
             ("\n\n" + context.getString(R.string.remaining_daylight) + spacedColon +
                     remaining.asRemainingTime(context))
     }

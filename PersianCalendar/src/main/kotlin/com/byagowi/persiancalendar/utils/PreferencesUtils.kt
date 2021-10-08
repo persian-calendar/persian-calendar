@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.generated.citiesStore
-import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 
 val Context.appPrefs: SharedPreferences get() = PreferenceManager.getDefaultSharedPreferences(this)
@@ -54,7 +54,7 @@ fun SharedPreferences.saveCity(city: CityItem) = edit {
 }
 
 fun SharedPreferences.saveLocation(
-    coordinates: Coordinate, cityName: String, countryCode: String = "IR"
+    coordinates: Coordinates, cityName: String, countryCode: String = "IR"
 ) = edit {
     putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinates.latitude))
     putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinates.longitude))

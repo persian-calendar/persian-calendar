@@ -12,13 +12,13 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
-import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 import kotlin.math.abs
 import kotlin.math.ceil
@@ -114,26 +114,6 @@ fun getA11yDaySummary(
     }
 }
 
-private fun baseFormatClock(hour: Int, minute: Int): String =
-    formatNumber("%d:%02d".format(Locale.ENGLISH, hour, minute))
-
-fun Clock.toFormattedString(forcedIn12: Boolean = false, printAmPm: Boolean = true) =
-    if (clockIn24 && !forcedIn12) baseFormatClock(hour, minute)
-    else baseFormatClock((hour % 12).takeIf { it != 0 } ?: 12, minute) +
-            if (printAmPm) {
-                " " + if (hour >= 12) pmString else amString
-            } else ""
-
-fun Clock.asRemainingTime(context: Context, short: Boolean = false): String {
-    val pairs = listOf(R.string.n_hours to hour, R.string.n_minutes to minute)
-        .filter { (_, n) -> n != 0 }
-    if (pairs.size == 2 && short) // if both present special casing the short form makes sense
-        return context.getString(R.string.n_hours_minutes, formatNumber(hour), formatNumber(minute))
-    return pairs.joinToString(spacedAnd) { (stringId, n) ->
-        context.getString(stringId, formatNumber(n))
-    }
-}
-
 fun Calendar.toCivilDate() =
     CivilDate(this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH])
 
@@ -143,7 +123,7 @@ fun Date.toJavaCalendar(forceLocalTime: Boolean = false): Calendar = Calendar.ge
     it.time = this
 }
 
-fun Jdn.toJavaCalendar(): Calendar = Calendar.getInstance().also {
+fun Jdn.toJavaCalendar(): GregorianCalendar = GregorianCalendar().also {
     val gregorian = this.toGregorianCalendar()
     it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
 }
@@ -180,7 +160,7 @@ private fun readDeviceEvents(
             val endDate = Date(it.getLong(4))
             val startCalendar = startDate.toJavaCalendar()
             val endCalendar = endDate.toJavaCalendar()
-            fun Calendar.clock() = baseFormatClock(get(Calendar.HOUR_OF_DAY), get(Calendar.MINUTE))
+            fun Calendar.clock() = Clock(this).toBasicFormatString()
             CalendarEvent.DeviceCalendarEvent(
                 id = it.getInt(0),
                 title =

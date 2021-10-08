@@ -59,8 +59,9 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
-import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.Coordinates
 
 val monthNameEmptyList = List(12) { "" }
 var persianMonths = monthNameEmptyList
@@ -94,7 +95,7 @@ var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     private set
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
     private set
-var asrJuristic = CalculationMethod.AsrJuristics.Standard
+var asrMethod = AsrMethod.Standard
     private set
 var enableNewInterface = false
     private set
@@ -102,7 +103,7 @@ var language = Language.FA
     private set
 var easternGregorianArabicMonths = false
     private set
-var coordinates: Coordinate? = null
+var coordinates: Coordinates? = null
     private set
 var mainCalendar = CalendarType.SHAMSI
     private set
@@ -231,20 +232,17 @@ fun updateStoredPreference(context: Context) {
     // so switched to "Tehran" method as default calculation algorithm
     calculationMethod = CalculationMethod
         .valueOf(prefs.getString(PREF_PRAY_TIME_METHOD, null) ?: DEFAULT_PRAY_TIME_METHOD)
-    asrJuristic =
-        if (calculationMethod.isShia ||
+    asrMethod =
+        if (calculationMethod.isJafari ||
             !prefs.getBoolean(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority)
-        )
-            CalculationMethod.AsrJuristics.Standard
-        else
-            CalculationMethod.AsrJuristics.Hanafi
+        ) AsrMethod.Standard else AsrMethod.Hanafi
 
 
-    coordinates = prefs.storedCity?.coordinate ?: run {
+    coordinates = prefs.storedCity?.coordinates ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
             .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }
             .takeIf { coords -> coords.any { it != .0 } } // if all were zero preference isn't set yet
-            ?.let { (lat, lng, alt) -> Coordinate(lat, lng, alt) }
+            ?.let { (lat, lng, alt) -> Coordinates(lat, lng, alt) }
     }
     runCatching {
         mainCalendar = CalendarType.valueOf(

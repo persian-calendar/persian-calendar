@@ -44,6 +44,7 @@ import com.byagowi.persiancalendar.Widget4x1
 import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetSunView
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.service.ApplicationService
@@ -55,7 +56,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import io.github.persiancalendar.calendar.AbstractDate
-import io.github.persiancalendar.praytimes.Clock
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 
@@ -154,16 +154,16 @@ fun update(context: Context, updateDate: Boolean) {
 
 @StringRes
 private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
-    val clock = current.toInt()
+    val clock = current.hours * 60.0 + current.minutes
     return when {
-        fajrClock.toInt() > clock -> R.string.fajr
-        sunriseClock.toInt() > clock -> R.string.sunrise
-        dhuhrClock.toInt() > clock -> R.string.dhuhr
-        asrClock.toInt() > clock -> R.string.asr
-        sunsetClock.toInt() > clock -> R.string.sunset
-        maghribClock.toInt() > clock -> R.string.maghrib
-        ishaClock.toInt() > clock -> R.string.isha
-        midnightClock.toInt() > clock -> R.string.midnight
+        fajr > clock -> R.string.fajr
+        sunrise > clock -> R.string.sunrise
+        dhuhr > clock -> R.string.dhuhr
+        asr > clock -> R.string.asr
+        sunset > clock -> R.string.sunset
+        maghrib > clock -> R.string.maghrib
+        isha > clock -> R.string.isha
+        midnight > clock -> R.string.midnight
         // TODO: this is today's, not tomorrow
         else -> R.string.fajr
     }
@@ -437,7 +437,7 @@ private fun create4x2RemoteViews(
             R.id.textPlaceholder4owghat_3_4x2, R.id.textPlaceholder4owghat_4_4x2,
             R.id.textPlaceholder4owghat_5_4x2
         ).zip(
-            if (calculationMethod.isShia) listOf(
+            if (calculationMethod.isJafari) listOf(
                 R.string.fajr, R.string.sunrise,
                 R.string.dhuhr, R.string.maghrib,
                 R.string.midnight
@@ -456,14 +456,14 @@ private fun create4x2RemoteViews(
             Triple(textHolderViewId, owghatStringId, timeClock)
         }
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
-            timeClock.toInt() > nowClock.toInt()
+            timeClock.toMinutes() > nowClock.toMinutes()
         } ?: owghats[0]
         remoteViews.setTextColor(nextViewId, Color.RED)
 
         if (enableWorkManager) { // we can't have 1 minutes updates in work manager
             remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.GONE)
         } else {
-            val difference = timeClock.toInt() - nowClock.toInt()
+            val difference = timeClock.toMinutes() - nowClock.toMinutes()
             remoteViews.setTextViewText(
                 R.id.textPlaceholder2_4x2, context.getString(
                     R.string.n_till,

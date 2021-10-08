@@ -164,7 +164,7 @@ val minApi21Implementation by configurations
 dependencies {
     implementation("com.github.persian-calendar:equinox:1.0.1")
     implementation("com.github.persian-calendar:calendar:1.0.5")
-    implementation("com.github.persian-calendar:praytimes:1.0.4")
+    implementation("com.github.persian-calendar:praytimes:2.1.0")
 
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("androidx.preference:preference-ktx:1.1.1")
@@ -295,7 +295,7 @@ val irregularRecurringEvents = listOf(
         countryCode = "$countryCode",
         countryEn = "${country["en"]}", countryFa = "${country["fa"]}",
         countryCkb = "${country["ckb"]}", countryAr = "${country["ar"]}",
-        coordinate = Coordinate($latitude, $longitude, $elevation)
+        coordinates = Coordinates($latitude, $longitude, $elevation)
     )"""
             }
         }.joinToString(",\n    ")
@@ -303,7 +303,7 @@ val irregularRecurringEvents = listOf(
             """package ${android.defaultConfig.applicationId}.generated
 
 import com.byagowi.persiancalendar.entities.CityItem
-import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.Coordinates
 
 val citiesStore = mapOf(
     $cities
@@ -330,7 +330,7 @@ val citiesStore = mapOf(
             """package ${android.defaultConfig.applicationId}.generated
 
 import com.byagowi.persiancalendar.entities.CityItem
-import io.github.persiancalendar.praytimes.Coordinate
+import io.github.persiancalendar.praytimes.Coordinates
 
 val distrcitsStore = listOf(
     $districts

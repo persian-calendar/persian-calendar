@@ -9,6 +9,7 @@ import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
@@ -25,8 +26,6 @@ import com.byagowi.persiancalendar.utils.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.spacedColon
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.toFormattedString
-import io.github.persiancalendar.praytimes.Clock
 import java.util.*
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {

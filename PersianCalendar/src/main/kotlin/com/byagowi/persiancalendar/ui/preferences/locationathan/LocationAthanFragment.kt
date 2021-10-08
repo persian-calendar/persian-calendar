@@ -96,7 +96,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 switch(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority) {
                     asrCalculationHanafiJuristic = this
                     title(R.string.asr_hanafi_juristic)
-                    isVisible = !calculationMethod.isShia
+                    isVisible = !calculationMethod.isJafari
                 }
                 clickable(onClick = { showAthanGapDialog(activity) }) {
                     title(R.string.athan_gap)
@@ -219,7 +219,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         updateLocationOnSummaries()
-        asrCalculationHanafiJuristic?.isVisible = !calculationMethod.isShia
+        asrCalculationHanafiJuristic?.isVisible = !calculationMethod.isJafari
     }
 
     private fun updateLocationOnSummaries() {

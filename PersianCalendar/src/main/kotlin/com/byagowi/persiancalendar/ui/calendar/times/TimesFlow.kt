@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.databinding.TimeItemBinding
 import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.getFromStringId
-import com.byagowi.persiancalendar.utils.toFormattedString
 import io.github.persiancalendar.praytimes.PrayTimes
 
 class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
