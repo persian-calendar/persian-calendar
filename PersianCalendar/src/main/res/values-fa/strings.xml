@@ -106,7 +106,7 @@
     <string name="custom_notification_is_set">صدای درخواستی تنظیم شد</string>
     <string name="custom_athan">انتخاب اذان</string>
     <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
-    <string name="default_athan">اذان پیش‌فرض</string>
+    <string name="default_athan">صدای پیش‌فرض</string>
     <string name="default_athan_name">عبدالباسط عبدالصمد</string>
     <string name="about_license">مجوز</string>
     <string name="about_license_title">مجوزهای برنامه</string>

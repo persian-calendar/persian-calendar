@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.coordinates
+import com.byagowi.persiancalendar.utils.getCustomAthanUri
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.setDirection
@@ -84,8 +85,12 @@ class AthanNotification : Service() {
             .setContentTitle(title)
             .setContentText(subtitle)
 
+        val sound = getCustomAthanUri(this)
+
+        if (sound != null) notificationBuilder.setSound(sound)
+        else notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND)
+
         notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE)
-        notificationBuilder.setDefaults(NotificationCompat.DEFAULT_SOUND)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(

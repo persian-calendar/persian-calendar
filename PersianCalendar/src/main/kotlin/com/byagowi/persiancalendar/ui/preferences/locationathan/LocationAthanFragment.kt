@@ -105,15 +105,14 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     title(R.string.athan_alarm)
                     summary(R.string.athan_alarm_summary)
                 }
+                clickable(onClick = { showAthanSelectDialog(activity, pickRingtone) }) {
+                    title(R.string.custom_athan)
+                    this@LocationAthanFragment.ringtonePreference = this
+                }
                 switch(PREF_NOTIFICATION_ATHAN, false) {
                     title(R.string.notification_athan)
                     summary(R.string.enable_notification_athan)
                     disableDependentsState = true
-                }
-                clickable(onClick = { showAthanSelectDialog(activity, pickRingtone) }) {
-                    title(R.string.custom_athan)
-                    this@LocationAthanFragment.ringtonePreference = this
-                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
                 }
                 switch(PREF_ASCENDING_ATHAN_VOLUME, false) {
                     title(R.string.ascending_athan_volume)
