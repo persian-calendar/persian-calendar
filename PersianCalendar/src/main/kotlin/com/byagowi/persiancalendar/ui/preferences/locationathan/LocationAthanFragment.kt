@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan
 
-import android.app.Activity.RESULT_OK
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -12,7 +12,6 @@ import android.os.Looper
 import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.ListPreference
@@ -24,6 +23,7 @@ import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
 import com.byagowi.persiancalendar.ui.preferences.dialogTitle
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
+import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectPreviewDialog
@@ -42,14 +42,13 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private val defaultAthanName get() = context?.getString(R.string.default_athan_name) ?: ""
+    private val defaultAthanName get() = context?.getString(R.string.default_athan) ?: ""
 
     private var coordinatesPreference: Preference? = null
     private var ringtonePreference: Preference? = null
     private var selectedLocationPreference: Preference? = null
     private var athanPreferenceCategory: PreferenceCategory? = null
     private var asrCalculationHanafiJuristic: Preference? = null
-    private var defaultAthanPreference: Preference? = null
 
     // Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
     private val prayTimeCalculationMethods = listOf(
@@ -111,20 +110,10 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.enable_notification_athan)
                     disableDependentsState = true
                 }
-                clickable(onClick = {
-                    runCatching { pickRingtone.launch(getCustomAthanUri(layoutInflater.context)) }
-                        .onFailure(logException).getOrNull()
-                }) {
+                clickable(onClick = { showAthanSelectDialog(activity, pickRingtone) }) {
                     title(R.string.custom_athan)
                     this@LocationAthanFragment.ringtonePreference = this
                     handler.post { dependency = PREF_NOTIFICATION_ATHAN }
-                }
-                clickable(onClick = ::restoreDefaultAthan) {
-                    defaultAthanPreference = this
-                    title(R.string.default_athan)
-                    summary(R.string.default_athan_summary)
-                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
-                    isVisible = PREF_ATHAN_URI in activity.appPrefs
                 }
                 switch(PREF_ASCENDING_ATHAN_VOLUME, false) {
                     title(R.string.ascending_athan_volume)
@@ -145,32 +134,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
         onSharedPreferenceChanged(null, null)
         layoutInflater.context.appPrefs.registerOnSharedPreferenceChangeListener(this)
-
-        updateAthanSummaries(activity.appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName))
-        updateLocationOnSummaries()
-    }
-
-    private fun restoreDefaultAthan() {
-        val activity = activity ?: return
-        AlertDialog.Builder(activity)
-            .setTitle(R.string.default_athan_summary)
-            .setMessage(R.string.are_you_sure)
-            .setPositiveButton(R.string.accept) { _, _ ->
-                activity.appPrefs.edit {
-                    remove(PREF_ATHAN_URI)
-                    remove(PREF_ATHAN_NAME)
-                }
-                view?.let { v ->
-                    Snackbar.make(
-                        v,
-                        R.string.returned_to_default,
-                        Snackbar.LENGTH_SHORT
-                    ).show()
-                }
-                updateAthanSummaries(defaultAthanName)
-            }
-            .setNegativeButton(R.string.cancel, null)
-            .show()
+        updateSummaries()
     }
 
     private class PickRingtoneContract : ActivityResultContract<Uri?, String>() {
@@ -188,7 +152,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 }
 
         override fun parseResult(resultCode: Int, intent: Intent?): String? =
-            if (resultCode == RESULT_OK)
+            if (resultCode == Activity.RESULT_OK)
                 intent
                     ?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     ?.toString()
@@ -209,29 +173,25 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         view?.let {
             Snackbar.make(it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT).show()
         }
-        updateAthanSummaries(ringtoneTitle)
-    }
-
-    private fun updateAthanSummaries(athanName: String?) {
-        ringtonePreference?.summary = athanName
-        defaultAthanPreference?.isVisible = PREF_ATHAN_URI in (context ?: return).appPrefs
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        updateLocationOnSummaries()
+        updateSummaries()
         asrCalculationHanafiJuristic?.isVisible = !calculationMethod.isJafari
     }
 
-    private fun updateLocationOnSummaries() {
+    private fun updateSummaries() {
         val context = context ?: return
         updateStoredPreference(context) // So vital to have this to have updated preferences here
-        val cityName = context.appPrefs.cityName
+        val appPrefs = context.appPrefs
+        ringtonePreference?.summary = appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName)
+        val cityName = appPrefs.cityName
         selectedLocationPreference?.summary = cityName ?: context.getString(R.string.location_help)
         athanPreferenceCategory?.isEnabled = coordinates != null
         athanPreferenceCategory?.setSummary(
             if (coordinates == null) R.string.athan_disabled_summary else R.string.empty
         )
-        val selectedLocation = context.appPrefs.getString(PREF_SELECTED_LOCATION, null)
+        val selectedLocation = appPrefs.getString(PREF_SELECTED_LOCATION, null)
             ?.takeIf { it.isNotEmpty() && it != DEFAULT_CITY }
         coordinatesPreference?.isEnabled = selectedLocation == null
         coordinatesPreference?.summary = coordinates
