@@ -188,7 +188,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             appPrefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
         ascendingAthanVolumePreference?.isVisible = !isNotificationAthan
         athanVolumeDialogPreference?.isVisible = !isNotificationAthan &&
-                appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
+                !appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
 
         ringtonePreference?.summary = appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName)
         val cityName = appPrefs.cityName
