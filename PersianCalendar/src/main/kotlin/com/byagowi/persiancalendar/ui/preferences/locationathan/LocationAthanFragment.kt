@@ -48,7 +48,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var ringtonePreference: Preference? = null
     private var selectedLocationPreference: Preference? = null
     private var athanPreferenceCategory: PreferenceCategory? = null
-    private var asrCalculationHanafiJuristic: Preference? = null
+    private var asrCalculationHanafiJuristicPreference: Preference? = null
+    private var ascendingAthanVolumePreference: Preference? = null
+    private var athanVolumeDialogPreference: Preference? = null
 
     // Thee same order as http://praytimes.org/code/v2/js/examples/monthly.htm
     private val prayTimeCalculationMethods = listOf(
@@ -93,9 +95,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
                 switch(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority) {
-                    asrCalculationHanafiJuristic = this
+                    asrCalculationHanafiJuristicPreference = this
                     title(R.string.asr_hanafi_juristic)
-                    isVisible = !calculationMethod.isJafari
                 }
                 clickable(onClick = { showAthanGapDialog(activity) }) {
                     title(R.string.athan_gap)
@@ -109,21 +110,20 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     title(R.string.custom_athan)
                     this@LocationAthanFragment.ringtonePreference = this
                 }
-                switch(PREF_NOTIFICATION_ATHAN, false) {
+                switch(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN) {
                     title(R.string.notification_athan)
                     summary(R.string.enable_notification_athan)
                     disableDependentsState = true
                 }
-                switch(PREF_ASCENDING_ATHAN_VOLUME, false) {
+                switch(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME) {
                     title(R.string.ascending_athan_volume)
                     summary(R.string.enable_ascending_athan_volume)
-                    disableDependentsState = true
-                    handler.post { dependency = PREF_NOTIFICATION_ATHAN }
+                    ascendingAthanVolumePreference = this
                 }
                 clickable(onClick = { showAthanVolumeDialog(activity) }) {
                     title(R.string.athan_volume)
                     summary(R.string.athan_volume_summary)
-                    handler.post { dependency = PREF_ASCENDING_ATHAN_VOLUME }
+                    athanVolumeDialogPreference = this
                 }
                 clickable(onClick = { showPrayerSelectPreviewDialog(activity) }) {
                     title(R.string.preview)
@@ -133,7 +133,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
         onSharedPreferenceChanged(null, null)
         layoutInflater.context.appPrefs.registerOnSharedPreferenceChangeListener(this)
-        updateSummaries()
+        updatePreferencesItems()
     }
 
     private class PickRingtoneContract : ActivityResultContract<Uri?, String>() {
@@ -174,15 +174,22 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
-        updateSummaries()
-        asrCalculationHanafiJuristic?.isVisible = !calculationMethod.isJafari
-    }
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
+        updatePreferencesItems()
 
-    private fun updateSummaries() {
+    private fun updatePreferencesItems() {
         val context = context ?: return
         updateStoredPreference(context) // So vital to have this to have updated preferences here
+        asrCalculationHanafiJuristicPreference?.isVisible = !calculationMethod.isJafari
+
         val appPrefs = context.appPrefs
+
+        val isNotificationAthan =
+            appPrefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
+        ascendingAthanVolumePreference?.isVisible = !isNotificationAthan
+        athanVolumeDialogPreference?.isVisible = !isNotificationAthan &&
+                appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
+
         ringtonePreference?.summary = appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName)
         val cityName = appPrefs.cityName
         selectedLocationPreference?.summary = cityName ?: context.getString(R.string.location_help)

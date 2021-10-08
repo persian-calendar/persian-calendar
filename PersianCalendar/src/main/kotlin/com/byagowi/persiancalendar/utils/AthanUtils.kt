@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.ALARMS_BASE_ID
 import com.byagowi.persiancalendar.ALARM_TAG
 import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.BROADCAST_ALARM
+import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
@@ -56,7 +57,7 @@ fun getDefaultAthanUri(context: Context) = "%s://%s/%s/%s".format(
 val Context.athanVolume: Int get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 
 val Context.isAscendingAthanVolumeEnabled: Boolean
-    get() = appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, false)
+    get() = appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
 
 fun getCustomAthanUri(context: Context): Uri? =
     context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }?.toUri()
