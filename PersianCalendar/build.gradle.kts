@@ -12,15 +12,16 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
 }
 
-//val versionMajor = 1
-//val versionMinor = 1
-//val versionPatch = 1
-//val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
-//if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
-//    error("Use one digit numbers for minor and patch")
-//if (versionPatch % 2 != 0)
-//   error("As current Api based flavors scheme, use even number for patch numbers")
-//val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
+// Disabled due to F-Droid inability to parse dynamic versioning
+//   val versionMajor = 1
+//   val versionMinor = 1
+//   val versionPatch = 1
+//   val versionNumber = versionMajor * 100 + versionMinor * 10 + versionPatch
+//   if (listOf(versionMinor, versionPatch).any { it !in 0..9 })
+//       error("Use one digit numbers for minor and patch")
+//   if (versionPatch % 2 != 0)
+//      error("As current Api based flavors scheme, use even number for patch numbers")
+//   val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 val composeVersion = "1.0.3"
 
