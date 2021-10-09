@@ -32,10 +32,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
+import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.TIME_NAMES
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
@@ -218,6 +220,13 @@ class CalendarFragment : Fragment() {
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
         binding.viewPager.setCurrentItem(lastTab, false)
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
+
+        binding.root.post {
+            binding.root.context.appPrefs.edit {
+                putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
+            }
+        }
+
         return binding.root
     }
 
