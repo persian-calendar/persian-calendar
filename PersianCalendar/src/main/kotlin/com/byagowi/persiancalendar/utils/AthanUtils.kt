@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -47,12 +48,10 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-// https://stackoverflow.com/a/27788209
-fun Context.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
-    ContentResolver.SCHEME_ANDROID_RESOURCE,
-    resources.getResourcePackageName(rawRes),
-    resources.getResourceTypeName(rawRes),
-    resources.getResourceEntryName(rawRes)
+// https://stackoverflow.com/a/69505596
+fun Resources.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
+    ContentResolver.SCHEME_ANDROID_RESOURCE, this.getResourcePackageName(rawRes),
+    this.getResourceTypeName(rawRes), this.getResourceEntryName(rawRes)
 )
 
 val Context.athanVolume: Int get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)

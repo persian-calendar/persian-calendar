@@ -34,7 +34,7 @@ fun showAthanSelectDialog(activity: Activity, pickRingtone: ActivityResultLaunch
         stringId to {
             val prefs = activity.appPrefs
             prefs.edit {
-                putString(PREF_ATHAN_URI, activity.getRawUri(rawId))
+                putString(PREF_ATHAN_URI, activity.resources.getRawUri(rawId))
                 putString(PREF_ATHAN_NAME, activity.getString(stringId))
             }
         }

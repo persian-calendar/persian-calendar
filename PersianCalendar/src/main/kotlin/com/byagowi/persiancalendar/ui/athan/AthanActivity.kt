@@ -121,7 +121,8 @@ class AthanActivity : ComponentActivity() {
             } else {
                 mediaPlayer = MediaPlayer().also { mediaPlayer ->
                     runCatching {
-                        mediaPlayer.setDataSource(this, getRawUri(R.raw.abdulbasit).toUri())
+                        val rawUri = resources.getRawUri(R.raw.abdulbasit).toUri()
+                        mediaPlayer.setDataSource(this, rawUri)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             mediaPlayer.setAudioAttributes(
                                 AudioAttributes.Builder()

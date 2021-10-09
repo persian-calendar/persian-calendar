@@ -36,7 +36,8 @@ fun showAthanVolumeDialog(activity: Activity) {
     } else {
         val player = MediaPlayer()
         runCatching {
-            player.setDataSource(activity, activity.getRawUri(R.raw.abdulbasit).toUri())
+            val rawUri = activity.resources.getRawUri(R.raw.abdulbasit).toUri()
+            player.setDataSource(activity, rawUri)
             player.setAudioStreamType(AudioManager.STREAM_ALARM)
             player.prepare()
         }.onFailure(logException)
