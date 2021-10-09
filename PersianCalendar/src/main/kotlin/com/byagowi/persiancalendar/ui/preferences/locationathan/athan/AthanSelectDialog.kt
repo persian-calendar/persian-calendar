@@ -29,7 +29,8 @@ fun showAthanSelectDialog(activity: Activity, pickRingtone: ActivityResultLaunch
     ) + listOf(
         R.string.default_athan_name to R.raw.abdulbasit,
         R.string.moazzenzadeh to R.raw.moazzenzadeh,
-        R.string.abouzeid to R.raw.abouzeid
+        R.string.abouzeid to R.raw.abouzeid,
+        R.string.entezar to R.raw.entezar
     ).map { (stringId, rawId) ->
         stringId to {
             val prefs = activity.appPrefs
