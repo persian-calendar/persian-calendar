@@ -566,7 +566,7 @@ class CalendarFragment : Fragment() {
             }
         }
         if (coordinates != null) {
-            toolbar.menu.add(R.string.pray_times_table).also {
+            toolbar.menu.add(R.string.month_pray_times).also {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                 it.onClick { context.showHtml(createOwghatHtmlReport(calendarPager.selectedMonth)) }
             }
