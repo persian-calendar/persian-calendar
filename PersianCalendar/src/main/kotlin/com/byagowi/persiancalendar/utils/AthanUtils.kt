@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import androidx.annotation.DrawableRes
+import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -47,12 +48,12 @@ import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 // https://stackoverflow.com/a/27788209
-fun getDefaultAthanUri(context: Context) = "%s://%s/%s/%s".format(
+fun Context.getRawUri(@RawRes rawRes: Int) = "%s://%s/%s/%s".format(
     ContentResolver.SCHEME_ANDROID_RESOURCE,
-    context.resources.getResourcePackageName(R.raw.abdulbasit),
-    context.resources.getResourceTypeName(R.raw.abdulbasit),
-    context.resources.getResourceEntryName(R.raw.abdulbasit)
-).toUri()
+    resources.getResourcePackageName(rawRes),
+    resources.getResourceTypeName(rawRes),
+    resources.getResourceEntryName(rawRes)
+)
 
 val Context.athanVolume: Int get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_ATHAN_VOLUME)
 

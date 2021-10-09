@@ -15,16 +15,18 @@ import android.telephony.TelephonyManager
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
-import com.byagowi.persiancalendar.utils.getDefaultAthanUri
+import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
@@ -119,7 +121,7 @@ class AthanActivity : ComponentActivity() {
             } else {
                 mediaPlayer = MediaPlayer().also { mediaPlayer ->
                     runCatching {
-                        mediaPlayer.setDataSource(this, getDefaultAthanUri(this))
+                        mediaPlayer.setDataSource(this, getRawUri(R.raw.abdulbasit).toUri())
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             mediaPlayer.setAudioAttributes(
                                 AudioAttributes.Builder()

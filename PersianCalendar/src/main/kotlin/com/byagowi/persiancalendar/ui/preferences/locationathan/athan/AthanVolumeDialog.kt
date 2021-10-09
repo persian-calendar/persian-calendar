@@ -9,12 +9,13 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getCustomAthanUri
-import com.byagowi.persiancalendar.utils.getDefaultAthanUri
+import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
 
 fun showAthanVolumeDialog(activity: Activity) {
@@ -35,7 +36,7 @@ fun showAthanVolumeDialog(activity: Activity) {
     } else {
         val player = MediaPlayer()
         runCatching {
-            player.setDataSource(activity, getDefaultAthanUri(activity))
+            player.setDataSource(activity, activity.getRawUri(R.raw.abdulbasit).toUri())
             player.setAudioStreamType(AudioManager.STREAM_ALARM)
             player.prepare()
         }.onFailure(logException)
