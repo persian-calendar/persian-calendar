@@ -30,7 +30,10 @@ fun showCoordinatesDialog(activity: Activity) {
         .setView(binding.root)
         .setTitle(R.string.coordination)
         .setPositiveButton(R.string.accept) { _, _ ->
-            val coordinates = coordinatesEdits.map { it.text.toString() }
+            val coordinates = coordinatesEdits.map { it.text.toString() }.mapIndexed { i, x ->
+                // Replace empty elevation with zero
+                if (i == 2 && x.isEmpty()) "0" else x
+            }
             // just ensure they are parsable numbers for the last time otherwise reset it
             if (coordinates.all { it.toDoubleOrNull() != null })
                 activity.appPrefs.edit { coordinatesKeys.zip(coordinates, ::putString) }
