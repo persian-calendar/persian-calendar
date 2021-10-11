@@ -231,11 +231,16 @@ fun CalendarType.getMonthLength(year: Int, month: Int): Int {
 
 fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     val daysAbsoluteDistance = abs(Jdn.today - jdn)
-    val civilBase = CivilDate(2000, 1, 1)
-    val civilOffset = CivilDate(civilBase.toJdn() + daysAbsoluteDistance)
-    val yearsDifference = civilOffset.year - civilBase.year
-    val monthsDifference = civilOffset.month - civilBase.month
-    val daysOfMonthDifference = civilOffset.dayOfMonth - civilBase.dayOfMonth
+    val baseDate = mainCalendar.createDate(
+        when (mainCalendar) {
+            CalendarType.GREGORIAN -> 2000
+            CalendarType.ISLAMIC, CalendarType.SHAMSI -> 1400
+        }, 1, 1
+    )
+    val offsetDate = Jdn(baseDate.toJdn() + daysAbsoluteDistance).toCalendar(mainCalendar)
+    val yearsDifference = offsetDate.year - baseDate.year
+    val monthsDifference = offsetDate.month - baseDate.month
+    val daysOfMonthDifference = offsetDate.dayOfMonth - baseDate.dayOfMonth
     val days = resources.getString(R.string.n_days, formatNumber(daysAbsoluteDistance))
     return if (monthsDifference == 0 && yearsDifference == 0) days else ("$days (~" + listOf(
         R.string.n_years to yearsDifference,
