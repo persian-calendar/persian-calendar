@@ -11,14 +11,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentComposeBinding
-import com.byagowi.persiancalendar.ui.ComposeTheme
+import com.google.android.material.composethemeadapter.MdcTheme
 
 fun showComposeDialog(activity: Activity, dialog: @Composable ((closeDialog: () -> Unit) -> Unit)) {
     val decorView = (activity.window.decorView as? ViewGroup).debugAssertNotNull ?: return
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {
             val isDialogOpen = remember { mutableStateOf(true) }
-            if (isDialogOpen.value) ComposeTheme { dialog { isDialogOpen.value = false } }
+            if (isDialogOpen.value) MdcTheme { dialog { isDialogOpen.value = false } }
             else decorView.post { decorView.removeView(composeView) }
         }
     })
@@ -37,7 +37,7 @@ private fun createComposeView(
     composeView.layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
     )
-    composeView.setContent { ComposeTheme { Surface { content(setTitle, setSubtitle) } } }
+    composeView.setContent { MdcTheme { Surface { content(setTitle, setSubtitle) } } }
     binding.root.addView(composeView)
     return binding.root
 }

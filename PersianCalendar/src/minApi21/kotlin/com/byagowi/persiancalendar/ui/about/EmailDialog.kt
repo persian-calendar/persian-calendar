@@ -17,8 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.ComposeTheme
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
+import com.google.android.material.composethemeadapter.MdcTheme
 
 fun showEmailDialog(activity: Activity, onSuccess: (String) -> Unit) =
     showComposeDialog(activity) { EmailAlertDialog(it, onSuccess) }
@@ -58,4 +58,4 @@ private fun EmailAlertDialog(closeDialog: () -> Unit, onSuccess: (String) -> Uni
 
 @Preview
 @Composable
-private fun EmailAlertDialogPreview() = ComposeTheme { EmailAlertDialog({}, {}) }
+private fun EmailAlertDialogPreview() = MdcTheme { EmailAlertDialog({}, {}) }
