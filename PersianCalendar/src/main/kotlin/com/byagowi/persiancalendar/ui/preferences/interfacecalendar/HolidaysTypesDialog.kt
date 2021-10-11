@@ -10,9 +10,9 @@ import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.spacedComma
 
 fun showHolidaysTypesDialog(activity: Activity) {
     val binding = HolidaysTypesDialogBinding.inflate(activity.layoutInflater)

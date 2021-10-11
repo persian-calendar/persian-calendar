@@ -5,7 +5,7 @@ import androidx.appcompat.app.AlertDialog
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.language
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.saveLanguage
 
 fun showLanguagePreferenceDialog(activity: Activity) {

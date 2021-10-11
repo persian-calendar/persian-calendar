@@ -8,10 +8,10 @@ import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.otherCalendars
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.isHighTextContrastEnabled
-import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.otherCalendars
 import kotlin.math.min
 
 class DayView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {

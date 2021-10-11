@@ -5,10 +5,10 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.scheduleAlarmManagerUpdates
 import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.utils.updateStoredPreference
 import java.lang.ref.WeakReference
 
 /**

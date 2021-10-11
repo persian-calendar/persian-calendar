@@ -17,6 +17,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.global.calculationMethod
+import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
 import com.byagowi.persiancalendar.ui.preferences.dialogTitle

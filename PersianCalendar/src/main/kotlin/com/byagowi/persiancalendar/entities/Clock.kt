@@ -2,11 +2,11 @@ package com.byagowi.persiancalendar.entities
 
 import android.content.Context
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.amString
-import com.byagowi.persiancalendar.utils.clockIn24
+import com.byagowi.persiancalendar.global.amString
+import com.byagowi.persiancalendar.global.clockIn24
+import com.byagowi.persiancalendar.global.pmString
+import com.byagowi.persiancalendar.global.spacedAnd
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.pmString
-import com.byagowi.persiancalendar.utils.spacedAnd
 import java.util.*
 
 data class Clock(val hours: Int, val minutes: Int) {

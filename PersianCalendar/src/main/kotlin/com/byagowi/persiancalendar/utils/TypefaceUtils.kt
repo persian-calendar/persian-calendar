@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.graphics.Typeface
 import com.byagowi.persiancalendar.FONT_PATH
+import com.byagowi.persiancalendar.global.language
 
 // https://gist.github.com/artem-zinnatullin/7749076
 

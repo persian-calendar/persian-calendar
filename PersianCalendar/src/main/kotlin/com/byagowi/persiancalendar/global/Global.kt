@@ -1,7 +1,6 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.global
 
 import android.content.Context
-import android.os.Build
 import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
@@ -58,12 +57,26 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
+import com.byagowi.persiancalendar.utils.ARABIC_DIGITS
+import com.byagowi.persiancalendar.utils.ARABIC_INDIC_DIGITS
+import com.byagowi.persiancalendar.utils.EnabledHolidays
+import com.byagowi.persiancalendar.utils.PERSIAN_DIGITS
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.defaultWidgetBackground
+import com.byagowi.persiancalendar.utils.getJdnOrNull
+import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
+import com.byagowi.persiancalendar.utils.loadEvents
+import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.scheduleAlarms
+import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
+import com.byagowi.persiancalendar.utils.storedCity
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 
-val monthNameEmptyList = List(12) { "" }
+private val monthNameEmptyList = List(12) { "" }
 var persianMonths = monthNameEmptyList
     private set
 var islamicMonths = monthNameEmptyList
@@ -156,11 +169,6 @@ var numericalDatePreferred = false
 var calendarTypesTitleAbbr = emptyList<String>()
     private set
 // Some more are in EventsUtils
-
-val defaultWidgetBackground
-    get() =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) "#20000000"
-        else DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {

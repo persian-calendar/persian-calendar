@@ -7,9 +7,9 @@ import androidx.core.content.edit
 import androidx.core.view.setPadding
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.defaultWidgetBackground
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.defaultWidgetBackground
 import java.util.*
 
 fun showColorPickerDialog(activity: Activity, isBackgroundPick: Boolean, key: String) {

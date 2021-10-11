@@ -8,9 +8,9 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
+import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.coordinates
-import com.byagowi.persiancalendar.utils.spacedComma
 
 fun showCoordinatesDialog(activity: Activity) {
     val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)

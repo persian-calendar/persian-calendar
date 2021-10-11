@@ -5,6 +5,8 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.asrMethod
+import com.byagowi.persiancalendar.global.calculationMethod
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates

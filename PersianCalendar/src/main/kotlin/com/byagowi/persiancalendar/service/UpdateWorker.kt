@@ -7,10 +7,10 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.byagowi.persiancalendar.CHANGE_DATE_TAG
+import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.update
-import com.byagowi.persiancalendar.utils.updateStoredPreference
 import kotlinx.coroutines.coroutineScope
 import java.util.*
 import java.util.concurrent.TimeUnit

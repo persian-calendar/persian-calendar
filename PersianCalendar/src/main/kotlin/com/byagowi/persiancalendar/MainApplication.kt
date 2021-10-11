@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar
 
 import android.app.Application
 import androidx.annotation.Keep
-import com.byagowi.persiancalendar.utils.initGlobal
+import com.byagowi.persiancalendar.global.initGlobal
 
 class MainApplication : Application() {
 

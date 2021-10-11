@@ -20,18 +20,18 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.shiftWorkRecurs
+import com.byagowi.persiancalendar.global.shiftWorkStartingJdn
+import com.byagowi.persiancalendar.global.shiftWorkTitles
+import com.byagowi.persiancalendar.global.shiftWorks
+import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.mainCalendar
 import com.byagowi.persiancalendar.utils.putJdn
-import com.byagowi.persiancalendar.utils.shiftWorkRecurs
-import com.byagowi.persiancalendar.utils.shiftWorkStartingJdn
-import com.byagowi.persiancalendar.utils.shiftWorkTitles
-import com.byagowi.persiancalendar.utils.shiftWorks
-import com.byagowi.persiancalendar.utils.spacedComma
-import com.byagowi.persiancalendar.utils.updateStoredPreference
 
 fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> Unit) {
     var isFirstSetup = false

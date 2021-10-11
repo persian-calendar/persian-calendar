@@ -2,6 +2,12 @@ package com.byagowi.persiancalendar.utils
 
 import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.shiftWorkPeriod
+import com.byagowi.persiancalendar.global.shiftWorkRecurs
+import com.byagowi.persiancalendar.global.shiftWorkStartingJdn
+import com.byagowi.persiancalendar.global.shiftWorkTitles
+import com.byagowi.persiancalendar.global.shiftWorks
 
 fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
     val shiftWorkStartingJdn = shiftWorkStartingJdn ?: return ""

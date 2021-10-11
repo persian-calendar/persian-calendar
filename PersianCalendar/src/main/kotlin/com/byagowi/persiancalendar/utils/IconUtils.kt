@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.preferredDigits
 
 // Dynamic icon generation, currently unused
 fun createStatusIcon(context: Context, dayOfMonth: Int): Bitmap {

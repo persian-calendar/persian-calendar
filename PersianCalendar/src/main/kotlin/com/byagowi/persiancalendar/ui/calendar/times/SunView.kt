@@ -19,11 +19,11 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.getAppFont
-import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.spacedColon
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*

@@ -47,6 +47,22 @@ import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.global.calculationMethod
+import com.byagowi.persiancalendar.global.clockIn24
+import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.isCenterAlignWidgets
+import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
+import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.global.isNotifyDate
+import com.byagowi.persiancalendar.global.isNotifyDateOnLockScreen
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
+import com.byagowi.persiancalendar.global.isWidgetClock
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.selectedWidgetBackgroundColor
+import com.byagowi.persiancalendar.global.selectedWidgetTextColor
+import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
@@ -200,6 +216,11 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
         }
     }
 }
+
+val defaultWidgetBackground
+    get() =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) "#20000000"
+        else DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
 fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: Int): RemoteViews {
     val appPrefs = context.appPrefs

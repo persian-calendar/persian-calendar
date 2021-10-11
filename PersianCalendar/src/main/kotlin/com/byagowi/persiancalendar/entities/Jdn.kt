@@ -1,9 +1,9 @@
 package com.byagowi.persiancalendar.entities
 
+import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
-import com.byagowi.persiancalendar.utils.weekDays
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate

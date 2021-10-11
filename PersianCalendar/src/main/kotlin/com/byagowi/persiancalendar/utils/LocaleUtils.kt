@@ -6,6 +6,10 @@ import android.view.View
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.otherCalendars
+import com.byagowi.persiancalendar.global.preferredDigits
 import java.util.*
 
 // Context preferably should be activity context not application
