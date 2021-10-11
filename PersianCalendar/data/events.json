@@ -1262,6 +1262,7 @@
     { "holiday": false, "month": 9, "day": 21, "title": "روز جهانی آلزایمر", "type": "International" },
     { "holiday": false, "month": 9, "day": 21, "title": "روز جهانی صلح", "type": "International" },
     { "holiday": false, "month": 9, "day": 30, "title": "روز جهانی ترجمه", "type": "International" },
+    { "holiday": false, "month": 10, "day": 11, "title": "روز جهانی دختر", "type": "International" },
     { "holiday": false, "month": 10, "day": 24, "title": "روز ملل متحد و روز جهانی توسعه اطلاعات", "type": "International" },
     { "holiday": false, "month": 10, "day": 27, "title": "روز جهانی میراث سمعی و بصری", "type": "International" },
     { "holiday": false, "month": 10, "day": 27, "title": "روز جهانی کادر درمانی", "type": "International" },
