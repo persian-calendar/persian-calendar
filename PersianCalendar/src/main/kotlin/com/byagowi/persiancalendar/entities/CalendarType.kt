@@ -17,4 +17,19 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
         GREGORIAN -> CivilDate(year, month, day)
         SHAMSI -> PersianDate(year, month, day)
     }
+
+    // 1 means Saturday on it and 7 means Friday
+    fun getLastWeekDayOfMonth(year: Int, month: Int, dayOfWeek: Int): Int {
+        val monthLength = this.getMonthLength(year, month)
+        val endOfMonthJdn = Jdn(this, year, month, monthLength)
+        return monthLength - ((endOfMonthJdn.value - dayOfWeek + 3L) % 7).toInt()
+    }
+
+    fun getMonthLength(year: Int, month: Int): Int {
+        val nextMonthYear = if (month == 12) year + 1 else year
+        val nextMonthMonth = if (month == 12) 1 else month + 1
+        val nextMonthStartingDay = Jdn(this, nextMonthYear, nextMonthMonth, 1)
+        val thisMonthStartingDay = Jdn(this, year, month, 1)
+        return nextMonthStartingDay - thisMonthStartingDay
+    }
 }

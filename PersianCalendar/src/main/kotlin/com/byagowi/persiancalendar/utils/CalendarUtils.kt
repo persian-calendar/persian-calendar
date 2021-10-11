@@ -38,13 +38,6 @@ fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean 
 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
-// 1 means Saturday on it and 7 means Friday
-fun CalendarType.getLastWeekDayOfMonth(year: Int, month: Int, dayOfWeek: Int): Int {
-    val monthLength = this.getMonthLength(year, month)
-    val endOfMonthJdn = Jdn(this, year, month, monthLength)
-    return monthLength - ((endOfMonthJdn.value - dayOfWeek + 3L) % 7).toInt()
-}
-
 val AbstractDate.monthName get() = this.calendarType.monthsNames.getOrNull(month - 1) ?: ""
 
 val CalendarType.monthsNames: List<String>
@@ -121,11 +114,6 @@ fun Date.toJavaCalendar(forceLocalTime: Boolean = false): Calendar = Calendar.ge
     if (!forceLocalTime && isForcedIranTimeEnabled)
         it.timeZone = TimeZone.getTimeZone("Asia/Tehran")
     it.time = this
-}
-
-fun Jdn.toJavaCalendar(): GregorianCalendar = GregorianCalendar().also {
-    val gregorian = this.toGregorianCalendar()
-    it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
 }
 
 // Google Meet generates weird and ugly descriptions with lines having such patterns, let's get rid of them
@@ -220,14 +208,6 @@ val AbstractDate.calendarType: CalendarType
         is CivilDate -> CalendarType.GREGORIAN
         else -> CalendarType.SHAMSI
     }
-
-fun CalendarType.getMonthLength(year: Int, month: Int): Int {
-    val nextMonthYear = if (month == 12) year + 1 else year
-    val nextMonthMonth = if (month == 12) 1 else month + 1
-    val nextMonthStartingDay = Jdn(this, nextMonthYear, nextMonthMonth, 1)
-    val thisMonthStartingDay = Jdn(this, year, month, 1)
-    return nextMonthStartingDay - thisMonthStartingDay
-}
 
 fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     val daysAbsoluteDistance = abs(Jdn.today - jdn)

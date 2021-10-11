@@ -38,6 +38,11 @@ value class Jdn(val value: Long) {
     // Difference of two Jdn values in days
     operator fun minus(other: Jdn): Int = (value - other.value).toInt()
 
+    fun toJavaCalendar(): GregorianCalendar = GregorianCalendar().also {
+        val gregorian = this.toGregorianCalendar()
+        it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
+    }
+
     companion object {
         val today: Jdn get() = Jdn(Date().toJavaCalendar().toCivilDate())
     }
