@@ -19,8 +19,9 @@ import com.byagowi.persiancalendar.utils.logException
 fun showAthanSelectDialog(activity: Activity, pickRingtone: ActivityResultLauncher<Uri?>) {
     fun selectAthan(@RawRes rawRes: Int, @StringRes titleRes: Int) {
     }
+
     val items = listOf(
-        R.string.default_athan to callback@ {
+        R.string.default_athan to callback@{
             val prefs = activity.appPrefs
             if (PREF_ATHAN_URI !in prefs && PREF_ATHAN_NAME !in prefs) return@callback
             prefs.edit { remove(PREF_ATHAN_URI); remove(PREF_ATHAN_NAME) }

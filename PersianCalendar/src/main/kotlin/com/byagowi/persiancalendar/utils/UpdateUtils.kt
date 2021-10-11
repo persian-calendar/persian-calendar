@@ -111,7 +111,7 @@ fun update(context: Context, updateDate: Boolean) {
     val owghat = if (nextOwghatId == null) "" else buildString {
         append(context.getString(nextOwghatId))
         append(": ")
-        append(prayTimes.getFromStringId(nextOwghatId)?.toFormattedString() ?: "")
+        append(prayTimes.getFromStringId(nextOwghatId).toFormattedString())
         if (OWGHAT_LOCATION_KEY in whatToShowOnWidgets)
             context.appPrefs.cityName?.also { append(" ($it)") }
     }
@@ -447,10 +447,10 @@ private fun create4x2RemoteViews(
                 R.string.isha
             )
         ) { textHolderViewId, owghatStringId ->
-            val timeClock = prayTimes.getFromStringId(owghatStringId) ?: Clock.fromInt(0)
+            val timeClock = prayTimes.getFromStringId(owghatStringId)
             remoteViews.setTextViewText(
                 textHolderViewId, context.getString(owghatStringId) + "\n" +
-                        timeClock?.toFormattedString(printAmPm = false)
+                        timeClock.toFormattedString(printAmPm = false)
             )
             remoteViews.setTextColor(textHolderViewId, color)
             Triple(textHolderViewId, owghatStringId, timeClock)

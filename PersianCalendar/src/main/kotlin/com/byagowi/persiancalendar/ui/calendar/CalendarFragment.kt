@@ -92,7 +92,6 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.spacedComma
 import com.byagowi.persiancalendar.utils.titleStringId
-import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.calendar.AbstractDate

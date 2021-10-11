@@ -27,7 +27,7 @@ class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
 
     fun update(prayTimes: PrayTimes) = times
         .forEach { (timeId: Int, timeItemBinding: TimeItemBinding) ->
-            timeItemBinding.time.text = prayTimes.getFromStringId(timeId)?.toFormattedString() ?: ""
+            timeItemBinding.time.text = prayTimes.getFromStringId(timeId).toFormattedString()
         }
 
     var isExpanded = true
