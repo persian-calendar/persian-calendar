@@ -2,6 +2,9 @@ package com.byagowi.persiancalendar.entities
 
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.gregorianMonths
+import com.byagowi.persiancalendar.utils.islamicMonths
+import com.byagowi.persiancalendar.utils.persianMonths
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -32,4 +35,11 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
         val thisMonthStartingDay = Jdn(this, year, month, 1)
         return nextMonthStartingDay - thisMonthStartingDay
     }
+
+    val monthsNames: List<String>
+        get() = when (this) {
+            SHAMSI -> persianMonths
+            ISLAMIC -> islamicMonths
+            GREGORIAN -> gregorianMonths
+        }
 }

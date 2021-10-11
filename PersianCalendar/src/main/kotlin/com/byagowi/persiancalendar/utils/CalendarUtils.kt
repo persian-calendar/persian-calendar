@@ -21,7 +21,6 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import java.util.*
 import kotlin.math.abs
-import kotlin.math.ceil
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
@@ -39,13 +38,6 @@ fun dayTitleSummary(jdn: Jdn, date: AbstractDate, calendarNameInLinear: Boolean 
 fun getInitialOfWeekDay(position: Int) = weekDaysInitials[position % 7]
 
 val AbstractDate.monthName get() = this.calendarType.monthsNames.getOrNull(month - 1) ?: ""
-
-val CalendarType.monthsNames: List<String>
-    get() = when (this) {
-        CalendarType.SHAMSI -> persianMonths
-        CalendarType.ISLAMIC -> islamicMonths
-        CalendarType.GREGORIAN -> gregorianMonths
-    }
 
 // Generating text used in TalkBack / Voice Assistant
 fun getA11yDaySummary(
@@ -230,13 +222,6 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
         resources.getString(stringId, formatNumber(n))
     } + ")")
 }
-
-fun Jdn.getWeekOfYear(startOfYear: Jdn): Int {
-    val dayOfYear = this - startOfYear
-    return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(this.dayOfWeek)) / 7.0).toInt()
-}
-
-val Jdn.dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
 fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(
     persianCalendarEvents.getEvents(jdn.toPersianCalendar()),

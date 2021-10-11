@@ -14,7 +14,6 @@ import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 import com.byagowi.persiancalendar.utils.language
-import com.byagowi.persiancalendar.utils.monthsNames
 import com.google.android.material.snackbar.Snackbar
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {

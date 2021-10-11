@@ -1,12 +1,15 @@
 package com.byagowi.persiancalendar.entities
 
+import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.byagowi.persiancalendar.utils.weekDays
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
+import kotlin.math.ceil
 
 // Julian day number, basically a day counter starting from some day in concept
 // https://en.wikipedia.org/wiki/Julian_day
@@ -42,6 +45,13 @@ value class Jdn(val value: Long) {
         val gregorian = this.toGregorianCalendar()
         it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
     }
+
+    fun getWeekOfYear(startOfYear: Jdn): Int {
+        val dayOfYear = this - startOfYear
+        return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(this.dayOfWeek)) / 7.0).toInt()
+    }
+
+    val dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
     companion object {
         val today: Jdn get() = Jdn(Date().toJavaCalendar().toCivilDate())
