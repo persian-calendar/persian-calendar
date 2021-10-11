@@ -83,7 +83,7 @@ var islamicMonths = monthNameEmptyList
     private set
 var gregorianMonths = monthNameEmptyList
     private set
-val weekDaysEmptyList = List(7) { "" }
+private val weekDaysEmptyList = List(7) { "" }
 var weekDays = weekDaysEmptyList
     private set
 var weekDaysInitials = weekDaysEmptyList
