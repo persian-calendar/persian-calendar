@@ -264,9 +264,7 @@ class CalendarFragment : Fragment() {
 
     private fun createOwghatTabPlaceholder(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding = OwghatTabPlaceholderBinding.inflate(inflater, container, false)
-        // As mentioned above is Persian only so i18n is not a concern
-        binding.buttonsBar.header.text =
-            "اگر مایل به دیدن خورشیدنما و اوقات شرعی هستید مکان را در تنظیمات مشخص کنید"
+        binding.buttonsBar.header.setText(R.string.ask_user_to_set_location)
         binding.buttonsBar.settings.setOnClickListener {
             findNavController().navigateSafe(
                 CalendarFragmentDirections.navigateToSettings(PreferencesFragment.LOCATION_ATHAN_TAB)
