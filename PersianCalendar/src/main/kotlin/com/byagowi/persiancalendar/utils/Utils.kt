@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
+import android.content.SharedPreferences
+import android.os.Bundle
 import android.util.Log
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.LOG_TAG
@@ -36,3 +38,10 @@ val CalculationMethod.titleStringId
         CalculationMethod.Jafari -> R.string.method_jafari
         CalculationMethod.Tehran -> R.string.method_tehran
     }
+
+fun Bundle.putJdn(key: String, jdn: Jdn?) {
+    if (jdn == null) remove(jdn) else putLong(key, jdn.value)
+}
+
+fun Bundle.getJdnOrNull(key: String): Jdn? =
+    getLong(key, -1).takeIf { it != -1L }?.let { Jdn(it) }

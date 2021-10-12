@@ -86,10 +86,12 @@ import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getFromStringId
+import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.google.android.material.snackbar.Snackbar
@@ -120,7 +122,8 @@ class CalendarFragment : Fragment() {
     private var eventsBinding: EventsTabContentBinding? = null
     private var searchView: SearchView? = null
     private var todayButton: MenuItem? = null
-    private val initialDate = Jdn.today.toCalendar(mainCalendar)
+    private val initialJdn = Jdn.today
+    private val initialDate = initialJdn.toCalendar(mainCalendar)
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -282,14 +285,19 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        bringDate(Jdn.today, monthChange = false, highlight = false)
+        val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
+        if (savedJdn != null) {
+            bringDate(savedJdn)
+        } else {
+            bringDate(Jdn.today, monthChange = false, highlight = false)
+        }
 
         mainBinding?.appBar?.let { appBar ->
             appBar.toolbar.setupMenuNavigation()
             appBar.appbarLayout.hideToolbarBottomShadow()
         }
 
-        Jdn.today.toCalendar(mainCalendar).let { today ->
+        selectedJdn.toCalendar(mainCalendar).let { today ->
             updateToolbar(today.monthName, formatNumber(today.year))
         }
     }
@@ -374,7 +382,12 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private var selectedJdn = Jdn.today
+    private var selectedJdn: Jdn = Jdn.today
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putJdn(SELECTED_JDN_KEY, selectedJdn)
+    }
 
     private fun bringDate(jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true) {
         selectedJdn = jdn
@@ -519,7 +532,7 @@ class CalendarFragment : Fragment() {
                 it.setOnItemClickListener { parent, _, position, _ ->
                     val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                     val type = date.calendarType
-                    val today = Jdn.today.toCalendar(type)
+                    val today = initialJdn.toCalendar(type)
                     bringDate(
                         Jdn(
                             type, if (date.year == -1)
@@ -636,5 +649,6 @@ class CalendarFragment : Fragment() {
         private const val CALENDARS_TAB = 0
         private const val EVENTS_TAB = 1
         private const val OWGHAT_TAB = 2
+        private const val SELECTED_JDN_KEY = "SELECTED_JDN_KEY"
     }
 }
