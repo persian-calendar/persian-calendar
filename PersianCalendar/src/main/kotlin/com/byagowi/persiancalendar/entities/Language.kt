@@ -154,7 +154,7 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when {
             this == FA -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
             prefersGregorianCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
-            prefersIslamicCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
+            prefersIslamicCalendar -> "${CalendarType.GREGORIAN.name},${CalendarType.SHAMSI.name}"
             prefersPersianCalendar -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
             else -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
         }
