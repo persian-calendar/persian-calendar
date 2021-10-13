@@ -19,7 +19,13 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
+      - id: should_run
+        continue-on-error: true
+        name: check latest commit is less than a day
+        run: test -z $(git rev-list --after="24 hours" ${{ github.sha }}) && echo "::set-output name=should_run::false"
+
       - name: Build and send apks to telegram
+        if: ${{ steps.should_run.outputs.should_run != 'false' }}
         run: |
           # TODO: Clean up the duplication here
           ./gradlew assembleMinApi17Nightly
