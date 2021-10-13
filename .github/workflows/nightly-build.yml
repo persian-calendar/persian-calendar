@@ -13,28 +13,25 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 1
+
       - name: set up JDK
         uses: actions/setup-java@v2
         with:
           java-version: '11'
           distribution: 'adopt'
 
-      - id: should_run
-        continue-on-error: true
-        name: check latest commit is less than a day
-        run: test -z $(git rev-list --after="24 hours" ${{ github.sha }}) && echo "::set-output name=should_run::false"
-
       - name: Build and send apks to telegram
-        if: ${{ steps.should_run.outputs.should_run != 'false' }}
         run: |
-          # TODO: Clean up the duplication here
-          ./gradlew assembleMinApi17Nightly
-          apk_dir="$(find . -type f -iname *.apk)"
-          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
-          rm "$apk_dir"
-          ./gradlew assembleMinApi21Nightly
-          apk_dir="$(find . -type f -iname *.apk)"
-          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
+          if [[ $(git rev-list --after="24 hours" main) ]]; then
+            # TODO: Clean up the duplication here
+            ./gradlew assembleMinApi17Nightly
+            apk_dir="$(find . -type f -iname *.apk)"
+            curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
+            rm "$apk_dir"
+            ./gradlew assembleMinApi21Nightly
+            apk_dir="$(find . -type f -iname *.apk)"
+            curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
+          fi
 
       - name: Update the runtime dependencies report
         run: |
