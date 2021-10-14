@@ -288,7 +288,7 @@ class CalendarFragment : Fragment() {
 
         val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
         if (savedJdn != null) {
-            bringDate(savedJdn, smoothScroll = false)
+            bringDate(savedJdn, highlight = savedJdn != initialJdn, smoothScroll = false)
         } else {
             bringDate(Jdn.today, monthChange = false, highlight = false)
         }
