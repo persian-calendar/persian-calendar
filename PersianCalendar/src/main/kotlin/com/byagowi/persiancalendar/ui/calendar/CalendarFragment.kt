@@ -287,8 +287,8 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
-        if (savedJdn != null) {
-            bringDate(savedJdn, highlight = savedJdn != initialJdn, smoothScroll = false)
+        if (savedJdn != null && savedJdn != initialJdn) {
+            bringDate(savedJdn, smoothScroll = false)
         } else {
             bringDate(Jdn.today, monthChange = false, highlight = false)
         }
