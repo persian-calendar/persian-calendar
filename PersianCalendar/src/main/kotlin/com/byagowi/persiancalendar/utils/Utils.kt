@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.utils
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.StringRes
