@@ -61,8 +61,7 @@
                 android:inputType="number|numberDecimal|numberSigned"
                 android:layoutDirection="ltr"
                 android:singleLine="true"
-                android:textDirection="ltr"
-                app:suffixText="@string/altitude_praytime" />
+                android:textDirection="ltr" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

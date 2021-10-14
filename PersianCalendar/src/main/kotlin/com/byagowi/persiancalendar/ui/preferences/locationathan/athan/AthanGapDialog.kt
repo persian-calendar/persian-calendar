@@ -12,8 +12,8 @@ fun showAthanGapDialog(activity: Activity) {
     val binding = NumericBinding.inflate(activity.layoutInflater)
     val gap = activity.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull() ?: .0
     binding.edit.setText(gap.toString())
+    binding.root.setHint(R.string.athan_gap_summary)
     AlertDialog.Builder(activity)
-        .setTitle(R.string.athan_gap_summary)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
             val value = binding.edit.toString().toDoubleOrNull() ?: .0
