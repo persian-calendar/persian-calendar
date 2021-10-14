@@ -288,7 +288,7 @@ class CalendarFragment : Fragment() {
 
         val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
         if (savedJdn != null) {
-            bringDate(savedJdn)
+            bringDate(savedJdn, smoothScroll = false)
         } else {
             bringDate(Jdn.today, monthChange = false, highlight = false)
         }
@@ -390,10 +390,13 @@ class CalendarFragment : Fragment() {
         outState.putJdn(SELECTED_JDN_KEY, selectedJdn)
     }
 
-    private fun bringDate(jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true) {
+    private fun bringDate(
+        jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
+        smoothScroll: Boolean = true
+    ) {
         selectedJdn = jdn
 
-        mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange)
+        mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
 
         val isToday = Jdn.today == jdn
 

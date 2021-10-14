@@ -29,14 +29,18 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
     val selectedMonth: AbstractDate
         get() = getDateFromOffset(mainCalendar, applyOffset(viewPager.currentItem))
 
-    fun setSelectedDay(jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true) {
+    fun setSelectedDay(
+        jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
+        smoothScroll: Boolean = true
+    ) {
         selectedJdn = if (highlight) jdn else null
 
         if (monthChange) {
             val today = Jdn.today.toCalendar(mainCalendar)
             val date = jdn.toCalendar(mainCalendar)
             viewPager.setCurrentItem(
-                applyOffset((today.year - date.year) * 12 + today.month - date.month), true
+                applyOffset(position = (today.year - date.year) * 12 + today.month - date.month),
+                smoothScroll
             )
         }
 
