@@ -1,60 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="25dp">
+    android:layout_height="wrap_content">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:labelFor="@id/latitude"
-        android:text="@string/latitude" />
+        android:orientation="vertical"
+        android:padding="25dp">
 
-    <EditText
-        android:id="@+id/latitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:autofillHints=""
-        android:inputType="number|numberDecimal|numberSigned"
-        android:layoutDirection="ltr"
-        android:singleLine="true"
-        android:textDirection="ltr" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/AppTextInputLayoutOutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/latitude">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:labelFor="@id/longitude"
-        android:text="@string/longitude" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/latitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:inputType="number|numberDecimal|numberSigned"
+                android:layoutDirection="ltr"
+                android:singleLine="true"
+                android:textDirection="ltr" />
 
-    <EditText
-        android:id="@+id/longitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:autofillHints=""
-        android:inputType="number|numberDecimal|numberSigned"
-        android:layoutDirection="ltr"
-        android:singleLine="true"
-        android:textDirection="ltr" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/altitude_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:labelFor="@id/altitude"
-        android:text="@string/altitude" />
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/AppTextInputLayoutOutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/longitude">
 
-    <EditText
-        android:id="@+id/altitude"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:autofillHints=""
-        android:inputType="number|numberDecimal|numberSigned"
-        android:layoutDirection="ltr"
-        android:singleLine="true"
-        android:textDirection="ltr" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/longitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:inputType="number|numberDecimal|numberSigned"
+                android:layoutDirection="ltr"
+                android:singleLine="true"
+                android:textDirection="ltr" />
 
-</LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/altitudeLabel"
+            style="@style/AppTextInputLayoutOutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/altitude">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/altitude"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:inputType="number|numberDecimal|numberSigned"
+                android:layoutDirection="ltr"
+                android:singleLine="true"
+                android:textDirection="ltr"
+                app:suffixText="@string/altitude_praytime" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+</ScrollView>

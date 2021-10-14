@@ -434,4 +434,6 @@
 
     <style name="AppTextInputLayoutFilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox" />
 
+    <style name="AppTextInputLayoutOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
 </resources>

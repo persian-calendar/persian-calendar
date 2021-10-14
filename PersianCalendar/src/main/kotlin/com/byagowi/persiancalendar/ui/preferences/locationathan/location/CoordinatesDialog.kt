@@ -16,7 +16,7 @@ fun showCoordinatesDialog(activity: Activity) {
     val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)
 
     // As we don't already a string concatenated of the two, let's do in code
-    binding.altitudeLabel.text = listOf(R.string.altitude, R.string.altitude_praytime)
+    binding.altitudeLabel.hint = listOf(R.string.altitude, R.string.altitude_praytime)
         .joinToString(spacedComma) { activity.getString(it) }
 
     val coordinatesEdits = listOf(binding.latitude, binding.longitude, binding.altitude)

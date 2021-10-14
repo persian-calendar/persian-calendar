@@ -22,8 +22,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="vertical"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:padding="8dp">
 
             <Button
@@ -38,14 +38,18 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/edit_widget_title"
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_margin="8dp"
                     android:layout_height="wrap_content"
-                    android:autofillHints="@string/age_widget_title"
-                    android:hint="@string/age_widget_title"
-                    android:inputType="text" />
+                    android:hint="@string/age_widget_title">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edit_widget_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <FrameLayout
                     android:id="@+id/preference_fragment_holder"
