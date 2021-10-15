@@ -83,8 +83,6 @@ import kotlin.math.sqrt
  */
 class DeviceInformationFragment : Fragment() {
 
-    private var clickCount = 0
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -133,6 +131,7 @@ class DeviceInformationFragment : Fragment() {
         }
 
         binding.bottomNavigation.menu.also {
+            var clickCount = 0
             val click = { if (++clickCount % 10 == 0) openTestingHiddenDialog() }
             it.add(Build.VERSION.RELEASE).setIcon(R.drawable.ic_developer).onClick(click)
             it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_settings).onClick(click)
@@ -150,18 +149,6 @@ class DeviceInformationFragment : Fragment() {
         BottomSheetDialog(activity).also { bottomSheetDialog ->
             bottomSheetDialog.setContentView(LinearLayout(activity).also { linearLayout ->
                 linearLayout.orientation = LinearLayout.VERTICAL
-                // Add one with CircularProgressIndicator also
-                linearLayout.addView(LinearProgressIndicator(activity).also { linearProgressIndicator ->
-                    linearProgressIndicator.isIndeterminate = true
-                    linearProgressIndicator.setIndicatorColor(
-                        Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE
-                    )
-                    linearProgressIndicator.layoutParams =
-                        ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                        )
-                })
                 linearLayout.addView(TabLayout(
                     activity, null, R.style.TabLayoutColored
                 ).also { tabLayout ->
@@ -184,8 +171,7 @@ class DeviceInformationFragment : Fragment() {
                             }
                         })
                     }
-                    tabLayout.addOnTabSelectedListener(object :
-                        TabLayout.OnTabSelectedListener {
+                    tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                         override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
                         override fun onTabReselected(tab: TabLayout.Tab?) = Unit
                         override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -194,6 +180,13 @@ class DeviceInformationFragment : Fragment() {
                     })
                     tabLayout.setSelectedTabIndicator(R.drawable.cat_tabs_pill_indicator)
                     tabLayout.setSelectedTabIndicatorGravity(TabLayout.INDICATOR_GRAVITY_STRETCH)
+                })
+                linearLayout.addView(LinearProgressIndicator(activity).also { indicator ->
+                    indicator.isIndeterminate = true
+                    indicator.setIndicatorColor(Color.RED, Color.YELLOW, Color.GREEN, Color.BLUE)
+                    indicator.layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+                    )
                 })
                 linearLayout.addView(ImageView(activity).also { imageView ->
                     imageView.minimumHeight = 80.dp.toInt()
