@@ -313,4 +313,9 @@
     <string name="enable_new_interface">Activer la nouvelle interface</string>
     <string name="are_you_sure">Êtes-vous sûr·e \?</string>
     <string name="month_pray_times">Heures de prière du mois</string>
+    <string name="high_latitudes_method">High Latitudes Method</string>
+    <string name="high_latitudes_night_middle">Night Middle</string>
+    <string name="high_latitudes_angle_based">Angle Based</string>
+    <string name="high_latitudes_one_seventh">One Seventh</string>
+    <string name="none">None</string>
 </resources>

@@ -40,6 +40,7 @@ import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.praytimes.CalculationMethod
+import io.github.persiancalendar.praytimes.HighLatitudesMethod
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -51,6 +52,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var selectedLocationPreference: Preference? = null
     private var athanPreferenceCategory: PreferenceCategory? = null
     private var asrCalculationHanafiJuristicPreference: Preference? = null
+    private var highLatitudesMethodPreference: Preference? = null
     private var ascendingAthanVolumePreference: Preference? = null
     private var athanVolumeDialogPreference: Preference? = null
 
@@ -83,6 +85,17 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     title(R.string.pray_methods)
                     dialogTitle(R.string.pray_methods_calculation)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                }
+                singleSelect(
+                    PREF_HIGH_LATITUDES_METHOD,
+                    HighLatitudesMethod.values().map { getString(it.titleStringId) },
+                    HighLatitudesMethod.values().map { it.name },
+                    DEFAULT_HIGH_LATITUDES_METHOD
+                ) {
+                    title(R.string.high_latitudes_method)
+                    dialogTitle(R.string.high_latitudes_method)
+                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
+                    this@LocationAthanFragment.highLatitudesMethodPreference = this
                 }
                 switch(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority) {
                     asrCalculationHanafiJuristicPreference = this
@@ -171,6 +184,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val context = context ?: return
         updateStoredPreference(context) // So vital to have this to have updated preferences here
         asrCalculationHanafiJuristicPreference?.isVisible = !calculationMethod.isJafari
+        highLatitudesMethodPreference?.isVisible = enableHighLatitudesConfiguration
 
         val appPrefs = context.appPrefs
 

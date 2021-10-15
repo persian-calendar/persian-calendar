@@ -313,4 +313,9 @@
     <string name="enable_new_interface">Yeni arayüzü etkinleştirin</string>
     <string name="are_you_sure">Emin misiniz\?</string>
     <string name="month_pray_times">Ayın namaz vakitleri</string>
+    <string name="high_latitudes_method">High Latitudes Method</string>
+    <string name="high_latitudes_night_middle">Night Middle</string>
+    <string name="high_latitudes_angle_based">Angle Based</string>
+    <string name="high_latitudes_one_seventh">One Seventh</string>
+    <string name="none">None</string>
 </resources>

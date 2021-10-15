@@ -317,4 +317,9 @@
     <string name="enable_new_interface">فعال‌سازی ظاهر جدید</string>
     <string name="are_you_sure">آیا اطمینان دارید؟</string>
     <string name="month_pray_times">اوقات شرعی ماه</string>
+    <string name="high_latitudes_method">شیوهٔ عرض‌های جغرافیایی بالا</string>
+    <string name="high_latitudes_night_middle">نصفهٔ شب</string>
+    <string name="high_latitudes_angle_based">بر پایهٔ زاویه</string>
+    <string name="high_latitudes_one_seventh">یک‌هفتم</string>
+    <string name="none">هیچ</string>
 </resources>

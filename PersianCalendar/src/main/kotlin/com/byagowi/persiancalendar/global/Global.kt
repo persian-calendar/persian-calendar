@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_AM
+import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
@@ -24,6 +25,7 @@ import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_CENTER_ALIGN_WIDGETS
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
+import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LATITUDE
@@ -64,6 +66,7 @@ import com.byagowi.persiancalendar.utils.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.defaultWidgetBackground
+import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.loadEvents
@@ -75,6 +78,7 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
+import io.github.persiancalendar.praytimes.HighLatitudesMethod
 
 private val monthNameEmptyList = List(12) { "" }
 var persianMonths = monthNameEmptyList
@@ -109,6 +113,8 @@ var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
     private set
 var asrMethod = AsrMethod.Standard
+    private set
+var highLatitudesMethod = HighLatitudesMethod.NightMiddle
     private set
 var enableNewInterface = false
     private set
@@ -244,6 +250,10 @@ fun updateStoredPreference(context: Context) {
         if (calculationMethod.isJafari ||
             !prefs.getBoolean(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority)
         ) AsrMethod.Standard else AsrMethod.Hanafi
+    highLatitudesMethod = HighLatitudesMethod.valueOf(
+        if (!enableHighLatitudesConfiguration) DEFAULT_HIGH_LATITUDES_METHOD
+        else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
+    )
 
 
     coordinates = prefs.storedCity?.coordinates ?: run {
