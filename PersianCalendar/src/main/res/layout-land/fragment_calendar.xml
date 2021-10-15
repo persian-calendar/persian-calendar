@@ -20,9 +20,17 @@
             android:layout_height="match_parent"
             android:background="?attr/colorMonthsBackground" />
 
-        <include
-            android:id="@+id/details"
-            layout="@layout/fragment_calendar_details" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbars="none">
+
+            <include
+                android:id="@+id/details"
+                layout="@layout/fragment_calendar_details" />
+
+        </ScrollView>
 
     </LinearLayout>
 
