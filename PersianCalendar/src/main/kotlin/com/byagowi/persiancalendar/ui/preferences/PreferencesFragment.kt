@@ -156,7 +156,10 @@ class PreferencesFragment : Fragment() {
             )
             dialog.setView(
                 ScrollView(context).also { scrollView ->
-                    scrollView.addView(TextView(context).also { it.text = result })
+                    scrollView.addView(TextView(context).also {
+                        it.text = result
+                        it.textDirection = View.TEXT_DIRECTION_LTR
+                    })
                     // Scroll to bottom, https://stackoverflow.com/a/3080483
                     scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
                 }
