@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -61,7 +62,7 @@ class AthanNotification : Service() {
         val prayTimeName = getString(getPrayTimeName(athanKey))
         val title =
             if (cityName == null) prayTimeName
-            else "$prayTimeName - ${getString(R.string.in_city_time, cityName)}"
+            else "$prayTimeName$spacedComma${getString(R.string.in_city_time, cityName)}"
 
         val prayTimes = coordinates?.calculatePrayTimes()
         val subtitle = when (athanKey) {
