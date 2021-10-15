@@ -9,8 +9,8 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.appPrefs
+import kotlin.math.abs
 
 fun showCoordinatesDialog(activity: Activity) {
     val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)
@@ -30,8 +30,19 @@ fun showCoordinatesDialog(activity: Activity) {
                 // Replace empty elevation with zero
                 if (i == 2 && x.isEmpty()) "0" else x
             }
-            // just ensure they are parsable numbers for the last time otherwise reset it
-            if (coordinates.all { it.toDoubleOrNull() != null })
+
+            // Make sure coordinates array has both parsable and in range numbers
+            val isValidCoordinates = coordinates.mapIndexedNotNull { i, coordinate ->
+                coordinate.toDoubleOrNull()?.takeIf {
+                    when (i) {
+                        0 -> abs(it) <= 90 // Valid latitudes
+                        1 -> abs(it) <= 180 // Valid longitudes
+                        else -> it in -418.0..848.0 // Altitude, from Dead Sea to Mount Everest
+                    }
+                }
+            }.size == 3
+
+            if (isValidCoordinates)
                 activity.appPrefs.edit { coordinatesKeys.zip(coordinates, ::putString) }
             else
                 activity.appPrefs.edit { coordinatesKeys.forEach(::remove) }
