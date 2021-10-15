@@ -43,7 +43,7 @@ import androidx.recyclerview.widget.*
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
-import com.byagowi.persiancalendar.databinding.FragmentDeviceInfoBinding
+import com.byagowi.persiancalendar.databinding.FragmentDeviceInformationBinding
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -88,7 +88,7 @@ class DeviceInformationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentDeviceInfoBinding.inflate(inflater, container, false)
+        val binding = FragmentDeviceInformationBinding.inflate(inflater, container, false)
         binding.toolbar.let {
             it.setTitle(R.string.device_info)
             it.setupUpNavigation()
