@@ -51,7 +51,8 @@
             style="@style/AppTextInputLayoutOutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/altitude">
+            android:hint="@string/altitude"
+            app:helperText="@string/altitude_praytime">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/altitude"
