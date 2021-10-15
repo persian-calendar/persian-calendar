@@ -2,16 +2,16 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="25dp">
+        android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/AppTextInputLayoutOutlinedBox"
+            style="@style/AppTextInputLayoutFilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/latitude">
@@ -29,9 +29,10 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/AppTextInputLayoutOutlinedBox"
+            style="@style/AppTextInputLayoutFilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:hint="@string/longitude">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -48,9 +49,10 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/altitudeLabel"
-            style="@style/AppTextInputLayoutOutlinedBox"
+            style="@style/AppTextInputLayoutFilledBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
             android:hint="@string/altitude"
             app:helperText="@string/altitude_praytime">
 
