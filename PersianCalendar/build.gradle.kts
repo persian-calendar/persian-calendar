@@ -191,7 +191,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     minApi21Implementation("androidx.activity:activity-compose:1.3.1")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter:1.0.3")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter:1.0.4")
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:0.19.0")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
     minApi21Implementation("androidx.compose.material:material:$composeVersion")
