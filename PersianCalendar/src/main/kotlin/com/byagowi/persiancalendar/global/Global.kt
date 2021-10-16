@@ -198,7 +198,7 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     loadEvents(enabledHolidays, language)
 }
 
-private fun loadLanguageResources(context: Context) {
+fun loadLanguageResources(context: Context) {
     debugLog("Utils: loadLanguageResources is called")
     persianMonths = language.getPersianMonths(context)
     islamicMonths = language.getIslamicMonths(context)
