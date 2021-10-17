@@ -167,7 +167,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black_reflect">#FF666666</color>
-    <color name="translucent">#00FFFFFF</color>
     <!-- Level -->
     <color name="level_liquid_reflect">#FFE9DF00</color>
     <color name="level_border_reflect">@color/black_reflect</color>
