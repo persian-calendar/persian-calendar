@@ -6,6 +6,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.view.Surface
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.abs
@@ -79,7 +80,11 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
         // register listener and start listening
         if (sensorManager == null || sensor == null) return
         isListening =
-            sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST)
+            sensorManager.registerListener(
+                this, sensor,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SensorManager.SENSOR_DELAY_GAME
+                else SensorManager.SENSOR_DELAY_FASTEST
+            )
         view.invalidate()
     }
 
