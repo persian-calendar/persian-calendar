@@ -201,7 +201,8 @@ private class ShiftWorkItemsAdapter(
 
         fun bind(position: Int) = if (position < rows.size) {
             val shiftWorkRecord = rows[position]
-            binding.rowNumber.text = "%s:".format(formatNumber(position + 1))
+            binding.editTextParent.prefixText = "\n%s: ".format(formatNumber(position + 1))
+            binding.editTextParent.prefixTextView.textSize = 12f
             binding.lengthSpinner.setSelection(shiftWorkRecord.length)
             binding.editText.setText(shiftWorkKeyToString(shiftWorkRecord.type))
             binding.detail.isVisible = true

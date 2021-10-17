@@ -20,24 +20,19 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/row_number"
-            android:layout_width="16sp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/edit_text_parent"
             style="@style/AppTextInputLayoutFilledBoxDenseExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@null"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
             app:errorEnabled="false">
 
             <AutoCompleteTextView
                 android:id="@+id/edit_text"
-                android:layout_width="125sp"
+                android:layout_width="146dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/empty"
                 android:inputType="textNoSuggestions"
