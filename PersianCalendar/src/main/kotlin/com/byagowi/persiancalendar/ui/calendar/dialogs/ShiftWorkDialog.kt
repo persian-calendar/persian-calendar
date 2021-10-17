@@ -191,6 +191,7 @@ private class ShiftWorkItemsAdapter(
             binding.addButton.setOnClickListener {
                 rows = rows + ShiftWorkRecord("r", 0)
                 notifyItemInserted(bindingAdapterPosition)
+                notifyItemChanged(rows.size) // ensure the add button will be removed after a certain size
                 updateShiftWorkResult()
             }
         }
@@ -199,6 +200,7 @@ private class ShiftWorkItemsAdapter(
             rows = rows.filterIndexed { i, _ -> i != bindingAdapterPosition }
             notifyItemRemoved(bindingAdapterPosition)
             notifyItemRangeChanged(0, rows.size)
+            notifyItemChanged(rows.size) // ensure the add button will be re-added
             updateShiftWorkResult()
         }
 
