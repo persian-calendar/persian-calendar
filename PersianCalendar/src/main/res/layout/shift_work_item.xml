@@ -17,6 +17,7 @@
         android:id="@+id/detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
@@ -26,17 +27,30 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical" />
 
-        <AutoCompleteTextView
-            android:id="@+id/type_auto_complete_text_view"
-            android:layout_width="98sp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/edit_text_parent"
+            style="@style/AppTextInputLayoutFilledBoxDenseExposedDropdownMenu"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLines="1" />
+            app:boxBackgroundColor="@null"
+            app:errorEnabled="false">
+
+            <AutoCompleteTextView
+                android:id="@+id/edit_text"
+                android:layout_width="125sp"
+                android:layout_height="wrap_content"
+                android:hint="@string/empty"
+                android:inputType="textNoSuggestions"
+                android:maxLines="1"
+                android:padding="0dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
             android:id="@+id/length_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:padding="0dp" />
 
         <LinearLayout
             android:id="@+id/remove"

@@ -129,22 +129,17 @@ private class ShiftWorkItemsAdapter(
             val context = binding.root.context
 
             binding.lengthSpinner.adapter = ArrayAdapter(
-                context, android.R.layout.simple_spinner_dropdown_item, (0..14).map {
-                    if (it == 0) context.getString(R.string.shift_work_days_head)
-                    else formatNumber(it)
-                }
+                context, android.R.layout.simple_spinner_dropdown_item, (0..14).map(::formatNumber)
             )
 
-            binding.typeAutoCompleteTextView.also { editText ->
-                val adapter = ArrayAdapter(
-                    context, android.R.layout.simple_spinner_dropdown_item,
-                    shiftWorkTitles.values.toList()
-                )
-                editText.setAdapter(adapter)
-                editText.setOnClickListener {
-                    if (editText.text.toString().isNotEmpty()) adapter.filter.filter(null)
-                    editText.showDropDown()
-                }
+            binding.editText.also { editText ->
+                editText.setAdapter(object : ArrayAdapter<String>(
+                    context, android.R.layout.simple_spinner_dropdown_item
+                ) {
+                    private val titles = shiftWorkTitles.values.toList()
+                    override fun getItem(position: Int) = titles[position]
+                    override fun getCount(): Int = titles.size
+                })
                 editText.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(
                         parent: AdapterView<*>, view: View, position: Int, id: Long
@@ -208,7 +203,7 @@ private class ShiftWorkItemsAdapter(
             val shiftWorkRecord = rows[position]
             binding.rowNumber.text = "%s:".format(formatNumber(position + 1))
             binding.lengthSpinner.setSelection(shiftWorkRecord.length)
-            binding.typeAutoCompleteTextView.setText(shiftWorkKeyToString(shiftWorkRecord.type))
+            binding.editText.setText(shiftWorkKeyToString(shiftWorkRecord.type))
             binding.detail.isVisible = true
             binding.addButton.isVisible = false
         } else {

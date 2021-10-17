@@ -73,7 +73,8 @@
     <style name="SplashScreenTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
-        <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen</item>
+        <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen
+        </item>
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.MaterialComponents.NoActionBar">
@@ -118,6 +119,7 @@
 
     <!-- Their actual definition is in v31/styles.xml -->
     <style name="DynamicLightTheme" parent="LightTheme" />
+
     <style name="DynamicDarkTheme" parent="DarkTheme" />
 
     <style name="DarkTheme" parent="BaseDarkTheme">
@@ -435,5 +437,7 @@
     <style name="AppTextInputLayoutFilledBox" parent="Widget.MaterialComponents.TextInputLayout.FilledBox" />
 
     <style name="AppTextInputLayoutOutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+
+    <style name="AppTextInputLayoutFilledBoxDenseExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu" />
 
 </resources>
