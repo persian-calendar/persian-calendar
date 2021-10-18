@@ -190,7 +190,7 @@ class CalendarFragment : Fragment() {
             }
         }
 
-        val tabsViewPager = binding.details.viewPager
+        val tabsViewPager = binding.viewPager
         tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun getItemCount(): Int = tabs.size
             override fun getItemViewType(position: Int) = position // set viewtype equal to position
@@ -198,7 +198,7 @@ class CalendarFragment : Fragment() {
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                 object : RecyclerView.ViewHolder(tabs[viewType].second) {}
         }
-        TabLayoutMediator(binding.details.tabLayout, tabsViewPager) { tab, i ->
+        TabLayoutMediator(binding.tabLayout, tabsViewPager) { tab, i ->
             tab.setText(tabs[i].first)
         }.attach()
         tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -208,12 +208,12 @@ class CalendarFragment : Fragment() {
                 context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
 
                 // Make sure view pager's height at least matches with the shown tab
-                binding.details.viewPager.width.takeIf { it != 0 }?.let { width ->
+                binding.viewPager.width.takeIf { it != 0 }?.let { width ->
                     tabs[position].second.measure(
                         View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                     )
-                    binding.details.viewPager.minimumHeight = tabs[position].second.measuredHeight
+                    binding.viewPager.minimumHeight = tabs[position].second.measuredHeight
                 }
             }
         })
@@ -511,8 +511,7 @@ class CalendarFragment : Fragment() {
                 sunView.setPrayTimesAndMoonPhase(prayTimes, coordinates.calculateMoonPhase(jdn))
                 true
             } else false
-            if (isToday && mainBinding?.details?.viewPager?.currentItem == OWGHAT_TAB)
-                sunView.startAnimate()
+            if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()
         }
     }
 
