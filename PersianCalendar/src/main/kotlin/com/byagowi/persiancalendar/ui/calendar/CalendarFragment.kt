@@ -16,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ScrollView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
@@ -44,7 +43,6 @@ import com.byagowi.persiancalendar.TIME_NAMES
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
-import com.byagowi.persiancalendar.databinding.FragmentCalendarContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -119,7 +117,6 @@ import kotlinx.html.unsafe
 class CalendarFragment : Fragment() {
 
     private var mainBinding: FragmentCalendarBinding? = null
-    private var contentBinding: FragmentCalendarContentBinding? = null
     private var calendarsView: CalendarsView? = null
     private var owghatBinding: OwghatTabContentBinding? = null
     private var eventsBinding: EventsTabContentBinding? = null
@@ -131,7 +128,6 @@ class CalendarFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         mainBinding = null
-        contentBinding = null
         calendarsView = null
         owghatBinding = null
         eventsBinding = null
@@ -166,8 +162,6 @@ class CalendarFragment : Fragment() {
     ): View {
         val binding = FragmentCalendarBinding.inflate(inflater, container, false)
         mainBinding = binding
-        val content = FragmentCalendarContentBinding.bind(binding.root)
-        contentBinding = content
 
         val tabs = listOf(
             R.string.calendar to CalendarsView(inflater.context).also { calendarsView = it },
@@ -196,38 +190,37 @@ class CalendarFragment : Fragment() {
             }
         }
 
-        content.viewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        val tabsViewPager = binding.viewPager
+        tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             override fun getItemCount(): Int = tabs.size
             override fun getItemViewType(position: Int) = position // set viewtype equal to position
             override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                 object : RecyclerView.ViewHolder(tabs[viewType].second) {}
         }
-        TabLayoutMediator(content.tabLayout, content.viewPager) { tab, i ->
+        TabLayoutMediator(binding.tabLayout, tabsViewPager) { tab, i ->
             tab.setText(tabs[i].first)
         }.attach()
-        content.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+        tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                content.viewPagerScrollView.fullScroll(ScrollView.FOCUS_UP)
-
                 if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                 else owghatBinding?.sunView?.clear()
                 context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
 
                 // Make sure view pager's height at least matches with the shown tab
-                content.viewPager.width.takeIf { it != 0 }?.let { width ->
+                binding.viewPager.width.takeIf { it != 0 }?.let { width ->
                     tabs[position].second.measure(
                         View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                         View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
                     )
-                    content.viewPager.minimumHeight = tabs[position].second.measuredHeight
+                    binding.viewPager.minimumHeight = tabs[position].second.measuredHeight
                 }
             }
         })
 
         var lastTab = inflater.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-        content.viewPager.setCurrentItem(lastTab, false)
+        tabsViewPager.setCurrentItem(lastTab, false)
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
 
         binding.root.post {
@@ -518,8 +511,7 @@ class CalendarFragment : Fragment() {
                 sunView.setPrayTimesAndMoonPhase(prayTimes, coordinates.calculateMoonPhase(jdn))
                 true
             } else false
-            if (isToday && contentBinding?.viewPager?.currentItem == OWGHAT_TAB)
-                sunView.startAnimate()
+            if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()
         }
     }
 
