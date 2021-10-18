@@ -92,7 +92,7 @@ class DeviceInformationFragment : Fragment() {
             it.setupUpNavigation()
         }
 
-        binding.circularReveal.circularRevealFromMiddle()
+        binding.root.circularRevealFromMiddle()
 
         binding.recyclerView.let {
             it.setHasFixedSize(true)
