@@ -94,9 +94,7 @@ class AthanNotification : Service() {
         notificationBuilder.setDefaults(NotificationCompat.DEFAULT_VIBRATE)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val cv = RemoteViews(
-                applicationContext?.packageName, R.layout.custom_notification
-            )
+            val cv = RemoteViews(applicationContext?.packageName, R.layout.custom_notification)
             cv.setDirection(R.id.custom_notification_root, this)
             cv.setTextViewText(R.id.title, title)
             if (subtitle.isEmpty()) {
