@@ -75,6 +75,8 @@
         <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen
         </item>
+        <!-- Set Android 5 recent apps tab color https://stackoverflow.com/q/26899820 -->
+        <item name="android:colorPrimary" tools:targetApi="lollipop">@color/light_primary</item>
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.MaterialComponents.NoActionBar">
