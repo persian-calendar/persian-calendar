@@ -55,7 +55,7 @@ class PreferencesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         val binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        binding.appBar.appbarLayout.hideToolbarBottomShadow()
+        binding.appBar.root.hideToolbarBottomShadow()
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation()

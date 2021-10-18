@@ -40,7 +40,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         binding.expansionArrow
             .animateTo(if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN)
-        TransitionManager.beginDelayedTransition(binding.calendarsTabContent, ChangeBounds())
+        TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
 
         binding.extraInformationContainer.isVisible = isExpanded
     }

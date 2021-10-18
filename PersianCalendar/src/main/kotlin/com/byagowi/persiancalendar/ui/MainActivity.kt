@@ -96,7 +96,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var binding: ActivityMainBinding
 
     private val onBackPressedCloseDrawerCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = binding.drawer.closeDrawer(GravityCompat.START)
+        override fun handleOnBackPressed() = binding.root.closeDrawer(GravityCompat.START)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,16 +127,16 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             getSystemService<ActivityManager>()?.isLowRamDevice == false
         ) {
             window?.makeWallpaperTransparency()
-            binding.drawer.fitsSystemWindows = false
-            binding.drawer.background = MaterialShapeDrawable().also {
+            binding.root.fitsSystemWindows = false
+            binding.root.background = MaterialShapeDrawable().also {
                 it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
             }
-            binding.drawer.clipToOutline = true
-            binding.drawer.alpha = 0.96f
+            binding.root.clipToOutline = true
+            binding.root.alpha = 0.96f
             binding.root.fitsSystemWindows = false
         }
 
-        binding.drawer.addDrawerListener(createDrawerListener())
+        binding.root.addDrawerListener(createDrawerListener())
 
         navHostFragment?.navController?.addOnDestinationChangedListener(this)
         when (intent?.action) {
@@ -323,10 +323,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     // Checking for the ancient "menu" key
     override fun onKeyDown(keyCode: Int, event: KeyEvent?) = when (keyCode) {
         KeyEvent.KEYCODE_MENU -> {
-            if (binding.drawer.isDrawerOpen(GravityCompat.START))
-                binding.drawer.closeDrawer(GravityCompat.START)
+            if (binding.root.isDrawerOpen(GravityCompat.START))
+                binding.root.closeDrawer(GravityCompat.START)
             else
-                binding.drawer.openDrawer(GravityCompat.START)
+                binding.root.openDrawer(GravityCompat.START)
             true
         }
         else -> super.onKeyDown(keyCode, event)
@@ -345,7 +345,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         when (val itemId = selectedMenuItem.itemId) {
             R.id.exit -> finish()
             else -> {
-                binding.drawer.closeDrawer(GravityCompat.START)
+                binding.root.closeDrawer(GravityCompat.START)
                 if (navHostFragment?.navController?.currentDestination?.id != itemId) {
                     clickedItem = itemId
                 }
@@ -380,15 +380,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun setupToolbarWithDrawer(toolbar: Toolbar) {
         val listener = ActionBarDrawerToggle(
-            this, binding.drawer, toolbar,
+            this, binding.root, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description, R.string.close
         ).also { it.syncState() }
 
-        binding.drawer.addDrawerListener(listener)
-        toolbar.setNavigationOnClickListener { binding.drawer.openDrawer(GravityCompat.START) }
+        binding.root.addDrawerListener(listener)
+        toolbar.setNavigationOnClickListener { binding.root.openDrawer(GravityCompat.START) }
         toolbar.findViewTreeLifecycleOwner()?.lifecycle?.addObserver(LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_DESTROY) {
-                binding.drawer.removeDrawerListener(listener)
+                binding.root.removeDrawerListener(listener)
                 toolbar.setNavigationOnClickListener(null)
             }
         })
@@ -405,8 +405,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
             binding.navHostFragment.translationX =
                 slideOffset * drawerView.width.toFloat() * slidingDirection
-            binding.drawer.bringChildToFront(drawerView)
-            binding.drawer.requestLayout()
+            binding.root.bringChildToFront(drawerView)
+            binding.root.requestLayout()
         }
 
         override fun onDrawerOpened(drawerView: View) {

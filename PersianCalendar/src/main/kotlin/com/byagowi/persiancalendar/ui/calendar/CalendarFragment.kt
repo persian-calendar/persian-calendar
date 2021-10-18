@@ -295,7 +295,7 @@ class CalendarFragment : Fragment() {
 
         mainBinding?.appBar?.let { appBar ->
             appBar.toolbar.setupMenuNavigation()
-            appBar.appbarLayout.hideToolbarBottomShadow()
+            appBar.root.hideToolbarBottomShadow()
         }
 
         selectedJdn.toCalendar(mainCalendar).let { today ->
