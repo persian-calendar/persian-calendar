@@ -17,11 +17,11 @@
 
         <TextView
             android:id="@+id/title"
-            android:textSize="17sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="4dp"
             android:textColor="?attr/colorTextNormal"
+            android:textSize="17sp"
             tools:text="Title" />
 
         <TextView

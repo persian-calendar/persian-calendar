@@ -35,8 +35,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="?attr/appToolbarTheme"
-                app:popupTheme="?attr/appToolbarPopupTheme"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:popupTheme="?attr/appToolbarPopupTheme" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -54,9 +54,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:labelVisibilityMode="labeled"
         app:itemIconTint="?attr/normalTabTextColor"
         app:itemTextColor="?attr/normalTabTextColor"
+        app:labelVisibilityMode="labeled"
         app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

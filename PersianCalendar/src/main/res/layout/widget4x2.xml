@@ -10,8 +10,8 @@
         android:id="@+id/widget_layout4x2_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:importantForAccessibility="no" />
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,8 +36,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textAlignment="viewEnd"
                 android:gravity="end|center_vertical"
+                android:textAlignment="viewEnd"
                 android:textSize="40sp" />
 
             <FrameLayout

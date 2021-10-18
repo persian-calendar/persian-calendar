@@ -15,8 +15,8 @@
         style="@style/WidgetTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:ellipsize="end"
+        android:gravity="center_horizontal"
         android:maxLines="1"
         android:textColor="@color/widget_holiday"
         android:textSize="13sp" />
@@ -26,8 +26,8 @@
         style="@style/WidgetTextStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
         android:ellipsize="end"
+        android:gravity="center_horizontal"
         android:maxLines="1"
         android:textSize="13sp" />
 

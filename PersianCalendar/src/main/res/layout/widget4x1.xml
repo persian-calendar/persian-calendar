@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/widget_layout4x1"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/widget_layout4x1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Widget4x1">
@@ -10,8 +10,8 @@
         android:id="@+id/widget_layout4x1_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:importantForAccessibility="no" />
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -55,8 +55,8 @@
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="viewStart"
             android:gravity="start"
+            android:textAlignment="viewStart"
             android:textSize="14dp" />
 
     </LinearLayout>

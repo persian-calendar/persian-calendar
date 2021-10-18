@@ -8,8 +8,8 @@
         android:id="@+id/widget_sample_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
-        android:importantForAccessibility="no" />
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY" />
 
     <LinearLayout
         android:layout_width="match_parent"
