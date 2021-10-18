@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorCard"
@@ -10,40 +9,12 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <ScrollView
+    <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+        android:id="@+id/calendarPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:scrollbars="none">
+        android:layout_height="@dimen/grid_calendar_height"
+        android:background="?attr/colorMonthsBackground" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
-                android:id="@+id/calendarPager"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/grid_calendar_height"
-                android:background="?attr/colorMonthsBackground" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                style="@style/TabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorCard"
-                app:tabBackground="?attr/selectableItemBackground" />
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:minHeight="220sp" />
-
-        </LinearLayout>
-
-    </ScrollView>
+    <include layout="@layout/fragment_calendar_content" />
 
 </LinearLayout>
