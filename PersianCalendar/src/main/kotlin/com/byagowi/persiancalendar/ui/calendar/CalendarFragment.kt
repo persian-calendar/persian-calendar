@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ScrollView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
@@ -207,6 +208,8 @@ class CalendarFragment : Fragment() {
         }.attach()
         content.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                content.viewPagerScrollView.fullScroll(ScrollView.FOCUS_UP)
+
                 if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
                 else owghatBinding?.sunView?.clear()
                 context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
