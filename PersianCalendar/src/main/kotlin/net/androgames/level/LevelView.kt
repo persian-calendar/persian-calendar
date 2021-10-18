@@ -2,6 +2,7 @@ package net.androgames.level
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
@@ -40,7 +41,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     private val angleDisplay = AngleDisplay(context)
     private val infoPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = resources.getColor(R.color.black)
+        it.color = Color.BLACK
     }
 
     /**
