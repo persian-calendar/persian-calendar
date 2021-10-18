@@ -7,7 +7,7 @@ import java.util.*
 import kotlin.math.abs
 
 fun formatCoordinate(context: Context, coordinates: Coordinates, separator: String) =
-    "%s: %.7f%s%s: %.7f".format(
+    "%s: %.2f%s%s: %.7f".format(
         Locale.getDefault(),
         context.getString(R.string.latitude), coordinates.latitude, separator,
         context.getString(R.string.longitude), coordinates.longitude

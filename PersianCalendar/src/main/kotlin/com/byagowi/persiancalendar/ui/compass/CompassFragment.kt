@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -26,7 +25,7 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
-import com.byagowi.persiancalendar.utils.formatCoordinate
+import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.abs
@@ -97,8 +96,9 @@ class CompassFragment : Fragment() {
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.compass)
-            toolbar.subtitle = inflater.context.appPrefs.cityName
-                ?: coordinates?.let { formatCoordinate(inflater.context, it, spacedComma) }
+            toolbar.subtitle = inflater.context.appPrefs.cityName ?: coordinates?.run {
+                formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
+            }
             toolbar.setupMenuNavigation()
         }
 
