@@ -186,7 +186,7 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
                 }
                 else -> return@mapNotNull null
             }
-            val title = "${(event["title"] ?: return@mapNotNull null)} (${formatNumber(year)})"
+            val title = "${event["title"] ?: return@mapNotNull null} (${formatNumber(year)})"
             val isHoliday = event["holiday"] == "true"
             when (date) {
                 is PersianDate -> CalendarEvent.PersianCalendarEvent(title, isHoliday, date)
