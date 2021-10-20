@@ -438,10 +438,10 @@ class CalendarFragment : Fragment() {
         val deviceEvents = getDeviceEventsTitle(events)
         val contentDescription = StringBuilder()
 
-        eventsBinding.noEvent.isVisible = true
+        eventsBinding.noEvent.isVisible =
+            listOf(holidays, deviceEvents, nonHolidays).all { it.isEmpty() }
 
         if (holidays.isNotEmpty()) {
-            eventsBinding.noEvent.isVisible = false
             eventsBinding.holidayTitle.text = holidays
             val holidayContent = getString(R.string.holiday_reason, holidays)
             eventsBinding.holidayTitle.contentDescription = holidayContent
@@ -452,7 +452,6 @@ class CalendarFragment : Fragment() {
         }
 
         if (deviceEvents.isNotEmpty()) {
-            eventsBinding.noEvent.isVisible = false
             eventsBinding.deviceEventTitle.text = deviceEvents
             contentDescription
                 .appendLine()
@@ -468,7 +467,6 @@ class CalendarFragment : Fragment() {
         }
 
         if (nonHolidays.isNotEmpty()) {
-            eventsBinding.noEvent.isVisible = false
             eventsBinding.eventTitle.text = nonHolidays
             contentDescription
                 .appendLine()
