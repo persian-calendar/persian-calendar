@@ -604,10 +604,11 @@ class CalendarFragment : Fragment() {
             style {
                 unsafe {
                     +"""
-                    |th, td { padding: 0 .5em; text-align: center }
-                    |td { border-top: 1px solid lightgray; font-size: 95% }
-                    |h1 { text-align: center; font-size: 110% }
-                    |table { margin: 0 auto; }""".trimMargin("|")
+                        th, td { padding: 0 .5em; text-align: center }
+                        td { border-top: 1px solid lightgray; font-size: 95% }
+                        h1 { text-align: center; font-size: 110% }
+                        table { margin: 0 auto; }
+                    """.trimIndent()
                 }
             }
         }
