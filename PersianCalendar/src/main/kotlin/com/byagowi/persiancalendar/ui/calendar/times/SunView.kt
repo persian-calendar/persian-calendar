@@ -23,7 +23,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.utils.getAppFont
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -43,7 +42,7 @@ class SunView @JvmOverloads constructor(
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
     private val halfDay = Clock(12, 0).toMinutes().toFloat()
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.typeface = getAppFont(context) }
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL }
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }

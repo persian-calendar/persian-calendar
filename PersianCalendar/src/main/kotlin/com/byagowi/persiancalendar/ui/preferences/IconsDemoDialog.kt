@@ -29,7 +29,7 @@ fun showIconsDemoDialog(activity: Activity) {
                         val day = viewType / 2 + 1
                         when (viewType % 2) {
                             0 -> setImageResource(getDayIconResource(day))
-                            1 -> setImageBitmap(createStatusIcon(context, day))
+                            1 -> setImageBitmap(createStatusIcon(day))
                         }
                         layoutParams = ViewGroup.MarginLayoutParams(36.dp.toInt(), 36.dp.toInt())
                             .apply { setMargins(4.dp.toInt()) }

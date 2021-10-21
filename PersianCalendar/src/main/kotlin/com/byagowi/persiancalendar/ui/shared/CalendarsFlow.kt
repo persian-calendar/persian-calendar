@@ -13,14 +13,12 @@ import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getCalendarFragmentFont
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toLinearDate
 
 class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs),
     View.OnClickListener {
 
-    private val calendarFont = getCalendarFragmentFont(context)
     private var bindings = emptyList<CalendarItemBinding>()
 
     fun update(calendarsToShow: List<CalendarType>, jdn: Jdn) {
@@ -29,8 +27,6 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
         if (bindings.isEmpty()) {
             bindings = calendarsToShow.map { CalendarItemBinding.inflate(context.layoutInflater) }
             addViewsToFlow(bindings.map {
-                it.monthYear.typeface = calendarFont
-                it.day.typeface = calendarFont
                 if (language.isArabicScript) it.monthYear.setLineSpacing(0f, .6f)
                 it.container.setOnClickListener(this)
                 it.linear.setOnClickListener(this)

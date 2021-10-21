@@ -71,9 +71,7 @@ import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.getAppFont
 import com.byagowi.persiancalendar.utils.isRtl
-import com.byagowi.persiancalendar.utils.overrideFont
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
@@ -108,9 +106,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         initGlobal(this)
-
-        // Don't apply font override to non Arabic script languages
-        if (language.isArabicScript) overrideFont("SANS_SERIF", getAppFont(applicationContext))
 
         startEitherServiceOrWorker(this)
 

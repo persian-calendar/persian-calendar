@@ -33,7 +33,7 @@ class PersianCalendarTileService : TileService() {
         tile.icon = if ((false)) {
             // The disabled path of runtime creation of day icon as maybe it increases its boot as
             // it already gives ANRs
-            Icon.createWithBitmap(createStatusIcon(this, today.dayOfMonth))
+            Icon.createWithBitmap(createStatusIcon(today.dayOfMonth))
         } else {
             Icon.createWithResource(this, getDayIconResource(today.dayOfMonth))
         }

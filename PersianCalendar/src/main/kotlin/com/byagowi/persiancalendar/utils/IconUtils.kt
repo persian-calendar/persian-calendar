@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.utils
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -10,11 +9,10 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.preferredDigits
 
 // Dynamic icon generation, currently unused
-fun createStatusIcon(context: Context, dayOfMonth: Int): Bitmap {
+fun createStatusIcon(dayOfMonth: Int): Bitmap {
     val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     paint.textSize = if (isArabicDigitSelected) 75f else 90f
     paint.textAlign = Paint.Align.CENTER
-    paint.typeface = getAppFont(context)
     val text = formatNumber(dayOfMonth)
     val bounds = Rect()
     paint.color = Color.WHITE

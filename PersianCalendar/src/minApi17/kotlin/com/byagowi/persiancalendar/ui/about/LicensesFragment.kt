@@ -27,9 +27,7 @@ import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.getAppFont
 import kotlin.math.roundToInt
-
 
 class LicensesFragment : Fragment() {
     override fun onCreateView(
@@ -45,7 +43,6 @@ class LicensesFragment : Fragment() {
             fun createTextIcon(text: String): Drawable {
                 val paint = Paint(Paint.ANTI_ALIAS_FLAG)
                 paint.textSize = 40f
-                paint.typeface = getAppFont(layoutInflater.context)
                 val bounds = Rect()
                 paint.color = Color.WHITE
                 paint.getTextBounds(text, 0, text.length, bounds)
