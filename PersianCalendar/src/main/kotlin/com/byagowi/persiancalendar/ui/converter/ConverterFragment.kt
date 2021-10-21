@@ -25,7 +25,7 @@ class ConverterFragment : Fragment() {
         binding.calendarsView.toggle()
         binding.calendarsView.hideMoreIcon()
 
-        val todayJdn = Jdn.today
+        val todayJdn = Jdn.today()
 
         binding.todayButton.setOnClickListener { binding.dayPickerView.jdn = todayJdn }
 
@@ -43,7 +43,7 @@ class ConverterFragment : Fragment() {
                     )
                 }
             }
-            it.jdn = Jdn.today
+            it.jdn = Jdn.today()
             it.anchorView = binding.todayButton
         }
         return binding.root

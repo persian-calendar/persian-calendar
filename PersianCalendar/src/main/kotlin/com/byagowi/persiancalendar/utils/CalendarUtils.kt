@@ -218,7 +218,7 @@ val AbstractDate.calendarType: CalendarType
     }
 
 fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
-    val daysAbsoluteDistance = abs(Jdn.today - jdn)
+    val daysAbsoluteDistance = abs(Jdn.today() - jdn)
     val baseDate = mainCalendar.createDate(
         when (mainCalendar) {
             CalendarType.GREGORIAN -> 2000

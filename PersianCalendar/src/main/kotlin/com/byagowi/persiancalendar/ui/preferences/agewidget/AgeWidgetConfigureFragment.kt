@@ -31,7 +31,7 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
             section(R.string.empty) {
                 clickable(onClick = {
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
-                    val jdn = activity.appPrefs.getJdnOrNull(key) ?: Jdn.today
+                    val jdn = activity.appPrefs.getJdnOrNull(key) ?: Jdn.today()
                     showDayPickerDialog(activity, jdn, R.string.accept) { result ->
                         activity.appPrefs.edit { putJdn(key, result) }
                     }

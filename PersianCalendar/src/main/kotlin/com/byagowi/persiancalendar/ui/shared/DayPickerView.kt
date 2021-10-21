@@ -59,7 +59,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             } else Jdn(selectedCalendarType, year, month, day)
         }
         set(value) {
-            val jdn = value ?: Jdn.today
+            val jdn = value ?: Jdn.today()
             mJdn = jdn
             val date = jdn.toCalendar(selectedCalendarType)
             binding.yearPicker.also {

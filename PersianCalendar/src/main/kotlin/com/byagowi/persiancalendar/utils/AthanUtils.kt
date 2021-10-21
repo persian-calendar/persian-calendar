@@ -76,7 +76,7 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
     if (prayTimeKey !in getEnabledAlarms(context)) return
 
     // skips if already called through either WorkManager or AlarmManager
-    val today = Jdn.today
+    val today = Jdn.today()
     if (lastAthanJdn == today && lastAthanKey == prayTimeKey) return
     lastAthanJdn = today; lastAthanKey = prayTimeKey
 

@@ -68,7 +68,7 @@ class DaysAdapter(
     // days of week * month view rows
     override fun getItemCount(): Int = 7 * if (isShowWeekOfYearEnabled) 8 else 7
 
-    private val todayJdn = Jdn.today
+    private val todayJdn = Jdn.today()
 
     inner class ViewHolder(itemView: DayView) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener, View.OnLongClickListener {

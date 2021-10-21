@@ -90,7 +90,7 @@ class SearchEventsAdapter private constructor(
         ) {
             lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                 withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) {
-                    val jdn = Jdn.today
+                    val jdn = Jdn.today()
                     val events = listOf(
                         context.getAllEnabledAppointments(), persianCalendarEvents.getAllEvents(),
                         islamicCalendarEvents.getAllEvents(), gregorianCalendarEvents.getAllEvents()

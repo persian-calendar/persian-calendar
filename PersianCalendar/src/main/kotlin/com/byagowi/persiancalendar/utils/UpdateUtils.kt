@@ -81,7 +81,7 @@ private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty(
 
 // Is called from MainActivity to make sure is updated, probably should be removed however
 fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) = runCatching {
-    deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today)
+    deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today())
 }.onFailure(logException).let {}
 
 private var latestFiredUpdate = 0L
@@ -100,7 +100,7 @@ fun update(context: Context, updateDate: Boolean) {
     debugLog("UpdateUtils: update")
     applyAppLanguage(context)
 
-    val jdn = Jdn.today
+    val jdn = Jdn.today()
     val date = jdn.toCalendar(mainCalendar)
 
     if (pastDate == null || pastDate != date || updateDate) {
@@ -224,7 +224,7 @@ val defaultWidgetBackground
 
 fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: Int): RemoteViews {
     val appPrefs = context.appPrefs
-    val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today
+    val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today()
     val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
     val subtitle = calculateDaysDifference(context.resources, baseJdn)
     val textColor = appPrefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId, null)

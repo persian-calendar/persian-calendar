@@ -54,6 +54,6 @@ value class Jdn(val value: Long) {
     val dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
     companion object {
-        val today: Jdn get() = Jdn(Date().toJavaCalendar().toCivilDate())
+        fun today() = Jdn(Date().toJavaCalendar().toCivilDate())
     }
 }

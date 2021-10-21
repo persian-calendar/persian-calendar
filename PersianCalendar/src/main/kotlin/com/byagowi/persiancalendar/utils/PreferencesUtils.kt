@@ -47,7 +47,7 @@ val SharedPreferences.cityName: String?
 
 // Ignore offset if it isn't set in less than month ago
 val SharedPreferences.isIslamicOffsetExpired
-    get() = getJdnOrNull(PREF_ISLAMIC_OFFSET_SET_DATE)?.let { Jdn.today - it > 30 } ?: true
+    get() = getJdnOrNull(PREF_ISLAMIC_OFFSET_SET_DATE)?.let { Jdn.today() - it > 30 } ?: true
 
 fun SharedPreferences.saveCity(city: CityItem) = edit {
     listOf(PREF_GEOCODED_CITYNAME, PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE).forEach(::remove)

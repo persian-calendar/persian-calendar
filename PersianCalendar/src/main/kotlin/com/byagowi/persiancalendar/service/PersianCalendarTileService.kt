@@ -28,7 +28,7 @@ class PersianCalendarTileService : TileService() {
 
     override fun onStartListening() = runCatching {
         val tile = qsTile ?: return@runCatching
-        val jdn = Jdn.today
+        val jdn = Jdn.today()
         val today = jdn.toCalendar(mainCalendar)
         tile.icon = if ((false)) {
             // The disabled path of runtime creation of day icon as maybe it increases its boot as

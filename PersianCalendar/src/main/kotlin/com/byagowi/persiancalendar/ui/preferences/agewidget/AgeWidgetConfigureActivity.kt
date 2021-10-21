@@ -80,7 +80,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         // Put today's jdn if it wasn't set by the dialog, maybe a day counter is meant
         if (appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId) == null)
             appPrefs.edit {
-                putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today)
+                putJdn(PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId, Jdn.today())
             }
 
         supportFragmentManager.commit {

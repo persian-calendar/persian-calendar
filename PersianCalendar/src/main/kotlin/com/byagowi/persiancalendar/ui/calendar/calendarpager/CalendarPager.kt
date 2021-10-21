@@ -36,7 +36,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         selectedJdn = if (highlight) jdn else null
 
         if (monthChange) {
-            val today = Jdn.today.toCalendar(mainCalendar)
+            val today = Jdn.today().toCalendar(mainCalendar)
             val date = jdn.toCalendar(mainCalendar)
             viewPager.setCurrentItem(
                 applyOffset(position = (today.year - date.year) * 12 + today.month - date.month),
@@ -59,7 +59,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
     private val monthsLimit = 5000 // this should be an even number
 
     private fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
-        val date = Jdn.today.toCalendar(calendar)
+        val date = Jdn.today().toCalendar(calendar)
         var month = date.month - offset
         month -= 1
         var year = date.year

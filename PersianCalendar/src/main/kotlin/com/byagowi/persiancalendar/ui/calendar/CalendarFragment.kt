@@ -122,7 +122,7 @@ class CalendarFragment : Fragment() {
     private var eventsBinding: EventsTabContentBinding? = null
     private var searchView: SearchView? = null
     private var todayButton: MenuItem? = null
-    private val initialJdn = Jdn.today
+    private val initialJdn = Jdn.today()
     private val initialDate = initialJdn.toCalendar(mainCalendar)
 
     override fun onDestroyView() {
@@ -290,7 +290,7 @@ class CalendarFragment : Fragment() {
         if (savedJdn != null && savedJdn != initialJdn) {
             bringDate(savedJdn, smoothScroll = false)
         } else {
-            bringDate(Jdn.today, monthChange = false, highlight = false)
+            bringDate(Jdn.today(), monthChange = false, highlight = false)
         }
 
         mainBinding?.appBar?.let { appBar ->
@@ -383,7 +383,7 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private var selectedJdn: Jdn = Jdn.today
+    private var selectedJdn: Jdn = Jdn.today()
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -398,7 +398,7 @@ class CalendarFragment : Fragment() {
 
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
 
-        val isToday = Jdn.today == jdn
+        val isToday = Jdn.today() == jdn
 
         // Show/Hide bring today menu button
         todayButton?.isVisible = !isToday
@@ -552,7 +552,7 @@ class CalendarFragment : Fragment() {
             it.icon = toolbarContext.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.isVisible = false
-            it.onClick { bringDate(Jdn.today, highlight = false) }
+            it.onClick { bringDate(Jdn.today(), highlight = false) }
             todayButton = it
         }
         toolbar.menu.add(R.string.search_in_events).also {

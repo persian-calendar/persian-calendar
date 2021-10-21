@@ -62,7 +62,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             it.isVisible = it.text.isNotEmpty()
         }
 
-        val isToday = Jdn.today == jdn
+        val isToday = Jdn.today() == jdn
         if (isToday) {
             if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
                 jdn.dayOfWeekName, context.getString(R.string.iran_time)

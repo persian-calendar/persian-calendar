@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.navigation.setNavigationItemSelectedListener(this)
 
-        val today = Jdn.today
+        val today = Jdn.today()
         creationDateJdn = today
 
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             PREF_LAST_APP_VISIT_VERSION -> return // nothing needs to be updated
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET ->
-                prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today) }
+                prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
             PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
                 if (prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) &&
                     ActivityCompat.checkSelfPermission(
@@ -307,7 +307,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         super.onResume()
         applyAppLanguage(this)
         update(applicationContext, false)
-        val today = Jdn.today
+        val today = Jdn.today()
         if (creationDateJdn != today) {
             creationDateJdn = today
             val navController = navHostFragment?.navController
