@@ -27,7 +27,6 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
         if (bindings.isEmpty()) {
             bindings = calendarsToShow.map { CalendarItemBinding.inflate(context.layoutInflater) }
             addViewsToFlow(bindings.map {
-                if (language.isArabicScript) it.monthYear.setLineSpacing(0f, .6f)
                 it.container.setOnClickListener(this)
                 it.linear.setOnClickListener(this)
                 it.root
