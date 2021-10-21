@@ -78,7 +78,7 @@ fun Activity.bringMarketPage() = runCatching {
 fun Context.showHtml(html: String) = runCatching {
     val uri = FileProvider.getUriForFile(
         applicationContext, "$packageName.provider",
-        File(externalCacheDir, "temp.html").also { it.writeText(html) }
+        File(externalCacheDir, "persian-calendar.html").also { it.writeText(html) }
     )
     CustomTabsIntent.Builder().build()
         .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
