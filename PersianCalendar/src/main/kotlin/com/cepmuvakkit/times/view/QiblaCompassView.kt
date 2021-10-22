@@ -17,6 +17,7 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.cepmuvakkit.times.posAlgo.AstroLib
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
@@ -36,7 +37,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             }
         }
 
-    private val dashPath = DashPathEffect(floatArrayOf(2f, 5f), 1f)
+    private val dashPath = DashPathEffect(floatArrayOf(0.5.dp, 2.dp), 2.dp)
     private val northwardShapePath = Path()
     private val trueNorthArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.RED
@@ -48,7 +49,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
-        it.strokeWidth = 1f
+        it.strokeWidth = 0.5.dp
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
     private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -77,7 +78,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GREEN
         it.style = Paint.Style.FILL_AND_STROKE
-        it.strokeWidth = 5.5f
+        it.strokeWidth = 2.dp
     }
     private val kaaba = BitmapFactory.decodeResource(resources, R.drawable.kaaba)
 
@@ -87,7 +88,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var r = 0f // radius of Sun and Moon
     private var dashedPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.pathEffect = dashPath
-        it.strokeWidth = 2f
+        it.strokeWidth = 1.5.dp
     }
     private val sunMoonPosition = SunMoonPosition(
         AstroLib.calculateJulianDay(GregorianCalendar()), coordinates?.latitude ?: 0.0,
