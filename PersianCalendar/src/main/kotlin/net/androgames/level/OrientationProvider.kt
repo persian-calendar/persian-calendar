@@ -79,12 +79,11 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
     fun startListening() {
         // register listener and start listening
         if (sensorManager == null || sensor == null) return
-        isListening =
-            sensorManager.registerListener(
-                this, sensor,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SensorManager.SENSOR_DELAY_GAME
-                else SensorManager.SENSOR_DELAY_FASTEST
-            )
+        isListening = sensorManager.registerListener(
+            this, sensor,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) SensorManager.SENSOR_DELAY_GAME
+            else SensorManager.SENSOR_DELAY_FASTEST
+        )
         view.invalidate()
     }
 

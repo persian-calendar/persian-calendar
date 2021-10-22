@@ -54,6 +54,7 @@ class LevelFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         provider?.startListening()
+        if (provider?.isListening != true) return // don't tweak orientation if no sensor available
         // https://stackoverflow.com/a/20017878
         activity?.requestedOrientation = when (activity?.windowManager?.defaultDisplay?.rotation) {
             Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
