@@ -45,7 +45,7 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
     private val LOC = FloatArray(3)
     private val sensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
     private val displayOrientation = activity.windowManager.defaultDisplay.rotation
-    private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.get(0)
+    private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.getOrNull(0)
 
     /**
      * Returns true if the manager is listening to orientation changes
