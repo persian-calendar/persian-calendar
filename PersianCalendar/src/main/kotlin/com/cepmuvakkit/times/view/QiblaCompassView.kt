@@ -148,7 +148,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         val textHeight = textPaint.measureText("yY").toInt()
         // Draw the background
         drawCircle(cx, cy, radius, circlePaint)
-        drawCircle(cx, cy, (radius - 20), circlePaint)
+        drawCircle(cx, cy, radius * .975f, circlePaint)
         // Rotate our perspective so that the "top" is
         // facing the current bearing.
         val cardinalX = cx
