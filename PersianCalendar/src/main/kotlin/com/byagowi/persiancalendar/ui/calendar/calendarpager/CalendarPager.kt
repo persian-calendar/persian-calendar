@@ -7,7 +7,6 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
-import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.shared.ArrowView
@@ -26,8 +25,11 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     // Selected month is visible current month of the pager, maybe a day is not selected on it yet
     var onMonthSelected = fun() {}
+    private val baseJdn = Jdn.today()
     val selectedMonth: AbstractDate
-        get() = getDateFromOffset(mainCalendar, applyOffset(viewPager.currentItem))
+        get() = mainCalendar.getMonthStartFromMonthsDistance(
+            baseJdn, applyOffset(viewPager.currentItem)
+        )
 
     fun setSelectedDay(
         jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
@@ -36,11 +38,8 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         selectedJdn = if (highlight) jdn else null
 
         if (monthChange) {
-            val today = Jdn.today().toCalendar(mainCalendar)
-            val date = jdn.toCalendar(mainCalendar)
             viewPager.setCurrentItem(
-                applyOffset(position = (today.year - date.year) * 12 + today.month - date.month),
-                smoothScroll
+                applyOffset(position = mainCalendar.getMonthsDistance(baseJdn, jdn)), smoothScroll
             )
         }
 
@@ -57,22 +56,6 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
     private fun addViewHolder(vh: PagerAdapter.ViewHolder) = pagesViewHolders.add(WeakReference(vh))
 
     private val monthsLimit = 5000 // this should be an even number
-
-    private fun getDateFromOffset(calendar: CalendarType, offset: Int): AbstractDate {
-        val date = Jdn.today().toCalendar(calendar)
-        var month = date.month - offset
-        month -= 1
-        var year = date.year
-
-        year += month / 12
-        month %= 12
-        if (month < 0) {
-            year -= 1
-            month += 12
-        }
-        month += 1
-        return calendar.createDate(year, month, 1)
-    }
 
     private fun applyOffset(position: Int) = monthsLimit / 2 - position
 
@@ -135,7 +118,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
             fun bind(position: Int) {
                 val offset = applyOffset(position)
-                val monthStartDate = getDateFromOffset(mainCalendar, offset)
+                val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(baseJdn, offset)
                 val monthStartJdn = Jdn(monthStartDate)
                 val monthLength =
                     mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)

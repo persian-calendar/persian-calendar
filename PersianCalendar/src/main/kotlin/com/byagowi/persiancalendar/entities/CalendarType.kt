@@ -5,6 +5,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.gregorianMonths
 import com.byagowi.persiancalendar.global.islamicMonths
 import com.byagowi.persiancalendar.global.persianMonths
+import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -34,6 +35,26 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
         val nextMonthStartingDay = Jdn(this, nextMonthYear, nextMonthMonth, 1)
         val thisMonthStartingDay = Jdn(this, year, month, 1)
         return nextMonthStartingDay - thisMonthStartingDay
+    }
+
+    fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
+        val date = baseJdn.toCalendar(this)
+        var month = date.month - monthsDistance
+        month -= 1
+        var year = date.year + month / 12
+        month %= 12
+        if (month < 0) {
+            year -= 1
+            month += 12
+        }
+        month += 1
+        return createDate(year, month, 1)
+    }
+
+    fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int {
+        val base = baseJdn.toCalendar(this)
+        val date = toJdn.toCalendar(this)
+        return (base.year - date.year) * 12 + base.month - date.month
     }
 
     val monthsNames: List<String>
