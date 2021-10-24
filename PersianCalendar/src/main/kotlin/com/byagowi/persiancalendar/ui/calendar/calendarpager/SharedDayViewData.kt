@@ -22,6 +22,7 @@ class SharedDayViewData(
 
     val isArabicScript = language.isArabicScript
     val dayOffset = if (isArabicDigitSelected) 0f else 3.sp
+    val circlesPadding = 1.dp
     val eventYOffset = height * 7 / 40
     val eventIndicatorRadius = height * 2 / 40
     private val eventIndicatorsGap = height * 2 / 40

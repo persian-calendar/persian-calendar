@@ -9,7 +9,6 @@ import android.view.View
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.otherCalendars
 import com.byagowi.persiancalendar.utils.formatNumber
 import kotlin.math.min
@@ -30,17 +29,30 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
 
     var sharedDayViewData: SharedDayViewData? = null
 
-    private val textBounds = Rect()
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val shared = sharedDayViewData ?: return
 
-        // Draw circle around day
         val radius = min(width, height) / 2f
-        if (dayIsSelected)
-            canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.selectedPaint)
-        if (today) canvas.drawCircle(width / 2f, height / 2f, radius - 5, shared.todayPaint)
+        drawCircle(canvas, shared, radius) // background circle, if is needed
+        drawText(canvas, shared) // can be a day number, week day name abbr or week number of year
+        drawIndicators(canvas, shared) // whether a day has event or appointment
+        drawHeader(canvas, shared) // shift work header
+        // draw other calendars experiment, currently disabled
+        if ((false)) drawOtherCalendars(canvas, shared, radius)
+    }
 
+    private fun drawCircle(canvas: Canvas, shared: SharedDayViewData, radius: Float) {
+        if (dayIsSelected) canvas.drawCircle(
+            width / 2f, height / 2f, radius - shared.circlesPadding, shared.selectedPaint
+        )
+        if (today) canvas.drawCircle(
+            width / 2f, height / 2f, radius - shared.circlesPadding, shared.todayPaint
+        )
+    }
+
+    private val textBounds = Rect()
+    private fun drawText(canvas: Canvas, shared: SharedDayViewData) {
         val textPaint = when {
             jdn != null -> when {
                 today && !shared.isCurrentDayOutlineOnly -> shared.dayOfMonthNumberCurrentTextPaint
@@ -51,15 +63,15 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             isWeekNumber -> shared.weekNumberTextPaint
             else -> shared.weekDayInitialsTextPaint
         }
-
         // Measure a sample text to find height for vertical center aligning of the text to draw
         val sample = if (jdn != null) text else if (shared.isArabicScript) "س" else "Yy"
         textPaint.getTextBounds(sample, 0, sample.length, textBounds)
         val yPos = (height + textBounds.height()) / 2f
         // Draw day number/label
         canvas.drawText(text, width / 2f, yPos + shared.dayOffset, textPaint)
+    }
 
-        // Draw indicators, whether a day has event or appointment
+    private fun drawIndicators(canvas: Canvas, shared: SharedDayViewData) {
         val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1
         indicators.forEachIndexed { i, paint ->
             val xOffset = shared.eventIndicatorsCentersDistance *
@@ -75,28 +87,28 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                 }
             )
         }
+    }
 
-        // Draw day header which is used for shit work
-        if (header.isNotEmpty()) {
+    private fun drawHeader(canvas: Canvas, shared: SharedDayViewData) {
+        if (header.isEmpty()) return
+        canvas.drawText(
+            header, width / 2f, height * 0.23f,
+            if (dayIsSelected) shared.headerTextSelectedPaint else shared.headerTextPaint
+        )
+    }
+
+    private fun drawOtherCalendars(canvas: Canvas, shared: SharedDayViewData, radius: Float) {
+        // Experiment around what happens if we show other calendars day of month
+        val jdn = jdn ?: return
+        otherCalendars.forEachIndexed { i, calendar ->
+            val offset = (if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1) *
+                    if (i == 1) -1 else 1
             canvas.drawText(
-                header, width / 2f, yPos * 0.87f - textBounds.height(),
+                // better to not calculate this during onDraw
+                formatNumber(jdn.toCalendar(calendar).dayOfMonth),
+                (width - radius * offset) / 2f, (height + radius) / 1.75f,
                 if (dayIsSelected) shared.headerTextSelectedPaint else shared.headerTextPaint
             )
-        }
-
-        // Experiment around what happens if we show other calendars day of month
-        if ((false)) jdn?.also {
-            otherCalendars.forEachIndexed { i, calendar ->
-                val offset = (if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1) *
-                        if (i == 1) -1 else 1
-                canvas.drawText(
-                    // better to not calculate this during onDraw
-                    formatNumber(it.toCalendar(calendar).dayOfMonth),
-                    (width - radius * offset) / 2f,
-                    (height + textBounds.height() + radius) / 2f,
-                    shared.headerTextPaint
-                )
-            }
         }
     }
 
