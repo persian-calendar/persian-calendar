@@ -24,16 +24,12 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
 
     // 1 means Saturday on it and 7 means Friday
     fun getLastWeekDayOfMonth(year: Int, month: Int, dayOfWeek: Int): Int {
-        val monthLength = this.getMonthLength(year, month)
-        val endOfMonthJdn = Jdn(this, year, month, monthLength)
-        return monthLength - ((endOfMonthJdn.value - dayOfWeek + 3L) % 7).toInt()
+        val monthLength = getMonthLength(year, month)
+        return monthLength - (Jdn(this, year, month, monthLength) - dayOfWeek + 1).dayOfWeek
     }
 
-    fun getMonthLength(year: Int, month: Int): Int {
-        val nextMonthStartingDay = Jdn(getMonthStartFromMonthsDistance(year, month, 1))
-        val thisMonthStartingDay = Jdn(this, year, month, 1)
-        return nextMonthStartingDay - thisMonthStartingDay
-    }
+    fun getMonthLength(year: Int, month: Int) =
+        Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - Jdn(this, year, month, 1)
 
     private fun getMonthStartFromMonthsDistance(
         baseYear: Int, baseMonth: Int, monthsDistance: Int
@@ -49,15 +45,15 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
         return createDate(year, month, 1)
     }
 
-    fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
-        val date = baseJdn.toCalendar(this)
-        return getMonthStartFromMonthsDistance(date.year, date.month, monthsDistance)
-    }
-
     fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int {
         val base = baseJdn.toCalendar(this)
         val date = toJdn.toCalendar(this)
         return (date.year - base.year) * 12 + date.month - base.month
+    }
+
+    fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
+        val date = baseJdn.toCalendar(this)
+        return getMonthStartFromMonthsDistance(date.year, date.month, monthsDistance)
     }
 
     val monthsNames: List<String>
