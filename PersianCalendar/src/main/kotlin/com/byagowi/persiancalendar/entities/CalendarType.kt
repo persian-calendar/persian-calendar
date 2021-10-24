@@ -34,21 +34,20 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
     private fun getMonthStartFromMonthsDistance(
         baseYear: Int, baseMonth: Int, monthsDistance: Int
     ): AbstractDate {
-        var month = baseMonth + monthsDistance - 1
+        var month = monthsDistance + baseMonth - 1 // make it zero based for easier calculations
         var year = baseYear + month / 12
         month %= 12
         if (month < 0) {
             year -= 1
             month += 12
         }
-        month += 1
-        return createDate(year, month, 1)
+        return createDate(year, month + 1, 1)
     }
 
     fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int {
-        val base = baseJdn.toCalendar(this)
-        val date = toJdn.toCalendar(this)
-        return (date.year - base.year) * 12 + date.month - base.month
+        val baseDate = baseJdn.toCalendar(this)
+        val toDate = toJdn.toCalendar(this)
+        return (toDate.year - baseDate.year) * 12 + toDate.month - baseDate.month
     }
 
     fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
