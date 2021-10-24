@@ -28,7 +28,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
     private val baseJdn = Jdn.today()
     val selectedMonth: AbstractDate
         get() = mainCalendar.getMonthStartFromMonthsDistance(
-            baseJdn, applyOffset(viewPager.currentItem)
+            baseJdn, -applyOffset(viewPager.currentItem)
         )
 
     fun setSelectedDay(
@@ -39,7 +39,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         if (monthChange) {
             viewPager.setCurrentItem(
-                applyOffset(position = mainCalendar.getMonthsDistance(baseJdn, jdn)), smoothScroll
+                applyOffset(position = -mainCalendar.getMonthsDistance(baseJdn, jdn)), smoothScroll
             )
         }
 
@@ -117,8 +117,9 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
 
             fun bind(position: Int) {
-                val offset = applyOffset(position)
-                val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(baseJdn, offset)
+                val monthStartDate = mainCalendar.getMonthStartFromMonthsDistance(
+                    baseJdn, -applyOffset(position)
+                )
                 val monthStartJdn = Jdn(monthStartDate)
                 val monthLength =
                     mainCalendar.getMonthLength(monthStartDate.year, monthStartDate.month)

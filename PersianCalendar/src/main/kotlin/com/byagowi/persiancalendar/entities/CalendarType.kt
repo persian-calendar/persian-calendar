@@ -30,18 +30,16 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
     }
 
     fun getMonthLength(year: Int, month: Int): Int {
-        val nextMonthYear = if (month == 12) year + 1 else year
-        val nextMonthMonth = if (month == 12) 1 else month + 1
-        val nextMonthStartingDay = Jdn(this, nextMonthYear, nextMonthMonth, 1)
+        val nextMonthStartingDay = Jdn(getMonthStartFromMonthsDistance(year, month, 1))
         val thisMonthStartingDay = Jdn(this, year, month, 1)
         return nextMonthStartingDay - thisMonthStartingDay
     }
 
-    fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
-        val date = baseJdn.toCalendar(this)
-        var month = date.month - monthsDistance
-        month -= 1
-        var year = date.year + month / 12
+    private fun getMonthStartFromMonthsDistance(
+        baseYear: Int, baseMonth: Int, monthsDistance: Int
+    ): AbstractDate {
+        var month = baseMonth + monthsDistance - 1
+        var year = baseYear + month / 12
         month %= 12
         if (month < 0) {
             year -= 1
@@ -51,10 +49,15 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
         return createDate(year, month, 1)
     }
 
+    fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
+        val date = baseJdn.toCalendar(this)
+        return getMonthStartFromMonthsDistance(date.year, date.month, monthsDistance)
+    }
+
     fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int {
         val base = baseJdn.toCalendar(this)
         val date = toJdn.toCalendar(this)
-        return (base.year - date.year) * 12 + base.month - date.month
+        return (date.year - base.year) * 12 + date.month - base.month
     }
 
     val monthsNames: List<String>
