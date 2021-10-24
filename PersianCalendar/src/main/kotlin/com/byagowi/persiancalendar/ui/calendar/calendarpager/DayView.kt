@@ -53,11 +53,11 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         }
 
         // Measure a sample text to find height for vertical center aligning of the text to draw
-        val sample = if (jdn != null) text else if (language.isArabicScript) "س" else "Yy"
+        val sample = if (jdn != null) text else if (shared.isArabicScript) "س" else "Yy"
         textPaint.getTextBounds(sample, 0, sample.length, textBounds)
         val yPos = (height + textBounds.height()) / 2f
         // Draw day number/label
-        canvas.drawText(text, width / 2f, yPos, textPaint)
+        canvas.drawText(text, width / 2f, yPos + shared.dayOffset, textPaint)
 
         // Draw indicators, whether a day has event or appointment
         val offsetDirection = if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1

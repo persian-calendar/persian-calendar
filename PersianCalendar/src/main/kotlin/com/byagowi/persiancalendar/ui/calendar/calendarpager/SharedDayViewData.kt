@@ -9,15 +9,19 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveBoolean
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
 class SharedDayViewData(
     context: Context, height: Float, @ColorInt private val widgetTextColor: Int? = null
 ) {
 
+    val isArabicScript = language.isArabicScript
+    val dayOffset = if (isArabicDigitSelected) 0f else 3.sp
     val eventYOffset = height * 7 / 40
     val eventIndicatorRadius = height * 2 / 40
     private val eventIndicatorsGap = height * 2 / 40
