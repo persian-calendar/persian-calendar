@@ -16,7 +16,7 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
     ISLAMIC(R.string.islamic_calendar, R.string.islamic_calendar_short),
     GREGORIAN(R.string.gregorian_calendar, R.string.gregorian_calendar_short);
 
-    fun createDate(year: Int, month: Int, day: Int) = when (this) {
+    fun createDate(year: Int, month: Int, day: Int): AbstractDate = when (this) {
         ISLAMIC -> IslamicDate(year, month, day)
         GREGORIAN -> CivilDate(year, month, day)
         SHAMSI -> PersianDate(year, month, day)
@@ -33,21 +33,16 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
 
     private fun getMonthStartFromMonthsDistance(
         baseYear: Int, baseMonth: Int, monthsDistance: Int
-    ): AbstractDate {
-        var month = monthsDistance + baseMonth - 1 // make it zero based for easier calculations
-        var year = baseYear + month / 12
-        month %= 12
-        if (month < 0) {
-            year -= 1
-            month += 12
-        }
-        return createDate(year, month + 1, 1)
+    ): AbstractDate = when (this) {
+        ISLAMIC -> IslamicDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
+        GREGORIAN -> CivilDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
+        SHAMSI -> PersianDate(baseYear, baseMonth, 1).monthStartOfMonthsDistance(monthsDistance)
     }
 
-    fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int {
-        val baseDate = baseJdn.toCalendar(this)
-        val toDate = toJdn.toCalendar(this)
-        return (toDate.year - baseDate.year) * 12 + toDate.month - baseDate.month
+    fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int = when (this) {
+        ISLAMIC -> IslamicDate(baseJdn.value).monthsDistanceTo(IslamicDate(toJdn.value))
+        GREGORIAN -> CivilDate(baseJdn.value).monthsDistanceTo(CivilDate(toJdn.value))
+        SHAMSI -> PersianDate(baseJdn.value).monthsDistanceTo(PersianDate(toJdn.value))
     }
 
     fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
