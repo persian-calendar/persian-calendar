@@ -40,9 +40,9 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
     }
 
     fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int = when (this) {
-        ISLAMIC -> IslamicDate(baseJdn.value).monthsDistanceTo(IslamicDate(toJdn.value))
-        GREGORIAN -> CivilDate(baseJdn.value).monthsDistanceTo(CivilDate(toJdn.value))
-        SHAMSI -> PersianDate(baseJdn.value).monthsDistanceTo(PersianDate(toJdn.value))
+        ISLAMIC -> baseJdn.toIslamicCalendar().monthsDistanceTo(toJdn.toIslamicCalendar())
+        GREGORIAN -> baseJdn.toGregorianCalendar().monthsDistanceTo(toJdn.toGregorianCalendar())
+        SHAMSI -> baseJdn.toPersianCalendar().monthsDistanceTo(toJdn.toPersianCalendar())
     }
 
     fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {
