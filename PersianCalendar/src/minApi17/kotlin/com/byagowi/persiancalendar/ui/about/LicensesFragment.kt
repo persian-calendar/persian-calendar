@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
@@ -46,9 +47,11 @@ class LicensesFragment : Fragment() {
                 val bounds = Rect()
                 paint.color = Color.WHITE
                 paint.getTextBounds(text, 0, text.length, bounds)
+                val padding = 1.dp
+                val width = bounds.width() + padding.toInt() * 2
                 val height = bounds.height()
-                val bitmap = Bitmap.createBitmap(bounds.width(), height, Bitmap.Config.ARGB_8888)
-                Canvas(bitmap).drawText(text, 0f, height.toFloat(), paint)
+                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                Canvas(bitmap).drawText(text, padding, height.toFloat(), paint)
                 return BitmapDrawable(layoutInflater.context.resources, bitmap)
             }
 
