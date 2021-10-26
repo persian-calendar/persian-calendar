@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -81,6 +83,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.snackbar.Snackbar
+import kotlin.math.roundToInt
 
 /**
  * Program activity for android
@@ -396,12 +399,22 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
             super.onDrawerSlide(drawerView, slideOffset)
-            slidingAnimation(drawerView, slideOffset / 1.5f)
+            slidingAnimation(drawerView, slideOffset)
         }
+
+        private val blurs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            listOf(null) + (1..4).map { it * 6f }
+                .map { RenderEffect.createBlurEffect(it, it, Shader.TileMode.REPEAT) }
+        } else emptyList()
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
             binding.navHostFragment.translationX =
-                slideOffset * drawerView.width.toFloat() * slidingDirection
+                slideOffset / 1.5f * drawerView.width.toFloat() * slidingDirection
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && blurs.isNotEmpty()) {
+                binding.navHostFragment.setRenderEffect(
+                    blurs[((blurs.size - 1) * slideOffset).roundToInt()]
+                )
+            }
             binding.root.bringChildToFront(drawerView)
             binding.root.requestLayout()
         }
