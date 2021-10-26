@@ -62,7 +62,7 @@ class LicensesFragment : Fragment() {
 
         // Based on https://stackoverflow.com/a/34623367
         class BadgeSpan : ReplacementSpan() {
-            private val sidePadding = 3.sp
+            private val sidePadding = 6.sp
 
             override fun getSize(
                 paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?
@@ -75,10 +75,10 @@ class LicensesFragment : Fragment() {
                 val verticalReduce = 5.sp
                 val rect = RectF(
                     x, top + verticalReduce,
-                    x + getSize(paint, text, start, end, null), bottom - verticalReduce
+                    x + getSize(paint, text, start, end, null), bottom.toFloat()
                 )
                 paint.color = inflater.context.resolveColor(R.attr.colorDivider)
-                canvas.drawRoundRect(rect, 5.sp, 5.sp, paint)
+                canvas.drawRoundRect(rect, 25.dp, 25.dp, paint)
                 paint.color = inflater.context.resolveColor(R.attr.colorTextDrawer)
                 canvas.drawText(text ?: "", start, end, x + sidePadding, y.toFloat(), paint)
             }
