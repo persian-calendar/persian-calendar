@@ -404,7 +404,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         private val blurs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             listOf(null) + (1..4).map { it * 6f }
-                .map { RenderEffect.createBlurEffect(it, it, Shader.TileMode.REPEAT) }
+                .map { RenderEffect.createBlurEffect(it, it, Shader.TileMode.CLAMP) }
         } else emptyList()
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
