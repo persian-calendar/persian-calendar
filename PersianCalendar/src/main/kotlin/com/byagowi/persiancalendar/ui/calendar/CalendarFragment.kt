@@ -326,15 +326,15 @@ class CalendarFragment : Fragment() {
     }
 
     private val addEvent =
-        registerForActivityResult(object : ActivityResultContract<Jdn, Void>() {
+        registerForActivityResult(object : ActivityResultContract<Jdn, Void?>() {
             override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
-            override fun createIntent(context: Context, jdn: Jdn): Intent {
-                val time = jdn.toJavaCalendar().timeInMillis
+            override fun createIntent(context: Context, input: Jdn): Intent {
+                val time = input.toJavaCalendar().timeInMillis
                 return Intent(Intent.ACTION_INSERT)
                     .setData(CalendarContract.Events.CONTENT_URI)
                     .putExtra(
                         CalendarContract.Events.DESCRIPTION, dayTitleSummary(
-                            jdn, jdn.toCalendar(mainCalendar)
+                            input, input.toCalendar(mainCalendar)
                         )
                     )
                     .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, time)
@@ -344,11 +344,11 @@ class CalendarFragment : Fragment() {
         }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
 
     private val viewEvent =
-        registerForActivityResult(object : ActivityResultContract<Long, Void>() {
+        registerForActivityResult(object : ActivityResultContract<Long, Void?>() {
             override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
-            override fun createIntent(context: Context, id: Long): Intent =
+            override fun createIntent(context: Context, input: Long): Intent =
                 Intent(Intent.ACTION_VIEW).setData(
-                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, id)
+                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, input)
                 )
         }) { mainBinding?.calendarPager?.refresh(isEventsModified = true) }
 

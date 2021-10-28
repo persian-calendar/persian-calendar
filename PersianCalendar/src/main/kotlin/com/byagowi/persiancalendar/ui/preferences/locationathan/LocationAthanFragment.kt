@@ -139,7 +139,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         updatePreferencesItems()
     }
 
-    private class PickRingtoneContract : ActivityResultContract<Uri?, String>() {
+    private class PickRingtoneContract : ActivityResultContract<Uri?, String?>() {
         override fun createIntent(context: Context, input: Uri?): Intent =
             Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
                 .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
