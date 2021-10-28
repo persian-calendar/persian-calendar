@@ -75,6 +75,7 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 
+
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
@@ -481,18 +482,25 @@ private fun create4x2RemoteViews(
         } ?: owghats[0]
         remoteViews.setTextColor(nextViewId, Color.RED)
 
-        if (enableWorkManager) { // we can't have 1 minutes updates in work manager
-            remoteViews.setViewVisibility(R.id.textPlaceholder2_4x2, View.GONE)
-        } else {
-            val difference = timeClock.toMinutes() - nowClock.toMinutes()
-            remoteViews.setTextViewText(
-                R.id.textPlaceholder2_4x2, context.getString(
-                    R.string.n_till,
-                    Clock.fromInt(if (difference > 0) difference else difference + 60 * 24)
-                        .asRemainingTime(context),
-                    context.getString(nextOwghatId)
-                )
+        val difference = timeClock.toMinutes() - nowClock.toMinutes()
+        remoteViews.setTextViewText(
+            R.id.textPlaceholder2_4x2, context.getString(
+                R.string.n_till,
+                Clock.fromInt(if (difference > 0) difference else difference + 60 * 24)
+                    .asRemainingTime(context), context.getString(nextOwghatId)
             )
+        )
+
+        if (enableWorkManager && // no need for refresh icon, they get frequent updates
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP // for vector drawables
+        ) {
+            remoteViews.setImageViewResource(R.id.refresh_icon, R.drawable.ic_restore_modified)
+            val pendingIntent = PendingIntent.getBroadcast(
+                context, 0, Intent(context, Widget4x2::class.java),
+                PendingIntent.FLAG_UPDATE_CURRENT or
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+            )
+            remoteViews.setOnClickPendingIntent(R.id.refresh_wrapper, pendingIntent)
         }
 
         remoteViews.setViewVisibility(R.id.widget4x2_owghat, View.VISIBLE)
