@@ -494,7 +494,7 @@ private fun create4x2RemoteViews(
         if (enableWorkManager && // no need for refresh icon, they get frequent updates
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP // for vector drawables
         ) {
-            remoteViews.setImageViewResource(R.id.refresh_icon, R.drawable.ic_restore_modified)
+            remoteViews.setImageViewResource(R.id.refresh_icon, R.drawable.ic_widget_refresh)
             val pendingIntent = PendingIntent.getBroadcast(
                 context, 0, Intent(context, Widget4x2::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT or
