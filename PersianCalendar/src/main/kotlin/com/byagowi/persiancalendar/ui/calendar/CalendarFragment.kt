@@ -229,6 +229,8 @@ class CalendarFragment : Fragment() {
             }
         }
 
+        binding.addEventButton?.setOnClickListener { addEventOnCalendar(selectedJdn) }
+
         return binding.root
     }
 
@@ -402,6 +404,7 @@ class CalendarFragment : Fragment() {
 
         // Show/Hide bring today menu button
         todayButton?.isVisible = !isToday
+        mainBinding?.addEventButton?.let { if (isToday) it.hide() else it.show() }
 
         // Update tabs
         calendarsView?.showCalendars(jdn, mainCalendar, getEnabledCalendarTypes())
