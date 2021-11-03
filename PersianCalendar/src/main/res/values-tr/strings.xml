@@ -106,7 +106,10 @@
     <string name="pm">ÖS</string>
     <string name="am">ÖÖ</string>
     <string name="recurs">Tekrarlar</string>
-    <string name="shift_work_record_title">%1$s gün %2$s</string>
+    <plurals name="shift_work_record_title">
+        <item quantity="one">%1$s gün %2$s</item>
+        <item quantity="other">%1$s gün %2$s</item>
+    </plurals>
     <string name="n_till">%2$s \'na %1$s var</string>
     <string name="center_align_widgets">Widget\'ları ortaya hizalayın</string>
     <string name="center_align_widgets_summary">4x1 ve 2x2 widget\'ları ortaya hizala</string>

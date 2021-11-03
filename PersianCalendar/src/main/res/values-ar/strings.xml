@@ -219,7 +219,6 @@
     <string name="center_align_widgets_summary">توسيط المصغر 4x1 و 2x2</string>
     <string name="center_align_widgets">توسيط المصغر</string>
     <string name="n_till">%1$s إلى %2$s</string>
-    <string name="shift_work_record_title">%1$s أيام %2$s</string>
     <string name="recurs">تكرار</string>
     <string name="am">ص</string>
     <string name="pm">م</string>

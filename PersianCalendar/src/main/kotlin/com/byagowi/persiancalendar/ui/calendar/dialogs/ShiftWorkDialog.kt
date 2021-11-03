@@ -96,8 +96,8 @@ private class ShiftWorkItemsAdapter(
 
     private fun updateShiftWorkResult() {
         rows.filter { it.length != 0 }.joinToString(spacedComma) {
-            binding.root.context.getString(
-                R.string.shift_work_record_title,
+            binding.root.context.resources.getQuantityString(
+                R.plurals.shift_work_record_title, it.length,
                 formatNumber(it.length), shiftWorkKeyToString(it.type)
             )
         }.also {

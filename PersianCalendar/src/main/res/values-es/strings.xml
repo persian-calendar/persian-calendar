@@ -220,7 +220,10 @@
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%1$s till to %2$s</string>
-    <string name="shift_work_record_title">%1$s día(s) %2$s</string>
+    <plurals name="shift_work_record_title">
+        <item quantity="one">%1$s día %2$s</item>
+        <item quantity="other">%1$s días %2$s</item>
+    </plurals>
     <string name="recurs">Recurre</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>

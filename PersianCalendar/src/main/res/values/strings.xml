@@ -212,8 +212,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
     <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
     <string name="shift_work_reset_button">Disable or reprogram</string>
-    <string name="n_minutes">%1$s minutes</string>
-    <string name="n_hours">%1$s hours</string>
     <string name="spaced_and">" and "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
@@ -221,7 +219,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%1$s till to %2$s</string>
-    <string name="shift_work_record_title">%1$s day(s) %2$s</string>
     <string name="recurs">Recurs</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
@@ -237,9 +234,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="enable_location_services">Location Services is disabled, please turn it on to use the feature.</string>
     <string name="select_date">Select date</string>
     <string name="age_widget_title">Widget title</string>
-    <string name="n_days">%1$s days</string>
-    <string name="n_months">%1$s months</string>
-    <string name="n_years">%1$s years</string>
     <string name="preview">Preview</string>
     <string name="ignore">Ignore</string>
     <!--Theme-->
@@ -343,4 +337,14 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="high_latitudes_angle_based">Angle Based</string>
     <string name="high_latitudes_one_seventh">One Seventh</string>
     <string name="none">None</string>
+
+    <plurals name="shift_work_record_title">
+        <item quantity="one">%1$s %2$s day</item>
+        <item quantity="other">%1$s %2$s days</item>
+    </plurals>
+    <string name="n_minutes">%1$s minutes</string>
+    <string name="n_hours">%1$s hours</string>
+    <string name="n_days">%1$s days</string>
+    <string name="n_months">%1$s months</string>
+    <string name="n_years">%1$s years</string>
 </resources>
