@@ -197,8 +197,14 @@
     <string name="shift_work_starting_date">شروع شیفت‌کاری از روز انتخاب شده در تقویم، %1$s است.</string>
     <string name="shift_work_starting_date_edit">شروع شیفت‌کاری از روز تعیین‌شده‌ در قبل، %1$s خواهد بود.</string>
     <string name="shift_work_reset_button">غیرفعال‌سازی یا برنامه‌ریزی مجدد</string>
-    <string name="n_minutes">%1$s دقیقه</string>
-    <string name="n_hours">%1$s ساعت</string>
+    <plurals name="n_minutes">
+        <item quantity="one">%1$s دقیقه</item>
+        <item quantity="other">%1$s دقیقه</item>
+    </plurals>
+    <plurals name="n_hours">
+        <item quantity="one">%1$s ساعت</item>
+        <item quantity="other">%1$s ساعت</item>
+    </plurals>
     <string name="spaced_and">" و "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
@@ -228,9 +234,18 @@
     <string name="widget_age_name">فارسی کلیز (سن)</string>
     <string name="select_date">انتخاب تاریخ</string>
     <string name="age_widget_title">عنوان ویجت</string>
-    <string name="n_days">%1$s روز</string>
-    <string name="n_months">%1$s ماه</string>
-    <string name="n_years">%1$s سال</string>
+    <plurals name="n_days">
+        <item quantity="one">%1$s روز</item>
+        <item quantity="other">%1$s روز</item>
+    </plurals>
+    <plurals name="n_months">
+        <item quantity="one">%1$s ماه</item>
+        <item quantity="other">%1$s ماه</item>
+    </plurals>
+    <plurals name="n_years">
+        <item quantity="one">%1$s سال</item>
+        <item quantity="other">%1$s سال</item>
+    </plurals>
     <string name="preview">مخليدنه</string>
     <string name="ignore">نادیده گرفتن</string>
     <string name="theme_default">سیسټم اصلي</string>

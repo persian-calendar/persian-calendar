@@ -197,8 +197,14 @@
     <string name="shift_work_starting_date">ایش شیفتی‌نین باشلانق‌یجی تقویم‌ده، %1$s سئچ‌یلن گۆندن اولاجاق‌دیر.</string>
     <string name="shift_work_starting_date_edit">ایش شیفتی، %1$s سئچ‌یلن گۆندن قاباق اولاجاقدیر.</string>
     <string name="shift_work_reset_button">ائتکی‌سیزلشتیرمک یادا یئنی‌دن تنظیم ائتمک</string>
-    <string name="n_minutes">%1$s دقیقه</string>
-    <string name="n_hours">%1$s ساعات</string>
+    <plurals name="n_minutes">
+        <item quantity="one">%1$s دقیقه</item>
+        <item quantity="other">%1$s دقیقه</item>
+    </plurals>
+    <plurals name="n_hours">
+        <item quantity="one">%1$s ساعات</item>
+        <item quantity="other">%1$s ساعات</item>
+    </plurals>
     <string name="spaced_and">" و "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
@@ -228,9 +234,18 @@
     <string name="widget_age_name">فارسجا تقویم (یاش)</string>
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="select_date">انتخاب تاریخ</string>
-    <string name="n_days">%1$s گۆن</string>
-    <string name="n_months">%1$s آی</string>
-    <string name="n_years">%1$s ایل</string>
+    <plurals name="n_days">
+        <item quantity="one">%1$s گۆن</item>
+        <item quantity="other">%1$s گۆن</item>
+    </plurals>
+    <plurals name="n_months">
+        <item quantity="one">%1$s آی</item>
+        <item quantity="other">%1$s آی</item>
+    </plurals>
+    <plurals name="n_years">
+        <item quantity="one">%1$s ایل</item>
+        <item quantity="other">%1$s ایل</item>
+    </plurals>
     <string name="preview">سیناق گؤستریش</string>
     <string name="ignore">خبردارلیقلارا</string>
     <!--Theme-->

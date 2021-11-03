@@ -197,8 +197,14 @@
     <string name="shift_work_starting_date">شيفتˇکاري شۊرۊ بؤن تقويمˇدؤجين بؤبؤسته رۊزˇجأ، %1$s به.</string>
     <string name="shift_work_starting_date_edit">شيفتˇکاري شۊرۊ بؤن اۊ رۊزˇجأ کي قبلن دؤجين بؤبؤسته بۊ، %1$s خأيه ببه.</string>
     <string name="shift_work_reset_button">غیرفعال کۊدن یا دۊمرتبه برنامه‌ریزي کۊدن</string>
-    <string name="n_minutes">%1$s ديقه</string>
-    <string name="n_hours">%1$s ساعت</string>
+    <plurals name="n_minutes">
+        <item quantity="one">%1$s ديقه</item>
+        <item quantity="other">%1$s ديقه</item>
+    </plurals>
+    <plurals name="n_hours">
+        <item quantity="one">%1$s ساعت</item>
+        <item quantity="other">%1$s ساعت</item>
+    </plurals>
     <string name="spaced_and">" ؤ "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
@@ -228,9 +234,18 @@
     <string name="widget_age_name">تقویم فارسی (سن)</string>
     <string name="age_widget_title">عنوان ویجت</string>
     <string name="select_date">انتخاب تاریخ</string>
-    <string name="n_days">%1$s رۊز</string>
-    <string name="n_months">%1$s ما</string>
-    <string name="n_years">%1$s سال</string>
+    <plurals name="n_days">
+        <item quantity="one">%1$s رۊز</item>
+        <item quantity="other">%1$s رۊز</item>
+    </plurals>
+    <plurals name="n_months">
+        <item quantity="one">%1$s ما</item>
+        <item quantity="other">%1$s ما</item>
+    </plurals>
+    <plurals name="n_years">
+        <item quantity="one">%1$s سال</item>
+        <item quantity="other">%1$s سال</item>
+    </plurals>
     <string name="preview">پيشادئن</string>
     <string name="ignore">چشم‌پوشی</string>
     <string name="theme_default">سيستم ٚ دؤجين</string>

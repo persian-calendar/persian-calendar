@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.provider.CalendarContract
+import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
 import com.byagowi.persiancalendar.R
@@ -229,13 +230,15 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     val yearsDifference = offsetDate.year - baseDate.year
     val monthsDifference = offsetDate.month - baseDate.month
     val daysOfMonthDifference = offsetDate.dayOfMonth - baseDate.dayOfMonth
-    val days = resources.getString(R.string.n_days, formatNumber(daysAbsoluteDistance))
+    val days = resources.getQuantityString(
+        R.plurals.n_days, daysAbsoluteDistance, formatNumber(daysAbsoluteDistance)
+    )
     return if (monthsDifference == 0 && yearsDifference == 0) days else ("$days (~" + listOf(
-        R.string.n_years to yearsDifference,
-        R.string.n_months to monthsDifference,
-        R.string.n_days to daysOfMonthDifference
-    ).filter { (_, n) -> n != 0 }.joinToString(spacedAnd) { (stringId, n) ->
-        resources.getString(stringId, formatNumber(n))
+        R.plurals.n_years to yearsDifference,
+        R.plurals.n_months to monthsDifference,
+        R.plurals.n_days to daysOfMonthDifference
+    ).filter { (_, n) -> n != 0 }.joinToString(spacedAnd) { (@PluralsRes pluralId: Int, n: Int) ->
+        resources.getQuantityString(pluralId, n, formatNumber(n))
     } + ")")
 }
 

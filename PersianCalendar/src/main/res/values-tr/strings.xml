@@ -88,9 +88,18 @@
     <string name="theme_default">Sistem Varsayılanı</string>
     <string name="ignore">Yok say, göz ardı et</string>
     <string name="preview">Önizleme</string>
-    <string name="n_years">%1$s yıl</string>
-    <string name="n_months">%1$s ay</string>
-    <string name="n_days">%1$s gün</string>
+    <plurals name="n_days">
+        <item quantity="one">%1$s yıl</item>
+        <item quantity="other">%1$s yıl</item>
+    </plurals>
+    <plurals name="n_months">
+        <item quantity="one">%1$s ay</item>
+        <item quantity="other">%1$s ay</item>
+    </plurals>
+    <plurals name="n_years">
+        <item quantity="one">%1$s gün</item>
+        <item quantity="other">%1$s gün</item>
+    </plurals>
     <string name="age_widget_title">Widget Başlığı</string>
     <string name="select_date">Tarih seçiniz</string>
     <string name="enable_location_services">Konum Servisleri devre dışı bırakıldı, lütfen özelliği kullanmak için açın.</string>
@@ -117,8 +126,14 @@
     <string name="spaced_colon">": "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_and">" ve "</string>
-    <string name="n_hours">%1$s saat</string>
-    <string name="n_minutes">%1$s dakika</string>
+    <plurals name="n_minutes">
+        <item quantity="one">%1$s dakika</item>
+        <item quantity="other">%1$s dakika</item>
+    </plurals>
+    <plurals name="n_hours">
+        <item quantity="one">%1$s saat</item>
+        <item quantity="other">%1$s saat</item>
+    </plurals>
     <string name="shift_work_reset_button">Devre dışı bırak veya yeniden programla</string>
     <string name="shift_work_starting_date">Takvimde seçilen %1$s, vardiyalı çalışmaya başlama günüdür.</string>
     <string name="remove">Kaldır</string>

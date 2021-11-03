@@ -342,9 +342,24 @@ The app needs this only once, however, if you move to a new location, accessing 
         <item quantity="one">%1$s %2$s day</item>
         <item quantity="other">%1$s %2$s days</item>
     </plurals>
-    <string name="n_minutes">%1$s minutes</string>
-    <string name="n_hours">%1$s hours</string>
-    <string name="n_days">%1$s days</string>
-    <string name="n_months">%1$s months</string>
-    <string name="n_years">%1$s years</string>
+    <plurals name="n_minutes">
+        <item quantity="one">%1$s minute</item>
+        <item quantity="other">%1$s minutes</item>
+    </plurals>
+    <plurals name="n_hours">
+        <item quantity="one">%1$s hour</item>
+        <item quantity="other">%1$s hours</item>
+    </plurals>
+    <plurals name="n_days">
+        <item quantity="one">%1$s day</item>
+        <item quantity="other">%1$s days</item>
+    </plurals>
+    <plurals name="n_months">
+        <item quantity="one">%1$s month</item>
+        <item quantity="other">%1$s months</item>
+    </plurals>
+    <plurals name="n_years">
+        <item quantity="one">%1$s year</item>
+        <item quantity="other">%1$s years</item>
+    </plurals>
 </resources>

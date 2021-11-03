@@ -210,8 +210,6 @@
     <string name="shift_work_starting_date">%1$s، حدد على التقويم، هو مدة إزاحة وقت العمل من اليوم.</string>
     <string name="shift_work_starting_date_edit">%1$s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
-    <string name="n_minutes">%1$s دقائق</string>
-    <string name="n_hours">%1$s ساعات</string>
     <string name="spaced_and">" و "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
@@ -235,9 +233,6 @@
     <string name="widget_age_name">التقويم الفارسي (عمر)</string>
     <string name="age_widget_title">عنوان المصغر</string>
     <string name="select_date">اختيار التاريخ</string>
-    <string name="n_days">%1$s يوم</string>
-    <string name="n_months">%1$s شهر</string>
-    <string name="n_years">%1$s سنة</string>
     <string name="preview">معاينة</string>
     <string name="ignore">تجاهل</string>
     <!--Theme-->
