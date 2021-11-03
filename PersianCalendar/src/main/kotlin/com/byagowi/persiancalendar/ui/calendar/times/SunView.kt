@@ -272,15 +272,15 @@ class SunView @JvmOverloads constructor(
             if (now > sunset || now < sunrise) 0 else (sunset - now).toInt()
         )
         dayLengthString = context.getString(R.string.length_of_day) + spacedColon +
-                dayLength.asRemainingTime(context, short = true)
+                dayLength.asRemainingTime(resources, short = true)
         remainingString = if (remaining.toMinutes() == 0) "" else
             context.getString(R.string.remaining_daylight) + spacedColon +
-                    remaining.asRemainingTime(context, short = true)
+                    remaining.asRemainingTime(resources, short = true)
         // a11y
         contentDescription = context.getString(R.string.length_of_day) + spacedColon +
-                dayLength.asRemainingTime(context) + if (remaining.toMinutes() == 0) "" else
+                dayLength.asRemainingTime(resources) + if (remaining.toMinutes() == 0) "" else
             ("\n\n" + context.getString(R.string.remaining_daylight) + spacedColon +
-                    remaining.asRemainingTime(context))
+                    remaining.asRemainingTime(resources))
     }
 
     fun startAnimate() {

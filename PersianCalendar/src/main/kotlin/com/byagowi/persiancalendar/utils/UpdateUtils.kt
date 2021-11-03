@@ -487,7 +487,7 @@ private fun create4x2RemoteViews(
             R.id.textPlaceholder2_4x2, context.getString(
                 R.string.n_till,
                 Clock.fromInt(if (difference > 0) difference else difference + 60 * 24)
-                    .asRemainingTime(context), context.getString(nextOwghatId)
+                    .asRemainingTime(context.resources), context.getString(nextOwghatId)
             )
         )
 

@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
-import android.content.Context
+import android.content.res.Resources
 import androidx.annotation.PluralsRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.amString
@@ -25,14 +25,14 @@ data class Clock(val hours: Int, val minutes: Int) {
             " " + if (hours >= 12) pmString else amString
         } else ""
 
-    fun asRemainingTime(context: Context, short: Boolean = false): String {
+    fun asRemainingTime(resources: Resources, short: Boolean = false): String {
         val pairs = listOf(R.plurals.n_hours to hours, R.plurals.n_minutes to minutes)
             .filter { (_, n) -> n != 0 }
         // if both present special casing the short form makes sense
-        return if (pairs.size == 2 && short)
-            context.getString(R.string.n_hours_minutes, formatNumber(hours), formatNumber(minutes))
-        else pairs.joinToString(spacedAnd) { (@PluralsRes pluralId: Int, n: Int) ->
-            context.resources.getQuantityString(pluralId, n, formatNumber(n))
+        return if (pairs.size == 2 && short) resources.getString(
+            R.string.n_hours_minutes, formatNumber(hours), formatNumber(minutes)
+        ) else pairs.joinToString(spacedAnd) { (@PluralsRes pluralId: Int, n: Int) ->
+            resources.getQuantityString(pluralId, n, formatNumber(n))
         }
     }
 
