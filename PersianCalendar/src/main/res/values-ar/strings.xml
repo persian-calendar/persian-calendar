@@ -360,7 +360,7 @@
         <item quantity="other">%1$s يوم</item>
     </plurals>
     <plurals name="n_months">
-        <item quantity="zero">%1$s لا شهر</item>
+        <item quantity="zero">لا شهر</item>
         <item quantity="one">شهر واحد</item>
         <item quantity="two">شهرين</item>
         <item quantity="few">%1$s أشهر</item>
