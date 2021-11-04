@@ -335,4 +335,52 @@
     <string name="high_latitudes_angle_based">Angle Based</string>
     <string name="high_latitudes_one_seventh">One Seventh</string>
     <string name="none">None</string>
+    <plurals name="n_hours">
+        <item quantity="zero">صفر ساعات</item>
+        <item quantity="one">ساعة واحدة</item>
+        <item quantity="two">ساعتان</item>
+        <item quantity="few">بضع ساعات</item>
+        <item quantity="many">ساعات عديدة</item>
+        <item quantity="other">%1$s ساعات</item>
+    </plurals>
+    <plurals name="n_months">
+        <item quantity="zero">صفر أشهر</item>
+        <item quantity="one">شهر واحد</item>
+        <item quantity="two">شهرين</item>
+        <item quantity="few">بضعة أشهر</item>
+        <item quantity="many">عدة أشهر</item>
+        <item quantity="other">%1$s أشهر</item>
+    </plurals>
+    <plurals name="n_days">
+        <item quantity="zero">صفر أيام</item>
+        <item quantity="one">يوم واحد</item>
+        <item quantity="two">يومان</item>
+        <item quantity="few">بضعة أيام</item>
+        <item quantity="many">أيام عديدة</item>
+        <item quantity="other">%1$s أيام</item>
+    </plurals>
+    <plurals name="n_years">
+        <item quantity="zero">صفر سنوات</item>
+        <item quantity="one">سنة واحدة</item>
+        <item quantity="two">سنتان</item>
+        <item quantity="few">بضع سنوات</item>
+        <item quantity="many">سنوات عديدة</item>
+        <item quantity="other">%1$s سنوات</item>
+    </plurals>
+    <plurals name="shift_work_record_title">
+        <item quantity="zero">صفر أيام %2$s</item>
+        <item quantity="one">يوم واحد %2$s</item>
+        <item quantity="two">يومان %2$s</item>
+        <item quantity="few">بضعة أيام %2$s</item>
+        <item quantity="many">أيام عديدة %2$s</item>
+        <item quantity="other">%1$s أيام %2$s</item>
+    </plurals>
+    <plurals name="n_minutes">
+        <item quantity="zero">صفر دقائق</item>
+        <item quantity="one">دقيقة واحدة</item>
+        <item quantity="two">دقيقتان</item>
+        <item quantity="few">بضع دقائق</item>
+        <item quantity="many">عدة دقائق</item>
+        <item quantity="other">%1$s دقائق</item>
+    </plurals>
 </resources>
