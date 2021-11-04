@@ -368,12 +368,12 @@
         <item quantity="other">%1$s سنوات</item>
     </plurals>
     <plurals name="shift_work_record_title">
-        <item quantity="zero">صفر أيام %2$s</item>
-        <item quantity="one">يوم واحد %2$s</item>
-        <item quantity="two">يومان %2$s</item>
-        <item quantity="few">بضعة أيام %2$s</item>
-        <item quantity="many">أيام عديدة %2$s</item>
-        <item quantity="other">%1$s أيام %2$s</item>
+        <item quantity="zero">ولايوم %2$s</item>
+        <item quantity="one">يو‮م واحد %2$s</item>
+        <item quantity="two">يومين %2$s</item>
+        <item quantity="few">%1$s أيام %2$s</item>
+        <item quantity="many">%1$s یوم %2$s</item>
+        <item quantity="other">%1$s یوم %2$s</item>
     </plurals>
     <plurals name="n_minutes">
         <item quantity="zero">صفر دقائق</item>
