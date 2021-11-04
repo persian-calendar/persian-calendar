@@ -340,7 +340,7 @@
         <item quantity="one">ساعة واحدة</item>
         <item quantity="two">ساعتان</item>
         <item quantity="few">%1$s ساعات</item>
-        <item quantity="many">%1$s عديدة</item>
+        <item quantity="many">%1$s ساعات</item>
         <item quantity="other">%1$s ساعات</item>
     </plurals>
     <plurals name="n_months">
@@ -356,7 +356,7 @@
         <item quantity="one">يوم واحد</item>
         <item quantity="two">يومان</item>
         <item quantity="few">%1$s أيام</item>
-        <item quantity="many">%1$s عديدة</item>
+        <item quantity="many">%1$s ساعات</item>
         <item quantity="other">%1$s أيام</item>
     </plurals>
     <plurals name="n_years">
@@ -364,7 +364,7 @@
         <item quantity="one">سنة واحدة</item>
         <item quantity="two">سنتان</item>
         <item quantity="few">%1$s سنوات</item>
-        <item quantity="many">%1$s عديدة</item>
+        <item quantity="many">%1$s ساعات</item>
         <item quantity="other">%1$s سنوات</item>
     </plurals>
     <plurals name="shift_work_record_title">
