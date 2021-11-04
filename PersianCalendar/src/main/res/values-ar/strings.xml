@@ -335,6 +335,14 @@
     <string name="high_latitudes_angle_based">بناء على الزاوية</string>
     <string name="high_latitudes_one_seventh">سُبٌع</string>
     <string name="none">لا شيء</string>
+    <plurals name="n_minutes">
+        <item quantity="zero">%1$s دقائق</item>
+        <item quantity="one">دقيقة واحدة</item>
+        <item quantity="two">دقيقتان</item>
+        <item quantity="few">%1$s دقائق</item>
+        <item quantity="many">%1$s دقائق</item>
+        <item quantity="other">%1$s دقائق</item>
+    </plurals>
     <plurals name="n_hours">
         <item quantity="zero">%1$s ساعات</item>
         <item quantity="one">ساعة واحدة</item>
@@ -342,6 +350,22 @@
         <item quantity="few">%1$s ساعات</item>
         <item quantity="many">%1$s ساعات</item>
         <item quantity="other">%1$s ساعات</item>
+    </plurals>
+    <plurals name="n_days">
+        <item quantity="zero">%1$s أيام</item>
+        <item quantity="one">يوم واحد</item>
+        <item quantity="two">يومان</item>
+        <item quantity="few">%1$s أيام</item>
+        <item quantity="many">%1$s أيام</item>
+        <item quantity="other">%1$s أيام</item>
+    </plurals>
+    <plurals name="n_years">
+        <item quantity="zero">%1$s سنوات</item>
+        <item quantity="one">سنة واحدة</item>
+        <item quantity="two">سنتان</item>
+        <item quantity="few">%1$s سنوات</item>
+        <item quantity="many">%1$s سنوات</item>
+        <item quantity="other">%1$s سنوات</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="zero">%1$s أشهر</item>
@@ -351,36 +375,12 @@
         <item quantity="many">%1$s أشهر</item>
         <item quantity="other">%1$s أشهر</item>
     </plurals>
-    <plurals name="n_days">
-        <item quantity="zero">%1$s أيام</item>
-        <item quantity="one">يوم واحد</item>
-        <item quantity="two">يومان</item>
-        <item quantity="few">%1$s أيام</item>
-        <item quantity="many">%1$s ساعات</item>
-        <item quantity="other">%1$s أيام</item>
-    </plurals>
-    <plurals name="n_years">
-        <item quantity="zero">%1$s سنوات</item>
-        <item quantity="one">سنة واحدة</item>
-        <item quantity="two">سنتان</item>
-        <item quantity="few">%1$s سنوات</item>
-        <item quantity="many">%1$s ساعات</item>
-        <item quantity="other">%1$s سنوات</item>
-    </plurals>
-    <plurals name="shift_work_record_title">
+    <plurals name="shift_work_record_titles">
         <item quantity="zero">لا يوم %2$s</item>
-        <item quantity="one">يو‮م واحد %2$s</item>
+        <item quantity="one">يوم واحد %2$s</item>
         <item quantity="two">يومين %2$s</item>
         <item quantity="few">%1$s أيام %2$s</item>
-        <item quantity="many">%1$s یوم %2$s</item>
-        <item quantity="other">%1$s یوم %2$s</item>
-    </plurals>
-    <plurals name="n_minutes">
-        <item quantity="zero">%1$s دقائق</item>
-        <item quantity="one">دقيقة واحدة</item>
-        <item quantity="two">دقيقتان</item>
-        <item quantity="few">%1$s دقائق</item>
-        <item quantity="many">%1$s دقائق</item>
-        <item quantity="other">%1$s دقائق</item>
+        <item quantity="many">%1$s أيام %2$s</item>
+        <item quantity="other">%1$s أيام %2$s</item>
     </plurals>
 </resources>
