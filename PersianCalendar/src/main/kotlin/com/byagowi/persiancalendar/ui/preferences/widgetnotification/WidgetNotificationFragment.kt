@@ -30,6 +30,8 @@ import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.isSystemProvidedWidgetColors
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
@@ -54,17 +56,20 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             section(R.string.pref_widget) {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 6
+                val showColorOptions = !isSystemProvidedWidgetColors(activity.appPrefs)
                 clickable(onClick = {
                     showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }) {
                     title(R.string.widget_text_color)
                     summary(R.string.select_widgets_text_color)
+                    isVisible = showColorOptions
                 }
                 clickable(onClick = {
                     showColorPickerDialog(activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
                 }) {
                     title(R.string.widget_background_color)
                     summary(R.string.select_widgets_background_color)
+                    isVisible = showColorOptions
                 }
                 switch(PREF_NUMERICAL_DATE_PREFERRED, false) {
                     title(R.string.prefer_linear_date)

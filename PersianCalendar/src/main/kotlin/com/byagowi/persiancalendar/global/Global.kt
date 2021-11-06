@@ -65,7 +65,6 @@ import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
-import com.byagowi.persiancalendar.utils.defaultWidgetBackground
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
@@ -105,10 +104,6 @@ var isWidgetClock = DEFAULT_WIDGET_CLOCK
 var isNotifyDate = DEFAULT_NOTIFY_DATE
     private set
 var notificationAthan = DEFAULT_NOTIFICATION_ATHAN
-    private set
-var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-    private set
-var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     private set
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
     private set
@@ -236,11 +231,6 @@ fun updateStoredPreference(context: Context) {
     isNotifyDate = prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
     notificationAthan = prefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
     isCenterAlignWidgets = prefs.getBoolean(PREF_CENTER_ALIGN_WIDGETS, true)
-
-    selectedWidgetTextColor = prefs.getString(PREF_SELECTED_WIDGET_TEXT_COLOR, null)
-        ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-    selectedWidgetBackgroundColor = prefs.getString(PREF_SELECTED_WIDGET_BACKGROUND_COLOR, null)
-        ?: defaultWidgetBackground
 
     // We were using "Jafari" method but later found out Tehran is nearer to time.ir and others
     // so switched to "Tehran" method as default calculation algorithm

@@ -42,7 +42,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
             }
         }
 
-        fun isNonDefault(appPrefs: SharedPreferences?) = appPrefs.theme != SYSTEM_DEFAULT.key
+        fun isDefault(appPrefs: SharedPreferences?) = appPrefs.theme == SYSTEM_DEFAULT.key
 
         fun isNightModeEnabled(context: Context): Boolean =
             context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES

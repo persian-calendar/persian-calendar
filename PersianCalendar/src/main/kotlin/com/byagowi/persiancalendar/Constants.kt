@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar
 
+import android.graphics.Color
 import androidx.annotation.StringRes
 
 const val LOG_TAG = "PersianCalendar"
@@ -63,8 +64,8 @@ const val CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE"
 const val DEFAULT_CITY = "CUSTOM"
 const val DEFAULT_PRAY_TIME_METHOD = "Tehran"
 const val DEFAULT_HIGH_LATITUDES_METHOD = "NightMiddle"
-const val DEFAULT_SELECTED_WIDGET_TEXT_COLOR = "#ffffffff"
-const val DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR = "#00000000"
+const val DEFAULT_SELECTED_WIDGET_TEXT_COLOR = Color.WHITE
+const val DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR = Color.TRANSPARENT
 const val DEFAULT_WIDGET_IN_24 = false
 const val DEFAULT_IRAN_TIME = false
 const val DEFAULT_PERSIAN_DIGITS = true

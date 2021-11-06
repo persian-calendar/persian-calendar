@@ -265,7 +265,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 // Restart activity if theme is changed and don't if app theme
                 // has just got a default value by preferences as going
                 // from null => SystemDefault which makes no difference
-                if (previousAppThemeValue != null || Theme.isNonDefault(prefs)) restartToSettings()
+                if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
             }
             PREF_NOTIFY_DATE -> {
                 if (!prefs.getBoolean(PREF_NOTIFY_DATE, true)) {

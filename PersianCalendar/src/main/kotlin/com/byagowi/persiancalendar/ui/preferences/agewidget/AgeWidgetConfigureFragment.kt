@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getJdnOrNull
+import com.byagowi.persiancalendar.utils.isSystemProvidedWidgetColors
 import com.byagowi.persiancalendar.utils.putJdn
 
 class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
@@ -36,6 +37,7 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
                         activity.appPrefs.edit { putJdn(key, result) }
                     }
                 }) { title(R.string.select_date) }
+                val showColorOptions = !isSystemProvidedWidgetColors(activity.appPrefs)
                 clickable(onClick = {
                     showColorPickerDialog(
                         activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId
@@ -43,6 +45,7 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
                 }) {
                     title(R.string.widget_text_color)
                     summary(R.string.select_widgets_text_color)
+                    isVisible = showColorOptions
                 }
                 clickable(onClick = {
                     showColorPickerDialog(
@@ -51,6 +54,7 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
                 }) {
                     title(R.string.widget_background_color)
                     summary(R.string.select_widgets_background_color)
+                    isVisible = showColorOptions
                 }
             }
         }
