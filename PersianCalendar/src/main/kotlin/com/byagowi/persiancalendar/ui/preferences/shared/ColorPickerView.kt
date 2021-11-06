@@ -36,27 +36,31 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SeekBar
-import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
+import androidx.core.widget.doOnTextChanged
 import java.util.*
 
 class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
 
-    private val colorResultView = TextView(context).apply {
-        setTextIsSelectable(true)
+    private val colorResultView = EditText(context).apply {
         gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
-        setOnClickListener {
-            colorCodeVisibility = !colorCodeVisibility
+        setOnFocusChangeListener { _, hasFocus ->
+            colorCodeVisibility = hasFocus
             showColor()
+        }
+        doOnTextChanged { text, _, _, _ ->
+            runCatching { setPickedColor(Color.parseColor(text.toString()), fromEditor = true) }
         }
     }
     private val redSeekBar = SeekBar(context)
@@ -103,7 +107,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) =
-                showColor()
+                if (fromUser) showColor() else Unit
         }
 
         listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
@@ -170,18 +174,20 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
         }
     }
 
-    private fun showColor() {
+    private fun showColor(fromEditor: Boolean = false) {
         val color = Color.argb(
             alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
         )
         colorResultView.apply {
             setBackgroundColor(color)
-            text = if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else ""
-            setTextColor(color xor 0xFFFFFF)
+            if (!fromEditor) {
+                setText(if (colorCodeVisibility) "#%08X".format(Locale.ENGLISH, color) else "")
+            }
+            setTextColor(ColorUtils.setAlphaComponent(color xor 0xFFFFFF, 0xFF))
         }
     }
 
-    fun setPickedColor(@ColorInt color: Int) {
+    fun setPickedColor(@ColorInt color: Int, fromEditor: Boolean = false) {
         listOf(redSeekBar, greenSeekBar, blueSeekBar, alphaSeekBar).zip(
             listOf(Color.red(color), Color.green(color), Color.blue(color), Color.alpha(color))
         ) { seekBar, channelValue ->
@@ -190,7 +196,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
             else
                 seekBar.progress = channelValue
         }
-        showColor()
+        showColor(fromEditor)
     }
 
     fun hideAlphaSeekBar() {
