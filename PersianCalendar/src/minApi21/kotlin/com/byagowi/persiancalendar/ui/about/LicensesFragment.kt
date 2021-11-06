@@ -73,7 +73,7 @@ class LicensesFragment : Fragment() {
                                 painter = painterResource(androidx.preference.R.drawable.ic_arrow_down_24dp),
                                 contentDescription = stringResource(R.string.more),
                                 modifier = Modifier.rotate(angle),
-                                colorFilter = ColorFilter.tint(MaterialTheme.colors.primary)
+                                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
                             )
                             Spacer(modifier = Modifier.width(4.dp))
                             Text(title)
