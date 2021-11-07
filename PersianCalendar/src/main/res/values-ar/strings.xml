@@ -171,7 +171,7 @@
     <string name="notification_athan">تنبيه الأذان</string>
     <string name="enable_notification_athan">إظهار الأذان كتنبيه مع الإهتزاز</string>
     <string name="custom_athan">إختيار صوت المؤذن</string>
-    <string name="default_athan_name">عبدالباسط عبدالصمد</string>
+    <string name="abdulbasit">عبدالباسط عبدالصمد</string>
     <string name="custom_notification_is_set">تم تخصيص صوت المؤذن</string>
     <string name="default_athan">صوت المؤذن الإفتراضي</string>
     <string name="default_athan_summary">الرجوع إلى صوت المؤذن الإفتراضي</string>

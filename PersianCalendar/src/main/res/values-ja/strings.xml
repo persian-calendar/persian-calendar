@@ -107,7 +107,7 @@
     <string name="custom_athan">Select Athan</string>
     <string name="default_athan">Default Athan</string>
     <string name="default_athan_summary">Return to default Athan</string>
-    <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
+    <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
     <string name="about_license">許可</string>
     <string name="about_license_title">Application License</string>
     <string name="about_license_sum">Check GPL3 License and other license terms used on Persian Calendar.</string>

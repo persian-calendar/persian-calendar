@@ -28,7 +28,8 @@ fun showAthanSelectDialog(activity: Activity, pickRingtone: ActivityResultLaunch
             Toast.makeText(activity, R.string.returned_to_default, Toast.LENGTH_SHORT).show()
         }
     ) + listOf(
-        R.string.default_athan_name to R.raw.abdulbasit,
+        R.string.special_voice to R.raw.special,
+        R.string.abdulbasit to R.raw.abdulbasit,
         R.string.moazzenzadeh to R.raw.moazzenzadeh,
         R.string.entezar to R.raw.entezar
     ).map { (stringId, rawId) ->

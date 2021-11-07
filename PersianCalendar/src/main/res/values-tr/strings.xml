@@ -167,7 +167,7 @@
     <string name="default_athan_summary">Varsayılan Ezana dön</string>
     <string name="default_athan">Varsayılan Ezan</string>
     <string name="custom_notification_is_set">Müezzin sesi ayarlandı</string>
-    <string name="default_athan_name">Abdulbasıt Abdus Samed</string>
+    <string name="abdulbasit">Abdulbasıt Abdus Samed</string>
     <string name="custom_athan">Ezan\'ı seçin</string>
     <string name="enable_ascending_athan_volume">Ezan sesini bir dakikada maksimum düzeye ulaştır</string>
     <string name="ascending_athan_volume">Ezan Sesini Artır</string>

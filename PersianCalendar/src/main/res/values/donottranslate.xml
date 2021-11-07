@@ -117,6 +117,7 @@ xmha97: Muhammad Hussein Ammari"</string>
     <string name="sagittarius_emoji" translatable="false">♐</string>
     <string name="not_set_time" translatable="false">--:--</string>
     <string name="moazzenzadeh" translatable="false">رحیم مؤذن‌زاده اردبیلی</string>
+    <string name="special_voice" translatable="false">صدای ویژهٔ تقویم فارسی</string>
     <string name="entezar" translatable="false">انتظار، روح‌الله کاظمی‌زاده</string>
     <string name="empty" translatable="false" />
 </resources>

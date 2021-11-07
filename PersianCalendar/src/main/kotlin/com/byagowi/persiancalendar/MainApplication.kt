@@ -16,6 +16,6 @@ class MainApplication : Application() {
     // Workaround for weird AGP 4.1.0 >= used resource removal issues
     @Keep
     private val heyAndroidBuildToolsWeNeedTheseAndItIsUnbelievableYouAreRemovingThem = listOf(
-        R.drawable.blue_shade_background, R.raw.abdulbasit
+        R.drawable.blue_shade_background, R.raw.abdulbasit, R.raw.special
     )
 }

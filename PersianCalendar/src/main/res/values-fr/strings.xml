@@ -223,7 +223,7 @@
     <string name="default_athan_summary">Retour à l’Athan par défaut</string>
     <string name="default_athan">Athan par défaut</string>
     <string name="custom_notification_is_set">La notification personnalisée vient d’être définie</string>
-    <string name="default_athan_name">Abdul-Basit Abdel-Samad</string>
+    <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
     <string name="custom_athan">Sélectionnez l’Athan</string>
     <string name="enable_notification_athan">Afficher l’Athan comme notification et vibration l’appareil</string>
     <string name="ascending_athan_volume">Volume croissant pour l’Athan</string>
