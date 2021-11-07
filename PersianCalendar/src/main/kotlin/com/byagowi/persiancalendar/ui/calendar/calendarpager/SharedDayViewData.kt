@@ -31,7 +31,8 @@ class SharedDayViewData(
     val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
 
     private fun addShadowIfNeeded(paint: Paint) {
-        if (widgetTextColor != null) paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
+        if (widgetTextColor == null || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) return
+        paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
 
     @IdRes
