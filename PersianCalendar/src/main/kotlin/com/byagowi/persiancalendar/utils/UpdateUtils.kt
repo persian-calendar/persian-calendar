@@ -329,7 +329,7 @@ private fun createMonthViewRemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_image_view)
-    val monthView = MonthView(ContextThemeWrapper(context, R.style.ModernTheme))
+    val monthView = MonthView(ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context)))
     monthView.initializeForWidget(selectedWidgetTextColor, height, date)
     prepareViewForWidget(monthView, width, height)
     remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())

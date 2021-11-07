@@ -35,11 +35,19 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
             if (userTheme != SYSTEM_DEFAULT) return userTheme.styleRes
             if (isPowerSaveMode(context)) return BLACK.styleRes
             val isNightModeEnabled = isNightModeEnabled(context)
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && BuildConfig.DEVELOPMENT) {
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
             } else {
                 if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes
             }
+        }
+
+        @StyleRes
+        fun getWidgetSuitableStyle(context: Context): Int {
+            val isNightModeEnabled = isNightModeEnabled(context)
+            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
+            } else MODERN.styleRes
         }
 
         fun isDefault(appPrefs: SharedPreferences?) = appPrefs.theme == SYSTEM_DEFAULT.key
