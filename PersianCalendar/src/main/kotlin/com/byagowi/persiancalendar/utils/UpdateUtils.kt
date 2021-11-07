@@ -69,6 +69,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import io.github.persiancalendar.calendar.AbstractDate
@@ -236,7 +237,7 @@ private fun getWidgetBackgroundColor(
     key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 ): Int {
     return if (isSystemProvidedWidgetColors(prefs))
-        context.resources.getColor(
+        context.getColor(
             if (Theme.isNightModeEnabled(context))
                 android.R.color.system_neutral1_800
             else android.R.color.system_accent1_100
@@ -249,7 +250,7 @@ private fun getWidgetTextColor(
     context: Context, prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
 ): Int {
     return if (isSystemProvidedWidgetColors(prefs))
-        context.resources.getColor(
+        context.getColor(
             if (Theme.isNightModeEnabled(context))
                 android.R.color.system_accent1_50
             else android.R.color.system_accent1_900
@@ -511,7 +512,9 @@ private fun create4x2RemoteViews(
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
             timeClock.toMinutes() > nowClock.toMinutes()
         } ?: owghats[0]
-        remoteViews.setTextColor(nextViewId, Color.RED)
+        val color = ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context))
+            .resolveColor(R.attr.colorHoliday)
+        remoteViews.setTextColor(nextViewId, color)
 
         val difference = timeClock.toMinutes() - nowClock.toMinutes()
         remoteViews.setTextViewText(
