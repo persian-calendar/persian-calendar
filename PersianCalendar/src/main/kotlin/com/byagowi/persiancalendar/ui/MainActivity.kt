@@ -85,6 +85,7 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.roundToInt
 
+
 /**
  * Program activity for android
  */
@@ -402,9 +403,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             slidingAnimation(drawerView, slideOffset)
         }
 
-        private val blurs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            listOf(null) + (1..4).map { it * 6f }
-                .map { RenderEffect.createBlurEffect(it, it, Shader.TileMode.CLAMP) }
+        private val blurs = if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && windowManager.isCrossWindowBlurEnabled
+        ) (0..4).map {
+            if (it == 0) null
+            else RenderEffect.createBlurEffect(it * 6f, it * 6f, Shader.TileMode.CLAMP)
         } else emptyList()
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
