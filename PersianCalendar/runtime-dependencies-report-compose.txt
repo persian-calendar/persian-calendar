@@ -388,10 +388,10 @@
 |    |    \--- androidx.compose.ui:ui-util:1.0.5 -> 1.1.0-beta01 (*)
 |    +--- com.google.android.material:material:1.1.0 -> 1.4.0 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.31 (*)
-+--- com.google.accompanist:accompanist-flowlayout:0.20.1
++--- com.google.accompanist:accompanist-flowlayout:0.20.2
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 (*)
-|    +--- androidx.compose.foundation:foundation:1.0.4 -> 1.1.0-beta01 (*)
-|    \--- androidx.compose.ui:ui-util:1.0.4 -> 1.1.0-beta01 (*)
+|    +--- androidx.compose.foundation:foundation:1.0.5 -> 1.1.0-beta01 (*)
+|    \--- androidx.compose.ui:ui-util:1.0.5 -> 1.1.0-beta01 (*)
 +--- androidx.compose.ui:ui:1.0.5 -> 1.1.0-beta01 (*)
 +--- androidx.compose.material:material:1.0.5 (*)
 +--- androidx.compose.material3:material3:1.0.0-alpha01
