@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -215,3 +216,15 @@ val canEnableNewInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
 // Make the new interface for Android 12 opt-out instead of opt-in
 val shouldEnableNewInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
+fun Dialog.showWithBlur(activity: Activity) {
+    show()
+    val window = window ?: return
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+        activity.windowManager.isCrossWindowBlurEnabled
+    ) {
+        window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+        window.attributes?.blurBehindRadius = 10
+        window.setDimAmount(0.05f)
+    }
+}
