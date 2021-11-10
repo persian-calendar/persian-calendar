@@ -27,7 +27,6 @@ import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.shiftWorks
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.utils.showWithBlur
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDate
@@ -83,7 +82,7 @@ fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> U
         }
         .setNegativeButton(R.string.cancel, null)
         .create()
-        .showWithBlur(activity)
+        .show()
 }
 
 private class ShiftWorkItemsAdapter(

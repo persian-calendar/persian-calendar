@@ -8,6 +8,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -49,7 +50,10 @@ import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import java.io.File
+
 
 val Number.dp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.density
 val Number.sp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.scaledDensity
@@ -216,15 +220,3 @@ val canEnableNewInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
 // Make the new interface for Android 12 opt-out instead of opt-in
 val shouldEnableNewInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
-fun Dialog.showWithBlur(activity: Activity) {
-    show()
-    val window = window ?: return
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-        activity.windowManager.isCrossWindowBlurEnabled
-    ) {
-        window.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
-        window.attributes?.blurBehindRadius = 10
-        window.setDimAmount(0.05f)
-    }
-}

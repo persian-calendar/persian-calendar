@@ -36,6 +36,7 @@
     <attr name="dragIconColor" format="reference" />
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
+    <attr name="dialogBackgroundColor" format="color" />
     <attr name="isDarkTheme" format="boolean" />
 
     <style name="ShapeAppearanceOverlay.Nav">
@@ -97,6 +98,7 @@
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
         <item name="isDarkTheme">true</item>
         <item name="colorCurrentDayIsOutlineOnly">true</item>
+        <item name="dialogBackgroundColor">#E0404040</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -117,6 +119,7 @@
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
         <item name="isDarkTheme">false</item>
         <item name="colorCurrentDayIsOutlineOnly">true</item>
+        <item name="dialogBackgroundColor">#F0FFFFFF</item>
     </style>
 
     <!-- Their actual definition is in v31/styles.xml -->

@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.ui.utils.showWithBlur
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
@@ -57,7 +56,7 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
                 it.adapter = MonthOverviewItemAdapter(events)
             }
         )
-    }.showWithBlur(activity)
+    }.show()
 }
 
 private class MonthOverviewItemAdapter(private val rows: List<Pair<String, CharSequence>>) :
