@@ -98,7 +98,7 @@
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.MaterialComponents.Dark</item>
         <item name="isDarkTheme">true</item>
         <item name="colorCurrentDayIsOutlineOnly">true</item>
-        <item name="dialogBackgroundColor">#50FFFFFF</item>
+        <item name="dialogBackgroundColor">#70606060</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
