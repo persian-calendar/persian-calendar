@@ -605,8 +605,6 @@ private fun updateNotification(
             else
                 NotificationCompat.VISIBILITY_SECRET
         )
-        .setColor(0xFF607D8B.toInt())
-        .setColorized(true)
         .setContentTitle(toPrepend + title)
         .setContentText(
             when {
@@ -620,6 +618,9 @@ private fun updateNotification(
                 else -> toPrepend + subtitle
             }
         )
+
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+        builder.setColor(0xFF607D8B.toInt()).setColorized(true)
 
     // Dynamic small icon generator, disabled as it needs API 23 and we need to have the other path anyway
     if ((false)) {
