@@ -1270,6 +1270,7 @@
     { "holiday": false, "month": 10, "day": 31, "title": "روز جهانی شهرها", "type": "International" },
     { "holiday": false, "month": 10, "day": 31, "title": "جشن هالووین", "type": "International" },
     { "holiday": false, "month": 11, "day": 6, "title": "روز بین‌المللی پیشگیری از سوء استفاده از محیط زیست در جنگ و مناقشات مسلحانه", "type": "International" },
+    { "holiday": false, "month": 11, "day": 10, "title": "روز جهانی حسابداری", "type": "International" },
     { "holiday": false, "month": 11, "day": 14, "title": "روز جهانی دیابت", "type": "International" },
     { "holiday": false, "month": 11, "day": 21, "title": "روز جهانی تلویزیون", "type": "International" },
     { "holiday": false, "month": 11, "day": 25, "title": "روز جهانی مبارزه با خشونت علیه زنان", "type": "International" },
