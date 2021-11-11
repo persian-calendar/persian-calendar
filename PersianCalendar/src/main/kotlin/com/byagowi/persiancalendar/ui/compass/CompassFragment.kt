@@ -31,7 +31,9 @@ import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.snackbar.Snackbar
+import java.util.*
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 /**
  * Compass/Qibla activity
@@ -160,10 +162,12 @@ class CompassFragment : Fragment() {
         valueAnimator.interpolator = AccelerateDecelerateInterpolator()
         valueAnimator.addUpdateListener { _ ->
             val value = (valueAnimator.animatedValue as? Float)?.takeIf { it != 24f } ?: 0f
+            val time = GregorianCalendar()
+            time.add(Calendar.MINUTE, (value * 60f).roundToInt())
             binding.appBar.toolbar.title =
                 if (value == 0f) getString(R.string.compass)
-                else "+" + Clock.fromHoursFraction(value.toDouble()).toBasicFormatString()
-            binding.compassView.setHoursOffset(value)
+                else Clock(time).toBasicFormatString()
+            binding.compassView.setTime(time)
         }
         valueAnimator.start()
     }
