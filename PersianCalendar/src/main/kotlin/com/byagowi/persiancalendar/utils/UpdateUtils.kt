@@ -244,8 +244,8 @@ private fun getWidgetBackgroundColor(
     return if (isSystemProvidedWidgetColors(prefs))
         context.getColor(
             if (Theme.isNightModeEnabled(context))
-                android.R.color.system_neutral1_800
-            else android.R.color.system_accent1_100
+                android.R.color.system_accent2_800
+            else android.R.color.system_accent1_50
         )
     else prefs.getString(key, null)?.let(Color::parseColor)
         ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
