@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.compass
 
+import android.animation.ValueAnimator
 import android.content.res.Configuration
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -7,6 +8,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
@@ -17,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -137,8 +140,32 @@ class CompassFragment : Fragment() {
             binding.fab.contentDescription = resources
                 .getString(if (stopped) R.string.resume else R.string.stop)
         }
+
+        if (coordinates != null) {
+            binding.appBar.toolbar.menu.add(R.string.show_sun_and_moon_path_in_24_hours).also {
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                it.onClick(::animateMoonAndSun)
+            }
+        }
+
         updateCompassOrientation()
+
         return binding.root
+    }
+
+    private fun animateMoonAndSun() {
+        val binding = binding ?: return
+        val valueAnimator = ValueAnimator.ofFloat(0f, 24f)
+        valueAnimator.duration = 10000
+        valueAnimator.interpolator = AccelerateDecelerateInterpolator()
+        valueAnimator.addUpdateListener { _ ->
+            val value = (valueAnimator.animatedValue as? Float)?.takeIf { it != 24f } ?: 0f
+            binding.appBar.toolbar.title =
+                if (value == 0f) getString(R.string.compass)
+                else "+" + Clock.fromHoursFraction(value.toDouble()).toBasicFormatString()
+            binding.compassView.setHoursOffset(value)
+        }
+        valueAnimator.start()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

@@ -340,4 +340,5 @@
     <string name="high_latitudes_angle_based">بر پایهٔ زاویه</string>
     <string name="high_latitudes_one_seventh">یک‌هفتم</string>
     <string name="none">هیچ‌کدام</string>
+    <string name="show_sun_and_moon_path_in_24_hours">نمایش مسیر ماه و خورشید در ۲۴ ساعت آینده</string>
 </resources>

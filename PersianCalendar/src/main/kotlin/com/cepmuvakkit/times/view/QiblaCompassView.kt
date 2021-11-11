@@ -26,6 +26,7 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
@@ -90,10 +91,21 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.pathEffect = dashPath
         it.strokeWidth = 1.5.dp
     }
-    private val sunMoonPosition = SunMoonPosition(
-        AstroLib.calculateJulianDay(GregorianCalendar()), coordinates?.latitude ?: 0.0,
+
+    private fun calculateSunMoonPosition(calendar: GregorianCalendar) = SunMoonPosition(
+        AstroLib.calculateJulianDay(calendar), coordinates?.latitude ?: 0.0,
         coordinates?.longitude ?: 0.0, coordinates?.elevation ?: 0.0, 0.0
     )
+
+    private var sunMoonPosition = calculateSunMoonPosition(GregorianCalendar())
+
+    fun setHoursOffset(offset: Float) {
+        val calendar = GregorianCalendar()
+        calendar.add(Calendar.MINUTE, (offset * 60f).roundToInt())
+        sunMoonPosition = calculateSunMoonPosition(calendar)
+        postInvalidate()
+    }
+
     val qiblaHeading = sunMoonPosition.destinationHeading.heading.toFloat()
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)

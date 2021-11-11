@@ -180,7 +180,7 @@ private val prayTimesNames = mapOf(
 @StringRes
 fun getPrayTimeName(athanKey: String?): Int = prayTimesNames[athanKey] ?: R.string.fajr
 
-fun PrayTimes.getFromStringId(@StringRes stringId: Int) = Clock.fromDouble(
+fun PrayTimes.getFromStringId(@StringRes stringId: Int) = Clock.fromHoursFraction(
     when (stringId) {
         R.string.imsak -> imsak
         R.string.fajr -> fajr
