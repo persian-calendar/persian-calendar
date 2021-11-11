@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
@@ -31,7 +32,6 @@ import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.switch
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.isSystemProvidedWidgetColors
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat() {
@@ -56,7 +56,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             section(R.string.pref_widget) {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 6
-                val showColorOptions = !isSystemProvidedWidgetColors(activity.appPrefs)
+                val showColorOptions = !Theme.isDynamicColors(activity.appPrefs)
                 clickable(onClick = {
                     showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }) {

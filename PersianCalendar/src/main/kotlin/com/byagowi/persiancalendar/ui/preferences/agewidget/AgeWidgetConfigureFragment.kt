@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
@@ -18,7 +19,6 @@ import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getJdnOrNull
-import com.byagowi.persiancalendar.utils.isSystemProvidedWidgetColors
 import com.byagowi.persiancalendar.utils.putJdn
 
 class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
@@ -37,7 +37,7 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
                         activity.appPrefs.edit { putJdn(key, result) }
                     }
                 }) { title(R.string.select_date) }
-                val showColorOptions = !isSystemProvidedWidgetColors(activity.appPrefs)
+                val showColorOptions = !Theme.isDynamicColors(activity.appPrefs)
                 clickable(onClick = {
                     showColorPickerDialog(
                         activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR + appWidgetId

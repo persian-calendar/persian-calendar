@@ -232,16 +232,11 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
     }
 }
 
-fun isSystemProvidedWidgetColors(prefs: SharedPreferences) =
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-            DynamicColors.isDynamicColorAvailable() &&
-            Theme.isDefault(prefs)
-
 private fun getWidgetBackgroundColor(
     context: Context, prefs: SharedPreferences,
     key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 ): Int {
-    return if (isSystemProvidedWidgetColors(prefs))
+    return if (Theme.isDynamicColors(prefs))
         context.getColor(
             if (Theme.isNightModeEnabled(context))
                 android.R.color.system_accent2_800
@@ -254,7 +249,7 @@ private fun getWidgetBackgroundColor(
 private fun getWidgetTextColor(
     context: Context, prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
 ): Int {
-    return if (isSystemProvidedWidgetColors(prefs))
+    return if (Theme.isDynamicColors(prefs))
         context.getColor(
             if (Theme.isNightModeEnabled(context))
                 android.R.color.system_accent1_50
