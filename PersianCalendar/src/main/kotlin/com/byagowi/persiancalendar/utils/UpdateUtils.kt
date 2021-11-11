@@ -310,7 +310,7 @@ private fun createSunViewRemoteViews(
     if (selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
         ShapeAppearancePathProvider().calculatePath(
             ShapeAppearanceModel().withCornerSize(roundPixelSize), 1f,
-            RectF(0f, 0f, width.toFloat(), height.toFloat()), sunView.pathToClip
+            RectF(0f, 0f, width.toFloat(), height.toFloat()), sunView.clippingPath
         )
     }
     remoteViews.setTextViewTextOrHideIfEmpty(

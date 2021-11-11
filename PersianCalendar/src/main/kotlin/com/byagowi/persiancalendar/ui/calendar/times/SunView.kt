@@ -133,12 +133,12 @@ class SunView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (pathToClip.isEmpty) mainDraw(canvas) // no change if there is path is empty
-        else canvas.withClip(pathToClip) { mainDraw(canvas) }
+        if (clippingPath.isEmpty) mainDraw(canvas) // no change if there is path is empty
+        else canvas.withClip(clippingPath) { mainDraw(canvas) }
     }
 
     // A home-screen widget with background has some roundness that is taken care by a passed path
-    val pathToClip = Path()
+    val clippingPath = Path()
 
     private fun mainDraw(canvas: Canvas) {
         val width = width
