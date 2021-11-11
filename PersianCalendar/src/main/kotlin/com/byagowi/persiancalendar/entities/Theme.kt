@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
-import android.os.Build.VERSION
-import android.os.Build.VERSION_CODES
 import android.os.PowerManager
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -59,8 +57,8 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
         fun isDefault(prefs: SharedPreferences?) = prefs.theme == SYSTEM_DEFAULT.key
 
         fun isDynamicColors(prefs: SharedPreferences?) =
-            VERSION.SDK_INT >= VERSION_CODES.S && DynamicColors.isDynamicColorAvailable() &&
-                    isDefault(prefs)
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                    DynamicColors.isDynamicColorAvailable() && isDefault(prefs)
 
         fun isNightModeEnabled(context: Context): Boolean =
             context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
