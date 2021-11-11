@@ -30,7 +30,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
             val theme = getCurrent(activity)
             if (theme != SYSTEM_DEFAULT) return activity.setTheme(theme.styleRes)
             val isNightModeEnabled = isNightModeEnabled(activity)
-            return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return if (DynamicColors.isDynamicColorAvailable()) {
                 activity.setTheme(
                     if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
                 )

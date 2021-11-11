@@ -71,6 +71,7 @@ import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.google.android.material.color.DynamicColors
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.ShapeAppearancePathProvider
@@ -232,7 +233,9 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
 }
 
 fun isSystemProvidedWidgetColors(prefs: SharedPreferences) =
-    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && Theme.isDefault(prefs)
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+            DynamicColors.isDynamicColorAvailable() &&
+            Theme.isDefault(prefs)
 
 private fun getWidgetBackgroundColor(
     context: Context, prefs: SharedPreferences,
@@ -627,7 +630,7 @@ private fun updateNotification(
             }
         )
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S)
+    if (DynamicColors.isDynamicColorAvailable())
         builder.setColor(0xFF607D8B.toInt()).setColorized(true)
 
     // Dynamic small icon generator, disabled as it needs API 23 and we need to have the other path anyway
