@@ -13,13 +13,13 @@ import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.IconCompat
