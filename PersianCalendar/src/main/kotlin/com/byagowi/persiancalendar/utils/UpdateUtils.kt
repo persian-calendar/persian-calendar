@@ -11,6 +11,7 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
+import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
@@ -72,6 +73,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.android.material.shape.ShapeAppearancePathProvider
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -305,6 +307,12 @@ private fun createSunViewRemoteViews(
     prepareViewForWidget(sunView, width, height)
     prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
     sunView.initiate()
+    if (selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
+        ShapeAppearancePathProvider().calculatePath(
+            ShapeAppearanceModel().withCornerSize(roundPixelSize), 1f,
+            RectF(0f, 0f, width.toFloat(), height.toFloat()), sunView.pathToClip
+        )
+    }
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.message,
         if (coordinates == null) context.getString(R.string.ask_user_to_set_location) else ""
@@ -703,7 +711,7 @@ private fun createRoundDrawable(@ColorInt color: Int): Drawable {
     return MaterialShapeDrawable().also {
         it.fillColor = ColorStateList.valueOf(color)
         // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
-        // Apply a 16dp round corner which is the default in Android 12 apparently
+        // Apply a round corner which is the default in Android 12
         it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundPixelSize)
     }
 }
