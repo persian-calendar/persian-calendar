@@ -158,10 +158,12 @@ class CompassFragment : Fragment() {
     private fun animateMoonAndSun() {
         val binding = binding ?: return
         val valueAnimator = ValueAnimator.ofFloat(0f, 24f)
+        valueAnimator.repeatCount = 1
+        valueAnimator.repeatMode = ValueAnimator.REVERSE
         valueAnimator.duration = 10000
         valueAnimator.interpolator = AccelerateDecelerateInterpolator()
-        valueAnimator.addUpdateListener { _ ->
-            val value = (valueAnimator.animatedValue as? Float)?.takeIf { it != 24f } ?: 0f
+        valueAnimator.addUpdateListener {
+            val value = valueAnimator.animatedValue as? Float ?: 0f
             val time = GregorianCalendar()
             time.add(Calendar.MINUTE, (value * 60f).roundToInt())
             binding.appBar.toolbar.title =

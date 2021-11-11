@@ -325,7 +325,7 @@ fun updateStoredPreference(context: Context) {
     // https://stackoverflow.com/a/61599809
     isHighTextContrastEnabled = runCatching {
         context.getSystemService<AccessibilityManager>()?.let {
-            (it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean)
+            it.javaClass.getMethod("isHighTextContrastEnabled").invoke(it) as? Boolean
         }
     }.onFailure(logException).getOrNull() ?: false
 }
