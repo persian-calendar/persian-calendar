@@ -56,7 +56,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             section(R.string.pref_widget) {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 6
-                val showColorOptions = !Theme.isDynamicColors(activity.appPrefs)
+                val showColorOptions = !Theme.isDynamicColor(activity.appPrefs)
                 clickable(onClick = {
                     showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }) {

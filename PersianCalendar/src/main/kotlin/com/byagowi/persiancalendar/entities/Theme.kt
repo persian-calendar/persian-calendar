@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.content.res.Configuration
 import android.os.Build
 import android.os.PowerManager
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
@@ -29,8 +30,8 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)
             if (theme != SYSTEM_DEFAULT) return activity.setTheme(theme.styleRes)
-            val isNightModeEnabled = isNightModeEnabled(activity)
-            return if (DynamicColors.isDynamicColorAvailable()) {
+            val isNightModeEnabled = isNightMode(activity)
+            return if (isDynamicColorAvailable()) {
                 activity.setTheme(
                     if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
                 )
@@ -48,19 +49,24 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
 
         @StyleRes
         fun getWidgetSuitableStyle(context: Context): Int {
-            val isNightModeEnabled = isNightModeEnabled(context)
+            val isNightMode = isNightMode(context)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
+                if (isNightMode) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
             } else MODERN.styleRes
         }
 
         fun isDefault(prefs: SharedPreferences?) = prefs.theme == SYSTEM_DEFAULT.key
 
-        fun isDynamicColors(prefs: SharedPreferences?) =
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                    DynamicColors.isDynamicColorAvailable() && isDefault(prefs)
+        // DynamicColors.isDynamicColorAvailable() checks for particular brands but sooner or later
+        // all the brands will have dynamic colors, let's skip its check.
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+        fun isDynamicColorAvailable() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
-        fun isNightModeEnabled(context: Context): Boolean =
+        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+        fun isDynamicColor(prefs: SharedPreferences?) =
+            isDynamicColorAvailable() && isDefault(prefs)
+
+        fun isNightMode(context: Context): Boolean =
             context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 
         private fun isPowerSaveMode(context: Context): Boolean {

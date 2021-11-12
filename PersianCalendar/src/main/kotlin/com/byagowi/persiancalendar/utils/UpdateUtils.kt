@@ -71,7 +71,6 @@ import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.google.android.material.color.DynamicColors
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.ShapeAppearancePathProvider
@@ -236,9 +235,9 @@ private fun getWidgetBackgroundColor(
     context: Context, prefs: SharedPreferences,
     key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 ): Int {
-    return if (Theme.isDynamicColors(prefs))
+    return if (Theme.isDynamicColor(prefs))
         context.getColor(
-            if (Theme.isNightModeEnabled(context))
+            if (Theme.isNightMode(context))
                 android.R.color.system_accent2_800
             else android.R.color.system_accent1_50
         )
@@ -249,9 +248,9 @@ private fun getWidgetBackgroundColor(
 private fun getWidgetTextColor(
     context: Context, prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
 ): Int {
-    return if (Theme.isDynamicColors(prefs))
+    return if (Theme.isDynamicColor(prefs))
         context.getColor(
-            if (Theme.isNightModeEnabled(context))
+            if (Theme.isNightMode(context))
                 android.R.color.system_accent1_50
             else android.R.color.system_accent1_900
         )
@@ -625,7 +624,7 @@ private fun updateNotification(
             }
         )
 
-    if (DynamicColors.isDynamicColorAvailable())
+    if (Theme.isDynamicColorAvailable())
         builder.setColor(0xFF607D8B.toInt()).setColorized(true)
 
     // Dynamic small icon generator, disabled as it needs API 23 and we need to have the other path anyway
@@ -640,7 +639,7 @@ private fun updateNotification(
 
     // Night mode doesn't like our custom notification in Samsung and HTC One UI
     val shouldDisableCustomNotification = when (Build.BRAND) {
-        "samsung", "htc" -> Theme.isNightModeEnabled(context)
+        "samsung", "htc" -> Theme.isNightMode(context)
         else -> false
     }
 
