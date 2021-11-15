@@ -146,7 +146,7 @@
     <string name="altitude">Höhe</string>
     <string name="altitude_praytime">in meter (optional)</string>
     <string name="athan">Athan</string>
-    <string name="in_city_time">in</string>
+    <string name="in_city_time">in %1$s</string>
     <string name="pray_methods">Berechnungsmethoden</string>
     <string name="pray_methods_calculation">Berechnungsmethoden für Gebetszeiten und Qibla-Kompass</string>
     <string name="athan_gap">Athan Gap</string>
