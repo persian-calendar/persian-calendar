@@ -15,7 +15,7 @@
         <item name="coloredTabBackground">@android:color/system_accent1_50</item>
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_600</item>
         <item name="colorMonthSwitch">@android:color/system_accent3_600</item>
-        <item name="colorDrawerBackground">@android:color/system_accent1_50</item>
+        <item name="colorDrawerBackground">@android:color/system_accent1_10</item>
         <item name="colorDrawerIcon">@android:color/system_accent1_900</item>
         <item name="colorTextToday">@android:color/system_accent3_900</item>
         <item name="colorCurrentDay">@android:color/system_accent1_600</item>
