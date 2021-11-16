@@ -210,6 +210,11 @@
     <string name="enable_location_services">Location Services ist deaktiviert. Aktivieren Sie diese Option, um die Funktion zu verwenden.</string>
     <string name="select_date">Datum auswählen</string>
     <string name="age_widget_title">Widget-Titel</string>
+    <string name="spaced_and">" und "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
+    <string name="pref_widget">Widget</string>
+    <string name="pref_notification">Benachrichtigung</string>
     <string name="farvardin">Farvardin</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">Khordad</string>
