@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/widget_layout_sun_view"
+    android:id="@+id/widget_layout_month_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:theme="@style/WidgetTheme"
-    tools:context=".WidgetSunView">
+    tools:context=".WidgetMonthView"
+    android:theme="@style/WidgetTheme">
 
     <ImageView
         android:id="@+id/image_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/widget_background"
         android:importantForAccessibility="no"
         android:scaleType="centerInside" />
 
@@ -20,7 +21,7 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:contentDescription="@string/sun_view"
+        android:contentDescription="@string/month"
         android:scaleType="centerInside" />
 
     <TextView

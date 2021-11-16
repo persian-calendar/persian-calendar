@@ -4,6 +4,7 @@
     android:id="@+id/widget_layout2x2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/WidgetTheme"
     tools:context=".Widget2x2">
 
     <ImageView
@@ -16,8 +17,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        android:padding="3dp">
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp">
 
         <TextClock
             android:id="@+id/time_2x2"

@@ -17,6 +17,7 @@ import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
@@ -89,6 +90,9 @@ private var selectedWidgetTextColor = DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 @ColorInt
 private var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
+@ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
+private var isDynamicColors = false
+
 // Is called from MainActivity to make sure is updated, probably should be removed however
 fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) = runCatching {
     deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today())
@@ -144,8 +148,9 @@ fun update(context: Context, updateDate: Boolean) {
     }
     // endregion
 
-    selectedWidgetTextColor = getWidgetTextColor(context, prefs)
-    selectedWidgetBackgroundColor = getWidgetBackgroundColor(context, prefs)
+    selectedWidgetTextColor = getWidgetTextColor(prefs)
+    selectedWidgetBackgroundColor = getWidgetBackgroundColor(prefs)
+    isDynamicColors = Theme.isDynamicColor(prefs)
 
     roundPixelSize =
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 16.dp
@@ -232,50 +237,33 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
 }
 
 private fun getWidgetBackgroundColor(
-    context: Context, prefs: SharedPreferences,
-    key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
-): Int {
-    return if (Theme.isDynamicColor(prefs))
-        context.getColor(
-            if (Theme.isNightMode(context))
-                android.R.color.system_accent2_800
-            else android.R.color.system_accent1_50
-        )
-    else prefs.getString(key, null)?.let(Color::parseColor)
-        ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-}
+    prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_BACKGROUND_COLOR
+) = prefs.getString(key, null)?.let(Color::parseColor)
+    ?: DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 
 private fun getWidgetTextColor(
-    context: Context, prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
-): Int {
-    return if (Theme.isDynamicColor(prefs))
-        context.getColor(
-            if (Theme.isNightMode(context))
-                android.R.color.system_accent1_50
-            else android.R.color.system_accent1_900
-        )
-    else prefs.getString(key, null)?.let(Color::parseColor)
-        ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
-}
+    prefs: SharedPreferences, key: String = PREF_SELECTED_WIDGET_TEXT_COLOR
+) = prefs.getString(key, null)?.let(Color::parseColor)
+    ?: DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 
 fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: Int): RemoteViews {
     val appPrefs = context.appPrefs
     val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today()
     val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
     val subtitle = calculateDaysDifference(context.resources, baseJdn)
-    val textColor = getWidgetTextColor(
-        context, appPrefs, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId
-    )
+    val textColor = getWidgetTextColor(appPrefs, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
     val backgroundColor = getWidgetBackgroundColor(
-        context, appPrefs, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
+        appPrefs, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId
     )
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_age)
     remoteViews.setRoundBackground(R.id.age_widget_background, width, height, backgroundColor)
     remoteViews.setDirection(R.id.age_widget_root, context)
     remoteViews.setTextViewTextOrHideIfEmpty(R.id.textview_age_widget_title, title)
     remoteViews.setTextViewText(R.id.textview_age_widget, subtitle)
-    remoteViews.setTextColor(R.id.textview_age_widget_title, textColor)
-    remoteViews.setTextColor(R.id.textview_age_widget, textColor)
+    if (!isDynamicColors) {
+        remoteViews.setTextColor(R.id.textview_age_widget_title, textColor)
+        remoteViews.setTextColor(R.id.textview_age_widget, textColor)
+    }
     remoteViews.setOnClickPendingIntent(
         R.id.age_widget_root,
         context.launchAgeWidgetConfigurationAppPendingIntent(widgetId)
@@ -284,9 +272,6 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
 }
 
 private fun prepareViewForWidget(view: View, width: Int, height: Int) {
-    if (selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
-        view.background = createRoundDrawable(selectedWidgetBackgroundColor)
-    }
     view.layoutDirection = view.context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
     view.measure(
@@ -300,11 +285,18 @@ private fun createSunViewRemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, prayTimes: PrayTimes?
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
-    val sunView = SunView(context, textColor = selectedWidgetTextColor)
+    val color = when {
+        isDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.GRAY
+        else -> selectedWidgetTextColor
+    }
+    val sunView = SunView(context, textColor = color)
+    remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForWidget(sunView, width, height)
     prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
     sunView.initiate()
-    if (selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) {
+    if (isDynamicColors || // dynamic colors for widget need this round clipping anyway
+        selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
+    ) {
         ShapeAppearancePathProvider().calculatePath(
             ShapeAppearanceModel().withCornerSize(roundPixelSize), 1f,
             RectF(0f, 0f, width.toFloat(), height.toFloat()), sunView.clippingPath
@@ -334,9 +326,14 @@ private fun createSunViewRemoteViews(
 private fun createMonthViewRemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate
 ): RemoteViews {
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_image_view)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
     val monthView = MonthView(ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context)))
-    monthView.initializeForWidget(selectedWidgetTextColor, height, date)
+    val color = when {
+        isDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.GRAY
+        else -> selectedWidgetTextColor
+    }
+    monthView.initializeForWidget(color, height, date)
+    remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForWidget(monthView, width, height)
     remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())
     remoteViews.setContentDescription(R.id.image, monthView.contentDescription)
@@ -348,9 +345,11 @@ fun createSampleRemoteViews(context: Context, width: Int, height: Int): RemoteVi
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sample)
     remoteViews.setRoundBackground(R.id.widget_sample_background, width, height)
     remoteViews.setDirection(R.id.widget_sample, context)
-    remoteViews.setTextColor(R.id.sample_text, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.sample_clock, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.sample_clock_replacement, selectedWidgetTextColor)
+    if (!isDynamicColors) {
+        remoteViews.setTextColor(R.id.sample_text, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.sample_clock, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.sample_clock_replacement, selectedWidgetTextColor)
+    }
     if (isWidgetClock) {
         remoteViews.setViewVisibility(R.id.sample_clock, View.VISIBLE)
         remoteViews.configureClock(R.id.sample_clock)
@@ -369,8 +368,10 @@ private fun create1x1RemoteViews(
     val remoteViews = RemoteViews(context.packageName, R.layout.widget1x1)
     remoteViews.setRoundBackground(R.id.widget_layout1x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout1x1, context)
-    remoteViews.setTextColor(R.id.textPlaceholder1_1x1, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder2_1x1, selectedWidgetTextColor)
+    if (!isDynamicColors) {
+        remoteViews.setTextColor(R.id.textPlaceholder1_1x1, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder2_1x1, selectedWidgetTextColor)
+    }
     remoteViews.setTextViewText(R.id.textPlaceholder1_1x1, formatNumber(date.dayOfMonth))
     remoteViews.setTextViewText(R.id.textPlaceholder2_1x1, date.monthName)
     remoteViews.setOnClickPendingIntent(R.id.widget_layout1x1, context.launchAppPendingIntent())
@@ -396,9 +397,11 @@ private fun create4x1RemoteViews(
     if (enableClock) remoteViews.configureClock(R.id.textPlaceholder1_4x1)
     remoteViews.setRoundBackground(R.id.widget_layout4x1_background, width, height)
     remoteViews.setDirection(R.id.widget_layout4x1, context)
-    remoteViews.setTextColor(R.id.textPlaceholder1_4x1, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder2_4x1, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder3_4x1, selectedWidgetTextColor)
+    if (!isDynamicColors) {
+        remoteViews.setTextColor(R.id.textPlaceholder1_4x1, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder2_4x1, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder3_4x1, selectedWidgetTextColor)
+    }
 
     if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder1_4x1, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder2_4x1, buildString {
@@ -432,10 +435,12 @@ private fun create2x2RemoteViews(
     if (enableClock) remoteViews.configureClock(R.id.time_2x2)
     remoteViews.setRoundBackground(R.id.widget_layout2x2_background, width, height)
     remoteViews.setDirection(R.id.widget_layout2x2, context)
-    remoteViews.setTextColor(R.id.time_2x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.date_2x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.event_2x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.owghat_2x2, selectedWidgetTextColor)
+    if (!isDynamicColors) {
+        remoteViews.setTextColor(R.id.time_2x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.date_2x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.event_2x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.owghat_2x2, selectedWidgetTextColor)
+    }
 
     setEventsInWidget(context, jdn, remoteViews, R.id.holiday_2x2, R.id.event_2x2)
 
@@ -472,15 +477,17 @@ private fun create4x2RemoteViews(
     remoteViews.setRoundBackground(R.id.widget_layout4x2_background, width, height)
     remoteViews.setDirection(R.id.widget_layout4x2, context)
 
-    remoteViews.setTextColor(R.id.textPlaceholder0_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder1_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder2_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_3_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_1_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_4_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_2_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.textPlaceholder4owghat_5_4x2, selectedWidgetTextColor)
-    remoteViews.setTextColor(R.id.event_4x2, selectedWidgetTextColor)
+    if (!isDynamicColors) {
+        remoteViews.setTextColor(R.id.textPlaceholder0_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder1_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder2_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_3_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_1_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_4_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_2_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.textPlaceholder4owghat_5_4x2, selectedWidgetTextColor)
+        remoteViews.setTextColor(R.id.event_4x2, selectedWidgetTextColor)
+    }
 
     if (!enableClock) remoteViews.setTextViewText(R.id.textPlaceholder0_4x2, weekDayName)
     remoteViews.setTextViewText(R.id.textPlaceholder1_4x2, buildString {
@@ -511,15 +518,25 @@ private fun create4x2RemoteViews(
                 textHolderViewId, context.getString(owghatStringId) + "\n" +
                         timeClock.toFormattedString(printAmPm = false)
             )
-            remoteViews.setTextColor(textHolderViewId, selectedWidgetTextColor)
+            if (isDynamicColors) {
+                remoteViews.setColorAttr(
+                    textHolderViewId, "setTextColor", android.R.attr.colorForeground
+                )
+            } else {
+                remoteViews.setTextColor(textHolderViewId, selectedWidgetTextColor)
+            }
             Triple(textHolderViewId, owghatStringId, timeClock)
         }
         val (nextViewId, nextOwghatId, timeClock) = owghats.firstOrNull { (_, _, timeClock) ->
             timeClock.toMinutes() > nowClock.toMinutes()
         } ?: owghats[0]
-        val color = ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context))
-            .resolveColor(R.attr.colorHoliday)
-        remoteViews.setTextColor(nextViewId, color)
+        if (isDynamicColors) {
+            remoteViews.setColorAttr(nextViewId, "setTextColor", android.R.attr.colorAccent)
+        } else {
+            val color = ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context))
+                .resolveColor(R.attr.colorHoliday)
+            remoteViews.setTextColor(nextViewId, color)
+        }
 
         val difference = timeClock.toMinutes() - nowClock.toMinutes()
         remoteViews.setTextViewText(
@@ -700,8 +717,14 @@ private fun RemoteViews.setRoundBackground(
     @IdRes viewId: Int, width: Int, height: Int,
     @ColorInt color: Int = selectedWidgetBackgroundColor
 ) {
-    if (color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR) setImageViewResource(viewId, 0)
-    else setImageViewBitmap(viewId, createRoundDrawable(color).toBitmap(width, height))
+    when {
+        isDynamicColors -> {
+            setImageViewResource(viewId, R.drawable.widget_background)
+            // setColorStateListAttr(viewId, "setImageTintList", android.R.attr.colorBackground)
+        }
+        color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)
+        else -> setImageViewBitmap(viewId, createRoundDrawable(color).toBitmap(width, height))
+    }
 }
 
 private fun createRoundDrawable(@ColorInt color: Int): Drawable {

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ShadowTextStyle" parent="android:Theme.DeviceDefault" />
+    <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
+
+    <style name="ShadowTextStyle" parent="android:Theme.DeviceDefault.DayNight" />
 
     <style name="DynamicLightTheme" parent="ModernTheme">
         <item name="colorAccent">@android:color/system_accent1_800</item>

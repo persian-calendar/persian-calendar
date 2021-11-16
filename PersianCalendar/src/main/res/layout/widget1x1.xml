@@ -4,6 +4,7 @@
     android:id="@+id/widget_layout1x1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/WidgetTheme"
     tools:context=".Widget1x1">
 
     <ImageView
