@@ -3,9 +3,11 @@
 
     <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
 
-    <style name="WidgetTextStyle" />
+    <style name="WidgetTextStyle">
+        <item name="android:textColor">?android:attr/colorForeground</item>
+    </style>
 
-    <style name="WidgetClockStyle" parent="WidgetTextStyle">
+    <style name="WidgetAccentTextStyle" parent="WidgetTextStyle">
         <item name="android:textColor">?android:attr/colorAccent</item>
     </style>
 

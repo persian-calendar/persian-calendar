@@ -22,6 +22,7 @@
 
         <TextView
             android:id="@+id/textview_age_widget_title"
+            style="@style/WidgetTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingBottom="4dp"
@@ -29,6 +30,7 @@
 
         <TextView
             android:id="@+id/textview_age_widget"
+            style="@style/WidgetTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textSize="18sp" />
