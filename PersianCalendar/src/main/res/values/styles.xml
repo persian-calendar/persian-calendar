@@ -369,17 +369,7 @@
 
     <style name="WidgetAccentTextStyle" parent="WidgetTextStyle" />
 
-    <style name="ShadowTextStyle">
-        <item name="android:paddingLeft">1dp</item>
-        <item name="android:paddingBottom">1dp</item>
-        <item name="android:textColor">#ffffffff</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:shadowColor">#000000</item>
-        <item name="android:shadowDx">1</item>
-        <item name="android:shadowDy">1</item>
-        <item name="android:shadowRadius">1</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
-    </style>
+    <style name="ShadowTextStyle" />
 
     <style name="AboutCard">
         <item name="android:layout_marginLeft">5dp</item>

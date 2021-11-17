@@ -523,7 +523,7 @@ private fun create4x2RemoteViews(
                     textHolderViewId, "setTextColor", android.R.attr.colorForeground
                 )
             } else {
-                remoteViews.setTextColor(textHolderViewId, selectedWidgetTextColor)
+                remoteViews.setTextColor(textHolderViewId, Color.GRAY)
             }
             Triple(textHolderViewId, owghatStringId, timeClock)
         }
@@ -533,9 +533,7 @@ private fun create4x2RemoteViews(
         if (isDynamicColors) {
             remoteViews.setColorAttr(nextViewId, "setTextColor", android.R.attr.colorAccent)
         } else {
-            val color = ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context))
-                .resolveColor(R.attr.colorHoliday)
-            remoteViews.setTextColor(nextViewId, color)
+            remoteViews.setTextColor(nextViewId, selectedWidgetTextColor)
         }
 
         val difference = timeClock.toMinutes() - nowClock.toMinutes()
