@@ -12,6 +12,7 @@
     <color name="qibla_color">#888</color>
     <color name="widget_holiday">#ff8a65</color>
     <color name="widget_divider">#46ffffff</color>
+    <color name="widget_refresh_icon_color">#ddd</color>
 
     <color name="dark_primary">#1E252A</color>
     <color name="dark_primary_dark">#1E252A</color>

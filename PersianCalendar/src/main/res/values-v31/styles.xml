@@ -3,6 +3,7 @@
 
     <color name="widget_background">@android:color/system_accent2_50</color>
     <color name="widget_divider">@android:color/system_accent2_200</color>
+    <color name="widget_refresh_icon_color">@android:color/system_neutral2_700</color>
 
     <!--
      Not in use currently, also has a override in night-v31/styles.xml, source:
