@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="widget_background">@android:color/system_accent2_50</color>
+    <color name="widget_divider">@android:color/system_accent2_200</color>
+
     <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
 
     <style name="WidgetTextStyle">

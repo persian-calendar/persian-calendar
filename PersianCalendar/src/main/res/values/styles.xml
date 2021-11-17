@@ -42,6 +42,9 @@
     <!-- its v31 version is more interesting -->
     <style name="WidgetTheme" />
 
+    <!-- its v31 version is more interesting -->
+    <color name="widget_background">@android:color/transparent</color>
+
     <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="dialogCornerRadius">@dimen/common_radius</item>
     </style>
