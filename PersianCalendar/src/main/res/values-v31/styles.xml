@@ -61,7 +61,7 @@
     </style>
 
     <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="dialogCornerRadius">@dimen/common_radius</item>
+        <item name="dialogCornerRadius">@android:dimen/system_app_widget_background_radius</item>
         <item name="android:windowBackgroundBlurRadius">8dp</item>
         <item name="android:windowBlurBehindEnabled">true</item>
         <item name="android:windowBlurBehindRadius">12dp</item>
