@@ -361,8 +361,10 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <!-- But in v31/styles.xml 'ShadowTextStyle' is overridden to not have shadow -->
+    <!-- But in v31/styles.xml it is overridden to not have shadow -->
     <style name="WidgetTextStyle" parent="ShadowTextStyle" />
+
+    <style name="WidgetClockStyle" parent="WidgetTextStyle" />
 
     <style name="ShadowTextStyle">
         <item name="android:paddingLeft">1dp</item>

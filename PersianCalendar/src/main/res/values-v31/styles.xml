@@ -3,7 +3,11 @@
 
     <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
 
-    <style name="ShadowTextStyle" parent="android:Theme.DeviceDefault.DayNight" />
+    <style name="WidgetTextStyle" />
+
+    <style name="WidgetClockStyle" parent="WidgetTextStyle">
+        <item name="android:textColor">?android:attr/colorAccent</item>
+    </style>
 
     <style name="DynamicLightTheme" parent="ModernTheme">
         <item name="colorAccent">@android:color/system_accent1_800</item>

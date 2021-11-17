@@ -718,10 +718,7 @@ private fun RemoteViews.setRoundBackground(
     @ColorInt color: Int = selectedWidgetBackgroundColor
 ) {
     when {
-        isDynamicColors -> {
-            setImageViewResource(viewId, R.drawable.widget_background)
-            // setColorStateListAttr(viewId, "setImageTintList", android.R.attr.colorBackground)
-        }
+        isDynamicColors -> setImageViewResource(viewId, R.drawable.widget_background)
         color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)
         else -> setImageViewBitmap(viewId, createRoundDrawable(color).toBitmap(width, height))
     }

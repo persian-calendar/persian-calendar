@@ -32,7 +32,7 @@
 
             <TextClock
                 android:id="@+id/textPlaceholder1_4x1"
-                style="@style/WidgetTextStyle"
+                style="@style/WidgetClockStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-thin"
