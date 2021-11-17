@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="code">en</string>
     <!--Global-->
     <string name="app_name">Persian Calendar</string>
@@ -337,7 +337,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="high_latitudes_angle_based">Angle Based</string>
     <string name="high_latitudes_one_seventh">One Seventh</string>
     <string name="none">None</string>
-    <string name="show_sun_and_moon_path_in_24_hours" tools:ignore="MissingTranslation">Show Sun and Moon path in 24 hours</string>
+    <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

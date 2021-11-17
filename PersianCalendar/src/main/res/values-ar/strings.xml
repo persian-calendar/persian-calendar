@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="code">ar</string>
     <!--Global-->
     <string name="app_name">التقويم الفارسي</string>
@@ -384,5 +384,5 @@
         <item quantity="many">%1$s يوما %2$s</item>
         <item quantity="other">%1$s يوم %2$s</item>
     </plurals>
-    <string name="show_sun_and_moon_path_in_24_hours" tools:ignore="MissingTranslation">عرض مسار الشمس والقمر في 24 ساعة</string>
+    <string name="show_sun_and_moon_path_in_24_hours">عرض مسار الشمس والقمر في 24 ساعة</string>
 </resources>
