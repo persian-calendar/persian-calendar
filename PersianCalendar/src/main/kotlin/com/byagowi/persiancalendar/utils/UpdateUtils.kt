@@ -286,7 +286,7 @@ private fun createSunViewRemoteViews(
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_sun_view)
     val color = when {
-        isDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.GRAY
+        isDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
     val sunView = SunView(context, textColor = color)
@@ -329,7 +329,7 @@ private fun createMonthViewRemoteViews(
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
     val monthView = MonthView(ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context)))
     val color = when {
-        isDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.GRAY
+        isDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
     monthView.initializeForWidget(color, height, date)
