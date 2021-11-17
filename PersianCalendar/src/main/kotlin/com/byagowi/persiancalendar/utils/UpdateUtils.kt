@@ -189,7 +189,7 @@ fun update(context: Context, updateDate: Boolean) {
 
 @StringRes
 private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
-    val clock = current.hours * 60.0 + current.minutes
+    val clock = current.toHoursFraction()
     return when {
         fajr > clock -> R.string.fajr
         sunrise > clock -> R.string.sunrise

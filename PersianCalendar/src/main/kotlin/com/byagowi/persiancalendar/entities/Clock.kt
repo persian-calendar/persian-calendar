@@ -36,6 +36,8 @@ data class Clock(val hours: Int, val minutes: Int) {
         }
     }
 
+    fun toHoursFraction() = toMinutes() / 60.0
+
     companion object {
         fun fromHoursFraction(input: Double): Clock {
             val value = (input + 0.5 / 60) % 24 // add 0.5 minutes to round
