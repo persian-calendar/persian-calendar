@@ -336,4 +336,5 @@
     <string name="high_latitudes_angle_based">Angle Based</string>
     <string name="high_latitudes_one_seventh">One Seventh</string>
     <string name="none">None</string>
+    <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
 </resources>
