@@ -19,7 +19,9 @@
             android:layout_width="11sp"
             android:layout_height="11sp"
             android:layout_gravity="center_vertical"
-            android:importantForAccessibility="no" />
+            android:importantForAccessibility="no"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp" />
 
     </LinearLayout>
 
