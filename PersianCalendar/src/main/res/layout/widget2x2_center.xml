@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/time_2x2"
-            style="@style/WidgetTextStyle"
+            style="@style/WidgetAccentTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"

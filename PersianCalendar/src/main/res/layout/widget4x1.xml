@@ -32,7 +32,7 @@
 
             <TextView
                 android:id="@+id/textPlaceholder1_4x1"
-                style="@style/WidgetTextStyle"
+                style="@style/WidgetAccentTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
