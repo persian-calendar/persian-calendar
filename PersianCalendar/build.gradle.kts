@@ -186,7 +186,7 @@ dependencies {
 
     implementation("androidx.browser:browser:1.4.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.7.0")
+    implementation("androidx.work:work-runtime-ktx:2.7.1")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
