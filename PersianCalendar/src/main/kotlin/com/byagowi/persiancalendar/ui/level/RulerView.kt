@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.level
 
 import android.content.Context
-import android.content.res.Resources
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.ui.utils.dp
 
 class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private val dpi = Resources.getSystem().displayMetrics.densityDpi
     private val textSize = 12.dp
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
@@ -26,6 +25,9 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val topTextOffset = topOffset - textSize / 2
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas ?: return)
+
+        val dpi = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            resources.displayMetrics.ydpi else resources.displayMetrics.xdpi
 
         // Inch
         paint.textAlign = Paint.Align.LEFT
