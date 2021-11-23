@@ -36,6 +36,7 @@ fun applyAppLanguage(context: Context) {
 val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
 val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
 val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+val DEVANAGARI_DIGITS = charArrayOf('०', '१', '२', '३', '४', '५', '६', '७', '८', '९')
 // CJK digits: charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
 // but they weren't looking nice in the UI
 
