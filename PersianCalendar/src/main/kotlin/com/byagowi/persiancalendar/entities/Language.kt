@@ -354,8 +354,11 @@ enum class Language(val code: String, val nativeName: String) {
 
         // https://github.com/techgaun/get-nepday-of-week/blob/02b6ffc/index.js#L19
         // probably should be provided from the translations though
-        val nepaliWeekDays = listOf7Items(
+        val weekDaysInNepali = listOf7Items(
             "शनिबार", "आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहिबार", "शुक्रबार"
+        )
+        val weekDaysInitialsInNepali = listOf7Items(
+            "श", "आ", "सो", "मं", "बु", "बि", "शु"
         )
 
         private val irCodeOrder = listOf("zz", "ir", "tr", "af", "iq")
