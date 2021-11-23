@@ -341,6 +341,23 @@ enum class Language(val code: String, val nativeName: String) {
             "Шн", "Як", "Дш", "Сш", "Чш", "Пш", "Ҷм"
         )
 
+        // https://github.com/techgaun/ad-bs-converter/blob/4731f2c/src/converter.js
+        // https://en.wikipedia.org/wiki/Vikram_Samvat
+        val nepaliMonths = listOf12Items(
+            "बैशाख", "जेष्ठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन",
+            "कार्तिक", "मंसिर", "पौष", "माघ", "फाल्गुन", "चैत्र"
+        )
+        val nepaliMonthsInEnglish = listOf12Items(
+            "Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin",
+            "Kartik", "Mangsir", "Paush", "Mangh", "Falgun", "Chaitra"
+        )
+
+        // https://github.com/techgaun/get-nepday-of-week/blob/02b6ffc/index.js#L19
+        // probably should be provided from the translations though
+        val nepaliWeekDays = listOf7Items(
+            "शनिबार", "आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहिबार", "शुक्रबार"
+        )
+
         private val irCodeOrder = listOf("zz", "ir", "tr", "af", "iq")
         private val afCodeOrder = listOf("zz", "af", "ir", "tr", "iq")
         private val arCodeOrder = listOf("zz", "iq", "tr", "ir", "af")
