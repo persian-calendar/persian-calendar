@@ -91,7 +91,7 @@
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="isDarkTheme">true</item>
         <item name="colorCurrentDayIsOutlineOnly">true</item>
-        <item name="dialogBackgroundColor">#E0606060</item>
+        <item name="dialogBackgroundColor">#70606060</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
@@ -113,7 +113,7 @@
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="isDarkTheme">false</item>
         <item name="colorCurrentDayIsOutlineOnly">true</item>
-        <item name="dialogBackgroundColor">#F0FFFFFF</item>
+        <item name="dialogBackgroundColor">#C0FFFFFF</item>
     </style>
 
     <!-- Their actual definition is in v31/styles.xml -->

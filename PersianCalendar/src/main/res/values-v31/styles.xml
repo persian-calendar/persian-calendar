@@ -71,7 +71,11 @@
         <item name="colorAppointment">@android:color/system_accent1_300</item>
     </style>
 
-    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+    <style name="AlertDialogThemeBlurSupportedOverlay">
+        <item name="alertDialogTheme">@style/AlertDialogThemeBlurSupported</item>
+    </style>
+
+    <style name="AlertDialogThemeBlurSupported" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="dialogCornerRadius">@android:dimen/system_app_widget_background_radius</item>
         <item name="android:windowBackgroundBlurRadius">8dp</item>
         <item name="android:windowBlurBehindEnabled">true</item>
