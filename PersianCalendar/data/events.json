@@ -1281,6 +1281,8 @@
   ],
 
   "Irregular Recurring": [
+    { "calendar": "Persian", "rule": "single event", "year": 1401, "month": 8, "day": 3, "type": "Iran",
+      "title": "خورشیدگرفتگی جزئی قابل مشاهده در ایران", "holiday": false },
     { "calendar": "Persian", "rule": "second week of month", "month": 1, "type": "Afghanistan",
       "title": "هفته جیولوجست‌های افغانستان (هفته دوم حمل)", "holiday": false },
     { "calendar": "Persian", "rule": "last week of month", "month": 2, "type": "Afghanistan",
