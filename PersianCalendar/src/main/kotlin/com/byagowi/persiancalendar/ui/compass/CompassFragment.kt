@@ -116,6 +116,8 @@ class CompassFragment : Fragment() {
             ) {
                 SensorManager.getOrientation(rotationMatrix, orientationMatrix)
                 update(Math.toDegrees(orientationMatrix[0].toDouble()).toFloat())
+                isAccelerationsAvailable = false
+                isMagneticFieldAvailable = false
             }
         }
     }
