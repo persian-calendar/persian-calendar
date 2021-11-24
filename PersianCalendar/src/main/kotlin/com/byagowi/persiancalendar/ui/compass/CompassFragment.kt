@@ -10,12 +10,14 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
@@ -43,26 +45,27 @@ class CompassFragment : Fragment() {
     private var stopped = false
     private var binding: FragmentCompassBinding? = null
     private var sensorManager: SensorManager? = null
-    private var sensor: Sensor? = null
+    private var orientationSensor: Sensor? = null
+    private var accelerometerSensor: Sensor? = null
+    private var magnetometerSensor: Sensor? = null
     private var orientation = 0f
     private var sensorNotFound = false
 
-    private val compassListener = object : SensorEventListener {
+    private abstract inner class BaseSensorListener : SensorEventListener {
         /*
          * time smoothing constant for low-pass filter 0 ≤ alpha ≤ 1 ; a smaller
          * value basically means more smoothing See:
          * https://en.wikipedia.org/wiki/Low-pass_filter#Discrete-time_realization
          */
-        val ALPHA = 0.15f
-        var azimuth: Float = 0f
+        private val ALPHA = 0.15f
+        private var azimuth: Float = 0f
 
         override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-        override fun onSensorChanged(event: SensorEvent?) {
+        protected fun update(value: Float) {
             // angle between the magnetic north direction
             // 0=North, 90=East, 180=South, 270=West
-            if (event == null) return
-            val angle = if (stopped) 0f else event.values[0] + orientation
+            val angle = if (stopped) 0f else value + orientation
             if (!stopped) checkIfA11yAnnounceIsNeeded(angle)
             azimuth = lowPass(angle, azimuth)
             binding?.compassView?.angle = azimuth
@@ -75,6 +78,45 @@ class CompassFragment : Fragment() {
         private fun lowPass(input: Float, output: Float): Float = when {
             abs(180 - input) > 170 -> input
             else -> output + ALPHA * (input - output)
+        }
+    }
+
+    private val orientationSensorListener = object : BaseSensorListener() {
+        override fun onSensorChanged(event: SensorEvent?) {
+            if (event == null) return
+            update(event.values[0])
+        }
+    }
+
+    private val accelerometerMagneticSensorListener = object : BaseSensorListener() {
+        private val acceleration = FloatArray(3)
+        private val magneticField = FloatArray(3)
+        private var isAccelerationsAvailable = false
+        private var isMagneticFieldAvailable = false
+        private val rotationMatrix = FloatArray(9)
+        private val orientationMatrix = FloatArray(3)
+
+        override fun onSensorChanged(event: SensorEvent?) {
+            if (event == null) return
+
+            if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+                acceleration[0] = event.values[0]
+                acceleration[1] = event.values[1]
+                acceleration[2] = event.values[2]
+                isAccelerationsAvailable = true
+            } else if (event.sensor.type == Sensor.TYPE_MAGNETIC_FIELD) {
+                magneticField[0] = event.values[0]
+                magneticField[1] = event.values[1]
+                magneticField[2] = event.values[2]
+                isMagneticFieldAvailable = true
+            }
+
+            if (isAccelerationsAvailable && isMagneticFieldAvailable &&
+                SensorManager.getRotationMatrix(rotationMatrix, null, acceleration, magneticField)
+            ) {
+                SensorManager.getOrientation(rotationMatrix, orientationMatrix)
+                update(Math.toDegrees(orientationMatrix[0].toDouble()).toFloat())
+            }
         }
     }
 
@@ -193,26 +235,41 @@ class CompassFragment : Fragment() {
         super.onResume()
 
         sensorManager = activity?.getSystemService()
-        sensor = sensorManager?.getDefaultSensor(Sensor.TYPE_ORIENTATION)
-        when {
-            sensor != null -> {
-                sensorManager?.registerListener(
-                    compassListener, sensor, SensorManager.SENSOR_DELAY_FASTEST
-                )
-                if (coordinates == null) showLongSnackbar(
-                    R.string.set_location,
-                    Snackbar.LENGTH_SHORT
-                )
-            }
-            else -> {
-                showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
-                sensorNotFound = true
-            }
+        val sensorManager = sensorManager ?: return
+        accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        magnetometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)
+        orientationSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION)
+
+        if (accelerometerSensor != null && magnetometerSensor != null) {
+            sensorManager.registerListener(
+                accelerometerMagneticSensorListener, accelerometerSensor,
+                SensorManager.SENSOR_DELAY_GAME
+            )
+            sensorManager.registerListener(
+                accelerometerMagneticSensorListener, magnetometerSensor,
+                SensorManager.SENSOR_DELAY_GAME
+            )
+            if (BuildConfig.DEVELOPMENT)
+                Toast.makeText(context, "dev: acc+magnet", Toast.LENGTH_LONG).show()
+            if (coordinates == null) showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
+        } else if (orientationSensor != null) {
+            sensorManager.registerListener(
+                orientationSensorListener, orientationSensor, SensorManager.SENSOR_DELAY_FASTEST
+            )
+            if (BuildConfig.DEVELOPMENT)
+                Toast.makeText(context, "dev: orientation", Toast.LENGTH_LONG).show()
+            if (coordinates == null) showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
+        } else {
+            showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
+            sensorNotFound = true
         }
     }
 
     override fun onPause() {
-        if (sensor != null) sensorManager?.unregisterListener(compassListener)
+        if (accelerometerSensor != null && magnetometerSensor != null)
+            sensorManager?.unregisterListener(accelerometerMagneticSensorListener)
+        else if (orientationSensor != null)
+            sensorManager?.unregisterListener(orientationSensorListener)
         super.onPause()
     }
 
