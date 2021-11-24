@@ -641,8 +641,7 @@ private fun updateNotification(
             }
         )
 
-    if (Theme.isDynamicColorAvailable())
-        builder.setColor(0xFF607D8B.toInt()).setColorized(true)
+    if (Theme.isDynamicColorAvailable()) builder.setColor(0xFF607D8B.toInt()).setColorized(true)
 
     // Dynamic small icon generator, disabled as it needs API 23 and we need to have the other path anyway
     if ((false)) {
@@ -759,15 +758,17 @@ private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequ
     }
 }
 
-private fun Context.launchAppPendingIntent(): PendingIntent? = PendingIntent.getActivity(
-    this, 0,
-    Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
-    PendingIntent.FLAG_UPDATE_CURRENT or
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
-)
+private fun Context.launchAppPendingIntent(): PendingIntent? {
+    return PendingIntent.getActivity(
+        this, 0,
+        Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        PendingIntent.FLAG_UPDATE_CURRENT or
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+    )
+}
 
-private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int): PendingIntent? =
-    PendingIntent.getActivity(
+private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int): PendingIntent? {
+    return PendingIntent.getActivity(
         this, 0,
         Intent(this, AgeWidgetConfigureActivity::class.java)
             .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
@@ -775,3 +776,4 @@ private fun Context.launchAgeWidgetConfigurationAppPendingIntent(widgetId: Int):
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
+}
