@@ -24,8 +24,6 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     var selectedCalendarType: CalendarType = CalendarType.SHAMSI
 
-    var anchorView: View? = null
-
     private val inflater = context.layoutInflater
     val binding = DayPickerViewBinding.inflate(inflater, this, true).also { binding ->
         val calendarTypes =
@@ -52,9 +50,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
             return if (day > selectedCalendarType.getMonthLength(year, month)) {
-                Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).also {
-                    it.anchorView = anchorView
-                }.show()
+                Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).show()
                 null
             } else Jdn(selectedCalendarType, year, month, day)
         }
