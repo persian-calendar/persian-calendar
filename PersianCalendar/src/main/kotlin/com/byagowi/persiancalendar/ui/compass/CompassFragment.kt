@@ -15,6 +15,7 @@ import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
@@ -32,6 +33,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.logException
+import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
 import kotlin.math.abs
@@ -196,24 +198,48 @@ class CompassFragment : Fragment() {
 
         updateCompassOrientation()
 
+        binding.timeSlider.value = 0f
+        binding.timeSlider.valueFrom = 0f
+        binding.timeSlider.valueTo = 24f
+        binding.timeSlider.setLabelFormatter {
+            val time = GregorianCalendar()
+            time.add(Calendar.MINUTE, (it * 60f).roundToInt())
+            Clock(time).toBasicFormatString()
+        }
+        binding.timeSlider.addOnChangeListener { slider, value, fromUser ->
+            val time = GregorianCalendar()
+            time.add(Calendar.MINUTE, (value * 60f).roundToInt())
+            binding.appBar.toolbar.title =
+                if (value == 0f || fromUser) getString(R.string.compass)
+                else Clock(time).toBasicFormatString()
+            binding.compassView.setTime(time)
+            slider.value = value
+            slider.isVisible = value != 0f
+        }
+        binding.timeSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStopTrackingTouch(slider: Slider) = Unit
+            override fun onStartTrackingTouch(slider: Slider) {
+                stopAnimator = true
+            }
+        })
+
         return binding.root
     }
 
+    var stopAnimator: Boolean = false
+
     private fun animateMoonAndSun() {
+        stopAnimator = false
         val binding = binding ?: return
+        binding.timeSlider.isVisible = true
         val valueAnimator = ValueAnimator.ofFloat(0f, 24f)
         valueAnimator.repeatCount = 1
         valueAnimator.repeatMode = ValueAnimator.REVERSE
         valueAnimator.duration = 10000
         valueAnimator.interpolator = AccelerateDecelerateInterpolator()
         valueAnimator.addUpdateListener {
-            val value = valueAnimator.animatedValue as? Float ?: 0f
-            val time = GregorianCalendar()
-            time.add(Calendar.MINUTE, (value * 60f).roundToInt())
-            binding.appBar.toolbar.title =
-                if (value == 0f) getString(R.string.compass)
-                else Clock(time).toBasicFormatString()
-            binding.compassView.setTime(time)
+            if (!stopAnimator)
+                binding.timeSlider.value = valueAnimator.animatedValue as? Float ?: 0f
         }
         valueAnimator.start()
     }

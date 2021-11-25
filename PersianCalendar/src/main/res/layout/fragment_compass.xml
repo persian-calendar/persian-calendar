@@ -9,12 +9,25 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.cepmuvakkit.times.view.QiblaCompassView
-        android:id="@+id/compass_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="75dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:animateLayoutChanges="true">
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/time_slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <com.cepmuvakkit.times.view.QiblaCompassView
+            android:id="@+id/compass_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="75dp" />
+
+    </FrameLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_appbar"
