@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 
 interface DrawerHost {
-    fun setupToolbarWithDrawer(toolbar: Toolbar)
+    fun setupToolbarWithDrawer(toolbar: MaterialToolbar)
 }

@@ -10,7 +10,6 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -41,6 +40,7 @@ import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.concurrent.TimeUnit
 
@@ -98,7 +98,7 @@ class PreferencesFragment : Fragment() {
 
     // Development only functionalities
     private fun setupDevelopmentMenu(
-        toolbar: Toolbar, binding: FragmentSettingsBinding, inflater: LayoutInflater
+        toolbar: MaterialToolbar, binding: FragmentSettingsBinding, inflater: LayoutInflater
     ) {
         if (!BuildConfig.DEVELOPMENT) return
         val activity = activity ?: return
