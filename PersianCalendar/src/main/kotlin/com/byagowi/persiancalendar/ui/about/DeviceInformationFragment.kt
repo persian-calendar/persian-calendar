@@ -102,11 +102,14 @@ class DeviceInformationFragment : Fragment() {
             )
             val adapter = DeviceInformationAdapter(activity ?: return@let)
             it.adapter = adapter
-            binding.fab.setOnClickListener { context?.showHtml(adapter.asHtml()) }
             binding.toolbar.menu.add(R.string.share).also { menu ->
                 menu.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
                 menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }.onClick { activity?.shareText(adapter.asHtml(), "device.html", "text/html") }
+            binding.toolbar.menu.add("Print").also { menu ->
+                menu.setIcon(R.drawable.ic_print)
+                menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }.onClick { context?.showHtml(adapter.asHtml()) }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
