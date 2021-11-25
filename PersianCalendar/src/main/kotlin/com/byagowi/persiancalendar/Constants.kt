@@ -37,7 +37,7 @@ const val PREF_SHOW_WEEK_OF_YEAR_NUMBER = "showWeekOfYearNumber"
 const val PREF_NOTIFY_DATE = "NotifyDate"
 const val PREF_NOTIFICATION_ATHAN = "NotificationAthan"
 const val PREF_NOTIFY_DATE_LOCK_SCREEN = "NotifyDateLockScreen"
-const val PREF_ATHAN_VOLUME = "AthanVolume"
+const val PREF_ATHAN_VOLUME = "athanVolume"
 const val PREF_ASCENDING_ATHAN_VOLUME = "AscendingAthanVolume"
 const val PREF_APP_LANGUAGE = "AppLanguage"
 const val PREF_EASTERN_GREGORIAN_ARABIC_MONTHS = "EasternGregorianArabicMonths"
@@ -74,7 +74,7 @@ const val DEFAULT_NOTIFY_DATE = true
 const val DEFAULT_NOTIFICATION_ATHAN = false
 const val DEFAULT_ASCENDING_ATHAN_VOLUME = false
 const val DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true
-const val DEFAULT_ATHAN_VOLUME = 1
+const val DEFAULT_ATHAN_VOLUME = 5
 const val DEFAULT_ISLAMIC_OFFSET = "0"
 
 const val LOAD_APP_ID = 1000
