@@ -36,6 +36,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             binding.dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
+            binding.monthPicker.maxValue = selectedCalendarType.getYearMonths(year)
 
             mJdn = jdn
             selectedDayListener(mJdn)
@@ -64,7 +65,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
             binding.monthPicker.also {
                 it.minValue = 1
-                it.maxValue = 12
+                it.maxValue = selectedCalendarType.getYearMonths(date.year)
                 it.value = date.month
                 val months = date.calendarType.monthsNames
                 it.setFormatter { x -> months[x - 1] + " / " + formatNumber(x) }
