@@ -2,9 +2,9 @@ package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.NumberPicker
+import android.widget.Toast
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
@@ -14,7 +14,6 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
-import com.google.android.material.snackbar.Snackbar
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
@@ -50,7 +49,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
             return if (day > selectedCalendarType.getMonthLength(year, month)) {
-                Snackbar.make(rootView, R.string.date_exception, Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.date_exception, Toast.LENGTH_SHORT).show()
                 null
             } else Jdn(selectedCalendarType, year, month, day)
         }
