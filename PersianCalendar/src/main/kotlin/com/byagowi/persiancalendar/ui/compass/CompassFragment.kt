@@ -182,12 +182,7 @@ class CompassFragment : Fragment() {
             }
         }
 
-        binding.fab.setOnClickListener {
-            stopped = !stopped
-            binding.fab.setImageResource(if (stopped) R.drawable.ic_play else R.drawable.ic_stop)
-            binding.fab.contentDescription = resources
-                .getString(if (stopped) R.string.resume else R.string.stop)
-        }
+        binding.fab.setOnClickListener { stopCompass(!stopped) }
 
         if (coordinates != null) {
             binding.appBar.toolbar.menu.add(R.string.show_sun_and_moon_path_in_24_hours).also {
@@ -224,6 +219,14 @@ class CompassFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    private fun stopCompass(stop: Boolean) {
+        stopped = stop
+        val binding = binding ?: return
+        binding.fab.setImageResource(if (stop) R.drawable.ic_play else R.drawable.ic_stop)
+        binding.fab.contentDescription = resources
+            .getString(if (stop) R.string.resume else R.string.stop)
     }
 
     var stopAnimator: Boolean = false
