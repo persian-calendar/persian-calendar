@@ -233,13 +233,13 @@ class CompassFragment : Fragment() {
         val binding = binding ?: return
         binding.timeSlider.isVisible = true
         val valueAnimator = ValueAnimator.ofFloat(0f, 24f)
-        valueAnimator.repeatCount = 1
-        valueAnimator.repeatMode = ValueAnimator.REVERSE
         valueAnimator.duration = 10000
         valueAnimator.interpolator = AccelerateDecelerateInterpolator()
         valueAnimator.addUpdateListener {
-            if (!stopAnimator)
-                binding.timeSlider.value = valueAnimator.animatedValue as? Float ?: 0f
+            if (!stopAnimator) {
+                val value = valueAnimator.animatedValue as? Float ?: 0f
+                binding.timeSlider.value = if (value == 24f) 0f else value
+            }
         }
         valueAnimator.start()
     }
