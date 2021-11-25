@@ -17,10 +17,10 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
         it.strokeWidth = 1.dp
         it.textSize = textSize
     }
-    private val textSideOffset = 24.dp
-    private val firstLevel = 20.dp
-    private val secondLevel = 10.dp
-    private val thirdLevel = 5.dp
+    private val textSideOffset = 30.dp
+    private val firstLevel = 25.dp
+    private val secondLevel = 15.dp
+    private val thirdLevel = 8.dp
     private val topOffset = 10.dp.toInt()
     private val topTextOffset = topOffset - textSize / 2
     override fun onDraw(canvas: Canvas?) {
