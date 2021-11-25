@@ -263,16 +263,13 @@ class SunView @JvmOverloads constructor(
 
         val sunset = Clock.fromHoursFraction(prayTimes.sunset).toMinutes().toFloat()
         val sunrise = Clock.fromHoursFraction(prayTimes.sunrise).toMinutes().toFloat()
-        var midnight = Clock.fromHoursFraction(prayTimes.midnight).toMinutes().toFloat()
-
-        if (midnight > halfDay) midnight -= fullDay
         val now = Clock(Calendar.getInstance(Locale.getDefault())).toMinutes().toFloat()
 
         fun Float.safeDiv(other: Float) = if (other == 0f) 0f else this / other
         current = when {
-            now <= sunrise -> (now - midnight).safeDiv(sunrise) * .17f
+            now <= sunrise -> now.safeDiv(sunrise) * .17f
             now <= sunset -> (now - sunrise).safeDiv(sunset - sunrise) * .66f + .17f
-            else -> (now - sunset).safeDiv(fullDay + midnight - sunset) * .17f + .17f + .66f
+            else -> (now - sunset).safeDiv(fullDay - sunset) * .17f + .17f + .66f
         }
 
         val dayLength = Clock.fromMinutesCount((sunset - sunrise).toInt())
