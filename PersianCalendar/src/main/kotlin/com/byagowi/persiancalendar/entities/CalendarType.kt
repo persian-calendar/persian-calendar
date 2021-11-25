@@ -29,7 +29,7 @@ enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: In
     }
 
     fun getYearMonths(year: Int) =
-        (Jdn(this, year, 1, 1) - 1).toCalendar(this).month
+        (Jdn(this, year + 1, 1, 1) - 1).toCalendar(this).month
 
     fun getMonthLength(year: Int, month: Int) =
         Jdn(getMonthStartFromMonthsDistance(year, month, 1)) - Jdn(this, year, month, 1)
