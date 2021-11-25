@@ -12,6 +12,6 @@ fun showDayPickerDialog(
     val dayPickerView = DayPickerView(activity).also { it.jdn = jdn }
     AlertDialog.Builder(activity)
         .setView(dayPickerView)
-        .setPositiveButton(positiveButtonTitle) { _, _ -> dayPickerView.jdn?.also(onSuccess) }
+        .setPositiveButton(positiveButtonTitle) { _, _ -> onSuccess(dayPickerView.jdn) }
         .show()
 }

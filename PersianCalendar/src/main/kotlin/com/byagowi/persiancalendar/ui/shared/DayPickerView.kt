@@ -4,8 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.NumberPicker
-import android.widget.Toast
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
@@ -17,9 +15,9 @@ import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
-    private var mJdn: Jdn? = null
+    private var mJdn: Jdn = Jdn.today()
 
-    var selectedDayListener = fun(_: Jdn?) {}
+    var selectedDayListener = fun(_: Jdn) {}
 
     var selectedCalendarType: CalendarType = CalendarType.SHAMSI
 
@@ -35,6 +33,10 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         }
 
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
+            val year = binding.yearPicker.value
+            val month = binding.monthPicker.value
+            binding.dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
+
             mJdn = jdn
             selectedDayListener(mJdn)
         }
@@ -43,20 +45,16 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.dayPicker.setOnValueChangedListener(onDaySelected)
     }
 
-    var jdn: Jdn?
+    var jdn: Jdn
         get() {
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
-            return if (day > selectedCalendarType.getMonthLength(year, month)) {
-                Toast.makeText(context, R.string.date_exception, Toast.LENGTH_SHORT).show()
-                null
-            } else Jdn(selectedCalendarType, year, month, day)
+            return Jdn(selectedCalendarType, year, month, day)
         }
         set(value) {
-            val jdn = value ?: Jdn.today()
-            mJdn = jdn
-            val date = jdn.toCalendar(selectedCalendarType)
+            mJdn = value
+            val date = value.toCalendar(selectedCalendarType)
             binding.yearPicker.also {
                 it.minValue = date.year - 100
                 it.maxValue = date.year + 100
@@ -74,7 +72,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
             binding.dayPicker.also {
                 it.minValue = 1
-                it.maxValue = 31
+                it.maxValue = selectedCalendarType.getMonthLength(date.year, date.month)
                 it.value = date.dayOfMonth
                 it.setFormatter(::formatNumber)
                 it.isVerticalScrollBarEnabled = false

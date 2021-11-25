@@ -39,16 +39,12 @@ class ConverterFragment : Fragment() {
 
         binding.dayPickerView.also {
             it.selectedDayListener = { jdn ->
-                if (jdn == null) {
-                    binding.resultCard.isVisible = false
-                } else {
-                    todayButton.isVisible = jdn != todayJdn
-                    binding.resultCard.isVisible = true
-                    val selectedCalendarType = binding.dayPickerView.selectedCalendarType
-                    binding.calendarsView.showCalendars(
-                        jdn, selectedCalendarType, getOrderedCalendarTypes() - selectedCalendarType
-                    )
-                }
+                todayButton.isVisible = jdn != todayJdn
+                binding.resultCard.isVisible = true
+                val selectedCalendarType = binding.dayPickerView.selectedCalendarType
+                binding.calendarsView.showCalendars(
+                    jdn, selectedCalendarType, getOrderedCalendarTypes() - selectedCalendarType
+                )
             }
             it.jdn = Jdn.today()
         }
