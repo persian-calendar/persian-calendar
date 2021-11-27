@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.view.Surface
+import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.abs
 import kotlin.math.asin
@@ -43,7 +44,7 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
     private val R = FloatArray(16)
     private val outR = FloatArray(16)
     private val LOC = FloatArray(3)
-    private val sensorManager = activity.getSystemService(Context.SENSOR_SERVICE) as SensorManager?
+    private val sensorManager = activity.getSystemService<SensorManager>()
     private val displayOrientation = activity.windowManager.defaultDisplay.rotation
     private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.getOrNull(0)
 
