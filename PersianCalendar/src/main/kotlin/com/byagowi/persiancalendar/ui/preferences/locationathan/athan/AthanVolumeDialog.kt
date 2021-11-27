@@ -6,13 +6,11 @@ import android.media.RingtoneManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.net.toUri
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.athanVolume
-import com.byagowi.persiancalendar.utils.getCustomAthanUri
-import com.byagowi.persiancalendar.utils.getRawUri
+import com.byagowi.persiancalendar.utils.getAthanUri
 import com.google.android.material.slider.Slider
 
 fun showAthanVolumeDialog(activity: Activity) {
@@ -22,8 +20,7 @@ fun showAthanVolumeDialog(activity: Activity) {
     val originalAlarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
     audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
 
-    val uri = getCustomAthanUri(activity) ?: activity.resources.getRawUri(R.raw.special).toUri()
-    val ringtone = RingtoneManager.getRingtone(activity, uri)
+    val ringtone = RingtoneManager.getRingtone(activity, getAthanUri(activity))
     ringtone?.streamType = AudioManager.STREAM_ALARM
     ringtone?.play()
 

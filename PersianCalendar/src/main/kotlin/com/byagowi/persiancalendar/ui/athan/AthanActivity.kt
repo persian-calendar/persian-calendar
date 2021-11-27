@@ -15,18 +15,15 @@ import android.telephony.TelephonyManager
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.core.content.getSystemService
-import androidx.core.net.toUri
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.athanVolume
-import com.byagowi.persiancalendar.utils.getCustomAthanUri
-import com.byagowi.persiancalendar.utils.getRawUri
+import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
@@ -37,17 +34,13 @@ class AthanActivity : ComponentActivity() {
     private var currentVolumeSteps = 1
     private val handler = Handler(Looper.getMainLooper())
     private var ringtone: Ringtone? = null
-    private var mediaPlayer: MediaPlayer? = null
     private var alreadyStopped = false
     private var spentSeconds = 0
     private var originalVolume = -1
     private val stopTask = object : Runnable {
         override fun run() = runCatching {
             spentSeconds += 5
-            if ((ringtone == null && mediaPlayer == null) ||
-                ringtone?.isPlaying == false ||
-                mediaPlayer?.isPlaying == false ||
-                spentSeconds > 360 ||
+            if (ringtone == null || ringtone?.isPlaying == false || spentSeconds > 360 ||
                 (stopAtHalfMinute && spentSeconds > 30)
             ) finish() else handler.postDelayed(this, FIVE_SECONDS_IN_MILLIS)
         }.onFailure(logException).onFailure { finish() }.let {}
@@ -95,50 +88,27 @@ class AthanActivity : ComponentActivity() {
             ) goMute = true
         }
 
-        val customAthanUri = getCustomAthanUri(this)
         if (!goMute) runCatching {
-            if (customAthanUri != null) {
-                runCatching {
-                    MediaPlayer.create(this, customAthanUri).duration // is in milliseconds
-                }.onFailure(logException).onSuccess {
-                    // if the URIs duration is less than half a minute, it is probably a looping one
-                    // so stop on half a minute regardless
-                    if (it < THIRTY_SECONDS_IN_MILLIS) stopAtHalfMinute = true
+            val athanUri = getAthanUri(this)
+            runCatching {
+                MediaPlayer.create(this, athanUri).duration // is in milliseconds
+            }.onFailure(logException).onSuccess {
+                // if the URIs duration is less than half a minute, it is probably a looping one
+                // so stop on half a minute regardless
+                if (it < THIRTY_SECONDS_IN_MILLIS) stopAtHalfMinute = true
+            }
+            ringtone = RingtoneManager.getRingtone(this, getAthanUri(this)).also {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    it.audioAttributes = AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .build()
+                } else {
+                    @Suppress("DEPRECATION")
+                    it.streamType = AudioManager.STREAM_ALARM
                 }
-                ringtone = RingtoneManager.getRingtone(this, customAthanUri).also {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        it.audioAttributes = AudioAttributes.Builder()
-                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                            .setUsage(AudioAttributes.USAGE_ALARM)
-                            .build()
-                    } else {
-                        @Suppress("DEPRECATION")
-                        it.streamType = AudioManager.STREAM_ALARM
-                    }
-                    volumeControlStream = AudioManager.STREAM_ALARM
-                    it.play()
-                }
-            } else {
-                mediaPlayer = MediaPlayer().also { mediaPlayer ->
-                    runCatching {
-                        val rawUri = resources.getRawUri(R.raw.special).toUri()
-                        mediaPlayer.setDataSource(this, rawUri)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            mediaPlayer.setAudioAttributes(
-                                AudioAttributes.Builder()
-                                    .setUsage(AudioAttributes.USAGE_ALARM)
-                                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                    .build()
-                            )
-                        } else {
-                            @Suppress("DEPRECATION")
-                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM)
-                        }
-                        volumeControlStream = AudioManager.STREAM_ALARM
-                        mediaPlayer.prepare()
-                    }.onFailure(logException)
-                    mediaPlayer.start()
-                }
+                volumeControlStream = AudioManager.STREAM_ALARM
+                it.play()
             }
         }.onFailure(logException)
 
@@ -193,15 +163,6 @@ class AthanActivity : ComponentActivity() {
         }.onFailure(logException)
 
         ringtone?.stop()
-
-        runCatching {
-            mediaPlayer?.also {
-                if (it.isPlaying) {
-                    it.stop()
-                    it.release()
-                }
-            }
-        }.onFailure(logException)
 
         handler.removeCallbacks(stopTask)
         if (isAscendingAthanVolumeEnabled) handler.removeCallbacks(ascendVolume)

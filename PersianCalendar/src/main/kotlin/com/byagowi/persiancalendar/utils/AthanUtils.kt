@@ -61,8 +61,9 @@ val Context.athanVolume: Int get() = appPrefs.getInt(PREF_ATHAN_VOLUME, DEFAULT_
 val Context.isAscendingAthanVolumeEnabled: Boolean
     get() = appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
 
-fun getCustomAthanUri(context: Context): Uri? =
-    context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }?.toUri()
+fun getAthanUri(context: Context): Uri =
+    (context.appPrefs.getString(PREF_ATHAN_URI, null)?.takeIf { it.isNotEmpty() }
+        ?: context.resources.getRawUri(R.raw.special)).toUri()
 
 private var lastAthanKey = ""
 private var lastAthanJdn: Jdn? = null

@@ -113,6 +113,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     title(R.string.custom_athan)
                     this@LocationAthanFragment.ringtonePreference = this
                 }
+                clickable(onClick = { showPrayerSelectPreviewDialog(activity) }) {
+                    title(R.string.preview)
+                }
                 switch(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN) {
                     title(R.string.notification_athan)
                     summary(R.string.enable_notification_athan)
@@ -128,9 +131,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.athan_volume_summary)
                     athanVolumeDialogPreference = this
                 }
-                clickable(onClick = { showPrayerSelectPreviewDialog(activity) }) {
-                    title(R.string.preview)
-                }
             }
         }
 
@@ -139,8 +139,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         updatePreferencesItems()
     }
 
-    private class PickRingtoneContract : ActivityResultContract<Uri?, String?>() {
-        override fun createIntent(context: Context, input: Uri?): Intent =
+    private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
+        override fun createIntent(context: Context, input: Unit): Intent =
             Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
                 .putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALL)
                 .putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
@@ -149,9 +149,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI,
                     Settings.System.DEFAULT_NOTIFICATION_URI
                 )
-                .also { intent ->
-                    input?.let { intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, it) }
-                }
 
         override fun parseResult(resultCode: Int, intent: Intent?): String? =
             if (resultCode == Activity.RESULT_OK)
