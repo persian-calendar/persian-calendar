@@ -54,8 +54,9 @@ class EventsTests {
         irregularCalendarEventsStore.getEventsList<CalendarEvent.GregorianCalendarEvent>(
             2021, CalendarType.GREGORIAN
         ).let {
-            assertEquals(1, it.size)
+            assertEquals(2, it.size)
             assertEquals(false, it[0].isHoliday)
+            assertEquals(false, it[1].isHoliday)
         }
 
         //
