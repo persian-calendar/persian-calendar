@@ -15,38 +15,9 @@ import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
-    private val todayJdn = Jdn.today()
-    private var currentJdn = todayJdn
-
     var selectedDayListener = fun(_: Jdn) {}
-
-    var selectedCalendarType: CalendarType = CalendarType.SHAMSI
-
-    private val inflater = context.layoutInflater
-    val binding = DayPickerViewBinding.inflate(inflater, this, true).also { binding ->
-        val calendarTypes =
-            getOrderedCalendarEntities(context, short = language.betterToUseShortCalendarName)
-                .also { selectedCalendarType = it[0].first }
-        binding.calendarsFlow.setup(calendarTypes) {
-            selectedCalendarType = it
-            jdn = currentJdn
-            selectedDayListener(currentJdn)
-        }
-
-        val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
-            val year = binding.yearPicker.value
-            val month = binding.monthPicker.value
-            binding.dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
-            binding.monthPicker.maxValue = selectedCalendarType.getYearMonths(year)
-
-            currentJdn = jdn
-            selectedDayListener(currentJdn)
-        }
-        binding.yearPicker.setOnValueChangedListener(onDaySelected)
-        binding.monthPicker.setOnValueChangedListener(onDaySelected)
-        binding.dayPicker.setOnValueChangedListener(onDaySelected)
-    }
-
+    var selectedCalendarType = CalendarType.SHAMSI
+        private set
     var jdn: Jdn
         get() {
             val year = binding.yearPicker.value
@@ -82,4 +53,32 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
             selectedDayListener(value)
         }
+
+    private val todayJdn = Jdn.today()
+    private var currentJdn = todayJdn
+    private val binding = DayPickerViewBinding.inflate(
+        context.layoutInflater, this, true
+    ).also { binding ->
+        val calendarTypes =
+            getOrderedCalendarEntities(context, short = language.betterToUseShortCalendarName)
+                .also { selectedCalendarType = it[0].first }
+        binding.calendarsFlow.setup(calendarTypes) {
+            selectedCalendarType = it
+            jdn = currentJdn
+            selectedDayListener(currentJdn)
+        }
+
+        val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
+            val year = binding.yearPicker.value
+            val month = binding.monthPicker.value
+            binding.dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
+            binding.monthPicker.maxValue = selectedCalendarType.getYearMonths(year)
+
+            currentJdn = jdn
+            selectedDayListener(currentJdn)
+        }
+        binding.yearPicker.setOnValueChangedListener(onDaySelected)
+        binding.monthPicker.setOnValueChangedListener(onDaySelected)
+        binding.dayPicker.setOnValueChangedListener(onDaySelected)
+    }
 }
