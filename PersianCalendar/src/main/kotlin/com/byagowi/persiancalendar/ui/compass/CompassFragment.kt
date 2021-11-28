@@ -205,7 +205,7 @@ class CompassFragment : Fragment() {
             val time = GregorianCalendar()
             time.add(Calendar.MINUTE, (value * 60f).roundToInt())
             binding.appBar.toolbar.title =
-                if (value == 0f || fromUser) getString(R.string.compass)
+                if (value == 0f || fromUser) slider.resources.getString(R.string.compass)
                 else Clock(time).toBasicFormatString()
             binding.compassView.setTime(time)
             slider.value = value
@@ -239,7 +239,7 @@ class CompassFragment : Fragment() {
         valueAnimator.duration = 10000
         valueAnimator.interpolator = AccelerateDecelerateInterpolator()
         valueAnimator.addUpdateListener {
-            if (!stopAnimator) {
+            if (stopAnimator) valueAnimator.removeAllUpdateListeners() else {
                 val value = valueAnimator.animatedValue as? Float ?: 0f
                 binding.timeSlider.value = if (value == 24f) 0f else value
             }
@@ -297,6 +297,7 @@ class CompassFragment : Fragment() {
     }
 
     override fun onPause() {
+        stopAnimator = true
         if (orientationSensor != null)
             sensorManager?.unregisterListener(orientationSensorListener)
         else if (accelerometerSensor != null && magnetometerSensor != null)
