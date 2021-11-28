@@ -338,6 +338,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="high_latitudes_one_seventh">One Seventh</string>
     <string name="none">None</string>
     <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
+    <string name="widget_prefer_system_colors">Follow System Coloring in Widgets</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

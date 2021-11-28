@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar.ui.preferences.widgetnotification
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
@@ -14,6 +16,7 @@ import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
+import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
@@ -34,7 +37,12 @@ import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.appPrefs
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
-class WidgetNotificationFragment : PreferenceFragmentCompat() {
+class WidgetNotificationFragment : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private var widgetTextColorPreferences: Preference? = null
+    private var widgetBackgroundColorPreferences: Preference? = null
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val handler = Handler(Looper.getMainLooper())
         val activity = activity ?: return
@@ -56,20 +64,23 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
             section(R.string.pref_widget) {
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 6
-                val showColorOptions = !Theme.isDynamicColor(activity.appPrefs)
+                switch(PREF_WIDGETS_PREFER_SYSTEM_COLORS, Theme.isDynamicColor(activity.appPrefs)) {
+                    title(R.string.widget_prefer_system_colors)
+                    isVisible = Theme.isDynamicColor(activity.appPrefs)
+                }
                 clickable(onClick = {
                     showColorPickerDialog(activity, false, PREF_SELECTED_WIDGET_TEXT_COLOR)
                 }) {
                     title(R.string.widget_text_color)
                     summary(R.string.select_widgets_text_color)
-                    isVisible = showColorOptions
+                    widgetTextColorPreferences = this
                 }
                 clickable(onClick = {
                     showColorPickerDialog(activity, true, PREF_SELECTED_WIDGET_BACKGROUND_COLOR)
                 }) {
                     title(R.string.widget_background_color)
                     summary(R.string.select_widgets_background_color)
-                    isVisible = showColorOptions
+                    widgetBackgroundColorPreferences = this
                 }
                 switch(PREF_NUMERICAL_DATE_PREFERRED, false) {
                     title(R.string.prefer_linear_date)
@@ -109,6 +120,19 @@ class WidgetNotificationFragment : PreferenceFragmentCompat() {
                     dialogTitle(R.string.which_one_to_show)
                 }
             }
+        }
+
+        val appPrefs = layoutInflater.context.appPrefs
+        onSharedPreferenceChanged(appPrefs, null)
+        appPrefs.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (Theme.isDynamicColor(sharedPreferences)) {
+            val prefersSystemColors =
+                sharedPreferences?.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true) ?: return
+            widgetTextColorPreferences?.isVisible = !prefersSystemColors
+            widgetBackgroundColorPreferences?.isVisible = !prefersSystemColors
         }
     }
 
