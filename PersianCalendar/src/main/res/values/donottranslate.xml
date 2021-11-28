@@ -10,9 +10,7 @@ runo280: Ruhollah Nosrati
 FtADev: Fatemeh Akhlaghi
 MasoodFallahpoor: Masood Fallahpoor
 beigirad: Farhad BeigiRad
-AryanAhadinia: Aryan Ahadinia
-shahabhm: Shahab Hosseini Moghaddam
-MohammadKashaniJabbari: Mohammad Kashani"</string>
+ilius: Saeed Rasooli"</string>
     <string name="about_designers_list" translatable="false">"MEHDIMYADI: Mehdi Dimyadi
 MehraraAbedi: Mehrara Abedi
 behdude: Behdad Pournader
@@ -37,6 +35,9 @@ alirezaivaz: Alireza Ivaz
 AminBakhtiyari: Amin Bakhtiyari
 SCR-IR: SCR-IR
 MMeshkiny: Mohsen Meshkini
+AryanAhadinia: Aryan Ahadinia
+shahabhm: Shahab Hosseini Moghaddam
+MohammadKashaniJabbari: Mohammad Kashani
 xmha97: Muhammad Hussein Ammari
 nullkit: Hamid Mahmoudi"</string>
     <string name="about_help_subtitle" translatable="false">نسخهٔ سال %s-%s</string>
