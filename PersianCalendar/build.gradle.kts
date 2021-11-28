@@ -158,6 +158,8 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    lint { disable("MissingTranslation") }
 }
 
 val minApi21Implementation by configurations
