@@ -15,7 +15,8 @@ import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
-    private var mJdn: Jdn = Jdn.today()
+    private val todayJdn = Jdn.today()
+    private var currentJdn = todayJdn
 
     var selectedDayListener = fun(_: Jdn) {}
 
@@ -28,8 +29,8 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 .also { selectedCalendarType = it[0].first }
         binding.calendarsFlow.setup(calendarTypes) {
             selectedCalendarType = it
-            jdn = mJdn
-            selectedDayListener(mJdn)
+            jdn = currentJdn
+            selectedDayListener(currentJdn)
         }
 
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
@@ -38,8 +39,8 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             binding.dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
             binding.monthPicker.maxValue = selectedCalendarType.getYearMonths(year)
 
-            mJdn = jdn
-            selectedDayListener(mJdn)
+            currentJdn = jdn
+            selectedDayListener(currentJdn)
         }
         binding.yearPicker.setOnValueChangedListener(onDaySelected)
         binding.monthPicker.setOnValueChangedListener(onDaySelected)
@@ -54,11 +55,12 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             return Jdn(selectedCalendarType, year, month, day)
         }
         set(value) {
-            mJdn = value
+            currentJdn = value
             val date = value.toCalendar(selectedCalendarType)
             binding.yearPicker.also {
-                it.minValue = date.year - 100
-                it.maxValue = date.year + 100
+                val today = todayJdn.toCalendar(selectedCalendarType)
+                it.minValue = today.year - 200
+                it.maxValue = today.year + 200
                 it.value = date.year
                 it.setFormatter(::formatNumber)
                 it.isVerticalScrollBarEnabled = false
