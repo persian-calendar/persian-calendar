@@ -57,9 +57,10 @@ class AthanNotification : Service() {
                 it.lightColor = Color.GREEN
                 it.vibrationPattern = longArrayOf(0, 1000, 500, 1000)
                 it.enableVibration(true)
+                it.setBypassDnd(true)
                 it.setSound(
                     soundUri, AudioAttributes.Builder()
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                         .build()
                 )
