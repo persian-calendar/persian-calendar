@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="widget_age_name">फारसी पात्रो उमेर ()</string>
+    <string name="widget_name">फारसी पात्रो</string>
+    <string name="outdated_app">पुरानो भएको कारण, चीजहरू गलत हुन सक्छ</string>
+    <string name="app_name">फारसी पात्रो</string>
+    <string name="widget_mini_name">फारसी पात्रो (सानो )</string>
+    <string name="close">बन्द</string>
+    <string name="open">खुला</string>
+    <string name="accept">हुन्छ</string>
+    <string name="add">जोड्नुहोस</string>
+    <string name="help">मदत</string>
+    <string name="more">अन्य</string>
+    <string name="cancel">रद्द</string>
+    <string name="continue_button">जारी राख्नुहोस्</string>
+    <string name="update">अपडेट</string>
+    <string name="calendar">पात्रो</string>
+    <string name="date_converter">मीती परिवर्तन</string>
+    <string name="code">ne</string>
+</resources>
