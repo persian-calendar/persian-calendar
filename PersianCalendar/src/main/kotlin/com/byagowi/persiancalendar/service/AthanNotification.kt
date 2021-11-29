@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioAttributes
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -30,9 +31,7 @@ import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
 import com.byagowi.persiancalendar.utils.setDirection
-
-private const val NOTIFICATION_ID = 1002
-private const val NOTIFICATION_CHANNEL_ID = NOTIFICATION_ID.toString()
+import kotlin.random.Random
 
 class AthanNotification : Service() {
 
@@ -41,18 +40,29 @@ class AthanNotification : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent ?: return super.onStartCommand(intent, flags, startId)
 
+        val notificationId = Random.nextInt(2000, 4000)
+        val notificationChannelId = notificationId.toString()
+
         val notificationManager = getSystemService<NotificationManager>()
+
+        val soundUri = getAthanUri(this)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
-                NOTIFICATION_CHANNEL_ID, getString(R.string.app_name),
+                notificationChannelId, getString(R.string.app_name),
                 NotificationManager.IMPORTANCE_DEFAULT
-            ).apply {
-                description = getString(R.string.app_name)
-                enableLights(true)
-                lightColor = Color.GREEN
-                vibrationPattern = longArrayOf(0, 1000, 500, 1000)
-                enableVibration(true)
+            ).also {
+                it.description = getString(R.string.app_name)
+                it.enableLights(true)
+                it.lightColor = Color.GREEN
+                it.vibrationPattern = longArrayOf(0, 1000, 500, 1000)
+                it.enableVibration(true)
+                it.setSound(
+                    soundUri, AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .build()
+                )
             }
             notificationManager?.createNotificationChannel(notificationChannel)
         }
@@ -76,16 +86,13 @@ class AthanNotification : Service() {
             "${getString(it)}: ${prayTimes?.getFromStringId(it)?.toFormattedString() ?: ""}"
         }
 
-        val notificationBuilder = NotificationCompat.Builder(
-            this,
-            NOTIFICATION_CHANNEL_ID
-        )
+        val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)
         notificationBuilder.setAutoCancel(true)
             .setWhen(System.currentTimeMillis())
             .setSmallIcon(R.drawable.sun)
             .setContentTitle(title)
             .setContentText(subtitle)
-            .setSound(getAthanUri(this))
+            .setSound(soundUri)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(applicationContext?.packageName, R.layout.custom_notification)
@@ -102,10 +109,10 @@ class AthanNotification : Service() {
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }
 
-        notificationManager?.notify(NOTIFICATION_ID, notificationBuilder.build())
+        notificationManager?.notify(notificationId, notificationBuilder.build())
 
         Handler(Looper.getMainLooper()).postDelayed({
-            notificationManager?.cancel(NOTIFICATION_ID)
+            notificationManager?.cancel(notificationId)
             stopSelf()
         }, FIFTEEN_MINUTES_IN_MILLIS)
 
