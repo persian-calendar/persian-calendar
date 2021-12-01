@@ -4,7 +4,7 @@
     <item
         android:width="100dp"
         android:height="100dp"
-        android:drawable="@drawable/ic_splash_icon2"
+        android:drawable="@drawable/splash_icon"
         android:gravity="center"
         tools:ignore="UnusedAttribute" />
 </layer-list>
