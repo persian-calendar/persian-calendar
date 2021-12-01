@@ -30,6 +30,7 @@ import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getAthanUri
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getPrayTimeName
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.setDirection
 import kotlin.random.Random
 
@@ -87,6 +88,13 @@ class AthanNotification : Service() {
             "${getString(it)}: ${prayTimes?.getFromStringId(it)?.toFormattedString() ?: ""}"
         }
 
+        runCatching {
+            // ensure custom reminder sounds play well
+            grantUriPermission(
+                "com.android.systemui", soundUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }.onFailure(logException)
+
         val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)
         notificationBuilder.setAutoCancel(true)
             .setWhen(System.currentTimeMillis())
@@ -94,6 +102,8 @@ class AthanNotification : Service() {
             .setContentTitle(title)
             .setContentText(subtitle)
             .setSound(soundUri)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(applicationContext?.packageName, R.layout.custom_notification)
