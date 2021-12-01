@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.media.RingtoneManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
@@ -16,6 +15,7 @@ import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.forEach
 import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
@@ -134,9 +134,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             }
         }
 
-        onSharedPreferenceChanged(null, null)
-        layoutInflater.context.appPrefs.registerOnSharedPreferenceChangeListener(this)
-        updatePreferencesItems()
+        val appPrefs = layoutInflater.context.appPrefs
+        onSharedPreferenceChanged(appPrefs, null)
+        appPrefs.registerOnSharedPreferenceChangeListener(this)
     }
 
     private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
@@ -174,27 +174,25 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         }
     }
 
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) =
-        updatePreferencesItems()
-
-    private fun updatePreferencesItems() {
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         val context = context ?: return
+        sharedPreferences ?: return
         updateStoredPreference(context) // So vital to have this to have updated preferences here
         asrCalculationHanafiJuristicPreference?.isVisible = !calculationMethod.isJafari
         highLatitudesMethodPreference?.isVisible = enableHighLatitudesConfiguration
 
-        val appPrefs = context.appPrefs
-
         val isNotificationAthan =
-            appPrefs.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
+            sharedPreferences.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
         ascendingAthanVolumePreference?.isVisible = !isNotificationAthan
         athanVolumeDialogPreference?.isVisible = !isNotificationAthan &&
-                !appPrefs.getBoolean(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME)
+                !sharedPreferences.getBoolean(
+                    PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME
+                )
 
-        ringtonePreference?.summary = appPrefs.getString(PREF_ATHAN_NAME, defaultAthanName)
-        val cityName = appPrefs.cityName
+        ringtonePreference?.summary = sharedPreferences.getString(PREF_ATHAN_NAME, defaultAthanName)
+        val cityName = sharedPreferences.cityName
         selectedLocationPreference?.summary = cityName ?: context.getString(R.string.location_help)
-        athanPreferenceCategory?.isEnabled = coordinates != null
+        athanPreferenceCategory?.forEach { it.isVisible = coordinates != null }
         athanPreferenceCategory?.setSummary(
             if (coordinates == null) R.string.athan_disabled_summary else R.string.empty
         )
