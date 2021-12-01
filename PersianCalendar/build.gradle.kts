@@ -166,7 +166,7 @@ val minApi21Implementation by configurations
 
 dependencies {
     implementation("com.github.persian-calendar:equinox:1.0.1")
-    implementation("com.github.persian-calendar:calendar:1.1.0")
+    implementation("com.github.persian-calendar:calendar:1.2.0")
     implementation("com.github.persian-calendar:praytimes:2.1.2")
 
     implementation("androidx.appcompat:appcompat:1.4.0")
