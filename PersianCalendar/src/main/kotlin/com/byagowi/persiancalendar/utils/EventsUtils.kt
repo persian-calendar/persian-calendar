@@ -99,8 +99,8 @@ fun loadEvents(enabledTypes: EnabledHolidays, language: Language) {
     gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull { record ->
         createEvent(record, enabledTypes, CalendarType.GREGORIAN)
     })
-    nepaliCalendarEvents = NepaliCalendarEventsStore(gregorianEvents.mapNotNull { record ->
-        createEvent(record, enabledTypes, CalendarType.GREGORIAN)
+    nepaliCalendarEvents = NepaliCalendarEventsStore(nepaliEvents.mapNotNull { record ->
+        createEvent(record, enabledTypes, CalendarType.NEPALI)
     })
 }
 
