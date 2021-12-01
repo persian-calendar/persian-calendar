@@ -14,13 +14,7 @@
 
     <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
 
-    <style name="WidgetTextStyle">
-        <item name="android:textColor">?android:attr/colorForeground</item>
-    </style>
-
-    <style name="WidgetAccentTextStyle" parent="WidgetTextStyle">
-        <item name="android:textColor">?android:attr/colorAccent</item>
-    </style>
+    <style name="WidgetTextStyle" />
 
     <style name="DynamicLightTheme" parent="ModernTheme">
         <item name="colorAccent">@android:color/system_accent1_800</item>

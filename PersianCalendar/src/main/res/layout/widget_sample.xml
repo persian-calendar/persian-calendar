@@ -20,7 +20,7 @@
 
         <TextClock
             android:id="@+id/sample_clock"
-            style="@style/WidgetAccentTextStyle"
+            style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-thin"

@@ -367,8 +367,6 @@
     <!-- But in v31/styles.xml it is overridden to not have shadow -->
     <style name="WidgetTextStyle" parent="ShadowTextStyle" />
 
-    <style name="WidgetAccentTextStyle" parent="WidgetTextStyle" />
-
     <style name="ShadowTextStyle">
         <item name="android:paddingLeft">1dp</item>
         <item name="android:paddingBottom">1dp</item>
