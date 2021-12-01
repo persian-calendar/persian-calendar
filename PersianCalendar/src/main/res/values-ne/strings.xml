@@ -345,15 +345,15 @@
     <string name="widget_prefer_system_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
     <string name="nepal">नेपाल</string>
     <string name="calculator">क्यालकुलेटर</string>
-    <string name="summer"></string>
-    <string name="fall"></string>
-    <string name="winter"></string>
-    <string name="spring"></string>
-    <string name="sun"></string>
-    <string name="moon"></string>
-    <string name="tropical"></string>
-    <string name="lunar_eclipse"></string>
-    <string name="chinese_calendar"></string>
-    <string name="chinese"></string>
-    <string name="solar_eclipse"></string>
+    <string name="summer"/>
+    <string name="fall"/>
+    <string name="winter"/>
+    <string name="spring"/>
+    <string name="sun"/>
+    <string name="moon"/>
+    <string name="tropical"/>
+    <string name="lunar_eclipse"/>
+    <string name="chinese_calendar"/>
+    <string name="chinese"/>
+    <string name="solar_eclipse"/>
 </resources>
