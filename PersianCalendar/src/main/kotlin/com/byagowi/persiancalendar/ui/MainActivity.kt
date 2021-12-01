@@ -83,6 +83,7 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.snackbar.Snackbar
+import io.github.persiancalendar.calendar.PersianDate
 import kotlin.math.roundToInt
 
 
@@ -163,20 +164,26 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val today = Jdn.today()
         creationDateJdn = today
 
-        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-            .seasonImage.setImageResource(run {
-                var season = (today.toPersianCalendar().month - 1) / 3
+        run {
+            val drawerHeader = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+            val persian = today.toPersianCalendar()
+            var season = (persian.month - 1) / 3
 
-                // Southern hemisphere
-                if ((coordinates?.latitude ?: 1.0) < .0) season = (season + 2) % 4
+            val seasonMonthsLength = if (season < 2) 31 else 30
+            drawerHeader.seasonProgress.max = seasonMonthsLength * 3
+            drawerHeader.seasonProgress.progress =
+                (persian.month - season * 3 - 1) * seasonMonthsLength + persian.dayOfMonth
 
-                when (season) {
-                    0 -> R.drawable.spring
-                    1 -> R.drawable.summer
-                    2 -> R.drawable.fall
-                    else -> R.drawable.winter
-                }
+            // Southern hemisphere
+            if ((coordinates?.latitude ?: 1.0) < .0) season = (season + 2) % 4
+
+            drawerHeader.seasonImage.setImageResource(when (season) {
+                0 -> R.drawable.spring
+                1 -> R.drawable.summer
+                2 -> R.drawable.fall
+                else -> R.drawable.winter
             })
+        }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
             showChangeLanguageSnackbar()
