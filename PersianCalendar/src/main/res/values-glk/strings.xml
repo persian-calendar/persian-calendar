@@ -9,8 +9,8 @@
     <string name="longitude">طۊلˇجؤغرافیایي</string>
     <string name="settings">تنظیمات</string>
     <string name="exit">بيرۊن شؤن</string>
-    <string name="enable_persian_digits">عددانأ فارسي نيشان دأن</string>
-    <string name="persian_digits">فارسي عددان</string>
+    <string name="enable_native_digits">عددانأ فارسي نيشان دأن</string>
+    <string name="native_digits">فارسي عددان</string>
     <string name="showing_clock_on_widget">ساعتˇنيشان دأن ابزارکانˇدۊرۊن</string>
     <string name="clock_on_widget">ساعت ابزارکˇدۊرۊن</string>
     <string name="showing_clock_in_24">۲۴ تائي ساعتˈ نيشان دأن</string>

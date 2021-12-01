@@ -111,8 +111,8 @@
     <string name="language">Idioma</string>
     <string name="skin">Diseño</string>
     <string name="select_skin">Elegir un diseño</string>
-    <string name="persian_digits">Dígitos persas</string>
-    <string name="enable_persian_digits">Habilitar dígitos persas</string>
+    <string name="native_digits">Dígitos persas</string>
+    <string name="enable_native_digits">Habilitar dígitos persas</string>
     <string name="events_summary">Eventos para mostrar</string>
     <string name="show_device_calendar_events">Eventos del calendario personal</string>
     <string name="show_device_calendar_events_summary">Mostrar los eventos del calendario personal</string>

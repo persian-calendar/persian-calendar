@@ -79,7 +79,7 @@
     <string name="week_start">Destpêka heftiyê</string>
     <string name="astronomical_info">Agehdariyên stêrnasiyê</string>
     <string name="calendars_priority">Ewlewîyeta rojhejmêran</string>
-    <string name="persian_digits">Hejmarên Aramî</string>
+    <string name="native_digits">Hejmarên Aramî</string>
     <string name="select_day">Bijartina rojê</string>
     <string name="select_month">Bijartina heyvê</string>
     <string name="select_year">Bijartina salê</string>

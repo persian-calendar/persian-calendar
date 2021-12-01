@@ -9,8 +9,8 @@
     <string name="longitude">طول البلد</string>
     <string name="settings">ترتیبات</string>
     <string name="exit">باہر نکلیں</string>
-    <string name="enable_persian_digits">فارسی اعداد فعال کریں</string>
-    <string name="persian_digits">فارسی اعداد</string>
+    <string name="enable_native_digits">فارسی اعداد فعال کریں</string>
+    <string name="native_digits">فارسی اعداد</string>
     <string name="showing_clock_on_widget">وڈگیٹ میں گھڑی رکھیں</string>
     <string name="clock_on_widget">وڈگیٹ میں گھڑی</string>
     <string name="showing_clock_in_24">24 گھنٹے والا فارمیٹ رکھیں</string>

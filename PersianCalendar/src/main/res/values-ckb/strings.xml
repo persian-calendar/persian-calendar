@@ -9,8 +9,8 @@
     <string name="longitude">درێژاییی جوگرافی</string>
     <string name="settings">ڕێکخستن</string>
     <string name="exit">دەرچوون</string>
-    <string name="enable_persian_digits">نیشاندانی ژمارەکان بە کوردی</string>
-    <string name="persian_digits">ژمارەی کوردی</string>
+    <string name="enable_native_digits">نیشاندانی ژمارەکان بە کوردی</string>
+    <string name="native_digits">ژمارەی کوردی</string>
     <string name="showing_clock_on_widget">نیشاندانی کاتژمێر لە ویجیتدا</string>
     <string name="clock_on_widget">کاتژمێر لە ویجیتدا</string>
     <string name="showing_clock_in_24">نیشاندانی کاتژمێر بە ٢٤ کاتکۆ</string>

@@ -9,8 +9,8 @@
     <string name="longitude">جغرافیایی بوْیلام</string>
     <string name="settings">تنظیم‌لر</string>
     <string name="exit">چیخیش</string>
-    <string name="enable_persian_digits">سایلاری فارسجا گؤستر</string>
-    <string name="persian_digits">فارسجا سایلار</string>
+    <string name="enable_native_digits">سایلاری فارسجا گؤستر</string>
+    <string name="native_digits">فارسجا سایلار</string>
     <string name="showing_clock_on_widget">ساعاتی ویجت‌ده گؤستر</string>
     <string name="clock_on_widget">ساعات ویجت‌ده</string>
     <string name="showing_clock_in_24">ساعاتی ۲۴‌لۆک گؤستر</string>

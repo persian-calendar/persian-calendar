@@ -8,14 +8,12 @@ import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
 import com.byagowi.persiancalendar.DEFAULT_IRAN_TIME
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_LOCAL_DIGITS
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
-import com.byagowi.persiancalendar.DEFAULT_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
-import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
@@ -31,16 +29,14 @@ import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
+import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
-import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
-import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_BACKGROUND_COLOR
-import com.byagowi.persiancalendar.PREF_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
@@ -60,7 +56,6 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
 import com.byagowi.persiancalendar.utils.ARABIC_DIGITS
-import com.byagowi.persiancalendar.utils.ARABIC_INDIC_DIGITS
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -213,12 +208,11 @@ fun updateStoredPreference(context: Context) {
     enableNewInterface = canEnableNewInterface &&
             prefs.getBoolean(PREF_NEW_INTERFACE, false) //shouldEnableNewInterface)
 
-    preferredDigits = when {
-        !prefs.getBoolean(PREF_PERSIAN_DIGITS, DEFAULT_PERSIAN_DIGITS) ||
-                !language.canHaveLocalDigits -> ARABIC_DIGITS
-        language.prefersArabicIndicDigits -> ARABIC_INDIC_DIGITS
-        else -> PERSIAN_DIGITS
-    }
+    preferredDigits =
+        if (!prefs.getBoolean(PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS) ||
+            !language.canHaveLocalDigits
+        ) ARABIC_DIGITS
+        else language.preferredDigits
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled =

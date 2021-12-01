@@ -77,8 +77,8 @@
     <string name="language">Забон</string>
     <string name="skin">Пӯста</string>
     <string name="select_skin">Интихоби Пӯста</string>
-    <string name="persian_digits">Рақамҳои форсӣ</string>
-    <string name="enable_persian_digits">Рақамҳои форсиро фаъол созед</string>
+    <string name="native_digits">Рақамҳои форсӣ</string>
+    <string name="enable_native_digits">Рақамҳои форсиро фаъол созед</string>
     <string name="show_device_calendar_events_summary">тамошои pӯйдодҳои Тақвими шахсӣ</string>
     <string name="calendars_priority_summary">Тақвимҳоро барои нишон додани афзалият ё пинҳон кардани онҳо таъин кунед</string>
     <string name="astronomical_info">Маълумоти астрономӣ</string>

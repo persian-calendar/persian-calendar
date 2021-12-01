@@ -110,8 +110,8 @@
     <string name="language">اللغة</string>
     <string name="skin">لون التطبيق</string>
     <string name="select_skin">إختيار لون التطبيق</string>
-    <string name="persian_digits">الأرقام الهندية</string>
-    <string name="enable_persian_digits">إختيار الأرقام الهندية (١٢٣٤٥٦٧٨٩٠)</string>
+    <string name="native_digits">الأرقام الهندية</string>
+    <string name="enable_native_digits">إختيار الأرقام الهندية (١٢٣٤٥٦٧٨٩٠)</string>
     <string name="events_summary">ما المناسبات والأحداث التي يتم عرضها في التقويم</string>
     <string name="show_device_calendar_events">الأحداث الخاصة</string>
     <string name="show_device_calendar_events_summary">إظهار الأحداث الشخصية</string>

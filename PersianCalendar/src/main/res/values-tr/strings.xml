@@ -223,8 +223,8 @@
     <string name="show_device_calendar_events_summary">Kişisel takvim etkinliklerini gösterme</string>
     <string name="show_device_calendar_events">Kişisel Takvim Etkinlikleri</string>
     <string name="events_summary">Gösterilecek Etkinlikler</string>
-    <string name="enable_persian_digits">Arapça Rakamları Etkinleştir</string>
-    <string name="persian_digits">Arapça Rakamlar</string>
+    <string name="enable_native_digits">Arapça Rakamları Etkinleştir</string>
+    <string name="native_digits">Arapça Rakamlar</string>
     <string name="select_skin">Bir Arayüz Seçin</string>
     <string name="skin">Arayüz</string>
     <string name="language">Dil</string>

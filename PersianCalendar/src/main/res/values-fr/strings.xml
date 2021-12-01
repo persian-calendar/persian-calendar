@@ -105,8 +105,8 @@
     <string name="show_device_calendar_events_summary">Afficher les évènements du calendrier personnel</string>
     <string name="show_device_calendar_events">Évènements du calendrier personnel</string>
     <string name="events_summary">Évènements à afficher</string>
-    <string name="enable_persian_digits">Activer les chiffres persans</string>
-    <string name="persian_digits">Chiffres persans</string>
+    <string name="enable_native_digits">Activer les chiffres persans</string>
+    <string name="native_digits">Chiffres persans</string>
     <string name="select_skin">Sélectionnez une apparence</string>
     <string name="skin">Apparence</string>
     <string name="language">Langue</string>

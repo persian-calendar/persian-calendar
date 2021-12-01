@@ -9,8 +9,8 @@
     <string name="longitude">経度</string>
     <string name="settings">設定</string>
     <string name="exit">出る</string>
-    <string name="enable_persian_digits">ペルシャ語で数字を表示する</string>
-    <string name="persian_digits">ペルシャ番号</string>
+    <string name="enable_native_digits">ペルシャ語で数字を表示する</string>
+    <string name="native_digits">ペルシャ番号</string>
     <string name="showing_clock_on_widget">ウィジェットで時間を表示</string>
     <string name="clock_on_widget">ウィジェット内の時間</string>
     <string name="showing_clock_in_24">24時間表示</string>

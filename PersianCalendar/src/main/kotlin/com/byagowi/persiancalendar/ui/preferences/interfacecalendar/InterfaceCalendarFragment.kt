@@ -15,7 +15,7 @@ import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
-import com.byagowi.persiancalendar.PREF_PERSIAN_DIGITS
+import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_THEME
@@ -70,9 +70,9 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                         summary = "كانون الثاني، شباط، آذار، …"
                     } else isVisible = false
                 }
-                switch(PREF_PERSIAN_DIGITS, true) {
-                    title(R.string.persian_digits)
-                    summary(R.string.enable_persian_digits)
+                switch(PREF_LOCAL_DIGITS, true) {
+                    title(R.string.native_digits)
+                    summary(R.string.enable_native_digits)
                     if (!language.canHaveLocalDigits) isVisible = false
                 }
             }

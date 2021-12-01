@@ -9,8 +9,8 @@
     <string name="longitude">جغرافیایی طول</string>
     <string name="settings">غوراوي</string>
     <string name="exit">وتل</string>
-    <string name="enable_persian_digits">فارسی اعداد توانول</string>
-    <string name="persian_digits">فارسی اعداد</string>
+    <string name="enable_native_digits">فارسی اعداد توانول</string>
+    <string name="native_digits">فارسی اعداد</string>
     <string name="showing_clock_on_widget">ساعت په ویجت کی</string>
     <string name="clock_on_widget">ساعت په ویجت کی</string>
     <string name="showing_clock_in_24">د ۲۴ ساعته ساعت ښودل</string>

@@ -3,6 +3,9 @@ package com.byagowi.persiancalendar.entities
 import android.annotation.SuppressLint
 import android.content.Context
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.utils.ARABIC_INDIC_DIGITS
+import com.byagowi.persiancalendar.utils.DEVANAGARI_DIGITS
+import com.byagowi.persiancalendar.utils.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -26,6 +29,7 @@ enum class Language(val code: String, val nativeName: String) {
     GLK("glk", "گيلکي"),
     JA("ja", "日本語"),
     KMR("kmr", "Kurdî"),
+    NE("ne", "नेपाली"),
     TG("tg", "Тоҷикӣ"),
     TR("tr", "Türkçe"),
     UR("ur", "اردو");
@@ -34,6 +38,7 @@ enum class Language(val code: String, val nativeName: String) {
     val isDari get() = this == FA_AF
     val isPersian get() = this == FA
     val isIranianEnglish get() = this == EN_IR
+    val isNepali get() = this == NE
 
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
 
@@ -59,19 +64,19 @@ enum class Language(val code: String, val nativeName: String) {
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR, KMR, TG -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR, KMR, TG, NE -> true
             else -> false
         }
 
     val preferredCalculationMethod: CalculationMethod
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, TR, KMR, TG -> CalculationMethod.MWL
+            FA_AF, PS, UR, AR, CKB, TR, KMR, TG, NE -> CalculationMethod.MWL
             else -> CalculationMethod.Tehran
         }
 
     val isHanafiMajority: Boolean
         get() = when (this) {
-            TR, FA_AF, PS, TG -> true
+            TR, FA_AF, PS, TG, NE -> true
             else -> false
         }
 
@@ -85,7 +90,7 @@ enum class Language(val code: String, val nativeName: String) {
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, TR, KMR, EN_IR, TG -> false
+            EN_US, JA, FR, ES, TR, KMR, EN_IR, TG, NE -> false
             else -> true
         }
 
@@ -97,13 +102,14 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     // Local digits (۱۲۳) make sense for the locale
-    val canHaveLocalDigits get() = isArabicScript || isIranianEnglish
+    val canHaveLocalDigits get() = isArabicScript || isIranianEnglish || isNepali
 
     // Prefers ٤٥٦ over ۴۵۶
-    val prefersArabicIndicDigits: Boolean
+    val preferredDigits
         get() = when (this) {
-            AR, CKB -> true
-            else -> false
+            AR, CKB -> ARABIC_INDIC_DIGITS
+            NE -> DEVANAGARI_DIGITS
+            else -> PERSIAN_DIGITS
         }
 
     // We can presume user is from Afghanistan
@@ -123,7 +129,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, UR, TR, KMR, TG -> true
+            EN_US, JA, FR, ES, UR, TR, KMR, TG, NE -> true
             else -> false
         }
 
@@ -205,6 +211,7 @@ enum class Language(val code: String, val nativeName: String) {
         TR -> weekDaysInitialsInTurkish
         EN_IR -> weekDaysInitialsInEnglishIran
         TG -> weekDaysInitialsInTajiki
+        NE -> weekDaysInitialsInNepali
         else -> getWeekDays(context).map { it.substring(0, 1) }
     }
 
