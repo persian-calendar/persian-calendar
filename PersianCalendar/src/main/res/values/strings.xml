@@ -341,6 +341,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="widget_prefer_system_colors">Follow System Coloring in Widgets</string>
     <string name="nepali_calendar">Nepali Calendar</string>
     <string name="nepali_calendar_short">Nepali</string>
+    <string name="country_emoji">🇺🇸🇬🇧</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

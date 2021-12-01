@@ -335,6 +335,7 @@
     <string name="high_latitudes_angle_based">بناء على الزاوية</string>
     <string name="high_latitudes_one_seventh">سُبٌع</string>
     <string name="none">لا شيء</string>
+    <string name="country_emoji">🇸🇦🇮🇶🇦🇪</string>
     <plurals name="n_minutes">
         <item quantity="zero">لا دقائق</item>
         <item quantity="one">دقيقة واحدة</item>

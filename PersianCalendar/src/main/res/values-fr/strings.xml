@@ -337,4 +337,5 @@
     <string name="high_latitudes_one_seventh">Un septième</string>
     <string name="none">None</string>
     <string name="show_sun_and_moon_path_in_24_hours">Afficher la trajectoire du Soleil et de la Lune en 24 heures</string>
+    <string name="country_emoji">🇫🇷</string>
 </resources>
