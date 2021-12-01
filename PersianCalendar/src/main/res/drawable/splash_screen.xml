@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center"
-    app:srcCompat="@drawable/ic_splash_icon2" />
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/ic_splash_icon2"
+        android:gravity="center" />
+</layer-list>
