@@ -79,7 +79,8 @@ class SearchEventsAdapter private constructor(
             get() = when (this) {
                 is CalendarEvent.GregorianCalendarEvent,
                 is CalendarEvent.IslamicCalendarEvent,
-                is CalendarEvent.PersianCalendarEvent -> title
+                is CalendarEvent.PersianCalendarEvent,
+                is CalendarEvent.NepaliCalendarEvent -> title
                 is CalendarEvent.DeviceCalendarEvent ->
                     if (description.isBlank()) title else "$title ($description)"
             }

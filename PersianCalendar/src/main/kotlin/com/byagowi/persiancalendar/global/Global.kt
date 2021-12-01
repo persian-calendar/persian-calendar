@@ -81,6 +81,8 @@ var islamicMonths = monthNameEmptyList
     private set
 var gregorianMonths = monthNameEmptyList
     private set
+var nepaliMonths = monthNameEmptyList
+    private set
 private val weekDaysEmptyList = List(7) { "" }
 var weekDays = weekDaysEmptyList
     private set
@@ -193,6 +195,7 @@ fun loadLanguageResources(context: Context) {
     persianMonths = language.getPersianMonths(context)
     islamicMonths = language.getIslamicMonths(context)
     gregorianMonths = language.getGregorianMonths(context, easternGregorianArabicMonths)
+    nepaliMonths = language.getNepaliMonths()
     weekDays = language.getWeekDays(context)
     weekDaysInitials = language.getWeekDaysInitials(context)
 }

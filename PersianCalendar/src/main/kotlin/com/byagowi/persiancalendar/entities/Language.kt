@@ -129,9 +129,12 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, UR, TR, KMR, TG, NE -> true
+            EN_US, JA, FR, ES, UR, TR, KMR, TG -> true
             else -> false
         }
+
+    private val prefersNepaliCalendar: Boolean
+        get() = isNepali
 
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersIslamicCalendar: Boolean
@@ -153,6 +156,7 @@ enum class Language(val code: String, val nativeName: String) {
             prefersGregorianCalendar -> CalendarType.GREGORIAN.name
             prefersIslamicCalendar -> CalendarType.ISLAMIC.name
             prefersPersianCalendar -> CalendarType.SHAMSI.name
+            prefersNepaliCalendar -> CalendarType.NEPALI.name
             else -> CalendarType.SHAMSI.name
         }
 
@@ -162,6 +166,7 @@ enum class Language(val code: String, val nativeName: String) {
             prefersGregorianCalendar -> "${CalendarType.ISLAMIC.name},${CalendarType.SHAMSI.name}"
             prefersIslamicCalendar -> "${CalendarType.GREGORIAN.name},${CalendarType.SHAMSI.name}"
             prefersPersianCalendar -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
+            prefersNepaliCalendar -> CalendarType.GREGORIAN.name
             else -> "${CalendarType.GREGORIAN.name},${CalendarType.ISLAMIC.name}"
         }
 
@@ -169,12 +174,13 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when (this) {
             FA -> "0"
             TR, TG -> "2" // Monday
-            else -> if (prefersGregorianCalendar) "1"/*Sunday*/ else "0"
+            else -> if (prefersGregorianCalendar || isNepali) "1"/*Sunday*/ else "0"
         }
 
     val defaultWeekEnds
         get() = when {
             this == FA -> setOf("6")
+            isNepali -> setOf("0")
             prefersGregorianCalendar -> setOf("0", "1") // Saturday and Sunday
             else -> setOf("6") // 6 means Friday
         }
@@ -200,8 +206,14 @@ enum class Language(val code: String, val nativeName: String) {
         else -> gregorianCalendarMonths.map(context::getString)
     }
 
+    fun getNepaliMonths(): List<String> = when (this) {
+        NE -> nepaliMonths
+        else -> nepaliMonthsInEnglish
+    }
+
     fun getWeekDays(context: Context): List<String> = when (this) {
         FA, EN_IR, FA_AF -> weekDaysInPersian
+        NE -> weekDaysInNepali
         else -> weekDays.map(context::getString)
     }
 

@@ -35,6 +35,7 @@ import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import java.util.*
 import kotlin.math.abs
@@ -215,6 +216,7 @@ val AbstractDate.calendarType: CalendarType
     get() = when (this) {
         is IslamicDate -> CalendarType.ISLAMIC
         is CivilDate -> CalendarType.GREGORIAN
+        is NepaliDate -> CalendarType.NEPALI
         else -> CalendarType.SHAMSI
     }
 
@@ -222,7 +224,7 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     val daysAbsoluteDistance = abs(Jdn.today() - jdn)
     val baseDate = mainCalendar.createDate(
         when (mainCalendar) {
-            CalendarType.GREGORIAN -> 2000
+            CalendarType.GREGORIAN, CalendarType.NEPALI -> 2000
             CalendarType.ISLAMIC, CalendarType.SHAMSI -> 1400
         }, 1, 1
     )

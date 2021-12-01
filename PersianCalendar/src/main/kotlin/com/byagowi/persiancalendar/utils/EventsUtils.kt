@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.global.*
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 
 var persianCalendarEvents: PersianCalendarEventsStore = EventsStore.empty()
@@ -19,6 +20,8 @@ var persianCalendarEvents: PersianCalendarEventsStore = EventsStore.empty()
 var islamicCalendarEvents: IslamicCalendarEventsStore = EventsStore.empty()
     private set
 var gregorianCalendarEvents: GregorianCalendarEventsStore = EventsStore.empty()
+    private set
+var nepaliCalendarEvents: NepaliCalendarEventsStore = EventsStore.empty()
     private set
 var irregularCalendarEventsStore = IrregularCalendarEventsStore(EnabledHolidays())
 
@@ -96,6 +99,9 @@ fun loadEvents(enabledTypes: EnabledHolidays, language: Language) {
     gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull { record ->
         createEvent(record, enabledTypes, CalendarType.GREGORIAN)
     })
+    nepaliCalendarEvents = NepaliCalendarEventsStore(gregorianEvents.mapNotNull { record ->
+        createEvent(record, enabledTypes, CalendarType.GREGORIAN)
+    })
 }
 
 private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
@@ -120,6 +126,10 @@ private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
             val date = IslamicDate(-1, record.month, record.day)
             CalendarEvent.IslamicCalendarEvent(title, holiday, date)
         }
+        CalendarType.NEPALI -> {
+            val date = NepaliDate(-1, record.month, record.day)
+            CalendarEvent.NepaliCalendarEvent(title, holiday, date)
+        }
     } as? T).debugAssertNotNull
 }
 
@@ -128,6 +138,7 @@ private fun formatDayAndMonth(calendarType: CalendarType, day: Int, month: Int):
         CalendarType.SHAMSI -> persianMonths
         CalendarType.GREGORIAN -> gregorianMonths
         CalendarType.ISLAMIC -> islamicMonths
+        CalendarType.NEPALI -> nepaliMonths
     }.getOrNull(month - 1).debugAssertNotNull ?: ""
     return language.dm.format(formatNumber(day), monthName)
 }
@@ -136,6 +147,7 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
     private val persianEvents = mutableMapOf<Int, List<CalendarEvent.PersianCalendarEvent>>()
     private val islamicEvents = mutableMapOf<Int, List<CalendarEvent.IslamicCalendarEvent>>()
     private val gregorianEvents = mutableMapOf<Int, List<CalendarEvent.GregorianCalendarEvent>>()
+    private val nepaliEvents = mutableMapOf<Int, List<CalendarEvent.NepaliCalendarEvent>>()
 
     @Suppress("UNCHECKED_CAST")
     fun <T : CalendarEvent<*>> getEventsList(year: Int, type: CalendarType): List<T> {
@@ -144,6 +156,7 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
             CalendarType.SHAMSI -> persianEvents.getOrPut(year, ::generate)
             CalendarType.ISLAMIC -> islamicEvents.getOrPut(year, ::generate)
             CalendarType.GREGORIAN -> gregorianEvents.getOrPut(year, ::generate)
+            CalendarType.NEPALI -> nepaliEvents.getOrPut(year, ::generate)
         } as? List<T> ?: emptyList()
     }
 
@@ -157,6 +170,7 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
                 "Gregorian" -> CalendarType.GREGORIAN
                 "Persian" -> CalendarType.SHAMSI
                 "Hijri" -> CalendarType.ISLAMIC
+                "Nepali" -> CalendarType.NEPALI
                 else -> return@filter false
             }
             if (eventType != type) return@filter false
@@ -198,6 +212,7 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
                 is PersianDate -> CalendarEvent.PersianCalendarEvent(title, isHoliday, date)
                 is IslamicDate -> CalendarEvent.IslamicCalendarEvent(title, isHoliday, date)
                 is CivilDate -> CalendarEvent.GregorianCalendarEvent(title, isHoliday, date)
+                is NepaliDate -> CalendarEvent.NepaliCalendarEvent(title, isHoliday, date)
                 else -> null
             }.debugAssertNotNull
         }

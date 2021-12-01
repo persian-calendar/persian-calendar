@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.utils.getOrderedCalendarTypes
+import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
@@ -43,7 +43,7 @@ class ConverterFragment : Fragment() {
                 binding.resultCard.isVisible = true
                 val selectedCalendarType = binding.dayPickerView.selectedCalendarType
                 binding.calendarsView.showCalendars(
-                    jdn, selectedCalendarType, getOrderedCalendarTypes() - selectedCalendarType
+                    jdn, selectedCalendarType, getEnabledCalendarTypes() - selectedCalendarType
                 )
             }
             it.jdn = Jdn.today()

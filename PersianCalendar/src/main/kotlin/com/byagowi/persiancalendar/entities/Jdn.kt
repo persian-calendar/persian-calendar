@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.utils.toJavaCalendar
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 import kotlin.math.ceil
@@ -26,11 +27,13 @@ value class Jdn(val value: Long) {
         CalendarType.ISLAMIC -> toIslamicCalendar()
         CalendarType.GREGORIAN -> toGregorianCalendar()
         CalendarType.SHAMSI -> toPersianCalendar()
+        CalendarType.NEPALI -> toNepaliCalendar()
     }
 
     fun toIslamicCalendar() = IslamicDate(value)
     fun toGregorianCalendar() = CivilDate(value)
     fun toPersianCalendar() = PersianDate(value)
+    fun toNepaliCalendar() = NepaliDate(value)
 
     fun createMonthDaysList(monthLength: Int) = (value until value + monthLength).map(::Jdn)
 

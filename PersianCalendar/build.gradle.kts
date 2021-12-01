@@ -59,7 +59,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         if (!isMinApi21Build) vectorDrawables.useSupportLibrary = true
         resourceConfigurations += listOf(
-            "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg"
+            "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
+            "ne"
         )
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
     }
@@ -237,8 +238,8 @@ val generateAppSrcTask by tasks.registering {
 
         // Events
         val events = JsonSlurper().parse(eventsJson) as Map<*, *>
-        val (persianEvents, islamicEvents, gregorianEvents) = listOf(
-            "Persian Calendar", "Hijri Calendar", "Gregorian Calendar"
+        val (persianEvents, islamicEvents, gregorianEvents, nepaliEvents) = listOf(
+            "Persian Calendar", "Hijri Calendar", "Gregorian Calendar", "Nepali Calendar"
         ).map { key ->
             (events[key] as List<*>).joinToString(",\n    ") {
                 val record = it as Map<*, *>
@@ -264,16 +265,20 @@ enum class EventType(val source: String) {
 
 class CalendarRecord(val title: String, val type: EventType, val isHoliday: Boolean, val month: Int, val day: Int)
 
-val persianEvents = listOf(
+val persianEvents = listOf<CalendarRecord>(
     $persianEvents
 )
 
-val islamicEvents = listOf(
+val islamicEvents = listOf<CalendarRecord>(
     $islamicEvents
 )
 
-val gregorianEvents = listOf(
+val gregorianEvents = listOf<CalendarRecord>(
     $gregorianEvents
+)
+
+val nepaliEvents = listOf<CalendarRecord>(
+    $nepaliEvents
 )
 
 val irregularRecurringEvents = listOf(

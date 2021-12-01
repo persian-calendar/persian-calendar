@@ -3,7 +3,8 @@
     "Afghanistan": "https://w.mudl.gov.af/sites/default/files/2020-03/Calendar%202020%20Website.pdf",
     "Iran": "https://calendar.ut.ac.ir/Fa/News/Data/Doc/Calendar%201401-Full.pdf",
     "AncientIran": "~https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
-    "International": "~http://www.un.org/en/sections/observances/international-days/"
+    "International": "~http://www.un.org/en/sections/observances/international-days/",
+    "Nepal": ""
   },
 
   "#meta": [
@@ -1337,6 +1338,9 @@
     { "holiday": false, "month": 12, "day": 2, "title": "روز جهانی لغو برده‌داری", "type": "International" },
     { "holiday": false, "month": 12, "day": 10, "title": "روز جهانی حقوق بشر", "type": "International" },
     { "holiday": false, "month": 12, "day": 11, "title": "روز جهانی کوهستان", "type": "International" }
+  ],
+
+  "Nepali Calendar": [
   ],
 
   "Irregular Recurring": [

@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.entities
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
+import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 
@@ -17,6 +18,9 @@ sealed class CalendarEvent<T : AbstractDate>(
 
     class PersianCalendarEvent(title: String, isHoliday: Boolean, date: PersianDate) :
         CalendarEvent<PersianDate>(title, isHoliday, date)
+
+    class NepaliCalendarEvent(title: String, isHoliday: Boolean, date: NepaliDate) :
+        CalendarEvent<NepaliDate>(title, isHoliday, date)
 
     class DeviceCalendarEvent(
         date: CivilDate, title: String, isHoliday: Boolean, val id: Int, val description: String,

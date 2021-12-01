@@ -64,8 +64,13 @@ fun getOrderedCalendarTypes(): List<CalendarType> =
 
 fun getOrderedCalendarEntities(context: Context, short: Boolean = false):
         List<Pair<CalendarType, String>> {
-    applyAppLanguage(context)
     return getOrderedCalendarTypes().map { calendarType ->
+        calendarType to context.getString(if (short) calendarType.shortTitle else calendarType.title)
+    }
+}
+fun getEnabledCalendarEntities(context: Context, short: Boolean = false):
+        List<Pair<CalendarType, String>> {
+    return getEnabledCalendarTypes().map { calendarType ->
         calendarType to context.getString(if (short) calendarType.shortTitle else calendarType.title)
     }
 }
