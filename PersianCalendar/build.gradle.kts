@@ -198,7 +198,7 @@ dependencies {
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:0.20.2")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
     minApi21Implementation("androidx.compose.material:material:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha01")
+    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha02")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
