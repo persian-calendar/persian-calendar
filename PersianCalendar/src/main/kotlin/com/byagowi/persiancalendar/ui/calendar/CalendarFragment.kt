@@ -602,6 +602,7 @@ class CalendarFragment : Fragment() {
             style {
                 unsafe {
                     +"""
+                        body { font-family: system-ui }
                         th, td { padding: 0 .5em; text-align: center }
                         td { border-top: 1px solid lightgray; font-size: 95% }
                         h1 { text-align: center; font-size: 110% }

@@ -62,6 +62,9 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
             } else MODERN.styleRes
         }
 
+        @StyleRes
+        val printSuitableStyle = MODERN.styleRes
+
         fun isDefault(prefs: SharedPreferences?) = prefs.theme == SYSTEM_DEFAULT.key
 
         // DynamicColors.isDynamicColorAvailable() checks for particular brands but sooner or later

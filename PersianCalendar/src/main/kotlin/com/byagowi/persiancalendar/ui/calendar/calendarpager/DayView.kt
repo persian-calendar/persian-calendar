@@ -46,7 +46,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         if (dayIsSelected) canvas.drawCircle(
             width / 2f, height / 2f, radius - shared.circlesPadding, shared.selectedPaint
         )
-        if (today) canvas.drawCircle(
+        if (today && !shared.isPrint) canvas.drawCircle(
             width / 2f, height / 2f, radius - shared.circlesPadding, shared.todayPaint
         )
     }
@@ -55,7 +55,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun drawText(canvas: Canvas, shared: SharedDayViewData) {
         val textPaint = when {
             jdn != null -> when {
-                today && !shared.isCurrentDayOutlineOnly -> shared.dayOfMonthNumberCurrentTextPaint
+                today && !shared.isCurrentDayOutlineOnly && !shared.isPrint ->
+                    shared.dayOfMonthNumberCurrentTextPaint
                 holiday -> shared.dayOfMonthNumberTextHolidayPaint
                 dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
                 else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint

@@ -118,17 +118,18 @@ class DaysAdapter(
             if (days.size < position - 6 - fixedStartingDayOfWeek) {
                 setEmpty()
             } else if (position < 7) {
-                val weekDayInitial = getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position))
-                dayView.setInitialOfWeekDay(
-                    getInitialOfWeekDay(revertWeekStartOffsetFromWeekDay(position))
-                )
+                val weekDayPosition = revertWeekStartOffsetFromWeekDay(position)
+                val weekDayTitle =
+                    if (sharedDayViewData.isPrint) getWeekDayName(weekDayPosition)
+                    else getInitialOfWeekDay(weekDayPosition)
+                dayView.setInitialOfWeekDay(weekDayTitle)
 
                 dayView.contentDescription = if (isTalkBackEnabled)
                     context.getString(
                         R.string.week_days_name_column,
                         getWeekDayName(revertWeekStartOffsetFromWeekDay(position))
                     )
-                else weekDayInitial
+                else weekDayTitle
 
                 dayView.isVisible = true
                 dayView.setBackgroundResource(0)

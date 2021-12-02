@@ -275,7 +275,7 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
     return remoteViews
 }
 
-private fun prepareViewForWidget(view: View, width: Int, height: Int) {
+fun prepareViewForRendering(view: View, width: Int, height: Int) {
     view.layoutDirection = view.context.resources.configuration.layoutDirection
     // https://stackoverflow.com/a/69080742
     view.measure(
@@ -295,7 +295,7 @@ private fun createSunViewRemoteViews(
     }
     val sunView = SunView(context, textColor = color)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
-    prepareViewForWidget(sunView, width, height)
+    prepareViewForRendering(sunView, width, height)
     prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
     sunView.initiate()
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
@@ -336,9 +336,9 @@ private fun createMonthViewRemoteViews(
         prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
-    monthView.initializeForWidget(color, height, date)
+    monthView.initializeForRendering(color, height, date, false)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
-    prepareViewForWidget(monthView, width, height)
+    prepareViewForRendering(monthView, width, height)
     remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())
     remoteViews.setContentDescription(R.id.image, monthView.contentDescription)
     remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())

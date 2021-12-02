@@ -28,9 +28,11 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         adapter = daysAdapter
     }
 
-    fun initializeForWidget(@ColorInt textColor: Int, height: Int, today: AbstractDate) {
-        daysAdapter =
-            DaysAdapter(context, SharedDayViewData(context, height / 7f, textColor), null)
+    fun initializeForRendering(
+        @ColorInt textColor: Int, height: Int, today: AbstractDate, isPrint: Boolean
+    ) {
+        val sharedData = SharedDayViewData(context, height / 7f, textColor, isPrint)
+        daysAdapter = DaysAdapter(context, sharedData, null)
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)
         bind(jdn, jdn.toCalendar(mainCalendar))
@@ -42,7 +44,9 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         super.onDraw(c)
 
         // Widget only tweak
-        val widgetFooterTextPaint = daysAdapter?.sharedDayViewData?.widgetFooterTextPaint ?: return
+        val sharedData = daysAdapter?.sharedDayViewData ?: return
+        val widgetFooterTextPaint = sharedData.widgetFooterTextPaint ?: return
+        if (sharedData.isPrint) return
         c.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
     }
 
