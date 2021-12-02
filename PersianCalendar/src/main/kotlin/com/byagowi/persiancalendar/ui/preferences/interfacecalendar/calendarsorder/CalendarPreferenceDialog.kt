@@ -8,14 +8,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
-import com.byagowi.persiancalendar.utils.getOrderedCalendarEntities
 
 fun showCalendarPreferenceDialog(activity: Activity, onEmpty: () -> Unit) {
     val enabledCalendarTypes = getEnabledCalendarTypes()
-    val adapter = RecyclerListAdapter(getOrderedCalendarEntities(activity).map { (type, title) ->
-        RecyclerListAdapter.Item(title, type.name, type in enabledCalendarTypes)
+    val orderedCalendarTypes =
+        getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it.toSet()) }
+    val adapter = RecyclerListAdapter(orderedCalendarTypes.map { calendarType ->
+        RecyclerListAdapter.Item(
+            activity.getString(calendarType.title), calendarType.name,
+            calendarType in enabledCalendarTypes
+        )
     })
 
     AlertDialog.Builder(activity)

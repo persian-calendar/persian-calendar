@@ -51,16 +51,6 @@ val isArabicDigitSelected: Boolean get() = preferredDigits === Language.ARABIC_D
 
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
-fun getOrderedCalendarTypes(): List<CalendarType> =
-    getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it) }
-
-fun getOrderedCalendarEntities(context: Context, short: Boolean = false):
-        List<Pair<CalendarType, String>> {
-    return getOrderedCalendarTypes().map { calendarType ->
-        calendarType to context.getString(if (short) calendarType.shortTitle else calendarType.title)
-    }
-}
-
 fun getEnabledCalendarEntities(context: Context, short: Boolean = false):
         List<Pair<CalendarType, String>> {
     return getEnabledCalendarTypes().map { calendarType ->
