@@ -343,4 +343,6 @@
     <string name="show_sun_and_moon_path_in_24_hours">نمایش مسیر ماه و خورشید در ۲۴ ساعت آینده</string>
     <string name="widget_prefer_system_colors">پیروی از رنگ‌بندی سیستم در ویجت‌ها</string>
     <string name="country_emoji">🇮🇷</string>
+    <string name="nepali_calendar">نپالی</string>
+    <string name="nepali_calendar_short">نپالی</string>
 </resources>
