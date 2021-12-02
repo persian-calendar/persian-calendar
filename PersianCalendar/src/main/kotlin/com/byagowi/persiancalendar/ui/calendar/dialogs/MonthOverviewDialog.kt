@@ -160,9 +160,9 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
                     MonthView(ContextThemeWrapper(context, Theme.printSuitableStyle))
                 view.initializeForRendering(Color.BLACK, h * 3, date, true)
                 prepareViewForRendering(view, w * 3, h * 3)
-                val baos = ByteArrayOutputStream()
-                view.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, baos)
-                val base64 = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT)
+                val buffer = ByteArrayOutputStream()
+                view.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, buffer)
+                val base64 = Base64.encodeToString(buffer.toByteArray(), Base64.DEFAULT)
                 src = "data:image/png;base64,${base64}"
             }
         }
