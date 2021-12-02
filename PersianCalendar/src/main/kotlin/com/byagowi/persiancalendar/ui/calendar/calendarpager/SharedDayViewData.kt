@@ -95,12 +95,6 @@ class SharedDayViewData(
             it.color = context.resolveColor(R.attr.colorTextDayCurrent)
             addShadowIfNeeded(it)
         }
-    val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.textAlign = Paint.Align.CENTER
-        it.textSize = headerTextSize
-        it.color = ColorUtils.setAlphaComponent(colorTextDay, 0xA0)
-        addShadowIfNeeded(it)
-    }
 
     private val colorTextDaySelected =
         widgetTextColor ?: context.resolveColor(R.attr.colorTextDaySelected)
@@ -118,6 +112,12 @@ class SharedDayViewData(
     }
 
     private val colorTextDayName = widgetTextColor ?: context.resolveColor(R.attr.colorTextDayName)
+    val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = headerTextSize
+        it.color = colorTextDayName
+        addShadowIfNeeded(it)
+    }
     val weekNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
