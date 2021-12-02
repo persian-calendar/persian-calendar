@@ -12,6 +12,7 @@ const val LAST_CHOSEN_TAB_KEY = "LastChosenTab"
 
 const val PREF_MAIN_CALENDAR_KEY = "mainCalendarType"
 const val PREF_OTHER_CALENDARS_KEY = "otherCalendarTypes"
+const val PREF_SECONDARY_CALENDAR_IN_TABLE = "secondaryCalendar"
 const val PREF_PRAY_TIME_METHOD = "SelectedPrayTimeMethod"
 const val PREF_HIGH_LATITUDES_METHOD = "SelectedHighLatitudesMethod"
 const val PREF_ASR_HANAFI_JURISTIC = "AsrHanafiJuristic"

@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
+import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.TIME_NAMES
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
@@ -53,6 +54,7 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.otherCalendars
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
@@ -92,6 +94,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
+import com.byagowi.persiancalendar.utils.secondaryCalendar
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
@@ -589,6 +592,22 @@ class CalendarFragment : Fragment() {
             toolbar.menu.add(R.string.month_pray_times).also {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                 it.onClick { context.showHtml(createOwghatHtmlReport(calendarPager.selectedMonth)) }
+            }
+        }
+        toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
+            val prefs = context.appPrefs
+            val secondaryCalendar = prefs.secondaryCalendar
+            (listOf(null) + otherCalendars).forEach {
+                val item = menu.add(it?.title ?: R.string.none)
+                item.isCheckable = true
+                item.isChecked = it == secondaryCalendar
+                item.onClick {
+                    prefs.edit {
+                        if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
+                        else putString(PREF_SECONDARY_CALENDAR_IN_TABLE, it.name)
+                    }
+                    findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                }
             }
         }
     }

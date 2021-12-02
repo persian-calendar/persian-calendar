@@ -12,12 +12,22 @@ import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 
-enum class CalendarType(@StringRes val title: Int, @StringRes val shortTitle: Int) {
+enum class CalendarType(
+    @StringRes val title: Int, @StringRes val shortTitle: Int, val preferredDigits: CharArray
+) {
     // So vital, don't ever change names of these
-    SHAMSI(R.string.shamsi_calendar, R.string.shamsi_calendar_short),
-    ISLAMIC(R.string.islamic_calendar, R.string.islamic_calendar_short),
-    GREGORIAN(R.string.gregorian_calendar, R.string.gregorian_calendar_short),
-    NEPALI(R.string.nepali_calendar, R.string.nepali_calendar_short);
+    SHAMSI(
+        R.string.shamsi_calendar, R.string.shamsi_calendar_short, Language.PERSIAN_DIGITS
+    ),
+    ISLAMIC(
+        R.string.islamic_calendar, R.string.islamic_calendar_short, Language.ARABIC_INDIC_DIGITS
+    ),
+    GREGORIAN(
+        R.string.gregorian_calendar, R.string.gregorian_calendar_short, Language.ARABIC_DIGITS
+    ),
+    NEPALI(
+        R.string.nepali_calendar, R.string.nepali_calendar_short, Language.DEVANAGARI_DIGITS
+    );
 
     fun createDate(year: Int, month: Int, day: Int): AbstractDate = when (this) {
         ISLAMIC -> IslamicDate(year, month, day)

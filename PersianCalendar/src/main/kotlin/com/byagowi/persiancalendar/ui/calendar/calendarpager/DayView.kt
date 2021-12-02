@@ -8,8 +8,9 @@ import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
-import com.byagowi.persiancalendar.global.otherCalendars
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.formatNumber
 import kotlin.math.min
 
@@ -38,8 +39,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         drawText(canvas, shared) // can be a day number, week day name abbr or week number of year
         drawIndicators(canvas, shared) // whether a day has event or appointment
         drawHeader(canvas, shared) // shift work header
-        // draw other calendars experiment, currently disabled
-        if ((false)) drawOtherCalendars(canvas, shared, radius)
     }
 
     private fun drawCircle(canvas: Canvas, shared: SharedDayViewData, radius: Float) {
@@ -98,21 +97,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         )
     }
 
-    private fun drawOtherCalendars(canvas: Canvas, shared: SharedDayViewData, radius: Float) {
-        // Experiment around what happens if we show other calendars day of month
-        val jdn = jdn ?: return
-        otherCalendars.forEachIndexed { i, calendar ->
-            val offset = (if (layoutDirection == LAYOUT_DIRECTION_RTL) -1 else 1) *
-                    if (i == 1) -1 else 1
-            canvas.drawText(
-                // better to not calculate this during onDraw
-                formatNumber(jdn.toCalendar(calendar).dayOfMonth),
-                (width - radius * offset) / 2f, (height + radius) / 1.75f,
-                if (dayIsSelected) shared.headerTextSelectedPaint else shared.headerTextPaint
-            )
-        }
-    }
-
     private fun setAll(
         text: String, isToday: Boolean = false, isSelected: Boolean = false,
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
@@ -126,7 +110,12 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.jdn = jdn
         this.dayOfMonth = dayOfMonth
         this.isWeekNumber = isWeekNumber
-        this.header = header
+        val secondaryCalendar = sharedDayViewData?.secondaryCalendar
+        this.header = if (secondaryCalendar == null || jdn == null) header else formatNumber(
+            jdn.toCalendar(secondaryCalendar).dayOfMonth,
+            if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
+            else secondaryCalendar.preferredDigits
+        )
         sharedDayViewData.debugAssertNotNull?.also { shared ->
             this.indicators = listOf(
                 hasAppointment to shared.appointmentIndicatorPaint,

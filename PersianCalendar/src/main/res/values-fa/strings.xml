@@ -345,4 +345,5 @@
     <string name="country_emoji">🇮🇷</string>
     <string name="nepali_calendar">نپالی</string>
     <string name="nepali_calendar_short">نپالی</string>
+    <string name="show_secondary_calendar">نمایش تقویم ثانویه</string>
 </resources>
