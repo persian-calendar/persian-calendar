@@ -8,6 +8,7 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
+import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -97,7 +98,7 @@ class SharedDayViewData(
     val headerTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = headerTextSize
-        it.color = colorTextDay
+        it.color = ColorUtils.setAlphaComponent(colorTextDay, 0xA0)
         addShadowIfNeeded(it)
     }
 
