@@ -7,7 +7,6 @@ import androidx.constraintlayout.helper.widget.Flow
 import com.byagowi.persiancalendar.databinding.CalendarItemBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.layoutInflater

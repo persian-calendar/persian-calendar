@@ -32,14 +32,6 @@ fun applyAppLanguage(context: Context) {
 //    return createConfigurationContext(config)
 //}
 
-// See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
-val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
-val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
-val DEVANAGARI_DIGITS = charArrayOf('०', '१', '२', '३', '४', '५', '६', '७', '८', '९')
-// CJK digits: charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
-// but they weren't looking nice in the UI
-
 val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
 
 fun formatNumber(number: Double): String {
@@ -55,7 +47,7 @@ fun formatNumber(number: String): String {
         .joinToString("")
 }
 
-val isArabicDigitSelected: Boolean get() = preferredDigits === ARABIC_DIGITS
+val isArabicDigitSelected: Boolean get() = preferredDigits === Language.ARABIC_DIGITS
 
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
@@ -68,6 +60,7 @@ fun getOrderedCalendarEntities(context: Context, short: Boolean = false):
         calendarType to context.getString(if (short) calendarType.shortTitle else calendarType.title)
     }
 }
+
 fun getEnabledCalendarEntities(context: Context, short: Boolean = false):
         List<Pair<CalendarType, String>> {
     return getEnabledCalendarTypes().map { calendarType ->

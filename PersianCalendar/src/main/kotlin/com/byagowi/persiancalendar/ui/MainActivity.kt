@@ -83,7 +83,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.snackbar.Snackbar
-import io.github.persiancalendar.calendar.PersianDate
 import kotlin.math.roundToInt
 
 
@@ -177,12 +176,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             // Southern hemisphere
             if ((coordinates?.latitude ?: 1.0) < .0) season = (season + 2) % 4
 
-            drawerHeader.seasonImage.setImageResource(when (season) {
-                0 -> R.drawable.spring
-                1 -> R.drawable.summer
-                2 -> R.drawable.fall
-                else -> R.drawable.winter
-            })
+            drawerHeader.seasonImage.setImageResource(
+                when (season) {
+                    0 -> R.drawable.spring
+                    1 -> R.drawable.summer
+                    2 -> R.drawable.fall
+                    else -> R.drawable.winter
+                }
+            )
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {

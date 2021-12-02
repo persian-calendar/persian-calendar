@@ -27,9 +27,9 @@ import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.PREF_IRAN_TIME
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LATITUDE
+import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
-import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
@@ -55,9 +55,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
-import com.byagowi.persiancalendar.utils.ARABIC_DIGITS
 import com.byagowi.persiancalendar.utils.EnabledHolidays
-import com.byagowi.persiancalendar.utils.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -88,7 +86,7 @@ var weekDays = weekDaysEmptyList
     private set
 var weekDaysInitials = weekDaysEmptyList
     private set
-var preferredDigits = PERSIAN_DIGITS
+var preferredDigits = Language.PERSIAN_DIGITS
     private set
 var clockIn24 = DEFAULT_WIDGET_IN_24
     private set
@@ -214,7 +212,7 @@ fun updateStoredPreference(context: Context) {
     preferredDigits =
         if (!prefs.getBoolean(PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS) ||
             !language.canHaveLocalDigits
-        ) ARABIC_DIGITS
+        ) Language.ARABIC_DIGITS
         else language.preferredDigits
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)

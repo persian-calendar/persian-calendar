@@ -3,9 +3,6 @@ package com.byagowi.persiancalendar.entities
 import android.annotation.SuppressLint
 import android.content.Context
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.utils.ARABIC_INDIC_DIGITS
-import com.byagowi.persiancalendar.utils.DEVANAGARI_DIGITS
-import com.byagowi.persiancalendar.utils.PERSIAN_DIGITS
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -384,5 +381,13 @@ enum class Language(val code: String, val nativeName: String) {
         private val afCodeOrder = listOf("zz", "af", "ir", "tr", "iq")
         private val arCodeOrder = listOf("zz", "iq", "tr", "ir", "af")
         private val trCodeOrder = listOf("zz", "tr", "ir", "iq", "af")
+
+        // See the naming here, https://developer.mozilla.org/en-US/docs/Web/CSS/list-style-type
+        val PERSIAN_DIGITS = charArrayOf('۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹')
+        val ARABIC_DIGITS = charArrayOf('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
+        val ARABIC_INDIC_DIGITS = charArrayOf('٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩')
+        val DEVANAGARI_DIGITS = charArrayOf('०', '१', '२', '३', '४', '५', '६', '७', '८', '९')
+        // CJK digits: charArrayOf('０', '１', '２', '３', '４', '５', '６', '７', '８', '９')
+        // but they weren't looking nice in the UI
     }
 }

@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.preferredDigits
 
 // Dynamic icon generation, currently unused
@@ -23,8 +24,8 @@ fun createStatusIcon(dayOfMonth: Int): Bitmap {
 }
 
 fun getDayIconResource(day: Int): Int = when (preferredDigits) {
-    ARABIC_DIGITS -> DAYS_ICONS_ARABIC
-    ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC
+    Language.DEVANAGARI_DIGITS, Language.ARABIC_DIGITS -> DAYS_ICONS_ARABIC
+    Language.ARABIC_INDIC_DIGITS -> DAYS_ICONS_ARABIC_INDIC
     else -> DAYS_ICONS_PERSIAN
 }.getOrNull(day - 1) ?: 0
 
