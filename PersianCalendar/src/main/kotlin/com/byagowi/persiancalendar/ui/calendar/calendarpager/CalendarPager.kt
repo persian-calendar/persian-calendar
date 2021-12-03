@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.shared.ArrowView
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.*
 import io.github.persiancalendar.calendar.AbstractDate
 import java.lang.ref.WeakReference
@@ -81,7 +82,9 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         override fun getItemCount() = monthsLimit
 
-        private val sharedDayViewData = SharedDayViewData(context, 40.sp)
+        private val sharedDayViewData = SharedDayViewData(
+            context, resources.getDimension(R.dimen.grid_calendar_height) / 7 - 1.dp
+        )
 
         inner class ViewHolder(val binding: FragmentMonthBinding) :
             RecyclerView.ViewHolder(binding.root) {
