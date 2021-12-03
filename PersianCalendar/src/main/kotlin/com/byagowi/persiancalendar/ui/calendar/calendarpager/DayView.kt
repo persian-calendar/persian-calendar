@@ -92,7 +92,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun drawHeader(canvas: Canvas, shared: SharedDayViewData) {
         if (header.isEmpty()) return
         canvas.drawText(
-            header, width / 2f, height * 0.27f,
+            header, width / 2f, height * 0.26f,
             if (dayIsSelected) shared.headerTextSelectedPaint else shared.headerTextPaint
         )
     }

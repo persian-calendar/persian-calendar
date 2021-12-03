@@ -28,8 +28,11 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.showHtml
+import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEvents
@@ -37,8 +40,8 @@ import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
+import com.byagowi.persiancalendar.utils.secondaryCalendar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.persiancalendar.calendar.AbstractDate
@@ -51,6 +54,7 @@ import kotlinx.html.html
 import kotlinx.html.img
 import kotlinx.html.meta
 import kotlinx.html.script
+import kotlinx.html.small
 import kotlinx.html.stream.createHTML
 import kotlinx.html.style
 import kotlinx.html.table
@@ -134,9 +138,11 @@ private fun createEventsList(
         }
     }
     return if (isPrint) events.map { (jdn, title) ->
-        jdn to title.toString().replace("\n", " – ")
+        jdn to title.toString().replace("\n", enDash)
     } else events
 }
+
+private const val enDash = " – "
 
 private fun createEventsReport(context: Context, date: AbstractDate) = createHTML().html {
     attributes["lang"] = language.language
@@ -155,7 +161,24 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
         }
     }
     body {
-        h1 { +language.my.format(date.monthName, formatNumber(date.year)) }
+        h1 {
+            +language.my.format(date.monthName, formatNumber(date.year))
+            val secondaryCalendar = context.appPrefs.secondaryCalendar ?: return@h1
+            val from = Jdn(
+                mainCalendar.createDate(date.year, date.month, 1)
+            ).toCalendar(secondaryCalendar)
+            val to = Jdn(
+                mainCalendar.createDate(
+                    date.year, date.month, date.calendarType.getMonthLength(date.year, date.month)
+                )
+            ).toCalendar(secondaryCalendar)
+            small {
+                val dates = listOf(from) + if (from.month == to.month) emptyList() else listOf(to)
+                +(" (" + dates.joinToString(enDash) {
+                    language.my.format(it.monthName, formatNumber(it.year))
+                } + ")")
+            }
+        }
         div("center") {
             img {
                 width = "100%"
