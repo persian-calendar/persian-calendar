@@ -13,6 +13,7 @@ import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -595,11 +596,11 @@ class CalendarFragment : Fragment() {
             }
         }
         toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
+            val groupId = Menu.FIRST
             val prefs = context.appPrefs
             val secondaryCalendar = prefs.secondaryCalendar
             (listOf(null) + otherCalendars).forEach {
-                val item = menu.add(it?.title ?: R.string.none)
-                item.isCheckable = true
+                val item = menu.add(groupId, Menu.NONE, Menu.NONE, it?.title ?: R.string.none)
                 item.isChecked = it == secondaryCalendar
                 item.onClick {
                     prefs.edit {
@@ -609,6 +610,7 @@ class CalendarFragment : Fragment() {
                     findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
             }
+            menu.setGroupCheckable(groupId, true, true)
         }
     }
 
