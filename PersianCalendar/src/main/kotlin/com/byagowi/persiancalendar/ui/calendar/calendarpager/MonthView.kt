@@ -2,14 +2,19 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.view.setPadding
+import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
@@ -26,6 +31,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     fun initialize(sharedDayViewData: SharedDayViewData, calendarPager: CalendarPager) {
         daysAdapter = DaysAdapter(context, sharedDayViewData, calendarPager)
         adapter = daysAdapter
+        addCellSpacing(4.dp.toInt())
     }
 
     fun initializeForRendering(
@@ -36,6 +42,21 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)
         bind(jdn, jdn.toCalendar(mainCalendar))
+        if (isPrint) addCellSpacing(20)
+    }
+
+    private fun addCellSpacing(space: Int) {
+        addItemDecoration(object : ItemDecoration() {
+            override fun getItemOffsets(
+                outRect: Rect, view: View, parent: RecyclerView, state: State
+            ) {
+                if (parent.paddingBottom != space) {
+                    parent.updatePadding(space)
+                    parent.clipToPadding = false
+                }
+                outRect.set(0, 0, 0, space)
+            }
+        })
     }
 
     private var monthName = ""

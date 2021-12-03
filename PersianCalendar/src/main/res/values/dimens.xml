@@ -13,7 +13,7 @@
     <dimen name="card_elevation">8dp</dimen>
     <dimen name="chip_elevation">4dp</dimen>
 
-    <dimen name="grid_calendar_height">305sp</dimen>
+    <dimen name="grid_calendar_height">315sp</dimen>
     <dimen name="grid_calendar_land_width">340sp</dimen>
     <dimen name="grid_calendar_padding_bottom">4sp</dimen>
 

@@ -83,7 +83,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         override fun getItemCount() = monthsLimit
 
         private val sharedDayViewData = SharedDayViewData(
-            context, resources.getDimension(R.dimen.grid_calendar_height) / 7 - 1.dp
+            context, resources.getDimension(R.dimen.grid_calendar_height) / 7 - 4.5.dp
         )
 
         inner class ViewHolder(val binding: FragmentMonthBinding) :
