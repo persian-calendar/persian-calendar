@@ -51,7 +51,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
                 outRect: Rect, view: View, parent: RecyclerView, state: State
             ) {
                 if (parent.paddingBottom != space) {
-                    parent.updatePadding(space)
+                    parent.updatePadding(bottom = space)
                     parent.clipToPadding = false
                 }
                 outRect.set(0, 0, 0, space)

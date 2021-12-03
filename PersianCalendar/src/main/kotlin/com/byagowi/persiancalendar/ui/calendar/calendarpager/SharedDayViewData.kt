@@ -71,7 +71,7 @@ class SharedDayViewData(
     }
 
     private val textSize = height * (if (isArabicDigitSelected) 18 else 25) / 40
-    private val headerTextSize = height * 12 / 40
+    private val headerTextSize = height * 11 / 40
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
