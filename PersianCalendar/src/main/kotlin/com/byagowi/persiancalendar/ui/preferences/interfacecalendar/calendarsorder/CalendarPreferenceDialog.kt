@@ -9,13 +9,17 @@ import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarType
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 
 fun showCalendarPreferenceDialog(activity: Activity, onEmpty: () -> Unit) {
     val enabledCalendarTypes = getEnabledCalendarTypes()
-    val orderedCalendarTypes =
-        getEnabledCalendarTypes().let { it + (CalendarType.values().toList() - it.toSet()) }
+    val orderedCalendarTypes = getEnabledCalendarTypes().let {
+        it + (CalendarType.values().toList() - it.toSet()) -
+                if (language.isUserAbleToReadPersian) setOf(CalendarType.NEPALI)
+                else emptySet()
+    }
     val adapter = RecyclerListAdapter(orderedCalendarTypes.map { calendarType ->
         RecyclerListAdapter.Item(
             activity.getString(calendarType.title), calendarType.name,
