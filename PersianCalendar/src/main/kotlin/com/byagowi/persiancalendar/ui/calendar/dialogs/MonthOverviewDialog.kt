@@ -158,14 +158,12 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
         h1 { +language.my.format(date.monthName, formatNumber(date.year)) }
         div("center") {
             img {
-                val w = 700
-                val h = 300
-                val scaleFactor = 4
-                width = w.toString()
-                height = h.toString()
+                width = "100%"
                 val view = MonthView(ContextThemeWrapper(context, Theme.printSuitableStyle))
-                view.initializeForRendering(Color.BLACK, h * scaleFactor, date, true)
-                prepareViewForRendering(view, w * scaleFactor, h * scaleFactor)
+                val w = 2800
+                val h = 1200
+                view.initializeForRendering(Color.BLACK, h, date, true)
+                prepareViewForRendering(view, w, h)
                 val buffer = ByteArrayOutputStream()
                 view.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, buffer)
                 val base64 = Base64.encodeToString(buffer.toByteArray(), Base64.DEFAULT)
