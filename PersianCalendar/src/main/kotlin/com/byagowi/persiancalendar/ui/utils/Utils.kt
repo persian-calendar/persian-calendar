@@ -211,6 +211,16 @@ fun Window.makeWallpaperTransparency() {
     this.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 }
 
+fun prepareViewForRendering(view: View, width: Int, height: Int) {
+    view.layoutDirection = view.context.resources.configuration.layoutDirection
+    // https://stackoverflow.com/a/69080742
+    view.measure(
+        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
+        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
+    )
+    view.layout(0, 0, width, height)
+}
+
 // Whether we can enable the new interface
 val canEnableNewInterface = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 

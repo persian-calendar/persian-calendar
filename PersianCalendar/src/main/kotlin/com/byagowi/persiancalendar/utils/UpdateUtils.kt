@@ -74,6 +74,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -273,16 +274,6 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
         context.launchAgeWidgetConfigurationAppPendingIntent(widgetId)
     )
     return remoteViews
-}
-
-fun prepareViewForRendering(view: View, width: Int, height: Int) {
-    view.layoutDirection = view.context.resources.configuration.layoutDirection
-    // https://stackoverflow.com/a/69080742
-    view.measure(
-        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.AT_MOST),
-        View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
-    )
-    view.layout(0, 0, width, height)
 }
 
 private fun createSunViewRemoteViews(
