@@ -53,8 +53,12 @@ import kotlinx.html.meta
 import kotlinx.html.script
 import kotlinx.html.stream.createHTML
 import kotlinx.html.style
+import kotlinx.html.table
+import kotlinx.html.td
+import kotlinx.html.tr
 import kotlinx.html.unsafe
 import java.io.ByteArrayOutputStream
+import kotlin.math.ceil
 
 fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
     val events = createEventsList(activity, date)
@@ -143,7 +147,9 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
             unsafe {
                 +"""
                     body { font-family: system-ui }
-                    h1, .center { text-align: center; font-size: 110% }
+                    td { padding: 0 1em; vertical-align: top; width: 50% }
+                    table { width: 100% }
+                    h1, .center { text-align: center }
                 """.trimIndent()
             }
         }
@@ -154,22 +160,31 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
             img {
                 val w = 700
                 val h = 300
+                val scaleFactor = 4
                 width = w.toString()
                 height = h.toString()
-                val view =
-                    MonthView(ContextThemeWrapper(context, Theme.printSuitableStyle))
-                view.initializeForRendering(Color.BLACK, h * 3, date, true)
-                prepareViewForRendering(view, w * 3, h * 3)
+                val view = MonthView(ContextThemeWrapper(context, Theme.printSuitableStyle))
+                view.initializeForRendering(Color.BLACK, h * scaleFactor, date, true)
+                prepareViewForRendering(view, w * scaleFactor, h * scaleFactor)
                 val buffer = ByteArrayOutputStream()
                 view.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, buffer)
                 val base64 = Base64.encodeToString(buffer.toByteArray(), Base64.DEFAULT)
                 src = "data:image/png;base64,${base64}"
             }
         }
-        createEventsList(context, date, true).forEach { (jdn, title) ->
-            div("two-columns") {
-                b { +(formatNumber(jdn.toCalendar(mainCalendar).dayOfMonth) + spacedColon) }
-                +title.toString()
+        table {
+            tr {
+                val events = createEventsList(context, date, true)
+                events.chunked(ceil(events.size / 2.0).toInt()).forEach {
+                    td {
+                        it.forEach { (jdn, title) ->
+                            div {
+                                b { +(formatNumber(jdn.toCalendar(mainCalendar).dayOfMonth) + spacedColon) }
+                                +title.toString()
+                            }
+                        }
+                    }
+                }
             }
         }
         script { unsafe { +"print()" } }
