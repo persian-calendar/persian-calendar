@@ -136,13 +136,14 @@ class DeviceInformationFragment : Fragment() {
         binding.bottomNavigation.menu.also {
             var clickCount = 0
             val click = { if (++clickCount % 10 == 0) openTestingHiddenDialog() }
-            it.add(Build.VERSION.RELEASE).setIcon(R.drawable.ic_developer).onClick(click)
-            it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_settings).onClick(click)
-            it.add(
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
-                else Build.CPU_ABI
-            ).setIcon(R.drawable.ic_motorcycle).onClick(click)
-            it.add(Build.MODEL).setIcon(R.drawable.ic_device_information_white).onClick(click)
+            listOf(
+                R.drawable.ic_developer to Build.VERSION.RELEASE,
+                R.drawable.ic_settings to "API " + Build.VERSION.SDK_INT,
+                R.drawable.ic_motorcycle to
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
+                        else Build.CPU_ABI,
+                R.drawable.ic_device_information_white to Build.MODEL
+            ).forEach { (icon, title) -> it.add(title).setIcon(icon).onClick(click) }
         }
         return binding.root
     }
