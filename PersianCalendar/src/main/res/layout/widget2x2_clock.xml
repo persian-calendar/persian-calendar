@@ -25,7 +25,7 @@
             style="@style/WidgetTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-thin"
+            android:fontFamily="sans-serif"
             android:gravity="start"
             android:textAlignment="viewStart"
             android:textSize="34sp" />

@@ -37,7 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:fontFamily="sans-serif-thin"
+                android:fontFamily="sans-serif"
                 android:gravity="end|center_vertical"
                 android:maxLines="1"
                 android:textAlignment="viewEnd"
