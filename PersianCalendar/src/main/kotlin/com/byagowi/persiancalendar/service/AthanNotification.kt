@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
 import android.os.IBinder
@@ -47,6 +48,12 @@ class AthanNotification : Service() {
         val notificationManager = getSystemService<NotificationManager>()
 
         val soundUri = getAthanUri(this)
+        runCatching {
+            // ensure custom reminder sounds play well
+            grantUriPermission(
+                "com.android.systemui", soundUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }.onFailure(logException)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
@@ -63,6 +70,8 @@ class AthanNotification : Service() {
                     soundUri, AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                        .setLegacyStreamType(AudioManager.STREAM_NOTIFICATION)
+                        .setFlags(AudioAttributes.FLAG_AUDIBILITY_ENFORCED)
                         .build()
                 )
             }
@@ -87,13 +96,6 @@ class AthanNotification : Service() {
         }.joinToString(" - ") {
             "${getString(it)}: ${prayTimes?.getFromStringId(it)?.toFormattedString() ?: ""}"
         }
-
-        runCatching {
-            // ensure custom reminder sounds play well
-            grantUriPermission(
-                "com.android.systemui", soundUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-        }.onFailure(logException)
 
         val notificationBuilder = NotificationCompat.Builder(this, notificationChannelId)
         notificationBuilder.setAutoCancel(true)
