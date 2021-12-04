@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.PREF_NUMERICAL_DATE_PREFERRED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
+import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
@@ -117,6 +118,8 @@ var coordinates: Coordinates? = null
 var mainCalendar = CalendarType.SHAMSI
     private set
 var otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+    private set
+var secondaryCalendar: CalendarType? = null
     private set
 var isShowWeekOfYearEnabled = false
     private set
@@ -254,10 +257,14 @@ fun updateStoredPreference(context: Context) {
         otherCalendars =
             (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: language.defaultOtherCalendars)
                 .splitIgnoreEmpty(",").map(CalendarType::valueOf)
+        secondaryCalendar = prefs.getString(PREF_SECONDARY_CALENDAR_IN_TABLE, null)?.let {
+            runCatching { CalendarType.valueOf(it) }.onFailure(logException).getOrNull()
+        }
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
         mainCalendar = CalendarType.SHAMSI
         otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+        secondaryCalendar = null
     }.getOrNull().debugAssertNotNull
 
     isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)

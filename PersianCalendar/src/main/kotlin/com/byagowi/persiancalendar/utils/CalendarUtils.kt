@@ -9,6 +9,7 @@ import android.provider.CalendarContract
 import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
+import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -259,6 +260,26 @@ else language.dmy.format(formatNumber(date.dayOfMonth), date.monthName, formatNu
 fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
     formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)
 )
+
+fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: CalendarType): String {
+    val mainCalendar = date.calendarType
+    val from = Jdn(
+        mainCalendar.createDate(date.year, date.month, 1)
+    ).toCalendar(secondaryCalendar)
+    val to = Jdn(
+        mainCalendar.createDate(
+            date.year, date.month,
+            date.calendarType.getMonthLength(date.year, date.month)
+        )
+    ).toCalendar(secondaryCalendar)
+    return when {
+        from.month == to.month -> language.my.format(from.monthName, formatNumber(from.year))
+        from.year != to.year -> listOf(from, to).joinToString(EN_DASH) {
+            language.my.format(it.monthName, formatNumber(it.year))
+        }
+        else -> language.my.format(from.monthName + EN_DASH + to.monthName, formatNumber(from.year))
+    }
+}
 
 private fun getCalendarNameAbbr(date: AbstractDate) =
     calendarTypesTitleAbbr.getOrNull(date.calendarType.ordinal) ?: ""

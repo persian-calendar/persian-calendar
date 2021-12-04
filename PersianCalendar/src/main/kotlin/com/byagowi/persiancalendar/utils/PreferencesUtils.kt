@@ -94,8 +94,3 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
     putString(PREF_PRAY_TIME_METHOD, language.preferredCalculationMethod.name)
     putBoolean(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority)
 }
-
-val SharedPreferences.secondaryCalendar
-    get() = getString(PREF_SECONDARY_CALENDAR_IN_TABLE, null)?.let {
-        runCatching { CalendarType.valueOf(it) }.onFailure(logException).getOrNull()
-    }

@@ -8,16 +8,13 @@ import android.util.TypedValue
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
-import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveBoolean
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
-import com.byagowi.persiancalendar.utils.secondaryCalendar
 
 class SharedDayViewData(
     context: Context, height: Float, @ColorInt private val widgetTextColor: Int? = null,
@@ -31,7 +28,6 @@ class SharedDayViewData(
     val eventIndicatorRadius = height * 2 / 40
     private val eventIndicatorsGap = height * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
-    val secondaryCalendar = context.appPrefs.secondaryCalendar
 
     val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
 

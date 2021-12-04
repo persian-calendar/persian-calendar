@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.utils.formatNumber
 import kotlin.math.min
 
@@ -110,12 +111,12 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.jdn = jdn
         this.dayOfMonth = dayOfMonth
         this.isWeekNumber = isWeekNumber
-        val secondaryCalendar = sharedDayViewData?.secondaryCalendar
+        val secondaryCalendar = secondaryCalendar
         this.header = if (secondaryCalendar == null || jdn == null) header else formatNumber(
             jdn.toCalendar(secondaryCalendar).dayOfMonth,
             if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
             else secondaryCalendar.preferredDigits
-        )
+        ) + (if (header.isEmpty()) "" else " $header")
         sharedDayViewData.debugAssertNotNull?.also { shared ->
             this.indicators = listOf(
                 hasAppointment to shared.appointmentIndicatorPaint,

@@ -17,12 +17,14 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
@@ -31,17 +33,15 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.showHtml
-import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
-import com.byagowi.persiancalendar.utils.secondaryCalendar
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.persiancalendar.calendar.AbstractDate
@@ -138,11 +138,9 @@ private fun createEventsList(
         }
     }
     return if (isPrint) events.map { (jdn, title) ->
-        jdn to title.toString().replace("\n", enDash)
+        jdn to title.toString().replace("\n", " $EN_DASH ")
     } else events
 }
-
-private const val enDash = " – "
 
 private fun createEventsReport(context: Context, date: AbstractDate) = createHTML().html {
     attributes["lang"] = language.language
@@ -163,21 +161,8 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
     body {
         h1 {
             +language.my.format(date.monthName, formatNumber(date.year))
-            val secondaryCalendar = context.appPrefs.secondaryCalendar ?: return@h1
-            val from = Jdn(
-                mainCalendar.createDate(date.year, date.month, 1)
-            ).toCalendar(secondaryCalendar)
-            val to = Jdn(
-                mainCalendar.createDate(
-                    date.year, date.month, date.calendarType.getMonthLength(date.year, date.month)
-                )
-            ).toCalendar(secondaryCalendar)
-            small {
-                val dates = listOf(from) + if (from.month == to.month) emptyList() else listOf(to)
-                +(" (" + dates.joinToString(enDash) {
-                    language.my.format(it.monthName, formatNumber(it.year))
-                } + ")")
-            }
+            val title = monthFormatForSecondaryCalendar(date, secondaryCalendar ?: return@h1)
+            small { +" ($title)" }
         }
         div("center") {
             img {

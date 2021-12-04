@@ -56,7 +56,9 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.otherCalendars
+import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
@@ -92,10 +94,10 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
-import com.byagowi.persiancalendar.utils.secondaryCalendar
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
@@ -187,7 +189,15 @@ class CalendarFragment : Fragment() {
             it.onDayLongClicked = ::addEventOnCalendar
             it.onMonthSelected = {
                 it.selectedMonth.let { date ->
-                    updateToolbar(date.monthName, formatNumber(date.year))
+                    val secondaryCalendar = secondaryCalendar
+                    if (secondaryCalendar == null) {
+                        updateToolbar(date.monthName, formatNumber(date.year))
+                    } else {
+                        updateToolbar(
+                            language.my.format(date.monthName, formatNumber(date.year)),
+                            monthFormatForSecondaryCalendar(date, secondaryCalendar)
+                        )
+                    }
                     todayButton?.isVisible =
                         date.year != initialDate.year || date.month != initialDate.month
                 }
@@ -598,7 +608,6 @@ class CalendarFragment : Fragment() {
         toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
             val groupId = Menu.FIRST
             val prefs = context.appPrefs
-            val secondaryCalendar = prefs.secondaryCalendar
             (listOf(null) + otherCalendars).forEach {
                 val item = menu.add(groupId, Menu.NONE, Menu.NONE, it?.title ?: R.string.none)
                 item.isChecked = it == secondaryCalendar
@@ -607,6 +616,7 @@ class CalendarFragment : Fragment() {
                         if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
                         else putString(PREF_SECONDARY_CALENDAR_IN_TABLE, it.name)
                     }
+                    updateStoredPreference(context)
                     findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
             }

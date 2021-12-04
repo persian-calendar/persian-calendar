@@ -92,6 +92,8 @@ const val KEY_EXTRA_PRAYER_TIME = "prayer_time"
 const val RLM = "\u200F"
 const val ZWJ = "\u200D"
 
+const val EN_DASH = "–"
+
 const val DEFAULT_AM = "ق.ظ"
 const val DEFAULT_PM = "ب.ظ"
 const val DEFAULT_HOLIDAY = "تعطیل"
