@@ -188,11 +188,10 @@ class CalendarFragment : Fragment() {
             it.onDayClicked = { jdn -> bringDate(jdn, monthChange = false) }
             it.onDayLongClicked = ::addEventOnCalendar
             it.onMonthSelected = {
-                it.selectedMonth.let { date ->
-                    updateToolbar(date)
-                    todayButton?.isVisible =
-                        date.year != initialDate.year || date.month != initialDate.month
-                }
+                val date = it.selectedMonth
+                updateToolbar(date)
+                todayButton?.isVisible =
+                    date.year != initialDate.year || date.month != initialDate.month
             }
         }
 
