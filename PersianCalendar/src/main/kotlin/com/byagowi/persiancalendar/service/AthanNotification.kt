@@ -56,13 +56,13 @@ class AthanNotification : Service() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
-                notificationChannelId, getString(R.string.app_name),
+                notificationChannelId, getString(R.string.athan),
                 NotificationManager.IMPORTANCE_HIGH
             ).also {
                 it.description = getString(R.string.athan)
                 it.enableLights(true)
                 it.lightColor = Color.GREEN
-                it.vibrationPattern = longArrayOf(0, 1000, 500, 1000)
+                it.vibrationPattern = LongArray(2) { 500 }
                 it.enableVibration(true)
                 it.setBypassDnd(true)
                 it.setSound(
