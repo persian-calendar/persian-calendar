@@ -189,15 +189,7 @@ class CalendarFragment : Fragment() {
             it.onDayLongClicked = ::addEventOnCalendar
             it.onMonthSelected = {
                 it.selectedMonth.let { date ->
-                    val secondaryCalendar = secondaryCalendar
-                    if (secondaryCalendar == null) {
-                        updateToolbar(date.monthName, formatNumber(date.year))
-                    } else {
-                        updateToolbar(
-                            language.my.format(date.monthName, formatNumber(date.year)),
-                            monthFormatForSecondaryCalendar(date, secondaryCalendar)
-                        )
-                    }
+                    updateToolbar(date)
                     todayButton?.isVisible =
                         date.year != initialDate.year || date.month != initialDate.month
                 }
@@ -312,9 +304,7 @@ class CalendarFragment : Fragment() {
             appBar.root.hideToolbarBottomShadow()
         }
 
-        selectedJdn.toCalendar(mainCalendar).let { today ->
-            updateToolbar(today.monthName, formatNumber(today.year))
-        }
+        updateToolbar(selectedJdn.toCalendar(mainCalendar))
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {
@@ -332,10 +322,16 @@ class CalendarFragment : Fragment() {
         }
     }
 
-    private fun updateToolbar(title: String, subTitle: String) {
+    private fun updateToolbar(date: AbstractDate) {
         mainBinding?.appBar?.toolbar?.let {
-            it.title = title
-            it.subtitle = subTitle
+            val secondaryCalendar = secondaryCalendar
+            if (secondaryCalendar == null) {
+                it.title = date.monthName
+                it.subtitle = formatNumber(date.year)
+            } else {
+                it.title = language.my.format(date.monthName, formatNumber(date.year))
+                it.subtitle = monthFormatForSecondaryCalendar(date, secondaryCalendar)
+            }
         }
     }
 
