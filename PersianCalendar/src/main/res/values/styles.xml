@@ -36,7 +36,6 @@
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
     <attr name="dialogBackgroundColor" format="color" />
-    <attr name="isDarkTheme" format="boolean" />
 
     <!-- its v31 version is more interesting -->
     <style name="WidgetTheme" />
@@ -88,7 +87,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
-        <item name="isDarkTheme">true</item>
         <item name="dialogBackgroundColor">#70606060</item>
     </style>
 
@@ -109,7 +107,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
-        <item name="isDarkTheme">false</item>
         <item name="dialogBackgroundColor">#C0FFFFFF</item>
     </style>
 
