@@ -8,14 +8,13 @@ import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.os.Build
-import android.os.Handler
 import android.os.IBinder
-import android.os.Looper
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.ASR_KEY
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.ISHA_KEY
@@ -24,7 +23,6 @@ import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.cityName
@@ -42,7 +40,8 @@ class AthanNotification : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent ?: return super.onStartCommand(intent, flags, startId)
 
-        val notificationId = Random.nextInt(2000, 4000)
+        val notificationId =
+            if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000) else 3000
         val notificationChannelId = notificationId.toString()
 
         val notificationManager = getSystemService<NotificationManager>()
@@ -58,9 +57,9 @@ class AthanNotification : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 notificationChannelId, getString(R.string.app_name),
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_HIGH
             ).also {
-                it.description = getString(R.string.app_name)
+                it.description = getString(R.string.athan)
                 it.enableLights(true)
                 it.lightColor = Color.GREEN
                 it.vibrationPattern = longArrayOf(0, 1000, 500, 1000)
@@ -103,9 +102,10 @@ class AthanNotification : Service() {
             .setSmallIcon(R.drawable.sun)
             .setContentTitle(title)
             .setContentText(subtitle)
-            .setSound(soundUri)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setSound(soundUri, AudioManager.STREAM_NOTIFICATION)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(applicationContext?.packageName, R.layout.custom_notification)
@@ -122,12 +122,7 @@ class AthanNotification : Service() {
                 .setStyle(NotificationCompat.DecoratedCustomViewStyle())
         }
 
-        notificationManager?.notify(notificationId, notificationBuilder.build())
-
-        Handler(Looper.getMainLooper()).postDelayed({
-            notificationManager?.cancel(notificationId)
-            stopSelf()
-        }, FIFTEEN_MINUTES_IN_MILLIS)
+        startForeground(notificationId, notificationBuilder.build())
 
         return super.onStartCommand(intent, flags, startId)
     }

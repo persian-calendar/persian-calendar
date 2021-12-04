@@ -12,6 +12,7 @@ import android.os.PowerManager
 import androidx.annotation.DrawableRes
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.work.Data
@@ -95,8 +96,8 @@ private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching 
     }.onFailure(logException)
 
     if (notificationAthan) {
-        context.startService(
-            Intent(context, AthanNotification::class.java)
+        ContextCompat.startForegroundService(
+            context, Intent(context, AthanNotification::class.java)
                 .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
         )
     } else {
