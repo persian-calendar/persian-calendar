@@ -55,8 +55,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun drawText(canvas: Canvas, shared: SharedDayViewData) {
         val textPaint = when {
             jdn != null -> when {
-                today && !shared.isCurrentDayOutlineOnly && !shared.isPrint ->
-                    shared.dayOfMonthNumberCurrentTextPaint
                 holiday -> shared.dayOfMonthNumberTextHolidayPaint
                 dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
                 else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint

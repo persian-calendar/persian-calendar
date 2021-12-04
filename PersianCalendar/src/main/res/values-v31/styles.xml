@@ -33,7 +33,6 @@
         <item name="colorTextToday">@android:color/system_accent3_900</item>
         <item name="colorCurrentDay">@android:color/system_accent1_600</item>
         <item name="colorTextDayCurrent">@android:color/system_accent1_0</item>
-        <item name="colorCurrentDayIsOutlineOnly">false</item>
         <item name="colorHoliday">@android:color/system_accent1_400</item>
         <item name="colorTextHoliday">@android:color/system_accent1_400</item>
         <item name="colorSelectDay">@android:color/system_accent2_100</item>
@@ -57,7 +56,6 @@
         <item name="colorTextToday">@android:color/system_accent3_100</item>
         <item name="colorCurrentDay">@android:color/system_accent1_200</item>
         <item name="colorTextDayCurrent">@android:color/system_accent1_1000</item>
-        <item name="colorCurrentDayIsOutlineOnly">false</item>
         <item name="colorHoliday">@android:color/system_accent1_100</item>
         <item name="colorTextHoliday">@android:color/system_accent1_100</item>
         <item name="colorSelectDay">@android:color/system_accent2_300</item>

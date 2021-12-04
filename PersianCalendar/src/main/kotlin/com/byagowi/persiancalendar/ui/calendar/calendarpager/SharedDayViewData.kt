@@ -59,9 +59,8 @@ class SharedDayViewData(
         it.color = context.resolveColor(R.attr.colorSelectDay)
     }
 
-    val isCurrentDayOutlineOnly = context.resolveBoolean(R.attr.colorCurrentDayIsOutlineOnly)
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = if (isCurrentDayOutlineOnly) Paint.Style.STROKE else Paint.Style.FILL
+        it.style = Paint.Style.STROKE
         it.strokeWidth = 1.dp
         it.color = widgetTextColor ?: context.resolveColor(R.attr.colorCurrentDay)
     }
@@ -83,14 +82,6 @@ class SharedDayViewData(
         it.color = colorTextDay
         addShadowIfNeeded(it)
     }
-    val dayOfMonthNumberCurrentTextPaint =
-        if (isCurrentDayOutlineOnly) dayOfMonthNumberTextPaint
-        else Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.textAlign = Paint.Align.CENTER
-            it.textSize = textSize
-            it.color = context.resolveColor(R.attr.colorTextDayCurrent)
-            addShadowIfNeeded(it)
-        }
 
     private val colorTextDaySelected =
         widgetTextColor ?: context.resolveColor(R.attr.colorTextDaySelected)

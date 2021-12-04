@@ -21,7 +21,6 @@
     <attr name="colorDivider" format="reference" />
     <attr name="colorCurrentDay" format="reference" />
     <attr name="colorTextDayCurrent" format="reference" />
-    <attr name="colorCurrentDayIsOutlineOnly" format="boolean" />
     <attr name="colorSelectDay" format="reference" />
     <attr name="colorEventIndicator" format="reference" />
     <attr name="colorDrawerBackground" format="reference" />
@@ -90,7 +89,6 @@
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="isDarkTheme">true</item>
-        <item name="colorCurrentDayIsOutlineOnly">true</item>
         <item name="dialogBackgroundColor">#70606060</item>
     </style>
 
@@ -112,7 +110,6 @@
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="isDarkTheme">false</item>
-        <item name="colorCurrentDayIsOutlineOnly">true</item>
         <item name="dialogBackgroundColor">#C0FFFFFF</item>
     </style>
 
