@@ -101,7 +101,6 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
                                 FrameLayout.LayoutParams.MATCH_PARENT,
                                 FrameLayout.LayoutParams.WRAP_CONTENT
                             )
-                            root.isVisible = events.isNotEmpty()
                         }) {}
                     },
                     MonthOverviewItemAdapter(activity, events)

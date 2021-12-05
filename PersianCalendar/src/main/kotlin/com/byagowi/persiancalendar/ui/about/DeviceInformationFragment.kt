@@ -227,10 +227,7 @@ class DeviceInformationFragment : Fragment() {
                         }.start()
                     }
                     progressBar.layoutParams =
-                        ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            600
-                        )
+                        ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 600)
                     // setOnLongClickListener {
                     //     val player = MediaPlayer.create(activity, R.raw.moonlight)
                     //     runCatching {
