@@ -8,7 +8,9 @@ import android.graphics.Color
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
@@ -23,6 +25,7 @@ import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.cityName
@@ -123,6 +126,11 @@ class AthanNotification : Service() {
         }
 
         startForeground(notificationId, notificationBuilder.build())
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            notificationManager?.cancel(notificationId)
+            stopSelf()
+        }, ONE_MINUTE_IN_MILLIS)
 
         return super.onStartCommand(intent, flags, startId)
     }
