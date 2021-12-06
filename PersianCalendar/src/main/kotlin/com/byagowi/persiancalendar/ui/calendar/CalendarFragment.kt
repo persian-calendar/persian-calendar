@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
+import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.TIME_NAMES
@@ -608,7 +609,14 @@ class CalendarFragment : Fragment() {
                 item.onClick {
                     prefs.edit {
                         if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
-                        else putString(PREF_SECONDARY_CALENDAR_IN_TABLE, it.name)
+                        else {
+                            putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
+                            putString(
+                                PREF_OTHER_CALENDARS_KEY,
+                                // Put the chosen calendars at the first of calendars priorities
+                                (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
+                            )
+                        }
                     }
                     updateStoredPreference(context)
                     findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())

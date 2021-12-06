@@ -117,9 +117,9 @@ var coordinates: Coordinates? = null
     private set
 var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
-val mainCalendar inline get() = enabledCalendars[0]
-var secondaryCalendar: CalendarType? = null
-    private set
+val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SHAMSI
+val secondaryCalendar get() =
+    if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) ?: CalendarType.SHAMSI else null
 var isShowWeekOfYearEnabled = false
     private set
 var isCenterAlignWidgets = true
@@ -167,6 +167,8 @@ var numericalDatePreferred = false
 var calendarTypesTitleAbbr = emptyList<String>()
     private set
 // Some more are in EventsUtils
+
+private var secondaryCalendarEnabled = false
 
 // This should be called before any use of Utils on the activity and services
 fun initGlobal(context: Context) {
@@ -257,13 +259,11 @@ fun updateStoredPreference(context: Context) {
             (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: language.defaultOtherCalendars)
                 .splitIgnoreEmpty(",").map(CalendarType::valueOf)
         enabledCalendars = listOf(mainCalendar) + otherCalendars
-        secondaryCalendar = prefs.getString(PREF_SECONDARY_CALENDAR_IN_TABLE, null)?.let {
-            runCatching { CalendarType.valueOf(it) }.onFailure(logException).getOrNull()
-        }
+        secondaryCalendarEnabled = prefs.getBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, false)
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
         enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
-        secondaryCalendar = null
+        secondaryCalendarEnabled = false
     }.getOrNull().debugAssertNotNull
 
     isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
