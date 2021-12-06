@@ -119,7 +119,7 @@ var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, Calen
     private set
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SHAMSI
 val secondaryCalendar get() =
-    if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) ?: CalendarType.SHAMSI else null
+    if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
 var isShowWeekOfYearEnabled = false
     private set
 var isCenterAlignWidgets = true
