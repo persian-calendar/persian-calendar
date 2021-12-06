@@ -26,7 +26,6 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numericalDatePreferred
-import com.byagowi.persiancalendar.global.otherCalendars
 import com.byagowi.persiancalendar.global.spacedAnd
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekDays
