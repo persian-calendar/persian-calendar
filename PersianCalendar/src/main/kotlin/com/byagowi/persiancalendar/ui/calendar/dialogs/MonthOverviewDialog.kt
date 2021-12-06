@@ -180,6 +180,7 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
         table {
             tr {
                 val events = createEventsList(context, date, true)
+                if (events.isEmpty()) return@tr
                 events.chunked(ceil(events.size / 2.0).toInt()).forEach {
                     td {
                         it.forEach { (jdn, title) ->
