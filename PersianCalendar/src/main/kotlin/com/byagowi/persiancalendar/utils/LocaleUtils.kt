@@ -52,13 +52,6 @@ val isArabicDigitSelected: Boolean get() = preferredDigits === Language.ARABIC_D
 
 fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
 
-fun getEnabledCalendarEntities(context: Context, short: Boolean = false):
-        List<Pair<CalendarType, String>> {
-    return getEnabledCalendarTypes().map { calendarType ->
-        calendarType to context.getString(if (short) calendarType.shortTitle else calendarType.title)
-    }
-}
-
 val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->
         city to language.getCityName(city).let { language.prepareForSort(it) }
