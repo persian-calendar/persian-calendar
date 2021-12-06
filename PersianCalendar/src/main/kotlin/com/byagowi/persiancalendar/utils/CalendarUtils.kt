@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calendarTypesTitleAbbr
+import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -285,6 +286,6 @@ private fun getCalendarNameAbbr(date: AbstractDate) =
     calendarTypesTitleAbbr.getOrNull(date.calendarType.ordinal) ?: ""
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
-    otherCalendars.joinToString(separator) { formatDate(jdn.toCalendar(it)) }
+    enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.toCalendar(it)) }
 
 fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()

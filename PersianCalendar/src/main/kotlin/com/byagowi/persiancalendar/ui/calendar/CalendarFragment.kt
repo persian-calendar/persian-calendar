@@ -56,7 +56,6 @@ import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.otherCalendars
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
@@ -603,7 +602,7 @@ class CalendarFragment : Fragment() {
         toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
             val groupId = Menu.FIRST
             val prefs = context.appPrefs
-            (listOf(null) + otherCalendars).forEach {
+            (listOf(null) + enabledCalendars.drop(1)).forEach {
                 val item = menu.add(groupId, Menu.NONE, Menu.NONE, it?.title ?: R.string.none)
                 item.isChecked = it == secondaryCalendar
                 item.onClick {

@@ -117,8 +117,6 @@ var coordinates: Coordinates? = null
     private set
 var mainCalendar = CalendarType.SHAMSI
     private set
-var otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
-    private set
 var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
 var secondaryCalendar: CalendarType? = null
@@ -256,19 +254,18 @@ fun updateStoredPreference(context: Context) {
         mainCalendar = CalendarType.valueOf(
             prefs.getString(PREF_MAIN_CALENDAR_KEY, null) ?: language.defaultMainCalendar
         )
-        otherCalendars =
-            (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: language.defaultOtherCalendars)
-                .splitIgnoreEmpty(",").map(CalendarType::valueOf)
+        enabledCalendars = listOf(mainCalendar) +
+                (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: language.defaultOtherCalendars)
+                    .splitIgnoreEmpty(",").map(CalendarType::valueOf)
         secondaryCalendar = prefs.getString(PREF_SECONDARY_CALENDAR_IN_TABLE, null)?.let {
             runCatching { CalendarType.valueOf(it) }.onFailure(logException).getOrNull()
         }
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
         mainCalendar = CalendarType.SHAMSI
-        otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+        enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
         secondaryCalendar = null
     }.getOrNull().debugAssertNotNull
-    enabledCalendars = listOf(mainCalendar) + otherCalendars
 
     isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =
