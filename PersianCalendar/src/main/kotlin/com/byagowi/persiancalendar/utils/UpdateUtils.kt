@@ -327,7 +327,7 @@ private fun createMonthViewRemoteViews(
         prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
     }
-    monthView.initializeForRendering(color, height, date, false)
+    monthView.initializeForRendering(color, height, date)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForRendering(monthView, width, height)
     remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())

@@ -34,15 +34,12 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         addCellSpacing(4.dp.toInt())
     }
 
-    fun initializeForRendering(
-        @ColorInt textColor: Int, height: Int, today: AbstractDate, isPrint: Boolean
-    ) {
-        val sharedData = SharedDayViewData(context, height / 7f, textColor, isPrint)
+    fun initializeForRendering(@ColorInt textColor: Int, height: Int, today: AbstractDate) {
+        val sharedData = SharedDayViewData(context, height / 7f, textColor)
         daysAdapter = DaysAdapter(context, sharedData, null)
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)
         bind(jdn, jdn.toCalendar(mainCalendar))
-        if (isPrint) addCellSpacing(20)
     }
 
     private fun addCellSpacing(space: Int) {
@@ -67,7 +64,6 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         // Widget only tweak
         val sharedData = daysAdapter?.sharedDayViewData ?: return
         val widgetFooterTextPaint = sharedData.widgetFooterTextPaint ?: return
-        if (sharedData.isPrint) return
         c.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
     }
 

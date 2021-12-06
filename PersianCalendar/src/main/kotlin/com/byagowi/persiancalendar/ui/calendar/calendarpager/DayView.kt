@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.utils.formatNumber
 import kotlin.math.min
 
@@ -46,7 +47,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         if (dayIsSelected) canvas.drawCircle(
             width / 2f, height / 2f, radius - shared.circlesPadding, shared.selectedPaint
         )
-        if (today && !shared.isPrint) canvas.drawCircle(
+        if (today) canvas.drawCircle(
             width / 2f, height / 2f, radius - shared.circlesPadding, shared.todayPaint
         )
     }
@@ -111,9 +112,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.isWeekNumber = isWeekNumber
         val secondaryCalendar = secondaryCalendar
         this.header = if (secondaryCalendar == null || jdn == null) header else formatNumber(
-            jdn.toCalendar(secondaryCalendar).dayOfMonth,
-            if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
-            else secondaryCalendar.preferredDigits
+            jdn.toCalendar(secondaryCalendar).dayOfMonth, secondaryCalendarDigits
         ) + (if (header.isEmpty()) "" else " $header")
         sharedDayViewData.debugAssertNotNull?.also { shared ->
             this.indicators = listOf(

@@ -2,17 +2,13 @@ package com.byagowi.persiancalendar.ui.calendar.dialogs
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.Base64
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
-import androidx.core.view.drawToBitmap
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,51 +16,58 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
+import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
-import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.showHtml
+import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
+import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
+import com.byagowi.persiancalendar.utils.getShiftWorkTitle
+import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.isRtl
+import com.byagowi.persiancalendar.utils.isWeekEnd
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
+import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.github.persiancalendar.calendar.AbstractDate
-import kotlinx.html.b
 import kotlinx.html.body
 import kotlinx.html.div
 import kotlinx.html.h1
 import kotlinx.html.head
 import kotlinx.html.html
-import kotlinx.html.img
 import kotlinx.html.meta
 import kotlinx.html.script
 import kotlinx.html.small
+import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.style
+import kotlinx.html.sub
 import kotlinx.html.table
 import kotlinx.html.td
+import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
-import java.io.ByteArrayOutputStream
 import kotlin.math.ceil
 
 fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
+    applyAppLanguage(activity)
     val events = createEventsList(activity, date)
 
     BottomSheetDialog(activity, R.style.TransparentBottomSheetDialog).also { dialog ->
@@ -87,7 +90,8 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
                                     it.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_print))
                                     it.setOnClickListener {
                                         runCatching {
-                                            activity.showHtml(createEventsReport(activity, date))
+                                            val html = createEventsReport(activity, date, events)
+                                            activity.showHtml(html)
                                         }.onFailure(logException)
                                         dialog.dismiss()
                                     }
@@ -103,7 +107,7 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
                             )
                         }) {}
                     },
-                    MonthOverviewItemAdapter(activity, events)
+                    MonthOverviewItemAdapter(activity, formatEventsList(events, false))
                 )
             }
         )
@@ -111,14 +115,20 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
 }
 
 private fun createEventsList(
-    context: Context, date: AbstractDate, isPrint: Boolean = false
-): List<Pair<Jdn, CharSequence>> {
+    context: Context, date: AbstractDate
+): Map<Jdn, List<CalendarEvent<*>>> {
     val baseJdn = Jdn(date)
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
-    val colorTextHoliday = context.resolveColor(R.attr.colorTextHoliday)
-    val events = (0 until mainCalendar.getMonthLength(date.year, date.month)).mapNotNull {
+    return (0 until mainCalendar.getMonthLength(date.year, date.month)).map {
         val jdn = baseJdn + it
         val events = getEvents(jdn, deviceEvents)
+        jdn to events
+    }.toMap()
+}
+
+private fun formatEventsList(events: Map<Jdn, List<CalendarEvent<*>>>, isPrint: Boolean):
+        List<Pair<Jdn, CharSequence>> {
+    val result = events.toList().sortedBy { (jdn, _) -> jdn.value }.mapNotNull { (jdn, events) ->
         val holidays = getEventsTitle(
             events, holiday = true, compact = isPrint, showDeviceCalendarEvents = false,
             insertRLM = false, addIsHoliday = isPrint
@@ -129,33 +139,50 @@ private fun createEventsList(
         )
         if (holidays.isEmpty() && nonHolidays.isEmpty()) null
         else jdn to buildSpannedString {
-            if (holidays.isNotEmpty()) color(colorTextHoliday) { append(holidays) }
+            if (holidays.isNotEmpty()) color(Color.RED) { append(holidays) }
             if (nonHolidays.isNotEmpty()) {
                 if (holidays.isNotEmpty()) appendLine()
                 append(nonHolidays)
             }
         }
     }
-    return if (isPrint) events.map { (jdn, title) ->
+    return if (isPrint) result.map { (jdn, title) ->
         jdn to title.toString().replace("\n", " $EN_DASH ")
-    } else events
+    } else result
 }
 
-private fun createEventsReport(context: Context, date: AbstractDate) = createHTML().html {
+private fun createEventsReport(
+    context: Context, date: AbstractDate, events: Map<Jdn, List<CalendarEvent<*>>>
+) = createHTML().html {
     attributes["lang"] = language.language
     attributes["dir"] = if (context.resources.isRtl) "rtl" else "ltr"
     head {
         meta(charset = "utf8")
         style {
             unsafe {
+                val calendarColumnsPercent = 100 / if (isShowWeekOfYearEnabled) 8 else 7
                 +"""
                     body { font-family: system-ui }
-                    td { padding: 0 1em; vertical-align: top; width: 50% }
+                    td { vertical-align: top }
+                    table.calendar td, table.calendar th {
+                        width: $calendarColumnsPercent%; text-align: center; height: 1.5em;
+                    }
+                    .holiday { color: red; font-weight: bold }
+                    .hasEvents { border-bottom: 1px dotted; }
+                    table.events td { width: 50%; padding: 0 1em }
                     table { width: 100% }
-                    h1, .center { text-align: center }
+                    h1 { text-align: center }
                 """.trimIndent()
             }
         }
+    }
+    fun generateDayClasses(jdn: Jdn, weekEndsAsHoliday: Boolean): String {
+        val dayEvents = events[jdn] ?: emptyList()
+        return listOf(
+            "holiday" to ((isWeekEnd(jdn.dayOfWeek) && weekEndsAsHoliday) ||
+                    dayEvents.any { it.isHoliday }),
+            "hasEvents" to dayEvents.isNotEmpty()
+        ).filter { it.second }.joinToString(" ") { it.first }
     }
     body {
         h1 {
@@ -163,29 +190,58 @@ private fun createEventsReport(context: Context, date: AbstractDate) = createHTM
             val title = monthFormatForSecondaryCalendar(date, secondaryCalendar ?: return@h1)
             small { +" ($title)" }
         }
-        div("center") {
-            img {
-                width = "100%"
-                val view = MonthView(ContextThemeWrapper(context, Theme.printSuitableStyle))
-                val w = 2800
-                val h = 1200
-                view.initializeForRendering(Color.BLACK, h, date, true)
-                prepareViewForRendering(view, w, h)
-                val buffer = ByteArrayOutputStream()
-                view.drawToBitmap().compress(Bitmap.CompressFormat.PNG, 100, buffer)
-                val base64 = Base64.encodeToString(buffer.toByteArray(), Base64.DEFAULT)
-                src = "data:image/png;base64,${base64}"
+        table("calendar") {
+            tr {
+                if (isShowWeekOfYearEnabled) th {}
+                (0..6).forEach { th { +getWeekDayName(revertWeekStartOffsetFromWeekDay(it)) } }
+            }
+            val monthLength = date.calendarType.getMonthLength(date.year, date.month)
+            val monthStartJdn = Jdn(date)
+            val startingDayOfWeek = monthStartJdn.dayOfWeek
+            val fixedStartingDayOfWeek = applyWeekStartOffsetToWeekDay(startingDayOfWeek)
+            val startOfYearJdn = Jdn(date.calendarType, date.year, 1, 1)
+            (0 until (6 * 7)).map {
+                val index = it - fixedStartingDayOfWeek
+                if (index !in (0 until monthLength)) return@map null
+                (index + 1) to (monthStartJdn + index)
+            }.chunked(7).map { row ->
+                val firstJdnInWeek = row.firstNotNullOfOrNull { it?.second/*jdn*/ } ?: return@map
+                tr {
+                    if (isShowWeekOfYearEnabled) {
+                        val weekOfYear = firstJdnInWeek.getWeekOfYear(startOfYearJdn)
+                        th { sub { small { +formatNumber(weekOfYear) } } }
+                    }
+                    row.map { pair ->
+                        td {
+                            val (dayOfMonth, jdn) = pair ?: return@td
+                            span(generateDayClasses(jdn, true)) {
+                                +formatNumber(dayOfMonth)
+                            }
+                            val secondaryCalendar = secondaryCalendar
+                            if (secondaryCalendar != null) {
+                                val secondaryDateDay = jdn.toCalendar(secondaryCalendar).dayOfMonth
+                                val digits = secondaryCalendarDigits
+                                sub { small { +" ${formatNumber(secondaryDateDay, digits)}" } }
+                            }
+                            val shiftWork = getShiftWorkTitle(jdn, false)
+                            if (shiftWork.isNotEmpty()) sub { small { +" $shiftWork" } }
+                        }
+                    }
+                }
             }
         }
-        table {
+        table("events") {
             tr {
-                val events = createEventsList(context, date, true)
-                if (events.isEmpty()) return@tr
-                events.chunked(ceil(events.size / 2.0).toInt()).forEach {
+                val eventsTitle = formatEventsList(events, true)
+                if (eventsTitle.isEmpty()) return@tr
+                eventsTitle.chunked(ceil(eventsTitle.size / 2.0).toInt()).forEach {
                     td {
                         it.forEach { (jdn, title) ->
                             div {
-                                b { +(formatNumber(jdn.toCalendar(mainCalendar).dayOfMonth) + spacedColon) }
+                                span(generateDayClasses(jdn, false)) {
+                                    +formatNumber(jdn.toCalendar(mainCalendar).dayOfMonth)
+                                }
+                                +spacedColon
                                 +title.toString()
                             }
                         }

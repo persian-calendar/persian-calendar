@@ -120,6 +120,9 @@ var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, Calen
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SHAMSI
 val secondaryCalendar get() =
     if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
+val secondaryCalendarDigits get() =
+    if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
+    else (secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS)
 var isShowWeekOfYearEnabled = false
     private set
 var isCenterAlignWidgets = true

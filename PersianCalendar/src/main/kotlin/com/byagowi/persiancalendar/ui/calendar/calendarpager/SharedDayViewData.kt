@@ -16,8 +16,7 @@ import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
 class SharedDayViewData(
-    context: Context, height: Float, @ColorInt private val widgetTextColor: Int? = null,
-    val isPrint: Boolean = false
+    context: Context, height: Float, @ColorInt private val widgetTextColor: Int? = null
 ) {
 
     val isArabicScript = language.isArabicScript
@@ -31,8 +30,7 @@ class SharedDayViewData(
     val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
 
     private fun addShadowIfNeeded(paint: Paint) {
-        if (isPrint || widgetTextColor == null || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-            return
+        if (widgetTextColor == null || Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) return
         paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
 
