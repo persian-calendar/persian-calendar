@@ -50,8 +50,6 @@ fun formatNumber(number: String, digits: CharArray = preferredDigits): String {
 
 val isArabicDigitSelected: Boolean get() = preferredDigits === Language.ARABIC_DIGITS
 
-fun getEnabledCalendarTypes() = listOf(mainCalendar) + otherCalendars
-
 val Collection<CityItem>.sortCityNames: List<CityItem>
     get() = this.map { city ->
         city to language.getCityName(city).let { language.prepareForSort(it) }

@@ -50,6 +50,7 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -86,7 +87,6 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getFromStringId
@@ -413,7 +413,7 @@ class CalendarFragment : Fragment() {
         todayButton?.isVisible = !isToday
 
         // Update tabs
-        calendarsView?.showCalendars(jdn, mainCalendar, getEnabledCalendarTypes())
+        calendarsView?.showCalendars(jdn, mainCalendar, enabledCalendars)
         showEvent(jdn)
         setOwghat(jdn, isToday)
 

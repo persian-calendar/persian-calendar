@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
@@ -59,7 +58,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     private val binding = DayPickerViewBinding.inflate(
         context.layoutInflater, this, true
     ).also { binding ->
-        val calendarTypes = getEnabledCalendarTypes().map { calendarType ->
+        val calendarTypes = enabledCalendars.map { calendarType ->
             calendarType to context.getString(
                 if (language.betterToUseShortCalendarName) calendarType.shortTitle
                 else calendarType.title

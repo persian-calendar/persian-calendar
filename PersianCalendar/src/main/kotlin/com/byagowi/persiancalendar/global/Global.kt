@@ -119,6 +119,8 @@ var mainCalendar = CalendarType.SHAMSI
     private set
 var otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
+var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
+    private set
 var secondaryCalendar: CalendarType? = null
     private set
 var isShowWeekOfYearEnabled = false
@@ -266,6 +268,7 @@ fun updateStoredPreference(context: Context) {
         otherCalendars = listOf(CalendarType.GREGORIAN, CalendarType.ISLAMIC)
         secondaryCalendar = null
     }.getOrNull().debugAssertNotNull
+    enabledCalendars = listOf(mainCalendar) + otherCalendars
 
     isShowWeekOfYearEnabled = prefs.getBoolean(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false)
     weekStartOffset =

@@ -10,10 +10,10 @@ import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.utils.getEnabledCalendarTypes
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
@@ -43,7 +43,7 @@ class ConverterFragment : Fragment() {
                 binding.resultCard.isVisible = true
                 val selectedCalendarType = binding.dayPickerView.selectedCalendarType
                 binding.calendarsView.showCalendars(
-                    jdn, selectedCalendarType, getEnabledCalendarTypes() - selectedCalendarType
+                    jdn, selectedCalendarType, enabledCalendars - selectedCalendarType
                 )
             }
             it.jdn = Jdn.today()
