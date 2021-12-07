@@ -71,6 +71,14 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
     val events = createEventsList(activity, date)
 
     BottomSheetDialog(activity, R.style.TransparentBottomSheetDialog).also { dialog ->
+        fun showPrintReport(isLongClick: Boolean) {
+            runCatching {
+                activity.showHtml(createEventsReport(activity, date, wholeYear = isLongClick))
+            }.onFailure(logException)
+            dialog.dismiss()
+            createEventsReport(activity, date, wholeYear = isLongClick)
+        }
+
         dialog.setContentView(
             RecyclerView(activity).also { recyclerView ->
                 recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -88,19 +96,9 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
                                 FloatingActionButton(activity).also {
                                     it.contentDescription = "Print"
                                     it.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_print))
-                                    it.setOnClickListener {
-                                        runCatching {
-                                            val html = createEventsReport(activity, date)
-                                            activity.showHtml(html)
-                                        }.onFailure(logException)
-                                        dialog.dismiss()
-                                    }
+                                    it.setOnClickListener { showPrintReport(isLongClick = false) }
                                     it.setOnLongClickListener {
-                                        runCatching {
-                                            val html = createEventsReport(activity, date, true)
-                                            activity.showHtml(html)
-                                        }.onFailure(logException)
-                                        dialog.dismiss()
+                                        showPrintReport(isLongClick = true)
                                         true
                                     }
                                     it.layoutParams = FrameLayout.LayoutParams(
@@ -173,14 +171,17 @@ private fun createEventsReport(
                     body { font-family: system-ui }
                     td { vertical-align: top }
                     table.calendar td, table.calendar th {
-                        width: $calendarColumnsPercent%; text-align: center; height: 1.5em;
+                        width: $calendarColumnsPercent%;
+                        text-align: center;
+                        height: 2em;
                     }
                     .holiday { color: red; font-weight: bold }
                     .hasEvents { border-bottom: 1px dotted; }
+                    table.events { padding: 1em 0 }
                     table.events td { width: 50%; padding: 0 1em }
                     table { width: 100% }
                     h1 { text-align: center }
-                    .page { break-after: always }
+                    .page { break-after: page; break-inside: avoid }
                 """.trimIndent()
             }
         }
