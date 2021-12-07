@@ -136,12 +136,10 @@ class DaysAdapter(
 
                     val dayOfMonth = position - 6 - fixedStartingDayOfWeek
                     dayView.setDayOfMonthItem(
-                        isToday,
-                        pos == selectedDay,
+                        isToday, pos == selectedDay,
                         events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
-                        events.any { it.isHoliday },
-                        day, dayOfMonth, getShiftWorkTitle(day, true)
+                        events.any { it.isHoliday }, day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
 
                     dayView.contentDescription = if (isTalkBackEnabled) getA11yDaySummary(
