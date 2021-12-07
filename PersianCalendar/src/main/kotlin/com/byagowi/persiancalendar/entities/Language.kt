@@ -84,6 +84,8 @@ enum class Language(val code: String, val nativeName: String) {
             else -> false
         }
 
+    val showIranTimeOption get() = (isUserAbleToReadPersian || this == EN_US) && this != FA_AF
+
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {

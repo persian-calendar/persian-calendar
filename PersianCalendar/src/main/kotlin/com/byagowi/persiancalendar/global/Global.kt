@@ -119,11 +119,13 @@ var coordinates: Coordinates? = null
 var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SHAMSI
-val secondaryCalendar get() =
-    if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
-val secondaryCalendarDigits get() =
-    if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
-    else (secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS)
+val secondaryCalendar
+    get() =
+        if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null
+val secondaryCalendarDigits
+    get() =
+        if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
+        else (secondaryCalendar?.preferredDigits ?: Language.ARABIC_DIGITS)
 var isShowWeekOfYearEnabled = false
     private set
 var isCenterAlignWidgets = true
@@ -224,8 +226,8 @@ fun updateStoredPreference(context: Context) {
         else language.preferredDigits
 
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
-    isForcedIranTimeEnabled =
-        language.isIranExclusive && prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
+    isForcedIranTimeEnabled = language.showIranTimeOption
+            && prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
     isNotifyDateOnLockScreen = prefs.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN,
         DEFAULT_NOTIFY_DATE_LOCK_SCREEN

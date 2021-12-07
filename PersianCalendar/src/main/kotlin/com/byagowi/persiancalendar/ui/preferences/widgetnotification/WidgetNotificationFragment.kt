@@ -23,8 +23,10 @@ import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
 import com.byagowi.persiancalendar.ui.preferences.dialogTitle
@@ -101,7 +103,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                 switch(PREF_IRAN_TIME, false) {
                     title(R.string.iran_time)
                     summary(R.string.showing_iran_time)
-                    isVisible = language.isIranExclusive
+                    isVisible = language.showIranTimeOption || mainCalendar == CalendarType.SHAMSI
                 }
                 val widgetCustomizations = listOf(
                     OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
