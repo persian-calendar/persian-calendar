@@ -64,7 +64,6 @@ import kotlinx.html.td
 import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
-import kotlin.math.ceil
 
 fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
     applyAppLanguage(activity)
@@ -251,9 +250,12 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     }
     table("events") {
         tr {
-            val eventsTitle = formatEventsList(events, true)
-            if (eventsTitle.isEmpty()) return@tr
-            eventsTitle.chunked(ceil(eventsTitle.size / 2.0).toInt()).forEach {
+            val titles = formatEventsList(events, true)
+            if (titles.isEmpty()) return@tr
+            val sizes = titles.map { it.second.length }.runningReduce { acc, it -> acc + it }
+            val halfOfTotal = sizes.last() / 2
+            val center = sizes.indexOfFirst { it > halfOfTotal }
+            listOf(titles.take(center), titles.drop(center)).forEach {
                 td {
                     it.forEach { (jdn, title) ->
                         div {
