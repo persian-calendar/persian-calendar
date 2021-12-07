@@ -6,7 +6,6 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView

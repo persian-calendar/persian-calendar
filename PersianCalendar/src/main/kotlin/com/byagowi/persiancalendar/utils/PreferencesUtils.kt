@@ -17,11 +17,9 @@ import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
-import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.PREF_SELECTED_LOCATION
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
-import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language

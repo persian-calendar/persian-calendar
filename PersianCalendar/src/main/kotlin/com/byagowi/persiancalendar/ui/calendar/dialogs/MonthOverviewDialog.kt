@@ -158,7 +158,7 @@ private fun formatEventsList(events: Map<Jdn, List<CalendarEvent<*>>>, isPrint: 
 }
 
 private fun createEventsReport(
-    context: Context, date: AbstractDate, wholeYear: Boolean = false
+    context: Context, date: AbstractDate, wholeYear: Boolean
 ) = createHTML().html {
     attributes["lang"] = language.language
     attributes["dir"] = if (context.resources.isRtl) "rtl" else "ltr"

@@ -8,9 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.utils.formatNumber
