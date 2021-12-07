@@ -130,8 +130,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         jdn: Jdn, dayOfMonth: Int, header: String
     ) = setAll(
         text = formatNumber(dayOfMonth), isToday = isToday, isSelected = isSelected,
-        hasEvent = hasEvent, hasAppointment = hasAppointment, isHoliday = isHoliday, jdn = jdn,
-        dayOfMonth = dayOfMonth, header = header
+        hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,
+        dayOfMonth = dayOfMonth, header = header, isHoliday = isHoliday || jdn.isWeekEnd()
     )
 
     fun setInitialOfWeekDay(text: String) = setAll(text)

@@ -140,7 +140,7 @@ class DaysAdapter(
                         pos == selectedDay,
                         events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
-                        day.isWeekEnd() || events.any { it.isHoliday },
+                        events.any { it.isHoliday },
                         day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
 
