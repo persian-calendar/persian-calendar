@@ -30,7 +30,6 @@ import com.byagowi.persiancalendar.global.spacedAnd
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
-import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.global.weekStartOffset
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.AbstractDate
@@ -42,8 +41,6 @@ import java.util.*
 import kotlin.math.abs
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
-
-fun isWeekEnd(dayOfWeek: Int) = weekEnds[dayOfWeek]
 
 fun applyWeekStartOffsetToWeekDay(dayOfWeek: Int): Int = (dayOfWeek + 7 - weekStartOffset) % 7
 

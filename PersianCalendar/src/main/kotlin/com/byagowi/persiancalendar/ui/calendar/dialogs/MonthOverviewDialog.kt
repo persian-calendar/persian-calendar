@@ -38,7 +38,6 @@ import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
 import com.byagowi.persiancalendar.utils.isRtl
-import com.byagowi.persiancalendar.utils.isWeekEnd
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
@@ -179,8 +178,7 @@ private fun createEventsReport(
     fun generateDayClasses(jdn: Jdn, weekEndsAsHoliday: Boolean): String {
         val dayEvents = events[jdn] ?: emptyList()
         return listOf(
-            "holiday" to ((isWeekEnd(jdn.dayOfWeek) && weekEndsAsHoliday) ||
-                    dayEvents.any { it.isHoliday }),
+            "holiday" to ((jdn.isWeekEnd() && weekEndsAsHoliday) || dayEvents.any { it.isHoliday }),
             "hasEvents" to dayEvents.isNotEmpty()
         ).filter { it.second }.joinToString(" ") { it.first }
     }

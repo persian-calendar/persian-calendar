@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
 import com.byagowi.persiancalendar.global.weekDays
+import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
@@ -22,6 +23,8 @@ value class Jdn(val value: Long) {
 
     // 0 means Saturday in it, see #`test day of week from jdn`() in the testsuite
     val dayOfWeek: Int get() = ((value + 2L) % 7L).toInt()
+
+    fun isWeekEnd() = weekEnds[dayOfWeek]
 
     fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
         CalendarType.ISLAMIC -> toIslamicCalendar()

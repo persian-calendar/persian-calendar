@@ -22,7 +22,6 @@ import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getInitialOfWeekDay
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
-import com.byagowi.persiancalendar.utils.isWeekEnd
 import com.byagowi.persiancalendar.utils.readMonthDeviceEvents
 import com.byagowi.persiancalendar.utils.revertWeekStartOffsetFromWeekDay
 
@@ -141,7 +140,7 @@ class DaysAdapter(
                         pos == selectedDay,
                         events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
-                        isWeekEnd((day + startingDayOfWeek - days[0]) % 7) || events.any { it.isHoliday },
+                        day.isWeekEnd() || events.any { it.isHoliday },
                         day, dayOfMonth, getShiftWorkTitle(day, true)
                     )
 
