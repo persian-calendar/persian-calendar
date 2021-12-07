@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE_LOCK_SCREEN
 import com.byagowi.persiancalendar.DEFAULT_PM
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
+import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
@@ -262,7 +263,9 @@ fun updateStoredPreference(context: Context) {
             (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: language.defaultOtherCalendars)
                 .splitIgnoreEmpty(",").map(CalendarType::valueOf)
         enabledCalendars = listOf(mainCalendar) + otherCalendars
-        secondaryCalendarEnabled = prefs.getBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, false)
+        secondaryCalendarEnabled = prefs.getBoolean(
+            PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE
+        )
     }.onFailure(logException).onFailure {
         // This really shouldn't happen, just in case
         enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
