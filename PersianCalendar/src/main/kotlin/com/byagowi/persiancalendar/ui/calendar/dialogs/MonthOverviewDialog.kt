@@ -176,7 +176,7 @@ private fun createEventsReport(
                     }
                     .holiday { color: red; font-weight: bold }
                     .hasEvents { border-bottom: 1px dotted; }
-                    table.events { padding: 1em 0 }
+                    table.events { padding: 1em 0; font-size: 95% }
                     table.events td { width: 50%; padding: 0 1em }
                     table { width: 100% }
                     h1 { text-align: center }
@@ -252,7 +252,8 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         tr {
             val titles = formatEventsList(events, true)
             if (titles.isEmpty()) return@tr
-            val sizes = titles.map { it.second.length }.runningReduce { acc, it -> acc + it }
+            val sizes = titles.map { it.second.toString().length }
+                .runningFold(0) { acc, it -> acc + it }
             val halfOfTotal = sizes.last() / 2
             val center = sizes.indexOfFirst { it > halfOfTotal }
             listOf(titles.take(center), titles.drop(center)).forEach {
