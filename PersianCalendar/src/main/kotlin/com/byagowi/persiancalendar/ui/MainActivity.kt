@@ -358,6 +358,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (navHostFragment?.navController?.currentDestination?.id != itemId) {
                     clickedItem = itemId
                 }
+                applyAppLanguage(this)
             }
         }
         return true
