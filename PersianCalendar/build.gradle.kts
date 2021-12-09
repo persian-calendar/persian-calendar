@@ -193,6 +193,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
+    minApi21Implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
+
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.1")
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:0.20.2")
