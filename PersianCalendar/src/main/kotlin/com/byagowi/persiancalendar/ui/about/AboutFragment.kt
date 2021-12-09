@@ -87,7 +87,6 @@ class AboutFragment : Fragment() {
         }
         binding.aboutHeader.text = version
         binding.icon.also {
-            it.fadeIn(1500)
             val drawable = context?.getAnimatedDrawable(R.drawable.splash_screen_animated_icon)
             it.setImageDrawable(drawable)
             drawable?.start()
@@ -133,13 +132,6 @@ class AboutFragment : Fragment() {
         setupContributorsList(binding)
 
         return binding.root
-    }
-
-    private fun View.fadeIn(durationMillis: Long = 250) {
-        this.startAnimation(AlphaAnimation(0F, 1F).apply {
-            duration = durationMillis
-            fillAfter = true
-        })
     }
 
     private fun setupContributorsList(binding: FragmentAboutBinding) {

@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
@@ -141,6 +142,13 @@ fun Context.getAnimatedDrawable(@DrawableRes animatedDrawableRes: Int) =
 
 fun AppBarLayout.hideToolbarBottomShadow() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) outlineProvider = null
+}
+
+fun View.fadeIn(durationMillis: Long = 250) {
+    this.startAnimation(AlphaAnimation(0F, 1F).also {
+        it.duration = durationMillis
+        it.fillAfter = true
+    })
 }
 
 inline fun MenuItem.onClick(crossinline action: () -> Unit) =
