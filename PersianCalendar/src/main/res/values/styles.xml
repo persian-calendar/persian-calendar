@@ -65,7 +65,7 @@
         <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
         <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen</item>
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/splash_screen_animated_icon</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/splash_icon</item>
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">3000</item>
         <!-- Set Android 5 recent apps tab color https://stackoverflow.com/q/26899820 -->
         <item name="android:colorPrimary" tools:targetApi="lollipop">@color/light_primary</item>

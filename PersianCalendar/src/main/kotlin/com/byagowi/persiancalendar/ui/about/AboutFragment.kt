@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.browser.customtabs.CustomTabsIntent
@@ -87,7 +86,7 @@ class AboutFragment : Fragment() {
         }
         binding.aboutHeader.text = version
         binding.icon.also {
-            val drawable = context?.getAnimatedDrawable(R.drawable.splash_screen_animated_icon)
+            val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon)
             it.setImageDrawable(drawable)
             drawable?.start()
         }

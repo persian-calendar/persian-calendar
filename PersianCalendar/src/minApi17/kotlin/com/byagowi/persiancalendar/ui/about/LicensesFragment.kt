@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
-import android.graphics.drawable.Animatable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -23,7 +22,6 @@ import androidx.core.text.scale
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -66,8 +64,7 @@ class LicensesFragment : Fragment() {
                         inflater.context.getCompatDrawable(R.drawable.ic_motorcycle)
             ).map { (title, icon) ->
                 it.add(title).setIcon(icon).onClick {
-                    val animation = R.drawable.splash_screen_animated_icon
-                    val drawable = inflater.context.getAnimatedDrawable(animation)
+                    val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon)
                     binding.background.setImageDrawable(drawable)
                     drawable?.start()
                 }
