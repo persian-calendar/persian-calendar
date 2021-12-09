@@ -76,10 +76,6 @@ fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> U
                 putJdn(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) null else jdn)
                 putString(PREF_SHIFT_WORK_SETTING, result)
                 putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
-
-                // Remove secondary calendar as it overrides shift work titles
-                if (result.isNotEmpty())
-                    remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
             }
 
             updateStoredPreference(activity)
