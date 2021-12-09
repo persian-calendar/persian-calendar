@@ -22,9 +22,8 @@ Assets
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
 * kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)
   https://www.behance.net/gallery/21015893/Google-Calendar
-* abdulbasit.ogg Abdulbasit takbir, not a free work but probably is on Public Domain due to being so
-  old and related Egypt laws, anyway just a portion of it used in hope to not be copyvio at least.
-* Noto Naskh Arabic from Noto fonts project https://github.com/googlei18n/noto-fonts (OFL 1.1)
+* نوای اعلان: برنا تصویر رسانه
+* انیمیشن: برنا تصویر رسانه
 
 ----
 Calendar converter - GPLv2

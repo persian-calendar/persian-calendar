@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.drawable.Animatable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -22,9 +23,11 @@ import androidx.core.text.scale
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
@@ -40,6 +43,12 @@ class LicensesFragment : Fragment() {
             it.setupUpNavigation()
         }
 
+        val animation = R.drawable.splash_screen_animation
+        val drawable = AnimatedVectorDrawableCompat.create(binding.root.context, animation)
+        binding.background.setImageDrawable(drawable)
+        val animatable = drawable as Animatable?
+        animatable?.start()
+
         binding.railView.menu.also {
             fun createTextIcon(text: String): Drawable {
                 val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -54,10 +63,16 @@ class LicensesFragment : Fragment() {
                 Canvas(bitmap).drawText(text, padding, height.toFloat(), paint)
                 return BitmapDrawable(layoutInflater.context.resources, bitmap)
             }
-
-            it.add("GPLv3").setIcon(R.drawable.ic_info)
-            it.add("" + KotlinVersion.CURRENT).icon = createTextIcon("Kotlin")
-            it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_motorcycle)
+            listOf(
+                it.add("GPLv3").setIcon(R.drawable.ic_info),
+                it.add("" + KotlinVersion.CURRENT).setIcon(createTextIcon("Kotlin")),
+                it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_motorcycle),
+            ).map { menuIcon ->
+                menuIcon.onClick {
+                    animatable?.stop()
+                    animatable?.start()
+                }
+            }
         }
 
         // Based on https://stackoverflow.com/a/34623367
