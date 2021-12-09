@@ -43,7 +43,7 @@ class LicensesFragment : Fragment() {
             it.setupUpNavigation()
         }
 
-        val animation = R.drawable.splash_screen_animation
+        val animation = R.drawable.splash_screen_animated_icon
         val drawable = AnimatedVectorDrawableCompat.create(binding.root.context, animation)
         binding.background.setImageDrawable(drawable)
         val animatable = drawable as Animatable?
