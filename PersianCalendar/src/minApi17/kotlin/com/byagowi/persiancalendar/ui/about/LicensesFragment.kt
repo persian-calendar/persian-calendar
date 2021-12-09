@@ -27,6 +27,8 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getAnimatedDrawable
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
@@ -43,12 +45,6 @@ class LicensesFragment : Fragment() {
             it.setupUpNavigation()
         }
 
-        val animation = R.drawable.splash_screen_animated_icon
-        val drawable = AnimatedVectorDrawableCompat.create(binding.root.context, animation)
-        binding.background.setImageDrawable(drawable)
-        val animatable = drawable as Animatable?
-        animatable?.start()
-
         binding.railView.menu.also {
             fun createTextIcon(text: String): Drawable {
                 val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -64,13 +60,16 @@ class LicensesFragment : Fragment() {
                 return BitmapDrawable(layoutInflater.context.resources, bitmap)
             }
             listOf(
-                it.add("GPLv3").setIcon(R.drawable.ic_info),
-                it.add("" + KotlinVersion.CURRENT).setIcon(createTextIcon("Kotlin")),
-                it.add("API " + Build.VERSION.SDK_INT).setIcon(R.drawable.ic_motorcycle),
-            ).map { menuIcon ->
-                menuIcon.onClick {
-                    animatable?.stop()
-                    animatable?.start()
+                "GPLv3" to inflater.context.getCompatDrawable(R.drawable.ic_info),
+                KotlinVersion.CURRENT.toString() to createTextIcon("Kotlin"),
+                "API " + Build.VERSION.SDK_INT to
+                        inflater.context.getCompatDrawable(R.drawable.ic_motorcycle)
+            ).map { (title, icon) ->
+                it.add(title).setIcon(icon).onClick {
+                    val animation = R.drawable.splash_screen_animated_icon
+                    val drawable = inflater.context.getAnimatedDrawable(animation)
+                    binding.background.setImageDrawable(drawable)
+                    drawable?.start()
                 }
             }
         }

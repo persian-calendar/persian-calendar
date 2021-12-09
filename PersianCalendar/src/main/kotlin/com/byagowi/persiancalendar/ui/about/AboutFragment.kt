@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.*
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.getAnimatedDrawable
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -84,10 +85,12 @@ class AboutFragment : Fragment() {
                 }
             }
         }
-        binding.aboutHeader.also {
-            it.text = version
-            it.fadeIn(2500)
-            it.setCompoundDrawablesWithIntrinsicBounds(0, R.mipmap.ic_launcher_round, 0, 0)
+        binding.aboutHeader.text = version
+        binding.icon.also {
+            it.fadeIn(1500)
+            val drawable = context?.getAnimatedDrawable(R.drawable.splash_screen_animated_icon)
+            it.setImageDrawable(drawable)
+            drawable?.start()
         }
 
         fun TextView.putLineStartIcon(@DrawableRes icon: Int) {

@@ -9,6 +9,7 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
@@ -38,6 +39,7 @@ import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
@@ -133,6 +135,9 @@ fun NavController.navigateSafe(directions: NavDirections) = runCatching {
 
 fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
     AppCompatResources.getDrawable(this, drawableRes).debugAssertNotNull ?: ShapeDrawable()
+
+fun Context.getAnimatedDrawable(@DrawableRes animatedDrawableRes: Int) =
+    AnimatedVectorDrawableCompat.create(this, animatedDrawableRes)
 
 fun AppBarLayout.hideToolbarBottomShadow() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) outlineProvider = null
