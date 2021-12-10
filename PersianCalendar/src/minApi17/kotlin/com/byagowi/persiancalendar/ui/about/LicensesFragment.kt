@@ -64,7 +64,7 @@ class LicensesFragment : Fragment() {
                         inflater.context.getCompatDrawable(R.drawable.ic_motorcycle)
             ).map { (title, icon) ->
                 it.add(title).setIcon(icon).onClick {
-                    val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon)
+                    val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon_animation)
                     binding.background.setImageDrawable(drawable)
                     drawable?.start()
                 }

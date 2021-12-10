@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/splash_icon"
+    tools:ignore="NewApi">
+    <target android:name="first_band">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="240"
+                    android:propertyName="scaleX"
+                    android:startOffset="0"
+                    android:valueFrom="0"
+                    android:valueTo="1.1"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:duration="240"
+                    android:propertyName="scaleX"
+                    android:startOffset="240"
+                    android:valueFrom="1.1"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="second_band">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="240"
+                    android:propertyName="scaleX"
+                    android:startOffset="320"
+                    android:valueFrom="0"
+                    android:valueTo="1.1"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:duration="240"
+                    android:propertyName="scaleX"
+                    android:startOffset="560"
+                    android:valueFrom="1.1"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="third_band">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="240"
+                    android:propertyName="scaleX"
+                    android:startOffset="440"
+                    android:valueFrom="0"
+                    android:valueTo="1.1"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:duration="240"
+                    android:propertyName="scaleX"
+                    android:startOffset="680"
+                    android:valueFrom="1.1"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+    <target android:name="fourth_band">
+        <aapt:attr name="android:animation">
+            <set android:ordering="together">
+                <objectAnimator
+                    android:duration="320"
+                    android:propertyName="scaleX"
+                    android:startOffset="600"
+                    android:valueFrom="0"
+                    android:valueTo="1.1"
+                    android:valueType="floatType" />
+                <objectAnimator
+                    android:duration="320"
+                    android:propertyName="scaleX"
+                    android:startOffset="920"
+                    android:valueFrom="1.1"
+                    android:valueTo="1"
+                    android:valueType="floatType" />
+            </set>
+        </aapt:attr>
+    </target>
+</animated-vector>

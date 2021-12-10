@@ -86,7 +86,7 @@ class AboutFragment : Fragment() {
         }
         binding.aboutHeader.text = version
         binding.icon.also {
-            val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon)
+            val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon_animation)
             it.setImageDrawable(drawable)
             drawable?.start()
         }
