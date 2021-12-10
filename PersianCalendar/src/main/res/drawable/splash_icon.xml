@@ -5,15 +5,15 @@
     tools:ignore="NewApi">
     <aapt:attr name="android:drawable">
         <vector
-            android:width="400dp"
-            android:height="400dp"
+            android:width="600dp"
+            android:height="600dp"
             android:viewportWidth="600"
             android:viewportHeight="600">
             <group
-                android:scaleX=".5"
-                android:scaleY=".5"
-                android:translateX="150"
-                android:translateY="150">
+                android:pivotX="300"
+                android:pivotY="300"
+                android:scaleX=".60"
+                android:scaleY=".60">
                 <path
                     android:fillColor="#23a79b"
                     android:pathData="M301.033,298.187m-294.044,0a294.044,294.044 45,1 1,588.088 0a294.044,294.044 135,1 1,-588.088 0" />
