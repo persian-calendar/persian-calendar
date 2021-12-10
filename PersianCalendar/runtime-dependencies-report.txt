@@ -1,4 +1,4 @@
-+--- androidx.databinding:viewbinding:7.0.3
++--- androidx.databinding:viewbinding:7.0.4
 |    \--- androidx.annotation:annotation:1.0.0 -> 1.3.0
 +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.31
