@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="600"
+    android:viewportHeight="600">
+    <group
+        android:pivotX="300"
+        android:pivotY="300"
+        android:scaleX=".7"
+        android:scaleY=".7">
+        <path
+            android:fillColor="@color/themed_icon_background"
+            android:pathData="M301.033,298.187m-294.044,0a294.044,294.044 45,1 1,588.088 0a294.044,294.044 135,1 1,-588.088 0" />
+        <path
+            android:fillColor="@color/themed_icon_background"
+            android:pathData="M292.2,4.3c162.4,-1 294.9,129.8 295.9,292.1S458.3,591.2 295.9,592.2" />
+        <path
+            android:fillColor="@color/themed_icon_background"
+            android:pathData="M299.8,4.2c162.4,-0.9 294.8,130.1 295.6,292.4S465.3,591.2 302.9,592.1" />
+        <path
+            android:fillColor="@color/themed_icon_foreground"
+            android:pathData="M64.7,123.4v52.9l46.4,34.9l46.2,-34.8V39.7C106.5,39.7 64.7,77.4 64.7,123.4z" />
+        <path
+            android:fillColor="#343434"
+            android:pathData="M156.4,238.8v35.9c0,8.9 -6.4,16.2 -14.4,16.2h-9c-7.9,0 -14.4,-7.3 -14.4,-16.2v-36H89V365h29.4v-44.8H149c20.4,-0.1 36.8,-16.5 36.9,-36.9v-44.6L156.4,238.8L156.4,238.8z" />
+        <path
+            android:fillColor="#343434"
+            android:pathData="M273.9,272.3v-33.7h-52.5c-16.4,0 -29.7,13.1 -30.2,29.4v30.6c0.1,20.4 16.5,36.8 36.9,36.9h16.2V365h29.4v-44.8c0,9.5 0.3,-45.6 0.3,-45.6v-2.3L273.9,272.3zM238.9,306.2h-2.3c-8.9,0 -16.2,-6.4 -16.2,-14.4v-9c0,-7.9 7.3,-14.4 16.2,-14.4h7.5v37.7L238.9,306.2L238.9,306.2z" />
+        <path
+            android:fillColor="@color/themed_icon_foreground"
+            android:pathData="M154,236.4v35.9c0,8.9 -6.4,16.2 -14.4,16.2h-9c-7.9,0 -14.4,-7.3 -14.4,-16.2v-36H86.5v126.3h29.4v-44.8h30.6c20.4,-0.1 36.8,-16.5 36.9,-36.9v-44.6L154,236.4z" />
+        <path
+            android:fillColor="@color/themed_icon_foreground"
+            android:pathData="M271.4,270.1v-33.7h-52.5c-16.4,0 -29.7,13.1 -30.2,29.4v30.6c0.1,20.4 16.5,36.8 36.9,36.9h16.2v29.5h29.4V318c0,9.5 0.3,-45.6 0.3,-45.6v-2.3L271.4,270.1zM236.5,303.9h-2.3c-8.9,0 -16.2,-6.4 -16.2,-14.4v-9c0,-7.9 7.3,-14.4 16.2,-14.4h7.5v37.7L236.5,303.9L236.5,303.9z" />
+        <group android:name="first_band">
+            <path
+                android:fillColor="@color/themed_icon_foreground"
+                android:pathData="M324.998,201.708l233.796,0l0,61.2l-233.796,0z" />
+        </group>
+        <group android:name="second_band">
+            <path
+                android:fillColor="@color/themed_icon_foreground"
+                android:pathData="M324.998,295.784l233.796,0l0,32.946l-233.796,0z" />
+        </group>
+        <group android:name="third_band">
+            <path
+                android:fillColor="@color/themed_icon_foreground"
+                android:pathData="M324.998,360.159l233.796,0l0,31.041l-233.796,0z" />
+        </group>
+        <group android:name="fourth_band">
+            <path
+                android:fillColor="@color/themed_icon_foreground"
+                android:pathData="M325.739,422.629l168.68,0l0,31.253l-168.68,0z" />
+        </group>
+    </group>
+</vector>
