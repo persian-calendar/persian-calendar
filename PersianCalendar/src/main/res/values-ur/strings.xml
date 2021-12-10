@@ -110,7 +110,7 @@
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
     <string name="about_license">مجوز</string>
     <string name="about_license_title">مجوزهای برنامه</string>
-    <string name="about_license_sum">مجوز GPL3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
+    <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
     <string name="help">راهنما</string>
     <string name="about_report_bug">گزارش اشکال</string>
     <string name="about_report_bug_sum">"راه ترجیحی برای گزارش باگ و درخواست قابلیت‌های جدید، نیازمند حسابی در گیت‌هاب "</string>

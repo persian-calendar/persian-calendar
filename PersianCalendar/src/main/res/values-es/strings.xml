@@ -190,7 +190,7 @@
     <string name="version">Versión %1$s</string>
     <string name="about_license">Licencia</string>
     <string name="about_license_title">Licencia de aplicación</string>
-    <string name="about_license_sum">Check GPL3 License and other license terms used on Persian Calendar.</string>
+    <string name="about_license_sum">Check GPLv3 License and other license terms used on Persian Calendar.</string>
     <string name="about_support_developers">Soporte para desarrolladores</string>
     <string name="about_report_bug">Informar error en Github</string>
     <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>

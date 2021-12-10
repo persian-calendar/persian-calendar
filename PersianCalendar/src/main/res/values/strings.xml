@@ -190,7 +190,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="version">Version %1$s</string>
     <string name="about_license">License</string>
     <string name="about_license_title">Application License</string>
-    <string name="about_license_sum">Check GPL3 License and other license terms used on Persian Calendar.</string>
+    <string name="about_license_sum">Check GPLv3 License and other license terms used on Persian Calendar.</string>
     <string name="about_support_developers">Developer Support</string>
     <string name="about_report_bug">Report bug on GitHub</string>
     <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>

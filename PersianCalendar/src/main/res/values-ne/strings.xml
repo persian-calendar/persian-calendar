@@ -104,7 +104,7 @@
     <string name="about_license_title">आवेदन लाइसेन्स</string>
     <string name="phone_location_required">एपको यो भागलाई स्थान अनुमति चाहिन्छ, यदि तपाईंले अस्वीकार गर्न चाहनुहुन्छ भने तपाईंले आफ्नो अक्षांश र देशान्तर म्यानुअल रूपमा प्रविष्ट गर्नुपर्नेछ।</string>
     <string name="about_license">इजाजतपत्र</string>
-    <string name="about_license_sum">फारसी क्यालेन्डरमा प्रयोग गरिएको GPL3 लाइसेन्स र अन्य इजाजतपत्र सर्तहरू जाँच गर्नुहोस्।</string>
+    <string name="about_license_sum">फारसी क्यालेन्डरमा प्रयोग गरिएको GPLv3 लाइसेन्स र अन्य इजाजतपत्र सर्तहरू जाँच गर्नुहोस्।</string>
     <string name="fajr">फजर</string>
     <string name="dhuhr">धुहर</string>
     <string name="select_year">वर्ष चयन गर्नुहोस्</string>

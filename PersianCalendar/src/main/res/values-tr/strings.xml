@@ -151,7 +151,7 @@
     <string name="about_report_bug_sum">Tercih edilen hata raporlama veya yeni özellik isteme, GitHub hesabına ihtiyaç duyar</string>
     <string name="about_report_bug">GitHub\'da hata bildir</string>
     <string name="about_support_developers">Geliştirici Desteği</string>
-    <string name="about_license_sum">İran Takviminde kullanılan GPL3 Lisansını ve diğer lisans koşullarını kontrol edin.</string>
+    <string name="about_license_sum">İran Takviminde kullanılan GPLv3 Lisansını ve diğer lisans koşullarını kontrol edin.</string>
     <string name="about_license_title">Uygulama Lisansı</string>
     <string name="about_license">Lisans</string>
     <string name="version">Sürüm %1$s</string>

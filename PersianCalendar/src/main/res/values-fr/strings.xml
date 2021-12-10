@@ -214,7 +214,7 @@
     <string name="shift_work_settings">Paramètres de travail par postes</string>
     <string name="week_days_name_column">colonne %1$s dans le tableau des jours</string>
     <string name="about_support_developers">Assistance développeur</string>
-    <string name="about_license_sum">Vérifier la licence GPL3 et les autres conditions de licence utilisées pour Calendrier persan.</string>
+    <string name="about_license_sum">Vérifier la licence GPLv3 et les autres conditions de licence utilisées pour Calendrier persan.</string>
     <string name="gpl_logo">Logo GPL</string>
     <string name="phone_calendar_required">Cette partie de l’application nécessite l’autorisation du calendrier. Si vous l’autorisez, vos évènements personnels seront affichés sur le calendrier.</string>
     <string name="phone_location_required">Cette partie de l’application nécessite une autorisation de localisation. Si vous choisissez de la refuser, vous devez saisir manuellement votre latitude et votre longitude.</string>

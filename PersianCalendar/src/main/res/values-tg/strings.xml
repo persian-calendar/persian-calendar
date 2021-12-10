@@ -311,7 +311,7 @@
     <string name="athan_volume">Ҳаҷми овози азон</string>
     <string name="athan_volume_summary">танзим ҳаҷми овози азон</string>
     <string name="athan_disabled_summary">Барои фаъол кардани танзимоти азон, маконро таъин кунед</string>
-    <string name="about_license_sum">Литсензияи GPL3, шартҳои иҷозатномаро, ки дар тақвими форсӣ истифода мешаванд ва китобхонаҳои истифодашударо тафтиш кунед.</string>
+    <string name="about_license_sum">Литсензияи GPLv3, шартҳои иҷозатномаро, ки дар тақвими форсӣ истифода мешаванд ва китобхонаҳои истифодашударо тафтиш кунед.</string>
     <string name="notify_date_lock_screen">Намоиши огоҳиҳо дар ҳолати қулф</string>
     <string name="notify_date_lock_screen_summary">Танҳо вақте кор мекунад, ки роҳи муҳофизати телефон муқаррар карда шавад.</string>
     <string name="week_days_name_column">Сутуни %1$s дар ҷадвали рӯзҳо</string>
