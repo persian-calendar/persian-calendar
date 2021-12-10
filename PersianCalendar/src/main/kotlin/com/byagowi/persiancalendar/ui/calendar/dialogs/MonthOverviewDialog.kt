@@ -180,7 +180,7 @@ private fun createEventsReport(
                     table.events td { width: 50%; padding: 0 1em }
                     table { width: 100% }
                     h1 { text-align: center }
-                    .page { break-after: page; break-inside: avoid }
+                    .page { break-after: page }
                 """.trimIndent()
             }
         }
