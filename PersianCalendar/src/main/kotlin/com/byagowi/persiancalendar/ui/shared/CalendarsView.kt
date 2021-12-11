@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getSpringEquinox
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.toCivilDate
+import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
@@ -78,31 +79,31 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
         }
 
-        val mainDate = jdn.toCalendar(chosenCalendarType)
-        val startOfYearJdn = Jdn(chosenCalendarType, mainDate.year, 1, 1)
-        val endOfYearJdn = Jdn(chosenCalendarType, mainDate.year + 1, 1, 1) - 1
+        val date = jdn.toCalendar(chosenCalendarType)
+        val startOfYearJdn = Jdn(chosenCalendarType, date.year, 1, 1)
+        val endOfYearJdn = Jdn(chosenCalendarType, date.year + 1, 1, 1) - 1
         val currentWeek = jdn.getWeekOfYear(startOfYearJdn)
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
 
         val startOfYearText = context.getString(
             R.string.start_of_year_diff, formatNumber(jdn - startOfYearJdn + 1),
-            formatNumber(currentWeek), formatNumber(mainDate.month)
+            formatNumber(currentWeek), formatNumber(date.month)
         )
         val endOfYearText = context.getString(
             R.string.end_of_year_diff, formatNumber(endOfYearJdn - jdn),
-            formatNumber(weeksCount - currentWeek), formatNumber(12 - mainDate.month)
+            formatNumber(weeksCount - currentWeek), formatNumber(12 - date.month)
         )
         binding.startAndEndOfYearDiff.text =
             listOf(startOfYearText, endOfYearText).joinToString("\n")
 
         var equinox = ""
         if (mainCalendar == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
-            if (mainDate.month == 12 && mainDate.dayOfMonth >= 20 || mainDate.month == 1 && mainDate.dayOfMonth == 1) {
-                val addition = if (mainDate.month == 12) 1 else 0
+            if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) {
+                val addition = if (date.month == 12) 1 else 0
                 val springEquinox = jdn.toGregorianCalendar().getSpringEquinox()
                 equinox = context.getString(
                     R.string.spring_equinox,
-                    formatNumber(mainDate.year + addition),
+                    formatNumber(date.year + addition),
                     Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
                         .toFormattedString(forcedIn12 = true) + " " +
                             formatDate(
@@ -121,5 +122,17 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             context, jdn, isToday, EventsStore.empty(),
             withZodiac = true, withOtherCalendars = true, withTitle = true
         )
+
+        val persian = (date as? PersianDate) ?: jdn.toPersianCalendar()
+        val season = (persian.month - 1) / 3
+        val seasonMonthsLength = if (season < 2) 31 else 30
+        binding.seasonProgress.max = seasonMonthsLength * 3
+        binding.seasonProgress.progress = (persian.month - season * 3 - 1) * seasonMonthsLength +
+                persian.dayOfMonth
+
+        binding.monthProgress.max = mainCalendar.getMonthLength(date.year, date.month)
+        binding.monthProgress.progress = date.dayOfMonth
+        binding.yearProgress.max = endOfYearJdn - startOfYearJdn
+        binding.yearProgress.progress = jdn - startOfYearJdn
     }
 }

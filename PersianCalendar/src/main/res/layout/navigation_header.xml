@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:importantForAccessibility="no"
     android:orientation="vertical">
 
@@ -12,11 +11,5 @@
         android:layout_height="@dimen/drawer_header_height"
         android:contentDescription="@string/app_name"
         android:scaleType="centerCrop" />
-
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/season_progress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:trackThickness="1.5dp" />
 
 </LinearLayout>

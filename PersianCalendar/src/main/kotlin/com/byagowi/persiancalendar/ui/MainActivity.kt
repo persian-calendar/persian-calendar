@@ -168,11 +168,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             val persian = today.toPersianCalendar()
             var season = (persian.month - 1) / 3
 
-            val seasonMonthsLength = if (season < 2) 31 else 30
-            drawerHeader.seasonProgress.max = seasonMonthsLength * 3
-            drawerHeader.seasonProgress.progress =
-                (persian.month - season * 3 - 1) * seasonMonthsLength + persian.dayOfMonth
-
             // Southern hemisphere
             if ((coordinates?.latitude ?: 1.0) < .0) season = (season + 2) % 4
 

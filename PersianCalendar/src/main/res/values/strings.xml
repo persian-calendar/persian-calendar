@@ -343,6 +343,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="nepali_calendar_short">Nepali</string>
     <string name="country_emoji">🇺🇸🇬🇧</string>
     <string name="show_secondary_calendar">Show secondary calendar</string>
+    <string name="season">Season</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
