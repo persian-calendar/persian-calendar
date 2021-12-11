@@ -126,12 +126,15 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         val persian = (date as? PersianDate) ?: jdn.toPersianCalendar()
         val season = (persian.month - 1) / 3
         val seasonMonthsLength = if (season < 2) 31 else 30
+        binding.seasonProgress.enableAnimation = isExpanded
         binding.seasonProgress.max = seasonMonthsLength * 3
         binding.seasonProgress.progress = (persian.month - season * 3 - 1) * seasonMonthsLength +
                 persian.dayOfMonth
 
+        binding.monthProgress.enableAnimation = isExpanded
         binding.monthProgress.max = mainCalendar.getMonthLength(date.year, date.month)
         binding.monthProgress.progress = date.dayOfMonth
+        binding.yearProgress.enableAnimation = isExpanded
         binding.yearProgress.max = endOfYearJdn - startOfYearJdn
         binding.yearProgress.progress = jdn - startOfYearJdn
     }
