@@ -10,15 +10,14 @@
 
     <TextView
         android:id="@+id/week_day_name"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:paddingStart="@dimen/padding_item"
         android:paddingTop="@dimen/padding_item"
         android:paddingEnd="@dimen/padding_item"
         android:textColor="?attr/colorAccent"
-        android:textSize="@dimen/text_size_title"
-        tools:text="Calendar" />
+        android:textSize="@dimen/text_size_title" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendars"
@@ -54,11 +53,12 @@
         android:id="@+id/extra_information_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/zodiac"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="@dimen/padding_item"
@@ -66,11 +66,16 @@
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description" />
 
+        <com.byagowi.persiancalendar.ui.shared.MoonView
+            android:id="@+id/moon_phase"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:importantForAccessibility="no" />
+
         <TextView
             android:id="@+id/diff_date"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:paddingTop="@dimen/padding_item"
             android:textColor="?attr/colorTextNormal"
             android:textIsSelectable="true"
@@ -78,9 +83,8 @@
             tools:text="@string/days_distance" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="@dimen/padding_item">
 
@@ -144,7 +148,7 @@
 
         <TextView
             android:id="@+id/start_and_end_of_year_diff"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="@dimen/padding_item"

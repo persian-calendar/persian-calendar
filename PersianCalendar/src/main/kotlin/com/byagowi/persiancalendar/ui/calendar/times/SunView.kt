@@ -3,11 +3,9 @@ package com.byagowi.persiancalendar.ui.calendar.times
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
 import android.graphics.Shader
 import android.util.AttributeSet
 import android.view.View
@@ -21,13 +19,12 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sqrt
 
@@ -39,11 +36,7 @@ class SunView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, @ColorInt textColor: Int? = null
 ) : View(context, attrs), ValueAnimator.AnimatorUpdateListener {
 
-    private val fullDay = Clock(24, 0).toMinutes().toFloat()
-    private val halfDay = Clock(12, 0).toMinutes().toFloat()
-
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL }
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
     private val horizonColor = textColor ?: context.resolveColor(R.attr.SunViewHorizonColor)
@@ -52,10 +45,6 @@ class SunView @JvmOverloads constructor(
     private val nightColor = ContextCompat.getColor(context, R.color.sViewNightColor)
     private val dayColor = ContextCompat.getColor(context, R.color.sViewDayColor)
     private val daySecondColor = ContextCompat.getColor(context, R.color.sViewDaySecondColor)
-    private val sunBeforeMiddayColor =
-        ContextCompat.getColor(context, R.color.sViewSunBeforeMiddayColor)
-    private val sunAfterMiddayColor =
-        ContextCompat.getColor(context, R.color.sViewSunAfterMiddayColor)
     private val sunriseTextColor = textColor ?: context.resolveColor(R.attr.SunViewSunriseTextColor)
     private val middayTextColor = textColor ?: context.resolveColor(R.attr.SunViewMiddayTextColor)
     private val sunsetTextColor = textColor ?: context.resolveColor(R.attr.SunViewSunsetTextColor)
@@ -66,30 +55,6 @@ class SunView @JvmOverloads constructor(
     private val curvePath = Path()
     private val nightPath = Path()
     private var current = 0f
-    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.WHITE
-        it.style = Paint.Style.FILL_AND_STROKE
-    }
-
-    // moon Paint Black
-    private val moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.BLACK
-        it.style = Paint.Style.FILL_AND_STROKE
-    }
-
-    // moon Paint for Oval
-    private val moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.WHITE
-        it.style = Paint.Style.FILL_AND_STROKE
-    }
-
-    // moon Paint for Diameter
-    private val moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.GRAY
-        it.style = Paint.Style.STROKE
-    }
-    private val moonRect = RectF()
-    private val moonOval = RectF()
     private var dayLengthString = ""
     private var remainingString = ""
     private val sunriseString = context.getString(R.string.sunriseSunView)
@@ -181,17 +146,14 @@ class SunView @JvmOverloads constructor(
             drawLine(width / 2f, height * .7f, width / 2f, height * .8f, paint)
 
             // draw sun
-            val sunMoonRadius = sqrt(width * height * .002f)
+            val radius = sqrt(width * height * .002f)
+            val cx = width * current
+            val cy = getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt())
             if (current in .17f..0.83f) {
-                sunPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
-                    current, sunBeforeMiddayColor, sunAfterMiddayColor
-                )
-                drawCircle(
-                    width * current,
-                    getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt()),
-                    sunMoonRadius, sunPaint
-                )
-            } else drawMoon(canvas, sunMoonRadius)
+                solarDraw.sun(canvas, cx, cy, radius, current)
+            } else canvas.withRotation(if (isRtl) 0f else 180f, cx, cx) { // cancel parent flip
+                solarDraw.moon(canvas, moonPhase, cx, cy, radius)
+            }
         }
 
         // draw text
@@ -227,27 +189,7 @@ class SunView @JvmOverloads constructor(
         )
     }
 
-    private fun drawMoon(canvas: Canvas, r: Float) {
-        // This is brought from QiblaCompassView with some modifications
-        val radius = 1f
-        val px = width * current
-        val py = getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt())
-        canvas.withRotation(180f, px, py) {
-            val eOffset = 0
-            val arcWidth = ((moonPhase - .5) * (4 * r)).toInt()
-            // elevation Offset 0 for 0 degree; r for 90 degree
-            moonRect.set(px - r, py + eOffset - radius - r, px + r, py + eOffset - radius + r)
-            canvas.drawArc(moonRect, 90f, 180f, false, moonPaint)
-            canvas.drawArc(moonRect, 270f, 180f, false, moonPaintB)
-            moonOval.set(
-                px - abs(arcWidth) / 2f, py + eOffset - radius - r,
-                px + abs(arcWidth) / 2f, py + eOffset - radius + r
-            )
-            moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
-            canvas.drawArc(moonOval, 0f, 360f, false, moonPaintO)
-            canvas.drawArc(moonRect, 0f, 360f, false, moonPaintD)
-        }
-    }
+    private val solarDraw = SolarDraw()
 
     private fun getY(x: Int, segment: Double, height: Int): Float =
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
@@ -306,5 +248,9 @@ class SunView @JvmOverloads constructor(
     override fun onAnimationUpdate(valueAnimator: ValueAnimator) {
         current = valueAnimator.animatedValue as Float
         postInvalidate()
+    }
+
+    companion object {
+        private val fullDay = Clock(24, 0).toMinutes().toFloat()
     }
 }

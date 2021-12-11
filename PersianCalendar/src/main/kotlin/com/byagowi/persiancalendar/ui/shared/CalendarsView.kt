@@ -11,12 +11,14 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.EventsStore
+import com.byagowi.persiancalendar.utils.ONE_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -59,8 +61,12 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.weekDayName.text = jdn.dayOfWeekName
 
         binding.zodiac.also {
-            it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
-            it.isVisible = it.text.isNotEmpty()
+            val zodiacInfo = getZodiacInfo(context, jdn, withEmoji = true, short = false)
+            it.text = zodiacInfo
+            val zodiacAvailable = zodiacInfo.isNotEmpty()
+            it.isVisible = zodiacAvailable
+            binding.moonPhase.isVisible = zodiacAvailable && coordinates != null
+            binding.moonPhase.jdn = jdn
         }
 
         val isToday = Jdn.today() == jdn

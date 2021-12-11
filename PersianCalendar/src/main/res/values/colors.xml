@@ -156,12 +156,9 @@
     <color name="sViewHorizonColorDark">#eeeeee</color>
     <color name="sViewTimelineColorDark">#eeeeee</color>
     <color name="sViewTaglineColorDark">#c1eeeeee</color>
-    <color name="sViewSunColor">#ffcc00</color>
     <color name="sViewDayColor">#74BBEF</color>
     <color name="sViewDaySecondColor">#B2D5F1</color>
     <color name="sViewNightColor">#383C7C</color>
-    <color name="sViewSunBeforeMiddayColor">#FFF9C4</color>
-    <color name="sViewSunAfterMiddayColor">#FF9100</color>
     <color name="sViewSunriseTextColorLight">#FF9800</color>
     <color name="sViewMiddayTextColorLight">#FFC107</color>
     <color name="sViewSunsetTextColorLight">#B71C1C</color>

@@ -9,21 +9,21 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.cepmuvakkit.times.posAlgo.AstroLib
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import net.androgames.level.AngleDisplay
 import java.util.*
-import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.round
 
@@ -52,29 +52,11 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.strokeWidth = 0.5.dp
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
-    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.YELLOW
-        it.style = Paint.Style.FILL_AND_STROKE
-        it.pathEffect = dashPath
-    }
-    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.WHITE
-        it.style = Paint.Style.FILL_AND_STROKE
-    }
-    private val moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.BLACK
-        it.style = Paint.Style.FILL_AND_STROKE
-    }
-    private val moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG).also { // Oval
-        it.color = Color.WHITE
-        it.style = Paint.Style.FILL_AND_STROKE
-    }
     private val moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG).also { // Diameter
         it.color = Color.GRAY
         it.style = Paint.Style.STROKE
+        it.pathEffect = dashPath
     }
-    private val moonRect = RectF()
-    private val moonOval = RectF()
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GREEN
         it.style = Paint.Style.FILL_AND_STROKE
@@ -98,8 +80,12 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     private var sunMoonPosition = calculateSunMoonPosition(GregorianCalendar())
 
+    private val fullDay = Clock(24, 0).toMinutes().toFloat()
+    private var sunProgress = 0f
+
     fun setTime(time: GregorianCalendar) {
         sunMoonPosition = calculateSunMoonPosition(time)
+        sunProgress = Clock(time).toMinutes() / fullDay
         postInvalidate()
     }
 
@@ -190,38 +176,26 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         }
     }
 
+    private val solarDraw = SolarDraw()
+
     private fun Canvas.drawSun() {
         if (sunMoonPosition.sunPosition.altitude <= -10) return
-        withRotation(sunMoonPosition.sunPosition.azimuth.toFloat() - 360, cx, cy) {
+        val rotation = sunMoonPosition.sunPosition.azimuth.toFloat() - 360
+        withRotation(rotation, cx, cy) {
             val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
-            drawCircle(cx, (cy - ry), r, sunPaint)
+            solarDraw.sun(this, cx, cy - ry, r, sunProgress)
             dashedPaint.color = Color.YELLOW
-            drawLine(cx, (cy - radius), cx, (cy + radius), dashedPaint)
+            drawLine(cx, cy - radius, cx, cy + radius, dashedPaint)
         }
     }
 
     private fun Canvas.drawMoon() {
         if (sunMoonPosition.moonPosition.altitude <= -5) return
-        withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
+        val rotation = sunMoonPosition.moonPosition.azimuth.toFloat() - 360
+        withRotation(rotation, cx, cy) {
             val eOffset = (sunMoonPosition.moonPosition.altitude / 90 * radius).toInt()
-            // elevation Offset 0 for 0 degree; r for 90 degree
-            moonRect.set(
-                cx - r, cy + eOffset - radius - r,
-                cx + r, cy + eOffset - radius + r
-            )
-            drawArc(moonRect, 90f, 180f, false, moonPaint)
-            drawArc(moonRect, 270f, 180f, false, moonPaintB)
-            val arcWidth = ((sunMoonPosition.moonPhase - 0.5) * (4 * r)).toInt()
-            moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
-            moonOval.set(
-                cx - abs(arcWidth) / 2, cy + eOffset - radius - r,
-                cx + abs(arcWidth) / 2, cy + eOffset - radius + r
-            )
-            drawArc(moonOval, 0f, 360f, false, moonPaintO)
-            drawArc(moonRect, 0f, 360f, false, moonPaintD)
-            moonPaintD.pathEffect = dashPath
-            drawLine(cx, (cy - radius), cx, (cy + radius), moonPaintD)
-            moonPaintD.pathEffect = null
+            solarDraw.moon(this, sunMoonPosition.moonPhase, cx, cy + eOffset - radius, r)
+            drawLine(cx, cy - radius, cx, cy + radius, moonPaintD)
         }
     }
 

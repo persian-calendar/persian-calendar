@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.animation.BounceInterpolator
 import android.widget.FrameLayout
+import com.byagowi.persiancalendar.utils.ONE_SECOND_IN_MILLIS
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = null) :
@@ -32,7 +33,7 @@ class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = n
             }
             ValueAnimator.ofInt(progressIndicator.progress / accuracyFactor, value).also {
                 animator = it
-                it.duration = animationDuration
+                it.duration = ONE_SECOND_IN_MILLIS
                 it.interpolator = BounceInterpolator()
                 it.addUpdateListener(this)
             }.start()
@@ -43,7 +44,6 @@ class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = n
     }
 
     companion object {
-        private const val animationDuration = 1000L
         private const val accuracyFactor = 100
     }
 }
