@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numericalDatePreferred
+import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.spacedAnd
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekDays
@@ -254,8 +255,9 @@ fun formatDate(
     (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
 else language.dmy.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
 
-fun toLinearDate(date: AbstractDate): String = "%s/%s/%s".format(
-    formatNumber(date.year), formatNumber(date.month), formatNumber(date.dayOfMonth)
+fun toLinearDate(date: AbstractDate, digits: CharArray = preferredDigits) = "%s/%s/%s".format(
+    formatNumber(date.year, digits), formatNumber(date.month, digits),
+    formatNumber(date.dayOfMonth, digits)
 )
 
 fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: CalendarType): String {
