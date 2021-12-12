@@ -70,7 +70,8 @@
             android:id="@+id/moon_phase"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:importantForAccessibility="no" />
+            android:importantForAccessibility="no"
+            android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/diff_date"
