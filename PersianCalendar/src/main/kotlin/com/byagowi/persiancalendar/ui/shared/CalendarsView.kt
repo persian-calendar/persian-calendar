@@ -65,7 +65,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             it.text = zodiacInfo
             val zodiacAvailable = zodiacInfo.isNotEmpty()
             it.isVisible = zodiacAvailable
-            binding.moonPhase.isVisible = isExpanded && zodiacAvailable && coordinates != null
+            binding.moonPhase.isVisible = zodiacAvailable && coordinates != null
             binding.moonPhase.jdn = jdn
         }
 
