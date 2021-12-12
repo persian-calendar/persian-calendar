@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getAthanUri
@@ -42,6 +43,8 @@ class AthanNotification : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent ?: return super.onStartCommand(intent, flags, startId)
+
+        applyAppLanguage(this)
 
         val notificationId =
             if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000) else 3000
