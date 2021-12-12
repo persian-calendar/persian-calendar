@@ -3,12 +3,12 @@ package com.byagowi.persiancalendar.ui.shared
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
-import android.view.animation.BounceInterpolator
+import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import com.byagowi.persiancalendar.utils.ONE_SECOND_IN_MILLIS
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
-class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = null) :
+class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs), ValueAnimator.AnimatorUpdateListener {
 
     private val progressIndicator = CircularProgressIndicator(context, attrs).also(::addView)
@@ -34,7 +34,7 @@ class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = n
             ValueAnimator.ofInt(progressIndicator.progress, value).also {
                 animator = it
                 it.duration = ONE_SECOND_IN_MILLIS
-                it.interpolator = BounceInterpolator()
+                it.interpolator = OvershootInterpolator(2f)
                 it.addUpdateListener(this)
             }.start()
         }

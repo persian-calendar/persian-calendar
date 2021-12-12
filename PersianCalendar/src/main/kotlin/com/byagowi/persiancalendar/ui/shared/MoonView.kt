@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.BounceInterpolator
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
@@ -34,7 +35,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             ValueAnimator.ofFloat(moonPhase, dest).also {
                 animator = it
                 it.duration = ONE_SECOND_IN_MILLIS
-                it.interpolator = BounceInterpolator()
+                it.interpolator = AccelerateDecelerateInterpolator()
                 it.addUpdateListener(this)
             }.start()
             postInvalidate()
