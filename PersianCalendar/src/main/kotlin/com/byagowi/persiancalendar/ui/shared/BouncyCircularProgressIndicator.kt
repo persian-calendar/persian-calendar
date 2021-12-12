@@ -17,7 +17,7 @@ class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = n
 
     var max = 0
         set(value) {
-            progressIndicator.max = value * accuracyFactor
+            progressIndicator.max = value
             field = value
         }
 
@@ -28,10 +28,10 @@ class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = n
             animator?.removeAllUpdateListeners()
             field = value
             if (!enableAnimation) {
-                progressIndicator.progress = value * accuracyFactor
+                progressIndicator.progress = value
                 return
             }
-            ValueAnimator.ofInt(progressIndicator.progress / accuracyFactor, value).also {
+            ValueAnimator.ofInt(progressIndicator.progress, value).also {
                 animator = it
                 it.duration = ONE_SECOND_IN_MILLIS
                 it.interpolator = BounceInterpolator()
@@ -40,10 +40,6 @@ class BouncyCircularProgressIndicator(context: Context, attrs: AttributeSet? = n
         }
 
     override fun onAnimationUpdate(animator: ValueAnimator?) {
-        progressIndicator.progress = ((animator?.animatedValue as? Int) ?: 0) * accuracyFactor
-    }
-
-    companion object {
-        private const val accuracyFactor = 100
+        progressIndicator.progress = ((animator?.animatedValue as? Int) ?: 0)
     }
 }
