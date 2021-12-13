@@ -58,7 +58,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.pathEffect = dashPath
     }
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.GREEN
+        it.color = 0xFF004000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
         it.strokeWidth = 2.dp
     }
@@ -176,7 +176,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         }
     }
 
-    private val solarDraw = SolarDraw()
+    private val solarDraw = SolarDraw(context)
 
     private fun Canvas.drawSun() {
         if (sunMoonPosition.sunPosition.altitude <= -10) return
@@ -196,7 +196,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         withRotation(rotation, cx, cy) {
             drawLine(cx, cy - radius, cx, cy + radius, moonPaintD)
             val eOffset = (sunMoonPosition.moonPosition.altitude / 90 * radius).toInt()
-            solarDraw.moon(this, sunMoonPosition.moonPhase, cx, cy + eOffset - radius, r)
+            solarDraw.moon(this, sunMoonPosition.moonPhase, cx, cy + eOffset - radius, r * .8f)
         }
     }
 

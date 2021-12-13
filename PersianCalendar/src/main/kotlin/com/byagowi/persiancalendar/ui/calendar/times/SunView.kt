@@ -189,7 +189,7 @@ class SunView @JvmOverloads constructor(
         )
     }
 
-    private val solarDraw = SolarDraw()
+    private val solarDraw = SolarDraw(context)
 
     private fun getY(x: Int, segment: Double, height: Int): Float =
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f

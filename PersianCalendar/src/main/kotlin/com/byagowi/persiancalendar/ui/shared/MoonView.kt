@@ -14,7 +14,7 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
     ValueAnimator.AnimatorUpdateListener {
 
-    private val solarDraw = SolarDraw()
+    private val solarDraw = SolarDraw(context)
     private var animator: ValueAnimator? = null
     private var moonPhase = .0f
     var jdn = Jdn.today()
