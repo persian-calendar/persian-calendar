@@ -45,6 +45,8 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
 
         binding.extraInformationContainer.isVisible = isExpanded
+
+        binding.moonPhase.isVisible = isExpanded && coordinates != null
     }
 
     fun hideMoreIcon() {
@@ -59,7 +61,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.calendarsFlow.update(calendarsToShow, jdn)
         binding.weekDayName.text = jdn.dayOfWeekName
 
-        binding.moonPhase.isVisible = coordinates != null
+        binding.moonPhase.isVisible = isExpanded && coordinates != null
         binding.moonPhase.jdn = jdn
 
         binding.zodiac.also {
