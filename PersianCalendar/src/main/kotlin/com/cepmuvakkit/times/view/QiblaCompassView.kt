@@ -58,9 +58,9 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.pathEffect = dashPath
     }
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = 0xFF004000.toInt()
+        it.color = 0xFF009000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
-        it.strokeWidth = 2.dp
+        it.strokeWidth = 1.5.dp
     }
     private val kaaba = BitmapFactory.decodeResource(resources, R.drawable.kaaba)
 
