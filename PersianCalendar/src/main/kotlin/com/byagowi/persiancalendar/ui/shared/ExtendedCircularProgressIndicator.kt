@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? = null) :
@@ -16,7 +17,7 @@ class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? =
 
     var max = 0
         set(value) {
-            progressIndicator.max = value
+            progressIndicator.max = value * accuracyFactor
             field = value
         }
 
@@ -26,11 +27,11 @@ class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? =
         set(value) {
             animator?.removeAllUpdateListeners()
             field = value
-            if (!enableAnimation) {
-                progressIndicator.progress = value
+            if (!enableAnimation || isTalkBackEnabled) {
+                progressIndicator.progress = value * accuracyFactor
                 return
             }
-            ValueAnimator.ofInt(progressIndicator.progress, value).also {
+            ValueAnimator.ofInt(progressIndicator.progress / accuracyFactor, value).also {
                 animator = it
                 it.duration = resources.getInteger(android.R.integer.config_longAnimTime) * 2L
                 it.interpolator = OvershootInterpolator(2f)
@@ -39,6 +40,8 @@ class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? =
         }
 
     override fun onAnimationUpdate(animator: ValueAnimator?) {
-        progressIndicator.progress = ((animator?.animatedValue as? Int) ?: 0)
+        progressIndicator.progress = ((animator?.animatedValue as? Int) ?: 0) * accuracyFactor
     }
+
+    private val accuracyFactor = if (isTalkBackEnabled) 1 else 100
 }
