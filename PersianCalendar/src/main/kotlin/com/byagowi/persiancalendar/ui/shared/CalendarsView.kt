@@ -59,13 +59,12 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.calendarsFlow.update(calendarsToShow, jdn)
         binding.weekDayName.text = jdn.dayOfWeekName
 
+        binding.moonPhase.isVisible = coordinates != null
+        binding.moonPhase.jdn = jdn
+
         binding.zodiac.also {
-            val zodiacInfo = getZodiacInfo(context, jdn, withEmoji = true, short = false)
-            it.text = zodiacInfo
-            val zodiacAvailable = zodiacInfo.isNotEmpty()
-            it.isVisible = zodiacAvailable
-            binding.moonPhase.isVisible = zodiacAvailable && coordinates != null
-            binding.moonPhase.jdn = jdn
+            it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
+            it.isVisible = it.text.isNotEmpty()
         }
 
         val isToday = Jdn.today() == jdn

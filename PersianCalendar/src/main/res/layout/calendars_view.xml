@@ -56,6 +56,13 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <com.byagowi.persiancalendar.ui.shared.MoonView
+            android:id="@+id/moon_phase"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            android:importantForAccessibility="no" />
+
         <TextView
             android:id="@+id/zodiac"
             android:layout_width="wrap_content"
@@ -65,13 +72,6 @@
             android:textColor="?attr/colorTextNormal"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description" />
-
-        <com.byagowi.persiancalendar.ui.shared.MoonView
-            android:id="@+id/moon_phase"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:importantForAccessibility="no"
-            android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/diff_date"
