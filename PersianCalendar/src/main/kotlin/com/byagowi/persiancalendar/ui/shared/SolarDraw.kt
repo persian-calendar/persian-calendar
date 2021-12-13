@@ -27,39 +27,31 @@ class SolarDraw {
         val arcWidth = ((moonPhase - .5) * (4 * r)).toInt()
         // elevation Offset 0 for 0 degree; r for 90 degree
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
-        canvas.drawArc(moonRect, 90f, 180f, false, moonPaint)
-        canvas.drawArc(moonRect, 270f, 180f, false, moonPaintB)
+        canvas.drawArc(moonRect, 90f, 180f, false, moonBrightPaint)
+        canvas.drawArc(moonRect, 270f, 180f, false, moonDarkPaint)
         moonOval.set(
             cx - abs(arcWidth) / 2f, cy - r,
             cx + abs(arcWidth) / 2f, cy + r
         )
-        moonPaintO.color = if (arcWidth < 0) Color.BLACK else Color.WHITE
-        canvas.drawArc(moonOval, 0f, 360f, false, moonPaintO)
-        canvas.drawArc(moonRect, 0f, 360f, false, moonPaintD)
+        val ovalPaint = if (arcWidth < 0) moonDarkPaint else moonBrightPaint
+        canvas.drawArc(moonOval, 0f, 360f, false, ovalPaint)
+        canvas.drawArc(moonRect, 0f, 360f, false, moonDiameterPaint)
     }
 
     private val moonRect = RectF()
     private val moonOval = RectF()
 
-    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.WHITE
+    private val moonBrightPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = moonBrightColor
         it.style = Paint.Style.FILL_AND_STROKE
     }
 
-    // moon Paint Black
-    private val moonPaintB = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.BLACK
+    private val moonDarkPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = moonDarkColor
         it.style = Paint.Style.FILL_AND_STROKE
     }
 
-    // moon Paint for Oval
-    private val moonPaintO = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.WHITE
-        it.style = Paint.Style.FILL_AND_STROKE
-    }
-
-    // moon Paint for Diameter
-    private val moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG).also {
+    private val moonDiameterPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
         it.style = Paint.Style.STROKE
     }
@@ -69,9 +61,15 @@ class SolarDraw {
         val moonPhasesEmojis = listOf("🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘", "🌑")
 
         @ColorInt
-        private val minSunColor = Color.parseColor("#FFFFF9C4")
+        private val minSunColor = Color.parseColor("#FFF9C4")
 
         @ColorInt
-        private val maxSunColor = Color.parseColor("#FFFF9100")
+        private val maxSunColor = Color.parseColor("#FF9100")
+
+        @ColorInt
+        private val moonBrightColor = Color.parseColor("#DDE7EF")
+
+        @ColorInt
+        private val moonDarkColor = Color.parseColor("#22404C")
     }
 }
