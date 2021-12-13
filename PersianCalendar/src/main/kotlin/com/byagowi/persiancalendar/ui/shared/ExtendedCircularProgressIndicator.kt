@@ -31,7 +31,9 @@ class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? =
                 progressIndicator.progress = value * accuracyFactor
                 return
             }
-            ValueAnimator.ofInt(progressIndicator.progress / accuracyFactor, value).also {
+            val current = progressIndicator.progress
+            val dest = value * accuracyFactor
+            ValueAnimator.ofInt(if (current == dest) 0 else current, dest).also {
                 animator = it
                 it.duration = resources.getInteger(android.R.integer.config_longAnimTime) * 2L
                 it.interpolator = OvershootInterpolator(2f)
@@ -40,7 +42,7 @@ class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? =
         }
 
     override fun onAnimationUpdate(animator: ValueAnimator?) {
-        progressIndicator.progress = ((animator?.animatedValue as? Int) ?: 0) * accuracyFactor
+        progressIndicator.progress = (animator?.animatedValue as? Int) ?: 0
     }
 
     private val accuracyFactor = if (isTalkBackEnabled) 1 else 100

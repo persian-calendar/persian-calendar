@@ -30,7 +30,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
                 moonPhase = dest
                 return
             }
-            ValueAnimator.ofFloat(moonPhase, dest).also {
+            ValueAnimator.ofFloat(if (dest == moonPhase) 0f else moonPhase, dest).also {
                 animator = it
                 it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
                 it.interpolator = AccelerateDecelerateInterpolator()
