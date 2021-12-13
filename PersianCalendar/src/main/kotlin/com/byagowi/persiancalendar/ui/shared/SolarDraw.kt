@@ -24,15 +24,12 @@ class SolarDraw {
 
     fun moon(canvas: Canvas, moonPhase: Double, cx: Float, cy: Float, r: Float) {
         // This is separated from QiblaCompassView with some modifications
-        val arcWidth = ((moonPhase - .5) * (4 * r)).toInt()
+        val arcWidth = (moonPhase.toFloat() - .5f) * 2 * r
         // elevation Offset 0 for 0 degree; r for 90 degree
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawArc(moonRect, 90f, 180f, false, moonBrightPaint)
         canvas.drawArc(moonRect, 270f, 180f, false, moonDarkPaint)
-        moonOval.set(
-            cx - abs(arcWidth) / 2f, cy - r,
-            cx + abs(arcWidth) / 2f, cy + r
-        )
+        moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
         val ovalPaint = if (arcWidth < 0) moonDarkPaint else moonBrightPaint
         canvas.drawArc(moonOval, 0f, 360f, false, ovalPaint)
         canvas.drawArc(moonRect, 0f, 360f, false, moonDiameterPaint)
