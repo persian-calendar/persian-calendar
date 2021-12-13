@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
-import com.byagowi.persiancalendar.utils.ONE_SECOND_IN_MILLIS
 import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? = null) :
@@ -33,7 +32,7 @@ class ExtendedCircularProgressIndicator(context: Context, attrs: AttributeSet? =
             }
             ValueAnimator.ofInt(progressIndicator.progress, value).also {
                 animator = it
-                it.duration = ONE_SECOND_IN_MILLIS
+                it.duration = resources.getInteger(android.R.integer.config_longAnimTime) * 2L
                 it.interpolator = OvershootInterpolator(2f)
                 it.addUpdateListener(this)
             }.start()

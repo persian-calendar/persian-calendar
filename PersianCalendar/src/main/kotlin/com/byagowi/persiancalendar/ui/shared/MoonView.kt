@@ -9,7 +9,6 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.utils.ONE_SECOND_IN_MILLIS
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
@@ -33,7 +32,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             }
             ValueAnimator.ofFloat(moonPhase, dest).also {
                 animator = it
-                it.duration = ONE_SECOND_IN_MILLIS
+                it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
                 it.interpolator = AccelerateDecelerateInterpolator()
                 it.addUpdateListener(this)
             }.start()

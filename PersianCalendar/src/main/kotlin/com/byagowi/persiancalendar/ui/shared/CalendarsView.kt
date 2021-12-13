@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.EventsStore
-import com.byagowi.persiancalendar.utils.ONE_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
