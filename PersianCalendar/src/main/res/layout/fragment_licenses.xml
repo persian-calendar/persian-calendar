@@ -9,42 +9,30 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ImageView
-            android:id="@+id/background"
-            android:alpha=".4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <com.google.android.material.navigationrail.NavigationRailView
+            android:id="@+id/rail_view"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:background="?attr/colorCard"
+            app:labelVisibilityMode="labeled"
+            app:menuGravity="top" />
 
-            <com.google.android.material.navigationrail.NavigationRailView
-                android:id="@+id/rail_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="?attr/colorCard"
-                app:labelVisibilityMode="labeled"
-                app:menuGravity="top" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layoutDirection="ltr"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:scrollbars="vertical"
+            android:textDirection="ltr" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutDirection="ltr"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:scrollbars="vertical"
-                android:textDirection="ltr" />
-
-        </LinearLayout>
-
-    </FrameLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
