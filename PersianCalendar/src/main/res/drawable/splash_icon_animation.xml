@@ -28,6 +28,13 @@
         <aapt:attr name="android:animation">
             <set android:ordering="together">
                 <objectAnimator
+                    android:duration="0"
+                    android:propertyName="scaleX"
+                    android:startOffset="0"
+                    android:valueFrom="0"
+                    android:valueTo="0"
+                    android:valueType="floatType" />
+                <objectAnimator
                     android:duration="240"
                     android:propertyName="scaleX"
                     android:startOffset="320"
@@ -48,6 +55,13 @@
         <aapt:attr name="android:animation">
             <set android:ordering="together">
                 <objectAnimator
+                    android:duration="0"
+                    android:propertyName="scaleX"
+                    android:startOffset="0"
+                    android:valueFrom="0"
+                    android:valueTo="0"
+                    android:valueType="floatType" />
+                <objectAnimator
                     android:duration="240"
                     android:propertyName="scaleX"
                     android:startOffset="440"
@@ -67,6 +81,13 @@
     <target android:name="fourth_band">
         <aapt:attr name="android:animation">
             <set android:ordering="together">
+                <objectAnimator
+                    android:duration="0"
+                    android:propertyName="scaleX"
+                    android:startOffset="0"
+                    android:valueFrom="0"
+                    android:valueTo="0"
+                    android:valueType="floatType" />
                 <objectAnimator
                     android:duration="320"
                     android:propertyName="scaleX"
