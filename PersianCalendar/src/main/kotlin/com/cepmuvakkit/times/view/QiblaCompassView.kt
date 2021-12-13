@@ -81,7 +81,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var sunMoonPosition = calculateSunMoonPosition(GregorianCalendar())
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
-    private var sunProgress = 0f
+    private var sunProgress = Clock(Calendar.getInstance()).toMinutes() / fullDay
 
     fun setTime(time: GregorianCalendar) {
         sunMoonPosition = calculateSunMoonPosition(time)
@@ -183,9 +183,10 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         val rotation = sunMoonPosition.sunPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
             val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
-            solarDraw.sun(this, cx, cy - ry, r, sunProgress)
-            dashedPaint.color = Color.YELLOW
+            val sunColor = solarDraw.sunColor(sunProgress)
+            dashedPaint.color = sunColor
             drawLine(cx, cy - radius, cx, cy + radius, dashedPaint)
+            solarDraw.sun(this, cx, cy - ry, r, sunColor)
         }
     }
 
@@ -193,9 +194,9 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         if (sunMoonPosition.moonPosition.altitude <= -5) return
         val rotation = sunMoonPosition.moonPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
+            drawLine(cx, cy - radius, cx, cy + radius, moonPaintD)
             val eOffset = (sunMoonPosition.moonPosition.altitude / 90 * radius).toInt()
             solarDraw.moon(this, sunMoonPosition.moonPhase, cx, cy + eOffset - radius, r)
-            drawLine(cx, cy - radius, cx, cy + radius, moonPaintD)
         }
     }
 

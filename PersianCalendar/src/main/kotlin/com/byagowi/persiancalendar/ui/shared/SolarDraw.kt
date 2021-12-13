@@ -10,10 +10,11 @@ import kotlin.math.abs
 
 class SolarDraw {
 
-    fun sun(canvas: Canvas, cx: Float, cy: Float, r: Float, progress: Float) {
-        sunPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
-            progress, sunBeforeMiddayColor, sunAfterMiddayColor
-        )
+    fun sunColor(progress: Float) =
+        ArgbEvaluatorCompat.getInstance().evaluate(progress, minSunColor, maxSunColor)
+
+    fun sun(canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int) {
+        sunPaint.color = color
         canvas.drawCircle(cx, cy, r, sunPaint)
     }
 
@@ -68,9 +69,9 @@ class SolarDraw {
         val moonPhasesEmojis = listOf("🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘", "🌑")
 
         @ColorInt
-        private val sunBeforeMiddayColor = Color.parseColor("#FFFFF9C4")
+        private val minSunColor = Color.parseColor("#FFFFF9C4")
 
         @ColorInt
-        private val sunAfterMiddayColor = Color.parseColor("#FFFF9100")
+        private val maxSunColor = Color.parseColor("#FFFF9100")
     }
 }
