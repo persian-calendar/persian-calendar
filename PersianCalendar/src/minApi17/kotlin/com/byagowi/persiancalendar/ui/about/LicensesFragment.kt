@@ -62,13 +62,7 @@ class LicensesFragment : Fragment() {
                 KotlinVersion.CURRENT.toString() to createTextIcon("Kotlin"),
                 "API " + Build.VERSION.SDK_INT to
                         inflater.context.getCompatDrawable(R.drawable.ic_motorcycle)
-            ).map { (title, icon) ->
-                it.add(title).setIcon(icon).onClick {
-                    val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon_animation)
-                    binding.background.setImageDrawable(drawable)
-                    drawable?.start()
-                }
-            }
+            ).map { (title, icon) -> it.add(title).setIcon(icon) }
         }
 
         // Based on https://stackoverflow.com/a/34623367

@@ -86,9 +86,14 @@ class AboutFragment : Fragment() {
         }
         binding.aboutHeader.text = version
         binding.icon.also {
-            val drawable = context?.getAnimatedDrawable(R.drawable.splash_icon_animation)
-            it.setImageDrawable(drawable)
-            drawable?.start()
+            val animation =
+                context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@also
+            it.setImageDrawable(animation)
+            animation.start()
+            it.setOnClickListener {
+                animation.stop()
+                animation.start()
+            }
         }
 
         fun TextView.putLineStartIcon(@DrawableRes icon: Int) {
