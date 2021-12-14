@@ -54,25 +54,33 @@
         <path
             android:fillColor="#ffffff"
             android:pathData="M271.4,270.1v-33.7h-52.5c-16.4,0 -29.7,13.1 -30.2,29.4v30.6c0.1,20.4 16.5,36.8 36.9,36.9h16.2v29.5h29.4V318c0,9.5 0.3,-45.6 0.3,-45.6v-2.3L271.4,270.1zM236.5,303.9h-2.3c-8.9,0 -16.2,-6.4 -16.2,-14.4v-9c0,-7.9 7.3,-14.4 16.2,-14.4h7.5v37.7L236.5,303.9L236.5,303.9z" />
-        <group android:name="first_band">
+        <group
+            android:name="first_band"
+            android:pivotX="325">
             <path
                 android:fillColor="#ffffff"
-                android:pathData="M324.998,201.708l233.796,0l0,61.2l-233.796,0z" />
+                android:pathData="M325,202h234v61h-234z" />
         </group>
-        <group android:name="second_band">
+        <group
+            android:name="second_band"
+            android:pivotX="325">
             <path
                 android:fillColor="#ffffff"
-                android:pathData="M324.998,295.784l233.796,0l0,32.946l-233.796,0z" />
+                android:pathData="M325,296h234v33h-234z" />
         </group>
-        <group android:name="third_band">
+        <group
+            android:name="third_band"
+            android:pivotX="325">
             <path
                 android:fillColor="#ffffff"
-                android:pathData="M324.998,360.159l233.796,0l0,31.041l-233.796,0z" />
+                android:pathData="M325,360h234v33h-234z" />
         </group>
-        <group android:name="fourth_band">
+        <group
+            android:name="fourth_band"
+            android:pivotX="325">
             <path
                 android:fillColor="#ffffff"
-                android:pathData="M325.739,422.629l168.68,0l0,31.253l-168.68,0z" />
+                android:pathData="M325,423h169v31h-169z" />
         </group>
     </group>
 </vector>
