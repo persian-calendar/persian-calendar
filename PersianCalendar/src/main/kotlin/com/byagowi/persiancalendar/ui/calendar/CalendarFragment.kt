@@ -79,8 +79,8 @@ import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.appPrefs
-import com.byagowi.persiancalendar.utils.calculateMoonPhase
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
+import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -511,11 +511,13 @@ class CalendarFragment : Fragment() {
         val coordinates = coordinates ?: return
         val owghatBinding = owghatBinding ?: return
 
-        val prayTimes = coordinates.calculatePrayTimes(jdn.toJavaCalendar())
+        val date = jdn.toJavaCalendar()
+        val prayTimes = coordinates.calculatePrayTimes(date)
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.sunView.let { sunView ->
             sunView.isVisible = if (isToday) {
-                sunView.setPrayTimesAndMoonPhase(prayTimes, coordinates.calculateMoonPhase(jdn))
+                val moonPhase = coordinates.calculateSunMoonPosition(date).moonPhase
+                sunView.setPrayTimesAndMoonPhase(prayTimes, moonPhase)
                 true
             } else false
             if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()

@@ -20,8 +20,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.cepmuvakkit.times.posAlgo.AstroLib
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import net.androgames.level.AngleDisplay
 import java.util.*
 import kotlin.math.min
@@ -73,23 +72,18 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.strokeWidth = 1.5.dp
     }
 
-    private fun calculateSunMoonPosition(time: GregorianCalendar) = SunMoonPosition(
-        AstroLib.calculateJulianDay(time), coordinates?.latitude ?: 0.0,
-        coordinates?.longitude ?: 0.0, coordinates?.elevation ?: 0.0, 0.0
-    )
-
-    private var sunMoonPosition = calculateSunMoonPosition(GregorianCalendar())
+    private var sunMoonPosition = coordinates?.calculateSunMoonPosition(GregorianCalendar())
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
     private var sunProgress = Clock(Calendar.getInstance()).toMinutes() / fullDay
 
     fun setTime(time: GregorianCalendar) {
-        sunMoonPosition = calculateSunMoonPosition(time)
+        sunMoonPosition = coordinates?.calculateSunMoonPosition(time)
         sunProgress = Clock(time).toMinutes() / fullDay
         postInvalidate()
     }
 
-    val qiblaHeading = sunMoonPosition.destinationHeading.heading.toFloat()
+    val qiblaHeading = sunMoonPosition?.destinationHeading?.heading?.toFloat()
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
         it.textSize = 12.sp
@@ -179,6 +173,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val solarDraw = SolarDraw(context)
 
     private fun Canvas.drawSun() {
+        val sunMoonPosition = sunMoonPosition ?: return
         if (sunMoonPosition.sunPosition.altitude <= -10) return
         val rotation = sunMoonPosition.sunPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
@@ -191,6 +186,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawMoon() {
+        val sunMoonPosition = sunMoonPosition ?: return
         if (sunMoonPosition.moonPosition.altitude <= -5) return
         val rotation = sunMoonPosition.moonPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
@@ -201,6 +197,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawQibla() {
+        val qiblaHeading = qiblaHeading ?: return
         withRotation(qiblaHeading - 360, cx, cy) {
             qiblaPaint.pathEffect = dashPath
             drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)

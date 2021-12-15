@@ -9,8 +9,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.utils.calculateMoonPhase
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
     ValueAnimator.AnimatorUpdateListener {
@@ -23,7 +22,8 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             field = value
             val coordinates = coordinates ?: return
             animator?.removeAllUpdateListeners()
-            val dest = coordinates.calculateMoonPhase(jdn).toFloat()
+            val dest =
+                coordinates.calculateSunMoonPosition(jdn.toJavaCalendar()).moonPhase.toFloat()
             if (!isVisible) {
                 moonPhase = dest
                 return

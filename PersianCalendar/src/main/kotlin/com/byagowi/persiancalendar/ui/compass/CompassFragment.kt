@@ -317,9 +317,9 @@ class CompassFragment : Fragment() {
         eastAnnouncer.check(binding.root.context, isNearToDegree(90f, angle))
         southAnnouncer.check(binding.root.context, isNearToDegree(180f, angle))
         westAnnouncer.check(binding.root.context, isNearToDegree(270f, angle))
-        if (coordinates != null) {
-            val qiblaAngle = binding.compassView.qiblaHeading
-            qiblaAnnouncer.check(binding.root.context, isNearToDegree(qiblaAngle, angle))
+        val qiblaHeading = binding.compassView.qiblaHeading
+        if (qiblaHeading != null) {
+            qiblaAnnouncer.check(binding.root.context, isNearToDegree(qiblaHeading, angle))
         }
     }
 
