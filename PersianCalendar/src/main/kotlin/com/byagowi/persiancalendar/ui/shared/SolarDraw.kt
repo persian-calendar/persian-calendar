@@ -21,10 +21,7 @@ class SolarDraw(context: Context) {
             sunDrawable.setTint(color)
         }
         sunDrawable.setBounds(
-            (cx - r).toInt(),
-            (cy - r).toInt(),
-            (cx + r).toInt(),
-            (cy + r).toInt()
+            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
         )
         sunDrawable.draw(canvas)
     }
