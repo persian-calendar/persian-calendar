@@ -64,7 +64,7 @@ object AstroLib {
      * @return julianDay julian day ( Julian date independent of time zone by
      * the way)
      */
-    fun calculateJulianDay(c: Calendar): Double {
+    fun calculateJulianDay(c: GregorianCalendar): Double {
         var year = c[Calendar.YEAR]
         var month = c[Calendar.MONTH] + 1
         val day = c[Calendar.DAY_OF_MONTH]
