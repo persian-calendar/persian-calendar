@@ -16,7 +16,7 @@ fun showAthanGapDialog(activity: Activity) {
     AlertDialog.Builder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
-            val value = binding.edit.toString().toDoubleOrNull() ?: .0
+            val value = binding.edit.text.toString().toDoubleOrNull() ?: .0
             activity.appPrefs.edit { putString(PREF_ATHAN_GAP, value.toString()) }
         }
         .setNegativeButton(R.string.cancel, null)
