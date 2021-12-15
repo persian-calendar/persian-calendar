@@ -287,7 +287,8 @@ private fun createSunViewRemoteViews(
     val sunView = SunView(context, textColor = color)
     remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForRendering(sunView, width, height)
-    prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, coordinates.calculateMoonPhase(jdn)) }
+    val moonPhase = coordinates?.calculateMoonPhase(jdn) ?: 1.0
+    prayTimes?.let { sunView.setPrayTimesAndMoonPhase(it, moonPhase) }
     sunView.initiate()
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR

@@ -23,8 +23,7 @@ fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNot
 fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalendar()) =
     PrayTimes(calculationMethod, calendar, this, asrMethod, highLatitudesMethod)
 
-fun Coordinates?.calculateMoonPhase(jdn: Jdn) = runCatching {
-    this ?: return@runCatching 1.0
+fun Coordinates.calculateMoonPhase(jdn: Jdn) = runCatching {
     SunMoonPosition(jdn.value.toDouble(), latitude, longitude, elevation, 0.0).moonPhase
 }.onFailure(logException).getOrNull() ?: 1.0
 
