@@ -1,0 +1,31 @@
+<!-- Source https://upload.wikimedia.org/wikipedia/commons/5/50/638-full-moon.svg but highly modified -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+  <path
+      android:fillColor="#cdb597"
+      android:pathData="m39,20a19,19 0,0 1,-19 19,19 19,0 0,1 -19,-19 19,19 0,0 1,19 -19,19 19,0 0,1 19,19z" />
+  <path
+      android:fillColor="#a6957c"
+      android:pathData="M30,12a4,2.8 53.9,1 0,4.5 -3.3a4,2.8 53.9,1 0,-4.5 3.3z"/>
+  <path
+      android:fillColor="#a6957c"
+      android:pathData="M4,16a2.49,1.7 111.1,1 0,1.8 -4.65a2.5,1.7 111.2,1 0,-1.8 4.6z"/>
+  <path
+      android:fillColor="#a6957c"
+      android:pathData="M15,37a2.5,4 104.4,1 0,1.25 -4.8a2.5,4 104.45,1 0,-1.25 4.85z"/>
+  <path
+      android:fillColor="#a6957c"
+      android:pathData="M34,23m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0"/>
+  <path
+      android:fillColor="#a6957c"
+      android:pathData="M12,21m-2,0a2,2 0,1 1,4 0a2,2 0,1 1,-4 0"/>
+  <path
+      android:fillColor="#a6957c"
+      android:pathData="M15,10m-3.4,0a3.4,3.4 0,1 1,6.8 0a3.4,3.4 0,1 1,-6.8 0"/>
+  <path
+      android:fillColor="#a6957c"
+      android:pathData="M23,26m-2.8,0a2.8,2.8 0,1 1,5.6 0a2.8,2.8 0,1 1,-5.6 0"/>
+</vector>
