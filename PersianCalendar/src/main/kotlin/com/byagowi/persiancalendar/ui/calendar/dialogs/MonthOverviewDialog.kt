@@ -59,6 +59,7 @@ import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.style
 import kotlinx.html.sub
+import kotlinx.html.sup
 import kotlinx.html.table
 import kotlinx.html.td
 import kotlinx.html.th
@@ -181,6 +182,7 @@ private fun createEventsReport(
                     table { width: 100% }
                     h1 { text-align: center }
                     .page { break-after: page }
+                    sup { font-size: x-small; position: absolute }
                 """.trimIndent()
             }
         }
@@ -235,14 +237,14 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                         span(generateDayClasses(jdn, true)) {
                             +formatNumber(dayOfMonth)
                         }
-                        val secondaryCalendar = secondaryCalendar
-                        if (secondaryCalendar != null) {
-                            val secondaryDateDay = jdn.toCalendar(secondaryCalendar).dayOfMonth
-                            val digits = secondaryCalendarDigits
-                            sub { small { +" ${formatNumber(secondaryDateDay, digits)}" } }
-                        }
-                        val shiftWork = getShiftWorkTitle(jdn, false)
-                        if (shiftWork.isNotEmpty()) sub { small { +" $shiftWork" } }
+                        listOfNotNull(
+                            secondaryCalendar?.let {
+                                val secondaryDateDay = jdn.toCalendar(it).dayOfMonth
+                                val digits = secondaryCalendarDigits
+                                formatNumber(secondaryDateDay, digits)
+                            },
+                            getShiftWorkTitle(jdn, false).takeIf { it.isNotEmpty() }
+                        ).joinToString(" ").takeIf { it.isNotEmpty() }?.let { sup { +" $it" } }
                     }
                 }
             }
