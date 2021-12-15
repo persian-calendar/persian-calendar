@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import kotlin.math.PI
@@ -61,8 +62,16 @@ class SunView @JvmOverloads constructor(
     private val middayString = context.getString(R.string.middaySunView)
     private val sunsetString = context.getString(R.string.sunsetSunView)
     private var segmentByPixel = .0
-    private var prayTimes: PrayTimes? = null
-    private var moonPhase = 1.0
+    var prayTimes: PrayTimes? = null
+        set(value) {
+            field = value
+            postInvalidate()
+        }
+    var sunMoonPosition: SunMoonPosition? = null
+        set(value) {
+            field = value
+            postInvalidate()
+        }
     private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
@@ -152,7 +161,7 @@ class SunView @JvmOverloads constructor(
             if (current in .17f..0.83f) {
                 solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(current))
             } else canvas.withRotation(if (isRtl) 0f else 180f, cx, cy) { // cancel parent flip
-                solarDraw.moon(canvas, moonPhase, cx, cy, radius)
+                run { solarDraw.moon(canvas, sunMoonPosition ?: return@run, cx, cy, radius) }
             }
         }
 
@@ -193,12 +202,6 @@ class SunView @JvmOverloads constructor(
 
     private fun getY(x: Int, segment: Double, height: Int): Float =
         height - height * ((cos(-PI + x * segment) + 1f) / 2f).toFloat() + height * .1f
-
-    fun setPrayTimesAndMoonPhase(prayTimes: PrayTimes, moonPhase: Double) {
-        this.prayTimes = prayTimes
-        this.moonPhase = moonPhase
-        postInvalidate()
-    }
 
     fun initiate() {
         val prayTimes = prayTimes ?: return

@@ -188,11 +188,10 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private fun Canvas.drawMoon() {
         val sunMoonPosition = sunMoonPosition ?: return
         if (sunMoonPosition.moonPosition.altitude <= -5) return
-        val rotation = sunMoonPosition.moonPosition.azimuth.toFloat() - 360
-        withRotation(rotation, cx, cy) {
+        withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
             drawLine(cx, cy - radius, cx, cy + radius, moonPaintD)
-            val eOffset = (sunMoonPosition.moonPosition.altitude / 90 * radius).toInt()
-            solarDraw.moon(this, sunMoonPosition.moonPhase, cx, cy + eOffset - radius, r * .8f)
+            val moonCy = cy + (sunMoonPosition.moonPosition.altitude.toFloat() / 90 - 1) * radius
+            solarDraw.moon(this, sunMoonPosition, cx, moonCy, r * .8f)
         }
     }
 

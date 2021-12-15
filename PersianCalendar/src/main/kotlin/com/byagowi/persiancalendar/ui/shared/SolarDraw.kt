@@ -7,6 +7,7 @@ import android.graphics.RectF
 import android.os.Build
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import kotlin.math.abs
 
@@ -30,14 +31,17 @@ class SolarDraw(context: Context) {
 
     private val sunDrawable = context.getCompatDrawable(R.drawable.ic_compass_sun)
 
-    fun moon(canvas: Canvas, moonPhase: Double, cx: Float, cy: Float, r: Float) {
+    fun moon(
+        canvas: Canvas, sunMoonPosition: SunMoonPosition, cx: Float, cy: Float, r: Float,
+        moonPhase: Float = sunMoonPosition.moonPhase.toFloat()
+    ) {
+        // canvas.withRotation(sunMoonPosition.moonPosition.azimuth.toFloat(), cx, cy) {
         // moonDrawable.setBounds(
         //     (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
         // )
         // moonDrawable.draw(canvas)
-
         // This is separated from QiblaCompassView with some modifications
-        val arcWidth = (moonPhase.toFloat() - .5f) * 2 * r
+        val arcWidth = (moonPhase - .5f) * 2 * r
         // elevation Offset 0 for 0 degree; r for 90 degree
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawArc(moonRect, 90f, 180f, false, moonBrightPaint)

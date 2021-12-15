@@ -10,20 +10,23 @@ import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
     ValueAnimator.AnimatorUpdateListener {
 
     private val solarDraw = SolarDraw(context)
     private var animator: ValueAnimator? = null
+    private var sunMoonPosition: SunMoonPosition? = null
     private var moonPhase = .0f
     var jdn = Jdn.today()
         set(value) {
             field = value
             val coordinates = coordinates ?: return
             animator?.removeAllUpdateListeners()
-            val dest =
-                coordinates.calculateSunMoonPosition(jdn.toJavaCalendar()).moonPhase.toFloat()
+            val dest = coordinates.calculateSunMoonPosition(jdn.toJavaCalendar()).also {
+                sunMoonPosition = it
+            }.moonPhase.toFloat()
             if (!isVisible) {
                 moonPhase = dest
                 return
@@ -40,7 +43,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas ?: return)
         val cx = width / 2f
-        solarDraw.moon(canvas, moonPhase.toDouble(), cx, cx, cx)
+        solarDraw.moon(canvas, sunMoonPosition ?: return, cx, cx, cx, moonPhase)
     }
 
     override fun onAnimationUpdate(valueAnimator: ValueAnimator?) {
