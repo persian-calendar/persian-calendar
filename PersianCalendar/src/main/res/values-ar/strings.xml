@@ -189,7 +189,7 @@
     <string name="version">الإصدار %1$s</string>
     <string name="about_license">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>
-    <string name="about_license_sum">راجع رخصة GPL المستخدمة في تطبيق التقويم الفارسي.</string>
+    <string name="about_license_sum">راجع رخصة GPLv3 المستخدمة في تطبيق التقويم الفارسي.</string>
     <string name="about_support_developers">دعم المطورين</string>
     <string name="about_report_bug">الإبلاغ عن الأخطاء</string>
     <string name="about_report_bug_sum">للإبلاغ عن الأخطاء وطلب ميزات جديدة يرجى إستخدام خدمة Github</string>
@@ -390,4 +390,5 @@
     <string name="widget_prefer_system_colors">اتبع تلوين النظام في المصغر</string>
     <string name="nepali_calendar">التقويم النيبالي</string>
     <string name="show_secondary_calendar">إظهار التقويم الثانوي</string>
+    <string name="season">موسم</string>
 </resources>

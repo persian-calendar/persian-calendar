@@ -342,4 +342,5 @@
     <string name="nepali_calendar">Calendrier népalais</string>
     <string name="widget_prefer_system_colors">Suivre la coloration du système dans les widgets</string>
     <string name="show_secondary_calendar">Afficher le calendrier secondaire</string>
+    <string name="season">Saison</string>
 </resources>
