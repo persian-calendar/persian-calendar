@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
@@ -36,7 +35,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             }
         }
 
-    private val dashPath = DashPathEffect(floatArrayOf(0.5.dp, 2.dp), 2.dp)
     private val northwardShapePath = Path()
     private val trueNorthArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.RED
@@ -51,15 +49,28 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.strokeWidth = 0.5.dp
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
-    private val moonPaintD = Paint(Paint.ANTI_ALIAS_FLAG).also { // Diameter
-        it.color = Color.GRAY
+    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { // Diameter
+        it.color = Color.LTGRAY
         it.style = Paint.Style.STROKE
-        it.pathEffect = dashPath
+        it.strokeWidth = 1.dp
+    }
+    private val moonPaintShade = Paint(Paint.ANTI_ALIAS_FLAG).also { // Diameter
+        it.color = Color.LTGRAY
+        it.style = Paint.Style.STROKE
+        it.strokeWidth = 3.dp
+    }
+    private var sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.STROKE
+        it.strokeWidth = 1.dp
+    }
+    private var sunPaintShade = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.STROKE
+        it.strokeWidth = 3.dp
     }
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF009000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
-        it.strokeWidth = 1.5.dp
+        it.strokeWidth = 1.dp
     }
     private val kaaba = BitmapFactory.decodeResource(resources, R.drawable.kaaba)
 
@@ -67,9 +78,9 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var cy = 0f // Center of Compass (cx, cy)
     private var radius = 0f // radius of Compass dial
     private var r = 0f // radius of Sun and Moon
-    private var dashedPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
-        it.pathEffect = dashPath
+    private var northPaint = Paint().also {
         it.strokeWidth = 1.5.dp
+        it.color = Color.RED
     }
 
     private var sunMoonPosition = coordinates?.calculateSunMoonPosition(GregorianCalendar())
@@ -129,9 +140,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     private fun Canvas.drawTrueNorthArrow() {
         drawPath(northwardShapePath, trueNorthArrowPaint)
-        dashedPaint.color = Color.RED
-        drawLine(cx, (cy - radius), cx, (cy + radius), dashedPaint)
-        drawCircle(cx, cy, 5f, dashedPaint)
+        drawLine(cx, (cy - radius), cx, (cy + radius), northPaint)
+        drawCircle(cx, cy, 5f, northPaint)
     }
 
     private fun Canvas.drawDial() {
@@ -172,16 +182,20 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     private val solarDraw = SolarDraw(context)
 
+    private val shadeFactor = 3
+
     private fun Canvas.drawSun() {
         val sunMoonPosition = sunMoonPosition ?: return
         if (sunMoonPosition.sunPosition.altitude <= -10) return
         val rotation = sunMoonPosition.sunPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
-            val ry = ((90 - sunMoonPosition.sunPosition.altitude) / 90 * radius).toInt()
+            val sunHeight = (sunMoonPosition.sunPosition.altitude.toFloat() / 90 - 1) * radius
             val sunColor = solarDraw.sunColor(sunProgress)
-            dashedPaint.color = sunColor
-            drawLine(cx, cy - radius, cx, cy + radius, dashedPaint)
-            solarDraw.sun(this, cx, cy - ry, r, sunColor)
+            sunPaint.color = sunColor
+            drawLine(cx, cy - radius, cx, cy + radius, sunPaint)
+            sunPaintShade.color = sunColor
+            drawLine(cx, cy, cx, cy - sunHeight / shadeFactor, sunPaintShade)
+            solarDraw.sun(this, cx, cy + sunHeight, r, sunColor)
         }
     }
 
@@ -189,18 +203,17 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         val sunMoonPosition = sunMoonPosition ?: return
         if (sunMoonPosition.moonPosition.altitude <= -5) return
         withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
-            drawLine(cx, cy - radius, cx, cy + radius, moonPaintD)
-            val moonCy = cy + (sunMoonPosition.moonPosition.altitude.toFloat() / 90 - 1) * radius
-            solarDraw.moon(this, sunMoonPosition, cx, moonCy, r * .8f)
+            val moonHeight = (sunMoonPosition.moonPosition.altitude.toFloat() / 90 - 1) * radius
+            drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
+            drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonPaintShade)
+            solarDraw.moon(this, sunMoonPosition, cx, cy + moonHeight, r * .8f)
         }
     }
 
     private fun Canvas.drawQibla() {
         val qiblaHeading = qiblaHeading ?: return
         withRotation(qiblaHeading - 360, cx, cy) {
-            qiblaPaint.pathEffect = dashPath
             drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)
-            qiblaPaint.pathEffect = null
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, qiblaPaint)
         }
     }
