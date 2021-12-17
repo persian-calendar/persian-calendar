@@ -73,6 +73,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.isRtl
+import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
@@ -169,7 +170,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             var season = (persian.month - 1) / 3
 
             // Southern hemisphere
-            if ((coordinates?.latitude ?: 1.0) < .0) season = (season + 2) % 4
+            if (coordinates?.isSouthernHemisphere == true) season = (season + 2) % 4
 
             drawerHeader.seasonImage.setImageResource(
                 when (season) {

@@ -10,7 +10,6 @@ import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.highLatitudesMethod
-import com.cepmuvakkit.times.posAlgo.AstroLib
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
@@ -24,8 +23,9 @@ fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNot
 fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalendar()) =
     PrayTimes(calculationMethod, calendar, this, asrMethod, highLatitudesMethod)
 
-fun Coordinates.calculateSunMoonPosition(time: GregorianCalendar) =
-    SunMoonPosition(AstroLib.calculateJulianDay(time), latitude, longitude, elevation, 0.0)
+fun Coordinates.calculateSunMoonPosition(time: GregorianCalendar) = SunMoonPosition(time, this, 0.0)
+
+val Coordinates.isSouthernHemisphere get() = latitude < .0
 
 val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
 

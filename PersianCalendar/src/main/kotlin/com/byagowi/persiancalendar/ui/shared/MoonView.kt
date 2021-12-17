@@ -15,6 +15,10 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
     ValueAnimator.AnimatorUpdateListener {
 
+    init {
+        setOnClickListener { jdn = jdn }
+    }
+
     private val solarDraw = SolarDraw(context)
     private var animator: ValueAnimator? = null
     private var sunMoonPosition: SunMoonPosition? = null
