@@ -221,7 +221,7 @@
     <string name="method_makkah">उम्म अल-कुरा विश्वविद्यालय, मक्का</string>
     <string name="high_latitudes_one_seventh">एक सातौं</string>
     <string name="high_latitudes_night_middle">मध्यरात</string>
-    <string name="are_you_sure">के तपाई ढुक्क हुनुहुन्छ् \?</string>
+    <string name="are_you_sure">के तपाई ढुक्क हुनुहुन्छ् ?</string>
     <plurals name="minutes">
         <item quantity="one">%1$s मिनेट</item>
         <item quantity="other">%1$s मिनेटहरु</item>
