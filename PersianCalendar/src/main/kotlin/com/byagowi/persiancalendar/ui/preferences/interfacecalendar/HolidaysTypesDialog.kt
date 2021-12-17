@@ -41,6 +41,8 @@ fun showHolidaysTypesDialog(activity: Activity) {
         binding.iranOthers to EnabledHolidays.iranOthersKey,
         binding.afghanistanHolidays to EnabledHolidays.afghanistanHolidaysKey,
         binding.afghanistanOthers to EnabledHolidays.afghanistanOthersKey,
+        binding.nepalHolidays to EnabledHolidays.nepalHolidaysKey,
+        binding.nepalOthers to EnabledHolidays.nepalOthersKey,
         binding.iranAncient to EnabledHolidays.iranAncientKey,
         binding.international to EnabledHolidays.internationalKey
     )
