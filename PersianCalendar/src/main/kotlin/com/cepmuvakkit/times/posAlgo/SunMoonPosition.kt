@@ -1,5 +1,7 @@
 package com.cepmuvakkit.times.posAlgo
 
+import com.byagowi.persiancalendar.utils.toCivilDate
+import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 import kotlin.math.cos
@@ -14,6 +16,7 @@ class SunMoonPosition(
     val sunPosition: Horizontal
     val moonPosition: Horizontal
     val moonPhase: Double
+    val moonPhaseAscending: Boolean
     val destinationHeading: EarthHeading
     fun illumunatedFractionofMoon(jd: Double, ΔT: Double): Double {
         return moonPhase
@@ -42,6 +45,7 @@ class SunMoonPosition(
         destinationHeading = earth.toEarthHeading(qibla)
         // moonPhase = (1 + cos(pi - E)) / 2;
         moonPhase = (1 + cos(Math.PI - E)) / 2 //48694254279852139 e-17
+        moonPhaseAscending = IslamicDate(time.toCivilDate()).dayOfMonth >= 14
 //        moonPhase = run { // Hacky, just that the previous wasn't able to distinguish them
 //            // 0 <= phase < 2
 //            // https://github.com/ilius/starcal/blob/060a0c2/scal3/moon.py
