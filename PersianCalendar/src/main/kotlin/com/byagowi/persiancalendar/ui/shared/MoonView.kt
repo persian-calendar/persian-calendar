@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import java.util.*
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs),
     ValueAnimator.AnimatorUpdateListener {
@@ -28,14 +29,18 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             field = value
             val coordinates = coordinates ?: return
             animator?.removeAllUpdateListeners()
-            val dest = coordinates.calculateSunMoonPosition(jdn.toJavaCalendar()).also {
+            val date = jdn.toJavaCalendar()
+            date[Calendar.HOUR_OF_DAY] = 0
+            date[Calendar.MINUTE] = 0
+            date[Calendar.SECOND] = 0
+            val dest = coordinates.calculateSunMoonPosition(date).also {
                 sunMoonPosition = it
             }.moonPhase.toFloat()
             if (!isVisible) {
                 moonPhase = dest
                 return
             }
-            ValueAnimator.ofFloat(if (dest == moonPhase) 0f else moonPhase, dest).also {
+            ValueAnimator.ofFloat(moonPhase, dest).also {
                 animator = it
                 it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
                 it.interpolator = AccelerateDecelerateInterpolator()

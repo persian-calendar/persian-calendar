@@ -39,7 +39,7 @@ class SolarDraw(context: Context) {
         // )
         // moonDrawable.draw(canvas)
         // This is separated from QiblaCompassView with some modifications
-        canvas.withScale(x = if (sunMoonPosition.moonPhaseAscending) 1f else -1f, pivotX = cx) {
+        canvas.withScale(x = if (sunMoonPosition.moonPhaseAscending) -1f else 1f, pivotX = cx) {
             val arcWidth = (moonPhase - .5f) * 2 * r
             // elevation Offset 0 for 0 degree; r for 90 degree
             moonRect.set(cx - r, cy - r, cx + r, cy + r)
