@@ -259,7 +259,7 @@
     </plurals>
     <string name="preview">Previsualización</string>
     <string name="ignore">Ignorar</string>
-    <string name="theme_default">System Default</string>
+    <string name="theme_default">Predeterminado del sistema</string>
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="theme_modern">Moderno</string>
@@ -283,7 +283,7 @@
     <string name="method_karachi">University of Islamic Sciences, Karachi</string>
     <string name="method_tehran">Institute of Geophysics, University of Tehran</string>
     <string name="iran_holidays">Holidays in Iran</string>
-    <string name="iran_ancient">Ancient Iran (in Persian)</string>
+    <string name="iran_ancient">Irán antiguo (en persa)</string>
     <string name="iran_others">Otros eventos de irán</string>
     <string name="international">Eventos internacionales (en persa)</string>
     <string name="afghanistan_holidays">Holidays in Afghanistan</string>
@@ -351,4 +351,6 @@
     <string name="none">None</string>
     <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
     <string name="country_emoji">🇪🇸</string>
+    <string name="season">Estación</string>
+    <string name="show_secondary_calendar">Mostrar calendario secundario</string>
 </resources>
