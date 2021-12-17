@@ -36,6 +36,8 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
     val iranHolidays = iranHolidaysKey in enabledTypes
     val iranAncient = iranAncientKey in enabledTypes
     val iranOthers = iranOthersKey in enabledTypes || /*legacy*/ "iran_islamic" in enabledTypes
+    val nepalHolidays = nepalHolidaysKey in enabledTypes
+    val nepalOthers = nepalOthersKey in enabledTypes
     val international = internationalKey in enabledTypes
     val isEmpty get() = enabledTypes.isEmpty()
     val onlyIranHolidaysIsEnabled get() = enabledTypes.size == 1 && iranHolidays
@@ -46,6 +48,8 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
         record.type == EventType.Iran && iranOthers -> false
         record.type == EventType.Afghanistan && record.isHoliday && afghanistanHolidays -> false
         record.type == EventType.Afghanistan && afghanistanOthers -> false
+        record.type == EventType.Nepal && record.isHoliday && nepalHolidays -> false
+        record.type == EventType.Nepal && nepalOthers && language.showNepaliCalendar -> false
         record.type == EventType.AncientIran && iranAncient -> false
         record.type == EventType.International && international -> false
         // Enable Iranian events of Gregorian calendar even if itself isn't enabled
@@ -76,10 +80,13 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
         const val iranOthersKey = "iran_others"
         const val afghanistanHolidaysKey = "afghanistan_holidays"
         const val afghanistanOthersKey = "afghanistan_others"
+        const val nepalHolidaysKey = "nepal_holidays"
+        const val nepalOthersKey = "nepal_others"
         const val iranAncientKey = "iran_ancient"
         const val internationalKey = "international"
         val iranDefault = setOf(iranHolidaysKey)
         val afghanistanDefault = setOf(afghanistanHolidaysKey)
+        val nepalDefault = setOf(nepalHolidaysKey)
     }
 }
 

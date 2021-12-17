@@ -12,6 +12,7 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
 
+        <!-- Iran -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/iran"
             android:layout_width="wrap_content"
@@ -32,6 +33,7 @@
             android:layout_marginStart="28dp"
             android:text="@string/iran_others" />
 
+        <!-- Afghanistan -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/afghanistan"
             android:layout_width="wrap_content"
@@ -51,6 +53,30 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
             android:text="@string/afghanistan_others" />
+
+        <!-- Nepal -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/nepal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/nepal"
+            android:visibility="gone" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/nepal_holidays"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:text="@string/holiday"
+            android:visibility="gone" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/nepal_others"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:text="@string/other_holidays"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/other"

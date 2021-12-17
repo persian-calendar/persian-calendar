@@ -6,10 +6,12 @@ import android.text.method.LinkMovementMethod
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -49,8 +51,19 @@ fun showHolidaysTypesDialog(activity: Activity) {
     // Check boxes hierarchy
     val hierarchy = listOf(
         binding.iran to listOf(binding.iranHolidays, binding.iranOthers),
-        binding.afghanistan to listOf(binding.afghanistanHolidays, binding.afghanistanOthers)
+        binding.afghanistan to listOf(binding.afghanistanHolidays, binding.afghanistanOthers),
+        binding.nepal to listOf(binding.nepalHolidays, binding.nepalOthers)
     )
+
+    if (language.showNepaliCalendar) {
+        listOf(
+            binding.iran, binding.iranHolidays, binding.iranOthers,
+            binding.afghanistan, binding.afghanistanHolidays, binding.afghanistanOthers,
+            binding.other, binding.iranAncient, binding.international,
+        ).forEach { it.isVisible = false }
+        listOf(binding.nepal, binding.nepalHolidays, binding.nepalOthers)
+            .forEach { it.isVisible = true }
+    }
 
     // Parents update logic
     fun updateParents() = hierarchy.forEach { (parent, children) ->

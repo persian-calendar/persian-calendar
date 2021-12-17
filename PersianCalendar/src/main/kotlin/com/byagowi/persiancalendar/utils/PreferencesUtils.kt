@@ -82,6 +82,9 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
             if (enabledHolidays.isEmpty || enabledHolidays.onlyAfghanistanHolidaysIsEnabled)
                 putStringSet(PREF_HOLIDAY_TYPES, EnabledHolidays.iranDefault)
         }
+        language.isNepali -> {
+            putStringSet(PREF_HOLIDAY_TYPES, EnabledHolidays.nepalDefault)
+        }
     }
 
     putString(PREF_MAIN_CALENDAR_KEY, language.defaultMainCalendar)

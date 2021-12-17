@@ -37,6 +37,8 @@ enum class Language(val code: String, val nativeName: String) {
     val isIranianEnglish get() = this == EN_IR
     val isNepali get() = this == NE
 
+    val showNepaliCalendar get() = this == NE
+
     val language get() = code.replace(Regex("-(IR|AF|US)"), "")
 
     // en-IR and fa-AF aren't recognized by system, that's handled by #language
