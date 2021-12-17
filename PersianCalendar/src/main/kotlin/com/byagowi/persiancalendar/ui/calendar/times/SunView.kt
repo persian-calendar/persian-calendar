@@ -88,7 +88,7 @@ class SunView @JvmOverloads constructor(
         if (width != 0) segmentByPixel = 2 * PI / width
 
         curvePath.also {
-            it.reset()
+            it.rewind()
             it.moveTo(0f, height.toFloat())
             (0..width).forEach { x ->
                 it.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * .9f).toInt()))
@@ -96,7 +96,7 @@ class SunView @JvmOverloads constructor(
         }
 
         nightPath.also {
-            it.reset()
+            it.rewind()
             it.addPath(curvePath)
             it.setLastPoint(width.toFloat(), height.toFloat())
             it.lineTo(width.toFloat(), 0f)

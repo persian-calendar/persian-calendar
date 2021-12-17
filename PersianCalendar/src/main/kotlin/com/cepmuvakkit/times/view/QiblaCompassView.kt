@@ -115,7 +115,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         // Construct a wedge-shaped path
         northwardShapePath.also {
             val r = radius / 12
-            it.reset()
+            it.rewind()
             it.moveTo(cx, cy - radius)
             it.lineTo(cx - r, cy)
             it.lineTo(cx, cy + r)
