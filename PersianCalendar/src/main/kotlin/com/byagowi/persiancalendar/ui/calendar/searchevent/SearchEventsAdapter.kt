@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.gregorianCalendarEvents
 import com.byagowi.persiancalendar.utils.irregularCalendarEventsStore
 import com.byagowi.persiancalendar.utils.islamicCalendarEvents
+import com.byagowi.persiancalendar.utils.nepaliCalendarEvents
 import com.byagowi.persiancalendar.utils.persianCalendarEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -94,7 +95,8 @@ class SearchEventsAdapter private constructor(
                     val jdn = Jdn.today()
                     val events = listOf(
                         context.getAllEnabledAppointments(), persianCalendarEvents.getAllEvents(),
-                        islamicCalendarEvents.getAllEvents(), gregorianCalendarEvents.getAllEvents()
+                        islamicCalendarEvents.getAllEvents(), nepaliCalendarEvents.getAllEvents(),
+                        gregorianCalendarEvents.getAllEvents(),
                     ).flatten() + listOf(
                         jdn.toPersianCalendar(), jdn.toGregorianCalendar(), jdn.toIslamicCalendar()
                     ).flatMap {

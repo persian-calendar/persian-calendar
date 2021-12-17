@@ -49,7 +49,7 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
         record.type == EventType.Afghanistan && record.isHoliday && afghanistanHolidays -> false
         record.type == EventType.Afghanistan && afghanistanOthers -> false
         record.type == EventType.Nepal && record.isHoliday && nepalHolidays -> false
-        record.type == EventType.Nepal && nepalOthers && language.showNepaliCalendar -> false
+        record.type == EventType.Nepal && nepalOthers -> false
         record.type == EventType.AncientIran && iranAncient -> false
         record.type == EventType.International && international -> false
         // Enable Iranian events of Gregorian calendar even if itself isn't enabled
@@ -185,6 +185,8 @@ class IrregularCalendarEventsStore(private val enabledHolidays: EnabledHolidays)
                 event["type"] == "International" && enabledHolidays.international -> true
                 event["type"] == "Iran" && enabledHolidays.iranHolidays && event["holiday"] == "true" -> true
                 event["type"] == "Iran" && enabledHolidays.iranOthers -> true
+                event["type"] == "Nepal" && enabledHolidays.nepalHolidays && event["holiday"] == "true" -> true
+                event["type"] == "Nepal" && enabledHolidays.nepalOthers -> true
                 event["type"] == "AncientIran" && enabledHolidays.iranAncient -> true
                 else -> false
             }

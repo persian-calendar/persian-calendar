@@ -246,6 +246,7 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
 fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(
     persianCalendarEvents.getEvents(jdn.toPersianCalendar()),
     islamicCalendarEvents.getEvents(jdn.toIslamicCalendar()),
+    nepaliCalendarEvents.getEvents(jdn.toNepaliCalendar()),
     gregorianCalendarEvents.getEvents(jdn.toGregorianCalendar(), deviceEvents)
 ).flatten()
 
