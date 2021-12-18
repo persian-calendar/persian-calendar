@@ -18,8 +18,7 @@ fun showCalendarPreferenceDialog(activity: Activity, onEmpty: () -> Unit) {
     val orderedCalendarTypes =
         enabledCalendars + (CalendarType.values().toList() - enabledCalendars.toSet()) -
                 // Don't show Nepali on default locales, at least for now.
-                if (language.showNepaliCalendar) setOf(CalendarType.NEPALI)
-                else emptySet()
+                if (language.showNepaliCalendar) emptySet() else setOf(CalendarType.NEPALI)
     val adapter = RecyclerListAdapter(orderedCalendarTypes.map { calendarType ->
         RecyclerListAdapter.Item(
             activity.getString(calendarType.title), calendarType.name,
