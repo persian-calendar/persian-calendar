@@ -12,6 +12,7 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
@@ -37,7 +38,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         }
 
     private val northwardShapePath = Path()
-    private val trueNorthArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+    private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.RED
         it.style = Paint.Style.FILL
         it.alpha = 100
@@ -51,13 +52,13 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
     private val moonShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = 0x80000080.toInt()
+        it.color = 0x808080FF.toInt()
         it.style = Paint.Style.STROKE
         it.strokeWidth = 9.dp
         it.strokeCap = Paint.Cap.ROUND
     }
     private val sunShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = 0x80000000.toInt()
+        it.color = 0x80808080.toInt()
         it.style = Paint.Style.STROKE
         it.strokeWidth = 9.dp
         it.strokeCap = Paint.Cap.ROUND
@@ -74,10 +75,6 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var cy = 0f // Center of Compass (cx, cy)
     private var radius = 0f // radius of Compass dial
     private var r = 0f // radius of Sun and Moon
-    private var northPaint = Paint().also {
-        it.strokeWidth = 1.5.dp
-        it.color = Color.RED
-    }
 
     private var sunMoonPosition = coordinates?.calculateSunMoonPosition(GregorianCalendar())
 
@@ -125,7 +122,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         angleDisplay.draw(canvas, (round(angle) + 360f) % 360f)
         canvas.withRotation(-angle, cx, cy) {
             drawDial()
-            drawPath(northwardShapePath, trueNorthArrowPaint)
+            drawPath(northwardShapePath, northArrowPaint)
             if (coordinates != null) {
                 drawQibla()
                 drawMoon()
