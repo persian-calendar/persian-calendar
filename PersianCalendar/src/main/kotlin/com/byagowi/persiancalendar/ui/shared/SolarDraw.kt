@@ -41,20 +41,14 @@ class SolarDraw(context: Context) {
             val arcWidth = (moonPhase - .5f) * 2 * r
             moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
             ovalPath.rewind()
-            if (arcWidth < 0) {
-                ovalPath.arcTo(moonOval, 90f, 180f)
-                ovalPath.arcTo(moonRect, 90f, -180f)
-            } else {
-                ovalPath.arcTo(moonOval, 90f, -180f)
-                ovalPath.arcTo(moonRect, 270f, 180f)
-            }
+            ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
+            ovalPath.arcTo(moonRect, 270f, 180f)
             ovalPath.close()
             drawPath(ovalPath, moonPaint)
         }
     }
 
     private val moonBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_moon)
-
     private val ovalPath = Path()
     private val moonRect = RectF()
     private val moonOval = RectF()
