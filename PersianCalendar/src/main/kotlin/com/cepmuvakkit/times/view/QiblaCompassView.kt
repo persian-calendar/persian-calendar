@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
@@ -49,28 +50,23 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.strokeWidth = 0.5.dp
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
-    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { // Diameter
-        it.color = Color.LTGRAY
+    private val moonShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0x80000080.toInt()
         it.style = Paint.Style.STROKE
-        it.strokeWidth = 1.dp
+        it.strokeWidth = 9.dp
+        it.strokeCap = Paint.Cap.ROUND
     }
-    private val moonPaintShade = Paint(Paint.ANTI_ALIAS_FLAG).also { // Diameter
-        it.color = Color.LTGRAY
+    private val sunShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0x80000000.toInt()
         it.style = Paint.Style.STROKE
-        it.strokeWidth = 3.dp
-    }
-    private var sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.STROKE
-        it.strokeWidth = 1.dp
-    }
-    private var sunPaintShade = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.STROKE
-        it.strokeWidth = 3.dp
+        it.strokeWidth = 9.dp
+        it.strokeCap = Paint.Cap.ROUND
     }
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF009000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
         it.strokeWidth = 1.dp
+        it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
     private val kaaba = BitmapFactory.decodeResource(resources, R.drawable.kaaba)
 
@@ -129,19 +125,13 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         angleDisplay.draw(canvas, (round(angle) + 360f) % 360f)
         canvas.withRotation(-angle, cx, cy) {
             drawDial()
-            drawTrueNorthArrow()
+            drawPath(northwardShapePath, trueNorthArrowPaint)
             if (coordinates != null) {
                 drawQibla()
                 drawMoon()
                 drawSun()
             }
         }
-    }
-
-    private fun Canvas.drawTrueNorthArrow() {
-        drawPath(northwardShapePath, trueNorthArrowPaint)
-        drawLine(cx, (cy - radius), cx, (cy + radius), northPaint)
-        drawCircle(cx, cy, 5f, northPaint)
     }
 
     private fun Canvas.drawDial() {
@@ -182,7 +172,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     private val solarDraw = SolarDraw(context)
 
-    private val shadeFactor = 3
+    private val shadeFactor = 1.5f
 
     private fun Canvas.drawSun() {
         val sunMoonPosition = sunMoonPosition ?: return
@@ -190,11 +180,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         val rotation = sunMoonPosition.sunPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
             val sunHeight = (sunMoonPosition.sunPosition.altitude.toFloat() / 90 - 1) * radius
+            drawLine(cx, cy, cx, cy - sunHeight / shadeFactor, sunShadePaint)
             val sunColor = solarDraw.sunColor(sunProgress)
-            sunPaint.color = sunColor
-            drawLine(cx, cy - radius, cx, cy + radius, sunPaint)
-            sunPaintShade.color = sunColor
-            drawLine(cx, cy, cx, cy - sunHeight / shadeFactor, sunPaintShade)
             solarDraw.sun(this, cx, cy + sunHeight, r, sunColor)
         }
     }
@@ -204,8 +191,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         if (sunMoonPosition.moonPosition.altitude <= -5) return
         withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
             val moonHeight = (sunMoonPosition.moonPosition.altitude.toFloat() / 90 - 1) * radius
-            drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
-            drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonPaintShade)
+            drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
             solarDraw.moon(this, sunMoonPosition, cx, cy + moonHeight, r * .8f)
         }
     }
