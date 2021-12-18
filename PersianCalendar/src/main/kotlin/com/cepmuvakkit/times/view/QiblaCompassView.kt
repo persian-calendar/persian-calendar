@@ -12,7 +12,6 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
@@ -51,11 +50,20 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         it.strokeWidth = 0.5.dp
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
+    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.STROKE
+        it.color = Color.LTGRAY
+        it.strokeWidth = 1.dp
+    }
     private val moonShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x808080FF.toInt()
         it.style = Paint.Style.STROKE
         it.strokeWidth = 9.dp
         it.strokeCap = Paint.Cap.ROUND
+    }
+    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.STROKE
+        it.strokeWidth = 1.dp
     }
     private val sunShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x80808080.toInt()
@@ -80,6 +88,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
     private var sunProgress = Clock(Calendar.getInstance()).toMinutes() / fullDay
+
+    private val enableShade = false
 
     fun setTime(time: GregorianCalendar) {
         sunMoonPosition = coordinates?.calculateSunMoonPosition(time)
@@ -177,8 +187,10 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         val rotation = sunMoonPosition.sunPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
             val sunHeight = (sunMoonPosition.sunPosition.altitude.toFloat() / 90 - 1) * radius
-            drawLine(cx, cy, cx, cy - sunHeight / shadeFactor, sunShadePaint)
             val sunColor = solarDraw.sunColor(sunProgress)
+            sunPaint.color = sunColor
+            drawLine(cx, cy - radius, cx, cy + radius, sunPaint)
+            if (enableShade) drawLine(cx, cy, cx, cy - sunHeight / shadeFactor, sunShadePaint)
             solarDraw.sun(this, cx, cy + sunHeight, r, sunColor)
         }
     }
@@ -188,7 +200,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         if (sunMoonPosition.moonPosition.altitude <= -5) return
         withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
             val moonHeight = (sunMoonPosition.moonPosition.altitude.toFloat() / 90 - 1) * radius
-            drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
+            drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
+            if (enableShade) drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
             solarDraw.moon(this, sunMoonPosition, cx, cy + moonHeight, r * .8f)
         }
     }
