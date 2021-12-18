@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -37,18 +38,18 @@ class SolarDraw(context: Context) {
     ) {
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(moonBitmap, null, moonRect, null)
+        val arcWidth = (moonPhase - .5f) * 2 * r
+        moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
+        ovalPath.rewind()
+        ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
+        ovalPath.arcTo(moonRect, 270f, 180f)
+        ovalPath.close()
         canvas.withScale(x = if (sunMoonPosition.moonPhaseAscending) -1f else 1f, pivotX = cx) {
-            val arcWidth = (moonPhase - .5f) * 2 * r
-            moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
-            ovalPath.rewind()
-            ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
-            ovalPath.arcTo(moonRect, 270f, 180f)
-            ovalPath.close()
             drawPath(ovalPath, moonPaint)
         }
     }
 
-    private val moonBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_moon)
+    private val moonBitmap = context.getCompatDrawable(R.drawable.ic_moon).toBitmap(256, 256)
     private val ovalPath = Path()
     private val moonRect = RectF()
     private val moonOval = RectF()
