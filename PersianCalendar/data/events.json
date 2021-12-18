@@ -702,6 +702,9 @@
     { "holiday": false, "month": 9, "day": 27, "type": "Iran",
       "title": "روز وحدت حوزه و دانشگاه" },
 
+    { "holiday": false, "month": 9, "day": 27, "type": "Iran",
+      "title": "روز جهان عاری از خشونت و افراطی‌گری" },
+
     { "holiday": false, "month": 9, "day": 29, "type": "Iran",
       "title": "روز تجلیل از شهید تندگویان" },
 
@@ -1274,7 +1277,6 @@
     { "holiday": false, "month": 12, "day": 1, "title": "روز جهانی مبارزه با ایدز", "type": "Iran" },
     { "holiday": false, "month": 12, "day": 3, "title": "روز جهانی معلولان", "type": "Iran" },
     { "holiday": false, "month": 12, "day": 7, "title": "روز جهانی هواپیمایی", "type": "Iran" },
-    { "holiday": false, "month": 12, "day": 18, "title": "روز جهانی عاری از خشونت و افراطی‌گری", "type": "Iran" },
     { "holiday": false, "month": 12, "day": 25, "title": "ولادت حضرت عیسی مسیح (ع)", "type": "Iran" },
 
     { "holiday": false, "month": 1, "day": 4, "title": "روز جهانی بریل", "type": "International" },
