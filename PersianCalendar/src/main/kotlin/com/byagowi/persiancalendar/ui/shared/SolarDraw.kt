@@ -29,21 +29,16 @@ class SolarDraw(context: Context) {
         sunDrawable.draw(canvas)
     }
 
-    private val sunDrawable = context.getCompatDrawable(R.drawable.ic_compass_sun)
-    private val moonBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_moon)
-
-    private val ovalPath = Path()
+    private val sunDrawable = context.getCompatDrawable(R.drawable.ic_sun)
 
     fun moon(
         canvas: Canvas, sunMoonPosition: SunMoonPosition, cx: Float, cy: Float, r: Float,
         moonPhase: Float = sunMoonPosition.moonPhase.toFloat()
     ) {
-        moonRect.set(cx - r * 1.1f, cy - r * 1.1f, cx + r * 1.1f, cy + r * 1.1f)
+        moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(moonBitmap, null, moonRect, null)
         canvas.withScale(x = if (sunMoonPosition.moonPhaseAscending) -1f else 1f, pivotX = cx) {
             val arcWidth = (moonPhase - .5f) * 2 * r
-            // elevation Offset 0 for 0 degree; r for 90 degree
-            moonRect.set(cx - r, cy - r, cx + r, cy + r)
             moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
             ovalPath.rewind()
             if (arcWidth < 0) {
@@ -58,8 +53,9 @@ class SolarDraw(context: Context) {
         }
     }
 
-    // private val moonDrawable = context.getCompatDrawable(R.drawable.ic_moon)
+    private val moonBitmap = BitmapFactory.decodeResource(context.resources, R.drawable.ic_moon)
 
+    private val ovalPath = Path()
     private val moonRect = RectF()
     private val moonOval = RectF()
 
