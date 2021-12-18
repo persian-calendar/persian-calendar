@@ -39,7 +39,7 @@ class SolarDraw(context: Context) {
         moonPhase: Float = sunMoonPosition.moonPhase.toFloat()
     ) {
         moonRect.set(cx - r * 1.1f, cy - r * 1.1f, cx + r * 1.1f, cy + r * 1.1f)
-        canvas.drawBitmap(moonBitmap, null, moonRect, moonPaint)
+        canvas.drawBitmap(moonBitmap, null, moonRect, null)
         canvas.withScale(x = if (sunMoonPosition.moonPhaseAscending) -1f else 1f, pivotX = cx) {
             val arcWidth = (moonPhase - .5f) * 2 * r
             // elevation Offset 0 for 0 degree; r for 90 degree

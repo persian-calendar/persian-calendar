@@ -214,7 +214,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         val qiblaHeading = qiblaHeading ?: return
         withRotation(qiblaHeading - 360, cx, cy) {
             drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)
-            drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, qiblaPaint)
+            drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
         }
     }
 }
