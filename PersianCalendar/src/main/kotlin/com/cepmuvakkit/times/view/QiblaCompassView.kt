@@ -26,6 +26,7 @@ import net.androgames.level.AngleDisplay
 import java.util.*
 import kotlin.math.min
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
@@ -99,7 +100,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     val qiblaHeading = coordinates?.run {
-        EarthPosition(latitude, longitude).toEarthHeading(EarthPosition(21.416666667, 39.816666))
+        EarthPosition(latitude, longitude).toEarthHeading(EarthPosition(21.422522, 39.826181))
     }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
@@ -157,7 +158,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         // Draw the marker every 15 degrees and text every 45.
         (0..23).forEach {
             withRotation(15f * it, cx, cy) {
-                drawLine(cx, (cy - radius), cx, (cy - radius * .975f), markerPaint)
+                drawLine(cx, cy - radius, cx, cy - radius * .975f, markerPaint)
                 withTranslation(0f, textHeight.toFloat()) {
                     // Draw the cardinal points
                     if (it % 6 == 0) {
@@ -212,8 +213,11 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private fun Canvas.drawQibla() {
         val qiblaHeading = qiblaHeading ?: return
         withRotation(qiblaHeading.heading.toFloat() - 360, cx, cy) {
-            drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)
+            drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
+            val distance =
+                "%,d km".format(Locale.ENGLISH, (qiblaHeading.metres / 1000f).roundToInt())
+            drawText(distance, cx, cy - radius * .8f, textPaint)
         }
     }
 }
