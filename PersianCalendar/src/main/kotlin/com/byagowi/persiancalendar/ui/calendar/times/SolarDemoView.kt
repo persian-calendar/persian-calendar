@@ -61,11 +61,11 @@ class SolarDemoView(context: Context, attrs: AttributeSet? = null) : LinearLayou
         val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
         val cr = radius / 8
         solarDraw.sun(this, radius, radius, cr)
-        withRotation(pivotX = radius, pivotY = radius, degrees = sunDegree) {
+        withRotation(pivotX = radius, pivotY = radius, degrees = -sunDegree) {
             val earthCy = cr * 3f
             drawCircle(radius, earthCy, cr / 1.2f, earthPaint)
             withRotation(pivotX = radius, pivotY = earthCy, degrees = moonDegree + sunDegree) {
-                solarDraw.moon(this, sunMoonPosition, radius, earthCy - cr * 2f, cr / 1.3f)
+                solarDraw.moon(this, sunMoonPosition, radius, earthCy - cr * 2f, cr / 1.7f)
             }
         }
     }
