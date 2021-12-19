@@ -20,22 +20,23 @@ class SunMoonPosition(
         return moonPhase
     }
 
+    val moonEcliptic: Ecliptic
+    val sunEcliptic: Ecliptic
+
     init {
         val jd = AstroLib.calculateJulianDay(time)
-        val tau_Sun = 8.32 / 1440.0 // 8.32 min  [cy]
-        val moonPosEc = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
-        val solarPosEc = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tau_Sun, ΔT)
-        val E = Math.toRadians(solarPosEc.λ - moonPosEc.λ)
-        val moonPosEq = LunarPosition.calculateMoonEquatorialCoordinates(moonPosEc, jd, ΔT)
-        val solarPosEq = SolarPosition.calculateSunEquatorialCoordinates(solarPosEc, jd, ΔT)
+        val tauSun = 8.32 / 1440.0 // 8.32 min  [cy]
+        moonEcliptic = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
+        sunEcliptic = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
+        val E = Math.toRadians(sunEcliptic.λ - moonEcliptic.λ)
+        val moonPosEq = LunarPosition.calculateMoonEquatorialCoordinates(moonEcliptic, jd, ΔT)
+        val solarPosEq = SolarPosition.calculateSunEquatorialCoordinates(sunEcliptic, jd, ΔT)
         moonPosition = moonPosEq.equ2Topocentric(
             coordinates.longitude, coordinates.latitude, coordinates.elevation, jd, ΔT
         ) //az=183.5858
         sunPosition = solarPosEq.equ2Topocentric(
             coordinates.longitude, coordinates.latitude, coordinates.elevation, jd, ΔT
         )
-        //System.out.println(moonPosition.Az);
-        // System.out.println(moonPosition.h);
 
         // double E = 0;// APC_Sun.L-APC_Moon.l_Moon;//l_moon 1.4421 L=6.18064// E=4.73850629772695878
         // moonPhase = (1 + cos(pi - E)) / 2;

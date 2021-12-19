@@ -6,9 +6,12 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.calendar.times.SolarDemoView
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import java.util.*
@@ -18,6 +21,12 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
 
     init {
         setOnClickListener { jdn = jdn }
+        if (BuildConfig.DEVELOPMENT) {
+            setOnLongClickListener {
+                AlertDialog.Builder(context).setView(SolarDemoView(context)).show()
+                true
+            }
+        }
     }
 
     private val solarDraw = SolarDraw(context)

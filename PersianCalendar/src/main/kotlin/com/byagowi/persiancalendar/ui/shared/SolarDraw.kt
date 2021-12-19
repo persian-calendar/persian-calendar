@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.shared
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
@@ -20,8 +19,8 @@ class SolarDraw(context: Context) {
     fun sunColor(progress: Float) =
         ArgbEvaluatorCompat.getInstance().evaluate(progress, 0xFFFFF9C4.toInt(), 0xFFFF9100.toInt())
 
-    fun sun(canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    fun sun(canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null) {
+        if (color != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             sunDrawable.setTint(color)
         }
         sunDrawable.setBounds(
