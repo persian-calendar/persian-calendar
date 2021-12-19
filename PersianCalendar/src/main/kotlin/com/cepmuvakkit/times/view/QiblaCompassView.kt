@@ -13,7 +13,6 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withRotation
-import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
@@ -146,36 +145,31 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawDial() {
-        val textHeight = textPaint.measureText("yY").toInt()
         // Draw the background
         drawCircle(cx, cy, radius, circlePaint)
         drawCircle(cx, cy, radius * .975f, circlePaint)
         // Rotate our perspective so that the "top" is
         // facing the current bearing.
         val cardinalX = cx
-        val cardinalY = cy - radius + textHeight
+        val cardinalY = cy - radius * .85f
 
         // Draw the marker every 15 degrees and text every 45.
         (0..23).forEach {
             withRotation(15f * it, cx, cy) {
                 drawLine(cx, cy - radius, cx, cy - radius * .975f, markerPaint)
-                withTranslation(0f, textHeight.toFloat()) {
-                    // Draw the cardinal points
-                    if (it % 6 == 0) {
-                        val dirString = when (it) {
-                            0 -> "N"
-                            6 -> "E"
-                            12 -> "S"
-                            18 -> "W"
-                            else -> ""
-                        }
-                        drawText(dirString, cardinalX, cardinalY, textPaint)
-                    } else if (it % 3 == 0) {
-                        // Draw the text every alternate 45deg
-                        val angle = (it * 15).toString()
-                        val angleTextY = cy - radius + textHeight
-                        drawText(angle, cardinalX, angleTextY, textPaint)
+                // Draw the cardinal points
+                if (it % 6 == 0) {
+                    val dirString = when (it) {
+                        0 -> "N"
+                        6 -> "E"
+                        12 -> "S"
+                        18 -> "W"
+                        else -> ""
                     }
+                    drawText(dirString, cardinalX, cardinalY, textPaint)
+                } else if (it % 3 == 0) {
+                    // Draw the text every alternate 45deg
+                    drawText((it * 15).toString(), cardinalX, cardinalY, textPaint)
                 }
             }
         }
