@@ -17,13 +17,11 @@ class SunMoonPosition(
     val moonPosition: Horizontal
     val moonPhase: Double
     val moonPhaseAscending: Boolean
-    val destinationHeading: EarthHeading
     fun illumunatedFractionofMoon(jd: Double, ΔT: Double): Double {
         return moonPhase
     }
 
     init {
-        val earth = EarthPosition(coordinates.latitude, coordinates.longitude)
         val jd = AstroLib.calculateJulianDay(time)
         val tau_Sun = 8.32 / 1440.0 // 8.32 min  [cy]
         val moonPosEc = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
@@ -41,8 +39,6 @@ class SunMoonPosition(
         // System.out.println(moonPosition.h);
 
         // double E = 0;// APC_Sun.L-APC_Moon.l_Moon;//l_moon 1.4421 L=6.18064// E=4.73850629772695878
-        val qibla = EarthPosition(21.416666667, 39.816666)
-        destinationHeading = earth.toEarthHeading(qibla)
         // moonPhase = (1 + cos(pi - E)) / 2;
         moonPhase = (1 + cos(Math.PI - E)) / 2 //48694254279852139 e-17
         moonPhaseAscending = IslamicDate(time.toCivilDate()).dayOfMonth < 14

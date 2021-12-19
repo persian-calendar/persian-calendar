@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
+import com.cepmuvakkit.times.posAlgo.EarthPosition
 import net.androgames.level.AngleDisplay
 import java.util.*
 import kotlin.math.min
@@ -97,7 +98,9 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         postInvalidate()
     }
 
-    val qiblaHeading = sunMoonPosition?.destinationHeading?.heading?.toFloat()
+    val qiblaHeading = coordinates?.run {
+        EarthPosition(latitude, longitude).toEarthHeading(EarthPosition(21.416666667, 39.816666))
+    }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
         it.textSize = 12.sp
@@ -208,7 +211,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
 
     private fun Canvas.drawQibla() {
         val qiblaHeading = qiblaHeading ?: return
-        withRotation(qiblaHeading - 360, cx, cy) {
+        withRotation(qiblaHeading.heading.toFloat() - 360, cx, cy) {
             drawLine(cx, (cy - radius), cx, (cy + radius), qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
         }
