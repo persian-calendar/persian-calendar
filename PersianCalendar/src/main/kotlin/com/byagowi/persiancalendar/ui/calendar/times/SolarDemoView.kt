@@ -49,7 +49,7 @@ class SolarDemoView(context: Context, attrs: AttributeSet? = null) : LinearLayou
 
     private val earthPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
-        it.color = Color.GRAY
+        it.color = 0xFF6981E7.toInt()
     }
     private val solarDraw = SolarDraw(context)
 
@@ -62,9 +62,9 @@ class SolarDemoView(context: Context, attrs: AttributeSet? = null) : LinearLayou
         val cr = radius / 8
         solarDraw.sun(this, radius, radius, cr)
         withRotation(pivotX = radius, pivotY = radius, degrees = sunDegree) {
-            val earthCy = cr * 3
+            val earthCy = cr * 3f
             drawCircle(radius, earthCy, cr / 1.2f, earthPaint)
-            withRotation(pivotX = radius, pivotY = earthCy, degrees = 90 + moonDegree - sunDegree) {
+            withRotation(pivotX = radius, pivotY = earthCy, degrees = moonDegree + sunDegree) {
                 solarDraw.moon(this, sunMoonPosition, radius, earthCy - cr * 2f, cr / 1.3f)
             }
         }

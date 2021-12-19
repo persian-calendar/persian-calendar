@@ -23,7 +23,10 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
         setOnClickListener { jdn = jdn }
         if (BuildConfig.DEVELOPMENT) {
             setOnLongClickListener {
-                AlertDialog.Builder(context).setView(SolarDemoView(context)).show()
+                AlertDialog.Builder(context)
+                    .setTitle("DEVELOPMENT ONLY")
+                    .setView(SolarDemoView(context))
+                    .show()
                 true
             }
         }
