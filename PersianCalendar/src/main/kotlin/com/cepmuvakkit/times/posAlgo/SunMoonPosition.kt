@@ -1,10 +1,9 @@
 package com.cepmuvakkit.times.posAlgo
 
-import com.byagowi.persiancalendar.utils.toCivilDate
-import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * @author mehmetrg
@@ -40,17 +39,7 @@ class SunMoonPosition(
 
         // double E = 0;// APC_Sun.L-APC_Moon.l_Moon;//l_moon 1.4421 L=6.18064// E=4.73850629772695878
         // moonPhase = (1 + cos(pi - E)) / 2;
-        moonPhase = (1 + cos(Math.PI - E)) / 2 //48694254279852139 e-17
-        moonPhaseAscending = IslamicDate(time.toCivilDate()).dayOfMonth < 14
-//        moonPhase = run { // Hacky, just that the previous wasn't able to distinguish them
-//            // 0 <= phase < 2
-//            // https://github.com/ilius/starcal/blob/060a0c2/scal3/moon.py
-//            val d = IslamicDate(time.toCivilDate()).dayOfMonth
-//            val phase = if (d >= 28) .0 else d / 14.0
-//            // Southern Hemisphere, probably should handled while draw
-//            // if (coordinates.isSouthernHemisphere) phase = (2.0 - phase) % 2.0
-//            phase
-//        }
-        //System.out.println(qiblaInfo.getKiloMetres());
+        moonPhase = (1 - cos(E)) / 2 //48694254279852139 e-17
+        moonPhaseAscending = sin(E) < 0
     }
 }
