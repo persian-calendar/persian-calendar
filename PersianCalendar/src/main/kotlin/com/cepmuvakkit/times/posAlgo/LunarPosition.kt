@@ -267,7 +267,7 @@ object LunarPosition {
         return Ecliptic(λ, β)
     }
 
-    fun calculateMoonEqutarialCoordinates(jd: Double, ΔT: Double): Equatorial {
+    fun calculateMoonEquatorialCoordinates(jd: Double, ΔT: Double): Equatorial {
         val moonPos: Ecliptic = calculateMoonEclipticCoordinates(jd, ΔT)
         val x = SolarPosition.calculateXArray(jd, ΔT)
         val jde: Double = getJulianEphemerisDay(jd, ΔT)
@@ -282,7 +282,7 @@ object LunarPosition {
         return Equatorial(α, δ, moonPos.Δ)
     }
 
-    fun calculateMoonEqutarialCoordinates(moonPos: Ecliptic, jd: Double, ΔT: Double): Equatorial {
+    fun calculateMoonEquatorialCoordinates(moonPos: Ecliptic, jd: Double, ΔT: Double): Equatorial {
         val x = SolarPosition.calculateXArray(jd, ΔT)
         val jde = getJulianEphemerisDay(jd, ΔT)
         val jce = getJulianEphemerisCentury(jde)
@@ -349,9 +349,9 @@ object LunarPosition {
         val HPrime = DoubleArray(3)
         jd = floor(jd + 0.5) - 0.5
         val ΔT = calculateTimeDifference(jd)
-        val dayBefore = calculateMoonEqutarialCoordinates(jd - 1, ΔT)
-        val dayOfInterest = calculateMoonEqutarialCoordinates(jd, ΔT)
-        val dayAfter = calculateMoonEqutarialCoordinates(jd + 1, ΔT)
+        val dayBefore = calculateMoonEquatorialCoordinates(jd - 1, ΔT)
+        val dayOfInterest = calculateMoonEquatorialCoordinates(jd, ΔT)
+        val dayAfter = calculateMoonEquatorialCoordinates(jd + 1, ΔT)
         // private final int MOONRADIUS=15;
         val h0Prime = getLunarRiseSetAltitude(dayOfInterest.Δ, temperature, pressure, altitude)
         val ν = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
@@ -412,9 +412,9 @@ object LunarPosition {
         val moonRiseSet = DoubleArray(3)
         jd = floor(jd + 0.5) - 0.5
         val ΔT = calculateTimeDifference(jd)
-        val dayBefore = calculateMoonEqutarialCoordinates(jd - 1, ΔT)
-        val dayOfInterest = calculateMoonEqutarialCoordinates(jd, ΔT)
-        val dayAfter = calculateMoonEqutarialCoordinates(jd + 1, ΔT)
+        val dayBefore = calculateMoonEquatorialCoordinates(jd - 1, ΔT)
+        val dayOfInterest = calculateMoonEquatorialCoordinates(jd, ΔT)
+        val dayAfter = calculateMoonEquatorialCoordinates(jd + 1, ΔT)
         // private final int MOONRADIUS=15;
         val h0Prime = getLunarRiseSetAltitude(dayOfInterest.Δ, temperature, pressure, altitude)
         val ν = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)

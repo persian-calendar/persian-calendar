@@ -29,7 +29,7 @@ class SunMoonPosition(
         val moonPosEc = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
         val solarPosEc = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tau_Sun, ΔT)
         val E = Math.toRadians(solarPosEc.λ - moonPosEc.λ)
-        val moonPosEq = LunarPosition.calculateMoonEqutarialCoordinates(moonPosEc, jd, ΔT)
+        val moonPosEq = LunarPosition.calculateMoonEquatorialCoordinates(moonPosEc, jd, ΔT)
         val solarPosEq = SolarPosition.calculateSunEquatorialCoordinates(solarPosEc, jd, ΔT)
         moonPosition = moonPosEq.equ2Topocentric(
             coordinates.longitude, coordinates.latitude, coordinates.elevation, jd, ΔT
