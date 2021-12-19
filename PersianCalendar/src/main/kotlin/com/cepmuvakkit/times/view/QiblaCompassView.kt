@@ -209,9 +209,12 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         withRotation(qiblaHeading.heading.toFloat() - 360, cx, cy) {
             drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
-            val distance =
-                "%,d km".format(Locale.ENGLISH, (qiblaHeading.metres / 1000f).roundToInt())
-            drawText(distance, cx, cy - radius * .8f, textPaint)
+            if ((false)) {
+                drawText(
+                    "%,d km".format(Locale.ENGLISH, (qiblaHeading.metres / 1000f).roundToInt()),
+                    cx, cy - radius * .8f, textPaint
+                )
+            }
         }
     }
 }
