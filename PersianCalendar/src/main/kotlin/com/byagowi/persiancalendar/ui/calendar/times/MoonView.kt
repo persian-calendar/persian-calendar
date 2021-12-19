@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.shared
+package com.byagowi.persiancalendar.ui.calendar.times
 
 import android.animation.ValueAnimator
 import android.content.Context
@@ -11,7 +11,7 @@ import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.calendar.times.SolarDemoView
+import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import java.util.*
