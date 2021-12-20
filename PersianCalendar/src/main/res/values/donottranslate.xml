@@ -107,18 +107,6 @@ Arasteh: Mahmoud Arasteh Nasab"</string>
 در دستگاه‌های قدیمی‌تر ممکن است به دلیل حجم کم حافظهٔ دستگاه، برنامه قادر به به‌روزرسانی شمارهٔ روز ماه در نوار اعلان نباشد و روز عقب‌تری را نشان دهد. پیشنهاد می‌شود سایر برنامه‌های دستگاه را که حافظهٔ اضافی گرفته‌اند حذف کنید یا گزینهٔ نوار اعلان برنامه را غیرفعال کنید یا برنامهٔ دیگری را بیازمایید.
 
 "</string>
-    <string name="capricorn_emoji" translatable="false">♑</string>
-    <string name="aquarius_emoji" translatable="false">♒</string>
-    <string name="pisces_emoji" translatable="false">♓</string>
-    <string name="aries_emoji" translatable="false">♈</string>
-    <string name="taurus_emoji" translatable="false">♉</string>
-    <string name="gemini_emoji" translatable="false">♊</string>
-    <string name="cancer_emoji" translatable="false">♋</string>
-    <string name="leo_emoji" translatable="false">♌</string>
-    <string name="virgo_emoji" translatable="false">♍</string>
-    <string name="libra_emoji" translatable="false">♎</string>
-    <string name="scorpio_emoji" translatable="false">♏</string>
-    <string name="sagittarius_emoji" translatable="false">♐</string>
     <string name="not_set_time" translatable="false">--:--</string>
     <string name="moazzenzadeh" translatable="false">رحیم مؤذن‌زاده اردبیلی</string>
     <string name="entezar" translatable="false">انتظار، روح‌الله کاظمی‌زاده</string>
