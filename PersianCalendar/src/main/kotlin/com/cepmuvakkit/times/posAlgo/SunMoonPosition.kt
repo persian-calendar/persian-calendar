@@ -23,7 +23,7 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
     init {
         val jd = AstroLib.calculateJulianDay(time)
 
-        val tauSun = 8.32 / 1440.0 // 8.32 min  [cy]
+        val tauSun = 8.32 / 1440.0 // 8.32 min  [cy], Earth to Sun distance in light speed terms
         moonEcliptic = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
         sunEcliptic = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
 
@@ -37,7 +37,6 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
         val longitude = observerEarthCoordinates.longitude
         val latitude = observerEarthCoordinates.latitude
         val elevation = observerEarthCoordinates.elevation
-        // az=183.5858
         moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
         sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
     }
