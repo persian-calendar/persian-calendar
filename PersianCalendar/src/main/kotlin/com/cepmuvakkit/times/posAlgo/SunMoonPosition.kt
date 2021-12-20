@@ -1,5 +1,6 @@
 package com.cepmuvakkit.times.posAlgo
 
+import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 import kotlin.math.cos
@@ -10,14 +11,14 @@ import kotlin.math.sin
  */
 class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordinates, ΔT: Double) {
 
-    val moonPosition: Horizontal
-    val sunPosition: Horizontal
-
     val moonEcliptic: Ecliptic
     val sunEcliptic: Ecliptic
 
     val moonPhase: Double
     val moonPhaseAscending: Boolean
+
+    val moonPosition: Horizontal
+    val sunPosition: Horizontal
 
     init {
         val jd = AstroLib.calculateJulianDay(time)
@@ -40,4 +41,22 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
         moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
         sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
     }
+
+    // https://github.com/janczer/goMoonPhase/blob/master/MoonPhase.go#L363
+    val moonZodiac: Int
+        get() = when {
+            moonEcliptic.λ < 33.18 -> R.string.aries
+            moonEcliptic.λ < 51.16 -> R.string.taurus
+            moonEcliptic.λ < 93.44 -> R.string.gemini
+            moonEcliptic.λ < 119.48 -> R.string.cancer
+            moonEcliptic.λ < 135.30 -> R.string.leo
+            moonEcliptic.λ < 173.34 -> R.string.virgo
+            moonEcliptic.λ < 224.17 -> R.string.libra
+            moonEcliptic.λ < 242.57 -> R.string.scorpio
+            moonEcliptic.λ < 271.26 -> R.string.sagittarius
+            moonEcliptic.λ < 302.49 -> R.string.capricorn
+            moonEcliptic.λ < 311.72 -> R.string.aquarius
+            moonEcliptic.λ < 348.58 -> R.string.pisces
+            else -> R.string.aries
+        }
 }
