@@ -39,10 +39,10 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             animator?.removeAllUpdateListeners()
             if (!isVisible) {
                 field = value
+                update()
                 return
             }
-            val startValue = field
-            ValueAnimator.ofFloat(startValue, value).also {
+            ValueAnimator.ofFloat(field, value).also {
                 animator = it
                 it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
                 it.interpolator = AccelerateDecelerateInterpolator()
