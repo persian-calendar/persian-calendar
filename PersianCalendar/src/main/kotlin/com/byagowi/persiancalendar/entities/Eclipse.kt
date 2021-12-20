@@ -19,7 +19,6 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
 
     enum class Category(val rawValue: Int) { SOLAR(0), LUNAR(1) }
 
-    // Local visibility circumstances (lunar & solar both)
     enum class Type {
         SolarNoncenral, SolarPartial, SolarCentralTotal, SolarCentralAnnular, SolarCentralAnnularTotal,
         LunarUmbralTotal, LunarUmbralPartial, LunarPenumbral
@@ -289,5 +288,16 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
 
         /// convert angle to radians
         private fun toRadians(angle: Double) = angle * Math.PI / 180
+
+        // Local visibility circumstances (lunar & solar both)
+        // val VISIBILITY_NONE = 0
+        // val VISIBILITY_PARTIAL = 1
+        // val VISIBILITY_FULL = 2
+        // val VISIBILITY_START_PENUMBRA = 3
+        // val VISIBILITY_START_PARTIAL = 4
+        // val VISIBILITY_START_FULL = 5
+        // val VISIBILITY_END_FULL = 6
+        // val VISIBILITY_END_PARTIAL = 7
+        // val VISIBILITY_END_PENUMBRA = 8
     }
 }
