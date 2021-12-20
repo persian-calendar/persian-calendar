@@ -131,14 +131,6 @@
     <string name="shift_work_night">Şevkarî</string>
     <string name="week_of_year_summary">Nîşandana heftiya salê di rojhejmêrê de</string>
     <string name="week_of_year">Heftiya salê</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="month_pray_times">Month\'s pray times</string>
-    <string name="high_latitudes_method">High Latitudes Method</string>
-    <string name="high_latitudes_night_middle">Night Middle</string>
-    <string name="high_latitudes_angle_based">Angle Based</string>
-    <string name="high_latitudes_one_seventh">One Seventh</string>
-    <string name="none">None</string>
-    <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
     <string name="country_emoji">🇮🇷🇹🇷🇮🇶</string>
     <string name="nepal">نپال</string>
 </resources>

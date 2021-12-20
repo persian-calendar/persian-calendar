@@ -182,7 +182,6 @@
     <string name="equivalent_to">برابر با</string>
     <string name="holiday_reason">تعطیل به مناسبت %1$s</string>
     <string name="nth_week_of_year">هفتهٔ %1$s سال</string>
-    <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">شمال</string>
     <string name="east">شرق</string>
     <string name="south">جنوب</string>
@@ -330,15 +329,6 @@
     <string name="friday">جمعہ</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
-    <string name="enable_new_interface">Enable the new interface</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="month_pray_times">Month\'s pray times</string>
-    <string name="high_latitudes_method">High Latitudes Method</string>
-    <string name="high_latitudes_night_middle">Night Middle</string>
-    <string name="high_latitudes_angle_based">Angle Based</string>
-    <string name="high_latitudes_one_seventh">One Seventh</string>
-    <string name="none">None</string>
-    <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
     <string name="country_emoji">🇵🇰🇮🇳</string>
     <string name="nepal">نپال</string>
 </resources>

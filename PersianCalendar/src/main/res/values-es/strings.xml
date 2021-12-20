@@ -151,7 +151,7 @@
     <string name="gps_internet_desc">Enable device\'s GPS and Internet connection to find your location, please.
 \n
 \nThe app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again.</string>
-    <string name="pleasewaitgps">Espere ... Si no aparece nada después de un minuto, quiza debería probar otras opciones</string>
+    <string name="pleasewaitgps">Espere … Si no aparece nada después de un minuto, quizá debería probar otras opciones</string>
     <string name="location">Ubicación</string>
     <string name="location_help">If none of them, specify it below</string>
     <string name="latitude">Latitud</string>
@@ -205,7 +205,6 @@
     <string name="equivalent_to">Equivalente a</string>
     <string name="holiday_reason">Festivo debido a %1$s</string>
     <string name="nth_week_of_year">%1$s semana del año</string>
-    <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="shift_work_settings">Ajustes del turno de trabajo</string>
     <string name="remove">Eliminar</string>
     <string name="shift_work_starting_date">%1$s, selected on the calendar, is shift work starting day.</string>
@@ -271,10 +270,6 @@
     <string name="shamsi_calendar_short">Persa</string>
     <string name="islamic_calendar_short">Islámico</string>
     <string name="gregorian_calendar_short">Gregorian</string>
-    <string name="shift_work_morning">Morning</string>
-    <string name="shift_work_off">Off</string>
-    <string name="shift_work_evening">Evening</string>
-    <string name="shift_work_night">Night</string>
     <string name="method_jafari">Shia Ithna-Ashari, Leva Institute, Qum</string>
     <string name="method_mwl">Muslim World League</string>
     <string name="method_isna">Islamic Society of North America</string>
@@ -290,12 +285,6 @@
     <string name="afghanistan_others">Otros eventos de Afghanistan</string>
     <string name="iran_official_events">Irán, oficial (en persa)</string>
     <string name="afghanistan_events">Afganistán (en persa)</string>
-    <string name="other_holidays">Others</string>
-    <string name="view_source">view source</string>
-    <string name="widget_customization_other_calendars">Other calendars on 1x4 and 2x2 widgets</string>
-    <string name="widget_customization_non_holiday_events">Non-holidays on 2x2 widget and notification</string>
-    <string name="widget_customization_owghat">Pray times on 2x2 and notification (if is set)</string>
-    <string name="widget_customization_owghat_location">Location of pray times on 2x2 and notification (if is set)</string>
     <string name="farvardin">Farvardín</string>
     <string name="ordibehesht">Ordibehesht</string>
     <string name="khordad">Jordad</string>
@@ -339,17 +328,6 @@
     <string name="wednesday">Miércoles</string>
     <string name="thursday">Jueves</string>
     <string name="friday">Viernes</string>
-    <string name="sun_view">Sun View</string>
-    <string name="asr_hanafi_juristic">Hanafi Asr Juristic Method</string>
-    <string name="enable_new_interface">Enable the new interface</string>
-    <string name="are_you_sure">¿Estás seguro/a\?</string>
-    <string name="month_pray_times">Month\'s pray times</string>
-    <string name="high_latitudes_method">High Latitudes Method</string>
-    <string name="high_latitudes_night_middle">Night Middle</string>
-    <string name="high_latitudes_angle_based">Angle Based</string>
-    <string name="high_latitudes_one_seventh">One Seventh</string>
-    <string name="none">None</string>
-    <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
     <string name="country_emoji">🇪🇸</string>
     <string name="season">Estación</string>
     <string name="show_secondary_calendar">Mostrar calendario secundario</string>

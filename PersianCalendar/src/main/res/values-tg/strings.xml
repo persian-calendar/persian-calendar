@@ -326,13 +326,6 @@
     <string name="sun_view">Хоршиднамо</string>
     <string name="asr_hanafi_juristic">Усули ҳисоб кардани азони Ҳанафӣ</string>
     <string name="enable_new_interface">Намуди навро фаъол кунед</string>
-    <string name="month_pray_times">Month\'s pray times</string>
-    <string name="high_latitudes_method">High Latitudes Method</string>
-    <string name="high_latitudes_night_middle">Night Middle</string>
-    <string name="high_latitudes_angle_based">Angle Based</string>
-    <string name="high_latitudes_one_seventh">One Seventh</string>
-    <string name="none">None</string>
-    <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
     <string name="country_emoji">🇹🇯</string>
     <string name="nepal">Непал</string>
 </resources>

@@ -40,15 +40,6 @@
     <string name="language">ژبه</string>
     <string name="version">نسخه %1$s</string>
     <string name="athan">اذان</string>
-    <string name="athan_alarm_summary">Prayres to sound the alarm for</string>
-    <string name="athan_alarm">Athan Alarm</string>
-    <string name="athan_volume_summary">Set the volume for the alarm</string>
-    <string name="athan_volume">Athan Volume</string>
-    <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
-    <string name="athan_gap">Athan Gap</string>
-    <string name="athan_gap_summary">How long ahead of the Athan should the alarm be sounded (minutes)</string>
-    <string name="close">Close</string>
-    <string name="open">Open</string>
     <string name="imsak">امساک</string>
     <string name="fajr">اذان صبح</string>
     <string name="dhuhr">اذان ظهر</string>
@@ -76,7 +67,6 @@
     <string name="stop">توقف</string>
     <string name="goto_date">برو به تاریخ</string>
     <string name="go">برو</string>
-    <string name="pleasewaitgps">Please wait… If nothing appeared after one minute you probably should try other options</string>
     <string name="notify_date_lock_screen">نمایش آگاهی در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند</string>
     <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
@@ -122,7 +112,6 @@
     <string name="gps_internet_desc">لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید. برنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
     <string name="start_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) از ابتدای سال</string>
     <string name="end_of_year_diff">%1$s روز (~%2$s هفته یا %3$s ماه) تا انتهای سال</string>
-    <!-- Sun Info -->
     <string name="sunriseSunView">طلوع</string>
     <string name="middaySunView">ظهر</string>
     <string name="sunsetSunView">غروب</string>
@@ -182,7 +171,6 @@
     <string name="equivalent_to">برابر با</string>
     <string name="holiday_reason">تعطیل به مناسبت %1$s</string>
     <string name="nth_week_of_year">هفتهٔ %1$s سال</string>
-    <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">شمال</string>
     <string name="east">شرق</string>
     <string name="south">جنوب</string>
@@ -330,15 +318,6 @@
     <string name="friday">جمعه</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
-    <string name="enable_new_interface">Enable the new interface</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="month_pray_times">Month\'s pray times</string>
-    <string name="high_latitudes_method">High Latitudes Method</string>
-    <string name="high_latitudes_night_middle">Night Middle</string>
-    <string name="high_latitudes_angle_based">Angle Based</string>
-    <string name="high_latitudes_one_seventh">One Seventh</string>
-    <string name="none">None</string>
-    <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
     <string name="country_emoji">🇦🇫🇵🇰</string>
     <string name="nepal">نپال</string>
 </resources>

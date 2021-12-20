@@ -78,13 +78,6 @@
     <string name="go">行く</string>
     <string name="pleasewaitgps">少し待って、1分経っても何も起こらない場合は、GPSがデバイス設定で有効になっていることを確認してください。それでもうまくいかない場合は、他の方法を試してみる必要があります。</string>
     <string name="notify_date_lock_screen">画面ロックで通知を表示</string>
-    <string name="notify_date_lock_screen_summary">Only when a lock screen security method is set.</string>
-    <string name="warn_if_events_not_set">To select and show holidays and events you like, go to the settings</string>
-    <string name="days_distance">Distance</string>
-    <string name="calendars_priority">Calendars Priority</string>
-    <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
-    <string name="week_of_year">Week of Year</string>
-    <string name="week_of_year_summary">Show week of year on calendar</string>
     <string name="accept">確認する</string>
     <string name="calendar">暦</string>
     <string name="week_start">週の初日</string>
@@ -92,47 +85,15 @@
     <string name="week_ends">Weekends</string>
     <string name="week_ends_summary">Select weekends days</string>
     <string name="search_in_events">Search in events</string>
-    <string name="show_device_calendar_events_summary">Show personal calendar events</string>
-    <string name="show_device_calendar_events">Personal Calendar Events</string>
     <string name="add_event">予定を追加</string>
-    <string name="device_calendar_does_not_support">Device calendar does not support the action</string>
-    <string name="customize_widget_summary">What to show from notification and widgets to make them more compact</string>
-    <string name="customize_widget">Widget Customization</string>
     <string name="add">加算</string>
-    <string name="which_one_to_show">Which one to show</string>
-    <string name="notification_athan">Athan Notification</string>
-    <string name="enable_notification_athan">Show Athan as a notification and device vibration</string>
-    <string name="returned_to_default">Returned to default</string>
-    <string name="custom_notification_is_set">Custom notification is just set</string>
-    <string name="custom_athan">Select Athan</string>
-    <string name="default_athan">Default Athan</string>
-    <string name="default_athan_summary">Return to default Athan</string>
-    <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
-    <string name="about_license">許可</string>
-    <string name="about_license_title">Application License</string>
-    <string name="about_license_sum">Check GPLv3 License and other license terms used on Persian Calendar.</string>
     <string name="help">案内</string>
     <string name="about_report_bug">問題を報告します</string>
-    <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
     <string name="about_sendMail">電子メール</string>
-    <string name="about_noClient">No email client is installed</string>
     <string name="about_developers">開発者</string>
-    <string name="about_support_developers">Developer Support</string>
-    <string name="about_email_sum">Send personal email to the authors of the app</string>
-    <string name="gps_internet_desc">Enable device\'s GPS and Internet connection to find your location, please.
-\n
-\nThe app needs this only once, however, if you move to a new location, accessing to GPS and Internet is needed again.</string>
-    <string name="start_of_year_diff">%1$s days (~%2$s weeks or %3$s months) from start of the year</string>
-    <string name="end_of_year_diff">%1$s days (~%2$s weeks or %3$s months) to end of the year</string>
-    <!-- Sun Info -->
     <string name="sunriseSunView">日の出</string>
     <string name="middaySunView">正午</string>
     <string name="sunsetSunView">日没</string>
-    <string name="no_event">No event or appointment for this day.</string>
-    <string name="length_of_day">Daytime</string>
-    <string name="remaining_daylight">Remaining</string>
-    <string name="n_hours_minutes">%1$sh %2$sm</string>
-    <string name="more">More</string>
     <string name="zodiac">天宮図</string>
     <string name="capricorn">磨羯宮</string>
     <string name="aquarius">宝瓶宮</string>
@@ -160,31 +121,12 @@
     <string name="year11">午</string>
     <string name="year12">未</string>
     <string name="level">Level</string>
-    <string name="calibrate_compass_summary">For improving compass sensor accuracy move the phone away from any magnetic objects, tilt and rotate the device back and forth on every axis.</string>
-    <string name="set_location">In order to have Sun and Moon location, and Qibla direction, set the location in the settings.</string>
-    <string name="moonInScorpio">Moon is in Scorpio</string>
-    <string name="astronomical_info">Astronomical Information</string>
-    <string name="astronomical_info_summary">Show additional information like constellation, years names and moon in scorpio</string>
-    <string name="islamic_offset">Islamic offset</string>
-    <string name="islamic_offset_summary">Adjust Islamic calendar by adding a number</string>
-    <string name="pref_widget">Widget</string>
-    <string name="pref_notification">Notification</string>
     <string name="pref_interface">界面</string>
     <string name="resume">続ける</string>
     <string name="continue_button">続ける</string>
-    <!--Permissions-->
-    <string name="location_access">Location Access</string>
-    <string name="phone_location_required">This part of the app needs location permission, if you choose deny you have to enter your latitude and longitude manually.</string>
-    <string name="calendar_access">Calendar Access</string>
-    <string name="phone_calendar_required">This part of the app needs calendar permission, if you allow it your personal events will be shown on the calendar.</string>
-    <!--TalkBack, a11y-->
     <string name="previous_month">先月</string>
     <string name="next_month">来月</string>
-    <string name="week_days_name_column">%1$s column in days table</string>
     <string name="equivalent_to">等しい</string>
-    <string name="holiday_reason">Holiday because of %1$s</string>
-    <string name="nth_week_of_year">%1$s week of year</string>
-    <!-- New additions, to be categorized, keep the section on your translation -->
     <string name="north">北</string>
     <string name="east">東</string>
     <string name="south">南</string>
