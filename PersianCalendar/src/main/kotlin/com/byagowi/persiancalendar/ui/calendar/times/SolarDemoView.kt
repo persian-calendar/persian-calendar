@@ -8,11 +8,18 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.core.graphics.withRotation
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.Eclipse
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
+import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.slider.Slider
 import java.util.*
 import kotlin.math.min
@@ -23,6 +30,14 @@ class SolarDemoView(context: Context, attrs: AttributeSet? = null) : LinearLayou
     init {
         orientation = VERTICAL
         gravity = Gravity.CENTER
+        addView(TextView(context).also { v ->
+            v.textAlignment = View.TEXT_ALIGNMENT_CENTER
+            v.text = listOf(Eclipse.Category.SOLAR, Eclipse.Category.LUNAR).joinToString("\n\n") {
+                val eclipse = Eclipse(GregorianCalendar(), it, true)
+                val date = Jdn(eclipse.maxPhaseDate.toJavaCalendar().toCivilDate())
+                "$it\n${formatDate(date.toCalendar(mainCalendar))}\n${eclipse.type}"
+            }
+        })
         val solarView = object : View(context) {
             init {
                 layoutParams = ViewGroup.LayoutParams(200.dp.toInt(), 200.dp.toInt())
