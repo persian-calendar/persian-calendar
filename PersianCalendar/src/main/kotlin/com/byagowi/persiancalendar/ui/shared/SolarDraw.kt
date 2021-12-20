@@ -31,13 +31,10 @@ class SolarDraw(context: Context) {
 
     private val sunDrawable = context.getCompatDrawable(R.drawable.ic_sun)
 
-    fun moon(
-        canvas: Canvas, sunMoonPosition: SunMoonPosition, cx: Float, cy: Float, r: Float,
-        moonPhase: Float = sunMoonPosition.moonPhase.toFloat()
-    ) {
+    fun moon(canvas: Canvas, sunMoonPosition: SunMoonPosition, cx: Float, cy: Float, r: Float) {
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(moonBitmap, null, moonRect, null)
-        val arcWidth = (moonPhase - .5f) * 2 * r
+        val arcWidth = (sunMoonPosition.moonPhase.toFloat() - .5f) * 2 * r
         moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
         ovalPath.rewind()
         ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
