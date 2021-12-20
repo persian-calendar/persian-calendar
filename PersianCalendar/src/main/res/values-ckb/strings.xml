@@ -285,7 +285,7 @@
     <string name="view_source">نیشاندانی سەرچاوە</string>
     <string name="widget_customization_other_calendars">ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</string>
     <string name="widget_customization_non_holiday_events">ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</string>
-    <string name="widget_customization_owghat">کاتی شەرعی لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
+    <string name="widget_customization_owghat">کاتی نوێژ لەسەر ویجیتەکان و ئاگانامەکان (ئەگەر دانراوە)</string>
     <string name="widget_customization_owghat_location">شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
     <string name="farvardin">خاکەلێوە</string>
     <string name="ordibehesht">گوڵان</string>
@@ -342,4 +342,10 @@
     <string name="show_sun_and_moon_path_in_24_hours">Show Sun and Moon path in 24 hours</string>
     <string name="country_emoji">🇮🇷🇮🇶</string>
     <string name="nepal">نپال</string>
+    <string name="nepali_calendar">ڕۆژژمێری نیپالی</string>
+    <string name="nepali_calendar_short">نیپالی</string>
+    <string name="season">وەرز</string>
+    <string name="show_secondary_calendar">ڕۆژژمێری لاوەکی نیشان بدە</string>
+    <string name="widget_prefer_system_colors">بەدواکەوتنی ڕەنگکردنی سیستەم لە ویجیتەکان</string>
+    <string name="enable_new_interface">چالاککردنی ڕووکاری نوێ</string>
 </resources>
