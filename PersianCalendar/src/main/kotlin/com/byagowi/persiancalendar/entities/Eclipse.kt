@@ -26,8 +26,8 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
 
     init {
         // AFFC, p. 32, f. 32.2
-        var k = floor((dayToYear(date) - 1900) * 12.3685)
-        k = if (next) k + eclipseCategory.rawValue * 0.5 else k - eclipseCategory.rawValue * 0.5
+        var k = floor((dayToYear(date) - 1900) * 12.3685) +
+                eclipseCategory.rawValue * if (next) .5 else -.5
 
         var eclipseFound: Boolean
         do {
