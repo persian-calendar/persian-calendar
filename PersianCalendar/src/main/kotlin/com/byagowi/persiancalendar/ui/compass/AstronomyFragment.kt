@@ -60,9 +60,9 @@ class AstronomyFragment : Fragment() {
             binding.zodiac.text = listOf(
                 date.formatDateAndTime(),
                 "☉ " + getString(R.string.sun) + spacedColon +
-                        sunMoonPosition.sunEcliptic.zodiac.format(inflater.context, true),
+                        sunMoonPosition.sunEcliptic.zodiac.format(binding.zodiac.context, true),
                 "☾ " + getString(R.string.moon) + spacedColon +
-                        sunMoonPosition.moonEcliptic.zodiac.format(inflater.context, true)
+                        sunMoonPosition.moonEcliptic.zodiac.format(binding.zodiac.context, true)
             ).joinToString("\n")
         }
         update()
