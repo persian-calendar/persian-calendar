@@ -152,8 +152,6 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
                     type = Type.SolarPartial
                     phase = (1.5432 + u - abs(gamma)) / (0.5461 + u + u)
                 }
-
-
             } else { // LUNAR ECLIPSE
                 rho = 1.2847 + u
                 sigma = 0.7494 - u
@@ -227,7 +225,7 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
     var u: Double = 0.0
         private set
 
-    // /** Eclipse visibiliy for local point */
+    // /** Eclipse visibility for local point */
     // var visibility: Int = 0
     //     private set
 
