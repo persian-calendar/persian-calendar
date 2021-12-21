@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
@@ -20,13 +19,13 @@ import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescript
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDate
+import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getSpringEquinox
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.toCivilDate
 import io.github.persiancalendar.calendar.PersianDate
-import java.util.*
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
@@ -101,16 +100,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         if (mainCalendar == chosenCalendarType && chosenCalendarType == CalendarType.SHAMSI) {
             if (date.month == 12 && date.dayOfMonth >= 20 || date.month == 1 && date.dayOfMonth == 1) {
                 val addition = if (date.month == 12) 1 else 0
-                val springEquinox = jdn.toGregorianCalendar().getSpringEquinox()
                 equinox = context.getString(
                     R.string.spring_equinox,
                     formatNumber(date.year + addition),
-                    Clock(springEquinox[Calendar.HOUR_OF_DAY], springEquinox[Calendar.MINUTE])
-                        .toFormattedString(forcedIn12 = true) + " " +
-                            formatDate(
-                                Jdn(springEquinox.toCivilDate()).toCalendar(mainCalendar),
-                                forceNonNumerical = true
-                            )
+                    jdn.toGregorianCalendar().getSpringEquinox().formatDateAndTime()
                 )
             }
         }

@@ -6,9 +6,7 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
@@ -18,18 +16,6 @@ import java.util.*
 import kotlin.math.roundToInt
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
-
-    init {
-        if (BuildConfig.DEVELOPMENT) {
-            setOnLongClickListener {
-                AlertDialog.Builder(context)
-                    .setTitle("DEVELOPMENT ONLY")
-                    .setView(SolarDemoView(context))
-                    .show()
-                true
-            }
-        }
-    }
 
     private val solarDraw = SolarDraw(context)
     private var animator: ValueAnimator? = null

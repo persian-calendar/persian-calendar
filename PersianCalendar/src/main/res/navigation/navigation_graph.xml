@@ -57,6 +57,13 @@
             app:exitAnim="@anim/nav_exit_anim"
             app:popEnterAnim="@anim/nav_enter_anim"
             app:popExitAnim="@anim/nav_exit_anim" />
+        <action
+            android:id="@+id/action_compass_to_astronomy"
+            app:destination="@id/astronomy"
+            app:enterAnim="@anim/nav_enter_anim"
+            app:exitAnim="@anim/nav_exit_anim"
+            app:popEnterAnim="@anim/nav_enter_anim"
+            app:popExitAnim="@anim/nav_exit_anim" />
     </fragment>
 
     <fragment
@@ -116,6 +123,11 @@
     <fragment
         android:id="@+id/licenses"
         android:name="com.byagowi.persiancalendar.ui.about.LicensesFragment"
+        android:label="Licenses Fragment" />
+
+    <fragment
+        android:id="@+id/astronomy"
+        android:name="com.byagowi.persiancalendar.ui.compass.AstronomyFragment"
         android:label="Licenses Fragment" />
 
 </navigation>

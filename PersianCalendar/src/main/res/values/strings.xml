@@ -345,6 +345,15 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="show_secondary_calendar">Show secondary calendar</string>
     <string name="season">Season</string>
     <string name="nepal">Nepal</string>
+    <string name="solar_eclipse">Solar eclipse</string>
+    <string name="lunar_eclipse">Lunar eclipse</string>
+    <string name="eclipse_of_type_in">%1$s of %2$s in %3$s</string>
+    <string name="summer">Summer</string>
+    <string name="fall">Fall</string>
+    <string name="winter">Winter</string>
+    <string name="spring">Spring</string>
+    <string name="sun">Sun</string>
+    <string name="moon">Moon</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

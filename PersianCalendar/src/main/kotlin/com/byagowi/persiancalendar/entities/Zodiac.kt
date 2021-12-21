@@ -1,11 +1,12 @@
 package com.byagowi.persiancalendar.entities
 
+import android.content.Context
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.cepmuvakkit.times.posAlgo.Ecliptic
 import io.github.persiancalendar.calendar.PersianDate
 
-enum class Zodiac(val emoji: String, @StringRes val title: Int) {
+enum class Zodiac(private val emoji: String, @StringRes private val title: Int) {
     ARIES("♈", R.string.aries),
     TAURUS("♉", R.string.taurus),
     GEMINI("♊", R.string.gemini),
@@ -18,6 +19,11 @@ enum class Zodiac(val emoji: String, @StringRes val title: Int) {
     CAPRICORN("♑", R.string.capricorn),
     AQUARIUS("♒", R.string.aquarius),
     PISCES("♓", R.string.pisces);
+
+    fun format(context: Context, withEmoji: Boolean) = buildString {
+        if (withEmoji) append("$emoji ")
+        append(context.getString(title))
+    }
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate) =

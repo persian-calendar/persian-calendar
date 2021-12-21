@@ -30,12 +30,12 @@ fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean
 
     if (short) return moonInScorpioText
     val sunZodiac = Zodiac.fromPersianCalendar(persianDate)
-    return "%s: %s\n%s: %s %s\n%s".format(
+    return "%s: %s\n%s: %s\n%s".format(
         context.getString(R.string.year_name),
         // TODO: Check how a negative year can be passed here
         context.getString(YEARS_NAME.getOrNull(persianDate.year % 12) ?: R.string.empty),
         context.getString(R.string.zodiac),
-        if (withEmoji) sunZodiac.emoji else "", context.getString(sunZodiac.title),
+        Zodiac.fromPersianCalendar(persianDate).format(context, withEmoji),
         moonInScorpioText
     ).trim()
 }
