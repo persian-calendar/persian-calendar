@@ -28,9 +28,9 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
 
     private fun scheduleDayChangesUpdates() {
         val remainedMillis = Calendar.getInstance().also {
-            it.set(Calendar.HOUR_OF_DAY, 0)
-            it.set(Calendar.MINUTE, 0)
-            it.set(Calendar.SECOND, 1)
+            it[Calendar.HOUR_OF_DAY] = 0
+            it[Calendar.MINUTE] = 0
+            it[Calendar.SECOND] = 1
         }.timeInMillis + DAY_IN_MILLIS - System.currentTimeMillis()
         val dayIsChangedWorker = OneTimeWorkRequest.Builder(UpdateWorker::class.java)
             .setInitialDelay(remainedMillis, TimeUnit.MILLISECONDS)

@@ -128,9 +128,9 @@ fun scheduleAlarms(context: Context) {
         scheduleAlarm(context, name, Calendar.getInstance().also {
             // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
             val alarmTime = prayTimes.getFromStringId(getPrayTimeName(name))
-            it.set(Calendar.HOUR_OF_DAY, alarmTime.hours)
-            it.set(Calendar.MINUTE, alarmTime.minutes)
-            it.set(Calendar.SECOND, 0)
+            it[Calendar.HOUR_OF_DAY] = alarmTime.hours
+            it[Calendar.MINUTE] = alarmTime.minutes
+            it[Calendar.SECOND] = 0
         }.timeInMillis - athanGap, i)
     }
 }
