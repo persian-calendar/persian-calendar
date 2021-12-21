@@ -25,6 +25,7 @@ import com.byagowi.persiancalendar.global.shiftWorkRecurs
 import com.byagowi.persiancalendar.global.shiftWorkStartingJdn
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.shiftWorks
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
@@ -202,7 +203,7 @@ private class ShiftWorkItemsAdapter(
 
         fun bind(position: Int) = if (position < rows.size) {
             val shiftWorkRecord = rows[position]
-            binding.editTextParent.prefixText = "\n%s: ".format(formatNumber(position + 1))
+            binding.editTextParent.prefixText = "\n${formatNumber(position + 1)}$spacedColon"
             binding.editTextParent.prefixTextView.textSize = 12f
             binding.lengthSpinner.setSelection(shiftWorkRecord.length)
             binding.editText.setText(shiftWorkKeyToString(shiftWorkRecord.type))

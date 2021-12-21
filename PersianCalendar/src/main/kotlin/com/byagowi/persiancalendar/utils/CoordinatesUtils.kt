@@ -2,12 +2,13 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.Context
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.spacedColon
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 import kotlin.math.abs
 
 fun formatCoordinate(context: Context, coordinates: Coordinates, separator: String) =
-    "%s: %.2f%s%s: %.7f".format(
+    "%s$spacedColon%.2f%s%s$spacedColon%.7f".format(
         Locale.getDefault(),
         context.getString(R.string.latitude), coordinates.latitude, separator,
         context.getString(R.string.longitude), coordinates.longitude

@@ -6,6 +6,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.global.isAstronomicalFeaturesEnabled
+import com.byagowi.persiancalendar.global.spacedColon
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
@@ -29,8 +30,7 @@ fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean
         context.getString(R.string.moonInScorpio) else ""
 
     if (short) return moonInScorpioText
-    val sunZodiac = Zodiac.fromPersianCalendar(persianDate)
-    return "%s: %s\n%s: %s\n%s".format(
+    return "%s$spacedColon%s\n%s$spacedColon%s\n%s".format(
         context.getString(R.string.year_name),
         // TODO: Check how a negative year can be passed here
         context.getString(YEARS_NAME.getOrNull(persianDate.year % 12) ?: R.string.empty),
