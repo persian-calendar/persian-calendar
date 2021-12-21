@@ -38,7 +38,7 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
 
             // Moon's argument of latitude
             // AFFC, p. 129
-            val F = toRadians(
+            val F = Math.toRadians(
                 to360(
                     21.2964 + 390.67050646 * k
                             - 0.0016528 * TT
@@ -59,7 +59,7 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
 
             // mean anomaly of the Sun
             // AFFC, p. 129
-            val M = toRadians(
+            val M = Math.toRadians(
                 (359.2242 + 29.10535608 * k
                         - 0.0000333 * TT
                         - 0.00000347 * TTT)
@@ -67,7 +67,7 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
 
             // mean anomaly of the Moon
             // AFFC, p. 129
-            val M_ = toRadians(
+            val M_ = Math.toRadians(
                 to360(
                     306.0253 + 385.81691806 * k
                             + 0.0107306 * TT
@@ -81,7 +81,7 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
                     + 0.0001178 * TT
                     - 0.000000155 * TTT
                     + 0.00033 *
-                    sin(toRadians(166.56 + 132.87 * T - 0.009173 * TT)))
+                    sin(Math.toRadians(166.56 + 132.87 * T - 0.009173 * TT)))
 
             // time of maximum eclipse
             timeByJulianDate += ((0.1734 - 0.000393 * T) * sin(M)
@@ -279,13 +279,10 @@ class Eclipse(date: GregorianCalendar, eclipseCategory: Category, next: Boolean)
             date[Calendar.YEAR] + date[Calendar.DAY_OF_YEAR] / 365.2425
 
         /// returns gregorian date from julian calendar date timestamp
-        private fun dateFrom(julianTime: Double) =
+        private fun dateFrom(julianTime: Double): Date =
             Date(((julianTime - 2440587.5/*JD_JAN_1_1970_0000GMT*/) * 86400000).toLong())
 
         private fun to360(angle: Double) = angle % 360.0 + if (angle < 0) 360 else 0
-
-        /// convert angle to radians
-        private fun toRadians(angle: Double) = angle * Math.PI / 180
 
         // Local visibility circumstances (lunar & solar both)
         // val VISIBILITY_NONE = 0
