@@ -23,7 +23,8 @@
                 android:id="@+id/header_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_padding" />
+                android:padding="@dimen/view_padding"
+                android:textIsSelectable="true" />
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/slider"
@@ -42,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textIsSelectable="true" />
 
         </LinearLayout>
 
