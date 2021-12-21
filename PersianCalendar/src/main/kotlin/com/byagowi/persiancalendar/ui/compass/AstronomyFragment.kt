@@ -29,29 +29,27 @@ class AstronomyFragment : Fragment() {
             it.setTitle(R.string.astronomical_info)
             it.setupUpNavigation()
         }
+
         val persianYear = Jdn.today().toPersianCalendar().year
-        binding.headerInformation.text = listOf(
-            listOf(
-                getString(R.string.solar_eclipse) to Eclipse.Category.SOLAR,
-                getString(R.string.lunar_eclipse) to Eclipse.Category.LUNAR
-            ).joinToString("\n") { (title, eclipseCategory) ->
-                val eclipse = Eclipse(GregorianCalendar(), eclipseCategory, true)
-                val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
-                val type = eclipse.type.name.replace(Regex("([a-z])([A-Z])"), "$1 $2")
-                getString(R.string.eclipse_of_type_in).format(title, type, date)
-            },
-            (1..4).map {
-                val year = CivilDate(PersianDate(persianYear, it * 3, 29)).year
-                when (it) {
-                    1 -> R.string.summer to Equinox.northernSolstice(year)
-                    2 -> R.string.fall to Equinox.southwardEquinox(year)
-                    3 -> R.string.winter to Equinox.southernSolstice(year - 1)
-                    else -> R.string.spring to Equinox.northwardEquinox(year + 1)
-                }
-            }.joinToString("\n") { (season, equinox) ->
-                getString(season) + spacedColon + equinox.toJavaCalendar().formatDateAndTime()
+        binding.headerInformation.text = (listOf(
+            R.string.solar_eclipse to Eclipse.Category.SOLAR,
+            R.string.lunar_eclipse to Eclipse.Category.LUNAR
+        ).map { (title, eclipseCategory) ->
+            val eclipse = Eclipse(GregorianCalendar(), eclipseCategory, true)
+            val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
+            val type = eclipse.type.name.replace(Regex("([a-z])([A-Z])"), "$1 $2")
+            getString(R.string.eclipse_of_type_in).format(getString(title), type, date)
+        } + (1..4).map {
+            val year = CivilDate(PersianDate(persianYear, it * 3, 29)).year
+            when (it) {
+                1 -> R.string.summer to Equinox.northernSolstice(year)
+                2 -> R.string.fall to Equinox.southwardEquinox(year)
+                3 -> R.string.winter to Equinox.southernSolstice(year - 1)
+                else -> R.string.spring to Equinox.northwardEquinox(year + 1)
             }
-        ).joinToString("\n")
+        }.map { (season, equinox) ->
+            getString(season) + spacedColon + equinox.toJavaCalendar().formatDateAndTime()
+        }).joinToString("\n")
 
         fun update() {
             val date = GregorianCalendar().also {
