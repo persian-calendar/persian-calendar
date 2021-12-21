@@ -44,7 +44,7 @@ class AstronomyFragment : Fragment() {
             when (it) {
                 1 -> R.string.summer to Equinox.northernSolstice(year)
                 2 -> R.string.fall to Equinox.southwardEquinox(year)
-                3 -> R.string.winter to Equinox.southernSolstice(year - 1)
+                3 -> R.string.winter to Equinox.southernSolstice(year)
                 else -> R.string.spring to Equinox.northwardEquinox(year + 1)
             }
         }.map { (season, equinox) ->
@@ -59,9 +59,9 @@ class AstronomyFragment : Fragment() {
             binding.solarView.sunMoonPosition = sunMoonPosition
             binding.zodiac.text = listOf(
                 date.formatDateAndTime(),
-                getString(R.string.sun) + spacedColon +
+                "☉ " + getString(R.string.sun) + spacedColon +
                         sunMoonPosition.sunEcliptic.zodiac.format(inflater.context, true),
-                getString(R.string.moon) + spacedColon +
+                "☾ " + getString(R.string.moon) + spacedColon +
                         sunMoonPosition.moonEcliptic.zodiac.format(inflater.context, true)
             ).joinToString("\n")
         }
