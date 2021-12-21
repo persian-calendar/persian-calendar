@@ -45,7 +45,7 @@ class AstronomyFragment : Fragment() {
                 1 -> R.string.summer to Equinox.northernSolstice(year)
                 2 -> R.string.fall to Equinox.southwardEquinox(year)
                 3 -> R.string.winter to Equinox.southernSolstice(year)
-                else -> R.string.spring to Equinox.northwardEquinox(year + 1)
+                else -> R.string.spring to Equinox.northwardEquinox(year)
             }
         }.map { (season, equinox) ->
             getString(season) + spacedColon + equinox.toJavaCalendar().formatDateAndTime()
@@ -53,7 +53,7 @@ class AstronomyFragment : Fragment() {
 
         fun update() {
             val date = GregorianCalendar().also {
-                it.add(Calendar.HOUR, (binding.slider.value * 24f).toInt())
+                it.add(Calendar.MINUTE, (binding.slider.value * 24 * 60).toInt())
             }
             val sunMoonPosition = date.calculateSunMoonPosition(coordinates)
             binding.solarView.sunMoonPosition = sunMoonPosition
@@ -61,7 +61,7 @@ class AstronomyFragment : Fragment() {
                 date.formatDateAndTime(),
                 "☉ " + getString(R.string.sun) + spacedColon +
                         sunMoonPosition.sunEcliptic.zodiac.format(binding.zodiac.context, true),
-                "☾ " + getString(R.string.moon) + spacedColon +
+                "☽ " + getString(R.string.moon) + spacedColon +
                         sunMoonPosition.moonEcliptic.zodiac.format(binding.zodiac.context, true)
             ).joinToString("\n")
         }
