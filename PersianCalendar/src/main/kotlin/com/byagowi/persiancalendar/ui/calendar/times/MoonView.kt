@@ -63,7 +63,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
     fun update() {
         val date = Jdn(jdn.toLong()).toJavaCalendar()
         date[Calendar.HOUR_OF_DAY] = ((jdn % 1) * 24).roundToInt().coerceIn(0, 23)
-        sunMoonPosition = coordinates?.calculateSunMoonPosition(date)
+        sunMoonPosition = date.calculateSunMoonPosition(coordinates)
         postInvalidate()
     }
 }

@@ -9,7 +9,7 @@ import kotlin.math.sin
 /**
  * @author mehmetrg
  */
-class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordinates, ΔT: Double) {
+class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordinates?, ΔT: Double) {
 
     val moonEcliptic: Ecliptic
     val sunEcliptic: Ecliptic
@@ -17,8 +17,8 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
     val moonPhase: Double
     val moonPhaseAscending: Boolean
 
-    val moonPosition: Horizontal
-    val sunPosition: Horizontal
+    val moonPosition: Horizontal?
+    val sunPosition: Horizontal?
 
     init {
         val jd = AstroLib.calculateJulianDay(time)
@@ -31,13 +31,19 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
         moonPhase = (1 - cos(e)) / 2
         moonPhaseAscending = sin(e) < 0
 
-        val moonEquatorial = LunarPosition.calculateMoonEquatorialCoordinates(moonEcliptic, jd, ΔT)
-        val sunEquatorial = SolarPosition.calculateSunEquatorialCoordinates(sunEcliptic, jd, ΔT)
+        if (observerEarthCoordinates == null) {
+            moonPosition = null
+            sunPosition = null
+        } else {
+            val moonEquatorial =
+                LunarPosition.calculateMoonEquatorialCoordinates(moonEcliptic, jd, ΔT)
+            val sunEquatorial = SolarPosition.calculateSunEquatorialCoordinates(sunEcliptic, jd, ΔT)
 
-        val longitude = observerEarthCoordinates.longitude
-        val latitude = observerEarthCoordinates.latitude
-        val elevation = observerEarthCoordinates.elevation
-        moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
-        sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
+            val longitude = observerEarthCoordinates.longitude
+            val latitude = observerEarthCoordinates.latitude
+            val elevation = observerEarthCoordinates.elevation
+            moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
+            sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
+        }
     }
 }

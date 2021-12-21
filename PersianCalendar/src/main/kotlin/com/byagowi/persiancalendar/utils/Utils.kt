@@ -23,7 +23,8 @@ fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNot
 fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalendar()) =
     PrayTimes(calculationMethod, calendar, this, asrMethod, highLatitudesMethod)
 
-fun Coordinates.calculateSunMoonPosition(time: GregorianCalendar) = SunMoonPosition(time, this, 0.0)
+fun GregorianCalendar.calculateSunMoonPosition(coordinates: Coordinates?) =
+    SunMoonPosition(this, coordinates, 0.0)
 
 val Coordinates.isSouthernHemisphere get() = latitude < .0
 

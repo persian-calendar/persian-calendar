@@ -68,9 +68,12 @@ class SolarDemoView(context: Context, attrs: AttributeSet? = null) : LinearLayou
     private val solarDraw = SolarDraw(context)
 
     private fun Canvas.drawSolarSystem(radius: Float, dayOffset: Float) {
-        val sunMoonPosition = coordinates?.calculateSunMoonPosition(
-            GregorianCalendar().also { it.add(Calendar.HOUR, (dayOffset * 24f).toInt()) }
-        ) ?: return
+        val sunMoonPosition = GregorianCalendar().also {
+            it.add(
+                Calendar.HOUR,
+                (dayOffset * 24f).toInt()
+            )
+        }.calculateSunMoonPosition(coordinates)
         val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
         val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
         val cr = radius / 8

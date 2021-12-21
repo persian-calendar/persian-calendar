@@ -85,7 +85,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var radius = 0f // radius of Compass dial
     private var r = 0f // radius of Sun and Moon
 
-    private var sunMoonPosition = coordinates?.calculateSunMoonPosition(GregorianCalendar())
+    private var sunMoonPosition = GregorianCalendar().calculateSunMoonPosition(coordinates)
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
     private var sunProgress = Clock(Calendar.getInstance()).toMinutes() / fullDay
@@ -93,7 +93,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val enableShade = false
 
     fun setTime(time: GregorianCalendar) {
-        sunMoonPosition = coordinates?.calculateSunMoonPosition(time)
+        sunMoonPosition = time.calculateSunMoonPosition(coordinates)
         sunProgress = Clock(time).toMinutes() / fullDay
         postInvalidate()
     }
@@ -180,11 +180,11 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val shadeFactor = 1.5f
 
     private fun Canvas.drawSun() {
-        val sunMoonPosition = sunMoonPosition ?: return
-        if (sunMoonPosition.sunPosition.altitude <= -10) return
-        val rotation = sunMoonPosition.sunPosition.azimuth.toFloat() - 360
+        val sunPosition = sunMoonPosition.sunPosition ?: return
+        if (sunPosition.altitude <= -10) return
+        val rotation = sunPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
-            val sunHeight = (sunMoonPosition.sunPosition.altitude.toFloat() / 90 - 1) * radius
+            val sunHeight = (sunPosition.altitude.toFloat() / 90 - 1) * radius
             val sunColor = solarDraw.sunColor(sunProgress)
             sunPaint.color = sunColor
             drawLine(cx, cy - radius, cx, cy + radius, sunPaint)
@@ -194,10 +194,10 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawMoon() {
-        val sunMoonPosition = sunMoonPosition ?: return
-        if (sunMoonPosition.moonPosition.altitude <= -5) return
-        withRotation(sunMoonPosition.moonPosition.azimuth.toFloat() - 360, cx, cy) {
-            val moonHeight = (sunMoonPosition.moonPosition.altitude.toFloat() / 90 - 1) * radius
+        val moonPosition = sunMoonPosition.moonPosition ?: return
+        if (moonPosition.altitude <= -5) return
+        withRotation(moonPosition.azimuth.toFloat() - 360, cx, cy) {
+            val moonHeight = (moonPosition.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
             if (enableShade) drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
             solarDraw.moon(this, sunMoonPosition, cx, cy + moonHeight, r * .8f)

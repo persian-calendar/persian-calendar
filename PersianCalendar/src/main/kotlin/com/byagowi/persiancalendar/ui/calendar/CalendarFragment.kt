@@ -519,7 +519,7 @@ class CalendarFragment : Fragment() {
         owghatBinding.sunView.let { sunView ->
             sunView.isVisible = if (isToday) {
                 sunView.prayTimes = prayTimes
-                sunView.sunMoonPosition = coordinates.calculateSunMoonPosition(date)
+                sunView.sunMoonPosition = date.calculateSunMoonPosition(coordinates)
                 true
             } else false
             if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()
