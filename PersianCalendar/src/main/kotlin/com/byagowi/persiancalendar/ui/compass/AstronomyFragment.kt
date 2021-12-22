@@ -54,9 +54,9 @@ class AstronomyFragment : Fragment() {
             binding.solarView.setTime(time, immediate) {
                 binding.zodiac.text = listOf(
                     time.formatDateAndTime(),
-                    /*☉*/getString(R.string.sun) + spacedColon +
+                    getString(R.string.sun) + spacedColon + // ☉
                             it.sunEcliptic.zodiac.format(binding.zodiac.context, true),
-                    /*☽*/getString(R.string.moon) + spacedColon +
+                    getString(R.string.moon) + spacedColon + // ☽
                             it.moonEcliptic.zodiac.format(binding.zodiac.context, true)
                 ).joinToString("\n")
             }
@@ -86,13 +86,12 @@ class AstronomyFragment : Fragment() {
         }
         update(0, true)
 
-        val slider = binding.slider
-        slider.setHasFixedSize(true)
-        val layoutManager = LinearLayoutManager(layoutInflater.context)
-        layoutManager.orientation = LinearLayoutManager.HORIZONTAL
         val size = 500000
-        slider.layoutManager = layoutManager
-        slider.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        binding.slider.setHasFixedSize(true)
+        binding.slider.layoutManager = LinearLayoutManager(layoutInflater.context).also {
+            it.orientation = LinearLayoutManager.HORIZONTAL
+        }
+        binding.slider.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
                 it.strokeWidth = 1.5.dp
                 it.color = 0x80808080.toInt()
@@ -112,7 +111,7 @@ class AstronomyFragment : Fragment() {
                     }
                 }) {}
         }
-        slider.scrollToPosition(size / 2)
+        binding.slider.scrollToPosition(size / 2)
 
         var offset = 0
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
@@ -135,19 +134,19 @@ class AstronomyFragment : Fragment() {
 
         val viewDirection = if (resources.isRtl) -1 else 1
 
-        var lastButtonClickTimeStamp = 0L
+        var lastButtonClickTimestamp = 0L
 
-        slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (System.currentTimeMillis() - lastButtonClickTimeStamp < 2000) return
+                if (System.currentTimeMillis() - lastButtonClickTimestamp < 2000) return
                 offset += dx * viewDirection
                 update(offset, true)
             }
         })
 
         fun buttonScrollSlider(days: Int): Boolean {
-            lastButtonClickTimeStamp = System.currentTimeMillis()
-            slider.smoothScrollBy(10 * days * viewDirection, 0)
+            lastButtonClickTimestamp = System.currentTimeMillis()
+            binding.slider.smoothScrollBy(10 * days * viewDirection, 0)
             offset -= days * 60 * 24
             update(offset, false)
             return true
