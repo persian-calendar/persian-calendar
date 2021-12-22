@@ -140,7 +140,7 @@ class AstronomyFragment : Fragment() {
         slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (System.currentTimeMillis() - lastButtonClickTimeStamp < 2000) return
-                offset += dx / 10 * viewDirection
+                offset += dx * viewDirection
                 update(offset, true)
             }
         })
