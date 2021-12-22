@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.EarthPosition
@@ -108,6 +109,13 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
+        it.textSize = 12.sp
+        it.textAlign = Paint.Align.CENTER
+    }
+    private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.color = context.resolveColor(R.attr.colorCard)
+        it.strokeWidth = 5.dp
+        it.style = Paint.Style.STROKE
         it.textSize = 12.sp
         it.textAlign = Paint.Align.CENTER
     }
@@ -215,11 +223,12 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         withRotation(qiblaHeading.heading.toFloat() - 360, cx, cy) {
             drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
-            if ((false)) {
-                drawText(
-                    "%,d km".format(Locale.ENGLISH, (qiblaHeading.metres / 1000f).roundToInt()),
-                    cx, cy - radius * .8f, textPaint
-                )
+            val textCenter = cy - radius / 2
+            withRotation(90f, cx, textCenter) {
+                val distance =
+                    "%,d km".format(Locale.ENGLISH, (qiblaHeading.metres / 1000f).roundToInt())
+                drawText(distance, cx, textCenter + 4.dp, textStrokePaint)
+                drawText(distance, cx, textCenter + 4.dp, textPaint)
             }
         }
     }
