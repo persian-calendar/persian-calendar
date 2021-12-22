@@ -49,7 +49,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         val sunMoonPosition = sunMoonPosition ?: return
         val radius = min(width, height) / 2f
         val cr = radius / 8f
-        canvas.drawCircle(radius, radius, cr / 1.5f, earthPaint)
+        solarDraw.earth(canvas, radius, radius, cr / 1.5f)
         val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
         canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -sunDegree) {
             solarDraw.sun(this, radius, radius / 6, cr)
@@ -60,9 +60,5 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }
     }
 
-    private val earthPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
-        it.color = Color.GRAY
-    }
     private val solarDraw = SolarDraw(context)
 }

@@ -45,7 +45,7 @@ class SolarDraw(context: Context) {
         }
     }
 
-    private val moonBitmap = context.getCompatDrawable(R.drawable.ic_moon).toBitmap(256, 256)
+    private val moonBitmap = context.getCompatDrawable(R.drawable.ic_moon).toBitmap(192, 192)
     private val ovalPath = Path()
     private val moonRect = RectF()
     private val moonOval = RectF()
@@ -54,6 +54,17 @@ class SolarDraw(context: Context) {
         it.color = 0x90000000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
     }
+
+    private val earthDrawable by lazy(LazyThreadSafetyMode.NONE) {
+        context.getCompatDrawable(R.drawable.ic_earth).toBitmap(128, 128)
+    }
+
+    fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float) {
+        earthRect.set(cx - r, cy - r, cx + r, cy + r)
+        canvas.drawBitmap(earthDrawable, null, earthRect, null)
+    }
+
+    private val earthRect = RectF()
 
     companion object {
         // Not used yet
