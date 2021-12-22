@@ -26,37 +26,6 @@
                 android:padding="@dimen/view_padding"
                 android:textIsSelectable="true" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/slider"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <com.byagowi.persiancalendar.ui.shared.ArrowView
-                    android:id="@+id/start_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|start"
-                    android:layout_marginStart="8dp" />
-
-                <com.byagowi.persiancalendar.ui.shared.ArrowView
-                    android:id="@+id/end_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical|end"
-                    android:layout_marginEnd="8dp" />
-
-            </FrameLayout>
-
-            <com.byagowi.persiancalendar.ui.compass.SolarView
-                android:id="@+id/solar_view"
-                android:layout_width="290dp"
-                android:layout_height="290dp"
-                android:layout_gravity="center_horizontal" />
-
             <TextView
                 android:id="@+id/zodiac"
                 android:layout_width="match_parent"
@@ -66,8 +35,42 @@
                 android:textAlignment="center"
                 android:textIsSelectable="true" />
 
+            <com.byagowi.persiancalendar.ui.compass.SolarView
+                android:id="@+id/solar_view"
+                android:layout_width="290dp"
+                android:layout_height="290dp"
+                android:layout_gravity="center_horizontal" />
+
         </LinearLayout>
 
     </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <com.byagowi.persiancalendar.ui.shared.ArrowView
+            android:id="@+id/start_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/slider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp" />
+
+        <com.byagowi.persiancalendar.ui.shared.ArrowView
+            android:id="@+id/end_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical" />
+
+    </FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
