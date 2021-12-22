@@ -18,7 +18,7 @@ import kotlin.math.min
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private var currentTime: Long = 0
+    private var currentTime = 0L
     private var sunMoonPosition: SunMoonPosition? = null
     private var animator: ValueAnimator? = null
 
@@ -32,7 +32,6 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }
         ValueAnimator.ofFloat(currentTime.toFloat(), time.timeInMillis.toFloat()).also {
             animator = it
-            it
             it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
             it.interpolator = AccelerateDecelerateInterpolator()
             val date = GregorianCalendar()

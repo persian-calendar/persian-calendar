@@ -135,18 +135,18 @@ class AstronomyFragment : Fragment() {
 
         val viewDirection = if (resources.isRtl) -1 else 1
 
-        var disableSliderUpdates = false
+        var lastButtonClickTimeStamp = 0L
+
         slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (disableSliderUpdates) return
+                if (System.currentTimeMillis() - lastButtonClickTimeStamp < 2000) return
                 offset += dx / 10 * viewDirection
                 update(offset, true)
             }
         })
 
         fun buttonScrollSlider(days: Int): Boolean {
-            disableSliderUpdates = true
-            binding.root.postDelayed({ disableSliderUpdates = false }, 1000)
+            lastButtonClickTimeStamp = System.currentTimeMillis()
             slider.smoothScrollBy(10 * days * viewDirection, 0)
             offset -= days * 60 * 24
             update(offset, false)
