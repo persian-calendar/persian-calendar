@@ -101,6 +101,11 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     val qiblaHeading = coordinates?.run {
         EarthPosition(latitude, longitude).toEarthHeading(EarthPosition(21.422522, 39.826181))
     }
+    var isShowQibla = true
+        set(value) {
+            field = value
+            postInvalidate()
+        }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
         it.textSize = 12.sp
@@ -205,6 +210,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawQibla() {
+        if (!isShowQibla) return
         val qiblaHeading = qiblaHeading ?: return
         withRotation(qiblaHeading.heading.toFloat() - 360, cx, cy) {
             drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)

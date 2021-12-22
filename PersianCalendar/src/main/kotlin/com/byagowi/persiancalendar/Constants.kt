@@ -60,6 +60,7 @@ const val PREF_SHIFT_WORK_RECURS = "ShiftWorkRecurs"
 const val PREF_DISABLE_OWGHAT = "DisableOwghat"
 const val PREF_HAS_EVER_VISITED = "PreferenceIsVisitedOnce"
 const val PREF_LAST_APP_VISIT_VERSION = "LastAppVisitVersion"
+const val PREF_SHOW_QIBLA_IN_COMPASS = "showQibla"
 
 const val CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE"
 

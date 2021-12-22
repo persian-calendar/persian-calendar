@@ -13,12 +13,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
@@ -194,6 +196,21 @@ class CompassFragment : Fragment() {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
                 findNavController().navigateSafe(CompassFragmentDirections.actionCompassToAstronomy())
+            }
+        }
+        if (coordinates != null) {
+            binding.appBar.toolbar.menu.add(R.string.qibla).also { menu ->
+                val prefs = binding.root.context.appPrefs
+                binding.compassView.isShowQibla = prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
+                menu.isCheckable = true
+                menu.isChecked = binding.compassView.isShowQibla
+                menu.onClick {
+                    binding.compassView.isShowQibla = !binding.compassView.isShowQibla
+                    menu.isChecked = binding.compassView.isShowQibla
+                    prefs.edit {
+                        putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, binding.compassView.isShowQibla)
+                    }
+                }
             }
         }
 
