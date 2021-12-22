@@ -31,7 +31,8 @@ class ConverterFragment : Fragment() {
         val todayJdn = Jdn.today()
 
         val todayButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
-            it.icon = inflater.context.getCompatDrawable(R.drawable.ic_restore_modified)
+            it.icon =
+                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.isVisible = false
             it.onClick { binding.dayPickerView.jdn = todayJdn }
