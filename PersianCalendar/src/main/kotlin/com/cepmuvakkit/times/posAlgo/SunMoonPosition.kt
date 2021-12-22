@@ -1,6 +1,5 @@
 package com.cepmuvakkit.times.posAlgo
 
-import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 import kotlin.math.cos

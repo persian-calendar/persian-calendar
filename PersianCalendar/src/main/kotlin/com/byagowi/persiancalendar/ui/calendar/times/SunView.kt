@@ -13,7 +13,6 @@ import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.withClip
-import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock

@@ -9,7 +9,6 @@ import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
-import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -18,13 +17,11 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
-import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getSpringEquinox
 import com.byagowi.persiancalendar.utils.getZodiacInfo
-import com.byagowi.persiancalendar.utils.toCivilDate
 import io.github.persiancalendar.calendar.PersianDate
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
