@@ -31,7 +31,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 
 class AstronomyFragment : Fragment() {
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -48,7 +47,8 @@ class AstronomyFragment : Fragment() {
             it.isVisible = false
         }
 
-        fun update(offset: Int, immediate: Boolean) {
+        var offset = 0
+        fun update(immediate: Boolean) {
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }
             resetButton.isVisible = offset != 0
             binding.solarView.setTime(time, immediate) {
@@ -84,7 +84,7 @@ class AstronomyFragment : Fragment() {
                 getString(season) + spacedColon + equinox.toJavaCalendar().formatDateAndTime()
             }).joinToString("\n")
         }
-        update(0, true)
+        update(true)
 
         val size = 500000
         binding.slider.setHasFixedSize(true)
@@ -113,7 +113,6 @@ class AstronomyFragment : Fragment() {
         }
         binding.slider.scrollToPosition(size / 2)
 
-        var offset = 0
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
@@ -121,7 +120,7 @@ class AstronomyFragment : Fragment() {
                     Jdn(GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }.toCivilDate())
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
                     offset = (jdn - Jdn.today()) * 60 * 24
-                    update(offset, false)
+                    update(false)
                 }
             }
         }
@@ -129,7 +128,7 @@ class AstronomyFragment : Fragment() {
         resetButton.onClick {
             offset = 0
             resetButton.isVisible = false
-            update(offset, false)
+            update(false)
         }
 
         val viewDirection = if (resources.isRtl) -1 else 1
@@ -140,7 +139,7 @@ class AstronomyFragment : Fragment() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (System.currentTimeMillis() - lastButtonClickTimestamp < 2000) return
                 offset += dx * viewDirection
-                update(offset, true)
+                update(true)
             }
         })
 
@@ -148,7 +147,7 @@ class AstronomyFragment : Fragment() {
             lastButtonClickTimestamp = System.currentTimeMillis()
             binding.slider.smoothScrollBy(10 * days * viewDirection, 0)
             offset -= days * 60 * 24
-            update(offset, false)
+            update(false)
             return true
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
