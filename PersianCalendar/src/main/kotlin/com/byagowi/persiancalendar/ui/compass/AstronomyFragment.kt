@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -47,7 +48,9 @@ class AstronomyFragment : Fragment() {
             it.isVisible = false
         }
 
-        var offset = 0
+        val args by navArgs<AstronomyFragmentArgs>()
+        val minutesInDay = 60 * 24
+        var offset = args.dayOffset * minutesInDay
         fun update(immediate: Boolean) {
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }
             resetButton.isVisible = offset != 0
@@ -119,7 +122,7 @@ class AstronomyFragment : Fragment() {
                 val startJdn =
                     Jdn(GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }.toCivilDate())
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
-                    offset = (jdn - Jdn.today()) * 60 * 24
+                    offset = (jdn - Jdn.today()) * minutesInDay
                     update(false)
                 }
             }
@@ -146,7 +149,7 @@ class AstronomyFragment : Fragment() {
         fun buttonScrollSlider(days: Int): Boolean {
             lastButtonClickTimestamp = System.currentTimeMillis()
             binding.slider.smoothScrollBy(50 * days * viewDirection, 0)
-            offset += days * 60 * 24
+            offset += days * minutesInDay
             update(false)
             return true
         }

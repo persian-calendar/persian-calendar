@@ -62,7 +62,7 @@ class PreferencesFragment : Fragment() {
             setupDevelopmentMenu(toolbar, binding, inflater)
         }
 
-        val args: PreferencesFragmentArgs by navArgs()
+        val args by navArgs<PreferencesFragmentArgs>()
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = tabs.size
             override fun createFragment(position: Int) = tabs[position].first().also {

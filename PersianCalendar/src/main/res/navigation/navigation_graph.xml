@@ -43,7 +43,12 @@
             app:enterAnim="@anim/nav_enter_anim"
             app:exitAnim="@anim/nav_exit_anim"
             app:popEnterAnim="@anim/nav_enter_anim"
-            app:popExitAnim="@anim/nav_exit_anim" />
+            app:popExitAnim="@anim/nav_exit_anim">
+            <argument
+                android:name="day_offset"
+                android:defaultValue="0"
+                app:argType="integer" />
+        </action>
     </fragment>
 
     <fragment
@@ -135,6 +140,11 @@
     <fragment
         android:id="@+id/astronomy"
         android:name="com.byagowi.persiancalendar.ui.compass.AstronomyFragment"
-        android:label="Licenses Fragment" />
+        android:label="Licenses Fragment">
+        <argument
+            android:name="day_offset"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

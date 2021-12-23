@@ -7,25 +7,15 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.isVisible
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import java.util.*
 import kotlin.math.roundToInt
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
-
-    init {
-        setOnClickListener {
-            findNavController().navigateSafe(CalendarFragmentDirections.actionCalendarToAstronomy())
-        }
-    }
 
     private val solarDraw = SolarDraw(context)
     private var animator: ValueAnimator? = null

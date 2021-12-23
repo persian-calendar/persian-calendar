@@ -515,6 +515,11 @@ class CalendarFragment : Fragment() {
         val prayTimes = coordinates.calculatePrayTimes(date)
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.moonView.isVisible = !isToday
+        owghatBinding.moonView.setOnClickListener {
+            findNavController().navigateSafe(
+                CalendarFragmentDirections.actionCalendarToAstronomy(jdn - Jdn.today())
+            )
+        }
         if (!isToday) owghatBinding.moonView.jdn = jdn.value.toFloat()
         owghatBinding.sunView.let { sunView ->
             sunView.isVisible = if (isToday) {
