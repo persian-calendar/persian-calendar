@@ -344,4 +344,13 @@
     <string name="show_secondary_calendar">Afficher le calendrier secondaire</string>
     <string name="season">Saison</string>
     <string name="nepal">Nepal</string>
+    <string name="solar_eclipse">Éclipse solaire</string>
+    <string name="lunar_eclipse">Éclipse lunaire</string>
+    <string name="fall">Automne</string>
+    <string name="winter">Hiver</string>
+    <string name="moon">Lune</string>
+    <string name="spring">Printemps</string>
+    <string name="sun">Soleil</string>
+    <string name="summer">Été</string>
+    <string name="eclipse_of_type_in">%1$s de %2$s dans %3$s</string>
 </resources>
