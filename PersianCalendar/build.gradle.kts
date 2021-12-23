@@ -190,7 +190,7 @@ dependencies {
 
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
