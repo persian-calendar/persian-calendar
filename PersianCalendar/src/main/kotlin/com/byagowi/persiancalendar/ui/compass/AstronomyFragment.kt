@@ -145,17 +145,17 @@ class AstronomyFragment : Fragment() {
 
         fun buttonScrollSlider(days: Int): Boolean {
             lastButtonClickTimestamp = System.currentTimeMillis()
-            binding.slider.smoothScrollBy(10 * days * viewDirection, 0)
-            offset -= days * 60 * 24
+            binding.slider.smoothScrollBy(50 * days * viewDirection, 0)
+            offset += days * 60 * 24
             update(false)
             return true
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
-        binding.startArrow.setOnClickListener { buttonScrollSlider(1) }
-        binding.startArrow.setOnLongClickListener { buttonScrollSlider(365) }
+        binding.startArrow.setOnClickListener { buttonScrollSlider(-1) }
+        binding.startArrow.setOnLongClickListener { buttonScrollSlider(-365) }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
-        binding.endArrow.setOnClickListener { buttonScrollSlider(-1) }
-        binding.endArrow.setOnLongClickListener { buttonScrollSlider(-365) }
+        binding.endArrow.setOnClickListener { buttonScrollSlider(1) }
+        binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
 
         return binding.root
     }
