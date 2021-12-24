@@ -1,11 +1,12 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
@@ -48,7 +49,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         super.onDraw(canvas ?: return)
         val sunMoonPosition = sunMoonPosition ?: return
         val radius = min(width, height) / 2f
-        val cr = radius / 8f
+        val cr = scaleFactor * radius / 8f
         solarDraw.earth(canvas, radius, radius, cr / 1.5f)
         val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
         canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -sunDegree) {
@@ -58,6 +59,23 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -moonDegree) {
             solarDraw.moon(this, sunMoonPosition, radius, radius / 1.7f, cr / 1.9f)
         }
+    }
+
+    private var scaleFactor = 1f
+    private val scaleGestureDetector = ScaleGestureDetector(
+        context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector?): Boolean {
+                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.7f, 1.5f)
+                postInvalidate()
+                return true
+            }
+        }
+    )
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        scaleGestureDetector.onTouchEvent(event)
+        return true
     }
 
     private val solarDraw = SolarDraw(context)
