@@ -28,7 +28,8 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
                 update()
                 return
             }
-            ValueAnimator.ofFloat(field.coerceIn(value - 30f, value + 30f), value).also {
+            val from = if (field == value) value - 29f else field.coerceIn(value - 30f, value + 30f)
+            ValueAnimator.ofFloat(from, value).also {
                 animator = it
                 it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
                 it.interpolator = AccelerateDecelerateInterpolator()
