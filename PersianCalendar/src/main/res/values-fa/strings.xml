@@ -347,7 +347,7 @@
     <string name="show_secondary_calendar">نمایش تقویم ثانویه</string>
     <string name="season">فصل</string>
     <string name="nepal">نپال</string>
-    <string name="solar_eclipse">خورشیدگرفتی</string>
+    <string name="solar_eclipse">خورشیدگرفتگی</string>
     <string name="lunar_eclipse">ماه‌گرفتگی</string>
     <string name="eclipse_of_type_in">%1$s از نوع %2$s در %3$s</string>
     <string name="summer">تابستان</string>
