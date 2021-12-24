@@ -52,28 +52,18 @@ class SliderView(context: Context, attrs: AttributeSet? = null) :
         it.color = context.resolveColor(com.google.android.material.R.attr.colorAccent)
     }
 
-    private var lines = FloatArray(8) { 0f }
     private val space = 10.dp
-
     override fun onDraw(canvas: Canvas?) {
         canvas ?: return
-        lines[1] = 0f
-        lines[3] = height / 2f
-        lines[5] = height / 2f
-        lines[7] = height.toFloat()
         val linesCount = width / space.toInt()
         (0..linesCount).forEachIndexed { index, it ->
             val x = it * space + positionOffset % space
-            val centrality = (index - linesCount / 2f) / linesCount
-            paint.alpha = ((1 - sqrt(abs(centrality))) * 255).toInt()
-            val indentX = x + 80 * centrality
-            if (indentX >= 0 && indentX <= width) {
-                lines[0] = x
-                lines[2] = indentX
-                lines[4] = indentX
-                lines[6] = x
-                canvas.drawLines(lines, paint)
-            }
+            val deviation = (index - linesCount / 2f) / linesCount
+            paint.alpha = ((1 - sqrt(abs(deviation))) * 255).toInt()
+            val indentX = x + 80 * deviation
+            if (indentX < 0 || indentX > width) return@forEachIndexed
+            canvas.drawLine(x, 0f, indentX, height / 2f, paint)
+            canvas.drawLine(indentX, height / 2f, x, height.toFloat(), paint)
         }
     }
 }
