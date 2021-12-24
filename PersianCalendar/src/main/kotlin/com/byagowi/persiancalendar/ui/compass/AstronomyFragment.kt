@@ -1,7 +1,5 @@
 package com.byagowi.persiancalendar.ui.compass
 
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -9,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
@@ -17,7 +14,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
@@ -88,33 +84,6 @@ class AstronomyFragment : Fragment() {
             }).joinToString("\n")
         }
         update(true)
-
-        val size = 500000
-        binding.slider.setHasFixedSize(true)
-        binding.slider.layoutManager = LinearLayoutManager(layoutInflater.context).also {
-            it.orientation = LinearLayoutManager.HORIZONTAL
-        }
-        binding.slider.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-            private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-                it.strokeWidth = 1.5.dp
-                it.color = 0x80808080.toInt()
-            }
-            private val commonLayoutParams = ViewGroup.LayoutParams(10.dp.toInt(), 45.dp.toInt())
-
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) = Unit
-            override fun getItemCount() = size
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                object : RecyclerView.ViewHolder(object : View(parent.context) {
-                    init {
-                        layoutParams = commonLayoutParams
-                    }
-
-                    override fun onDraw(canvas: Canvas?) {
-                        canvas?.drawLine(width / 2f, 0f, width / 2f, height / 1f, paint)
-                    }
-                }) {}
-        }
-        binding.slider.scrollToPosition(size / 2)
 
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)

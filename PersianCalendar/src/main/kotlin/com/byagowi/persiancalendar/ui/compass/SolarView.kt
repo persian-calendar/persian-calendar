@@ -10,6 +10,7 @@ import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
+import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
@@ -49,15 +50,17 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         super.onDraw(canvas ?: return)
         val sunMoonPosition = sunMoonPosition ?: return
         val radius = min(width, height) / 2f
-        val cr = scaleFactor * radius / 8f
-        solarDraw.earth(canvas, radius, radius, cr / 1.5f)
-        val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
-        canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -sunDegree) {
-            solarDraw.sun(this, radius, radius / 6, cr)
-        }
-        val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
-        canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -moonDegree) {
-            solarDraw.moon(this, sunMoonPosition, radius, radius / 1.7f, cr / 1.9f)
+        canvas.withScale(x = scaleFactor, y = scaleFactor, pivotX = radius, pivotY = radius) {
+            val cr = radius / 8f
+            solarDraw.earth(canvas, radius, radius, cr / 1.5f)
+            val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
+            canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -sunDegree) {
+                solarDraw.sun(this, radius, radius / 6, cr)
+            }
+            val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
+            canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -moonDegree) {
+                solarDraw.moon(this, sunMoonPosition, radius, radius / 1.7f, cr / 1.9f)
+            }
         }
     }
 
@@ -65,7 +68,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val scaleGestureDetector = ScaleGestureDetector(
         context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
             override fun onScale(detector: ScaleGestureDetector?): Boolean {
-                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.7f, 1.5f)
+                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.9f, 1.1f)
                 postInvalidate()
                 return true
             }
