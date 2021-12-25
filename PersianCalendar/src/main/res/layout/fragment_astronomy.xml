@@ -45,34 +45,47 @@
 
     </ScrollView>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
-        <com.byagowi.persiancalendar.ui.shared.ArrowView
-            android:id="@+id/start_arrow"
+        <TextView
+            android:id="@+id/time"
+            android:layout_marginBottom="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            app:tint="?attr/colorAccent" />
+            android:layout_gravity="center_horizontal" />
 
-        <com.byagowi.persiancalendar.ui.compass.SliderView
-            android:id="@+id/slider"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginStart="32dp"
-            android:layout_marginEnd="32dp" />
+            android:layout_height="wrap_content">
 
-        <com.byagowi.persiancalendar.ui.shared.ArrowView
-            android:id="@+id/end_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            app:tint="?attr/colorAccent" />
+            <com.byagowi.persiancalendar.ui.shared.ArrowView
+                android:id="@+id/start_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                app:tint="?attr/colorAccent" />
 
-    </FrameLayout>
+            <com.byagowi.persiancalendar.ui.compass.SliderView
+                android:id="@+id/slider"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp" />
+
+            <com.byagowi.persiancalendar.ui.shared.ArrowView
+                android:id="@+id/end_arrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                app:tint="?attr/colorAccent" />
+
+        </FrameLayout>
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

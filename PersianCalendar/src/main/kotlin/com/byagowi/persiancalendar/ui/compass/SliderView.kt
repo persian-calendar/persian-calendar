@@ -60,7 +60,7 @@ class SliderView(context: Context, attrs: AttributeSet? = null) :
             val x = it * space + positionOffset % space
             val deviation = (index - linesCount / 2f) / linesCount
             paint.alpha = ((1 - sqrt(abs(deviation))) * 255).toInt()
-            val indentX = x + 80 * deviation
+            val indentX = x // + 80 * deviation.pow(5)
             if (indentX < 0 || indentX > width) return@forEachIndexed
             canvas.drawLine(x, 0f, indentX, height / 2f, paint)
             canvas.drawLine(indentX, height / 2f, x, height.toFloat(), paint)
