@@ -11,6 +11,7 @@ import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -22,6 +23,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.view.GravityCompat
+import androidx.core.view.get
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -55,6 +57,7 @@ import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enableNewInterface
 import com.byagowi.persiancalendar.global.initGlobal
+import com.byagowi.persiancalendar.global.isAstronomicalFeaturesEnabled
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.language
@@ -101,6 +104,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private val onBackPressedCloseDrawerCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = binding.root.closeDrawer(GravityCompat.START)
     }
+
+    private val exitId = View.generateViewId()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
@@ -159,6 +164,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
 
+        listOf(
+            Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
+            Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
+            Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
+            Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
+            Triple(R.id.about, R.drawable.ic_info, R.string.about),
+            Triple(exitId, R.drawable.ic_cancel, R.string.exit)
+        ).forEach { (id, icon, title) ->
+            binding.navigation.menu.add(Menu.NONE, id, Menu.NONE, title).setIcon(icon)
+            // if (id == R.id.compass && isAstronomicalFeaturesEnabled) binding.navigation.menu.add(
+            //     Menu.NONE, R.id.astronomy, Menu.NONE, R.string.astronomical_info
+            // ).setIcon(R.drawable.ic_astrology_horoscope)
+        }
+        binding.navigation.menu[0].also { it.isCheckable = true; it.isChecked = true }
         binding.navigation.setNavigationItemSelectedListener(this)
 
         val today = Jdn.today()
@@ -348,7 +367,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onNavigationItemSelected(selectedMenuItem: MenuItem): Boolean {
         when (val itemId = selectedMenuItem.itemId) {
-            R.id.exit -> finish()
+            exitId -> finish()
             else -> {
                 binding.root.closeDrawer(GravityCompat.START)
                 if (navHostFragment?.navController?.currentDestination?.id != itemId) {

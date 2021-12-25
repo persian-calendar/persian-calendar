@@ -23,7 +23,6 @@
         android:background="?attr/colorDrawerBackground"
         app:headerLayout="@layout/navigation_header"
         app:itemIconTint="?attr/colorDrawerIcon"
-        app:itemTextColor="?attr/colorTextNormal"
-        app:menu="@menu/navigation_items" />
+        app:itemTextColor="?attr/colorTextNormal" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
