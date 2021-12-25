@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             "COMPASS" -> R.id.compass
             "LEVEL" -> R.id.level
             "CONVERTER" -> R.id.converter
+            "ASTRONOMY" -> R.id.astronomy
             "SETTINGS" -> R.id.settings
             "DEVICE" -> R.id.deviceInformation
             else -> null // unsupported action. ignore

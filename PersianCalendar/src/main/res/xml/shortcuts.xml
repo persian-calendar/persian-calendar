@@ -45,4 +45,18 @@
 
     </shortcut>
 
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/sc_astrology_horoscope"
+        android:shortcutId="ASTRONOMY"
+        android:shortcutLongLabel="@string/astronomical_info"
+        android:shortcutShortLabel="@string/astronomical_info">
+
+        <intent
+            android:action="ASTRONOMY"
+            android:targetClass="com.byagowi.persiancalendar.ui.MainActivity"
+            android:targetPackage="com.byagowi.persiancalendar" />
+
+    </shortcut>
+
 </shortcuts>
