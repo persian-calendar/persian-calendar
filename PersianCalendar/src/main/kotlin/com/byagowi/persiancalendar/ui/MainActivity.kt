@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
             Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
             Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
-            Triple(R.id.astronomy, R.drawable.ic_sunny, R.string.astronomical_info),
+            Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomical_info),
             Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
             Triple(R.id.about, R.drawable.ic_info, R.string.about),
             Triple(exitId, R.drawable.ic_cancel, R.string.exit)

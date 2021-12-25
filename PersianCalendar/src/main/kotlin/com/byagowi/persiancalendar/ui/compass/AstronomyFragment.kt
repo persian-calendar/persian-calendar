@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.Eclipse
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -34,7 +35,7 @@ class AstronomyFragment : Fragment() {
         val binding = FragmentAstronomyBinding.inflate(layoutInflater)
         binding.appBar.toolbar.let {
             it.setTitle(R.string.astronomical_info)
-            it.setupUpNavigation()
+            it.setupMenuNavigation()
         }
 
         val resetButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
