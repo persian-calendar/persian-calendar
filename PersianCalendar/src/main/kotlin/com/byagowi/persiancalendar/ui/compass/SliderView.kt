@@ -48,7 +48,7 @@ class SliderView(context: Context, attrs: AttributeSet? = null) :
     }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.strokeWidth = 3.dp
+        it.strokeWidth = 2.dp
         it.color = context.resolveColor(com.google.android.material.R.attr.colorAccent)
     }
 
