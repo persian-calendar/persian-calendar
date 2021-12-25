@@ -99,7 +99,7 @@
     <string name="week_of_year_summary">Afficher la semaine de l’année sur le calendrier</string>
     <string name="week_of_year">Semaine de l’année</string>
     <string name="astronomical_info_summary">Afficher des informations supplémentaires comme les constellations, les anciens noms des années et la Lune en scorpion</string>
-    <string name="astronomical_info">Informations astronomiques</string>
+    <string name="astronomical_info">Astronomiques</string>
     <string name="calendars_priority_summary">Paramétrer les calendriers pour les afficher en priorité ou les masquer</string>
     <string name="calendars_priority">Priorité des calendriers</string>
     <string name="show_device_calendar_events_summary">Afficher les évènements du calendrier personnel</string>
