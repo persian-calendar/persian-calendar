@@ -143,6 +143,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         binding.root.addDrawerListener(createDrawerListener())
 
+        listOf(
+            Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
+            Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
+            Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
+            Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomical_info),
+            Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
+            Triple(R.id.about, R.drawable.ic_info, R.string.about),
+            Triple(exitId, R.drawable.ic_cancel, R.string.exit)
+        ).forEach { (id, icon, title) ->
+            if (id == R.id.astronomy && !isAstronomicalFeaturesEnabled) return@forEach
+            binding.navigation.menu.add(Menu.NONE, id, Menu.NONE, title).setIcon(icon)
+        }
+        binding.navigation.setNavigationItemSelectedListener(this)
+
         navHostFragment?.navController?.addOnDestinationChangedListener(this)
         when (intent?.action) {
             "COMPASS" -> R.id.compass
@@ -164,21 +178,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 this, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
-
-        listOf(
-            Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
-            Triple(R.id.converter, R.drawable.ic_swap_vertical_circle, R.string.date_converter),
-            Triple(R.id.compass, R.drawable.ic_explore, R.string.compass),
-            Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomical_info),
-            Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
-            Triple(R.id.about, R.drawable.ic_info, R.string.about),
-            Triple(exitId, R.drawable.ic_cancel, R.string.exit)
-        ).forEach { (id, icon, title) ->
-            if (id == R.id.astronomy && !isAstronomicalFeaturesEnabled) return@forEach
-            binding.navigation.menu.add(Menu.NONE, id, Menu.NONE, title).setIcon(icon)
-        }
-        binding.navigation.menu[0].also { it.isCheckable = true; it.isChecked = true }
-        binding.navigation.setNavigationItemSelectedListener(this)
 
         val today = Jdn.today()
         creationDateJdn = today
