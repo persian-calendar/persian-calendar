@@ -118,7 +118,7 @@
     <string name="show_device_calendar_events_summary">Show personal calendar events</string>
     <string name="calendars_priority">Calendars Priority</string>
     <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
-    <string name="astronomical_info">Astronomical Information</string>
+    <string name="astronomical_info">Astronomy</string>
     <string name="astronomical_info_summary">"Show additional information like constellation, ancient names of years and moon in scorpio"</string>
     <string name="week_of_year">Week of Year</string>
     <string name="week_of_year_summary">Show week of year on calendar</string>
