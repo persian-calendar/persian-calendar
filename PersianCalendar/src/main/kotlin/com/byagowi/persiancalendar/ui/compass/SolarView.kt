@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -11,8 +12,11 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
+import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.isAstronomicalFeaturesEnabled
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import java.util.*
@@ -46,22 +50,38 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }.start()
     }
 
+    private val labels = Zodiac.values().map { it.format(context, false, short = true) }
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas ?: return)
         val sunMoonPosition = sunMoonPosition ?: return
         val radius = min(width, height) / 2f
         canvas.withScale(x = scaleFactor, y = scaleFactor, pivotX = radius, pivotY = radius) {
+            if (isAstronomicalFeaturesEnabled) Zodiac.values().forEachIndexed { index, zodiac ->
+                canvas.withRotation(-zodiac.endOfRange.toFloat() + 90f, radius, radius) {
+                    drawLine(radius, 0f, radius, radius * .05f, degreesPaint)
+                }
+                canvas.withRotation(-zodiac.centerOfRange.toFloat() + 90f, radius, radius) {
+                    drawText(labels[index], radius, radius * .05f, degreesPaint)
+                }
+            }
             val cr = radius / 8f
             solarDraw.earth(canvas, radius, radius, cr / 1.5f)
             val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
-            canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -sunDegree) {
-                solarDraw.sun(this, radius, radius / 6, cr)
+            canvas.withRotation(-sunDegree + 90f, radius, radius) {
+                solarDraw.sun(this, radius, radius / 5f, cr)
             }
             val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
-            canvas.withRotation(pivotX = radius, pivotY = radius, degrees = -moonDegree) {
-                solarDraw.moon(this, sunMoonPosition, radius, radius / 1.7f, cr / 1.9f)
+            canvas.withRotation(-moonDegree + 90f, radius, radius) {
+                solarDraw.moon(this, sunMoonPosition, radius, radius / 1.6f, cr / 1.9f)
             }
         }
+    }
+
+    private val degreesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0xFF808080.toInt()
+        it.strokeWidth = 1.dp
+        it.textSize = 10.dp
+        it.textAlign = Paint.Align.CENTER
     }
 
     private var scaleFactor = 1f

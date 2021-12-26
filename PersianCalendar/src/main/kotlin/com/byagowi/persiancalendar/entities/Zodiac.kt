@@ -23,9 +23,10 @@ enum class Zodiac(
     AQUARIUS(311.72, "♒", R.string.aquarius),
     PISCES(348.58, "♓", R.string.pisces);
 
-    fun format(context: Context, withEmoji: Boolean) = buildString {
+    fun format(context: Context, withEmoji: Boolean, short: Boolean = false) = buildString {
         if (withEmoji && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) append("$emoji ")
-        append(context.getString(title))
+        val result = context.getString(title)
+        append(if (short) result.split(" (")[0] else result)
     }
 
     val centerOfRange
