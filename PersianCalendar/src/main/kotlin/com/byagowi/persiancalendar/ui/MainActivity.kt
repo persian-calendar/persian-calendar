@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener,
     DrawerHost {
 
-    private var creationDateJdn: Jdn? = null
+    private var creationDateJdn = Jdn.today()
     private var settingHasChanged = false
     private lateinit var binding: ActivityMainBinding
 
@@ -175,12 +175,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
 
-        val today = Jdn.today()
-        creationDateJdn = today
-
+        val persian = creationDateJdn.toPersianCalendar()
         run {
             val drawerHeader = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-            val persian = today.toPersianCalendar()
             var season = (persian.month - 1) / 3
 
             // Southern hemisphere
@@ -202,7 +199,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-            today.toPersianCalendar().year > supportedYearOfIranCalendar
+            persian.year > supportedYearOfIranCalendar
         ) showAppIsOutDatedSnackbar()
 
         applyAppLanguage(this)
