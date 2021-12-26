@@ -210,6 +210,7 @@ dependencies {
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
 
     testImplementation("junit:junit:4.13.2")
+    testImplementation("com.google.truth:truth:1.1.3")
     // Scratch.kt only dependencies
     // testImplementation("com.squareup.okhttp3:okhttp:3.10.0")
     // testImplementation("org.json:json:20210307")

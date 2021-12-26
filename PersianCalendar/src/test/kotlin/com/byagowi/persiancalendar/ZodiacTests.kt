@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.cepmuvakkit.times.posAlgo.Ecliptic
+import com.google.common.truth.Truth.assertThat
 import io.github.persiancalendar.calendar.PersianDate
 import junit.framework.Assert.assertEquals
 import org.junit.Test
@@ -34,5 +35,15 @@ class ZodiacTests {
         assertEquals(Zodiac.AQUARIUS, Zodiac.fromEcliptic(Ecliptic(310.0, .0, .0)))
         assertEquals(Zodiac.PISCES, Zodiac.fromEcliptic(Ecliptic(320.0, .0, .0)))
         assertEquals(Zodiac.ARIES, Zodiac.fromEcliptic(Ecliptic(350.0, .0, .0)))
+    }
+
+    @Test
+    fun `Zodiac center of range`() {
+        listOf(
+            10.88, 42.17, 72.3, 106.46, 127.39, 154.32,
+            198.755, 233.37, 256.915, 286.875, 307.105, 330.15
+        ).zip(Zodiac.values()) { centerOfZodiac, zodiac ->
+            assertThat(zodiac.centerOfRange).isWithin(1.0e-10).of(centerOfZodiac)
+        }
     }
 }

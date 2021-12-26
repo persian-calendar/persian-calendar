@@ -28,6 +28,10 @@ enum class Zodiac(
         append(context.getString(title))
     }
 
+    val centerOfRange
+        get() = (((values().getOrNull(ordinal - 1)?.endOfRange) ?: PISCES.endOfRange - 360) +
+                endOfRange) / 2
+
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate) =
             values().getOrNull(persianDate.month - 1) ?: ARIES
