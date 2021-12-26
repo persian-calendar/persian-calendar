@@ -92,6 +92,9 @@
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="dialogBackgroundColor">#70606060</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">
+            @android:color/transparent
+        </item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
@@ -112,6 +115,9 @@
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="dialogBackgroundColor">#C0FFFFFF</item>
+        <item name="android:statusBarColor" tools:targetApi="lollipop">
+            @android:color/transparent
+        </item>
     </style>
 
     <!-- Their actual definition is in v31/styles.xml -->
