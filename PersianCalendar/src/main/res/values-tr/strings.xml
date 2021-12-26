@@ -90,15 +90,15 @@
     <string name="preview">Önizleme</string>
     <plurals name="n_days">
         <item quantity="one">%1$s yıl</item>
-        <item quantity="other">%1$s yıl</item>
+        <item quantity="other">%1$s yıllar</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s ay</item>
-        <item quantity="other">%1$s ay</item>
+        <item quantity="other">%1$s aylar</item>
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s gün</item>
-        <item quantity="other">%1$s gün</item>
+        <item quantity="other">%1$s günler</item>
     </plurals>
     <string name="age_widget_title">Widget Başlığı</string>
     <string name="select_date">Tarih seçiniz</string>
@@ -116,8 +116,8 @@
     <string name="am">ÖÖ</string>
     <string name="recurs">Tekrarlar</string>
     <plurals name="shift_work_record_title">
-        <item quantity="one">%1$s gün %2$s</item>
-        <item quantity="other">%1$s gün %2$s</item>
+        <item quantity="one">%1$s %2$s gün</item>
+        <item quantity="other">%1$s %2$s günler</item>
     </plurals>
     <string name="n_till">%2$s \'na %1$s var</string>
     <string name="center_align_widgets">Widget\'ları ortaya hizalayın</string>
@@ -128,11 +128,11 @@
     <string name="spaced_and">" ve "</string>
     <plurals name="n_minutes">
         <item quantity="one">%1$s dakika</item>
-        <item quantity="other">%1$s dakika</item>
+        <item quantity="other">%1$s dakikalar</item>
     </plurals>
     <plurals name="n_hours">
         <item quantity="one">%1$s saat</item>
-        <item quantity="other">%1$s saat</item>
+        <item quantity="other">%1$s saatler</item>
     </plurals>
     <string name="shift_work_reset_button">Devre dışı bırak veya yeniden programla</string>
     <string name="shift_work_starting_date">Takvimde seçilen %1$s, vardiyalı çalışmaya başlama günüdür.</string>
@@ -333,4 +333,24 @@
     <string name="month_pray_times">Ayın namaz vakitleri</string>
     <string name="country_emoji">🇹🇷</string>
     <string name="nepal">Nepal</string>
+    <string name="nepali_calendar">Nepal Takvimi</string>
+    <string name="nepali_calendar_short">Nepalce</string>
+    <string name="season">Mevsim</string>
+    <string name="show_secondary_calendar">İkincil takvimi göster</string>
+    <string name="solar_eclipse">Güneş tutulması</string>
+    <string name="lunar_eclipse">Ay Tutulması</string>
+    <string name="eclipse_of_type_in">%3$s içindeki %2$s\'in %1$s</string>
+    <string name="summer">Yaz</string>
+    <string name="fall">Sonbahar</string>
+    <string name="winter">Kış</string>
+    <string name="spring">İlkbahar</string>
+    <string name="sun">Güneş</string>
+    <string name="moon">Ay</string>
+    <string name="widget_prefer_system_colors">Widget\'larda Sistem Renklendirmesini İzleyiniz</string>
+    <string name="high_latitudes_method">Yüksek Enlemler Alan Yöntemi</string>
+    <string name="high_latitudes_night_middle">Gece Yarısı</string>
+    <string name="high_latitudes_angle_based">Açı Tabanlı</string>
+    <string name="high_latitudes_one_seventh">Yedide Bir</string>
+    <string name="none">Hiçbiri</string>
+    <string name="show_sun_and_moon_path_in_24_hours">24 Saatteki Güneş ve Ay Hareketlerini Göster</string>
 </resources>
