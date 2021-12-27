@@ -28,6 +28,120 @@
                 android:paddingRight="@dimen/view_padding"
                 android:textIsSelectable="true" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/view_padding"
+                android:paddingRight="@dimen/view_padding">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/seasonChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/summer"
+                            app:chipBackgroundColor="#6EAD8C" />
+
+                        <TextView
+                            android:id="@+id/summer"
+                            style="@style/seasonChipCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="4dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/seasonChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/winter"
+                            app:chipBackgroundColor="#7696AE" />
+
+                        <TextView
+                            android:id="@+id/winter"
+                            style="@style/seasonChipCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="4dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/seasonChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fall"
+                            app:chipBackgroundColor="#AF9C75" />
+
+                        <TextView
+                            android:id="@+id/fall"
+                            style="@style/seasonChipCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="4dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="40sp"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.chip.Chip
+                            style="@style/seasonChip"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/spring"
+                            app:chipBackgroundColor="#91AE74" />
+
+                        <TextView
+                            android:id="@+id/spring"
+                            style="@style/seasonChipCaption"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_margin="4dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/zodiac"
                 android:layout_width="wrap_content"

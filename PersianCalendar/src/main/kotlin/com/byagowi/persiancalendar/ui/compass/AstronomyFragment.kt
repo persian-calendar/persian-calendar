@@ -76,27 +76,27 @@ class AstronomyFragment : Fragment() {
             binding.solarView.setTime(time, immediate) { updateSolarView(time, it) }
 
             val persianYear = PersianDate(time.toCivilDate()).year
-            binding.headerInformation.text = (listOf(
+            binding.headerInformation.text = listOf(
                 R.string.solar_eclipse to Eclipse.Category.SOLAR,
                 R.string.lunar_eclipse to Eclipse.Category.LUNAR
-            ).map { (title, eclipseCategory) ->
+            ).joinToString("\n") { (title, eclipseCategory) ->
                 val eclipse = Eclipse(time, eclipseCategory, true)
                 val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
                 val type = eclipse.type.name
                     .replace(Regex("^(Solar|Lunar)"), "")
                     .replace(Regex("([a-z])([A-Z])"), "$1 $2")
                 getString(R.string.eclipse_of_type_in).format(getString(title), type, date)
-            } + (1..4).map {
+            }
+
+            (1..4).map {
                 val year = CivilDate(PersianDate(persianYear, it * 3, 29)).year
                 when (it) {
-                    1 -> R.string.summer to Equinox.northernSolstice(year)
-                    2 -> R.string.fall to Equinox.southwardEquinox(year)
-                    3 -> R.string.winter to Equinox.southernSolstice(year)
-                    else -> R.string.spring to Equinox.northwardEquinox(year)
+                    1 -> binding.summer to Equinox.northernSolstice(year)
+                    2 -> binding.fall to Equinox.southwardEquinox(year)
+                    3 -> binding.winter to Equinox.southernSolstice(year)
+                    else -> binding.spring to Equinox.northwardEquinox(year)
                 }
-            }.map { (season, equinox) ->
-                getString(season) + spacedColon + equinox.toJavaCalendar().formatDateAndTime()
-            }).joinToString("\n")
+            }.map { (view, equinox) -> view.text = equinox.toJavaCalendar().formatDateAndTime() }
         }
         update(true)
 

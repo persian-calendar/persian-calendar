@@ -429,6 +429,23 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="seasonChip">
+        <item name="chipStartPadding">0dp</item>
+        <item name="chipEndPadding">0dp</item>
+        <item name="chipSpacingVertical">0dp</item>
+        <item name="chipMinHeight">30dp</item>
+        <item name="maxHeight">30dp</item>
+        <item name="android:clickable">false</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="chipStrokeColor">@android:color/transparent</item>
+    </style>
+
+    <style name="seasonChipCaption">
+        <item name="android:maxLines">1</item>
+        <item name="autoSizeMinTextSize">8dp</item>
+        <item name="autoSizeTextType">uniform</item>
+    </style>
+
     <style name="AppOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
 
     <style name="AppTextButton" parent="Widget.Material3.Button.TextButton" />
