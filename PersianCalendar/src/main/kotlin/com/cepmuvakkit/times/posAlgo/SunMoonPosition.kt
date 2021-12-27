@@ -3,7 +3,6 @@ package com.cepmuvakkit.times.posAlgo
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 import kotlin.math.cos
-import kotlin.math.sin
 
 /**
  * @author mehmetrg
@@ -13,11 +12,10 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
     val moonEcliptic: Ecliptic
     val sunEcliptic: Ecliptic
 
-    val moonPhase: Double
-    val moonPhaseAscending: Boolean
-
     val moonPosition: Horizontal?
     val sunPosition: Horizontal?
+
+    val moonAgeInDegrees: Double
 
     init {
         val jd = AstroLib.calculateJulianDay(time)
@@ -26,9 +24,7 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
         moonEcliptic = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
         sunEcliptic = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
 
-        val e = Math.toRadians(sunEcliptic.λ - moonEcliptic.λ)
-        moonPhase = (1 - cos(e)) / 2
-        moonPhaseAscending = sin(e) < 0
+        moonAgeInDegrees = to360(sunEcliptic.λ - moonEcliptic.λ)
 
         if (observerEarthCoordinates == null) {
             moonPosition = null
@@ -45,4 +41,9 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
             sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
         }
     }
+
+    // https://github.com/janczer/goMoonPhase/blob/0363844/MoonPhase.go#L94
+    val moonPhase get() = (1 - cos(Math.toRadians(moonAgeInDegrees))) / 2
+
+    private fun to360(angle: Double) = angle % 360.0 + if (angle < 0) 360 else 0
 }

@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.global.isAstronomicalFeaturesEnabled
 import com.byagowi.persiancalendar.global.spacedColon
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
@@ -21,6 +22,8 @@ private val YEARS_NAME = listOf12Items(
 fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
     (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
             persianDate.month).toInt() % 12 == 8
+
+val SunMoonPosition.tithi get() = moonAgeInDegrees / 12.0 // https://en.wikipedia.org/wiki/Tithi
 
 fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean): String {
     if (!isAstronomicalFeaturesEnabled) return ""

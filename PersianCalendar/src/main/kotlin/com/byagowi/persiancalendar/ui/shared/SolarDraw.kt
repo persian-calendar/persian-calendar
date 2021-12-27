@@ -40,7 +40,7 @@ class SolarDraw(context: Context) {
         ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
         ovalPath.arcTo(moonRect, 270f, 180f)
         ovalPath.close()
-        canvas.withScale(x = if (sunMoonPosition.moonPhaseAscending) -1f else 1f, pivotX = cx) {
+        canvas.withScale(x = if (sunMoonPosition.moonAgeInDegrees > 180) -1f else 1f, pivotX = cx) {
             drawPath(ovalPath, moonPaint)
         }
     }
