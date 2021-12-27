@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -12,11 +14,12 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
+import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.isAstronomicalFeaturesEnabled
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import java.util.*
@@ -51,35 +54,82 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     }
 
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
+    private val ranges = Zodiac.values().map {
+        it.range.start.toFloat() to it.range.endInclusive.toFloat()
+    }
+
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas ?: return)
         val sunMoonPosition = sunMoonPosition ?: return
         val radius = min(width, height) / 2f
         canvas.withScale(x = scaleFactor, y = scaleFactor, pivotX = radius, pivotY = radius) {
-            if (isAstronomicalFeaturesEnabled) Zodiac.values().forEachIndexed { index, zodiac ->
-                canvas.withRotation(-zodiac.endOfRange.toFloat() + 90f, radius, radius) {
-                    drawLine(radius, 0f, radius, radius * .05f, zodiacPaint)
+            arcRect.set(0f, 0f, 2 * radius, 2 * radius)
+            val circleInset = radius * .05f
+            arcRect.inset(circleInset, circleInset)
+            canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
+            ranges.forEachIndexed { index, (start, end) ->
+                canvas.withRotation(-end + 90f, radius, radius) {
+                    if (index % 2 == 0) canvas.drawArc(
+                        arcRect, -90f, end - start, true, zodiacForegroundPaint
+                    )
+                    drawLine(radius, circleInset, radius, radius, zodiacSeparatorPaint)
                 }
-                canvas.withRotation(-zodiac.centerOfRange.toFloat() + 90f, radius, radius) {
-                    drawText(labels[index], radius, radius * .05f, zodiacPaint)
+                canvas.withRotation(-(start + end) / 2 + 90f, radius, radius) {
+                    drawText(labels[index], radius, radius * .1f, zodiacPaint)
                 }
             }
             val cr = radius / 8f
             solarDraw.earth(canvas, radius, radius, cr / 1.5f)
             val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
             canvas.withRotation(-sunDegree + 90f, radius, radius) {
-                solarDraw.sun(this, radius, radius / 5, cr)
+                solarDraw.sun(this, radius, radius / 3.5f, cr)
+                canvas.withTranslation(x = radius, y = 0f) {
+                    canvas.drawPath(trianglePath, sunIndicatorPaint)
+                }
             }
             val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
-            canvas.drawCircle(radius, radius, radius * .4f, moonOrbitPaint)
+            canvas.drawCircle(radius, radius, radius * .35f, moonOrbitPaint)
             canvas.withRotation(-moonDegree + 90f, radius, radius) {
                 val moonDistance = sunMoonPosition.moonEcliptic.Δ / SunMoonPosition.LUNAR_DISTANCE
                 solarDraw.moon(
                     this, sunMoonPosition, radius,
-                    radius * moonDistance.toFloat() * .6f, cr / 1.9f
+                    radius * moonDistance.toFloat() * .7f, cr / 1.9f
                 )
+                canvas.withTranslation(x = radius, y = 0f) {
+                    canvas.drawPath(trianglePath, moonIndicatorPaint)
+                }
             }
         }
+    }
+
+    private val trianglePath = Path().also {
+        it.moveTo(0f, 6.dp)
+        it.lineTo((-5).dp, 1f)
+        it.lineTo(5.dp, 1f)
+        it.close()
+    }
+    private val arcRect = RectF()
+
+    private val moonIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0x78808080
+        it.style = Paint.Style.FILL
+    }
+    private val sunIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0xFFFFE564.toInt()
+        it.style = Paint.Style.FILL
+    }
+    private val zodiacBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0x08808080
+        it.style = Paint.Style.FILL
+    }
+    private val zodiacForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0x18808080
+        it.style = Paint.Style.FILL
+    }
+    private val zodiacSeparatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = context.resolveColor(com.google.android.material.R.attr.colorSurface)
+        it.strokeWidth = .5.dp
+        it.style = Paint.Style.STROKE
     }
 
     private val zodiacPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

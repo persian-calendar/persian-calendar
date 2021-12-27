@@ -8,7 +8,7 @@ import com.cepmuvakkit.times.posAlgo.Ecliptic
 import io.github.persiancalendar.calendar.PersianDate
 
 enum class Zodiac(
-    val endOfRange: Double, private val emoji: String, @StringRes private val title: Int
+    private val endOfRange: Double, private val emoji: String, @StringRes private val title: Int
 ) {
     ARIES(33.18, "♈", R.string.aries),
     TAURUS(51.16, "♉", R.string.taurus),
@@ -29,9 +29,10 @@ enum class Zodiac(
         append(if (short) result.split(" (")[0] else result)
     }
 
-    val centerOfRange
-        get() = (((values().getOrNull(ordinal - 1)?.endOfRange) ?: PISCES.endOfRange - 360) +
-                endOfRange) / 2
+    private val startOfRange get() =
+        ((values().getOrNull(ordinal - 1)?.endOfRange) ?: PISCES.endOfRange - 360)
+
+    val range get() = startOfRange..endOfRange
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate) =
