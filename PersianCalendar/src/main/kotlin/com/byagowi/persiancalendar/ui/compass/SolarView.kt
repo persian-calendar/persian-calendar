@@ -1,15 +1,12 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
@@ -22,6 +19,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import com.google.android.material.math.MathUtils
 import java.util.*
 import kotlin.math.min
 
@@ -30,6 +28,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private var currentTime = 0L
     private var sunMoonPosition: SunMoonPosition? = null
     private var animator: ValueAnimator? = null
+
+    init {
+        setOnClickListener { isFormalDegree = !isFormalDegree }
+    }
 
     fun setTime(time: GregorianCalendar, immediate: Boolean, update: (SunMoonPosition) -> Unit) {
         animator?.removeAllUpdateListeners()
@@ -53,10 +55,33 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }.start()
     }
 
-    private val labels = Zodiac.values().map { it.format(context, false, short = true) }
-    private val ranges = Zodiac.values().map {
+    var isFormalDegree = false
+        set(value) {
+            ValueAnimator.ofFloat(if (value) 0f else 1f, if (field) 0f else 1f).also { animator ->
+                animator.duration =
+                    resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+                animator.interpolator = AccelerateDecelerateInterpolator()
+                animator.addUpdateListener { _ ->
+                    val fraction = ((animator.animatedValue as? Float) ?: 0f)
+                    ranges.indices.forEach {
+                        ranges[it] = MathUtils.lerp(
+                            naturalRanges[it].first, formalRanges[it].first, fraction
+                        ) to MathUtils.lerp(
+                            naturalRanges[it].second, formalRanges[it].second, fraction
+                        )
+                    }
+                    postInvalidate()
+                }
+            }.start()
+            field = value
+        }
+    private val formalRanges = (0..11).map { it * 30f to (it + 1) * 30f }
+    private val naturalRanges = Zodiac.values().map {
         it.range.start.toFloat() to it.range.endInclusive.toFloat()
     }
+
+    private val labels = Zodiac.values().map { it.format(context, false, short = true) }
+    private val ranges = naturalRanges.toMutableList()
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas ?: return)
@@ -145,21 +170,21 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     }
 
     private var scaleFactor = 1f
-    private val scaleGestureDetector = ScaleGestureDetector(
-        context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            override fun onScale(detector: ScaleGestureDetector?): Boolean {
-                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.9f, 1.1f)
-                postInvalidate()
-                return true
-            }
-        }
-    )
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        scaleGestureDetector.onTouchEvent(event)
-        return true
-    }
+//    private val scaleGestureDetector = ScaleGestureDetector(
+//        context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+//            override fun onScale(detector: ScaleGestureDetector?): Boolean {
+//                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.9f, 1.1f)
+//                postInvalidate()
+//                return true
+//            }
+//        }
+//    )
+//
+//    @SuppressLint("ClickableViewAccessibility")
+//    override fun onTouchEvent(event: MotionEvent?): Boolean {
+//        scaleGestureDetector.onTouchEvent(event)
+//        return true
+//    }
 
     private val solarDraw = SolarDraw(context)
 }
