@@ -52,9 +52,9 @@ class AstronomyFragment : Fragment() {
             resetButton.isVisible = offset != 0
             binding.solarView.setTime(time, immediate) {
                 binding.zodiac.text = listOf(
-                    getString(R.string.sun) + spacedColon + // ☉
+                    getString(R.string.sun) + spacedColon + // ☉, "☀️ " +
                             it.sunEcliptic.zodiac.format(binding.zodiac.context, true),
-                    getString(R.string.moon) + spacedColon + // ☽
+                    getString(R.string.moon) + spacedColon + // ☽, it.moonPhaseEmoji + " " +
                             it.moonEcliptic.zodiac.format(binding.zodiac.context, true)
                 ).joinToString("\n")
                 binding.time.text = time.formatDateAndTime()

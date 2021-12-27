@@ -63,11 +63,5 @@ class SolarDraw(context: Context) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(earthDrawable, null, earthRect, null)
     }
-
     private val earthRect = RectF()
-
-    companion object {
-        // Not used yet
-        val moonPhasesEmojis = listOf("🌑", "🌒", "🌓", "🌔", "🌕", "🌖", "🌗", "🌘", "🌑")
-    }
 }
