@@ -69,13 +69,6 @@
             app:exitAnim="@anim/nav_exit_anim"
             app:popEnterAnim="@anim/nav_enter_anim"
             app:popExitAnim="@anim/nav_exit_anim" />
-        <action
-            android:id="@+id/action_compass_to_astronomy"
-            app:destination="@id/astronomy"
-            app:enterAnim="@anim/nav_enter_anim"
-            app:exitAnim="@anim/nav_exit_anim"
-            app:popEnterAnim="@anim/nav_enter_anim"
-            app:popExitAnim="@anim/nav_exit_anim" />
     </fragment>
 
     <fragment

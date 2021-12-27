@@ -148,7 +148,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             Triple(R.id.about, R.drawable.ic_info, R.string.about),
             Triple(exitId, R.drawable.ic_cancel, R.string.exit)
         ).forEach { (id, icon, title) ->
-            if (id == R.id.astronomy && !isAstronomicalFeaturesEnabled) return@forEach
             binding.navigation.menu.add(Menu.NONE, id, Menu.NONE, title).setIcon(icon)
         }
         binding.navigation.setNavigationItemSelectedListener(this)

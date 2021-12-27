@@ -192,12 +192,6 @@ class CompassFragment : Fragment() {
                 it.onClick(::animateMoonAndSun)
             }
         }
-        binding.appBar.toolbar.menu.add(R.string.astronomical_info).also {
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick {
-                findNavController().navigateSafe(CompassFragmentDirections.actionCompassToAstronomy())
-            }
-        }
         if (coordinates != null) {
             binding.appBar.toolbar.menu.add(R.string.qibla).also { menu ->
                 val prefs = binding.root.context.appPrefs
