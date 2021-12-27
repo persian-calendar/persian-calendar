@@ -114,7 +114,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 }
             }
             val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
-            canvas.drawCircle(radius, radius, radius * .35f, moonOrbitPaint)
+            canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
             canvas.withRotation(-moonDegree + 90f, radius, radius) {
                 val moonDistance = sunMoonPosition.moonEcliptic.Δ / SunMoonPosition.LUNAR_DISTANCE
                 solarDraw.moon(
