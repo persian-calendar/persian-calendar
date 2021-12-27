@@ -356,4 +356,5 @@
     <string name="spring">بهار</string>
     <string name="sun">خورشید</string>
     <string name="moon">ماه</string>
+    <string name="formal_degrees">درجات قراردادی</string>
 </resources>

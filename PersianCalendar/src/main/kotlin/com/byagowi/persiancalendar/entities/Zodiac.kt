@@ -6,6 +6,7 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.cepmuvakkit.times.posAlgo.Ecliptic
 import io.github.persiancalendar.calendar.PersianDate
+import kotlin.math.floor
 
 enum class Zodiac(
     private val endOfRange: Double, private val emoji: String, @StringRes private val title: Int
@@ -32,14 +33,18 @@ enum class Zodiac(
     private val startOfRange get() =
         ((values().getOrNull(ordinal - 1)?.endOfRange) ?: PISCES.endOfRange - 360)
 
-    val range get() = startOfRange..endOfRange
+    val naturalRange get() = startOfRange..endOfRange
+    val formalRange get() = ordinal * 30.0..(ordinal + 1) * 30.0
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate) =
             values().getOrNull(persianDate.month - 1) ?: ARIES
 
         // https://github.com/janczer/goMoonPhase/blob/0363844/MoonPhase.go#L363
-        fun fromEcliptic(ecliptic: Ecliptic) =
+        fun fromNaturalEcliptic(ecliptic: Ecliptic) =
             values().firstOrNull { ecliptic.λ < it.endOfRange } ?: ARIES
+
+        fun fromFormalEcliptic(ecliptic: Ecliptic) =
+            values().getOrNull(floor(ecliptic.λ / 30).toInt()) ?: ARIES
     }
 }

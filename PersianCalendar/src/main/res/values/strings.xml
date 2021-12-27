@@ -354,6 +354,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="spring">Spring</string>
     <string name="sun">Sun</string>
     <string name="moon">Moon</string>
+    <string name="formal_degrees">Formal degrees</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

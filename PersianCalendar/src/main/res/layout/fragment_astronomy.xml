@@ -23,15 +23,16 @@
                 android:id="@+id/header_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/view_padding"
+                android:paddingLeft="@dimen/view_padding"
+                android:paddingTop="@dimen/view_padding"
+                android:paddingRight="@dimen/view_padding"
                 android:textIsSelectable="true" />
 
             <TextView
                 android:id="@+id/zodiac"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:padding="@dimen/view_padding"
                 android:textAlignment="center"
                 android:textIsSelectable="true" />
 
@@ -40,6 +41,14 @@
                 android:layout_width="290dp"
                 android:layout_height="290dp"
                 android:layout_gravity="center_horizontal" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/formal_degrees"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginRight="@dimen/view_padding"
+                android:text="@string/formal_degrees" />
 
         </LinearLayout>
 
@@ -54,10 +63,10 @@
 
         <TextView
             android:id="@+id/time"
-            android:layout_marginBottom="4dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="4dp" />
 
         <FrameLayout
             android:layout_width="match_parent"

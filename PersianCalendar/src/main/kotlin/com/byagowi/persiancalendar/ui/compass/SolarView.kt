@@ -1,12 +1,15 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
@@ -28,10 +31,6 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private var currentTime = 0L
     private var sunMoonPosition: SunMoonPosition? = null
     private var animator: ValueAnimator? = null
-
-    init {
-        setOnClickListener { isFormalDegree = !isFormalDegree }
-    }
 
     fun setTime(time: GregorianCalendar, immediate: Boolean, update: (SunMoonPosition) -> Unit) {
         animator?.removeAllUpdateListeners()
@@ -75,9 +74,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }.start()
             field = value
         }
-    private val formalRanges = (0..11).map { it * 30f to (it + 1) * 30f }
+    private val formalRanges = Zodiac.values().map {
+        it.formalRange.start.toFloat() to it.formalRange.endInclusive.toFloat()
+    }
     private val naturalRanges = Zodiac.values().map {
-        it.range.start.toFloat() to it.range.endInclusive.toFloat()
+        it.naturalRange.start.toFloat() to it.naturalRange.endInclusive.toFloat()
     }
 
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
@@ -100,7 +101,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     drawLine(radius, circleInset, radius, radius, zodiacSeparatorPaint)
                 }
                 canvas.withRotation(-(start + end) / 2 + 90f, radius, radius) {
-                    drawText(labels[index], radius, radius * .1f, zodiacPaint)
+                    drawText(labels[index], radius, radius * .12f, zodiacPaint)
                 }
             }
             val cr = radius / 8f
@@ -170,21 +171,21 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     }
 
     private var scaleFactor = 1f
-//    private val scaleGestureDetector = ScaleGestureDetector(
-//        context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-//            override fun onScale(detector: ScaleGestureDetector?): Boolean {
-//                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.9f, 1.1f)
-//                postInvalidate()
-//                return true
-//            }
-//        }
-//    )
-//
-//    @SuppressLint("ClickableViewAccessibility")
-//    override fun onTouchEvent(event: MotionEvent?): Boolean {
-//        scaleGestureDetector.onTouchEvent(event)
-//        return true
-//    }
+    private val scaleGestureDetector = ScaleGestureDetector(
+        context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+            override fun onScale(detector: ScaleGestureDetector?): Boolean {
+                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.9f, 1.1f)
+                postInvalidate()
+                return true
+            }
+        }
+    )
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        scaleGestureDetector.onTouchEvent(event)
+        return true
+    }
 
     private val solarDraw = SolarDraw(context)
 }

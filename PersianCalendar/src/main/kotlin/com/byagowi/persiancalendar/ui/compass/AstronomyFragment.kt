@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -47,18 +48,32 @@ class AstronomyFragment : Fragment() {
         val args by navArgs<AstronomyFragmentArgs>()
         val minutesInDay = 60 * 24
         var offset = args.dayOffset * minutesInDay
-        fun update(immediate: Boolean) {
+
+        fun updateSolarView(time: GregorianCalendar, it: SunMoonPosition) {
+            val formal = binding.formalDegrees.isChecked
+            val sunZodiac =
+                if (formal) it.sunEcliptic.formalZodiac else it.sunEcliptic.naturalZodiac
+            val moonZodiac =
+                if (formal) it.moonEcliptic.formalZodiac else it.moonEcliptic.naturalZodiac
+            binding.zodiac.text = listOf(
+                getString(R.string.sun) + spacedColon + // ☉, "☀️ " +
+                        sunZodiac.format(binding.zodiac.context, true),
+                getString(R.string.moon) + spacedColon + // ☽, it.moonPhaseEmoji + " " +
+                        moonZodiac.format(binding.zodiac.context, true)
+            ).joinToString("\n")
+            binding.time.text = time.formatDateAndTime()
+        }
+
+        binding.formalDegrees.setOnClickListener {
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }
+            binding.solarView.setTime(time, true) { updateSolarView(time, it) }
+            binding.solarView.isFormalDegree = binding.formalDegrees.isChecked
+        }
+
+        fun update(immediate: Boolean) {
             resetButton.isVisible = offset != 0
-            binding.solarView.setTime(time, immediate) {
-                binding.zodiac.text = listOf(
-                    getString(R.string.sun) + spacedColon + // ☉, "☀️ " +
-                            it.sunEcliptic.zodiac.format(binding.zodiac.context, true),
-                    getString(R.string.moon) + spacedColon + // ☽, it.moonPhaseEmoji + " " +
-                            it.moonEcliptic.zodiac.format(binding.zodiac.context, true)
-                ).joinToString("\n")
-                binding.time.text = time.formatDateAndTime()
-            }
+            val time = GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }
+            binding.solarView.setTime(time, immediate) { updateSolarView(time, it) }
 
             val persianYear = PersianDate(time.toCivilDate()).year
             binding.headerInformation.text = (listOf(
