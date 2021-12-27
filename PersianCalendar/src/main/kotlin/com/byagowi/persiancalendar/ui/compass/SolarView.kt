@@ -58,30 +58,40 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         canvas.withScale(x = scaleFactor, y = scaleFactor, pivotX = radius, pivotY = radius) {
             if (isAstronomicalFeaturesEnabled) Zodiac.values().forEachIndexed { index, zodiac ->
                 canvas.withRotation(-zodiac.endOfRange.toFloat() + 90f, radius, radius) {
-                    drawLine(radius, 0f, radius, radius * .05f, degreesPaint)
+                    drawLine(radius, 0f, radius, radius * .05f, zodiacPaint)
                 }
                 canvas.withRotation(-zodiac.centerOfRange.toFloat() + 90f, radius, radius) {
-                    drawText(labels[index], radius, radius * .05f, degreesPaint)
+                    drawText(labels[index], radius, radius * .05f, zodiacPaint)
                 }
             }
             val cr = radius / 8f
             solarDraw.earth(canvas, radius, radius, cr / 1.5f)
             val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
             canvas.withRotation(-sunDegree + 90f, radius, radius) {
-                solarDraw.sun(this, radius, radius / 5f, cr)
+                solarDraw.sun(this, radius, radius / 5, cr)
             }
             val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
+            canvas.drawCircle(radius, radius, radius * .4f, moonOrbitPaint)
             canvas.withRotation(-moonDegree + 90f, radius, radius) {
-                solarDraw.moon(this, sunMoonPosition, radius, radius / 1.6f, cr / 1.9f)
+                val moonDistance = sunMoonPosition.moonEcliptic.Δ / SunMoonPosition.LUNAR_DISTANCE
+                solarDraw.moon(
+                    this, sunMoonPosition, radius,
+                    radius * moonDistance.toFloat() * .6f, cr / 1.9f
+                )
             }
         }
     }
 
-    private val degreesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+    private val zodiacPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF808080.toInt()
         it.strokeWidth = 1.dp
         it.textSize = 10.dp
         it.textAlign = Paint.Align.CENTER
+    }
+    private val moonOrbitPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.STROKE
+        it.strokeWidth = 1.dp
+        it.color = 0x40808080
     }
 
     private var scaleFactor = 1f

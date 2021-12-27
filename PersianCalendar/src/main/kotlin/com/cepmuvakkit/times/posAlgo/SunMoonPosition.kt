@@ -46,4 +46,9 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
     val moonPhase get() = (1 - cos(Math.toRadians(moonAgeInDegrees))) / 2
 
     private fun to360(angle: Double) = angle % 360.0 + if (angle < 0) 360 else 0
+
+    companion object {
+        // https://en.wikipedia.org/wiki/Lunar_distance_(astronomy)
+        const val LUNAR_DISTANCE = 384399
+    }
 }
