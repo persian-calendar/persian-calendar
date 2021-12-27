@@ -22,19 +22,11 @@ class ZodiacTests {
 
     @Test
     fun `Zodiac from ecliptic`() {
-        assertEquals(Zodiac.ARIES, Zodiac.fromEcliptic(Ecliptic(10.0, .0, .0)))
-        assertEquals(Zodiac.TAURUS, Zodiac.fromEcliptic(Ecliptic(40.0, .0, .0)))
-        assertEquals(Zodiac.GEMINI, Zodiac.fromEcliptic(Ecliptic(60.0, .0, .0)))
-        assertEquals(Zodiac.CANCER, Zodiac.fromEcliptic(Ecliptic(100.0, .0, .0)))
-        assertEquals(Zodiac.LEO, Zodiac.fromEcliptic(Ecliptic(130.0, .0, .0)))
-        assertEquals(Zodiac.VIRGO, Zodiac.fromEcliptic(Ecliptic(140.0, .0, .0)))
-        assertEquals(Zodiac.LIBRA, Zodiac.fromEcliptic(Ecliptic(180.0, .0, .0)))
-        assertEquals(Zodiac.SCORPIO, Zodiac.fromEcliptic(Ecliptic(230.0, .0, .0)))
-        assertEquals(Zodiac.SAGITTARIUS, Zodiac.fromEcliptic(Ecliptic(260.0, .0, .0)))
-        assertEquals(Zodiac.CAPRICORN, Zodiac.fromEcliptic(Ecliptic(280.0, .0, .0)))
-        assertEquals(Zodiac.AQUARIUS, Zodiac.fromEcliptic(Ecliptic(310.0, .0, .0)))
-        assertEquals(Zodiac.PISCES, Zodiac.fromEcliptic(Ecliptic(320.0, .0, .0)))
-        assertEquals(Zodiac.ARIES, Zodiac.fromEcliptic(Ecliptic(350.0, .0, .0)))
+        listOf(10, 40, 60, 100, 130, 140, 180, 230, 260, 280, 310, 320, 350).zip(
+            Zodiac.values() + listOf(Zodiac.ARIES)
+        ) { longitude, zodiac ->
+            assertEquals(zodiac, Zodiac.fromEcliptic(Ecliptic(longitude.toDouble(), .0, .0)))
+        }
     }
 
     @Test
