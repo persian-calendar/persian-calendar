@@ -87,7 +87,7 @@ class AstronomyFragment : Fragment() {
                 val eclipse = Eclipse(time, eclipseCategory, true)
                 val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
                 val type = eclipse.type.name
-                    .replace(Regex("^(Solar|Lunar)"), "")
+                    .replace(Regex("^(Solar(Central)?|Lunar)"), "")
                     .replace(Regex("([a-z])([A-Z])"), "$1 $2")
                 getString(R.string.eclipse_of_type_in).format(getString(title), type, date)
             }
