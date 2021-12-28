@@ -117,7 +117,7 @@
     <string name="show_device_calendar_events_summary">إظهار الأحداث الشخصية</string>
     <string name="calendars_priority">التقويم الرئيسي</string>
     <string name="calendars_priority_summary">تغيير التقويم الرئيسي، ترتيب وإخفاء التقاويم الأخرى</string>
-    <string name="astronomical_info">المعلومات الفلكية</string>
+    <string name="astronomical_info">الفلك</string>
     <string name="astronomical_info_summary">إظهار المزيد من المعلومات مثل (الأبراج، أسماء الأعوام، القمر في العقرب)</string>
     <string name="week_of_year">رقم الأسبوع</string>
     <string name="week_of_year_summary">إظهار رقم الأسبوع في تقويم الرئيسي</string>
@@ -391,4 +391,13 @@
     <string name="show_secondary_calendar">إظهار التقويم الثانوي</string>
     <string name="season">موسم</string>
     <string name="nepal">نيبال</string>
+    <string name="sun">الشمس</string>
+    <string name="moon">القمر</string>
+    <string name="solar_eclipse">كسوف الشمس</string>
+    <string name="lunar_eclipse">خسوف القمر</string>
+    <string name="eclipse_of_type_in">%1$s من %2$s في %3$s</string>
+    <string name="summer">الصيف</string>
+    <string name="fall">الخريف</string>
+    <string name="winter">الشتاء</string>
+    <string name="spring">الربيع</string>
 </resources>
