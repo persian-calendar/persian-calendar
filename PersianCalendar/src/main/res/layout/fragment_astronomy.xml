@@ -54,7 +54,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/summer"
-                            app:chipBackgroundColor="#55BB66" />
+                            app:chipBackgroundColor="#cc2baa40" />
 
                         <TextView
                             android:id="@+id/summer"
@@ -76,7 +76,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/winter"
-                            app:chipBackgroundColor="#7799BB" />
+                            app:chipBackgroundColor="#cc5580aa" />
 
                         <TextView
                             android:id="@+id/winter"
@@ -99,7 +99,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/sun"
-                            app:chipBackgroundColor="#EEBB22" />
+                            app:chipBackgroundColor="#cceaaa00" />
 
                         <TextView
                             android:id="@+id/sun"
@@ -129,7 +129,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/fall"
-                            app:chipBackgroundColor="#CC9944" />
+                            app:chipBackgroundColor="#ccbf8015" />
 
                         <TextView
                             android:id="@+id/fall"
@@ -151,7 +151,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/spring"
-                            app:chipBackgroundColor="#99BB44" />
+                            app:chipBackgroundColor="#cc80aa15" />
 
                         <TextView
                             android:id="@+id/spring"
@@ -174,7 +174,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/moon"
-                            app:chipBackgroundColor="#808080" />
+                            app:chipBackgroundColor="#cc606060" />
 
                         <TextView
                             android:id="@+id/moon"
