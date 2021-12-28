@@ -429,7 +429,7 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
-    <style name="seasonChip">
+    <style name="astronomyChip">
         <item name="ensureMinTouchTargetSize">false</item>
         <item name="chipStartPadding">0dp</item>
         <item name="chipEndPadding">0dp</item>
@@ -441,7 +441,7 @@
         <item name="chipStrokeColor">@android:color/transparent</item>
     </style>
 
-    <style name="seasonChipCaption">
+    <style name="astronomyChipCaption">
         <item name="android:maxLines">1</item>
         <item name="autoSizeMinTextSize">8dp</item>
         <item name="autoSizeTextType">uniform</item>

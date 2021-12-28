@@ -49,15 +49,15 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
-                            style="@style/seasonChip"
+                            style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/summer"
-                            app:chipBackgroundColor="#6EAD8C" />
+                            app:chipBackgroundColor="#55BB66" />
 
                         <TextView
                             android:id="@+id/summer"
-                            style="@style/seasonChipCaption"
+                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -71,15 +71,15 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
-                            style="@style/seasonChip"
+                            style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/winter"
-                            app:chipBackgroundColor="#7696AE" />
+                            app:chipBackgroundColor="#7799BB" />
 
                         <TextView
                             android:id="@+id/winter"
-                            style="@style/seasonChipCaption"
+                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -94,15 +94,15 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
-                            style="@style/seasonChip"
+                            style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/sun"
-                            app:chipBackgroundColor="#F9A825" />
+                            app:chipBackgroundColor="#EEBB22" />
 
                         <TextView
                             android:id="@+id/sun"
-                            style="@style/seasonChipCaption"
+                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -124,15 +124,15 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
-                            style="@style/seasonChip"
+                            style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/fall"
-                            app:chipBackgroundColor="#AF9C75" />
+                            app:chipBackgroundColor="#CC9944" />
 
                         <TextView
                             android:id="@+id/fall"
-                            style="@style/seasonChipCaption"
+                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -146,15 +146,15 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
-                            style="@style/seasonChip"
+                            style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/spring"
-                            app:chipBackgroundColor="#91AE74" />
+                            app:chipBackgroundColor="#99BB44" />
 
                         <TextView
                             android:id="@+id/spring"
-                            style="@style/seasonChipCaption"
+                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -169,7 +169,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
-                            style="@style/seasonChip"
+                            style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/moon"
@@ -177,7 +177,7 @@
 
                         <TextView
                             android:id="@+id/moon"
-                            style="@style/seasonChipCaption"
+                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
