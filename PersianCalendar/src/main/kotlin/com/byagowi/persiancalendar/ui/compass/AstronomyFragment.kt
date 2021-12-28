@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -23,7 +24,6 @@ import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
-import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
@@ -93,14 +93,15 @@ class AstronomyFragment : Fragment() {
             }
 
             (1..4).map {
-                val year = CivilDate(PersianDate(persianYear, it * 3, 29)).year
-                when (it) {
-                    1 -> binding.summer to Equinox.northernSolstice(year)
-                    2 -> binding.fall to Equinox.southwardEquinox(year)
-                    3 -> binding.winter to Equinox.southernSolstice(year)
-                    else -> binding.spring to Equinox.northwardEquinox(year)
+                val (view, season) = when (it) {
+                    1 -> binding.summer to Season.SUMMER
+                    2 -> binding.fall to Season.FALL
+                    3 -> binding.winter to Season.WINTER
+                    else -> binding.spring to Season.SPRING
                 }
-            }.map { (view, equinox) -> view.text = equinox.toJavaCalendar().formatDateAndTime() }
+                view.text = season.getEquinox(CivilDate(PersianDate(persianYear, it * 3, 29)))
+                    .formatDateAndTime()
+            }
         }
         update(true)
 

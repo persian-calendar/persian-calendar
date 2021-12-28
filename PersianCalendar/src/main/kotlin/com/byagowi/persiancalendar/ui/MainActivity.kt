@@ -51,12 +51,12 @@ import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
+import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enableNewInterface
 import com.byagowi.persiancalendar.global.initGlobal
-import com.byagowi.persiancalendar.global.isAstronomicalFeaturesEnabled
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.language
@@ -74,7 +74,6 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.isRtl
-import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
@@ -176,20 +175,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         val persian = creationDateJdn.toPersianCalendar()
         run {
-            val drawerHeader = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-            var season = (persian.month - 1) / 3
-
-            // Southern hemisphere
-            if (coordinates?.isSouthernHemisphere == true) season = (season + 2) % 4
-
-            drawerHeader.seasonImage.setImageResource(
-                when (season) {
-                    0 -> R.drawable.spring
-                    1 -> R.drawable.summer
-                    2 -> R.drawable.fall
-                    else -> R.drawable.winter
-                }
-            )
+            val header = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+            val season = Season.fromPersianCalendar(persian, coordinates)
+            header.seasonImage.setImageResource(season.imageRes)
+            header.seasonImage.contentDescription = getString(season.nameRes)
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {

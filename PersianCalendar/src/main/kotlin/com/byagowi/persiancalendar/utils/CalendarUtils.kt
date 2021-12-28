@@ -290,5 +290,3 @@ private fun getCalendarNameAbbr(date: AbstractDate) =
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.toCalendar(it)) }
-
-fun CivilDate.getSpringEquinox() = Equinox.northwardEquinox(this.year).toJavaCalendar()
