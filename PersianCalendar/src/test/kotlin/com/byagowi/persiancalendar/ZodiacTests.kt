@@ -25,10 +25,10 @@ class ZodiacTests {
         listOf(10, 40, 60, 100, 130, 140, 180, 230, 260, 280, 310, 320, 350).zip(
             Zodiac.values() + listOf(Zodiac.ARIES)
         ) { longitude, zodiac ->
-            assertEquals(zodiac, Zodiac.fromNaturalEcliptic(Ecliptic(longitude.toDouble(), .0, .0)))
+            assertEquals(zodiac, Zodiac.fromIauEcliptic(Ecliptic(longitude.toDouble(), .0, .0)))
         }
         (0..11).map { 10 + it * 30 }.zip(Zodiac.values() + listOf(Zodiac.ARIES)) { longitude, zodiac ->
-            assertEquals(zodiac, Zodiac.fromFormalEcliptic(Ecliptic(longitude.toDouble(), .0, .0)))
+            assertEquals(zodiac, Zodiac.fromTropicalEcliptic(Ecliptic(longitude.toDouble(), .0, .0)))
         }
     }
 
@@ -38,7 +38,7 @@ class ZodiacTests {
             10.88, 42.17, 72.3, 106.46, 127.39, 154.32,
             198.755, 233.37, 256.915, 286.875, 307.105, 330.15
         ).zip(Zodiac.values()) { centerOfZodiac, zodiac ->
-            val average = (zodiac.naturalRange.start + zodiac.naturalRange.endInclusive) / 2
+            val average = (zodiac.iauRange.start + zodiac.iauRange.endInclusive) / 2
             assertThat(average).isWithin(1.0e-10).of(centerOfZodiac)
         }
     }

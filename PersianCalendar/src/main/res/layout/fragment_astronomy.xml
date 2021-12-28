@@ -195,14 +195,6 @@
                 android:layout_height="290dp"
                 android:layout_gravity="center_horizontal" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/formal_degrees"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/view_padding"
-                android:layout_marginRight="@dimen/view_padding"
-                android:text="@string/formal_degrees" />
-
         </LinearLayout>
 
     </ScrollView>

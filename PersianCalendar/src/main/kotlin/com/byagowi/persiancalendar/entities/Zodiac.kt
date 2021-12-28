@@ -33,18 +33,20 @@ enum class Zodiac(
     private val startOfRange get() =
         ((values().getOrNull(ordinal - 1)?.endOfRange) ?: PISCES.endOfRange - 360)
 
-    val naturalRange get() = startOfRange..endOfRange
-    val formalRange get() = ordinal * 30.0..(ordinal + 1) * 30.0
+    val iauRange get() = startOfRange..endOfRange
+    val tropicalRange get() = ordinal * 30.0..(ordinal + 1) * 30.0
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate) =
             values().getOrNull(persianDate.month - 1) ?: ARIES
 
+        // See the table below https://en.wikipedia.org/wiki/Sidereal_and_tropical_astrology
+        // to learn about the difference of the Zodiac calculation
         // https://github.com/janczer/goMoonPhase/blob/0363844/MoonPhase.go#L363
-        fun fromNaturalEcliptic(ecliptic: Ecliptic) =
+        fun fromIauEcliptic(ecliptic: Ecliptic) =
             values().firstOrNull { ecliptic.λ < it.endOfRange } ?: ARIES
 
-        fun fromFormalEcliptic(ecliptic: Ecliptic) =
+        fun fromTropicalEcliptic(ecliptic: Ecliptic) =
             values().getOrNull(floor(ecliptic.λ / 30).toInt()) ?: ARIES
     }
 }

@@ -54,7 +54,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }.start()
     }
 
-    var isFormalDegree = false
+    var isTropicalDegree = false
         set(value) {
             ValueAnimator.ofFloat(if (value) 0f else 1f, if (field) 0f else 1f).also { animator ->
                 animator.duration =
@@ -63,10 +63,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 animator.addUpdateListener { _ ->
                     val fraction = ((animator.animatedValue as? Float) ?: 0f)
                     ranges.indices.forEach {
-                        ranges[it] = MathUtils.lerp(
-                            naturalRanges[it].first, formalRanges[it].first, fraction
-                        ) to MathUtils.lerp(
-                            naturalRanges[it].second, formalRanges[it].second, fraction
+                        ranges[it][0] = MathUtils.lerp(
+                            iauRanges[it].first, tropicalRanges[it].first, fraction
+                        )
+                        ranges[it][1] = MathUtils.lerp(
+                            iauRanges[it].second, tropicalRanges[it].second, fraction
                         )
                     }
                     postInvalidate()
@@ -74,15 +75,15 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }.start()
             field = value
         }
-    private val formalRanges = Zodiac.values().map {
-        it.formalRange.start.toFloat() to it.formalRange.endInclusive.toFloat()
+    private val tropicalRanges = Zodiac.values().map {
+        it.tropicalRange.start.toFloat() to it.tropicalRange.endInclusive.toFloat()
     }
-    private val naturalRanges = Zodiac.values().map {
-        it.naturalRange.start.toFloat() to it.naturalRange.endInclusive.toFloat()
+    private val iauRanges = Zodiac.values().map {
+        it.iauRange.start.toFloat() to it.iauRange.endInclusive.toFloat()
     }
 
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
-    private val ranges = naturalRanges.toMutableList()
+    private val ranges = iauRanges.map { it.toList().toMutableList() }.toMutableList()
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas ?: return)

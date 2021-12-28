@@ -14,6 +14,6 @@ class Ecliptic(
     val β = latitude
     val Δ = radius
 
-    val naturalZodiac get() = Zodiac.fromNaturalEcliptic(this)
-    val formalZodiac get() = Zodiac.fromFormalEcliptic(this)
+    val iauZodiac get() = Zodiac.fromIauEcliptic(this)
+    val tropicalZodiac get() = Zodiac.fromTropicalEcliptic(this)
 }

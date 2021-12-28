@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -48,21 +49,29 @@ class AstronomyFragment : Fragment() {
         val minutesInDay = 60 * 24
         var offset = args.dayOffset * minutesInDay
 
+        val tropicalSwitch = SwitchMaterial(binding.appBar.toolbar.context)
+        tropicalSwitch.setText(R.string.tropical)
+
         fun updateSolarView(time: GregorianCalendar, it: SunMoonPosition) {
-            val formal = binding.formalDegrees.isChecked
+            val tropical = tropicalSwitch.isChecked
             val sunZodiac =
-                if (formal) it.sunEcliptic.formalZodiac else it.sunEcliptic.naturalZodiac
+                if (tropical) it.sunEcliptic.tropicalZodiac else it.sunEcliptic.iauZodiac
             val moonZodiac =
-                if (formal) it.moonEcliptic.formalZodiac else it.moonEcliptic.naturalZodiac
+                if (tropical) it.moonEcliptic.tropicalZodiac else it.moonEcliptic.iauZodiac
             binding.sun.text = sunZodiac.format(binding.root.context, true) // ☉☀️
             binding.moon.text = moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
             binding.time.text = time.formatDateAndTime()
         }
 
-        binding.formalDegrees.setOnClickListener {
+        tropicalSwitch.setOnClickListener {
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }
             binding.solarView.setTime(time, true) { updateSolarView(time, it) }
-            binding.solarView.isFormalDegree = binding.formalDegrees.isChecked
+            binding.solarView.isTropicalDegree = tropicalSwitch.isChecked
+        }
+
+        binding.appBar.toolbar.menu.add(R.string.goto_date).also { menuItem ->
+            menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            menuItem.actionView = tropicalSwitch
         }
 
         fun update(immediate: Boolean) {
