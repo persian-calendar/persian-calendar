@@ -92,15 +92,14 @@ class AstronomyFragment : Fragment() {
                 getString(R.string.eclipse_of_type_in).format(getString(title), type, date)
             }
 
-            (1..4).map {
-                val (view, season) = when (it) {
-                    1 -> binding.summer to Season.SUMMER
-                    2 -> binding.fall to Season.FALL
-                    3 -> binding.winter to Season.WINTER
-                    else -> binding.spring to Season.SPRING
-                }
-                view.text = season.getEquinox(CivilDate(PersianDate(persianYear, it * 3, 29)))
-                    .formatDateAndTime()
+            (1..4).forEach {
+                val date = CivilDate(PersianDate(persianYear, it * 3, 29))
+                when (it) {
+                    1 -> binding.summer
+                    2 -> binding.fall
+                    3 -> binding.winter
+                    else -> binding.spring
+                }.text = Season.values()[it % 4].getEquinox(date).formatDateAndTime()
             }
         }
         update(true)
