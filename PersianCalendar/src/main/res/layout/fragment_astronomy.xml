@@ -15,7 +15,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:paddingBottom="80dp"
+            android:paddingBottom="95dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -24,9 +24,7 @@
                 android:id="@+id/header_information"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/view_padding"
-                android:paddingTop="@dimen/view_padding"
-                android:paddingRight="@dimen/view_padding"
+                android:padding="@dimen/view_padding"
                 android:textIsSelectable="true" />
 
             <LinearLayout
@@ -90,7 +88,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
 
@@ -165,7 +163,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
 
@@ -191,6 +189,7 @@
 
             <com.byagowi.persiancalendar.ui.compass.SolarView
                 android:id="@+id/solar_view"
+                android:layout_marginTop="16dp"
                 android:layout_width="290dp"
                 android:layout_height="290dp"
                 android:layout_gravity="center_horizontal" />
@@ -204,10 +203,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
+        android:padding="8dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/time"
+            android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
