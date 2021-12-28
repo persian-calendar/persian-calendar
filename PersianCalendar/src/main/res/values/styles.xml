@@ -430,11 +430,12 @@
     </style>
 
     <style name="seasonChip">
+        <item name="ensureMinTouchTargetSize">false</item>
         <item name="chipStartPadding">0dp</item>
         <item name="chipEndPadding">0dp</item>
         <item name="chipSpacingVertical">0dp</item>
-        <item name="chipMinHeight">30dp</item>
-        <item name="maxHeight">30dp</item>
+        <item name="chipMinHeight">26dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
         <item name="android:clickable">false</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="chipStrokeColor">@android:color/transparent</item>

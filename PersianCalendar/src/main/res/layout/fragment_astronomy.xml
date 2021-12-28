@@ -31,10 +31,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:baselineAligned="false"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/view_padding"
-                android:paddingRight="@dimen/view_padding">
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginRight="@dimen/view_padding"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -44,7 +43,8 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="40sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
@@ -59,14 +59,14 @@
                             style="@style/seasonChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="4dp" />
+                            android:layout_gravity="center_vertical" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="40sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
@@ -81,8 +81,7 @@
                             style="@style/seasonChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="4dp" />
+                            android:layout_gravity="center_vertical" />
 
                     </LinearLayout>
 
@@ -96,7 +95,8 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="40sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
@@ -111,14 +111,14 @@
                             style="@style/seasonChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="4dp" />
+                            android:layout_gravity="center_vertical" />
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="40sp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
@@ -133,8 +133,7 @@
                             style="@style/seasonChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_margin="4dp" />
+                            android:layout_gravity="center_vertical" />
 
                     </LinearLayout>
 
