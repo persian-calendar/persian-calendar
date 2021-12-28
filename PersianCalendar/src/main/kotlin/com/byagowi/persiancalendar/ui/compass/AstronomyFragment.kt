@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -55,12 +54,8 @@ class AstronomyFragment : Fragment() {
                 if (formal) it.sunEcliptic.formalZodiac else it.sunEcliptic.naturalZodiac
             val moonZodiac =
                 if (formal) it.moonEcliptic.formalZodiac else it.moonEcliptic.naturalZodiac
-            binding.zodiac.text = listOf(
-                getString(R.string.sun) + spacedColon + // ☉, "☀️ " +
-                        sunZodiac.format(binding.zodiac.context, true),
-                getString(R.string.moon) + spacedColon + // ☽, it.moonPhaseEmoji + " " +
-                        moonZodiac.format(binding.zodiac.context, true)
-            ).joinToString("\n")
+            binding.sun.text = sunZodiac.format(binding.root.context, true) // ☉☀️
+            binding.moon.text = moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
             binding.time.text = time.formatDateAndTime()
         }
 

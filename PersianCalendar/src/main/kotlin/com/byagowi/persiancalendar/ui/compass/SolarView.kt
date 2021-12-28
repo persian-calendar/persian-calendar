@@ -141,7 +141,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         it.style = Paint.Style.FILL
     }
     private val sunIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = 0xFFFFE564.toInt()
+        it.color = 0xFFF9A825.toInt()
         it.style = Paint.Style.FILL
     }
     private val zodiacBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

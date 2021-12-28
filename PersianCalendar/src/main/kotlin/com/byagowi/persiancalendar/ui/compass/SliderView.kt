@@ -12,8 +12,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import kotlin.math.cos
 
-class SliderView(context: Context, attrs: AttributeSet? = null) :
-    RecyclerView(context, attrs) {
+class SliderView(context: Context, attrs: AttributeSet? = null) : RecyclerView(context, attrs) {
 
     private val itemsCount = 500000
     private var positionOffset = 0
