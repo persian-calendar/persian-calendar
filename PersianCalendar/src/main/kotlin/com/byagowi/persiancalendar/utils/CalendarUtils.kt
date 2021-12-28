@@ -126,9 +126,8 @@ fun Date.toJavaCalendar(forceLocalTime: Boolean = false): Calendar = Calendar.ge
 }
 
 fun Calendar.formatDateAndTime(): String =
-    Clock(this).toFormattedString(forcedIn12 = true) + " " + formatDate(
-        Jdn(this.toCivilDate()).toCalendar(mainCalendar), forceNonNumerical = true
-    )
+    Clock(this).toFormattedString(forcedIn12 = true) + spacedComma +
+            formatDate(Jdn(this.toCivilDate()).toCalendar(mainCalendar), forceNonNumerical = true)
 
 // Google Meet generates weird and ugly descriptions with lines having such patterns, let's get rid of them
 private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULTILINE)
