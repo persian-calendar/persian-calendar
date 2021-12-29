@@ -18,7 +18,7 @@ class AstronomyTests {
         listOf(
             1.84566, 5.53699, 9.22831, 12.91963, 16.61096, 20.30228, 23.99361, 27.68493
         ).forEachIndexed { index, it ->
-            val lunarAge = LunarAge.fromDegrees((index + .5) * 45)
+            val lunarAge = LunarAge.fromDegrees((index + .5) * (360 / 8))
             assertThat(lunarAge.days).isWithin(1.0e-5).of(it)
             assertThat(lunarAge.toPhase().ordinal).isEqualTo((index + 1) % 8)
         }
