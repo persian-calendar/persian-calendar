@@ -36,7 +36,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         animator?.removeAllUpdateListeners()
         if (immediate) {
             currentTime = time.timeInMillis
-            sunMoonPosition = time.calculateSunMoonPosition(coordinates).also(update)
+            sunMoonPosition = time.calculateSunMoonPosition(null).also(update)
             postInvalidate()
             return
         }
@@ -48,7 +48,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             it.addUpdateListener { _ ->
                 currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
                 date.timeInMillis = currentTime
-                sunMoonPosition = date.calculateSunMoonPosition(coordinates).also(update)
+                sunMoonPosition = date.calculateSunMoonPosition(null).also(update)
                 postInvalidate()
             }
         }.start()
