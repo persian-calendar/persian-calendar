@@ -8,8 +8,40 @@ import com.cepmuvakkit.times.posAlgo.Ecliptic
 import io.github.persiancalendar.calendar.PersianDate
 import kotlin.math.floor
 
+/**
+ * The following table is copied from https://en.wikipedia.org/wiki/Sidereal_and_tropical_astrology
+ *
+ * | Constellation |       Tropical date       |       Sidereal Date       |  Based on IAU boundaries  |
+ * |---------------|---------------------------|---------------------------|---------------------------|
+ * | Aries         | March 21 – April 19       | April 15 – May 15         | April 18 – May 13         |
+ * | Taurus        | April 20 – May 20         | May 16 – June 15          | May 13 – June 21          |
+ * | Gemini        | May 21 – June 20          | June 16 – July 16         | June 21 – July 20         |
+ * | Cancer        | June 21 – July 22         | July 17 – August 16       | July 20 – August 10       |
+ * | Leo           | July 23 – August 22       | August 17 – September 16  | August 10 – September 16  |
+ * | Virgo         | August 23 – September 22  | September 17 – October 17 | September 16 – October 30 |
+ * | Libra         | September 23 – October 22 | October 18 – November 16  | October 30 – November 23  |
+ * | Scorpio       | October 23 – November 21  | November 17 – December 16 | November 23 – November 29 |
+ * | Sagittarius   | November 22 – December 21 | December 17 – January 15  | December 17 – January 20  |
+ * | Capricorn     | December 22 – January 19  | January 16 – February 14  | January 20 – February 16  |
+ * | Aquarius      | January 21 – February 19  | February 15 – March 15    | February 16 – March 11    |
+ * | Pisces        | February 19 – March 20    | March 16 – April 14       | March 11 – April 18       |
+ *
+ * Ours should match with tropical and IAU boundaries ones but we are interesting on having having
+ * others types also such Vedic and Sidereal if is easy to do and we can find their degrees.
+ *
+ * iauRangeEnd values can be found on the following places:
+ * * https://github.com/janczer/goMoonPhase/blob/0363844/MoonPhase.go#L363
+ * * https://github.com/emvakar/EKAstrologyCalc/blob/ee0cd57/Sources/EKAstrologyCalc/Calculators/EKMoonZodiacSignCalculator.swift#L70
+ * * https://www.scribd.com/doc/83082081/Moon-Phase-Calculator
+ * * https://www.mail-archive.com/amibroker@yahoogroups.com/msg04288.html
+ * * https://github.com/giboow/mooncalc/blob/5df85ab/mooncalc.js#L103
+ * * https://github.com/mfzhang/AB.Formulae/blob/bbab96c/ZakirBoss-Mubarak/Formulas/Custom/Luna%20Phase.afl
+ * * https://github.com/chan/vios/blob/3430b89/autoload/time/moon.vim
+ * * https://github.com/BGCX262/zweer-gdr-svn-to-git/blob/6d85903/trunk/library/Zwe/Weather/Moon.php
+ *
+ */
 enum class Zodiac(
-    private val endOfRange: Double, private val emoji: String, @StringRes private val title: Int
+    private val iauRangeEnd: Double, private val emoji: String, @StringRes private val title: Int
 ) {
     ARIES(33.18, "♈", R.string.aries),
     TAURUS(51.16, "♉", R.string.taurus),
@@ -30,21 +62,18 @@ enum class Zodiac(
         append(if (short) result.split(" (")[0] else result)
     }
 
-    private val startOfRange get() =
-        ((values().getOrNull(ordinal - 1)?.endOfRange) ?: PISCES.endOfRange - 360)
+    private val iauPreviousRangeEnd
+        get() = ((values().getOrNull(ordinal - 1)?.iauRangeEnd) ?: PISCES.iauRangeEnd - 360)
 
-    val iauRange get() = listOf(startOfRange, endOfRange)
+    val iauRange get() = listOf(iauPreviousRangeEnd, iauRangeEnd)
     val tropicalRange get() = listOf(ordinal * 30.0, (ordinal + 1) * 30.0)
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate) =
             values().getOrNull(persianDate.month - 1) ?: ARIES
 
-        // See the table below https://en.wikipedia.org/wiki/Sidereal_and_tropical_astrology
-        // to learn about the difference of the Zodiac calculation
-        // https://github.com/janczer/goMoonPhase/blob/0363844/MoonPhase.go#L363
         fun fromIauEcliptic(ecliptic: Ecliptic) =
-            values().firstOrNull { ecliptic.λ < it.endOfRange } ?: ARIES
+            values().firstOrNull { ecliptic.λ < it.iauRangeEnd } ?: ARIES
 
         fun fromTropicalEcliptic(ecliptic: Ecliptic) =
             values().getOrNull(floor(ecliptic.λ / 30).toInt()) ?: ARIES

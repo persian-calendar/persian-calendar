@@ -59,6 +59,10 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
         // https://en.wikipedia.org/wiki/Lunar_distance_(astronomy)
         const val LUNAR_DISTANCE = 384399
 
+        // TODO: make it match with https://github.com/BGCX262/zweer-gdr-svn-to-git/blob/6d85903/trunk/library/Zwe/Weather/Moon.php
+        val moonPhases = listOf(
+            1.84566, 5.53699, 9.22831, 12.91963, 16.61096, 20.30228, 23.99361, 27.68493
+        )
         val moonPhasesNames = listOf(
             "New Moon", "Waxing Crescent", "First Quarter", "Waxing Gibbous", "Full Moon",
             "Waning Gibbous", "Third Quarter", "Waning Crescent", "New Moon"
