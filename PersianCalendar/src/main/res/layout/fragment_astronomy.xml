@@ -52,7 +52,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/summer"
-                            app:chipBackgroundColor="#cc2baa40" />
+                            app:chipBackgroundColor="#ccfab000" />
 
                         <TextView
                             android:id="@+id/summer"
