@@ -131,8 +131,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     private val trianglePath = Path().also {
         it.moveTo(0f, 6.dp)
-        it.lineTo((-5).dp, 1f)
-        it.lineTo(5.dp, 1f)
+        it.lineTo((-5).dp, .5.dp)
+        it.lineTo(5.dp, .5.dp)
         it.close()
     }
     private val arcRect = RectF()
