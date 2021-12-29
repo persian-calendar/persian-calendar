@@ -177,8 +177,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         run {
             val header = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
             val season = Season.fromPersianCalendar(persian, coordinates)
-            header.seasonImage.setImageResource(season.imageRes)
-            header.seasonImage.contentDescription = getString(season.nameRes)
+            header.seasonImage.setImageResource(season.imageId)
+            header.seasonImage.contentDescription = getString(season.nameStringId)
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {

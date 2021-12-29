@@ -12,7 +12,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 
 enum class Season(
-    @StringRes val nameRes: Int, @DrawableRes val imageRes: Int,
+    @StringRes val nameStringId: Int, @DrawableRes val imageId: Int,
     private val equinoxCalculator: (Int) -> Date
 ) {
     SPRING(R.string.spring, R.drawable.spring, Equinox::northwardEquinox),
