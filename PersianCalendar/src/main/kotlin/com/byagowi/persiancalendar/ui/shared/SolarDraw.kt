@@ -34,13 +34,13 @@ class SolarDraw(context: Context) {
     fun moon(canvas: Canvas, sunMoonPosition: SunMoonPosition, cx: Float, cy: Float, r: Float) {
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(moonBitmap, null, moonRect, null)
-        val arcWidth = (sunMoonPosition.moonPhase.toFloat() - .5f) * 2 * r
+        val arcWidth = (sunMoonPosition.lunarAge.absolutePhaseValue.toFloat() - .5f) * 2 * r
         moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
         ovalPath.rewind()
         ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
         ovalPath.arcTo(moonRect, 270f, 180f)
         ovalPath.close()
-        canvas.withScale(x = if (sunMoonPosition.moonAgeInDegrees > 180) -1f else 1f, pivotX = cx) {
+        canvas.withScale(x = if (sunMoonPosition.lunarAge.isAscending) 1f else -1f, pivotX = cx) {
             drawPath(ovalPath, moonPaint)
         }
     }
@@ -63,5 +63,6 @@ class SolarDraw(context: Context) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(earthDrawable, null, earthRect, null)
     }
+
     private val earthRect = RectF()
 }

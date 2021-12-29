@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar
 
+import com.byagowi.persiancalendar.entities.LunarAge
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.cepmuvakkit.times.posAlgo.Ecliptic
 import com.google.common.truth.Truth.assertThat
@@ -7,7 +8,23 @@ import io.github.persiancalendar.calendar.PersianDate
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
-class ZodiacTests {
+class AstronomyTests {
+
+    @Test
+    fun `Test lunar age`() {
+        // https://github.com/BGCX262/zweer-gdr-svn-to-git/blob/6d85903/trunk/library/Zwe/Weather/Moon.php
+        listOf(
+            1.84566, 5.53699, 9.22831, 12.91963, 16.61096, 20.30228, 23.99361, 27.68493
+        ).forEachIndexed { index, it ->
+            val lunarAge = LunarAge.fromDegrees((index + .5) * 45)
+            assertThat(lunarAge.days).isWithin(1.0e-5).of(it)
+            assertThat(lunarAge.toPhase().ordinal).isEqualTo((index + 1) % 8)
+        }
+        (0..720).map { LunarAge.fromDegrees(it.toDouble()).tithi }.forEach {
+            assertThat(it).isAtLeast(1)
+            assertThat(it).isAtMost(30)
+        }
+    }
 
     @Test
     fun `Zodiac from Persian calendar`() {
@@ -27,9 +44,13 @@ class ZodiacTests {
         ) { longitude, zodiac ->
             assertEquals(zodiac, Zodiac.fromIauEcliptic(Ecliptic(longitude.toDouble(), .0, .0)))
         }
-        (0..11).map { 10 + it * 30 }.zip(Zodiac.values() + listOf(Zodiac.ARIES)) { longitude, zodiac ->
-            assertEquals(zodiac, Zodiac.fromTropicalEcliptic(Ecliptic(longitude.toDouble(), .0, .0)))
-        }
+        (0..11).map { 10 + it * 30 }
+            .zip(Zodiac.values() + listOf(Zodiac.ARIES)) { longitude, zodiac ->
+                assertEquals(
+                    zodiac,
+                    Zodiac.fromTropicalEcliptic(Ecliptic(longitude.toDouble(), .0, .0))
+                )
+            }
     }
 
     @Test
@@ -40,6 +61,10 @@ class ZodiacTests {
         ).zip(Zodiac.values()) { centerOfZodiac, zodiac ->
             val average = zodiac.iauRange.sum() / 2
             assertThat(average).isWithin(1.0e-10).of(centerOfZodiac)
+        }
+        (0..11).zip(Zodiac.values()) { it, zodiac ->
+            val average = zodiac.tropicalRange.sum() / 2
+            assertThat(average).isWithin(1.0e-10).of(it * 30.0 + 15)
         }
     }
 }
