@@ -33,8 +33,8 @@ enum class Zodiac(
     private val startOfRange get() =
         ((values().getOrNull(ordinal - 1)?.endOfRange) ?: PISCES.endOfRange - 360)
 
-    val iauRange get() = startOfRange..endOfRange
-    val tropicalRange get() = ordinal * 30.0..(ordinal + 1) * 30.0
+    val iauRange get() = listOf(startOfRange, endOfRange)
+    val tropicalRange get() = listOf(ordinal * 30.0, (ordinal + 1) * 30.0)
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate) =

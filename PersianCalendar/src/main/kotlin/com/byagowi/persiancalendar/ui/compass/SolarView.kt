@@ -16,7 +16,6 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Zodiac
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -64,10 +63,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     val fraction = ((animator.animatedValue as? Float) ?: 0f)
                     ranges.indices.forEach {
                         ranges[it][0] = MathUtils.lerp(
-                            iauRanges[it].first, tropicalRanges[it].first, fraction
+                            iauRanges[it][0], tropicalRanges[it][0], fraction
                         )
                         ranges[it][1] = MathUtils.lerp(
-                            iauRanges[it].second, tropicalRanges[it].second, fraction
+                            iauRanges[it][1], tropicalRanges[it][1], fraction
                         )
                     }
                     postInvalidate()
@@ -75,15 +74,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }.start()
             field = value
         }
-    private val tropicalRanges = Zodiac.values().map {
-        it.tropicalRange.start.toFloat() to it.tropicalRange.endInclusive.toFloat()
-    }
-    private val iauRanges = Zodiac.values().map {
-        it.iauRange.start.toFloat() to it.iauRange.endInclusive.toFloat()
-    }
+    private val tropicalRanges = Zodiac.values().map { it.tropicalRange.map(Double::toFloat) }
+    private val iauRanges = Zodiac.values().map { it.iauRange.map(Double::toFloat) }
+    private val ranges = iauRanges.map { it.toFloatArray() }
 
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
-    private val ranges = iauRanges.map { it.toList().toMutableList() }.toMutableList()
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas ?: return)

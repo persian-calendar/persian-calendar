@@ -38,7 +38,7 @@ class ZodiacTests {
             10.88, 42.17, 72.3, 106.46, 127.39, 154.32,
             198.755, 233.37, 256.915, 286.875, 307.105, 330.15
         ).zip(Zodiac.values()) { centerOfZodiac, zodiac ->
-            val average = (zodiac.iauRange.start + zodiac.iauRange.endInclusive) / 2
+            val average = zodiac.iauRange.sum() / 2
             assertThat(average).isWithin(1.0e-10).of(centerOfZodiac)
         }
     }
