@@ -9,19 +9,18 @@ import io.github.persiancalendar.Equinox
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
+import java.util.*
 
-enum class Season(@StringRes val nameRes: Int, @DrawableRes val imageRes: Int) {
-    SPRING(R.string.spring, R.drawable.spring),
-    SUMMER(R.string.summer, R.drawable.summer),
-    FALL(R.string.fall, R.drawable.fall),
-    WINTER(R.string.winter, R.drawable.winter);
+enum class Season(
+    @StringRes val nameRes: Int, @DrawableRes val imageRes: Int,
+    private val equinoxCalculator: (Int) -> Date
+) {
+    SPRING(R.string.spring, R.drawable.spring, Equinox::northwardEquinox),
+    SUMMER(R.string.summer, R.drawable.summer, Equinox::northernSolstice),
+    FALL(R.string.fall, R.drawable.fall, Equinox::southwardEquinox),
+    WINTER(R.string.winter, R.drawable.winter, Equinox::southernSolstice);
 
-    fun getEquinox(date: CivilDate) = when (this) {
-        SPRING -> Equinox.northwardEquinox(date.year)
-        SUMMER -> Equinox.northernSolstice(date.year)
-        FALL -> Equinox.southwardEquinox(date.year)
-        WINTER -> Equinox.southernSolstice(date.year)
-    }.toJavaCalendar()
+    fun getEquinox(date: CivilDate) = equinoxCalculator(date.year).toJavaCalendar()
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate, coordinates: Coordinates?): Season {
