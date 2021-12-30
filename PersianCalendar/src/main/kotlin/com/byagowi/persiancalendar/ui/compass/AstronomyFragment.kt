@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.compass
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -12,6 +13,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -58,8 +60,9 @@ class AstronomyFragment : Fragment() {
                 if (tropical) it.sunEcliptic.tropicalZodiac else it.sunEcliptic.iauZodiac
             val moonZodiac =
                 if (tropical) it.moonEcliptic.tropicalZodiac else it.moonEcliptic.iauZodiac
-            binding.sun.text = sunZodiac.format(binding.root.context, true) // ☉☀️
-            binding.moon.text = moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
+            binding.sunText.text = sunZodiac.format(binding.root.context, true) // ☉☀️
+            binding.moonText.text =
+                moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
             binding.time.text = time.formatDateAndTime()
         }
 
@@ -72,6 +75,19 @@ class AstronomyFragment : Fragment() {
         binding.appBar.toolbar.menu.add(R.string.goto_date).also { menuItem ->
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             menuItem.actionView = tropicalSwitch
+        }
+
+        (0 until 4).forEach {
+            val month = it * 3 + 1 // first month of the season
+            val season = Season.fromPersianCalendar(PersianDate(1400, month, 1), coordinates)
+            val chip = when (it) {
+                0 -> binding.firstSeasonChip
+                1 -> binding.secondSeasonChip
+                2 -> binding.thirdSeasonChip
+                else -> binding.fourthSeasonChip
+            }
+            chip.setText(season.nameStringId)
+            chip.chipBackgroundColor = ColorStateList.valueOf(season.color)
         }
 
         fun update(immediate: Boolean) {
@@ -95,10 +111,10 @@ class AstronomyFragment : Fragment() {
             (1..4).forEach {
                 val date = CivilDate(PersianDate(persianYear, it * 3, 29))
                 when (it) {
-                    1 -> binding.summer
-                    2 -> binding.fall
-                    3 -> binding.winter
-                    else -> binding.spring
+                    1 -> binding.firstSeasonText
+                    2 -> binding.secondSeasonText
+                    3 -> binding.thirdSeasonText
+                    else -> binding.fourthSeasonText
                 }.text = Season.values()[it % 4].getEquinox(date).formatDateAndTime()
             }
         }

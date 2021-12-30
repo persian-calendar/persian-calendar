@@ -15,10 +15,10 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:paddingBottom="95dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingBottom="95dp">
 
             <TextView
                 android:id="@+id/header_information"
@@ -48,14 +48,13 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/firstSeasonChip"
                             style="@style/astronomyChip"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/summer"
-                            app:chipBackgroundColor="#ccfab000" />
+                            android:layout_height="wrap_content" />
 
                         <TextView
-                            android:id="@+id/summer"
+                            android:id="@+id/firstSeasonText"
                             style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -70,14 +69,13 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/thirdSeasonChip"
                             style="@style/astronomyChip"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/winter"
-                            app:chipBackgroundColor="#cc5580aa" />
+                            android:layout_height="wrap_content" />
 
                         <TextView
-                            android:id="@+id/winter"
+                            android:id="@+id/thirdSeasonText"
                             style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -93,6 +91,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/sunChip"
                             style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -100,7 +99,7 @@
                             app:chipBackgroundColor="#cceaaa00" />
 
                         <TextView
-                            android:id="@+id/sun"
+                            android:id="@+id/sunText"
                             style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -123,14 +122,13 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/secondSeasonChip"
                             style="@style/astronomyChip"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/fall"
-                            app:chipBackgroundColor="#ccbf8015" />
+                            android:layout_height="wrap_content" />
 
                         <TextView
-                            android:id="@+id/fall"
+                            android:id="@+id/secondSeasonText"
                             style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -145,14 +143,13 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/fourthSeasonChip"
                             style="@style/astronomyChip"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/spring"
-                            app:chipBackgroundColor="#cc80aa15" />
+                            android:layout_height="wrap_content" />
 
                         <TextView
-                            android:id="@+id/spring"
+                            android:id="@+id/fourthSeasonText"
                             style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -168,6 +165,7 @@
                         android:orientation="horizontal">
 
                         <com.google.android.material.chip.Chip
+                            android:id="@+id/moonChip"
                             style="@style/astronomyChip"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -175,7 +173,7 @@
                             app:chipBackgroundColor="#cc606060" />
 
                         <TextView
-                            android:id="@+id/moon"
+                            android:id="@+id/moonText"
                             style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -189,10 +187,10 @@
 
             <com.byagowi.persiancalendar.ui.compass.SolarView
                 android:id="@+id/solar_view"
-                android:layout_marginTop="16dp"
                 android:layout_width="290dp"
                 android:layout_height="290dp"
-                android:layout_gravity="center_horizontal" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp" />
 
         </LinearLayout>
 
@@ -203,16 +201,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:padding="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/time"
-            android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="4dp" />
+            android:layout_marginBottom="4dp"
+            android:textSize="15sp" />
 
         <FrameLayout
             android:layout_width="match_parent"

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
@@ -14,12 +15,12 @@ import java.util.*
 
 enum class Season(
     @StringRes val nameStringId: Int, @DrawableRes val imageId: Int,
-    private val equinoxCalculator: (Int) -> Date
+    private val equinoxCalculator: (Int) -> Date, @ColorInt val color: Int
 ) {
-    SPRING(R.string.spring, R.drawable.spring, Equinox::northwardEquinox),
-    SUMMER(R.string.summer, R.drawable.summer, Equinox::northernSolstice),
-    FALL(R.string.fall, R.drawable.fall, Equinox::southwardEquinox),
-    WINTER(R.string.winter, R.drawable.winter, Equinox::southernSolstice);
+    SPRING(R.string.spring, R.drawable.spring, Equinox::northwardEquinox, 0xcc80aa15.toInt()),
+    SUMMER(R.string.summer, R.drawable.summer, Equinox::northernSolstice, 0xccfab000.toInt()),
+    FALL(R.string.fall, R.drawable.fall, Equinox::southwardEquinox, 0xccbf8015.toInt()),
+    WINTER(R.string.winter, R.drawable.winter, Equinox::southernSolstice, 0xcc5580aa.toInt());
 
     fun getEquinox(date: CivilDate) = equinoxCalculator(date.year).toJavaCalendar()
 
