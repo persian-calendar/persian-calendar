@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.entities
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import io.github.persiancalendar.Equinox
@@ -27,7 +28,7 @@ enum class Season(
             var season = (persianDate.month - 1) / 3
             // Southern hemisphere
             if (coordinates?.isSouthernHemisphere == true) season = (season + 2) % 4
-            return values()[season]
+            return values().getOrNull(season).debugAssertNotNull ?: SPRING
         }
     }
 }

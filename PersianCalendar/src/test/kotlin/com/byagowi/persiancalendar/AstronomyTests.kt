@@ -1,11 +1,14 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.LunarAge
+import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.utils.Eclipse
 import com.cepmuvakkit.times.posAlgo.Ecliptic
 import com.google.common.truth.Truth.assertThat
+import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import io.github.persiancalendar.praytimes.Coordinates
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import java.util.*
@@ -98,6 +101,48 @@ class AstronomyTests {
         (0..11).zip(Zodiac.values()) { it, zodiac ->
             val average = zodiac.tropicalRange.sum() / 2
             assertThat(average).isWithin(1.0e-10).of(it * 30.0 + 15)
+        }
+    }
+
+    @Test
+    fun `Season from Persian calendar`() {
+        val noLocationSeasons = (1..12).map { Season.fromPersianCalendar(PersianDate(1400, it, 29), null) }
+        listOf(
+            1..3 to Season.SPRING, 4..6 to Season.SUMMER,
+            7..9 to Season.FALL, 10..12 to Season.WINTER
+        ).forEach { (range, season) ->
+            range.forEach { assertThat(noLocationSeasons[it - 1]).isEqualTo(season) }
+        }
+        val northernHemisphereSeason = (1..12).map {
+            val kathmandu = Coordinates(27.7172, 85.324, 1_400.0)
+            Season.fromPersianCalendar(PersianDate(1400, it, 29), kathmandu)
+        }
+        listOf(
+            1..3 to Season.SPRING, 4..6 to Season.SUMMER,
+            7..9 to Season.FALL, 10..12 to Season.WINTER
+        ).forEach { (range, season) ->
+            range.forEach { assertThat(northernHemisphereSeason[it - 1]).isEqualTo(season) }
+        }
+        val southernHemisphereSeasons = (1..12).map {
+            val nirobi = Coordinates(-1.286389, 36.817222, 1_795.0)
+            Season.fromPersianCalendar(PersianDate(1400, it, 29), nirobi)
+        }
+        listOf(
+            1..3 to Season.FALL, 4..6 to Season.WINTER,
+            7..9 to Season.SPRING, 10..12 to Season.SUMMER
+        ).forEach { (range, season) ->
+            range.forEach { assertThat(southernHemisphereSeasons[it - 1]).isEqualTo(season) }
+        }
+    }
+
+    @Test
+    fun `Season equinox`() {
+        val civilDate = CivilDate(2020, 1, 1)
+        listOf(
+            Season.SPRING to 1584676243, Season.SUMMER to 1592689391,
+            Season.FALL to 1600781495, Season.WINTER to 1608545015
+        ).map { (it, time) ->
+            assertThat(it.getEquinox(civilDate).time.time / 1000).isEqualTo(time)
         }
     }
 }
