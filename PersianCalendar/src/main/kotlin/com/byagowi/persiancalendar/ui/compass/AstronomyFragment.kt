@@ -77,15 +77,11 @@ class AstronomyFragment : Fragment() {
             menuItem.actionView = tropicalSwitch
         }
 
-        (0 until 4).forEach {
-            val month = it * 3 + 1 // first month of the season
+        listOf(
+            binding.firstSeasonChip to 4, binding.secondSeasonChip to 7,
+            binding.thirdSeasonChip to 10, binding.fourthSeasonChip to 1
+        ).map { (chip, month) -> // 'month' is month number of first Persian month in the season
             val season = Season.fromPersianCalendar(PersianDate(1400, month, 1), coordinates)
-            val chip = when (it) {
-                0 -> binding.firstSeasonChip
-                1 -> binding.secondSeasonChip
-                2 -> binding.thirdSeasonChip
-                else -> binding.fourthSeasonChip
-            }
             chip.setText(season.nameStringId)
             chip.chipBackgroundColor = ColorStateList.valueOf(season.color)
         }
