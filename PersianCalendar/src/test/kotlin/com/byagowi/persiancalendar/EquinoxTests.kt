@@ -12,11 +12,11 @@ class EquinoxTests {
 
         listOf(
             // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1401.pdf
-            listOf(2022, 3, 20, 19, 3/*should be 19*/, 2/* should be 26*/),
+            listOf(2022, 3, 20, 19, 3, 2/* should be 26*/),
             // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1400.pdf
-            listOf(2021, 3, 20, 13, 7/*should be 19*/, 14/* should be 28*/),
+            listOf(2021, 3, 20, 13, 7, 14/* should be 28*/),
             // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1399.pdf
-            listOf(2020, 3, 20, 7, 19/*should be 19*/, 43/* should be 37*/),
+            listOf(2020, 3, 20, 7, 19, 43/* should be 37*/),
             // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1398.pdf
             listOf(2019, 3, 21, 1, 28, 13/*should be 27*/),
             // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1397.pdf
