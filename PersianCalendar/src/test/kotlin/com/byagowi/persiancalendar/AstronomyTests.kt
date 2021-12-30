@@ -139,10 +139,8 @@ class AstronomyTests {
     fun `Season equinox`() {
         val civilDate = CivilDate(2020, 1, 1)
         listOf(
-            Season.SPRING to 1584676243, Season.SUMMER to 1592689391,
-            Season.FALL to 1600781495, Season.WINTER to 1608545015
-        ).map { (it, time) ->
-            assertThat(it.getEquinox(civilDate).time.time / 1000).isEqualTo(time)
-        }
+            Season.SPRING to 1584676183400, Season.SUMMER to 1592689390621,
+            Season.FALL to 1600781435095, Season.WINTER to 1608544954756
+        ).map { (it, time) -> assertThat(it.getEquinox(civilDate).time.time).isEqualTo(time) }
     }
 }
