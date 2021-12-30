@@ -25,6 +25,7 @@ plugins {
 
 // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 val composeVersion = "1.1.0-rc02"
+val composeSecondaryVersion = "1.0.5"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
@@ -199,12 +200,14 @@ dependencies {
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.2")
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:0.20.3")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material:material:$composeVersion")
+    minApi21Implementation("androidx.compose.material:material:$composeSecondaryVersion")
     minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha02")
+    minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeSecondaryVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
-        androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
+        androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeSecondaryVersion")
     }
+    minApi21Implementation("androidx.compose.ui:ui-tooling:$composeSecondaryVersion")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
 
