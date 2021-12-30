@@ -23,7 +23,8 @@ plugins {
 //      error("As current Api based flavors scheme, use even number for patch numbers")
 //   val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
-val composeVersion = "1.0.5"
+// https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+val composeVersion = "1.1.0-rc02"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
@@ -191,7 +192,7 @@ dependencies {
 
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
@@ -200,11 +201,9 @@ dependencies {
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
     minApi21Implementation("androidx.compose.material:material:$composeVersion")
     minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha02")
-    minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
         androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
-        debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     }
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
