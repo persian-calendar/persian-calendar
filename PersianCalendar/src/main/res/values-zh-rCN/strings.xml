@@ -174,4 +174,5 @@
     <string name="version">版本号 %1$s</string>
     <string name="about_noClient">未安装任何邮件应用</string>
     <string name="shift_work_starting_date">日历上选择的日期（%1$s）将作为倒班的起始日。</string>
+    <string name="spaced_and">和</string>
 </resources>

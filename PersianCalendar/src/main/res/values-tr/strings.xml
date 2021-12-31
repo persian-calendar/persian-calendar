@@ -217,7 +217,7 @@
     <string name="week_of_year_summary">Takvimde hafta no göster</string>
     <string name="week_of_year">Hafta No</string>
     <string name="astronomical_info_summary">Ek bilgileri göster (Akrep burcundaki ay, yılların isimleri ve burçlar gibi)</string>
-    <string name="astronomical_info">Astronomik Bilgi</string>
+    <string name="astronomical_info">Astronomi</string>
     <string name="calendars_priority_summary">Takvimleri önceliği gösterecek veya gizleyecek şekilde ayarlayın</string>
     <string name="calendars_priority">Takvim Önceliği</string>
     <string name="show_device_calendar_events_summary">Kişisel takvim etkinliklerini gösterme</string>
