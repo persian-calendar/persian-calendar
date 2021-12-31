@@ -29,7 +29,8 @@ enum class Language(val code: String, val nativeName: String) {
     NE("ne", "नेपाली"),
     TG("tg", "Тоҷикӣ"),
     TR("tr", "Türkçe"),
-    UR("ur", "اردو");
+    UR("ur", "اردو"),
+    ZH_CN("zh-CN", "中文");
 
     val isArabic get() = this == AR
     val isDari get() = this == FA_AF
@@ -39,7 +40,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val showNepaliCalendar get() = this == NE
 
-    val language get() = code.replace(Regex("-(IR|AF|US)"), "")
+    val language get() = code.replace(Regex("-(IR|AF|US|CN)"), "")
 
     // en-IR and fa-AF aren't recognized by system, that's handled by #language
     fun asSystemLocale() = Locale(language)
@@ -57,13 +58,13 @@ enum class Language(val code: String, val nativeName: String) {
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, AR, TR, TG -> true
+            EN_US, JA, ZH_CN, FR, ES, AR, TR, TG -> true
             else -> false
         }
 
     val mightPreferUmmAlquraIslamicCalendar: Boolean
         get() = when (this) {
-            FA_AF, PS, UR, AR, CKB, EN_US, JA, FR, ES, TR, KMR, TG, NE -> true
+            FA_AF, PS, UR, AR, CKB, EN_US, JA, ZH_CN, FR, ES, TR, KMR, TG, NE -> true
             else -> false
         }
 
@@ -88,21 +89,21 @@ enum class Language(val code: String, val nativeName: String) {
 
     val showIranTimeOption
         get() = when (this) {
-            FA, AZB, CKB, EN_IR, EN_US, ES, FR, GLK, JA, KMR -> true
+            FA, AZB, CKB, EN_IR, EN_US, ES, FR, GLK, JA, ZH_CN, KMR -> true
             else -> false
         }
 
     // Whether locale uses الفبا or not
     val isArabicScript: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, TR, KMR, EN_IR, TG, NE -> false
+            EN_US, JA, ZH_CN, FR, ES, TR, KMR, EN_IR, TG, NE -> false
             else -> true
         }
 
     // Whether locale would prefer local digits like ۱۲۳ over the global ones, 123, initially at least
     val prefersLocalDigits: Boolean
         get() = when (this) {
-            UR, EN_IR, EN_US, JA, FR, ES, TR, KMR, TG -> false
+            UR, EN_IR, EN_US, JA, ZH_CN, FR, ES, TR, KMR, TG -> false
             else -> true
         }
 
@@ -134,7 +135,7 @@ enum class Language(val code: String, val nativeName: String) {
     // We can presume user would prefer Gregorian calendar at least initially
     private val prefersGregorianCalendar: Boolean
         get() = when (this) {
-            EN_US, JA, FR, ES, UR, TR, KMR, TG -> true
+            EN_US, JA, ZH_CN, FR, ES, UR, TR, KMR, TG -> true
             else -> false
         }
 
