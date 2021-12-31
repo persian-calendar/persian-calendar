@@ -152,5 +152,26 @@
     <string name="gps_location">通过GPS或网络获取位置</string>
     <string name="pleasewaitgps">请稍候…一分钟内如果没有结果请尝试其他选项</string>
     <string name="longitude">经度</string>
-    <string name="location_access">位置权限</string>
+    <string name="location_access">位置信息权限</string>
+    <string name="calendar_access">日历权限</string>
+    <string name="phone_calendar_required">此功能需要日历权限，授权后即可在日历中显示您的个人日程。</string>
+    <string name="gpl_logo">GPL图标</string>
+    <string name="about_license">许可证</string>
+    <string name="about_license_title">应用程序许可证</string>
+    <string name="about_support_developers">开发者支持</string>
+    <string name="about_report_bug">在 GitHub 上报告问题</string>
+    <string name="about_report_bug_sum">建议用于提交错误或请求新功能，需要 GitHub 账号</string>
+    <string name="about_email_sum">向应用开发者发送私人邮件</string>
+    <string name="about_developers">开发者名单（排名不分先后）</string>
+    <string name="previous_month">上个月</string>
+    <string name="next_month">下个月</string>
+    <string name="nth_week_of_year">第%1$s周</string>
+    <string name="shift_work_settings">倒班设置</string>
+    <string name="shift_work_starting_date_edit">之前选择的日期（%1$s）将作为倒班的起始日。</string>
+    <string name="about_sendMail">电子邮件</string>
+    <string name="phone_location_required">此功能需要位置信息权限，如您拒绝授权则需要手动输入经纬度。</string>
+    <string name="about_license_sum">查阅波斯历的GPLv3许可证和其他许可条款。</string>
+    <string name="version">版本号 %1$s</string>
+    <string name="about_noClient">未安装任何邮件应用</string>
+    <string name="shift_work_starting_date">日历上选择的日期（%1$s）将作为倒班的起始日。</string>
 </resources>
