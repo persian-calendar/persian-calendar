@@ -54,7 +54,7 @@ class EquinoxTests {
             // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1381.pdf
             listOf(2002, 3, 20, 22, 46, 12/*should be 2*/)
         ).forEach {
-            calendar.time = Equinox.northwardEquinox(it[0])
+            calendar.time = Equinox.NORTHWARD_EQUINOX.inYear(it[0])
             assertEquals(it[0].toString(), it[0], calendar[Calendar.YEAR])
             assertEquals(it[0].toString(), it[1], calendar[Calendar.MONTH] + 1)
             assertEquals(it[0].toString(), it[2], calendar[Calendar.DAY_OF_MONTH])
@@ -64,6 +64,6 @@ class EquinoxTests {
         }
 
         // And not having random crashes
-        (-2000..10000).forEach { Equinox.northwardEquinox(it) }
+        (-2000..10000).forEach { Equinox.NORTHWARD_EQUINOX.inYear(it) }
     }
 }

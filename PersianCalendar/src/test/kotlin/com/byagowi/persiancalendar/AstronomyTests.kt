@@ -140,7 +140,7 @@ class AstronomyTests {
         val civilDate = CivilDate(2020, 1, 1)
         listOf(
             Season.SPRING to 1584676183400, Season.SUMMER to 1592689390621,
-            Season.FALL to 1600781435095, Season.WINTER to 1608544954756
+            Season.FALL to 1600781435095, Season.WINTER to 1608544954755
         ).map { (it, time) -> assertThat(it.getEquinox(civilDate).time.time).isEqualTo(time) }
     }
 }
