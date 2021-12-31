@@ -6,7 +6,7 @@
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.10
 |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 (*)
-+--- com.github.persian-calendar:equinox:1.0.1
++--- com.github.persian-calendar:equinox:1.0.2
 +--- com.github.persian-calendar:calendar:1.2.0
 +--- com.github.persian-calendar:praytimes:2.1.2
 +--- androidx.appcompat:appcompat:1.4.0
