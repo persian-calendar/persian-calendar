@@ -40,7 +40,9 @@ class SolarDraw(context: Context) {
         ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
         ovalPath.arcTo(moonRect, 270f, 180f)
         ovalPath.close()
-        canvas.withScale(x = if (sunMoonPosition.lunarAge.isAscending) 1f else -1f, pivotX = cx) {
+        val isAscendingFactor = if (sunMoonPosition.lunarAge.isAscending) 1f else -1f
+        val isSouthernHemisphereFactor = if (sunMoonPosition.isSouthernHemisphere) -1f else 1f
+        canvas.withScale(x = isAscendingFactor * isSouthernHemisphereFactor, pivotX = cx) {
             drawPath(ovalPath, moonPaint)
         }
     }

@@ -1,6 +1,7 @@
 package com.cepmuvakkit.times.posAlgo
 
 import com.byagowi.persiancalendar.entities.LunarAge
+import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 
@@ -14,6 +15,7 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
 
     val moonPosition: Horizontal?
     val sunPosition: Horizontal?
+    val isSouthernHemisphere: Boolean
 
     val lunarAge: LunarAge
 
@@ -28,6 +30,7 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
         if (observerEarthCoordinates == null) {
             moonPosition = null
             sunPosition = null
+            isSouthernHemisphere = false
         } else {
             val moonEquatorial =
                 LunarPosition.calculateMoonEquatorialCoordinates(moonEcliptic, jd, ΔT)
@@ -38,6 +41,7 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
             val elevation = observerEarthCoordinates.elevation
             moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
             sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
+            isSouthernHemisphere = observerEarthCoordinates.isSouthernHemisphere
         }
     }
 
