@@ -188,11 +188,11 @@ class CompassFragment : Fragment() {
 
         if (coordinates != null) {
             binding.appBar.toolbar.menu.add(R.string.show_sun_and_moon_path_in_24_hours).also {
-                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+                it.icon =
+                    binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_in_24_hours)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 it.onClick(::animateMoonAndSun)
             }
-        }
-        if (coordinates != null) {
             binding.appBar.toolbar.menu.add(R.string.qibla).also { menu ->
                 val prefs = binding.root.context.appPrefs
                 binding.compassView.isShowQibla = prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
