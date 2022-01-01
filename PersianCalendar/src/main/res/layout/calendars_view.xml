@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|start"
-        android:paddingStart="@dimen/padding_item"
+        android:paddingStart="@dimen/view_padding"
         android:paddingTop="@dimen/padding_item"
-        android:paddingEnd="@dimen/padding_item"
+        android:paddingEnd="@dimen/view_padding"
         android:textColor="?attr/colorAccent"
         android:textSize="@dimen/text_size_title" />
 
