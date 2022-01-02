@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -137,9 +138,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
             it.rewind()
             it.moveTo(cx, cy - radius)
             it.lineTo(cx - r, cy)
-            it.lineTo(cx, cy + r)
-            it.lineTo(cx + r, cy)
-            it.addCircle(cx, cy, r, Path.Direction.CCW)
+            it.arcTo(RectF(cx - r, cy - r, cx + r, cy + r), 180f, -180f)
             it.close()
         }
     }
