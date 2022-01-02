@@ -13,14 +13,22 @@
                     android:startOffset="0"
                     android:valueFrom="0"
                     android:valueTo="1.1"
-                    android:valueType="floatType" />
+                    android:valueType="floatType">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
                 <objectAnimator
                     android:duration="240"
                     android:propertyName="scaleX"
                     android:startOffset="240"
                     android:valueFrom="1.1"
                     android:valueTo="1"
-                    android:valueType="floatType" />
+                    android:valueType="floatType">
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
             </set>
         </aapt:attr>
     </target>
