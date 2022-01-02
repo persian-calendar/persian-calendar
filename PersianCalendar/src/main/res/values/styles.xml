@@ -441,7 +441,8 @@
         <item name="chipStrokeColor">@android:color/transparent</item>
     </style>
 
-    <style name="astronomyChipCaption">
+    <!-- Don't apply auto size to sun and moon text as it causes text get smaller and smaller -->
+    <style name="astronomyChipCaptionAutoSize">
         <item name="android:maxLines">1</item>
         <item name="autoSizeMinTextSize">8dp</item>
         <item name="autoSizeTextType">uniform</item>

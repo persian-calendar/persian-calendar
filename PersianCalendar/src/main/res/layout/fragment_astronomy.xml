@@ -55,7 +55,7 @@
 
                         <TextView
                             android:id="@+id/firstSeasonText"
-                            style="@style/astronomyChipCaption"
+                            style="@style/astronomyChipCaptionAutoSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -76,7 +76,7 @@
 
                         <TextView
                             android:id="@+id/thirdSeasonText"
-                            style="@style/astronomyChipCaption"
+                            style="@style/astronomyChipCaptionAutoSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -100,7 +100,6 @@
 
                         <TextView
                             android:id="@+id/sunText"
-                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -129,7 +128,7 @@
 
                         <TextView
                             android:id="@+id/secondSeasonText"
-                            style="@style/astronomyChipCaption"
+                            style="@style/astronomyChipCaptionAutoSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -150,7 +149,7 @@
 
                         <TextView
                             android:id="@+id/fourthSeasonText"
-                            style="@style/astronomyChipCaption"
+                            style="@style/astronomyChipCaptionAutoSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -174,7 +173,6 @@
 
                         <TextView
                             android:id="@+id/moonText"
-                            style="@style/astronomyChipCaption"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
