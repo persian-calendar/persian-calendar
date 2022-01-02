@@ -54,13 +54,10 @@
         <path
             android:fillColor="#ffffff"
             android:pathData="M271.4,270.1v-33.7h-52.5c-16.4,0 -29.7,13.1 -30.2,29.4v30.6c0.1,20.4 16.5,36.8 36.9,36.9h16.2v29.5h29.4V318c0,9.5 0.3,-45.6 0.3,-45.6v-2.3L271.4,270.1zM236.5,303.9h-2.3c-8.9,0 -16.2,-6.4 -16.2,-14.4v-9c0,-7.9 7.3,-14.4 16.2,-14.4h7.5v37.7L236.5,303.9L236.5,303.9z" />
-        <group
+        <path
             android:name="first_band"
-            android:pivotX="325">
-            <path
-                android:fillColor="#ffffff"
-                android:pathData="M325,202h234v61h-234z" />
-        </group>
+            android:fillColor="#ffffff"
+            android:pathData="M325,202v61h234v-61z" />
         <group
             android:name="second_band"
             android:pivotX="325">

@@ -7,28 +7,22 @@
     <target android:name="first_band">
         <aapt:attr name="android:animation">
             <set android:ordering="together">
+                <!-- this could be done using scaleX just like the other bands
+                     but it is intended to be an example of path animator -->
                 <objectAnimator
                     android:duration="240"
-                    android:propertyName="scaleX"
+                    android:propertyName="pathData"
                     android:startOffset="0"
-                    android:valueFrom="0"
-                    android:valueTo="1.1"
-                    android:valueType="floatType">
-                    <aapt:attr name="android:interpolator">
-                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
-                    </aapt:attr>
-                </objectAnimator>
+                    android:valueFrom="M325,202v61h0v-61z"
+                    android:valueTo="M325,202v61h257v-61z"
+                    android:valueType="pathType" />
                 <objectAnimator
                     android:duration="240"
-                    android:propertyName="scaleX"
+                    android:propertyName="pathData"
                     android:startOffset="240"
-                    android:valueFrom="1.1"
-                    android:valueTo="1"
-                    android:valueType="floatType">
-                    <aapt:attr name="android:interpolator">
-                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
-                    </aapt:attr>
-                </objectAnimator>
+                    android:valueFrom="M325,202v61h257v-61z"
+                    android:valueTo="M325,202v61h234v-61z"
+                    android:valueType="pathType" />
             </set>
         </aapt:attr>
     </target>
@@ -48,7 +42,12 @@
                     android:startOffset="320"
                     android:valueFrom="0"
                     android:valueTo="1.1"
-                    android:valueType="floatType" />
+                    android:valueType="floatType">
+                    <!-- it is almost unnoticeable, just as an example of path interpolator -->
+                    <aapt:attr name="android:interpolator">
+                        <pathInterpolator android:pathData="M 0.0,0.0 c0.333,0 0.667,1 1.0,1.0" />
+                    </aapt:attr>
+                </objectAnimator>
                 <objectAnimator
                     android:duration="240"
                     android:propertyName="scaleX"
