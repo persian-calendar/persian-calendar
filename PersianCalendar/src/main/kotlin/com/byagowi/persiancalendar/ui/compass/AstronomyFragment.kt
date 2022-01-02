@@ -114,7 +114,7 @@ class AstronomyFragment : Fragment() {
                 }.text = Season.values()[it % 4].getEquinox(date).formatDateAndTime()
             }
         }
-        update(true)
+        update(false)
 
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
@@ -136,7 +136,8 @@ class AstronomyFragment : Fragment() {
 
         val viewDirection = if (resources.isRtl) -1 else 1
 
-        var lastButtonClickTimestamp = 0L
+        var lastButtonClickTimestamp = System.currentTimeMillis()
+        binding.slider.smoothScrollBy(200 * viewDirection, 0)
 
         binding.slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

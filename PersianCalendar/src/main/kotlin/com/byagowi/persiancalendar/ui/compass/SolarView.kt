@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.math.MathUtils
@@ -27,7 +28,7 @@ import kotlin.math.min
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private var currentTime = 0L
+    private var currentTime = System.currentTimeMillis() - DAY_IN_MILLIS // Initial animation
     private var sunMoonPosition: SunMoonPosition? = null
     private var animator: ValueAnimator? = null
 
