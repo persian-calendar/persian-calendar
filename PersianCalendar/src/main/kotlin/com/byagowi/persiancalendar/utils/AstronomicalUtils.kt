@@ -5,9 +5,8 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Zodiac
-import com.byagowi.persiancalendar.global.isAstronomicalFeaturesEnabled
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.spacedColon
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 
@@ -24,7 +23,7 @@ fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
             persianDate.month).toInt() % 12 == 8
 
 fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean): String {
-    if (!isAstronomicalFeaturesEnabled) return ""
+    if (!isAstronomicalExtraFeaturesEnabled) return ""
     val persianDate = jdn.toPersianCalendar()
     val islamicDate = jdn.toIslamicCalendar()
     val moonInScorpioText = if (isMoonInScorpio(persianDate, islamicDate))

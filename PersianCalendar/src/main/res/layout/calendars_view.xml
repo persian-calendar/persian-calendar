@@ -8,16 +8,33 @@
     android:orientation="vertical"
     android:padding="@dimen/padding_item">
 
-    <TextView
-        android:id="@+id/week_day_name"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
-        android:paddingStart="@dimen/view_padding"
+        android:paddingStart="@dimen/padding_item"
         android:paddingTop="@dimen/padding_item"
-        android:paddingEnd="@dimen/view_padding"
-        android:textColor="?attr/colorAccent"
-        android:textSize="@dimen/text_size_title" />
+        android:paddingEnd="@dimen/padding_item">
+
+        <com.byagowi.persiancalendar.ui.calendar.times.MoonView
+            android:id="@+id/moon_phase_view"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical|start"
+            android:importantForAccessibility="no"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/week_day_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:paddingStart="@dimen/padding_item"
+            android:paddingEnd="@dimen/padding_item"
+            android:textColor="?attr/colorAccent"
+            android:textSize="@dimen/text_size_title" />
+
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendars"

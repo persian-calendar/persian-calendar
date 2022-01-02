@@ -11,6 +11,7 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
@@ -22,7 +23,6 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getZodiacInfo
-import com.byagowi.persiancalendar.utils.toJavaCalendar
 import io.github.persiancalendar.calendar.PersianDate
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
@@ -42,10 +42,14 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
 
         binding.extraInformationContainer.isVisible = isExpanded
+        binding.moonPhaseView.isVisible = isExpanded && isAstronomicalExtraFeaturesEnabled
+        binding.seasonProgress.enableAnimation = isExpanded
+        binding.monthProgress.enableAnimation = isExpanded
+        binding.yearProgress.enableAnimation = isExpanded
     }
 
     fun hideMoreIcon() {
-        binding.expansionArrow.isVisible = false
+        binding.moonPhaseView.isVisible = false
     }
 
     fun showCalendars(
@@ -55,6 +59,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         binding.calendarsFlow.update(calendarsToShow, jdn)
         binding.weekDayName.text = jdn.dayOfWeekName
+        binding.moonPhaseView.jdn = jdn.value.toFloat()
 
         binding.zodiac.also {
             it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
@@ -113,15 +118,11 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         val persian = (date as? PersianDate) ?: jdn.toPersianCalendar()
         val season = (persian.month - 1) / 3
         val seasonMonthsLength = if (season < 2) 31 else 30
-        binding.seasonProgress.enableAnimation = isExpanded
         binding.seasonProgress.max = seasonMonthsLength * 3
         binding.seasonProgress.progress = (persian.month - season * 3 - 1) * seasonMonthsLength +
                 persian.dayOfMonth
-
-        binding.monthProgress.enableAnimation = isExpanded
         binding.monthProgress.max = mainCalendar.getMonthLength(date.year, date.month)
         binding.monthProgress.progress = date.dayOfMonth
-        binding.yearProgress.enableAnimation = isExpanded
         binding.yearProgress.max = endOfYearJdn - startOfYearJdn
         binding.yearProgress.progress = jdn - startOfYearJdn
 

@@ -138,7 +138,7 @@ var isShowDeviceCalendarEvents = false
     private set
 var whatToShowOnWidgets = emptySet<String>()
     private set
-var isAstronomicalFeaturesEnabled = false
+var isAstronomicalExtraFeaturesEnabled = false
     private set
 var isTalkBackEnabled = false
     private set
@@ -287,7 +287,7 @@ fun updateStoredPreference(context: Context) {
     whatToShowOnWidgets = prefs.getStringSet(PREF_WHAT_TO_SHOW_WIDGETS, null)
         ?: DEFAULT_WIDGET_CUSTOMIZATIONS
 
-    isAstronomicalFeaturesEnabled = prefs.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
+    isAstronomicalExtraFeaturesEnabled = prefs.getBoolean(PREF_ASTRONOMICAL_FEATURES, false)
     numericalDatePreferred = prefs.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     // TODO: probably can be done in applyAppLanguage itself?
