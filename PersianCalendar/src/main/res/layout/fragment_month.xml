@@ -23,6 +23,7 @@
         android:layout_weight="1"
         android:overScrollMode="never"
         android:paddingBottom="@dimen/grid_calendar_padding_bottom"
+        android:scrollbarSize="0dp"
         android:scrollbars="vertical" />
 
     <com.byagowi.persiancalendar.ui.shared.ArrowView
