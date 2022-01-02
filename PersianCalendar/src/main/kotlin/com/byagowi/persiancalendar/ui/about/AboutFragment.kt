@@ -164,6 +164,7 @@ class AboutFragment : Fragment() {
             val icon = context.getCompatDrawable(iconId)
             getString(listId).trim().split("\n").map {
                 Chip(context).also { chip ->
+                    chip.ensureAccessibleTouchTarget(0)
                     chip.setOnClickListener(chipClick)
                     val parts = it.split(": ")
                     chip.tag = parts[0]
