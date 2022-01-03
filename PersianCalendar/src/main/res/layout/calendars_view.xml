@@ -16,7 +16,7 @@
         android:paddingTop="@dimen/padding_item"
         android:paddingEnd="@dimen/padding_item">
 
-        <com.byagowi.persiancalendar.ui.calendar.times.MoonView
+        <com.byagowi.persiancalendar.ui.shared.MoonView
             android:id="@+id/moon_phase_view"
             android:layout_width="20dp"
             android:layout_height="20dp"
