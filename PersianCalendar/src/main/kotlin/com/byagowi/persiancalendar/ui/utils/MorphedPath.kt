@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.ui.utils
 
 import android.graphics.Path
 import androidx.core.graphics.PathParser
