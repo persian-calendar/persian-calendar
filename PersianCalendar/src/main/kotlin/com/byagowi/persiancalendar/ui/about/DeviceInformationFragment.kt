@@ -24,13 +24,12 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.annotation.ColorInt
-import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -192,22 +191,35 @@ class DeviceInformationFragment : Fragment() {
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
                     )
                 })
-                linearLayout.addView(ImageView(activity).also { imageView ->
-                    imageView.minimumHeight = 80.dp.toInt()
-                    imageView.minimumWidth = 80.dp.toInt()
-                    imageView.setImageDrawable(DrawerArrowDrawable(activity).also { drawable ->
-                        ValueAnimator.ofFloat(-.1f, 1.1f).also { valueAnimator ->
+                linearLayout.addView(object : View(activity) {
+                    private val pathMorph = MorphedPath(
+                        "m 100 0 l -100 100 l 100 100 l 100 -100 z",
+                        "m 50 50 l 0 100 l 100 0 l 0 -100 z"
+                    )
+
+                    init {
+                        layoutParams = ViewGroup.LayoutParams(200.dp.toInt(), 200.dp.toInt())
+                        ValueAnimator.ofFloat(0f, 1f).also { valueAnimator ->
                             valueAnimator.duration = 3000
-                            valueAnimator.interpolator = LinearInterpolator()
+                            valueAnimator.interpolator = AccelerateDecelerateInterpolator()
                             valueAnimator.repeatMode = ValueAnimator.REVERSE
                             valueAnimator.repeatCount = ValueAnimator.INFINITE
                             valueAnimator.addUpdateListener {
-                                drawable.progress =
-                                    (it.animatedValue as Float).coerceIn(0f, 1f)
+                                pathMorph.interpolateTo((it.animatedValue as? Float) ?: 0f)
+                                postInvalidate()
                             }
                         }.start()
-                    })
+                    }
+
+                    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+                        it.color = Color.BLACK
+                    }
+
+                    override fun onDraw(canvas: Canvas?) {
+                        canvas?.drawPath(pathMorph.path, paint)
+                    }
                 })
+
                 linearLayout.addView(ProgressBar(activity).also { progressBar ->
                     progressBar.isIndeterminate = true
                     when {
