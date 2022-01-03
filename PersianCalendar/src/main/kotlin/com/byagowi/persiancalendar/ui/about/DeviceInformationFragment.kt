@@ -20,11 +20,11 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
@@ -58,6 +58,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import kotlinx.html.body
@@ -192,33 +193,35 @@ class DeviceInformationFragment : Fragment() {
                         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
                     )
                 })
-                linearLayout.addView(object : View(activity) {
+
+                val morphedPathView = object : View(activity) {
                     private val pathMorph = MorphedPath(
                         "m 100 0 l -100 100 l 100 100 l 100 -100 z",
                         "m 50 50 l 0 100 l 100 0 l 0 -100 z"
                     )
-
-                    init {
-                        layoutParams = ViewGroup.LayoutParams(200.dp.toInt(), 200.dp.toInt())
-                        ValueAnimator.ofFloat(0f, 1f).also { valueAnimator ->
-                            valueAnimator.duration = 3000
-                            valueAnimator.interpolator = AccelerateDecelerateInterpolator()
-                            valueAnimator.repeatMode = ValueAnimator.REVERSE
-                            valueAnimator.repeatCount = ValueAnimator.INFINITE
-                            valueAnimator.addUpdateListener {
-                                pathMorph.interpolateTo((it.animatedValue as? Float) ?: 0f)
-                                postInvalidate()
-                            }
-                        }.start()
-                    }
-
                     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
                         it.color = Color.BLACK
+                    }
+
+                    init {
+                        val scale = 100.dp.toInt()
+                        layoutParams = LinearLayout.LayoutParams(scale, scale).also {
+                            it.gravity = Gravity.CENTER_HORIZONTAL
+                        }
                     }
 
                     override fun onDraw(canvas: Canvas?) {
                         canvas?.drawPath(pathMorph.path, paint)
                     }
+
+                    fun setFraction(value: Float) {
+                        pathMorph.interpolateTo(value)
+                        postInvalidate()
+                    }
+                }
+                linearLayout.addView(morphedPathView)
+                linearLayout.addView(Slider(activity).also {
+                    it.addOnChangeListener { _, value, _ -> morphedPathView.setFraction(value) }
                 })
 
                 linearLayout.addView(ProgressBar(activity).also { progressBar ->

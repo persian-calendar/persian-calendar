@@ -14,6 +14,7 @@ class MorphedPath(fromPath: String, toPath: String) {
 
     init {
         if (BuildConfig.DEVELOPMENT) check(PathParser.canMorph(nodesFrom, nodesTo))
+        interpolateTo(0f)
     }
 
     fun interpolateTo(fraction: Float) {
