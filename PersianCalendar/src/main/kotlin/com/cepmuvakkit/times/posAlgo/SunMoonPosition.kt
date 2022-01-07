@@ -8,14 +8,14 @@ import java.util.*
 /**
  * @author mehmetrg
  */
-class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordinates?, ΔT: Double) {
+class SunMoonPosition(time: GregorianCalendar, observer: Coordinates?, ΔT: Double) {
 
     val moonEcliptic: Ecliptic
     val sunEcliptic: Ecliptic
 
     val moonPosition: Horizontal?
     val sunPosition: Horizontal?
-    val isSouthernHemisphere: Boolean
+    val lunarSunlitTilt: Double
 
     val lunarAge: LunarAge
 
@@ -27,21 +27,30 @@ class SunMoonPosition(time: GregorianCalendar, observerEarthCoordinates: Coordin
         sunEcliptic = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
         lunarAge = LunarAge.fromDegrees(sunEcliptic.λ - moonEcliptic.λ)
 
-        if (observerEarthCoordinates == null) {
+        if (observer == null) {
             moonPosition = null
             sunPosition = null
-            isSouthernHemisphere = false
+            lunarSunlitTilt = if (lunarAge.isAscending) .0 else 180.0
         } else {
             val moonEquatorial =
                 LunarPosition.calculateMoonEquatorialCoordinates(moonEcliptic, jd, ΔT)
             val sunEquatorial = SolarPosition.calculateSunEquatorialCoordinates(sunEcliptic, jd, ΔT)
 
-            val longitude = observerEarthCoordinates.longitude
-            val latitude = observerEarthCoordinates.latitude
-            val elevation = observerEarthCoordinates.elevation
+            val longitude = observer.longitude
+            val latitude = observer.latitude
+            val elevation = observer.elevation
             moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
             sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
-            isSouthernHemisphere = observerEarthCoordinates.isSouthernHemisphere
+            lunarSunlitTilt = if (lunarAge.isAscending) {
+                if (observer.isSouthernHemisphere) 180.0 else .0
+            } else {
+                if (observer.isSouthernHemisphere) .0 else 180.0
+            }
+            // TODO: Make sure our sun equatorial and moon topocentric exactly matches with what it
+            //       want before enable it
+            // TODO: Make sure enabling it won't ruin moon's animation much, or fixed it in some
+            //       hour of a day
+            // lunarSunlitTilt = lunarSunlitTilt(sunEquatorial, moonPosition, time, observer) + 90
         }
     }
 

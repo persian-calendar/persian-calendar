@@ -4,7 +4,9 @@ import com.byagowi.persiancalendar.entities.LunarAge
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.utils.Eclipse
+import com.byagowi.persiancalendar.utils.lunarSunlitTilt
 import com.cepmuvakkit.times.posAlgo.Ecliptic
+import com.cepmuvakkit.times.posAlgo.Horizontal
 import com.google.common.truth.Truth.assertThat
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -106,7 +108,8 @@ class AstronomyTests {
 
     @Test
     fun `Season from Persian calendar`() {
-        val noLocationSeasons = (1..12).map { Season.fromPersianCalendar(PersianDate(1400, it, 29), null) }
+        val noLocationSeasons =
+            (1..12).map { Season.fromPersianCalendar(PersianDate(1400, it, 29), null) }
         listOf(
             1..3 to Season.SPRING, 4..6 to Season.SUMMER,
             7..9 to Season.FALL, 10..12 to Season.WINTER
@@ -142,5 +145,22 @@ class AstronomyTests {
             Season.SPRING to 1584676183400, Season.SUMMER to 1592689390621,
             Season.FALL to 1600781435095, Season.WINTER to 1608544954755
         ).map { (it, time) -> assertThat(it.getEquinox(civilDate).time.time).isEqualTo(time) }
+    }
+
+    @Test
+    fun `Lunar Sunlit Tilt`() {
+        val time = GregorianCalendar(TimeZone.getTimeZone("UTC")).also {
+            it.clear()
+            it.set(2021, Calendar.JANUARY, 10, 4, 0, 0)
+        }
+        assertThat(
+            lunarSunlitTilt(
+                // Equatorial(19.451750, -21.930057, 0.983402),
+                doubleArrayOf(0.338427, -0.847146, -0.367276),
+                Horizontal(187.958846, 40.777947),
+                time,
+                Coordinates(27.0, 85.0, .0)
+            )
+        ).isWithin(1.0e-10).of(-0.9376037778203803)
     }
 }

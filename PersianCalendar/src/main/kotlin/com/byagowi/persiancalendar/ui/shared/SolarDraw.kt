@@ -7,7 +7,7 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.withScale
+import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
@@ -40,9 +40,7 @@ class SolarDraw(context: Context) {
         ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
         ovalPath.arcTo(moonRect, 270f, 180f)
         ovalPath.close()
-        val isAscendingFactor = if (sunMoonPosition.lunarAge.isAscending) 1f else -1f
-        val isSouthernHemisphereFactor = if (sunMoonPosition.isSouthernHemisphere) -1f else 1f
-        canvas.withScale(x = isAscendingFactor * isSouthernHemisphereFactor, pivotX = cx) {
+        canvas.withRotation(sunMoonPosition.lunarSunlitTilt.toFloat(), cx, cy) {
             drawPath(ovalPath, moonPaint)
         }
     }
