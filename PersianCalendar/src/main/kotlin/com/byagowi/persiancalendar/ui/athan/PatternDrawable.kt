@@ -27,7 +27,7 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
 
     private val tintColor = when (prayerKey) {
         FAJR_KEY -> 0xFF009788
-        DHUHR_KEY -> 0xFFFBC02D
+        DHUHR_KEY -> 0xFFF1A42A
         ASR_KEY -> 0xFFF57C01
         MAGHRIB_KEY -> 0xFF5E35B1
         ISHA_KEY -> 0xFF283593
