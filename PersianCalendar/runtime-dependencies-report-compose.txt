@@ -419,6 +419,9 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
 |    +--- androidx.compose.foundation:foundation:1.0.5 -> 1.1.0-rc01 (*)
 |    \--- androidx.compose.ui:ui-util:1.0.5 -> 1.1.0-rc01 (*)
++--- com.google.accompanist:accompanist-drawablepainter:0.20.3
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31 -> 1.6.10 (*)
+|    \--- androidx.compose.ui:ui:1.0.5 -> 1.1.0-rc01 (*)
 +--- androidx.compose.ui:ui:1.1.0-rc02 -> 1.1.0-rc01 (*)
 +--- androidx.compose.material:material:1.0.5 -> 1.1.0-rc01 (*)
 +--- androidx.compose.material3:material3:1.0.0-alpha02
