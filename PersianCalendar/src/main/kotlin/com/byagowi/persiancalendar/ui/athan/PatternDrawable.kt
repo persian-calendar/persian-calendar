@@ -15,6 +15,7 @@ import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.os.Build
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
@@ -36,23 +37,25 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
     private val paint = Paint().also { paint ->
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
             return@also paint.setColor(Color.TRANSPARENT)
-        val size = 80.dp
         val path = Path().also { path ->
-            val basePath = Path().apply {
-                moveTo(0f, size / 2); lineTo(size / 2, 0f)
-                lineTo(size, size / 2); lineTo(size / 2, size); close()
+            val basePath = Path().also {
+                it.moveTo(0f, .5f); it.lineTo(.5f, 0f)
+                it.lineTo(1f, .5f); it.lineTo(.5f, 1f); it.close()
             }
-            val rotated = Path().apply {
-                addPath(basePath, Matrix().apply { setRotate(45f, size / 2, size / 2) })
+            val rotated = Path().also {
+                it.addPath(basePath, Matrix().apply { setRotate(45f, .5f, .5f) })
             }
             path.op(basePath, rotated, Path.Op.UNION)
         }
+        val size = 80.dp
         val bitmap = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         Canvas(bitmap).also { canvas ->
-            canvas.drawPath(path, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                style = Paint.Style.FILL
-                color = ColorUtils.setAlphaComponent(tintColor, 0x20)
-            })
+            canvas.withScale(size, size) {
+                canvas.drawPath(path, Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                    style = Paint.Style.FILL
+                    color = ColorUtils.setAlphaComponent(tintColor, 0x20)
+                })
+            }
         }
         paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
