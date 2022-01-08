@@ -26,7 +26,6 @@ package com.byagowi.persiancalendar.utils
  SOFTWARE.
  */
 
-import com.cepmuvakkit.times.posAlgo.Equatorial
 import com.cepmuvakkit.times.posAlgo.Horizontal
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*

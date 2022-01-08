@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.MAGHRIB_KEY
-import com.byagowi.persiancalendar.ui.utils.dp
 import kotlin.math.min
 
 class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
@@ -64,7 +63,8 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
                 })
             }
         }
-        foregroundPaint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+        foregroundPaint.shader =
+            BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
     override fun draw(canvas: Canvas) {

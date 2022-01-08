@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar
 
 import android.graphics.Color
-import androidx.annotation.StringRes
 
 const val LOG_TAG = "PersianCalendar"
 
