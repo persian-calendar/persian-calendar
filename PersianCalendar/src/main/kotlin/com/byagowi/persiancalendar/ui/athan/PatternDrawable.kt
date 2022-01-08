@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.ui.utils.dp
+import kotlin.math.min
 
 class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
 
@@ -34,10 +35,16 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
         else -> 0xFF283593
     }.toInt()
 
-    private val paint = Paint().also { paint ->
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
-            return@also paint.setColor(Color.TRANSPARENT)
+    private val backgroundPaint = Paint()
+    private val foregroundPaint = Paint()
+    override fun onBoundsChange(bounds: Rect?) {
+        super.onBoundsChange(bounds ?: return)
+        backgroundPaint.shader = LinearGradient(
+            0f, 0f, 0f, bounds.bottom.toFloat(),
+            tintColor, Color.WHITE, Shader.TileMode.CLAMP
+        )
         val path = Path().also { path ->
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return@also
             val basePath = Path().also {
                 it.moveTo(0f, .5f); it.lineTo(.5f, 0f)
                 it.lineTo(1f, .5f); it.lineTo(.5f, 1f); it.close()
@@ -47,31 +54,22 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
             }
             path.op(basePath, rotated, Path.Op.UNION)
         }
-        val size = 80.dp
+        val size = min(bounds.width(), bounds.height()) / 5f
         val bitmap = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         Canvas(bitmap).also { canvas ->
             canvas.withScale(size, size) {
-                canvas.drawPath(path, Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    style = Paint.Style.FILL
-                    color = ColorUtils.setAlphaComponent(tintColor, 0x20)
+                canvas.drawPath(path, Paint(Paint.ANTI_ALIAS_FLAG).also {
+                    it.style = Paint.Style.FILL
+                    it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
                 })
             }
         }
-        paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-    }
-
-    private val backgroundPaint: Paint = Paint()
-    override fun onBoundsChange(bounds: Rect?) {
-        super.onBoundsChange(bounds)
-        backgroundPaint.shader = LinearGradient(
-            0f, 0f, 0f, (bounds ?: return).bottom.toFloat(),
-            tintColor, Color.WHITE, Shader.TileMode.CLAMP
-        )
+        foregroundPaint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
     override fun draw(canvas: Canvas) {
         canvas.drawPaint(backgroundPaint)
-        canvas.drawPaint(paint)
+        canvas.drawPaint(foregroundPaint)
     }
 
     override fun setAlpha(alpha: Int) = Unit
