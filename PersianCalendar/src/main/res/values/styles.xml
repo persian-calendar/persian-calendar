@@ -366,6 +366,9 @@
 
     <style name="AthanTheme" parent="ModernTheme">
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentNavigation" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/white</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 
     <!-- But in v31/styles.xml it is overridden to not have shadow -->

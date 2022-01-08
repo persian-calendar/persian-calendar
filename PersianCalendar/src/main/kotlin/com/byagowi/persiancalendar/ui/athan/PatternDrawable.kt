@@ -14,6 +14,7 @@ import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.os.Build
+import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
@@ -24,15 +25,17 @@ import com.byagowi.persiancalendar.ui.utils.dp
 class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
 
     private val tintColor = when (prayerKey) {
-        FAJR_KEY -> 0xFF00796B
-        DHUHR_KEY -> 0xFFFF8F00
-        ASR_KEY -> 0xFFE65100
-        MAGHRIB_KEY -> 0xFF512DA8
-        ISHA_KEY -> 0xFF3F51B5
-        else -> 0xFF3F51B5
+        FAJR_KEY -> 0xFF009788
+        DHUHR_KEY -> 0xFFFBC02D
+        ASR_KEY -> 0xFFF57C01
+        MAGHRIB_KEY -> 0xFF5E35B1
+        ISHA_KEY -> 0xFF283593
+        else -> 0xFF283593
     }.toInt()
 
     private val paint = Paint().also { paint ->
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT)
+            return@also paint.setColor(Color.TRANSPARENT)
         val size = 80.dp
         val path = Path().also { path ->
             val basePath = Path().apply {
@@ -42,18 +45,13 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
             val rotated = Path().apply {
                 addPath(basePath, Matrix().apply { setRotate(45f, size / 2, size / 2) })
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                path.op(basePath, rotated, Path.Op.UNION)
-            } else {
-                path.addPath(basePath); path.addPath(rotated)
-            }
+            path.op(basePath, rotated, Path.Op.UNION)
         }
-
         val bitmap = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         Canvas(bitmap).also { canvas ->
             canvas.drawPath(path, Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 style = Paint.Style.FILL
-                color = tintColor
+                color = ColorUtils.setAlphaComponent(tintColor, 0x20)
             })
         }
         paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
