@@ -93,7 +93,7 @@
             android:showForAllUsers="true"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
-            android:theme="@style/FullscreenTheme"
+            android:theme="@style/AthanTheme"
             android:turnScreenOn="true" />
 
         <receiver

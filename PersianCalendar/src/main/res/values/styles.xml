@@ -364,7 +364,7 @@
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
     </style>
 
-    <style name="FullscreenTheme" parent="LightTheme">
+    <style name="AthanTheme" parent="ModernTheme">
         <item name="android:windowFullscreen">true</item>
     </style>
 

@@ -196,13 +196,3 @@ fun PrayTimes.getFromStringId(@StringRes stringId: Int) = Clock.fromHoursFractio
         else -> .0
     }
 )
-
-@DrawableRes
-fun getPrayTimeImage(athanKey: String?): Int = when (athanKey) {
-    FAJR_KEY -> R.drawable.fajr
-    DHUHR_KEY -> R.drawable.dhuhr
-    ASR_KEY -> R.drawable.asr
-    MAGHRIB_KEY -> R.drawable.maghrib
-    ISHA_KEY -> R.drawable.isha
-    else -> R.drawable.isha
-}

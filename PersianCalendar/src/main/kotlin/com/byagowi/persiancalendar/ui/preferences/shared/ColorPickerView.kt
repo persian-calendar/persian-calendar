@@ -78,7 +78,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
             it.weight = 1f
         }
     }
-    private val colorFrame = createColorFrameLayout(createCheckerBoard(20))
+    private val colorView = createColorView(createCheckerBoard(20))
     private var colorCodeVisibility = false
 
     val pickerColor: Int
@@ -90,10 +90,9 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
     private val Number.dp: Int
         get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
 
-    private fun createColorFrameLayout(paint: Paint) = object : FrameLayout(context) {
+    private fun createColorView(paint: Paint) = object : View(context) {
         val rect = Rect()
         override fun onDraw(canvas: Canvas) {
-            super.onDraw(canvas)
             getDrawingRect(rect)
             rect.inset(1.dp, 1.dp)
             canvas.drawRect(rect, paint)
@@ -138,7 +137,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
                     MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
                 )
             })
-            addView(colorFrame.apply {
+            addView(colorView.apply {
                 addView(colorResultView)
                 layoutParams = LayoutParams(
                     seekBars.measuredHeight,
@@ -161,7 +160,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
                     FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
                 )
             }
-            val frameLayout = createColorFrameLayout(checkerBoard).apply {
+            val frameLayout = createColorView(checkerBoard).apply {
                 setBackgroundColor(Color.LTGRAY)
                 layoutParams = LayoutParams(40.dp, 40.dp).apply {
                     setMargins(5.dp, 10.dp, 5.dp, 5.dp)
@@ -205,7 +204,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
             MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
         )
-        colorFrame.layoutParams = LayoutParams(seekBars.measuredHeight, LayoutParams.MATCH_PARENT)
+        colorView.layoutParams = LayoutParams(seekBars.measuredHeight, LayoutParams.MATCH_PARENT)
     }
 }
 
