@@ -47,14 +47,14 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
         )
         val path = Path().also { path ->
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return@also
-            val basePath = Path().also {
+            val basePath = Path().also { // defines a rotated square, ◇
                 it.moveTo(0f, .5f); it.lineTo(.5f, 0f)
                 it.lineTo(1f, .5f); it.lineTo(.5f, 1f); it.close()
             }
-            val rotated = Path().also {
+            val rotated = Path().also { // makes the defined square straight, □
                 it.addPath(basePath, Matrix().apply { setRotate(45f, .5f, .5f) })
             }
-            path.op(basePath, rotated, Path.Op.UNION)
+            path.op(basePath, rotated, Path.Op.UNION) // adds the two shapes together
         }
         val size = min(bounds.width(), bounds.height()) / 5f
         val bitmap = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
