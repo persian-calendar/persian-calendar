@@ -71,12 +71,12 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
         }
         foregroundPaint.shader =
             BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
-        centerX = listOf(-1f, 0f, .5f, 1f, 2f).random() * bounds.width()
-        centerY = listOf(-1f, 0f, .5f, 1f, 2f).random() * bounds.height()
+        centerX = listOf(-.5f, 0f, .5f, 1f, 1.5f).random() * bounds.width()
+        centerY = listOf(-.5f, 0f, .5f, 1f, 1.5f).random() * bounds.height()
     }
 
     private val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
-        it.duration = 120000L
+        it.duration = 180000L
         it.interpolator = LinearInterpolator()
         it.repeatMode = ValueAnimator.RESTART
         it.repeatCount = ValueAnimator.INFINITE
