@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.athan
 
+import android.animation.ValueAnimator
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
@@ -14,7 +15,9 @@ import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.view.animation.LinearInterpolator
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.DHUHR_KEY
@@ -67,9 +70,21 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
             BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
     }
 
+    private val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
+        it.duration = 120000L
+        it.interpolator = LinearInterpolator()
+        it.repeatMode = ValueAnimator.RESTART
+        it.repeatCount = ValueAnimator.INFINITE
+        it.addUpdateListener { invalidateSelf() }
+        listOf(it::start, it::reverse).random()()
+    }
+
     override fun draw(canvas: Canvas) {
         canvas.drawPaint(backgroundPaint)
-        canvas.drawPaint(foregroundPaint)
+        val degree = valueAnimator.animatedValue as? Float ?: 0f
+        canvas.withRotation(degree, bounds.exactCenterX(), bounds.exactCenterY()) {
+            drawPaint(foregroundPaint)
+        }
     }
 
     override fun setAlpha(alpha: Int) = Unit
