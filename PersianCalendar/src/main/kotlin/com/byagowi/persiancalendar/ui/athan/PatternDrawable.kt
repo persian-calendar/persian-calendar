@@ -14,7 +14,6 @@ import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import androidx.core.graphics.ColorUtils
