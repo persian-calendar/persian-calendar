@@ -14,6 +14,7 @@ import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import androidx.core.graphics.ColorUtils
@@ -39,6 +40,8 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
 
     private val backgroundPaint = Paint()
     private val foregroundPaint = Paint()
+    private var centerX = 0f
+    private var centerY = 0f
     override fun onBoundsChange(bounds: Rect?) {
         super.onBoundsChange(bounds ?: return)
         backgroundPaint.shader = LinearGradient(
@@ -68,6 +71,8 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
         }
         foregroundPaint.shader =
             BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+        centerX = listOf(-1f, 0f, .5f, 1f, 2f).random() * bounds.width()
+        centerY = listOf(-1f, 0f, .5f, 1f, 2f).random() * bounds.height()
     }
 
     private val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
@@ -82,7 +87,7 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
     override fun draw(canvas: Canvas) {
         canvas.drawPaint(backgroundPaint)
         val degree = valueAnimator.animatedValue as? Float ?: 0f
-        canvas.withRotation(degree, bounds.exactCenterX(), bounds.exactCenterY()) {
+        canvas.withRotation(degree, centerX, centerY) {
             drawPaint(foregroundPaint)
         }
     }
