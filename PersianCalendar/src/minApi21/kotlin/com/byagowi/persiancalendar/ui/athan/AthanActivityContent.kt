@@ -37,7 +37,7 @@ fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onCl
 private fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Unit) {
     Box(modifier = Modifier.clickable { onClick() }) {
         Image(
-            painter = rememberDrawablePainter(BackgroundPatternDrawable(prayerKey)),
+            painter = rememberDrawablePainter(PatternDrawable(prayerKey)),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()
