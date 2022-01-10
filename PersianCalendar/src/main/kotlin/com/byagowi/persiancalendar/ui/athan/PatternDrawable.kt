@@ -16,6 +16,8 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.and
+import androidx.core.graphics.or
 import androidx.core.graphics.plus
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
@@ -27,6 +29,8 @@ import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.rotateBy
 import com.byagowi.persiancalendar.ui.utils.toPath
+import kotlin.math.sin
+import kotlin.math.tan
 
 class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
 
@@ -53,7 +57,7 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
         val bitmap = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
         Canvas(bitmap).also { canvas ->
             canvas.withScale(size, size) {
-                val path = listOf(::thirdPattern).random()()
+                val path = listOf(::firstPattern, ::thirdPattern).random()()
                 canvas.drawPath(path, Paint(Paint.ANTI_ALIAS_FLAG).also {
                     it.style = Paint.Style.FILL
                     it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
@@ -64,6 +68,18 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
             BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         centerX = listOf(-.5f, .5f, 1.5f).random() * bounds.width()
         centerY = listOf(-.5f, .5f, 1.5f).random() * bounds.height()
+    }
+
+    private fun firstPattern(): Path {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
+        val t = tan(Math.PI.toFloat() / 8)
+        val s = sin(Math.PI.toFloat() / 4) / 2
+        val triangle = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t).toPath()
+        val sumOfTwo = triangle or triangle.rotateBy(180f, .5f, .5f)
+        val sum = sumOfTwo and sumOfTwo.rotateBy(90f, .5f, .5f)
+        val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath()
+        return (sum + sum.rotateBy(45f, .5f, .5f)) or
+                (1..3).fold(corner) { acc, i -> acc or corner.rotateBy(90f * i, .5f, .5f) }
     }
 
     private fun thirdPattern(): Path {
