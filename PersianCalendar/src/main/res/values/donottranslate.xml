@@ -14,7 +14,9 @@ ilius: Saeed Rasooli"</string>
     <string name="about_designers_list" translatable="false">"MEHDIMYADI: Mehdi Dimyadi
 MehraraAbedi: Mehrara Abedi
 behdude: Behdad Pournader
-ImanSoltanian: Iman Soltanian"</string>
+ImanSoltanian: Iman Soltanian
+nullkit: Hamid Mahmoudi
+Arasteh: Mahmoud Arasteh Nasab"</string>
     <string name="about_translators_list" translatable="false">"yethrosh: Muhammad Shuaib
 TaherAzizi: Taher Azizi
 mehdy: Mehdy Khoshnoody
@@ -39,9 +41,7 @@ MMeshkiny: Mohsen Meshkini
 AryanAhadinia: Aryan Ahadinia
 shahabhm: Shahab Hosseini Moghaddam
 MohammadKashaniJabbari: Mohammad Kashani
-xmha97: Muhammad Hussein Ammari
-nullkit: Hamid Mahmoudi
-Arasteh: Mahmoud Arasteh Nasab"</string>
+xmha97: Muhammad Hussein Ammari"</string>
     <string name="about_help_subtitle" translatable="false">نسخهٔ سال %s-%s</string>
     <string name="help_sections" translatable="false">"
 صحت عملکرد
