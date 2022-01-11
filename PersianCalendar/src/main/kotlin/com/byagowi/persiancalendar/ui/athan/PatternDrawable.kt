@@ -31,6 +31,8 @@ import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.rotateBy
 import com.byagowi.persiancalendar.ui.utils.toPath
+import com.byagowi.persiancalendar.ui.utils.translateBy
+import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.tan
 
@@ -93,6 +95,7 @@ interface Pattern {
 }
 
 class FirstPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+    // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-pattern/
     override val width = suggestedTileSize
     override val height = suggestedTileSize
 
@@ -101,7 +104,7 @@ class FirstPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Floa
 
     private fun path(order: Boolean): Path {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
-        val triangle = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t).toPath()
+        val triangle = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t).toPath(true)
         val sumOfTwo = triangle or triangle.rotateBy(180f, .5f, .5f)
         val sum = sumOfTwo and sumOfTwo.rotateBy(90f, .5f, .5f)
         return if (order) sum + sum.rotateBy(45f, .5f, .5f)
@@ -110,7 +113,7 @@ class FirstPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Floa
 
     private fun corners(): Path {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
-        val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath()
+        val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath(true)
         return (1..3).fold(corner) { acc, i -> acc or corner.rotateBy(90f * i, .5f, .5f) }
     }
 
@@ -128,12 +131,13 @@ class FirstPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Floa
 }
 
 class ThirdPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+    // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-3/
     override val width = suggestedTileSize
     override val height = suggestedTileSize
 
     private fun path(): Path {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
-        val diamond = listOf(0f to .5f, .5f to 0f, 1f to .5f, .5f to 1f).toPath() // ◇
+        val diamond = listOf(0f to .5f, .5f to 0f, 1f to .5f, .5f to 1f).toPath(true) // ◇
         val square = diamond.rotateBy(45f, .5f, .5f) // rotates it in to □
         return diamond + square // adds the two shapes together
     }
@@ -145,5 +149,37 @@ class ThirdPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Floa
                 it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
             })
         }
+    }
+}
+
+class SpiralPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+    // Not enabled, just as an experiment on how spiral pattern and hexagon tiling would work
+    // https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/graphics/skiasharp/paths/polylines
+    override val width = suggestedTileSize
+    override val height = suggestedTileSize * 1.7f
+
+    private fun pattern(): Path {
+        val result = Path()
+        (0..3600).forEach { angle ->
+            val scaledRadius = width / 2 * angle / 3600
+            val radians = Math.toRadians(angle.toDouble()).toFloat()
+            val x = width / 2f + scaledRadius * cos(radians)
+            val y = width / 2f + scaledRadius * sin(radians)
+            if (angle == 0) result.moveTo(x, y) else result.lineTo(x, y)
+        }
+        return result
+    }
+
+    override fun draw(canvas: Canvas) {
+        val path = pattern()
+        val paint = Paint()
+        paint.style = Paint.Style.STROKE
+        paint.color = ColorUtils.setAlphaComponent(tintColor, 0x80)
+        paint.strokeWidth = width / 80
+        canvas.drawPath(path, paint)
+        canvas.drawPath(path.translateBy(width / 2, height / 2), paint)
+        canvas.drawPath(path.translateBy(-width / 2, height / 2), paint)
+        canvas.drawPath(path.translateBy(width / 2, -height / 2), paint)
+        canvas.drawPath(path.translateBy(-width / 2, -height / 2), paint)
     }
 }
