@@ -15,12 +15,14 @@ import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.animation.LinearInterpolator
+import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and
 import androidx.core.graphics.or
 import androidx.core.graphics.plus
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
+import androidx.core.graphics.xor
 import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
@@ -53,40 +55,15 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
             0f, 0f, 0f, bounds.bottom.toFloat(),
             tintColor, Color.WHITE, Shader.TileMode.CLAMP
         )
-        val size = 80.dp
-        val bitmap = Bitmap.createBitmap(size.toInt(), size.toInt(), Bitmap.Config.ARGB_8888)
-        Canvas(bitmap).also { canvas ->
-            canvas.withScale(size, size) {
-                val path = listOf(::firstPattern, ::thirdPattern).random()()
-                canvas.drawPath(path, Paint(Paint.ANTI_ALIAS_FLAG).also {
-                    it.style = Paint.Style.FILL
-                    it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
-                })
-            }
-        }
+        val pattern = listOf(::FirstPattern, ::ThirdPattern).random()(tintColor, 80.dp)
+        val bitmap = Bitmap.createBitmap(
+            pattern.width.toInt(), pattern.height.toInt(), Bitmap.Config.ARGB_8888
+        )
+        Canvas(bitmap).also(pattern::draw)
         foregroundPaint.shader =
             BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
         centerX = listOf(-.5f, .5f, 1.5f).random() * bounds.width()
         centerY = listOf(-.5f, .5f, 1.5f).random() * bounds.height()
-    }
-
-    private fun firstPattern(): Path {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
-        val t = tan(Math.PI.toFloat() / 8)
-        val s = sin(Math.PI.toFloat() / 4) / 2
-        val triangle = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t).toPath()
-        val sumOfTwo = triangle or triangle.rotateBy(180f, .5f, .5f)
-        val sum = sumOfTwo and sumOfTwo.rotateBy(90f, .5f, .5f)
-        val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath()
-        return (sum + sum.rotateBy(45f, .5f, .5f)) or
-                (1..3).fold(corner) { acc, i -> acc or corner.rotateBy(90f * i, .5f, .5f) }
-    }
-
-    private fun thirdPattern(): Path {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
-        val diamond = listOf(0f to .5f, .5f to 0f, 1f to .5f, .5f to 1f).toPath() // ◇
-        val square = diamond.rotateBy(45f, .5f, .5f) // rotates it in to □
-        return diamond + square // adds the two shapes together
     }
 
     private val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
@@ -107,4 +84,66 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
     override fun setAlpha(alpha: Int) = Unit
     override fun setColorFilter(colorFilter: ColorFilter?) = Unit
     override fun getOpacity(): Int = PixelFormat.OPAQUE
+}
+
+interface Pattern {
+    val width: Float
+    val height: Float
+    fun draw(canvas: Canvas)
+}
+
+class FirstPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+    override val width = suggestedTileSize
+    override val height = suggestedTileSize
+
+    private val t = tan(Math.PI.toFloat() / 8)
+    private val s = sin(Math.PI.toFloat() / 4) / 2
+
+    private fun path(order: Boolean): Path {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
+        val triangle = listOf(0f to .5f, 1f to .5f + t, 1f to .5f - t).toPath()
+        val sumOfTwo = triangle or triangle.rotateBy(180f, .5f, .5f)
+        val sum = sumOfTwo and sumOfTwo.rotateBy(90f, .5f, .5f)
+        return if (order) sum + sum.rotateBy(45f, .5f, .5f)
+        else sum xor sum.rotateBy(45f, .5f, .5f)
+    }
+
+    private fun corners(): Path {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
+        val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath()
+        return (1..3).fold(corner) { acc, i -> acc or corner.rotateBy(90f * i, .5f, .5f) }
+    }
+
+    override fun draw(canvas: Canvas) {
+        canvas.withScale(width, height) {
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            paint.style = Paint.Style.FILL
+            paint.color = ColorUtils.setAlphaComponent(tintColor, 0x10)
+            canvas.drawPath(path(true), paint)
+            canvas.drawPath(path(false), paint)
+            paint.color = ColorUtils.setAlphaComponent(tintColor, 0x8)
+            canvas.drawPath(corners(), paint)
+        }
+    }
+}
+
+class ThirdPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+    override val width = suggestedTileSize
+    override val height = suggestedTileSize
+
+    private fun path(): Path {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
+        val diamond = listOf(0f to .5f, .5f to 0f, 1f to .5f, .5f to 1f).toPath() // ◇
+        val square = diamond.rotateBy(45f, .5f, .5f) // rotates it in to □
+        return diamond + square // adds the two shapes together
+    }
+
+    override fun draw(canvas: Canvas) {
+        canvas.withScale(width, height) {
+            canvas.drawPath(path(), Paint(Paint.ANTI_ALIAS_FLAG).also {
+                it.style = Paint.Style.FILL
+                it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
+            })
+        }
+    }
 }
