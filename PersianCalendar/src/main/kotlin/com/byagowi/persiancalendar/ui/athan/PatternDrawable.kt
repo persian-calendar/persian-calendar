@@ -57,13 +57,14 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
             0f, 0f, 0f, bounds.bottom.toFloat(),
             tintColor, Color.WHITE, Shader.TileMode.CLAMP
         )
-        val pattern = listOf(::FirstPattern, ::ThirdPattern).random()(tintColor, 80.dp)
+        val pattern = listOf(
+            ::FirstPattern, ::ThirdPattern, ::FourthPattern
+        ).random()(tintColor, 80.dp)
         val bitmap = Bitmap.createBitmap(
             pattern.width.toInt(), pattern.height.toInt(), Bitmap.Config.ARGB_8888
         )
         Canvas(bitmap).also(pattern::draw)
-        foregroundPaint.shader =
-            BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
+        foregroundPaint.shader = BitmapShader(bitmap, pattern.tileModeX, pattern.tileModeY)
         centerX = listOf(-.5f, .5f, 1.5f).random() * bounds.width()
         centerY = listOf(-.5f, .5f, 1.5f).random() * bounds.height()
     }
@@ -91,13 +92,17 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
 interface Pattern {
     val width: Float
     val height: Float
+    val tileModeX: Shader.TileMode
+    val tileModeY: Shader.TileMode
     fun draw(canvas: Canvas)
 }
 
-class FirstPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-pattern/
-    override val width = suggestedTileSize
-    override val height = suggestedTileSize
+    override val width = size
+    override val height = size
+    override val tileModeX = Shader.TileMode.REPEAT
+    override val tileModeY = Shader.TileMode.REPEAT
 
     private val t = tan(Math.PI.toFloat() / 8)
     private val s = sin(Math.PI.toFloat() / 4) / 2
@@ -130,10 +135,12 @@ class FirstPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Floa
     }
 }
 
-class ThirdPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-3/
-    override val width = suggestedTileSize
-    override val height = suggestedTileSize
+    override val width = size
+    override val height = size
+    override val tileModeX = Shader.TileMode.REPEAT
+    override val tileModeY = Shader.TileMode.REPEAT
 
     private fun path(): Path {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
@@ -152,11 +159,37 @@ class ThirdPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Floa
     }
 }
 
-class SpiralPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Float) : Pattern {
+class FourthPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
+    // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-2/
+    override val width = size * tan(Math.toRadians(30.0).toFloat())
+    override val height = size
+    override val tileModeX = Shader.TileMode.MIRROR
+    override val tileModeY = Shader.TileMode.MIRROR
+
+    override fun draw(canvas: Canvas) {
+        val paint = Paint().also {
+            it.style = Paint.Style.STROKE
+            it.color = ColorUtils.setAlphaComponent(tintColor, 0x40)
+            it.strokeWidth = width / 40
+        }
+        val w = width; val h = height
+        val lines = floatArrayOf(
+            width / 2, 0f, width, height / 2,
+            0f, height / 2, width / 4, height / 4,
+            width / 4, height / 4, width, height / 4
+        )
+        canvas.drawLines(lines, paint)
+        canvas.withRotation(180f, width / 2, height / 2) { drawLines(lines, paint) }
+    }
+}
+
+class SpiralPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
     // Not enabled, just as an experiment on how spiral pattern and hexagon tiling would work
     // https://docs.microsoft.com/en-us/xamarin/xamarin-forms/user-interface/graphics/skiasharp/paths/polylines
-    override val width = suggestedTileSize
-    override val height = suggestedTileSize * 1.7f
+    override val width = size
+    override val height = size * 1.7f
+    override val tileModeX = Shader.TileMode.REPEAT
+    override val tileModeY = Shader.TileMode.REPEAT
 
     private fun pattern(): Path {
         val result = Path()
@@ -172,10 +205,11 @@ class SpiralPattern(@ColorInt private val tintColor: Int, suggestedTileSize: Flo
 
     override fun draw(canvas: Canvas) {
         val path = pattern()
-        val paint = Paint()
-        paint.style = Paint.Style.STROKE
-        paint.color = ColorUtils.setAlphaComponent(tintColor, 0x80)
-        paint.strokeWidth = width / 80
+        val paint = Paint().also {
+            it.style = Paint.Style.STROKE
+            it.color = ColorUtils.setAlphaComponent(tintColor, 0x80)
+            it.strokeWidth = width / 80
+        }
         canvas.drawPath(path, paint)
         canvas.drawPath(path.translateBy(width / 2, height / 2), paint)
         canvas.drawPath(path.translateBy(-width / 2, height / 2), paint)
