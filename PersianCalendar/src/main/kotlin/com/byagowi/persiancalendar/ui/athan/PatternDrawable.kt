@@ -99,10 +99,10 @@ interface Pattern {
 
 private class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-pattern/
-    override val width = size
-    override val height = size
-    override val tileModeX = Shader.TileMode.REPEAT
-    override val tileModeY = Shader.TileMode.REPEAT
+    override val width = size / 2
+    override val height = size / 2
+    override val tileModeX = Shader.TileMode.MIRROR
+    override val tileModeY = Shader.TileMode.MIRROR
 
     private val t = tan(Math.PI.toFloat() / 8)
     private val s = sin(Math.PI.toFloat() / 4) / 2
@@ -116,21 +116,16 @@ private class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : 
         else sum xor sum.rotateBy(45f, .5f, .5f)
     }
 
-    private fun corners(): Path {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
-        val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath(true)
-        return (1..3).fold(corner) { acc, i -> acc or corner.rotateBy(90f * i, .5f, .5f) }
-    }
-
     override fun draw(canvas: Canvas) {
-        canvas.withScale(width, height) {
+        canvas.withScale(width * 2, height * 2) {
             val paint = Paint(Paint.ANTI_ALIAS_FLAG)
             paint.style = Paint.Style.FILL
             paint.color = ColorUtils.setAlphaComponent(tintColor, 0x10)
             canvas.drawPath(path(true), paint)
             canvas.drawPath(path(false), paint)
-            paint.color = ColorUtils.setAlphaComponent(tintColor, 0x8)
-            canvas.drawPath(corners(), paint)
+            paint.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
+            val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath(true)
+            canvas.drawPath(corner, paint)
         }
     }
 }
@@ -160,10 +155,10 @@ private class SecondPattern(@ColorInt private val tintColor: Int, private val si
 
 private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-3/
-    override val width = size
-    override val height = size
-    override val tileModeX = Shader.TileMode.REPEAT
-    override val tileModeY = Shader.TileMode.REPEAT
+    override val width = size / 2
+    override val height = size / 2
+    override val tileModeX = Shader.TileMode.MIRROR
+    override val tileModeY = Shader.TileMode.MIRROR
 
     private fun path(): Path {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
@@ -173,7 +168,7 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
     }
 
     override fun draw(canvas: Canvas) {
-        canvas.withScale(width, height) {
+        canvas.withScale(width * 2, height * 2) {
             canvas.drawPath(path(), Paint(Paint.ANTI_ALIAS_FLAG).also {
                 it.style = Paint.Style.FILL
                 it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
