@@ -180,8 +180,6 @@ dependencies {
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
     implementation("com.google.android.material:material:1.5.0")
 
-    implementation("com.google.openlocationcode:openlocationcode:1.0.4")
-
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
 
@@ -195,6 +193,10 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
+
+    implementation("com.google.openlocationcode:openlocationcode:1.0.4")
+    // The following makes dex class exceed 65k methods count
+    // implementation("com.google.zxing:core:3.4.1")
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.2")
