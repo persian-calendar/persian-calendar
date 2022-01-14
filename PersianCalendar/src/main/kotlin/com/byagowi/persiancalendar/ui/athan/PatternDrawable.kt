@@ -164,27 +164,27 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
     override val tileModeX = Shader.TileMode.MIRROR
     override val tileModeY = Shader.TileMode.MIRROR
 
-    private fun splitPath(p: List<Pair<Float, Float>>): List<Pair<Float, Float>> {
-        return (0..p.size - 2).flatMap {
-            val x = p[it + 1].first - p[it].first
-            val y = p[it + 1].second - p[it].second
-            val r = sqrt(x * x + y * y)
-            val angle = atan2(y, x)
+    private fun splitPath(path: List<Pair<Float, Float>>): List<Pair<Float, Float>> {
+        return (0..path.size - 2).flatMap {
+            val w = path[it + 1].first - path[it].first
+            val h = path[it + 1].second - path[it].second
+            val r = sqrt(w * w + h * h)
+            val angle = atan2(h, w)
             val c = (1 - cos(Math.PI.toFloat() / 4)) * r
-            listOf(0, -1, 1).runningFold(p[it].first to p[it].second) { (x, y), i ->
+            listOf(0, -1, 1).runningFold(path[it].first to path[it].second) { (x, y), i ->
                 val degree = angle + i * Math.PI.toFloat() / 4
-                x + sin(degree) * c to y + cos(degree) * c
+                x + cos(degree) * c to y + sin(degree) * c
             }
-        } + listOf(p.last())
+        } + listOf(path.last())
     }
 
     override fun draw(canvas: Canvas) {
-        val path = (0..0).fold(listOf(0f to 0f, 1f to 1f)) { acc, _ -> splitPath(acc) }
+        val path = (0..0).fold(listOf(0f to 1f, 1f to 0f)) { acc, _ -> splitPath(acc) }
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
             it.color = ColorUtils.setAlphaComponent(tintColor, 0xF0)
         }
-        canvas.withScale(width, height) { drawPath((path + listOf(1f to 0f)).toPath(true), paint) }
+        canvas.withScale(width, height) { drawPath((path + listOf(1f to 1f)).toPath(true), paint) }
     }
 }
 
