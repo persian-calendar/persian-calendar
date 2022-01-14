@@ -25,12 +25,12 @@ class SunMoonPosition(time: GregorianCalendar, observer: Coordinates?, ΔT: Doub
         val tauSun = 8.32 / 1440.0 // 8.32 min  [cy], Earth to Sun distance in light speed terms
         moonEcliptic = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
         sunEcliptic = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
-        lunarAge = LunarAge.fromDegrees(sunEcliptic.λ - moonEcliptic.λ)
+        lunarAge = LunarAge.fromDegrees(moonEcliptic.λ - sunEcliptic.λ)
 
         if (observer == null) {
             moonPosition = null
             sunPosition = null
-            lunarSunlitTilt = if (lunarAge.isAscending) .0 else 180.0
+            lunarSunlitTilt = if (lunarAge.isAscending) 180.0 else .0
         } else {
             val moonEquatorial =
                 LunarPosition.calculateMoonEquatorialCoordinates(moonEcliptic, jd, ΔT)
@@ -42,9 +42,9 @@ class SunMoonPosition(time: GregorianCalendar, observer: Coordinates?, ΔT: Doub
             moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
             sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
             lunarSunlitTilt = if (lunarAge.isAscending) {
-                if (observer.isSouthernHemisphere) 180.0 else .0
-            } else {
                 if (observer.isSouthernHemisphere) .0 else 180.0
+            } else {
+                if (observer.isSouthernHemisphere) 180.0 else .0
             }
             // TODO: Make sure our sun equatorial and moon topocentric exactly matches with what it
             //       want before enable it
