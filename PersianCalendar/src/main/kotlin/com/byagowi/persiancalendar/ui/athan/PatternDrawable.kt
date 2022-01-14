@@ -124,13 +124,15 @@ private class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : 
             canvas.drawPath(path(true), paint)
             canvas.drawPath(path(false), paint)
             paint.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
-            val corner = listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath(true)
+            val corner =
+                listOf(0f to 0f, 0f to .5f - t, .5f - s to .5f - s, .5f - t to 0f).toPath(true)
             canvas.drawPath(corner, paint)
         }
     }
 }
 
-private class SecondPattern(@ColorInt private val tintColor: Int, private val size: Float) : Pattern {
+private class SecondPattern(@ColorInt private val tintColor: Int, private val size: Float) :
+    Pattern {
     // http://www.sigd.org/resources/islamic-geometric-patterns/islamic-geometric-patterns-4/
     override val width = size * tan(Math.toRadians(30.0).toFloat())
     override val height = size
@@ -160,20 +162,15 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
     override val tileModeX = Shader.TileMode.MIRROR
     override val tileModeY = Shader.TileMode.MIRROR
 
-    private fun path(): Path {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
-        val diamond = listOf(0f to .5f, .5f to 0f, 1f to .5f, .5f to 1f).toPath(true) // ◇
-        val square = diamond.rotateBy(45f, .5f, .5f) // rotates it in to □
-        return diamond + square // adds the two shapes together
-    }
-
     override fun draw(canvas: Canvas) {
-        canvas.withScale(width * 2, height * 2) {
-            canvas.drawPath(path(), Paint(Paint.ANTI_ALIAS_FLAG).also {
-                it.style = Paint.Style.FILL
-                it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
-            })
+        val c = cos(Math.PI.toFloat() / 4)
+        val path = listOf(0f to 1f, 1f - c to c, 1f - c to 1f - c, c to 1f - c, 1f to 0f, 1f to 1f)
+            .toPath(true)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.style = Paint.Style.FILL
+            it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
         }
+        canvas.withScale(width, height) { drawPath(path, paint) }
     }
 }
 
