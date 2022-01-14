@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.utils.Eclipse
 import com.byagowi.persiancalendar.utils.lunarSunlitTilt
 import com.cepmuvakkit.times.posAlgo.Ecliptic
 import com.cepmuvakkit.times.posAlgo.Horizontal
+import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.common.truth.Truth.assertThat
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -31,6 +32,20 @@ class AstronomyTests {
             assertThat(it).isAtLeast(1)
             assertThat(it).isAtMost(30)
         }
+        val time = GregorianCalendar(TimeZone.getTimeZone("UTC"))
+        time.clear()
+        time.set(2022, 1, 13, 0, 0, 0)
+        assertThat(SunMoonPosition(time, null, 0.0).lunarAge.days).isWithin(1.0e-2).of(11.31)
+        assertThat(SunMoonPosition(time, null, 0.0).lunarAge.tithi).isEqualTo(12)
+        assertThat(SunMoonPosition(time, null, 0.0).lunarSunlitTilt).isWithin(1.0e0).of(180.0)
+
+        val kathmandu = Coordinates(27.7172, 85.324, 1_400.0)
+        assertThat(SunMoonPosition(time, kathmandu, 0.0).lunarAge.days).isWithin(1.0e-2).of(11.31)
+        assertThat(SunMoonPosition(time, kathmandu, 0.0).lunarAge.tithi).isEqualTo(12)
+        assertThat(SunMoonPosition(time, kathmandu, 0.0).lunarSunlitTilt).isWithin(1.0e0).of(180.0)
+
+        val nirobi = Coordinates(-1.286389, 36.817222, 1_795.0)
+        assertThat(SunMoonPosition(time, nirobi, 0.0).lunarSunlitTilt).isWithin(1.0e0).of(.0)
     }
 
     @Test
