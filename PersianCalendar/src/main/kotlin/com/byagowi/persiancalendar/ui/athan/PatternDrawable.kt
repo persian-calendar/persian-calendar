@@ -182,7 +182,7 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
         val path = (0..0).fold(listOf(0f to 1f, 1f to 0f)) { acc, _ -> splitPath(acc) }
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.FILL
-            it.color = ColorUtils.setAlphaComponent(tintColor, 0xF0)
+            it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
         }
         canvas.withScale(width, height) { drawPath((path + listOf(1f to 1f)).toPath(true), paint) }
     }
