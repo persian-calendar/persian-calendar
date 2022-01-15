@@ -12,7 +12,6 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:background="?attr/selectableItemBackground"
-        android:contentDescription="@string/previous_month"
         android:gravity="center"
         app:tint="?attr/colorMonthSwitch" />
 
@@ -33,7 +32,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:background="?attr/selectableItemBackground"
-        android:contentDescription="@string/next_month"
         android:gravity="center"
         app:tint="?attr/colorMonthSwitch" />
 

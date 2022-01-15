@@ -95,6 +95,9 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 binding.monthView.initialize(sharedDayViewData, this@CalendarPager)
 
                 binding.previous.let {
+                    it.contentDescription = it.context.getString(
+                        R.string.previous_x, it.context.getString(R.string.month)
+                    )
                     it.rotateTo(ArrowView.Direction.START)
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem - 1, true)
@@ -106,6 +109,9 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 }
 
                 binding.next.let {
+                    it.contentDescription = it.context.getString(
+                        R.string.next_x, it.context.getString(R.string.month)
+                    )
                     it.rotateTo(ArrowView.Direction.END)
                     it.setOnClickListener {
                         viewPager.setCurrentItem(viewPager.currentItem + 1, true)

@@ -157,9 +157,12 @@ class AstronomyFragment : Fragment() {
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener { buttonScrollSlider(-1) }
         binding.startArrow.setOnLongClickListener { buttonScrollSlider(-365) }
+        binding.startArrow.contentDescription =
+            getString(R.string.previous_x, getString(R.string.day))
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener { buttonScrollSlider(1) }
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
+        binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
         return binding.root
     }

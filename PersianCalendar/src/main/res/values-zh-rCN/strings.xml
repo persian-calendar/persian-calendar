@@ -163,8 +163,8 @@
     <string name="about_report_bug_sum">建议用于提交错误或请求新功能，需要 GitHub 账号</string>
     <string name="about_email_sum">向应用开发者发送私人邮件</string>
     <string name="about_developers">开发者名单（排名不分先后）</string>
-    <string name="previous_month">上个月</string>
-    <string name="next_month">下个月</string>
+    <string name="previous_x">上个%1$s</string>
+    <string name="next_x">下个%1$s</string>
     <string name="nth_week_of_year">第%1$s周</string>
     <string name="shift_work_settings">倒班设置</string>
     <string name="shift_work_starting_date_edit">之前选择的日期（%1$s）将作为倒班的起始日。</string>

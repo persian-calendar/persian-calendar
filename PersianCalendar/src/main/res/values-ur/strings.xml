@@ -176,8 +176,8 @@
     <string name="calendar_access">دسترسی به تقویم دستگاه</string>
     <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم دستگاه را بدهید، اگر اجازه دسترسی به تقویم دستگاه دهید برنامه می‌تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
     <!--Talkback, a11y-->
-    <string name="previous_month">ماه قبل</string>
-    <string name="next_month">ماه بعد</string>
+    <string name="previous_x">%1$s قبل</string>
+    <string name="next_x">%1$s بعد</string>
     <string name="week_days_name_column">ستون %1$s در جدول روزها</string>
     <string name="equivalent_to">برابر با</string>
     <string name="holiday_reason">تعطیل به مناسبت %1$s</string>

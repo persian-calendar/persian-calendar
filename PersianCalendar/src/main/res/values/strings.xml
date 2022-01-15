@@ -198,13 +198,17 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="about_email_sum">Send personal email to the authors of the app</string>
     <string name="about_noClient">No email client is installed</string>
     <string name="about_developers">Developers (randomly ordered)</string>
-    <!--TalkBack, a11y-->
-    <string name="previous_month">Previous Month</string>
-    <string name="next_month">Next Month</string>
+    <!-- Used in accessibility, previous day or month or year -->
+    <string name="previous_x">Previous %1$s</string>
+    <!-- Used in accessibility, next day or month or year -->
+    <string name="next_x">Next %1$s</string>
+    <!-- Used in accessibility, describes headers of calendar -->
     <string name="week_days_name_column">%1$s column in days table</string>
+    <!-- Used in accessibility -->
     <string name="equivalent_to">Equivalent to</string>
-    <!-- This is only used in TalkBack interface -->
+    <!-- Used in accessibility -->
     <string name="holiday_reason">Holiday because of %1$s</string>
+    <!-- Used in accessibility -->
     <string name="nth_week_of_year">%1$s week of year</string>
     <!-- Search for Shift Work in web to get some more information about it -->
     <string name="shift_work_settings">Shift work settings</string>

@@ -213,7 +213,6 @@
     <string name="method_mwl">मुस्लिम विश्व लीग</string>
     <string name="method_egypt">इजिप्टियन सामान्य प्राधिकरण सर्वेक्षण</string>
     <string name="about_noClient">कुनै इमेल क्लाइन्ट स्थापना गरिएको छैन</string>
-    <string name="previous_month">अघिल्लो महिना</string>
     <string name="shift_work_reset_button">असक्षम वा पुन: प्रोग्राम गर्नुहोस्</string>
     <string name="method_karachi">इस्लामिक विज्ञान विश्वविद्यालय, कराची</string>
     <string name="equivalent_to">को बराबर</string>
@@ -239,7 +238,8 @@
     <string name="about_report_bug_sum">रुचाइएको बग रिपोर्टिङ वा नयाँ सुविधाको लागि अनुरोध, GitHub खाता चाहिन्छ</string>
     <string name="about_email_sum">एपका विकासकर्ताहरूलाई व्यक्तिगत इमेल पठाउनुहोस्</string>
     <string name="about_developers">विकासकर्ताहरू (अनियमित रूपमा राखिएको)</string>
-    <string name="next_month">अर्को महिना</string>
+    <string name="previous_x">अघिल्लो %1$s</string>
+    <string name="next_x">अर्को %1$s</string>
     <string name="week_days_name_column">%1$s दिन तालिकामा स्तम्भ</string>
     <string name="holiday_reason">छुट्टी को कारण %1$s</string>
     <string name="nth_week_of_year">%1$s वर्षको हप्ता</string>

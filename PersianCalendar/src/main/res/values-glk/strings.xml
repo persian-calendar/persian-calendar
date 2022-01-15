@@ -176,8 +176,8 @@
     <string name="calendar_access">دزگا تقويمˈفارسئن</string>
     <string name="phone_calendar_required">اول وا وهأليد دزگا تقويمˇدۊرۊن بشه, أگه دزگا تقويمˈوهأليد برنامه تأنه شيمي شخصي رۊيدادانأ فارسي تقويمˇدۊرۊن نيشان بده.</string>
     <!--TalkBack, a11y-->
-    <string name="previous_month">ماىˇقبل</string>
-    <string name="next_month">ماىˇبعد</string>
+    <string name="previous_x">%1$sˇقبل</string>
+    <string name="next_x">%1$sˇبعد</string>
     <string name="week_days_name_column">سۊتۊن %1$s رۊزانˇجدولˇدۊرۊن</string>
     <string name="equivalent_to">برابره</string>
     <string name="holiday_reason">أنˇوأستي تعطيله %1$s</string>

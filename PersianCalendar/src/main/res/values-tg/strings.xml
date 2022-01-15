@@ -194,8 +194,8 @@
     <string name="about_developers">Таҳиягарон (ба таври тасодуфӣ Ба тартиб оварда шудаанд)</string>
     <string name="about_report_bug_sum">Ҳисоботи хатогиҳои афзалиятнок ё дархости хусусияти нав, ба ҳисоби GitHub ниёз дорад</string>
     <string name="phone_location_required">Ин қисми барнома ба иҷозати ҷойгиршавӣ ниёз дорад, агар шумо инкор карданро интихоб кунед, шумо бояд фарохӣ ва дарозии худро дастӣ ворид кунед.</string>
-    <string name="previous_month">Моҳи гузашта</string>
-    <string name="next_month">Моҳи оянда</string>
+    <string name="previous_x">%1$s гузашта</string>
+    <string name="next_x">%1$s оянда</string>
     <string name="center_align_widgets_summary">Ҳамоҳангсозии виджетҳои 4x1 ва 2x2</string>
     <string name="prefer_linear_date">Шакли рақамии санаҳоро интихоб кунед</string>
     <string name="select_widgets_background_color">Барои заминаи виджетҳо ранги фармоиширо интихоб кунед</string>

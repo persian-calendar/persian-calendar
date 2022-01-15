@@ -142,8 +142,8 @@
     <string name="holiday_reason">Tatil nedeniyle %1$s</string>
     <string name="equivalent_to">Eşdeğer</string>
     <string name="week_days_name_column">Gün tablosundaki %1$s sütunu</string>
-    <string name="next_month">Gelecek ay</string>
-    <string name="previous_month">Önceki Ay</string>
+    <string name="next_x">Gelecek %1$s</string>
+    <string name="previous_x">Önceki %1$s</string>
     <string name="about_developers">Geliştiriciler (rastgele sıralanmış)</string>
     <string name="about_noClient">Yüklü e-posta istemcisi yok</string>
     <string name="about_email_sum">Uygulamanın yazarlarına kişisel e-posta gönder</string>

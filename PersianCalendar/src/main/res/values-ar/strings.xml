@@ -198,8 +198,8 @@
     <string name="about_noClient">تعذّر العثور على تطبيق البريد الإلكتروني</string>
     <string name="about_developers">المطوّرون (مرتب عشوائيا)</string>
     <!--TalkBack, a11y-->
-    <string name="previous_month">الشهر السابق</string>
-    <string name="next_month">الشهر القادم</string>
+    <string name="previous_x">%1$s السابق</string>
+    <string name="next_x">%1$s القادم</string>
     <string name="week_days_name_column">عمود %1$s في جدول التواريخ</string>
     <string name="equivalent_to">ما يعادل</string>
     <string name="holiday_reason">عطلة لأن %1$s</string>

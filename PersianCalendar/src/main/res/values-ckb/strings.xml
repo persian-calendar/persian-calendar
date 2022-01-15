@@ -177,9 +177,8 @@
     <string name="phone_location_required">ئەم بەشەی بەرنامە پێویستی بە دەستەڵاتی شوێنە، دەنا دەبێ بەدەست درێژایی و پانایی جوگرافی تێ‌بخەن.</string>
     <string name="calendar_access">دەستڕاگەیشتن بە ڕۆژژمێری ئامراز</string>
     <string name="phone_calendar_required">ئەم بەشەی بەرنامە پێویستی بە دەستەڵاتی ڕۆژژمێری ئامرازە، بە پێدانی ئەم دەستەڵاتە بەرنامە دەتوانێ ڕووداوە کەسییەکانت لە ڕۆژژمێردا نیشان بدا.</string>
-    <!--TalkBack, a11y-->
-    <string name="previous_month">مانگی پاشەوە</string>
-    <string name="next_month">مانگی پێشەوە</string>
+    <string name="previous_x">%1$s پاشەوە</string>
+    <string name="next_x">%1$s پێشەوە</string>
     <string name="week_days_name_column">ئەستوونی %1$s لە خشتەی ڕۆژەکاندا</string>
     <string name="equivalent_to">ڕێککەوتە لەگەڵ</string>
     <string name="holiday_reason">پشوودان بە بۆنەی %1$s</string>
