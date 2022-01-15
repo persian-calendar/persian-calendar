@@ -222,7 +222,6 @@
 |    |    \--- androidx.lifecycle:lifecycle-runtime:2.2.0 -> 2.4.0 (*)
 |    +--- androidx.vectordrawable:vectordrawable:1.1.0 (*)
 |    \--- androidx.viewpager2:viewpager2:1.0.0 (*)
-+--- com.google.openlocationcode:openlocationcode:1.0.4
 +--- androidx.navigation:navigation-fragment-ktx:2.3.5
 |    +--- androidx.navigation:navigation-fragment:2.3.5
 |    |    +--- androidx.fragment:fragment:1.2.4 -> 1.4.0 (*)
@@ -291,6 +290,7 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.10 (*)
 |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0 -> 1.6.0 (*)
 +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0 (*)
-\--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3
-     +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31 -> 1.6.10 (*)
-     \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.4.31 -> 1.6.10
++--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3
+|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.4.31 -> 1.6.10 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.4.31 -> 1.6.10
+\--- com.google.openlocationcode:openlocationcode:1.0.4
