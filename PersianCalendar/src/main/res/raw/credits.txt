@@ -21,6 +21,12 @@ Assets
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
 * kaaba.png from Emoji One project, 1f54b.svg, http://emojione.com (CC BY 4.0)
   https://www.behance.net/gallery/21015893/Google-Calendar
+* ic_moon is derived from Google Noto Emoji but highly tweaked
+  https://github.com/googlefonts/noto-emoji/blob/main/svg/emoji_u1f315.svg
+* ic_sun is derived from Mozilla's Emoji but highly tweaked
+  https://github.com/mozilla/fxemoji/blob/gh-pages/svgs/nature/u2600-sunrays.svg
+* worldmap.gz is derived from https://commons.wikimedia.org/wiki/File:World_map_blank_without_borders.svg
+  which is released under CC-by-SA by User:Phirosiberia.
 * نوای اعلان و انیمیشن: برنا تصویر رسانه
 
 ----
