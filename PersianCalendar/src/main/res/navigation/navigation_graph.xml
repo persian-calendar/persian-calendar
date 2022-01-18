@@ -133,11 +133,16 @@
     <fragment
         android:id="@+id/astronomy"
         android:name="com.byagowi.persiancalendar.ui.compass.AstronomyFragment"
-        android:label="Licenses Fragment">
+        android:label="Astronomy Fragment">
         <argument
             android:name="day_offset"
             android:defaultValue="0"
             app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.byagowi.persiancalendar.ui.map.MapFragment"
+        android:label="Map" />
 
 </navigation>
