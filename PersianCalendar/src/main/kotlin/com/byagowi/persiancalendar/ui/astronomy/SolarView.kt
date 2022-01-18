@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.compass
+package com.byagowi.persiancalendar.ui.astronomy
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint

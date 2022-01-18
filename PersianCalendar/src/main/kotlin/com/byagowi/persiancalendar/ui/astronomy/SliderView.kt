@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.compass
+package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.Context
 import android.graphics.Canvas

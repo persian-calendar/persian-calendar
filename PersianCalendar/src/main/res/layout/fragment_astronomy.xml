@@ -183,7 +183,7 @@
 
             </LinearLayout>
 
-            <com.byagowi.persiancalendar.ui.compass.SolarView
+            <com.byagowi.persiancalendar.ui.astronomy.SolarView
                 android:id="@+id/solar_view"
                 android:layout_width="290dp"
                 android:layout_height="290dp"
@@ -221,7 +221,7 @@
                 android:layout_gravity="start|center_vertical"
                 app:tint="?attr/colorAccent" />
 
-            <com.byagowi.persiancalendar.ui.compass.SliderView
+            <com.byagowi.persiancalendar.ui.astronomy.SliderView
                 android:id="@+id/slider"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"

@@ -132,7 +132,7 @@
 
     <fragment
         android:id="@+id/astronomy"
-        android:name="com.byagowi.persiancalendar.ui.compass.AstronomyFragment"
+        android:name="com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment"
         android:label="Astronomy Fragment">
         <argument
             android:name="day_offset"

@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.compass
+package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -19,11 +19,7 @@ import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.utils.Eclipse
-import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.isRtl
-import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.byagowi.persiancalendar.utils.*
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.persiancalendar.calendar.CivilDate
