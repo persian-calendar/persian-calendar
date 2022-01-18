@@ -1,19 +1,15 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
-import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
@@ -85,42 +81,40 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         super.onDraw(canvas ?: return)
         val sunMoonPosition = sunMoonPosition ?: return
         val radius = min(width, height) / 2f
-        canvas.withScale(x = scaleFactor, y = scaleFactor, pivotX = radius, pivotY = radius) {
-            arcRect.set(0f, 0f, 2 * radius, 2 * radius)
-            val circleInset = radius * .05f
-            arcRect.inset(circleInset, circleInset)
-            canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
-            ranges.forEachIndexed { index, (start, end) ->
-                canvas.withRotation(-end + 90f, radius, radius) {
-                    if (index % 2 == 0) canvas.drawArc(
-                        arcRect, -90f, end - start, true, zodiacForegroundPaint
-                    )
-                    drawLine(radius, circleInset, radius, radius, zodiacSeparatorPaint)
-                }
-                canvas.withRotation(-(start + end) / 2 + 90f, radius, radius) {
-                    drawText(labels[index], radius, radius * .12f, zodiacPaint)
-                }
-            }
-            val cr = radius / 8f
-            solarDraw.earth(canvas, radius, radius, cr / 1.5f)
-            val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
-            canvas.withRotation(-sunDegree + 90f, radius, radius) {
-                solarDraw.sun(this, radius, radius / 3.5f, cr)
-                canvas.withTranslation(x = radius, y = 0f) {
-                    canvas.drawPath(trianglePath, sunIndicatorPaint)
-                }
-            }
-            val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
-            canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
-            canvas.withRotation(-moonDegree + 90f, radius, radius) {
-                val moonDistance = sunMoonPosition.moonEcliptic.Δ / SunMoonPosition.LUNAR_DISTANCE
-                solarDraw.moon(
-                    this, sunMoonPosition, radius,
-                    radius * moonDistance.toFloat() * .7f, cr / 1.9f
+        arcRect.set(0f, 0f, 2 * radius, 2 * radius)
+        val circleInset = radius * .05f
+        arcRect.inset(circleInset, circleInset)
+        canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
+        ranges.forEachIndexed { index, (start, end) ->
+            canvas.withRotation(-end + 90f, radius, radius) {
+                if (index % 2 == 0) canvas.drawArc(
+                    arcRect, -90f, end - start, true, zodiacForegroundPaint
                 )
-                canvas.withTranslation(x = radius, y = 0f) {
-                    canvas.drawPath(trianglePath, moonIndicatorPaint)
-                }
+                drawLine(radius, circleInset, radius, radius, zodiacSeparatorPaint)
+            }
+            canvas.withRotation(-(start + end) / 2 + 90f, radius, radius) {
+                drawText(labels[index], radius, radius * .12f, zodiacPaint)
+            }
+        }
+        val cr = radius / 8f
+        solarDraw.earth(canvas, radius, radius, cr / 1.5f)
+        val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
+        canvas.withRotation(-sunDegree + 90f, radius, radius) {
+            solarDraw.sun(this, radius, radius / 3.5f, cr)
+            canvas.withTranslation(x = radius, y = 0f) {
+                canvas.drawPath(trianglePath, sunIndicatorPaint)
+            }
+        }
+        val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
+        canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
+        canvas.withRotation(-moonDegree + 90f, radius, radius) {
+            val moonDistance = sunMoonPosition.moonEcliptic.Δ / SunMoonPosition.LUNAR_DISTANCE
+            solarDraw.moon(
+                this, sunMoonPosition, radius,
+                radius * moonDistance.toFloat() * .7f, cr / 1.9f
+            )
+            canvas.withTranslation(x = radius, y = 0f) {
+                canvas.drawPath(trianglePath, moonIndicatorPaint)
             }
         }
     }
@@ -165,23 +159,6 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1.dp
         it.color = 0x40808080
-    }
-
-    private var scaleFactor = 1f
-    private val scaleGestureDetector = ScaleGestureDetector(
-        context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            override fun onScale(detector: ScaleGestureDetector?): Boolean {
-                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.9f, 1.1f)
-                postInvalidate()
-                return true
-            }
-        }
-    )
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        scaleGestureDetector.onTouchEvent(event)
-        return true
     }
 
     private val solarDraw = SolarDraw(context)
