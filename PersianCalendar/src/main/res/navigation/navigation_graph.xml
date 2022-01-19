@@ -150,6 +150,11 @@
     <fragment
         android:id="@+id/map"
         android:name="com.byagowi.persiancalendar.ui.map.MapFragment"
-        android:label="Map" />
+        android:label="Map">
+        <argument
+            android:name="minutes_offset"
+            android:defaultValue="0"
+            app:argType="integer" />
+    </fragment>
 
 </navigation>

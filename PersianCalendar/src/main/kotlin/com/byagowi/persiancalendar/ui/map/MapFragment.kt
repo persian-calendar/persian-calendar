@@ -21,6 +21,7 @@ import androidx.core.graphics.PathParser
 import androidx.core.graphics.set
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
@@ -39,11 +40,13 @@ class MapFragment : Fragment() {
     ): View {
         val imageView = ZoomableImageView(inflater.context)
 
+        val args by navArgs<MapFragmentArgs>()
+        val date = GregorianCalendar().apply { add(Calendar.MINUTE, args.minutesOffset * 60 * 24) }
         lifecycleScope.launch {
             runCatching {
                 val bitmap = withContext(Dispatchers.IO) { createMap() }
                 imageView.setImageDrawable(BitmapDrawable(resources, bitmap))
-                val dayNightMap = withContext(Dispatchers.IO) { createDayNightMap(bitmap) }
+                val dayNightMap = withContext(Dispatchers.IO) { createDayNightMap(bitmap, date) }
                 imageView.setImageDrawable(BitmapDrawable(resources, dayNightMap))
             }.onFailure(logException).getOrNull().debugAssertNotNull // handle production OOM and so
         }
@@ -64,9 +67,9 @@ class MapFragment : Fragment() {
     }
 
     @WorkerThread
-    private fun createDayNightMap(originalMap: Bitmap): Bitmap {
+    private fun createDayNightMap(originalMap: Bitmap, date: GregorianCalendar): Bitmap {
         val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ARGB_8888)
-        val sunPosition = SunMoonPositionForMap(GregorianCalendar())
+        val sunPosition = SunMoonPositionForMap(date)
         (-90 until 90).forEach { lat ->
             (-180 until 180).forEach { long ->
                 // TODO: Calibrate it with the initial map

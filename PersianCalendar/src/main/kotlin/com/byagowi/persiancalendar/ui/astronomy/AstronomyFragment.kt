@@ -169,10 +169,11 @@ class AstronomyFragment : Fragment() {
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
-        var clickCount = 0
+        var solarViewClickCount = 0
         binding.solarView.setOnClickListener {
-            if (++clickCount % 5 == 0)
-                findNavController().navigateSafe(AstronomyFragmentDirections.actionAstronomyToMap())
+            if (++solarViewClickCount % 5 == 0) findNavController().navigateSafe(
+                AstronomyFragmentDirections.actionAstronomyToMap(offset)
+            )
         }
 
         return binding.root
