@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -153,12 +154,18 @@ class AstronomyFragment : Fragment() {
             return true
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
-        binding.startArrow.setOnClickListener { buttonScrollSlider(-1) }
+        binding.startArrow.setOnClickListener {
+            binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            buttonScrollSlider(-1)
+        }
         binding.startArrow.setOnLongClickListener { buttonScrollSlider(-365) }
         binding.startArrow.contentDescription =
             getString(R.string.previous_x, getString(R.string.day))
         binding.endArrow.rotateTo(ArrowView.Direction.END)
-        binding.endArrow.setOnClickListener { buttonScrollSlider(1) }
+        binding.endArrow.setOnClickListener {
+            binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            buttonScrollSlider(1)
+        }
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
