@@ -206,8 +206,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawMoon() {
+        if (sunMoonPosition.isMoonGone == true) return
         val moonPosition = sunMoonPosition.moonPosition ?: return
-        if (moonPosition.altitude <= -5) return
         withRotation(moonPosition.azimuth.toFloat() - 360, cx, cy) {
             val moonHeight = (moonPosition.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)

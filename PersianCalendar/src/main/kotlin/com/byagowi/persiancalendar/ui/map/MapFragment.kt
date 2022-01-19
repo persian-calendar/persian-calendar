@@ -24,7 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.utils.logException
-import com.cepmuvakkit.times.posAlgo.SunPosition
+import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -66,7 +66,7 @@ class MapFragment : Fragment() {
     @WorkerThread
     private fun createDayNightMap(originalMap: Bitmap): Bitmap {
         val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ARGB_8888)
-        val sunPosition = SunPosition(GregorianCalendar())
+        val sunPosition = SunMoonPositionForMap(GregorianCalendar())
         (-90 until 90).forEach { lat ->
             (-180 until 180).forEach { long ->
                 // TODO: Calibrate it with the initial map

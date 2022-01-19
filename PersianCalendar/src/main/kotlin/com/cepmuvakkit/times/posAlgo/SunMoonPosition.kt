@@ -55,6 +55,7 @@ class SunMoonPosition(time: GregorianCalendar, observer: Coordinates?, ΔT: Doub
     }
 
     val isNight get() = sunPosition?.run { altitude <= -10 }
+    val isMoonGone get() = moonPosition?.run { altitude <= -5 }
 
     companion object {
         // https://en.wikipedia.org/wiki/Lunar_distance_(astronomy)
@@ -62,18 +63,28 @@ class SunMoonPosition(time: GregorianCalendar, observer: Coordinates?, ΔT: Doub
     }
 }
 
-class SunPosition(time: GregorianCalendar) {
+class SunMoonPositionForMap(time: GregorianCalendar) {
+
+    private val moonEcliptic: Ecliptic
     private val sunEcliptic: Ecliptic
+
+    private val moonEquatorial: Equatorial
     private val sunEquatorial: Equatorial
+
     private val ΔT = .0
     private val jd = AstroLib.calculateJulianDay(time)
 
     init {
         val tauSun = 8.32 / 1440.0 // 8.32 min  [cy], Earth to Sun distance in light speed terms
+        moonEcliptic = LunarPosition.calculateMoonEclipticCoordinates(jd, ΔT)
         sunEcliptic = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
+        moonEquatorial = LunarPosition.calculateMoonEquatorialCoordinates(moonEcliptic, jd, ΔT)
         sunEquatorial = SolarPosition.calculateSunEquatorialCoordinates(sunEcliptic, jd, ΔT)
     }
 
     fun isNight(latitude: Double, longitude: Double) =
-        sunEquatorial.equ2Topocentric(longitude, latitude, .0, jd, ΔT).altitude < -10
+        sunEquatorial.equ2Topocentric(longitude, latitude, .0, jd, ΔT).altitude <= -10
+
+    fun isMoonGone(latitude: Double, longitude: Double) =
+        moonEquatorial.equ2Topocentric(longitude, latitude, .0, jd, ΔT).altitude <= -5
 }
