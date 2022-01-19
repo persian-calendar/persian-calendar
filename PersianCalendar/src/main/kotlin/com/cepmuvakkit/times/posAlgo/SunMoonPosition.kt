@@ -54,8 +54,26 @@ class SunMoonPosition(time: GregorianCalendar, observer: Coordinates?, ΔT: Doub
         }
     }
 
+    val isNight get() = sunPosition?.run { altitude <= -10 }
+
     companion object {
         // https://en.wikipedia.org/wiki/Lunar_distance_(astronomy)
         const val LUNAR_DISTANCE = 384399
     }
+}
+
+class SunPosition(time: GregorianCalendar) {
+    private val sunEcliptic: Ecliptic
+    private val sunEquatorial: Equatorial
+    private val ΔT = .0
+    private val jd = AstroLib.calculateJulianDay(time)
+
+    init {
+        val tauSun = 8.32 / 1440.0 // 8.32 min  [cy], Earth to Sun distance in light speed terms
+        sunEcliptic = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
+        sunEquatorial = SolarPosition.calculateSunEquatorialCoordinates(sunEcliptic, jd, ΔT)
+    }
+
+    fun isNight(latitude: Double, longitude: Double) =
+        sunEquatorial.equ2Topocentric(longitude, latitude, .0, jd, ΔT).altitude < -10
 }

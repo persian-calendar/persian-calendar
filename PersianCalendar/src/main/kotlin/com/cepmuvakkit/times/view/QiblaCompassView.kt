@@ -192,8 +192,8 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val shadeFactor = 1.5f
 
     private fun Canvas.drawSun() {
+        if (sunMoonPosition.isNight == true) return
         val sunPosition = sunMoonPosition.sunPosition ?: return
-        if (sunPosition.altitude <= -10) return
         val rotation = sunPosition.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
             val sunHeight = (sunPosition.altitude.toFloat() / 90 - 1) * radius

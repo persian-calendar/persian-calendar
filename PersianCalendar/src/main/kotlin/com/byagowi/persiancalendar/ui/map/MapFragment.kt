@@ -23,9 +23,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
-import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.logException
-import io.github.persiancalendar.praytimes.Coordinates
+import com.cepmuvakkit.times.posAlgo.SunPosition
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,13 +66,12 @@ class MapFragment : Fragment() {
     @WorkerThread
     private fun createDayNightMap(originalMap: Bitmap): Bitmap {
         val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ARGB_8888)
-        val calendar = GregorianCalendar()
+        val sunPosition = SunPosition(GregorianCalendar())
         (-90 until 90).forEach { lat ->
             (-180 until 180).forEach { long ->
-                val coordination = Coordinates(lat.toDouble(), long.toDouble(), .0)
-                val times = coordination.calculatePrayTimes(calendar)
-                if (calendar.get(Calendar.HOUR).toDouble() !in times.fajr..times.maghrib)
-                    nightMask[long + 180, lat + 90] = Color.BLACK
+                // TODO: Calibrate it with the initial map
+                if (sunPosition.isNight(lat.toDouble(), long.toDouble()))
+                    nightMask[long + 180, 179 - (lat + 90)] = Color.BLACK
             }
         }
         val result = originalMap.copy(Bitmap.Config.ARGB_8888, true)
