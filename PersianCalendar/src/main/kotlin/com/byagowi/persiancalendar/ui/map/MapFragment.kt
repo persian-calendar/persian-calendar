@@ -19,6 +19,7 @@ import androidx.annotation.WorkerThread
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.set
+import androidx.core.graphics.withScale
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
@@ -41,7 +42,7 @@ class MapFragment : Fragment() {
         val imageView = ZoomableImageView(inflater.context)
 
         val args by navArgs<MapFragmentArgs>()
-        val date = GregorianCalendar().apply { add(Calendar.MINUTE, args.minutesOffset * 60 * 24) }
+        val date = GregorianCalendar().also { it.add(Calendar.MINUTE, args.minutesOffset) }
         lifecycleScope.launch {
             runCatching {
                 val bitmap = withContext(Dispatchers.IO) { createMap() }
@@ -59,9 +60,12 @@ class MapFragment : Fragment() {
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathString = String(GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes())
         val mapPath = PathParser.createPathFromPathData(mapPathString)
-        val bitmap = Bitmap.createBitmap(4378, 2435, Bitmap.Config.ARGB_8888)
+        val scale = 4
+        val bitmap = Bitmap.createBitmap(4378 / scale, 2435 / scale, Bitmap.Config.ARGB_8888)
         Canvas(bitmap).also {
-            it.drawPath(mapPath, Paint().apply { color = 0xffbcbcbc.toInt() })
+            it.withScale(1f / scale, 1f / scale) {
+                it.drawPath(mapPath, Paint().apply { color = 0xffbcbcbc.toInt() })
+            }
         }
         return bitmap.copy(Bitmap.Config.ARGB_8888, false)
     }
