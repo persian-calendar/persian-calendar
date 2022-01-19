@@ -8,11 +8,13 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
+import android.util.Base64
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -51,6 +53,7 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -78,6 +81,13 @@ fun Activity.bringMarketPage() = runCatching {
         startActivity(Intent(Intent.ACTION_VIEW, uri))
     }.onFailure(logException)
 }.let {}
+
+fun Bitmap.toPngBase64(): String {
+    val buffer = ByteArrayOutputStream()
+    this.compress(Bitmap.CompressFormat.PNG, 100, buffer)
+    val base64 = Base64.encodeToString(buffer.toByteArray(), Base64.DEFAULT)
+    return "data:image/png;base64,$base64"
+}
 
 private fun Context.textToFile(text: String, fileName: String = "persian-calendar.html"): Uri =
     FileProvider.getUriForFile(
