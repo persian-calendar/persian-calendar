@@ -557,7 +557,7 @@ private fun spin(angle: Double, pos: DoubleArray): DoubleArray {
     )
 }
 
-fun rotationEqdHor(time: GregorianCalendar, observer: Coordinates): List<DoubleArray> {
+private fun rotationEqdHor(time: GregorianCalendar, observer: Coordinates): List<DoubleArray> {
     val sinlat = sin(Math.toRadians(observer.latitude))
     val coslat = cos(Math.toRadians(observer.latitude))
     val sinlon = sin(Math.toRadians(observer.longitude))
