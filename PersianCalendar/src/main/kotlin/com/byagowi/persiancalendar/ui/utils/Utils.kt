@@ -11,6 +11,7 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.ShapeDrawable
+import android.net.Uri
 import android.os.Build
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -78,24 +79,22 @@ fun Activity.bringMarketPage() = runCatching {
     }.onFailure(logException)
 }.let {}
 
-fun Context.showHtml(html: String) = runCatching {
-    val uri = FileProvider.getUriForFile(
-        applicationContext, "$packageName.provider",
-        File(externalCacheDir, "persian-calendar.html").also { it.writeText(html) }
-    )
-    CustomTabsIntent.Builder().build()
-        .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-        .launchUrl(this, uri)
-}.onFailure(logException).let {}
-
-fun Activity.shareText(text: String, fileName: String, mime: String) = runCatching {
-    val uri = FileProvider.getUriForFile(
+private fun Context.textToFile(text: String, fileName: String = "persian-calendar.html"): Uri =
+    FileProvider.getUriForFile(
         applicationContext, "$packageName.provider",
         File(externalCacheDir, fileName).also { it.writeText(text) }
     )
+
+fun Context.showHtml(html: String) = runCatching {
+    CustomTabsIntent.Builder().build()
+        .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+        .launchUrl(this, textToFile(html, "persian-calendar.html"))
+}.onFailure(logException).let {}
+
+fun Activity.shareText(text: String, fileName: String, mime: String) = runCatching {
     startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
         it.type = mime
-        it.putExtra(Intent.EXTRA_STREAM, uri)
+        it.putExtra(Intent.EXTRA_STREAM, textToFile(text, fileName))
     }, getString(R.string.share)))
 }.onFailure(logException).let {}
 
