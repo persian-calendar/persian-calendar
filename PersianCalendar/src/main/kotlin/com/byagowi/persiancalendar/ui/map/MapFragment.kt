@@ -46,9 +46,10 @@ class MapFragment : Fragment() {
         lifecycleScope.launch {
             runCatching {
                 val bitmap = withContext(Dispatchers.IO) { createMap() }
-                imageView.setImageDrawable(BitmapDrawable(resources, bitmap))
-                val dayNightMap = withContext(Dispatchers.IO) { createDayNightMap(bitmap, date) }
-                imageView.setImageDrawable(BitmapDrawable(resources, dayNightMap))
+                val image = BitmapDrawable(resources, bitmap)
+                imageView.setImageDrawable(image)
+                withContext(Dispatchers.IO) { addDayNightMask(bitmap, date) }
+                image.invalidateSelf()
             }.onFailure(logException).getOrNull().debugAssertNotNull // handle production OOM and so
         }
 
@@ -67,12 +68,12 @@ class MapFragment : Fragment() {
                 it.drawPath(mapPath, Paint().apply { color = 0xffbcbcbc.toInt() })
             }
         }
-        return bitmap.copy(Bitmap.Config.ARGB_8888, false)
+        return bitmap
     }
 
     @WorkerThread
-    private fun createDayNightMap(originalMap: Bitmap, date: GregorianCalendar): Bitmap {
-        val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ARGB_8888)
+    private fun addDayNightMask(bitmap: Bitmap, date: GregorianCalendar) {
+        val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ALPHA_8)
         val sunPosition = SunMoonPositionForMap(date)
         (-90 until 90).forEach { lat ->
             (-180 until 180).forEach { long ->
@@ -81,13 +82,11 @@ class MapFragment : Fragment() {
                     nightMask[long + 180, 179 - (lat + 90)] = Color.BLACK
             }
         }
-        val result = originalMap.copy(Bitmap.Config.ARGB_8888, true)
-        Canvas(result).also {
+        Canvas(bitmap).also {
             val maskRect = Rect(0, 0, nightMask.width, nightMask.height)
-            val originalRect = Rect(0, 0, result.width, result.height)
+            val originalRect = Rect(0, 0, bitmap.width, bitmap.height)
             it.drawBitmap(nightMask, maskRect, originalRect, Paint().apply { alpha = 0xB0 })
         }
-        return result
     }
 }
 
