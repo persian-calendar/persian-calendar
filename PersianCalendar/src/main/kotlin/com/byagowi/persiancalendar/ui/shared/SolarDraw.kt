@@ -45,6 +45,11 @@ class SolarDraw(context: Context) {
         }
     }
 
+    fun simpleMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
+        moonRect.set(cx - r, cy - r, cx + r, cy + r)
+        canvas.drawBitmap(moonBitmap, null, moonRect, null)
+    }
+
     private val moonBitmap = context.getCompatDrawable(R.drawable.ic_moon).toBitmap(192, 192)
     private val ovalPath = Path()
     private val moonRect = RectF()

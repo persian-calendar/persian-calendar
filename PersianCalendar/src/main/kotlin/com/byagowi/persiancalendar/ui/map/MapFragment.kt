@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
@@ -27,6 +26,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.ui.shared.ArrowView
+import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
@@ -48,6 +48,8 @@ class MapFragment : Fragment() {
             it.setTitle(R.string.map)
             it.setupUpNavigation()
         }
+
+        solarDraw = SolarDraw(layoutInflater.context)
 
         val args by navArgs<MapFragmentArgs>()
         val date = GregorianCalendar().also { it.add(Calendar.MINUTE, args.minutesOffset) }
@@ -93,7 +95,8 @@ class MapFragment : Fragment() {
         val mapPathString = String(GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes())
         val mapPath = PathParser.createPathFromPathData(mapPathString)
         val scale = 4
-        val bitmap = Bitmap.createBitmap(360 * 16 / scale, 180 * 16 / scale, Bitmap.Config.ARGB_8888)
+        val bitmap =
+            Bitmap.createBitmap(360 * 16 / scale, 180 * 16 / scale, Bitmap.Config.ARGB_8888)
         Canvas(bitmap).also {
             it.drawColor(0xFF809DB5.toInt())
             it.withScale(1f / scale, 1f / scale) {
@@ -103,26 +106,35 @@ class MapFragment : Fragment() {
         bitmap
     }
 
+    private var solarDraw: SolarDraw? = null
+
     @WorkerThread
     private fun createDayNightMap(date: GregorianCalendar): Bitmap {
-        val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ARGB_8888)
+        val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ALPHA_8)
         val sunPosition = SunMoonPositionForMap(date)
+        var sunLat = .0f; var sunLong = .0f; var sunAlt = .0
+        var moonLat = .0f; var moonLong = .0f; var moonAlt = .0
         (-90 until 90).forEach { lat ->
             (-180 until 180).forEach { long ->
-                val altitude = sunPosition.sunAltitude(lat.toDouble(), long.toDouble())
-                when {
-                    altitude <= -17 -> nightMask[long + 180, 179 - (lat + 90)] = 0x78000000
-                    altitude <= -10 -> nightMask[long + 180, 179 - (lat + 90)] = 0x58000000
-                    altitude <= -5 -> nightMask[long + 180, 179 - (lat + 90)] = 0x38000000
-                    altitude <= 0 -> nightMask[long + 180, 179 - (lat + 90)] = 0x18000000
+                val sunAltitude = sunPosition.sunAltitude(lat.toDouble(), long.toDouble())
+                if (sunAltitude < 0)
+                    nightMask[long + 180, 179 - (lat + 90)] =
+                        (-sunAltitude.toInt()).coerceAtMost(17) * 5 shl 24
+                if (sunAltitude > sunAlt) { // find lat/long of a point with maximum sun altitude
+                    sunAlt = sunAltitude; sunLat = 179f - (lat + 90); sunLong = long + 180f
+                }
+                val moonAltitude = sunPosition.moonAltitude(lat.toDouble(), long.toDouble())
+                if (moonAltitude > moonAlt) { // this time for moon
+                    moonAlt = moonAltitude; moonLat = 179f - (lat + 90); moonLong = long + 180f
                 }
             }
         }
         val result = cachedMap.copy(Bitmap.Config.ARGB_8888, true)
         Canvas(result).also {
-            val maskRect = Rect(0, 0, nightMask.width, nightMask.height)
-            val originalRect = Rect(0, 0, result.width, result.height)
-            it.drawBitmap(nightMask, maskRect, originalRect, null)
+            it.drawBitmap(nightMask, null, Rect(0, 0, result.width, result.height), null)
+            val scale = result.width / 360
+            solarDraw?.sun(it, sunLong * scale, sunLat * scale, scale * 12.5f)
+            solarDraw?.simpleMoon(it, moonLong * scale, moonLat * scale, scale * 8f)
         }
         return result
     }

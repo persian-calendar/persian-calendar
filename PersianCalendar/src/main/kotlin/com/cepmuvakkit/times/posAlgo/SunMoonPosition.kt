@@ -88,6 +88,6 @@ class SunMoonPositionForMap(time: GregorianCalendar) {
     fun sunAltitude(latitude: Double, longitude: Double) =
         sunEquatorial.equ2Topocentric(longitude, latitude, .0, theta, true).altitude
 
-    fun isMoonGone(latitude: Double, longitude: Double) =
-        moonEquatorial.equ2Topocentric(longitude, latitude, .0, theta, true).altitude <= -5
+    fun moonAltitude(latitude: Double, longitude: Double) =
+        moonEquatorial.equ2Topocentric(longitude, latitude, .0, theta, true).altitude
 }
