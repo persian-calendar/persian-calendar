@@ -25,6 +25,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.Variants.debugAssertNotNull
+import com.byagowi.persiancalendar.databinding.FragmentMapBinding
+import com.byagowi.persiancalendar.ui.shared.ArrowView
+import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
 import kotlinx.coroutines.Dispatchers
@@ -39,25 +43,52 @@ class MapFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val imageView = ZoomableImageView(inflater.context)
+        val binding = FragmentMapBinding.inflate(inflater)
+        binding.appBar.toolbar.let {
+            it.setTitle(R.string.map)
+            it.setupUpNavigation()
+        }
 
         val args by navArgs<MapFragmentArgs>()
         val date = GregorianCalendar().also { it.add(Calendar.MINUTE, args.minutesOffset) }
-        lifecycleScope.launch {
-            runCatching {
-                val bitmap = withContext(Dispatchers.IO) { createMap() }
-                val image = BitmapDrawable(resources, bitmap)
-                imageView.setImageDrawable(image)
-                withContext(Dispatchers.IO) { addDayNightMask(bitmap, date) }
-                image.invalidateSelf()
-            }.onFailure(logException).getOrNull().debugAssertNotNull // handle production OOM and so
+
+        update(binding, date)
+
+        binding.startArrow.rotateTo(ArrowView.Direction.START)
+        binding.startArrow.setOnClickListener {
+            date.add(Calendar.HOUR, -1)
+            update(binding, date)
+        }
+        binding.startArrow.setOnLongClickListener {
+            date.add(Calendar.DATE, -1)
+            update(binding, date)
+            true
+        }
+        binding.endArrow.rotateTo(ArrowView.Direction.END)
+        binding.endArrow.setOnClickListener {
+            date.add(Calendar.HOUR, 1)
+            update(binding, date)
+        }
+        binding.endArrow.setOnLongClickListener {
+            date.add(Calendar.DATE, 1)
+            update(binding, date)
+            true
         }
 
-        return imageView
+        return binding.root
     }
 
-    @WorkerThread
-    private fun createMap(): Bitmap {
+    private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
+        lifecycleScope.launch {
+            runCatching {
+                val bitmap = withContext(Dispatchers.IO) { createDayNightMap(date) }
+                binding.map.setImageDrawable(BitmapDrawable(resources, bitmap))
+                binding.date.text = date.formatDateAndTime()
+            }.onFailure(logException).getOrNull().debugAssertNotNull // handle production OOM and so
+        }
+    }
+
+    private val cachedMap by lazy {
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathString = String(GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes())
         val mapPath = PathParser.createPathFromPathData(mapPathString)
@@ -68,11 +99,11 @@ class MapFragment : Fragment() {
                 it.drawPath(mapPath, Paint().apply { color = 0xffbcbcbc.toInt() })
             }
         }
-        return bitmap
+        bitmap
     }
 
     @WorkerThread
-    private fun addDayNightMask(bitmap: Bitmap, date: GregorianCalendar) {
+    private fun createDayNightMap(date: GregorianCalendar): Bitmap {
         val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ALPHA_8)
         val sunPosition = SunMoonPositionForMap(date)
         (-90 until 90).forEach { lat ->
@@ -82,11 +113,13 @@ class MapFragment : Fragment() {
                     nightMask[long + 180, 179 - (lat + 90)] = Color.BLACK
             }
         }
-        Canvas(bitmap).also {
+        val result = cachedMap.copy(Bitmap.Config.ARGB_8888, true)
+        Canvas(result).also {
             val maskRect = Rect(0, 0, nightMask.width, nightMask.height)
-            val originalRect = Rect(0, 0, bitmap.width, bitmap.height)
+            val originalRect = Rect(0, 0, result.width, result.height)
             it.drawBitmap(nightMask, maskRect, originalRect, Paint().apply { alpha = 0xB0 })
         }
+        return result
     }
 }
 
