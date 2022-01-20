@@ -1,22 +1,15 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.AttributeSet
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.ScaleGestureDetector
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.WorkerThread
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.set
 import androidx.core.graphics.withScale
@@ -87,7 +80,7 @@ class MapFragment : Fragment() {
         lifecycleScope.launch {
             runCatching {
                 val bitmap = withContext(Dispatchers.IO) { createDayNightMap(date) }
-                binding.map.setImageDrawable(BitmapDrawable(resources, bitmap))
+                binding.map.setImageBitmap(bitmap)
                 binding.date.text = date.formatDateAndTime()
             }.onFailure(logException).getOrNull().debugAssertNotNull // handle production OOM and so
         }
@@ -115,8 +108,12 @@ class MapFragment : Fragment() {
     private fun createDayNightMap(date: GregorianCalendar): Bitmap {
         val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ALPHA_8)
         val sunPosition = SunMoonPositionForMap(date)
-        var sunLat = .0f; var sunLong = .0f; var sunAlt = .0
-        var moonLat = .0f; var moonLong = .0f; var moonAlt = .0
+        var sunLat = .0f
+        var sunLong = .0f
+        var sunAlt = .0
+        var moonLat = .0f
+        var moonLong = .0f
+        var moonAlt = .0
         (-90 until 90).forEach { lat ->
             (-180 until 180).forEach { long ->
                 val sunAltitude = sunPosition.sunAltitude(lat.toDouble(), long.toDouble())
@@ -140,27 +137,5 @@ class MapFragment : Fragment() {
             solarDraw?.simpleMoon(it, moonLong * scale, moonLat * scale, scale * 8f)
         }
         return result
-    }
-}
-
-// Stub
-class ZoomableImageView(context: Context, attrs: AttributeSet? = null) :
-    AppCompatImageView(context, attrs) {
-
-    private var scaleFactor = 1f
-    private val scaleGestureDetector = ScaleGestureDetector(
-        context, object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            override fun onScale(detector: ScaleGestureDetector?): Boolean {
-                scaleFactor = (scaleFactor + (detector?.scaleFactor ?: 1f)).coerceIn(.9f, 1.1f)
-                postInvalidate()
-                return true
-            }
-        }
-    )
-
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        scaleGestureDetector.onTouchEvent(event)
-        return true
     }
 }
