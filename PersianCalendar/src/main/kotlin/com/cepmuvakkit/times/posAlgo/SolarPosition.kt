@@ -8,14 +8,14 @@ import com.cepmuvakkit.times.posAlgo.AstroLib.getJulianEphemerisDay
 import com.cepmuvakkit.times.posAlgo.AstroLib.getJulianEphemerisMillennium
 import com.cepmuvakkit.times.posAlgo.AstroLib.getWeatherCorrectionCoefficent
 import com.cepmuvakkit.times.posAlgo.AstroLib.thirdOrderPolynomial
-import com.cepmuvakkit.times.posAlgo.MATH.acos
-import com.cepmuvakkit.times.posAlgo.MATH.asin
-import com.cepmuvakkit.times.posAlgo.MATH.atan
-import com.cepmuvakkit.times.posAlgo.MATH.pow
 import kotlin.math.abs
+import kotlin.math.acos
+import kotlin.math.asin
+import kotlin.math.atan
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.floor
+import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.tan
 
@@ -634,7 +634,7 @@ object SolarPosition {
         var sum = 0.0
         var i = 0
         while (i < count) {
-            sum += termSum[i] * pow(jme, i.toDouble())
+            sum += termSum[i] * jme.pow(i.toDouble())
             i++
         }
         sum /= 1.0e8

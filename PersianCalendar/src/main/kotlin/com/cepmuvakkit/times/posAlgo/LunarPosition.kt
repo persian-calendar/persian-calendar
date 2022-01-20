@@ -11,7 +11,7 @@ import com.cepmuvakkit.times.posAlgo.AstroLib.getStringHHMMSSS
 import com.cepmuvakkit.times.posAlgo.AstroLib.getWeatherCorrectionCoefficent
 import com.cepmuvakkit.times.posAlgo.AstroLib.limitDegrees
 import com.cepmuvakkit.times.posAlgo.AstroLib.thirdOrderPolynomial
-import com.cepmuvakkit.times.posAlgo.MATH.asin
+import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin

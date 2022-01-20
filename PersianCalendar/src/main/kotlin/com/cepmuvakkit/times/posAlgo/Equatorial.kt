@@ -1,5 +1,7 @@
 package com.cepmuvakkit.times.posAlgo
 
+import kotlin.math.asin
+import kotlin.math.atan
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -49,21 +51,21 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
                 atan2(sin(HPrime), cos(HPrime) * sin(ϕ) - tan(δPrime) * cos(ϕ)) + Math.PI
             ),
             altitude = Math.toDegrees(
-                MATH.asin(sin(ϕ) * sin(δPrime) + cos(ϕ) * cos(δPrime) * cos(HPrime))
+                asin(sin(ϕ) * sin(δPrime) + cos(ϕ) * cos(δPrime) * cos(HPrime))
             )
         )
     }
 
     private fun ρsinϕPrime(ϕ: Double, Height: Double): Double {
-        val U = MATH.atan(0.99664719 * tan(ϕ))
+        val U = atan(0.99664719 * tan(ϕ))
         return 0.99664719 * sin(U) + Height / 6378149 * sin(ϕ)
     }
 
     private fun ρCosϕPrime(ϕ: Double, Height: Double): Double {
         //Convert from degress to radians
-        val U = MATH.atan(0.99664719 * tan(ϕ))
+        val U = atan(0.99664719 * tan(ϕ))
         return cos(U) + Height / 6378149 * cos(ϕ)
     }
 
-    private fun getHorizontalParallax(RadiusVector: Double) = MATH.asin(6378.14 / RadiusVector)
+    private fun getHorizontalParallax(RadiusVector: Double) = asin(6378.14 / RadiusVector)
 }

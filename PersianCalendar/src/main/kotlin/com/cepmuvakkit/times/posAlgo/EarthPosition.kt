@@ -1,6 +1,8 @@
 package com.cepmuvakkit.times.posAlgo
 
 import kotlin.math.PI
+import kotlin.math.acos
+import kotlin.math.asin
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
@@ -23,12 +25,12 @@ class EarthPosition(
         val lon2 = Math.toRadians(-target.longitude) //-69493192920839161e-17  -0.69
         val a = sin((lat1 - lat2) / 2)
         val b = sin((lon1 - lon2) / 2)
-        val d = 2 * MATH.asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b)) //3774840207564380360e-19
+        val d = 2 * asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b)) //3774840207564380360e-19
         //d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
         // double c=a*a+Math.cos(lat1)*Math.cos(lat2))*b*b
         val tc1 = if (d > 0) {
             //tc1=acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))
-            val x = MATH.acos((sin(lat2) - sin(lat1) * cos(d)) / (sin(d) * cos(lat1)))
+            val x = acos((sin(lat2) - sin(lat1) * cos(d)) / (sin(d) * cos(lat1)))
             /*2646123918118404228e-18*/
             if (sin(lon2 - lon1) < 0) x else 2 * PI - x
         } else 0.0
