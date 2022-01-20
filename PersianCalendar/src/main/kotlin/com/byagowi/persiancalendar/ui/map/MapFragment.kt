@@ -93,7 +93,7 @@ class MapFragment : Fragment() {
         val mapPathString = String(GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes())
         val mapPath = PathParser.createPathFromPathData(mapPathString)
         val scale = 4
-        val bitmap = Bitmap.createBitmap(4378 / scale, 2435 / scale, Bitmap.Config.ARGB_8888)
+        val bitmap = Bitmap.createBitmap(360 * 16 / scale, 180 * 16 / scale, Bitmap.Config.ARGB_8888)
         Canvas(bitmap).also {
             it.withScale(1f / scale, 1f / scale) {
                 it.drawPath(mapPath, Paint().apply { color = 0xffbcbcbc.toInt() })
