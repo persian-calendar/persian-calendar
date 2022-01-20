@@ -11,9 +11,6 @@ object MATH {
      * ln(0.5) constant
      */
     const val LOGdiv2 = -0.6931471805599453094
-    fun round(a: Float): Int = floor((a + 0.5f).toDouble()).toInt()
-
-    fun round(a: Double): Long = floor(a + 0.5).toLong()
 
     fun acos(x: Double): Double {
         val f = asin(x)
@@ -80,25 +77,6 @@ object MATH {
         //
         return a
     }
-
-    fun atan2(y: Double, x: Double): Double {
-        // if x=y=0
-        if (y == 0.0 && x == 0.0) return 0.0
-        // if x>0 atan(y/x)
-        if (x > 0.0) return atan(y / x)
-        // if x<0 sign(y)*(pi - atan(|y/x|))
-        if (x < 0.0) {
-            return if (y < 0.0) {
-                -(Math.PI - atan(y / x))
-            } else {
-                Math.PI - atan(-y / x)
-            }
-        }
-        // if x=0 y!=0 sign(y)*pi/2
-        return if (y < 0.0) -Math.PI / 2.0 else Math.PI / 2.0
-    }
-
-    fun frac(x: Double) = x - floor(x)
 
     fun pow(x: Double, y: Double): Double {
         if (y == 0.0) return 1.0
@@ -207,6 +185,4 @@ object MATH {
         //
         return _log(x)
     }
-
-    fun Frac(x: Double): Double = x - floor(x)
 }

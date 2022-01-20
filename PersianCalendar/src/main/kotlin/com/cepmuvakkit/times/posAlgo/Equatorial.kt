@@ -1,5 +1,6 @@
 package com.cepmuvakkit.times.posAlgo
 
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.math.tan
@@ -35,17 +36,17 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
         val sinH = sin(H)
 
         //Calculate the adjustment in right ascension
-        val Δα = MATH.atan2(-ρCosϕPr * sinπ * sinH, cosδ - ρCosϕPr * sinπ * cosH)
+        val Δα = atan2(-ρCosϕPr * sinπ * sinH, cosδ - ρCosϕPr * sinπ * cosH)
         //  CAA2DCoordinate Topocentric;
         //    double αPrime =Math.toRadians(α)+Δα;
-        val δPrime = MATH.atan2(
+        val δPrime = atan2(
             (sin(δrad) - ρsinϕPr * sinπ) * cos(Δα),
             cosδ - ρCosϕPr * sinπ * cosH
         )
         val HPrime = H - Δα
         return Horizontal(
             azimuth = Math.toDegrees(
-                MATH.atan2(sin(HPrime), cos(HPrime) * sin(ϕ) - tan(δPrime) * cos(ϕ)) + Math.PI
+                atan2(sin(HPrime), cos(HPrime) * sin(ϕ) - tan(δPrime) * cos(ϕ)) + Math.PI
             ),
             altitude = Math.toDegrees(
                 MATH.asin(sin(ϕ) * sin(δPrime) + cos(ϕ) * cos(δPrime) * cos(HPrime))

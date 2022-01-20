@@ -11,9 +11,9 @@ import com.cepmuvakkit.times.posAlgo.AstroLib.thirdOrderPolynomial
 import com.cepmuvakkit.times.posAlgo.MATH.acos
 import com.cepmuvakkit.times.posAlgo.MATH.asin
 import com.cepmuvakkit.times.posAlgo.MATH.atan
-import com.cepmuvakkit.times.posAlgo.MATH.atan2
 import com.cepmuvakkit.times.posAlgo.MATH.pow
 import kotlin.math.abs
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.sin
