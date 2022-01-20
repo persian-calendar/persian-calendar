@@ -90,7 +90,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
     private val Number.dp: Int
         get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
 
-    private fun createColorView(paint: Paint) = object : View(context) {
+    private fun createColorView(paint: Paint) = object : FrameLayout(context) {
         val rect = Rect()
         override fun onDraw(canvas: Canvas) {
             getDrawingRect(rect)
