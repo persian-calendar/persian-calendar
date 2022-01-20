@@ -9,6 +9,7 @@ import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.AttributeSet
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
@@ -58,6 +59,7 @@ class MapFragment : Fragment() {
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
+            binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             date.add(Calendar.HOUR, -1)
             update(binding, date)
         }
@@ -68,6 +70,7 @@ class MapFragment : Fragment() {
         }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
+            binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             date.add(Calendar.HOUR, 1)
             update(binding, date)
         }
