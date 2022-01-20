@@ -86,8 +86,8 @@ class SunMoonPositionForMap(time: GregorianCalendar) {
     private val theta = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
 
     fun isNight(latitude: Double, longitude: Double) =
-        sunEquatorial.equ2Topocentric(longitude, latitude, .0, theta).altitude <= -10
+        sunEquatorial.equ2Topocentric(longitude, latitude, .0, theta, true).altitude <= -10
 
     fun isMoonGone(latitude: Double, longitude: Double) =
-        moonEquatorial.equ2Topocentric(longitude, latitude, .0, theta).altitude <= -5
+        moonEquatorial.equ2Topocentric(longitude, latitude, .0, theta, true).altitude <= -5
 }

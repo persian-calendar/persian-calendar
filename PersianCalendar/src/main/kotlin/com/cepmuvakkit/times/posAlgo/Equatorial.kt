@@ -13,7 +13,8 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
     var Δ = radius //distance to the earth(Δ) in km
 
     fun equ2Topocentric(
-        longitude: Double, latitude: Double, Height: Double, theta: Double
+        longitude: Double, latitude: Double, Height: Double, theta: Double,
+        skipAzimuthCalculation: Boolean = false
     ): Horizontal {
         val ϕ = Math.toRadians(latitude)
         val ρsinϕPr = ρsinϕPrime(ϕ, Height)
@@ -43,7 +44,8 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
         val HPrime = H - Δα
         return Horizontal(
             azimuth = Math.toDegrees(
-                atan2(sin(HPrime), cos(HPrime) * sin(ϕ) - tan(δPrime) * cos(ϕ)) + Math.PI
+                if (skipAzimuthCalculation) .0
+                else atan2(sin(HPrime), cos(HPrime) * sin(ϕ) - tan(δPrime) * cos(ϕ)) + Math.PI
             ),
             altitude = Math.toDegrees(
                 asin(sin(ϕ) * sin(δPrime) + cos(ϕ) * cos(δPrime) * cos(HPrime))
