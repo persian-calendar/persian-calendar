@@ -13,16 +13,11 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
     var Δ = radius //distance to the earth(Δ) in km
 
     fun equ2Topocentric(
-        longitude: Double, latitude: Double, Height: Double, jd: Double, ΔT: Double
+        longitude: Double, latitude: Double, Height: Double, theta: Double
     ): Horizontal {
         val ϕ = Math.toRadians(latitude)
         val ρsinϕPr = ρsinϕPrime(ϕ, Height)
         val ρCosϕPr = ρCosϕPrime(ϕ, Height)
-
-        //Calculate the Sidereal time
-
-        //double ΔT = AstroLib.calculateTimeDifference(jd);
-        val theta = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
 
         //Convert to radians
         val δrad = Math.toRadians(δ)

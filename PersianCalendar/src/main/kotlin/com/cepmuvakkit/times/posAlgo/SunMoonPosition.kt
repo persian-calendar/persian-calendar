@@ -39,8 +39,9 @@ class SunMoonPosition(time: GregorianCalendar, observer: Coordinates?, ΔT: Doub
             val longitude = observer.longitude
             val latitude = observer.latitude
             val elevation = observer.elevation
-            moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
-            sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, jd, ΔT)
+            val theta = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
+            moonPosition = moonEquatorial.equ2Topocentric(longitude, latitude, elevation, theta)
+            sunPosition = sunEquatorial.equ2Topocentric(longitude, latitude, elevation, theta)
             lunarSunlitTilt = if (lunarAge.isAscending) {
                 if (observer.isSouthernHemisphere) .0 else 180.0
             } else {
@@ -82,9 +83,11 @@ class SunMoonPositionForMap(time: GregorianCalendar) {
         sunEquatorial = SolarPosition.calculateSunEquatorialCoordinates(sunEcliptic, jd, ΔT)
     }
 
+    private val theta = SolarPosition.calculateGreenwichSiderealTime(jd, ΔT)
+
     fun isNight(latitude: Double, longitude: Double) =
-        sunEquatorial.equ2Topocentric(longitude, latitude, .0, jd, ΔT).altitude <= -10
+        sunEquatorial.equ2Topocentric(longitude, latitude, .0, theta).altitude <= -10
 
     fun isMoonGone(latitude: Double, longitude: Double) =
-        moonEquatorial.equ2Topocentric(longitude, latitude, .0, jd, ΔT).altitude <= -5
+        moonEquatorial.equ2Topocentric(longitude, latitude, .0, theta).altitude <= -5
 }
