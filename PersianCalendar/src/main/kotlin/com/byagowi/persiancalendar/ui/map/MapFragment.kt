@@ -1,6 +1,10 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
@@ -12,20 +16,14 @@ import androidx.core.graphics.PathParser
 import androidx.core.graphics.set
 import androidx.core.graphics.withScale
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.logException
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
@@ -75,17 +73,9 @@ class MapFragment : Fragment() {
         return binding.root
     }
 
-    private var inProgress = false
     private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
-        lifecycleScope.launch {
-            if (inProgress) return@launch
-            inProgress = true
-            runCatching {
-                binding.map.setImageBitmap(withContext(Dispatchers.IO) { createDayNightMap(date) })
-                binding.date.text = date.formatDateAndTime()
-            }.onFailure(logException).getOrNull().debugAssertNotNull // handle production OOM and so
-            inProgress = false
-        }
+        binding.map.setImageBitmap(createDayNightMap(date))
+        binding.date.text = date.formatDateAndTime()
     }
 
     private val scaleDownFactor = 4
@@ -119,7 +109,6 @@ class MapFragment : Fragment() {
 
     private val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ALPHA_8)
 
-    @WorkerThread
     private fun createDayNightMap(date: GregorianCalendar): Bitmap {
         nightMask.eraseColor(Color.TRANSPARENT)
         val sunPosition = SunMoonPositionForMap(date)
