@@ -76,13 +76,17 @@ class MapFragment : Fragment() {
         return binding.root
     }
 
+    var inProgress = false
     private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
         lifecycleScope.launch {
+            if (inProgress) return@launch
+            inProgress = true
             runCatching {
                 val bitmap = withContext(Dispatchers.IO) { createDayNightMap(date) }
                 binding.map.setImageBitmap(bitmap)
                 binding.date.text = date.formatDateAndTime()
             }.onFailure(logException).getOrNull().debugAssertNotNull // handle production OOM and so
+            inProgress = false
         }
     }
 

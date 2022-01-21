@@ -36,10 +36,7 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
         val Δα = atan2(-ρCosϕPr * sinπ * sinH, cosδ - ρCosϕPr * sinπ * cosH)
         //  CAA2DCoordinate Topocentric;
         //    double αPrime =Math.toRadians(α)+Δα;
-        val δPrime = atan2(
-            (sin(δrad) - ρsinϕPr * sinπ) * cos(Δα),
-            cosδ - ρCosϕPr * sinπ * cosH
-        )
+        val δPrime = atan2((sin(δrad) - ρsinϕPr * sinπ) * cos(Δα), cosδ - ρCosϕPr * sinπ * cosH)
         val HPrime = H - Δα
         return Horizontal(
             azimuth = Math.toDegrees(
@@ -76,10 +73,7 @@ class Equatorial(sunRightAscension: Double, sunDeclination: Double, radius: Doub
         val Δα = atan2(-ρCosϕPr * sinπ * sinH, cosδ - ρCosϕPr * sinπ * cosH)
         //  CAA2DCoordinate Topocentric;
         //    double αPrime =Math.toRadians(α)+Δα;
-        val δPrime = atan2(
-            (sin(δrad) - ρsinϕPr * sinπ) * cos(Δα),
-            cosδ - ρCosϕPr * sinπ * cosH
-        )
+        val δPrime = atan2((sin(δrad) - ρsinϕPr * sinπ) * cos(Δα), cosδ - ρCosϕPr * sinπ * cosH)
         val HPrime = H - Δα
         return Math.toDegrees(
             asin(sin(ϕ) * sin(δPrime) + cos(ϕ) * cos(δPrime) * cos(HPrime))
