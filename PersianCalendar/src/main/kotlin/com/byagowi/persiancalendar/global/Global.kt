@@ -250,7 +250,6 @@ fun updateStoredPreference(context: Context) {
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD
     )
 
-
     coordinates = prefs.storedCity?.coordinates ?: run {
         listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
             .map { prefs.getString(it, null)?.toDoubleOrNull() ?: .0 }

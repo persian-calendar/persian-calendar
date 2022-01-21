@@ -169,7 +169,6 @@ class AstronomyFragment : Fragment() {
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
-
         binding.appBar.toolbar.menu.add(R.string.map).also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_map)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)

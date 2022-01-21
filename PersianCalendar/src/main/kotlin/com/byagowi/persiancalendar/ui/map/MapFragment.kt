@@ -1,25 +1,34 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withScale
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
+import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.updateStoredPreference
+import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
@@ -40,6 +49,7 @@ class MapFragment : Fragment() {
         }
 
         solarDraw = SolarDraw(layoutInflater.context)
+        pinBitmap = inflater.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
         val args by navArgs<MapFragmentArgs>()
         val date = GregorianCalendar().also { it.add(Calendar.MINUTE, args.minutesOffset) }
@@ -69,17 +79,44 @@ class MapFragment : Fragment() {
             true
         }
 
+        fun bringGps() {
+            showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
+        }
+        binding.appBar.toolbar.menu.add("GPS").also {
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_my_location)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.onClick { bringGps() }
+        binding.appBar.toolbar.menu.add("Location").also {
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_location_on)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.onClick {
+            if (coordinates == null) bringGps()
+            displayLocation = !displayLocation; update(binding, date)
+        }
+        binding.appBar.toolbar.menu.add("Night Mask").also {
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.onClick { displayNightMask = !displayNightMask; update(binding, date) }
+        SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            updateStoredPreference(binding.root.context)
+            update(binding, date)
+        }
+
         return binding.root
     }
 
+    private var displayNightMask = true
+    private var displayLocation = true
+
     private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
-        binding.map.setImageBitmap(createDayNightMap(date))
+        binding.map.setImageBitmap(createMap(date))
         binding.date.text = date.formatDateAndTime()
     }
 
     private val scaleDownFactor = 4
-    private val sinkWidth = 360 * 16 / scaleDownFactor
-    private val sinkHeight = 180 * 16 / scaleDownFactor
+    private val mapScaleFactor = 16 / scaleDownFactor
+    private val sinkWidth = 360 * mapScaleFactor
+    private val sinkHeight = 180 * mapScaleFactor
     private val sinkBitmap = Bitmap.createBitmap(sinkWidth, sinkHeight, Bitmap.Config.ARGB_8888)
     private var referenceBuffer: ByteBuffer? = null
     private fun createReferenceBuffer(): ByteBuffer {
@@ -108,10 +145,11 @@ class MapFragment : Fragment() {
 
     private val nightMaskScale = 2
     private val nightMask = Bitmap.createBitmap(
-        360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ALPHA_8
+        360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
     )
 
-    private fun createDayNightMap(date: GregorianCalendar): Bitmap {
+    private fun createMap(date: GregorianCalendar): Bitmap {
+        val sink = getSinkBitmap()
         nightMask.eraseColor(Color.TRANSPARENT)
         val sunPosition = SunMoonPositionForMap(date)
         var sunX = .0f
@@ -121,12 +159,13 @@ class MapFragment : Fragment() {
         var moonY = .0f
         var moonAlt = .0
         (0 until nightMask.width).forEach { x ->
+            if (!displayNightMask) return@forEach
             (0 until nightMask.height).forEach { y ->
                 val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                 val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
                 val sunAltitude = sunPosition.sunAltitude(latitude, longitude)
                 if (sunAltitude < 0) nightMask[x, y] =
-                    (-sunAltitude.toInt()).coerceAtMost(17) * 5 shl 24
+                    (-sunAltitude.toInt()).coerceAtMost(17) * 7 shl 24
                 if (sunAltitude > sunAlt) { // find y/x of a point with maximum sun altitude
                     sunAlt = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
                 }
@@ -136,13 +175,28 @@ class MapFragment : Fragment() {
                 }
             }
         }
-        val sink = getSinkBitmap()
+        val userX = coordinates?.run { (longitude.toFloat() + 180) * mapScaleFactor }
+        val userY = coordinates?.run { (90 - latitude.toFloat()) * mapScaleFactor }
         Canvas(sink).also {
             it.drawBitmap(nightMask, null, Rect(0, 0, sink.width, sink.height), null)
             val scale = sink.width / nightMask.width
-            solarDraw?.sun(it, sunX * scale, sunY * scale, sink.width * .025f)
-            solarDraw?.simpleMoon(it, moonX * scale, moonY * scale, sink.width * .02f)
+            val solarDraw = solarDraw ?: return@also
+            solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sink.width * .02f)
+            solarDraw.sun(it, sunX * scale, sunY * scale, sink.width * .025f)
+            if (userX != null && userY != null && displayLocation) {
+                pinRect.set(
+                    userX - pinBitmap.width / 2f / pinScaleDown,
+                    userY - pinBitmap.height / pinScaleDown,
+                    userX + pinBitmap.width / 2f / pinScaleDown,
+                    userY
+                )
+                it.drawBitmap(pinBitmap, null, pinRect, null)
+            }
         }
         return sink
     }
+
+    private val pinScaleDown = 2
+    private val pinRect = RectF()
+    private var pinBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
 }
