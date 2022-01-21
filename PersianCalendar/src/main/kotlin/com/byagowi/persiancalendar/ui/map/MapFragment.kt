@@ -10,7 +10,6 @@ import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.WorkerThread
 import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.set
@@ -107,37 +106,42 @@ class MapFragment : Fragment() {
 
     private var solarDraw: SolarDraw? = null
 
-    private val nightMask = Bitmap.createBitmap(360, 180, Bitmap.Config.ALPHA_8)
+    private val nightMaskScale = 2
+    private val nightMask = Bitmap.createBitmap(
+        360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ALPHA_8
+    )
 
     private fun createDayNightMap(date: GregorianCalendar): Bitmap {
         nightMask.eraseColor(Color.TRANSPARENT)
         val sunPosition = SunMoonPositionForMap(date)
-        var sunLat = .0f
-        var sunLong = .0f
+        var sunX = .0f
+        var sunY = .0f
         var sunAlt = .0
-        var moonLat = .0f
-        var moonLong = .0f
+        var moonX = .0f
+        var moonY = .0f
         var moonAlt = .0
-        (-90 until 90).forEach { lat ->
-            (-180 until 180).forEach { long ->
-                val sunAltitude = sunPosition.sunAltitude(lat.toDouble(), long.toDouble())
-                if (sunAltitude < 0) nightMask[long + 180, 179 - (lat + 90)] =
+        (0 until nightMask.width).forEach { x ->
+            (0 until nightMask.height).forEach { y ->
+                val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
+                val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
+                val sunAltitude = sunPosition.sunAltitude(latitude, longitude)
+                if (sunAltitude < 0) nightMask[x, y] =
                     (-sunAltitude.toInt()).coerceAtMost(17) * 5 shl 24
-                if (sunAltitude > sunAlt) { // find lat/long of a point with maximum sun altitude
-                    sunAlt = sunAltitude; sunLat = 179f - (lat + 90); sunLong = long + 180f
+                if (sunAltitude > sunAlt) { // find y/x of a point with maximum sun altitude
+                    sunAlt = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
                 }
-                val moonAltitude = sunPosition.moonAltitude(lat.toDouble(), long.toDouble())
+                val moonAltitude = sunPosition.moonAltitude(latitude, longitude)
                 if (moonAltitude > moonAlt) { // this time for moon
-                    moonAlt = moonAltitude; moonLat = 179f - (lat + 90); moonLong = long + 180f
+                    moonAlt = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
                 }
             }
         }
         val sink = getSinkBitmap()
         Canvas(sink).also {
             it.drawBitmap(nightMask, null, Rect(0, 0, sink.width, sink.height), null)
-            val scale = sink.width / 360
-            solarDraw?.sun(it, sunLong * scale, sunLat * scale, scale * 12.5f)
-            solarDraw?.simpleMoon(it, moonLong * scale, moonLat * scale, scale * 8f)
+            val scale = sink.width / nightMask.width
+            solarDraw?.sun(it, sunX * scale, sunY * scale, scale * 6f)
+            solarDraw?.simpleMoon(it, moonX * scale, moonY * scale, scale * 4f)
         }
         return sink
     }
