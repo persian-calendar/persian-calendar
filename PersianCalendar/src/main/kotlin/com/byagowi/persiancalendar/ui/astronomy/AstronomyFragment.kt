@@ -42,7 +42,7 @@ class AstronomyFragment : Fragment() {
         val resetButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
             it.icon =
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.isVisible = false
         }
 
@@ -169,11 +169,13 @@ class AstronomyFragment : Fragment() {
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
-        var solarViewClickCount = 0
-        binding.solarView.setOnClickListener {
-            if (++solarViewClickCount % 5 == 0) findNavController().navigateSafe(
-                AstronomyFragmentDirections.actionAstronomyToMap(offset)
-            )
+
+        binding.appBar.toolbar.menu.add(R.string.map).also {
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_map)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+        }.onClick {
+            findNavController()
+                .navigateSafe(AstronomyFragmentDirections.actionAstronomyToMap(offset))
         }
 
         return binding.root
