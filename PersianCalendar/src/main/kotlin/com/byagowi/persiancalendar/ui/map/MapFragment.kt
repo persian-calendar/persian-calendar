@@ -140,8 +140,8 @@ class MapFragment : Fragment() {
         Canvas(sink).also {
             it.drawBitmap(nightMask, null, Rect(0, 0, sink.width, sink.height), null)
             val scale = sink.width / nightMask.width
-            solarDraw?.sun(it, sunX * scale, sunY * scale, scale * 6f)
-            solarDraw?.simpleMoon(it, moonX * scale, moonY * scale, scale * 4f)
+            solarDraw?.sun(it, sunX * scale, sunY * scale, sink.width * .025f)
+            solarDraw?.simpleMoon(it, moonX * scale, moonY * scale, sink.width * .02f)
         }
         return sink
     }
