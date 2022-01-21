@@ -48,10 +48,10 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
-import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.circularreveal.CircularRevealCompat
@@ -109,7 +109,7 @@ class DeviceInformationFragment : Fragment() {
             binding.toolbar.menu.add("Print").also { menu ->
                 menu.setIcon(R.drawable.ic_print)
                 menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            }.onClick { context?.showHtml(adapter.asHtml()) }
+            }.onClick { context?.openHtmlInBrowser(adapter.asHtml()) }
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

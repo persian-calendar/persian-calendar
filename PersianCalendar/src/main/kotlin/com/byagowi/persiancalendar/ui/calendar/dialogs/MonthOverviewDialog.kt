@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.showHtml
+import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendarType
@@ -73,7 +73,9 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
     BottomSheetDialog(activity, R.style.TransparentBottomSheetDialog).also { dialog ->
         fun showPrintReport(isLongClick: Boolean) {
             runCatching {
-                activity.showHtml(createEventsReport(activity, date, wholeYear = isLongClick))
+                activity.openHtmlInBrowser(
+                    createEventsReport(activity, date, wholeYear = isLongClick)
+                )
             }.onFailure(logException)
             dialog.dismiss()
             createEventsReport(activity, date, wholeYear = isLongClick)

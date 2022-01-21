@@ -93,7 +93,7 @@ private fun Context.saveTextAsFile(text: String, fileName: String) = FileProvide
     File(externalCacheDir, fileName).also { it.writeText(text) }
 )
 
-fun Context.showHtml(html: String) = runCatching {
+fun Context.openHtmlInBrowser(html: String) = runCatching {
     CustomTabsIntent.Builder().build()
         .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
         .launchUrl(this, saveTextAsFile(html, "persian-calendar.html"))

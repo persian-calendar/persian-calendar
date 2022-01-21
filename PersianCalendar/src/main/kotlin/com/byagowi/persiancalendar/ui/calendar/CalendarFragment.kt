@@ -74,9 +74,9 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.ui.utils.showHtml
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -616,7 +616,9 @@ class CalendarFragment : Fragment() {
         if (coordinates != null) {
             toolbar.menu.add(R.string.month_pray_times).also {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-                it.onClick { context.showHtml(createOwghatHtmlReport(calendarPager.selectedMonth)) }
+                it.onClick {
+                    context.openHtmlInBrowser(createOwghatHtmlReport(calendarPager.selectedMonth))
+                }
             }
         }
         toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
