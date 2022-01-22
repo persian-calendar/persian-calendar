@@ -222,7 +222,7 @@ class MapFragment : Fragment() {
             }
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
-                val userY = (coordinates.latitude.toFloat()) * mapScaleFactor
+                val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                 pinRect.set(
                     userX - pinBitmap.width / 2f / pinScaleDown,
                     userY - pinBitmap.height / pinScaleDown,
