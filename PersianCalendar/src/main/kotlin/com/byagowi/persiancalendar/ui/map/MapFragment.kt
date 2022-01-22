@@ -81,6 +81,13 @@ class MapFragment : Fragment() {
             true
         }
 
+        binding.appBar.toolbar.menu.add("Grid").also {
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_grid_3x3)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.onClick {
+            displayGrid = !displayGrid
+            update(binding, date)
+        }
         fun bringGps() {
             showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
         }
@@ -119,6 +126,7 @@ class MapFragment : Fragment() {
 
     private var displayNightMask = true
     private var displayLocation = true
+    private var displayGrid = false
 
     private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
         binding.map.setImageBitmap(createMap(date))
@@ -192,6 +200,18 @@ class MapFragment : Fragment() {
         Canvas(sink).also {
             it.drawBitmap(nightMask, null, Rect(0, 0, sink.width, sink.height), null)
             val scale = sink.width / nightMask.width
+            if (displayGrid) {
+                (0 until sink.width step sink.width / 24).forEachIndexed { i, x ->
+                    if (i == 0) return@forEachIndexed
+                    val paint = if (i != 12) gridPaint else gridHalfPaint
+                    it.drawLine(x.toFloat(), 0f, x.toFloat(), sink.height.toFloat(), paint)
+                }
+                (0 until sink.height step sink.height / 12).forEachIndexed { i, y ->
+                    if (i == 0) return@forEachIndexed
+                    val paint = if (i != 6) gridPaint else gridHalfPaint
+                    it.drawLine(0f, y.toFloat(), sink.width.toFloat(), y.toFloat(), paint)
+                }
+            }
             val solarDraw = solarDraw ?: return@also
             if (displayNightMask) {
                 solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sink.width * .02f)
@@ -210,6 +230,14 @@ class MapFragment : Fragment() {
         return sink
     }
 
+    private val gridPaint = Paint().also {
+        it.strokeWidth = sinkWidth * .002f
+        it.color = 0x80FFFFFF.toInt()
+    }
+    private val gridHalfPaint = Paint().also {
+        it.strokeWidth = sinkWidth * .002f
+        it.color = 0x80808080.toInt()
+    }
     private val pinScaleDown = 2
     private val pinRect = RectF()
     private var pinBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
