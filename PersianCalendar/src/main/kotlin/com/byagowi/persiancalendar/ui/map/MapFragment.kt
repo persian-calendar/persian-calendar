@@ -20,6 +20,7 @@ import androidx.core.graphics.set
 import androidx.core.graphics.withScale
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
@@ -30,8 +31,10 @@ import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
+import io.github.persiancalendar.praytimes.Coordinates
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
@@ -97,9 +100,11 @@ class MapFragment : Fragment() {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick { displayNightMask = !displayNightMask; update(binding, date) }
-        SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
-            updateStoredPreference(binding.root.context)
-            update(binding, date)
+        inflater.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
+            if (key == PREF_LATITUDE) {
+                displayLocation = true
+                update(binding, date)
+            }
         }
 
         return binding.root
