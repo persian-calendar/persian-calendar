@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -19,7 +18,6 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.*
@@ -168,14 +166,6 @@ class AstronomyFragment : Fragment() {
         }
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
-
-        binding.appBar.toolbar.menu.add(R.string.map).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_map)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-        }.onClick {
-            findNavController()
-                .navigateSafe(AstronomyFragmentDirections.actionAstronomyToMap(offset))
-        }
 
         return binding.root
     }

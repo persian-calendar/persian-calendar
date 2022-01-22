@@ -7,15 +7,18 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MenuItem
+import android.view.Surface
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
-import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -26,6 +29,7 @@ import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragmentDirections
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -34,7 +38,6 @@ import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
-import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import java.util.*
@@ -169,11 +172,8 @@ class CompassFragment : Fragment() {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_map)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
-                runCatching {
-                    CustomTabsIntent.Builder().build().launchUrl(
-                        activity ?: return@runCatching, "https://g.co/qiblafinder".toUri()
-                    )
-                }.onFailure(logException)
+                findNavController()
+                    .navigateSafe(AstronomyFragmentDirections.actionAstronomyToMap(0))
             }
         }
         binding.bottomAppbar.menu.add(R.string.level).also {
