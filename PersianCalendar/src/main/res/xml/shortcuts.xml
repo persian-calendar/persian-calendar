@@ -59,4 +59,18 @@
 
     </shortcut>
 
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/sc_map"
+        android:shortcutId="MAP"
+        android:shortcutLongLabel="@string/map"
+        android:shortcutShortLabel="@string/map">
+
+        <intent
+            android:action="MAP"
+            android:targetClass="com.byagowi.persiancalendar.ui.MainActivity"
+            android:targetPackage="com.byagowi.persiancalendar" />
+
+    </shortcut>
+
 </shortcuts>

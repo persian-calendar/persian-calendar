@@ -155,6 +155,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         when (intent?.action) {
             "COMPASS" -> R.id.compass
             "LEVEL" -> R.id.level
+            "MAP" -> R.id.map
             "CONVERTER" -> R.id.converter
             "ASTRONOMY" -> R.id.astronomy
             "SETTINGS" -> R.id.settings
