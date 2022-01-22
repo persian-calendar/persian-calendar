@@ -202,15 +202,15 @@ class MapFragment : Fragment() {
             val scale = sink.width / nightMask.width
             if (displayGrid) {
                 (0 until sink.width step sink.width / 24).forEachIndexed { i, x ->
-                    if (i == 0) return@forEachIndexed
-                    val paint = if (i != 12) gridPaint else gridHalfPaint
-                    it.drawLine(x.toFloat(), 0f, x.toFloat(), sink.height.toFloat(), paint)
+                    if (i == 0 || i == 12) return@forEachIndexed
+                    it.drawLine(x.toFloat(), 0f, x.toFloat(), sink.height.toFloat(), gridPaint)
                 }
                 (0 until sink.height step sink.height / 12).forEachIndexed { i, y ->
-                    if (i == 0) return@forEachIndexed
-                    val paint = if (i != 6) gridPaint else gridHalfPaint
-                    it.drawLine(0f, y.toFloat(), sink.width.toFloat(), y.toFloat(), paint)
+                    if (i == 0 || i == 6) return@forEachIndexed
+                    it.drawLine(0f, y.toFloat(), sink.width.toFloat(), y.toFloat(), gridPaint)
                 }
+                it.drawLine(sink.width / 2f, 0f, sink.width / 2f, sink.height / 1f, gridHalfPaint)
+                it.drawLine(0f, sink.height / 2f, sink.width / 1f, sink.height / 2f, gridHalfPaint)
             }
             val solarDraw = solarDraw ?: return@also
             if (displayNightMask) {
