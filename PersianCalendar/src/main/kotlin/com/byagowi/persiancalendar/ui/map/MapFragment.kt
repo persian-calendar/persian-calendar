@@ -181,8 +181,10 @@ class MapFragment : Fragment() {
             it.drawBitmap(nightMask, null, Rect(0, 0, sink.width, sink.height), null)
             val scale = sink.width / nightMask.width
             val solarDraw = solarDraw ?: return@also
-            solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sink.width * .02f)
-            solarDraw.sun(it, sunX * scale, sunY * scale, sink.width * .025f)
+            if (displayNightMask) {
+                solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sink.width * .02f)
+                solarDraw.sun(it, sunX * scale, sunY * scale, sink.width * .025f)
+            }
             if (userX != null && userY != null && displayLocation) {
                 pinRect.set(
                     userX - pinBitmap.width / 2f / pinScaleDown,
