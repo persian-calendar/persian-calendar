@@ -3,10 +3,9 @@ package com.byagowi.persiancalendar.ui.map
 // Unlike rest of the project this file doesn't have a clear copyright status thus isn't
 // used on the app, this is a port of http://alperen.cepmuvakkit.com/js/rendo_en.htm (down now)
 // or my cleaned up https://ebraminio.github.io/panorendo/ version. It is published by the same
-// person who has developed QiblaCompassView so having the copyright status of that isn't
-// unexpected isn't mentioned anywhere.
+// person who has developed QiblaCompassView so having the same copyright status of that isn't
+// unexpected, yet, isn't mentioned anywhere also.
 // So this isn't published with the same license of the project for now as far as I can say.
-// It also doesn't work right now so let's see where we can go with it anyway.
 
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -89,7 +88,7 @@ fun panoRendo(): Bitmap {
     var Z2 = .0
     var Z3 = .0
     ((if (z > 1) -1 else 0) until y2).forEach { y ->
-        val VE = if (y == -1) 90 * RPD else (1 - y / y1) * y0
+        val VE = if (y == -1) 90 * RPD else (1 - y.toDouble() / y1) * y0
         val fe = 1 - VE * 2 / Math.PI
         val cosV = sin(VE)
         val sinV = cos(VE)
@@ -124,9 +123,10 @@ fun panoRendo(): Bitmap {
         val A2 = exp(-O2 * OS - M2 * MV / 6) * 2 / (2 + R2 * RV)
         val A3 = exp(-O3 * OS - M3 * MV / 6) * 2 / (2 + R3 * RV)
         val V2 = V1 * sin(VE + EH + RPD) / if (V0 < 0) 1 - cos(V0) else .0
-        val dx = if (z != .0) 1 else x1 / 15 / (90 - VE / RPD)
+        val dx = if (z != .0) 1.0 else x1 / 15.0 / (90 - VE / RPD)
         val x2 = 2 * x0 / x1
-        (0 until x1 step dx.toInt()).forEach { x ->
+        var x = .0
+        while (x < x1) {
             val VA = x * x2 - x0
             val G = sinSV * cos(VA - SA) + cosSV
             val P = 1 + (if (G > 0) d else g) * G * G
@@ -146,12 +146,18 @@ fun panoRendo(): Bitmap {
                 I2 = if (I2 < .0031308) 12.92 * I2 else 1.055 * I2.pow(5 / 12) - .055
                 I3 = if (I3 < .0031308) 12.92 * I3 else 1.055 * I3.pow(5 / 12) - .055
             }
-            if (z != .0)
-                result[x, y] =
-                    Color.rgb((I1 * B).toInt(), (I2 * B).toInt(), (I3 * B).toInt())
-            else
-                result[(x1 / 2 * (1 + fe * cos(VA))).toInt(), (y1 / 2 * (1 + fe * sin(VA))).toInt()] =
-                    Color.rgb((I1 * B).toInt(), (I2 * B).toInt(), (I3 * B).toInt())
+            if (z != .0) result[x.toInt(), y] = Color.rgb(
+                (I1 * B).toInt().coerceIn(0, 255),
+                (I2 * B).toInt().coerceIn(0, 255),
+                (I3 * B).toInt().coerceIn(0, 255)
+            ) else result[
+                    (x1 / 2 * (1 + fe * cos(VA))).toInt(), (y1 / 2 * (1 + fe * sin(VA))).toInt()
+            ] = Color.rgb(
+                (I1 * B).toInt().coerceIn(0, 255),
+                (I2 * B).toInt().coerceIn(0, 255),
+                (I3 * B).toInt().coerceIn(0, 255)
+            )
+            x += dx
         }
     }
     return result
