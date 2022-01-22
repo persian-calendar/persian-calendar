@@ -196,8 +196,7 @@ class MapFragment : Fragment() {
                 }
             }
         }
-        val userX = coordinates?.run { (longitude.toFloat() + 180) * mapScaleFactor }
-        val userY = coordinates?.run { (90 - latitude.toFloat()) * mapScaleFactor }
+        val coordinates = coordinates
         Canvas(sink).also {
             it.drawBitmap(nightMask, null, Rect(0, 0, sinkWidth, sinkHeight), null)
             val scale = sink.width / nightMask.width
@@ -221,7 +220,9 @@ class MapFragment : Fragment() {
                 solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sinkWidth * .02f)
                 solarDraw.sun(it, sunX * scale, sunY * scale, sinkWidth * .025f)
             }
-            if (userX != null && userY != null && displayLocation) {
+            if (coordinates != null && displayLocation) {
+                val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
+                val userY = (coordinates.latitude.toFloat()) * mapScaleFactor
                 pinRect.set(
                     userX - pinBitmap.width / 2f / pinScaleDown,
                     userY - pinBitmap.height / pinScaleDown,
@@ -249,7 +250,7 @@ class MapFragment : Fragment() {
         -23.436806, // https://en.wikipedia.org/wiki/Tropic_of_Capricorn
         66.566667, // https://en.wikipedia.org/wiki/Arctic_Circle
         -66.566667, // https://en.wikipedia.org/wiki/Antarctic_Circle
-    ).map { (90 - it.toFloat()) / 180 * sinkHeight }
+    ).map { (90 - it.toFloat()) * mapScaleFactor }
     private val parallelsPaint = Paint().also {
         it.strokeWidth = gridLinesWidth
         it.color = 0x80800000.toInt()
