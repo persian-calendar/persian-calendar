@@ -4,6 +4,7 @@ import android.animation.LayoutTransition
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
@@ -198,24 +199,27 @@ class MapFragment : Fragment() {
         val userX = coordinates?.run { (longitude.toFloat() + 180) * mapScaleFactor }
         val userY = coordinates?.run { (90 - latitude.toFloat()) * mapScaleFactor }
         Canvas(sink).also {
-            it.drawBitmap(nightMask, null, Rect(0, 0, sink.width, sink.height), null)
+            it.drawBitmap(nightMask, null, Rect(0, 0, sinkWidth, sinkHeight), null)
             val scale = sink.width / nightMask.width
             if (displayGrid) {
-                (0 until sink.width step sink.width / 24).forEachIndexed { i, x ->
+                (0 until sinkWidth step sinkWidth / 24).forEachIndexed { i, x ->
                     if (i == 0 || i == 12) return@forEachIndexed
                     it.drawLine(x.toFloat(), 0f, x.toFloat(), sink.height.toFloat(), gridPaint)
                 }
-                (0 until sink.height step sink.height / 12).forEachIndexed { i, y ->
+                (0 until sinkHeight step sinkHeight / 12).forEachIndexed { i, y ->
                     if (i == 0 || i == 6) return@forEachIndexed
                     it.drawLine(0f, y.toFloat(), sink.width.toFloat(), y.toFloat(), gridPaint)
                 }
-                it.drawLine(sink.width / 2f, 0f, sink.width / 2f, sink.height / 1f, gridHalfPaint)
-                it.drawLine(0f, sink.height / 2f, sink.width / 1f, sink.height / 2f, gridHalfPaint)
+                it.drawLine(sinkWidth / 2f, 0f, sinkWidth / 2f, sinkHeight / 1f, gridHalfPaint)
+                it.drawLine(0f, sinkHeight / 2f, sinkWidth / 1f, sinkHeight / 2f, gridHalfPaint)
+                parallelsLatitudes.forEach { y ->
+                    it.drawLine(0f, y, sink.width.toFloat(), y, parallelsPaint)
+                }
             }
             val solarDraw = solarDraw ?: return@also
             if (displayNightMask) {
-                solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sink.width * .02f)
-                solarDraw.sun(it, sunX * scale, sunY * scale, sink.width * .025f)
+                solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sinkWidth * .02f)
+                solarDraw.sun(it, sunX * scale, sunY * scale, sinkWidth * .025f)
             }
             if (userX != null && userY != null && displayLocation) {
                 pinRect.set(
@@ -230,14 +234,28 @@ class MapFragment : Fragment() {
         return sink
     }
 
+    private val gridLinesWidth = sinkWidth * .001f
     private val gridPaint = Paint().also {
-        it.strokeWidth = sinkWidth * .002f
+        it.strokeWidth = gridLinesWidth
         it.color = 0x80FFFFFF.toInt()
     }
     private val gridHalfPaint = Paint().also {
-        it.strokeWidth = sinkWidth * .002f
+        it.strokeWidth = gridLinesWidth
         it.color = 0x80808080.toInt()
     }
+
+    private val parallelsLatitudes = listOf( // Circles of latitude are often called parallels
+        23.436806, // https://en.wikipedia.org/wiki/Tropic_of_Cancer
+        -23.436806, // https://en.wikipedia.org/wiki/Tropic_of_Capricorn
+        66.566667, // https://en.wikipedia.org/wiki/Arctic_Circle
+        -66.566667, // https://en.wikipedia.org/wiki/Antarctic_Circle
+    ).map { (90 - it.toFloat()) / 180 * sinkHeight }
+    private val parallelsPaint = Paint().also {
+        it.strokeWidth = gridLinesWidth
+        it.color = 0x80800000.toInt()
+        it.pathEffect = DashPathEffect(floatArrayOf(5f, 5f), 0f)
+    }
+
     private val pinScaleDown = 2
     private val pinRect = RectF()
     private var pinBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
