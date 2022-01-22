@@ -21,13 +21,14 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 fun panoRendo(): Bitmap {
-    val Elev = 30.0 // min -20 max 90 °
-    val Azi = 0.0 // min -180 max 180 °
-    val Alti = 0.0 // min 0 man 99 km
-    val Turbi = 3.0 // min 0 max 99
-    val Ozone = 300.0 // min 230 max 460 step 10
-    val Luma = 10.0 // min 1 max 99
-    val zoom = 1 // min 0 max 10
+    val Elev = 30.0 // Sun Elev. min -20 max 90 °
+    val Azi = 0.0 // Sun Azi. min -180 max 180 °
+    val Alti = 0.0 // Altitude. min 0 man 99 km
+    val Turbi = 3.0 // Haze. min 0 max 99
+    val Ozone = 300.0 // Ozone. min 230 max 460 step 10
+    val Luma = 10.0 // Luma. min 1 max 99
+    val hd = 0 // Tone Map. 0 -> Reinhard, 1 -> sRGB, 2 -> Linear
+    val zoom = 1 // Zoom. min 0 max 10
 
     val RPD = Math.PI / 180
     val O1 = 5e-5
@@ -42,7 +43,6 @@ fun panoRendo(): Bitmap {
     var H = Alti * 1
     var T = Turbi
     val O = Ozone
-    val hd = 0 // 0 -> Reinhard, 1 -> sRGB, 2 -> Linear
     val B = Luma * if (hd != 0) 18 else 36
     val z = zoom * 1.0
 
