@@ -91,7 +91,7 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
     override fun getOpacity(): Int = PixelFormat.OPAQUE
 }
 
-interface Pattern {
+private interface Pattern {
     val width: Float
     val height: Float
     val tileModeX: Shader.TileMode
