@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.content.SharedPreferences
+import android.animation.LayoutTransition
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -18,13 +18,13 @@ import androidx.core.graphics.PathParser
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withScale
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
@@ -34,7 +34,6 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
-import io.github.persiancalendar.praytimes.Coordinates
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
@@ -99,7 +98,15 @@ class MapFragment : Fragment() {
         binding.appBar.toolbar.menu.add("Night Mask").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { displayNightMask = !displayNightMask; update(binding, date) }
+        }.onClick {
+            displayNightMask = !displayNightMask
+            binding.timeBar.isVisible = displayNightMask
+            update(binding, date)
+        }
+        binding.root.layoutTransition = LayoutTransition().also {
+            it.enableTransitionType(LayoutTransition.APPEARING)
+            it.setAnimateParentHierarchy(false)
+        }
         inflater.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
             if (key == PREF_LATITUDE) {
                 displayLocation = true
