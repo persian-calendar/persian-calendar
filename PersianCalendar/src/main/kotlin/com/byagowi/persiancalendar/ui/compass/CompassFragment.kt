@@ -29,7 +29,6 @@ import com.byagowi.persiancalendar.Variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragmentDirections
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -173,7 +172,7 @@ class CompassFragment : Fragment() {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController()
-                    .navigateSafe(AstronomyFragmentDirections.actionAstronomyToMap(0))
+                    .navigateSafe(CompassFragmentDirections.actionCompassToMap(0))
             }
         }
         binding.bottomAppbar.menu.add(R.string.level).also {
