@@ -3,6 +3,7 @@ package com.cepmuvakkit.times.posAlgo
 import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.asin
+import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.round
 import kotlin.math.sin
@@ -16,6 +17,7 @@ class EarthPosition(
     val timezone: Double = round(longitude / 15.0),
     val altitude: Int = 0, val temperature: Int = 10, val pressure: Int = 1010
 ) {
+
     fun toEarthHeading(target: EarthPosition): EarthHeading {
         // great circle formula from:
         // http://williams.best.vwh.net/avform.htm
@@ -26,7 +28,7 @@ class EarthPosition(
         val a = sin((lat1 - lat2) / 2)
         val b = sin((lon1 - lon2) / 2)
         // https://en.wikipedia.org/wiki/Haversine_formula
-        val d = 2 * asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b)) //3774840207564380360e-19
+        val d = 2 * asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b))
         //d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
         // double c=a*a+Math.cos(lat1)*Math.cos(lat2))*b*b
         val tc1 = if (d > 0) {
@@ -37,6 +39,42 @@ class EarthPosition(
         } else 0.0
         //  tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))
         val radPerDeg = PI / 180
-        return EarthHeading(tc1 / radPerDeg, (d * 6371000).toLong())
+        return EarthHeading(tc1 / radPerDeg, (d * 6371e3).toLong())
+    }
+
+    // Ported from https://www.movable-type.co.uk/scripts/latlong.html MIT License
+    fun intermediatePoints(target: EarthPosition, pointsCount: Int): List<EarthPosition> {
+        val φ1 = Math.toRadians(latitude)
+        val λ1 = Math.toRadians(longitude)
+        val φ2 = Math.toRadians(target.latitude)
+        val λ2 = Math.toRadians(target.longitude)
+        // distance between points
+        val Δφ = φ2 - φ1
+        val Δλ = λ2 - λ1
+        val cosφ1 = cos(φ1)
+        val cosφ2 = cos(φ2)
+        val cosλ1 = cos(λ1)
+        val cosλ2 = cos(λ2)
+        val sinλ1 = sin(λ1)
+        val sinλ2 = sin(λ2)
+        val sinφ1 = sin(φ1)
+        val sinφ2 = sin(φ2)
+        val a = sin(Δφ / 2) * sin(Δφ / 2) + cosφ1 * cosφ2 * sin(Δλ / 2) * sin(Δλ / 2)
+        val δ = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return (0..pointsCount).map {
+            val fraction = it.toDouble() / pointsCount
+            val A = sin((1 - fraction) * δ) / sin(δ)
+            val B = sin(fraction * δ) / sin(δ)
+            val x = A * cosφ1 * cosλ1 + B * cosφ2 * cosλ2
+            val y = A * cosφ1 * sinλ1 + B * cosφ2 * sinλ2
+            val z = A * sinφ1 + B * sinφ2
+            val lat = Math.toDegrees(atan2(z, sqrt(x * x + y * y)))
+            val lon = Math.toDegrees(atan2(y, x))
+            EarthPosition(lat, lon)
+        }
+    }
+
+    companion object {
+        const val R = 6371e3 // Earth radius
     }
 }
