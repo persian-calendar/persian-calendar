@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Zodiac
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.spacedColon
+import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 

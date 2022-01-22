@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.entities
+package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.Context
 import android.os.Build

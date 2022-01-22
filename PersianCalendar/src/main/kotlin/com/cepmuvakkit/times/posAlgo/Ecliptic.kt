@@ -1,6 +1,6 @@
 package com.cepmuvakkit.times.posAlgo
 
-import com.byagowi.persiancalendar.entities.Zodiac
+import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 
 /**
  * @author mehmetrg

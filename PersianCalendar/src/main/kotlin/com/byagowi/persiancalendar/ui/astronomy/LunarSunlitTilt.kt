@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.ui.astronomy
 
 /*
  This is separated/ported from https://github.com/cosinekitty/astronomy

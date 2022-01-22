@@ -1,6 +1,6 @@
 package com.cepmuvakkit.times.posAlgo
 
-import com.byagowi.persiancalendar.entities.LunarAge
+import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*

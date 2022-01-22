@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.entities.LunarAge
 import com.byagowi.persiancalendar.entities.Season
-import com.byagowi.persiancalendar.entities.Zodiac
+import com.byagowi.persiancalendar.ui.astronomy.LunarAge
+import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.utils.Eclipse
 import com.byagowi.persiancalendar.utils.lunarSunlitTilt
 import com.cepmuvakkit.times.posAlgo.Ecliptic
