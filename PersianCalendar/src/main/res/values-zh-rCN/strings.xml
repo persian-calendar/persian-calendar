@@ -165,7 +165,7 @@
     <string name="about_developers">开发者名单（排名不分先后）</string>
     <string name="previous_x">上个%1$s</string>
     <string name="next_x">下个%1$s</string>
-    <string name="nth_week_of_year">第 %1$s 周</string>
+    <string name="nth_week_of_year">第%1$s周</string>
     <string name="shift_work_settings">倒班设置</string>
     <string name="shift_work_starting_date_edit">之前选择的日期（%1$s）将作为倒班的起始日。</string>
     <string name="about_sendMail">电子邮件</string>
@@ -174,7 +174,7 @@
     <string name="version">版本号 %1$s</string>
     <string name="about_noClient">未安装任何邮件应用</string>
     <string name="shift_work_starting_date">日历上选择的日期（%1$s）将作为倒班的起始日。</string>
-    <string name="spaced_and">" 和 "</string>
+    <string name="spaced_and">和</string>
     <string name="tuesday">星期二</string>
     <string name="monday">星期一</string>
     <string name="islamic_calendar">伊斯兰历</string>
@@ -182,8 +182,8 @@
     <string name="iran_official_events">伊朗官方（波斯语）</string>
     <string name="afghanistan_holidays">阿富汗节假日</string>
     <string name="device_info">设备信息</string>
-    <string name="spaced_comma">"， "</string>
-    <string name="spaced_colon">"： "</string>
+    <string name="spaced_comma">，</string>
+    <string name="spaced_colon">：</string>
     <string name="am">上午</string>
     <string name="pm">下午</string>
     <string name="center_align_widgets">小部件居中对齐</string>
