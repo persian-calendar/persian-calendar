@@ -28,7 +28,7 @@ class EarthPosition(
         val a = sin((lat1 - lat2) / 2)
         val b = sin((lon1 - lon2) / 2)
         // https://en.wikipedia.org/wiki/Haversine_formula
-        val d = 2 * asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b))
+        val d = 2 * asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b)) //3774840207564380360e-19
         //d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
         // double c=a*a+Math.cos(lat1)*Math.cos(lat2))*b*b
         val tc1 = if (d > 0) {
