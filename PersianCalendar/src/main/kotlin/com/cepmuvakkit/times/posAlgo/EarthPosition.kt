@@ -61,16 +61,17 @@ class EarthPosition(
         val sinφ2 = sin(φ2)
         val a = sin(Δφ / 2) * sin(Δφ / 2) + cosφ1 * cosφ2 * sin(Δλ / 2) * sin(Δλ / 2)
         val δ = 2 * atan2(sqrt(a), sqrt(1 - a))
+        val sinδ = sin(δ)
         return (0..pointsCount).map {
             val fraction = it.toDouble() / pointsCount
-            val A = sin((1 - fraction) * δ) / sin(δ)
-            val B = sin(fraction * δ) / sin(δ)
+            val A = sin((1 - fraction) * δ) / sinδ
+            val B = sin(fraction * δ) / sinδ
             val x = A * cosφ1 * cosλ1 + B * cosφ2 * cosλ2
             val y = A * cosφ1 * sinλ1 + B * cosφ2 * sinλ2
             val z = A * sinφ1 + B * sinφ2
-            val lat = Math.toDegrees(atan2(z, sqrt(x * x + y * y)))
-            val lon = Math.toDegrees(atan2(y, x))
-            EarthPosition(lat, lon)
+            val φ3 = atan2(z, sqrt(x * x + y * y))
+            val λ3 = atan2(y, x)
+            EarthPosition(Math.toDegrees(φ3), Math.toDegrees(λ3))
         }
     }
 
