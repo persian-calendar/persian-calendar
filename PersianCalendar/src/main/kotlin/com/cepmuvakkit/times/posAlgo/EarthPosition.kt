@@ -20,7 +20,7 @@ class EarthPosition(
 
     fun toEarthHeading(target: EarthPosition): EarthHeading {
         // great circle formula from:
-        // http://williams.best.vwh.net/avform.htm
+        // https://web.archive.org/web/20161209044600/http://williams.best.vwh.net/avform.htm
         val lat1 = Math.toRadians(latitude) //7155849931833333333e-19 0.71
         val lat2 = Math.toRadians(target.latitude) //3737913479489224943e-19 0.373
         val lon1 = Math.toRadians(-longitude) //-5055637064497558276 e-19 -0.505
