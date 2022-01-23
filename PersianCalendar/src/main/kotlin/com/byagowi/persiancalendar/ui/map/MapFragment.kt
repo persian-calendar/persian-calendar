@@ -5,9 +5,11 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
+import android.graphics.LinearGradient
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.Shader
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
@@ -18,6 +20,7 @@ import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.set
+import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -29,16 +32,21 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.toPath
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.cepmuvakkit.times.posAlgo.EarthPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.zip.GZIPInputStream
+import kotlin.math.atan2
+import kotlin.math.roundToInt
 
 class MapFragment : Fragment() {
 
@@ -231,6 +239,32 @@ class MapFragment : Fragment() {
                 )
                 it.drawBitmap(pinBitmap, null, pinRect, null)
             }
+            if ((false)) {
+                val from = EarthPosition(10.0, 10.0)
+                val to = EarthPosition(50.0, 90.0)
+                val points = from.intermediatePoints(to, 24).map { point ->
+                    val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
+                    val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
+                    userX to userY
+                }
+                pathPaint.shader = LinearGradient(
+                    points[0].first, points[0].second, points.last().first, points.last().second,
+                    Color.BLACK, Color.RED, Shader.TileMode.CLAMP
+                )
+                it.drawPath(points.toPath(false), pathPaint)
+                val heading = from.toEarthHeading(to)
+                val center = points[points.size / 2]
+                val centerPlus1 = points[points.size / 2 + 1]
+                val distance =
+                    "%,d km".format(Locale.ENGLISH, (heading.metres / 1000f).roundToInt())
+                val textDegree = Math.toDegrees(atan2(
+                    centerPlus1.second - center.second,
+                    centerPlus1.first - center.first
+                ).toDouble()).toFloat()
+                it.withRotation(textDegree, center.first, center.second) {
+                    it.drawText(distance, center.first, center.second - 2.dp, textPaint)
+                }
+            }
         }
         return sink
     }
@@ -244,8 +278,18 @@ class MapFragment : Fragment() {
         it.strokeWidth = gridLinesWidth
         it.color = 0x80808080.toInt()
     }
+    private val pathPaint = Paint().also {
+        it.strokeWidth = gridLinesWidth * 2
+        it.style = Paint.Style.STROKE
+    }
+    private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.color = Color.BLACK
+        it.textSize = gridLinesWidth * 10
+        it.textAlign = Paint.Align.CENTER
+    }
 
-    private val parallelsLatitudes = listOf( // Circles of latitude are often called parallels
+    private val parallelsLatitudes = listOf(
+        // Circles of latitude are often called parallels
         23.436806, // https://en.wikipedia.org/wiki/Tropic_of_Cancer
         -23.436806, // https://en.wikipedia.org/wiki/Tropic_of_Capricorn
         66.566667, // https://en.wikipedia.org/wiki/Arctic_Circle
