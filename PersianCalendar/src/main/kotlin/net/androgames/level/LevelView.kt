@@ -10,6 +10,7 @@ import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.cos
@@ -343,6 +344,6 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         private const val BUBBLE_ASPECT_RATIO = 1.000
         private const val BUBBLE_CROPPING = 0.500
         private const val MARKER_GAP = BUBBLE_WIDTH + 0.020
-        private val MAX_SINUS = sin(Math.PI / 4) // Angle max
+        private val MAX_SINUS = sin(PI / 4) // Angle max
     }
 }

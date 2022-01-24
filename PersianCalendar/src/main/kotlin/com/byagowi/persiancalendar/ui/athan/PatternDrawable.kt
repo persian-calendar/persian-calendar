@@ -32,6 +32,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.rotateBy
 import com.byagowi.persiancalendar.ui.utils.toPath
 import com.byagowi.persiancalendar.ui.utils.translateBy
+import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -106,8 +107,8 @@ private class FirstPattern(@ColorInt private val tintColor: Int, size: Float) : 
     override val tileModeX = Shader.TileMode.MIRROR
     override val tileModeY = Shader.TileMode.MIRROR
 
-    private val t = tan(Math.PI.toFloat() / 8)
-    private val s = sin(Math.PI.toFloat() / 4) / 2
+    private val t = tan(PI.toFloat() / 8)
+    private val s = sin(PI.toFloat() / 4) / 2
 
     private fun path(order: Boolean): Path {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return Path()
@@ -147,8 +148,8 @@ private class SecondPattern(@ColorInt private val tintColor: Int, private val si
             it.color = ColorUtils.setAlphaComponent(tintColor, 0x40)
             it.strokeWidth = width / 40
         }
-        val s = .5f - sin(Math.PI.toFloat() / 8) / 2
-        val t = tan(Math.PI.toFloat() / 6) * s
+        val s = .5f - sin(PI.toFloat() / 8) / 2
+        val t = tan(PI.toFloat() / 6) * s
         val lines =
             listOf(0f to s * size, width / 2 to height / 2, t * size to s / 2 * size, width to 0f)
                 .toPath(false)
@@ -170,9 +171,9 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
             val h = path[it + 1].second - path[it].second
             val r = sqrt(w * w + h * h)
             val angle = atan2(h, w)
-            val c = (1 - cos(Math.PI.toFloat() / 4)) * r
+            val c = (1 - cos(PI.toFloat() / 4)) * r
             listOf(0, -1, 1).runningFold(path[it].first to path[it].second) { (x, y), i ->
-                val degree = angle + i * Math.PI.toFloat() / 4
+                val degree = angle + i * PI.toFloat() / 4
                 x + cos(degree) * c to y + sin(degree) * c
             }
         } + listOf(path.last())

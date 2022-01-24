@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -12,7 +13,7 @@ value class LunarAge private constructor(private val fraction: Double) {
     val days get() = fraction * PERIOD
 
     // See also, https://github.com/janczer/goMoonPhase/blob/0363844/MoonPhase.go#L94
-    val absolutePhaseValue get() = (1 - cos(fraction * 2 * Math.PI)) / 2
+    val absolutePhaseValue get() = (1 - cos(fraction * 2 * PI)) / 2
 
     // 30 is number phases in https://en.wikipedia.org/wiki/Tithi and no rounding is need apparently
     val tithi get() = (floor(fraction * 30) + 1).toInt()

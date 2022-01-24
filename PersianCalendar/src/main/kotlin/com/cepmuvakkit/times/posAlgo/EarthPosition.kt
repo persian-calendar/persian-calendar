@@ -76,12 +76,12 @@ data class EarthPosition(
         }
     }
 
-    // https://github.com/openstreetmap/openstreetmap-website/blob/e72acac/lib/osm.rb#L452
     /**
      * rectangular bounds of a certain point
      * @param radius is in km
      */
     fun rectangularBoundsOfRadius(radius: Double): Pair<EarthPosition, EarthPosition> {
+        // https://github.com/openstreetmap/openstreetmap-website/blob/e72acac/lib/osm.rb#L452
         val lat = Math.toRadians(latitude)
         val lon = Math.toRadians(longitude)
         val latRadius = 2 * asin(sqrt(sin(radius / (R / 1000) / 2).pow(2)))

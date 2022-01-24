@@ -29,6 +29,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 import com.cepmuvakkit.times.posAlgo.Horizontal
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
+import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -351,7 +352,7 @@ private class IauRow(
 
 private const val ASEC360 = 1296000.0
 private const val ASEC2RAD = 4.848136811095359935899141e-6
-private const val PI2 = 2 * Math.PI
+private const val PI2 = 2 * PI
 
 private fun iau2000b_psi(tt: Double): Double {
     /* Adapted from the NOVAS C 3.1 function of the same name. */

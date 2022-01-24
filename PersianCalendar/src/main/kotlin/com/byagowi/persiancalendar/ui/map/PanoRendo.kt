@@ -10,6 +10,7 @@ package com.byagowi.persiancalendar.ui.map
 import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.core.graphics.set
+import kotlin.math.PI
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.exp
@@ -29,7 +30,7 @@ fun panoRendo(): Bitmap {
     val hd = 0 // Tone Map. 0 -> Reinhard, 1 -> sRGB, 2 -> Linear
     val zoom = 1 // Zoom. min 0 max 10
 
-    val RPD = Math.PI / 180
+    val RPD = PI / 180
     val O1 = 5e-5
     val O2 = 5e-5
     val O3 = 5e-6
@@ -53,7 +54,7 @@ fun panoRendo(): Bitmap {
     }
     // GetId("Alti").hidden = GetId("Ozone").hidden = !T
     val EH = acos(6371 / (6371 + H))
-    val x0 = Math.PI / max(z, 1.0)
+    val x0 = PI / max(z, 1.0)
     val y0 = x0 / 2
     val x1 = if (z != .0) 800 else 400
     val y1 = if (z != .0) 200 else x1
@@ -89,7 +90,7 @@ fun panoRendo(): Bitmap {
     var Z3 = .0
     ((if (z > 1) -1 else 0) until y2).forEach { y ->
         val VE = if (y == -1) 90 * RPD else (1 - y.toDouble() / y1) * y0
-        val fe = 1 - VE * 2 / Math.PI
+        val fe = 1 - VE * 2 / PI
         val cosV = sin(VE)
         val sinV = cos(VE)
         val sinSV = sinS * sinV
