@@ -25,6 +25,7 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
@@ -36,6 +37,7 @@ import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.toPath
@@ -47,6 +49,7 @@ import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.zip.GZIPInputStream
+import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.roundToInt
 
@@ -132,8 +135,14 @@ class MapFragment : Fragment() {
             }
         }
 
+
         binding.map.onClick = fun (x: Float, y: Float) {
-            debugLog("${x / mapScaleFactor - 180} ${90 - y / mapScaleFactor}")
+            val latitude = 90 - y / mapScaleFactor
+            val longitude = x / mapScaleFactor - 180
+            if (latitude.absoluteValue < 5 && longitude.absoluteValue < 5)
+                findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
+
+
         }
 
         return binding.root

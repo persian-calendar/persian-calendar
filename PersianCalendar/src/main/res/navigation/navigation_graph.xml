@@ -155,6 +155,18 @@
             android:name="minutes_offset"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_map_to_pano_rendo"
+            app:destination="@id/pano_rendo"
+            app:enterAnim="@anim/nav_enter_anim"
+            app:exitAnim="@anim/nav_exit_anim"
+            app:popEnterAnim="@anim/nav_enter_anim"
+            app:popExitAnim="@anim/nav_exit_anim" />
     </fragment>
+
+    <fragment
+        android:id="@+id/pano_rendo"
+        android:name="com.byagowi.persiancalendar.ui.map.PanoRendoFragment"
+        android:label="PanoRendo" />
 
 </navigation>

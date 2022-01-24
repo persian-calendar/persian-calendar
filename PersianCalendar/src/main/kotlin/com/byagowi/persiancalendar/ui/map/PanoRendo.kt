@@ -20,16 +20,16 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-fun panoRendo(): Bitmap {
-    val Elev = 30.0 // Sun Elev. min -20 max 90 °
-    val Azi = 0.0 // Sun Azi. min -180 max 180 °
-    val Alti = 0.0 // Altitude. min 0 man 99 km
-    val Turbi = 3.0 // Haze. min 0 max 99
-    val Ozone = 300.0 // Ozone. min 230 max 460 step 10
-    val Luma = 10.0 // Luma. min 1 max 99
-    val hd = 0 // Tone Map. 0 -> Reinhard, 1 -> sRGB, 2 -> Linear
-    val zoom = 1 // Zoom. min 0 max 10
-
+fun panoRendo(
+    Elev: Double = 30.0, // Sun Elev. min -20 max 90 °
+    Azi: Double = 0.0, // Sun Azi. min -180 max 180 °
+    Alti: Double = 0.0, // Altitude. min 0 man 99 km
+    Turbi: Double = 3.0, // Haze. min 0 max 99
+    Ozone: Double = 300.0, // Ozone. min 230 max 460 step 10
+    Luma: Double = 10.0, // Luma. min 1 max 99
+    hd: Int = 0, // Tone Map. 0 -> Reinhard, 1 -> sRGB, 2 -> Linear
+    zoom: Int = 0, // Zoom. min 0 max 10
+): Bitmap {
     val RPD = PI / 180
     val O1 = 5e-5
     val O2 = 5e-5
