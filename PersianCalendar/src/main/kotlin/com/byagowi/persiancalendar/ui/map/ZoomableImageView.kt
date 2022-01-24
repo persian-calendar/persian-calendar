@@ -192,6 +192,7 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
                     val yDiff = abs(curr.y - start.y).toInt()
                     if (xDiff < CLICK && yDiff < CLICK) {
                         performClick()
+                        // https://stackoverflow.com/a/7418428
                         val inverse = Matrix()
                         imageMatrix.invert(inverse)
                         val touchPoint = floatArrayOf(event.x, event.y)
