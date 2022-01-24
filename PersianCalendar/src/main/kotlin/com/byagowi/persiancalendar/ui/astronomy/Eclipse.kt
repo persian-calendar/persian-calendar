@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.ui.astronomy
 
 import java.util.*
 import kotlin.math.abs

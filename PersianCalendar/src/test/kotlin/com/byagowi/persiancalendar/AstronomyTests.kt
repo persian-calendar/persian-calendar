@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Season
+import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.byagowi.persiancalendar.ui.astronomy.lunarSunlitTilt
-import com.byagowi.persiancalendar.utils.Eclipse
 import com.cepmuvakkit.times.posAlgo.Ecliptic
 import com.cepmuvakkit.times.posAlgo.Horizontal
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
