@@ -129,12 +129,7 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
         imageMatrix = viewMatrix
     }
 
-    companion object {
-        const val NONE = 0
-        const val DRAG = 1
-        const val ZOOM = 2
-        const val CLICK = 3
-    }
+    var onClick = fun (_: Float, _: Float) {}
 
     init {
         super.setClickable(true)
@@ -195,7 +190,14 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
                     mode = NONE
                     val xDiff = abs(curr.x - start.x).toInt()
                     val yDiff = abs(curr.y - start.y).toInt()
-                    if (xDiff < CLICK && yDiff < CLICK) performClick()
+                    if (xDiff < CLICK && yDiff < CLICK) {
+                        performClick()
+                        val inverse = Matrix()
+                        imageMatrix.invert(inverse)
+                        val touchPoint = floatArrayOf(event.x, event.y)
+                        inverse.mapPoints(touchPoint)
+                        onClick(touchPoint[0], touchPoint[1])
+                    }
                 }
                 MotionEvent.ACTION_POINTER_UP -> mode = NONE
             }
@@ -203,5 +205,12 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
             invalidate()
             true
         }
+    }
+
+    companion object {
+        private const val NONE = 0
+        private const val DRAG = 1
+        private const val ZOOM = 2
+        private const val CLICK = 3
     }
 }

@@ -16,6 +16,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.drawable.toBitmap
@@ -27,6 +28,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
@@ -128,6 +130,10 @@ class MapFragment : Fragment() {
                 displayLocation = true
                 update(binding, date)
             }
+        }
+
+        binding.map.onClick = fun (x: Float, y: Float) {
+            debugLog("${x / mapScaleFactor - 180} ${90 - y / mapScaleFactor}")
         }
 
         return binding.root
