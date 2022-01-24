@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.ui.utils.translateBy
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.hypot
 import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.tan
@@ -169,7 +170,7 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
         return (0..path.size - 2).flatMap {
             val w = path[it + 1].first - path[it].first
             val h = path[it + 1].second - path[it].second
-            val r = sqrt(w * w + h * h)
+            val r = hypot(w, h)
             val angle = atan2(h, w)
             val c = (1 - cos(PI.toFloat() / 4)) * r
             listOf(0, -1, 1).runningFold(path[it].first to path[it].second) { (x, y), i ->

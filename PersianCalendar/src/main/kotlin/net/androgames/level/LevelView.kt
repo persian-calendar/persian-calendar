@@ -14,6 +14,7 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.cos
+import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
@@ -210,7 +211,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         // correction des angles a plat
         // la bulle ne doit pas sortir du niveau
         if (orientation == Orientation.LANDING && angleX != 0.0 && angleY != 0.0) {
-            val n = sqrt(angleX * angleX + angleY * angleY)
+            val n = hypot(angleX, angleY)
             val teta = acos(abs(angleX) / n)
             val l = 1 / max(abs(cos(teta)), abs(sin(teta)))
             angleX /= l
@@ -268,9 +269,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         // si la bubble a trop deviee
         // elle est replacee correctement
         if (orientation == Orientation.LANDING) {
-            if (sqrt((middleX - x) * (middleX - x) + (middleY - y) * (middleY - y))
-                > levelMaxDimension / 2 - halfBubbleWidth
-            ) {
+            if (hypot(middleX - x, middleY - y) > levelMaxDimension / 2 - halfBubbleWidth) {
                 x = (angleX * levelMinusBubbleWidth + minLevelX + maxLevelX) / 2
                 y = (angleY * levelMinusBubbleHeight + minLevelY + maxLevelY) / 2
             }

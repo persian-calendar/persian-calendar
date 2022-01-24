@@ -1,6 +1,7 @@
 package com.cepmuvakkit.times.posAlgo
 
 import kotlin.math.floor
+import kotlin.math.hypot
 import kotlin.math.sqrt
 
 object MoonPhases {
@@ -24,7 +25,7 @@ object MoonPhases {
         val solarPos = SolarPosition.calculateSunEclipticCoordinatesAstronomic(jd - tauSun, ΔT)
         val longDiff = moonPos.λ - solarPos.λ
         if (phase == 8) { // Crescent Visibility at 8 degrees Angle
-            val elongation = sqrt(longDiff * longDiff + moonPos.β * moonPos.β)
+            val elongation = hypot(longDiff, moonPos.β)
             // In case of Small angles of elongation lattitude is
             // taken into root mean square due to accuracy
             return phase - elongation

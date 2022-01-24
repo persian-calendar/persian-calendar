@@ -5,6 +5,7 @@ import kotlin.math.acos
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.hypot
 import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.sin
@@ -70,7 +71,7 @@ data class EarthPosition(
             val x = A * cosφ1 * cosλ1 + B * cosφ2 * cosλ2
             val y = A * cosφ1 * sinλ1 + B * cosφ2 * sinλ2
             val z = A * sinφ1 + B * sinφ2
-            val φ3 = atan2(z, sqrt(x * x + y * y))
+            val φ3 = atan2(z, hypot(x, y))
             val λ3 = atan2(y, x)
             EarthPosition(Math.toDegrees(φ3), Math.toDegrees(λ3))
         }

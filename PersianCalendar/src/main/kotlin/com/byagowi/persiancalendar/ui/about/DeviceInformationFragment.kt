@@ -75,6 +75,7 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 import java.util.*
+import kotlin.math.hypot
 import kotlin.math.sqrt
 
 /**
@@ -271,7 +272,7 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
     post {
         val viewWidth = width
         val viewHeight = height
-        val diagonal = sqrt((viewWidth * viewWidth + viewHeight * viewHeight).toDouble()).toInt()
+        val diagonal = hypot(viewWidth.toDouble(), viewHeight.toDouble()).toInt()
         AnimatorSet().also {
             it.playTogether(
                 CircularRevealCompat.createCircularReveal(

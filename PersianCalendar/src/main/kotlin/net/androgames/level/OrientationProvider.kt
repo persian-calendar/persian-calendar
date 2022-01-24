@@ -12,6 +12,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.abs
 import kotlin.math.asin
+import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.sqrt
 
@@ -114,7 +115,7 @@ class OrientationProvider(activity: Activity, private val view: LevelView) : Sen
         SensorManager.getOrientation(outR, LOC)
 
         // normalize z on ux, uy
-        var tmp = sqrt((outR[8] * outR[8] + outR[9] * outR[9]).toDouble()).toFloat()
+        var tmp = hypot(outR[8], outR[9])
         tmp = if (tmp == 0f) 0f else outR[8] / tmp
 
         // LOC[0] compass
