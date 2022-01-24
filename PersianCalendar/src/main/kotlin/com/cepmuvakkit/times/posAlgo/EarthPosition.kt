@@ -5,6 +5,7 @@ import kotlin.math.acos
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
@@ -12,7 +13,7 @@ import kotlin.math.sqrt
 /**
  * @author mgeden
  */
-class EarthPosition(
+data class EarthPosition(
     val latitude: Double, val longitude: Double,
     val timezone: Double = round(longitude / 15.0),
     val altitude: Int = 0, val temperature: Int = 10, val pressure: Int = 1010
@@ -75,7 +76,29 @@ class EarthPosition(
         }
     }
 
+    // https://github.com/openstreetmap/openstreetmap-website/blob/e72acac/lib/osm.rb#L452
+    /**
+     * rectangular bounds of a certain point
+     * @param radius is in km
+     */
+    fun rectangularBoundsOfRadius(radius: Double): Pair<EarthPosition, EarthPosition> {
+        val lat = Math.toRadians(latitude)
+        val lon = Math.toRadians(longitude)
+        val latRadius = 2 * asin(sqrt(sin(radius / (R / 1000) / 2).pow(2)))
+        val lonRadius = runCatching {
+            2 * asin(sqrt(sin(radius / (R / 1000) / 2).pow(2) / cos(lat).pow(2)))
+        }.getOrNull() ?: PI
+        return EarthPosition(
+            Math.toDegrees(lat - latRadius).coerceAtLeast(-90.0),
+            Math.toDegrees(lon - lonRadius).coerceAtLeast(-180.0)
+        ) to EarthPosition(
+            Math.toDegrees(lat + latRadius).coerceAtMost(90.0),
+            Math.toDegrees(lon + lonRadius).coerceAtMost(180.0)
+        )
+    }
+
     companion object {
-        const val R = 6371e3 // Earth radius
+        // https://en.wikipedia.org/wiki/Earth_radius
+        const val R = 6_378_137 // Earth radius
     }
 }

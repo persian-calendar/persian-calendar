@@ -28,4 +28,14 @@ class EarthPositionTests {
         assertThat(points[2].latitude).isWithin(1.0e-4).of(50.5363)
         assertThat(points[2].longitude).isWithin(1.0e-4).of(1.2746)
     }
+
+    @Test
+    fun rectangularBoundsOfRadius() {
+        // https://gist.github.com/ebraminio/f20acf3bf605066d069bf313f52e2b68
+        val (from, to) = EarthPosition(51.0217, 35.67719).rectangularBoundsOfRadius(.2)
+        assertThat(from.latitude).isWithin(1.0e-7).of(51.01990163906112)
+        assertThat(from.longitude).isWithin(1.0e-7).of( 35.67433103883863)
+        assertThat(to.latitude).isWithin(1.0e-7).of(51.023498360938895)
+        assertThat(to.longitude).isWithin(1.0e-7).of(35.680048961161376)
+    }
 }
