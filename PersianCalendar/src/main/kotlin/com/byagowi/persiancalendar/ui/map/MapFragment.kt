@@ -150,7 +150,8 @@ class MapFragment : Fragment() {
     private var referenceBuffer: ByteBuffer? = null
     private fun createReferenceBuffer(): ByteBuffer {
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
-        val mapPathString = String(GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes())
+        val mapPathString =
+            GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes().decodeToString()
         val mapPath = PathParser.createPathFromPathData(mapPathString)
         // We assume creating reference map will be first use of sink also.
         Canvas(sinkBitmap).also {

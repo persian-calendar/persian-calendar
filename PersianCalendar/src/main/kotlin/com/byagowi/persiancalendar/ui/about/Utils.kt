@@ -3,7 +3,8 @@ package com.byagowi.persiancalendar.ui.about
 import android.content.res.Resources
 import com.byagowi.persiancalendar.R
 
-fun Resources.getCreditsSections() = openRawResource(R.raw.credits).use { String(it.readBytes()) }
+fun Resources.getCreditsSections() = openRawResource(R.raw.credits)
+    .use { it.readBytes().decodeToString() }
     .split(Regex("^-{4}$", RegexOption.MULTILINE))
     .map {
         val lines = it.trim().lines()
