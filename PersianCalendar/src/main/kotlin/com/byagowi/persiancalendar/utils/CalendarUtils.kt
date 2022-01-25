@@ -256,12 +256,11 @@ fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(
 fun formatDate(
     date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false
 ): String = if (numericalDatePreferred && !forceNonNumerical)
-    (toLinearDate(date) + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
+    (date.toLinearDate() + if (calendarNameInLinear) (" " + getCalendarNameAbbr(date)) else "").trim()
 else language.dmy.format(formatNumber(date.dayOfMonth), date.monthName, formatNumber(date.year))
 
-fun toLinearDate(date: AbstractDate, digits: CharArray = preferredDigits) = "%s/%s/%s".format(
-    formatNumber(date.year, digits), formatNumber(date.month, digits),
-    formatNumber(date.dayOfMonth, digits)
+fun AbstractDate.toLinearDate(digits: CharArray = preferredDigits) = "%s/%s/%s".format(
+    formatNumber(year, digits), formatNumber(month, digits), formatNumber(dayOfMonth, digits)
 )
 
 fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: CalendarType): String {
