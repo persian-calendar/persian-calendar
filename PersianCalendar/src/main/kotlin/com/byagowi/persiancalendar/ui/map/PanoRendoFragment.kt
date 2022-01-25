@@ -18,12 +18,12 @@ class PanoRendoFragment : Fragment() {
             it.setupUpNavigation()
         }
 
-        var zoom = 1
+        var zoom = 1.0
         fun update() = binding.image.setImageBitmap(panoRendo(zoom = zoom))
         update()
 
         binding.zoom.setOnClickListener {
-            zoom = if (zoom == 1) 0 else 1
+            zoom = if (zoom == 1.0) 0.0 else 1.0
             update()
         }
 

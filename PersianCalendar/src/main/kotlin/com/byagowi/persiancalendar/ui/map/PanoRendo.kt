@@ -21,14 +21,14 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 fun panoRendo(
-    Elev: Double = 30.0, // Sun Elev. min -20 max 90 °
-    Azi: Double = 0.0, // Sun Azi. min -180 max 180 °
-    Alti: Double = 0.0, // Altitude. min 0 man 99 km
-    Turbi: Double = 3.0, // Haze. min 0 max 99
-    Ozone: Double = 300.0, // Ozone. min 230 max 460 step 10
-    Luma: Double = 10.0, // Luma. min 1 max 99
+    sunElevationDegrees: Double = 30.0, // Sun Elev. min -20 max 90 °
+    sunAzimuthDegrees: Double = 0.0, // Sun Azi. min -180 max 180 °
+    originalAltitude: Double = 0.0, // Altitude. min 0 man 99 km
+    originalTurbi: Double = 3.0, // Haze. min 0 max 99
+    ozone: Double = 300.0, // Ozone. min 230 max 460 step 10
+    lumination: Double = 10.0, // Luma. min 1 max 99
     hd: Int = 0, // Tone Map. 0 -> Reinhard, 1 -> sRGB, 2 -> Linear
-    zoom: Int = 0, // Zoom. min 0 max 10
+    zoom: Double = 1.0 // Zoom. min 0 max 10
 ): Bitmap {
     val RPD = PI / 180
     val O1 = 5e-5
@@ -38,64 +38,61 @@ fun panoRendo(
     val R2 = .09
     val R3 = .25
 
-    val SE = Elev * RPD
-    val SA = Azi * RPD
-    var H = Alti * 1
-    var T = Turbi
-    val O = Ozone
-    val B = Luma * if (hd != 0) 18 else 36
-    val z = zoom * 1.0
+    val sunElevation = Math.toRadians(sunElevationDegrees)
+    val sunAzimuth = Math.toRadians(sunAzimuthDegrees)
+    var altitude = originalAltitude
+    var turbi = originalTurbi
+    val B = lumination * if (hd != 0) 18 else 36
 
-    var R = if (T > 0) 1.0 else 0.0
-    if (T < 0) T = -T
-    val m1: Double
-    if (T != .0) m1 = 1500.0 else {
-        m1 = 300.0; H = .0
+    var R = if (turbi > 0) 1.0 else 0.0
+    if (turbi < 0) turbi = -turbi
+    val m1 = if (turbi != .0) 1500.0 else {
+        altitude = .0; 300.0
     }
     // GetId("Alti").hidden = GetId("Ozone").hidden = !T
-    val EH = acos(6371 / (6371 + H))
-    val x0 = PI / max(z, 1.0)
+    val EH = acos(6371 / (6371 + altitude))
+    val x0 = PI / max(zoom, 1.0)
     val y0 = x0 / 2
-    val x1 = if (z != .0) 800 else 400
-    val y1 = if (z != .0) 200 else x1
-    val y2 = if (z != .0) (y1 * (1 + EH / y0)).toInt() else y1
+    val x1 = if (zoom != .0) 800 else 400
+    val y1 = if (zoom != .0) 200 else x1
+    val y2 = if (zoom != .0) (y1 * (1 + EH / y0)).toInt() else y1
     val result = Bitmap.createBitmap(x1, y2, Bitmap.Config.ARGB_8888)
-    val cosS = sin(SE)
-    val sinS = cos(SE)
-    val HS = if (cosS > 0) H else H - 6371.0 * (1 - sinS)
+    val cosS = sin(sunElevation)
+    val sinS = cos(sunElevation)
+    val HS = if (cosS > 0) altitude else altitude - 6371.0 * (1 - sinS)
     var RS = 500.0 * cosS
     RS = min((sqrt(RS * RS + 1001) - RS) * exp(-HS / 8.4), 75.0)
     var MS = m1 * cosS
     MS = min((sqrt(MS * MS + 3001) - MS) * exp(-HS / 1.2), 200.0)
     var OS = 125.0 * cosS
-    OS = min((sqrt(OS * OS + 251) - OS) * exp(-HS / 40), 25.0) * O
+    OS = min((sqrt(OS * OS + 251) - OS) * exp(-HS / 40), 25.0) * ozone
     val W1 = .03 * max(-HS, .0)
     val W2 = .03 * W1 * W1
-    val M2 = if (T != .0) .06 * (T - 2 + 1 / T) else .33
-    val MH = M2 * exp(-H / 1.2)
+    val M2 = if (turbi != .0) .06 * (turbi - 2 + 1 / turbi) else .33
+    val MH = M2 * exp(-altitude / 1.2)
     val d = .94 * exp(-MH)
     val g = d * exp(-.02 * MS)
     val g2 = g * g
     val c = .89 - .11 * g
-    val M1 = if (T != .0) M2 * c else .4
-    val M3 = if (T != .0) M2 / c else .2
+    val M1 = if (turbi != .0) M2 * c else .4
+    val M3 = if (turbi != .0) M2 / c else .2
     R *= 42.0 / (3 + d)
     val MP0 = 2.7 * (1 - g2) / (3 + d + 2 * d * g2)
     val A0 = 8000 / max(MH, .001) / d
-    val V0 = SE - EH - RPD
+    val V0 = sunElevation - EH - RPD
     val V1 = (1 + 20 * EH) / 60
 
     var Z1 = .0
     var Z2 = .0
     var Z3 = .0
-    ((if (z > 1) -1 else 0) until y2).forEach { y ->
-        val VE = if (y == -1) 90 * RPD else (1 - y.toDouble() / y1) * y0
+    ((if (zoom > 1) -1 else 0) until y2).forEach { y ->
+        val VE = if (y == -1) Math.toRadians(90.0) else (1 - y.toDouble() / y1) * y0
         val fe = 1 - VE * 2 / PI
         val cosV = sin(VE)
         val sinV = cos(VE)
         val sinSV = sinS * sinV
         val cosSV = cosS * cosV
-        val HV = if (cosV > 0) H else H - 6371 * (1 - sinV)
+        val HV = if (cosV > 0) altitude else altitude - 6371 * (1 - sinV)
         var RV = 500 * cosV
         RV = (sqrt(RV * RV + 1001) - RV) * exp(-HV / 8.4)
         var MV = m1 * cosV
@@ -111,11 +108,11 @@ fun panoRendo(
         val RS1 = R * R1 * RV * S1 / (2 + R1 * R0)
         val RS2 = R * R2 * RV * S2 / (2 + R2 * R0)
         val RS3 = R * R3 * RV * S3 / (2 + R3 * R0)
-        if (y < 0 || y == 0 && z < 2) {
+        if (y < 0 || y == 0 && zoom < 2) {
             Z1 = RS1
             Z2 = RS2
             Z3 = RS3
-            if (z > 1) return@forEach
+            if (zoom > 1) return@forEach
         }
         val MS1 = M1 * MV * S1 * exp(-M1 * M0 / 6)
         val MS2 = M2 * MV * S2 * exp(-M2 * M0 / 6)
@@ -124,12 +121,12 @@ fun panoRendo(
         val A2 = exp(-O2 * OS - M2 * MV / 6) * 2 / (2 + R2 * RV)
         val A3 = exp(-O3 * OS - M3 * MV / 6) * 2 / (2 + R3 * RV)
         val V2 = V1 * sin(VE + EH + RPD) / if (V0 < 0) 1 - cos(V0) else .0
-        val dx = if (z != .0) 1.0 else x1 / 15.0 / (90 - VE / RPD)
+        val dx = if (zoom != .0) 1.0 else x1 / 15.0 / (90 - Math.toDegrees(VE))
         val x2 = 2 * x0 / x1
         var x = .0
         while (x < x1) {
             val VA = x * x2 - x0
-            val G = sinSV * cos(VA - SA) + cosSV
+            val G = sinSV * cos(VA - sunAzimuth) + cosSV
             val P = 1 + (if (G > 0) d else g) * G * G
             var MP = 1 + g2 - 2 * g * G
             MP = MP0 / MP / sqrt(MP)
@@ -147,7 +144,7 @@ fun panoRendo(
                 I2 = if (I2 < .0031308) 12.92 * I2 else 1.055 * I2.pow(5 / 12) - .055
                 I3 = if (I3 < .0031308) 12.92 * I3 else 1.055 * I3.pow(5 / 12) - .055
             }
-            if (z != .0) result[x.toInt(), y] = Color.rgb(
+            if (zoom != .0) result[x.toInt(), y] = Color.rgb(
                 (I1 * B).toInt().coerceIn(0, 255),
                 (I2 * B).toInt().coerceIn(0, 255),
                 (I3 * B).toInt().coerceIn(0, 255)
@@ -180,13 +177,13 @@ fun panoRendo(
 //    val x: Double
 //    var y: Double
 //    if (z != .0) {
-//        x = atan2(dy, dx) / RPD
-//        y = sqrt(dx * dx + dy * dy)
+//        x = Math.toDegrees(atan2(dy, dx))
+//        y = hypot(dx, dy)
 //        if (y > 1) return ""
 //        y = 90 * (1 - y)
 //    } else {
-//        x = dx * x0 / RPD
-//        y = (.5 - dy / 2) * y0 / RPD
+//        x = dx * Math.toDegrees(x0)
+//        y = (.5 - dy / 2) * Math.toDegrees(y0)
 //    }
 //    return "Elev = $y; Azi = $x; Color = "
 //}
