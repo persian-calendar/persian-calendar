@@ -14,7 +14,6 @@ import kotlin.math.abs
 import kotlin.math.asin
 import kotlin.math.hypot
 import kotlin.math.min
-import kotlin.math.sqrt
 
 /*
  * This file is part of Level (an Android Bubble Level).

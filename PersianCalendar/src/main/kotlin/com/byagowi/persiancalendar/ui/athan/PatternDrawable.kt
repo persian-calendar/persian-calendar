@@ -39,9 +39,11 @@ import kotlin.math.hypot
 import kotlin.math.sin
 import kotlin.math.tan
 
-class PatternDrawable(prayerKey: String = listOf(
-    FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY
-).random(), controlFromOutSide: Boolean = false) : Drawable() {
+class PatternDrawable(
+    prayerKey: String = listOf(
+        FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY
+    ).random(), controlFromOutSide: Boolean = false
+) : Drawable() {
 
     private val tintColor = when (prayerKey) {
         FAJR_KEY -> 0xFF009788

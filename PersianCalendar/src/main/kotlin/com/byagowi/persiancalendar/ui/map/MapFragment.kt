@@ -143,7 +143,7 @@ class MapFragment : Fragment() {
         }
 
 
-        binding.map.onClick = fun (x: Float, y: Float) {
+        binding.map.onClick = fun(x: Float, y: Float) {
             val latitude = 90 - y / mapScaleFactor
             val longitude = x / mapScaleFactor - 180
             if (latitude.absoluteValue < 5 && longitude.absoluteValue < 5)
@@ -290,10 +290,12 @@ class MapFragment : Fragment() {
                 val centerPlus1 = points[points.size / 2 + 1]
                 val distance =
                     "%,d km".format(Locale.ENGLISH, (heading.metres / 1000f).roundToInt())
-                val textDegree = Math.toDegrees(atan2(
-                    centerPlus1.second - center.second,
-                    centerPlus1.first - center.first
-                ).toDouble()).toFloat()
+                val textDegree = Math.toDegrees(
+                    atan2(
+                        centerPlus1.second - center.second,
+                        centerPlus1.first - center.first
+                    ).toDouble()
+                ).toFloat()
                 it.withRotation(textDegree, center.first, center.second) {
                     it.drawText(distance, center.first, center.second - 2.dp, textPaint)
                 }

@@ -129,7 +129,7 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
         imageMatrix = viewMatrix
     }
 
-    var onClick = fun (_: Float, _: Float) {}
+    var onClick = fun(_: Float, _: Float) {}
 
     init {
         super.setClickable(true)

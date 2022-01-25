@@ -2,7 +2,6 @@ package com.cepmuvakkit.times.posAlgo
 
 import kotlin.math.floor
 import kotlin.math.hypot
-import kotlin.math.sqrt
 
 object MoonPhases {
     /**

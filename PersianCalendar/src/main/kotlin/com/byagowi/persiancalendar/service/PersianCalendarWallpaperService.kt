@@ -20,6 +20,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
             if (visible) handler.post(drawRunner)
             else handler.removeCallbacks(drawRunner)
         }
+
         private var rotationDegree = 0f
         private fun draw() {
             val surfaceHolder = surfaceHolder
