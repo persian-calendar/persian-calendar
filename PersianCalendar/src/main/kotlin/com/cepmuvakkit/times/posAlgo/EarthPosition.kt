@@ -40,8 +40,7 @@ data class EarthPosition(
             if (sin(lon2 - lon1) < 0) x else 2 * PI - x
         } else 0.0
         //  tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))
-        val radPerDeg = PI / 180
-        return EarthHeading(tc1 / radPerDeg, (d * 6371e3).toLong())
+        return EarthHeading(Math.toDegrees(tc1), (d * 6371e3).toLong())
     }
 
     // Ported from https://www.movable-type.co.uk/scripts/latlong.html MIT License
