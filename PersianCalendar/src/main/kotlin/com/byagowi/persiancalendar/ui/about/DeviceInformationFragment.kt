@@ -51,7 +51,7 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.ui.utils.shareText
+import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.circularreveal.CircularRevealCompat
@@ -76,7 +76,6 @@ import kotlinx.html.tr
 import kotlinx.html.unsafe
 import java.util.*
 import kotlin.math.hypot
-import kotlin.math.sqrt
 
 /**
  * @author MEHDI DIMYADI
@@ -106,7 +105,7 @@ class DeviceInformationFragment : Fragment() {
             binding.toolbar.menu.add(R.string.share).also { menu ->
                 menu.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
                 menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            }.onClick { activity?.shareText(adapter.asHtml(), "device.html", "text/html") }
+            }.onClick { activity?.shareTextFile(adapter.asHtml(), "device.html", "text/html") }
             binding.toolbar.menu.add("Print").also { menu ->
                 menu.setIcon(R.drawable.ic_print)
                 menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)

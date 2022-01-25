@@ -31,6 +31,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.helper.widget.Flow
+import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
@@ -99,7 +100,15 @@ fun Context.openHtmlInBrowser(html: String) = runCatching {
         .launchUrl(this, saveTextAsFile(html, "persian-calendar.html"))
 }.onFailure(logException).let {}
 
-fun Activity.shareText(text: String, fileName: String, mime: String) = runCatching {
+fun Activity.shareText(text: String) = runCatching {
+    ShareCompat.IntentBuilder(this)
+        .setType("text/plain")
+        .setChooserTitle(getString(R.string.date_converter))
+        .setText(text)
+        .startChooser()
+}.onFailure(logException).let {}
+
+fun Activity.shareTextFile(text: String, fileName: String, mime: String) = runCatching {
     startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
         it.type = mime
         it.putExtra(Intent.EXTRA_STREAM, saveTextAsFile(text, fileName))

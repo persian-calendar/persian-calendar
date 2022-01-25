@@ -11,9 +11,16 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.shareText
+import com.byagowi.persiancalendar.utils.EventsStore
+import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
+import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.getA11yDaySummary
 
 class ConverterFragment : Fragment() {
     override fun onCreateView(
@@ -30,6 +37,20 @@ class ConverterFragment : Fragment() {
 
         val todayJdn = Jdn.today()
 
+        binding.appBar.toolbar.menu.add(R.string.share).also { menu ->
+            menu.icon =
+                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
+            menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.onClick {
+            val jdn = binding.dayPickerView.jdn
+            activity?.shareText(
+                listOf(
+                    dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                    getString(R.string.equivalent_to),
+                    dateStringOfOtherCalendars(jdn, spacedComma)
+                ).joinToString(" ")
+            )
+        }
         val todayButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
             it.icon =
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)

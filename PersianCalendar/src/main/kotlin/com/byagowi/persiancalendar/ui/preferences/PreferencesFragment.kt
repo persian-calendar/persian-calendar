@@ -37,7 +37,7 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.ui.utils.shareText
+import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.appbar.MaterialToolbar
@@ -146,7 +146,9 @@ class PreferencesFragment : Fragment() {
             val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
             val button = ImageButton(activity).also { button ->
                 button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
-                button.setOnClickListener { activity.shareText(result, "log.txt", "text/plain") }
+                button.setOnClickListener {
+                    activity.shareTextFile(result, "log.txt", "text/plain")
+                }
             }
             dialog.setCustomTitle(
                 LinearLayout(activity).also {
