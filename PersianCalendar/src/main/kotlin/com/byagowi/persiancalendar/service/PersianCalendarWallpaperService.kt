@@ -24,20 +24,17 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private var rotationDegree = 0f
         private fun draw() {
             val surfaceHolder = surfaceHolder
-            rotationDegree += .1f
-            val canvas = runCatching {
+            rotationDegree += .05f
+            runCatching {
                 val result = surfaceHolder.lockCanvas()
                 result.getClipBounds(bounds)
                 patternDrawable.bounds = bounds
                 patternDrawable.rotationDegree = rotationDegree
                 patternDrawable.draw(result)
                 result
-            }.onFailure(logException).getOrNull()
-            if (canvas != null) {
-                surfaceHolder.unlockCanvasAndPost(canvas)
-            }
+            }.onSuccess(surfaceHolder::unlockCanvasAndPost).onFailure(logException)
             handler.removeCallbacks(drawRunner)
-            if (visible) handler.postDelayed(drawRunner, 1000 / 15)
+            if (visible) handler.postDelayed(drawRunner, 1000 / 10)
         }
     }
 }
