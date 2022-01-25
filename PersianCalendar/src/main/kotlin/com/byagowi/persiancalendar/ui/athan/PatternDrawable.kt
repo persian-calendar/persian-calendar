@@ -37,10 +37,11 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.sin
-import kotlin.math.sqrt
 import kotlin.math.tan
 
-class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
+class PatternDrawable(prayerKey: String = listOf(
+    FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY
+).random(), controlFromOutSide: Boolean = false) : Drawable() {
 
     private val tintColor = when (prayerKey) {
         FAJR_KEY -> 0xFF009788
@@ -79,12 +80,14 @@ class PatternDrawable(prayerKey: String = FAJR_KEY) : Drawable() {
         it.repeatMode = ValueAnimator.RESTART
         it.repeatCount = ValueAnimator.INFINITE
         it.addUpdateListener { invalidateSelf() }
-        listOf(it::start, it::reverse).random()()
+        if (!controlFromOutSide) listOf(it::start, it::reverse).random()()
     }
+
+    var rotationDegree: Float? = null
 
     override fun draw(canvas: Canvas) {
         canvas.drawPaint(backgroundPaint)
-        val degree = valueAnimator.animatedValue as? Float ?: 0f
+        val degree = rotationDegree ?: valueAnimator.animatedValue as? Float ?: 0f
         canvas.withRotation(degree, centerX, centerY) { drawPaint(foregroundPaint) }
     }
 
