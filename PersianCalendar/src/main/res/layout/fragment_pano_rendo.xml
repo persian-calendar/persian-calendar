@@ -29,8 +29,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:padding="8dp">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/tone_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/zoom"

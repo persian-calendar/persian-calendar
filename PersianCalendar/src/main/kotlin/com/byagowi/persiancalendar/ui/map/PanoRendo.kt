@@ -20,14 +20,18 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
+enum class ToneMap {
+    Reinhard, sRGB, Linear
+}
+
 fun panoRendo(
     sunElevationDegrees: Double = 30.0, // Sun Elev. min -20 max 90 °
     sunAzimuthDegrees: Double = 0.0, // Sun Azi. min -180 max 180 °
     originalAltitude: Double = 0.0, // Altitude. min 0 man 99 km
     originalTurbi: Double = 3.0, // Haze. min 0 max 99
     ozone: Double = 300.0, // Ozone. min 230 max 460 step 10
-    lumination: Double = 10.0, // Luma. min 1 max 99
-    hd: Int = 0, // Tone Map. 0 -> Reinhard, 1 -> sRGB, 2 -> Linear
+    luminance: Double = 10.0, // Luma. min 1 max 99
+    toneMap: ToneMap = ToneMap.Reinhard, // hd
     zoom: Double = 1.0 // Zoom. min 0 max 10
 ): Bitmap {
     val RPD = PI / 180
@@ -42,16 +46,17 @@ fun panoRendo(
     val sunAzimuth = Math.toRadians(sunAzimuthDegrees)
     var altitude = originalAltitude
     var turbi = originalTurbi
-    val B = lumination * if (hd != 0) 18 else 36
+    val B = luminance * if (toneMap == ToneMap.Reinhard) 36 else 18
 
     var R = if (turbi > 0) 1.0 else 0.0
     if (turbi < 0) turbi = -turbi
     val m1 = if (turbi != .0) 1500.0 else {
-        altitude = .0; 300.0
+        altitude = .0
+        300.0
     }
     // GetId("Alti").hidden = GetId("Ozone").hidden = !T
     val EH = acos(6371 / (6371 + altitude))
-    val x0 = PI / max(zoom, 1.0)
+    val x0 = PI / zoom.coerceAtLeast(1.0)
     val y0 = x0 / 2
     val x1 = if (zoom != .0) 800 else 400
     val y1 = if (zoom != .0) 200 else x1
@@ -135,21 +140,21 @@ fun panoRendo(
             var I1 = max((max(RS1 / V, Z1) + MP * (MS1 + A1 / A)) * P, .005)
             var I2 = max((max(RS2 / V, Z2) + MP * (MS2 + A2 / A)) * P, .009)
             var I3 = max((max(RS3 / V, Z3) + MP * (MS3 + A3 / A)) * P, .007)
-            if (hd == 0) {
+            if (toneMap == ToneMap.Reinhard) {
                 I1 /= 1 + I1
                 I2 /= 1 + I2
                 I3 /= 1 + I3
-            } else if (hd == 1) {
-                I1 = if (I1 < .0031308) 12.92 * I1 else 1.055 * I1.pow(5 / 12) - .055
-                I2 = if (I2 < .0031308) 12.92 * I2 else 1.055 * I2.pow(5 / 12) - .055
-                I3 = if (I3 < .0031308) 12.92 * I3 else 1.055 * I3.pow(5 / 12) - .055
+            } else if (toneMap == ToneMap.sRGB) {
+                I1 = if (I1 < .0031308) 12.92 * I1 else 1.055 * I1.pow(5.0 / 12) - .055
+                I2 = if (I2 < .0031308) 12.92 * I2 else 1.055 * I2.pow(5.0 / 12) - .055
+                I3 = if (I3 < .0031308) 12.92 * I3 else 1.055 * I3.pow(5.0 / 12) - .055
             }
             if (zoom != .0) result[x.toInt(), y] = Color.rgb(
                 (I1 * B).toInt().coerceIn(0, 255),
                 (I2 * B).toInt().coerceIn(0, 255),
                 (I3 * B).toInt().coerceIn(0, 255)
             ) else result[
-                    (x1 / 2 * (1 + fe * cos(VA))).toInt(), (y1 / 2 * (1 + fe * sin(VA))).toInt()
+                    (x1 / 2.0 * (1 + fe * cos(VA))).toInt(), (y1 / 2.0 * (1 + fe * sin(VA))).toInt()
             ] = Color.rgb(
                 (I1 * B).toInt().coerceIn(0, 255),
                 (I2 * B).toInt().coerceIn(0, 255),
