@@ -109,8 +109,8 @@ android {
             buildConfigField("boolean", "DEVELOPMENT", "false")
         }
     }
+    flavorDimensions += listOf("api")
 
-    flavorDimensions("api")
     productFlavors {
         create("minApi17") {
             dimension = "api"
@@ -162,7 +162,7 @@ android {
         jvmTarget = "11"
     }
 
-    lint { disable("MissingTranslation") }
+    lint { disable += listOf("MissingTranslation") }
 }
 
 val minApi21Implementation by configurations
