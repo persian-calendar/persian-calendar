@@ -20,6 +20,7 @@
     <string name="remove">Retirer</string>
     <plurals name="n_minutes">
         <item quantity="one">%1$s minute</item>
+        <item quantity="many">%1$s minutes</item>
         <item quantity="other">%1$s minutes</item>
     </plurals>
     <string name="shift_work_reset_button">Désactiver ou reprogrammer</string>
@@ -28,6 +29,7 @@
     <string name="spaced_colon">": "</string>
     <plurals name="n_hours">
         <item quantity="one">%1$s heure</item>
+        <item quantity="many">%1$s heures</item>
         <item quantity="other">%1$s heures</item>
     </plurals>
     <string name="center_align_widgets">Alignement central des widgets</string>
@@ -45,14 +47,17 @@
     <string name="prefer_linear_date">Préférer la forme numérique des dates</string>
     <plurals name="n_days">
         <item quantity="one">%1$s jour</item>
+        <item quantity="many">%1$s jours</item>
         <item quantity="other">%1$s jours</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s moi</item>
+        <item quantity="many">%1$s mois</item>
         <item quantity="other">%1$s mois</item>
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s année</item>
+        <item quantity="many">%1$s années</item>
         <item quantity="other">%1$s années</item>
     </plurals>
     <string name="age_widget_title">Titre du widget</string>
@@ -242,6 +247,7 @@
     <string name="recurs">Récurrent</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s jour %2$s</item>
+        <item quantity="many">%1$s jours %2$s</item>
         <item quantity="other">%1$s jours %2$s</item>
     </plurals>
     <string name="preview">Prévisualiser</string>
