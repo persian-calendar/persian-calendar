@@ -19,17 +19,22 @@ class SolarDraw(context: Context) {
     fun sunColor(progress: Float) =
         ArgbEvaluatorCompat.getInstance().evaluate(progress, 0xFFFFF9C4.toInt(), 0xFFFF9100.toInt())
 
-    fun sun(canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null) {
-        if (color != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            sunDrawable.setTint(color)
-        }
-        sunDrawable.setBounds(
-            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
-        )
-        sunDrawable.draw(canvas)
+    fun sun(
+        canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false
+    ) {
+        val drawable = if (small) smallSunDrawable else sunDrawable
+        if (color != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            drawable.setTint(color)
+        drawable.setBounds((cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt())
+        drawable.draw(canvas)
     }
 
-    private val sunDrawable = context.getCompatDrawable(R.drawable.ic_sun)
+    private val sunDrawable by lazy(LazyThreadSafetyMode.NONE) {
+        context.getCompatDrawable(R.drawable.ic_sun)
+    }
+    private val smallSunDrawable by lazy(LazyThreadSafetyMode.NONE) {
+        context.getCompatDrawable(R.drawable.ic_sun_small)
+    }
 
     fun moon(canvas: Canvas, sunMoonPosition: SunMoonPosition, cx: Float, cy: Float, r: Float) {
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
