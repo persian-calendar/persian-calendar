@@ -87,15 +87,15 @@ android {
             )
             isMinifyEnabled = true
             isShrinkResources = true
+            multiDexEnabled = false
             buildConfigField("boolean", "DEVELOPMENT", "true")
         }
 
         getByName("debug") {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
             buildConfigField("boolean", "DEVELOPMENT", "true")
-
-            // Commented out To make it work in older Android version, feel free to undo
-            // applicationIdSuffix = ".debug"
+            applicationIdSuffix = ".debug"
+            multiDexEnabled = true
         }
 
         getByName("release") {
@@ -195,8 +195,10 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     implementation("com.google.openlocationcode:openlocationcode:1.0.4")
-    // The following makes dex class exceed 65k methods count
-    // implementation("com.google.zxing:core:3.4.1")
+    implementation("com.google.zxing:core:3.4.1")
+
+    // Only needed for debug builds for now, won't be needed for minApi21 builds either
+    debugImplementation("com.android.support:multidex:2.0.0")
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.3")
@@ -326,7 +328,8 @@ import io.github.persiancalendar.praytimes.Coordinates
 val citiesStore = mapOf(
     $cities
 )
-""")
+"""
+        )
 
         // Districts
         val districts = (JsonSlurper().parse(districtsJson) as Map<*, *>).mapNotNull { province ->
@@ -353,7 +356,8 @@ import io.github.persiancalendar.praytimes.Coordinates
 val distrcitsStore = listOf(
     $districts
 )
-""")
+"""
+        )
     }
 }
 tasks.named("preBuild").configure { dependsOn(generateAppSrcTask) }
