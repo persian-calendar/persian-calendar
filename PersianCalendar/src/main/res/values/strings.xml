@@ -351,7 +351,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="nepal">Nepal</string>
     <string name="solar_eclipse">Solar eclipse</string>
     <string name="lunar_eclipse">Lunar eclipse</string>
-    <string name="eclipse_of_type_in">%1$s of %2$s in %3$s</string>
     <string name="summer">Summer</string>
     <string name="fall">Fall</string>
     <string name="winter">Winter</string>

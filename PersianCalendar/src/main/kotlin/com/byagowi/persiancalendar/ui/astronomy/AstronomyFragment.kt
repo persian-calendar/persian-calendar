@@ -15,12 +15,17 @@ import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.isRtl
+import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.persiancalendar.calendar.CivilDate
@@ -95,10 +100,8 @@ class AstronomyFragment : Fragment() {
             ).joinToString("\n") { (title, eclipseCategory) ->
                 val eclipse = Eclipse(time, eclipseCategory, true)
                 val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
-                val type = eclipse.type.name
-                    .replace(Regex("^(Solar(Central)?|Lunar)"), "")
-                    .replace(Regex("([a-z])([A-Z])"), "$1 $2")
-                getString(R.string.eclipse_of_type_in).format(getString(title), type, date)
+                (language.tryTranslateEclipseType(eclipse.type) ?: getString(title)) +
+                        spacedColon + date
             }
 
             (1..4).forEach {

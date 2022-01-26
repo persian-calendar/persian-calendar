@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.entities
 import android.annotation.SuppressLint
 import android.content.Context
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
 import io.github.persiancalendar.praytimes.CalculationMethod
@@ -279,6 +280,36 @@ enum class Language(val code: String, val nativeName: String) {
         .replace("ێ", "یی")
         .replace("ھ", "نی")
         .replace("ە", "هی")
+
+    // Too hard to translate and don't want to disappoint translators thus
+    // not moved yet to our common i18n system
+    fun tryTranslateEclipseType(type: Eclipse.Type) = when (this) {
+        EN_US, EN_IR -> {
+            when (type) {
+                Eclipse.Type.SolarNoncenral -> "Noncentral solar eclipse"
+                Eclipse.Type.SolarPartial -> "Partial solar eclipse"
+                Eclipse.Type.SolarCentralTotal -> "Central total solar eclipse"
+                Eclipse.Type.SolarCentralAnnular -> "Central Annular solar eclipse"
+                Eclipse.Type.SolarCentralAnnularTotal -> "Central Annular total solar eclipse"
+                Eclipse.Type.LunarUmbralTotal -> "Umbral total lunar eclipse"
+                Eclipse.Type.LunarUmbralPartial -> "Umbral partial lunar eclipse"
+                Eclipse.Type.LunarPenumbral -> "Lunar penumbral lunar eclipse"
+            }
+        }
+        FA, FA_AF -> {
+            when (type) {
+                Eclipse.Type.SolarNoncenral -> "خورشیدگرفتگی غیرمرکزی"
+                Eclipse.Type.SolarPartial -> "خورشیدگرفتگی جزئی"
+                Eclipse.Type.SolarCentralTotal -> "خورشیدگرفتگی کلی"
+                Eclipse.Type.SolarCentralAnnular -> "خورشیدگرفتگی حلقوی"
+                Eclipse.Type.SolarCentralAnnularTotal -> "خورشیدگرفتگی کلی حلقوی"
+                Eclipse.Type.LunarUmbralTotal -> "ماه‌گرفتگی کلی"
+                Eclipse.Type.LunarUmbralPartial -> "ماه‌گرفتگی جزئی"
+                Eclipse.Type.LunarPenumbral -> "ماه‌گرفتگی نیم‌سایه‌ای"
+            }
+        }
+        else -> null
+    }
 
     companion object {
         @SuppressLint("ConstantLocale")

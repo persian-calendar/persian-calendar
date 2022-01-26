@@ -358,6 +358,5 @@
     <string name="spring">Printemps</string>
     <string name="sun">Soleil</string>
     <string name="summer">Été</string>
-    <string name="eclipse_of_type_in">%1$s de %2$s dans %3$s</string>
     <string name="tropical">Tropicale</string>
 </resources>

@@ -395,7 +395,6 @@
     <string name="moon">القمر</string>
     <string name="solar_eclipse">كسوف الشمس</string>
     <string name="lunar_eclipse">خسوف القمر</string>
-    <string name="eclipse_of_type_in">%1$s من %2$s في %3$s</string>
     <string name="summer">الصيف</string>
     <string name="fall">الخريف</string>
     <string name="winter">الشتاء</string>
