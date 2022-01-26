@@ -62,6 +62,16 @@ import kotlin.math.roundToInt
 
 class MapFragment : Fragment() {
 
+    private val date = GregorianCalendar()
+    private val dateMinutesOffset
+        get() =
+            ((date.timeInMillis - GregorianCalendar().timeInMillis) / 1000 / 60).toInt()
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(MINUTES_OFFSET_KEY, dateMinutesOffset)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -75,7 +85,8 @@ class MapFragment : Fragment() {
         pinBitmap = inflater.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
         val args by navArgs<MapFragmentArgs>()
-        val date = GregorianCalendar().also { it.add(Calendar.MINUTE, args.minutesOffset) }
+        val minutesOffset = savedInstanceState?.getInt(MINUTES_OFFSET_KEY) ?: args.minutesOffset
+        date.add(Calendar.MINUTE, minutesOffset)
 
         update(binding, date)
 
@@ -142,12 +153,14 @@ class MapFragment : Fragment() {
             }
         }
 
-
         binding.map.onClick = fun(x: Float, y: Float) {
             val latitude = 90 - y / mapScaleFactor
             val longitude = x / mapScaleFactor - 180
-            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2)
-                findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
+            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2) {
+                findNavController().navigateSafe(
+                    MapFragmentDirections.actionMapToPanoRendo(dateMinutesOffset)
+                )
+            }
 
             if (BuildConfig.DEVELOPMENT) {
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -339,4 +352,8 @@ class MapFragment : Fragment() {
     private val pinScaleDown = 2
     private val pinRect = RectF()
     private var pinBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+
+    companion object {
+        private const val MINUTES_OFFSET_KEY = "offset"
+    }
 }

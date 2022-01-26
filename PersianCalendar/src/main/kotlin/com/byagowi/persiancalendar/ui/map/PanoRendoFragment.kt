@@ -6,10 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.databinding.FragmentPanoRendoBinding
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
+import java.util.*
 
 class PanoRendoFragment : Fragment() {
     override fun onCreateView(
@@ -26,8 +31,19 @@ class PanoRendoFragment : Fragment() {
             ToneMap.values().map { it.toString() }
         )
 
+        val coordinates = coordinates
+        if (coordinates == null) {
+            Toast.makeText(inflater.context, "Location is not set", Toast.LENGTH_SHORT).show()
+        }
+        val args by navArgs<PanoRendoFragmentArgs>()
+        val sunPosition = GregorianCalendar().also {
+            it.add(Calendar.MINUTE, args.minutesOffset)
+        }.calculateSunMoonPosition(coordinates).sunPosition
+
         fun update() = binding.image.setImageBitmap(
             panoRendo(
+                sunElevationDegrees = sunPosition?.altitude ?: 30.0,
+                sunAzimuthDegrees = sunPosition?.azimuth ?: 0.0,
                 toneMap = ToneMap.values().getOrNull(binding.toneMap.selectedItemPosition)
                     ?: ToneMap.Reinhard,
                 zoom = binding.zoom.text?.toString()?.toDoubleOrNull() ?: .0
