@@ -4,6 +4,7 @@ import android.app.Activity
 import android.location.Geocoder
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -28,14 +29,14 @@ import kotlin.math.abs
 fun showCoordinatesDialog(
     activity: Activity, viewLifecycleOwner: LifecycleOwner, inputCoordinates: Coordinates? = null
 ) {
-    val coord = inputCoordinates ?: coordinates
+    val coordinates = inputCoordinates ?: coordinates
     val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)
 
     val coordinatesEdits = listOf(binding.latitude, binding.longitude, binding.altitude)
     val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
 
     coordinatesEdits.zip(
-        coord?.run { listOf(latitude, longitude, elevation) } ?: listOf(.0, .0, .0)
+        coordinates?.run { listOf(latitude, longitude, elevation) } ?: listOf(.0, .0, .0)
     ) { editable, value -> editable.setText(value.toString()) }
 
     var cityName: String? = null
@@ -49,7 +50,7 @@ fun showCoordinatesDialog(
                     .getFromLocation(latitude, longitude, 20)
                 withContext(Dispatchers.Main.immediate) {
                     cityName = null
-                    binding.geocoder.text = geocoder
+                    val text = geocoder
                         .mapIndexed { i, address ->
                             if (i == 0) {
                                 cityName = address?.locality
@@ -63,11 +64,13 @@ fun showCoordinatesDialog(
                                 address.countryCode, address.phone, address.url
                             )).joinToString(spacedComma)
                         }.joinToString("\n")
+                    binding.geocoder.text = text
+                    binding.geocoder.isVisible = text.isNotEmpty()
                 }
             }.onFailure(logException)
         }
     }
-    showGeocoderResult()
+    if (inputCoordinates != null) showGeocoderResult()
 
     binding.latitude.addTextChangedListener { showGeocoderResult() }
     binding.longitude.addTextChangedListener { showGeocoderResult() }
@@ -76,13 +79,11 @@ fun showCoordinatesDialog(
         .setView(binding.root)
         .setTitle(R.string.coordination)
         .setPositiveButton(R.string.accept) { _, _ ->
-            val coordinates = coordinatesEdits.map { it.text.toString() }.mapIndexed { i, x ->
+            val parts = coordinatesEdits.map { it.text.toString() }.mapIndexed { i, x ->
                 // Replace empty elevation with zero
                 if (i == 2 && x.isEmpty()) "0" else x
-            }
-
-            // Make sure coordinates array has both parsable and in range numbers
-            val parts = coordinates.mapIndexedNotNull { i, coordinate ->
+            }.mapIndexedNotNull { i, coordinate ->
+                // Make sure coordinates array has both parsable and in range numbers
                 coordinate.toDoubleOrNull()?.takeIf {
                     when (i) {
                         0 -> abs(it) <= 90 // Valid latitudes
@@ -92,8 +93,7 @@ fun showCoordinatesDialog(
                 }
             }
             if (parts.size == 3) activity.appPrefs.saveLocation(
-                Coordinates(parts[0], parts[1], parts[2]),
-                cityName ?: "", countryCode ?: ""
+                Coordinates(parts[0], parts[1], parts[2]), cityName ?: "", countryCode ?: ""
             ) else activity.appPrefs.edit { coordinatesKeys.forEach(::remove) }
         }
         .setNegativeButton(R.string.cancel, null)
