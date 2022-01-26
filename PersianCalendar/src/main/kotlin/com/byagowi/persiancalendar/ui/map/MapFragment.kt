@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.shared.ArrowView
 import com.byagowi.persiancalendar.ui.shared.SolarDraw
@@ -49,6 +50,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
 import com.cepmuvakkit.times.posAlgo.EarthPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
+import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -162,17 +164,9 @@ class MapFragment : Fragment() {
                 )
             }
 
-            if (BuildConfig.DEVELOPMENT) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    runCatching {
-                        val text = Geocoder(activity, language.asSystemLocale())
-                            .getFromLocation(latitude.toDouble(), longitude.toDouble(), 10)
-                            .joinToString("\n")
-                        withContext(Dispatchers.Main.immediate) {
-                            Toast.makeText(binding.map.context, text, Toast.LENGTH_SHORT).show()
-                        }
-                    }.onFailure(logException)
-                }
+            activity?.also {
+                val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+                showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
             }
         }
 

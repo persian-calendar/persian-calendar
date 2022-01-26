@@ -69,7 +69,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.location_help)
                     this@LocationAthanFragment.selectedLocationPreference = this
                 }
-                clickable(onClick = { showCoordinatesDialog(activity) }) {
+                clickable(onClick = { showCoordinatesDialog(activity, viewLifecycleOwner) }) {
                     title(R.string.coordination)
                     this@LocationAthanFragment.coordinatesPreference = this
                 }
