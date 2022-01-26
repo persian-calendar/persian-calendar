@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
+import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.utils.logException
 
@@ -15,7 +16,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private var visible = true
         private val bounds = Rect()
         override fun onVisibilityChanged(visible: Boolean) {
-            patternDrawable = PatternDrawable()
+            val isNightMode = Theme.isNightMode(this@PersianCalendarWallpaperService)
+            patternDrawable = PatternDrawable(darkBaseColor = isNightMode)
             this.visible = visible
             if (visible) handler.post(drawRunner)
             else handler.removeCallbacks(drawRunner)

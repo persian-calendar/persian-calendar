@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.athan
 import androidx.activity.ComponentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
+import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.utils.fadeIn
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -15,7 +16,8 @@ fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onCl
         binding.athanName.setText(getPrayTimeName(prayerKey))
         binding.place.fadeIn(TWO_SECONDS_IN_MILLIS)
         binding.root.setOnClickListener { onClick() }
-        binding.root.background = PatternDrawable(prayerKey)
+        binding.root.background =
+            PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(activity))
         binding.place.text = cityName?.let { activity.getString(R.string.in_city_time, it) }
     }.root)
 }

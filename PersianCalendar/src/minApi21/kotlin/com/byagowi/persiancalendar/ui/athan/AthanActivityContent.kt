@@ -28,6 +28,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.getPrayTimeName
@@ -50,7 +52,9 @@ fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onCl
 private fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: () -> Unit) {
     Box(modifier = Modifier.clickable { onClick() }) {
         Image(
-            painter = rememberDrawablePainter(PatternDrawable(prayerKey)),
+            painter = rememberDrawablePainter(
+                PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(LocalContext.current))
+            ),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxSize()

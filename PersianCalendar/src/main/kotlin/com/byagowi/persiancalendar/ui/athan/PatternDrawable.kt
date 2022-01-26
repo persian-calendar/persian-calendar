@@ -42,7 +42,8 @@ import kotlin.math.tan
 class PatternDrawable(
     prayerKey: String = listOf(
         FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY
-    ).random(), controlFromOutSide: Boolean = false
+    ).random(), controlFromOutSide: Boolean = false,
+    private val darkBaseColor: Boolean = false
 ) : Drawable() {
 
     private val tintColor = when (prayerKey) {
@@ -62,7 +63,8 @@ class PatternDrawable(
         super.onBoundsChange(bounds ?: return)
         backgroundPaint.shader = LinearGradient(
             0f, 0f, 0f, bounds.bottom.toFloat(),
-            tintColor, Color.WHITE, Shader.TileMode.CLAMP
+            tintColor, if (darkBaseColor) Color.BLACK else Color.WHITE,
+            Shader.TileMode.CLAMP
         )
         val pattern = listOf(
             ::FirstPattern, ::SecondPattern, ::ThirdPattern, ::FourthPattern
