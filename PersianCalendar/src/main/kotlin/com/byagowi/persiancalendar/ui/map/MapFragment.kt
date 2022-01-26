@@ -146,7 +146,7 @@ class MapFragment : Fragment() {
         binding.map.onClick = fun(x: Float, y: Float) {
             val latitude = 90 - y / mapScaleFactor
             val longitude = x / mapScaleFactor - 180
-            if (latitude.absoluteValue < 5 && longitude.absoluteValue < 5)
+            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2)
                 findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
 
             if (BuildConfig.DEVELOPMENT) {

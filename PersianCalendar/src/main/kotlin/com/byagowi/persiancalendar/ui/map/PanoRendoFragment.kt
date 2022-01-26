@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.databinding.FragmentPanoRendoBinding
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
@@ -25,12 +26,11 @@ class PanoRendoFragment : Fragment() {
             ToneMap.values().map { it.toString() }
         )
 
-        var zoom = 1.0
         fun update() = binding.image.setImageBitmap(
             panoRendo(
                 toneMap = ToneMap.values().getOrNull(binding.toneMap.selectedItemPosition)
                     ?: ToneMap.Reinhard,
-                zoom = zoom
+                zoom = binding.zoom.text?.toString()?.toDoubleOrNull() ?: .0
             )
         )
         update()
@@ -40,10 +40,7 @@ class PanoRendoFragment : Fragment() {
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) = update()
         }
-        binding.zoom.setOnClickListener {
-            zoom = if (zoom == 1.0) 0.0 else 1.0
-            update()
-        }
+        binding.zoom.addTextChangedListener { update() }
 
         return binding.root
     }
