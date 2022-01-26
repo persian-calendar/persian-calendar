@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -228,7 +229,10 @@ class CompassFragment : Fragment() {
             slider.isVisible = value != 0f
         }
         binding.timeSlider.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            @SuppressLint("RestrictedApi")
             override fun onStopTrackingTouch(slider: Slider) = Unit
+
+            @SuppressLint("RestrictedApi")
             override fun onStartTrackingTouch(slider: Slider) {
                 stopAnimator = true
             }
