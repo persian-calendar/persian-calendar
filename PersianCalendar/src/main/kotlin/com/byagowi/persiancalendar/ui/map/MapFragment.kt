@@ -40,6 +40,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.toPath
+import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.cepmuvakkit.times.posAlgo.EarthPosition
@@ -106,15 +107,29 @@ class MapFragment : Fragment() {
             true
         }
 
+        fun bringGps() {
+            showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
+        }
+
+        val directPathButton = binding.appBar.toolbar.menu.add("Direct Path")
+        directPathButton.also {
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_direct_path)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }.onClick {
+            if (coordinates == null) bringGps()
+            else {
+                isDirectPathMode = !isDirectPathMode
+                directPathButton.icon.alpha = if (isDirectPathMode) 127 else 255
+                if (!isDirectPathMode) toCoordinates = null
+            }
+            update(binding, date)
+        }
         binding.appBar.toolbar.menu.add("Grid").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_grid_3x3)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             displayGrid = !displayGrid
             update(binding, date)
-        }
-        fun bringGps() {
-            showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
         }
         binding.appBar.toolbar.menu.add("GPS").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_my_location)
@@ -142,14 +157,14 @@ class MapFragment : Fragment() {
         inflater.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
             if (key == PREF_LATITUDE) {
                 displayLocation = true
-                update(binding, date)
+                binding.root.postDelayed({ update(binding, date) }, HALF_SECOND_IN_MILLIS)
             }
         }
 
         binding.map.onClick = fun(x: Float, y: Float) {
-            val latitude = 90 - y / mapScaleFactor
+            val latitude = 90 - y / mapScaleFactor + 1
             val longitude = x / mapScaleFactor - 180
-            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2) {
+            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && displayGrid) {
                 findNavController().navigateSafe(
                     MapFragmentDirections.actionMapToPanoRendo(dateMinutesOffset)
                 )
@@ -157,7 +172,12 @@ class MapFragment : Fragment() {
 
             activity?.also {
                 val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
+                if (isDirectPathMode) {
+                    toCoordinates = coordinates
+                    update(binding, date)
+                } else {
+                    showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
+                }
             }
         }
 
@@ -167,6 +187,8 @@ class MapFragment : Fragment() {
     private var displayNightMask = true
     private var displayLocation = true
     private var displayGrid = false
+    private var isDirectPathMode = false
+    private var toCoordinates: Coordinates? = null
 
     private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
         binding.map.setImageBitmap(createMap(date))
@@ -270,9 +292,10 @@ class MapFragment : Fragment() {
                 )
                 it.drawBitmap(pinBitmap, null, pinRect, null)
             }
-            if ((false)) {
-                val from = EarthPosition(10.0, 10.0)
-                val to = EarthPosition(50.0, 90.0)
+            val toPath = toCoordinates
+            if (coordinates != null && toPath != null) {
+                val from = EarthPosition(coordinates.latitude, coordinates.longitude)
+                val to = EarthPosition(toPath.latitude, toPath.longitude)
                 val points = from.intermediatePoints(to, 24).map { point ->
                     val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
                     val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
