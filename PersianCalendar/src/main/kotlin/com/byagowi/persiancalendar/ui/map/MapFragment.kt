@@ -50,6 +50,7 @@ import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
 import java.util.zip.GZIPInputStream
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.roundToInt
@@ -164,6 +165,7 @@ class MapFragment : Fragment() {
         binding.map.onClick = fun(x: Float, y: Float) {
             val latitude = 90 - y / mapScaleFactor + 1
             val longitude = x / mapScaleFactor - 180
+            if (abs(latitude) > 90 || abs(longitude) > 180) return
             if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && displayGrid) {
                 findNavController().navigateSafe(
                     MapFragmentDirections.actionMapToPanoRendo(dateMinutesOffset)
