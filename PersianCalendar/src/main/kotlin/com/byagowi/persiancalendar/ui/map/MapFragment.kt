@@ -116,7 +116,7 @@ class MapFragment : Fragment() {
 
         val directPathButton = binding.appBar.toolbar.menu.add("Direct Path")
         directPathButton.also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_direct_path)
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_distance_icon)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             if (coordinates == null) bringGps()
