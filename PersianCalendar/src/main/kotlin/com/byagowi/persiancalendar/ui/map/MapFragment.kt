@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.cepmuvakkit.times.posAlgo.EarthPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
+import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.Coordinates
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
@@ -53,6 +54,7 @@ import java.util.zip.GZIPInputStream
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.atan2
+import kotlin.math.hypot
 import kotlin.math.roundToInt
 
 class MapFragment : Fragment() {
@@ -304,11 +306,15 @@ class MapFragment : Fragment() {
                     val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
                     userX to userY
                 }
-                pathPaint.shader = LinearGradient(
-                    points[0].first, points[0].second, points.last().first, points.last().second,
-                    Color.BLACK, Color.RED, Shader.TileMode.CLAMP
-                )
-                it.drawPath(points.toPath(false), pathPaint)
+                points.forEachIndexed { i, (x1, y1) ->
+                    if (i >= points.size - 1) return@forEachIndexed
+                    val (x2, y2) = points[i + 1]
+                    if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
+                    pathPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
+                        i.toFloat() / points.size, Color.BLACK, Color.RED
+                    )
+                    it.drawLine(x1, y1, x2, y2, pathPaint)
+                }
                 val heading = from.toEarthHeading(to)
                 val center = points[points.size / 2]
                 val centerPlus1 = points[points.size / 2 + 1]
