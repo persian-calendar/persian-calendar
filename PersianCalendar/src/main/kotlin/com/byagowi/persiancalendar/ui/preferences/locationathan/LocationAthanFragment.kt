@@ -58,7 +58,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activity = activity ?: return
-        preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
+        preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
             section(R.string.location) {
                 clickable(onClick = { showGPSLocationDialog(activity, viewLifecycleOwner) }) {
                     title(R.string.gps_location)

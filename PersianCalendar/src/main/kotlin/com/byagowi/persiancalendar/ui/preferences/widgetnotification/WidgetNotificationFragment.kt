@@ -48,7 +48,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val handler = Handler(Looper.getMainLooper())
         val activity = activity ?: return
-        preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
+        preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
             section(R.string.pref_notification) {
                 // Hide notification category if we are in widgets configuration
                 if (arguments?.getBoolean(IS_WIDGETS_CONFIGURATION, false) == true)

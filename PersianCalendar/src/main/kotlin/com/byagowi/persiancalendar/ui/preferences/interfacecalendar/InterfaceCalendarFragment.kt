@@ -47,7 +47,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         val destination = arguments?.getString(PreferencesFragment.PREF_DESTINATION)
         if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(activity)
 
-        preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
+        preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
             section(R.string.pref_interface) {
                 clickable(onClick = { showLanguagePreferenceDialog(activity) }) {
                     if (destination == PREF_APP_LANGUAGE) title = "Language"

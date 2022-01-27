@@ -173,7 +173,7 @@ dependencies {
     implementation("com.github.persian-calendar:praytimes:2.1.2")
 
     implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("androidx.preference:preference-ktx:1.1.1")
+    implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")

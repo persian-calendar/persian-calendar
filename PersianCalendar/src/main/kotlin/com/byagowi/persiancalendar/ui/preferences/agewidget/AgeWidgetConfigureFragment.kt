@@ -28,7 +28,7 @@ class AgeWidgetConfigureFragment : PreferenceFragmentCompat() {
             ?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, 0) ?: return
 
         val activity = activity ?: return
-        preferenceScreen = preferenceManager.createPreferenceScreen(context).build {
+        preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
             section(R.string.empty) {
                 clickable(onClick = {
                     val key = PREF_SELECTED_DATE_AGE_WIDGET + appWidgetId
