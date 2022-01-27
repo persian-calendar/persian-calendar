@@ -168,6 +168,7 @@ class MapFragment : Fragment() {
                 findNavController().navigateSafe(
                     MapFragmentDirections.actionMapToPanoRendo(dateMinutesOffset)
                 )
+                return
             }
 
             activity?.also {
