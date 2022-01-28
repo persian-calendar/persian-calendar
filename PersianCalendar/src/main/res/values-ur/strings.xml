@@ -172,7 +172,7 @@
     <string name="continue_button">ادامه</string>
     <!--Permissions-->
     <string name="location_access">دسترسی به موقعیت مکانی</string>
-    <string name="phone_location_required">این بخش از برنامه نیازمند گرفتن دسترسی مکان است، در غیر است می‌بایست طول و عرض جفرافیایی خود را به صورت دستی وارد کنید.</string>
+    <string name="phone_location_required">این بخش از برنامه نیازمند گرفتن دسترسی مکان است، در غیر این‌صورت می‌بایست طول و عرض جفرافیایی خود را به صورت دستی وارد کنید.</string>
     <string name="calendar_access">دسترسی به تقویم دستگاه</string>
     <string name="phone_calendar_required">ابتدا باید مجوز دسترسی به تقویم دستگاه را بدهید، اگر اجازه دسترسی به تقویم دستگاه دهید برنامه می‌تواند رویدادهای شخصی شما را در تقویم فارسی نمایش دهد.</string>
     <!--Talkback, a11y-->
