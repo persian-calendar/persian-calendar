@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.athan
 
-import android.animation.ValueAnimator
 import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
@@ -14,7 +13,6 @@ import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.view.animation.LinearInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and
@@ -42,7 +40,8 @@ import kotlin.math.tan
 class PatternDrawable(
     prayerKey: String = listOf(
         FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY
-    ).random(), controlFromOutSide: Boolean = false,
+    ).random(),
+    var rotationDegree: Float = 0f,
     private val darkBaseColor: Boolean = false
 ) : Drawable() {
 
@@ -78,21 +77,9 @@ class PatternDrawable(
         centerY = listOf(-.5f, .5f, 1.5f).random() * bounds.height()
     }
 
-    private val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
-        it.duration = 180000L
-        it.interpolator = LinearInterpolator()
-        it.repeatMode = ValueAnimator.RESTART
-        it.repeatCount = ValueAnimator.INFINITE
-        it.addUpdateListener { invalidateSelf() }
-        if (!controlFromOutSide) listOf(it::start, it::reverse).random()()
-    }
-
-    var rotationDegree: Float? = null
-
     override fun draw(canvas: Canvas) {
         canvas.drawPaint(backgroundPaint)
-        val degree = rotationDegree ?: valueAnimator.animatedValue as? Float ?: 0f
-        canvas.withRotation(degree, centerX, centerY) { drawPaint(foregroundPaint) }
+        canvas.withRotation(rotationDegree, centerX, centerY) { drawPaint(foregroundPaint) }
     }
 
     override fun setAlpha(alpha: Int) = Unit

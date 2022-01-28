@@ -1,6 +1,10 @@
 package com.byagowi.persiancalendar.ui.athan
 
+import android.animation.ValueAnimator
+import android.view.animation.LinearInterpolator
 import androidx.activity.ComponentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
 import com.byagowi.persiancalendar.entities.Theme
@@ -16,8 +20,26 @@ fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onCl
         binding.athanName.setText(getPrayTimeName(prayerKey))
         binding.place.fadeIn(TWO_SECONDS_IN_MILLIS)
         binding.root.setOnClickListener { onClick() }
-        binding.root.background =
-            PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(activity))
+        val pattern = PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(activity))
+        val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
+            it.duration = 180000L
+            it.interpolator = LinearInterpolator()
+            it.repeatMode = ValueAnimator.RESTART
+            it.repeatCount = ValueAnimator.INFINITE
+            it.addUpdateListener {
+                pattern.rotationDegree = it.animatedValue as? Float ?: 0f
+                pattern.invalidateSelf()
+            }
+            listOf(it::start, it::reverse).random()()
+        }
+        valueAnimator.start()
+        activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_PAUSE) {
+                valueAnimator.removeAllUpdateListeners()
+                valueAnimator.cancel()
+            }
+        })
+        binding.root.background = pattern
         binding.place.text = cityName?.let { activity.getString(R.string.in_city_time, it) }
     }.root)
 }

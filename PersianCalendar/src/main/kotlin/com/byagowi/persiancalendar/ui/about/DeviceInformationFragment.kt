@@ -232,7 +232,7 @@ class DeviceInformationFragment : Fragment() {
                             valueAnimator.duration = 3000
                             valueAnimator.interpolator = LinearInterpolator()
                             valueAnimator.repeatMode = ValueAnimator.REVERSE
-                            valueAnimator.repeatCount = ValueAnimator.INFINITE
+                            valueAnimator.repeatCount = 1
                             valueAnimator.addUpdateListener {
                                 progressBar.indeterminateDrawable?.colorFilter =
                                     BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
