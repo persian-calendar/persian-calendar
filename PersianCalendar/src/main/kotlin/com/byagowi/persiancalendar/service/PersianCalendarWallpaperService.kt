@@ -16,8 +16,16 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private var visible = true
         private val bounds = Rect()
         override fun onVisibilityChanged(visible: Boolean) {
-            val isNightMode = Theme.isNightMode(this@PersianCalendarWallpaperService)
-            patternDrawable = PatternDrawable(darkBaseColor = isNightMode)
+            val context = this@PersianCalendarWallpaperService
+            val isNightMode = Theme.isNightMode(context)
+            val accentColor = if (Theme.isDynamicColorAvailable()) context.getColor(
+                if (isNightMode) android.R.color.system_accent1_200
+                else android.R.color.system_accent1_400
+            ) else null
+            patternDrawable = PatternDrawable(
+                preferredTintColor = accentColor,
+                darkBaseColor = Theme.isNightMode(context)
+            )
             this.visible = visible
             if (visible) handler.post(drawRunner)
             else handler.removeCallbacks(drawRunner)

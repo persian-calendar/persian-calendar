@@ -41,11 +41,12 @@ class PatternDrawable(
     prayerKey: String = listOf(
         FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY
     ).random(),
+    preferredTintColor: Int? = null,
     var rotationDegree: Float = 0f,
     private val darkBaseColor: Boolean = false
 ) : Drawable() {
 
-    private val tintColor = when (prayerKey) {
+    private val tintColor = preferredTintColor ?: when (prayerKey) {
         FAJR_KEY -> 0xFF009788
         DHUHR_KEY -> 0xFFF1A42A
         ASR_KEY -> 0xFFF57C01
