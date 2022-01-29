@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/app_name"
-    android:thumbnail="@mipmap/ic_banner" />
+    android:thumbnail="@drawable/livewallpaper" />
 <!--    android:settingsActivity="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity"-->
