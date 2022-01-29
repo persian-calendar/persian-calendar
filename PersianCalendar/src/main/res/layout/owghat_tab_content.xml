@@ -13,7 +13,7 @@
         android:layout_height="100dp"
         android:layout_marginTop="10dp" />
 
-    <com.byagowi.persiancalendar.ui.shared.MoonView
+    <com.byagowi.persiancalendar.ui.common.MoonView
         android:id="@+id/moon_view"
         android:layout_width="54dp"
         android:layout_height="54dp"
@@ -56,7 +56,7 @@
             android:textSize="@dimen/text_size_title"
             tools:text="City" />
 
-        <com.byagowi.persiancalendar.ui.shared.ArrowView
+        <com.byagowi.persiancalendar.ui.common.ArrowView
             android:id="@+id/expansion_arrow"
             android:layout_width="@dimen/arrow_size"
             android:layout_height="@dimen/arrow_size"

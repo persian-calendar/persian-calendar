@@ -16,7 +16,7 @@
         android:paddingTop="@dimen/padding_item"
         android:paddingEnd="@dimen/padding_item">
 
-        <com.byagowi.persiancalendar.ui.shared.MoonView
+        <com.byagowi.persiancalendar.ui.common.MoonView
             android:id="@+id/moon_phase_view"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -45,7 +45,7 @@
         android:paddingTop="@dimen/padding_item"
         android:paddingBottom="@dimen/padding_item">
 
-        <com.byagowi.persiancalendar.ui.shared.CalendarsFlow
+        <com.byagowi.persiancalendar.ui.common.CalendarsFlow
             android:id="@+id/calendars_flow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <com.byagowi.persiancalendar.ui.shared.ExtendedCircularProgressIndicator
+                <com.byagowi.persiancalendar.ui.common.ExtendedCircularProgressIndicator
                     android:id="@+id/month_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -125,7 +125,7 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp">
 
-                <com.byagowi.persiancalendar.ui.shared.ExtendedCircularProgressIndicator
+                <com.byagowi.persiancalendar.ui.common.ExtendedCircularProgressIndicator
                     android:id="@+id/season_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -143,7 +143,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <com.byagowi.persiancalendar.ui.shared.ExtendedCircularProgressIndicator
+                <com.byagowi.persiancalendar.ui.common.ExtendedCircularProgressIndicator
                     android:id="@+id/year_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -170,7 +170,7 @@
 
     </LinearLayout>
 
-    <com.byagowi.persiancalendar.ui.shared.ArrowView
+    <com.byagowi.persiancalendar.ui.common.ArrowView
         android:id="@+id/expansion_arrow"
         android:layout_width="@dimen/arrow_size"
         android:layout_height="@dimen/arrow_size"

@@ -11,7 +11,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
-import com.byagowi.persiancalendar.ui.shared.SolarDraw
+import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS

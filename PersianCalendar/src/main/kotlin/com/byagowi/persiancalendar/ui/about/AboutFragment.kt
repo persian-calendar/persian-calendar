@@ -22,7 +22,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.byagowi.persiancalendar.*
+import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
@@ -32,7 +33,10 @@ import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.utils.*
+import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.isRtl
+import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 

@@ -16,7 +16,7 @@
         android:paddingTop="@dimen/padding_item"
         android:paddingBottom="@dimen/padding_item">
 
-        <com.byagowi.persiancalendar.ui.shared.DayPickerCalendarsFlow
+        <com.byagowi.persiancalendar.ui.common.DayPickerCalendarsFlow
             android:id="@+id/calendars_flow"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

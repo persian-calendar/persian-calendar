@@ -28,10 +28,10 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.common.ArrowView
+import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
-import com.byagowi.persiancalendar.ui.shared.ArrowView
-import com.byagowi.persiancalendar.ui.shared.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe

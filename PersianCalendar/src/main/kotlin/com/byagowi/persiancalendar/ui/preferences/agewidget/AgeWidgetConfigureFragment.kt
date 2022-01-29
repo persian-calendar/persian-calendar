@@ -13,8 +13,8 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
+import com.byagowi.persiancalendar.ui.preferences.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.section
-import com.byagowi.persiancalendar.ui.preferences.shared.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.summary
 import com.byagowi.persiancalendar.ui.preferences.title
 import com.byagowi.persiancalendar.utils.appPrefs

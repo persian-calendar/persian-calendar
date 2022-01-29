@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <com.byagowi.persiancalendar.ui.shared.ArrowView
+    <com.byagowi.persiancalendar.ui.common.ArrowView
         android:id="@+id/previous"
         android:layout_width="@dimen/arrow_size"
         android:layout_height="@dimen/arrow_size"
@@ -25,7 +25,7 @@
         android:scrollbarSize="0dp"
         android:scrollbars="vertical" />
 
-    <com.byagowi.persiancalendar.ui.shared.ArrowView
+    <com.byagowi.persiancalendar.ui.common.ArrowView
         android:id="@+id/next"
         android:layout_width="@dimen/arrow_size"
         android:layout_height="@dimen/arrow_size"

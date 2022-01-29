@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.shared
+package com.byagowi.persiancalendar.ui.common
 
 import android.content.Context
 import android.graphics.Canvas

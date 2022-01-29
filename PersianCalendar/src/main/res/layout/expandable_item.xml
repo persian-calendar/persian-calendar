@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.byagowi.persiancalendar.ui.shared.ArrowView
+        <com.byagowi.persiancalendar.ui.common.ArrowView
             android:id="@+id/expansion_arrow"
             android:layout_width="@dimen/arrow_size"
             android:layout_height="@dimen/arrow_size"

@@ -1,3 +1,4 @@
+package com.byagowi.persiancalendar.ui.preferences.common
 /*
  * Single class, no dependency, ColorPickerView.
  * Unlike the rest of the project is released under MIT license.
@@ -21,7 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.byagowi.persiancalendar.ui.preferences.shared
 
 import android.content.Context
 import android.content.res.Resources

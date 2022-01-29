@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.shared
+package com.byagowi.persiancalendar.ui.preferences.common
 
 import android.app.Activity
 import android.graphics.Color
