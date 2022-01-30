@@ -25,7 +25,7 @@ import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
+import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -133,7 +133,7 @@ class AthanNotification : Service() {
         Handler(Looper.getMainLooper()).postDelayed({
             notificationManager?.cancel(notificationId)
             stopSelf()
-        }, ONE_MINUTE_IN_MILLIS)
+        }, SIX_MINUTES_IN_MILLIS)
 
         return super.onStartCommand(intent, flags, startId)
     }
