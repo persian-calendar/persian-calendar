@@ -249,7 +249,7 @@ class CompassFragment : Fragment() {
             .getString(if (stop) R.string.resume else R.string.stop)
     }
 
-    var stopAnimator: Boolean = false
+    private var stopAnimator: Boolean = false
 
     private fun animateMoonAndSun() {
         stopAnimator = false
