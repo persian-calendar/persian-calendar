@@ -25,6 +25,8 @@ Assets
   https://github.com/googlefonts/noto-emoji/blob/main/svg/emoji_u1f315.svg
 * ic_sun is derived from Mozilla's Emoji but highly tweaked
   https://github.com/mozilla/fxemoji/blob/gh-pages/svgs/nature/u2600-sunrays.svg
+* ic_earth is derived from Epiphany's logo
+  https://github.com/GNOME/epiphany/blob/a308ad5/data/icons/hicolor/scalable/apps/org.gnome.Epiphany.svg
 * worldmap.gz is derived from https://github.com/nvkelso/natural-earth-vector/blob/master/50m_physical/ne_50m_land.shp
   which is released under public domain.
 * نوای اعلان و انیمیشن: برنا تصویر رسانه
