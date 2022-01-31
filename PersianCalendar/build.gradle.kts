@@ -214,7 +214,7 @@ dependencies {
     }
     minApi21Implementation("androidx.compose.ui:ui-tooling:$composeSecondaryVersion")
 
-    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.0-alpha-2")
+    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
 
     testImplementation("junit:junit:4.13.2")
     testImplementation("com.google.truth:truth:1.1.3")
