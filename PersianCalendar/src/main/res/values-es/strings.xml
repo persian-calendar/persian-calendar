@@ -170,7 +170,7 @@
     <string name="notification_athan">Notificación de azan</string>
     <string name="enable_notification_athan">Mostrar azán como notificación y vibración del dispositivo</string>
     <string name="ascending_athan_volume">Volumen de Azán ascendente</string>
-    <string name="enable_ascending_athan_volume">Athan volume reaches to maximum value in one minute</string>
+    <string name="enable_ascending_athan_volume">El volumen de azán alcanza al máximo en un minuto</string>
     <string name="custom_athan">Elegir azan</string>
     <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
     <string name="custom_notification_is_set">Custom notification is just set</string>
@@ -333,4 +333,21 @@
     <string name="nepal">Nepal</string>
     <string name="view_source">Ver fuente</string>
     <string name="shift_work_night">Noche</string>
+    <string name="are_you_sure">¿Está usted seguro\?</string>
+    <string name="nepali_calendar_short">Nepalí</string>
+    <string name="shift_work_morning">La mañana</string>
+    <string name="summer">Verano</string>
+    <string name="fall">Otoño</string>
+    <string name="winter">Invierno</string>
+    <string name="spring">Primavera</string>
+    <string name="sun">Sol</string>
+    <string name="moon">Luna</string>
+    <string name="tropical">Tropical</string>
+    <string name="solar_eclipse">Eclipse solar</string>
+    <string name="lunar_eclipse">Eclipse lunar</string>
+    <string name="other_holidays">Otros</string>
+    <string name="nepali_calendar">Calendario nepalí</string>
+    <string name="shift_work_evening">La tarde</string>
+    <string name="enable_new_interface">Habilitar la nueva interfaz</string>
+    <string name="high_latitudes_night_middle">Medianoche</string>
 </resources>
