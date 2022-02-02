@@ -47,6 +47,12 @@ enum class Language(val code: String, val nativeName: String) {
     // en-IR and fa-AF aren't recognized by system, that's handled by #language
     fun asSystemLocale() = Locale(language)
 
+    val inParentheses: String
+        get() = when (this) {
+            JA, ZH_CN -> "%s（%s）"
+            else -> "%s (%s)"
+        }
+
     // Formatting "Day Month Year" considerations
     val dmy: String
         get() = when (this) {

@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
@@ -68,7 +69,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         val isToday = Jdn.today() == jdn
         if (isToday) {
-            if (isForcedIranTimeEnabled) binding.weekDayName.text = "%s (%s)".format(
+            if (isForcedIranTimeEnabled) binding.weekDayName.text = language.inParentheses.format(
                 jdn.dayOfWeekName, context.getString(R.string.iran_time)
             )
             binding.diffDate.isVisible = false
