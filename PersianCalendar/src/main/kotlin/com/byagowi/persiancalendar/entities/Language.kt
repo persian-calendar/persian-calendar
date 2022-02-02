@@ -47,9 +47,24 @@ enum class Language(val code: String, val nativeName: String) {
     fun asSystemLocale() = Locale(language)
 
     // Formatting "Day Month Year" considerations
-    val dmy: String get() = if (this == CKB) "%sی %sی %s" else "%s %s %s"
-    val dm: String get() = if (this == CKB) "%sی %s" else "%s %s"
-    val my: String get() = if (this == CKB) "%sی %s" else "%s %s"
+    val dmy: String
+        get() = when (this) {
+            CKB -> "%1\$sی %2\$sی %3\$s"
+            JA, ZH_CN -> "%3\$s %2\$s %1\$s"
+            else -> "%1\$s %2\$s %3\$s"
+        }
+    val dm: String
+        get() = when (this) {
+            CKB -> "%1\$sی %2\$s"
+            JA, ZH_CN -> "%2\$s %1\$s"
+            else -> "%1\$s %2\$s"
+        }
+    val my: String
+        get() = when (this) {
+            CKB -> "%1\$sی %2\$s"
+            JA, ZH_CN -> "%1\$s %2\$s"
+            else -> "%1\$s %2\$s"
+        }
 
     val isLessKnownRtl: Boolean
         get() = when (this) {
