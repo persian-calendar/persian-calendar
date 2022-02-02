@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.entities
 import android.annotation.SuppressLint
 import android.content.Context
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
@@ -64,6 +65,11 @@ enum class Language(val code: String, val nativeName: String) {
             CKB -> "%1\$sی %2\$s"
             JA, ZH_CN -> "%1\$s %2\$s"
             else -> "%1\$s %2\$s"
+        }
+    val timeAndDateFormat: String
+        get() = when (this) {
+            JA, ZH_CN -> "%2\$s%1\$s"
+            else -> "%1\$s$spacedComma%2\$s"
         }
 
     val isLessKnownRtl: Boolean
