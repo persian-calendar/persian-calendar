@@ -6,7 +6,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.amString
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.pmString
-import com.byagowi.persiancalendar.global.spacedAnd
+import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.*
 
@@ -30,7 +30,7 @@ data class Clock(val hours: Int, val minutes: Int) {
         // if both present special casing the short form makes sense
         return if (pairs.size == 2 && short) resources.getString(
             R.string.n_hours_minutes, formatNumber(hours), formatNumber(minutes)
-        ) else pairs.joinToString(spacedAnd) { (@PluralsRes pluralId: Int, n: Int) ->
+        ) else pairs.joinToString(spacedAndInDates) { (@PluralsRes pluralId: Int, n: Int) ->
             resources.getQuantityString(pluralId, n, formatNumber(n))
         }
     }

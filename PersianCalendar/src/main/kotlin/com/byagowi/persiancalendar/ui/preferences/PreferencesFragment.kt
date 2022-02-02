@@ -27,7 +27,6 @@ import com.byagowi.persiancalendar.Variants.debugLog
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.global.enableNewInterface
-import com.byagowi.persiancalendar.global.spacedAnd
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
@@ -72,7 +71,7 @@ class PreferencesFragment : Fragment() {
             }
         }
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, i ->
-            tab.text = tabs[i].second.joinToString(spacedAnd) { getString(it) }
+            tab.text = tabs[i].second.joinToString(getString(R.string.spaced_and)) { getString(it) }
         }.attach()
         binding.viewPager.currentItem = args.tab
         return binding.root

@@ -160,7 +160,7 @@ var amString = DEFAULT_AM
     private set
 var pmString = DEFAULT_PM
     private set
-var spacedAnd = " و "
+var spacedAndInDates = " و "
     private set
 var spacedColon = ": "
     private set
@@ -322,7 +322,8 @@ fun updateStoredPreference(context: Context) {
         }
     }
     holidayString = if (language.isDari) "رخصتی" else context.getString(R.string.holiday)
-    spacedAnd = context.getString(R.string.spaced_and)
+    spacedAndInDates =
+        if (language.languagePrefersEmptyAndInDates) "" else context.getString(R.string.spaced_and)
     spacedColon = context.getString(R.string.spaced_colon)
     spacedComma = context.getString(R.string.spaced_comma)
 

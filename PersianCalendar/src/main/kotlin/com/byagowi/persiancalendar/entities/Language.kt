@@ -108,6 +108,13 @@ enum class Language(val code: String, val nativeName: String) {
             else -> true
         }
 
+    // Whether the language doesn't need " and " between date parts or not
+    val languagePrefersEmptyAndInDates: Boolean
+        get() = when (this) {
+            JA, ZH_CN -> true
+            else -> false
+        }
+
     // Local digits (۱۲۳) make sense for the locale
     val canHaveLocalDigits get() = isArabicScript || isIranianEnglish || isNepali
 

@@ -27,7 +27,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numericalDatePreferred
 import com.byagowi.persiancalendar.global.preferredDigits
-import com.byagowi.persiancalendar.global.spacedAnd
+import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
@@ -241,7 +241,7 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
         R.plurals.n_years to yearsDifference,
         R.plurals.n_months to monthsDifference,
         R.plurals.n_days to daysOfMonthDifference
-    ).filter { (_, n) -> n != 0 }.joinToString(spacedAnd) { (@PluralsRes pluralId: Int, n: Int) ->
+    ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
         resources.getQuantityString(pluralId, n, formatNumber(n))
     } + ")")
 }
