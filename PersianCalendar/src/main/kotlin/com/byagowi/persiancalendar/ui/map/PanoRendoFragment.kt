@@ -18,7 +18,7 @@ import java.util.*
 class PanoRendoFragment : Fragment(R.layout.fragment_pano_rendo) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentPanoRendoBinding.inflate(layoutInflater)
+        val binding = FragmentPanoRendoBinding.bind(view)
         binding.appBar.toolbar.let {
             it.title = "PanoRendo"
             it.setupUpNavigation()
