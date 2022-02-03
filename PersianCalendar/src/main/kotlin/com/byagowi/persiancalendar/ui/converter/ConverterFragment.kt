@@ -20,11 +20,10 @@ import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 
-class ConverterFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentConverterBinding.inflate(inflater, container, false)
+class ConverterFragment : Fragment(R.layout.fragment_converter) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentConverterBinding.bind(view)
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setupMenuNavigation()
             toolbar.setTitle(R.string.date_converter)
@@ -68,6 +67,5 @@ class ConverterFragment : Fragment() {
             }
             it.jdn = Jdn.today()
         }
-        return binding.root
     }
 }

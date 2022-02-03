@@ -8,11 +8,9 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.Surface
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
@@ -47,7 +45,7 @@ import kotlin.math.roundToInt
 /**
  * Compass/Qibla activity
  */
-class CompassFragment : Fragment() {
+class CompassFragment : Fragment(R.layout.fragment_compass) {
 
     private var stopped = false
     private var binding: FragmentCompassBinding? = null
@@ -144,15 +142,14 @@ class CompassFragment : Fragment() {
         binding = null
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentCompassBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentCompassBinding.bind(view)
         this.binding = binding
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.compass)
-            toolbar.subtitle = inflater.context.appPrefs.cityName ?: coordinates?.run {
+            toolbar.subtitle = layoutInflater.context.appPrefs.cityName ?: coordinates?.run {
                 formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
             }
             toolbar.setupMenuNavigation()
@@ -237,8 +234,6 @@ class CompassFragment : Fragment() {
                 stopAnimator = true
             }
         })
-
-        return binding.root
     }
 
     private fun stopCompass(stop: Boolean) {

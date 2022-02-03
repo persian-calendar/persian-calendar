@@ -7,10 +7,8 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.util.Linkify
 import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.browser.customtabs.CustomTabsIntent
@@ -40,13 +38,11 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.android.material.chip.Chip
 import com.google.android.material.snackbar.Snackbar
 
-class AboutFragment : Fragment() {
+class AboutFragment : Fragment(R.layout.fragment_about) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentAboutBinding.inflate(inflater, container, false)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentAboutBinding.bind(view)
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.about)
             toolbar.setupMenuNavigation()
@@ -138,8 +134,6 @@ class AboutFragment : Fragment() {
         binding.emailTitle.putLineStartIcon(R.drawable.ic_email)
 
         setupContributorsList(binding)
-
-        return binding.root
     }
 
     private fun setupContributorsList(binding: FragmentAboutBinding) {

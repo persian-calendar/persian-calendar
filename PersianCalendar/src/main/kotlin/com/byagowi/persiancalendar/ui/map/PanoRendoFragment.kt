@@ -1,39 +1,38 @@
 package com.byagowi.persiancalendar.ui.map
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentPanoRendoBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import java.util.*
 
-class PanoRendoFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentPanoRendoBinding.inflate(inflater)
+class PanoRendoFragment : Fragment(R.layout.fragment_pano_rendo) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentPanoRendoBinding.inflate(layoutInflater)
         binding.appBar.toolbar.let {
             it.title = "PanoRendo"
             it.setupUpNavigation()
         }
 
         binding.toneMap.adapter = ArrayAdapter(
-            inflater.context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+            layoutInflater.context,
+            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
             ToneMap.values().map { it.toString() }
         )
 
         val coordinates = coordinates
         if (coordinates == null) {
-            Toast.makeText(inflater.context, "Location is not set", Toast.LENGTH_SHORT).show()
+            Toast.makeText(layoutInflater.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }
         val args by navArgs<PanoRendoFragmentArgs>()
         val sunPosition = GregorianCalendar().also {
@@ -57,7 +56,5 @@ class PanoRendoFragment : Fragment() {
             ) = update()
         }
         binding.zoom.addTextChangedListener { update() }
-
-        return binding.root
     }
 }

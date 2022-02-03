@@ -32,11 +32,12 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 
-class AstronomyFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentAstronomyBinding.inflate(layoutInflater)
+class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentAstronomyBinding.bind(view)
+
         binding.appBar.toolbar.let {
             it.setTitle(R.string.astronomical_info)
             it.setupMenuNavigation()
@@ -169,7 +170,5 @@ class AstronomyFragment : Fragment() {
         }
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
-
-        return binding.root
     }
 }

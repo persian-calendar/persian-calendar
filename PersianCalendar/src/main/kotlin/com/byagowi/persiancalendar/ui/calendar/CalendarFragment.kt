@@ -121,7 +121,7 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-class CalendarFragment : Fragment() {
+class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private var mainBinding: FragmentCalendarBinding? = null
     private var calendarsView: CalendarsView? = null
@@ -162,80 +162,6 @@ class CalendarFragment : Fragment() {
                         !appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) &&
                         // Try to not show the placeholder to established users
                         PREF_APP_LANGUAGE !in appPrefs)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentCalendarBinding.inflate(inflater, container, false)
-        mainBinding = binding
-
-        val tabs = listOf(
-            R.string.calendar to CalendarsView(inflater.context).also { calendarsView = it },
-            R.string.events to createEventsTab(inflater, container)
-        ) + if (enableOwghatTab(inflater.context)) listOf(
-            // The optional third tab
-            R.string.owghat to createOwghatTab(inflater, container)
-        ) else emptyList()
-
-        // tabs should fill their parent otherwise view pager can't handle it
-        tabs.forEach { (_: Int, tabView: View) ->
-            tabView.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
-            )
-        }
-
-        binding.calendarPager.also {
-            it.onDayClicked = { jdn -> bringDate(jdn, monthChange = false) }
-            it.onDayLongClicked = ::addEventOnCalendar
-            it.onMonthSelected = {
-                val date = it.selectedMonth
-                updateToolbar(date)
-                todayButton?.isVisible =
-                    date.year != initialDate.year || date.month != initialDate.month
-            }
-        }
-
-        val tabsViewPager = binding.viewPager
-        tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-            override fun getItemCount(): Int = tabs.size
-            override fun getItemViewType(position: Int) = position // set viewtype equal to position
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                object : RecyclerView.ViewHolder(tabs[viewType].second) {}
-        }
-        TabLayoutMediator(binding.tabLayout, tabsViewPager) { tab, i ->
-            tab.setText(tabs[i].first)
-        }.attach()
-        tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
-                else owghatBinding?.sunView?.clear()
-                context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
-
-                // Make sure view pager's height at least matches with the shown tab
-                binding.viewPager.width.takeIf { it != 0 }?.let { width ->
-                    tabs[position].second.measure(
-                        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-                    )
-                    binding.viewPager.minimumHeight = tabs[position].second.measuredHeight
-                }
-            }
-        })
-
-        var lastTab = inflater.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
-        if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-        tabsViewPager.setCurrentItem(lastTab, false)
-        setupMenu(binding.appBar.toolbar, binding.calendarPager)
-
-        binding.root.post {
-            binding.root.context.appPrefs.edit {
-                putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
-            }
-        }
-
-        return binding.root
     }
 
     private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): View {
@@ -300,6 +226,74 @@ class CalendarFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val binding = FragmentCalendarBinding.bind(view)
+        mainBinding = binding
+
+        val tabs = listOf(
+            R.string.calendar to CalendarsView(layoutInflater.context).also { calendarsView = it },
+            R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup)
+        ) + if (enableOwghatTab(layoutInflater.context)) listOf(
+            // The optional third tab
+            R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
+        ) else emptyList()
+
+        // tabs should fill their parent otherwise view pager can't handle it
+        tabs.forEach { (_: Int, tabView: View) ->
+            tabView.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+
+        binding.calendarPager.also {
+            it.onDayClicked = { jdn -> bringDate(jdn, monthChange = false) }
+            it.onDayLongClicked = ::addEventOnCalendar
+            it.onMonthSelected = {
+                val date = it.selectedMonth
+                updateToolbar(date)
+                todayButton?.isVisible =
+                    date.year != initialDate.year || date.month != initialDate.month
+            }
+        }
+
+        val tabsViewPager = binding.viewPager
+        tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            override fun getItemCount(): Int = tabs.size
+            override fun getItemViewType(position: Int) = position // set viewtype equal to position
+            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
+            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+                object : RecyclerView.ViewHolder(tabs[viewType].second) {}
+        }
+        TabLayoutMediator(binding.tabLayout, tabsViewPager) { tab, i ->
+            tab.setText(tabs[i].first)
+        }.attach()
+        tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
+                else owghatBinding?.sunView?.clear()
+                context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
+
+                // Make sure view pager's height at least matches with the shown tab
+                binding.viewPager.width.takeIf { it != 0 }?.let { width ->
+                    tabs[position].second.measure(
+                        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+                    )
+                    binding.viewPager.minimumHeight = tabs[position].second.measuredHeight
+                }
+            }
+        })
+
+        var lastTab = layoutInflater.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
+        if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
+        tabsViewPager.setCurrentItem(lastTab, false)
+        setupMenu(binding.appBar.toolbar, binding.calendarPager)
+
+        binding.root.post {
+            binding.root.context.appPrefs.edit {
+                putInt(PREF_LAST_APP_VISIT_VERSION, BuildConfig.VERSION_CODE)
+            }
+        }
 
         val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
         if (savedJdn != null && savedJdn != initialJdn) {

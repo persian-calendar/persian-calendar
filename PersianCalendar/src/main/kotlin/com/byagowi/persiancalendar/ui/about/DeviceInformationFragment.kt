@@ -26,7 +26,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -90,12 +89,11 @@ import kotlin.math.hypot
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class DeviceInformationFragment : Fragment() {
+class DeviceInformationFragment : Fragment(R.layout.fragment_device_information) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentDeviceInformationBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentDeviceInformationBinding.bind(view)
         binding.toolbar.let {
             it.setTitle(R.string.device_info)
             it.setupUpNavigation()
@@ -105,9 +103,9 @@ class DeviceInformationFragment : Fragment() {
 
         binding.recyclerView.let {
             it.setHasFixedSize(true)
-            it.layoutManager = LinearLayoutManager(inflater.context)
+            it.layoutManager = LinearLayoutManager(layoutInflater.context)
             it.addItemDecoration(
-                DividerItemDecoration(inflater.context, LinearLayoutManager.VERTICAL)
+                DividerItemDecoration(layoutInflater.context, LinearLayoutManager.VERTICAL)
             )
             val adapter = DeviceInformationAdapter(activity ?: return@let)
             it.adapter = adapter
@@ -154,7 +152,6 @@ class DeviceInformationFragment : Fragment() {
                 R.drawable.ic_device_information_white to Build.MODEL
             ).forEach { (icon, title) -> it.add(title).setIcon(icon).onClick(click) }
         }
-        return binding.root
     }
 
     private fun openTestingHiddenDialog() {

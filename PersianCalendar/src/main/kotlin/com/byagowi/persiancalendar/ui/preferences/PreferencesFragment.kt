@@ -48,17 +48,16 @@ import java.util.concurrent.TimeUnit
  * MEHDIMYADI
  */
 
-class PreferencesFragment : Fragment() {
+class PreferencesFragment : Fragment(R.layout.fragment_settings) {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentSettingsBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentSettingsBinding.bind(view)
         binding.appBar.root.hideToolbarBottomShadow()
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation()
-            setupDevelopmentMenu(toolbar, binding, inflater)
+            setupDevelopmentMenu(toolbar, binding, layoutInflater)
         }
 
         val args by navArgs<PreferencesFragmentArgs>()
@@ -74,11 +73,6 @@ class PreferencesFragment : Fragment() {
             tab.text = tabs[i].second.joinToString(getString(R.string.spaced_and)) { getString(it) }
         }.attach()
         binding.viewPager.currentItem = args.tab
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         view.post { view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
     }
 
