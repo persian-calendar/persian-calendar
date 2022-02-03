@@ -19,19 +19,18 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import net.androgames.level.OrientationProvider
 
-class LevelFragment : Fragment() {
+class LevelFragment : Fragment(R.layout.fragment_level) {
 
     private var provider: OrientationProvider? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val activity = activity ?: return View(inflater.context)
-        val binding = FragmentLevelBinding.inflate(inflater, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentLevelBinding.bind(view)
         binding.appBar.toolbar.also { toolbar ->
             toolbar.setTitle(R.string.level)
             toolbar.setupUpNavigation()
         }
+        val activity = activity ?: return
         provider = OrientationProvider(activity, binding.levelView)
         val announcer = SensorEventAnnouncer(R.string.level)
         binding.levelView.onIsLevel = { isLevel -> announcer.check(activity, isLevel) }
@@ -51,7 +50,6 @@ class LevelFragment : Fragment() {
             binding.fab.contentDescription = getString(if (stop) R.string.stop else R.string.resume)
             if (stop) provider.startListening() else provider.stopListening()
         }
-        return binding.root
     }
 
     @SuppressLint("SourceLockedOrientationActivity")

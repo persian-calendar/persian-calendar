@@ -31,11 +31,10 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
 import kotlin.math.roundToInt
 
-class LicensesFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentLicensesBinding.inflate(inflater, container, false)
+class LicensesFragment : Fragment(R.layout.fragment_licenses) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentLicensesBinding.bind(view)
         binding.appBar.toolbar.let {
             it.setTitle(R.string.about_license_title)
             it.setupUpNavigation()
@@ -56,10 +55,10 @@ class LicensesFragment : Fragment() {
                 return BitmapDrawable(layoutInflater.context.resources, bitmap)
             }
             listOf(
-                "GPLv3" to inflater.context.getCompatDrawable(R.drawable.ic_info),
+                "GPLv3" to view.context.getCompatDrawable(R.drawable.ic_info),
                 KotlinVersion.CURRENT.toString() to createTextIcon("Kotlin"),
                 "API " + Build.VERSION.SDK_INT to
-                        inflater.context.getCompatDrawable(R.drawable.ic_motorcycle)
+                        view.context.getCompatDrawable(R.drawable.ic_motorcycle)
             ).map { (title, icon) -> it.add(title).setIcon(icon) }
         }
 
@@ -80,9 +79,9 @@ class LicensesFragment : Fragment() {
                     x, top + verticalReduce,
                     x + getSize(paint, text, start, end, null), bottom.toFloat()
                 )
-                paint.color = inflater.context.resolveColor(R.attr.colorDivider)
+                paint.color = view.context.resolveColor(R.attr.colorDivider)
                 canvas.drawRoundRect(rect, 25.dp, 25.dp, paint)
-                paint.color = inflater.context.resolveColor(R.attr.colorTextDrawer)
+                paint.color = view.context.resolveColor(R.attr.colorTextDrawer)
                 canvas.drawText(text ?: "", start, end, x + sidePadding, y.toFloat(), paint)
             }
         }
@@ -104,6 +103,5 @@ class LicensesFragment : Fragment() {
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.addItemDecoration(itemDecoration)
-        return binding.root
     }
 }

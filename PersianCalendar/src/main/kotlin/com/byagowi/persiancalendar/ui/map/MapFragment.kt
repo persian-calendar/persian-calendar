@@ -54,7 +54,7 @@ import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 
-class MapFragment : Fragment() {
+class MapFragment : Fragment(R.layout.fragment_map) {
 
     private val date = GregorianCalendar()
     private val dateMinutesOffset
@@ -66,17 +66,16 @@ class MapFragment : Fragment() {
         outState.putInt(MINUTES_OFFSET_KEY, dateMinutesOffset)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        val binding = FragmentMapBinding.inflate(inflater)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentMapBinding.bind(view)
         binding.appBar.toolbar.let {
             it.setTitle(R.string.map)
             it.setupUpNavigation()
         }
 
         solarDraw = SolarDraw(layoutInflater.context)
-        pinBitmap = inflater.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
+        pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
         val args by navArgs<MapFragmentArgs>()
         val minutesOffset = savedInstanceState?.getInt(MINUTES_OFFSET_KEY) ?: args.minutesOffset
@@ -154,7 +153,7 @@ class MapFragment : Fragment() {
             it.enableTransitionType(LayoutTransition.APPEARING)
             it.setAnimateParentHierarchy(false)
         }
-        inflater.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
+        view.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
             if (key == PREF_LATITUDE) {
                 displayLocation = true
                 binding.root.postDelayed({ update(binding, date) }, HALF_SECOND_IN_MILLIS)
@@ -182,8 +181,6 @@ class MapFragment : Fragment() {
                 }
             }
         }
-
-        return binding.root
     }
 
     private var displayNightMask = true
