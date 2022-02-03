@@ -74,7 +74,7 @@ enum class Language(val code: String, val nativeName: String) {
         }
     val timeAndDateFormat: String
         get() = when (this) {
-            JA, ZH_CN -> "%2\$s%1\$s"
+            JA, ZH_CN -> "%2\$s %1\$s"
             else -> "%1\$s$spacedComma%2\$s"
         }
 
