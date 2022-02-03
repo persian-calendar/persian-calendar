@@ -19,7 +19,7 @@ import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
 import com.byagowi.persiancalendar.utils.update
 
-class WidgetConfigurationActivity : AppCompatActivity(R.layout.widget_preference_layout) {
+class WidgetConfigurationActivity : AppCompatActivity() {
 
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
@@ -41,7 +41,9 @@ class WidgetConfigurationActivity : AppCompatActivity(R.layout.widget_preference
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
 
-        val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater)
+        val binding = WidgetPreferenceLayoutBinding.inflate(layoutInflater).also {
+            setContentView(it.root)
+        }
 
         val width = 200.dp.toInt()
         val height = 60.dp.toInt()

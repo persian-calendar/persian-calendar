@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.utils.getWidgetSize
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.update
 
-class AgeWidgetConfigureActivity : AppCompatActivity(R.layout.activity_age_widget_configure) {
+class AgeWidgetConfigureActivity : AppCompatActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     private fun confirm() {
@@ -44,7 +44,9 @@ class AgeWidgetConfigureActivity : AppCompatActivity(R.layout.activity_age_widge
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
-        val binding = ActivityAgeWidgetConfigureBinding.inflate(layoutInflater)
+        val binding = ActivityAgeWidgetConfigureBinding.inflate(layoutInflater).also {
+            setContentView(it.root)
+        }
 
         appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID

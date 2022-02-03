@@ -90,7 +90,7 @@ import kotlin.math.roundToInt
 /**
  * Program activity for android
  */
-class MainActivity : AppCompatActivity(R.layout.activity_main), SharedPreferences.OnSharedPreferenceChangeListener,
+class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener,
     NavigationView.OnNavigationItemSelectedListener, NavController.OnDestinationChangedListener,
     DrawerHost {
 
@@ -117,7 +117,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main), SharedPreference
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater).also {
+            setContentView(it.root)
+        }
         ensureDirectionality()
 
         if (enableNewInterface &&
