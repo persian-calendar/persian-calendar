@@ -240,14 +240,16 @@ fun calculateDatePartsDifference(
     return Triple(y, m, d)
 }
 
-fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
-    val today = Jdn.today()
-    val todayDate = today.toCalendar(mainCalendar)
-    val date = jdn.toCalendar(mainCalendar)
+fun calculateDaysDifference(
+    resources: Resources, jdn: Jdn,
+    baseJdn: Jdn = Jdn.today(), calendarType: CalendarType = mainCalendar
+): String {
+    val baseDate = baseJdn.toCalendar(calendarType)
+    val date = jdn.toCalendar(calendarType)
     val (years, months, daysOfMonth) = calculateDatePartsDifference(
-        if (today > jdn) todayDate else date, if (today > jdn) date else todayDate, mainCalendar
+        if (baseJdn > jdn) baseDate else date, if (baseJdn > jdn) date else baseDate, calendarType
     )
-    val days = abs(today - jdn)
+    val days = abs(baseJdn - jdn)
         .let { resources.getQuantityString(R.plurals.n_days, it, formatNumber(it)) }
     return if (months == 0 && years == 0) days else language.inParentheses.format(days, listOf(
         R.plurals.n_years to years,

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minWidth="400dp"
-    android:orientation="vertical"
-    android:padding="@dimen/view_padding">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/calendars"
@@ -46,6 +45,7 @@
             android:padding="4dp">
 
             <TextView
+                android:id="@+id/dayTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -71,6 +71,7 @@
             android:padding="4dp">
 
             <TextView
+                android:id="@+id/monthTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -96,6 +97,7 @@
             android:padding="4dp">
 
             <TextView
+                android:id="@+id/yearTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

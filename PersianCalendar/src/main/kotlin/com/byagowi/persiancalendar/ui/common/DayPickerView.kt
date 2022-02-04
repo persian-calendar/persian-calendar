@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.NumberPicker
+import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
@@ -17,7 +18,6 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     var selectedDayListener = fun(_: Jdn) {}
     var selectedCalendarType = CalendarType.SHAMSI
-        private set
     var jdn: Jdn
         get() {
             val year = binding.yearPicker.value
@@ -83,5 +83,12 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.yearPicker.setOnValueChangedListener(onDaySelected)
         binding.monthPicker.setOnValueChangedListener(onDaySelected)
         binding.dayPicker.setOnValueChangedListener(onDaySelected)
+    }
+
+    fun turnToSecondaryDatePicker() {
+        binding.calendars.isVisible = false
+        binding.dayTitle.isVisible = false
+        binding.monthTitle.isVisible = false
+        binding.yearTitle.isVisible = false
     }
 }

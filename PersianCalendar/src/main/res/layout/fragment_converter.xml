@@ -20,10 +20,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.byagowi.persiancalendar.ui.common.DayPickerView
-                android:id="@+id/day_picker_view"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/view_padding">
+
+                <com.byagowi.persiancalendar.ui.common.DayPickerView
+                    android:id="@+id/day_picker_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <TextView
+                    android:id="@+id/day_distance"
+                    android:textIsSelectable="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/view_padding"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <com.byagowi.persiancalendar.ui.common.DayPickerView
+                    android:id="@+id/second_day_picker_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone" />
+
+            </LinearLayout>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/result_card"
