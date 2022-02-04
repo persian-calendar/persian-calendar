@@ -223,28 +223,38 @@ val AbstractDate.calendarType: CalendarType
         else -> CalendarType.SHAMSI
     }
 
+fun calculateDatePartsDifference(
+    higher: AbstractDate, lower: AbstractDate, calendar: CalendarType
+): Triple<Int, Int, Int> {
+    var y = higher.year - lower.year
+    var m = higher.month - lower.month
+    var d = higher.dayOfMonth - lower.dayOfMonth
+    val previousMonth = calendar.getMonthStartFromMonthsDistance(Jdn(higher), -1)
+    if (d < 0) {
+        m--
+        d += calendar.getMonthLength(previousMonth.year, previousMonth.month)
+    }
+    if (m < 0) {
+        y--
+        m += calendar.getYearMonths(previousMonth.year)
+    }
+    return Triple(y, m, d)
+}
+
 fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
-    val daysAbsoluteDistance = abs(Jdn.today() - jdn)
-    val baseDate = mainCalendar.createDate(
-        when (mainCalendar) {
-            CalendarType.GREGORIAN, CalendarType.NEPALI -> 2000
-            CalendarType.ISLAMIC, CalendarType.SHAMSI -> 1400
-        }, 1, 1
+    val today = Jdn.today()
+    val todayDate = today.toCalendar(mainCalendar)
+    val date = jdn.toCalendar(mainCalendar)
+    val (years, months, daysOfMonth) = calculateDatePartsDifference(
+        if (today > jdn) todayDate else date, if (today > jdn) date else todayDate, mainCalendar
     )
-    val offsetDate = Jdn(baseDate.toJdn() + daysAbsoluteDistance).toCalendar(mainCalendar)
-    val yearsDifference = offsetDate.year - baseDate.year
-    val monthsDifference = offsetDate.month - baseDate.month
-    val daysOfMonthDifference = offsetDate.dayOfMonth - baseDate.dayOfMonth
-    val days = resources.getQuantityString(
-        R.plurals.n_days, daysAbsoluteDistance, formatNumber(daysAbsoluteDistance)
-    )
-    return if (monthsDifference == 0 && yearsDifference == 0) days else ("$days (~" + listOf(
-        R.plurals.n_years to yearsDifference,
-        R.plurals.n_months to monthsDifference,
-        R.plurals.n_days to daysOfMonthDifference
+    val days = abs(today - jdn)
+        .let { resources.getQuantityString(R.plurals.n_days, it, formatNumber(it)) }
+    return if (months != 0 || years != 0) language.inParentheses.format(days, "~" + listOf(
+        R.plurals.n_years to years, R.plurals.n_months to months, R.plurals.n_days to daysOfMonth
     ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
         resources.getQuantityString(pluralId, n, formatNumber(n))
-    } + ")")
+    }) else days
 }
 
 fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(

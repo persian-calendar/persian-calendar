@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -394,5 +395,67 @@ class CalendarTests {
         assertEquals(4, Jdn(PersianDate(1398, 9, 20)).dayOfWeek)
         assertEquals(5, Jdn(PersianDate(1398, 9, 21)).dayOfWeek)
         assertEquals(6, Jdn(PersianDate(1398, 9, 22)).dayOfWeek)
+    }
+
+
+    @Test
+    fun `test date parts difference`() {
+        val higher = PersianDate(1400, 11, 15)
+        run {
+            val lower = PersianDate(1363, 3, 19)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(37, y)
+            assertEquals(7, m)
+            assertEquals(26, d) // but it should be 26, should be investigated
+        }
+        run {
+            val lower = PersianDate(1363, 11, 15)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(37, y)
+            assertEquals(0, m)
+            assertEquals(0, d)
+        }
+        run {
+            val lower = PersianDate(1363, 11, 14)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(37, y)
+            assertEquals(0, m)
+            assertEquals(1, d)
+        }
+        run {
+            val lower = PersianDate(1363, 11, 16)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(36, y)
+            assertEquals(11, m)
+            assertEquals(29, d)
+        }
+        run {
+            val lower = PersianDate(1400, 7, 15)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(0, y)
+            assertEquals(4, m)
+            assertEquals(0, d)
+        }
+        run {
+            val lower = PersianDate(1400, 8, 15)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(0, y)
+            assertEquals(3, m)
+            assertEquals(0, d)
+        }
+        run {
+            val lower = PersianDate(1400, 9, 15)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(0, y)
+            assertEquals(2, m)
+            assertEquals(0, d)
+        }
+        run {
+            val lower = PersianDate(1400, 10, 15)
+            val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
+            assertEquals(0, y)
+            assertEquals(1, m)
+            assertEquals(0, d)
+        }
     }
 }
