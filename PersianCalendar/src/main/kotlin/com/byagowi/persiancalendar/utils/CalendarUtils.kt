@@ -229,14 +229,13 @@ fun calculateDatePartsDifference(
     var y = higher.year - lower.year
     var m = higher.month - lower.month
     var d = higher.dayOfMonth - lower.dayOfMonth
-    val previousMonth = calendar.getMonthStartFromMonthsDistance(Jdn(higher), -1)
     if (d < 0) {
         m--
-        d += calendar.getMonthLength(previousMonth.year, previousMonth.month)
+        d += calendar.getMonthLength(lower.year, lower.month)
     }
     if (m < 0) {
         y--
-        m += calendar.getYearMonths(previousMonth.year)
+        m += calendar.getYearMonths(lower.year)
     }
     return Triple(y, m, d)
 }
@@ -250,11 +249,13 @@ fun calculateDaysDifference(resources: Resources, jdn: Jdn): String {
     )
     val days = abs(today - jdn)
         .let { resources.getQuantityString(R.plurals.n_days, it, formatNumber(it)) }
-    return if (months != 0 || years != 0) language.inParentheses.format(days, "~" + listOf(
-        R.plurals.n_years to years, R.plurals.n_months to months, R.plurals.n_days to daysOfMonth
+    return if (months == 0 && years == 0) days else language.inParentheses.format(days, listOf(
+        R.plurals.n_years to years,
+        R.plurals.n_months to months,
+        R.plurals.n_days to daysOfMonth
     ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
         resources.getQuantityString(pluralId, n, formatNumber(n))
-    }) else days
+    })
 }
 
 fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(
