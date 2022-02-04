@@ -34,6 +34,13 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
 
         val todayJdn = Jdn.today()
 
+        val todayButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
+            it.icon =
+                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            it.isVisible = false
+            it.onClick { binding.dayPickerView.jdn = todayJdn }
+        }
         binding.appBar.toolbar.menu.add(R.string.share).also { menu ->
             menu.icon =
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
@@ -47,13 +54,6 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
                     dateStringOfOtherCalendars(jdn, spacedComma)
                 ).joinToString(" ")
             )
-        }
-        val todayButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
-            it.icon =
-                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.isVisible = false
-            it.onClick { binding.dayPickerView.jdn = todayJdn }
         }
 
         binding.dayPickerView.also {
