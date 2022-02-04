@@ -190,7 +190,7 @@
     <string name="version">Versión %1$s</string>
     <string name="about_license">Licencia</string>
     <string name="about_license_title">Licencia de aplicación</string>
-    <string name="about_license_sum">Check GPLv3 License and other license terms used on Persian Calendar.</string>
+    <string name="about_license_sum">Consulte la licencia de GPLv3 y otros términos de licencia utilizados en el calendario persa.</string>
     <string name="about_support_developers">Soporte para desarrolladores</string>
     <string name="about_report_bug">Informar error en Github</string>
     <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
@@ -350,4 +350,12 @@
     <string name="shift_work_evening">La tarde</string>
     <string name="enable_new_interface">Habilitar la nueva interfaz</string>
     <string name="high_latitudes_night_middle">Medianoche</string>
+    <string name="widget_customization_other_calendars">Otros clendarios en widget 1x4 y 2x2</string>
+    <string name="shift_work_off">Descanso</string>
+    <string name="widget_prefer_system_colors">Seguir el color del sistema en widgets</string>
+    <string name="month_pray_times">Tiempos de oración del mes</string>
+    <string name="high_latitudes_method">Método de latitudes altas</string>
+    <string name="high_latitudes_one_seventh">Un séptimo</string>
+    <string name="none">Ninguno</string>
+    <string name="show_sun_and_moon_path_in_24_hours">Mostrar la trayectoria del Sol y la Luna en 24 horas</string>
 </resources>
