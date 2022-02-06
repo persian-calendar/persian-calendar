@@ -45,7 +45,10 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activity = activity ?: return
         val destination = arguments?.getString(PreferencesFragment.PREF_DESTINATION)
-        if (destination == PREF_HOLIDAY_TYPES) showHolidaysTypesDialog(activity)
+        if (destination == PREF_HOLIDAY_TYPES) {
+            showHolidaysTypesDialog(activity)
+            arguments?.remove(PreferencesFragment.PREF_DESTINATION)
+        }
 
         preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
             section(R.string.pref_interface) {
