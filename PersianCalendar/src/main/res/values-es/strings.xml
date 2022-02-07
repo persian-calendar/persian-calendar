@@ -179,7 +179,7 @@
     <string name="returned_to_default">Vuelto a predeterminado</string>
     <string name="athan_volume">Volumen de azán</string>
     <string name="athan_volume_summary">Configurar el volumen para alarma</string>
-    <string name="athan_disabled_summary">To set the Athan alarm, choose a location or enter the coordinates above</string>
+    <string name="athan_disabled_summary">Para configurar la alarma azán, elija una ubicación o confígurela</string>
     <!--Permissions-->
     <string name="location_access">Acceso a ubicación</string>
     <string name="phone_location_required">Esta parte de la aplicación necesita permiso de ubicación, si pincha negar, debe ingresar su latitud y longitud manualmente.</string>
@@ -358,4 +358,5 @@
     <string name="high_latitudes_one_seventh">Un séptimo</string>
     <string name="none">Ninguno</string>
     <string name="show_sun_and_moon_path_in_24_hours">Mostrar la trayectoria del Sol y la Luna en 24 horas</string>
+    <string name="widget_customization_non_holiday_events">Widget y notificación de no festivos en 2x2</string>
 </resources>
