@@ -37,7 +37,7 @@ class SliderView(context: Context, attrs: AttributeSet? = null) : RecyclerView(c
                     }
                 }) {}
         }
-        scrollToPosition(itemsCount / 2)
+        post { scrollToPosition(itemsCount / 2) }
 
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
