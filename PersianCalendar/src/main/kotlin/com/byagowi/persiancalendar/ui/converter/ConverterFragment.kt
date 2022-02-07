@@ -3,6 +3,9 @@ package com.byagowi.persiancalendar.ui.converter
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
@@ -24,9 +27,29 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentConverterBinding.bind(view)
+
+        val spinner = Spinner(binding.appBar.toolbar.context)
+        spinner.adapter = ArrayAdapter(
+            spinner.context, R.layout.toolbar_dropdown_item,
+            listOf(R.string.date_converter, R.string.days_distance).map(spinner.context::getString)
+        )
+        var isDayDistance = false
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
+            ) {
+                isDayDistance = position == 1
+                binding.secondDayPickerView.isVisible = isDayDistance
+                binding.dayDistance.isVisible = isDayDistance
+                binding.calendarsView.isVisible = !isDayDistance
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setupMenuNavigation()
-            toolbar.setTitle(R.string.date_converter)
+            toolbar.addView(spinner)
         }
 
         binding.calendarsView.toggle()
@@ -45,18 +68,6 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             }
         }
 
-        val tropicalSwitch = SwitchMaterial(binding.appBar.toolbar.context)
-        tropicalSwitch.setText(R.string.days_distance)
-        tropicalSwitch.setOnClickListener {
-            binding.secondDayPickerView.isVisible = tropicalSwitch.isChecked
-            binding.dayDistance.isVisible = tropicalSwitch.isChecked
-            binding.calendarsView.isVisible = !tropicalSwitch.isChecked
-        }
-        binding.appBar.toolbar.menu.add(R.string.days_distance).also { menuItem ->
-            menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            menuItem.actionView = tropicalSwitch
-        }
-
         binding.appBar.toolbar.menu.add(R.string.share).also { menu ->
             menu.icon =
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_content_copy)
@@ -64,7 +75,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         }.onClick {
             val jdn = binding.dayPickerView.jdn
             activity?.shareText(
-                if (tropicalSwitch.isChecked) binding.dayDistance.text.toString()
+                if (isDayDistance) binding.dayDistance.text.toString()
                 else listOf(
                     dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
                     getString(R.string.equivalent_to),
