@@ -54,9 +54,7 @@ val HighLatitudesMethod.titleStringId
         HighLatitudesMethod.None -> R.string.none
     }
 
-fun Bundle.putJdn(key: String, jdn: Jdn?) {
-    if (jdn == null) remove(jdn) else putLong(key, jdn.value)
-}
+fun Bundle.putJdn(key: String, jdn: Jdn) = putLong(key, jdn.value)
 
 fun Bundle.getJdnOrNull(key: String): Jdn? =
     getLong(key, -1).takeIf { it != -1L }?.let { Jdn(it) }

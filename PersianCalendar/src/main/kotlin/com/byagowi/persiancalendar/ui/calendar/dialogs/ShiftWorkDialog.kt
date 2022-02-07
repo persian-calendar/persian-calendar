@@ -73,7 +73,8 @@ fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> U
             }
 
             activity.appPrefs.edit {
-                putJdn(PREF_SHIFT_WORK_STARTING_JDN, if (result.isEmpty()) null else jdn)
+                if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
+                else putJdn(PREF_SHIFT_WORK_STARTING_JDN, jdn)
                 putString(PREF_SHIFT_WORK_SETTING, result)
                 putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
             }
