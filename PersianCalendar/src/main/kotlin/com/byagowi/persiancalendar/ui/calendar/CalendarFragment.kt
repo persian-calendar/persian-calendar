@@ -295,13 +295,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         }
 
-        val selectedJdnProviderKey = "SELECTED_JDN_REGISTRY_KEY"
-        val selectedJdnKey = "SELECTED_JDN_KEY"
-        savedStateRegistry.registerSavedStateProvider(selectedJdnProviderKey) {
-            Bundle().apply { putJdn(selectedJdnKey, selectedJdn) }
+        savedStateRegistry.registerSavedStateProvider("selectedJdnProviderKey") {
+            Bundle().apply { putJdn("selectedJdnKey", selectedJdn) }
         }
-        val savedJdn = savedStateRegistry.consumeRestoredStateForKey(selectedJdnProviderKey)
-            ?.getJdnOrNull(selectedJdnKey)
+        val savedJdn = savedStateRegistry.consumeRestoredStateForKey("selectedJdnProviderKey")
+            ?.getJdnOrNull("selectedJdnKey")
         if (savedJdn != null && savedJdn != initialJdn) {
             bringDate(savedJdn, smoothScroll = false)
         } else {
