@@ -3,10 +3,8 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView

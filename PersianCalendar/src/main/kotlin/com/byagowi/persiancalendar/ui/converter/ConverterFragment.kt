@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 class ConverterFragment : Fragment(R.layout.fragment_converter) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
