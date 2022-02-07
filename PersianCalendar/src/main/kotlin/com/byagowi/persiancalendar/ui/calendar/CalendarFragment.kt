@@ -68,7 +68,6 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.CalendarsView
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
-import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showPrayerSelectPreviewDialog
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
@@ -195,14 +194,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.setAnimateParentHierarchy(false)
         }
         binding.timesFlow.setup()
-
-        run {
-            val activity = activity
-            if (BuildConfig.DEVELOPMENT && activity != null) {
-                binding.sunView
-                    .setOnLongClickListener { showPrayerSelectPreviewDialog(activity); true }
-            }
-        }
 
         return binding.root
     }
