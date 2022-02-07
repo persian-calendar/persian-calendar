@@ -10,10 +10,8 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
-import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.drawable.toBitmap
@@ -23,7 +21,6 @@ import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
@@ -63,7 +60,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(MINUTES_OFFSET_KEY, dateMinutesOffset)
+        outState.putAll(MapFragmentArgs(dateMinutesOffset).toBundle())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -77,9 +74,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         solarDraw = SolarDraw(layoutInflater.context)
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
-        val args by navArgs<MapFragmentArgs>()
-        val minutesOffset = savedInstanceState?.getInt(MINUTES_OFFSET_KEY) ?: args.minutesOffset
-        date.add(Calendar.MINUTE, minutesOffset)
+        date.add(
+            Calendar.MINUTE,
+            (savedInstanceState ?: arguments)?.let(MapFragmentArgs::fromBundle)?.minutesOffset ?: 0
+        )
 
         update(binding, date)
 
@@ -361,8 +359,4 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private val pinScaleDown = 2
     private val pinRect = RectF()
     private var pinBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
-
-    companion object {
-        private const val MINUTES_OFFSET_KEY = "offset"
-    }
 }
