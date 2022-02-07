@@ -58,11 +58,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         get() =
             ((date.timeInMillis - GregorianCalendar().timeInMillis) / 1000 / 60).toInt()
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putAll(MapFragmentArgs(dateMinutesOffset).toBundle())
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentMapBinding.bind(view)
@@ -74,9 +69,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         solarDraw = SolarDraw(layoutInflater.context)
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
+        savedStateRegistry.registerSavedStateProvider("nowOffsetProvider") {
+            MapFragmentArgs(dateMinutesOffset).toBundle()
+        }
         date.add(
             Calendar.MINUTE,
-            (savedInstanceState ?: arguments)?.let(MapFragmentArgs::fromBundle)?.minutesOffset ?: 0
+            (savedStateRegistry.consumeRestoredStateForKey("nowOffsetProvider") ?: arguments)
+                ?.let(MapFragmentArgs::fromBundle)?.minutesOffset ?: 0
         )
 
         update(binding, date)
