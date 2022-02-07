@@ -295,7 +295,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         }
 
-        val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
+        val selectedJdnProviderKey = "SELECTED_JDN_REGISTRY_KEY"
+        val selectedJdnKey = "SELECTED_JDN_KEY"
+        savedStateRegistry.registerSavedStateProvider(selectedJdnProviderKey) {
+            Bundle().apply { putJdn(selectedJdnKey, selectedJdn) }
+        }
+        val savedJdn = savedStateRegistry.consumeRestoredStateForKey(selectedJdnProviderKey)
+            ?.getJdnOrNull(selectedJdnKey)
         if (savedJdn != null && savedJdn != initialJdn) {
             bringDate(savedJdn, smoothScroll = false)
         } else {
@@ -397,12 +403,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     }
 
     private var selectedJdn: Jdn = Jdn.today()
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putJdn(SELECTED_JDN_KEY, selectedJdn)
-    }
-
     private fun bringDate(
         jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
         smoothScroll: Boolean = true
@@ -701,6 +701,5 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         private const val CALENDARS_TAB = 0
         private const val EVENTS_TAB = 1
         private const val OWGHAT_TAB = 2
-        private const val SELECTED_JDN_KEY = "SELECTED_JDN_KEY"
     }
 }
