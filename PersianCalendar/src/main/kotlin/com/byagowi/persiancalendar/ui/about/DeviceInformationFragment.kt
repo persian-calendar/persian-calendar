@@ -148,7 +148,7 @@ class DeviceInformationFragment : Fragment(R.layout.fragment_device_information)
                 R.drawable.ic_settings to "API " + Build.VERSION.SDK_INT,
                 R.drawable.ic_motorcycle to
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
-                        else Build.CPU_ABI,
+                        else @Suppress("DEPRECATION") Build.CPU_ABI,
                 R.drawable.ic_device_information_white to Build.MODEL
             ).forEach { (icon, title) -> it.add(title).setIcon(icon).onClick(click) }
         }
@@ -340,7 +340,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         Item(
             "CPU Instructions Sets", (when {
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> Build.SUPPORTED_ABIS
-                else -> arrayOf(Build.CPU_ABI, Build.CPU_ABI2)
+                else -> @Suppress("DEPRECATION") arrayOf(Build.CPU_ABI, Build.CPU_ABI2)
             }).joinToString(", ")
         ),
         Item(
@@ -349,18 +349,24 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         ),
         Item("Model", Build.MODEL),
         Item("Product", Build.PRODUCT),
-        Item("Screen Resolution", activity.windowManager.let {
+        Item(
+            "Screen Resolution", activity.windowManager?.let {
                 "%d*%d pixels".format(
                     Locale.ENGLISH,
-                    activity.resources.displayMetrics.widthPixels,
-                    activity.resources.displayMetrics.heightPixels
+                    activity.resources?.displayMetrics?.widthPixels ?: 0,
+                    activity.resources?.displayMetrics?.heightPixels ?: 0
                 )
-            }, "%.1fHz".format(Locale.ENGLISH, when {
+            }, "%.1fHz".format(
+                Locale.ENGLISH, when {
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> activity.display?.refreshRate
-                    else -> activity.windowManager.defaultDisplay.refreshRate })
+                    else ->
+                        @Suppress("DEPRECATION")
+                        activity.windowManager?.defaultDisplay?.refreshRate
+                } ?: ""
+            )
         ),
-        Item("DPI", activity.resources.displayMetrics.densityDpi.toString()),
-        Item("Available Processors", Runtime.getRuntime().availableProcessors().toString()),
+        Item("DPI", activity.resources?.displayMetrics?.densityDpi?.toString()),
+        Item("Available Processors", Runtime.getRuntime()?.availableProcessors()?.toString()),
         Item("Instruction Architecture", Build.DEVICE),
         Item("Manufacturer", Build.MANUFACTURER),
         Item("Brand", Build.BRAND),
@@ -383,7 +389,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         ),
         Item(
             "Battery", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                (activity.getSystemService<BatteryManager>())?.let {
+                activity.getSystemService<BatteryManager>()?.let {
                     listOf("Charging: ${it.isCharging}") + listOf(
                         "Capacity" to BatteryManager.BATTERY_PROPERTY_CAPACITY,
                         "Charge Counter" to BatteryManager.BATTERY_PROPERTY_CHARGE_COUNTER,
@@ -393,35 +399,38 @@ private class DeviceInformationAdapter(private val activity: Activity) :
                     ).map { (title: String, id: Int) -> "$title: ${it.getLongProperty(id)}" }
                 }?.joinToString("\n") else ""
         ),
-        Item("Display Metrics", activity.resources.displayMetrics.toString()),
+        Item("Display Metrics", activity.resources?.displayMetrics?.toString() ?: ""),
         Item(
             "Display Cutout", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) run {
-                val cutout = activity.window.decorView.rootWindowInsets.displayCutout
+                val cutout = activity.window?.decorView?.rootWindowInsets?.displayCutout
                     ?: return@run "None"
                 listOf(
                     "Safe Inset Top" to cutout.safeInsetTop,
                     "Safe Inset Right" to cutout.safeInsetRight,
                     "Safe Inset Bottom" to cutout.safeInsetBottom,
                     "Safe Inset Left" to cutout.safeInsetLeft,
-                    "Rects" to (cutout.boundingRects.joinToString(","))
+                    "Rects" to cutout.boundingRects.joinToString(",")
                 ).joinToString("\n") { (key, value) -> "$key: $value" }
             } else "None"
         ),
         Item(
             "Install Source of ${activity.packageName}", runCatching {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    activity.packageManager.getInstallSourceInfo(activity.packageName).run {
+                    activity.packageManager?.getInstallSourceInfo(activity.packageName)?.run {
                         """
                         |Initiating Package Name: $initiatingPackageName
                         |Installing Package Name: $installingPackageName
                         |Originating Package Name: $originatingPackageName
                         |Initiating Package Signing Info: $initiatingPackageSigningInfo
                         |Installer Package Name: ${
-                            activity.packageManager.getInstallerPackageName(activity.packageName)
+                            @Suppress("DEPRECATION")
+                            activity.packageManager?.getInstallerPackageName(activity.packageName) ?: ""
                         }
                         """.trimMargin("|").trim()
                     }
-                } else activity.packageManager.getInstallerPackageName(activity.packageName)
+                } else
+                    @Suppress("DEPRECATION")
+                    activity.packageManager?.getInstallerPackageName(activity.packageName) ?: ""
             }.onFailure(logException).getOrNull()
         ),
         Item(
@@ -430,7 +439,7 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         ),
         Item(
             "System Features",
-            activity.packageManager.systemAvailableFeatures.joinToString("\n")
+            activity.packageManager?.systemAvailableFeatures?.joinToString("\n")
         )
     ) + (runCatching {
         // Quick Kung-fu to create gl context, https://stackoverflow.com/a/27092070
