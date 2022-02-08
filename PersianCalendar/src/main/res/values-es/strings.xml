@@ -50,13 +50,13 @@
     <string name="year12">Oveja</string>
     <string name="zodiac">Zodiaco</string>
     <string name="capricorn">Capricornio</string>
-    <string name="aquarius">Aquarius</string>
-    <string name="pisces">Pisces</string>
+    <string name="aquarius">Acuario</string>
+    <string name="pisces">Piscis</string>
     <string name="aries">Aries</string>
     <string name="taurus">Tauro</string>
     <string name="gemini">Geminis</string>
     <string name="cancer">Cáncer</string>
-    <string name="leo">Leo</string>
+    <string name="leo">León</string>
     <string name="virgo">Virgo</string>
     <string name="libra">Libra</string>
     <string name="scorpio">Escorpio</string>
@@ -102,7 +102,7 @@
     <string name="east">Este</string>
     <string name="south">Sur</string>
     <string name="west">Oeste</string>
-    <string name="qibla">Qibla</string>
+    <string name="qibla">Alquibla</string>
     <!-- Settings -->
     <string name="pref_widget">Widget</string>
     <string name="pref_notification">Notificación</string>
@@ -164,9 +164,9 @@
     <string name="pray_methods">Método de cálculo</string>
     <string name="pray_methods_calculation">Métodos de cálculo para tiempos de oración y brújula para Qibla</string>
     <string name="athan_gap">Demora de Azán</string>
-    <string name="athan_gap_summary">How long ahead of the Athan should the alarm be triggered (in minutes)</string>
+    <string name="athan_gap_summary">Cuánto tiempo antes del azán debe activarse la alarma (en minutos)</string>
     <string name="athan_alarm">Alarma de azan</string>
-    <string name="athan_alarm_summary">Prayers to trigger the alarm for</string>
+    <string name="athan_alarm_summary">Activar la alarma azán para estas oraciones</string>
     <string name="notification_athan">Notificación de azan</string>
     <string name="enable_notification_athan">Mostrar azán como notificación y vibración del dispositivo</string>
     <string name="ascending_athan_volume">Volumen de Azán ascendente</string>
@@ -193,7 +193,7 @@
     <string name="about_license_sum">Consulte la licencia de GPLv3 y otros términos de licencia utilizados en el calendario persa.</string>
     <string name="about_support_developers">Soporte para desarrolladores</string>
     <string name="about_report_bug">Informar error en Github</string>
-    <string name="about_report_bug_sum">Preferred bug reporting or requesting for new feature, needs a GitHub account</string>
+    <string name="about_report_bug_sum">Para informe de errores preferencia o solicitud de una nueva característica, necesita una cuenta de GitHub</string>
     <string name="about_sendMail">Correo electrónico</string>
     <string name="about_email_sum">Enviar un correo electrónico personal a los autores de la aplicación</string>
     <string name="about_noClient">No hay ningún cliente de correo electrónico instalado</string>
@@ -359,4 +359,9 @@
     <string name="none">Ninguno</string>
     <string name="show_sun_and_moon_path_in_24_hours">Mostrar la trayectoria del Sol y la Luna en 24 horas</string>
     <string name="widget_customization_non_holiday_events">Widget y notificación de no festivos en 2x2</string>
+    <string name="widget_customization_owghat">Tiempos de oración en widgets y notificaciones (si está configurado)</string>
+    <string name="widget_customization_owghat_location">Ubicación de los tiempos de oración en 2x2 y notificación (si está configurado)</string>
+    <string name="sun_view">Vista solar</string>
+    <string name="asr_hanafi_juristic">Método de Asr Hanafí para azán</string>
+    <string name="high_latitudes_angle_based">Basado en ángulo</string>
 </resources>
