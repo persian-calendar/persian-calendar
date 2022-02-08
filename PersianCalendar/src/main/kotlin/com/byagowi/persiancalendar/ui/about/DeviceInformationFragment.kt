@@ -350,12 +350,15 @@ private class DeviceInformationAdapter(private val activity: Activity) :
         Item("Model", Build.MODEL),
         Item("Product", Build.PRODUCT),
         Item("Screen Resolution", activity.windowManager.let {
-            "%d*%d pixels".format(
-                Locale.ENGLISH,
-                activity.resources.displayMetrics.widthPixels,
-                activity.resources.displayMetrics.heightPixels
-            )
-        }, "%.1fHz".format(Locale.ENGLISH, activity.windowManager.defaultDisplay.refreshRate)),
+                "%d*%d pixels".format(
+                    Locale.ENGLISH,
+                    activity.resources.displayMetrics.widthPixels,
+                    activity.resources.displayMetrics.heightPixels
+                )
+            }, "%.1fHz".format(Locale.ENGLISH, when {
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> activity.display?.refreshRate
+                    else -> activity.windowManager.defaultDisplay.refreshRate })
+        ),
         Item("DPI", activity.resources.displayMetrics.densityDpi.toString()),
         Item("Available Processors", Runtime.getRuntime().availableProcessors().toString()),
         Item("Instruction Architecture", Build.DEVICE),
