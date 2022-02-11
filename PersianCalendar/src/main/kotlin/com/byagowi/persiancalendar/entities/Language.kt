@@ -57,7 +57,7 @@ enum class Language(val code: String, val nativeName: String) {
     val dmy: String
         get() = when (this) {
             CKB -> "%1\$sی %2\$sی %3\$s"
-            JA, ZH_CN -> "%3\$s %2\$s %1\$s"
+            ZH_CN -> "%3\$s 年 %2\$s %1\$s 日"
             else -> "%1\$s %2\$s %3\$s"
         }
     val dm: String
@@ -76,6 +76,11 @@ enum class Language(val code: String, val nativeName: String) {
         get() = when (this) {
             JA, ZH_CN -> "%2\$s %1\$s"
             else -> "%1\$s$spacedComma%2\$s"
+        }
+    val clockAmPmOrder: String
+        get() = when (this) {
+            ZH_CN -> "%2\$s %1\$s"
+            else -> "%1\$s %2\$s"
         }
 
     val isLessKnownRtl: Boolean
