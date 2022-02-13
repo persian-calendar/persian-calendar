@@ -221,13 +221,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         val binding = FragmentCalendarBinding.bind(view)
         mainBinding = binding
 
-        val tabs = listOf(
+        val tabs = listOfNotNull(
             R.string.calendar to CalendarsView(layoutInflater.context).also { calendarsView = it },
-            R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup)
-        ) + if (enableOwghatTab(layoutInflater.context)) listOf(
-            // The optional third tab
-            R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
-        ) else emptyList()
+            R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
+            if (enableOwghatTab(layoutInflater.context))
+                // The optional third tab
+                R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
+            else null
+        )
 
         // tabs should fill their parent otherwise view pager can't handle it
         tabs.forEach { (_: Int, tabView: View) ->
