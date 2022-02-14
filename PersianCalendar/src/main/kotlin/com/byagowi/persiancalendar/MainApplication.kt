@@ -8,8 +8,7 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Variants.mainApplication(this)
-        initGlobal(applicationContext)
+        initGlobal(applicationContext) // Used for things should be provided in locale level
     }
 
     // Can I haz these resources not removed?!
