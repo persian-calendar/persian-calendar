@@ -224,8 +224,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         val tabs = listOfNotNull(
             R.string.calendar to CalendarsView(layoutInflater.context).also { calendarsView = it },
             R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
-            if (enableOwghatTab(layoutInflater.context))
-                // The optional third tab
+            if (enableOwghatTab(layoutInflater.context)) // The optional third tab
                 R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
             else null
         )
@@ -287,11 +286,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         }
 
-        savedStateRegistry.registerSavedStateProvider("selectedJdnProviderKey") {
-            Bundle().apply { putJdn("selectedJdnKey", selectedJdn) }
-        }
-        val savedJdn = savedStateRegistry.consumeRestoredStateForKey("selectedJdnProviderKey")
-            ?.getJdnOrNull("selectedJdnKey")
+        val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
         if (savedJdn != null && savedJdn != initialJdn) {
             bringDate(savedJdn, smoothScroll = false)
         } else {
@@ -304,6 +299,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
 
         updateToolbar(selectedJdn.toCalendar(mainCalendar))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putJdn(SELECTED_JDN_KEY, selectedJdn)
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {
@@ -691,5 +691,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         private const val CALENDARS_TAB = 0
         private const val EVENTS_TAB = 1
         private const val OWGHAT_TAB = 2
+        private const val SELECTED_JDN_KEY = "SELECTED_JDN_KEY"
     }
 }
