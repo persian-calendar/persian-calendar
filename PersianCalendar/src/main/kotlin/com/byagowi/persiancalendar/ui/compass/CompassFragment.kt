@@ -149,7 +149,7 @@ class CompassFragment : Fragment(R.layout.fragment_compass) {
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.compass)
-            toolbar.subtitle = layoutInflater.context.appPrefs.cityName ?: coordinates?.run {
+            toolbar.subtitle = view.context.appPrefs.cityName ?: coordinates?.run {
                 formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
             }
             toolbar.setupMenuNavigation()

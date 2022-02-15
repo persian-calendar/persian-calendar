@@ -222,9 +222,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         mainBinding = binding
 
         val tabs = listOfNotNull(
-            R.string.calendar to CalendarsView(layoutInflater.context).also { calendarsView = it },
+            R.string.calendar to CalendarsView(view.context).also { calendarsView = it },
             R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
-            if (enableOwghatTab(layoutInflater.context)) // The optional third tab
+            if (enableOwghatTab(view.context)) // The optional third tab
                 R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
             else null
         )
@@ -275,7 +275,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         })
 
-        var lastTab = layoutInflater.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
+        var lastTab = view.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
         tabsViewPager.setCurrentItem(lastTab, false)
         setupMenu(binding.appBar.toolbar, binding.calendarPager)

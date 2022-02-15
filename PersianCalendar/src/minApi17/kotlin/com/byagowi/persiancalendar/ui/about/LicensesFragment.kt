@@ -52,7 +52,7 @@ class LicensesFragment : Fragment(R.layout.fragment_licenses) {
                 val height = bounds.height()
                 val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
                 Canvas(bitmap).drawText(text, padding, height.toFloat(), paint)
-                return BitmapDrawable(layoutInflater.context.resources, bitmap)
+                return BitmapDrawable(view.context.resources, bitmap)
             }
             listOf(
                 "GPLv3" to view.context.getCompatDrawable(R.drawable.ic_info),

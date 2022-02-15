@@ -71,7 +71,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             it.setupUpNavigation()
         }
 
-        solarDraw = SolarDraw(layoutInflater.context)
+        solarDraw = SolarDraw(view.context)
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
         date.add(

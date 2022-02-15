@@ -61,7 +61,7 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
                 if (tropical) it.sunEcliptic.tropicalZodiac else it.sunEcliptic.iauZodiac
             val moonZodiac =
                 if (tropical) it.moonEcliptic.tropicalZodiac else it.moonEcliptic.iauZodiac
-            binding.sunText.text = sunZodiac.format(binding.root.context, true) // ☉☀️
+            binding.sunText.text = sunZodiac.format(view.context, true) // ☉☀️
             binding.moonText.text =
                 moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
             binding.time.text = time.formatDateAndTime()

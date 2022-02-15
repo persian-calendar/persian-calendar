@@ -25,14 +25,14 @@ class PanoRendoFragment : Fragment(R.layout.fragment_pano_rendo) {
         }
 
         binding.toneMap.adapter = ArrayAdapter(
-            layoutInflater.context,
+            view.context,
             androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
             ToneMap.values().map { it.toString() }
         )
 
         val coordinates = coordinates
         if (coordinates == null) {
-            Toast.makeText(layoutInflater.context, "Location is not set", Toast.LENGTH_SHORT).show()
+            Toast.makeText(view.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }
         val args by navArgs<PanoRendoFragmentArgs>()
         val sunPosition = GregorianCalendar().also {

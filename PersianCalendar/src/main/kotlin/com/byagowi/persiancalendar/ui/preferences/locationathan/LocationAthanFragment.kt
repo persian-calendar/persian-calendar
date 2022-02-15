@@ -149,7 +149,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             }
         }
 
-        val appPrefs = layoutInflater.context.appPrefs
+        val appPrefs = activity.appPrefs
         onSharedPreferenceChanged(appPrefs, null)
         appPrefs.registerOnSharedPreferenceChangeListener(this)
     }

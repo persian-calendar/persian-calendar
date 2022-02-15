@@ -103,9 +103,9 @@ class DeviceInformationFragment : Fragment(R.layout.fragment_device_information)
 
         binding.recyclerView.let {
             it.setHasFixedSize(true)
-            it.layoutManager = LinearLayoutManager(layoutInflater.context)
+            it.layoutManager = LinearLayoutManager(view.context)
             it.addItemDecoration(
-                DividerItemDecoration(layoutInflater.context, LinearLayoutManager.VERTICAL)
+                DividerItemDecoration(view.context, LinearLayoutManager.VERTICAL)
             )
             val adapter = DeviceInformationAdapter(activity ?: return@let)
             it.adapter = adapter
