@@ -147,10 +147,12 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     dialogTitle(R.string.week_start_summary)
                     summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                 }
-                multiSelect(PREF_WEEK_ENDS, weekDays, weekDaysValues, language.defaultWeekEnds) {
+                multiSelect(
+                    PREF_WEEK_ENDS, weekDays, weekDaysValues, language.defaultWeekEnds,
+                    R.string.week_ends_summary
+                ) {
                     title(R.string.week_ends)
                     summary(R.string.week_ends_summary)
-                    dialogTitle(R.string.week_ends_summary)
                 }
             }
         }

@@ -115,11 +115,10 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                     PREF_WHAT_TO_SHOW_WIDGETS,
                     widgetCustomizations.map { (_, title) -> getString(title) },
                     widgetCustomizations.map { (key, _) -> key },
-                    DEFAULT_WIDGET_CUSTOMIZATIONS
+                    DEFAULT_WIDGET_CUSTOMIZATIONS, R.string.which_one_to_show
                 ) {
                     title(R.string.customize_widget)
                     summary(R.string.customize_widget_summary)
-                    dialogTitle(R.string.which_one_to_show)
                 }
             }
         }
