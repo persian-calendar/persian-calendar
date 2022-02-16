@@ -7,13 +7,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import com.byagowi.persiancalendar.ui.utils.sp
+import kotlin.math.roundToInt
 
 fun showTypographyDemoDialog(activity: Activity) {
     val text = buildSpannedString {
         textAppearances.forEach { (appearanceName, appearanceId) ->
             val textAppearance = TextAppearanceSpan(activity, appearanceId)
             inSpans(textAppearance) { append(appearanceName) }
-            append(" (${textAppearance.textSize / 1.sp}sp)")
+            append(" ${(textAppearance.textSize / 1.sp).roundToInt()}sp")
             appendLine()
         }
     }
