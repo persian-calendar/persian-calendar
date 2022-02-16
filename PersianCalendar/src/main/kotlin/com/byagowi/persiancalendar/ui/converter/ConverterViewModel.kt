@@ -10,4 +10,5 @@ class ConverterViewModel : ViewModel() {
     val jdn by lazy { MutableStateFlow(Jdn.today()) }
     val distanceJdn by lazy { MutableStateFlow(Jdn.today()) }
     val isDayDistance by lazy { MutableStateFlow(false) }
+    val todayButtonVisibility by lazy { MutableStateFlow(false) }
 }

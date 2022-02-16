@@ -62,7 +62,6 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             it.icon =
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.isVisible = false
             it.onClick {
                 binding.dayPickerView.jdn = todayJdn
                 binding.secondDayPickerView.jdn = todayJdn
@@ -94,7 +93,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
 
         // Setup flow listeners
         fun updateResult() {
-            todayButton.isVisible = model.jdn.value != todayJdn ||
+            model.todayButtonVisibility.value = model.jdn.value != todayJdn ||
                     (model.isDayDistance.value && model.distanceJdn.value != todayJdn)
             if (model.isDayDistance.value) {
                 binding.dayDistance.text = calculateDaysDifference(
@@ -110,17 +109,14 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             }
         }
 
-        model.distanceJdn.onEach { updateResult() }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-        model.jdn.onEach {
-            updateResult()
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
+        val viewLifecycleScope = viewLifecycleOwner.lifecycleScope
         model.calendarType.onEach {
             if (model.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
             updateResult()
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-
+        }.launchIn(viewLifecycleScope)
+        model.jdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
+        model.distanceJdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
+        model.todayButtonVisibility.onEach(todayButton::setVisible).launchIn(viewLifecycleScope)
         model.isDayDistance.onEach {
             if (it) binding.secondDayPickerView.changeCalendarType(model.calendarType.value)
             binding.secondDayPickerView.isVisible = it
@@ -128,6 +124,6 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             binding.calendarsView.isVisible = !it
             binding.resultCard.isVisible = !it
             updateResult()
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(viewLifecycleScope)
     }
 }
