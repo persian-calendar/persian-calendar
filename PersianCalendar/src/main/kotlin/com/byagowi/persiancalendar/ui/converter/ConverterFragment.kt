@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.entities.Jdn
@@ -21,26 +23,26 @@ import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class ConverterFragment : Fragment(R.layout.fragment_converter) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentConverterBinding.bind(view)
 
+        val model by viewModels<ConverterViewModel>()
+
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
             listOf(R.string.date_converter, R.string.days_distance).map(spinner.context::getString)
         )
-        var isDayDistance = false
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                isDayDistance = position == 1
-                binding.secondDayPickerView.isVisible = isDayDistance
-                binding.dayDistance.isVisible = isDayDistance
-                binding.calendarsView.isVisible = !isDayDistance
+                model.isDayDistance.value = position == 1
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -74,7 +76,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         }.onClick {
             val jdn = binding.dayPickerView.jdn
             activity?.shareText(
-                if (isDayDistance) binding.dayDistance.text.toString()
+                if (model.isDayDistance.value) binding.dayDistance.text.toString()
                 else listOf(
                     dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
                     getString(R.string.equivalent_to),
@@ -83,36 +85,49 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             )
         }
 
-        fun updateDifference() {
-            if (binding.secondDayPickerView.selectedCalendarType !=
-                binding.dayPickerView.selectedCalendarType
-            ) {
-                binding.secondDayPickerView.selectedCalendarType =
-                    binding.dayPickerView.selectedCalendarType
-                binding.secondDayPickerView.jdn = binding.dayPickerView.jdn
-            }
-            binding.dayDistance.text = calculateDaysDifference(
-                resources,
-                binding.dayPickerView.jdn,
-                binding.secondDayPickerView.jdn,
-                binding.dayPickerView.selectedCalendarType
-            )
-        }
-
         binding.secondDayPickerView.jdn = todayJdn
         binding.secondDayPickerView.turnToSecondaryDatePicker()
-        binding.dayPickerView.selectedDayListener = { jdn ->
-            todayButton.isVisible = jdn != todayJdn
-            binding.resultCard.isVisible = true
-            val selectedCalendarType = binding.dayPickerView.selectedCalendarType
-            binding.calendarsView.showCalendars(
-                jdn, selectedCalendarType, enabledCalendars - selectedCalendarType
-            )
-            updateDifference()
-        }
+        binding.dayPickerView.selectedDayListener = { model.jdn.value = it }
+        binding.dayPickerView.selectedCalendarListener = { model.calendarType.value = it }
         binding.dayPickerView.jdn = todayJdn
-        binding.secondDayPickerView.selectedDayListener = { _ ->
-            updateDifference()
+        binding.secondDayPickerView.selectedDayListener = { model.distanceJdn.value = it }
+
+        // Setup flow listeners
+        fun updateResult() {
+            todayButton.isVisible = model.jdn.value != todayJdn ||
+                    (model.isDayDistance.value && model.distanceJdn.value != todayJdn)
+            if (model.isDayDistance.value) {
+                binding.dayDistance.text = calculateDaysDifference(
+                    resources, model.jdn.value, model.distanceJdn.value,
+                    model.calendarType.value
+                )
+            } else {
+                val selectedCalendarType = model.calendarType.value
+                binding.calendarsView.showCalendars(
+                    model.jdn.value,
+                    selectedCalendarType, enabledCalendars - selectedCalendarType
+                )
+            }
         }
+
+        model.distanceJdn.onEach { updateResult() }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        model.jdn.onEach {
+            updateResult()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        model.calendarType.onEach {
+            if (model.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
+            updateResult()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        model.isDayDistance.onEach {
+            if (it) binding.secondDayPickerView.changeCalendarType(model.calendarType.value)
+            binding.secondDayPickerView.isVisible = it
+            binding.dayDistance.isVisible = it
+            binding.calendarsView.isVisible = !it
+            binding.resultCard.isVisible = !it
+            updateResult()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

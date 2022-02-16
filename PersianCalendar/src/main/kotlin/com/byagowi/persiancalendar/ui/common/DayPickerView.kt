@@ -17,7 +17,8 @@ import com.byagowi.persiancalendar.utils.formatNumber
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
     var selectedDayListener = fun(_: Jdn) {}
-    var selectedCalendarType = CalendarType.SHAMSI
+    var selectedCalendarListener = fun(_: CalendarType) {}
+    private var selectedCalendarType = CalendarType.SHAMSI
     var jdn: Jdn
         get() {
             val year = binding.yearPicker.value
@@ -64,9 +65,13 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 if (language.betterToUseShortCalendarName) calendarType.shortTitle
                 else calendarType.title
             )
-        }.also { selectedCalendarType = it[0].first }
+        }.also {
+            selectedCalendarType = it[0].first
+            selectedCalendarListener(selectedCalendarType)
+        }
         binding.calendarsFlow.setup(calendarTypes) {
             selectedCalendarType = it
+            selectedCalendarListener(selectedCalendarType)
             jdn = currentJdn
             selectedDayListener(currentJdn)
         }
@@ -90,5 +95,9 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.dayTitle.isVisible = false
         binding.monthTitle.isVisible = false
         binding.yearTitle.isVisible = false
+    }
+    fun changeCalendarType(calendarType: CalendarType) { // only to use when the picker is secondary
+        selectedCalendarType = calendarType
+        jdn = currentJdn
     }
 }
