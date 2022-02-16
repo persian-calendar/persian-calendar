@@ -31,7 +31,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentConverterBinding.bind(view)
 
-        val model by viewModels<ConverterViewModel>()
+        val model by viewModels<ViewModel>()
 
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
