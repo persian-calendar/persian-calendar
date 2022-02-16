@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.ui
 
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.fragment.app.viewModels
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.converter.ConverterFragment
+import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -17,21 +19,23 @@ class ConverterFragmentTest {
     @Test
     fun testTodayButtonVisibility() {
         launchFragmentInContainer<ConverterFragment>(themeResId = R.style.LightTheme).onFragment {
+            val model by it.viewModels<ConverterViewModel>()
+
             // Converter
-            assertEquals(it.model.jdn.value, Jdn.today())
-            assertFalse(it.model.todayButtonVisibility.value)
-            it.model.jdn.value = Jdn.today() + 1
-            assertEquals(it.model.jdn.value, Jdn.today() + 1)
-            assertTrue(it.model.todayButtonVisibility.value)
-            it.model.jdn.value = Jdn.today()
-            assertFalse(it.model.todayButtonVisibility.value)
+            assertEquals(model.jdn.value, Jdn.today())
+            assertFalse(model.todayButtonVisibility.value)
+            model.jdn.value = Jdn.today() + 1
+            assertEquals(model.jdn.value, Jdn.today() + 1)
+            assertTrue(model.todayButtonVisibility.value)
+            model.jdn.value = Jdn.today()
+            assertFalse(model.todayButtonVisibility.value)
 
             // Day distance
-            assertFalse(it.model.isDayDistance.value)
-            it.model.isDayDistance.value = true
-            assertTrue(it.model.isDayDistance.value)
-            it.model.distanceJdn.value = Jdn.today() + 1
-            assertTrue(it.model.todayButtonVisibility.value)
+            assertFalse(model.isDayDistance.value)
+            model.isDayDistance.value = true
+            assertTrue(model.isDayDistance.value)
+            model.distanceJdn.value = Jdn.today() + 1
+            assertTrue(model.todayButtonVisibility.value)
         }
     }
 }
