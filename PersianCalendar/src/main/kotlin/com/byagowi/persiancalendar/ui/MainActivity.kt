@@ -16,6 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.IdRes
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -360,7 +361,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         return true
     }
 
-    private fun showChangeLanguageSnackbar() {
+    @VisibleForTesting
+    fun showChangeLanguageSnackbar() {
         if (Language.userDeviceLanguage == Language.FA.language) return
         Snackbar.make(
             binding.root, "✖  Change app language?", Snackbar.LENGTH_INDEFINITE
@@ -377,7 +379,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }.show()
     }
 
-    private fun showAppIsOutDatedSnackbar() = Snackbar.make(
+    @VisibleForTesting
+    fun showAppIsOutDatedSnackbar() = Snackbar.make(
         binding.root, getString(R.string.outdated_app), 10000
     ).also {
         it.setAction(getString(R.string.update)) { bringMarketPage() }

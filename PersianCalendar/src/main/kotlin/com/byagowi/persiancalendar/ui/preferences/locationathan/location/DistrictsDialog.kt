@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
 import android.app.Activity
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,7 +30,8 @@ fun showProvinceDialog(activity: Activity) {
     dialog.show()
 }
 
-private fun showDistrictsDialog(activity: Activity, provinceDetails: List<String>) {
+@VisibleForTesting
+fun showDistrictsDialog(activity: Activity, provinceDetails: List<String>) {
     val recyclerView = RecyclerView(activity)
     val dialog = AlertDialog.Builder(activity)
         .setTitle(R.string.location)
