@@ -61,9 +61,7 @@ inline fun PreferenceCategory.singleSelect(
                 .setNegativeButton(R.string.cancel, null)
                 .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
                     context.appPrefs.edit { putString(key, entryValues[which]) }
-                    preference?.summary = entries[entryValues.indexOf(
-                        context.appPrefs.getString(key, null) ?: defaultValue
-                    )]
+                    preference?.summary = entries[which]
                     dialog.dismiss()
                 }
                 .show()
