@@ -168,8 +168,6 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
 
     handler.postDelayed(checkGPSProviderCallback, THIRTY_SECONDS_IN_MILLIS)
     val dialog = AlertDialog.Builder(activity)
-        .setPositiveButton("", null)
-        .setNegativeButton("", null)
         .setView(binding.root)
         .create()
 

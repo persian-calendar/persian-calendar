@@ -18,8 +18,6 @@ fun showProvinceDialog(activity: Activity) {
         // i18n is no concern here as it is shown only in specific locales
         .setTitle("انتخاب استان برای مشاهدهٔ بخش‌ها")
         .setView(recyclerView)
-        .setPositiveButton("", null)
-        .setNegativeButton("", null)
         .create()
     recyclerView.setHasFixedSize(true)
     recyclerView.layoutManager = LinearLayoutManager(activity)
@@ -36,8 +34,6 @@ fun showDistrictsDialog(activity: Activity, provinceDetails: List<String>) {
     val dialog = AlertDialog.Builder(activity)
         .setTitle(R.string.location)
         .setView(recyclerView)
-        .setPositiveButton("", null)
-        .setNegativeButton("", null)
         .create()
     recyclerView.setHasFixedSize(true)
     recyclerView.layoutManager = LinearLayoutManager(activity)
