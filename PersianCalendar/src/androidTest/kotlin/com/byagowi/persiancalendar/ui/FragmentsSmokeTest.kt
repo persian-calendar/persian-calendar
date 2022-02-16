@@ -4,6 +4,8 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutFragment
+import com.byagowi.persiancalendar.ui.about.DeviceInformationFragment
+import com.byagowi.persiancalendar.ui.about.LicensesFragment
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragmentArgs
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
@@ -40,6 +42,8 @@ class FragmentsSmokeTest {
     fun fragmentsSmokeTest() {
         launchFragmentInContainer<CalendarFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AboutFragment>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<DeviceInformationFragment>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<LicensesFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AstronomyFragment>(
             themeResId = R.style.LightTheme,
             fragmentArgs = AstronomyFragmentArgs(0).toBundle()
