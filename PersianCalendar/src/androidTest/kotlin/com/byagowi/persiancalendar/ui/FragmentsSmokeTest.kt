@@ -14,6 +14,9 @@ import com.byagowi.persiancalendar.ui.map.MapFragment
 import com.byagowi.persiancalendar.ui.map.PanoRendoFragment
 import com.byagowi.persiancalendar.ui.map.PanoRendoFragmentArgs
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
+import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.LOCATION_ATHAN_TAB
+import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.WIDGET_NOTIFICATION_TAB
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragmentArgs
 import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureFragment
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
@@ -49,7 +52,7 @@ class FragmentsSmokeTest {
             themeResId = R.style.LightTheme,
             fragmentArgs = PanoRendoFragmentArgs(0).toBundle()
         )
-        (0..3).forEach {
+        listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
             launchFragmentInContainer<PreferencesFragment>(
                 themeResId = R.style.LightTheme,
                 fragmentArgs = PreferencesFragmentArgs(it).toBundle()
