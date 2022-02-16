@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.preferences
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
-import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceScreen
@@ -49,19 +48,36 @@ fun Preference.summary(@StringRes summaryResId: Int) = setSummary(summaryResId)
 @PreferencesDsl
 inline fun PreferenceCategory.singleSelect(
     key: String, entries: List<String>, entryValues: List<String>, defaultValue: String,
-    dialogTitleResId: Int, summaryResId: Int? = null, crossinline block: ListPreference.() -> Unit
-) = this.addPreference(ListPreference(this.context).also {
-    it.key = key
-    it.setDialogTitle(dialogTitleResId)
-    it.entries = entries.toTypedArray()
-    it.entryValues = entryValues.toTypedArray()
-    it.setDefaultValue(defaultValue)
-    it.setNegativeButtonText(R.string.cancel)
-    it.isIconSpaceReserved = false
-    if (summaryResId != null) it.setSummary(summaryResId)
-    else it.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-    block(it)
-})
+    dialogTitleResId: Int, summaryResId: Int? = null, crossinline block: Preference.() -> Unit
+) {
+    var preference: Preference? = null
+    this.clickable(
+        onClick = {
+            val currentValue = entryValues.indexOf(
+                context.appPrefs.getString(key, null) ?: defaultValue
+            )
+            AlertDialog.Builder(context)
+                .setTitle(dialogTitleResId)
+                .setNegativeButton(R.string.cancel, null)
+                .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
+                    context.appPrefs.edit { putString(key, entryValues[which]) }
+                    preference?.summary = entries[entryValues.indexOf(
+                        context.appPrefs.getString(key, null) ?: defaultValue
+                    )]
+                    dialog.dismiss()
+                }
+                .show()
+        },
+        block = {
+            preference = this
+            if (summaryResId != null) setSummary(summaryResId)
+            else summary = entries[entryValues.indexOf(
+                context.appPrefs.getString(key, null) ?: defaultValue
+            )]
+            block()
+        }
+    )
+}
 
 @PreferencesDsl
 inline fun PreferenceCategory.multiSelect(
