@@ -254,7 +254,7 @@ class DeviceInformationFragment : Fragment(R.layout.fragment_device_information)
                     //     runCatching {
                     //         if (!player.isPlaying) player.start()
                     //     }.onFailure(logException)
-                    //     AlertDialog.Builder(activity)
+                    //     MaterialAlertDialogBuilder(activity)
                     //         .setView(AppCompatImageButton(context).also {
                     //             it.setImageResource(R.drawable.ic_stop)
                     //             it.setOnClickListener { dismiss() }

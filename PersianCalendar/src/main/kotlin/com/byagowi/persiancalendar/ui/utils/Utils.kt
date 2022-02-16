@@ -26,7 +26,6 @@ import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
@@ -53,6 +52,7 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -187,7 +187,7 @@ fun View.setupExpandableAccessibilityDescription() {
 
 fun Activity.askForLocationPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
         .setTitle(R.string.location_access)
         .setMessage(R.string.phone_location_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->
@@ -205,7 +205,7 @@ fun Activity.askForLocationPermission() {
 
 fun Activity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
         .setTitle(R.string.calendar_access)
         .setMessage(R.string.phone_calendar_required)
         .setPositiveButton(R.string.continue_button) { _, _ ->

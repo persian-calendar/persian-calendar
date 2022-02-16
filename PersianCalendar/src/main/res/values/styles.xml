@@ -43,9 +43,7 @@
     <!-- its v31 version is more interesting -->
     <color name="widget_background">@android:color/transparent</color>
 
-    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-        <item name="dialogCornerRadius">@dimen/common_radius</item>
-    </style>
+    <style name="AlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog" />
 
     <style name="BottomSheetAppearance">
         <item name="cornerFamily">rounded</item>
@@ -78,7 +76,7 @@
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
@@ -101,7 +99,7 @@
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
@@ -456,8 +454,6 @@
     <style name="AppTextButton" parent="Widget.Material3.Button.TextButton" />
 
     <style name="AppChipChoice" parent="Widget.Material3.Chip.Assist" />
-
-    <style name="AppFullscreenAlertDialog" parent="Widget.Material3.MaterialCalendar.Fullscreen" />
 
     <style name="AppTextInputLayoutFilledBox" parent="Widget.Material3.TextInputLayout.FilledBox" />
 

@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.preferences
 import android.app.Activity
 import android.graphics.Color
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.setMargins
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +10,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -18,7 +18,7 @@ import com.google.android.material.shape.TriangleEdgeTreatment
 
 // Debug only dialog to check validity of dynamic icons generation
 fun showIconsDemoDialog(activity: Activity) {
-    AlertDialog.Builder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setView(RecyclerView(activity).also {
             it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}

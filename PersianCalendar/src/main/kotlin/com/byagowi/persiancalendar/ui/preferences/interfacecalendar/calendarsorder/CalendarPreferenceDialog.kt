@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
 import android.app.Activity
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +11,7 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showCalendarPreferenceDialog(activity: Activity, onEmpty: () -> Unit) {
     val enabledCalendarTypes = enabledCalendars
@@ -26,7 +26,7 @@ fun showCalendarPreferenceDialog(activity: Activity, onEmpty: () -> Unit) {
         )
     })
 
-    AlertDialog.Builder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setView(RecyclerView(activity).also {
             it.setHasFixedSize(true)
             it.layoutManager = LinearLayoutManager(activity)

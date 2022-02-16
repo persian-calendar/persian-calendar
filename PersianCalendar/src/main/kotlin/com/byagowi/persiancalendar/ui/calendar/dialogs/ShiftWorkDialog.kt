@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -33,6 +32,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.putJdn
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> Unit) {
     var isFirstSetup = false
@@ -65,7 +65,7 @@ fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> U
     binding.recurs.isChecked = shiftWorkRecurs
     binding.root.onCheckIsTextEditor()
 
-    AlertDialog.Builder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
             val result = shiftWorkItemAdapter.rows.filter { it.length != 0 }.joinToString(",") {

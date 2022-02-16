@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
 import android.app.Activity
 import androidx.annotation.VisibleForTesting
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -10,11 +9,12 @@ import com.byagowi.persiancalendar.generated.distrcitsStore
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLocation
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
 
 fun showProvinceDialog(activity: Activity) {
     val recyclerView = RecyclerView(activity)
-    val dialog = AlertDialog.Builder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         // i18n is no concern here as it is shown only in specific locales
         .setTitle("انتخاب استان برای مشاهدهٔ بخش‌ها")
         .setView(recyclerView)
@@ -31,7 +31,7 @@ fun showProvinceDialog(activity: Activity) {
 @VisibleForTesting
 fun showDistrictsDialog(activity: Activity, provinceDetails: List<String>) {
     val recyclerView = RecyclerView(activity)
-    val dialog = AlertDialog.Builder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         .setTitle(R.string.location)
         .setView(recyclerView)
         .create()

@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 import android.app.Activity
 import android.os.Build
 import android.text.method.LinkMovementMethod
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
@@ -15,6 +14,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showHolidaysTypesDialog(activity: Activity) {
     val binding = HolidaysTypesDialogBinding.inflate(activity.layoutInflater)
@@ -91,7 +91,7 @@ fun showHolidaysTypesDialog(activity: Activity) {
     }
 
     // Run the dialog
-    AlertDialog.Builder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setTitle(R.string.events)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->

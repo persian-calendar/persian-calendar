@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences
 
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
@@ -9,6 +8,7 @@ import androidx.preference.PreferenceScreen
 import androidx.preference.SwitchPreferenceCompat
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 @DslMarker
 @Target(AnnotationTarget.FUNCTION)
@@ -56,7 +56,7 @@ inline fun PreferenceCategory.singleSelect(
             val currentValue = entryValues.indexOf(
                 context.appPrefs.getString(key, null) ?: defaultValue
             )
-            AlertDialog.Builder(context)
+            MaterialAlertDialogBuilder(context)
                 .setTitle(dialogTitleResId)
                 .setNegativeButton(R.string.cancel, null)
                 .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
@@ -88,7 +88,7 @@ inline fun PreferenceCategory.multiSelect(
     onClick = {
         val result = (context.appPrefs.getStringSet(key, null) ?: defaultValue).toMutableSet()
         val checkedItems = entryValues.map { it in result }.toBooleanArray()
-        AlertDialog.Builder(context)
+        MaterialAlertDialogBuilder(context)
             .setTitle(dialogTitleResId)
             .setMultiChoiceItems(entries.toTypedArray(), checkedItems) { _, which, isChecked ->
                 if (isChecked) result.add(entryValues[which])

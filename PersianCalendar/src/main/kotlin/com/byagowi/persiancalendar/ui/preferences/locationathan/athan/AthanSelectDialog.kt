@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
 import android.app.Activity
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
@@ -10,6 +9,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getRawUri
 import com.byagowi.persiancalendar.utils.logException
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showAthanSelectDialog(activity: Activity, pickRingtone: ActivityResultLauncher<Unit>) {
     val items = listOf(
@@ -30,7 +30,7 @@ fun showAthanSelectDialog(activity: Activity, pickRingtone: ActivityResultLaunch
             runCatching { pickRingtone.launch(Unit) }.onFailure(logException).getOrNull()
         }
     )
-    AlertDialog.Builder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setTitle(R.string.custom_athan)
         .setItems(items.map { activity.getString(it.first) }.toTypedArray()) { dialog, which ->
             items[which].second()

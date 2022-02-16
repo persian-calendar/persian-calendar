@@ -8,7 +8,6 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -39,6 +38,7 @@ import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.concurrent.TimeUnit
 
@@ -113,7 +113,7 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
         toolbar.menu.add("Schedule an alarm").onClick {
             val numericBinding = NumericBinding.inflate(inflater)
             numericBinding.edit.setText("5")
-            AlertDialog.Builder(activity)
+            MaterialAlertDialogBuilder(activity)
                 .setTitle("Enter seconds to schedule alarm")
                 .setView(numericBinding.root)
                 .setPositiveButton(R.string.accept) { _, _ ->
@@ -133,9 +133,7 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
                 }
                 .show()
         }
-        fun viewCommandResult(command: String) = AlertDialog.Builder(
-            activity, R.style.AppFullscreenAlertDialog
-        ).also { dialog ->
+        fun viewCommandResult(command: String) = MaterialAlertDialogBuilder(activity).also {
             val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
             val button = ImageButton(activity).also { button ->
                 button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
@@ -143,13 +141,13 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
                     activity.shareTextFile(result, "log.txt", "text/plain")
                 }
             }
-            dialog.setCustomTitle(
+            it.setCustomTitle(
                 LinearLayout(activity).also {
                     it.layoutDirection = View.LAYOUT_DIRECTION_LTR
                     it.addView(button)
                 }
             )
-            dialog.setView(
+            it.setView(
                 ScrollView(context).also { scrollView ->
                     scrollView.addView(TextView(context).also {
                         it.text = result

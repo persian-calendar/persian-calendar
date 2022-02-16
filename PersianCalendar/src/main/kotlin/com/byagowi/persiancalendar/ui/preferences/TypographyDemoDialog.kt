@@ -3,10 +3,10 @@ package com.byagowi.persiancalendar.ui.preferences
 import android.app.Activity
 import android.text.style.TextAppearanceSpan
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import com.byagowi.persiancalendar.ui.utils.sp
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.roundToInt
 
 fun showTypographyDemoDialog(activity: Activity) {
@@ -18,7 +18,7 @@ fun showTypographyDemoDialog(activity: Activity) {
             appendLine()
         }
     }
-    AlertDialog.Builder(activity).setView(TextView(activity).also { it.text = text }).show()
+    MaterialAlertDialogBuilder(activity).setView(TextView(activity).also { it.text = text }).show()
 }
 
 private val textAppearances = listOf(

@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 import android.app.Activity
 import android.media.AudioManager
 import android.media.RingtoneManager
-import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
@@ -11,6 +10,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.athanVolume
 import com.byagowi.persiancalendar.utils.getAthanUri
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 
 fun showAthanVolumeDialog(activity: Activity) {
@@ -37,7 +37,7 @@ fun showAthanVolumeDialog(activity: Activity) {
         audioManager.setStreamVolume(AudioManager.STREAM_ALARM, volume, 0)
     }
 
-    AlertDialog.Builder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setTitle(R.string.athan_volume)
         .setView(slider)
         .setPositiveButton(R.string.accept) { _, _ ->

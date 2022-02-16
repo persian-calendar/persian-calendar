@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
@@ -33,6 +32,7 @@ import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.saveLocation
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.openlocationcode.OpenLocationCode
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.Dispatchers
@@ -123,7 +123,7 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
 
         runCatching {
             if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                AlertDialog.Builder(activity)
+                MaterialAlertDialogBuilder(activity)
                     .setMessage(R.string.gps_internet_desc)
                     .setPositiveButton(R.string.accept) { _, _ ->
                         runCatching {
@@ -167,7 +167,7 @@ fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner
     }
 
     handler.postDelayed(checkGPSProviderCallback, THIRTY_SECONDS_IN_MILLIS)
-    val dialog = AlertDialog.Builder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .create()
 

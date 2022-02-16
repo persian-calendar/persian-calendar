@@ -4,8 +4,8 @@ import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.widget.ImageView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.set
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.EncodeHintType
 import com.google.zxing.qrcode.QRCodeWriter
@@ -29,7 +29,7 @@ private fun textToQrCodeBitmap(text: String): Bitmap {
 }
 
 fun showQrCode(activity: Activity, text: String) {
-    AlertDialog.Builder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setView(ImageView(activity).also { it.setImageBitmap(textToQrCodeBitmap(text)) })
         .show()
 }
