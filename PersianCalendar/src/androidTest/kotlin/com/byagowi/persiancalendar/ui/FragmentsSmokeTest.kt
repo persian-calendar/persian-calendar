@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
+import android.appwidget.AppWidgetManager
+import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
@@ -62,7 +64,10 @@ class FragmentsSmokeTest {
                 fragmentArgs = PreferencesFragmentArgs(it).toBundle()
             )
         }
-        launchFragmentInContainer<AgeWidgetConfigureFragment>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<AgeWidgetConfigureFragment>(
+            themeResId = R.style.LightTheme,
+            fragmentArgs = bundleOf(AppWidgetManager.EXTRA_APPWIDGET_ID to 1)
+        )
         launchFragmentInContainer<InterfaceCalendarFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LocationAthanFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<WidgetNotificationFragment>(themeResId = R.style.LightTheme)
