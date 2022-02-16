@@ -105,6 +105,7 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
             }
         }
         toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog(activity) }
+        toolbar.menu.add("Typography").onClick { showTypographyDemoDialog(activity) }
         toolbar.menu.add("Clear preferences store and exit").onClick {
             activity.appPrefs.edit { clear() }
             activity.finish()
