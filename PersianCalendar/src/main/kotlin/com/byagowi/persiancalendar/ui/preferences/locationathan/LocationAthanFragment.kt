@@ -11,7 +11,6 @@ import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.core.content.edit
 import androidx.core.net.toUri
-import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
@@ -34,7 +33,6 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
-import com.byagowi.persiancalendar.ui.preferences.dialogTitle
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanGapDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanSelectDialog
 import com.byagowi.persiancalendar.ui.preferences.locationathan.athan.showAthanVolumeDialog
@@ -95,21 +93,17 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     PREF_PRAY_TIME_METHOD,
                     CalculationMethod.values().map { getString(it.titleStringId) },
                     CalculationMethod.values().map { it.name },
-                    DEFAULT_PRAY_TIME_METHOD
-                ) {
-                    title(R.string.pray_methods)
-                    dialogTitle(R.string.pray_methods_calculation)
-                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-                }
+                    DEFAULT_PRAY_TIME_METHOD,
+                    R.string.pray_methods_calculation
+                ) { title(R.string.pray_methods) }
                 singleSelect(
                     PREF_HIGH_LATITUDES_METHOD,
                     HighLatitudesMethod.values().map { getString(it.titleStringId) },
                     HighLatitudesMethod.values().map { it.name },
-                    DEFAULT_HIGH_LATITUDES_METHOD
+                    DEFAULT_HIGH_LATITUDES_METHOD,
+                    R.string.high_latitudes_method
                 ) {
                     title(R.string.high_latitudes_method)
-                    dialogTitle(R.string.high_latitudes_method)
-                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
                     this@LocationAthanFragment.highLatitudesMethodPreference = this
                 }
                 switch(PREF_ASR_HANAFI_JURISTIC, language.isHanafiMajority) {

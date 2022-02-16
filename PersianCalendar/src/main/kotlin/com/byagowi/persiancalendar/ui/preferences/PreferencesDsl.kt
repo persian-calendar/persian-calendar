@@ -44,23 +44,22 @@ inline fun PreferenceCategory.clickable(
 fun Preference.title(@StringRes titleResId: Int) = setTitle(titleResId)
 
 @PreferencesDsl
-fun ListPreference.dialogTitle(@StringRes dialogTitleResId: Int) =
-    setDialogTitle(dialogTitleResId)
-
-@PreferencesDsl
 fun Preference.summary(@StringRes summaryResId: Int) = setSummary(summaryResId)
 
 @PreferencesDsl
 inline fun PreferenceCategory.singleSelect(
     key: String, entries: List<String>, entryValues: List<String>, defaultValue: String,
-    crossinline block: ListPreference.() -> Unit
+    dialogTitleResId: Int, summaryResId: Int? = null, crossinline block: ListPreference.() -> Unit
 ) = this.addPreference(ListPreference(this.context).also {
     it.key = key
+    it.setDialogTitle(dialogTitleResId)
     it.entries = entries.toTypedArray()
     it.entryValues = entryValues.toTypedArray()
     it.setDefaultValue(defaultValue)
     it.setNegativeButtonText(R.string.cancel)
     it.isIconSpaceReserved = false
+    if (summaryResId != null) it.setSummary(summaryResId)
+    else it.summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
     block(it)
 })
 

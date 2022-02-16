@@ -28,7 +28,6 @@ import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
-import com.byagowi.persiancalendar.ui.preferences.dialogTitle
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.preferences.multiSelect
 import com.byagowi.persiancalendar.ui.preferences.section
@@ -61,12 +60,9 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     PREF_THEME,
                     Theme.values().map { getString(it.title) },
                     Theme.values().map { it.key },
-                    Theme.SYSTEM_DEFAULT.key
-                ) {
-                    title(R.string.select_skin)
-                    dialogTitle(R.string.select_skin)
-                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-                }
+                    Theme.SYSTEM_DEFAULT.key,
+                    R.string.select_skin
+                ) { title(R.string.select_skin) }
                 switch(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false) {
                     if (language.isArabic) {
                         title = "السنة الميلادية بالاسماء الشرقية"
@@ -135,18 +131,14 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     PREF_ISLAMIC_OFFSET,
                     // One is formatted with locale's numerals and the other used for keys isn't
                     (-2..2).map { formatNumber(it.toString()) }, (-2..2).map { it.toString() },
-                    DEFAULT_ISLAMIC_OFFSET
-                ) {
-                    title(R.string.islamic_offset)
-                    summary(R.string.islamic_offset_summary)
-                    dialogTitle(R.string.islamic_offset)
-                }
+                    DEFAULT_ISLAMIC_OFFSET, R.string.islamic_offset,
+                    R.string.islamic_offset_summary
+                ) { title(R.string.islamic_offset) }
                 val weekDaysValues = (0..6).map { it.toString() }
-                singleSelect(PREF_WEEK_START, weekDays, weekDaysValues, language.defaultWeekStart) {
-                    title(R.string.week_start)
-                    dialogTitle(R.string.week_start_summary)
-                    summaryProvider = ListPreference.SimpleSummaryProvider.getInstance()
-                }
+                singleSelect(
+                    PREF_WEEK_START, weekDays, weekDaysValues, language.defaultWeekStart,
+                    R.string.week_start_summary
+                ) { title(R.string.week_start) }
                 multiSelect(
                     PREF_WEEK_ENDS, weekDays, weekDaysValues, language.defaultWeekEnds,
                     R.string.week_ends_summary
