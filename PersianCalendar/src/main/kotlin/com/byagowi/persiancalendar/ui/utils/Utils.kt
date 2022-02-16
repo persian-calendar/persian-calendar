@@ -122,7 +122,7 @@ fun MaterialToolbar.setupUpNavigation() {
 }
 
 fun MaterialToolbar.setupMenuNavigation() {
-    (context.getActivity() as? DrawerHost).debugAssertNotNull?.setupToolbarWithDrawer(this)
+    (context.getActivity() as? DrawerHost)?.setupToolbarWithDrawer(this)
 }
 
 // https://stackoverflow.com/a/58249983

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.annotation.VisibleForTesting
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,11 +28,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class ConverterFragment : Fragment(R.layout.fragment_converter) {
+
+    @VisibleForTesting
+    val model by viewModels<ConverterViewModel>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentConverterBinding.bind(view)
-
-        val model by viewModels<ConverterViewModel>()
 
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
