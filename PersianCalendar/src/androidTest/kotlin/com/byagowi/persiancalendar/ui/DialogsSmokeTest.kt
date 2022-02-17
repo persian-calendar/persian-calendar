@@ -37,7 +37,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class DialogsSmokeTest {
     @Test
-    fun shiftWorkDialog() {
+    fun testDialog() {
         listOf<(MainActivity) -> Unit>(
             { it.showChangeLanguageSnackbar() },
             { it.showAppIsOutDatedSnackbar() },
