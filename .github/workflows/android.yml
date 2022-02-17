@@ -48,7 +48,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [32]
-        flavor: [minApi17, minApi21]
+        flavor: [MinApi17, MinApi21]
     steps:
       - uses: actions/checkout@v2
         with:
