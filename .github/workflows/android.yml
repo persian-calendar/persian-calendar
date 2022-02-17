@@ -47,8 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [32]
-        flavor: [MinApi17, MinApi21]
+        api-level: [29]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -74,7 +73,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           arch: x86
-          script: ./gradlew connected${{ matrix.flavor }}DebugAndroidTest --stacktrace
+          script: ./gradlew connectedMinApi17DebugAndroidTest --stacktrace
 
       - name: Upload results
         if: ${{ always() }}
