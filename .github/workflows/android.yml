@@ -72,6 +72,7 @@ jobs:
           api-level: ${{ matrix.api-level }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
+          ram-size: 2048M
           arch: x86
           script: ./gradlew connectedMinApi17DebugAndroidTest --stacktrace
 
