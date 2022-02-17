@@ -53,7 +53,7 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<CompassFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<ConverterFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LevelFragment>(themeResId = R.style.LightTheme)
-        // launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<PanoRendoFragment>(
             themeResId = R.style.LightTheme,
             fragmentArgs = PanoRendoFragmentArgs(0).toBundle()

@@ -37,6 +37,7 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.logException
 import com.cepmuvakkit.times.posAlgo.EarthPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
 import com.google.android.material.animation.ArgbEvaluatorCompat
@@ -188,7 +189,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private var toCoordinates: Coordinates? = null
 
     private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
-        binding.map.setImageBitmap(createMap(date))
+        runCatching { binding.map.setImageBitmap(createMap(date)) }.onFailure(logException)
         binding.date.text = date.formatDateAndTime()
     }
 
