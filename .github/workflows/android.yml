@@ -42,42 +42,43 @@ jobs:
           name: reports
           path: "*/build/reports"
 
-#   test-android:
-#     runs-on: macos-latest
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         api-level: [29]
-#     steps:
-#       - uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 1
+  test-android:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [32]
+        flavor: [minApi17, minApi21]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
-#       - name: set up JDK 11
-#         uses: actions/setup-java@v2
-#         with:
-#           java-version: "11"
-#           distribution: "adopt"
+      - name: set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: "11"
+          distribution: "adopt"
 
-#       - name: Cache Gradle dependencies
-#         uses: actions/cache@v2
-#         with:
-#           path: ~/.gradle/caches
-#           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-#           restore-keys: ${{ runner.os }}-gradle
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
+          restore-keys: ${{ runner.os }}-gradle
 
-#       - name: Run Android tests
-#         uses: reactivecircus/android-emulator-runner@ac874f3db5eccbb177697a00f8f609695ac2b15e
-#         with:
-#           api-level: ${{ matrix.api-level }}
-#           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#           disable-animations: true
-#           arch: x86
-#           script: ./gradlew connectedDebugAndroidTest --stacktrace
+      - name: Run Android tests
+        uses: reactivecircus/android-emulator-runner@76c2bf6f95ed6458fd659a1bdb680a0f8df232dc
+        with:
+          api-level: ${{ matrix.api-level }}
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          arch: x86
+          script: ./gradlew connected${{ matrix.flavor }}DebugAndroidTest --stacktrace
 
-#       - name: Upload results
-#         if: ${{ always() }}
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: instrumentation-test-results ${{ matrix.api-level }}
-#           path: ./**/build/reports/androidTests/connected/**
+      - name: Upload results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: instrumentation-test-results ${{ matrix.api-level }}
+          path: ./**/build/reports/androidTests/connected/**
