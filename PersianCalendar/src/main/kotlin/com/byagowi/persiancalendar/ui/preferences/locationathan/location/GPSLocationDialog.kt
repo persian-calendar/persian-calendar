@@ -21,7 +21,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.askForLocationPermission

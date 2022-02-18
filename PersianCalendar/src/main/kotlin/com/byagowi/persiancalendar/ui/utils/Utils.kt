@@ -46,7 +46,7 @@ import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
-import com.byagowi.persiancalendar.Variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException

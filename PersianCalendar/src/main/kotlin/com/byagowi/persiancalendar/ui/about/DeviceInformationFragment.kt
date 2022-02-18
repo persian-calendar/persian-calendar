@@ -47,7 +47,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
 import com.byagowi.persiancalendar.databinding.FragmentDeviceInformationBinding
 import com.byagowi.persiancalendar.ui.utils.MorphedPath

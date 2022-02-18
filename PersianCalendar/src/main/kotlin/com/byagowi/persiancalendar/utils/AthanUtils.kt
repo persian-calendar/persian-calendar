@@ -36,7 +36,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates

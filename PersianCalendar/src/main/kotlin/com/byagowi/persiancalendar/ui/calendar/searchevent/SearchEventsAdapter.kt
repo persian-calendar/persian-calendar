@@ -9,7 +9,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn

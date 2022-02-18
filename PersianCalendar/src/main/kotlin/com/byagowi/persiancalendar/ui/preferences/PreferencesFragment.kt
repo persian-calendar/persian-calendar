@@ -21,7 +21,7 @@ import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.global.enableNewInterface

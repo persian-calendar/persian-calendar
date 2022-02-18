@@ -50,8 +50,8 @@ import com.byagowi.persiancalendar.PREF_WHAT_TO_SHOW_WIDGETS
 import com.byagowi.persiancalendar.PREF_WIDGET_CLOCK
 import com.byagowi.persiancalendar.PREF_WIDGET_IN_24
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.Variants.debugAssertNotNull
-import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language

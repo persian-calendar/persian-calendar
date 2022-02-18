@@ -4,7 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
-import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.scheduleAlarmManagerUpdates

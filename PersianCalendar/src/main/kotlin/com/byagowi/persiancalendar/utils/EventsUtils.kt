@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.utils
 
 import android.content.SharedPreferences
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.Variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn

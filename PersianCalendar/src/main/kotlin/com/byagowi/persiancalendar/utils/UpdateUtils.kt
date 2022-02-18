@@ -44,7 +44,7 @@ import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
-import com.byagowi.persiancalendar.Variants.debugLog
+import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
