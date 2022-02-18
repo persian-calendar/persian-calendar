@@ -193,7 +193,9 @@ dependencies {
 
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+    val coroutinesVersion = "1.6.0"
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+    debugImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     implementation("com.google.openlocationcode:openlocationcode:1.0.4")

@@ -7,6 +7,9 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.converter.ConverterFragment
 import com.byagowi.persiancalendar.ui.converter.ViewModel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -35,6 +38,15 @@ class ConverterFragmentTest {
             assertTrue(model.isDayDistance.value)
             model.distanceJdn.value = Jdn.today() + 1
             assertTrue(model.todayButtonVisibility.value)
+            model.distanceJdn.value = Jdn.today()
+
+            runTest(UnconfinedTestDispatcher()) {
+                val values = mutableListOf<Boolean>()
+                val job = launch { model.todayButtonVisibility.collect(values::add) }
+                model.distanceJdn.value = Jdn.today() + 1
+                job.cancel()
+                assertEquals(listOf(false, true), values)
+            }
         }
     }
 }
