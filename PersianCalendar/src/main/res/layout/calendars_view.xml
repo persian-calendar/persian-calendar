@@ -171,11 +171,11 @@
 
     <com.byagowi.persiancalendar.ui.common.ArrowView
         android:id="@+id/expansion_arrow"
-        android:layout_width="@dimen/arrow_size"
-        android:layout_height="@dimen/arrow_size"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:layout_gravity="center"
+        android:layout_marginTop="8dp"
         android:importantForAccessibility="no"
-        android:paddingTop="@dimen/padding_item"
         app:tint="?attr/colorAccent" />
 
 </LinearLayout>
