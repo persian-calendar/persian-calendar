@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.converter.ConverterFragment
-import com.byagowi.persiancalendar.ui.converter.ViewModel
+import com.byagowi.persiancalendar.ui.converter.ConverterViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -21,7 +21,7 @@ class ConverterFragmentTest {
     @Test
     fun testTodayButtonVisibility() {
         launchFragmentInContainer<ConverterFragment>(themeResId = R.style.LightTheme).onFragment {
-            val model by it.viewModels<ViewModel>()
+            val model by it.viewModels<ConverterViewModel>()
 
             // Converter
             assertEquals(model.jdn.value, Jdn.today())

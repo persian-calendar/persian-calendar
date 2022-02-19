@@ -31,8 +31,8 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentConverterBinding.bind(view)
 
-        val model by viewModels<ViewModel>()
-        binding.dayPickerView.changeCalendarType(model.calendarType.value)
+        val viewModel by viewModels<ConverterViewModel>()
+        binding.dayPickerView.changeCalendarType(viewModel.calendarType.value)
 
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
@@ -43,12 +43,12 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-                model.isDayDistance.value = position == 1
+                viewModel.isDayDistance.value = position == 1
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
-        spinner.setSelection(if (model.isDayDistance.value) 1 else 0)
+        spinner.setSelection(if (viewModel.isDayDistance.value) 1 else 0)
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setupMenuNavigation()
@@ -77,7 +77,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         }.onClick {
             val jdn = binding.dayPickerView.jdn
             activity?.shareText(
-                if (model.isDayDistance.value) binding.dayDistance.text.toString()
+                if (viewModel.isDayDistance.value) binding.dayDistance.text.toString()
                 else listOf(
                     dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
                     getString(R.string.equivalent_to),
@@ -86,41 +86,41 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             )
         }
 
-        binding.secondDayPickerView.jdn = model.distanceJdn.value
+        binding.secondDayPickerView.jdn = viewModel.distanceJdn.value
         binding.secondDayPickerView.turnToSecondaryDatePicker()
-        binding.dayPickerView.selectedDayListener = { model.jdn.value = it }
-        binding.dayPickerView.selectedCalendarListener = { model.calendarType.value = it }
-        binding.dayPickerView.jdn = model.jdn.value
-        binding.secondDayPickerView.selectedDayListener = { model.distanceJdn.value = it }
+        binding.dayPickerView.selectedDayListener = { viewModel.jdn.value = it }
+        binding.dayPickerView.selectedCalendarListener = { viewModel.calendarType.value = it }
+        binding.dayPickerView.jdn = viewModel.jdn.value
+        binding.secondDayPickerView.selectedDayListener = { viewModel.distanceJdn.value = it }
 
         // Setup flow listeners
         fun updateResult() {
-            model.todayButtonVisibility.value = model.jdn.value != todayJdn ||
-                    (model.isDayDistance.value && model.distanceJdn.value != todayJdn)
-            if (model.isDayDistance.value) {
+            viewModel.todayButtonVisibility.value = viewModel.jdn.value != todayJdn ||
+                    (viewModel.isDayDistance.value && viewModel.distanceJdn.value != todayJdn)
+            if (viewModel.isDayDistance.value) {
                 binding.dayDistance.text = calculateDaysDifference(
-                    resources, model.jdn.value, model.distanceJdn.value,
-                    model.calendarType.value
+                    resources, viewModel.jdn.value, viewModel.distanceJdn.value,
+                    viewModel.calendarType.value
                 )
             } else {
-                val selectedCalendarType = model.calendarType.value
+                val selectedCalendarType = viewModel.calendarType.value
                 binding.calendarsView.showCalendars(
-                    model.jdn.value,
+                    viewModel.jdn.value,
                     selectedCalendarType, enabledCalendars - selectedCalendarType
                 )
             }
         }
 
         val viewLifecycleScope = viewLifecycleOwner.lifecycleScope
-        model.calendarType.onEach {
-            if (model.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
+        viewModel.calendarType.onEach {
+            if (viewModel.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
             updateResult()
         }.launchIn(viewLifecycleScope)
-        model.jdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
-        model.distanceJdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
-        model.todayButtonVisibility.onEach(todayButton::setVisible).launchIn(viewLifecycleScope)
-        model.isDayDistance.onEach {
-            if (it) binding.secondDayPickerView.changeCalendarType(model.calendarType.value)
+        viewModel.jdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
+        viewModel.distanceJdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
+        viewModel.todayButtonVisibility.onEach(todayButton::setVisible).launchIn(viewLifecycleScope)
+        viewModel.isDayDistance.onEach {
+            if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendarType.value)
             binding.secondDayPickerView.isVisible = it
             binding.dayDistance.isVisible = it
             binding.calendarsView.isVisible = !it

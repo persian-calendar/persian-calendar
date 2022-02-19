@@ -5,7 +5,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class ViewModel : ViewModel() {
+class ConverterViewModel : ViewModel() {
     val calendarType = MutableStateFlow(mainCalendar)
     val jdn = MutableStateFlow(Jdn.today())
     val distanceJdn = MutableStateFlow(Jdn.today())

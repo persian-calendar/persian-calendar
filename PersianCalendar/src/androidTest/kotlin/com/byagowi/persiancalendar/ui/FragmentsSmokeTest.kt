@@ -16,7 +16,6 @@ import com.byagowi.persiancalendar.ui.converter.ConverterFragment
 import com.byagowi.persiancalendar.ui.level.LevelFragment
 import com.byagowi.persiancalendar.ui.map.MapFragment
 import com.byagowi.persiancalendar.ui.map.PanoRendoFragment
-import com.byagowi.persiancalendar.ui.map.PanoRendoFragmentArgs
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.LOCATION_ATHAN_TAB
