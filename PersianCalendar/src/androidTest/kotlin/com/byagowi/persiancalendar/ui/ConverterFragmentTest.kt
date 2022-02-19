@@ -21,29 +21,29 @@ class ConverterFragmentTest {
     @Test
     fun testTodayButtonVisibility() {
         launchFragmentInContainer<ConverterFragment>(themeResId = R.style.LightTheme).onFragment {
-            val model by it.viewModels<ConverterViewModel>()
+            val viewModel by it.viewModels<ConverterViewModel>()
 
             // Converter
-            assertEquals(model.jdn.value, Jdn.today())
-            assertFalse(model.todayButtonVisibility.value)
-            model.jdn.value = Jdn.today() + 1
-            assertEquals(model.jdn.value, Jdn.today() + 1)
-            assertTrue(model.todayButtonVisibility.value)
-            model.jdn.value = Jdn.today()
-            assertFalse(model.todayButtonVisibility.value)
+            assertEquals(viewModel.jdn.value, Jdn.today())
+            assertFalse(viewModel.todayButtonVisibility.value)
+            viewModel.jdn.value = Jdn.today() + 1
+            assertEquals(viewModel.jdn.value, Jdn.today() + 1)
+            assertTrue(viewModel.todayButtonVisibility.value)
+            viewModel.jdn.value = Jdn.today()
+            assertFalse(viewModel.todayButtonVisibility.value)
 
             // Day distance
-            assertFalse(model.isDayDistance.value)
-            model.isDayDistance.value = true
-            assertTrue(model.isDayDistance.value)
-            model.distanceJdn.value = Jdn.today() + 1
-            assertTrue(model.todayButtonVisibility.value)
-            model.distanceJdn.value = Jdn.today()
+            assertFalse(viewModel.isDayDistance.value)
+            viewModel.isDayDistance.value = true
+            assertTrue(viewModel.isDayDistance.value)
+            viewModel.distanceJdn.value = Jdn.today() + 1
+            assertTrue(viewModel.todayButtonVisibility.value)
+            viewModel.distanceJdn.value = Jdn.today()
 
             runTest(UnconfinedTestDispatcher()) {
                 val values = mutableListOf<Boolean>()
-                val job = launch { model.todayButtonVisibility.collect(values::add) }
-                model.distanceJdn.value = Jdn.today() + 1
+                val job = launch { viewModel.todayButtonVisibility.collect(values::add) }
+                viewModel.distanceJdn.value = Jdn.today() + 1
                 job.cancel()
                 assertEquals(listOf(false, true), values)
             }

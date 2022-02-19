@@ -31,7 +31,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 
 class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentAstronomyBinding.bind(view)

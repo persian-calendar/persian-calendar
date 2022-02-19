@@ -126,7 +126,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private var mainBinding: FragmentCalendarBinding? = null
     private var searchView: SearchView? = null
-    private var todayButton: MenuItem? = null
     private val initialJdn = Jdn.today()
     private val initialDate = initialJdn.toCalendar(mainCalendar)
 
@@ -134,7 +133,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         super.onDestroyView()
         mainBinding = null
         searchView = null
-        todayButton = null
     }
 
     private val onBackPressedCloseSearchCallback = object : OnBackPressedCallback(false) {
@@ -250,7 +248,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.onMonthSelected = {
                 val date = it.selectedMonth
                 updateToolbar(binding, date)
-                todayButton?.isVisible =
+                viewModel.todayButtonVisibility.value =
                     date.year != initialDate.year || date.month != initialDate.month
             }
         }
@@ -402,9 +400,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
 
         val isToday = Jdn.today() == jdn
-        // Show/Hide bring today menu button
-        todayButton?.isVisible = !isToday
-
         viewModel.jdn.value = jdn
 
         // a11y
@@ -557,9 +552,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         toolbar.menu.add(R.string.return_to_today).also {
             it.icon = toolbarContext.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
-            it.isVisible = false
             it.onClick { bringDate(Jdn.today(), highlight = false) }
-            todayButton = it
+
+            viewModel.todayButtonVisibility.onEach { visibility ->
+                it.isVisible = visibility
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+            viewModel.jdn.onEach { jdn ->
+                viewModel.todayButtonVisibility.value = jdn != Jdn.today()
+            }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
         toolbar.menu.add(R.string.search_in_events).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
