@@ -32,6 +32,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         val binding = FragmentConverterBinding.bind(view)
 
         val model by viewModels<ViewModel>()
+        binding.dayPickerView.changeCalendarType(model.calendarType.value)
 
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
@@ -47,6 +48,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
+        spinner.setSelection(if (model.isDayDistance.value) 1 else 0)
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setupMenuNavigation()
@@ -84,11 +86,11 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             )
         }
 
-        binding.secondDayPickerView.jdn = todayJdn
+        binding.secondDayPickerView.jdn = model.distanceJdn.value
         binding.secondDayPickerView.turnToSecondaryDatePicker()
         binding.dayPickerView.selectedDayListener = { model.jdn.value = it }
         binding.dayPickerView.selectedCalendarListener = { model.calendarType.value = it }
-        binding.dayPickerView.jdn = todayJdn
+        binding.dayPickerView.jdn = model.jdn.value
         binding.secondDayPickerView.selectedDayListener = { model.distanceJdn.value = it }
 
         // Setup flow listeners

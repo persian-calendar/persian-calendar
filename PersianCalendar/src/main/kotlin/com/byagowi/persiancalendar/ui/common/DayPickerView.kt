@@ -96,8 +96,11 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.monthTitle.isVisible = false
         binding.yearTitle.isVisible = false
     }
-    fun changeCalendarType(calendarType: CalendarType) { // only to use when the picker is secondary
+
+    // To use in init or when the picker is secondary, selectedCalendarListener isn't called
+    fun changeCalendarType(calendarType: CalendarType) {
         selectedCalendarType = calendarType
+        binding.calendarsFlow.changeSelection(calendarType)
         jdn = currentJdn
     }
 }

@@ -11,6 +11,10 @@ import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
 class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
+
+    var changeSelection = fun(_: CalendarType) {}
+        private set
+
     fun setup(
         calendarTypes: List<Pair<CalendarType, String>>,
         onItemClick: (CalendarType) -> Unit
@@ -18,25 +22,24 @@ class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(cont
         val chips = calendarTypes.map { (_, title) ->
             SingleChipLayoutBinding.inflate(context.layoutInflater).also {
                 it.root.text = title
-                when {
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
-                        it.root.elevation = resources.getDimension(R.dimen.chip_elevation)
-                    }
-                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    it.root.elevation = resources.getDimension(R.dimen.chip_elevation)
             }.root
+        }
+        changeSelection = fun(calendarType: CalendarType) {
+            chips.forEachIndexed { i, chipView ->
+                chipView.isClickable = calendarType != calendarTypes[i].first
+                chipView.isSelected = calendarType == calendarTypes[i].first
+            }
         }
         addViewsToFlow(chips.mapIndexed { i, chip ->
             chip.setOnClickListener {
                 onItemClick(calendarTypes[i].first)
-                chips.forEachIndexed { j, chipView ->
-                    chipView.isClickable = i != j
-                    chipView.isSelected = i == j
-                }
+                changeSelection(calendarTypes[i].first)
             }
-            chip.isClickable = i != 0
-            chip.isSelected = i == 0
             chip.isCheckable = false
             chip
         })
+        changeSelection(calendarTypes[0].first)
     }
 }
