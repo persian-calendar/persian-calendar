@@ -24,28 +24,28 @@ class ConverterFragmentTest {
             val viewModel by it.viewModels<ConverterViewModel>()
 
             // Converter
-            assertEquals(viewModel.jdn.value, Jdn.today())
-            assertFalse(viewModel.todayButtonVisibility.value)
-            viewModel.jdn.value = Jdn.today() + 1
-            assertEquals(viewModel.jdn.value, Jdn.today() + 1)
-            assertTrue(viewModel.todayButtonVisibility.value)
-            viewModel.jdn.value = Jdn.today()
-            assertFalse(viewModel.todayButtonVisibility.value)
-
-            // Day distance
-            assertFalse(viewModel.isDayDistance.value)
-            viewModel.isDayDistance.value = true
-            assertTrue(viewModel.isDayDistance.value)
-            viewModel.distanceJdn.value = Jdn.today() + 1
-            assertTrue(viewModel.todayButtonVisibility.value)
-            viewModel.distanceJdn.value = Jdn.today()
-
             runTest(UnconfinedTestDispatcher()) {
                 val values = mutableListOf<Boolean>()
                 val job = launch { viewModel.todayButtonVisibility.collect(values::add) }
-                viewModel.distanceJdn.value = Jdn.today() + 1
+                viewModel.selectedDate.value = Jdn.today() + 1
+                viewModel.selectedDate.value = Jdn.today()
                 job.cancel()
-                assertEquals(listOf(false, true), values)
+                assertEquals(listOf(false, false, false, true, false), values)
+            }
+
+            // Day distance
+            runTest(UnconfinedTestDispatcher()) {
+                val values = mutableListOf<Boolean>()
+                val job = launch { viewModel.todayButtonVisibility.collect(values::add) }
+                viewModel.isDayDistance.value = true
+                viewModel.secondSelectedDate.value = Jdn.today() + 1
+                viewModel.secondSelectedDate.value = Jdn.today()
+                viewModel.secondSelectedDate.value = Jdn.today() + 1
+                viewModel.isDayDistance.value = false
+                viewModel.secondSelectedDate.value = Jdn.today()
+                job.cancel()
+                val expected = listOf(false, false, false, false, true, false, true, false, false)
+                assertEquals(expected, values)
             }
         }
     }

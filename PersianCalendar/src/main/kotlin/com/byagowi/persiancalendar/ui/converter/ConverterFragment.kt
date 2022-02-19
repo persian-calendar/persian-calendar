@@ -23,6 +23,7 @@ import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -86,26 +87,25 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             )
         }
 
-        binding.secondDayPickerView.jdn = viewModel.distanceJdn.value
+        binding.secondDayPickerView.jdn = viewModel.secondSelectedDate.value
         binding.secondDayPickerView.turnToSecondaryDatePicker()
-        binding.dayPickerView.selectedDayListener = { viewModel.jdn.value = it }
+        binding.dayPickerView.selectedDayListener = { viewModel.selectedDate.value = it }
         binding.dayPickerView.selectedCalendarListener = { viewModel.calendarType.value = it }
-        binding.dayPickerView.jdn = viewModel.jdn.value
-        binding.secondDayPickerView.selectedDayListener = { viewModel.distanceJdn.value = it }
+        binding.dayPickerView.jdn = viewModel.selectedDate.value
+        binding.secondDayPickerView.selectedDayListener =
+            { viewModel.secondSelectedDate.value = it }
 
         // Setup flow listeners
         fun updateResult() {
-            viewModel.todayButtonVisibility.value = viewModel.jdn.value != todayJdn ||
-                    (viewModel.isDayDistance.value && viewModel.distanceJdn.value != todayJdn)
             if (viewModel.isDayDistance.value) {
                 binding.dayDistance.text = calculateDaysDifference(
-                    resources, viewModel.jdn.value, viewModel.distanceJdn.value,
+                    resources, viewModel.selectedDate.value, viewModel.secondSelectedDate.value,
                     viewModel.calendarType.value
                 )
             } else {
                 val selectedCalendarType = viewModel.calendarType.value
                 binding.calendarsView.showCalendars(
-                    viewModel.jdn.value,
+                    viewModel.selectedDate.value,
                     selectedCalendarType, enabledCalendars - selectedCalendarType
                 )
             }
@@ -116,9 +116,10 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             if (viewModel.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
             updateResult()
         }.launchIn(viewLifecycleScope)
-        viewModel.jdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
-        viewModel.distanceJdn.onEach { updateResult() }.launchIn(viewLifecycleScope)
-        viewModel.todayButtonVisibility.onEach(todayButton::setVisible).launchIn(viewLifecycleScope)
+        viewModel.selectedDate.onEach { updateResult() }.launchIn(viewLifecycleScope)
+        viewModel.secondSelectedDate.onEach { updateResult() }.launchIn(viewLifecycleScope)
+        viewModel.todayButtonVisibility.distinctUntilChanged()
+            .onEach(todayButton::setVisible).launchIn(viewLifecycleScope)
         viewModel.isDayDistance.onEach {
             if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendarType.value)
             binding.secondDayPickerView.isVisible = it
