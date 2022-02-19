@@ -14,8 +14,6 @@ import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
 import com.byagowi.persiancalendar.ui.converter.ConverterFragment
 import com.byagowi.persiancalendar.ui.level.LevelFragment
-import com.byagowi.persiancalendar.ui.map.MapFragment
-import com.byagowi.persiancalendar.ui.map.PanoRendoFragment
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.LOCATION_ATHAN_TAB
@@ -52,11 +50,16 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<CompassFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<ConverterFragment>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LevelFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<PanoRendoFragment>(
-            themeResId = R.style.LightTheme,
-            fragmentArgs = PanoRendoFragmentArgs(0).toBundle()
-        )
+//        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
+//        navController.setViewModelStore(ViewModelStore())
+//        launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme).onFragment {
+//            navController.setGraph(R.navigation.navigation_graph)
+//            Navigation.setViewNavController(it.requireView(), navController)
+//        }
+//        launchFragmentInContainer<PanoRendoFragment>(themeResId = R.style.LightTheme).onFragment {
+//            navController.setGraph(R.navigation.navigation_graph)
+//            Navigation.setViewNavController(it.requireView(), navController)
+//        }
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
             launchFragmentInContainer<PreferencesFragment>(
                 themeResId = R.style.LightTheme,
