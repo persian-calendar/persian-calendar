@@ -29,16 +29,16 @@ class BasicSmokeTest {
 
     @Test
     fun basicSmokeTest() {
-        val appCompatImageButton = onView(
-            allOf(
-                withContentDescription("باز کردن کشوی پیمایش"), childAtPosition(
-                    allOf(
-                        withId(R.id.toolbar), childAtPosition(withId(R.id.app_bar), 0)
-                    ), 1
-                ), isDisplayed()
-            )
-        )
-        appCompatImageButton.perform(click())
+//        val appCompatImageButton = onView(
+//            allOf(
+//                withContentDescription("باز کردن کشوی پیمایش"), childAtPosition(
+//                    allOf(
+//                        withId(R.id.toolbar), childAtPosition(withId(R.id.app_bar), 0)
+//                    ), 1
+//                ), isDisplayed()
+//            )
+//        )
+//        appCompatImageButton.perform(click())
 
 //        onView(
 //            allOf(
