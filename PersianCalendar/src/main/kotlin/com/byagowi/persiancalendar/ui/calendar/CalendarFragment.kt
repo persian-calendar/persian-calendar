@@ -126,8 +126,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private var mainBinding: FragmentCalendarBinding? = null
     private var searchView: SearchView? = null
-    private val initialJdn = Jdn.today()
-    private val initialDate = initialJdn.toCalendar(mainCalendar)
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -163,7 +161,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.enableTransitionType(LayoutTransition.CHANGING)
             it.setAnimateParentHierarchy(false)
         }
-        viewModel.jdn.onEach { showEvent(binding, it) }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.selectedDay.onEach { showEvent(binding, it) }.launchIn(viewLifecycleOwner.lifecycleScope)
         return binding.root
     }
 
@@ -188,7 +186,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
         binding.timesFlow.setup()
 
-        viewModel.jdn.onEach { jdn ->
+        viewModel.selectedDay.onEach { jdn ->
             setOwghat(binding, jdn, jdn == Jdn.today())
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -225,7 +223,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
         val tabs = listOfNotNull(
             R.string.calendar to CalendarsView(view.context).also { calendarsView ->
-                viewModel.jdn.onEach { jdn ->
+                viewModel.selectedDay.onEach { jdn ->
                     calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
                 }.launchIn(viewLifecycleOwner.lifecycleScope)
             },
@@ -245,13 +243,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         binding.calendarPager.also {
             it.onDayClicked = { jdn -> bringDate(jdn, monthChange = false) }
             it.onDayLongClicked = ::addEventOnCalendar
-            it.onMonthSelected = {
-                val date = it.selectedMonth
-                updateToolbar(binding, date)
-                viewModel.todayButtonVisibility.value =
-                    date.year != initialDate.year || date.month != initialDate.month
-            }
+            it.setSelectedDay(
+                Jdn(viewModel.selectedMonth.value), highlight = false, smoothScroll = false
+            )
+            it.onMonthSelected = { viewModel.selectedMonth.value = it.selectedMonth }
         }
+
+        viewModel.selectedMonth.onEach {
+            updateToolbar(binding, it)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         val tabsViewPager = binding.viewPager
         tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -292,9 +292,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         }
 
-        val savedJdn = viewModel.jdn.value
-        if (savedJdn != initialJdn) {
-            bringDate(savedJdn, smoothScroll = false)
+        val savedJdn = viewModel.selectedDay.value
+        if (savedJdn != Jdn.today()) {
+            bringDate(savedJdn, monthChange = false, smoothScroll = false)
         } else {
             bringDate(Jdn.today(), monthChange = false, highlight = false)
         }
@@ -303,8 +303,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             appBar.toolbar.setupMenuNavigation()
             appBar.root.hideToolbarBottomShadow()
         }
-
-        updateToolbar(binding, viewModel.jdn.value.toCalendar(mainCalendar))
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {
@@ -400,7 +398,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
 
         val isToday = Jdn.today() == jdn
-        viewModel.jdn.value = jdn
+        viewModel.selectedDay.value = jdn
 
         // a11y
         if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
@@ -535,7 +533,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 it.setOnItemClickListener { parent, _, position, _ ->
                     val date = (parent.getItemAtPosition(position) as CalendarEvent<*>).date
                     val type = date.calendarType
-                    val today = initialJdn.toCalendar(type)
+                    val today = Jdn.today().toCalendar(type)
                     bringDate(
                         Jdn(
                             type, if (date.year == -1)
@@ -557,10 +555,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             viewModel.todayButtonVisibility.onEach { visibility ->
                 it.isVisible = visibility
             }.launchIn(viewLifecycleOwner.lifecycleScope)
-
-            viewModel.jdn.onEach { jdn ->
-                viewModel.todayButtonVisibility.value = jdn != Jdn.today()
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
         toolbar.menu.add(R.string.search_in_events).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
@@ -570,18 +564,18 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
                 showDayPickerDialog(
-                    activity ?: return@onClick, viewModel.jdn.value, R.string.go
+                    activity ?: return@onClick, viewModel.selectedDay.value, R.string.go
                 ) { jdn -> bringDate(jdn) }
             }
         }
         toolbar.menu.add(R.string.add_event).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { addEventOnCalendar(viewModel.jdn.value) }
+            it.onClick { addEventOnCalendar(viewModel.selectedDay.value) }
         }
         toolbar.menu.add(R.string.shift_work_settings).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showShiftWorkDialog(activity ?: return@onClick, viewModel.jdn.value) {
+                showShiftWorkDialog(activity ?: return@onClick, viewModel.selectedDay.value) {
                     findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
             }
@@ -589,14 +583,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         toolbar.menu.add(R.string.month_overview).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showMonthOverviewDialog(activity ?: return@onClick, calendarPager.selectedMonth)
+                showMonthOverviewDialog(activity ?: return@onClick, viewModel.selectedMonth.value)
             }
         }
         if (coordinates != null) {
             toolbar.menu.add(R.string.month_pray_times).also {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                 it.onClick {
-                    context.openHtmlInBrowser(createOwghatHtmlReport(calendarPager.selectedMonth))
+                    context.openHtmlInBrowser(createOwghatHtmlReport(viewModel.selectedMonth.value))
                 }
             }
         }

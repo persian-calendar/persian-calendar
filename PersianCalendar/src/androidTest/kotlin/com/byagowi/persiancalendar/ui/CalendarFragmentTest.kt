@@ -5,6 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import kotlinx.coroutines.launch
@@ -23,10 +24,27 @@ class CalendarFragmentTest {
             runTest(UnconfinedTestDispatcher()) {
                 val values = mutableListOf<Boolean>()
                 val job = launch { viewModel.todayButtonVisibility.collect(values::add) }
-                viewModel.jdn.value = Jdn.today() + 1
-                viewModel.jdn.value = Jdn.today()
-                viewModel.jdn.value = Jdn.today() - 1
-                viewModel.jdn.value = Jdn.today()
+                viewModel.selectedDay.value = Jdn.today() + 1
+                viewModel.selectedDay.value = Jdn.today()
+                viewModel.selectedDay.value = Jdn.today() - 1
+                viewModel.selectedDay.value = Jdn.today()
+                job.cancel()
+                assertEquals(listOf(false, true, false, true, false), values)
+            }
+
+            runTest(UnconfinedTestDispatcher()) {
+                val values = mutableListOf<Boolean>()
+                val job = launch { viewModel.todayButtonVisibility.collect(values::add) }
+                viewModel.selectedDay.value = Jdn.today() + 1
+                viewModel.selectedMonth.value =
+                    mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 1)
+                viewModel.selectedDay.value = Jdn.today()
+                viewModel.selectedMonth.value =
+                    mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 0)
+                viewModel.selectedMonth.value =
+                    mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), -1)
+                viewModel.selectedMonth.value =
+                    mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 0)
                 job.cancel()
                 assertEquals(listOf(false, true, false, true, false), values)
             }
