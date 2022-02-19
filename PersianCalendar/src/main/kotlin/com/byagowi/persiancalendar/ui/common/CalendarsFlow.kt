@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.animation.LayoutTransition
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
@@ -24,7 +25,14 @@ class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attr
         // It implicitly expects the number of calendarsToShow items to not be changed during
         // the view lifecycle
         if (bindings.isEmpty()) {
-            bindings = calendarsToShow.map { CalendarItemBinding.inflate(context.layoutInflater) }
+            bindings = calendarsToShow.map {
+                CalendarItemBinding.inflate(context.layoutInflater).also {
+                    it.container.layoutTransition = LayoutTransition().apply {
+                        enableTransitionType(LayoutTransition.CHANGING)
+                        setAnimateParentHierarchy(false)
+                    }
+                }
+            }
             addViewsToFlow(bindings.map {
                 it.container.setOnClickListener(this)
                 it.linear.setOnClickListener(this)

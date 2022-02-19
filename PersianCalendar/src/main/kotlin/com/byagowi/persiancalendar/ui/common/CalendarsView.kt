@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.common
 
+import android.animation.LayoutTransition
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
@@ -30,6 +31,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).also {
         it.root.setOnClickListener { toggle() }
+        it.root.layoutTransition = LayoutTransition().apply {
+            enableTransitionType(LayoutTransition.APPEARING or LayoutTransition.DISAPPEARING)
+            setAnimateParentHierarchy(false)
+        }
         it.root.setupExpandableAccessibilityDescription()
         it.extraInformationContainer.isVisible = false
     }
