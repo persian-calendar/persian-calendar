@@ -71,18 +71,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
         val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
-        fun update() {
+
+        viewModel.updateMap.onEach {
             val date = GregorianCalendar().also { it.time = Date(viewModel.time.value) }
             runCatching {
                 binding.map.setImageBitmap(createMap(date, viewModel))
             }.onFailure(logException)
             binding.date.text = date.formatDateAndTime()
-        }
-        viewModel.time.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.displayNightMask.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.displayLocation.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.displayGrid.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.isDirectPathMode.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
