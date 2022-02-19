@@ -27,6 +27,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
@@ -286,8 +287,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
         }
 
-        val savedJdn = savedInstanceState?.getJdnOrNull(SELECTED_JDN_KEY)
-        if (savedJdn != null && savedJdn != initialJdn) {
+        val savedJdn = viewModel.jdn.value
+        if (savedJdn != initialJdn) {
             bringDate(savedJdn, smoothScroll = false)
         } else {
             bringDate(Jdn.today(), monthChange = false, highlight = false)
@@ -298,12 +299,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             appBar.root.hideToolbarBottomShadow()
         }
 
-        updateToolbar(selectedJdn.toCalendar(mainCalendar))
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putJdn(SELECTED_JDN_KEY, selectedJdn)
+        updateToolbar(viewModel.jdn.value.toCalendar(mainCalendar))
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {
@@ -392,12 +388,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
     }
 
-    private var selectedJdn: Jdn = Jdn.today()
+    private val viewModel by viewModels<CalendarViewModel>()
     private fun bringDate(
         jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
         smoothScroll: Boolean = true
     ) {
-        selectedJdn = jdn
+        viewModel.jdn.value = jdn
 
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
 
@@ -574,19 +570,19 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showDayPickerDialog(activity ?: return@onClick, selectedJdn, R.string.go) { jdn ->
+                showDayPickerDialog(activity ?: return@onClick, viewModel.jdn.value, R.string.go) { jdn ->
                     bringDate(jdn)
                 }
             }
         }
         toolbar.menu.add(R.string.add_event).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { addEventOnCalendar(selectedJdn) }
+            it.onClick { addEventOnCalendar(viewModel.jdn.value) }
         }
         toolbar.menu.add(R.string.shift_work_settings).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showShiftWorkDialog(activity ?: return@onClick, selectedJdn) {
+                showShiftWorkDialog(activity ?: return@onClick, viewModel.jdn.value) {
                     findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
                 }
             }
@@ -691,6 +687,5 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         private const val CALENDARS_TAB = 0
         private const val EVENTS_TAB = 1
         private const val OWGHAT_TAB = 2
-        private const val SELECTED_JDN_KEY = "SELECTED_JDN_KEY"
     }
 }
