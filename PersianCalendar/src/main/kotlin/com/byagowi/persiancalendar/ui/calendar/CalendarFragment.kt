@@ -103,6 +103,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.calendar.AbstractDate
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.html.body
@@ -552,7 +553,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.onClick { bringDate(Jdn.today(), highlight = false) }
 
-            viewModel.todayButtonVisibility.onEach { visibility ->
+            viewModel.todayButtonVisibility.distinctUntilChanged().onEach { visibility ->
                 it.isVisible = visibility
             }.launchIn(viewLifecycleOwner.lifecycleScope)
         }
