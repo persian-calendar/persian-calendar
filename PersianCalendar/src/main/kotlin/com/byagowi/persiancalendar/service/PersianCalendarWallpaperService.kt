@@ -32,9 +32,10 @@ class PersianCalendarWallpaperService : WallpaperService() {
         }
 
         private var rotationDegree = 0f
+        private val direction = listOf(1, -1).random()
         private fun draw() {
             val surfaceHolder = surfaceHolder
-            rotationDegree += .05f
+            rotationDegree += .05f * direction
             runCatching {
                 val result = surfaceHolder.lockCanvas()
                 result.getClipBounds(bounds)
