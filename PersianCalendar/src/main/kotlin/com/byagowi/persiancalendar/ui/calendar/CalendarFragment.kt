@@ -28,6 +28,7 @@ import androidx.core.text.inSpans
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
@@ -43,7 +44,6 @@ import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.TIME_NAMES
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
@@ -91,19 +91,20 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getFromStringId
-import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
 import com.byagowi.persiancalendar.utils.monthName
-import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.titleStringId
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.calendar.AbstractDate
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head
@@ -124,9 +125,6 @@ import kotlinx.html.unsafe
 class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private var mainBinding: FragmentCalendarBinding? = null
-    private var calendarsView: CalendarsView? = null
-    private var owghatBinding: OwghatTabContentBinding? = null
-    private var eventsBinding: EventsTabContentBinding? = null
     private var searchView: SearchView? = null
     private var todayButton: MenuItem? = null
     private val initialJdn = Jdn.today()
@@ -135,9 +133,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     override fun onDestroyView() {
         super.onDestroyView()
         mainBinding = null
-        calendarsView = null
-        owghatBinding = null
-        eventsBinding = null
         searchView = null
         todayButton = null
     }
@@ -166,18 +161,17 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding = EventsTabContentBinding.inflate(inflater, container, false)
-        eventsBinding = binding
         binding.eventsContent.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.CHANGING)
             it.setAnimateParentHierarchy(false)
         }
+        viewModel.jdn.onEach { showEvent(binding, it) }.launchIn(viewLifecycleOwner.lifecycleScope)
         return binding.root
     }
 
     private fun createOwghatTab(inflater: LayoutInflater, container: ViewGroup?): View {
-        if (coordinates == null) return createOwghatTabPlaceholder(inflater, container)
+        val coordinates = coordinates ?: return createOwghatTabPlaceholder(inflater, container)
         val binding = OwghatTabContentBinding.inflate(inflater, container, false)
-        owghatBinding = binding
 
         var isExpanded = false
         binding.root.setOnClickListener {
@@ -195,6 +189,15 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.setAnimateParentHierarchy(false)
         }
         binding.timesFlow.setup()
+
+        viewModel.jdn.onEach { jdn ->
+            setOwghat(binding, jdn, jdn == Jdn.today())
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.selectedTab.onEach {
+            if (it == OWGHAT_TAB) binding.sunView.startAnimate()
+            else binding.sunView.clear()
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         return binding.root
     }
@@ -223,7 +226,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         mainBinding = binding
 
         val tabs = listOfNotNull(
-            R.string.calendar to CalendarsView(view.context).also { calendarsView = it },
+            R.string.calendar to CalendarsView(view.context).also { calendarsView ->
+                viewModel.jdn.onEach { jdn ->
+                    calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
+                }.launchIn(viewLifecycleOwner.lifecycleScope)
+            },
             R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
             if (enableOwghatTab(view.context)) // The optional third tab
                 R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
@@ -242,7 +249,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.onDayLongClicked = ::addEventOnCalendar
             it.onMonthSelected = {
                 val date = it.selectedMonth
-                updateToolbar(date)
+                updateToolbar(binding, date)
                 todayButton?.isVisible =
                     date.year != initialDate.year || date.month != initialDate.month
             }
@@ -261,8 +268,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }.attach()
         tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                if (position == OWGHAT_TAB) owghatBinding?.sunView?.startAnimate()
-                else owghatBinding?.sunView?.clear()
+                viewModel.selectedTab.value = position
                 context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
 
                 // Make sure view pager's height at least matches with the shown tab
@@ -278,7 +284,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
         var lastTab = view.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-        tabsViewPager.setCurrentItem(lastTab, false)
+        viewModel.selectedTab.value = lastTab
+        tabsViewPager.setCurrentItem(viewModel.selectedTab.value, false)
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
 
         binding.root.post {
@@ -294,12 +301,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             bringDate(Jdn.today(), monthChange = false, highlight = false)
         }
 
-        mainBinding?.appBar?.let { appBar ->
+        binding.appBar.let { appBar ->
             appBar.toolbar.setupMenuNavigation()
             appBar.root.hideToolbarBottomShadow()
         }
 
-        updateToolbar(viewModel.jdn.value.toCalendar(mainCalendar))
+        updateToolbar(binding, viewModel.jdn.value.toCalendar(mainCalendar))
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {
@@ -310,23 +317,22 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         ) activity.askForCalendarPermission() else {
             runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
                 Snackbar.make(
-                    mainBinding?.root ?: return, R.string.device_calendar_does_not_support,
+                    view ?: return, R.string.device_calendar_does_not_support,
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
-    private fun updateToolbar(date: AbstractDate) {
-        mainBinding?.appBar?.toolbar?.let {
-            val secondaryCalendar = secondaryCalendar
-            if (secondaryCalendar == null) {
-                it.title = date.monthName
-                it.subtitle = formatNumber(date.year)
-            } else {
-                it.title = language.my.format(date.monthName, formatNumber(date.year))
-                it.subtitle = monthFormatForSecondaryCalendar(date, secondaryCalendar)
-            }
+    private fun updateToolbar(binding: FragmentCalendarBinding, date: AbstractDate) {
+        val toolbar = binding.appBar.toolbar
+        val secondaryCalendar = secondaryCalendar
+        if (secondaryCalendar == null) {
+            toolbar.title = date.monthName
+            toolbar.subtitle = formatNumber(date.year)
+        } else {
+            toolbar.title = language.my.format(date.monthName, formatNumber(date.year))
+            toolbar.subtitle = monthFormatForSecondaryCalendar(date, secondaryCalendar)
         }
     }
 
@@ -393,19 +399,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
         smoothScroll: Boolean = true
     ) {
-        viewModel.jdn.value = jdn
-
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
 
         val isToday = Jdn.today() == jdn
-
         // Show/Hide bring today menu button
         todayButton?.isVisible = !isToday
 
-        // Update tabs
-        calendarsView?.showCalendars(jdn, mainCalendar, enabledCalendars)
-        showEvent(jdn)
-        setOwghat(jdn, isToday)
+        viewModel.jdn.value = jdn
 
         // a11y
         if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
@@ -418,9 +418,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         ).show()
     }
 
-    private fun showEvent(jdn: Jdn) {
+    private fun showEvent(eventsBinding: EventsTabContentBinding, jdn: Jdn) {
         val activity = activity ?: return
-        val eventsBinding = eventsBinding ?: return
 
         eventsBinding.shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
         val events = getEvents(jdn, activity.readDayDeviceEvents(jdn))
@@ -497,9 +496,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         eventsBinding.root.contentDescription = contentDescription
     }
 
-    private fun setOwghat(jdn: Jdn, isToday: Boolean) {
+    private fun setOwghat(owghatBinding: OwghatTabContentBinding, jdn: Jdn, isToday: Boolean) {
         val coordinates = coordinates ?: return
-        val owghatBinding = owghatBinding ?: return
 
         val date = jdn.toJavaCalendar()
         val prayTimes = coordinates.calculatePrayTimes(date)
@@ -570,9 +568,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showDayPickerDialog(activity ?: return@onClick, viewModel.jdn.value, R.string.go) { jdn ->
-                    bringDate(jdn)
-                }
+                showDayPickerDialog(
+                    activity ?: return@onClick, viewModel.jdn.value, R.string.go
+                ) { jdn -> bringDate(jdn) }
             }
         }
         toolbar.menu.add(R.string.add_event).also {

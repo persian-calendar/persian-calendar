@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class CalendarViewModel : ViewModel() {
     val jdn = MutableStateFlow(Jdn.today())
+    val selectedTab = MutableStateFlow(0)
 }
