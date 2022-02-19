@@ -7,7 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentPanoRendoBinding
 import com.byagowi.persiancalendar.global.coordinates
@@ -34,9 +34,9 @@ class PanoRendoFragment : Fragment(R.layout.fragment_pano_rendo) {
         if (coordinates == null) {
             Toast.makeText(view.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }
-        val args by navArgs<PanoRendoFragmentArgs>()
         val sunPosition = GregorianCalendar().also {
-            it.add(Calendar.MINUTE, args.minutesOffset)
+            val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
+            it.time = Date(mapViewModel.time.value)
         }.calculateSunMoonPosition(coordinates).sunPosition
 
         fun update() = binding.image.setImageBitmap(

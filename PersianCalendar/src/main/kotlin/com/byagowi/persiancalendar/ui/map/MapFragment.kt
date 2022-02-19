@@ -20,7 +20,9 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
@@ -34,7 +36,8 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.utils.HALF_SECOND_IN_MILLIS
+import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
+import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
@@ -42,6 +45,8 @@ import com.cepmuvakkit.times.posAlgo.EarthPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.persiancalendar.praytimes.Coordinates
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
@@ -54,16 +59,6 @@ import kotlin.math.roundToInt
 
 class MapFragment : Fragment(R.layout.fragment_map) {
 
-    private val date = GregorianCalendar()
-    private val dateMinutesOffset
-        get() =
-            ((date.timeInMillis - GregorianCalendar().timeInMillis) / 1000 / 60).toInt()
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putAll(MapFragmentArgs(dateMinutesOffset).toBundle())
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentMapBinding.bind(view)
@@ -75,33 +70,36 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         solarDraw = SolarDraw(view.context)
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
-        date.add(
-            Calendar.MINUTE,
-            (savedInstanceState ?: arguments)?.let(MapFragmentArgs::fromBundle)?.minutesOffset ?: 0
-        )
-
-        update(binding, date)
+        val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
+        fun update() {
+            val date = GregorianCalendar().also { it.time = Date(viewModel.time.value) }
+            runCatching {
+                binding.map.setImageBitmap(createMap(date, viewModel))
+            }.onFailure(logException)
+            binding.date.text = date.formatDateAndTime()
+        }
+        viewModel.time.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.displayNightMask.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.displayLocation.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.displayGrid.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.isDirectPathMode.onEach { update() }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
             binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            date.add(Calendar.HOUR, -1)
-            update(binding, date)
+            viewModel.time.value -= ONE_HOUR_IN_MILLIS
         }
         binding.startArrow.setOnLongClickListener {
-            date.add(Calendar.DATE, -1)
-            update(binding, date)
+            viewModel.time.value -= DAY_IN_MILLIS
             true
         }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            date.add(Calendar.HOUR, 1)
-            update(binding, date)
+            viewModel.time.value += ONE_HOUR_IN_MILLIS
         }
         binding.endArrow.setOnLongClickListener {
-            date.add(Calendar.DATE, 1)
-            update(binding, date)
+            viewModel.time.value += DAY_IN_MILLIS
             true
         }
 
@@ -116,19 +114,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }.onClick {
             if (coordinates == null) bringGps()
             else {
-                isDirectPathMode = !isDirectPathMode
-                directPathButton.icon.alpha = if (isDirectPathMode) 127 else 255
-                if (!isDirectPathMode) toCoordinates = null
+                viewModel.isDirectPathMode.value = !viewModel.isDirectPathMode.value
+                directPathButton.icon.alpha = if (viewModel.isDirectPathMode.value) 127 else 255
+                if (!viewModel.isDirectPathMode.value) viewModel.toCoordinates.value = null
             }
-            update(binding, date)
         }
         binding.appBar.toolbar.menu.add("Grid").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_grid_3x3)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
-            displayGrid = !displayGrid
-            update(binding, date)
-        }
+        }.onClick { viewModel.displayGrid.value = !viewModel.displayGrid.value }
         binding.appBar.toolbar.menu.add("GPS").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_my_location)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
@@ -138,59 +132,43 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             if (coordinates == null) bringGps()
-            displayLocation = !displayLocation; update(binding, date)
+            viewModel.displayLocation.value = !viewModel.displayLocation.value
         }
         binding.appBar.toolbar.menu.add("Night Mask").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
-            displayNightMask = !displayNightMask
-            binding.timeBar.isVisible = displayNightMask
-            update(binding, date)
+            viewModel.displayNightMask.value = !viewModel.displayNightMask.value
+            binding.timeBar.isVisible = viewModel.displayNightMask.value
         }
         binding.root.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.APPEARING)
             it.setAnimateParentHierarchy(false)
         }
         view.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
-            if (key == PREF_LATITUDE) {
-                displayLocation = true
-                binding.root.postDelayed({ update(binding, date) }, HALF_SECOND_IN_MILLIS)
-            }
+            if (key == PREF_LATITUDE) viewModel.displayLocation.value = true
         }
 
         binding.map.onClick = fun(x: Float, y: Float) {
             val latitude = 90 - y / mapScaleFactor + 1
             val longitude = x / mapScaleFactor - 180
             if (abs(latitude) > 90 || abs(longitude) > 180) return
-            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && displayGrid) {
-                findNavController().navigateSafe(
-                    MapFragmentDirections.actionMapToPanoRendo(dateMinutesOffset)
-                )
+            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 &&
+                viewModel.displayGrid.value
+            ) {
+                findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
                 return
             }
 
             activity?.also {
                 val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                if (isDirectPathMode) {
-                    toCoordinates = coordinates
-                    update(binding, date)
+                if (viewModel.isDirectPathMode.value) {
+                    viewModel.toCoordinates.value = coordinates
                 } else {
                     showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
                 }
             }
         }
-    }
-
-    private var displayNightMask = true
-    private var displayLocation = true
-    private var displayGrid = false
-    private var isDirectPathMode = false
-    private var toCoordinates: Coordinates? = null
-
-    private fun update(binding: FragmentMapBinding, date: GregorianCalendar) {
-        runCatching { binding.map.setImageBitmap(createMap(date)) }.onFailure(logException)
-        binding.date.text = date.formatDateAndTime()
     }
 
     private val scaleDownFactor = 4
@@ -228,7 +206,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
     )
 
-    private fun createMap(date: GregorianCalendar): Bitmap {
+    private fun createMap(date: GregorianCalendar, viewModel: MapViewModel): Bitmap {
         val sink = getSinkBitmap()
         nightMask.eraseColor(Color.TRANSPARENT)
         val sunPosition = SunMoonPositionForMap(date)
@@ -239,7 +217,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         var moonY = .0f
         var moonAlt = .0
         (0 until nightMask.width).forEach { x ->
-            if (!displayNightMask) return@forEach
+            if (!viewModel.displayNightMask.value) return@forEach
             (0 until nightMask.height).forEach { y ->
                 val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                 val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
@@ -259,7 +237,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         Canvas(sink).also {
             it.drawBitmap(nightMask, null, Rect(0, 0, sinkWidth, sinkHeight), null)
             val scale = sink.width / nightMask.width
-            if (displayGrid) {
+            if (viewModel.displayGrid.value) {
                 (0 until sinkWidth step sinkWidth / 24).forEachIndexed { i, x ->
                     if (i == 0 || i == 12) return@forEachIndexed
                     it.drawLine(x.toFloat(), 0f, x.toFloat(), sink.height.toFloat(), gridPaint)
@@ -275,11 +253,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 }
             }
             val solarDraw = solarDraw ?: return@also
-            if (displayNightMask) {
+            if (viewModel.displayNightMask.value) {
                 solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sinkWidth * .02f)
                 solarDraw.sun(it, sunX * scale, sunY * scale, sinkWidth * .025f)
             }
-            if (coordinates != null && displayLocation) {
+            if (coordinates != null && viewModel.displayLocation.value) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                 pinRect.set(
@@ -290,7 +268,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 )
                 it.drawBitmap(pinBitmap, null, pinRect, null)
             }
-            val toPath = toCoordinates
+            val toPath = viewModel.toCoordinates.value
             if (coordinates != null && toPath != null) {
                 val from = EarthPosition(coordinates.latitude, coordinates.longitude)
                 val to = EarthPosition(toPath.latitude, toPath.longitude)

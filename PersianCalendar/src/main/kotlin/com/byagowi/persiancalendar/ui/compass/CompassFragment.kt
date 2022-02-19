@@ -170,7 +170,7 @@ class CompassFragment : Fragment(R.layout.fragment_compass) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController()
-                    .navigateSafe(CompassFragmentDirections.actionCompassToMap(0))
+                    .navigateSafe(CompassFragmentDirections.actionCompassToMap())
             }
         }
         binding.bottomAppbar.menu.add(R.string.level).also {

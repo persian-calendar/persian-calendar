@@ -151,10 +151,6 @@
         android:id="@+id/map"
         android:name="com.byagowi.persiancalendar.ui.map.MapFragment"
         android:label="Map">
-        <argument
-            android:name="minutes_offset"
-            android:defaultValue="0"
-            app:argType="integer" />
         <action
             android:id="@+id/action_map_to_pano_rendo"
             app:destination="@id/pano_rendo"
@@ -167,11 +163,6 @@
     <fragment
         android:id="@+id/pano_rendo"
         android:name="com.byagowi.persiancalendar.ui.map.PanoRendoFragment"
-        android:label="PanoRendo">
-        <argument
-            android:name="minutes_offset"
-            android:defaultValue="0"
-            app:argType="integer" />
-    </fragment>
+        android:label="PanoRendo" />
 
 </navigation>
