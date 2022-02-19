@@ -29,7 +29,7 @@ class CalendarFragmentTest {
                 viewModel.selectedDay.value = Jdn.today() - 1
                 viewModel.selectedDay.value = Jdn.today()
                 job.cancel()
-                assertEquals(listOf(false, false, true, false, true, false), values)
+                assertEquals(listOf(false, true, false, true, false), values)
             }
 
             runTest(UnconfinedTestDispatcher()) {
@@ -46,7 +46,7 @@ class CalendarFragmentTest {
                 viewModel.selectedMonth.value =
                     mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 0)
                 job.cancel()
-                assertEquals(listOf(false, false, true, true, true, false, true, false), values)
+                assertEquals(listOf(false, true, true, true, false, true, false), values)
             }
         }
     }
