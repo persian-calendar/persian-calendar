@@ -17,4 +17,5 @@ class ConverterViewModel : ViewModel() {
         selectedDate.value != todayJdn ||
                 (isDayDistance.value && secondSelectedDate.value != todayJdn)
     }
+    val updateResult = merge(calendarType, selectedDate, secondSelectedDate, isDayDistance)
 }

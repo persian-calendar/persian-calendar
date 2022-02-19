@@ -95,8 +95,8 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         binding.secondDayPickerView.selectedDayListener =
             { viewModel.secondSelectedDate.value = it }
 
-        // Setup flow listeners
-        fun updateResult() {
+        // Setup view model change listeners
+        viewModel.updateResult.onEach {
             if (viewModel.isDayDistance.value) {
                 binding.dayDistance.text = calculateDaysDifference(
                     resources, viewModel.selectedDate.value, viewModel.secondSelectedDate.value,
@@ -109,24 +109,18 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
                     selectedCalendarType, enabledCalendars - selectedCalendarType
                 )
             }
-        }
-
-        val viewLifecycleScope = viewLifecycleOwner.lifecycleScope
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.calendarType.onEach {
             if (viewModel.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
-            updateResult()
-        }.launchIn(viewLifecycleScope)
-        viewModel.selectedDate.onEach { updateResult() }.launchIn(viewLifecycleScope)
-        viewModel.secondSelectedDate.onEach { updateResult() }.launchIn(viewLifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.todayButtonVisibility.distinctUntilChanged()
-            .onEach(todayButton::setVisible).launchIn(viewLifecycleScope)
+            .onEach(todayButton::setVisible).launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.isDayDistance.onEach {
             if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendarType.value)
             binding.secondDayPickerView.isVisible = it
             binding.dayDistance.isVisible = it
             binding.calendarsView.isVisible = !it
             binding.resultCard.isVisible = !it
-            updateResult()
-        }.launchIn(viewLifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }
