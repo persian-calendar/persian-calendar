@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +32,7 @@ class CalendarViewModel : ViewModel() {
 
     fun loadEvents(
         context: Context, viewLifecycleScope: LifecycleCoroutineScope,
-        callback: (eventsRepository: SearchEventsRepository) -> Unit
+        callback: (eventsRepository: ISearchEventsRepository) -> Unit
     ) {
         viewLifecycleScope.launch(Dispatchers.IO) {
             withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { // 2s timeout, give up if is too costly

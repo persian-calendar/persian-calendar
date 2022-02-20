@@ -15,7 +15,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
  * Created by Farhad Beigirad on 4/23/21.
  */
 class SearchEventsAdapter(
-    context: Context, private val eventsRepository: SearchEventsRepository
+    context: Context, private val eventsRepository: ISearchEventsRepository
 ) : ArrayAdapter<CalendarEvent<*>>(
     context, R.layout.suggestion, R.id.text, eventsRepository.events
 ) {
