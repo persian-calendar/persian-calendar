@@ -71,8 +71,10 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, i ->
             tab.text = tabs[i].second.joinToString(getString(R.string.spaced_and)) { getString(it) }
         }.attach()
-        binding.viewPager.currentItem = args.tab
-        view.post { view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) } }
+        view.post {
+            binding.viewPager.setCurrentItem(args.tab, true)
+            view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) }
+        }
     }
 
     private val tabs = listOf(
