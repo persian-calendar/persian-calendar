@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel.Companion.formattedTitle
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
@@ -29,7 +30,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
-class SearchEventsAdapter private constructor(
+class SearchEventsAdapter(
     context: Context,
     private val originalItems: List<CalendarEvent<*>>,
     private val itemsWords: List<Pair<CalendarEvent<*>, List<String>>>
@@ -72,45 +73,6 @@ class SearchEventsAdapter private constructor(
                 notifyDataSetChanged()
             else
                 notifyDataSetInvalidated()
-        }
-    }
-
-    companion object {
-        private val CalendarEvent<*>.formattedTitle
-            get() = when (this) {
-                is CalendarEvent.GregorianCalendarEvent,
-                is CalendarEvent.IslamicCalendarEvent,
-                is CalendarEvent.PersianCalendarEvent,
-                is CalendarEvent.NepaliCalendarEvent -> title
-                is CalendarEvent.DeviceCalendarEvent ->
-                    if (description.isBlank()) title else "$title ($description)"
-            }
-
-        fun attachEventsAdapter(
-            searchAutoComplete: SearchView.SearchAutoComplete, context: Context,
-            lifecycleOwner: LifecycleOwner,
-        ) {
-            lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) {
-                    val jdn = Jdn.today()
-                    val events = listOf(
-                        context.getAllEnabledAppointments(), persianCalendarEvents.getAllEvents(),
-                        islamicCalendarEvents.getAllEvents(), nepaliCalendarEvents.getAllEvents(),
-                        gregorianCalendarEvents.getAllEvents(),
-                    ).flatten() + listOf(
-                        jdn.toPersianCalendar(), jdn.toGregorianCalendar(), jdn.toIslamicCalendar()
-                    ).flatMap {
-                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
-                    }
-                    val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
-                    val itemsWords = events.map { it to it.formattedTitle.split(*delimiters) }
-                    withContext(Dispatchers.Main.immediate) {
-                        searchAutoComplete.setAdapter(
-                            SearchEventsAdapter(context, events, itemsWords)
-                        )
-                    }
-                }
-            }
         }
     }
 }

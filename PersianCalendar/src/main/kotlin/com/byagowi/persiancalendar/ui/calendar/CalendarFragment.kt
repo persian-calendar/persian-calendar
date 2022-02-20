@@ -544,7 +544,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     )
                     searchView.onActionViewCollapsed()
                 }
-                SearchEventsAdapter.attachEventsAdapter(it, context, viewLifecycleOwner)
+                viewModel.loadEvents(context, viewLifecycleOwner) { events, itemsWords ->
+                    it.setAdapter(SearchEventsAdapter(context, events, itemsWords))
+                }
             }
         }
 
