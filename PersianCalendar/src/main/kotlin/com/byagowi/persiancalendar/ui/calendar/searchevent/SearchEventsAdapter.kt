@@ -5,37 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Filter
-import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
-import com.byagowi.persiancalendar.utils.calendarType
-import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
-import com.byagowi.persiancalendar.utils.gregorianCalendarEvents
-import com.byagowi.persiancalendar.utils.irregularCalendarEventsStore
-import com.byagowi.persiancalendar.utils.islamicCalendarEvents
-import com.byagowi.persiancalendar.utils.nepaliCalendarEvents
-import com.byagowi.persiancalendar.utils.persianCalendarEvents
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.withTimeoutOrNull
+import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository.Companion.formattedTitle
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
-class SearchEventsAdapter private constructor(
-    context: Context,
-    private val originalItems: List<CalendarEvent<*>>,
-    private val itemsWords: List<Pair<CalendarEvent<*>, List<String>>>
-) : ArrayAdapter<CalendarEvent<*>>(context, R.layout.suggestion, R.id.text, originalItems) {
+class SearchEventsAdapter(
+    context: Context, private val eventsRepository: SearchEventsRepository
+) : ArrayAdapter<CalendarEvent<*>>(
+    context, R.layout.suggestion, R.id.text, eventsRepository.events
+) {
 
-    private var showingItems: List<CalendarEvent<*>> = originalItems
+    private var showingItems: List<CalendarEvent<*>> = eventsRepository.events
 
     override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
     override fun getCount(): Int = showingItems.size
@@ -57,10 +42,8 @@ class SearchEventsAdapter private constructor(
         }
 
         override fun performFiltering(constraint: CharSequence?) = createFilterResults(
-            if (constraint.isNullOrBlank()) originalItems
-            else itemsWords.mapNotNull { (event: CalendarEvent<*>, words: List<String>) ->
-                event.takeIf { words.any { word -> word.startsWith(constraint) } }
-            }
+            if (constraint.isNullOrBlank()) eventsRepository.events
+            else eventsRepository.query(constraint)
         )
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
@@ -72,45 +55,6 @@ class SearchEventsAdapter private constructor(
                 notifyDataSetChanged()
             else
                 notifyDataSetInvalidated()
-        }
-    }
-
-    companion object {
-        private val CalendarEvent<*>.formattedTitle
-            get() = when (this) {
-                is CalendarEvent.GregorianCalendarEvent,
-                is CalendarEvent.IslamicCalendarEvent,
-                is CalendarEvent.PersianCalendarEvent,
-                is CalendarEvent.NepaliCalendarEvent -> title
-                is CalendarEvent.DeviceCalendarEvent ->
-                    if (description.isBlank()) title else "$title ($description)"
-            }
-
-        fun attachEventsAdapter(
-            searchAutoComplete: SearchView.SearchAutoComplete, context: Context,
-            lifecycleOwner: LifecycleOwner,
-        ) {
-            lifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-                withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) {
-                    val jdn = Jdn.today()
-                    val events = listOf(
-                        context.getAllEnabledAppointments(), persianCalendarEvents.getAllEvents(),
-                        islamicCalendarEvents.getAllEvents(), nepaliCalendarEvents.getAllEvents(),
-                        gregorianCalendarEvents.getAllEvents(),
-                    ).flatten() + listOf(
-                        jdn.toPersianCalendar(), jdn.toGregorianCalendar(), jdn.toIslamicCalendar()
-                    ).flatMap {
-                        irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
-                    }
-                    val delimiters = arrayOf(" ", "(", ")", "-", /*ZWNJ*/"\u200c")
-                    val itemsWords = events.map { it to it.formattedTitle.split(*delimiters) }
-                    withContext(Dispatchers.Main.immediate) {
-                        searchAutoComplete.setAdapter(
-                            SearchEventsAdapter(context, events, itemsWords)
-                        )
-                    }
-                }
-            }
         }
     }
 }

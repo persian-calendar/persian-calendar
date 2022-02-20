@@ -162,7 +162,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.enableTransitionType(LayoutTransition.CHANGING)
             it.setAnimateParentHierarchy(false)
         }
-        viewModel.selectedDay.onEach { showEvent(binding, it) }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.selectedDay.onEach { showEvent(binding, it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
         return binding.root
     }
 
@@ -544,7 +545,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                     )
                     searchView.onActionViewCollapsed()
                 }
-                SearchEventsAdapter.attachEventsAdapter(it, context, viewLifecycleOwner)
+                viewModel.loadEvents(context, viewLifecycleOwner.lifecycleScope) { repository ->
+                    it.setAdapter(SearchEventsAdapter(context, repository))
+                }
             }
         }
 
