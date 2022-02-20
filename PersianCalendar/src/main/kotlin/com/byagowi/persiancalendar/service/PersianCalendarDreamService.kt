@@ -23,15 +23,8 @@ class PersianCalendarDreamService : DreamService() {
         setContentView(View(this).also {
             val isNightMode = Theme.isNightMode(this)
             val accentColor = if (Theme.isDynamicColorAvailable()) getColor(
-                if (isNightMode) listOf(
-                    android.R.color.system_accent1_200,
-                    android.R.color.system_accent2_200,
-                    android.R.color.system_accent3_200
-                ).random() else listOf(
-                    android.R.color.system_accent1_400,
-                    android.R.color.system_accent2_400,
-                    android.R.color.system_accent3_400
-                ).random()
+                if (isNightMode) android.R.color.system_accent1_200
+                else android.R.color.system_accent1_400
             ) else null
             val pattern = PatternDrawable(
                 preferredTintColor = accentColor,
