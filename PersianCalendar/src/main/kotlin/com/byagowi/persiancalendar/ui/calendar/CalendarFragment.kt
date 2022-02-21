@@ -195,7 +195,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             setOwghat(binding, jdn, jdn == Jdn.today())
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.selectedTab.onEach {
+        viewModel.selectedTabIndex.onEach {
             if (it == OWGHAT_TAB) binding.sunView.startAnimate()
             else binding.sunView.clear()
         }.launchIn(viewLifecycleOwner.lifecycleScope)
@@ -251,7 +251,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.setSelectedDay(
                 Jdn(viewModel.selectedMonth.value), highlight = false, smoothScroll = false
             )
-            it.onMonthSelected = { viewModel.selectedMonth.value = it.selectedMonth }
+            it.onMonthSelected = { viewModel.changeSelectedMonth(it.selectedMonth) }
         }
 
         viewModel.selectedMonth.onEach {
@@ -271,7 +271,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }.attach()
         tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                viewModel.selectedTab.value = position
+                viewModel.changeSelectedTabIndex(position)
                 context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
 
                 // Make sure view pager's height at least matches with the shown tab
@@ -287,8 +287,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
         var lastTab = view.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
         if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-        viewModel.selectedTab.value = lastTab
-        tabsViewPager.setCurrentItem(viewModel.selectedTab.value, false)
+        viewModel.changeSelectedTabIndex(lastTab)
+        tabsViewPager.setCurrentItem(viewModel.selectedTabIndex.value, false)
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
 
         binding.root.post {
@@ -403,7 +403,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         mainBinding?.calendarPager?.setSelectedDay(jdn, highlight, monthChange, smoothScroll)
 
         val isToday = Jdn.today() == jdn
-        viewModel.selectedDay.value = jdn
+        viewModel.changeSelectedDay(jdn)
 
         // a11y
         if (isTalkBackEnabled && !isToday && monthChange) Snackbar.make(
