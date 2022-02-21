@@ -17,19 +17,21 @@ class SearchEventsAdapter(
 ) : ArrayAdapter<CalendarEvent<*>>(
     context, R.layout.suggestion, R.id.text, store.events
 ) {
+    init {
+        setNotifyOnChange(false) // reduce auto notifying after clear() & addAdd()
+    }
 
-    private var showingItems: List<CalendarEvent<*>> = store.events
     private val filterInstance = ArrayFilter(store) {
-        showingItems = it
-        if (count > 0) notifyDataSetChanged() else notifyDataSetInvalidated()
+        clear()
+        addAll(it)
+        notifyDataSetChanged()
     }
 
     override fun getFilter() = filterInstance
-    override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
-    override fun getCount(): Int = showingItems.size
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return SuggestionBinding.bind(super.getView(position, convertView, parent)).also {
-            it.text.text = getItem(position).formattedTitle
+            it.text.text = getItem(position)?.formattedTitle
         }.root
     }
 }
