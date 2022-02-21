@@ -21,10 +21,12 @@ class SearchEventsAdapter(
         setNotifyOnChange(false) // reduce auto notifying after clear() & addAdd()
     }
 
-    private val filterInstance = ArrayFilter(store) {
-        clear()
-        addAll(it)
-        notifyDataSetChanged()
+    private val filterInstance by lazy {
+        ArrayFilter(store) {
+            clear()
+            addAll(it)
+            notifyDataSetChanged()
+        }
     }
 
     override fun getFilter() = filterInstance
