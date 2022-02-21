@@ -546,9 +546,12 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 )
                 searchView.onActionViewCollapsed()
             }
-            it.setAdapter(SearchEventsAdapter(context) { query ->
-                viewModel.store.query(query)
-            })
+            val eventsAdapter =
+                SearchEventsAdapter(context, onQueryChanged = viewModel::searchEvent)
+            it.setAdapter(eventsAdapter)
+            viewModel.eventsFlow
+                .onEach(eventsAdapter::setData)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
 
         toolbar.menu.add(R.string.return_to_today).also {

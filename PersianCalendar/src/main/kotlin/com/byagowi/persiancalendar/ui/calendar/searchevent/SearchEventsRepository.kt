@@ -13,9 +13,10 @@ import com.byagowi.persiancalendar.utils.persianCalendarEvents
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-// Its construction can be a bit costly so preferably better to be done off main thread
-class SearchEventsRepository : ISearchEventsRepository {
-    override suspend fun createStore(context: Context) = withContext(Dispatchers.IO) {
+class SearchEventsRepository(private val context: Context) : ISearchEventsRepository {
+    private var store: SearchEventsStore? = null
+
+    private suspend fun createStore(context: Context) = withContext(Dispatchers.IO) {
         val jdn = Jdn.today()
         // Hopefully we can get rid of these global variables someday
         val events: List<CalendarEvent<*>> = listOf(
@@ -28,5 +29,14 @@ class SearchEventsRepository : ISearchEventsRepository {
             irregularCalendarEventsStore.getEventsList(it.year, it.calendarType)
         }
         SearchEventsStore(events)
+    }
+
+    // encapsulate store in repository
+    override suspend fun findEvent(query: CharSequence): List<CalendarEvent<*>> {
+        if (store == null) {
+            store = createStore(context)
+        }
+
+        return store!!.query(query)
     }
 }

@@ -9,14 +9,14 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugLog
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
 class SearchEventsAdapter(
     context: Context,
-    onTextChanged: (CharSequence) -> List<CalendarEvent<*>>
+    onQueryChanged: (CharSequence) -> Unit
 ) : ArrayAdapter<CalendarEvent<*>>(
     context, R.layout.suggestion, R.id.text
 ) {
@@ -24,26 +24,23 @@ class SearchEventsAdapter(
         setNotifyOnChange(false) // reduce auto notifying after clear() & addAdd()
     }
 
+    // we need to this filter object only for listening query changes
     private val filterInstance by lazy {
         object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val items = onTextChanged(constraint ?: "")
-
-                return FilterResults().apply {
-                    values = items
-                    count = items.size
+            override fun performFiltering(constraint: CharSequence?) =
+                FilterResults().also {
+                    onQueryChanged(constraint ?: "")
+                    debugLog("looking for '$constraint'")
                 }
-            }
 
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                val newItems =
-                    (results?.values as? List<CalendarEvent<*>>).debugAssertNotNull ?: emptyList()
-
-                clear()
-                addAll(newItems)
-                notifyDataSetChanged()
-            }
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {}
         }
+    }
+
+    fun setData(items: List<CalendarEvent<*>>) {
+        clear()
+        addAll(items)
+        notifyDataSetChanged()
     }
 
     override fun getFilter() = filterInstance

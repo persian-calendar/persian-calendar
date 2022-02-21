@@ -3,11 +3,11 @@ package com.byagowi.persiancalendar.ui.calendar
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
-import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class CalendarViewModel @JvmOverloads constructor(
     application: Application,
-    private val repository: ISearchEventsRepository = SearchEventsRepository() // TODO: Inject maybe
+    private val repository: ISearchEventsRepository = SearchEventsRepository(application) // TODO: Inject maybe
 ) : AndroidViewModel(application) {
     private val _selectedDay = MutableStateFlow(Jdn.today())
     val selectedDay: StateFlow<Jdn> get() = _selectedDay
@@ -36,14 +36,8 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
 
-    private var _store: SearchEventsStore? = null
-    val store: SearchEventsStore get() = requireNotNull(_store)
-
-    init {
-        viewModelScope.launch {
-            _store = repository.createStore(application)
-        }
-    }
+    private val _eventsFlow = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
+    val eventsFlow: StateFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
     fun changeSelectedMonth(selectedMonth: AbstractDate) {
         _selectedMonth.value = selectedMonth
@@ -55,5 +49,12 @@ class CalendarViewModel @JvmOverloads constructor(
 
     fun changeSelectedTabIndex(index: Int) {
         _selectedTabIndex.value = index
+    }
+
+    fun searchEvent(query: CharSequence) {
+        viewModelScope.launch {
+            val result = repository.findEvent(query)
+            _eventsFlow.value = result
+        }
     }
 }
