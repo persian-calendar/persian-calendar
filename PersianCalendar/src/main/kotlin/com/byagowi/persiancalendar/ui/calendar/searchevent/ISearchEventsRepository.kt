@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar.searchevent
 
-import android.content.Context
+import com.byagowi.persiancalendar.entities.CalendarEvent
 
 interface ISearchEventsRepository {
-    suspend fun createStore(context: Context): SearchEventsStore
+    suspend fun findEvent(query: CharSequence): List<CalendarEvent<*>>
 }

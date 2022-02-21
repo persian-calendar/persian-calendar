@@ -4,32 +4,50 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
+import com.byagowi.persiancalendar.variants.debugLog
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
 class SearchEventsAdapter(
-    context: Context, store: SearchEventsStore
+    context: Context,
+    onQueryChanged: (CharSequence) -> Unit
 ) : ArrayAdapter<CalendarEvent<*>>(
-    context, R.layout.suggestion, R.id.text, store.events
+    context, R.layout.suggestion, R.id.text
 ) {
+    init {
+        setNotifyOnChange(false) // reduce auto notifying after clear() & addAdd()
+    }
 
-    private var showingItems: List<CalendarEvent<*>> = store.events
-    private val filterInstance = ArrayFilter(store) {
-        showingItems = it
-        if (count > 0) notifyDataSetChanged() else notifyDataSetInvalidated()
+    // we need to this filter object only for listening query changes
+    private val filterInstance by lazy {
+        object : Filter() {
+            override fun performFiltering(constraint: CharSequence?) =
+                FilterResults().also {
+                    onQueryChanged(constraint ?: "")
+                    debugLog("looking for '$constraint'")
+                }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {}
+        }
+    }
+
+    fun setData(items: List<CalendarEvent<*>>) {
+        clear()
+        addAll(items)
+        notifyDataSetChanged()
     }
 
     override fun getFilter() = filterInstance
-    override fun getItem(position: Int): CalendarEvent<*> = showingItems[position]
-    override fun getCount(): Int = showingItems.size
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         return SuggestionBinding.bind(super.getView(position, convertView, parent)).also {
-            it.text.text = getItem(position).formattedTitle
+            it.text.text = getItem(position)?.formattedTitle
         }.root
     }
 }
