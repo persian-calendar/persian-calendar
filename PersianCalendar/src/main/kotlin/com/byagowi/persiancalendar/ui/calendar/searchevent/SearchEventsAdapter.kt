@@ -4,28 +4,45 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Filter
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.SuggestionBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore.Companion.formattedTitle
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
 class SearchEventsAdapter(
-    context: Context, store: SearchEventsStore
+    context: Context,
+    onTextChanged: (CharSequence) -> List<CalendarEvent<*>>
 ) : ArrayAdapter<CalendarEvent<*>>(
-    context, R.layout.suggestion, R.id.text, store.events
+    context, R.layout.suggestion, R.id.text
 ) {
     init {
         setNotifyOnChange(false) // reduce auto notifying after clear() & addAdd()
     }
 
     private val filterInstance by lazy {
-        ArrayFilter(store) {
-            clear()
-            addAll(it)
-            notifyDataSetChanged()
+        object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val items = onTextChanged(constraint ?: "")
+
+                return FilterResults().apply {
+                    values = items
+                    count = items.size
+                }
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                val newItems =
+                    (results?.values as? List<CalendarEvent<*>>).debugAssertNotNull ?: emptyList()
+
+                clear()
+                addAll(newItems)
+                notifyDataSetChanged()
+            }
         }
     }
 

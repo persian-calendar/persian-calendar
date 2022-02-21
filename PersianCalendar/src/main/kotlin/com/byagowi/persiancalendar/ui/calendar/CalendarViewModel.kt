@@ -1,17 +1,23 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import android.content.Context
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
+import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsStore
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 
-class CalendarViewModel : ViewModel() {
+class CalendarViewModel @JvmOverloads constructor(
+    application: Application,
+    private val repository: ISearchEventsRepository = SearchEventsRepository() // TODO: Inject maybe
+) : AndroidViewModel(application) {
     private val _selectedDay = MutableStateFlow(Jdn.today())
     val selectedDay: StateFlow<Jdn> get() = _selectedDay
 
@@ -30,6 +36,15 @@ class CalendarViewModel : ViewModel() {
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
 
+    private var _store: SearchEventsStore? = null
+    val store: SearchEventsStore get() = requireNotNull(_store)
+
+    init {
+        viewModelScope.launch {
+            _store = repository.createStore(application)
+        }
+    }
+
     fun changeSelectedMonth(selectedMonth: AbstractDate) {
         _selectedMonth.value = selectedMonth
     }
@@ -41,7 +56,4 @@ class CalendarViewModel : ViewModel() {
     fun changeSelectedTabIndex(index: Int) {
         _selectedTabIndex.value = index
     }
-
-    private val repository: ISearchEventsRepository = SearchEventsRepository() // TODO: Inject maybe
-    suspend fun loadEvents(context: Context) = repository.createStore(context)
 }
