@@ -36,8 +36,6 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
-import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
@@ -72,7 +70,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
-        viewModel.updateMap.onEach {
+        viewModel.updateEvent.onEach {
             val date = GregorianCalendar().also { it.time = Date(viewModel.time.value) }
             runCatching {
                 binding.map.setImageBitmap(createMap(date, viewModel))
@@ -83,19 +81,19 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
             binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            viewModel.time.value -= ONE_HOUR_IN_MILLIS
+            viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener {
-            viewModel.time.value -= DAY_IN_MILLIS
+            viewModel.subtractOneDay()
             true
         }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            viewModel.time.value += ONE_HOUR_IN_MILLIS
+            viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener {
-            viewModel.time.value += DAY_IN_MILLIS
+            viewModel.addOneDay()
             true
         }
 
@@ -110,15 +108,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }.onClick {
             if (coordinates == null) bringGps()
             else {
-                viewModel.isDirectPathMode.value = !viewModel.isDirectPathMode.value
+                viewModel.toggleDirectPathMode()
                 directPathButton.icon.alpha = if (viewModel.isDirectPathMode.value) 127 else 255
-                if (!viewModel.isDirectPathMode.value) viewModel.toCoordinates.value = null
+                if (!viewModel.isDirectPathMode.value) viewModel.changeDirectPathDestination(null)
             }
         }
         binding.appBar.toolbar.menu.add("Grid").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_grid_3x3)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { viewModel.displayGrid.value = !viewModel.displayGrid.value }
+        }.onClick { viewModel.toggleDisplayGrid() }
         binding.appBar.toolbar.menu.add("GPS").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_my_location)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
@@ -128,13 +126,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             if (coordinates == null) bringGps()
-            viewModel.displayLocation.value = !viewModel.displayLocation.value
+            viewModel.toggleDisplayLocation()
         }
         binding.appBar.toolbar.menu.add("Night Mask").also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
-            viewModel.displayNightMask.value = !viewModel.displayNightMask.value
+            viewModel.toggleNightMask()
             binding.timeBar.isVisible = viewModel.displayNightMask.value
         }
         binding.root.layoutTransition = LayoutTransition().also {
@@ -142,7 +140,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             it.setAnimateParentHierarchy(false)
         }
         view.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
-            if (key == PREF_LATITUDE) viewModel.displayLocation.value = true
+            if (key == PREF_LATITUDE) viewModel.turnOnDisplayLocation()
         }
 
         binding.map.onClick = fun(x: Float, y: Float) {
@@ -159,7 +157,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             activity?.also {
                 val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
                 if (viewModel.isDirectPathMode.value) {
-                    viewModel.toCoordinates.value = coordinates
+                    viewModel.changeDirectPathDestination(coordinates)
                 } else {
                     showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
                 }
@@ -264,7 +262,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 )
                 it.drawBitmap(pinBitmap, null, pinRect, null)
             }
-            val toPath = viewModel.toCoordinates.value
+            val toPath = viewModel.directPathDestination.value
             if (coordinates != null && toPath != null) {
                 val from = EarthPosition(coordinates.latitude, coordinates.longitude)
                 val to = EarthPosition(toPath.latitude, toPath.longitude)
