@@ -14,12 +14,9 @@ import com.byagowi.persiancalendar.variants.debugLog
 /**
  * Created by Farhad Beigirad on 4/23/21.
  */
-class SearchEventsAdapter(
-    context: Context,
-    onQueryChanged: (CharSequence) -> Unit
-) : ArrayAdapter<CalendarEvent<*>>(
-    context, R.layout.suggestion, R.id.text
-) {
+class SearchEventsAdapter(context: Context, onQueryChanged: (CharSequence) -> Unit) :
+    ArrayAdapter<CalendarEvent<*>>(context, R.layout.suggestion, R.id.text) {
+
     init {
         setNotifyOnChange(false) // reduce auto notifying after clear() & addAdd()
     }

@@ -52,9 +52,6 @@ class CalendarViewModel @JvmOverloads constructor(
     }
 
     fun searchEvent(query: CharSequence) {
-        viewModelScope.launch {
-            val result = repository.findEvent(query)
-            _eventsFlow.value = result
-        }
+        viewModelScope.launch { _eventsFlow.value = repository.findEvent(query) }
     }
 }

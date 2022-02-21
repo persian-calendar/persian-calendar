@@ -14,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class SearchEventsRepository(private val context: Context) : ISearchEventsRepository {
+
     private var store: SearchEventsStore? = null
 
     private suspend fun createStore(context: Context) = withContext(Dispatchers.IO) {
@@ -32,11 +33,6 @@ class SearchEventsRepository(private val context: Context) : ISearchEventsReposi
     }
 
     // encapsulate store in repository
-    override suspend fun findEvent(query: CharSequence): List<CalendarEvent<*>> {
-        if (store == null) {
-            store = createStore(context)
-        }
-
-        return store!!.query(query)
-    }
+    override suspend fun findEvent(query: CharSequence): List<CalendarEvent<*>> =
+        (store ?: createStore(context).also { store = it }).query(query)
 }
