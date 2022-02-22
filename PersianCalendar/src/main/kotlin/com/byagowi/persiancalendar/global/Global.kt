@@ -323,7 +323,8 @@ fun updateStoredPreference(context: Context) {
     }
     holidayString = if (language.isDari) "رخصتی" else context.getString(R.string.holiday)
     spacedAndInDates =
-        if (language.languagePrefersEmptyAndInDates) "" else context.getString(R.string.spaced_and)
+        if (language.languagePrefersHalfSpaceAndInDates) " "
+        else context.getString(R.string.spaced_and)
     spacedColon = context.getString(R.string.spaced_colon)
     spacedComma = context.getString(R.string.spaced_comma)
 

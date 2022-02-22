@@ -141,7 +141,7 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     // Whether the language doesn't need " and " between date parts or not
-    val languagePrefersEmptyAndInDates: Boolean
+    val languagePrefersHalfSpaceAndInDates: Boolean
         get() = when (this) {
             JA, ZH_CN -> true
             else -> false
