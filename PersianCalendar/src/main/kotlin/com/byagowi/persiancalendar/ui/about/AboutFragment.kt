@@ -179,7 +179,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 
     private fun launchReportIntent() {
         runCatching {
-            val uri = "https://github.com/persian-calendar/DroidPersianCalendar/issues/new".toUri()
+            val uri = "https://github.com/persian-calendar/persian-calendar/issues/new".toUri()
             startActivity(Intent(Intent.ACTION_VIEW, uri))
         }.onFailure(logException)
     }
@@ -221,7 +221,7 @@ App Version Code: ${context?.packageName} ${BuildConfig.VERSION_CODE}"""
                 type = "text/plain"
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
                 val textToShare = """${getString(R.string.app_name)}
-https://github.com/persian-calendar/DroidPersianCalendar"""
+https://github.com/persian-calendar/persian-calendar"""
                 putExtra(Intent.EXTRA_TEXT, textToShare)
             }, getString(R.string.share)))
         }.onFailure(logException).onFailure { (activity ?: return).bringMarketPage() }

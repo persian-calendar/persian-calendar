@@ -25,7 +25,7 @@ class Scratch {
 //
 //        val issuesList = generateSequence(emptyList<JSONArray>()) { pages ->
 //            runCatching {
-//                val url = "https://api.github.com/repos/persian-calendar/DroidPersianCalendar/issues?state=all&per_page=100&page=${pages.size + 1}"
+//                val url = "https://api.github.com/repos/persian-calendar/persian-calendar/issues?state=all&per_page=100&page=${pages.size + 1}"
 //                JSONArray(URL(url).readText()).takeIf { it.length() != 0 }?.let(pages::plusElement)
 //            }.onFailure { it.printStackTrace() }.getOrNull()
 //        }.last().fold(emptyList<JSONObject>()) { r, t -> r + t.toObjectList() }

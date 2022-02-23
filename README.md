@@ -1,6 +1,6 @@
 # Android Persian Calendar
 
-[![Android CI](https://github.com/persian-calendar/DroidPersianCalendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/DroidPersianCalendar/actions)
+[![Android CI](https://github.com/persian-calendar/persian-calendar/actions/workflows/android.yml/badge.svg)](https://github.com/persian-calendar/persian-calendar/actions)
 [![Translation status](https://hosted.weblate.org/widgets/persian-calendar/-/svg-badge.svg)](https://hosted.weblate.org/engage/persian-calendar/)
 
 <div dir=rtl>
@@ -16,7 +16,7 @@
 
 - [F-Droid](https://f-droid.org/app/com.byagowi.persiancalendar)
 - [Google Play](https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar)
-- [GitHub](https://github.com/persian-calendar/DroidPersianCalendar/releases/)
+- [GitHub](https://github.com/persian-calendar/persian-calendar/releases/)
 - [Bazaar](https://cafebazaar.ir/app/com.byagowi.persiancalendar)
 - [Myket](https://myket.ir/app/com.byagowi.persiancalendar)
 
@@ -48,6 +48,6 @@ https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 
 ## Build
 
-1. `git clone https://github.com/persian-calendar/DroidPersianCalendar`
+1. `git clone https://github.com/persian-calendar/persian-calendar`
 1. Import the project in Android Studio
 
