@@ -70,13 +70,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
-        viewModel.updateEvent.onEach {
-            val date = GregorianCalendar().also { it.time = Date(viewModel.time.value) }
-            runCatching {
-                binding.map.setImageBitmap(createMap(date, viewModel))
-            }.onFailure(logException)
-            binding.date.text = date.formatDateAndTime()
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.updateEvent
+            .onEach {
+                val date = GregorianCalendar().also { it.time = Date(viewModel.time.value) }
+                runCatching { binding.map.setImageBitmap(createMap(date, viewModel)) }
+                    .onFailure(logException)
+                binding.date.text = date.formatDateAndTime()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {

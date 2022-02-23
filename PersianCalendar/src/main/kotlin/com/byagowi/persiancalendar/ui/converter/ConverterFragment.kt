@@ -95,31 +95,39 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         binding.secondDayPickerView.selectedDayListener = viewModel::changeSecondSelectedDate
 
         // Setup view model change listeners
-        viewModel.updateEvent.onEach {
-            if (viewModel.isDayDistance.value) {
-                binding.dayDistance.text = calculateDaysDifference(
-                    resources, viewModel.selectedDate.value, viewModel.secondSelectedDate.value,
-                    viewModel.calendar.value
-                )
-            } else {
-                val selectedCalendarType = viewModel.calendar.value
-                binding.calendarsView.showCalendars(
-                    viewModel.selectedDate.value,
-                    selectedCalendarType, enabledCalendars - selectedCalendarType
-                )
+        viewModel.updateEvent
+            .onEach {
+                if (viewModel.isDayDistance.value) {
+                    binding.dayDistance.text = calculateDaysDifference(
+                        resources, viewModel.selectedDate.value, viewModel.secondSelectedDate.value,
+                        viewModel.calendar.value
+                    )
+                } else {
+                    val selectedCalendarType = viewModel.calendar.value
+                    binding.calendarsView.showCalendars(
+                        viewModel.selectedDate.value,
+                        selectedCalendarType, enabledCalendars - selectedCalendarType
+                    )
+                }
             }
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.calendar.onEach {
-            if (viewModel.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.todayButtonVisibilityEvent.distinctUntilChanged()
-            .onEach(todayButton::setVisible).launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.isDayDistance.onEach {
-            if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
-            binding.secondDayPickerView.isVisible = it
-            binding.dayDistance.isVisible = it
-            binding.calendarsView.isVisible = !it
-            binding.resultCard.isVisible = !it
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.calendar
+            .onEach {
+                if (viewModel.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.todayButtonVisibilityEvent
+            .distinctUntilChanged()
+            .onEach(todayButton::setVisible)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.isDayDistance
+            .onEach {
+                if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
+                binding.secondDayPickerView.isVisible = it
+                binding.dayDistance.isVisible = it
+                binding.calendarsView.isVisible = !it
+                binding.resultCard.isVisible = !it
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

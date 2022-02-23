@@ -165,7 +165,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.enableTransitionType(LayoutTransition.CHANGING)
             it.setAnimateParentHierarchy(false)
         }
-        viewModel.selectedDay.onEach { showEvent(binding, it) }
+        viewModel.selectedDay
+            .onEach { showEvent(binding, it) }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         return binding.root
     }
@@ -191,14 +192,16 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
         binding.timesFlow.setup()
 
-        viewModel.selectedDay.onEach { jdn ->
-            setOwghat(binding, jdn, jdn == Jdn.today())
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.selectedDay
+            .onEach { jdn -> setOwghat(binding, jdn, jdn == Jdn.today()) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.selectedTabIndex.onEach {
-            if (it == OWGHAT_TAB) binding.sunView.startAnimate()
-            else binding.sunView.clear()
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.selectedTabIndex
+            .onEach {
+                if (it == OWGHAT_TAB) binding.sunView.startAnimate()
+                else binding.sunView.clear()
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         return binding.root
     }
@@ -228,9 +231,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
         val tabs = listOfNotNull(
             R.string.calendar to CalendarsView(view.context).also { calendarsView ->
-                viewModel.selectedDay.onEach { jdn ->
-                    calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
-                }.launchIn(viewLifecycleOwner.lifecycleScope)
+                viewModel.selectedDay
+                    .onEach { jdn ->
+                        calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
+                    }
+                    .launchIn(viewLifecycleOwner.lifecycleScope)
             },
             R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
             if (enableOwghatTab(view.context)) // The optional third tab
@@ -254,9 +259,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.onMonthSelected = { viewModel.changeSelectedMonth(it.selectedMonth) }
         }
 
-        viewModel.selectedMonth.onEach {
-            updateToolbar(binding, it)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.selectedMonth
+            .onEach { updateToolbar(binding, it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         val tabsViewPager = binding.viewPager
         tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -566,9 +571,10 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.onClick { bringDate(Jdn.today(), highlight = false) }
 
-            viewModel.todayButtonVisibility.distinctUntilChanged().onEach { visibility ->
-                it.isVisible = visibility
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
+            viewModel.todayButtonVisibility
+                .distinctUntilChanged()
+                .onEach { visibility -> it.isVisible = visibility }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
         }
         toolbar.menu.add(R.string.search_in_events).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
