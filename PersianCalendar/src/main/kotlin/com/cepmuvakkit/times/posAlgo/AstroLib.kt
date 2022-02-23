@@ -60,7 +60,7 @@ object AstroLib {
      * Astrolib calendar ends on October 4, 1582 (JD = 2299160), and after
      * 10-days the Gregorian calendar starts on October 15, 1582
      *
-     * @param calendar is input time to be converted julian day
+     * @param c is input time to be converted julian day
      * @return julianDay julian day ( Julian date independent of time zone by
      * the way)
      */
@@ -94,7 +94,7 @@ object AstroLib {
      * JC =(jd-2451545.0)/36525.0
      *
      *
-     * @param JD is the Astrolib Day
+     * @param jd is the Astrolib Day
      * @return the Astrolib century (JC)
      */
     fun getJulianCentury(jd: Double) = (jd - 2451545.0) / 36525.0
@@ -296,7 +296,7 @@ object AstroLib {
      * Converts a Astrolib day to a calendar date ref: Numerical Recipes in C,
      * 2nd ed., Cambridge University Press 1992
      *
-     * @param injulian is the Astrolib Day
+     * @param julianDay is the Astrolib Day
      * @return int[] {year, month, day};
      */
     fun fromJulian(julianDay: Double): List<Int> {
@@ -332,7 +332,7 @@ object AstroLib {
      * Converts a Astrolib day to a calendar date ref: Numerical Recipes in C,
      * 2nd ed., Cambridge University Press 1992
      *
-     * @param injulian is the Astrolib Day
+     * @param julianDay is the Astrolib Day
      * @return int[] {year, month, day,hour, minute,seconds} output always must
      * be in Universal Time UT;
      */
@@ -369,7 +369,7 @@ object AstroLib {
      * Converts a Astrolib day to a calendar date ref: Numerical Recipes in C,
      * 2nd ed., Cambridge University Press 1992
      *
-     * @param injulian is the Astrolib Day
+     * @param julianDay is the Astrolib Day
      * @return new GregorianCalendar (year, month, day, hour, minute,seconds);
      */
     fun convertJulian2Gregorian(julianDay: Double): GregorianCalendar {
@@ -407,7 +407,7 @@ object AstroLib {
     /**
      * Converts a julian day to a calendar date
      *
-     * @param julianday
+     * @param julianDay
      * @return String DD/MM/YYYY HH:MM:SS
      */
     fun fromJulianToCalendarStr(julianDay: Double): String {
@@ -434,7 +434,7 @@ object AstroLib {
     /**
      * Converts a julian day to a calendar date
      *
-     * @param julianday
+     * @param julianDay
      * @return String DD/MM/YYYY
      */
     fun fromJulianToCalendarDateStr(julianDay: Double): String {
@@ -450,12 +450,12 @@ object AstroLib {
         (((a * x + b) * x + c) * x + d) * x + e
 
     /**
-     * Compute the Atmospheric Refraction in minutes at apperant angle in
+     * Compute the Atmospheric Refraction in minutes at apparent angle in
      * degrees, R=1/(tan(ho+7.31/(ho+4.4)))+0.001351521723799; R is the
-     * atmospheric refraction at the apperant altitude h0 degrees;
+     * atmospheric refraction at the apparent altitude h0 degrees;
      *
-     * @param angle ho is the apperant altitude for celestial object in degrees.
-     * @result corection for altitude angle in Minutes
+     * @param ho ho is the apparent altitude for celestial object in degrees.
+     * @result correction for altitude angle in Minutes
      */
     fun getApparentAtmosphericRefraction(ho: Double): Double {
         val R = 1 / tan(Math.toRadians(ho + 7.31 / (ho + 4.4))) + 0.001351521723799
@@ -465,10 +465,10 @@ object AstroLib {
     /**
      * Compute the Atmospheric Refraction in minutes at angle in degrees,
      * R=1.02/(tan(h+10.3/(h+5.11)))++0.0019279; R is the atmospheric refraction
-     * at the apperant altitude h0 degrees;
+     * at the apparent altitude h0 degrees;
      *
-     * @param angle ho is the apperant altitude for celestial object in degrees.
-     * @result corection for altitude angle in Minutes
+     * @param h ho is the apparent altitude for celestial object in degrees.
+     * @result correction for altitude angle in Minutes
      */
     fun getAtmosphericRefraction(h: Double): Double {
         val R = (1.02 / tan(Math.toRadians(h + 10.3 / (h + 5.11)))
