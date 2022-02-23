@@ -11,9 +11,27 @@ import kotlinx.coroutines.flow.merge
 
 class MapViewModel : ViewModel() {
 
+    // State
     private val _time = MutableStateFlow(System.currentTimeMillis())
-    val time: StateFlow<Long> = _time
+    private val _displayNightMask = MutableStateFlow(true)
+    private val _displayLocation = MutableStateFlow(true)
+    private val _displayGrid = MutableStateFlow(false)
+    private val _isDirectPathMode = MutableStateFlow(false)
+    private val _directPathDestination = MutableStateFlow<Coordinates?>(null)
 
+    // Subscriptions
+    val time: StateFlow<Long> = _time
+    val displayNightMask: StateFlow<Boolean> = _displayNightMask
+    val displayLocation: StateFlow<Boolean> = _displayLocation
+    val displayGrid: StateFlow<Boolean> = _displayGrid
+    val isDirectPathMode: StateFlow<Boolean> = _isDirectPathMode
+    val directPathDestination: StateFlow<Coordinates?> = _directPathDestination
+    val updateEvent = merge(
+        _time, _displayNightMask, _displayLocation, _displayGrid, _isDirectPathMode,
+        _directPathDestination
+    ).debounce(10) // just to filter initial immediate emits
+
+    // Commands
     fun subtractOneHour() {
         _time.value -= ONE_HOUR_IN_MILLIS
     }
@@ -30,14 +48,10 @@ class MapViewModel : ViewModel() {
         _time.value += DAY_IN_MILLIS
     }
 
-    private val _displayNightMask = MutableStateFlow(true)
-    val displayNightMask: StateFlow<Boolean> = _displayNightMask
     fun toggleNightMask() {
         _displayNightMask.value = !_displayNightMask.value
     }
 
-    private val _displayLocation = MutableStateFlow(true)
-    val displayLocation: StateFlow<Boolean> = _displayLocation
     fun toggleDisplayLocation() {
         _displayLocation.value = !displayLocation.value
     }
@@ -46,27 +60,15 @@ class MapViewModel : ViewModel() {
         _displayLocation.value = true
     }
 
-    private val _displayGrid = MutableStateFlow(false)
-    val displayGrid: StateFlow<Boolean> = _displayGrid
     fun toggleDisplayGrid() {
         _displayGrid.value = !_displayGrid.value
     }
 
-    private val _isDirectPathMode = MutableStateFlow(false)
-    val isDirectPathMode: StateFlow<Boolean> = _isDirectPathMode
     fun toggleDirectPathMode() {
         _isDirectPathMode.value = !_isDirectPathMode.value
     }
 
-    // the destination direct path mode will draw the shortest real path to
-    private val _directPathDestination = MutableStateFlow<Coordinates?>(null)
-    val directPathDestination: StateFlow<Coordinates?> = _directPathDestination
     fun changeDirectPathDestination(coordinates: Coordinates?) {
         _directPathDestination.value = coordinates
     }
-
-    val updateEvent = merge(
-        _time, _displayNightMask, _displayLocation, _displayGrid, _isDirectPathMode,
-        _directPathDestination
-    ).debounce(10) // just to filter initial immediate emits
 }

@@ -11,25 +11,22 @@ import kotlinx.coroutines.flow.merge
 
 class ConverterViewModel : ViewModel() {
 
+    // State
     private val _calendar = MutableStateFlow(mainCalendar)
-    val calendar: StateFlow<CalendarType> = _calendar
-
     private val _selectedDate = MutableStateFlow(Jdn.today())
-    val selectedDate: StateFlow<Jdn> = _selectedDate
-
     private val _secondSelectedDate = MutableStateFlow(Jdn.today())
-    val secondSelectedDate: StateFlow<Jdn> = _secondSelectedDate
-
     private val _isDayDistance = MutableStateFlow(false)
-    val isDayDistance: StateFlow<Boolean> = _isDayDistance
 
-    // Events
+    // Subscriptions
+    val calendar: StateFlow<CalendarType> = _calendar
+    val selectedDate: StateFlow<Jdn> = _selectedDate
+    val secondSelectedDate: StateFlow<Jdn> = _secondSelectedDate
+    val isDayDistance: StateFlow<Boolean> = _isDayDistance
     val todayButtonVisibilityEvent = merge(selectedDate, secondSelectedDate, isDayDistance).map {
         val todayJdn = Jdn.today()
         selectedDate.value != todayJdn ||
                 (isDayDistance.value && secondSelectedDate.value != todayJdn)
     }
-
     val updateEvent = merge(calendar, selectedDate, secondSelectedDate, isDayDistance)
 
     // Commands

@@ -18,14 +18,20 @@ class CalendarViewModel @JvmOverloads constructor(
     application: Application,
     private var repository: ISearchEventsRepository = ISearchEventsRepository.empty() // TODO: Inject maybe
 ) : AndroidViewModel(application) {
-    private val _selectedDay = MutableStateFlow(Jdn.today())
-    val selectedDay: StateFlow<Jdn> get() = _selectedDay
 
+    // State
+    private val _selectedDay = MutableStateFlow(Jdn.today())
     private val _selectedMonth = MutableStateFlow(
         mainCalendar.getMonthStartFromMonthsDistance(selectedDay.value, 0)
     )
-    val selectedMonth: StateFlow<AbstractDate> get() = _selectedMonth
+    private val _selectedTabIndex = MutableStateFlow(0)
+    private val _eventsFlow = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
 
+    // Subscriptions
+    val selectedDay: StateFlow<Jdn> get() = _selectedDay
+    val selectedMonth: StateFlow<AbstractDate> get() = _selectedMonth
+    val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
+    val eventsFlow: StateFlow<List<CalendarEvent<*>>> get() = _eventsFlow
     val todayButtonVisibility = selectedDay.combine(selectedMonth) { selectedDay, selectedMonth ->
         val todayJdn = Jdn.today()
         val todayDate = todayJdn.toCalendar(mainCalendar)
@@ -33,12 +39,7 @@ class CalendarViewModel @JvmOverloads constructor(
                 selectedDay != todayJdn
     }
 
-    private val _selectedTabIndex = MutableStateFlow(0)
-    val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
-
-    private val _eventsFlow = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
-    val eventsFlow: StateFlow<List<CalendarEvent<*>>> get() = _eventsFlow
-
+    // Commands
     fun changeSelectedMonth(selectedMonth: AbstractDate) {
         _selectedMonth.value = selectedMonth
     }
