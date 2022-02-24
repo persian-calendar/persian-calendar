@@ -190,5 +190,15 @@ class AstronomyTests {
             ChineseZodiac.TIGER,
             ChineseZodiac.fromPersianCalendar(PersianDate(1401, 1, 1))
         )
+        listOf(
+            ChineseZodiac.MONKEY, ChineseZodiac.ROOSTER, ChineseZodiac.DOG,
+            ChineseZodiac.PIG, ChineseZodiac.RAT, ChineseZodiac.OX,
+            ChineseZodiac.TIGER, ChineseZodiac.RABBIT, ChineseZodiac.DRAGON,
+            ChineseZodiac.SNAKE, ChineseZodiac.HORSE, ChineseZodiac.GOAT
+        ).zip(1395..1406) { expected, year ->
+            assertEquals(
+                expected, ChineseZodiac.fromPersianCalendar(PersianDate(year, 1, 1))
+            )
+        }
     }
 }

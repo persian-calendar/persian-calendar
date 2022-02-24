@@ -28,6 +28,7 @@ enum class ChineseZodiac(@StringRes val title: Int, val emoji: String) {
     }
 
     companion object {
+        // e.g. see 'The Chinese-Uighur Animal Calendar in Persian Historiography of the Mongol Period'
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             values().getOrNull((persianDate.year + 9) % 12) ?: MONKEY
     }
