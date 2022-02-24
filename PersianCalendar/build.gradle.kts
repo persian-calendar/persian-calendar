@@ -181,6 +181,7 @@ dependencies {
     implementation("com.github.persian-calendar:calendar:1.2.0")
     implementation("com.github.persian-calendar:praytimes:2.1.2")
 
+    // For development builds only
     nightlyImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
     nightlyImplementation("com.google.firebase:firebase-analytics-ktx")
     nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx")
