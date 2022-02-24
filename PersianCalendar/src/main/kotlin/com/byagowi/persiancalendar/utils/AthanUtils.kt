@@ -36,7 +36,6 @@ import com.byagowi.persiancalendar.PREF_ATHAN_GAP
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
@@ -45,6 +44,7 @@ import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.AthanNotification
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
+import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import java.util.concurrent.TimeUnit

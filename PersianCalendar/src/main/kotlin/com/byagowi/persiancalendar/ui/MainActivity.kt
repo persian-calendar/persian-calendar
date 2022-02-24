@@ -46,7 +46,6 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
@@ -80,6 +79,7 @@ import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDa
 import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.MaterialShapeDrawable

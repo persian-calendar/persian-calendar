@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.global.enableNewInterface
@@ -37,6 +36,7 @@ import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator

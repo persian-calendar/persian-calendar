@@ -16,10 +16,10 @@ import com.byagowi.persiancalendar.BROADCAST_UPDATE_APP
 import com.byagowi.persiancalendar.LOAD_APP_ID
 import com.byagowi.persiancalendar.THREE_HOURS_APP_ID
 import com.byagowi.persiancalendar.UPDATE_TAG
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import java.util.*
 import java.util.concurrent.TimeUnit
 

@@ -24,7 +24,6 @@ import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
@@ -36,6 +35,7 @@ import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
 import java.util.*

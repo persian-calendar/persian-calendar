@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.preference.ListPreference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE

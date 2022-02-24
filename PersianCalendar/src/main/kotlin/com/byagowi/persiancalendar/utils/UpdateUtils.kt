@@ -44,7 +44,6 @@ import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_WIDGETS_PREFER_SYSTEM_COLORS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
-import com.byagowi.persiancalendar.variants.debugLog
 import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
@@ -76,6 +75,7 @@ import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureAc
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.ShapeAppearancePathProvider
