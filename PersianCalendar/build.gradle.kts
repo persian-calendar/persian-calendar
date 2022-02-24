@@ -205,6 +205,7 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
     implementation("androidx.activity:activity-ktx:1.4.0")
+    implementation("androidx.lifecycle:lifecycle-process:2.4.1")
 
     implementation("androidx.browser:browser:1.4.0")
 

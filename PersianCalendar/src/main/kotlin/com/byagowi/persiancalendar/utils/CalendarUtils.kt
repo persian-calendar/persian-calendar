@@ -5,9 +5,13 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.database.ContentObserver
+import android.net.Uri
+import android.os.Looper
 import android.provider.CalendarContract
 import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
+import androidx.core.os.HandlerCompat
 import androidx.core.text.HtmlCompat
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.R
@@ -32,11 +36,17 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekStartOffset
+import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.trySendBlocking
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import java.util.*
 import kotlin.math.abs
 
@@ -302,3 +312,43 @@ private fun getCalendarNameAbbr(date: AbstractDate) =
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.toCalendar(it)) }
+
+fun getDeviceEventsChangeFlow(context: Context): Flow<Unit> {
+    return callbackFlow {
+        if (ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.READ_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED
+        ) cancel("No permission")
+
+
+        val handler = HandlerCompat.createAsync(Looper.getMainLooper())
+
+        val observer = object : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean) {
+                onChange(selfChange, null) // based on documents
+                debugLog("onChange $selfChange")
+                trySendBlocking(Unit)
+            }
+
+            override fun onChange(selfChange: Boolean, uri: Uri?) {
+                debugLog("onChange $selfChange $uri")
+                trySendBlocking(Unit)
+            }
+
+            override fun onChange(selfChange: Boolean, uri: Uri?, flags: Int) {
+                debugLog("onChange $selfChange $uri $flags")
+                trySendBlocking(Unit)
+            }
+        }
+
+        context.contentResolver.registerContentObserver(
+            CalendarContract.CONTENT_URI,
+            false /* notifyForDescendants */,
+            observer
+        )
+
+        awaitClose {
+            context.contentResolver.unregisterContentObserver(observer)
+        }
+    }
+}
