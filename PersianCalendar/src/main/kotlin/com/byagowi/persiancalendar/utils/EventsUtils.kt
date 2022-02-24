@@ -86,6 +86,12 @@ class EnabledHolidays(val enabledTypes: Set<String> = emptySet()) {
         } else ""
     }
 
+    override fun equals(other: Any?): Boolean =
+        this === other || enabledTypes == (other as? EnabledHolidays)?.enabledTypes
+
+    override fun hashCode(): Int = enabledTypes.hashCode()
+
+
     companion object {
         const val iranHolidaysKey = "iran_holidays"
         const val iranOthersKey = "iran_others"

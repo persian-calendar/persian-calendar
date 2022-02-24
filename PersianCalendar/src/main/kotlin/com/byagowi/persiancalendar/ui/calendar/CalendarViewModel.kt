@@ -8,6 +8,8 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
+import com.byagowi.persiancalendar.utils.EnabledHolidays
+import com.byagowi.persiancalendar.utils.appPrefs
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,6 +58,9 @@ class CalendarViewModel @JvmOverloads constructor(
     }
 
     fun searchEvent(query: CharSequence) {
-        viewModelScope.launch { _eventsFlow.value = repository.findEvent(query) }
+        viewModelScope.launch {
+            _eventsFlow.value =
+                repository.findEvent(query, EnabledHolidays(getApplication<Application>().appPrefs))
+        }
     }
 }

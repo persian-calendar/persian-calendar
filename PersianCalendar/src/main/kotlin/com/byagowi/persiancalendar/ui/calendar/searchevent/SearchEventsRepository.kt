@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar.searchevent
 import android.content.Context
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.getAllEnabledAppointments
 import com.byagowi.persiancalendar.utils.gregorianCalendarEvents
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 class SearchEventsRepository(private val context: Context) : ISearchEventsRepository {
 
     private var store: SearchEventsStore? = null
+    private var enabledHolidays: EnabledHolidays? = null
 
     private suspend fun createStore(context: Context) = withContext(Dispatchers.IO) {
         val jdn = Jdn.today()
@@ -33,6 +35,10 @@ class SearchEventsRepository(private val context: Context) : ISearchEventsReposi
     }
 
     // encapsulate store in repository
-    override suspend fun findEvent(query: CharSequence): List<CalendarEvent<*>> =
-        (store ?: createStore(context).also { store = it }).query(query)
+    override suspend fun findEvent(
+        query: CharSequence,
+        enabledHolidays: EnabledHolidays
+    ): List<CalendarEvent<*>> =
+        (store?.takeIf { this.enabledHolidays == enabledHolidays }
+            ?: createStore(context).also { store = it }).query(query)
 }
