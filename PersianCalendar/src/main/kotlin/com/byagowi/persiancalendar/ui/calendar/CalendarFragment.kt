@@ -533,10 +533,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
         searchView.setOnSearchClickListener {
             onBackPressedCloseSearchCallback.isEnabled = true
-            viewLifecycleOwner.lifecycleScope.launch {
-                // 2s timeout, give up if took too much time
-                withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { viewModel.initializeEventsRepository() }
-            }
         }
         // Remove search edit view below bar
         searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull
