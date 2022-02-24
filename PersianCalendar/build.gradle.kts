@@ -5,11 +5,19 @@ operator fun File.div(child: String) = File(this, child)
 fun String.execute() = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
+val isNightlyBuild = gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
+
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
+}
+
+if (isNightlyBuild) {
+    plugins.apply("com.google.gms.google-services")
+    plugins.apply("com.google.firebase.firebase-perf")
+    plugins.apply("com.google.firebase.crashlytics")
 }
 
 // Disabled due to F-Droid inability to parse dynamic versioning
@@ -166,11 +174,18 @@ android {
 }
 
 val minApi21Implementation by configurations
+val nightlyImplementation by configurations
 
 dependencies {
     implementation("com.github.persian-calendar:equinox:2.0.0")
     implementation("com.github.persian-calendar:calendar:1.2.0")
     implementation("com.github.persian-calendar:praytimes:2.1.2")
+
+    // For development builds only
+    nightlyImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
+    nightlyImplementation("com.google.firebase:firebase-analytics-ktx")
+    nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx")
+    nightlyImplementation("com.google.firebase:firebase-perf-ktx")
 
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.preference:preference-ktx:1.2.0")

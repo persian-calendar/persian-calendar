@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "514252172621",
+    "project_id": "persian-calendar-dcb32",
+    "storage_bucket": "persian-calendar-dcb32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514252172621:android:ea05f802366cb843331b04",
+        "android_client_info": {
+          "package_name": "com.byagowi.persiancalendar.minApi21.nightly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514252172621-hqfn5ophq48115b1lh8sbhk0f28tcnsr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgO88LgYzGUQly-zfuTsdgwyU0a155EOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514252172621-hqfn5ophq48115b1lh8sbhk0f28tcnsr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514252172621:android:cf7be14e1b3fb9e6331b04",
+        "android_client_info": {
+          "package_name": "com.byagowi.persiancalendar.nightly"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "514252172621-hqfn5ophq48115b1lh8sbhk0f28tcnsr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgO88LgYzGUQly-zfuTsdgwyU0a155EOo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "514252172621-hqfn5ophq48115b1lh8sbhk0f28tcnsr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
