@@ -56,6 +56,7 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.clockIn24
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isCenterAlignWidgets
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
@@ -556,7 +557,7 @@ private fun create4x2RemoteViews(
 private fun setEventsInWidget(
     context: Context, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
 ) {
-    val events = getEvents(jdn, deviceCalendarEvents)
+    val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: listOf()
     val holidays = getEventsTitle(
         events, holiday = true, compact = true, showDeviceCalendarEvents = true,
         insertRLM = context.resources.isRtl, addIsHoliday = isHighTextContrastEnabled
@@ -642,7 +643,7 @@ private fun updateNotification(
     }
 
     if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val events = getEvents(jdn, deviceCalendarEvents)
+        val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: listOf()
         val holidays = getEventsTitle(
             events, holiday = true,
             compact = true, showDeviceCalendarEvents = true, insertRLM = context.resources.isRtl,

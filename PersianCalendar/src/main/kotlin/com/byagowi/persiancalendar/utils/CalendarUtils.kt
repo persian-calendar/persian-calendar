@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calendarTypesTitleAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -82,7 +83,7 @@ fun getA11yDaySummary(
         }
     }
 
-    val events = getEvents(jdn, deviceCalendarEvents)
+    val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: listOf()
     val holidays = getEventsTitle(
         events, true,
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false
@@ -259,13 +260,6 @@ fun calculateDaysDifference(
         resources.getQuantityString(pluralId, n, formatNumber(n))
     })
 }
-
-fun getEvents(jdn: Jdn, deviceEvents: DeviceCalendarEventsStore) = listOf(
-    persianCalendarEvents.getEvents(jdn.toPersianCalendar()),
-    islamicCalendarEvents.getEvents(jdn.toIslamicCalendar()),
-    nepaliCalendarEvents.getEvents(jdn.toNepaliCalendar()),
-    gregorianCalendarEvents.getEvents(jdn.toGregorianCalendar(), deviceEvents)
-).flatten()
 
 fun formatDate(
     date: AbstractDate, calendarNameInLinear: Boolean = true, forceNonNumerical: Boolean = false

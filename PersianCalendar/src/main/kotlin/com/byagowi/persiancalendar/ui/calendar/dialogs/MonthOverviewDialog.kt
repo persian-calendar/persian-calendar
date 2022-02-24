@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MonthOverviewItemBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -33,7 +34,6 @@ import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
 import com.byagowi.persiancalendar.utils.getWeekDayName
@@ -129,7 +129,7 @@ private fun createEventsList(
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
     return (0 until mainCalendar.getMonthLength(date.year, date.month)).associate {
         val jdn = baseJdn + it
-        val events = getEvents(jdn, deviceEvents)
+        val events = eventsRepository?.getEvents(jdn, deviceEvents) ?: listOf()
         jdn to events
     }
 }

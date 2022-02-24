@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.databinding.HolidaysTypesDialogBinding
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.utils.EnabledHolidays
+import com.byagowi.persiancalendar.utils.EventsRepository
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -37,18 +37,17 @@ fun showHolidaysTypesDialog(activity: Activity) {
 
     // Update view from stored settings
     val checkboxToKeyPairs = listOf(
-        binding.iranHolidays to EnabledHolidays.iranHolidaysKey,
-        binding.iranOthers to EnabledHolidays.iranOthersKey,
-        binding.afghanistanHolidays to EnabledHolidays.afghanistanHolidaysKey,
-        binding.afghanistanOthers to EnabledHolidays.afghanistanOthersKey,
-        binding.nepalHolidays to EnabledHolidays.nepalHolidaysKey,
-        binding.nepalOthers to EnabledHolidays.nepalOthersKey,
-        binding.iranAncient to EnabledHolidays.iranAncientKey,
-        binding.international to EnabledHolidays.internationalKey
+        binding.iranHolidays to EventsRepository.iranHolidaysKey,
+        binding.iranOthers to EventsRepository.iranOthersKey,
+        binding.afghanistanHolidays to EventsRepository.afghanistanHolidaysKey,
+        binding.afghanistanOthers to EventsRepository.afghanistanOthersKey,
+        binding.nepalHolidays to EventsRepository.nepalHolidaysKey,
+        binding.nepalOthers to EventsRepository.nepalOthersKey,
+        binding.iranAncient to EventsRepository.iranAncientKey,
+        binding.international to EventsRepository.internationalKey
     )
-    val enabledHolidays = EnabledHolidays(activity.appPrefs)
-    checkboxToKeyPairs
-        .forEach { (checkbox, key) -> checkbox.isChecked = key in enabledHolidays.enabledTypes }
+    val enabledTypes = EventsRepository.getEnabledTypes(activity.appPrefs, language)
+    checkboxToKeyPairs.forEach { (checkbox, key) -> checkbox.isChecked = key in enabledTypes }
 
     // Check boxes hierarchy
     val hierarchy = listOf(

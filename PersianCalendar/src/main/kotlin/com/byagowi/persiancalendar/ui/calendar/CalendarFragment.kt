@@ -53,6 +53,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isTalkBackEnabled
@@ -77,7 +78,7 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
-import com.byagowi.persiancalendar.utils.EnabledHolidays
+import com.byagowi.persiancalendar.utils.EventsRepository
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -89,7 +90,6 @@ import com.byagowi.persiancalendar.utils.dayTitleSummary
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getEvents
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
@@ -424,7 +424,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         val activity = activity ?: return
 
         eventsBinding.shiftWorkTitle.text = getShiftWorkTitle(jdn, false)
-        val events = getEvents(jdn, activity.readDayDeviceEvents(jdn))
+        val events =
+            eventsRepository?.getEvents(jdn, activity.readDayDeviceEvents(jdn)) ?: emptyList()
         val holidays = getEventsTitle(
             events,
             holiday = true, compact = false, showDeviceCalendarEvents = false, insertRLM = false,
@@ -478,7 +479,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             eventsBinding.eventTitle.isVisible = false
         }
 
-        if (EnabledHolidays(activity.appPrefs, emptySet()).isEmpty && language.isIranExclusive) {
+        if (PREF_HOLIDAY_TYPES !in activity.appPrefs && language.isIranExclusive) {
             eventsBinding.buttonsBar.header.setText(R.string.warn_if_events_not_set)
             eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
@@ -489,7 +490,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
             eventsBinding.buttonsBar.discard.setOnClickListener {
                 activity.appPrefs.edit {
-                    putStringSet(PREF_HOLIDAY_TYPES, EnabledHolidays.iranDefault)
+                    putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
                 }
                 eventsBinding.buttonsBar.root.isVisible = false
             }

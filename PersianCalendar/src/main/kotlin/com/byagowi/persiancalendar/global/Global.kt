@@ -55,13 +55,12 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
-import com.byagowi.persiancalendar.utils.EnabledHolidays
+import com.byagowi.persiancalendar.utils.EventsRepository
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
-import com.byagowi.persiancalendar.utils.loadEvents
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.scheduleAlarms
 import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
@@ -172,7 +171,8 @@ var numericalDatePreferred = false
     private set
 var calendarTypesTitleAbbr = emptyList<String>()
     private set
-// Some more are in EventsUtils
+var eventsRepository: EventsRepository? = null
+    private set
 
 private var secondaryCalendarEnabled = false
 
@@ -193,9 +193,8 @@ fun configureCalendarsAndLoadEvents(context: Context) {
     IslamicDate.islamicOffset = if (appPrefs.isIslamicOffsetExpired) 0 else
         appPrefs.getString(PREF_ISLAMIC_OFFSET, DEFAULT_ISLAMIC_OFFSET)?.toIntOrNull() ?: 0
 
-    val enabledHolidays = EnabledHolidays(appPrefs)
-    isIranHolidaysEnabled = enabledHolidays.iranHolidays
-    loadEvents(enabledHolidays, language)
+    eventsRepository = EventsRepository(appPrefs, language)
+    isIranHolidaysEnabled = eventsRepository?.iranHolidays ?: false
 }
 
 fun loadLanguageResources(context: Context) {

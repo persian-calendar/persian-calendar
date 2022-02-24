@@ -15,12 +15,18 @@ private constructor(private val store: Map<Int, List<T>>) {
         it.date.year == date.year || it.date.year == -1 // -1 means it is occurring every year
     } ?: emptyList()
 
-    fun getEvents(date: AbstractDate) = getEventsEntry(date) +
-            irregularCalendarEventsStore.getEvents(date)
+    fun getEvents(
+        date: AbstractDate, irregularCalendarEventsStore: IrregularCalendarEventsStore
+    ): List<T> {
+        return getEventsEntry(date) + irregularCalendarEventsStore.getEvents(date)
+    }
 
     fun getEvents(
-        date: CivilDate, deviceEvents: DeviceCalendarEventsStore
-    ): List<CalendarEvent<*>> = deviceEvents.getEventsEntry(date) + getEvents(date)
+        date: CivilDate, irregularCalendarEventsStore: IrregularCalendarEventsStore,
+        deviceEvents: DeviceCalendarEventsStore
+    ): List<CalendarEvent<*>> {
+        return deviceEvents.getEventsEntry(date) + getEvents(date, irregularCalendarEventsStore)
+    }
 
     fun getAllEvents(): List<T> = store.values.flatten()
 
