@@ -79,7 +79,6 @@ import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescript
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.EnabledHolidays
 import com.byagowi.persiancalendar.utils.EventsStore
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
@@ -107,8 +106,6 @@ import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head
@@ -532,10 +529,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
         searchView.setOnSearchClickListener {
             onBackPressedCloseSearchCallback.isEnabled = true
-            viewLifecycleOwner.lifecycleScope.launch {
-                // 2s timeout, give up if took too much time
-                withTimeoutOrNull(TWO_SECONDS_IN_MILLIS) { viewModel.initializeEventsRepository() }
-            }
         }
         // Remove search edit view below bar
         searchView.findViewById<View?>(androidx.appcompat.R.id.search_plate).debugAssertNotNull

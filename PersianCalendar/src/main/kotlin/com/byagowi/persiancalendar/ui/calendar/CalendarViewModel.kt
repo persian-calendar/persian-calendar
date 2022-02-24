@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class CalendarViewModel @JvmOverloads constructor(
     application: Application,
-    private var repository: ISearchEventsRepository = ISearchEventsRepository.empty() // TODO: Inject maybe
+    private val repository: ISearchEventsRepository = SearchEventsRepository(application) // TODO: Inject maybe
 ) : AndroidViewModel(application) {
 
     // State
@@ -57,11 +57,5 @@ class CalendarViewModel @JvmOverloads constructor(
 
     fun searchEvent(query: CharSequence) {
         viewModelScope.launch { _eventsFlow.value = repository.findEvent(query) }
-    }
-
-    // Events store cache needs to be invalidated as preferences of enabled events can be changed
-    // or user has added an appointment on their calendar outside the app.
-    fun initializeEventsRepository() {
-        repository = SearchEventsRepository(getApplication())
     }
 }
