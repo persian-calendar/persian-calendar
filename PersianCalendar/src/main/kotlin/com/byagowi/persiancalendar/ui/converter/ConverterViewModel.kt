@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -17,17 +18,20 @@ class ConverterViewModel : ViewModel() {
     private val _secondSelectedDate = MutableStateFlow(Jdn.today())
     private val _isDayDistance = MutableStateFlow(false)
 
-    // Subscriptions
-    val calendar: StateFlow<CalendarType> = _calendar
-    val selectedDate: StateFlow<Jdn> = _selectedDate
-    val secondSelectedDate: StateFlow<Jdn> = _secondSelectedDate
-    val isDayDistance: StateFlow<Boolean> = _isDayDistance
-    val todayButtonVisibilityEvent = merge(selectedDate, secondSelectedDate, isDayDistance).map {
+    // Values
+    val calendar: CalendarType get() = _calendar.value
+    val selectedDate: Jdn get() = _selectedDate.value
+    val secondSelectedDate: Jdn get() = _secondSelectedDate.value
+    val isDayDistance: Boolean get() = _isDayDistance.value
+
+    // Events
+    val calendarChangeEvent: Flow<CalendarType> get() = _calendar
+    val isDayDistanceChangeEvent: Flow<Boolean> get() = _isDayDistance
+    val todayButtonVisibilityEvent = merge(_selectedDate, _secondSelectedDate, _isDayDistance).map {
         val todayJdn = Jdn.today()
-        selectedDate.value != todayJdn ||
-                (isDayDistance.value && secondSelectedDate.value != todayJdn)
+        selectedDate != todayJdn || (isDayDistance && secondSelectedDate != todayJdn)
     }
-    val updateEvent = merge(calendar, selectedDate, secondSelectedDate, isDayDistance)
+    val updateEvent = merge(_calendar, _selectedDate, _secondSelectedDate, _isDayDistance)
 
     // Commands
     fun changeCalendar(calendarType: CalendarType) {

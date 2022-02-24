@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.calendar.searchevent.ISearchEventsRepository
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepository
 import io.github.persiancalendar.calendar.AbstractDate
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -22,21 +23,23 @@ class CalendarViewModel @JvmOverloads constructor(
     // State
     private val _selectedDay = MutableStateFlow(Jdn.today())
     private val _selectedMonth = MutableStateFlow(
-        mainCalendar.getMonthStartFromMonthsDistance(selectedDay.value, 0)
+        mainCalendar.getMonthStartFromMonthsDistance(selectedDay, 0)
     )
     private val _selectedTabIndex = MutableStateFlow(0)
     private val _eventsFlow = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
 
-    // Subscriptions
-    val selectedDay: StateFlow<Jdn> get() = _selectedDay
+    // Values
+    val selectedDay: Jdn get() = _selectedDay.value
     val selectedMonth: StateFlow<AbstractDate> get() = _selectedMonth
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
     val eventsFlow: StateFlow<List<CalendarEvent<*>>> get() = _eventsFlow
-    val todayButtonVisibility = selectedDay.combine(selectedMonth) { selectedDay, selectedMonth ->
+
+    // Events
+    val selectedDayChangeEvent: Flow<Jdn> get() = _selectedDay
+    val todayButtonVisibilityEvent = _selectedDay.combine(_selectedMonth) { day, month ->
         val todayJdn = Jdn.today()
         val todayDate = todayJdn.toCalendar(mainCalendar)
-        selectedMonth.year != todayDate.year || selectedMonth.month != todayDate.month ||
-                selectedDay != todayJdn
+        month.year != todayDate.year || month.month != todayDate.month || day != todayJdn
     }
 
     // Commands

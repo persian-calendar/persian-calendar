@@ -33,7 +33,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         val binding = FragmentConverterBinding.bind(view)
 
         val viewModel by viewModels<ConverterViewModel>()
-        binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
+        binding.dayPickerView.changeCalendarType(viewModel.calendar)
 
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
@@ -49,7 +49,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
-        spinner.setSelection(if (viewModel.isDayDistance.value) 1 else 0)
+        spinner.setSelection(if (viewModel.isDayDistance) 1 else 0)
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setupMenuNavigation()
@@ -78,7 +78,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         }.onClick {
             val jdn = binding.dayPickerView.jdn
             activity?.shareText(
-                if (viewModel.isDayDistance.value) binding.dayDistance.text.toString()
+                if (viewModel.isDayDistance) binding.dayDistance.text.toString()
                 else listOf(
                     dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
                     getString(R.string.equivalent_to),
@@ -87,42 +87,42 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             )
         }
 
-        binding.secondDayPickerView.jdn = viewModel.secondSelectedDate.value
+        binding.secondDayPickerView.jdn = viewModel.secondSelectedDate
         binding.secondDayPickerView.turnToSecondaryDatePicker()
         binding.dayPickerView.selectedDayListener = viewModel::changeSelectedDate
         binding.dayPickerView.selectedCalendarListener = viewModel::changeCalendar
-        binding.dayPickerView.jdn = viewModel.selectedDate.value
+        binding.dayPickerView.jdn = viewModel.selectedDate
         binding.secondDayPickerView.selectedDayListener = viewModel::changeSecondSelectedDate
 
         // Setup view model change listeners
         viewModel.updateEvent
             .onEach {
-                if (viewModel.isDayDistance.value) {
+                if (viewModel.isDayDistance) {
                     binding.dayDistance.text = calculateDaysDifference(
-                        resources, viewModel.selectedDate.value, viewModel.secondSelectedDate.value,
-                        viewModel.calendar.value
+                        resources, viewModel.selectedDate, viewModel.secondSelectedDate,
+                        viewModel.calendar
                     )
                 } else {
-                    val selectedCalendarType = viewModel.calendar.value
+                    val selectedCalendarType = viewModel.calendar
                     binding.calendarsView.showCalendars(
-                        viewModel.selectedDate.value,
+                        viewModel.selectedDate,
                         selectedCalendarType, enabledCalendars - selectedCalendarType
                     )
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.calendar
+        viewModel.calendarChangeEvent
             .onEach {
-                if (viewModel.isDayDistance.value) binding.secondDayPickerView.changeCalendarType(it)
+                if (viewModel.isDayDistance) binding.secondDayPickerView.changeCalendarType(it)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.todayButtonVisibilityEvent
             .distinctUntilChanged()
             .onEach(todayButton::setVisible)
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.isDayDistance
+        viewModel.isDayDistanceChangeEvent
             .onEach {
-                if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
+                if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendar)
                 binding.secondDayPickerView.isVisible = it
                 binding.dayDistance.isVisible = it
                 binding.calendarsView.isVisible = !it

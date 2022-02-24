@@ -72,7 +72,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
         viewModel.updateEvent
             .onEach {
-                val date = GregorianCalendar().also { it.time = Date(viewModel.time.value) }
+                val date = GregorianCalendar().also { it.time = Date(viewModel.time) }
                 runCatching { binding.map.setImageBitmap(createMap(date, viewModel)) }
                     .onFailure(logException)
                 binding.date.text = date.formatDateAndTime()
@@ -110,8 +110,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (coordinates == null) bringGps()
             else {
                 viewModel.toggleDirectPathMode()
-                directPathButton.icon.alpha = if (viewModel.isDirectPathMode.value) 127 else 255
-                if (!viewModel.isDirectPathMode.value) viewModel.changeDirectPathDestination(null)
+                directPathButton.icon.alpha = if (viewModel.isDirectPathMode) 127 else 255
+                if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
             }
         }
         binding.appBar.toolbar.menu.add("Grid").also {
@@ -134,7 +134,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             viewModel.toggleNightMask()
-            binding.timeBar.isVisible = viewModel.displayNightMask.value
+            binding.timeBar.isVisible = viewModel.displayNightMask
         }
         binding.root.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.APPEARING)
@@ -149,7 +149,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             val longitude = x / mapScaleFactor - 180
             if (abs(latitude) > 90 || abs(longitude) > 180) return
             if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 &&
-                viewModel.displayGrid.value
+                viewModel.displayGrid
             ) {
                 findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
                 return
@@ -157,7 +157,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
             activity?.also {
                 val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                if (viewModel.isDirectPathMode.value) {
+                if (viewModel.isDirectPathMode) {
                     viewModel.changeDirectPathDestination(coordinates)
                 } else {
                     showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
@@ -212,7 +212,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         var moonY = .0f
         var moonAlt = .0
         (0 until nightMask.width).forEach { x ->
-            if (!viewModel.displayNightMask.value) return@forEach
+            if (!viewModel.displayNightMask) return@forEach
             (0 until nightMask.height).forEach { y ->
                 val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                 val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
@@ -232,7 +232,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         Canvas(sink).also {
             it.drawBitmap(nightMask, null, Rect(0, 0, sinkWidth, sinkHeight), null)
             val scale = sink.width / nightMask.width
-            if (viewModel.displayGrid.value) {
+            if (viewModel.displayGrid) {
                 (0 until sinkWidth step sinkWidth / 24).forEachIndexed { i, x ->
                     if (i == 0 || i == 12) return@forEachIndexed
                     it.drawLine(x.toFloat(), 0f, x.toFloat(), sink.height.toFloat(), gridPaint)
@@ -248,11 +248,11 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 }
             }
             val solarDraw = solarDraw ?: return@also
-            if (viewModel.displayNightMask.value) {
+            if (viewModel.displayNightMask) {
                 solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sinkWidth * .02f)
                 solarDraw.sun(it, sunX * scale, sunY * scale, sinkWidth * .025f)
             }
-            if (coordinates != null && viewModel.displayLocation.value) {
+            if (coordinates != null && viewModel.displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                 pinRect.set(
@@ -263,7 +263,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 )
                 it.drawBitmap(pinBitmap, null, pinRect, null)
             }
-            val toPath = viewModel.directPathDestination.value
+            val toPath = viewModel.directPathDestination
             if (coordinates != null && toPath != null) {
                 val from = EarthPosition(coordinates.latitude, coordinates.longitude)
                 val to = EarthPosition(toPath.latitude, toPath.longitude)

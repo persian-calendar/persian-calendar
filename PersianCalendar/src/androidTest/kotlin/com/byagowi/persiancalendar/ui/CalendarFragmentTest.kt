@@ -23,7 +23,7 @@ class CalendarFragmentTest {
             val viewModel by it.viewModels<CalendarViewModel>()
             runTest(UnconfinedTestDispatcher()) {
                 val values = mutableListOf<Boolean>()
-                val job = launch { viewModel.todayButtonVisibility.collect(values::add) }
+                val job = launch { viewModel.todayButtonVisibilityEvent.collect(values::add) }
                 viewModel.changeSelectedDay(Jdn.today() + 1)
                 viewModel.changeSelectedDay(Jdn.today())
                 viewModel.changeSelectedDay(Jdn.today() - 1)
@@ -34,7 +34,7 @@ class CalendarFragmentTest {
 
             runTest(UnconfinedTestDispatcher()) {
                 val values = mutableListOf<Boolean>()
-                val job = launch { viewModel.todayButtonVisibility.collect(values::add) }
+                val job = launch { viewModel.todayButtonVisibilityEvent.collect(values::add) }
                 viewModel.changeSelectedDay(Jdn.today() + 1)
                 viewModel.changeSelectedMonth(
                     mainCalendar.getMonthStartFromMonthsDistance(Jdn.today(), 1)

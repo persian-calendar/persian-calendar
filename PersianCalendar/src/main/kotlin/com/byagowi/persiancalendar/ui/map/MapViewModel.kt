@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.byagowi.persiancalendar.utils.ONE_HOUR_IN_MILLIS
 import io.github.persiancalendar.praytimes.Coordinates
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.merge
 
@@ -19,14 +19,16 @@ class MapViewModel : ViewModel() {
     private val _isDirectPathMode = MutableStateFlow(false)
     private val _directPathDestination = MutableStateFlow<Coordinates?>(null)
 
-    // Subscriptions
-    val time: StateFlow<Long> = _time
-    val displayNightMask: StateFlow<Boolean> = _displayNightMask
-    val displayLocation: StateFlow<Boolean> = _displayLocation
-    val displayGrid: StateFlow<Boolean> = _displayGrid
-    val isDirectPathMode: StateFlow<Boolean> = _isDirectPathMode
-    val directPathDestination: StateFlow<Coordinates?> = _directPathDestination
-    val updateEvent = merge(
+    // Values
+    val time: Long get() = _time.value
+    val displayNightMask: Boolean get() = _displayNightMask.value
+    val displayLocation: Boolean get() = _displayLocation.value
+    val displayGrid: Boolean get() = _displayGrid.value
+    val isDirectPathMode: Boolean get() = _isDirectPathMode.value
+    val directPathDestination: Coordinates? get() = _directPathDestination.value
+
+    // Events
+    val updateEvent: Flow<*> = merge(
         _time, _displayNightMask, _displayLocation, _displayGrid, _isDirectPathMode,
         _directPathDestination
     ).debounce(10) // just to filter initial immediate emits
@@ -49,11 +51,11 @@ class MapViewModel : ViewModel() {
     }
 
     fun toggleNightMask() {
-        _displayNightMask.value = !_displayNightMask.value
+        _displayNightMask.value = !displayNightMask
     }
 
     fun toggleDisplayLocation() {
-        _displayLocation.value = !displayLocation.value
+        _displayLocation.value = !displayLocation
     }
 
     fun turnOnDisplayLocation() {
@@ -61,11 +63,11 @@ class MapViewModel : ViewModel() {
     }
 
     fun toggleDisplayGrid() {
-        _displayGrid.value = !_displayGrid.value
+        _displayGrid.value = !displayGrid
     }
 
     fun toggleDirectPathMode() {
-        _isDirectPathMode.value = !_isDirectPathMode.value
+        _isDirectPathMode.value = !isDirectPathMode
     }
 
     fun changeDirectPathDestination(coordinates: Coordinates?) {
