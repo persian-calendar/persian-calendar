@@ -321,4 +321,5 @@
     <string name="preview">预览</string>
     <string name="ignore">忽略</string>
     <string name="high_latitudes_method">高纬度模式</string>
+    <string name="calculator">电子计算器</string>
 </resources>

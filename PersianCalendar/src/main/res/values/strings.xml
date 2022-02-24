@@ -359,6 +359,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="moon">Moon</string>
     <!-- Used in astronomy screen, see https://en.wikipedia.org/wiki/Tropical_year and https://en.wikipedia.org/wiki/Sidereal_and_tropical_astrology -->
     <string name="tropical">Tropical</string>
+    <string name="calculator">Calculator</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
