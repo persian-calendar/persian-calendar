@@ -65,8 +65,8 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
+import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.CalendarsView
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
@@ -80,7 +80,6 @@ import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescript
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.EventsRepository
 import com.byagowi.persiancalendar.utils.EventsStore
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
@@ -107,8 +106,6 @@ import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.html.body
 import kotlinx.html.h1
 import kotlinx.html.head

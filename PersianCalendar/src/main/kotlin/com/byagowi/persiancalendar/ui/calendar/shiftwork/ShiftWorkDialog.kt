@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.calendar.dialogs
+package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
 import android.app.Activity
 import android.text.InputFilter

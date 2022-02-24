@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.about.showEmailDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
-import com.byagowi.persiancalendar.ui.calendar.dialogs.showShiftWorkDialog
+import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.common.showQrCode
 import com.byagowi.persiancalendar.ui.preferences.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
