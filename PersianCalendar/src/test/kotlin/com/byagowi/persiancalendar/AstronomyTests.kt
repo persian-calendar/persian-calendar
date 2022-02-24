@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.entities.Season
+import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
@@ -177,5 +178,17 @@ class AstronomyTests {
                 Coordinates(27.0, 85.0, .0)
             )
         ).isWithin(1.0e-10).of(-0.9376037778203803)
+    }
+
+    @Test
+    fun `Iranian animal year name`() {
+        assertEquals(
+            ChineseZodiac.OX,
+            ChineseZodiac.fromPersianCalendar(PersianDate(1400, 1, 1))
+        )
+        assertEquals(
+            ChineseZodiac.TIGER,
+            ChineseZodiac.fromPersianCalendar(PersianDate(1401, 1, 1))
+        )
     }
 }
