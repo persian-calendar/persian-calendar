@@ -96,7 +96,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }
         }
         val cr = radius / 8f
-        solarDraw.earth(canvas, radius, radius, cr / 1.5f)
+        solarDraw.earth(canvas, radius, radius, cr / 1.5f, sunMoonPosition)
         val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
         canvas.withRotation(-sunDegree + 90f, radius, radius) {
             solarDraw.sun(this, radius, radius / 3.5f, cr)

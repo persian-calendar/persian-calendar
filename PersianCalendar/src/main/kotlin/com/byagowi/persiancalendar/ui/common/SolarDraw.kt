@@ -46,7 +46,7 @@ class SolarDraw(context: Context) {
         ovalPath.arcTo(moonRect, 270f, 180f)
         ovalPath.close()
         canvas.withRotation(sunMoonPosition.lunarSunlitTilt.toFloat(), cx, cy) {
-            drawPath(ovalPath, moonPaint)
+            drawPath(ovalPath, moonShadowPaint)
         }
     }
 
@@ -60,7 +60,7 @@ class SolarDraw(context: Context) {
     private val moonRect = RectF()
     private val moonOval = RectF()
 
-    private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+    private val moonShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x90000000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
     }
@@ -69,10 +69,17 @@ class SolarDraw(context: Context) {
         context.getCompatDrawable(R.drawable.ic_earth).toBitmap(128, 128)
     }
 
-    fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float) {
+    fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunMoonPosition: SunMoonPosition) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(earthDrawable, null, earthRect, null)
+        earthRect.inset(r / 10, r / 10)
+        val sunDegree = -sunMoonPosition.sunEcliptic.λ.toFloat()
+        canvas.drawArc(earthRect, sunDegree + 90f, 180f, true, earthShadowPaint)
     }
 
     private val earthRect = RectF()
+    private val earthShadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = 0x40000000
+        it.style = Paint.Style.FILL_AND_STROKE
+    }
 }
