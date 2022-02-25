@@ -181,12 +181,6 @@ dependencies {
     implementation("com.github.persian-calendar:calendar:1.2.0")
     implementation("com.github.persian-calendar:praytimes:2.1.2")
 
-    // For development builds only
-    nightlyImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
-    nightlyImplementation("com.google.firebase:firebase-analytics-ktx")
-    nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx")
-    nightlyImplementation("com.google.firebase:firebase-perf-ktx")
-
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
@@ -220,6 +214,12 @@ dependencies {
 
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("com.android.support:multidex:2.0.0")
+
+    // For development builds only
+    nightlyImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
+    nightlyImplementation("com.google.firebase:firebase-analytics-ktx")
+    nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx")
+    nightlyImplementation("com.google.firebase:firebase-perf-ktx")
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.4")
