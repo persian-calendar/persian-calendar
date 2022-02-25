@@ -3,6 +3,7 @@ package io.github.persiancalendar.gradle
 import groovy.json.JsonSlurper
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.configurationcache.extensions.capitalized
 import java.io.File
 
 class CodeGenerators : Plugin<Project> {
@@ -12,29 +13,31 @@ class CodeGenerators : Plugin<Project> {
     override fun apply(target: Project) {
         target.tasks.register("codegenerators") {
             val projectDir = target.projectDir
-            val eventsJson = projectDir / "data" / "events.json"
-            val citiesJson = projectDir / "data" / "cities.json"
-            val districtsJson = projectDir / "data" / "districts.json"
-            inputs.files(eventsJson, citiesJson, districtsJson)
             val generatedAppSrcDir = target.buildDir / "generated" / "source" / "appsrc" / "main"
             val generateDir =
                 generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
 
-            val eventsOutput = generateDir / "Events.kt"
-            val citiesOutput = generateDir / "Cities.kt"
-            val districtsOutput = generateDir / "Districts.kt"
-            outputs.files(eventsOutput, citiesOutput, districtsOutput)
-
-            doLast {
-                generateDir.mkdirs()
-                generateEventsCode(eventsJson, eventsOutput)
-                generateCitiesCode(citiesJson, citiesOutput)
-                generateDistrictsCode(districtsJson, districtsOutput)
+            @OptIn(ExperimentalStdlibApi::class)
+            val actions = buildList {
+                add(generateDir::mkdirs)
+                listOf(
+                    "events" to ::generateEventsCode,
+                    "cities" to ::generateCitiesCode,
+                    "districts" to ::generateDistrictsCode
+                ).map { (name, generator) ->
+                    val input = projectDir / "data" / "$name.json"
+                    inputs.file(input)
+                    val output = generateDir / "${name.capitalized()}.kt"
+                    outputs.file(output)
+                    add { output.writeText(generator(input)) }
+                }
             }
+
+            doLast { actions.forEach { it() } }
         }
     }
 
-    private fun generateEventsCode(eventsJson: File, eventsOutput: File) {
+    private fun generateEventsCode(eventsJson: File): String {
         val events = JsonSlurper().parse(eventsJson) as Map<*, *>
         val (persianEvents, islamicEvents, gregorianEvents, nepaliEvents) = listOf(
             "Persian Calendar", "Hijri Calendar", "Gregorian Calendar", "Nepali Calendar"
@@ -54,8 +57,7 @@ class CodeGenerators : Plugin<Project> {
             }
         val eventsSource = (events["Source"] as Map<*, *>).toList()
             .joinToString(",\n    ") { (k, v) -> """$k("$v")""" }
-        eventsOutput.writeText(
-            """package com.byagowi.persiancalendar.generated
+        return """package com.byagowi.persiancalendar.generated
 
 enum class EventType(val source: String) {
     $eventsSource
@@ -83,10 +85,9 @@ val irregularRecurringEvents = listOf(
     $irregularRecurringEvents
 )
 """
-        )
     }
 
-    private fun generateCitiesCode(citiesJson: File, citiesOutput: File) {
+    private fun generateCitiesCode(citiesJson: File): String {
         val cities = (JsonSlurper().parse(citiesJson) as Map<*, *>).flatMap { countryEntry ->
             val countryCode = countryEntry.key as String
             val country = countryEntry.value as Map<*, *>
@@ -109,8 +110,7 @@ val irregularRecurringEvents = listOf(
         )"""
             }
         }.joinToString(",\n    ")
-        citiesOutput.writeText(
-            """package com.byagowi.persiancalendar.generated
+        return """package com.byagowi.persiancalendar.generated
 
 import com.byagowi.persiancalendar.entities.CityItem
 import io.github.persiancalendar.praytimes.Coordinates
@@ -118,37 +118,30 @@ import io.github.persiancalendar.praytimes.Coordinates
 val citiesStore = mapOf(
     $cities
 )
-    """
-        )
+"""
     }
 
-    private fun generateDistrictsCode(districtsJson: File, districtsOutput: File) {
-        val districts =
-            (JsonSlurper().parse(districtsJson) as Map<*, *>).mapNotNull { province ->
-                val provinceName = province.key as String
-                if (provinceName.startsWith("#")) return@mapNotNull null
-                "\"$provinceName\" to listOf(\n" + (province.value as Map<*, *>).map { county ->
-                    val key = county.key as String
-                    """       "$key;""" + (county.value as Map<*, *>).map { district ->
-                        val coordinates = district.value as Map<*, *>
-                        val latitude = (coordinates["lat"] as Number).toDouble()
-                        val longitude = (coordinates["long"] as Number).toDouble()
-                        // Remove what is in the parenthesis
-                        val name = district.key.toString().split("(")[0]
-                        "$name:$latitude:$longitude"
-                    }.joinToString(";") + "\""
-                }.joinToString(",\n") + "\n    )"
-            }.joinToString(",\n    ")
-        districtsOutput.writeText(
-            """package com.byagowi.persiancalendar.generated
+    private fun generateDistrictsCode(districtsJson: File): String {
+        val districts = (JsonSlurper().parse(districtsJson) as Map<*, *>).mapNotNull { province ->
+            val provinceName = province.key as String
+            if (provinceName.startsWith("#")) return@mapNotNull null
+            "\"$provinceName\" to listOf(\n" + (province.value as Map<*, *>).map { county ->
+                val key = county.key as String
+                """       "$key;""" + (county.value as Map<*, *>).map { district ->
+                    val coordinates = district.value as Map<*, *>
+                    val latitude = (coordinates["lat"] as Number).toDouble()
+                    val longitude = (coordinates["long"] as Number).toDouble()
+                    // Remove what is in the parenthesis
+                    val name = district.key.toString().split("(")[0]
+                    "$name:$latitude:$longitude"
+                }.joinToString(";") + "\""
+            }.joinToString(",\n") + "\n    )"
+        }.joinToString(",\n    ")
+        return """package com.byagowi.persiancalendar.generated
 
-import com.byagowi.persiancalendar.entities.CityItem
-import io.github.persiancalendar.praytimes.Coordinates
-
-val distrcitsStore = listOf(
+val districtsStore = listOf(
     $districts
 )
 """
-        )
     }
 }

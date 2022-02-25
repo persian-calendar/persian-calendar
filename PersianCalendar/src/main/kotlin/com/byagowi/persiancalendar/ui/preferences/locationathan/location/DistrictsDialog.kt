@@ -5,7 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.generated.distrcitsStore
+import com.byagowi.persiancalendar.generated.districtsStore
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLocation
@@ -23,8 +23,8 @@ fun showProvinceDialog(activity: Activity) {
     recyclerView.layoutManager = LinearLayoutManager(activity)
     recyclerView.adapter = PairsListAdapter(onItemClicked = { index ->
         dialog.dismiss()
-        showDistrictsDialog(activity, distrcitsStore[index].second)
-    }, items = distrcitsStore.map { it.first to "" })
+        showDistrictsDialog(activity, districtsStore[index].second)
+    }, items = districtsStore.map { it.first to "" })
     dialog.show()
 }
 
