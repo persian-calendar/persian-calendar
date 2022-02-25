@@ -215,11 +215,11 @@ dependencies {
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("com.android.support:multidex:2.0.0")
 
-    // For development builds only
+    // For development builds only, they aren't and most likely won't ever be used in stable releases
     nightlyImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
-    nightlyImplementation("com.google.firebase:firebase-analytics-ktx")
-    nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx")
-    nightlyImplementation("com.google.firebase:firebase-perf-ktx")
+    nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx:18.2.8")
+    nightlyImplementation("com.google.firebase:firebase-analytics-ktx:20.1.0")
+    nightlyImplementation("com.google.firebase:firebase-perf-ktx:20.0.5")
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.4")
