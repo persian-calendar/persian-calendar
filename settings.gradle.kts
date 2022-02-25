@@ -1,1 +1,2 @@
 include(":PersianCalendar")
+includeBuild("gradlePlugins")
