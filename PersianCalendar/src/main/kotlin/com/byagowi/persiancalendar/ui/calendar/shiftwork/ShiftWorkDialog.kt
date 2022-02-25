@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
-import android.app.Activity
 import android.text.InputFilter
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
@@ -34,7 +34,8 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.putJdn
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun showShiftWorkDialog(activity: Activity, selectedJdn: Jdn, onSuccess: () -> Unit) {
+fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn, onSuccess: () -> Unit) {
+
     var isFirstSetup = false
     var jdn = shiftWorkStartingJdn ?: run {
         isFirstSetup = true
