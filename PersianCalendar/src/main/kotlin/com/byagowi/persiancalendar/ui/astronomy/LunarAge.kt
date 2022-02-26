@@ -31,6 +31,6 @@ value class LunarAge private constructor(private val fraction: Double) {
         private fun to360(angle: Double) = angle % 360 + if (angle < 0) 360 else 0
         fun fromDegrees(e: Double) = LunarAge(to360(e) / 360)
 
-        const val PERIOD = 29.530588853 // Actually this isn't a constant and is decreasing :/
+        const val PERIOD = 29.530588853 // Actually this isn't a constant and is decreasing slooowly
     }
 }
