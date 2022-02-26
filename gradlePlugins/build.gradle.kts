@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup:kotlinpoet:1.8.0")
+    implementation("com.squareup:kotlinpoet:1.10.2")
 }
 
 gradlePlugin {
