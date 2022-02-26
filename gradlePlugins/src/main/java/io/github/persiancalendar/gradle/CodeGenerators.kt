@@ -201,9 +201,8 @@ class CodeGenerators : Plugin<Project> {
         builder.addProperty(
             PropertySpec
                 .builder(
-                    "citiesStore", Map::class.asClassName().parameterizedBy(
-                        String::class.asClassName().copy(nullable = true), cityItem
-                    )
+                    "citiesStore",
+                    Map::class.asClassName().parameterizedBy(String::class.asClassName(), cityItem)
                 )
                 .initializer(CodeBlock.of("mapOf(\n$cities\n)".preventLineWraps()))
                 .build()
