@@ -163,7 +163,7 @@
     <string name="calibrate_compass_summary">بۆ باشترکردنی دیقەتی ڕووگەنوێن، لە شتی موگناتیسی دوور بنەوە، سەر و خوار بە ئامرازکە بکەن و لە گشت تەوەرەکاندا بیھێنن و بیبەن.</string>
     <string name="set_location">بۆ نیشاندانی شوێنی خۆر، مانگ و ئاراستەی ڕووگە لە بەشی ڕێکخستندا شوێنەکەتان ڕێک بخەن.</string>
     <string name="moonInScorpio">ڕۆژانی مانگ لە دووپشکدا</string>
-    <string name="astronomical_info">زانیاریی ئەستێرەناسی</string>
+    <string name="astronomical_info">ئەستێرەناسی</string>
     <string name="astronomical_info_summary">نیشاندانی زانیاریگەلێک وەک کەلوو، ناوی ساڵ و مانگ لە دووپشکدا</string>
     <string name="islamic_offset">چاکسازیی ڕێککەوتی کۆچیی مانگی</string>
     <string name="islamic_offset_summary">وەدوا یان وەپێشخستنی ڕێککەوتی کۆچیی مانگی</string>
@@ -338,4 +338,21 @@
     <string name="widget_prefer_system_colors">بەدواکەوتنی ڕەنگکردنی سیستەم لە ویجیتەکان</string>
     <string name="enable_new_interface">چالاککردنی ڕووکاری نوێ</string>
     <string name="calculator">ژمێرەر</string>
+    <string name="asr_hanafi_juristic">ڕێبازی نوێژی عەسری حەنفی</string>
+    <string name="high_latitudes_angle_based">بەپێی گۆشەی بنچینەیی</string>
+    <string name="spring">بەهار</string>
+    <string name="solar_eclipse">خۆرگیران</string>
+    <string name="high_latitudes_method">شێوازی بەرزی</string>
+    <string name="sun">خۆر</string>
+    <string name="moon">مانگ</string>
+    <string name="fall">کەوتن</string>
+    <string name="winter">زستان</string>
+    <string name="lunar_eclipse">مانگگیران</string>
+    <string name="summer">هاوین</string>
+    <string name="are_you_sure">ئایا دڵنیایت؟</string>
+    <string name="month_pray_times">کاتی نوێژەکانی مانگ</string>
+    <string name="high_latitudes_night_middle">ناوەڕاستی شەو</string>
+    <string name="high_latitudes_one_seventh">یەک لە حەوت</string>
+    <string name="none">هیچ</string>
+    <string name="show_sun_and_moon_path_in_24_hours">پیشاندانی ڕێڕەوی خۆر و مانگ لە 24 کاتژمێردا</string>
 </resources>
