@@ -18,7 +18,8 @@ import java.io.File
 
 class CodeGenerators : Plugin<Project> {
 
-    operator fun File.div(child: String) = File(this, child)
+    private val packageName = "com.byagowi.persiancalendar.generated"
+    private operator fun File.div(child: String) = File(this, child)
 
     override fun apply(target: Project) {
         target.tasks.register("codegenerators") {
@@ -42,10 +43,7 @@ class CodeGenerators : Plugin<Project> {
             doLast {
                 actions.forEach { (name, generator) ->
                     val input = projectDir / "data" / "$name.json"
-                    val builder = FileSpec.builder(
-                        "com.byagowi.persiancalendar.generated",
-                        name.capitalized()
-                    )
+                    val builder = FileSpec.builder(packageName, name.capitalized())
                     generator(input, builder)
                     builder.build().writeTo(generatedAppSrcDir)
                 }
@@ -103,10 +101,7 @@ class CodeGenerators : Plugin<Project> {
                 .primaryConstructor(
                     FunSpec.constructorBuilder()
                         .addParameter("title", String::class)
-                        .addParameter(
-                            "type",
-                            ClassName("com.byagowi.persiancalendar.generated", "EventType")
-                        )
+                        .addParameter("type", ClassName(packageName, "EventType"))
                         .addParameter("isHoliday", Boolean::class)
                         .addParameter("month", Int::class)
                         .addParameter("day", Int::class)
@@ -119,11 +114,7 @@ class CodeGenerators : Plugin<Project> {
                 )
                 .addProperty(
                     PropertySpec
-                        .builder(
-                            "type",
-                            ClassName("com.byagowi.persiancalendar.generated", "EventType"),
-                            KModifier.PUBLIC
-                        )
+                        .builder("type", ClassName(packageName, "EventType"), KModifier.PUBLIC)
                         .initializer("type")
                         .build()
                 )
@@ -144,9 +135,8 @@ class CodeGenerators : Plugin<Project> {
                 )
                 .build()
         )
-        val calendarRecordList = List::class.asClassName().parameterizedBy(
-            ClassName("com.byagowi.persiancalendar.generated", "CalendarRecord")
-        )
+        val calendarRecordList = List::class.asClassName()
+            .parameterizedBy(ClassName(packageName, "CalendarRecord"))
         builder.addProperty(
             PropertySpec
                 .builder("persianEvents", calendarRecordList)
