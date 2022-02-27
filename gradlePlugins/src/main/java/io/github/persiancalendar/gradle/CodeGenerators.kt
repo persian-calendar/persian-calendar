@@ -19,6 +19,7 @@ import java.io.File
 class CodeGenerators : Plugin<Project> {
 
     private val packageName = "com.byagowi.persiancalendar.generated"
+    private operator fun File.div(child: String) = File(this, child)
 
     override fun apply(target: Project) {
         target.tasks.register("codegenerators") {
