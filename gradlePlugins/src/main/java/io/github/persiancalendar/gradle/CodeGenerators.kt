@@ -21,6 +21,13 @@ import java.io.File
 abstract class CodeGenerators : DefaultTask() {
 
     private val packageName = "com.byagowi.persiancalendar.generated"
+
+    private val calendarRecordName = "CalendarRecord"
+    private val eventTypeName = "EventType"
+
+    private val calendarRecordType = ClassName(packageName, calendarRecordName)
+    private val eventType = ClassName(packageName, eventTypeName)
+
     private operator fun File.div(child: String) = File(this, child)
 
     @InputDirectory
@@ -65,7 +72,7 @@ abstract class CodeGenerators : DefaultTask() {
                 "mapOf(${event.map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
             }
         builder.addType(
-            TypeSpec.enumBuilder("EventType")
+            TypeSpec.enumBuilder(eventTypeName)
                 .primaryConstructor(
                     FunSpec.constructorBuilder()
                         .addParameter("source", String::class)
@@ -88,11 +95,11 @@ abstract class CodeGenerators : DefaultTask() {
                 .build()
         )
         builder.addType(
-            TypeSpec.classBuilder("CalendarRecord")
+            TypeSpec.classBuilder(calendarRecordName)
                 .primaryConstructor(
                     FunSpec.constructorBuilder()
                         .addParameter("title", String::class)
-                        .addParameter("type", ClassName(packageName, "EventType"))
+                        .addParameter("type", eventType)
                         .addParameter("isHoliday", Boolean::class)
                         .addParameter("month", Int::class)
                         .addParameter("day", Int::class)
@@ -105,7 +112,7 @@ abstract class CodeGenerators : DefaultTask() {
                 )
                 .addProperty(
                     PropertySpec
-                        .builder("type", ClassName(packageName, "EventType"), KModifier.PUBLIC)
+                        .builder("type", eventType, KModifier.PUBLIC)
                         .initializer("type")
                         .build()
                 )
@@ -127,7 +134,7 @@ abstract class CodeGenerators : DefaultTask() {
                 .build()
         )
         val calendarRecordList = List::class.asClassName()
-            .parameterizedBy(ClassName(packageName, "CalendarRecord"))
+            .parameterizedBy(calendarRecordType)
         builder.addProperty(
             PropertySpec
                 .builder("persianEvents", calendarRecordList)
