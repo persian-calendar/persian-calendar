@@ -55,22 +55,6 @@ abstract class CodeGenerators : DefaultTask() {
 
     private fun generateEventsCode(eventsJson: File, builder: FileSpec.Builder) {
         val events = JsonSlurper().parse(eventsJson) as Map<*, *>
-        val (persianEvents, islamicEvents, gregorianEvents, nepaliEvents) = listOf(
-            "Persian Calendar", "Hijri Calendar", "Gregorian Calendar", "Nepali Calendar"
-        ).map { key ->
-            (events[key] as List<*>).joinToString(",\n") {
-                val record = it as Map<*, *>
-                buildCodeBlock {
-                    add("%L(".preventLineWraps(), calendarRecordName)
-                    add("title = %S, ".preventLineWraps(), record["title"])
-                    add("type = EventType.%L, ".preventLineWraps(), record["type"])
-                    add("isHoliday = %L, ".preventLineWraps(), record["holiday"])
-                    add("month = %L, ".preventLineWraps(), record["month"])
-                    add("day = %L".preventLineWraps(), record["day"])
-                    add(")")
-                }.toString()
-            }
-        }
         builder.addType(
             TypeSpec.enumBuilder(eventTypeName)
                 .primaryConstructor(
@@ -125,30 +109,33 @@ abstract class CodeGenerators : DefaultTask() {
         )
         val calendarRecordList = List::class.asClassName()
             .parameterizedBy(calendarRecordType)
-        builder.addProperty(
-            PropertySpec
-                .builder("persianEvents", calendarRecordList)
-                .initializer(CodeBlock.of("listOf(\n$persianEvents\n)".preventLineWraps()))
-                .build()
-        )
-        builder.addProperty(
-            PropertySpec
-                .builder("islamicEvents", calendarRecordList)
-                .initializer(CodeBlock.of("listOf(\n$islamicEvents\n)".preventLineWraps()))
-                .build()
-        )
-        builder.addProperty(
-            PropertySpec
-                .builder("gregorianEvents", calendarRecordList)
-                .initializer(CodeBlock.of("listOf(\n$gregorianEvents\n)".preventLineWraps()))
-                .build()
-        )
-        builder.addProperty(
-            PropertySpec
-                .builder("nepaliEvents", calendarRecordList)
-                .initializer(CodeBlock.of("listOf(\n$nepaliEvents\n)".preventLineWraps()))
-                .build()
-        )
+
+        listOf(
+            "Persian Calendar" to "persianEvents",
+            "Hijri Calendar" to "islamicEvents",
+            "Gregorian Calendar" to "gregorianEvents",
+            "Nepali Calendar" to "nepaliEvents"
+        ).forEach { (key, field) ->
+            builder.addProperty(
+                PropertySpec
+                    .builder(field, calendarRecordList)
+                    .initializer(buildCodeBlock {
+                        add("listOf(\n")
+                        (events[key] as List<*>).forEach {
+                            val record = it as Map<*, *>
+                            add("%L(".preventLineWraps(), calendarRecordName)
+                            add("title = %S, ".preventLineWraps(), record["title"])
+                            add("type = EventType.%L, ".preventLineWraps(), record["type"])
+                            add("isHoliday = %L, ".preventLineWraps(), record["holiday"])
+                            add("month = %L, ".preventLineWraps(), record["month"])
+                            add("day = %L".preventLineWraps(), record["day"])
+                            add("),\n")
+                        }
+                        add(")")
+                    })
+                    .build()
+            )
+        }
         @OptIn(ExperimentalStdlibApi::class)
         builder.addProperty(
             PropertySpec
