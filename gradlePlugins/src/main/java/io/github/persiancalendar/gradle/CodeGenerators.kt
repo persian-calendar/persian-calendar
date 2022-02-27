@@ -10,7 +10,13 @@ import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.typeNameOf
 import com.squareup.kotlinpoet.withIndent
-import groovy.json.JsonSlurper
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.jsonPrimitive
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.InputDirectory
@@ -51,8 +57,25 @@ abstract class CodeGenerators : DefaultTask() {
         }
     }
 
+    @Serializable
+    data class EventStore(
+        @SerialName("Source") val source: Map<String, String>,
+        @SerialName("#meta") val meta: List<String>,
+        @SerialName("Persian Calendar") val persianCalendar: List<Event>,
+        @SerialName("Hijri Calendar") val islamicCalendar: List<Event>,
+        @SerialName("Gregorian Calendar") val gregorianCalendar: List<Event>,
+        @SerialName("Nepali Calendar") val nepaliCalendar: List<Event>,
+        @SerialName("Irregular Recurring") val irregularRecurring: List<Map<String, JsonElement>>
+    )
+
+    @Serializable
+    data class Event(
+        val holiday: Boolean, val month: Int, val day: Int, val type: String, val title: String
+    )
+
     private fun generateEventsCode(eventsJson: File, builder: FileSpec.Builder) {
-        val events = JsonSlurper().parse(eventsJson) as Map<*, *>
+        @OptIn(ExperimentalSerializationApi::class)
+        val events = Json.decodeFromStream<EventStore>(eventsJson.inputStream())
         builder.addType(
             TypeSpec.enumBuilder(eventTypeName)
                 .primaryConstructor(
@@ -66,10 +89,11 @@ abstract class CodeGenerators : DefaultTask() {
                         .build()
                 )
                 .also {
-                    (events["Source"] as Map<*, *>).forEach { (name, source) ->
+                    events.source.forEach { (name, source) ->
                         it.addEnumConstant(
-                            name as String, TypeSpec.anonymousClassBuilder()
-                                .addSuperclassConstructorParameter("%S", source as String)
+                            name,
+                            TypeSpec.anonymousClassBuilder()
+                                .addSuperclassConstructorParameter("%S", source)
                                 .build()
                         )
                     }
@@ -106,26 +130,25 @@ abstract class CodeGenerators : DefaultTask() {
                 .build()
         )
         listOf(
-            "Persian Calendar" to "persianEvents",
-            "Hijri Calendar" to "islamicEvents",
-            "Gregorian Calendar" to "gregorianEvents",
-            "Nepali Calendar" to "nepaliEvents"
-        ).forEach { (key, field) ->
+            events.persianCalendar to "persianEvents",
+            events.islamicCalendar to "islamicEvents",
+            events.gregorianCalendar to "gregorianEvents",
+            events.nepaliCalendar to "nepaliEvents"
+        ).forEach { (list, field) ->
             builder.addProperty(
                 PropertySpec
                     .builder(field, List::class.asClassName().parameterizedBy(calendarRecordType))
                     .initializer(buildCodeBlock {
                         addStatement("listOf(")
-                        (events[key] as List<*>).forEach {
-                            val record = it as Map<*, *>
+                        list.forEach {
                             withIndent {
                                 addStatement("%L(", calendarRecordName)
                                 withIndent {
-                                    addStatement("title = %S,", record["title"])
-                                    add("type = EventType.%L, ", record["type"])
-                                    add("isHoliday = %L, ", record["holiday"])
-                                    add("month = %L, ", record["month"])
-                                    addStatement("day = %L", record["day"])
+                                    addStatement("title = %S,", it.title)
+                                    add("type = EventType.%L, ", it.type)
+                                    add("isHoliday = %L, ", it.holiday)
+                                    add("month = %L, ", it.month)
+                                    addStatement("day = %L", it.day)
                                 }
                                 addStatement("),")
                             }
@@ -142,11 +165,13 @@ abstract class CodeGenerators : DefaultTask() {
                 .initializer(
                     buildCodeBlock {
                         addStatement("listOf(")
-                        (events["Irregular Recurring"] as List<*>).forEach {
+                        events.irregularRecurring.forEach {
                             withIndent {
                                 addStatement("mapOf(")
-                                (it as Map<*, *>).forEach { (k, v) ->
-                                    withIndent { addStatement("%S to %S,", k, v) }
+                                it.forEach { (k, v) ->
+                                    withIndent {
+                                        addStatement("%S to %S,", k, v.jsonPrimitive.content)
+                                    }
                                 }
                                 addStatement("),")
                             }
@@ -158,9 +183,22 @@ abstract class CodeGenerators : DefaultTask() {
         )
     }
 
+    @Serializable
+    data class City(
+        val en: String, val fa: String, val ckb: String, val ar: String,
+        val latitude: Double, val longitude: Double, val elevation: Double
+    )
+
+    @Serializable
+    data class Country(
+        val en: String, val fa: String, val ckb: String, val ar: String,
+        val cities: Map<String, City>
+    )
+
     private fun generateCitiesCode(citiesJson: File, builder: FileSpec.Builder) {
         builder.addImport("com.byagowi.persiancalendar.entities", cityItemName)
         builder.addImport("io.github.persiancalendar.praytimes", "Coordinates")
+        @OptIn(ExperimentalSerializationApi::class)
         builder.addProperty(
             PropertySpec
                 .builder(
@@ -170,30 +208,31 @@ abstract class CodeGenerators : DefaultTask() {
                 )
                 .initializer(buildCodeBlock {
                     addStatement("mapOf(")
-                    (JsonSlurper().parse(citiesJson) as Map<*, *>).forEach { countryEntry ->
-                        val countryCode = countryEntry.key as String
-                        val country = countryEntry.value as Map<*, *>
-                        (country["cities"] as Map<*, *>).forEach { cityEntry ->
-                            val key = cityEntry.key as String
-                            val city = cityEntry.value as Map<*, *>
-                            val latitude = (city["latitude"] as Number).toDouble()
-                            val longitude = (city["longitude"] as Number).toDouble()
+                    Json.decodeFromStream<Map<String, Country>>(
+                        citiesJson.inputStream()
+                    ).forEach { countryEntry ->
+                        val countryCode = countryEntry.key
+                        val country = countryEntry.value
+                        country.cities.forEach { cityEntry ->
+                            val key = cityEntry.key
+                            val city = cityEntry.value
+                            val latitude = city.latitude
+                            val longitude = city.longitude
                             // Elevation really degrades quality of calculations
-                            val elevation =
-                                if (countryCode == "ir") .0 else (city["elevation"] as Number).toDouble()
+                            val elevation = if (countryCode == "ir") .0 else city.elevation
                             withIndent {
                                 addStatement("%S to %L(", key, cityItemName)
                                 withIndent {
                                     addStatement("key = %S,", key)
-                                    add("en = %S, ", city["en"])
-                                    add("fa = %S, ", city["fa"])
-                                    add("ckb = %S, ", city["ckb"])
-                                    addStatement("ar = %S,", city["ar"])
+                                    add("en = %S, ", city.en)
+                                    add("fa = %S, ", city.fa)
+                                    add("ckb = %S, ", city.ckb)
+                                    addStatement("ar = %S,", city.ar)
                                     addStatement("countryCode = %S,", countryCode)
-                                    add("countryEn = %S, ", country["en"])
-                                    add("countryFa = %S, ", country["fa"])
-                                    add("countryCkb = %S, ", country["ckb"])
-                                    addStatement("countryAr = %S,", country["ar"])
+                                    add("countryEn = %S, ", country.en)
+                                    add("countryFa = %S, ", country.fa)
+                                    add("countryCkb = %S, ", country.ckb)
+                                    addStatement("countryAr = %S,", country.ar)
                                     addStatement(
                                         "coordinates = %L",
                                         "Coordinates($latitude, $longitude, $elevation)"
@@ -209,29 +248,36 @@ abstract class CodeGenerators : DefaultTask() {
         )
     }
 
+    @Serializable
+    data class Coordinates(
+        @SerialName("lat") val latitude: Double,
+        @SerialName("long") val longitude: Double
+    )
+
     private fun generateDistrictsCode(districtsJson: File, builder: FileSpec.Builder) {
-        @OptIn(ExperimentalStdlibApi::class)
+        @OptIn(ExperimentalStdlibApi::class, ExperimentalSerializationApi::class)
         builder.addProperty(
             PropertySpec.builder("districtsStore", typeNameOf<List<Pair<String, List<String>>>>())
                 .initializer(buildCodeBlock {
                     addStatement("listOf(")
-                    (JsonSlurper().parse(districtsJson) as Map<*, *>).forEach { province ->
-                        val provinceName = province.key as String
+                    Json.decodeFromStream<Map<String, Map<String, Map<String, Coordinates>>>>(
+                        districtsJson.inputStream()
+                    ).forEach { province ->
+                        val provinceName = province.key
                         if (provinceName.startsWith("#")) return@forEach
                         withIndent {
                             addStatement("%S to listOf(", provinceName)
-                            (province.value as Map<*, *>).forEach { county ->
-                                val key = county.key as String
+                            province.value.forEach { county ->
+                                val key = county.key
                                 withIndent {
                                     addStatement(
                                         "%S,",
-                                        "$key;" + (county.value as Map<*, *>).map { district ->
-                                            val coordinates = district.value as Map<*, *>
-                                            val latitude = (coordinates["lat"] as Number).toDouble()
-                                            val longitude =
-                                                (coordinates["long"] as Number).toDouble()
+                                        "$key;" + county.value.map { district ->
+                                            val coordinates = district.value
+                                            val latitude = coordinates.latitude
+                                            val longitude = coordinates.longitude
                                             // Remove what is in the parenthesis
-                                            val name = district.key.toString().split("(")[0]
+                                            val name = district.key.split("(")[0]
                                             "$name:$latitude:$longitude"
                                         }.joinToString(";")
                                     )
