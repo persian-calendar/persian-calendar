@@ -84,7 +84,7 @@ abstract class CodeGenerators : DefaultTask() {
                         .build()
                 )
                 .also {
-                    (events["Source"] as Map<*, *>).toList().forEach { (name, source) ->
+                    (events["Source"] as Map<*, *>).forEach { (name, source) ->
                         it.addEnumConstant(
                             name as String, TypeSpec.anonymousClassBuilder()
                                 .addSuperclassConstructorParameter("%S", source as String)
