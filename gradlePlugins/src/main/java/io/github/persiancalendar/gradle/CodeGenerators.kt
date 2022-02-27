@@ -120,7 +120,7 @@ abstract class CodeGenerators : DefaultTask() {
                 PropertySpec
                     .builder(field, List::class.asClassName().parameterizedBy(calendarRecordType))
                     .initializer(buildCodeBlock {
-                        add("listOf(\n")
+                        addStatement("listOf(")
                         (events[key] as List<*>).forEach {
                             val record = it as Map<*, *>
                             add(
@@ -144,13 +144,13 @@ abstract class CodeGenerators : DefaultTask() {
                 .builder("irregularRecurringEvents", typeNameOf<List<Map<String, String>>>())
                 .initializer(
                     buildCodeBlock {
-                        add("listOf(\n")
+                        addStatement("listOf(")
                         (events["Irregular Recurring"] as List<*>).forEach {
                             add("mapOf(")
                             (it as Map<*, *>).forEach { (k, v) ->
                                 add("%S to %S, ".preventLineWraps(), k, v)
                             }
-                            add("),\n")
+                            addStatement("),")
                         }
                         add(")")
                     }
@@ -170,7 +170,7 @@ abstract class CodeGenerators : DefaultTask() {
                         .parameterizedBy(String::class.asClassName(), cityItemType)
                 )
                 .initializer(buildCodeBlock {
-                    add("mapOf(\n")
+                    addStatement("mapOf(")
                     (JsonSlurper().parse(citiesJson) as Map<*, *>).forEach { countryEntry ->
                         val countryCode = countryEntry.key as String
                         val country = countryEntry.value as Map<*, *>
@@ -187,12 +187,12 @@ abstract class CodeGenerators : DefaultTask() {
                                 withIndent {
                                     addStatement("key = %S,", key)
                                     add("en = %S, ", city["en"])
-                                    addStatement("fa = %S,", city["fa"])
+                                    add("fa = %S, ", city["fa"])
                                     add("ckb = %S, ", city["ckb"])
                                     addStatement("ar = %S,", city["ar"])
                                     addStatement("countryCode = %S,", countryCode)
                                     add("countryEn = %S, ", country["en"])
-                                    addStatement("countryFa = %S,", country["fa"])
+                                    add("countryFa = %S, ", country["fa"])
                                     add("countryCkb = %S, ", country["ckb"])
                                     addStatement("countryAr = %S,", country["ar"])
                                     addStatement(
@@ -200,7 +200,7 @@ abstract class CodeGenerators : DefaultTask() {
                                         "Coordinates($latitude, $longitude, $elevation)"
                                     )
                                 }
-                                add("),\n")
+                                addStatement("),")
                             }
                         }
                     }
@@ -215,28 +215,33 @@ abstract class CodeGenerators : DefaultTask() {
         builder.addProperty(
             PropertySpec.builder("districtsStore", typeNameOf<List<Pair<String, List<String>>>>())
                 .initializer(buildCodeBlock {
-                    add("listOf(\n")
+                    addStatement("listOf(")
                     (JsonSlurper().parse(districtsJson) as Map<*, *>).forEach { province ->
                         val provinceName = province.key as String
                         if (provinceName.startsWith("#")) return@forEach
-                        add("%S to listOf(\n", provinceName)
-                        (province.value as Map<*, *>).forEach { county ->
-                            val key = county.key as String
-                            add(
-                                "    %S,\n".preventLineWraps(),
-                                "$key;" + (county.value as Map<*, *>).map { district ->
-                                    val coordinates = district.value as Map<*, *>
-                                    val latitude = (coordinates["lat"] as Number).toDouble()
-                                    val longitude = (coordinates["long"] as Number).toDouble()
-                                    // Remove what is in the parenthesis
-                                    val name = district.key.toString().split("(")[0]
-                                    "$name:$latitude:$longitude"
-                                }.joinToString(";")
-                            )
+                        withIndent {
+                            addStatement("%S to listOf(", provinceName)
+                            (province.value as Map<*, *>).forEach { county ->
+                                val key = county.key as String
+                                withIndent {
+                                    addStatement(
+                                        "%S,",
+                                        "$key;" + (county.value as Map<*, *>).map { district ->
+                                            val coordinates = district.value as Map<*, *>
+                                            val latitude = (coordinates["lat"] as Number).toDouble()
+                                            val longitude =
+                                                (coordinates["long"] as Number).toDouble()
+                                            // Remove what is in the parenthesis
+                                            val name = district.key.toString().split("(")[0]
+                                            "$name:$latitude:$longitude"
+                                        }.joinToString(";")
+                                    )
+                                }
+                            }
+                            addStatement("),")
                         }
-                        add("),\n")
                     }
-                    add("\n)")
+                    add(")")
                 })
                 .build()
         )
