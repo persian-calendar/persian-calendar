@@ -110,9 +110,6 @@ abstract class CodeGenerators : DefaultTask() {
                 }
                 .build()
         )
-        val calendarRecordList = List::class.asClassName()
-            .parameterizedBy(calendarRecordType)
-
         listOf(
             "Persian Calendar" to "persianEvents",
             "Hijri Calendar" to "islamicEvents",
@@ -121,7 +118,7 @@ abstract class CodeGenerators : DefaultTask() {
         ).forEach { (key, field) ->
             builder.addProperty(
                 PropertySpec
-                    .builder(field, calendarRecordList)
+                    .builder(field, List::class.asClassName().parameterizedBy(calendarRecordType))
                     .initializer(buildCodeBlock {
                         add("listOf(\n")
                         (events[key] as List<*>).forEach {
@@ -161,45 +158,6 @@ abstract class CodeGenerators : DefaultTask() {
     }
 
     private fun generateCitiesCode(citiesJson: File, builder: FileSpec.Builder) {
-        val cities = (JsonSlurper().parse(citiesJson) as Map<*, *>).flatMap { countryEntry ->
-            val countryCode = countryEntry.key as String
-            val country = countryEntry.value as Map<*, *>
-            (country["cities"] as Map<*, *>).map { cityEntry ->
-                val key = cityEntry.key as String
-                val city = cityEntry.value as Map<*, *>
-                val latitude = (city["latitude"] as Number).toDouble()
-                val longitude = (city["longitude"] as Number).toDouble()
-                // Elevation really degrades quality of calculations
-                val elevation =
-                    if (countryCode == "ir") .0 else (city["elevation"] as Number).toDouble()
-
-                buildCodeBlock {
-                    add("%S to %L", key, buildCodeBlock {
-                        addStatement("%L(", cityItemName)
-                        withIndent {
-                            withIndent {
-                                addStatement("key = %S,", key)
-                                add("en = %S, ", city["en"])
-                                addStatement("fa = %S,", city["fa"])
-                                add("ckb = %S, ", city["ckb"])
-                                addStatement("ar = %S,", city["ar"])
-                                addStatement("countryCode = %S,", countryCode)
-                                add("countryEn = %S, ", country["en"])
-                                addStatement("countryFa = %S,", country["fa"])
-                                add("countryCkb = %S, ", country["ckb"])
-                                addStatement("countryAr = %S,", country["ar"])
-                                addStatement(
-                                    "coordinates = %L",
-                                    "Coordinates($latitude, $longitude, $elevation)"
-                                )
-                            }
-                        }
-                        add(")")
-                    })
-                }.toString()
-            }
-        }.joinToString(",\n")
-
         builder.addImport("com.byagowi.persiancalendar.entities", cityItemName)
         builder.addImport("io.github.persiancalendar.praytimes", "Coordinates")
         builder.addProperty(
@@ -209,7 +167,43 @@ abstract class CodeGenerators : DefaultTask() {
                     Map::class.asClassName()
                         .parameterizedBy(String::class.asClassName(), cityItemType)
                 )
-                .initializer(CodeBlock.of("mapOf(\n$cities\n)".preventLineWraps()))
+                .initializer(buildCodeBlock {
+                    add("mapOf(\n")
+                    (JsonSlurper().parse(citiesJson) as Map<*, *>).forEach { countryEntry ->
+                        val countryCode = countryEntry.key as String
+                        val country = countryEntry.value as Map<*, *>
+                        (country["cities"] as Map<*, *>).forEach { cityEntry ->
+                            val key = cityEntry.key as String
+                            val city = cityEntry.value as Map<*, *>
+                            val latitude = (city["latitude"] as Number).toDouble()
+                            val longitude = (city["longitude"] as Number).toDouble()
+                            // Elevation really degrades quality of calculations
+                            val elevation =
+                                if (countryCode == "ir") .0 else (city["elevation"] as Number).toDouble()
+                            withIndent {
+                                addStatement("%S to %L(", key, cityItemName)
+                                withIndent {
+                                    addStatement("key = %S,", key)
+                                    add("en = %S, ", city["en"])
+                                    addStatement("fa = %S,", city["fa"])
+                                    add("ckb = %S, ", city["ckb"])
+                                    addStatement("ar = %S,", city["ar"])
+                                    addStatement("countryCode = %S,", countryCode)
+                                    add("countryEn = %S, ", country["en"])
+                                    addStatement("countryFa = %S,", country["fa"])
+                                    add("countryCkb = %S, ", country["ckb"])
+                                    addStatement("countryAr = %S,", country["ar"])
+                                    addStatement(
+                                        "coordinates = %L",
+                                        "Coordinates($latitude, $longitude, $elevation)"
+                                    )
+                                }
+                                add("),\n")
+                            }
+                        }
+                    }
+                    add(")")
+                })
                 .build()
         )
     }
