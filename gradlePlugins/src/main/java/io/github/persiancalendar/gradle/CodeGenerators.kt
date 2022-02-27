@@ -4,11 +4,11 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
+import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.typeNameOf
 import groovy.json.JsonSlurper
 import org.gradle.api.DefaultTask
@@ -60,10 +60,15 @@ abstract class CodeGenerators : DefaultTask() {
         ).map { key ->
             (events[key] as List<*>).joinToString(",\n") {
                 val record = it as Map<*, *>
-                "CalendarRecord(title = \"${record["title"]}\"," +
-                        " type = EventType.${record["type"]}," +
-                        " isHoliday = ${record["holiday"]}," +
-                        " month = ${record["month"]}, day = ${record["day"]})"
+                buildCodeBlock {
+                    add("%L(".preventLineWraps(), calendarRecordName)
+                    add("title = %S, ".preventLineWraps(), record["title"])
+                    add("type = EventType.%L, ".preventLineWraps(), record["type"])
+                    add("isHoliday = %L, ".preventLineWraps(), record["holiday"])
+                    add("month = %L, ".preventLineWraps(), record["month"])
+                    add("day = %L".preventLineWraps(), record["day"])
+                    add(")")
+                }.toString()
             }
         }
         val irregularRecurringEvents = (events["Irregular Recurring"] as List<*>)
