@@ -71,11 +71,6 @@ abstract class CodeGenerators : DefaultTask() {
                 }.toString()
             }
         }
-        val irregularRecurringEvents = (events["Irregular Recurring"] as List<*>)
-            .mapNotNull { it as Map<*, *> }
-            .joinToString(",\n") { event ->
-                "mapOf(${event.map { (k, v) -> """"$k" to "$v"""" }.joinToString(", ")})"
-            }
         builder.addType(
             TypeSpec.enumBuilder(eventTypeName)
                 .primaryConstructor(
@@ -159,7 +154,17 @@ abstract class CodeGenerators : DefaultTask() {
             PropertySpec
                 .builder("irregularRecurringEvents", typeNameOf<List<Map<String, String>>>())
                 .initializer(
-                    CodeBlock.of("listOf(\n$irregularRecurringEvents\n)".preventLineWraps())
+                    buildCodeBlock {
+                        add("listOf(\n")
+                        (events["Irregular Recurring"] as List<*>).forEach {
+                            add("mapOf(")
+                            (it as Map<*, *>).forEach { (k, v) ->
+                                add("%S to %S, ".preventLineWraps(), k, v)
+                            }
+                            add("),\n")
+                        }
+                        add(")")
+                    }
                 )
                 .build()
         )
