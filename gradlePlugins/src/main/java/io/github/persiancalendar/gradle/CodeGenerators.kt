@@ -24,9 +24,11 @@ abstract class CodeGenerators : DefaultTask() {
 
     private val calendarRecordName = "CalendarRecord"
     private val eventTypeName = "EventType"
+    private val cityItemName = "CityItem"
 
     private val calendarRecordType = ClassName(packageName, calendarRecordName)
     private val eventType = ClassName(packageName, eventTypeName)
+    private val cityItemType = ClassName("com.byagowi.persiancalendar.entities", cityItemName)
 
     private operator fun File.div(child: String) = File(this, child)
 
@@ -169,7 +171,7 @@ abstract class CodeGenerators : DefaultTask() {
                 // Elevation really degrades quality of calculations
                 val elevation =
                     if (countryCode == "ir") .0 else (city["elevation"] as Number).toDouble()
-                """"$key" to CityItem(
+                """"$key" to $cityItemName(
     key = "$key",
     en = "${city["en"]}", fa = "${city["fa"]}",
     ckb = "${city["ckb"]}", ar = "${city["ar"]}",
@@ -180,14 +182,15 @@ abstract class CodeGenerators : DefaultTask() {
 )"""
             }
         }.joinToString(",\n")
-        val cityItem = ClassName("com.byagowi.persiancalendar.entities", "CityItem")
-        builder.addImport("com.byagowi.persiancalendar.entities", "CityItem")
+
+        builder.addImport("com.byagowi.persiancalendar.entities", cityItemName)
         builder.addImport("io.github.persiancalendar.praytimes", "Coordinates")
         builder.addProperty(
             PropertySpec
                 .builder(
                     "citiesStore",
-                    Map::class.asClassName().parameterizedBy(String::class.asClassName(), cityItem)
+                    Map::class.asClassName()
+                        .parameterizedBy(String::class.asClassName(), cityItemType)
                 )
                 .initializer(CodeBlock.of("mapOf(\n$cities\n)".preventLineWraps()))
                 .build()
