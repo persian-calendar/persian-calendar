@@ -79,7 +79,7 @@ abstract class CodeGenerators : DefaultTask() {
                         .build()
                 )
                 .addProperty(
-                    PropertySpec.builder("source", String::class, KModifier.PUBLIC)
+                    PropertySpec.builder("source", String::class)
                         .initializer("source")
                         .build()
                 )
@@ -94,43 +94,33 @@ abstract class CodeGenerators : DefaultTask() {
                 }
                 .build()
         )
+        val calendarRecordFields = listOf(
+            "title" to String::class.asClassName(),
+            "type" to eventType,
+            "isHoliday" to Boolean::class.asClassName(),
+            "month" to Int::class.asClassName(),
+            "day" to Int::class.asClassName()
+        )
         builder.addType(
             TypeSpec.classBuilder(calendarRecordName)
                 .primaryConstructor(
                     FunSpec.constructorBuilder()
-                        .addParameter("title", String::class)
-                        .addParameter("type", eventType)
-                        .addParameter("isHoliday", Boolean::class)
-                        .addParameter("month", Int::class)
-                        .addParameter("day", Int::class)
+                        .also {
+                            calendarRecordFields.forEach { (name, type) ->
+                                it.addParameter(name, type)
+                            }
+                        }
                         .build()
                 )
-                .addProperty(
-                    PropertySpec.builder("title", String::class, KModifier.PUBLIC)
-                        .initializer("title")
-                        .build()
-                )
-                .addProperty(
-                    PropertySpec
-                        .builder("type", eventType, KModifier.PUBLIC)
-                        .initializer("type")
-                        .build()
-                )
-                .addProperty(
-                    PropertySpec.builder("isHoliday", Boolean::class, KModifier.PUBLIC)
-                        .initializer("isHoliday")
-                        .build()
-                )
-                .addProperty(
-                    PropertySpec.builder("month", Int::class, KModifier.PUBLIC)
-                        .initializer("month")
-                        .build()
-                )
-                .addProperty(
-                    PropertySpec.builder("day", Int::class, KModifier.PUBLIC)
-                        .initializer("day")
-                        .build()
-                )
+                .also {
+                    calendarRecordFields.forEach { (name, type) ->
+                        it.addProperty(
+                            PropertySpec.builder(name, type)
+                                .initializer(name)
+                                .build()
+                        )
+                    }
+                }
                 .build()
         )
         val calendarRecordList = List::class.asClassName()
