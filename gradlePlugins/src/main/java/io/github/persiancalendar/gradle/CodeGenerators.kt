@@ -10,6 +10,7 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.buildCodeBlock
 import com.squareup.kotlinpoet.typeNameOf
+import com.squareup.kotlinpoet.withIndent
 import groovy.json.JsonSlurper
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property
@@ -171,15 +172,31 @@ abstract class CodeGenerators : DefaultTask() {
                 // Elevation really degrades quality of calculations
                 val elevation =
                     if (countryCode == "ir") .0 else (city["elevation"] as Number).toDouble()
-                """"$key" to $cityItemName(
-    key = "$key",
-    en = "${city["en"]}", fa = "${city["fa"]}",
-    ckb = "${city["ckb"]}", ar = "${city["ar"]}",
-    countryCode = "$countryCode",
-    countryEn = "${country["en"]}", countryFa = "${country["fa"]}",
-    countryCkb = "${country["ckb"]}", countryAr = "${country["ar"]}",
-    coordinates = Coordinates($latitude, $longitude, $elevation)
-)"""
+
+                buildCodeBlock {
+                    add("%S to %L", key, buildCodeBlock {
+                        addStatement("%L(", cityItemName)
+                        withIndent {
+                            withIndent {
+                                addStatement("key = %S,", key)
+                                add("en = %S, ", city["en"])
+                                addStatement("fa = %S,", city["fa"])
+                                add("ckb = %S, ", city["ckb"])
+                                addStatement("ar = %S,", city["ar"])
+                                addStatement("countryCode = %S,", countryCode)
+                                add("countryEn = %S, ", country["en"])
+                                addStatement("countryFa = %S,", country["fa"])
+                                add("countryCkb = %S, ", country["ckb"])
+                                addStatement("countryAr = %S,", country["ar"])
+                                addStatement(
+                                    "coordinates = %L",
+                                    "Coordinates($latitude, $longitude, $elevation)"
+                                )
+                            }
+                        }
+                        add(")")
+                    })
+                }.toString()
             }
         }.joinToString(",\n")
 
