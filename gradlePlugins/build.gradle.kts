@@ -13,8 +13,8 @@ dependencies {
 gradlePlugin {
     plugins {
         create("dependencies") {
-            id = "io.github.persiancalendar.codegenerators"
-            implementationClass = "io.github.persiancalendar.gradle.CodeGenerators"
+            id = "io.github.persiancalendar.appbuildplugin"
+            implementationClass = "io.github.persiancalendar.gradle.AppBuildPlugin"
         }
     }
 }

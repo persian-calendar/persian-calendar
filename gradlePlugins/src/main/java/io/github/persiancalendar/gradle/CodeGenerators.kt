@@ -11,43 +11,34 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.typeNameOf
 import groovy.json.JsonSlurper
-import org.gradle.api.Plugin
-import org.gradle.api.Project
+import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.TaskAction
 import org.gradle.configurationcache.extensions.capitalized
 import java.io.File
 
-class CodeGenerators : Plugin<Project> {
+abstract class CodeGenerators : DefaultTask() {
 
     private val packageName = "com.byagowi.persiancalendar.generated"
     private operator fun File.div(child: String) = File(this, child)
 
-    override fun apply(target: Project) {
-        target.tasks.register("codegenerators") {
-            val projectDir = target.projectDir
-            val generatedAppSrcDir = target.buildDir / "generated" / "source" / "appsrc" / "main"
-            val generateDir =
-                generatedAppSrcDir / "com" / "byagowi" / "persiancalendar" / "generated"
+    @InputDirectory
+    abstract fun getGeneratedAppSrcDir(): Property<File>
 
-            val actions = listOf(
-                "events" to ::generateEventsCode,
-                "cities" to ::generateCitiesCode,
-                "districts" to ::generateDistrictsCode
-            )
-            actions.forEach { (name, _) ->
-                val input = projectDir / "data" / "$name.json"
-                inputs.file(input)
-                val output = generateDir / "${name.capitalized()}.kt"
-                outputs.file(output)
-            }
-
-            doLast {
-                actions.forEach { (name, generator) ->
-                    val input = projectDir / "data" / "$name.json"
-                    val builder = FileSpec.builder(packageName, name.capitalized())
-                    generator(input, builder)
-                    builder.build().writeTo(generatedAppSrcDir)
-                }
-            }
+    @TaskAction
+    fun action() {
+        val projectDir = project.projectDir
+        val actions = listOf(
+            "events" to ::generateEventsCode,
+            "cities" to ::generateCitiesCode,
+            "districts" to ::generateDistrictsCode
+        )
+        actions.forEach { (name, generator) ->
+            val input = projectDir / "data" / "$name.json"
+            val builder = FileSpec.builder(packageName, name.capitalized())
+            generator(input, builder)
+            builder.build().writeTo(getGeneratedAppSrcDir().get())
         }
     }
 
