@@ -211,25 +211,33 @@ abstract class CodeGenerators : DefaultTask() {
     }
 
     private fun generateDistrictsCode(districtsJson: File, builder: FileSpec.Builder) {
-        val districts = (JsonSlurper().parse(districtsJson) as Map<*, *>).mapNotNull { province ->
-            val provinceName = province.key as String
-            if (provinceName.startsWith("#")) return@mapNotNull null
-            "\"$provinceName\" to listOf(\n" + (province.value as Map<*, *>).map { county ->
-                val key = county.key as String
-                """    "$key;""" + (county.value as Map<*, *>).map { district ->
-                    val coordinates = district.value as Map<*, *>
-                    val latitude = (coordinates["lat"] as Number).toDouble()
-                    val longitude = (coordinates["long"] as Number).toDouble()
-                    // Remove what is in the parenthesis
-                    val name = district.key.toString().split("(")[0]
-                    "$name:$latitude:$longitude"
-                }.joinToString(";") + "\""
-            }.joinToString(",\n") + "\n)"
-        }.joinToString(",\n")
         @OptIn(ExperimentalStdlibApi::class)
         builder.addProperty(
             PropertySpec.builder("districtsStore", typeNameOf<List<Pair<String, List<String>>>>())
-                .initializer(CodeBlock.of("listOf(\n$districts\n)".preventLineWraps()))
+                .initializer(buildCodeBlock {
+                    add("listOf(\n")
+                    (JsonSlurper().parse(districtsJson) as Map<*, *>).forEach { province ->
+                        val provinceName = province.key as String
+                        if (provinceName.startsWith("#")) return@forEach
+                        add("%S to listOf(\n", provinceName)
+                        (province.value as Map<*, *>).forEach { county ->
+                            val key = county.key as String
+                            add(
+                                "    %S,\n".preventLineWraps(),
+                                "$key;" + (county.value as Map<*, *>).map { district ->
+                                    val coordinates = district.value as Map<*, *>
+                                    val latitude = (coordinates["lat"] as Number).toDouble()
+                                    val longitude = (coordinates["long"] as Number).toDouble()
+                                    // Remove what is in the parenthesis
+                                    val name = district.key.toString().split("(")[0]
+                                    "$name:$latitude:$longitude"
+                                }.joinToString(";")
+                            )
+                        }
+                        add("),\n")
+                    }
+                    add("\n)")
+                })
                 .build()
         )
     }
