@@ -1,7 +1,6 @@
 package io.github.persiancalendar.gradle
 
 import com.squareup.kotlinpoet.ClassName
-import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
@@ -51,10 +50,6 @@ abstract class CodeGenerators : DefaultTask() {
             builder.build().writeTo(getGeneratedAppSrcDir().get())
         }
     }
-
-    // "·" prevents line wraps in KotlinPoet
-    // https://square.github.io/kotlinpoet/#spaces-wrap-by-default
-    private fun String.preventLineWraps(): String = this.replace(" ", "·")
 
     private fun generateEventsCode(eventsJson: File, builder: FileSpec.Builder) {
         val events = JsonSlurper().parse(eventsJson) as Map<*, *>
@@ -123,15 +118,17 @@ abstract class CodeGenerators : DefaultTask() {
                         addStatement("listOf(")
                         (events[key] as List<*>).forEach {
                             val record = it as Map<*, *>
-                            add(
-                                """%L(
-                                |    title = %S,
-                                |    type = EventType.%L, isHoliday = %L, month = %L, day = %L
-                                |),
-                                |""".trimMargin().preventLineWraps(),
-                                calendarRecordName, record["title"], record["type"],
-                                record["holiday"], record["month"], record["day"]
-                            )
+                            withIndent {
+                                addStatement("%L(", calendarRecordName)
+                                withIndent {
+                                    addStatement("title = %S,", record["title"])
+                                    add("type = EventType.%L, ", record["type"])
+                                    add("isHoliday = %L, ", record["holiday"])
+                                    add("month = %L, ", record["month"])
+                                    addStatement("day = %L", record["day"])
+                                }
+                                addStatement("),")
+                            }
                         }
                         add(")")
                     })
@@ -146,11 +143,13 @@ abstract class CodeGenerators : DefaultTask() {
                     buildCodeBlock {
                         addStatement("listOf(")
                         (events["Irregular Recurring"] as List<*>).forEach {
-                            add("mapOf(")
-                            (it as Map<*, *>).forEach { (k, v) ->
-                                add("%S to %S, ".preventLineWraps(), k, v)
+                            withIndent {
+                                addStatement("mapOf(")
+                                (it as Map<*, *>).forEach { (k, v) ->
+                                    withIndent { addStatement("%S to %S,", k, v) }
+                                }
+                                addStatement("),")
                             }
-                            addStatement("),")
                         }
                         add(")")
                     }
