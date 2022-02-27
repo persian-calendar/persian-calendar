@@ -123,13 +123,15 @@ abstract class CodeGenerators : DefaultTask() {
                         add("listOf(\n")
                         (events[key] as List<*>).forEach {
                             val record = it as Map<*, *>
-                            add("%L(".preventLineWraps(), calendarRecordName)
-                            add("title = %S, ".preventLineWraps(), record["title"])
-                            add("type = EventType.%L, ".preventLineWraps(), record["type"])
-                            add("isHoliday = %L, ".preventLineWraps(), record["holiday"])
-                            add("month = %L, ".preventLineWraps(), record["month"])
-                            add("day = %L".preventLineWraps(), record["day"])
-                            add("),\n")
+                            add(
+                                """%L(
+                                |    title = %S,
+                                |    type = EventType.%L, isHoliday = %L, month = %L, day = %L
+                                |),
+                                |""".trimMargin().preventLineWraps(),
+                                calendarRecordName, record["title"], record["type"],
+                                record["holiday"], record["month"], record["day"]
+                            )
                         }
                         add(")")
                     })
