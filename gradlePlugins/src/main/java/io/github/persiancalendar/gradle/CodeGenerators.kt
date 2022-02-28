@@ -197,7 +197,8 @@ abstract class CodeGenerators : DefaultTask() {
 
     private fun generateCitiesCode(citiesJson: File, builder: FileSpec.Builder) {
         builder.addImport("com.byagowi.persiancalendar.entities", cityItemName)
-        builder.addImport("io.github.persiancalendar.praytimes", "Coordinates")
+        val coordinatesName = "Coordinates"
+        builder.addImport("io.github.persiancalendar.praytimes", coordinatesName)
         @OptIn(ExperimentalSerializationApi::class)
         builder.addProperty(
             PropertySpec
@@ -234,8 +235,8 @@ abstract class CodeGenerators : DefaultTask() {
                                     add("countryCkb = %S, ", country.ckb)
                                     addStatement("countryAr = %S,", country.ar)
                                     addStatement(
-                                        "coordinates = %L",
-                                        "Coordinates($latitude, $longitude, $elevation)"
+                                        "coordinates = %L(%L, %L, %L)",
+                                        coordinatesName, latitude, longitude, elevation
                                     )
                                 }
                                 addStatement("),")
