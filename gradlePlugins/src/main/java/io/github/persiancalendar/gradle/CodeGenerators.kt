@@ -43,6 +43,8 @@ abstract class CodeGenerators : DefaultTask() {
 
     @TaskAction
     fun action() {
+        val generatedAppSrcDir = getGeneratedAppSrcDir().get()
+        generatedAppSrcDir.mkdirs()
         val projectDir = project.projectDir
         val actions = listOf(
             "events" to ::generateEventsCode,
@@ -53,7 +55,7 @@ abstract class CodeGenerators : DefaultTask() {
             val input = projectDir / "data" / "$name.json"
             val builder = FileSpec.builder(packageName, name.capitalized())
             generator(input, builder)
-            builder.build().writeTo(getGeneratedAppSrcDir().get())
+            builder.build().writeTo(generatedAppSrcDir)
         }
     }
 
