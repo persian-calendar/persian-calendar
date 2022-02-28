@@ -265,7 +265,6 @@ abstract class CodeGenerators : DefaultTask() {
                         districtsJson.inputStream()
                     ).forEach { province ->
                         val provinceName = province.key
-                        if (provinceName.startsWith("#")) return@forEach
                         withIndent {
                             addStatement("%S to listOf(", provinceName)
                             province.value.forEach { county ->
