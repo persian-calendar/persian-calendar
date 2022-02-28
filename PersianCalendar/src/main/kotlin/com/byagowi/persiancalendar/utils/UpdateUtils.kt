@@ -379,7 +379,8 @@ private fun create4x1RemoteViews(
     subtitle: String
 ): RemoteViews {
     val weekDayName = jdn.dayOfWeekName
-    val enableClock = isWidgetClock
+    val enableClock =
+        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
@@ -416,7 +417,8 @@ private fun create2x2RemoteViews(
     subtitle: String, owghat: String
 ): RemoteViews {
     val weekDayName = jdn.dayOfWeekName
-    val enableClock = isWidgetClock
+    val enableClock =
+        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
     val mainDateString = formatDate(date, calendarNameInLinear = showOtherCalendars)
     val remoteViews = RemoteViews(
@@ -460,7 +462,8 @@ private fun create4x2RemoteViews(
 ): RemoteViews {
     val weekDayName = jdn.dayOfWeekName
     val showOtherCalendars = OTHER_CALENDARS_KEY in whatToShowOnWidgets
-    val enableClock = isWidgetClock
+    val enableClock =
+        isWidgetClock && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2
     val remoteViews = RemoteViews(
         context.packageName, if (enableClock) R.layout.widget4x2_clock else R.layout.widget4x2
     )

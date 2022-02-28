@@ -62,7 +62,7 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdk = 19
+        minSdk = if (isNightlyBuild) 19 else 17
         targetSdk = 31
         versionCode = 740
         versionName = "7.4.0"
@@ -120,7 +120,7 @@ android {
     flavorDimensions += listOf("api")
 
     productFlavors {
-        create("minApi19") {
+        create("minApi17") {
             dimension = "api"
         }
         create("minApi21") {
@@ -294,13 +294,13 @@ tasks.register("moveToApiFlavors") {
             ?: error("Moves a source file to api flavors\nPass -P fileName=FILENAME to this")
         if ("/main/" !in source) error("File name should be a source file in the main flavor")
         if (!File(source).isFile) error("Source file name doesn't exist")
-        val minApi19Target = source.replace("/main/", "/minApi19/")
-        File(File(minApi19Target).parent).mkdirs()
+        val minApi17Target = source.replace("/main/", "/minApi17/")
+        File(File(minApi17Target).parent).mkdirs()
         val minApi21Target = source.replace("/main/", "/minApi21/")
         File(File(minApi21Target).parent).mkdirs()
         println("cp $source $minApi21Target".execute().text)
         println("git add $minApi21Target".execute().text)
-        println("git mv $source $minApi19Target".execute().text)
+        println("git mv $source $minApi17Target".execute().text)
         println("git status".execute().text)
     }
 }
