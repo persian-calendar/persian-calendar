@@ -216,7 +216,7 @@ dependencies {
     debugImplementation("com.android.support:multidex:2.0.0")
 
     // For development builds only, they aren't and most likely won't ever be used in stable releases
-    nightlyImplementation(platform("com.google.firebase:firebase-bom:28.4.1"))
+    nightlyImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
     // BoM specifies individual Firebase libraries versions so we don't need to.
     nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx")
     nightlyImplementation("com.google.firebase:firebase-analytics-ktx")
