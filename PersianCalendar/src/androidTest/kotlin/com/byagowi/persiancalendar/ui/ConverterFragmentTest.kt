@@ -35,11 +35,11 @@ class ConverterFragmentTest {
             runTest(UnconfinedTestDispatcher()) {
                 val values = mutableListOf<Boolean>()
                 val job = launch { viewModel.todayButtonVisibilityEvent.collect(values::add) }
-                viewModel.changeIsDayDistance(true)
+                viewModel.changeScreenMode(true)
                 viewModel.changeSecondSelectedDate(Jdn.today() + 1)
                 viewModel.changeSecondSelectedDate(Jdn.today())
                 viewModel.changeSecondSelectedDate(Jdn.today() + 1)
-                viewModel.changeIsDayDistance(false)
+                viewModel.changeScreenMode(false)
                 viewModel.changeSecondSelectedDate(Jdn.today())
                 job.cancel()
                 val expected = listOf(false, false, false, false, true, false, true, false, false)

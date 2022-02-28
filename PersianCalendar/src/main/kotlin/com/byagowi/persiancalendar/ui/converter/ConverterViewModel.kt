@@ -15,22 +15,23 @@ class ConverterViewModel : ViewModel() {
     private val _calendar = MutableStateFlow(mainCalendar)
     private val _selectedDate = MutableStateFlow(Jdn.today())
     private val _secondSelectedDate = MutableStateFlow(Jdn.today())
-    private val _isDayDistance = MutableStateFlow(false)
+    private val _screenMode = MutableStateFlow(ConverterScreenMode.Converter)
 
     // Values
     val calendar: CalendarType get() = _calendar.value
     val selectedDate: Jdn get() = _selectedDate.value
     val secondSelectedDate: Jdn get() = _secondSelectedDate.value
-    val isDayDistance: Boolean get() = _isDayDistance.value
+    val screenMode: ConverterScreenMode get() = _screenMode.value
 
     // Events
     val calendarChangeEvent: Flow<CalendarType> get() = _calendar
-    val isDayDistanceChangeEvent: Flow<Boolean> get() = _isDayDistance
-    val todayButtonVisibilityEvent = merge(_selectedDate, _secondSelectedDate, _isDayDistance).map {
+    val screenModeChangeEvent: Flow<ConverterScreenMode> get() = _screenMode
+    val todayButtonVisibilityEvent = merge(_selectedDate, _secondSelectedDate, _screenMode).map {
         val todayJdn = Jdn.today()
-        selectedDate != todayJdn || (isDayDistance && secondSelectedDate != todayJdn)
+        selectedDate != todayJdn ||
+                (screenMode == ConverterScreenMode.Distance && secondSelectedDate != todayJdn)
     }
-    val updateEvent = merge(_calendar, _selectedDate, _secondSelectedDate, _isDayDistance)
+    val updateEvent = merge(_calendar, _selectedDate, _secondSelectedDate, _screenMode)
 
     // Commands
     fun changeCalendar(calendarType: CalendarType) {
@@ -45,7 +46,7 @@ class ConverterViewModel : ViewModel() {
         _secondSelectedDate.value = jdn
     }
 
-    fun changeIsDayDistance(value: Boolean) {
-        _isDayDistance.value = value
+    fun changeScreenMode(value: ConverterScreenMode) {
+        _screenMode.value = value
     }
 }

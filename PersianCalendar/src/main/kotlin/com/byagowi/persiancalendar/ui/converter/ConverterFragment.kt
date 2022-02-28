@@ -38,18 +38,15 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
-            listOf(R.string.date_converter, R.string.days_distance).map(spinner.context::getString)
+            ConverterScreenMode.values().map { it.title }.map(spinner.context::getString)
         )
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) {
-                viewModel.changeIsDayDistance(position == 1)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+            ) = viewModel.changeScreenMode(ConverterScreenMode.values()[position])
         }
-        spinner.setSelection(if (viewModel.isDayDistance) 1 else 0)
+        spinner.setSelection(viewModel.screenMode.ordinal)
 
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setupMenuNavigation()
@@ -78,7 +75,8 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         }.onClick {
             val jdn = binding.dayPickerView.jdn
             activity?.shareText(
-                if (viewModel.isDayDistance) binding.dayDistance.text.toString()
+                if (viewModel.screenMode == ConverterScreenMode.Distance)
+                    binding.dayDistance.text.toString()
                 else listOf(
                     dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
                     getString(R.string.equivalent_to),
@@ -97,7 +95,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
         // Setup view model change listeners
         viewModel.updateEvent
             .onEach {
-                if (viewModel.isDayDistance) {
+                if (viewModel.screenMode == ConverterScreenMode.Distance) {
                     binding.dayDistance.text = calculateDaysDifference(
                         resources, viewModel.selectedDate, viewModel.secondSelectedDate,
                         viewModel.calendar
@@ -113,20 +111,23 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.calendarChangeEvent
             .onEach {
-                if (viewModel.isDayDistance) binding.secondDayPickerView.changeCalendarType(it)
+                if (viewModel.screenMode == ConverterScreenMode.Distance)
+                    binding.secondDayPickerView.changeCalendarType(it)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.todayButtonVisibilityEvent
             .distinctUntilChanged()
             .onEach(todayButton::setVisible)
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.isDayDistanceChangeEvent
+        viewModel.screenModeChangeEvent
             .onEach {
-                if (it) binding.secondDayPickerView.changeCalendarType(viewModel.calendar)
-                binding.secondDayPickerView.isVisible = it
-                binding.dayDistance.isVisible = it
-                binding.calendarsView.isVisible = !it
-                binding.resultCard.isVisible = !it
+                val isDistanceMode = viewModel.screenMode == ConverterScreenMode.Distance
+                if (isDistanceMode)
+                    binding.secondDayPickerView.changeCalendarType(viewModel.calendar)
+                binding.secondDayPickerView.isVisible = isDistanceMode
+                binding.dayDistance.isVisible = isDistanceMode
+                binding.calendarsView.isVisible = !isDistanceMode
+                binding.resultCard.isVisible = !isDistanceMode
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
