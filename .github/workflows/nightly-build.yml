@@ -24,7 +24,7 @@ jobs:
         run: |
           if [[ $(git rev-list --after="24 hours" main) ]]; then
             # TODO: Clean up the duplication here
-            ./gradlew assembleMinApi17Nightly
+            ./gradlew assembleMinApi19Nightly
             apk_dir="$(find . -type f -iname *.apk)"
             curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
             rm "$apk_dir"
