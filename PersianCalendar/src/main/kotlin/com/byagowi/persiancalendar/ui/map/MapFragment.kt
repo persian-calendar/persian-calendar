@@ -102,9 +102,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (coordinates == null) bringGps()
             viewModel.toggleDisplayLocation()
         }
-        nightMaskButton.onClick {
-            viewModel.toggleNightMask()
-        }
+        nightMaskButton.onClick { viewModel.toggleNightMask() }
         binding.root.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.APPEARING)
             it.setAnimateParentHierarchy(false)
