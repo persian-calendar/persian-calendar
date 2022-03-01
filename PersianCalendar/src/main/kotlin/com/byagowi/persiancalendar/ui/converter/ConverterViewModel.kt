@@ -29,9 +29,12 @@ class ConverterViewModel : ViewModel() {
     val calendarChangeEvent: Flow<CalendarType> get() = _calendar
     val screenModeChangeEvent: Flow<ConverterScreenMode> get() = _screenMode
     val todayButtonVisibilityEvent = merge(_selectedDate, _secondSelectedDate, _screenMode).map {
-        val todayJdn = Jdn.today()
-        selectedDate != todayJdn ||
-                (screenMode == ConverterScreenMode.Distance && secondSelectedDate != todayJdn)
+        val today = Jdn.today()
+        when (screenMode) {
+            ConverterScreenMode.Converter -> selectedDate != today
+            ConverterScreenMode.Distance -> selectedDate != today || secondSelectedDate != today
+            ConverterScreenMode.Calculator -> false
+        }
     }
     val updateEvent = merge(_calendar, _selectedDate, _secondSelectedDate, _screenMode, _inputText)
 
