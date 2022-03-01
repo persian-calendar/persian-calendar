@@ -114,7 +114,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         binding.map.onClick = { x: Float, y: Float ->
             val latitude = 90 - y / mapScaleFactor + 1
             val longitude = x / mapScaleFactor - 180
-            openPanoRendoOrDirectPathOrCoordinateDialog(latitude, longitude)
+            if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
         }
 
         viewModel.state.onEach { state ->
@@ -140,19 +140,16 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     }
 
     private fun attemptSwitchToDirectPathMode() {
-        if (coordinates == null) bringGps()
-        else viewModel.toggleDirectPathMode()
+        coordinates ?: bringGps()
+        viewModel.toggleDirectPathMode()
     }
 
-    private fun openPanoRendoOrDirectPathOrCoordinateDialog(
-        latitude: Float, longitude: Float
-    ): Boolean {
-        if (abs(latitude) > 90 || abs(longitude) > 180) return true
+    private fun onMapClick(latitude: Float, longitude: Float) {
+        // Easter egg like feature, bring sky renderer fragment
         if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.state.value.displayGrid) {
             findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
-            return true
+            return
         }
-
         activity?.also {
             val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
             if (viewModel.state.value.isDirectPathMode) {
@@ -161,7 +158,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
             }
         }
-        return false
     }
 
     private fun bringGps() {
