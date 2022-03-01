@@ -106,14 +106,14 @@
     <string name="show_device_calendar_events_summary">显示个人日历上的日程</string>
     <string name="calendars_priority">日历优先级</string>
     <string name="astronomical_info">天文信息</string>
-    <string name="astronomical_info_summary">显示星座、年份的古代名称和月亮处在天蝎座等附加信息</string>
+    <string name="astronomical_info_summary">显示星座、生肖和月亮是否处在天蝎座等附加信息</string>
     <string name="week_of_year">一年中的周数</string>
     <string name="week_of_year_summary">在日历上显示第几周</string>
     <string name="week_start_summary">选择一周中的起始日</string>
     <string name="islamic_offset">伊斯兰历偏移</string>
     <string name="islamic_offset_summary">在伊斯兰历的基础上增加或减少天数</string>
     <string name="clock_in_24">24 小时制</string>
-    <string name="showing_clock_in_24">使用 24 小时制显示时间</string>
+    <string name="showing_clock_in_24">以 24 小时制表示时间</string>
     <string name="select_widgets_text_color">自定义小部件文本的颜色</string>
     <string name="clock_on_widget">小部件时间</string>
     <string name="showing_clock_on_widget">设置在小部件上是否显示时间</string>
@@ -133,7 +133,7 @@
     <string name="showing_iran_time">小部件和通知中的时间一律使用伊朗时区</string>
     <string name="ask_user_to_set_location">请在设置中设定位置，以提高此处内容的精确度</string>
     <string name="notify_date">启用日期通知</string>
-    <string name="enable_notify">显示所有日历的持久通知</string>
+    <string name="enable_notify">显示包含所有日历的持久通知</string>
     <string name="notify_date_lock_screen">在锁屏上显示通知</string>
     <string name="gps_internet_desc">请打开设备的 GPS 和互联网连接，以对您所在的位置进行定位。
 \n
@@ -147,7 +147,7 @@
     <string name="athan">宣礼</string>
     <string name="pray_methods">计算方式</string>
     <string name="pray_methods_calculation">礼拜时间和朝向指南针的计算方式</string>
-    <string name="notify_date_lock_screen_summary">此设置仅在使用锁屏时生效</string>
+    <string name="notify_date_lock_screen_summary">此选项仅在使用锁屏时生效</string>
     <string name="gps_location_help">使用此选项以自动设定位置</string>
     <string name="gps_location">通过 GPS 或网络获取位置</string>
     <string name="pleasewaitgps">请稍候……
@@ -321,5 +321,23 @@
     <string name="preview">预览</string>
     <string name="ignore">忽略</string>
     <string name="high_latitudes_method">高纬度模式</string>
-    <string name="calculator">电子计算器</string>
+    <string name="calculator">时间计算器</string>
+    <string name="abdulbasit">阿卜杜勒·巴西推·阿卜杜·赛迈德</string>
+    <string name="muharram">1 月</string>
+    <string name="safar">2 月</string>
+    <string name="rabi_al_awwal">3 月</string>
+    <string name="rabi_al_thani">4 月</string>
+    <string name="jumada_al_awwal">5 月</string>
+    <string name="jumada_al_thani">6 月</string>
+    <string name="rajab">7 月</string>
+    <string name="shaban">8 月</string>
+    <string name="ramadan">9 月</string>
+    <string name="shawwal">10 月</string>
+    <string name="dhu_al_qidah">11 月</string>
+    <string name="dhu_al_hijjah">12 月</string>
+    <string name="sun_view">太阳位置</string>
+    <string name="show_sun_and_moon_path_in_24_hours">显示 24 小时内的日月轨迹</string>
+    <string name="nepali_calendar">尼泊尔历（维克拉姆历）</string>
+    <string name="nepali_calendar_short">尼泊尔历</string>
+    <string name="nepal">尼泊尔</string>
 </resources>
