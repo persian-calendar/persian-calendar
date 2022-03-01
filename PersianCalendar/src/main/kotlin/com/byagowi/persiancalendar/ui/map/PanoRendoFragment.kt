@@ -36,7 +36,7 @@ class PanoRendoFragment : Fragment(R.layout.fragment_pano_rendo) {
         }
         val sunPosition = GregorianCalendar().also {
             val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
-            it.time = Date(mapViewModel.time)
+            it.time = Date(mapViewModel.state.value.time)
         }.calculateSunMoonPosition(coordinates).sunPosition
 
         fun update() = binding.image.setImageBitmap(
