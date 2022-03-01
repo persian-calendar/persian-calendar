@@ -10,7 +10,6 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
-import android.view.MenuItem
 import android.view.View
 import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
@@ -36,6 +35,7 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
@@ -56,10 +56,17 @@ import kotlin.math.hypot
 import kotlin.math.roundToInt
 
 class MapFragment : Fragment(R.layout.fragment_map) {
+    private val binding by viewKeeper(FragmentMapBinding::bind)
+    private val directPathButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path) }
+    private val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
+    private val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
+    private val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
+    private val nightMaskButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
+
+    private val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentMapBinding.bind(view)
         binding.appBar.toolbar.let {
             it.setTitle(R.string.map)
             it.setupUpNavigation()
@@ -68,7 +75,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         solarDraw = SolarDraw(view.context)
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
-        val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
         viewModel.updateEvent
             .onEach {
@@ -98,41 +104,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             true
         }
 
-        fun bringGps() {
-            showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
-        }
-
-        val directPathButton = binding.appBar.toolbar.menu.add("Direct Path")
-        directPathButton.also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_distance_icon)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
-            if (coordinates == null) bringGps()
-            else {
-                viewModel.toggleDirectPathMode()
-                directPathButton.icon.alpha = if (viewModel.isDirectPathMode) 127 else 255
-                if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
-            }
-        }
-        binding.appBar.toolbar.menu.add("Grid").also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_grid_3x3)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { viewModel.toggleDisplayGrid() }
-        binding.appBar.toolbar.menu.add("GPS").also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_my_location)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { bringGps() }
-        binding.appBar.toolbar.menu.add("Location").also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_location_on)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
+        binding.appBar.toolbar.inflateMenu(R.menu.map_menu)
+        directPathButton.onClick { attemptSwitchToDirectPathMode() }
+        gridButton.onClick { viewModel.toggleDisplayGrid() }
+        myLocationButton.onClick { bringGps() }
+        locationButton.onClick {
             if (coordinates == null) bringGps()
             viewModel.toggleDisplayLocation()
         }
-        binding.appBar.toolbar.menu.add("Night Mask").also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
+        nightMaskButton.onClick {
             viewModel.toggleNightMask()
             binding.timeBar.isVisible = viewModel.displayNightMask
         }
@@ -144,26 +124,44 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (key == PREF_LATITUDE) viewModel.turnOnDisplayLocation()
         }
 
-        binding.map.onClick = fun(x: Float, y: Float) {
+        binding.map.onClick = { x: Float, y: Float ->
             val latitude = 90 - y / mapScaleFactor + 1
             val longitude = x / mapScaleFactor - 180
-            if (abs(latitude) > 90 || abs(longitude) > 180) return
-            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 &&
-                viewModel.displayGrid
-            ) {
-                findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
-                return
-            }
+            openPanoRendoOrDirectPathOrCoordinateDialog(latitude, longitude)
+        }
+    }
 
-            activity?.also {
-                val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                if (viewModel.isDirectPathMode) {
-                    viewModel.changeDirectPathDestination(coordinates)
-                } else {
-                    showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
-                }
+    private fun attemptSwitchToDirectPathMode() {
+        if (coordinates == null) bringGps()
+        else {
+            viewModel.toggleDirectPathMode()
+            directPathButton.icon.alpha = if (viewModel.isDirectPathMode) 127 else 255
+            if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
+        }
+    }
+
+    private fun openPanoRendoOrDirectPathOrCoordinateDialog(
+        latitude: Float, longitude: Float
+    ): Boolean {
+        if (abs(latitude) > 90 || abs(longitude) > 180) return true
+        if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.displayGrid) {
+            findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
+            return true
+        }
+
+        activity?.also {
+            val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+            if (viewModel.isDirectPathMode) {
+                viewModel.changeDirectPathDestination(coordinates)
+            } else {
+                showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
             }
         }
+        return false
+    }
+
+    private fun bringGps() {
+        showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
     }
 
     private val scaleDownFactor = 4
