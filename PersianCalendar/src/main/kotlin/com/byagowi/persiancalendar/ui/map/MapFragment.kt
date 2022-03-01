@@ -143,10 +143,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private fun attemptSwitchToDirectPathMode() {
         if (coordinates == null) bringGps()
-        else {
-            viewModel.toggleDirectPathMode()
-            if (!viewModel.state.value.isDirectPathMode) viewModel.changeDirectPathDestination(null)
-        }
+        else viewModel.toggleDirectPathMode()
     }
 
     private fun openPanoRendoOrDirectPathOrCoordinateDialog(
