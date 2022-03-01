@@ -267,10 +267,12 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 )
                 it.drawBitmap(pinBitmap, null, pinRect, null)
             }
-            val toPath = directPathDestination
-            if (coordinates != null && toPath != null) {
+            if (coordinates != null && directPathDestination != null) {
                 val from = EarthPosition(coordinates.latitude, coordinates.longitude)
-                val to = EarthPosition(toPath.latitude, toPath.longitude)
+                val to = EarthPosition(
+                    directPathDestination.latitude,
+                    directPathDestination.longitude
+                )
                 val points = from.intermediatePoints(to, 24).map { point ->
                     val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
                     val userY = (90 - point.latitude.toFloat()) * mapScaleFactor

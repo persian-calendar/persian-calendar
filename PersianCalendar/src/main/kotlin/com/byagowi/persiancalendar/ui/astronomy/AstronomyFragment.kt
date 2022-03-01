@@ -6,6 +6,8 @@ import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -28,6 +30,9 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.util.*
 
 class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
@@ -47,15 +52,12 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
             it.isVisible = false
         }
 
-        val args by navArgs<AstronomyFragmentArgs>()
-        val minutesInDay = 60 * 24
-        var offset = args.dayOffset * minutesInDay
-
-        val tropicalSwitch = SwitchMaterial(binding.appBar.toolbar.context)
-        tropicalSwitch.setText(R.string.tropical)
+        val viewModel by viewModels<AstronomyViewModel>()
+        if (viewModel.time.value == AstronomyViewModel.DEFAULT_TIME)
+            viewModel.changeToDayOffset(navArgs<AstronomyFragmentArgs>().value.dayOffset)
 
         fun updateSolarView(time: GregorianCalendar, it: SunMoonPosition) {
-            val tropical = tropicalSwitch.isChecked
+            val tropical = viewModel.isTropical.value
             val sunZodiac =
                 if (tropical) it.sunEcliptic.tropicalZodiac else it.sunEcliptic.iauZodiac
             val moonZodiac =
@@ -66,15 +68,13 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
             binding.time.text = time.formatDateAndTime()
         }
 
-        tropicalSwitch.setOnClickListener {
-            val time = GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }
-            binding.solarView.setTime(time, true) { updateSolarView(time, it) }
-            binding.solarView.isTropicalDegree = tropicalSwitch.isChecked
-        }
-
-        binding.appBar.toolbar.menu.add(R.string.goto_date).also { menuItem ->
+        binding.appBar.toolbar.menu.add(R.string.tropical).also { menuItem ->
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            menuItem.actionView = tropicalSwitch
+            menuItem.actionView = SwitchMaterial(binding.appBar.toolbar.context).also { switch ->
+                switch.setText(R.string.tropical)
+                switch.isChecked = viewModel.isTropical.value
+                switch.setOnClickListener { viewModel.changeTropical(switch.isChecked) }
+            }
         }
 
         listOf(
@@ -87,8 +87,7 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         }
 
         fun update(immediate: Boolean) {
-            resetButton.isVisible = offset != 0
-            val time = GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }
+            val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
             binding.solarView.setTime(time, immediate) { updateSolarView(time, it) }
 
             val persianYear = PersianDate(time.toCivilDate()).year
@@ -117,17 +116,19 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                val startJdn =
-                    Jdn(GregorianCalendar().also { it.add(Calendar.MINUTE, offset) }.toCivilDate())
+                val startJdn = Jdn(
+                    GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
+                        .toCivilDate()
+                )
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
-                    offset = (jdn - Jdn.today()) * minutesInDay
+                    viewModel.changeToDayOffset(jdn - Jdn.today())
                     update(false)
                 }
             }
         }
 
         resetButton.onClick {
-            offset = 0
+            viewModel.changeTime(0)
             resetButton.isVisible = false
             update(false)
         }
@@ -140,7 +141,7 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         binding.slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (System.currentTimeMillis() - lastButtonClickTimestamp < 2000) return
-                offset += dx * viewDirection
+                viewModel.addTime(dx * viewDirection)
                 update(true)
             }
         })
@@ -148,7 +149,7 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         fun buttonScrollSlider(days: Int): Boolean {
             lastButtonClickTimestamp = System.currentTimeMillis()
             binding.slider.smoothScrollBy(50 * days * viewDirection, 0)
-            offset += days * minutesInDay
+            viewModel.addDayOffset(days)
             update(false)
             return true
         }
@@ -167,5 +168,18 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         }
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
+
+        // Setup view model change listeners
+        viewModel.isTropical
+            .onEach { isTropical ->
+                val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
+                binding.solarView.setTime(time, true) { updateSolarView(time, it) }
+                binding.solarView.isTropicalDegree = isTropical
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.resetButtonVisibilityEvent
+            .onEach { resetButton.isVisible = it }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        // TOOO: figure out how to run update() from time flow
     }
 }

@@ -51,7 +51,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     var isTropicalDegree = false
         set(value) {
-            ValueAnimator.ofFloat(if (value) 0f else 1f, if (field) 0f else 1f).also { animator ->
+            if (value == field) return
+            ValueAnimator.ofFloat(if (value) 0f else 1f, if (value) 1f else 0f).also { animator ->
                 animator.duration =
                     resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
                 animator.interpolator = AccelerateDecelerateInterpolator()
