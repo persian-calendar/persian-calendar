@@ -102,7 +102,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
         }
 
-        val directPathButton = binding.appBar.toolbar.menu.add("Direct Path")
+        val directPathButton = binding.appBar.toolbar.menu.add(R.string.show_direct_path_label)
         directPathButton.also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_distance_icon)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
@@ -114,22 +114,22 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
             }
         }
-        binding.appBar.toolbar.menu.add("Grid").also {
+        binding.appBar.toolbar.menu.add(R.string.show_grid_label).also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_grid_3x3)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick { viewModel.toggleDisplayGrid() }
-        binding.appBar.toolbar.menu.add("GPS").also {
+        binding.appBar.toolbar.menu.add(R.string.show_my_location_label).also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_my_location)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick { bringGps() }
-        binding.appBar.toolbar.menu.add("Location").also {
+        binding.appBar.toolbar.menu.add(R.string.show_location_label).also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_location_on)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             if (coordinates == null) bringGps()
             viewModel.toggleDisplayLocation()
         }
-        binding.appBar.toolbar.menu.add("Night Mask").also {
+        binding.appBar.toolbar.menu.add(R.string.show_night_mask_label).also {
             it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
