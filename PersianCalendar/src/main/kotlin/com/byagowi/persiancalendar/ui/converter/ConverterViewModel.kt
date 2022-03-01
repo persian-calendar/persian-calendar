@@ -16,12 +16,14 @@ class ConverterViewModel : ViewModel() {
     private val _selectedDate = MutableStateFlow(Jdn.today())
     private val _secondSelectedDate = MutableStateFlow(Jdn.today())
     private val _screenMode = MutableStateFlow(ConverterScreenMode.Converter)
+    private val _inputText = MutableStateFlow("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
 
     // Values
     val calendar: CalendarType get() = _calendar.value
     val selectedDate: Jdn get() = _selectedDate.value
     val secondSelectedDate: Jdn get() = _secondSelectedDate.value
     val screenMode: ConverterScreenMode get() = _screenMode.value
+    val inputText: String get() = _inputText.value
 
     // Events
     val calendarChangeEvent: Flow<CalendarType> get() = _calendar
@@ -31,7 +33,7 @@ class ConverterViewModel : ViewModel() {
         selectedDate != todayJdn ||
                 (screenMode == ConverterScreenMode.Distance && secondSelectedDate != todayJdn)
     }
-    val updateEvent = merge(_calendar, _selectedDate, _secondSelectedDate, _screenMode)
+    val updateEvent = merge(_calendar, _selectedDate, _secondSelectedDate, _screenMode, _inputText)
 
     // Commands
     fun changeCalendar(calendarType: CalendarType) {
@@ -48,5 +50,9 @@ class ConverterViewModel : ViewModel() {
 
     fun changeScreenMode(value: ConverterScreenMode) {
         _screenMode.value = value
+    }
+
+    fun changeCalculatorInput(text: String) {
+        _inputText.value = text
     }
 }
