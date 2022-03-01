@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
@@ -39,6 +40,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.concurrent.TimeUnit
 
@@ -60,6 +62,17 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
         }
 
         val args by navArgs<PreferencesFragmentArgs>()
+        val viewModel by viewModels<PreferencesViewModel>()
+        if (viewModel.selectedTab == PreferencesViewModel.DEFAULT_SELECTED_TAB)
+            viewModel.changeSelectedTab(args.tab)
+
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+            override fun onTabReselected(tab: TabLayout.Tab?) = Unit
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.position?.also(viewModel::changeSelectedTab)
+            }
+        })
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount() = tabs.size
             override fun createFragment(position: Int) = tabs[position].first().also {
@@ -72,7 +85,7 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
             tab.text = tabs[i].second.joinToString(getString(R.string.spaced_and)) { getString(it) }
         }.attach()
         view.post {
-            binding.viewPager.setCurrentItem(args.tab, true)
+            binding.viewPager.setCurrentItem(viewModel.selectedTab, true)
             view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) }
         }
     }
