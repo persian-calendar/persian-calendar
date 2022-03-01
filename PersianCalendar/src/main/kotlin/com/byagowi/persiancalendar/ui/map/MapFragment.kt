@@ -63,6 +63,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
     private val nightMaskButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
 
+    private val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.appBar.toolbar.let {
@@ -73,7 +75,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         solarDraw = SolarDraw(view.context)
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
-        val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
         viewModel.updateEvent
             .onEach {
@@ -103,19 +104,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             true
         }
 
-        fun bringGps() {
-            showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
-        }
-
         binding.appBar.toolbar.inflateMenu(R.menu.map_menu)
-        directPathButton.onClick {
-            if (coordinates == null) bringGps()
-            else {
-                viewModel.toggleDirectPathMode()
-                directPathButton.icon.alpha = if (viewModel.isDirectPathMode) 127 else 255
-                if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
-            }
-        }
+        directPathButton.onClick { attemptSwitchToDirectPathMode() }
         gridButton.onClick { viewModel.toggleDisplayGrid() }
         myLocationButton.onClick { bringGps() }
         locationButton.onClick {
@@ -134,26 +124,44 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             if (key == PREF_LATITUDE) viewModel.turnOnDisplayLocation()
         }
 
-        binding.map.onClick = fun(x: Float, y: Float) {
+        binding.map.onClick = { x: Float, y: Float ->
             val latitude = 90 - y / mapScaleFactor + 1
             val longitude = x / mapScaleFactor - 180
-            if (abs(latitude) > 90 || abs(longitude) > 180) return
-            if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 &&
-                viewModel.displayGrid
-            ) {
-                findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
-                return
-            }
+            openPanoRendoOrDirectPathOrCoordinateDialog(latitude, longitude)
+        }
+    }
 
-            activity?.also {
-                val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-                if (viewModel.isDirectPathMode) {
-                    viewModel.changeDirectPathDestination(coordinates)
-                } else {
-                    showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
-                }
+    private fun attemptSwitchToDirectPathMode() {
+        if (coordinates == null) bringGps()
+        else {
+            viewModel.toggleDirectPathMode()
+            directPathButton.icon.alpha = if (viewModel.isDirectPathMode) 127 else 255
+            if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
+        }
+    }
+
+    private fun openPanoRendoOrDirectPathOrCoordinateDialog(
+        latitude: Float, longitude: Float
+    ): Boolean {
+        if (abs(latitude) > 90 || abs(longitude) > 180) return true
+        if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.displayGrid) {
+            findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
+            return true
+        }
+
+        activity?.also {
+            val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+            if (viewModel.isDirectPathMode) {
+                viewModel.changeDirectPathDestination(coordinates)
+            } else {
+                showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
             }
         }
+        return false
+    }
+
+    private fun bringGps() {
+        showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
     }
 
     private val scaleDownFactor = 4
