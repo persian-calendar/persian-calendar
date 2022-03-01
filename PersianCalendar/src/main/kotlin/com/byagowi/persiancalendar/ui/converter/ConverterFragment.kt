@@ -45,7 +45,7 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) = viewModel.changeScreenMode(ConverterScreenMode.values()[position])
+            ) = viewModel.changeScreenMode(ConverterScreenMode.fromPosition(position))
         }
         spinner.setSelection(viewModel.screenMode.ordinal)
 
