@@ -35,10 +35,10 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.utils.viewKeeper
 import com.cepmuvakkit.times.posAlgo.EarthPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
 import com.google.android.material.animation.ArgbEvaluatorCompat

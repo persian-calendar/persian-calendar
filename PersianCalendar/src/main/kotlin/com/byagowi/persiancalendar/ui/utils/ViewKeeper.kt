@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.ui.utils
 
 import android.view.View
 import androidx.fragment.app.Fragment
