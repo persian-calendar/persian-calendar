@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.utils.viewKeeper
 import com.cepmuvakkit.times.posAlgo.EarthPosition
 import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
 import com.google.android.material.animation.ArgbEvaluatorCompat
@@ -55,10 +56,15 @@ import kotlin.math.hypot
 import kotlin.math.roundToInt
 
 class MapFragment : Fragment(R.layout.fragment_map) {
+    private val binding by viewKeeper(FragmentMapBinding::bind)
+    private val directPathButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path) }
+    private val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
+    private val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
+    private val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
+    private val nightMaskButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentMapBinding.bind(view)
         binding.appBar.toolbar.let {
             it.setTitle(R.string.map)
             it.setupUpNavigation()
@@ -102,8 +108,6 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         binding.appBar.toolbar.inflateMenu(R.menu.map_menu)
-
-        val directPathButton = binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path)
         directPathButton.onClick {
             if (coordinates == null) bringGps()
             else {
@@ -112,15 +116,13 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
             }
         }
-        binding.appBar.toolbar.menu.findItem(R.id.menu_grid)
-            .onClick { viewModel.toggleDisplayGrid() }
-        binding.appBar.toolbar.menu.findItem(R.id.menu_my_location)
-            .onClick { bringGps() }
-        binding.appBar.toolbar.menu.findItem(R.id.menu_location).onClick {
+        gridButton.onClick { viewModel.toggleDisplayGrid() }
+        myLocationButton.onClick { bringGps() }
+        locationButton.onClick {
             if (coordinates == null) bringGps()
             viewModel.toggleDisplayLocation()
         }
-        binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask).onClick {
+        nightMaskButton.onClick {
             viewModel.toggleNightMask()
             binding.timeBar.isVisible = viewModel.displayNightMask
         }
