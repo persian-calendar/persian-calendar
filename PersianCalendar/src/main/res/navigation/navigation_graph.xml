@@ -152,8 +152,8 @@
         android:name="com.byagowi.persiancalendar.ui.map.MapFragment"
         android:label="Map">
         <action
-            android:id="@+id/action_map_to_pano_rendo"
-            app:destination="@id/pano_rendo"
+            android:id="@+id/action_map_to_sky_renderer"
+            app:destination="@id/sky_renderer"
             app:enterAnim="@anim/nav_enter_anim"
             app:exitAnim="@anim/nav_exit_anim"
             app:popEnterAnim="@anim/nav_enter_anim"
@@ -161,8 +161,8 @@
     </fragment>
 
     <fragment
-        android:id="@+id/pano_rendo"
-        android:name="com.byagowi.persiancalendar.ui.map.PanoRendoFragment"
+        android:id="@+id/sky_renderer"
+        android:name="com.byagowi.persiancalendar.ui.map.SkyRendererFragment"
         android:label="PanoRendo" />
 
 </navigation>

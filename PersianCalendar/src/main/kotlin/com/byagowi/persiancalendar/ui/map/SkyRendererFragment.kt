@@ -9,16 +9,16 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentPanoRendoBinding
+import com.byagowi.persiancalendar.databinding.FragmentSkyRendererBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import java.util.*
 
-class PanoRendoFragment : Fragment(R.layout.fragment_pano_rendo) {
+class SkyRendererFragment : Fragment(R.layout.fragment_sky_renderer) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentPanoRendoBinding.bind(view)
+        val binding = FragmentSkyRendererBinding.bind(view)
         binding.appBar.toolbar.let {
             it.title = "PanoRendo"
             it.setupUpNavigation()

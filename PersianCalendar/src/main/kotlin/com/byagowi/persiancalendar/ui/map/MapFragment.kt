@@ -147,7 +147,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun onMapClick(latitude: Float, longitude: Float) {
         // Easter egg like feature, bring sky renderer fragment
         if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.state.value.displayGrid) {
-            findNavController().navigateSafe(MapFragmentDirections.actionMapToPanoRendo())
+            findNavController().navigateSafe(MapFragmentDirections.actionMapToSkyRenderer())
             return
         }
         activity?.also {
