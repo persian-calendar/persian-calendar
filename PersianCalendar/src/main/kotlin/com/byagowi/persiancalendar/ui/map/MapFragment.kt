@@ -10,7 +10,6 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
-import android.view.MenuItem
 import android.view.View
 import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
@@ -102,11 +101,10 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
         }
 
-        val directPathButton = binding.appBar.toolbar.menu.add(R.string.show_direct_path_label)
-        directPathButton.also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_distance_icon)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
+        binding.appBar.toolbar.inflateMenu(R.menu.map_menu)
+
+        val directPathButton = binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path)
+        directPathButton.onClick {
             if (coordinates == null) bringGps()
             else {
                 viewModel.toggleDirectPathMode()
@@ -114,25 +112,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 if (!viewModel.isDirectPathMode) viewModel.changeDirectPathDestination(null)
             }
         }
-        binding.appBar.toolbar.menu.add(R.string.show_grid_label).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_grid_3x3)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { viewModel.toggleDisplayGrid() }
-        binding.appBar.toolbar.menu.add(R.string.show_my_location_label).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_my_location)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick { bringGps() }
-        binding.appBar.toolbar.menu.add(R.string.show_location_label).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_location_on)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
+        binding.appBar.toolbar.menu.findItem(R.id.menu_grid)
+            .onClick { viewModel.toggleDisplayGrid() }
+        binding.appBar.toolbar.menu.findItem(R.id.menu_my_location)
+            .onClick { bringGps() }
+        binding.appBar.toolbar.menu.findItem(R.id.menu_location).onClick {
             if (coordinates == null) bringGps()
             viewModel.toggleDisplayLocation()
         }
-        binding.appBar.toolbar.menu.add(R.string.show_night_mask_label).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_nightlight)
-            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        }.onClick {
+        binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask).onClick {
             viewModel.toggleNightMask()
             binding.timeBar.isVisible = viewModel.displayNightMask
         }
