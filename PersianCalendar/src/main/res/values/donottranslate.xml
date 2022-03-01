@@ -114,4 +114,10 @@ omasouri: Omid Masouri"</string>
     <string name="moazzenzadeh" translatable="false">رحیم مؤذن‌زاده اردبیلی</string>
     <string name="entezar" translatable="false">انتظار، روح‌الله کاظمی‌زاده</string>
     <string name="empty" translatable="false" />
+    <!--  Map  -->
+    <string name="show_direct_path_label">Direct Path</string>
+    <string name="show_grid_label">Grid</string>
+    <string name="show_my_location_label">GPS</string>
+    <string name="show_location_label">Location</string>
+    <string name="show_night_mask_label">Night Mask</string>
 </resources>

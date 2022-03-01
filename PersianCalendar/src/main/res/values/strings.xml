@@ -360,12 +360,6 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!-- Used in astronomy screen, see https://en.wikipedia.org/wiki/Tropical_year and https://en.wikipedia.org/wiki/Sidereal_and_tropical_astrology -->
     <string name="tropical">Tropical</string>
     <string name="calculator">Calculator</string>
-    <!--  Map  -->
-    <string name="show_direct_path_label">Direct Path</string>
-    <string name="show_grid_label">Grid</string>
-    <string name="show_my_location_label">GPS</string>
-    <string name="show_location_label">Location</string>
-    <string name="show_night_mask_label">Night Mask</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
