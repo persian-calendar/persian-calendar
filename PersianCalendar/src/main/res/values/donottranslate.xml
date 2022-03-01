@@ -115,9 +115,9 @@ omasouri: Omid Masouri"</string>
     <string name="entezar" translatable="false">انتظار، روح‌الله کاظمی‌زاده</string>
     <string name="empty" translatable="false" />
     <!--  Map  -->
-    <string name="show_direct_path_label">Direct Path</string>
-    <string name="show_grid_label">Grid</string>
-    <string name="show_my_location_label">GPS</string>
-    <string name="show_location_label">Location</string>
-    <string name="show_night_mask_label">Night Mask</string>
+    <string name="show_direct_path_label" translatable="false">Direct Path</string>
+    <string name="show_grid_label" translatable="false">Grid</string>
+    <string name="show_my_location_label" translatable="false">GPS</string>
+    <string name="show_location_label" translatable="false">Location</string>
+    <string name="show_night_mask_label" translatable="false">Night Mask</string>
 </resources>
