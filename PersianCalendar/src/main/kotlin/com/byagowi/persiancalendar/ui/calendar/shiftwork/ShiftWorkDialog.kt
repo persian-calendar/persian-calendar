@@ -45,7 +45,7 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn, onSuccess:
     val binding = ShiftWorkSettingsBinding.inflate(activity.layoutInflater, null, false)
     binding.recyclerView.layoutManager = LinearLayoutManager(activity)
     val shiftWorkItemAdapter = ShiftWorkItemsAdapter(
-        if (shiftWorks.isEmpty()) listOf(ShiftWorkRecord("d", 0)) else shiftWorks,
+        shiftWorks.ifEmpty { listOf(ShiftWorkRecord("d", 0)) },
         binding
     )
     binding.recyclerView.adapter = shiftWorkItemAdapter
