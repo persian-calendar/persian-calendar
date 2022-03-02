@@ -11,7 +11,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
-    id("io.github.persiancalendar.appbuildplugin")
+    id("io.github.persiancalendar.appbuildplugin") apply true
 }
 
 if (isNightlyBuild) {
@@ -253,9 +253,6 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }
 
-
-// App's own generated sources
-plugins.apply("io.github.persiancalendar.appbuildplugin")
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }
 
 //// Just a personal debugging tool, isn't that useful as it doesn't resolve all the dependencies
