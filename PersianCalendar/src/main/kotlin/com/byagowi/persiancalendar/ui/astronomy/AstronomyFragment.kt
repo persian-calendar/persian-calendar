@@ -15,22 +15,19 @@ import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.language
-import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.generateAstronomyHeaderText
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.*
@@ -87,22 +84,15 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         }
 
         fun update(immediate: Boolean) {
+            val context = context ?: return
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
             binding.solarView.setTime(time, immediate) { updateSolarView(time, it) }
 
-            val persianYear = PersianDate(time.toCivilDate()).year
-            binding.headerInformation.text = listOf(
-                R.string.solar_eclipse to Eclipse.Category.SOLAR,
-                R.string.lunar_eclipse to Eclipse.Category.LUNAR
-            ).joinToString("\n") { (title, eclipseCategory) ->
-                val eclipse = Eclipse(time, eclipseCategory, true)
-                val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
-                (language.tryTranslateEclipseType(eclipse.type) ?: getString(title)) +
-                        spacedColon + date
-            }
+            val persianDate = PersianDate(time.toCivilDate())
+            binding.headerInformation.text = generateAstronomyHeaderText(time, context, persianDate)
 
             (1..4).forEach {
-                val date = CivilDate(PersianDate(persianYear, it * 3, 29))
+                val date = CivilDate(PersianDate(persianDate.year, it * 3, 29))
                 when (it) {
                     1 -> binding.firstSeasonText
                     2 -> binding.secondSeasonText

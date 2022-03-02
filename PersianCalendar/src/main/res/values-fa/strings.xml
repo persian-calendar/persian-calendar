@@ -356,4 +356,6 @@
     <string name="moon">ماه</string>
     <string name="tropical">اعتدالی</string>
     <string name="calculator">حسابگر</string>
+    <string name="chinese_calendar">تقویم چینی</string>
+    <string name="chinese">چینی</string>
 </resources>

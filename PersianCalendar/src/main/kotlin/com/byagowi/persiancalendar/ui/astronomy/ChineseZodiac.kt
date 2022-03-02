@@ -1,7 +1,9 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.content.Context
+import android.icu.util.ChineseCalendar
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.PersianDate
@@ -39,6 +41,10 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
          */
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             values().getOrNull((persianDate.year + 9) % 12) ?: MONKEY
+
+        @RequiresApi(Build.VERSION_CODES.N)
+        fun fromChineseCalendar(date: ChineseCalendar): ChineseZodiac =
+            values().getOrNull((date.get(ChineseCalendar.YEAR) + 3) % 12) ?: MONKEY
 
         // Compatibilities, https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
         // They should be turned into formula eventually
