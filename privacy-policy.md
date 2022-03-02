@@ -3,7 +3,7 @@ Persian Calendar is developed and maintained by individual volunteers and not re
 What data the Persian Calendar app might collect, store and process
 ===
 
-The app only records data strictly necessary for its function, which is the app settings, last shown tab, last installed version, whether language snackbar is shown already and very minor things like that. The app does not include any advertisement libraries or any 3rd party tracking (analytics) code, such as Google Analytics.
+The app only records data strictly necessary for its function, which is the app settings, last shown tab, last installed version, and very minor things like that. The app does not include any advertisement libraries or any 3rd party tracking (analytics) code, such as Google Analytics.
 
 All data provided and created when using the app is stored locally on your device. The app does not send or upload your data as it doesn't get Internet access from the system.
 
