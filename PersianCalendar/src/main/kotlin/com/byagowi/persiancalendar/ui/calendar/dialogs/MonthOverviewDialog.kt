@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.ColorInt
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.isVisible
@@ -29,6 +30,7 @@ import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.calendarType
@@ -115,7 +117,10 @@ fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
                             )
                         }) {}
                     },
-                    MonthOverviewItemAdapter(activity, formatEventsList(events, false))
+                    MonthOverviewItemAdapter(
+                        activity,
+                        formatEventsList(events, false, activity.resolveColor(R.attr.colorHoliday)),
+                    )
                 )
             }
         )
@@ -134,8 +139,9 @@ private fun createEventsList(
     }
 }
 
-private fun formatEventsList(events: Map<Jdn, List<CalendarEvent<*>>>, isPrint: Boolean):
-        List<Pair<Jdn, CharSequence>> {
+private fun formatEventsList(
+    events: Map<Jdn, List<CalendarEvent<*>>>, isPrint: Boolean, @ColorInt holidayColor: Int
+): List<Pair<Jdn, CharSequence>> {
     val result = events.toList().sortedBy { (jdn, _) -> jdn.value }.mapNotNull { (jdn, events) ->
         val holidays = getEventsTitle(
             events, holiday = true, compact = isPrint, showDeviceCalendarEvents = false,
@@ -147,7 +153,7 @@ private fun formatEventsList(events: Map<Jdn, List<CalendarEvent<*>>>, isPrint: 
         )
         if (holidays.isEmpty() && nonHolidays.isEmpty()) null
         else jdn to buildSpannedString {
-            if (holidays.isNotEmpty()) color(Color.RED) { append(holidays) }
+            if (holidays.isNotEmpty()) color(holidayColor) { append(holidays) }
             if (nonHolidays.isNotEmpty()) {
                 if (holidays.isNotEmpty()) appendLine()
                 append(nonHolidays)
@@ -254,7 +260,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     }
     table("events") {
         tr {
-            val titles = formatEventsList(events, true)
+            val titles = formatEventsList(events, true, Color.RED)
             if (titles.isEmpty()) return@tr
             val sizes = titles.map { it.second.toString().length }
                 .runningFold(0) { acc, it -> acc + it }
