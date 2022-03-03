@@ -224,8 +224,9 @@ dependencies {
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.5")
-    minApi21Implementation("com.google.accompanist:accompanist-flowlayout:0.23.1")
-    minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:0.23.1")
+    val accompanistVersion = "0.23.1"
+    minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
+    minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
     minApi21Implementation("androidx.compose.material:material:$composeSecondaryVersion")
     minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha06")
@@ -245,12 +246,14 @@ dependencies {
     // testImplementation("org.json:json:20210307")
     // testImplementation("com.ibm.icu:icu4j:68.2")
 
-    androidTestImplementation("androidx.test:runner:1.4.0")
-    androidTestImplementation("androidx.test:rules:1.4.0")
-    androidTestImplementation("androidx.test:core-ktx:1.4.0")
+    val androidTestVersion = "1.4.0"
+    androidTestImplementation("androidx.test:runner:$androidTestVersion")
+    androidTestImplementation("androidx.test:rules:$androidTestVersion")
+    androidTestImplementation("androidx.test:core-ktx:$androidTestVersion")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.4.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    val espressoVersion = "3.4.0"
+    androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
+    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }
