@@ -174,7 +174,6 @@ android {
 }
 
 val minApi21Implementation by configurations
-val nightlyImplementation by configurations
 
 dependencies {
     implementation("com.github.persian-calendar:equinox:2.0.0")
@@ -215,12 +214,14 @@ dependencies {
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("com.android.support:multidex:2.0.0")
 
-    // For development builds only, they aren't and most likely won't ever be used in stable releases
-    nightlyImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
-    // BoM specifies individual Firebase libraries versions so we don't need to.
-    nightlyImplementation("com.google.firebase:firebase-crashlytics-ktx")
-    nightlyImplementation("com.google.firebase:firebase-analytics-ktx")
-    nightlyImplementation("com.google.firebase:firebase-perf-ktx")
+    if (isNightlyBuild) {
+        // For development builds only, they aren't and most likely won't ever be used in stable releases
+        implementation(platform("com.google.firebase:firebase-bom:29.1.0"))
+        // BoM specifies individual Firebase libraries versions so we don't need to.
+        implementation("com.google.firebase:firebase-crashlytics-ktx")
+        implementation("com.google.firebase:firebase-analytics-ktx")
+        implementation("com.google.firebase:firebase-perf-ktx")
+    }
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.5")
