@@ -59,6 +59,15 @@ value class Jdn(val value: Long) {
 
     val dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
+    fun calculatePersianSeasonPassedDaysAndCount(): Pair<Int, Int> {
+        val persianDate = this.toPersianCalendar()
+        val season = (persianDate.month - 1) / 3
+        val seasonBeginning = PersianDate(persianDate.year, season * 3 + 1, 1)
+        val seasonBeginningJdn = Jdn(seasonBeginning)
+        return this - seasonBeginningJdn + 1 to
+                Jdn(seasonBeginning.monthStartOfMonthsDistance(3)) - seasonBeginningJdn
+    }
+
     companion object {
         fun today() = Jdn(Date().toJavaCalendar().toCivilDate())
     }

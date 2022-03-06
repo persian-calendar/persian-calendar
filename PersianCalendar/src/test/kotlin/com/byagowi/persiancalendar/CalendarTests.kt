@@ -491,4 +491,68 @@ class CalendarTests {
             assertEquals(21, d)
         }
     }
+
+    @Test
+    fun `season passed days`() {
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1400, 12, 15)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(75, seasonPassedDays)
+            assertEquals(89, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1400, 10, 1)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(1, seasonPassedDays)
+            assertEquals(89, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1400, 12, 29)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(89, seasonPassedDays)
+            assertEquals(89, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1399, 12, 30)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(90, seasonPassedDays)
+            assertEquals(90, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1399, 9, 30)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(90, seasonPassedDays)
+            assertEquals(90, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1399, 8, 30)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(60, seasonPassedDays)
+            assertEquals(90, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1399, 7, 30)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(30, seasonPassedDays)
+            assertEquals(90, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1399, 6, 31)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(93, seasonPassedDays)
+            assertEquals(93, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1399, 4, 1)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(1, seasonPassedDays)
+            assertEquals(93, seasonDaysCount)
+        }
+        run {
+            val jdn = Jdn(CalendarType.SHAMSI, 1399, 3, 31)
+            val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+            assertEquals(93, seasonPassedDays)
+            assertEquals(93, seasonDaysCount)
+        }
+    }
 }

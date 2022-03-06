@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getZodiacInfo
-import io.github.persiancalendar.calendar.PersianDate
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
@@ -121,12 +120,9 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             it.isVisible = equinox.isNotEmpty()
         }
 
-        val persian = (date as? PersianDate) ?: jdn.toPersianCalendar()
-        val season = (persian.month - 1) / 3
-        val seasonMonthsLength = if (season < 2) 31 else 30
-        binding.seasonProgress.max = seasonMonthsLength * 3
-        binding.seasonProgress.progress = (persian.month - season * 3 - 1) * seasonMonthsLength +
-                persian.dayOfMonth
+        val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
+        binding.seasonProgress.max = seasonDaysCount
+        binding.seasonProgress.progress = seasonPassedDays
         binding.monthProgress.max = mainCalendar.getMonthLength(date.year, date.month)
         binding.monthProgress.progress = date.dayOfMonth
         binding.yearProgress.max = endOfYearJdn - startOfYearJdn
