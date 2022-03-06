@@ -401,4 +401,6 @@
     <string name="spring">الربيع</string>
     <string name="tropical">مدارية</string>
     <string name="calculator">حاسبة</string>
+    <string name="chinese_calendar">التقويم الصيني</string>
+    <string name="chinese">صيني</string>
 </resources>
