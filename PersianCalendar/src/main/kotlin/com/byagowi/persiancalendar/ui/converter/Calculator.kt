@@ -60,11 +60,21 @@ fun eval(expr: String): Double {
     return rootOp().also { if (index < expr.length) error("Invalid expression at $index") }
 }
 
+enum class Expression(transform: (List<Pair<Token, String>>) -> List<Pair<Token, String>>) {
+    NULL({ it }),
+    EXPONENTIATION_EXPRESSION({ it }),
+    PARENTHESIZED_EXPRESSION({ it }),
+    MULTIPLICATIVE_EXPRESSION({ it }),
+    ADDITIVE_EXPRESSION({ it })
+}
+
 @OptIn(ExperimentalStdlibApi::class)
 enum class Token(val matcher: Regex) {
     NUMBER(Regex("-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?")),
     SYMBOL(Regex("[a-zA-Z_]+")),
-    OPERATOR(Regex("[,()\\[\\]+-/%^]"));
+    MULTIPLICATIVE_OPERATOR(Regex("[*/%]")),
+    ADDITIVE_OPERATOR(Regex("[+-]")),
+    OPERATOR(Regex("[,()^]"));
 
     companion object {
         fun tokenize(text: String): List<Pair<Token, String>> = buildList {

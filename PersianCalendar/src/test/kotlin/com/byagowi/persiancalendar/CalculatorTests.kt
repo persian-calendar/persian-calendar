@@ -127,7 +127,7 @@ class CalculatorTests {
     @Test
     fun `Test tokenizer`() {
         val result = Token.tokenize(" sf + 234 / sf(123 + (213 / 123), 23) + sin(2) ")
-        val expected = "sf+234/int(123+(213/123),23)+sin(2)"
+        val expected = "sf+234/sf(123+(213/123),23)+sin(2)"
         assertEquals(expected, result.joinToString("") { it.second })
     }
 }
