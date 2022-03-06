@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar
 
+import android.widget.MultiAutoCompleteTextView
+import com.byagowi.persiancalendar.ui.converter.Token
 import com.byagowi.persiancalendar.ui.converter.eval
 import com.byagowi.persiancalendar.ui.converter.timeCalculator
 import org.junit.Assert.assertEquals
@@ -120,5 +122,12 @@ class CalculatorTests {
         assertThrows("Invalid braces", IllegalStateException::class.java) {
             eval("7 / 5 * ((2 + 2) / (((5 -7) + 2) * 2)")
         }
+    }
+
+    @Test
+    fun `Test tokenizer`() {
+        val result = Token.tokenize(" sf + 234 / sf(123 + (213 / 123), 23) + sin(2) ")
+        val expected = "sf+234/int(123+(213/123),23)+sin(2)"
+        assertEquals(expected, result.joinToString("") { it.second })
     }
 }
