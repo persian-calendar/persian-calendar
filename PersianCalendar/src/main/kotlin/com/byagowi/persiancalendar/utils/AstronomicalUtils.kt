@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.icu.util.ChineseCalendar
 import android.os.Build
-import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled

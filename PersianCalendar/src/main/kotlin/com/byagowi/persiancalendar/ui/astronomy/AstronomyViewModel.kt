@@ -1,14 +1,10 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.lifecycle.ViewModel
-import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.utils.toCivilDate
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
-import java.util.*
 
 class AstronomyViewModel : ViewModel() {
     private val _isTropical = MutableStateFlow(false)

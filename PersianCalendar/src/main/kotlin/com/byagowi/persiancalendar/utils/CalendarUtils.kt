@@ -37,7 +37,6 @@ import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
-import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
 import java.util.*
 import kotlin.math.abs
