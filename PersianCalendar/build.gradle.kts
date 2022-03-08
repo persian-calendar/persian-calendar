@@ -4,7 +4,10 @@ operator fun File.div(child: String) = File(this, child)
 fun String.execute() = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
-val isNightlyBuild = gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
+// Firebase is exclusively used in nightly builds which even
+// there can be disabled using DISABLE_FIREBASE environment variable
+val enableFirebaseInNightlyBuilds = System.getenv("DISABLE_FIREBASE") == null &&
+        gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
 
 plugins {
     id("com.android.application")
@@ -14,7 +17,7 @@ plugins {
     id("io.github.persiancalendar.appbuildplugin") apply true
 }
 
-if (isNightlyBuild) {
+if (enableFirebaseInNightlyBuilds) {
     plugins.apply("com.google.gms.google-services")
     plugins.apply("com.google.firebase.firebase-perf")
     plugins.apply("com.google.firebase.crashlytics")
@@ -62,7 +65,7 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdk = if (isNightlyBuild) 19 else 17
+        minSdk = if (enableFirebaseInNightlyBuilds) 19 else 17
         targetSdk = 31
         versionCode = 740
         versionName = "7.4.0"
@@ -214,7 +217,7 @@ dependencies {
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("com.android.support:multidex:2.0.0")
 
-    if (isNightlyBuild) {
+    if (enableFirebaseInNightlyBuilds) {
         // For development builds only, they aren't and most likely won't ever be used in stable releases
         implementation(platform("com.google.firebase:firebase-bom:29.1.0"))
         // BoM specifies individual Firebase libraries versions so we don't need to.
