@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,18 +21,19 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.google.android.material.composethemeadapter.MdcTheme
 
-fun showEmailDialog(activity: FragmentActivity, onSuccess: (String) -> Unit) =
-    showComposeDialog(activity) { EmailAlertDialog(it, onSuccess) }
+fun showEmailDialog(activity: FragmentActivity) =
+    showComposeDialog(activity) { EmailAlertDialog(it) }
 
 @Composable
-private fun EmailAlertDialog(closeDialog: () -> Unit, onSuccess: (String) -> Unit) {
+private fun EmailAlertDialog(closeDialog: () -> Unit) {
     val message = remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = { closeDialog() },
         confirmButton = {
+            val context = LocalContext.current
             TextButton(onClick = {
                 closeDialog()
-                onSuccess(message.value)
+                launchEmailIntent(context, message.value)
             }) { Text(stringResource(R.string.continue_button)) }
         },
         dismissButton = {
@@ -58,4 +60,4 @@ private fun EmailAlertDialog(closeDialog: () -> Unit, onSuccess: (String) -> Uni
 
 @Preview
 @Composable
-private fun EmailAlertDialogPreview() = MdcTheme { EmailAlertDialog({}, {}) }
+private fun EmailAlertDialogPreview() = MdcTheme { EmailAlertDialog {} }

@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
@@ -36,7 +35,6 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.android.material.chip.Chip
-import com.google.android.material.snackbar.Snackbar
 
 class AboutFragment : Fragment(R.layout.fragment_about) {
 
@@ -128,9 +126,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
         binding.reportBug.setOnClickListener { launchReportIntent() }
         binding.reportBugTitle.putLineStartIcon(R.drawable.ic_bug)
 
-        binding.email.setOnClickListener click@{
-            showEmailDialog(activity ?: return@click, ::launchEmailIntent)
-        }
+        binding.email.setOnClickListener click@{ showEmailDialog(activity ?: return@click) }
         binding.emailTitle.putLineStartIcon(R.drawable.ic_email)
 
         setupContributorsList(binding)
@@ -182,37 +178,6 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
             val uri = "https://github.com/persian-calendar/persian-calendar/issues/new".toUri()
             startActivity(Intent(Intent.ACTION_VIEW, uri))
         }.onFailure(logException)
-    }
-
-    private fun launchEmailIntent(message: String) {
-        val email = "persian-calendar-admin@googlegroups.com"
-        val subject = getString(R.string.app_name)
-        val body = """$message
-
-
-
-
-===Device Information===
-Manufacturer: ${Build.MANUFACTURER}
-Model: ${Build.MODEL}
-Android Version: ${Build.VERSION.RELEASE}
-App Version Code: ${context?.packageName} ${BuildConfig.VERSION_CODE}"""
-
-        // https://stackoverflow.com/a/62597382
-        val selectorIntent = Intent(Intent.ACTION_SENDTO).apply {
-            data = "mailto:$email?subject=${Uri.encode(subject)}&body=${Uri.encode(body)}".toUri()
-        }
-        val emailIntent = Intent(Intent.ACTION_SEND).apply {
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
-            putExtra(Intent.EXTRA_SUBJECT, subject)
-            putExtra(Intent.EXTRA_TEXT, body)
-            selector = selectorIntent
-        }
-        runCatching {
-            startActivity(Intent.createChooser(emailIntent, getString(R.string.about_sendMail)))
-        }.onFailure(logException).onFailure {
-            Snackbar.make(view ?: return, R.string.about_noClient, Snackbar.LENGTH_SHORT).show()
-        }
     }
 
     private fun shareApplication() {

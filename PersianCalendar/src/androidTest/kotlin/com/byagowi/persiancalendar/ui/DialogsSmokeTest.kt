@@ -67,7 +67,7 @@ class DialogsSmokeTest {
             { showDistrictsDialog(it, listOf("a", "b", "c")) },
             { showGPSLocationDialog(it, it) },
             { showGPSLocationDialog(it, it) },
-            { showEmailDialog(it) {} },
+            { showEmailDialog(it) },
             { showLanguagePreferenceDialog(it) },
             { showLocationPreferenceDialog(it) },
         ).forEach { launcher ->
