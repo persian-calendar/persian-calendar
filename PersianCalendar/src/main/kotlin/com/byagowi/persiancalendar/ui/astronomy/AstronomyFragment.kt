@@ -28,12 +28,10 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.*
+import kotlin.math.abs
 
 class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -136,7 +134,7 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val current = System.currentTimeMillis()
                 if (current - lastButtonClickTimestamp < 2000) return
-                if (current >= latestVibration + 250L) {
+                if (current >= latestVibration + 35_000 / abs(dx)) {
                     binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                     latestVibration = current
                 }
