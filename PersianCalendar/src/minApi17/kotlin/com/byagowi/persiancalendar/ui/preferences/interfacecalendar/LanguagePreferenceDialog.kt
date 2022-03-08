@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
-import android.app.Activity
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
@@ -8,7 +8,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLanguage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun showLanguagePreferenceDialog(activity: Activity) {
+fun showLanguagePreferenceDialog(activity: FragmentActivity) {
     val languages = Language.values().toList()
     val names = languages.map { it.nativeName }.toTypedArray()
     MaterialAlertDialogBuilder(activity)

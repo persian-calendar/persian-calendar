@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.app.Activity
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DialogEmailBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun showEmailDialog(activity: Activity, onSuccess: (String) -> Unit) {
+fun showEmailDialog(activity: FragmentActivity, onSuccess: (String) -> Unit) {
     val emailBinding = DialogEmailBinding.inflate(activity.layoutInflater)
     MaterialAlertDialogBuilder(activity)
         .setView(emailBinding.root)
