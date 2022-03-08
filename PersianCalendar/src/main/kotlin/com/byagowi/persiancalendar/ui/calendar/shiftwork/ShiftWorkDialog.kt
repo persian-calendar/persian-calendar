@@ -16,10 +16,7 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.global.shiftWorkRecurs
-import com.byagowi.persiancalendar.global.shiftWorkStartingJdn
 import com.byagowi.persiancalendar.global.shiftWorkTitles
-import com.byagowi.persiancalendar.global.shiftWorks
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
@@ -28,40 +25,41 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
-    var isFirstSetup = false
-    var jdn = shiftWorkStartingJdn ?: run {
-        isFirstSetup = true
-        selectedJdn
-    }
+    val viewModel = ShiftWorkViewModel()
+    // from already initialized global variable till a better solution
+    fillViewModelFromGlobalVariables(viewModel, selectedJdn)
 
     val binding = ShiftWorkSettingsBinding.inflate(activity.layoutInflater, null, false)
     binding.recyclerView.layoutManager = LinearLayoutManager(activity)
-    val shiftWorkItemAdapter = ShiftWorkItemsAdapter(
-        shiftWorks.ifEmpty { listOf(ShiftWorkRecord("d", 0)) },
-        binding
-    )
+    val shiftWorkItemAdapter = ShiftWorkItemsAdapter(viewModel.shiftWorks.value, binding)
     binding.recyclerView.adapter = shiftWorkItemAdapter
 
+    // TODO: Follow viewModel.isFirstSetup instead
     binding.description.text = activity.getString(
-        if (isFirstSetup) R.string.shift_work_starting_date
+        if (viewModel.isFirstSetup.value) R.string.shift_work_starting_date
         else R.string.shift_work_starting_date_edit,
-        formatDate(jdn.toCalendar(mainCalendar))
+        formatDate(viewModel.startingDate.value.toCalendar(mainCalendar))
     )
 
     binding.resetLink.setOnClickListener {
-        jdn = selectedJdn
+        viewModel.changeStartingDate(selectedJdn)
+        // TODO: Merge with above and follow viewModel.isFirstSetup instead
         binding.description.text = activity.getString(
-            R.string.shift_work_starting_date, formatDate(jdn.toCalendar(mainCalendar))
+            R.string.shift_work_starting_date,
+            formatDate(viewModel.startingDate.value.toCalendar(mainCalendar))
         )
+        // TODO: Move some parts of it to view model itself
         shiftWorkItemAdapter.reset()
     }
-    binding.recurs.isChecked = shiftWorkRecurs
+    binding.recurs.isChecked = viewModel.recurs.value
+    binding.recurs.setOnCheckedChangeListener { _, isChecked -> viewModel.changeRecurs(isChecked) }
     binding.root.onCheckIsTextEditor()
 
     MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
-            saveShiftWorkState(activity, shiftWorkItemAdapter.rows, jdn, binding.recurs.isChecked)
+            viewModel.changeShiftWorks(shiftWorkItemAdapter.rows)
+            saveShiftWorkState(activity, viewModel)
         }
         .setNegativeButton(R.string.cancel, null)
         .create()
