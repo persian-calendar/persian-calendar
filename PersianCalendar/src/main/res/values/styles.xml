@@ -69,7 +69,7 @@
         </item>
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
         <!-- Set Android 5 recent apps tab color https://stackoverflow.com/q/26899820 -->
-        <item name="android:colorPrimary" tools:targetApi="lollipop">@color/light_primary</item>
+        <item name="colorPrimary" tools:targetApi="lollipop">@color/light_primary</item>
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.Material3.Dark.NoActionBar">
@@ -381,7 +381,7 @@
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
-        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
+        <item name="fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
     </style>
 
     <style name="AboutCard">
@@ -427,7 +427,7 @@
     </style>
 
     <style name="TransparentBottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="background">@android:color/transparent</item>
     </style>
 
     <style name="astronomyChip">
