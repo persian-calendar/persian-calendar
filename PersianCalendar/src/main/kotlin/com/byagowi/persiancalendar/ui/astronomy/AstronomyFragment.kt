@@ -28,6 +28,9 @@ import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.*
@@ -128,9 +131,15 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         var lastButtonClickTimestamp = System.currentTimeMillis()
         binding.slider.smoothScrollBy(200 * viewDirection, 0)
 
+        var latestVibration = 0L
         binding.slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (System.currentTimeMillis() - lastButtonClickTimestamp < 2000) return
+                val current = System.currentTimeMillis()
+                if (current - lastButtonClickTimestamp < 2000) return
+                if (current >= latestVibration + 250L) {
+                    binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                    latestVibration = current
+                }
                 viewModel.addTime(dx * viewDirection)
                 update(true)
             }
