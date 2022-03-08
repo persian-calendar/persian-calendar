@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.utils
 
-import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

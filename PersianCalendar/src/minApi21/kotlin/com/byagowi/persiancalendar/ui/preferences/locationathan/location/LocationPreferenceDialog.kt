@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

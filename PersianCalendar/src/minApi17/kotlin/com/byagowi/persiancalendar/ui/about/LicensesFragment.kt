@@ -13,9 +13,7 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ReplacementSpan
 import android.text.util.Linkify
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.text.scale
