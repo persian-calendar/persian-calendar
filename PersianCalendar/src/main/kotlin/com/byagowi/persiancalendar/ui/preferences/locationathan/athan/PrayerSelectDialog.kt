@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
-import android.app.Activity
 import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.ATHANS_LIST
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
 import com.byagowi.persiancalendar.utils.startAthan
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun showPrayerSelectDialog(activity: Activity) {
+fun showPrayerSelectDialog(activity: FragmentActivity) {
     val alarms = (activity.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
         .splitIgnoreEmpty(",").toMutableSet()
 
@@ -31,7 +31,7 @@ fun showPrayerSelectDialog(activity: Activity) {
         .show()
 }
 
-fun showPrayerSelectPreviewDialog(activity: Activity) {
+fun showPrayerSelectPreviewDialog(activity: FragmentActivity) {
     val prayTimesNames = ATHANS_LIST.map { activity.getString(getPrayTimeName(it)) }.toTypedArray()
     MaterialAlertDialogBuilder(activity)
         .setTitle(R.string.preview)

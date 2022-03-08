@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
 
-import android.app.Activity
 import android.media.AudioManager
 import android.media.RingtoneManager
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.utils.getAthanUri
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.slider.Slider
 
-fun showAthanVolumeDialog(activity: Activity) {
+fun showAthanVolumeDialog(activity: FragmentActivity) {
     var volume = activity.athanVolume
 
     val audioManager = activity.getSystemService<AudioManager>() ?: return

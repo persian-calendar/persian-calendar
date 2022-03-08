@@ -1,15 +1,15 @@
 package com.byagowi.persiancalendar.ui.preferences
 
-import android.app.Activity
 import android.text.style.TextAppearanceSpan
 import android.widget.TextView
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlin.math.roundToInt
 
-fun showTypographyDemoDialog(activity: Activity) {
+fun showTypographyDemoDialog(activity: FragmentActivity) {
     val text = buildSpannedString {
         textAppearances.forEach { (appearanceName, appearanceId) ->
             val textAppearance = TextAppearanceSpan(activity, appearanceId)

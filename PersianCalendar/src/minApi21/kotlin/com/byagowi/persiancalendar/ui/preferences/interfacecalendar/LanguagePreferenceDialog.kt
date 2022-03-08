@@ -1,12 +1,7 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
 
-import android.app.Activity
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.RadioButton
@@ -20,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
@@ -28,7 +24,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLanguage
 import com.google.android.material.composethemeadapter.MdcTheme
 
-fun showLanguagePreferenceDialog(activity: Activity) =
+fun showLanguagePreferenceDialog(activity: FragmentActivity) =
     showComposeDialog(activity) { LanguagePreferenceDialog(it) }
 
 @Composable

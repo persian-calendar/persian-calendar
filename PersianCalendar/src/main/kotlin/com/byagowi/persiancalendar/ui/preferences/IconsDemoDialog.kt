@@ -1,9 +1,9 @@
 package com.byagowi.persiancalendar.ui.preferences
 
-import android.app.Activity
 import android.graphics.Color
 import android.view.ViewGroup
 import androidx.core.view.setMargins
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -17,7 +17,7 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.TriangleEdgeTreatment
 
 // Debug only dialog to check validity of dynamic icons generation
-fun showIconsDemoDialog(activity: Activity) {
+fun showIconsDemoDialog(activity: FragmentActivity) {
     MaterialAlertDialogBuilder(activity)
         .setView(RecyclerView(activity).also {
             it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

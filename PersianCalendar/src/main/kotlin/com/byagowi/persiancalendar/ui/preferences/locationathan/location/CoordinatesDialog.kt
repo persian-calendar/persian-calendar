@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
-import android.app.Activity
 import android.location.Geocoder
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
@@ -28,7 +28,9 @@ import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 fun showCoordinatesDialog(
-    activity: Activity, viewLifecycleOwner: LifecycleOwner, inputCoordinates: Coordinates? = null
+    activity: FragmentActivity,
+    viewLifecycleOwner: LifecycleOwner,
+    inputCoordinates: Coordinates? = null
 ) {
     val coordinates = inputCoordinates ?: coordinates
     val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)

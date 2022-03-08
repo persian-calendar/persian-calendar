@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.about
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
-import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
@@ -41,6 +40,7 @@ import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -112,7 +112,13 @@ class DeviceInformationFragment : Fragment(R.layout.fragment_device_information)
             binding.toolbar.menu.add(R.string.share).also { menu ->
                 menu.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
                 menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            }.onClick { activity?.shareTextFile(adapter.asHtml(), "device.html", "text/html") }
+            }.onClick {
+                activity?.shareTextFile(
+                    adapter.asHtml(),
+                    "device.html",
+                    "text/html"
+                )
+            }
             binding.toolbar.menu.add("Print").also { menu ->
                 menu.setIcon(R.drawable.ic_print)
                 menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
@@ -326,7 +332,7 @@ private fun humanReadableByteCountBin(bytes: Long): String = when {
     else -> "$bytes bytes"
 }
 
-private class DeviceInformationAdapter(private val activity: Activity) :
+private class DeviceInformationAdapter(private val activity: FragmentActivity) :
     ListAdapter<DeviceInformationAdapter.Item, DeviceInformationAdapter.ViewHolder>(
         object : DiffUtil.ItemCallback<Item>() {
             override fun areItemsTheSame(old: Item, new: Item) = old.title == new.title

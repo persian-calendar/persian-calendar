@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
 
-import android.app.Activity
 import androidx.core.content.edit
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun showCalendarPreferenceDialog(activity: Activity, onEmpty: () -> Unit) {
+fun showCalendarPreferenceDialog(activity: FragmentActivity, onEmpty: () -> Unit) {
     val enabledCalendarTypes = enabledCalendars
     val orderedCalendarTypes =
         enabledCalendars + (CalendarType.values().toList() - enabledCalendars.toSet()) -
