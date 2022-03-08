@@ -1,9 +1,9 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.set
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.zxing.BarcodeFormat
@@ -28,7 +28,7 @@ private fun textToQrCodeBitmap(text: String): Bitmap {
     return bitmap
 }
 
-fun showQrCode(activity: Activity, text: String) {
+fun showQrCode(activity: AppCompatActivity, text: String) {
     MaterialAlertDialogBuilder(activity)
         .setView(ImageView(activity).also { it.setImageBitmap(textToQrCodeBitmap(text)) })
         .show()

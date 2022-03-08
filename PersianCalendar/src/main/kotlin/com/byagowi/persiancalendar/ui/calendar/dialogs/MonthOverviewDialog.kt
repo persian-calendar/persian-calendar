@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar.dialogs
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.view.Gravity
@@ -11,6 +10,7 @@ import androidx.annotation.ColorInt
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -68,7 +68,7 @@ import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-fun showMonthOverviewDialog(activity: Activity, date: AbstractDate) {
+fun showMonthOverviewDialog(activity: FragmentActivity, date: AbstractDate) {
     applyAppLanguage(activity)
     val events = createEventsList(activity, date)
 

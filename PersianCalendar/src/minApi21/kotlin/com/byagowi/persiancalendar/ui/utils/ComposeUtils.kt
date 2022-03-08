@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +9,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.databinding.FragmentComposeBinding
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.composethemeadapter.MdcTheme
 
-fun showComposeDialog(activity: Activity, dialog: @Composable ((closeDialog: () -> Unit) -> Unit)) {
+fun showComposeDialog(
+    activity: FragmentActivity,
+    dialog: @Composable ((closeDialog: () -> Unit) -> Unit)
+) {
     val decorView = (activity.window.decorView as? ViewGroup).debugAssertNotNull ?: return
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {

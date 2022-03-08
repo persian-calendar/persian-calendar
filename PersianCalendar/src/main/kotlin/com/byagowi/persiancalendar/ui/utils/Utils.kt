@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -38,6 +37,7 @@ import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
@@ -73,7 +73,7 @@ fun Context?.copyToClipboard(
     onSuccess(message)
 }.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 
-fun Activity.bringMarketPage() = runCatching {
+fun FragmentActivity.bringMarketPage() = runCatching {
     startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
 }.onFailure(logException).onFailure {
     runCatching {
@@ -100,7 +100,7 @@ fun Context.openHtmlInBrowser(html: String) = runCatching {
         .launchUrl(this, saveTextAsFile(html, "persian-calendar.html"))
 }.onFailure(logException).let {}
 
-fun Activity.shareText(text: String) = runCatching {
+fun FragmentActivity.shareText(text: String) = runCatching {
     ShareCompat.IntentBuilder(this)
         .setType("text/plain")
         .setChooserTitle(getString(R.string.date_converter))
@@ -108,7 +108,7 @@ fun Activity.shareText(text: String) = runCatching {
         .startChooser()
 }.onFailure(logException).let {}
 
-fun Activity.shareTextFile(text: String, fileName: String, mime: String) = runCatching {
+fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String) = runCatching {
     startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
         it.type = mime
         it.putExtra(Intent.EXTRA_STREAM, saveTextAsFile(text, fileName))
@@ -126,7 +126,7 @@ fun MaterialToolbar.setupMenuNavigation() {
 }
 
 // https://stackoverflow.com/a/58249983
-private tailrec fun Context.getActivity(): Activity? = this as? Activity
+private tailrec fun Context.getActivity(): FragmentActivity? = this as? FragmentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 @ColorInt
@@ -185,7 +185,7 @@ fun View.setupExpandableAccessibilityDescription() {
     })
 }
 
-fun Activity.askForLocationPermission() {
+fun FragmentActivity.askForLocationPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     MaterialAlertDialogBuilder(this)
         .setTitle(R.string.location_access)
@@ -203,7 +203,7 @@ fun Activity.askForLocationPermission() {
         .show()
 }
 
-fun Activity.askForCalendarPermission() {
+fun FragmentActivity.askForCalendarPermission() {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
     MaterialAlertDialogBuilder(this)
         .setTitle(R.string.calendar_access)

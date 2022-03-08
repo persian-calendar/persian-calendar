@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -16,6 +15,7 @@ import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.isVisible
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -45,7 +45,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
-fun showGPSLocationDialog(activity: Activity, viewLifecycleOwner: LifecycleOwner) {
+fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: LifecycleOwner) {
     if (ActivityCompat.checkSelfPermission(
             activity, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(

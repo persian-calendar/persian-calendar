@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar.ui.preferences.common
 
-import android.app.Activity
 import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.core.content.edit
 import androidx.core.view.setPadding
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
 import com.byagowi.persiancalendar.R
@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.util.*
 
-fun showColorPickerDialog(activity: Activity, isBackgroundPick: Boolean, key: String) {
+fun showColorPickerDialog(activity: FragmentActivity, isBackgroundPick: Boolean, key: String) {
     val initialColor = activity.appPrefs.getString(key, null)?.let(Color::parseColor)
         ?: if (isBackgroundPick) DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
         else DEFAULT_SELECTED_WIDGET_TEXT_COLOR
@@ -23,7 +23,7 @@ fun showColorPickerDialog(activity: Activity, isBackgroundPick: Boolean, key: St
 }
 
 private fun showColorPickerDialog(
-    activity: Activity, isBackgroundPick: Boolean, @ColorInt initialColor: Int,
+    activity: FragmentActivity, isBackgroundPick: Boolean, @ColorInt initialColor: Int,
     onResult: (String) -> Unit
 ) {
     val colorPickerView = ColorPickerView(activity).also {

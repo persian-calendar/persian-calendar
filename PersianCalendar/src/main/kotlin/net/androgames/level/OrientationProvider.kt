@@ -1,7 +1,5 @@
 package net.androgames.level
 
-import android.app.Activity
-import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -9,6 +7,7 @@ import android.hardware.SensorManager
 import android.os.Build
 import android.view.Surface
 import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.abs
 import kotlin.math.asin
@@ -34,7 +33,8 @@ import kotlin.math.min
  * You should have received a copy of the GNU General Public License
  * along with Level. If not, see <http://www.gnu.org/licenses/>
  */
-class OrientationProvider(activity: Activity, private val view: LevelView) : SensorEventListener {
+class OrientationProvider(activity: FragmentActivity, private val view: LevelView) :
+    SensorEventListener {
 
     /**
      * Rotation Matrix

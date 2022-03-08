@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan.location
 
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +23,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
@@ -32,7 +33,7 @@ import com.byagowi.persiancalendar.utils.saveCity
 import com.byagowi.persiancalendar.utils.sortCityNames
 import com.google.android.material.composethemeadapter.MdcTheme
 
-fun showLocationPreferenceDialog(activity: Activity) =
+fun showLocationPreferenceDialog(activity: FragmentActivity) =
     showComposeDialog(activity) { LocationPreferenceDialog(it) { showProvinceDialog(activity) } }
 
 @Composable

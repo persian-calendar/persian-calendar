@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.preferences.locationathan
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -9,6 +8,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
 import androidx.activity.result.contract.ActivityResultContract
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.preference.Preference
@@ -160,7 +160,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 )
 
         override fun parseResult(resultCode: Int, intent: Intent?): String? =
-            if (resultCode == Activity.RESULT_OK)
+            if (resultCode == AppCompatActivity.RESULT_OK)
                 intent
                     ?.getParcelableExtra<Parcelable?>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
                     ?.toString()

@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,11 +15,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.google.android.material.composethemeadapter.MdcTheme
 
-fun showEmailDialog(activity: Activity, onSuccess: (String) -> Unit) =
+fun showEmailDialog(activity: FragmentActivity, onSuccess: (String) -> Unit) =
     showComposeDialog(activity) { EmailAlertDialog(it, onSuccess) }
 
 @Composable
