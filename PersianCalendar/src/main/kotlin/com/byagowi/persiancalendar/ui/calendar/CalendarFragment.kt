@@ -595,9 +595,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         toolbar.menu.add(R.string.shift_work_settings).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                showShiftWorkDialog(activity ?: return@onClick, viewModel.selectedDay) {
-                    findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
-                }
+                showShiftWorkDialog(activity ?: return@onClick, viewModel.selectedDay)
             }
         }
         toolbar.menu.add(R.string.month_overview).also {

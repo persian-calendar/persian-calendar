@@ -5,15 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.PREF_SHIFT_WORK_RECURS
-import com.byagowi.persiancalendar.PREF_SHIFT_WORK_SETTING
-import com.byagowi.persiancalendar.PREF_SHIFT_WORK_STARTING_JDN
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
@@ -26,16 +22,12 @@ import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.shiftWorks
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
-import com.byagowi.persiancalendar.utils.putJdn
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn, onSuccess: () -> Unit) {
-
+fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
     var isFirstSetup = false
     var jdn = shiftWorkStartingJdn ?: run {
         isFirstSetup = true
@@ -69,19 +61,7 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn, onSuccess:
     MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
-            val result = shiftWorkItemAdapter.rows.filter { it.length != 0 }.joinToString(",") {
-                "${it.type.replace("=", "").replace(",", "")}=${it.length}"
-            }
-
-            activity.appPrefs.edit {
-                if (result.isEmpty()) remove(PREF_SHIFT_WORK_STARTING_JDN)
-                else putJdn(PREF_SHIFT_WORK_STARTING_JDN, jdn)
-                putString(PREF_SHIFT_WORK_SETTING, result)
-                putBoolean(PREF_SHIFT_WORK_RECURS, binding.recurs.isChecked)
-            }
-
-            updateStoredPreference(activity)
-            onSuccess()
+            saveShiftWorkState(activity, shiftWorkItemAdapter.rows, jdn, binding.recurs.isChecked)
         }
         .setNegativeButton(R.string.cancel, null)
         .create()
