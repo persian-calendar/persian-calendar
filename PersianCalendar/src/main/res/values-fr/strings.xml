@@ -360,4 +360,6 @@
     <string name="summer">Été</string>
     <string name="tropical">Tropicale</string>
     <string name="calculator">Calculatrice</string>
+    <string name="chinese_calendar">Calendrier chinois</string>
+    <string name="chinese">chinois</string>
 </resources>

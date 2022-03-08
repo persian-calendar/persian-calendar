@@ -340,4 +340,9 @@
     <string name="nepali_calendar">尼泊尔历（维克拉姆历）</string>
     <string name="nepali_calendar_short">尼泊尔历</string>
     <string name="nepal">尼泊尔</string>
+    <string name="chinese_calendar">农历</string>
+    <string name="chinese">农历</string>
+    <string name="week_days_name_column">日历区域的星期栏，%1$s</string>
+    <string name="equivalent_to">在其他日历中对应的日期为</string>
+    <string name="holiday_reason">这一天是节假日，%1$s</string>
 </resources>

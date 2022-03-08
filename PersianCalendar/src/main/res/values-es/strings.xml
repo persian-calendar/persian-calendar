@@ -365,4 +365,6 @@
     <string name="asr_hanafi_juristic">Método de Asr Hanafí para azán</string>
     <string name="high_latitudes_angle_based">Basado en ángulo</string>
     <string name="calculator">Calculadora</string>
+    <string name="chinese_calendar">Calendario chino</string>
+    <string name="chinese">chino</string>
 </resources>
