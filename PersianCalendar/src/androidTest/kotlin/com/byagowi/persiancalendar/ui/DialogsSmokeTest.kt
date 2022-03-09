@@ -43,7 +43,7 @@ class DialogsSmokeTest {
             { it.showAppIsOutDatedSnackbar() },
             { showDayPickerDialog(it, Jdn.today(), R.string.accept) {} },
             { showMonthOverviewDialog(it, Jdn.today().toCalendar(mainCalendar)) },
-            { showShiftWorkDialog(it, Jdn.today()) {} },
+            { showShiftWorkDialog(it, Jdn.today()) },
             { showQrCode(it, "http://example.com") },
             { showIconsDemoDialog(it) },
             { showTypographyDemoDialog(it) },
