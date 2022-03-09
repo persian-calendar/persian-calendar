@@ -63,8 +63,9 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
 
         val args by navArgs<PreferencesFragmentArgs>()
         val viewModel by viewModels<PreferencesViewModel>()
-        if (viewModel.selectedTab == PreferencesViewModel.DEFAULT_SELECTED_TAB)
+        if (viewModel.selectedTab.value == PreferencesViewModel.DEFAULT_SELECTED_TAB)
             viewModel.changeSelectedTab(args.tab)
+        val initiallySelectedTab = viewModel.selectedTab.value
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
@@ -85,7 +86,7 @@ class PreferencesFragment : Fragment(R.layout.fragment_settings) {
             tab.text = tabs[i].second.joinToString(getString(R.string.spaced_and)) { getString(it) }
         }.attach()
         view.post {
-            binding.viewPager.setCurrentItem(viewModel.selectedTab, true)
+            binding.viewPager.setCurrentItem(initiallySelectedTab, true)
             view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) }
         }
     }
