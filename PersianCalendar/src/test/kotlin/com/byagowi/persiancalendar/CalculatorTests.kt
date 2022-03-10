@@ -1,13 +1,11 @@
 package com.byagowi.persiancalendar
 
-import android.widget.MultiAutoCompleteTextView
 import com.byagowi.persiancalendar.ui.converter.Token
 import com.byagowi.persiancalendar.ui.converter.eval
 import com.byagowi.persiancalendar.ui.converter.timeCalculator
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThrows
-import org.junit.Test
-import java.lang.IllegalStateException
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Test
 
 class CalculatorTests {
 
@@ -105,21 +103,21 @@ class CalculatorTests {
 
     @Test
     fun `Test wrong expression`() {
-        assertThrows("Wrong Symbol", IllegalStateException::class.java) {
+        assertThrows(IllegalStateException::class.java) {
             assertEquals(2.5, eval("2 *-2 +aa  * 2 + 2 -2 / -4"), 1.0e-7)
         }
     }
 
     @Test
     fun `Test invalid expression`() {
-        assertThrows("Invalid expression", IllegalStateException::class.java) {
+        assertThrows(IllegalStateException::class.java) {
             eval("5+ 5 5 6 +  7")
         }
     }
 
     @Test
     fun `Test invalid braces`() {
-        assertThrows("Invalid braces", IllegalStateException::class.java) {
+        assertThrows(IllegalStateException::class.java) {
             eval("7 / 5 * ((2 + 2) / (((5 -7) + 2) * 2)")
         }
     }

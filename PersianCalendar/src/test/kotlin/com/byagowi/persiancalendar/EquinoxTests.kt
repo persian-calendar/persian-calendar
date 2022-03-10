@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar
 
 import io.github.persiancalendar.Equinox
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.util.*
 
 class EquinoxTests {
@@ -55,12 +55,12 @@ class EquinoxTests {
             listOf(2002, 3, 20, 22, 46, 12/*should be 2*/)
         ).forEach {
             calendar.time = Equinox.NORTHWARD_EQUINOX.inYear(it[0])
-            assertEquals(it[0].toString(), it[0], calendar[Calendar.YEAR])
-            assertEquals(it[0].toString(), it[1], calendar[Calendar.MONTH] + 1)
-            assertEquals(it[0].toString(), it[2], calendar[Calendar.DAY_OF_MONTH])
-            assertEquals(it[0].toString(), it[3], calendar[Calendar.HOUR_OF_DAY])
-            assertEquals(it[0].toString(), it[4], calendar[Calendar.MINUTE])
-            assertEquals(it[0].toString(), it[5], calendar[Calendar.SECOND])
+            assertEquals(it[0], calendar[Calendar.YEAR], it[0].toString())
+            assertEquals(it[1], calendar[Calendar.MONTH] + 1, it[0].toString())
+            assertEquals(it[2], calendar[Calendar.DAY_OF_MONTH], it[0].toString())
+            assertEquals(it[3], calendar[Calendar.HOUR_OF_DAY], it[0].toString())
+            assertEquals(it[4], calendar[Calendar.MINUTE], it[0].toString())
+            assertEquals(it[5], calendar[Calendar.SECOND], it[0].toString())
         }
 
         // And not having random crashes
