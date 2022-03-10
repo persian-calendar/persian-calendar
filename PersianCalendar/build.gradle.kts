@@ -4,10 +4,9 @@ operator fun File.div(child: String) = File(this, child)
 fun String.execute() = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
-// Firebase is exclusively used in nightly builds which even
-// there can be disabled using DISABLE_FIREBASE environment variable
-val enableFirebaseInNightlyBuilds = System.getenv("DISABLE_FIREBASE") == null &&
-        gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
+// Firebase is exclusively used in nightly builds not stable release
+val enableFirebaseInNightlyBuilds =
+    gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
 
 plugins {
     id("com.android.application")
