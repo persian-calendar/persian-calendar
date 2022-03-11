@@ -39,7 +39,7 @@ class EquinoxTests {
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1388.pdf
         "2009, 3, 20, 15, 13, 50" /*should be 39*/,
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1387.pdf
-        "2008, 3, 20, 2, 18, 17" /*should be 19*/,
+        "2008, 3, 20, 9, 18, 17" /*should be 19*/,
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1386.pdf
         "2007, 3, 21, 3, 37, 15" /*should be 26*/,
         // https://calendar.ut.ac.ir/Fa/Tyear/Data/full-1385.pdf
