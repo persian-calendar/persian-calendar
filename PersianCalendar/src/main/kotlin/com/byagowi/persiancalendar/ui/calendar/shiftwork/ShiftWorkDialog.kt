@@ -62,7 +62,6 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
             saveShiftWorkState(activity, viewModel)
         }
         .setNegativeButton(R.string.cancel, null)
-        .create()
         .show()
 }
 
