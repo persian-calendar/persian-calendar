@@ -36,6 +36,7 @@ inline fun PreferenceCategory.clickable(
 ) = this.addPreference(Preference(this.context).also {
     it.setOnPreferenceClickListener { onClick(); true /* it captures the click event */ }
     it.isIconSpaceReserved = false
+    it.layoutResource = R.layout.preference_layout
     block(it)
 })
 
@@ -108,5 +109,6 @@ inline fun PreferenceCategory.switch(
     it.key = key
     it.setDefaultValue(defaultValue)
     it.isIconSpaceReserved = false
+    it.layoutResource = R.layout.preference_layout
     block(it)
 })
