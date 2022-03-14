@@ -26,6 +26,7 @@ inline fun PreferenceScreen.section(
     category.key = title.toString() // turns title's int id to string to make expansion logic work
     category.setTitle(title)
     category.isIconSpaceReserved = false
+    category.layoutResource = R.layout.preference_category_layout
     this.addPreference(category)
     category.block()
 }
