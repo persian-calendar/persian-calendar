@@ -437,7 +437,7 @@
 |    \--- androidx.compose.ui:ui:1.1.1 (*)
 +--- androidx.compose.ui:ui:1.1.1 (*)
 +--- androidx.compose.material:material:1.1.1 (*)
-+--- androidx.compose.material3:material3:1.0.0-alpha06
++--- androidx.compose.material3:material3:1.0.0-alpha07
 |    +--- androidx.compose.foundation:foundation:1.1.0-rc01 -> 1.1.1 (*)
 |    +--- androidx.compose.material:material-icons-core:1.0.2 -> 1.1.1 (*)
 |    +--- androidx.compose.material:material-ripple:1.0.0 -> 1.1.1 (*)
