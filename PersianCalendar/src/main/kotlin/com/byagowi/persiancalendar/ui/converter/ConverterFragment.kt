@@ -108,12 +108,14 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
                         )
                     }
                     ConverterScreenMode.Distance -> {
+                        binding.resultText.textDirection = View.TEXT_DIRECTION_INHERIT
                         binding.resultText.text = calculateDaysDifference(
                             resources, viewModel.selectedDate, viewModel.secondSelectedDate,
                             viewModel.calendar
                         )
                     }
                     ConverterScreenMode.Calculator -> {
+                        binding.resultText.textDirection = View.TEXT_DIRECTION_LTR
                         binding.resultText.text = runCatching {
                             // running this inside a runCatching block is absolutely important
                             eval(binding.inputText.text?.toString() ?: "")
