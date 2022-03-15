@@ -188,6 +188,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     angle1 = 180 - angle1
                 }
             }
+            else -> Unit
         }
         // correction des angles affiches
         if (angle1 > 99.9f) {
