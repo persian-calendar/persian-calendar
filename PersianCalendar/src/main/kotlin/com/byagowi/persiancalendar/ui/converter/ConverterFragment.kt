@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -114,7 +115,8 @@ class ConverterFragment : Fragment(R.layout.fragment_converter) {
                     }
                     ConverterScreenMode.Calculator -> {
                         binding.resultText.text = runCatching {
-                            timeCalculator(binding.inputText.text?.toString() ?: "")
+                            // running this inside a runCatching block is absolutely important
+                            eval(binding.inputText.text?.toString() ?: "")
                         }.getOrElse { it.message }
                     }
                 }
