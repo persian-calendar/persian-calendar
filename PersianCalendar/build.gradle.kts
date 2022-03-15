@@ -5,8 +5,9 @@ fun String.execute() = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
 // Firebase is exclusively used in nightly builds not stable release
-val enableFirebaseInNightlyBuilds =
-    gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
+val enableFirebaseInNightlyBuilds = false
+// Disable firebase build for now
+// gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
 
 plugins {
     id("com.android.application")
