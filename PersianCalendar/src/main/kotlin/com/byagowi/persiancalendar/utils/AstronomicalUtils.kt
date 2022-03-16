@@ -31,7 +31,7 @@ fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean
 
     if (short) return moonInScorpioText
     return "%s\n%s$spacedColon%s\n%s".format(
-        generateYearName(null, context, persianDate, withEmoji),
+        generateYearName(context, persianDate, withEmoji),
         context.getString(R.string.zodiac),
         Zodiac.fromPersianCalendar(persianDate).format(context, withEmoji),
         moonInScorpioText
@@ -51,14 +51,14 @@ fun generateAstronomyHeaderText(
         val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
         (language.tryTranslateEclipseType(eclipse.type) ?: context.getString(title)) +
                 spacedColon + date
-    } + listOf(generateYearName(time, context, persianDate, true))).joinToString("\n")
+    } + listOf(generateYearName(context, persianDate, true, time))).joinToString("\n")
 }
 
 private fun generateYearName(
-    time: GregorianCalendar?,
     context: Context,
     persianDate: PersianDate,
-    withEmoji: Boolean
+    withEmoji: Boolean,
+    time: GregorianCalendar? = null
 ): String {
     val yearNames = listOfNotNull(
         language.inParentheses.format(
