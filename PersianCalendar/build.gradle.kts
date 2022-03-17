@@ -65,7 +65,8 @@ android {
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
-        minSdk = if (enableFirebaseInNightlyBuilds) 19 else 17
+        // = if (enableFirebaseInNightlyBuilds) 19 else 17
+        minSdk = 17
         targetSdk = 31
         versionCode = 740
         versionName = "7.4.0"
