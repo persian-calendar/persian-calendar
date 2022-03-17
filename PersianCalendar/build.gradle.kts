@@ -188,7 +188,7 @@ dependencies {
     implementation("com.github.persian-calendar:equinox:2.0.0")
     implementation("com.github.persian-calendar:calendar:1.2.0")
     implementation("com.github.persian-calendar:praytimes:2.1.2")
-    implementation("com.github.persian-calendar:calculator:1ff0228244061dbe9d40587d9c3a8c15b3bb6152")
+    implementation("com.github.persian-calendar:calculator:9a8b4980873f8acf83cf119cf9bf3e31e5259c1d")
 
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.preference:preference-ktx:1.2.0")

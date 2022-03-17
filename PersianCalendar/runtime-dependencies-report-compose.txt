@@ -9,7 +9,7 @@
 +--- com.github.persian-calendar:equinox:2.0.0
 +--- com.github.persian-calendar:calendar:1.2.0
 +--- com.github.persian-calendar:praytimes:2.1.2
-+--- com.github.persian-calendar:calculator:1ff0228244061dbe9d40587d9c3a8c15b3bb6152
++--- com.github.persian-calendar:calculator:9a8b4980873f8acf83cf119cf9bf3e31e5259c1d
 |    +--- org.antlr:antlr4-runtime:4.9.3
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 (*)
 +--- androidx.appcompat:appcompat:1.4.1
