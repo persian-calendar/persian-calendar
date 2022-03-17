@@ -4,10 +4,7 @@ operator fun File.div(child: String) = File(this, child)
 fun String.execute() = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
-// Firebase is exclusively used in nightly builds not stable release
-val enableFirebaseInNightlyBuilds = false
-// Disable firebase build for now
-// gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
+val isFirebaseBuildType = gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
 
 plugins {
     id("com.android.application")
@@ -17,7 +14,7 @@ plugins {
     id("io.github.persiancalendar.appbuildplugin") apply true
 }
 
-if (enableFirebaseInNightlyBuilds) {
+if (isFirebaseBuildType) {
     plugins.apply("com.google.gms.google-services")
     plugins.apply("com.google.firebase.firebase-perf")
     plugins.apply("com.google.firebase.crashlytics")
@@ -109,6 +106,12 @@ android {
             buildConfigField("boolean", "DEVELOPMENT", "true")
         }
 
+        create("firebase") {
+            initWith(getByName("nightly"))
+            applicationIdSuffix = ".nightly.firebase"
+            matchingFallbacks += listOf("nightly")
+        }
+
         getByName("debug") {
             versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
             buildConfigField("boolean", "DEVELOPMENT", "true")
@@ -132,6 +135,11 @@ android {
     productFlavors {
         create("minApi17") {
             dimension = "api"
+        }
+        create("minApi19") {
+            applicationIdSuffix = ".minApi19"
+            dimension = "api"
+            minSdk = 19
         }
         create("minApi21") {
             applicationIdSuffix = ".minApi21"
@@ -184,6 +192,7 @@ android {
 }
 
 val minApi21Implementation by configurations
+val firebaseImplementation by configurations
 
 dependencies {
     implementation("com.github.persian-calendar:equinox:2.0.0")
@@ -225,14 +234,12 @@ dependencies {
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("com.android.support:multidex:2.0.0")
 
-    if (enableFirebaseInNightlyBuilds) {
-        // For development builds only, they aren't and most likely won't ever be used in stable releases
-        implementation(platform("com.google.firebase:firebase-bom:29.1.0"))
-        // BoM specifies individual Firebase libraries versions so we don't need to.
-        implementation("com.google.firebase:firebase-crashlytics-ktx")
-        implementation("com.google.firebase:firebase-analytics-ktx")
-        implementation("com.google.firebase:firebase-perf-ktx")
-    }
+    // For development builds only, they aren't and most likely won't ever be used in stable releases
+    firebaseImplementation(platform("com.google.firebase:firebase-bom:29.1.0"))
+    // BoM specifies individual Firebase libraries versions so we don't need to.
+    firebaseImplementation("com.google.firebase:firebase-crashlytics-ktx")
+    firebaseImplementation("com.google.firebase:firebase-analytics-ktx")
+    firebaseImplementation("com.google.firebase:firebase-perf-ktx")
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.5")
