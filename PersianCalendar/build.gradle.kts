@@ -248,6 +248,7 @@ dependencies {
         androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeSecondaryVersion")
     }
     minApi21Implementation("androidx.compose.ui:ui-tooling:$composeSecondaryVersion")
+    minApi21Implementation("com.godaddy.android.colorpicker:compose-color-picker:0.4.2")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
 
