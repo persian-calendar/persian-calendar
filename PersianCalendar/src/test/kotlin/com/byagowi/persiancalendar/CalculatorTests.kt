@@ -46,7 +46,6 @@ class CalculatorTests {
     @ParameterizedTest
     @CsvSource(
         value = [
-            "2 *-2 +aa  * 2 + 2 -2 / -4",
             "5+ 5 5 6 +  7",
             "7 / 5 * ((2 + 2) / (((5 -7) + 2) * 2)",
         ]
