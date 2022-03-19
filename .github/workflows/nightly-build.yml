@@ -5,10 +5,31 @@ on:
     - cron: '0 0 * * *' # once a day
 
 jobs:
-  build:
-
+  evaluateChanges:
+    name: Evaluate changes for run or skipping nightly build
     runs-on: ubuntu-latest
+    outputs:
+      SHOULD_BUILD: ${{ steps.check.outputs.shouldBuild }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
+      - name: Check
+        id: check
+        run: |
+          if [[ $(git rev-list --after="24 hours" main) ]]; then
+            echo ::set-output name=shouldBuild::true
+          else
+            echo ::set-output name=shouldBuild::false
+          fi
+
+
+  build:
+    name: Generate Nightly Build
+    runs-on: ubuntu-latest
+    needs: evaluateChanges
+    if: ${{ needs.evaluateChanges.outputs.SHOULD_BUILD == 'true' }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -22,16 +43,14 @@ jobs:
 
       - name: Build and send apks to telegram
         run: |
-          if [[ $(git rev-list --after="24 hours" main) ]]; then
-            # TODO: Clean up the duplication here
-            ./gradlew assembleMinApi17Nightly
-            apk_dir="$(find . -type f -iname *.apk)"
-            curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
-            rm "$apk_dir"
-            ./gradlew assembleMinApi21Nightly
-            apk_dir="$(find . -type f -iname *.apk)"
-            curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
-          fi
+          # TODO: Clean up the duplication here
+          ./gradlew assembleMinApi17Nightly
+          apk_dir="$(find . -type f -iname *.apk)"
+          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
+          rm "$apk_dir"
+          ./gradlew assembleMinApi21Nightly
+          apk_dir="$(find . -type f -iname *.apk)"
+          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_TO }}
 
       - name: Update the runtime dependencies report
         run: |
