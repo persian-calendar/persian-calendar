@@ -2,11 +2,13 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
 import android.animation.LayoutTransition
+import android.app.NotificationManager
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.TextPaint
@@ -22,7 +24,9 @@ import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
@@ -36,6 +40,8 @@ import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
+import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
+import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -231,6 +237,19 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
         val tabs = listOfNotNull(
             R.string.calendar to CalendarsView(view.context).also { calendarsView ->
+                if (Build.VERSION.SDK_INT >= 33 && ActivityCompat.checkSelfPermission(
+                        requireContext(), Manifest.permission.READ_CALENDAR
+                    ) != PackageManager.PERMISSION_GRANTED) {
+                    calendarsView.buttonsBar.settings.setOnClickListener {
+                        requestPermissions(
+                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                            POST_NOTIFICATION_PERMISSION_REQUEST_CODE
+                        )
+                    }
+                    calendarsView.buttonsBar.header.text = "مایلید اعلان تاریخ برنامه فعال شود؟"
+                    calendarsView.buttonsBar.root.isVisible = true
+                    calendarsView.buttonsBar.settings.setText(R.string.notify_date)
+                }
                 viewModel.selectedDayChangeEvent
                     .onEach { jdn ->
                         calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
