@@ -455,6 +455,8 @@
     <style name="AppSwitchStyle" parent="Widget.Material3.CompoundButton.Switch">
         <item name="track">@drawable/switch_track</item>
         <item name="android:thumb">@drawable/switch_thumb</item>
+        <item name="thumbTint">@color/switch_thumb_tint</item>
+        <item name="trackTint">@color/switch_track_tint</item>
     </style>
 
     <style name="AppOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
