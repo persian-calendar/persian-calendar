@@ -9,8 +9,8 @@
     <string name="longitude">طول جغرافیایی</string>
     <string name="settings">تنظیمات</string>
     <string name="exit">خروج</string>
-    <string name="enable_native_digits">نمایش عددها به فارسی</string>
-    <string name="native_digits">عددهای فارسی</string>
+    <string name="enable_native_digits">نمایش رقم‌ها به فارسی</string>
+    <string name="native_digits">رقم‌های فارسی</string>
     <string name="showing_clock_on_widget">نمایش ساعت در ویجت‌ها</string>
     <string name="clock_on_widget">ساعت در ویجت</string>
     <string name="showing_clock_in_24">نمایش ساعت به صورت ۲۴تایی</string>
