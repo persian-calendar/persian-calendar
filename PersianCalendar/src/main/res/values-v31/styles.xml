@@ -5,13 +5,6 @@
     <color name="widget_divider">@android:color/system_accent2_200</color>
     <color name="widget_refresh_icon_color">@android:color/system_neutral2_700</color>
 
-    <!--
-     Not in use currently, also has a override in night-v31/styles.xml, source:
-      https://android.googlesource.com/platform/frameworks/libs/systemui/+/1c77a89ae/iconloaderlib/src/com/android/launcher3/icons/ThemedIconDrawable.java#284
-    -->
-    <color name="themed_icon_background">@android:color/system_accent1_100</color>
-    <color name="themed_icon_foreground">@android:color/system_neutral2_700</color>
-
     <style name="WidgetTheme" parent="@android:style/Theme.DeviceDefault.DayNight" />
 
     <style name="WidgetTextStyle" />
