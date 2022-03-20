@@ -353,4 +353,7 @@
     <string name="none">Hiçbiri</string>
     <string name="show_sun_and_moon_path_in_24_hours">24 Saatteki Güneş ve Ay Hareketlerini Göster</string>
     <string name="calculator">Hesap makinesi</string>
+    <string name="tropical"></string>
+    <string name="chinese"></string>
+    <string name="chinese_calendar"></string>
 </resources>
