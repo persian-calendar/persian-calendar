@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
@@ -69,7 +70,8 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
         binding.appBar.toolbar.menu.add(R.string.tropical).also { menuItem ->
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             menuItem.actionView = SwitchMaterial(binding.appBar.toolbar.context).also { switch ->
-                switch.setText(R.string.tropical)
+                @SuppressLint("SetTextI18n")
+                switch.text = getString(R.string.tropical) + " "
                 switch.isChecked = viewModel.isTropical.value
                 switch.setOnClickListener { viewModel.changeTropical(switch.isChecked) }
             }
