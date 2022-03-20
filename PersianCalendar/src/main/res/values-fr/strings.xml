@@ -47,17 +47,14 @@
     <string name="prefer_linear_date">Préférer la forme numérique des dates</string>
     <plurals name="n_days">
         <item quantity="one">%1$s jour</item>
-        <item quantity="many">%1$s jours</item>
         <item quantity="other">%1$s jours</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s moi</item>
-        <item quantity="many">%1$s mois</item>
         <item quantity="other">%1$s mois</item>
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s année</item>
-        <item quantity="many">%1$s années</item>
         <item quantity="other">%1$s années</item>
     </plurals>
     <string name="age_widget_title">Titre du widget</string>
