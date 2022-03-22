@@ -9,8 +9,8 @@ import com.byagowi.persiancalendar.utils.EventsStore
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
 
 class EventsTests {
 

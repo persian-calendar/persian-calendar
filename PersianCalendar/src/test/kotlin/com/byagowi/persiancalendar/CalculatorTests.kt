@@ -1,11 +1,11 @@
 package com.byagowi.persiancalendar
 
 import io.github.persiancalendar.calculator.eval
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.test.assertEquals
+import kotlin.test.assertFails
 
 class CalculatorTests {
     @Test
@@ -51,6 +51,6 @@ class CalculatorTests {
         ]
     )
     fun `test errors`(input: String) {
-        assertThrows(Exception::class.java) { eval(input) }
+        assertFails { eval(input) }
     }
 }

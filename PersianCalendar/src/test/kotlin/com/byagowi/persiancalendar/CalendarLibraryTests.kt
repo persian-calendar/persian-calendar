@@ -4,10 +4,11 @@ import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotEquals
+import kotlin.test.assertTrue
 
 class CalendarLibraryTests {
 
@@ -90,7 +91,7 @@ class CalendarLibraryTests {
             val islamicDate = IslamicDate(it[3], it[4], it[5])
 
             assertEquals(jdn, islamicDate.toJdn())
-            assertTrue(islamicDate == IslamicDate(jdn))
+            assertEquals(islamicDate, IslamicDate(jdn))
         }
 
         IslamicDate.useUmmAlQura = true
@@ -189,8 +190,8 @@ class CalendarLibraryTests {
     @Test
     fun test_it_different_date_object_equal() {
         assertFalse(CivilDate(2000, 1, 1) == PersianDate(2000, 1, 1))
-        assertTrue(CivilDate(2000, 1, 1) == CivilDate(2000, 1, 1))
-        assertFalse(CivilDate(2000, 1, 1) == CivilDate(2000, 2, 1))
+        assertEquals(CivilDate(2000, 1, 1), CivilDate(2000, 1, 1))
+        assertNotEquals(CivilDate(2000, 1, 1), CivilDate(2000, 2, 1))
     }
 
     @Test

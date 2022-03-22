@@ -253,6 +253,8 @@ dependencies {
 
     testImplementation("junit:junit:4.13.2")
 
+    testImplementation(kotlin("test"))
+
     testImplementation("org.junit.platform:junit-platform-runner:1.8.2")
     val junit5Version = "5.8.2"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit5Version")

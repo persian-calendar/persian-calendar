@@ -1,9 +1,9 @@
 package com.byagowi.persiancalendar
 
 import com.byagowi.persiancalendar.ui.compass.CompassFragment
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class CompassTests {
     @Test

@@ -4,10 +4,10 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.utils.calculateDatePartsDifference
 import io.github.persiancalendar.calendar.PersianDate
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.test.assertEquals
 
 class CalendarTests {
     @ParameterizedTest

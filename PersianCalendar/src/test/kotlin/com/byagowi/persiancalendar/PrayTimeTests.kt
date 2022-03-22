@@ -5,9 +5,9 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.util.*
+import kotlin.test.assertEquals
 
 class PrayTimeTests {
 
