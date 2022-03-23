@@ -37,8 +37,6 @@ jobs:
           echo "::set-output name=message::$outMessage"
 
       - name: send message to Telegram
-        with:
-          message: ${{ steps.building_message.outputs.message }}
         run: |
           curl -X POST \
             -H 'Content-Type: application/json' \
@@ -47,7 +45,7 @@ jobs:
                 --argjson disable_web_page_preview true \
                 --arg chat_id ${{ secrets.TELEGRAM_TO }} \
                 --arg format html \
-                --arg text "$message" \
+                --arg text "${{ steps.building_message.outputs.message }}" \
                 '$ARGS.named'
             ) \
             https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
