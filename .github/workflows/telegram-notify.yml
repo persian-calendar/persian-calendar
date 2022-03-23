@@ -37,15 +37,10 @@ jobs:
           echo "::set-output name=message::$outMessage"
 
       - name: send message to Telegram
-        run: |
-          url="https://api.telegram.org/"
-          url+="bot${{ secrets.TELEGRAM_TOKEN }}/"
-          url+="sendMessage"
-          url+="?"
-          url+="&chat_id=${{ secrets.TELEGRAM_TO }}"
-          url+="&parse_mode=HTML"
-          url+="&text="
-          url+=$(jq -rn --arg x "${{ steps.building_message.outputs.message }}" '$x|@uri')
-          url+="&disable_web_page_preview=true"
-
-          curl $url
+        uses: appleboy/telegram-action@v0.1.1
+        with:
+          to: ${{ secrets.TELEGRAM_TO }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          format: html
+          disable_web_page_preview: true
+          message: ${{ steps.building_message.outputs.message }}
