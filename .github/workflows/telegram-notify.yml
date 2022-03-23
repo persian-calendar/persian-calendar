@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Building message
-        id: building_message
         run: |
           jsonCommits='${{toJson(github.event.commits)}}'
           commits=$(echo $jsonCommits | jq '.')
@@ -33,11 +32,6 @@ jobs:
           done
           outMessage+="📅 @Persian_Calendar"
 
-          echo $outMessage
-          echo "::set-output name=message::$outMessage"
-
-      - name: send message to Telegram
-        run: |
           curl -X POST \
             -H 'Content-Type: application/json' \
             -d $(
@@ -45,7 +39,7 @@ jobs:
                 --argjson disable_web_page_preview true \
                 --arg chat_id ${{ secrets.TELEGRAM_TO }} \
                 --arg format html \
-                --arg text "${{ steps.building_message.outputs.message }}" \
+                --arg text "$outMessage" \
                 '$ARGS.named'
             ) \
             https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage
