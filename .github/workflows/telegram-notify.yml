@@ -31,17 +31,20 @@ jobs:
             outMessage+=$message
             outMessage+="%0A%0A"
           done
+          outMessage+="📅 @Persian_Calendar"
 
           echo $outMessage
           echo "::set-output name=message::$outMessage"
 
       - name: send message to Telegram
-        uses: appleboy/telegram-action@v0.1.1
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          format: html
-          disable_web_page_preview: true
-          message: |
-            ${{steps.building_message.outputs.message}}
-            📅 @Persian_Calendar
+        run: |
+          url="https://api.telegram.org/"
+          url+="bot${{ secrets.TELEGRAM_TOKEN }}/"
+          url+="sendMessage"
+          url+="?"
+          url+="&chat_id=${{ secrets.TELEGRAM_TO }}"
+          url+="&parse_mode=HTML"
+          url+="&text=${{ steps.building_message.outputs.message }}"
+          url+="&disable_web_page_preview=true"
+
+          curl $url
