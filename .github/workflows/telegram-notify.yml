@@ -14,7 +14,7 @@ jobs:
         id: building_message
         run: |
           jsonCommits='${{toJson(github.event.commits)}}'
-          commits=$(echo $jsonGithub | jq '.')
+          commits=$(echo $jsonCommits | jq '.')
           length=$(echo $commits | jq 'length')
 
           outMessage=""
