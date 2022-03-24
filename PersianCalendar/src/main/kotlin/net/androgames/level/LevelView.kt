@@ -199,16 +199,8 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }
         // correction des angles aberrants
         // pour ne pas que la bulle sorte de l'ecran
-        if (angleX > 1) {
-            angleX = 1.0
-        } else if (angleX < -1) {
-            angleX = -1.0
-        }
-        if (angleY > 1) {
-            angleY = 1.0
-        } else if (angleY < -1) {
-            angleY = -1.0
-        }
+        angleX = angleX.coerceIn(-1.0, 1.0)
+        angleY = angleY.coerceIn(-1.0, 1.0)
         // correction des angles a plat
         // la bulle ne doit pas sortir du niveau
         if (orientation == Orientation.LANDING && angleX != 0.0 && angleY != 0.0) {
