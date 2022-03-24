@@ -191,12 +191,8 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             else -> Unit
         }
         // correction des angles affiches
-        if (angle1 > 99.9f) {
-            angle1 = 99.9f
-        }
-        if (angle2 > 99.9f) {
-            angle2 = 99.9f
-        }
+        angle1 = angle1.coerceAtMost(99.9f)
+        angle2 = angle2.coerceAtMost(99.9f)
         // correction des angles aberrants
         // pour ne pas que la bulle sorte de l'ecran
         angleX = angleX.coerceIn(-1.0, 1.0)

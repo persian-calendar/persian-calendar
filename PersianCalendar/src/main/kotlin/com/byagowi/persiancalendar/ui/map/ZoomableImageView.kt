@@ -11,6 +11,7 @@ import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import androidx.appcompat.widget.AppCompatImageView
 import kotlin.math.abs
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 // https://stackoverflow.com/a/17649895
 class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageView(context, attr) {
@@ -70,7 +71,7 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
                     val x = m[Matrix.MTRANS_X]
                     val y = m[Matrix.MTRANS_Y]
                     if (mScaleFactor < 1) {
-                        if (Math.round(origWidth * saveScale) < width) {
+                        if ((origWidth * saveScale).roundToInt() < width) {
                             if (y < -bottom) viewMatrix.postTranslate(
                                 0f,
                                 -(y + bottom)

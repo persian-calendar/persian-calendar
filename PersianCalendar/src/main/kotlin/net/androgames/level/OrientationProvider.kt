@@ -140,9 +140,9 @@ class OrientationProvider(activity: FragmentActivity, private val view: LevelVie
 
         val orientation = when {
             // top side up
-            pitch < -45 && pitch > -135 -> Orientation.TOP
+            pitch in -135.0..-45.0 -> Orientation.TOP
             // bottom side up
-            pitch > 45 && pitch < 135 -> Orientation.BOTTOM
+            pitch in 45.0..135.0 -> Orientation.BOTTOM
             // right side up
             roll > 45 -> Orientation.RIGHT
             // left side up
