@@ -10,35 +10,31 @@ jobs:
     name: Notify via Telegram
     runs-on: ubuntu-latest
     steps:
-      - name: Building message
-        id: building_message
+      - name: Notify
+        env:
+          jsonCommits: ${{ toJson(github.event.commits) }}
         run: |
-          jsonCommits='${{toJson(github.event.commits)}}'
-          commits=$(echo $jsonCommits | jq '.')
-          length=$(echo $commits | jq 'length')
+          (
+            printf 'text='
 
-          outMessage=""
-          for (( i = 0; i < length; i++ )); do
-            commit=$(echo $commits | jq '.['$i']')
-            url=$(echo $commit | jq -r '.url')
-            sha=$(echo $commit | jq -r '.id')
-            sha=${sha:0:8}
-            message=$(echo $commit | jq -r '.message')
-            actor=$(echo $commit | jq -r '.author.username')
+            commits=$(echo $jsonCommits | jq '.')
+            length=$(echo $commits | jq 'length')
 
-            outMessage+="<a href="\"$url\"">$sha</a> • <a href="\"https://github.com/$actor\"">$actor</a>"
-            outMessage+="%0A"
-            outMessage+=$message
-            outMessage+="%0A%0A"
-          done
-          outMessage+="📅 @Persian_Calendar"
-          echo "::set-output name=message::$outMessage"
+            for (( i = 0; i < length; i++ )); do
+              commit=$(echo $commits | jq '.['$i']')
+              url=$(echo $commit | jq -r '.url')
+              sha=$(echo $commit | jq -r '.id')
+              sha=${sha:0:8}
+              actor=$(echo $commit | jq -r '.author.username')
+              echo "<a href="\"$url\"">$sha</a> • <a href="\"https://github.com/$actor\"">$actor</a>"
+              echo $commit | jq -r '.message'
+              echo
+            done
 
-      - name: send message to Telegram
-        uses: appleboy/telegram-action@v0.1.1
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          format: html
-          disable_web_page_preview: true
-          message: ${{ steps.building_message.outputs.message }}
+            printf '%s' '📅 @Persian_Calendar'
+          ) | \
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+            -d disable_web_page_preview=true \
+            -d chat_id=${{ secrets.TELEGRAM_TO }} \
+            -d parse_mode=HTML \
+            --data-binary @-
