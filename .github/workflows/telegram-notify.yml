@@ -32,8 +32,6 @@ jobs:
             outMessage+="%0A%0A"
           done
           outMessage+="📅 @Persian_Calendar"
-
-          echo $outMessage
           echo "::set-output name=message::$outMessage"
 
       - name: send message to Telegram
