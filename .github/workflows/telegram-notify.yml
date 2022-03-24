@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Building message
+        id: building_message
         run: |
           jsonCommits='${{toJson(github.event.commits)}}'
           commits=$(echo $jsonCommits | jq '.')
