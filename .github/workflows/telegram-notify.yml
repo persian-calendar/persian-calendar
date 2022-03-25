@@ -13,19 +13,17 @@ jobs:
       - name: Notify
         env:
           COMMITS: ${{ toJson(github.event.commits) }}
-          TEMPLATE: '.[] | "<a href=\"\(.url)\">\(.id[:8])</a> • <a href=\"https://github.com/\(.author.username)\">\(.author.username)</a>
-
-          \(.message)
-
-          "'
         run: |
+          TEMPLATE='.[] | "[\(.id[:8])](\(.url)) • [\(.author.username)](https://github.com/\(.author.username))
+          \(.message | gsub("(?<a>[_*\\[\\]()~>#+\\-=|{}.!'"'"'])"; "\\\(.a)"))
+          "'
           (
             printf 'text='
             printenv COMMITS | jq -r "$TEMPLATE"
-            printf '📅 @Persian_Calendar'
+            printf '📅 @Persian\_Calendar'
           ) | \
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
             -d disable_web_page_preview=true \
             -d chat_id=${{ secrets.TELEGRAM_TO }} \
-            -d parse_mode=HTML \
+            -d parse_mode=MarkdownV2 \
             --data-binary @-
