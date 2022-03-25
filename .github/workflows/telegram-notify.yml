@@ -12,26 +12,17 @@ jobs:
     steps:
       - name: Notify
         env:
-          jsonCommits: ${{ toJson(github.event.commits) }}
+          COMMITS: ${{ toJson(github.event.commits) }}
+          TEMPLATE: '.[] | "<a href=\"\(.url)\">\(.id[:8])</a> • <a href=\"https://github.com/\(.author.username)\">\(.author.username)</a>
+
+          \(.message)
+
+          "'
         run: |
           (
             printf 'text='
-
-            commits=$(echo $jsonCommits | jq '.')
-            length=$(echo $commits | jq 'length')
-
-            for (( i = 0; i < length; i++ )); do
-              commit=$(echo $commits | jq '.['$i']')
-              url=$(echo $commit | jq -r '.url')
-              sha=$(echo $commit | jq -r '.id')
-              sha=${sha:0:8}
-              actor=$(echo $commit | jq -r '.author.username')
-              echo "<a href="\"$url\"">$sha</a> • <a href="\"https://github.com/$actor\"">$actor</a>"
-              echo $commit | jq -r '.message'
-              echo
-            done
-
-            printf '%s' '📅 @Persian_Calendar'
+            printenv COMMITS | jq -r "$TEMPLATE"
+            printf '📅 @Persian_Calendar'
           ) | \
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
             -d disable_web_page_preview=true \
