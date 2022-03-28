@@ -114,7 +114,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     summary(R.string.calendars_priority_summary)
                 }
                 switch(PREF_ASTRONOMICAL_FEATURES, false) {
-                    title(R.string.astronomical_info)
+                    title(R.string.astronomy)
                     summary(R.string.astronomical_info_summary)
                 }
                 switch(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false) {

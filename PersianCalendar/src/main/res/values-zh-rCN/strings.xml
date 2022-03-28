@@ -105,7 +105,7 @@
     <string name="show_device_calendar_events">个人日程</string>
     <string name="show_device_calendar_events_summary">显示个人日历上的日程</string>
     <string name="calendars_priority">日历优先级</string>
-    <string name="astronomical_info">天文信息</string>
+    <string name="astronomy">天文信息</string>
     <string name="astronomical_info_summary">显示星座、生肖和月亮是否处在天蝎座等附加信息</string>
     <string name="week_of_year">一年中的周数</string>
     <string name="week_of_year_summary">在日历上显示第几周</string>
@@ -157,7 +157,7 @@
     <string name="calendar_access">日历权限</string>
     <string name="phone_calendar_required">此功能需要日历权限，授权后即可在日历中显示您的个人日程。</string>
     <string name="gpl_logo">GPL 图标</string>
-    <string name="about_license">许可证</string>
+    <string name="licenses">许可证</string>
     <string name="about_license_title">应用程序许可证</string>
     <string name="about_support_developers">开发者支持</string>
     <string name="about_report_bug">在 GitHub 上报告问题</string>
@@ -182,7 +182,7 @@
     <string name="theme_black">黑色</string>
     <string name="iran_official_events">伊朗官方（波斯语）</string>
     <string name="afghanistan_holidays">阿富汗节假日</string>
-    <string name="device_info">设备信息</string>
+    <string name="device_information">设备信息</string>
     <string name="spaced_comma">，</string>
     <string name="spaced_colon">：</string>
     <string name="am">上午</string>

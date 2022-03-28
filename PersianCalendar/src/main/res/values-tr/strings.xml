@@ -122,7 +122,7 @@
     <string name="n_till">%2$s \'na %1$s var</string>
     <string name="center_align_widgets">Widget\'ları ortaya hizalayın</string>
     <string name="center_align_widgets_summary">4x1 ve 2x2 widget\'ları ortaya hizala</string>
-    <string name="device_info">Cihaz Bilgisi</string>
+    <string name="device_information">Cihaz Bilgisi</string>
     <string name="spaced_colon">": "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_and">" ve "</string>
@@ -153,7 +153,7 @@
     <string name="about_support_developers">Geliştirici Desteği</string>
     <string name="about_license_sum">İran Takviminde kullanılan GPLv3 Lisansını ve diğer lisans koşullarını kontrol edin.</string>
     <string name="about_license_title">Uygulama Lisansı</string>
-    <string name="about_license">Lisans</string>
+    <string name="licenses">Lisans</string>
     <string name="version">Sürüm %1$s</string>
     <string name="gpl_logo">GPL Logosu</string>
     <string name="phone_calendar_required">Uygulamanın bu bölümünün takvim iznine ihtiyacı vardır, izin verirseniz kişisel etkinlikleriniz takvimde gösterilir.</string>
@@ -217,7 +217,7 @@
     <string name="week_of_year_summary">Takvimde hafta no göster</string>
     <string name="week_of_year">Hafta No</string>
     <string name="astronomical_info_summary">Ek bilgileri göster (Akrep burcundaki ay, yılların isimleri ve burçlar gibi)</string>
-    <string name="astronomical_info">Astronomi</string>
+    <string name="astronomy">Astronomi</string>
     <string name="calendars_priority_summary">Takvimleri önceliği gösterecek veya gizleyecek şekilde ayarlayın</string>
     <string name="calendars_priority">Takvim Önceliği</string>
     <string name="show_device_calendar_events_summary">Kişisel takvim etkinliklerini gösterme</string>

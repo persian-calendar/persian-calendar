@@ -108,7 +108,7 @@
     <string name="default_athan_summary">اذانی ایلک حالته دؤند‌رمک</string>
     <string name="default_athan">ایلک اذان</string>
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
-    <string name="about_license">مؤجویزلر</string>
+    <string name="licenses">مؤجویزلر</string>
     <string name="about_license_title">برنامه‌نین مؤجویزلری</string>
     <string name="about_license_sum">مؤجویز GPLv3، کیتاب‌خانا مؤجویزلرین شرایط‌ین بررسی ائلین</string>
     <string name="help">یاردیم</string>
@@ -161,7 +161,7 @@
     <string name="calibrate_compass_summary">وسیله‌نین دوز عملکردینه‌گوره مغناطیس سنسورلاردان اوزاق توتون و بیر کئز دولانین</string>
     <string name="set_location">آی و گۆنو گؤسترمک اۆچون موقعیت تنظیم ائلین.</string>
     <string name="moonInScorpio">عقربه‌دکی آی گون‌لری</string>
-    <string name="astronomical_info">آسترونومیا حاقیندا معلومات</string>
+    <string name="astronomy">آسترونومیا</string>
     <string name="astronomical_info_summary">آسترونومیا ایطلاعات‌ین گؤسترمک</string>
     <string name="islamic_offset">ایسلامی تقویم‌ین تنظیم ائتمک</string>
     <string name="islamic_offset_summary">تقویم‌ین ایصلاحینا قاییت‌ماق</string>
@@ -206,7 +206,7 @@
     <string name="spaced_and">" و "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">وسیله‌نین اطلاعاتی</string>
+    <string name="device_information">وسیله‌نین اطلاعاتی</string>
     <string name="center_align_widgets_summary">ویجتی آرادا سالماق ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">ویجتی آرادا سالماق</string>
     <string name="n_till">%1$s تا %2$s</string>

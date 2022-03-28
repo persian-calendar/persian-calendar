@@ -117,7 +117,7 @@
     <string name="show_device_calendar_events_summary">إظهار الأحداث الشخصية</string>
     <string name="calendars_priority">التقويم الرئيسي</string>
     <string name="calendars_priority_summary">تغيير التقويم الرئيسي، ترتيب وإخفاء التقاويم الأخرى</string>
-    <string name="astronomical_info">الفلك</string>
+    <string name="astronomy">الفلك</string>
     <string name="astronomical_info_summary">إظهار المزيد من المعلومات مثل (الأبراج، أسماء الأعوام، القمر في العقرب)</string>
     <string name="week_of_year">رقم الأسبوع</string>
     <string name="week_of_year_summary">إظهار رقم الأسبوع في تقويم الرئيسي</string>
@@ -187,7 +187,7 @@
     <!--About-->
     <string name="gpl_logo">شعار GPL</string>
     <string name="version">الإصدار %1$s</string>
-    <string name="about_license">الترخيص</string>
+    <string name="licenses">الترخيص</string>
     <string name="about_license_title">ترخيص البرنامج</string>
     <string name="about_license_sum">راجع رخصة GPLv3 المستخدمة في تطبيق التقويم الفارسي.</string>
     <string name="about_support_developers">دعم المطورين</string>
@@ -212,7 +212,7 @@
     <string name="spaced_and">" و "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">معلومات الجهاز</string>
+    <string name="device_information">معلومات الجهاز</string>
     <string name="center_align_widgets_summary">توسيط المصغر 4x1 و 2x2</string>
     <string name="center_align_widgets">توسيط المصغر</string>
     <string name="n_till">%1$s إلى %2$s</string>

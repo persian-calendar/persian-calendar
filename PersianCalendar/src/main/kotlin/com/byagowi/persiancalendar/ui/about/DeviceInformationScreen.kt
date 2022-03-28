@@ -95,7 +95,7 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentDeviceInformationBinding.bind(view)
         binding.toolbar.let {
-            it.setTitle(R.string.device_info)
+            it.setTitle(R.string.device_information)
             it.setupUpNavigation()
         }
 

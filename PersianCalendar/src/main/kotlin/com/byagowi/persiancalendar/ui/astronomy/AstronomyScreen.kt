@@ -40,7 +40,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         val binding = FragmentAstronomyBinding.bind(view)
 
         binding.appBar.toolbar.let {
-            it.setTitle(R.string.astronomical_info)
+            it.setTitle(R.string.astronomy)
             it.setupMenuNavigation()
         }
 

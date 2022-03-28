@@ -103,7 +103,7 @@
     <string name="athan_volume_summary">अलार्मको लागि भोल्युम सेट गर्नुहोस्</string>
     <string name="about_license_title">आवेदन लाइसेन्स</string>
     <string name="phone_location_required">एपको यो भागलाई स्थान अनुमति चाहिन्छ, यदि तपाईंले अस्वीकार गर्न चाहनुहुन्छ भने तपाईंले आफ्नो अक्षांश र देशान्तर म्यानुअल रूपमा प्रविष्ट गर्नुपर्नेछ।</string>
-    <string name="about_license">इजाजतपत्र</string>
+    <string name="licenses">इजाजतपत्र</string>
     <string name="about_license_sum">फारसी क्यालेन्डरमा प्रयोग गरिएको GPLv3 लाइसेन्स र अन्य इजाजतपत्र सर्तहरू जाँच गर्नुहोस्।</string>
     <string name="fajr">फजर</string>
     <string name="dhuhr">धुहर</string>
@@ -133,7 +133,7 @@
     <string name="events_summary">देखाउने घटनाहरू</string>
     <string name="show_device_calendar_events">ब्यक्तिगत क्यालेन्डर घटनाहरू</string>
     <string name="calendars_priority">पात्रो प्राथमिकता</string>
-    <string name="astronomical_info">खगोलीय जानकारी</string>
+    <string name="astronomy">खगोलीय जानकारी</string>
     <string name="astronomical_info_summary">नक्षत्र, वर्षको पुरानो नाम र वृश्चिकमा चन्द्रमा जस्ता थप जानकारी देखाउनुहोस</string>
     <string name="week_start_summary">हप्ताको सुरुवात दिन चयन गर्नुहोस्</string>
     <string name="week_ends">सप्ताहन्त</string>
@@ -249,7 +249,7 @@
     <string name="spaced_and">" र "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">उपकरण जानकारी</string>
+    <string name="device_information">उपकरण जानकारी</string>
     <string name="center_align_widgets">विजेटहरू केन्द्रमा पङ्क्तिबद्ध गर्नुहोस्</string>
     <string name="n_till">%1$s देखि %2$s सम्म</string>
     <string name="recurs">दोहोरिन्छ</string>

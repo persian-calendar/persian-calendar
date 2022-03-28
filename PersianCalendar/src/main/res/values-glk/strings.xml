@@ -108,7 +108,7 @@
     <string name="default_athan_summary">اذانˇپيش فرضˈوأگردانئن</string>
     <string name="default_athan">اذانˇپیش‌فرض</string>
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
-    <string name="about_license">مۊجوز</string>
+    <string name="licenses">مۊجوز</string>
     <string name="about_license_title">برنامه ايجازهان</string>
     <string name="about_license_sum">مۊجوز GPLv3، ايستفادده بؤبؤسته مۊجوزانˇشرايطˈکي فارسي تقويم ؤ کيتابخانهانˇدۊرۊن ايستفاده بؤبؤسته دأريه-يأ وارسي بۊکۊنيد.</string>
     <string name="help">راهنما</string>
@@ -161,7 +161,7 @@
     <string name="calibrate_compass_summary">أنˇوأستي کي قؤطب-نما سنسؤر بهتر کار بۊکۊنه, مغناطيسي چيزانˇجأ دۊرˈبيد, دزگايأ وأگردانيد ؤ اۊنˈبه سه طرف جۊلؤب ؤ عقب بچرخأنيد.</string>
     <string name="set_location">أنˇوأستي کي خؤرشيد ؤ ما ؤ قبله مؤقعيتˈ بداريد, تأنيدي شيمي مؤقعيتˈتنظيماتˇدۊرۊن وارد بۊکۊنيد.</string>
     <string name="moonInScorpio">قمر در عقربˇرۊزان</string>
-    <string name="astronomical_info">اخترشناسي</string>
+    <string name="astronomy">اخترشناسي</string>
     <string name="astronomical_info_summary">ايطلاعاتˇنيشان دأن صورتˇفلکی، سالˇنام ؤ قمر در عقربˇمانستن</string>
     <string name="islamic_offset">ايسلامي تقويمˇتنظيم</string>
     <string name="islamic_offset_summary">واگردستن تقويمˇچاکۊدنˇره</string>
@@ -207,7 +207,7 @@
     <string name="spaced_and">" ؤ "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">دزگا ايطلاعات</string>
+    <string name="device_information">دزگا ايطلاعات</string>
     <string name="center_align_widgets_summary">ابزراکانأ وسط‌چین کۊدن ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">ويجتˈوسط‌چین کۊدن</string>
     <string name="n_till">%1$s تا %2$s</string>

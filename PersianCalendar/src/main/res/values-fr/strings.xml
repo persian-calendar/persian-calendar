@@ -5,7 +5,7 @@
     <string name="calendar_access">Accès au calendrier</string>
     <string name="version">Version %1$s</string>
     <string name="about_license_title">Licence de l’application</string>
-    <string name="about_license">Licence</string>
+    <string name="licenses">Licence</string>
     <string name="about_report_bug_sum">Préférable pour signaler les erreurs ou demander une nouvelle fonctionnalité, ce qui nécessite un compte GitHub</string>
     <string name="about_report_bug">Signaler un erreur sur GitHub</string>
     <string name="about_noClient">Aucun client de messagerie n’est installé</string>
@@ -34,7 +34,7 @@
     </plurals>
     <string name="center_align_widgets">Alignement central des widgets</string>
     <string name="center_align_widgets_summary">Alignement central des widgets 4x1 et 2x2</string>
-    <string name="device_info">Informations sur l’appareil</string>
+    <string name="device_information">Informations sur l’appareil</string>
     <string name="select_widgets_background_color">Sélectionnez une couleur personnalisée pour l’arrière-plan des widgets</string>
     <string name="shift_work_days_head">Durée</string>
     <string name="pm">PM</string>
@@ -104,7 +104,7 @@
     <string name="week_of_year_summary">Afficher la semaine de l’année sur le calendrier</string>
     <string name="week_of_year">Semaine de l’année</string>
     <string name="astronomical_info_summary">Afficher des informations supplémentaires comme les constellations, les anciens noms des années et la Lune en scorpion</string>
-    <string name="astronomical_info">Astronomiques</string>
+    <string name="astronomy">Astronomiques</string>
     <string name="calendars_priority_summary">Paramétrer les calendriers pour les afficher en priorité ou les masquer</string>
     <string name="calendars_priority">Priorité des calendriers</string>
     <string name="show_device_calendar_events_summary">Afficher les évènements du calendrier personnel</string>

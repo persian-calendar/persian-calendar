@@ -49,8 +49,8 @@
         android:enabled="true"
         android:icon="@drawable/sc_astrology_horoscope"
         android:shortcutId="ASTRONOMY"
-        android:shortcutLongLabel="@string/astronomical_info"
-        android:shortcutShortLabel="@string/astronomical_info">
+        android:shortcutLongLabel="@string/astronomy"
+        android:shortcutShortLabel="@string/astronomy">
 
         <intent
             android:action="ASTRONOMY"

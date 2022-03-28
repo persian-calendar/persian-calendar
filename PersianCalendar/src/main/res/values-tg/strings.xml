@@ -81,7 +81,7 @@
     <string name="enable_native_digits">Рақамҳои форсиро фаъол созед</string>
     <string name="show_device_calendar_events_summary">тамошои pӯйдодҳои Тақвими шахсӣ</string>
     <string name="calendars_priority_summary">Тақвимҳоро барои нишон додани афзалият ё пинҳон кардани онҳо таъин кунед</string>
-    <string name="astronomical_info">Астрономӣ</string>
+    <string name="astronomy">Астрономӣ</string>
     <string name="week_of_year">Ҳафтаи сол</string>
     <string name="resume">оғози дубора</string>
     <string name="week_of_year_summary">намоиши Ҳафтаи сол дар тақвим</string>
@@ -108,7 +108,7 @@
     <string name="phone_calendar_required">Ин қисми барнома ба иҷозати тақвим ниёз дорад, агар шумо ба он иҷозат диҳед, рӯйдодҳои шахсии шумо дар тақвим нишон дода мешаванд.</string>
     <string name="gpl_logo">Иҷозатномаи умумии ҷамъиятии GNU</string>
     <string name="version">Версияи %1$s</string>
-    <string name="about_license">Иҷозатнома</string>
+    <string name="licenses">Иҷозатнома</string>
     <string name="about_support_developers">Дастгирии таҳиягарон</string>
     <string name="about_report_bug">Гузориш дар бораи хато дар GitHub</string>
     <string name="about_sendMail">Почтаи электронӣ</string>
@@ -125,7 +125,7 @@
     <string name="spaced_and">" ва "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">Маълумот дар бораи дастгоҳ</string>
+    <string name="device_information">Маълумот дар бораи дастгоҳ</string>
     <string name="center_align_widgets">Виджетҳоро дар марказ ҳамоҳанг созед</string>
     <string name="n_till">%1$s то %2$s</string>
     <plurals name="shift_work_record_title">

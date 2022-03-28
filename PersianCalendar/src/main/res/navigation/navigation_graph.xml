@@ -130,17 +130,17 @@
     <fragment
         android:id="@+id/deviceInformation"
         android:name="com.byagowi.persiancalendar.ui.about.DeviceInformationScreen"
-        android:label="@string/device_info" />
+        android:label="@string/device_information" />
 
     <fragment
         android:id="@+id/licenses"
         android:name="com.byagowi.persiancalendar.ui.about.LicensesScreen"
-        android:label="@string/about_license" />
+        android:label="@string/licenses" />
 
     <fragment
         android:id="@+id/astronomy"
         android:name="com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen"
-        android:label="@string/astronomical_info">
+        android:label="@string/astronomy">
         <argument
             android:name="day_offset"
             android:defaultValue="0"

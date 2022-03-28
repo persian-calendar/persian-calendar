@@ -118,7 +118,7 @@
     <string name="show_device_calendar_events_summary">Show personal calendar events</string>
     <string name="calendars_priority">Calendars Priority</string>
     <string name="calendars_priority_summary">Set calendars to show priority or hide them</string>
-    <string name="astronomical_info">Astronomy</string>
+    <string name="astronomy">Astronomy</string>
     <string name="astronomical_info_summary">"Show additional information like constellation, ancient names of years and moon in scorpio"</string>
     <string name="week_of_year">Week of Year</string>
     <string name="week_of_year_summary">Show week of year on calendar</string>
@@ -188,7 +188,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <!--About-->
     <string name="gpl_logo">GPL Logo</string>
     <string name="version">Version %1$s</string>
-    <string name="about_license">License</string>
+    <string name="licenses">License</string>
     <string name="about_license_title">Application License</string>
     <string name="about_license_sum">Check GPLv3 License and other license terms used on Persian Calendar.</string>
     <string name="about_support_developers">Developer Support</string>
@@ -219,7 +219,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="spaced_and">" and "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">Device Information</string>
+    <string name="device_information">Device Information</string>
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%1$s till to %2$s</string>

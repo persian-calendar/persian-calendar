@@ -49,7 +49,7 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 it.onClick { shareApplication() }
             }
-            toolbar.menu.add(R.string.device_info).also {
+            toolbar.menu.add(R.string.device_information).also {
                 it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 it.onClick {

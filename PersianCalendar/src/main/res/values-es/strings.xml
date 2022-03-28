@@ -118,7 +118,7 @@
     <string name="show_device_calendar_events_summary">Mostrar los eventos del calendario personal</string>
     <string name="calendars_priority">Prioridades del calendario</string>
     <string name="calendars_priority_summary">Configurar calendarios para mostrar prioridad u ocultarlos</string>
-    <string name="astronomical_info">Astronómica</string>
+    <string name="astronomy">Astronómica</string>
     <string name="astronomical_info_summary">Mostrar información adicional como constelación, nombres antiguos de años y la luna en escorpio</string>
     <string name="week_of_year">Semana del año</string>
     <string name="week_of_year_summary">Mostrar la semana del año en calendario</string>
@@ -188,7 +188,7 @@
     <!--About-->
     <string name="gpl_logo">GPL Logo</string>
     <string name="version">Versión %1$s</string>
-    <string name="about_license">Licencia</string>
+    <string name="licenses">Licencia</string>
     <string name="about_license_title">Licencia de aplicación</string>
     <string name="about_license_sum">Consulte la licencia de GPLv3 y otros términos de licencia utilizados en el calendario persa.</string>
     <string name="about_support_developers">Soporte para desarrolladores</string>
@@ -220,7 +220,7 @@
     <string name="spaced_and">" y "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">Información del dispositivo</string>
+    <string name="device_information">Información del dispositivo</string>
     <string name="center_align_widgets_summary">Center aligning 4x1 and 2x2 widgets</string>
     <string name="center_align_widgets">Center align the widgets</string>
     <string name="n_till">%1$s till to %2$s</string>

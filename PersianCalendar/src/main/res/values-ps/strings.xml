@@ -98,7 +98,7 @@
     <string name="default_athan_summary">بازگردانی به اذان پیش‌فرض</string>
     <string name="default_athan">اذان پیش‌فرض</string>
     <string name="abdulbasit">عبدالباسط عبدالصمد</string>
-    <string name="about_license">مجوز</string>
+    <string name="licenses">مجوز</string>
     <string name="about_license_title">مجوزهای برنامه</string>
     <string name="about_license_sum">مجوز GPLv3، شرایط مجوزهای استفاده شده در تقویم فارسی و کتابخانه‌های استفاده شده را بررسی کنید.</string>
     <string name="help">راهنما</string>
@@ -150,7 +150,7 @@
     <string name="calibrate_compass_summary">جهت عملکرد دقیق‌تر سنسور قطب‌نما، از اشیاء مغناطیسی دور شوید، دستگاه را برگردانید و آن را روی سه محور به جلو و عقب بچرخانید.</string>
     <string name="set_location">برای داشتن موقعیت خورشید و ماه، و جهت قبله می‌توانید موقعیت خود را در بخش تنظیمات وارد نمایید.</string>
     <string name="moonInScorpio">ایام قمر در عقرب</string>
-    <string name="astronomical_info">ستاره‌شناسی</string>
+    <string name="astronomy">ستاره‌شناسی</string>
     <string name="astronomical_info_summary">نمایش اطلاعاتی مانند صورت فلکی، نام سال و قمر در عقرب</string>
     <string name="islamic_offset">تنظیم تقویم اسلامی</string>
     <string name="islamic_offset_summary">تنظیم روز جهت جلو عقب کردن جهت اصلاح تقویم</string>
@@ -196,7 +196,7 @@
     <string name="spaced_and">" و "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
-    <string name="device_info">اطلاعات دستگاه</string>
+    <string name="device_information">اطلاعات دستگاه</string>
     <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۲×۲ و ۴×۱</string>
     <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
     <string name="n_till">%1$s تا %2$s</string>
