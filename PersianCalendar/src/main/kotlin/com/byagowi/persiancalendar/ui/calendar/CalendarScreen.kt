@@ -69,7 +69,7 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.CalendarsView
-import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen
+import com.byagowi.persiancalendar.ui.preferences.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
@@ -211,7 +211,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         binding.buttonsBar.header.setText(R.string.ask_user_to_set_location)
         binding.buttonsBar.settings.setOnClickListener {
             findNavController().navigateSafe(
-                CalendarScreenDirections.navigateToSettings(PreferencesScreen.LOCATION_ATHAN_TAB)
+                CalendarScreenDirections.navigateToSettings(SettingsScreen.LOCATION_ATHAN_TAB)
             )
         }
         binding.buttonsBar.discard.setOnClickListener {
@@ -484,7 +484,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
                     CalendarScreenDirections.navigateToSettings(
-                        PreferencesScreen.INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
+                        SettingsScreen.INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                     )
                 )
             }

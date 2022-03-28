@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit
  * MEHDIMYADI
  */
 
-class PreferencesScreen : Fragment(R.layout.fragment_settings) {
+class SettingsScreen : Fragment(R.layout.fragment_settings) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,7 +61,7 @@ class PreferencesScreen : Fragment(R.layout.fragment_settings) {
             setupDevelopmentMenu(toolbar, binding, layoutInflater)
         }
 
-        val args by navArgs<PreferencesScreenArgs>()
+        val args by navArgs<SettingsScreenArgs>()
         val viewModel by viewModels<PreferencesViewModel>()
         if (viewModel.selectedTab.value == PreferencesViewModel.DEFAULT_SELECTED_TAB)
             viewModel.changeSelectedTab(args.tab)

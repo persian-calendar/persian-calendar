@@ -7,6 +7,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -34,6 +35,7 @@ import com.byagowi.persiancalendar.ui.preferences.showTypographyDemoDialog
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@LargeTest
 @RunWith(AndroidJUnit4::class)
 class DialogsSmokeTest {
     @Test

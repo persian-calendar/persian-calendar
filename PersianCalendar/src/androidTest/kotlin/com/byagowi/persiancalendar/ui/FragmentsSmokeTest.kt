@@ -4,21 +4,22 @@ import android.appwidget.AppWidgetManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreenArgs
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragmentArgs
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.level.LevelScreen
-import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen
-import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen.Companion.INTERFACE_CALENDAR_TAB
-import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen.Companion.LOCATION_ATHAN_TAB
-import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen.Companion.WIDGET_NOTIFICATION_TAB
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragmentArgs
+import com.byagowi.persiancalendar.ui.preferences.SettingsScreenArgs
+import com.byagowi.persiancalendar.ui.preferences.SettingsScreen
+import com.byagowi.persiancalendar.ui.preferences.SettingsScreen.Companion.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.preferences.SettingsScreen.Companion.LOCATION_ATHAN_TAB
+import com.byagowi.persiancalendar.ui.preferences.SettingsScreen.Companion.WIDGET_NOTIFICATION_TAB
 import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureFragment
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
@@ -26,6 +27,7 @@ import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotif
 import org.junit.Test
 import org.junit.runner.RunWith
 
+@LargeTest
 @RunWith(AndroidJUnit4::class)
 class FragmentsSmokeTest {
 
@@ -45,7 +47,7 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<LicensesScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<AstronomyScreen>(
             themeResId = R.style.LightTheme,
-            fragmentArgs = AstronomyFragmentArgs(0).toBundle()
+            fragmentArgs = AstronomyScreenArgs(0).toBundle()
         )
         launchFragmentInContainer<CompassScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)
@@ -61,9 +63,9 @@ class FragmentsSmokeTest {
 //            Navigation.setViewNavController(it.requireView(), navController)
 //        }
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
-            launchFragmentInContainer<PreferencesScreen>(
+            launchFragmentInContainer<SettingsScreen>(
                 themeResId = R.style.LightTheme,
-                fragmentArgs = PreferencesFragmentArgs(it).toBundle()
+                fragmentArgs = SettingsScreenArgs(it).toBundle()
             )
         }
         launchFragmentInContainer<AgeWidgetConfigureFragment>(
