@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
+package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
 
 /*
  * Copyright (C) 2015 Paul Burke

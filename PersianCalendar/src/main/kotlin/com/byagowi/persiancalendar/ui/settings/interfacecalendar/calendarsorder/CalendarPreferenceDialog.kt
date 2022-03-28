@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
+package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
 
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity

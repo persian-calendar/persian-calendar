@@ -28,8 +28,8 @@ import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
-import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showCoordinatesDialog
-import com.byagowi.persiancalendar.ui.preferences.locationathan.location.showGPSLocationDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
+import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe

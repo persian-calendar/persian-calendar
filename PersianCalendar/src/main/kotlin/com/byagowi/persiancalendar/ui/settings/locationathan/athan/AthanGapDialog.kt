@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
+package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
 import androidx.core.content.edit
 import androidx.fragment.app.FragmentActivity

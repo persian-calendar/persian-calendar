@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
+package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.Manifest
 import android.animation.ValueAnimator
@@ -24,16 +24,16 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
-import com.byagowi.persiancalendar.ui.preferences.SettingsScreen
-import com.byagowi.persiancalendar.ui.preferences.build
-import com.byagowi.persiancalendar.ui.preferences.clickable
-import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
-import com.byagowi.persiancalendar.ui.preferences.multiSelect
-import com.byagowi.persiancalendar.ui.preferences.section
-import com.byagowi.persiancalendar.ui.preferences.singleSelect
-import com.byagowi.persiancalendar.ui.preferences.summary
-import com.byagowi.persiancalendar.ui.preferences.switch
-import com.byagowi.persiancalendar.ui.preferences.title
+import com.byagowi.persiancalendar.ui.settings.SettingsScreen
+import com.byagowi.persiancalendar.ui.settings.build
+import com.byagowi.persiancalendar.ui.settings.clickable
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
+import com.byagowi.persiancalendar.ui.settings.multiSelect
+import com.byagowi.persiancalendar.ui.settings.section
+import com.byagowi.persiancalendar.ui.settings.singleSelect
+import com.byagowi.persiancalendar.ui.settings.summary
+import com.byagowi.persiancalendar.ui.settings.switch
+import com.byagowi.persiancalendar.ui.settings.title
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber

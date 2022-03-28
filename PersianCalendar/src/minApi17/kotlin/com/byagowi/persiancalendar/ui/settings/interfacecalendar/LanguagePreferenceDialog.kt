@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
+package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R

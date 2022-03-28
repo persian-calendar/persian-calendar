@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
+package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row

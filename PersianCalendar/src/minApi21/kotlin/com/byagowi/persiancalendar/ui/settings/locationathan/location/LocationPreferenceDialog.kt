@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.locationathan.location
+package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

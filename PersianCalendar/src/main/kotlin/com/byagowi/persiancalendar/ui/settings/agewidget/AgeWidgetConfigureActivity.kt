@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.agewidget
+package com.byagowi.persiancalendar.ui.settings.agewidget
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.common
+package com.byagowi.persiancalendar.ui.settings.common
 
 import android.graphics.Color
 import androidx.annotation.ColorInt

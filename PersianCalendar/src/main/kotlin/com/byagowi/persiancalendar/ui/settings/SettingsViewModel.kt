@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences
+package com.byagowi.persiancalendar.ui.settings
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

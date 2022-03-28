@@ -11,7 +11,7 @@ fun showEmailDialog(activity: FragmentActivity) {
         .setView(emailBinding.root)
         .setTitle(R.string.about_email_sum)
         .setPositiveButton(R.string.continue_button) { _, _ ->
-            launchEmailIntent(activity,  emailBinding.inputText.text?.toString() ?: "")
+            launchEmailIntent(activity, emailBinding.inputText.text?.toString() ?: "")
         }
         .setNegativeButton(R.string.cancel, null)
         .show()

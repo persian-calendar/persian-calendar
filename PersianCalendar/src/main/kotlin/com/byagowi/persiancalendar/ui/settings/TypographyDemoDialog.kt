@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences
+package com.byagowi.persiancalendar.ui.settings
 
 import android.text.style.TextAppearanceSpan
 import android.widget.TextView

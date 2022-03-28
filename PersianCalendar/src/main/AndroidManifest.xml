@@ -110,7 +110,7 @@
         </receiver>
 
         <activity
-            android:name=".ui.preferences.widgetnotification.WidgetConfigurationActivity"
+            android:name=".ui.settings.widgetnotification.WidgetConfigurationActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true">
             <intent-filter>
@@ -119,7 +119,7 @@
         </activity>
 
         <activity
-            android:name=".ui.preferences.agewidget.AgeWidgetConfigureActivity"
+            android:name=".ui.settings.agewidget.AgeWidgetConfigureActivity"
             android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
             android:exported="true"
             android:launchMode="singleTop">
@@ -143,7 +143,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
+                android:value="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -161,7 +161,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
+                android:value="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -179,7 +179,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
+                android:value="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -197,7 +197,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
+                android:value="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <!--        <receiver-->
@@ -215,7 +215,7 @@
 
         <!--            <meta-data-->
         <!--                android:name="android.appwidget.provider.semConfigureActivity"-->
-        <!--                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />-->
+        <!--                android:value="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />-->
         <!--        </receiver>-->
 
         <receiver
@@ -233,7 +233,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
+                android:value="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -251,7 +251,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetConfigurationActivity" />
+                android:value="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />
         </receiver>
 
         <receiver
@@ -269,7 +269,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider.semConfigureActivity"
-                android:value="com.byagowi.persiancalendar.ui.preferences.agewidget.WidgetAgeConfigureActivity" />
+                android:value="com.byagowi.persiancalendar.ui.settings.agewidget.WidgetAgeConfigureActivity" />
         </receiver>
 
         <service

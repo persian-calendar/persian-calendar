@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.locationathan.location
+package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import android.location.Geocoder
 import androidx.appcompat.app.AlertDialog

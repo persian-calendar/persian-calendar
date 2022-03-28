@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.locationathan.location
+package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import android.Manifest
 import android.annotation.SuppressLint

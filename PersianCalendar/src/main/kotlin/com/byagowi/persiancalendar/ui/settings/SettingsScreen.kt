@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences
+package com.byagowi.persiancalendar.ui.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,9 +26,9 @@ import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.global.enableNewInterface
 import com.byagowi.persiancalendar.service.AlarmWorker
-import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
-import com.byagowi.persiancalendar.ui.preferences.locationathan.LocationAthanFragment
-import com.byagowi.persiancalendar.ui.preferences.widgetnotification.WidgetNotificationFragment
+import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
+import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
+import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
 import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow

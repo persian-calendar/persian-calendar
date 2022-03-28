@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.locationathan.location
+package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity

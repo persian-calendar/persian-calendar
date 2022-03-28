@@ -18,7 +18,6 @@ import kotlin.math.hypot
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
-import kotlin.math.sqrt
 
 /*
  * This file is part of Level (an Android Bubble Level).

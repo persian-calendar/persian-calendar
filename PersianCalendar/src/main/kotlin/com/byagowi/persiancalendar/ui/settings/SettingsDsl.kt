@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences
+package com.byagowi.persiancalendar.ui.settings
 
 import androidx.annotation.StringRes
 import androidx.core.content.edit
@@ -12,13 +12,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 @DslMarker
 @Target(AnnotationTarget.FUNCTION)
-annotation class PreferencesDsl
+annotation class SettingsDsl
 
-@PreferencesDsl
+@SettingsDsl
 inline fun PreferenceScreen.build(crossinline block: PreferenceScreen.() -> Unit) =
     this.also { block(it) }
 
-@PreferencesDsl
+@SettingsDsl
 inline fun PreferenceScreen.section(
     @StringRes title: Int, crossinline block: PreferenceCategory.() -> Unit
 ) {
@@ -31,7 +31,7 @@ inline fun PreferenceScreen.section(
     category.block()
 }
 
-@PreferencesDsl
+@SettingsDsl
 inline fun PreferenceCategory.clickable(
     crossinline onClick: () -> Unit, crossinline block: Preference.() -> Unit
 ) = this.addPreference(Preference(this.context).also {
@@ -41,13 +41,13 @@ inline fun PreferenceCategory.clickable(
     block(it)
 })
 
-@PreferencesDsl
+@SettingsDsl
 fun Preference.title(@StringRes titleResId: Int) = setTitle(titleResId)
 
-@PreferencesDsl
+@SettingsDsl
 fun Preference.summary(@StringRes summaryResId: Int) = setSummary(summaryResId)
 
-@PreferencesDsl
+@SettingsDsl
 inline fun PreferenceCategory.singleSelect(
     key: String, entries: List<String>, entryValues: List<String>, defaultValue: String,
     dialogTitleResId: Int, summaryResId: Int? = null, crossinline block: Preference.() -> Unit
@@ -79,7 +79,7 @@ inline fun PreferenceCategory.singleSelect(
     )
 }
 
-@PreferencesDsl
+@SettingsDsl
 inline fun PreferenceCategory.multiSelect(
     key: String,
     entries: List<String>, entryValues: List<String>, defaultValue: Set<String>,
@@ -103,7 +103,7 @@ inline fun PreferenceCategory.multiSelect(
     block = block
 )
 
-@PreferencesDsl
+@SettingsDsl
 inline fun PreferenceCategory.switch(
     key: String, defaultValue: Boolean, crossinline block: SwitchPreferenceCompat.() -> Unit
 ) = this.addPreference(SwitchPreferenceCompat(this.context).also {

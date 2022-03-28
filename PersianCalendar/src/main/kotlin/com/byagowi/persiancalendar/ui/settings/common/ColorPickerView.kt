@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.common
+package com.byagowi.persiancalendar.ui.settings.common
 /*
  * Single class, no dependency, ColorPickerView.
  * Unlike the rest of the project is released under MIT license.

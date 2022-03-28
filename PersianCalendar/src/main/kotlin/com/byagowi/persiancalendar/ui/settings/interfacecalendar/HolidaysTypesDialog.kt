@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.interfacecalendar
+package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.os.Build
 import android.text.method.LinkMovementMethod

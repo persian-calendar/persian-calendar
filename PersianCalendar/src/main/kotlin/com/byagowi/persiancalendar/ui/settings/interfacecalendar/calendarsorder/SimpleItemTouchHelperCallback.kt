@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder
+package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
 
 import android.graphics.Canvas
 import androidx.recyclerview.widget.GridLayoutManager

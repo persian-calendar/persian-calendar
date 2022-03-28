@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.widgetnotification
+package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent

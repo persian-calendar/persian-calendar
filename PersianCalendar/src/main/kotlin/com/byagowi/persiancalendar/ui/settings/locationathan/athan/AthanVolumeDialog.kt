@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.preferences.locationathan.athan
+package com.byagowi.persiancalendar.ui.settings.locationathan.athan
 
 import android.media.AudioManager
 import android.media.RingtoneManager
