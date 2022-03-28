@@ -62,8 +62,8 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
         }
 
         val args by navArgs<SettingsScreenArgs>()
-        val viewModel by viewModels<PreferencesViewModel>()
-        if (viewModel.selectedTab.value == PreferencesViewModel.DEFAULT_SELECTED_TAB)
+        val viewModel by viewModels<SettingsViewModel>()
+        if (viewModel.selectedTab.value == SettingsViewModel.DEFAULT_SELECTED_TAB)
             viewModel.changeSelectedTab(args.tab)
         val initiallySelectedTab = viewModel.selectedTab.value
 
