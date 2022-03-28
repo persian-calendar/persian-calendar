@@ -302,8 +302,8 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             }
         }
 
-        if (viewModel.selectedDay != Jdn.today()) {
-            bringDate(viewModel.selectedDay, monthChange = false, smoothScroll = false)
+        if (viewModel.selectedDay.value != Jdn.today()) {
+            bringDate(viewModel.selectedDay.value, monthChange = false, smoothScroll = false)
         } else {
             bringDate(Jdn.today(), monthChange = false, highlight = false)
         }
@@ -584,17 +584,19 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
                 showDayPickerDialog(
-                    activity ?: return@onClick, viewModel.selectedDay, R.string.go
+                    activity ?: return@onClick, viewModel.selectedDay.value, R.string.go
                 ) { jdn -> bringDate(jdn) }
             }
         }
         toolbar.menu.add(R.string.add_event).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { addEventOnCalendar(viewModel.selectedDay) }
+            it.onClick { addEventOnCalendar(viewModel.selectedDay.value) }
         }
         toolbar.menu.add(R.string.shift_work_settings).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick { showShiftWorkDialog(activity ?: return@onClick, viewModel.selectedDay) }
+            it.onClick {
+                showShiftWorkDialog(activity ?: return@onClick, viewModel.selectedDay.value)
+            }
         }
         toolbar.menu.add(R.string.month_overview).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
