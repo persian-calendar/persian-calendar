@@ -15,7 +15,7 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import java.util.*
 
-class SkyRendererFragment : Fragment(R.layout.fragment_sky_renderer) {
+class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentSkyRendererBinding.bind(view)

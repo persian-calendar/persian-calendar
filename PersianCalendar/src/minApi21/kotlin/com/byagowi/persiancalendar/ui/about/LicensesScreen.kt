@@ -44,7 +44,7 @@ import androidx.fragment.app.Fragment
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.createUpNavigationComposeView
 
-class LicensesFragment : Fragment() {
+class LicensesScreen : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = createUpNavigationComposeView(layoutInflater) @Composable { setTitle, _ ->

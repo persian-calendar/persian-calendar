@@ -6,7 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
+import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -16,10 +16,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class CalendarFragmentTest {
+class CalendarScreenTest {
     @Test
     fun testTodayButtonVisibility() {
-        launchFragmentInContainer<CalendarFragment>(themeResId = R.style.LightTheme).onFragment {
+        launchFragmentInContainer<CalendarScreen>(themeResId = R.style.LightTheme).onFragment {
             val viewModel by it.viewModels<CalendarViewModel>()
             runTest(UnconfinedTestDispatcher()) {
                 val values = mutableListOf<Boolean>()

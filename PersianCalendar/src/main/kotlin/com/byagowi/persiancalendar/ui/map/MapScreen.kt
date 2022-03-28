@@ -55,7 +55,7 @@ import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 
-class MapFragment : Fragment(R.layout.fragment_map) {
+class MapScreen : Fragment(R.layout.fragment_map) {
     private val binding by viewKeeper(FragmentMapBinding::bind)
     private val directPathButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path) }
     private val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
@@ -147,7 +147,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     private fun onMapClick(latitude: Float, longitude: Float) {
         // Easter egg like feature, bring sky renderer fragment
         if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.state.value.displayGrid) {
-            findNavController().navigateSafe(MapFragmentDirections.actionMapToSkyRenderer())
+            findNavController().navigateSafe(MapScreenDirections.actionMapToSkyRenderer())
             return
         }
         activity?.also {

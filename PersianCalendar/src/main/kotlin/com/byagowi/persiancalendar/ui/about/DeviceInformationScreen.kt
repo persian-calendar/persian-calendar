@@ -89,7 +89,7 @@ import kotlin.math.hypot
  * @author MEHDI DIMYADI
  * MEHDIMYADI
  */
-class DeviceInformationFragment : Fragment(R.layout.fragment_device_information) {
+class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

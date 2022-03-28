@@ -36,7 +36,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.android.material.chip.Chip
 
-class AboutFragment : Fragment(R.layout.fragment_about) {
+class AboutScreen : Fragment(R.layout.fragment_about) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,7 +53,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
                 it.icon = toolbar.context.getCompatDrawable(R.drawable.ic_device_information)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
                 it.onClick {
-                    findNavController().navigateSafe(AboutFragmentDirections.actionAboutToDeviceInformation())
+                    findNavController().navigateSafe(AboutScreenDirections.actionAboutToDeviceInformation())
                 }
             }
         }
@@ -101,7 +101,7 @@ class AboutFragment : Fragment(R.layout.fragment_about) {
 
         // licenses
         binding.licenses.setOnClickListener {
-            findNavController().navigateSafe(AboutFragmentDirections.actionAboutToLicenses())
+            findNavController().navigateSafe(AboutScreenDirections.actionAboutToLicenses())
         }
         binding.licensesTitle.putLineStartIcon(R.drawable.ic_licences)
 

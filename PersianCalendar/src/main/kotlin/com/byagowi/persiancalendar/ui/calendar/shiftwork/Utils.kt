@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
 import com.byagowi.persiancalendar.global.updateStoredPreference
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
+import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.putJdn
@@ -30,7 +30,7 @@ fun saveShiftWorkState(activity: FragmentActivity, viewModel: ShiftWorkViewModel
     updateStoredPreference(activity)
 
     activity.findNavController(R.id.navHostFragment)
-        .navigateSafe(CalendarFragmentDirections.navigateToSelf())
+        .navigateSafe(CalendarScreenDirections.navigateToSelf())
 }
 
 fun fillViewModelFromGlobalVariables(shiftWorkViewModel: ShiftWorkViewModel, selectedJdn: Jdn) {

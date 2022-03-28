@@ -5,19 +5,19 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.about.AboutFragment
-import com.byagowi.persiancalendar.ui.about.DeviceInformationFragment
-import com.byagowi.persiancalendar.ui.about.LicensesFragment
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment
+import com.byagowi.persiancalendar.ui.about.AboutScreen
+import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
+import com.byagowi.persiancalendar.ui.about.LicensesScreen
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyFragmentArgs
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragment
-import com.byagowi.persiancalendar.ui.compass.CompassFragment
-import com.byagowi.persiancalendar.ui.converter.ConverterFragment
-import com.byagowi.persiancalendar.ui.level.LevelFragment
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.INTERFACE_CALENDAR_TAB
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.LOCATION_ATHAN_TAB
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment.Companion.WIDGET_NOTIFICATION_TAB
+import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
+import com.byagowi.persiancalendar.ui.compass.CompassScreen
+import com.byagowi.persiancalendar.ui.converter.ConverterScreen
+import com.byagowi.persiancalendar.ui.level.LevelScreen
+import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen
+import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen.Companion.INTERFACE_CALENDAR_TAB
+import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen.Companion.LOCATION_ATHAN_TAB
+import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen.Companion.WIDGET_NOTIFICATION_TAB
 import com.byagowi.persiancalendar.ui.preferences.PreferencesFragmentArgs
 import com.byagowi.persiancalendar.ui.preferences.agewidget.AgeWidgetConfigureFragment
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.InterfaceCalendarFragment
@@ -34,22 +34,22 @@ class FragmentsSmokeTest {
         listOf(
             R.style.DynamicLightTheme, R.style.DynamicDarkTheme, R.style.LightTheme,
             R.style.DarkTheme, R.style.ModernTheme, R.style.BlueTheme, R.style.BlackTheme
-        ).forEach { launchFragmentInContainer<CalendarFragment>(themeResId = it) }
+        ).forEach { launchFragmentInContainer<CalendarScreen>(themeResId = it) }
     }
 
     @Test
     fun fragmentsSmokeTest() {
-        launchFragmentInContainer<CalendarFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<AboutFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<DeviceInformationFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<LicensesFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<AstronomyFragment>(
+        launchFragmentInContainer<CalendarScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<AboutScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<DeviceInformationScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<LicensesScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<AstronomyScreen>(
             themeResId = R.style.LightTheme,
             fragmentArgs = AstronomyFragmentArgs(0).toBundle()
         )
-        launchFragmentInContainer<CompassFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<ConverterFragment>(themeResId = R.style.LightTheme)
-        launchFragmentInContainer<LevelFragment>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<CompassScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<LevelScreen>(themeResId = R.style.LightTheme)
 //        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
 //        navController.setViewModelStore(ViewModelStore())
 //        launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme).onFragment {
@@ -61,7 +61,7 @@ class FragmentsSmokeTest {
 //            Navigation.setViewNavController(it.requireView(), navController)
 //        }
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
-            launchFragmentInContainer<PreferencesFragment>(
+            launchFragmentInContainer<PreferencesScreen>(
                 themeResId = R.style.LightTheme,
                 fragmentArgs = PreferencesFragmentArgs(it).toBundle()
             )

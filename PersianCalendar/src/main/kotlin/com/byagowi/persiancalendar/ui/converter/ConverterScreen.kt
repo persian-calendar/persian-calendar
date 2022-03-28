@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class ConverterFragment : Fragment(R.layout.fragment_converter) {
+class ConverterScreen : Fragment(R.layout.fragment_converter) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentConverterBinding.bind(view)

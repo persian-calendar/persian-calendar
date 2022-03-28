@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
 import kotlin.math.roundToInt
 
-class LicensesFragment : Fragment(R.layout.fragment_licenses) {
+class LicensesScreen : Fragment(R.layout.fragment_licenses) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentLicensesBinding.bind(view)

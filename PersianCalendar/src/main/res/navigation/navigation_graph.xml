@@ -8,13 +8,13 @@
     <activity
         android:id="@+id/main_activity"
         android:name="com.byagowi.persiancalendar.ui.MainActivity"
-        android:label="Main Activity"
+        android:label="@string/app_name"
         tools:layout="@layout/activity_main" />
 
     <fragment
         android:id="@+id/calendar"
-        android:name="com.byagowi.persiancalendar.ui.calendar.CalendarFragment"
-        android:label="Calendar Fragment"
+        android:name="com.byagowi.persiancalendar.ui.calendar.CalendarScreen"
+        android:label="@string/calendar"
         tools:layout="@layout/fragment_calendar">
         <action
             android:id="@+id/navigate_to_self"
@@ -53,14 +53,14 @@
 
     <fragment
         android:id="@+id/converter"
-        android:name="com.byagowi.persiancalendar.ui.converter.ConverterFragment"
-        android:label="Converter Fragment"
+        android:name="com.byagowi.persiancalendar.ui.converter.ConverterScreen"
+        android:label="@string/date_converter"
         tools:layout="@layout/fragment_converter" />
 
     <fragment
         android:id="@+id/compass"
-        android:name="com.byagowi.persiancalendar.ui.compass.CompassFragment"
-        android:label="Compass Fragment"
+        android:name="com.byagowi.persiancalendar.ui.compass.CompassScreen"
+        android:label="@string/compass"
         tools:layout="@layout/fragment_compass">
         <action
             android:id="@+id/action_compass_to_level"
@@ -80,8 +80,8 @@
 
     <fragment
         android:id="@+id/level"
-        android:name="com.byagowi.persiancalendar.ui.level.LevelFragment"
-        android:label="Level Fragment">
+        android:name="com.byagowi.persiancalendar.ui.level.LevelScreen"
+        android:label="@string/level">
         <action
             android:id="@+id/action_level_to_compass"
             app:destination="@id/compass"
@@ -93,8 +93,8 @@
 
     <fragment
         android:id="@+id/settings"
-        android:name="com.byagowi.persiancalendar.ui.preferences.PreferencesFragment"
-        android:label="Settings Fragment"
+        android:name="com.byagowi.persiancalendar.ui.preferences.PreferencesScreen"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_calendar">
         <argument
             android:name="tab"
@@ -108,8 +108,8 @@
 
     <fragment
         android:id="@+id/about"
-        android:name="com.byagowi.persiancalendar.ui.about.AboutFragment"
-        android:label="About Fragment"
+        android:name="com.byagowi.persiancalendar.ui.about.AboutScreen"
+        android:label="@string/about"
         tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_about_to_device_information"
@@ -129,18 +129,18 @@
 
     <fragment
         android:id="@+id/deviceInformation"
-        android:name="com.byagowi.persiancalendar.ui.about.DeviceInformationFragment"
-        android:label="Device Information Fragment" />
+        android:name="com.byagowi.persiancalendar.ui.about.DeviceInformationScreen"
+        android:label="@string/device_info" />
 
     <fragment
         android:id="@+id/licenses"
-        android:name="com.byagowi.persiancalendar.ui.about.LicensesFragment"
-        android:label="Licenses Fragment" />
+        android:name="com.byagowi.persiancalendar.ui.about.LicensesScreen"
+        android:label="@string/about_license" />
 
     <fragment
         android:id="@+id/astronomy"
-        android:name="com.byagowi.persiancalendar.ui.astronomy.AstronomyFragment"
-        android:label="Astronomy Fragment">
+        android:name="com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen"
+        android:label="@string/astronomical_info">
         <argument
             android:name="day_offset"
             android:defaultValue="0"
@@ -149,8 +149,8 @@
 
     <fragment
         android:id="@+id/map"
-        android:name="com.byagowi.persiancalendar.ui.map.MapFragment"
-        android:label="Map">
+        android:name="com.byagowi.persiancalendar.ui.map.MapScreen"
+        android:label="@string/map">
         <action
             android:id="@+id/action_map_to_sky_renderer"
             app:destination="@id/sky_renderer"
@@ -162,7 +162,7 @@
 
     <fragment
         android:id="@+id/sky_renderer"
-        android:name="com.byagowi.persiancalendar.ui.map.SkyRendererFragment"
-        android:label="PanoRendo" />
+        android:name="com.byagowi.persiancalendar.ui.map.SkyRendererScreen"
+        android:label="Sky Renderer Screen" />
 
 </navigation>

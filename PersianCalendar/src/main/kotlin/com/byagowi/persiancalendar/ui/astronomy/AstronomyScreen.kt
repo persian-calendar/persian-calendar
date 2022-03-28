@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.onEach
 import java.util.*
 import kotlin.math.abs
 
-class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
+class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentAstronomyBinding.bind(view)
@@ -53,7 +53,7 @@ class AstronomyFragment : Fragment(R.layout.fragment_astronomy) {
 
         val viewModel by viewModels<AstronomyViewModel>()
         if (viewModel.time.value == AstronomyViewModel.DEFAULT_TIME)
-            viewModel.changeToDayOffset(navArgs<AstronomyFragmentArgs>().value.dayOffset)
+            viewModel.changeToDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
         fun updateSolarView(time: GregorianCalendar, it: SunMoonPosition) {
             val tropical = viewModel.isTropical.value

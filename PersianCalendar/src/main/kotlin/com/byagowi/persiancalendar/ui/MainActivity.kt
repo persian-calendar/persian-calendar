@@ -64,8 +64,8 @@ import com.byagowi.persiancalendar.global.loadLanguageResources
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
-import com.byagowi.persiancalendar.ui.calendar.CalendarFragmentDirections
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
+import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
+import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -300,7 +300,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (isGranted) {
                     val navController = navHostFragment?.navController
                     if (navController?.currentDestination?.id == R.id.calendar)
-                        navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                        navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
                 }
             }
         }
@@ -321,7 +321,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             creationDateJdn = today
             val navController = navHostFragment?.navController
             if (navController?.currentDestination?.id == R.id.calendar) {
-                navController.navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
             }
         }
     }
@@ -371,8 +371,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             it.view.setOnClickListener { _ -> it.dismiss() }
             it.setAction("Settings") {
                 navHostFragment?.navController?.navigateSafe(
-                    CalendarFragmentDirections.navigateToSettings(
-                        PreferencesFragment.INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
+                    CalendarScreenDirections.navigateToSettings(
+                        PreferencesScreen.INTERFACE_CALENDAR_TAB, PREF_APP_LANGUAGE
                     )
                 )
             }

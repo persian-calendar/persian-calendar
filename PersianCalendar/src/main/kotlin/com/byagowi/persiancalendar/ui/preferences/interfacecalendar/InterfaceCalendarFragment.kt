@@ -24,7 +24,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
+import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen
 import com.byagowi.persiancalendar.ui.preferences.build
 import com.byagowi.persiancalendar.ui.preferences.clickable
 import com.byagowi.persiancalendar.ui.preferences.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
@@ -42,10 +42,10 @@ import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activity = activity ?: return
-        val destination = arguments?.getString(PreferencesFragment.PREF_DESTINATION)
+        val destination = arguments?.getString(PreferencesScreen.PREF_DESTINATION)
         if (destination == PREF_HOLIDAY_TYPES) {
             showHolidaysTypesDialog(activity)
-            arguments?.remove(PreferencesFragment.PREF_DESTINATION)
+            arguments?.remove(PreferencesScreen.PREF_DESTINATION)
         }
 
         preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {

@@ -69,7 +69,7 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.CalendarsView
-import com.byagowi.persiancalendar.ui.preferences.PreferencesFragment
+import com.byagowi.persiancalendar.ui.preferences.PreferencesScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
@@ -126,7 +126,7 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-class CalendarFragment : Fragment(R.layout.fragment_calendar) {
+class CalendarScreen : Fragment(R.layout.fragment_calendar) {
 
     private var mainBinding: FragmentCalendarBinding? = null
     private var searchView: SearchView? = null
@@ -211,13 +211,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         binding.buttonsBar.header.setText(R.string.ask_user_to_set_location)
         binding.buttonsBar.settings.setOnClickListener {
             findNavController().navigateSafe(
-                CalendarFragmentDirections.navigateToSettings(PreferencesFragment.LOCATION_ATHAN_TAB)
+                CalendarScreenDirections.navigateToSettings(PreferencesScreen.LOCATION_ATHAN_TAB)
             )
         }
         binding.buttonsBar.discard.setOnClickListener {
             context?.appPrefs?.edit { putBoolean(PREF_DISABLE_OWGHAT, true) }
             findNavController().navigateSafe(
-                CalendarFragmentDirections.navigateToSelf()
+                CalendarScreenDirections.navigateToSelf()
             )
         }
         return binding.root
@@ -483,8 +483,8 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             eventsBinding.buttonsBar.header.setText(R.string.warn_if_events_not_set)
             eventsBinding.buttonsBar.settings.setOnClickListener {
                 findNavController().navigateSafe(
-                    CalendarFragmentDirections.navigateToSettings(
-                        PreferencesFragment.INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
+                    CalendarScreenDirections.navigateToSettings(
+                        PreferencesScreen.INTERFACE_CALENDAR_TAB, PREF_HOLIDAY_TYPES
                     )
                 )
             }
@@ -508,7 +508,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         owghatBinding.moonView.isVisible = !isToday
         owghatBinding.moonView.setOnClickListener {
             findNavController().navigateSafe(
-                CalendarFragmentDirections.actionCalendarToAstronomy(jdn - Jdn.today())
+                CalendarScreenDirections.actionCalendarToAstronomy(jdn - Jdn.today())
             )
         }
         if (!isToday) owghatBinding.moonView.jdn = jdn.value.toFloat()
@@ -629,7 +629,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                         }
                     }
                     updateStoredPreference(context)
-                    findNavController().navigateSafe(CalendarFragmentDirections.navigateToSelf())
+                    findNavController().navigateSafe(CalendarScreenDirections.navigateToSelf())
                 }
             }
             menu.setGroupCheckable(groupId, true, true)

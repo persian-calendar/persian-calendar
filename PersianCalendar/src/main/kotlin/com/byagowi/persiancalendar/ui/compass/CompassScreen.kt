@@ -45,7 +45,7 @@ import kotlin.math.roundToInt
 /**
  * Compass/Qibla activity
  */
-class CompassFragment : Fragment(R.layout.fragment_compass) {
+class CompassScreen : Fragment(R.layout.fragment_compass) {
 
     private var stopped = false
     private var binding: FragmentCompassBinding? = null
@@ -170,14 +170,14 @@ class CompassFragment : Fragment(R.layout.fragment_compass) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController()
-                    .navigateSafe(CompassFragmentDirections.actionCompassToMap())
+                    .navigateSafe(CompassScreenDirections.actionCompassToMap())
             }
         }
         binding.bottomAppbar.menu.add(R.string.level).also {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_level)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
-                findNavController().navigateSafe(CompassFragmentDirections.actionCompassToLevel())
+                findNavController().navigateSafe(CompassScreenDirections.actionCompassToLevel())
             }
         }
 
