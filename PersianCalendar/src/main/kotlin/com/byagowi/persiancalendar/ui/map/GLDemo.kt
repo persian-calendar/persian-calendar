@@ -14,7 +14,7 @@ fun showGLDemoDialog(activity: FragmentActivity) {
     val glView = GLSurfaceView(activity)
     glView.setEGLContextClientVersion(2)
     glView.setRenderer(Renderer())
-    glView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+    glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY // XXX: This is dangerous
     MaterialAlertDialogBuilder(activity)
         .setView(glView)
         .show()
@@ -69,10 +69,26 @@ void main() {
 
     private val fragmentShaderCode = """
 precision mediump float;
-uniform vec4 vColor;
-void main() {
+//uniform vec4 vColor;
+/*void main() {
   gl_FragColor = vColor;
-}"""
+}*/
+// https://twitter.com/notargs/status/1250468645030858753
+uniform float time;
+uniform vec2 resolution;
+void main()
+{
+    vec3 d = .5 - vec3(gl_FragCoord.xy, 1) / resolution.y, p, o;
+    for (int i = 0; i < 32; ++i) {
+        o = p;
+        o.z -= time * 9.;
+        float a = o.z * .1;
+        o.xy *= mat2(cos(a), sin(a), -sin(a), cos(a));
+        p += (.1 - length(cos(o.xy) + sin(o.yz))) * d;
+    }
+    gl_FragColor = vec4((sin(p) + vec3(2, 5, 9)) / length(p) * vec3(1), 1);
+}
+"""
 
     // Set color with red, green, blue and alpha (opacity) values
     val color = floatArrayOf(0.63671875f, 0.76953125f, 0.22265625f, 1.0f)
@@ -93,12 +109,18 @@ void main() {
         }
 
     private fun loadShader(type: Int, shaderCode: String): Int {
-        // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
-        // or a fragment shader type (GLES20.GL_FRAGMENT_SHADER)
         return GLES20.glCreateShader(type).also { shader ->
-            // add the source code to the shader and compile it
             GLES20.glShaderSource(shader, shaderCode)
             GLES20.glCompileShader(shader)
+
+            val compiled = IntArray(1)
+            GLES20.glGetShaderiv(shader, GLES20.GL_COMPILE_STATUS, compiled, 0)
+            if (compiled[0] == 0) {
+                val message =
+                    "Could not compile program: " + GLES20.glGetShaderInfoLog(shader) + " | " + shaderCode
+                GLES20.glDeleteShader(shader)
+                error(message)
+            }
         }
     }
 
@@ -108,16 +130,17 @@ void main() {
         val vertexShader: Int = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
         val fragmentShader: Int = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
 
-        // create empty OpenGL ES Program
         program = GLES20.glCreateProgram().also {
-            // add the vertex shader to program
             GLES20.glAttachShader(it, vertexShader)
-
-            // add the fragment shader to program
             GLES20.glAttachShader(it, fragmentShader)
-
-            // creates OpenGL ES program executables
             GLES20.glLinkProgram(it)
+            val linkStatus = IntArray(1)
+            GLES20.glGetProgramiv(it, GLES20.GL_LINK_STATUS, linkStatus, 0)
+            if (linkStatus[0] != GLES20.GL_TRUE) {
+                val message = "Could not link program: " + GLES20.glGetProgramInfoLog(it)
+                GLES20.glDeleteProgram(it)
+                error(message)
+            }
         }
     }
 
@@ -148,6 +171,18 @@ void main() {
             GLES20.glGetUniformLocation(program, "vColor").also { colorHandle ->
                 // Set color for drawing the triangle
                 GLES20.glUniform4fv(colorHandle, 1, color, 0)
+            }
+
+            // get handle to fragment shader's vColor member
+            GLES20.glGetUniformLocation(program, "resolution").also { colorHandle ->
+                // Set color for drawing the triangle
+                GLES20.glUniform2f(colorHandle, 600f, 800f)
+            }
+
+            // get handle to fragment shader's vColor member
+            GLES20.glGetUniformLocation(program, "time").also { colorHandle ->
+                // Set color for drawing the triangle
+                GLES20.glUniform1f(colorHandle, System.nanoTime() / 1e9f)
             }
 
             // Draw the triangle
