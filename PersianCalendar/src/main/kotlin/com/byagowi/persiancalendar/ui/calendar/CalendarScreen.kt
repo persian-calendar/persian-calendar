@@ -69,6 +69,8 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsAdapter
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.CalendarsView
+import com.byagowi.persiancalendar.ui.map.showGLDemoDialog
+import com.byagowi.persiancalendar.ui.map.showShaderDemoDialog
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -225,7 +227,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        showShaderDemoDialog(requireActivity())
         val binding = FragmentCalendarBinding.bind(view)
         mainBinding = binding
 
