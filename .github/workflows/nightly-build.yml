@@ -46,8 +46,7 @@ jobs:
           # TODO: Clean up the duplication here
           ./gradlew assembleMinApi17Nightly
           apk_dir="$(find . -type f -iname *.apk)"
-          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.f
-          KEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
           rm "$apk_dir"
           ./gradlew assembleMinApi21Nightly
           apk_dir="$(find . -type f -iname *.apk)"
