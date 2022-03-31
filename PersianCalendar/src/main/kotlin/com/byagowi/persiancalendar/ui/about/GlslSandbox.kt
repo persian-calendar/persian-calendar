@@ -1,9 +1,12 @@
-package com.byagowi.persiancalendar.ui.map
+package com.byagowi.persiancalendar.ui.about
 
+import android.annotation.SuppressLint
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
+import android.widget.Toast
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
-import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.databinding.GlDemoBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -11,18 +14,23 @@ import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-fun showGLDemoDialog(activity: FragmentActivity) {
-    val glView = GLSurfaceView(activity)
-    glView.setEGLContextClientVersion(2)
-    glView.setRenderer(
-        Renderer(
-            """
+@SuppressLint("SetTextI18n")
+fun showGlslSandboxDialog(activity: FragmentActivity) {
+    val binding = GlDemoBinding.inflate(activity.layoutInflater)
+    binding.glView.setEGLContextClientVersion(2)
+    val renderer = Renderer {
+        activity.runOnUiThread { Toast.makeText(activity, it, Toast.LENGTH_LONG).show() }
+    }
+    binding.inputText.doAfterTextChanged {
+        renderer.setFragmentShader(binding.inputText.text?.toString() ?: "")
+    }
+    binding.inputText.setText(
+        """
 precision mediump float;
-// https://twitter.com/notargs/status/1250468645030858753
 uniform float time;
 uniform vec2 resolution;
-void main()
-{
+void main() {
+    // https://twitter.com/notargs/status/1250468645030858753
     vec3 d = .5 - vec3(gl_FragCoord.xy, 1) / resolution.y, p, o;
     for (int i = 0; i < 32; ++i) {
         o = p;
@@ -33,41 +41,32 @@ void main()
     }
     gl_FragColor = vec4((sin(p) + vec3(2, 5, 9)) / length(p) * vec3(1), 1);
 }
-"""
-        )
+""".trim()
     )
-    glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+    binding.glView.setRenderer(renderer)
+    binding.glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     MaterialAlertDialogBuilder(activity)
-        .setView(glView)
+        .setView(binding.root)
         .show()
 }
 
-private class Renderer(private val fragmentShaderCode: String) : GLSurfaceView.Renderer {
+private class Renderer(val errorCallback: (String) -> Unit) : GLSurfaceView.Renderer {
     private val vertexShaderCode =
         "attribute vec4 position; void main() { gl_Position = position; }"
 
     private var program: Int = 0
     private var resolutionHandle: Int = 0
     private var timeHandle: Int = 0
+    private var needsRecompile = false
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
-        val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
-        val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
-        program = GLES20.glCreateProgram().also {
-            GLES20.glAttachShader(it, vertexShader)
-            GLES20.glAttachShader(it, fragmentShader)
-            GLES20.glLinkProgram(it)
-            val linkStatus = IntArray(1)
-            GLES20.glGetProgramiv(it, GLES20.GL_LINK_STATUS, linkStatus, 0)
-            if (linkStatus[0] != GLES20.GL_TRUE) {
-                val message = GLES20.glGetProgramInfoLog(it)
-                GLES20.glDeleteProgram(it)
-                if (BuildConfig.DEVELOPMENT) error(message)
-            }
-            resolutionHandle = GLES20.glGetUniformLocation(it, "resolution")
-            timeHandle = GLES20.glGetUniformLocation(it, "time")
-        }
+    }
+
+    private var fragmentShaderCode = ""
+    fun setFragmentShader(fragmentShaderCode: String) {
+        this.fragmentShaderCode = fragmentShaderCode
+        needsRecompile = true
     }
 
     private var width = 1f
@@ -79,7 +78,9 @@ private class Renderer(private val fragmentShaderCode: String) : GLSurfaceView.R
     }
 
     override fun onDrawFrame(gl: GL10?) {
+        if (needsRecompile) compileProgram()
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
+        if (program == 0) return
         GLES20.glUseProgram(program)
         val positionHandle = GLES20.glGetAttribLocation(program, "position")
         GLES20.glEnableVertexAttribArray(positionHandle)
@@ -112,6 +113,26 @@ private class Renderer(private val fragmentShaderCode: String) : GLSurfaceView.R
             }
         }
 
+    private fun compileProgram() {
+        needsRecompile = false
+        if (program != 0) GLES20.glDeleteProgram(program)
+        val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
+        val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
+        program = GLES20.glCreateProgram()
+        GLES20.glAttachShader(program, vertexShader)
+        GLES20.glAttachShader(program, fragmentShader)
+        GLES20.glLinkProgram(program)
+        val linkStatus = IntArray(1)
+        GLES20.glGetProgramiv(program, GLES20.GL_LINK_STATUS, linkStatus, 0)
+        if (linkStatus[0] != GLES20.GL_TRUE) {
+            val message = GLES20.glGetProgramInfoLog(program)
+            GLES20.glDeleteProgram(program)
+            errorCallback(message)
+        }
+        resolutionHandle = GLES20.glGetUniformLocation(program, "resolution")
+        timeHandle = GLES20.glGetUniformLocation(program, "time")
+    }
+
     private fun loadShader(type: Int, shaderCode: String): Int {
         return GLES20.glCreateShader(type).also { shader ->
             GLES20.glShaderSource(shader, shaderCode)
@@ -122,7 +143,7 @@ private class Renderer(private val fragmentShaderCode: String) : GLSurfaceView.R
             if (compiled[0] == 0) {
                 val message = GLES20.glGetShaderInfoLog(shader)
                 GLES20.glDeleteShader(shader)
-                if (BuildConfig.DEVELOPMENT) error(message)
+                errorCallback(message)
             }
         }
     }

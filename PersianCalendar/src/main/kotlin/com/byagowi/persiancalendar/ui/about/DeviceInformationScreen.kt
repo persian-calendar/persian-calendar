@@ -126,12 +126,15 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            var clickCount = 0
             binding.toolbar.menu.add("Game").also {
                 it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_esports)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }.onClick {
                 runCatching {
-                    startActivity(
+                    clickCount++
+                    if (clickCount % 3 == 0) activity?.let(::showGlslSandboxDialog)
+                    else startActivity(
                         Intent(Intent.ACTION_MAIN).setClassName(
                             "com.android.systemui", "com.android.systemui.egg.MLandActivity"
                         ).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
