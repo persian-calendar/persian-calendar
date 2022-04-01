@@ -132,7 +132,7 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }.onClick {
                 runCatching {
-                    if (clickCount++ % 3 == 0) activity?.let(::showGlslSandboxDialog)
+                    if (++clickCount % 3 == 0) activity?.let(::showGlslSandboxDialog)
                     else startActivity(
                         Intent(Intent.ACTION_MAIN).setClassName(
                             "com.android.systemui", "com.android.systemui.egg.MLandActivity"
