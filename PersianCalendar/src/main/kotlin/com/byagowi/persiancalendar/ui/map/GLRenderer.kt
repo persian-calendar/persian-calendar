@@ -128,7 +128,7 @@ class GLRenderer(
             GLES20.glTexParameteri(
                 GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST
             )
-            val minified = bitmap.scale(500, 500)
+            val minified = bitmap.scale(512, 512)
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, minified, 0)
             minified.recycle()
         }
