@@ -6,7 +6,7 @@ import android.opengl.GLSurfaceView
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
-import com.byagowi.persiancalendar.databinding.GlDemoBinding
+import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -15,8 +15,8 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 @SuppressLint("SetTextI18n")
-fun showGlslSandboxDialog(activity: FragmentActivity) {
-    val binding = GlDemoBinding.inflate(activity.layoutInflater)
+fun showShaderSandboxDialog(activity: FragmentActivity) {
+    val binding = ShaderSandboxBinding.inflate(activity.layoutInflater)
     binding.glView.setEGLContextClientVersion(2)
     val renderer = Renderer {
         activity.runOnUiThread { Toast.makeText(activity, it, Toast.LENGTH_LONG).show() }
