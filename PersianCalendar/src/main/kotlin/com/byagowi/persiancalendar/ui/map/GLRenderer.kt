@@ -132,9 +132,7 @@ class GLRenderer(
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, minified, 0)
             minified.recycle()
         }
-        if (textureHandle[0] == 0)
-            onError("Failed to load texture")
+        if (textureHandle[0] == 0) onError("Failed to load texture")
         this.textureHandle = textureHandle[0]
     }
-
 }
