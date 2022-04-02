@@ -82,7 +82,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener {
-            viewModel.subtractOneDay()
+            viewModel.subtractTenDays()
             true
         }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
@@ -91,7 +91,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener {
-            viewModel.addOneDay()
+            viewModel.addTenDays()
             true
         }
 
