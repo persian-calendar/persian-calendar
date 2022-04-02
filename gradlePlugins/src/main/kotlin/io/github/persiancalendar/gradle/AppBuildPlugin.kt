@@ -29,6 +29,8 @@ class AppBuildPlugin : Plugin<Project> {
             }
             inputs.file(project.rootDir / "THANKS.md")
             outputs.file(generateDir / "Credits.kt")
+            inputs.file(project.rootDir / "FAQ.fa.txt")
+            outputs.file(generateDir / "Faq.kt")
             inputs.file(projectDir / "shaders" / "common.vert")
             inputs.file(projectDir / "shaders" / "globe.frag")
             inputs.file(projectDir / "shaders" / "sandbox.frag")

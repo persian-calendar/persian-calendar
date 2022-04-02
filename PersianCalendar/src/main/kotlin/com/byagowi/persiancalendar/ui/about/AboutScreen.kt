@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAboutBinding
+import com.byagowi.persiancalendar.generated.faq
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.getAnimatedDrawable
@@ -109,7 +110,7 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
         binding.helpCard.isVisible = language.isUserAbleToReadPersian
         binding.helpTitle.putLineStartIcon(R.drawable.ic_help)
         binding.helpSectionsRecyclerView.apply {
-            val sections = getString(R.string.help_sections)
+            val sections = faq
                 .split(Regex("^={4}$", RegexOption.MULTILINE))
                 .map { it.trim().lines() }
                 .map { lines ->

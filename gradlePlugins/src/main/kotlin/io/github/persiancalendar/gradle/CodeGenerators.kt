@@ -67,6 +67,16 @@ abstract class CodeGenerators : DefaultTask() {
             builder.build().writeTo(generatedAppSrcDir)
         }
         run {
+            val input = project.rootDir / "FAQ.fa.txt"
+            val builder = FileSpec.builder(packageName, "Faq")
+            builder.addProperty(
+                PropertySpec.builder("faq", String::class)
+                    .initializer(buildCodeBlock { addStatement("%S", input.readText()) })
+                    .build()
+            )
+            builder.build().writeTo(generatedAppSrcDir)
+        }
+        run {
             val vertex = projectDir / "shaders" / "common.vert"
             val globe = projectDir / "shaders" / "globe.frag"
             val sandbox = projectDir / "shaders" / "sandbox.frag"
