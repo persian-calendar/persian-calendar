@@ -25,7 +25,7 @@ fun showShaderSandboxDialog(activity: FragmentActivity) {
     binding.glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     binding.inputText.doAfterTextChanged {
         renderer.fragmentShader = binding.inputText.text?.toString() ?: ""
-        binding.glView.queueEvent { renderer.compileProgram() }
+        binding.glView.queueEvent { renderer.compileProgram(); binding.glView.requestRender() }
     }
     binding.inputText.setText(
         """
