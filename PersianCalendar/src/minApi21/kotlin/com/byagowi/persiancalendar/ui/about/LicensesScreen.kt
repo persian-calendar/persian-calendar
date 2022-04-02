@@ -32,7 +32,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,8 +48,7 @@ class LicensesScreen : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View = createUpNavigationComposeView(layoutInflater) @Composable { setTitle, _ ->
         setTitle(stringResource(R.string.about_license_title))
-        val context = LocalContext.current
-        val sections = remember { context.resources.getCreditsSections() }
+        val sections = remember { getCreditsSections() }
         CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
             val expansionsState = remember { List(sections.size) { false }.toMutableStateList() }
             val initialDegree =

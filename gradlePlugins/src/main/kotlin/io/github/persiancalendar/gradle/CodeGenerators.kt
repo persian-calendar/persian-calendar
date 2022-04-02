@@ -46,15 +46,24 @@ abstract class CodeGenerators : DefaultTask() {
         val generatedAppSrcDir = getGeneratedAppSrcDir().get()
         generatedAppSrcDir.mkdirs()
         val projectDir = project.projectDir
-        val actions = listOf(
+        listOf(
             "events" to ::generateEventsCode,
             "cities" to ::generateCitiesCode,
             "districts" to ::generateDistrictsCode
-        )
-        actions.forEach { (name, generator) ->
+        ).forEach { (name, generator) ->
             val input = projectDir / "data" / "$name.json"
             val builder = FileSpec.builder(packageName, name.capitalized())
             generator(input, builder)
+            builder.build().writeTo(generatedAppSrcDir)
+        }
+        run {
+            val input = project.rootDir / "THANKS.md"
+            val builder = FileSpec.builder(packageName, "Credits")
+            builder.addProperty(
+                PropertySpec.builder("credits", String::class)
+                    .initializer(buildCodeBlock { addStatement("%S", input.readText()) })
+                    .build()
+            )
             builder.build().writeTo(generatedAppSrcDir)
         }
     }

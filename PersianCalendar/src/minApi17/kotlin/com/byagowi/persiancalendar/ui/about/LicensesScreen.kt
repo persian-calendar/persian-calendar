@@ -84,7 +84,7 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
             }
         }
 
-        val sections = resources.getCreditsSections().map { (title, license, text) ->
+        val sections = getCreditsSections().map { (title, license, text) ->
             buildSpannedString {
                 append(title)
                 if (license != null) {
