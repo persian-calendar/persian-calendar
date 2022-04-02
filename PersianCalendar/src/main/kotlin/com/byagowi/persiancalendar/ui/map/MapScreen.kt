@@ -62,6 +62,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
     private val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
     private val nightMaskButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
+    private val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
 
     private val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
@@ -103,6 +104,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             viewModel.toggleDisplayLocation()
         }
         nightMaskButton.onClick { viewModel.toggleNightMask() }
+        globeViewButton.onClick { map?.also { showGlobeDialog(activity ?: return@also, it) } }
         binding.root.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.APPEARING)
             it.setAnimateParentHierarchy(false)
@@ -121,16 +123,14 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             val date = GregorianCalendar().also { it.time = Date(state.time) }
 
             runCatching {
-                binding.map.setImageBitmap(
-                    // TODO this must be optimized and don't be invoke for each state change
-                    createMap(
-                        date = date,
-                        displayNightMask = state.displayNightMask,
-                        displayGrid = state.displayGrid,
-                        displayLocation = state.displayLocation,
-                        directPathDestination = state.directPathDestination
-                    )
-                )
+                val map = createMap(
+                    date = date,
+                    displayNightMask = state.displayNightMask,
+                    displayGrid = state.displayGrid,
+                    displayLocation = state.displayLocation,
+                    directPathDestination = state.directPathDestination
+                ).also { map = it }
+                binding.map.setImageBitmap(map)
             }.onFailure(logException)
 
             binding.date.text = date.formatDateAndTime()
@@ -138,6 +138,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             directPathButton.icon.alpha = if (state.isDirectPathMode) 127 else 255
         }.launchIn(viewLifecycleOwner.lifecycleScope)
     }
+
+    private var map: Bitmap? = null
 
     private fun attemptSwitchToDirectPathMode() {
         coordinates ?: bringGps()

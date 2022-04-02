@@ -120,4 +120,5 @@ omasouri: Omid Masouri"</string>
     <string name="show_my_location_label" translatable="false">GPS</string>
     <string name="show_location_label" translatable="false">Location</string>
     <string name="show_night_mask_label" translatable="false">Night Mask</string>
+    <string name="show_globe_view_label" translatable="false">3D Globe</string>
 </resources>
