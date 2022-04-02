@@ -8,10 +8,11 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
     val glView = GLSurfaceView(activity)
+    glView.setOnClickListener { glView.requestRender() }
     glView.setEGLContextClientVersion(2)
     val renderer = GLRenderer(onSurfaceCreated = { it.loadTexture(image) })
     glView.setRenderer(renderer)
-    glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
+    glView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
     renderer.fragmentShader = globeFragmentShader
     MaterialAlertDialogBuilder(activity)
         .setView(glView)
