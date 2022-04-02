@@ -45,7 +45,7 @@
     <uses-feature
         android:name="android.software.live_wallpaper"
         android:required="false" />
-    <!-- Used for 3d globe view in map screen, a corner feature -->
+    <!-- Used for 3d globe view in map screen, a niche feature -->
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="false" />
