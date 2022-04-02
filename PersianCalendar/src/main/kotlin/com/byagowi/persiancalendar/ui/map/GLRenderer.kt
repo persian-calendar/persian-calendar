@@ -5,6 +5,7 @@ import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.GLUtils
 import androidx.core.graphics.scale
+import com.byagowi.persiancalendar.generated.commonVertexShader
 import com.byagowi.persiancalendar.variants.debugLog
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -16,9 +17,6 @@ class GLRenderer(
     val onError: (String) -> Unit = { debugLog(it) },
     val onSurfaceCreated: (GLRenderer) -> Unit = {}
 ) : GLSurfaceView.Renderer {
-    private val vertexShaderCode =
-        "attribute vec4 position; void main() { gl_Position = position; }"
-
     private var program = 0
     private var resolutionHandle = 0
     private var timeHandle = 0
@@ -86,7 +84,7 @@ class GLRenderer(
     fun compileProgram() {
         if (!isSurfaceCreated) return
         if (program != 0) GLES20.glDeleteProgram(program)
-        val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
+        val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, commonVertexShader)
         val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
         program = GLES20.glCreateProgram()
         GLES20.glAttachShader(program, vertexShader)

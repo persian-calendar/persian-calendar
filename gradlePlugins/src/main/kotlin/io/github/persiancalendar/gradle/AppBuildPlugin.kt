@@ -27,6 +27,12 @@ class AppBuildPlugin : Plugin<Project> {
                 val output = generateDir / "${name.capitalized()}.kt"
                 outputs.file(output)
             }
+            inputs.file(project.rootDir / "THANKS.md")
+            outputs.file(generateDir / "Credits.kt")
+            inputs.file(projectDir / "shaders" / "common.vert")
+            inputs.file(projectDir / "shaders" / "globe.frag")
+            inputs.file(projectDir / "shaders" / "sandbox.frag")
+            outputs.file(generateDir / "Shaders.kt")
         }
     }
 }

@@ -66,6 +66,28 @@ abstract class CodeGenerators : DefaultTask() {
             )
             builder.build().writeTo(generatedAppSrcDir)
         }
+        run {
+            val vertex = projectDir / "shaders" / "common.vert"
+            val globe = projectDir / "shaders" / "globe.frag"
+            val sandbox = projectDir / "shaders" / "sandbox.frag"
+            val builder = FileSpec.builder(packageName, "Shaders")
+            builder.addProperty(
+                PropertySpec.builder("commonVertexShader", String::class)
+                    .initializer(buildCodeBlock { addStatement("%S", vertex.readText()) })
+                    .build()
+            )
+            builder.addProperty(
+                PropertySpec.builder("globeFragmentShader", String::class)
+                    .initializer(buildCodeBlock { addStatement("%S", globe.readText()) })
+                    .build()
+            )
+            builder.addProperty(
+                PropertySpec.builder("sandboxFragmentShader", String::class)
+                    .initializer(buildCodeBlock { addStatement("%S", sandbox.readText()) })
+                    .build()
+            )
+            builder.build().writeTo(generatedAppSrcDir)
+        }
     }
 
     @Serializable
