@@ -21,8 +21,11 @@ fun showGlslSandboxDialog(activity: FragmentActivity) {
     val renderer = Renderer {
         activity.runOnUiThread { Toast.makeText(activity, it, Toast.LENGTH_LONG).show() }
     }
+    binding.glView.setRenderer(renderer)
+    binding.glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     binding.inputText.doAfterTextChanged {
-        renderer.setFragmentShader(binding.inputText.text?.toString() ?: "")
+        renderer.fragmentShader = binding.inputText.text?.toString() ?: ""
+        binding.glView.queueEvent { renderer.compileProgram() }
     }
     binding.inputText.setText(
         """
@@ -43,8 +46,6 @@ void main() {
 }
 """.trim()
     )
-    binding.glView.setRenderer(renderer)
-    binding.glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .show()
@@ -57,17 +58,15 @@ private class Renderer(val errorCallback: (String) -> Unit) : GLSurfaceView.Rend
     private var program: Int = 0
     private var resolutionHandle: Int = 0
     private var timeHandle: Int = 0
-    private var needsRecompile = false
+    private var isSurfaceCreated = false
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
+        isSurfaceCreated = true
+        compileProgram()
     }
 
-    private var fragmentShaderCode = ""
-    fun setFragmentShader(fragmentShaderCode: String) {
-        this.fragmentShaderCode = fragmentShaderCode
-        needsRecompile = true
-    }
+    var fragmentShader = ""
 
     private var width = 1f
     private var height = 1f
@@ -78,7 +77,6 @@ private class Renderer(val errorCallback: (String) -> Unit) : GLSurfaceView.Rend
     }
 
     override fun onDrawFrame(gl: GL10?) {
-        if (needsRecompile) compileProgram()
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
         if (program == 0) return
         GLES20.glUseProgram(program)
@@ -113,11 +111,11 @@ private class Renderer(val errorCallback: (String) -> Unit) : GLSurfaceView.Rend
             }
         }
 
-    private fun compileProgram() {
-        needsRecompile = false
+    fun compileProgram() {
+        if (!isSurfaceCreated) return
         if (program != 0) GLES20.glDeleteProgram(program)
         val vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode)
-        val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode)
+        val fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader)
         program = GLES20.glCreateProgram()
         GLES20.glAttachShader(program, vertexShader)
         GLES20.glAttachShader(program, fragmentShader)
