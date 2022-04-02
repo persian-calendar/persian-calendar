@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.generated.globeFragmentShader
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
@@ -14,7 +15,7 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
     glView.setRenderer(renderer)
     glView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
     renderer.fragmentShader = globeFragmentShader
-    MaterialAlertDialogBuilder(activity)
-        .setView(glView)
-        .show()
+    val dialog = BottomSheetDialog(activity)
+    dialog.setContentView(glView)
+    dialog.show()
 }
