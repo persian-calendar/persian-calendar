@@ -12,7 +12,10 @@ import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class GLRenderer(val errorCallback: (String) -> Unit = { debugLog(it) }) : GLSurfaceView.Renderer {
+class GLRenderer(
+    val onError: (String) -> Unit = { debugLog(it) },
+    val onSurfaceCreated: (GLRenderer) -> Unit = {}
+) : GLSurfaceView.Renderer {
     private val vertexShaderCode =
         "attribute vec4 position; void main() { gl_Position = position; }"
 
@@ -26,6 +29,7 @@ class GLRenderer(val errorCallback: (String) -> Unit = { debugLog(it) }) : GLSur
         GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
         isSurfaceCreated = true
         compileProgram()
+        onSurfaceCreated(this)
     }
 
     var fragmentShader = ""
@@ -93,7 +97,7 @@ class GLRenderer(val errorCallback: (String) -> Unit = { debugLog(it) }) : GLSur
         if (linkStatus[0] != GLES20.GL_TRUE) {
             val message = GLES20.glGetProgramInfoLog(program)
             GLES20.glDeleteProgram(program)
-            errorCallback(message)
+            onError(message)
         }
         resolutionHandle = GLES20.glGetUniformLocation(program, "resolution")
         timeHandle = GLES20.glGetUniformLocation(program, "time")
@@ -109,7 +113,7 @@ class GLRenderer(val errorCallback: (String) -> Unit = { debugLog(it) }) : GLSur
             if (compiled[0] == 0) {
                 val message = GLES20.glGetShaderInfoLog(shader)
                 GLES20.glDeleteShader(shader)
-                errorCallback(message)
+                onError(message)
             }
         }
     }
@@ -130,7 +134,7 @@ class GLRenderer(val errorCallback: (String) -> Unit = { debugLog(it) }) : GLSur
             minified.recycle()
         }
         if (textureHandle[0] == 0)
-            errorCallback("Failed to load texture")
+            onError("Failed to load texture")
         this.textureHandle = textureHandle[0]
     }
 

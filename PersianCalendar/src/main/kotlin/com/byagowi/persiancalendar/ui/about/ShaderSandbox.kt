@@ -14,7 +14,7 @@ uniform float time;
 uniform vec2 resolution;
 void main() {
     // https://twitter.com/notargs/status/1250468645030858753
-    vec3 d = .5 - vec3(gl_FragCoord.xy, 1) / resolution.y, p, o;
+    vec3 d = .5 - vec3(gl_FragCoord.xy, 1.0) / resolution.y, p, o;
     for (int i = 0; i < 32; ++i) {
         o = p;
         o.z -= time * 9.;
@@ -29,9 +29,9 @@ void main() {
 fun showShaderSandboxDialog(activity: FragmentActivity) {
     val binding = ShaderSandboxBinding.inflate(activity.layoutInflater)
     binding.glView.setEGLContextClientVersion(2)
-    val renderer = GLRenderer {
+    val renderer = GLRenderer(onError = {
         activity.runOnUiThread { Toast.makeText(activity, it, Toast.LENGTH_LONG).show() }
-    }
+    })
     binding.glView.setRenderer(renderer)
     binding.glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
     binding.inputText.doAfterTextChanged {
