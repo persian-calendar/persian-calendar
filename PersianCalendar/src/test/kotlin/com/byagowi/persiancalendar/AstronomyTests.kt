@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar
 
+import android.icu.util.ChineseCalendar
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.Eclipse
@@ -14,6 +15,8 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 import org.junit.jupiter.api.Test
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
 import java.util.*
 import kotlin.test.assertEquals
 
@@ -199,6 +202,22 @@ class AstronomyTests {
             assertEquals(
                 expected, ChineseZodiac.fromPersianCalendar(PersianDate(year, 1, 1))
             )
+        }
+    }
+
+    @Test
+    fun `Chinese animal year name`() {
+        // https://en.wikipedia.org/wiki/Chinese_zodiac#Chinese_calendar
+        (1..5).flatMap {
+            listOf(
+                ChineseZodiac.RAT, ChineseZodiac.OX, ChineseZodiac.TIGER,
+                ChineseZodiac.RABBIT, ChineseZodiac.DRAGON, ChineseZodiac.SNAKE,
+                ChineseZodiac.HORSE, ChineseZodiac.GOAT, ChineseZodiac.MONKEY,
+                ChineseZodiac.ROOSTER, ChineseZodiac.DOG, ChineseZodiac.PIG,
+            )
+        }.zip(1..60) { expected, year ->
+            val mock = mock<ChineseCalendar> { on { get(ChineseCalendar.YEAR) } doReturn year }
+            assertEquals(expected, ChineseZodiac.fromChineseCalendar(mock))
         }
     }
 }
