@@ -9,18 +9,18 @@ import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.PersianDate
 
 enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: String) {
-    MONKEY(R.string.year1, "🐒"),
-    ROOSTER(R.string.year2, "🐔"),
-    DOG(R.string.year3, "🐕"),
-    PIG(R.string.year4, "🐖"),
-    RAT(R.string.year5, "🐀"),
-    OX(R.string.year6, "🐂"),
-    TIGER(R.string.year7, "🐅"),
-    RABBIT(R.string.year8, "🐇"),
-    DRAGON(R.string.year9, "🐲"),
-    SNAKE(R.string.year10, "🐍"),
-    HORSE(R.string.year11, "🐎"),
-    GOAT(R.string.year12, "🐐");
+    RAT(R.string.animal_year_name_rat, "🐀"),
+    OX(R.string.animal_year_name_ox, "🐂"),
+    TIGER(R.string.animal_year_name_tiger, "🐅"),
+    RABBIT(R.string.animal_year_name_rabbit, "🐇"),
+    DRAGON(R.string.animal_year_name_dragon, "🐲"),
+    SNAKE(R.string.animal_year_name_snake, "🐍"),
+    HORSE(R.string.animal_year_name_horse, "🐎"),
+    GOAT(R.string.animal_year_name_goat, "🐐"),
+    MONKEY(R.string.animal_year_name_monkey, "🐒"),
+    ROOSTER(R.string.animal_year_name_rooster, "🐔"),
+    DOG(R.string.animal_year_name_dog, "🐕"),
+    PIG(R.string.animal_year_name_pig, "🐖");
 
     fun format(context: Context, withEmoji: Boolean) = buildString {
         if (withEmoji && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) append("$emoji ")
@@ -40,11 +40,11 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
          * * https://fa.wikipedia.org/wiki/گاه‌شماری_حیوانی
          */
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
-            values().getOrNull((persianDate.year + 9) % 12) ?: MONKEY
+            values().getOrNull((persianDate.year + 5) % 12) ?: RAT
 
         @RequiresApi(Build.VERSION_CODES.N)
         fun fromChineseCalendar(date: ChineseCalendar): ChineseZodiac =
-            values().getOrNull((date.get(ChineseCalendar.YEAR) + 3) % 12) ?: MONKEY
+            values().getOrNull((date.get(ChineseCalendar.YEAR) - 1) % 12) ?: RAT
 
         // Compatibilities, https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
         // They should be turned into formula eventually
