@@ -56,48 +56,25 @@ abstract class CodeGenerators : DefaultTask() {
             generator(input, builder)
             builder.build().writeTo(generatedAppSrcDir)
         }
-        run {
-            val input = project.rootDir / "THANKS.md"
-            val builder = FileSpec.builder(packageName, "Credits")
+        createTextStore(generatedAppSrcDir)
+    }
+
+    private fun createTextStore(generatedAppSrcDir: File) {
+        val builder = FileSpec.builder(packageName, "TextStore")
+        listOf(
+            project.rootDir / "THANKS.md" to "credits",
+            project.rootDir / "FAQ.fa.txt" to "faq",
+            project.projectDir / "shaders" / "common.vert" to "commonVertexShader",
+            project.projectDir / "shaders" / "globe.frag" to "globeFragmentShader",
+            project.projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader",
+        ).forEach { (textFile, fieldName) ->
             builder.addProperty(
-                PropertySpec.builder("credits", String::class)
-                    .initializer(buildCodeBlock { addStatement("%S", input.readText()) })
+                PropertySpec.builder(fieldName, String::class)
+                    .initializer(buildCodeBlock { addStatement("%S", textFile.readText()) })
                     .build()
             )
-            builder.build().writeTo(generatedAppSrcDir)
         }
-        run {
-            val input = project.rootDir / "FAQ.fa.txt"
-            val builder = FileSpec.builder(packageName, "Faq")
-            builder.addProperty(
-                PropertySpec.builder("faq", String::class)
-                    .initializer(buildCodeBlock { addStatement("%S", input.readText()) })
-                    .build()
-            )
-            builder.build().writeTo(generatedAppSrcDir)
-        }
-        run {
-            val vertex = projectDir / "shaders" / "common.vert"
-            val globe = projectDir / "shaders" / "globe.frag"
-            val sandbox = projectDir / "shaders" / "sandbox.frag"
-            val builder = FileSpec.builder(packageName, "Shaders")
-            builder.addProperty(
-                PropertySpec.builder("commonVertexShader", String::class)
-                    .initializer(buildCodeBlock { addStatement("%S", vertex.readText()) })
-                    .build()
-            )
-            builder.addProperty(
-                PropertySpec.builder("globeFragmentShader", String::class)
-                    .initializer(buildCodeBlock { addStatement("%S", globe.readText()) })
-                    .build()
-            )
-            builder.addProperty(
-                PropertySpec.builder("sandboxFragmentShader", String::class)
-                    .initializer(buildCodeBlock { addStatement("%S", sandbox.readText()) })
-                    .build()
-            )
-            builder.build().writeTo(generatedAppSrcDir)
-        }
+        builder.build().writeTo(generatedAppSrcDir)
     }
 
     @Serializable
