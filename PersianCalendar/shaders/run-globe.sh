@@ -1,4 +1,3 @@
 #!/bin/bash
 
-glslViewer globe.frag --fps 60 map.png
-
+glslViewer globe.frag map.png

@@ -18,6 +18,7 @@ class GLRenderer(
     val onSurfaceCreated: (GLRenderer) -> Unit = {}
 ) : GLSurfaceView.Renderer {
     private var program = 0
+    private var positionHandle = 0
     private var resolutionHandle = 0
     private var timeHandle = 0
     private var textureHandle = 0
@@ -50,7 +51,6 @@ class GLRenderer(
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle)
             GLES20.glUniform1i(textureUniformHandle, 0)
         }
-        val positionHandle = GLES20.glGetAttribLocation(program, "position")
         GLES20.glEnableVertexAttribArray(positionHandle)
         GLES20.glVertexAttribPointer(
             positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer
@@ -97,9 +97,10 @@ class GLRenderer(
             GLES20.glDeleteProgram(program)
             onError(message)
         }
-        resolutionHandle = GLES20.glGetUniformLocation(program, "resolution")
-        timeHandle = GLES20.glGetUniformLocation(program, "time")
-        textureUniformHandle = GLES20.glGetUniformLocation(program, "tex0")
+        positionHandle = GLES20.glGetAttribLocation(program, "position")
+        resolutionHandle = GLES20.glGetUniformLocation(program, "u_resolution")
+        timeHandle = GLES20.glGetUniformLocation(program, "u_time")
+        textureUniformHandle = GLES20.glGetUniformLocation(program, "u_tex0")
     }
 
     private fun loadShader(type: Int, shaderCode: String): Int {
