@@ -8,6 +8,29 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.calendar.PersianDate
 
+/**
+ * The follow table is copied from https://en.wikipedia.org/wiki/Chinese_zodiac
+ *
+ * | Number |  Animal | Yin/Yang | Trine | Fixed Element |
+ * |:------:|:-------:|:--------:|:-----:|:-------------:|
+ * | 1      | Rat     | Yang     | 1st   | Water         |
+ * | 2      | Ox      | Yin      | 2nd   | Earth         |
+ * | 3      | Tiger   | Yang     | 3rd   | Wood          |
+ * | 4      | Rabbit  | Yin      | 4th   | Wood          |
+ * | 5      | Dragon  | Yang     | 1st   | Earth         |
+ * | 6      | Snake   | Yin      | 2nd   | Fire          |
+ * | 7      | Horse   | Yang     | 3rd   | Fire          |
+ * | 8      | Goat    | Yin      | 4th   | Earth         |
+ * | 9      | Monkey  | Yang     | 1st   | Metal         |
+ * | 10     | Rooster | Yin      | 2nd   | Metal         |
+ * | 11     | Dog     | Yang     | 3rd   | Earth         |
+ * | 12     | Pig     | Yin      | 4th   | Water         |
+ *
+ * The follow poem is copied from https://fa.wikipedia.org/wiki/گاه‌شماری_حیوانی
+ *
+ * موش و بقر و پلنگ و خرگوش شمار - زان چار چو بگذری نهنگ آید و مار
+ *آنگاه به اسب و گوسفند است حساب - حمدونه و مرغ و سگ و خوک آخر کار
+ */
 enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: String) {
     RAT(R.string.animal_year_name_rat, "🐀"),
     OX(R.string.animal_year_name_ox, "🐂"),
@@ -33,12 +56,6 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
     val harmfulMatch get() = harmfulMatchRaw[ordinal]
 
     companion object {
-        /**
-         * See also:
-         * * The Chinese-Uighur Animal Calendar in Persian Historiography of the Mongol Period
-         * * https://en.wikipedia.org/wiki/Chinese_zodiac
-         * * https://fa.wikipedia.org/wiki/گاه‌شماری_حیوانی
-         */
         fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
             values().getOrNull((persianDate.year + 5) % 12) ?: RAT
 
@@ -46,8 +63,27 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
         fun fromChineseCalendar(date: ChineseCalendar): ChineseZodiac =
             values().getOrNull((date.get(ChineseCalendar.YEAR) - 1) % 12) ?: RAT
 
-        // Compatibilities, https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
-        // They should be turned into formula eventually
+        /*
+         * Compatibilities, they should be turned into formula eventually.
+         *
+         * The follow table is copied from https://en.wikipedia.org/wiki/Chinese_zodiac#Compatibility
+         *
+         * |   Sign  |      Best Match     |                    Average Match                   | Super Bad | Harmful |
+         * |:-------:|:-------------------:|:--------------------------------------------------:|:---------:|---------|
+         * | Rat     | Dragon, Monkey, Rat | Pig, Tiger, Dog, Snake, Rabbit, Rooster, Ox        | Horse     | Goat    |
+         * | Ox      | Snake, Rooster, Ox  | Monkey, Dog, Rabbit, Tiger, Dragon, Pig, Rat       | Goat      | Horse   |
+         * | Tiger   | Horse, Dog, Tiger   | Rabbit, Dragon, Rooster, Rat, Goat, Ox, Pig        | Monkey    | Snake   |
+         * | Rabbit  | Pig, Goat, Rabbit   | Tiger, Monkey, Goat, Ox, Horse, Rat, Snake         | Rooster   | Dragon  |
+         * | Dragon  | Rat, Monkey, Dragon | Tiger, Snake, Horse, Goat, Pig, Ox, Rooster        | Dog       | Rabbit  |
+         * | Snake   | Ox, Rooster, Snake  | Horse, Dragon, Goat, Dog, Rabbit, Rat, Monkey      | Pig       | Tiger   |
+         * | Horse   | Dog, Tiger, Horse   | Snake, Rabbit, Dragon, Rooster, Pig, Monkey, Goat  | Rat       | Ox      |
+         * | Goat    | Rabbit, Pig, Goat   | Snake, Rabbit, Dragon, Monkey, Rooster, Dog, Tiger | Ox        | Rat     |
+         * | Monkey  | Dragon, Rat, Monkey | Dragon, Dog, Ox, Goat, Rabbit, Rooster, Horse      | Tiger     | Pig     |
+         * | Rooster | Ox, Snake, Rooster  | Horse, Snake, Goat, Pig, Tiger, Monkey, Rat        | Rabbit    | Dog     |
+         * | Dog     | Tiger, Horse, Dog   | Monkey, Pig, Rat, Ox, Snake, Goat, Rabbit          | Dragon    | Rooster |
+         * | Pig     | Rabbit, Goat, Pig   | Rat, Rooster, Dog, Dragon, Horse, Ox, Tiger        | Snake     | Monkey  |
+         */
+
         private val bestMatchesRaw = listOf(
             setOf(DRAGON, MONKEY, RAT),
             setOf(SNAKE, ROOSTER, OX),
