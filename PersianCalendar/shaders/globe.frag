@@ -14,10 +14,11 @@ void main() {
     float l = x * x + y * y;
     float r = sqrt(l);
     if (r > R) {
-        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+        float b = 4.4 - r / R * 3.7;
+        gl_FragColor = vec4(b, b, b, 1.0);
     } else {
         float z = sqrt(R * R - l);
-        vec2 longLat = vec2((-atan(x, z) / PI + u_time / 2.0) * 0.5, (asin(y / R) / PI + .5));
+        vec2 longLat = vec2((-atan(x, z) / PI + u_time / 5.0) * 0.5, (asin(y / R) / PI + .5));
         gl_FragColor = texture2D(u_tex0, longLat);
     }
 }
