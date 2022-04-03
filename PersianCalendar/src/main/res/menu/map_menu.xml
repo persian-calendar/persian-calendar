@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/menu_globe_view"
-        android:icon="@drawable/ic_3d_rotation"
-        android:title="@string/show_globe_view_label"
-        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/menu_globe_view"-->
+<!--        android:icon="@drawable/ic_3d_rotation"-->
+<!--        android:title="@string/show_globe_view_label"-->
+<!--        app:showAsAction="always" />-->
     <item
         android:id="@+id/menu_direct_path"
         android:icon="@drawable/ic_distance_icon"

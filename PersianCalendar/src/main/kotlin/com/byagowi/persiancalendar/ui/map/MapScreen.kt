@@ -62,7 +62,9 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
     private val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
     private val nightMaskButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
-    private val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
+
+    // It is not visible due to instabilities on real devices, will be seen by clicking night mask 5 times
+    // private val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
 
     private val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
@@ -103,8 +105,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (coordinates == null) bringGps()
             viewModel.toggleDisplayLocation()
         }
-        nightMaskButton.onClick { viewModel.toggleNightMask() }
-        globeViewButton.onClick { map?.also { showGlobeDialog(activity ?: return@also, it) } }
+        var nightMaskToggles = 0
+        nightMaskButton.onClick {
+            if (++nightMaskToggles % 5 == 0)
+                map?.also { showGlobeDialog(activity ?: return@also, it) }
+            else
+                viewModel.toggleNightMask()
+        }
         binding.root.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.APPEARING)
             it.setAnimateParentHierarchy(false)
