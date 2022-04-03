@@ -63,7 +63,7 @@ abstract class CodeGenerators : DefaultTask() {
         val builder = FileSpec.builder(packageName, "TextStore")
         listOf(
             project.rootDir / "THANKS.md" to "credits",
-            project.rootDir / "FAQ.fa.txt" to "faq",
+            project.rootDir / "FAQ.fa.md" to "faq",
             project.projectDir / "shaders" / "common.vert" to "commonVertexShader",
             project.projectDir / "shaders" / "globe.frag" to "globeFragmentShader",
             project.projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader",
