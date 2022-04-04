@@ -2,8 +2,6 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
@@ -43,9 +41,9 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
 
     private var widgetTextColorPreferences: Preference? = null
     private var widgetBackgroundColorPreferences: Preference? = null
+    private var notifyDateLockScreenPreference: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val handler = Handler(Looper.getMainLooper())
         val activity = activity ?: return
         preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
             section(R.string.pref_notification) {
@@ -59,7 +57,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                 switch(PREF_NOTIFY_DATE_LOCK_SCREEN, true) {
                     title(R.string.notify_date_lock_screen)
                     summary(R.string.notify_date_lock_screen_summary)
-                    handler.post { dependency = PREF_NOTIFY_DATE } // deferred dependency wire up
+                    notifyDateLockScreenPreference = this
                 }
             }
             section(R.string.pref_widget) {
@@ -128,9 +126,12 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        sharedPreferences ?: return
+        notifyDateLockScreenPreference?.isVisible =
+            sharedPreferences.getBoolean(PREF_NOTIFY_DATE, true)
         if (Theme.isDynamicColor(sharedPreferences)) {
             val prefersSystemColors =
-                sharedPreferences?.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true) ?: return
+                sharedPreferences.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
             widgetTextColorPreferences?.isVisible = !prefersSystemColors
             widgetBackgroundColorPreferences?.isVisible = !prefersSystemColors
         }
