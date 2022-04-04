@@ -9,7 +9,6 @@ import com.byagowi.persiancalendar.generated.commonVertexShader
 import com.byagowi.persiancalendar.variants.debugLog
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.FloatBuffer
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
@@ -21,6 +20,7 @@ class GLRenderer(
     private var positionHandle = 0
     private var resolutionHandle = 0
     private var timeHandle = 0
+    private var verticesHandle = 0
     private var textureHandle = 0
     private var textureUniformHandle = 0
     private var isSurfaceCreated = false
@@ -40,7 +40,30 @@ class GLRenderer(
         GLES20.glViewport(0, 0, width, height)
         this.width = width.toFloat()
         this.height = height.toFloat()
+
+        val vertexBuffer = ByteBuffer
+            .allocateDirect(rectangleVertices.size * 4).order(ByteOrder.nativeOrder())
+            .asFloatBuffer().put(rectangleVertices).position(0)
+        val handle = IntArray(1)
+        GLES20.glGenBuffers(1, handle, 0)
+        verticesHandle = handle[0]
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesHandle)
+        GLES20.glBufferData(
+            GLES20.GL_ARRAY_BUFFER, vertexBuffer.limit() * 4, vertexBuffer, GLES20.GL_STATIC_DRAW
+        )
     }
+
+    private val rectangleVertices = floatArrayOf(
+        -1f, -1f, 0f,
+        1f, -1f, 0f,
+        -1f, 1f, 0f,
+        1f, -1f, 0f,
+        1f, 1f, 0f,
+        -1f, 1f, 0f
+    )
+    private val perVertex = 3
+    private val vertexStride = perVertex * 4
+    private val vertexCount = rectangleVertices.size / perVertex
 
     override fun onDrawFrame(gl: GL10?) {
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT)
@@ -52,34 +75,15 @@ class GLRenderer(
             GLES20.glUniform1i(textureUniformHandle, 0)
         }
         GLES20.glEnableVertexAttribArray(positionHandle)
+        GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, verticesHandle)
         GLES20.glVertexAttribPointer(
-            positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, vertexBuffer
+            positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, 0
         )
         GLES20.glUniform2f(resolutionHandle, width, height)
         GLES20.glUniform1f(timeHandle, System.nanoTime() / 1e9f)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
         GLES20.glDisableVertexAttribArray(positionHandle)
     }
-
-    private val perVertex = 3
-    private val triangles = floatArrayOf(
-        -1f, -1f, 0f,
-        1f, -1f, 0f,
-        -1f, 1f, 0f,
-        1f, -1f, 0f,
-        1f, 1f, 0f,
-        -1f, 1f, 0f
-    )
-    private val vertexCount: Int = triangles.size / perVertex
-    private val vertexStride: Int = perVertex * 4
-    private var vertexBuffer: FloatBuffer =
-        ByteBuffer.allocateDirect(triangles.size * 4).let { byteBuffer ->
-            byteBuffer.order(ByteOrder.nativeOrder())
-            byteBuffer.asFloatBuffer().also {
-                it.put(triangles)
-                it.position(0)
-            }
-        }
 
     fun compileProgram() {
         if (!isSurfaceCreated) return
