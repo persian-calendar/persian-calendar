@@ -62,7 +62,7 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
 
         // app
         val version = buildSpannedString {
-            scale(1f) { bold { appendLine(getString(R.string.app_name)) } }
+            scale(1.5f) { bold { appendLine(getString(R.string.app_name)) } }
             scale(.8f) {
                 val version =
                     // Don't formatNumber it if is multi-parted
