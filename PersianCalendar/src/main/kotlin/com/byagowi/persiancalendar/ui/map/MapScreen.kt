@@ -68,10 +68,9 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.appBar.toolbar.let {
-            it.setTitle(R.string.map)
-            it.setupUpNavigation()
-        }
+        // Don't set the title as we got lots of icons
+        // binding.appBar.toolbar.setTitle(R.string.map)
+        binding.appBar.toolbar.setupUpNavigation()
 
         solarDraw = SolarDraw(view.context)
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
