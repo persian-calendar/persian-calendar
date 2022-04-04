@@ -96,12 +96,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
 
         binding.appBar.toolbar.inflateMenu(R.menu.map_menu)
-        directPathButton.onClick { attemptSwitchToDirectPathMode() }
+        directPathButton.onClick {
+            if (coordinates == null) bringGps() else viewModel.toggleDirectPathMode()
+        }
         gridButton.onClick { viewModel.toggleDisplayGrid() }
         myLocationButton.onClick { bringGps() }
         locationButton.onClick {
-            if (coordinates == null) bringGps()
-            viewModel.toggleDisplayLocation()
+            if (coordinates == null) bringGps() else viewModel.toggleDisplayLocation()
         }
         nightMaskButton.onClick { viewModel.toggleNightMask() }
         globeViewButton.onClick { map?.also { showGlobeDialog(activity ?: return@also, it) } }
@@ -141,11 +142,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     }
 
     private var map: Bitmap? = null
-
-    private fun attemptSwitchToDirectPathMode() {
-        coordinates ?: bringGps()
-        viewModel.toggleDirectPathMode()
-    }
 
     private fun onMapClick(latitude: Float, longitude: Float) {
         // Easter egg like feature, bring sky renderer fragment
