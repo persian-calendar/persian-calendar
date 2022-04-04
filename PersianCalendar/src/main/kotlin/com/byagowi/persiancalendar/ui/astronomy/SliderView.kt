@@ -18,6 +18,9 @@ class SliderView(context: Context, attrs: AttributeSet? = null) : RecyclerView(c
     private val itemsCount = 500000
     private var positionOffset = 0
 
+    // This can be set if no actual rendering of bar slider bars is needed, used in globe view
+    var hiddenBars = false
+
     init {
         setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context).also {
@@ -53,6 +56,7 @@ class SliderView(context: Context, attrs: AttributeSet? = null) : RecyclerView(c
 
     private val space = 10.dp
     override fun onDraw(canvas: Canvas?) {
+        if (hiddenBars) return
         canvas ?: return
         val linesCount = width / space.toInt()
         (0..linesCount).forEachIndexed { index, it ->

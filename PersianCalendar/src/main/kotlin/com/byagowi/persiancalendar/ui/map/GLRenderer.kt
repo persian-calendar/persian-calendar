@@ -16,6 +16,8 @@ class GLRenderer(
     val onError: (String) -> Unit = { debugLog(it) },
     val onSurfaceCreated: (GLRenderer) -> Unit = {}
 ) : GLSurfaceView.Renderer {
+    var overriddenTime = 0f
+
     private var program = 0
     private var positionHandle = 0
     private var resolutionHandle = 0
@@ -80,7 +82,9 @@ class GLRenderer(
             positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, 0
         )
         GLES20.glUniform2f(resolutionHandle, width, height)
-        GLES20.glUniform1f(timeHandle, System.nanoTime() / 1e9f)
+        GLES20.glUniform1f(
+            timeHandle, if (overriddenTime == 0f) System.nanoTime() / 1e9f else overriddenTime
+        )
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
         GLES20.glDisableVertexAttribArray(positionHandle)
     }
