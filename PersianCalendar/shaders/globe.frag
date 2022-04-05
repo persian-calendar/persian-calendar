@@ -17,7 +17,7 @@ void main() {
     float r = length(xy);
     if (r > R) {
         float b = 4.4 - r / R * 3.7;
-        if (rand(vec2(floor(mod(-u_time * 10.0 + xy.x / 4.0, 400.0)), floor(xy.y / 4.0))) > 0.997)
+        if (rand(vec2(floor(mod(u_time * 10.0 + xy.x / 4.0, 400.0)), floor(xy.y / 4.0))) > 0.997)
             b = 1.0;
         gl_FragColor = vec4(b, b, b, 1.0);
     } else {
