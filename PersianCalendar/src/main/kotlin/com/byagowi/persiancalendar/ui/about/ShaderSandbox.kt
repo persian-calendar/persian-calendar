@@ -5,6 +5,8 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
 import com.byagowi.persiancalendar.ui.map.GLRenderer
@@ -27,7 +29,10 @@ fun showShaderSandboxDialog(activity: FragmentActivity) {
         binding.inputText.setText(sandboxFragmentShader)
         frame.addView(binding.root)
     }
-    MaterialAlertDialogBuilder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         .setView(frame)
         .show()
+    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
+    })
 }

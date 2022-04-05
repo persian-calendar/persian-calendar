@@ -4,6 +4,8 @@ import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.astronomy.SliderView
@@ -31,7 +33,10 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
             it.hiddenBars = true
         })
     }
-    MaterialAlertDialogBuilder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         .setView(frame)
         .show()
+    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
+    })
 }
