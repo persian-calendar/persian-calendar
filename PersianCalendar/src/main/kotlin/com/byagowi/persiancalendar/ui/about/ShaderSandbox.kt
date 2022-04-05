@@ -13,7 +13,10 @@ import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showShaderSandboxDialog(activity: FragmentActivity) {
-    val frame = FrameLayout(activity)
+    val frame = object : FrameLayout(activity) {
+        // Just to let AlertDialog know there is an editor here so it needs to show the soft keyboard
+        override fun onCheckIsTextEditor() = true
+    }
     frame.post {
         val binding = ShaderSandboxBinding.inflate(activity.layoutInflater)
         binding.glView.setEGLContextClientVersion(2)
@@ -32,6 +35,7 @@ fun showShaderSandboxDialog(activity: FragmentActivity) {
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(frame)
         .show()
+    // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
     activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
     })
