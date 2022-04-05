@@ -67,7 +67,10 @@ class PatternDrawable(
             Shader.TileMode.CLAMP
         )
         val pattern = listOf(
-            ::FirstPattern, ::SecondPattern, ::ThirdPattern, ::FourthPattern
+            ::FirstPattern,
+            // ::SecondPattern, This won't look as great as others when rotated, let's disable it for now
+            ::ThirdPattern,
+            ::FourthPattern
         ).random()(tintColor, 80.dp)
         val bitmap = Bitmap.createBitmap(
             pattern.width.toInt(), pattern.height.toInt(), Bitmap.Config.ARGB_8888
