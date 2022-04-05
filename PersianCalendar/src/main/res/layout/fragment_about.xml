@@ -1,5 +1,6 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorCard">
@@ -25,15 +26,23 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/about_header"
+                <FrameLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:lineSpacingMultiplier="1.25"
-                    android:padding="32dp"
-                    android:textAlignment="textStart"
-                    android:textColor="?attr/colorTextDay" />
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/about_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:lineSpacingMultiplier="1.25"
+                        android:padding="20dp"
+                        android:textAlignment="textStart"
+                        android:textColor="?attr/colorTextDay"
+                        tools:ignore="RtlCompat" />
+
+                </FrameLayout>
 
                 <ImageView
                     android:id="@+id/icon"
