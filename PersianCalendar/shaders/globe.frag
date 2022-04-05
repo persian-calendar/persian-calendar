@@ -22,7 +22,7 @@ void main() {
         gl_FragColor = vec4(b, b, b, 1.0);
     } else {
         float z = sqrt(R * R - r * r);
-        vec2 longLat = vec2((-atan(xy.x, z) / PI + u_time / 5.0) * 0.5, (asin(xy.y / R) / PI + .5));
+        vec2 longLat = vec2((-atan(xy.x, z) / PI - u_time / 5.0) * 0.5, (asin(xy.y / R) / PI + .5));
         gl_FragColor = texture2D(u_tex0, longLat);
     }
 }

@@ -25,7 +25,7 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     if (dx != 0 && renderer.overriddenTime == 0f)
                         renderer.overriddenTime = System.nanoTime() / 1e9f
-                    renderer.overriddenTime += dx / 200f
+                    renderer.overriddenTime -= dx / 200f
                 }
             })
             it.hiddenBars = true
