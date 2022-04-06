@@ -206,7 +206,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             angleY /= l
         }
         onIsLevel(newOrientation.isLevel(newPitch, newRoll, newBalance, .8f))
-        postInvalidate()
+        invalidate()
     }
 
     var onIsLevel = fun(_: Boolean) {}

@@ -37,7 +37,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
                     update()
                 }
             }.start()
-            postInvalidate()
+            invalidate()
         }
 
     override fun onDraw(canvas: Canvas?) {
@@ -50,6 +50,6 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
         val date = Jdn(jdn.toLong()).toJavaCalendar()
         date[Calendar.HOUR_OF_DAY] = ((jdn % 1) * 24).roundToInt().coerceIn(0, 23)
         sunMoonPosition = date.calculateSunMoonPosition(coordinates)
-        postInvalidate()
+        invalidate()
     }
 }

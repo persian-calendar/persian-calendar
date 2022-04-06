@@ -64,12 +64,12 @@ class SunView @JvmOverloads constructor(
     var prayTimes: PrayTimes? = null
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
     var sunMoonPosition: SunMoonPosition? = null
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
     private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
 
@@ -244,12 +244,12 @@ class SunView @JvmOverloads constructor(
 
     fun clear() {
         current = 0f
-        postInvalidate()
+        invalidate()
     }
 
     override fun onAnimationUpdate(valueAnimator: ValueAnimator) {
         current = valueAnimator.animatedValue as Float
-        postInvalidate()
+        invalidate()
     }
 
     companion object {

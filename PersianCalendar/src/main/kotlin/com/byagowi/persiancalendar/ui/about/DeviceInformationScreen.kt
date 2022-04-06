@@ -229,7 +229,7 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
 
                     fun setFraction(value: Float) {
                         pathMorph.interpolateTo(value)
-                        postInvalidate()
+                        invalidate()
                     }
                 }
                 linearLayout.addView(morphedPathView)

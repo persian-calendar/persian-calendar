@@ -119,7 +119,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
             ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
             if (jdn != null) setBackgroundResource(shared.selectableItemBackground)
         }
-        postInvalidate()
+        invalidate()
     }
 
     fun setDayOfMonthItem(

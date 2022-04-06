@@ -32,7 +32,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         if (immediate) {
             currentTime = time.timeInMillis
             sunMoonPosition = time.calculateSunMoonPosition(null).also(update)
-            postInvalidate()
+            invalidate()
             return
         }
         ValueAnimator.ofFloat(currentTime.toFloat(), time.timeInMillis.toFloat()).also {
@@ -44,7 +44,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
                 date.timeInMillis = currentTime
                 sunMoonPosition = date.calculateSunMoonPosition(null).also(update)
-                postInvalidate()
+                invalidate()
             }
         }.start()
     }
@@ -66,7 +66,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                             iauRanges[it][1], tropicalRanges[it][1], fraction
                         )
                     }
-                    postInvalidate()
+                    invalidate()
                 }
             }.start()
             field = value

@@ -35,7 +35,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
         set(value) {
             if (value != field) {
                 field = value
-                postInvalidate()
+                invalidate()
             }
         }
 
@@ -97,7 +97,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     fun setTime(time: GregorianCalendar) {
         sunMoonPosition = time.calculateSunMoonPosition(coordinates)
         sunProgress = Clock(time).toMinutes() / fullDay
-        postInvalidate()
+        invalidate()
     }
 
     val qiblaHeading = coordinates?.run {
@@ -106,7 +106,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     var isShowQibla = true
         set(value) {
             field = value
-            postInvalidate()
+            invalidate()
         }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
