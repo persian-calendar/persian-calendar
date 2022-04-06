@@ -636,6 +636,19 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             }
             menu.setGroupCheckable(groupId, true, true)
         }
+        if (BuildConfig.DEVELOPMENT) {
+            toolbar.menu.add("Start Day Dream").onClick {
+                // https://stackoverflow.com/a/23112947
+                runCatching {
+                    startActivity(
+                        Intent(Intent.ACTION_MAIN)
+                            .setClassName(
+                                "com.android.systemui", "com.android.systemui.Somnambulator"
+                            )
+                    )
+                }.onFailure(logException).getOrNull().debugAssertNotNull
+            }
+        }
     }
 
     private fun createOwghatHtmlReport(date: AbstractDate): String = createHTML().html {
