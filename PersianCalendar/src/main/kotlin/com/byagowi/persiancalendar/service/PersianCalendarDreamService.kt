@@ -1,11 +1,20 @@
 package com.byagowi.persiancalendar.service
 
 import android.animation.ValueAnimator
+import android.media.AudioFormat
+import android.media.AudioManager
+import android.media.AudioTrack
+import android.os.Build
 import android.service.dreams.DreamService
-import android.view.View
+import android.view.ContextThemeWrapper
 import android.view.animation.LinearInterpolator
+import android.widget.FrameLayout
+import androidx.appcompat.widget.AppCompatImageView
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.byagowi.persiancalendar.ui.utils.dp
+import kotlin.random.Random
 
 class PersianCalendarDreamService : DreamService() {
 
@@ -16,11 +25,33 @@ class PersianCalendarDreamService : DreamService() {
         it.repeatCount = ValueAnimator.INFINITE
     }
 
+    private val audioTrack = run {
+        val sampleRate = 22050 // Hz (maximum frequency is 7902.13Hz (B8))
+        val numSamples = sampleRate * 10
+        val buffer = ShortArray(numSamples)
+        var lastOut = .0
+        buffer.indices.forEach {
+            // Brown noise https://github.com/zacharydenton/noise.js/blob/master/noise.js#L45
+            val x = (((Random.nextDouble() * 2 - 1) * .02 + lastOut) / 1.02)
+            lastOut = x
+            buffer[it] = (x * Short.MAX_VALUE).toInt().toShort()
+        }
+        val audioTrack = AudioTrack(
+            AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+            AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
+        )
+        audioTrack.write(buffer, 0, buffer.size)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            audioTrack.setLoopPoints(0, audioTrack.bufferSizeInFrames, -1)
+        }
+        audioTrack
+    }
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        isInteractive = false
+        isInteractive = true
         isFullscreen = true
-        setContentView(View(this).also {
+        setContentView(FrameLayout(this).also { frame ->
             val isNightMode = Theme.isNightMode(this)
             val accentColor = if (Theme.isDynamicColorAvailable()) getColor(
                 if (isNightMode) android.R.color.system_accent1_200
@@ -30,17 +61,31 @@ class PersianCalendarDreamService : DreamService() {
                 preferredTintColor = accentColor,
                 darkBaseColor = Theme.isNightMode(this)
             )
-            it.background = pattern
+            frame.background = pattern
             valueAnimator.addUpdateListener {
                 pattern.rotationDegree = valueAnimator.animatedValue as? Float ?: 0f
                 pattern.invalidateSelf()
             }
+            frame.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) wakeUp() else finish()
+            }
+            frame.addView(AppCompatImageView(ContextThemeWrapper(this, R.style.LightTheme)).also {
+                it.layoutParams = FrameLayout.LayoutParams(100.dp.toInt(), 100.dp.toInt())
+                it.setImageResource(R.drawable.ic_play)
+                var play = false
+                it.setOnClickListener { _ ->
+                    play = !play
+                    it.setImageResource(if (play) R.drawable.ic_stop else R.drawable.ic_play)
+                    if (play) audioTrack.play() else audioTrack.pause()
+                }
+            })
         })
         listOf(valueAnimator::start, valueAnimator::reverse).random()()
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
+        if (audioTrack.state == AudioTrack.STATE_INITIALIZED) audioTrack.stop()
         valueAnimator.removeAllUpdateListeners()
         valueAnimator.cancel()
     }
