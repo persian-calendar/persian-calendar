@@ -5,23 +5,17 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
-import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import io.github.persiancalendar.Equinox
-import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
 
 enum class Season(
-    @StringRes val nameStringId: Int, @DrawableRes val imageId: Int,
-    private val northernHemisphereEquinox: Equinox, @ColorInt val color: Int
+    @StringRes val nameStringId: Int, @DrawableRes val imageId: Int, @ColorInt val color: Int
 ) {
-    SPRING(R.string.spring, R.drawable.spring, Equinox.NORTHWARD_EQUINOX, 0xcc80aa15.toInt()),
-    SUMMER(R.string.summer, R.drawable.summer, Equinox.NORTHERN_SOLSTICE, 0xccfab000.toInt()),
-    FALL(R.string.fall, R.drawable.fall, Equinox.SOUTHWARD_EQUINOX, 0xccbf8015.toInt()),
-    WINTER(R.string.winter, R.drawable.winter, Equinox.SOUTHERN_SOLSTICE, 0xcc5580aa.toInt());
-
-    fun getEquinox(date: CivilDate) = northernHemisphereEquinox.inYear(date.year).toJavaCalendar()
+    SPRING(R.string.spring, R.drawable.spring, 0xcc80aa15.toInt()),
+    SUMMER(R.string.summer, R.drawable.summer, 0xccfab000.toInt()),
+    FALL(R.string.fall, R.drawable.fall, 0xccbf8015.toInt()),
+    WINTER(R.string.winter, R.drawable.winter, 0xcc5580aa.toInt());
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate, coordinates: Coordinates?): Season {
