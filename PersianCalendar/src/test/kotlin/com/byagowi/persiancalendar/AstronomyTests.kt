@@ -11,6 +11,7 @@ import com.cepmuvakkit.times.posAlgo.Ecliptic
 import com.cepmuvakkit.times.posAlgo.Horizontal
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.common.truth.Truth.assertThat
+import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import io.github.persiancalendar.praytimes.Coordinates
@@ -159,11 +160,11 @@ class AstronomyTests {
 
     @Test
     fun `Season equinox`() {
-        val civilDate = CivilDate(2020, 1, 1)
+        val seasons = seasons(2020)
         listOf(
-            Season.SPRING to 1584676183400, Season.SUMMER to 1592689390621,
-            Season.FALL to 1600781435095, Season.WINTER to 1608544954755
-        ).map { (it, time) -> assertThat(it.getEquinox(civilDate).time.time).isEqualTo(time) }
+            seasons.marchEquinox to 1584676196684, seasons.juneSolstice to 1592689413918,
+            seasons.septemberEquinox to 1600781456763, seasons.decemberSolstice to 1608544960472
+        ).map { (it, time) -> assertThat(it.toDate().time).isEqualTo(time) }
     }
 
     @Test

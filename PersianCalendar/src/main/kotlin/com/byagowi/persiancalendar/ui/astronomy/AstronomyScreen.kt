@@ -25,9 +25,10 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateAstronomyHeaderText
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
-import io.github.persiancalendar.calendar.CivilDate
+import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -90,18 +91,24 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             val context = context ?: return
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
             binding.solarView.setTime(time, immediate) { updateSolarView(time, it) }
-
-            val persianDate = PersianDate(time.toCivilDate())
+            val civilDate = time.toCivilDate()
+            val thisYearSeasons = seasons(civilDate.year)
+            val nextYearSeasons = seasons(civilDate.year + 1)
+            val persianDate = PersianDate(civilDate)
             binding.headerInformation.text = generateAstronomyHeaderText(time, context, persianDate)
 
             (1..4).forEach {
-                val date = CivilDate(PersianDate(persianDate.year, it * 3, 29))
                 when (it) {
                     1 -> binding.firstSeasonText
                     2 -> binding.secondSeasonText
                     3 -> binding.thirdSeasonText
                     else -> binding.fourthSeasonText
-                }.text = Season.values()[it % 4].getEquinox(date).formatDateAndTime()
+                }.text = when (it) {
+                    1 -> thisYearSeasons.juneSolstice
+                    2 -> thisYearSeasons.septemberEquinox
+                    3 -> thisYearSeasons.decemberSolstice
+                    else -> nextYearSeasons.marchEquinox
+                }.toDate().toJavaCalendar().formatDateAndTime()
             }
         }
         update(false)

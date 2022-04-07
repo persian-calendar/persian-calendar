@@ -11,7 +11,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.language
@@ -25,6 +24,8 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getZodiacInfo
+import com.byagowi.persiancalendar.utils.toJavaCalendar
+import io.github.cosinekitty.astronomy.seasons
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
@@ -111,7 +112,8 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 equinox = context.getString(
                     R.string.spring_equinox,
                     formatNumber(date.year + addition),
-                    Season.SPRING.getEquinox(jdn.toGregorianCalendar()).formatDateAndTime()
+                    seasons(jdn.toGregorianCalendar().year).marchEquinox.toDate()
+                        .toJavaCalendar().formatDateAndTime()
                 )
             }
         }
