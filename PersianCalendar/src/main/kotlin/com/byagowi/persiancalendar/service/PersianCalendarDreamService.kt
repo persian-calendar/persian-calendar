@@ -28,14 +28,10 @@ class PersianCalendarDreamService : DreamService() {
     private val audioTrack = run {
         val sampleRate = 22050 // Hz (maximum frequency is 7902.13Hz (B8))
         val numSamples = sampleRate * 10
-        val buffer = ShortArray(numSamples)
-        var lastOut = .0
-        buffer.indices.forEach {
+        val buffer = (0..numSamples).runningFold(.0) { lastOut, _ ->
             // Brown noise https://github.com/zacharydenton/noise.js/blob/master/noise.js#L45
-            val x = (((Random.nextDouble() * 2 - 1) * .02 + lastOut) / 1.02)
-            lastOut = x
-            buffer[it] = (x * Short.MAX_VALUE).toInt().toShort()
-        }
+            (((Random.nextDouble() * 2 - 1) * .02 + lastOut) / 1.02)
+        }.map { (it * Short.MAX_VALUE).toInt().toShort() }.toShortArray()
         val audioTrack = AudioTrack(
             AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
