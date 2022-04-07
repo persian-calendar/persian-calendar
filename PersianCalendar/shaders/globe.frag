@@ -18,6 +18,7 @@ void main() {
     float r = length(xy); // radius from screen center
     if (r < R) {
         float z = sqrt(R * R - r * r); // height of points over globe surface
+        // Converts x/y/z to texture coordinates https://en.wikibooks.org/wiki/GLSL_Programming/GLUT/Textured_Spheres
         vec2 longLat = vec2((-atan(xy.x, z) / PI - u_time / 5.0) * 0.5, (asin(xy.y / R) / PI + .5));
         gl_FragColor = texture2D(u_tex0, longLat);
     } else {
