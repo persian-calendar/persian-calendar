@@ -14,7 +14,7 @@ float rand(vec2 co) {
 
 void main() {
     float R = min(u_resolution.x, u_resolution.y) / 3.0; // supposed circle/globe radius
-    vec2 xy = u_resolution / 2.0 - gl_FragCoord.xy; // point from center
+    vec2 xy = u_resolution / 2.0 - gl_FragCoord.xy; // screen center
     float r = length(xy); // radius from screen center
     if (r < R) {
         float z = sqrt(R * R - r * r); // height of points over globe surface
