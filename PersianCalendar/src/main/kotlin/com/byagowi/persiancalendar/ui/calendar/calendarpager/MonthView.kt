@@ -57,13 +57,13 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
 
     private var monthName = ""
 
-    override fun onDraw(c: Canvas) {
-        super.onDraw(c)
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas) // This is important, don't remove it ever
 
         // Widget only tweak
         val sharedData = daysAdapter?.sharedDayViewData ?: return
         val widgetFooterTextPaint = sharedData.widgetFooterTextPaint ?: return
-        c.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
+        canvas.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
     }
 
     fun bind(monthStartJdn: Jdn, monthStartDate: AbstractDate) {

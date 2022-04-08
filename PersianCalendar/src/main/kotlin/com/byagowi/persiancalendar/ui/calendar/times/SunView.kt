@@ -105,7 +105,6 @@ class SunView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
         if (clippingPath.isEmpty) mainDraw(canvas) // no change if there is path is empty
         else canvas.withClip(clippingPath) { mainDraw(canvas) }
     }

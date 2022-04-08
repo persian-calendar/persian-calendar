@@ -223,7 +223,6 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     }
 
     public override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
         if (firstTime) {
             setOrientation(Orientation.LANDING, 0f, 0f, 0f)
             firstTime = false

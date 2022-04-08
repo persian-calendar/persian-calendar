@@ -31,7 +31,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     var sharedDayViewData: SharedDayViewData? = null
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
         val shared = sharedDayViewData ?: return
 
         val radius = min(width, height) / 2f
