@@ -223,8 +223,8 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
                         }
                     }
 
-                    override fun onDraw(canvas: Canvas?) {
-                        canvas?.drawPath(pathMorph.path, paint)
+                    override fun onDraw(canvas: Canvas) {
+                        canvas.drawPath(pathMorph.path, paint)
                     }
 
                     fun setFraction(value: Float) {

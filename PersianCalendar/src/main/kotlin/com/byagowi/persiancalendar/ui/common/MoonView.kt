@@ -40,7 +40,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
             invalidate()
         }
 
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas ?: return)
         val cx = width / 2f
         solarDraw.moon(canvas, sunMoonPosition ?: return, cx, cx, cx)

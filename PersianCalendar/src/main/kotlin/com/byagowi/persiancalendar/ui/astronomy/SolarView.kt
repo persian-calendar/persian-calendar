@@ -77,8 +77,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
 
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas ?: return)
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         val sunMoonPosition = sunMoonPosition ?: return
         val radius = min(width, height) / 2f
         arcRect.set(0f, 0f, 2 * radius, 2 * radius)

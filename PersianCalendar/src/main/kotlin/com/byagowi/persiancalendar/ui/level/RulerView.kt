@@ -23,9 +23,8 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val thirdLevel = 8.dp
     private val topOffset = 10.dp.toInt()
     private val topTextOffset = topOffset - textSize / 2
-    override fun onDraw(canvas: Canvas?) {
-        super.onDraw(canvas ?: return)
-
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
         val dpi = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             resources.displayMetrics.ydpi else resources.displayMetrics.xdpi
 

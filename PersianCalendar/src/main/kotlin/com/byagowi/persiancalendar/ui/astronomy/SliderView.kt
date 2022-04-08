@@ -55,9 +55,8 @@ class SliderView(context: Context, attrs: AttributeSet? = null) : RecyclerView(c
     }
 
     private val space = 10.dp
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         if (hiddenBars) return
-        canvas ?: return
         val linesCount = width / space.toInt()
         (0..linesCount).forEachIndexed { index, it ->
             val x = it * space + positionOffset % space
