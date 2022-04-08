@@ -4,44 +4,17 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.byagowi.persiancalendar.ui.common.EmptySlider
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import kotlin.math.PI
 import kotlin.math.cos
 
-class SliderView(context: Context, attrs: AttributeSet? = null) : RecyclerView(context, attrs) {
-
-    private val itemsCount = 500000
+class SliderView(context: Context, attrs: AttributeSet? = null) : EmptySlider(context, attrs) {
     private var positionOffset = 0
 
-    // This can be set if no actual rendering of bar slider bars is needed, used in globe view
-    var hiddenBars = false
-
     init {
-        setHasFixedSize(true)
-        layoutManager = LinearLayoutManager(context).also {
-            it.orientation = LinearLayoutManager.HORIZONTAL
-        }
-        adapter = object : RecyclerView.Adapter<ViewHolder>() {
-            private val commonLayoutParams = ViewGroup.LayoutParams(
-                10.dp.toInt(), ViewGroup.LayoutParams.MATCH_PARENT
-            )
-
-            override fun onBindViewHolder(holder: ViewHolder, position: Int) = Unit
-            override fun getItemCount() = itemsCount
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                object : RecyclerView.ViewHolder(object : View(parent.context) {
-                    init {
-                        layoutParams = commonLayoutParams
-                    }
-                }) {}
-        }
-        post { scrollToPosition(itemsCount / 2) }
-
         addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 positionOffset -= dx
@@ -53,10 +26,9 @@ class SliderView(context: Context, attrs: AttributeSet? = null) : RecyclerView(c
         it.strokeWidth = 2.dp
         it.color = context.resolveColor(com.google.android.material.R.attr.colorAccent)
     }
-
     private val space = 10.dp
+
     override fun onDraw(canvas: Canvas) {
-        if (hiddenBars) return
         val linesCount = width / space.toInt()
         (0..linesCount).forEachIndexed { index, it ->
             val x = it * space + positionOffset % space
