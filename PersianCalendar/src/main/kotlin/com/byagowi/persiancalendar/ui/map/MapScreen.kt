@@ -39,9 +39,16 @@ import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
-import com.cepmuvakkit.times.posAlgo.EarthPosition
-import com.cepmuvakkit.times.posAlgo.SunMoonPositionForMap
+import com.byagowi.persiancalendar.utils.EarthPosition
 import com.google.android.material.animation.ArgbEvaluatorCompat
+import io.github.cosinekitty.astronomy.Aberration
+import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.EquatorEpoch
+import io.github.cosinekitty.astronomy.Observer
+import io.github.cosinekitty.astronomy.Refraction
+import io.github.cosinekitty.astronomy.equator
+import io.github.cosinekitty.astronomy.horizon
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -197,6 +204,15 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
     )
 
+    class SunMoonState(observer: Observer, time: AstroTime) {
+        private val sunEquator =
+            equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
+        val sunHorizon = horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
+        private val moonEquator =
+            equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
+        val moonHorizon = horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
+    }
+
     private fun createMap(
         date: GregorianCalendar,
         displayNightMask: Boolean,
@@ -205,8 +221,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         directPathDestination: Coordinates?
     ): Bitmap {
         val sink = getSinkBitmap()
+        val time = AstroTime(date)
         nightMask.eraseColor(Color.TRANSPARENT)
-        val sunPosition = SunMoonPositionForMap(date)
         var sunX = .0f
         var sunY = .0f
         var sunAlt = .0
@@ -218,13 +234,14 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             (0 until nightMask.height).forEach { y ->
                 val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                 val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
-                val sunAltitude = sunPosition.sunAltitude(latitude, longitude)
+                val sunMoon = SunMoonState(Observer(latitude, longitude, .0), time)
+                val sunAltitude = sunMoon.sunHorizon.altitude
                 if (sunAltitude < 0) nightMask[x, y] =
                     (-sunAltitude.toInt()).coerceAtMost(17) * 7 shl 24
                 if (sunAltitude > sunAlt) { // find y/x of a point with maximum sun altitude
                     sunAlt = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
                 }
-                val moonAltitude = sunPosition.moonAltitude(latitude, longitude)
+                val moonAltitude = sunMoon.moonHorizon.altitude
                 if (moonAltitude > moonAlt) { // this time for moon
                     moonAlt = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
                 }

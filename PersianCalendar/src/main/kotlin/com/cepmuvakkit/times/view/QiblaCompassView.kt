@@ -21,7 +21,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.cepmuvakkit.times.posAlgo.EarthPosition
+import com.byagowi.persiancalendar.utils.EarthPosition
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.Body

@@ -1,4 +1,4 @@
-package com.cepmuvakkit.times.posAlgo
+package com.byagowi.persiancalendar.utils
 
 import kotlin.math.PI
 import kotlin.math.acos
@@ -7,18 +7,11 @@ import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.pow
-import kotlin.math.round
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-/**
- * @author mgeden
- */
-data class EarthPosition(
-    val latitude: Double, val longitude: Double,
-    val timezone: Double = round(longitude / 15.0),
-    val altitude: Int = 0, val temperature: Int = 10, val pressure: Int = 1010
-) {
+data class EarthPosition(val latitude: Double, val longitude: Double) {
+    class EarthHeading(val heading: Double, val metres: Long)
 
     fun toEarthHeading(target: EarthPosition): EarthHeading {
         // great circle formula from:
