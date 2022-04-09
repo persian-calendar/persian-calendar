@@ -254,13 +254,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 val sunAltitude = verticalComponent(observerRot, ovec, geoSunEqd)
                 val moonAltitude = verticalComponent(observerRot, ovec, geoMoonEqd)
 
-                if (sunAltitude > 0) nightMask[x, y] =
-                    ((sunAltitude * 90 * 7).toInt()).coerceAtMost(120) shl 24
+                if (sunAltitude < 0) nightMask[x, y] =
+                    ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120) shl 24
 
-                if (sunAltitude < sunAlt) { // find y/x of a point with maximum sun altitude
+                if (sunAltitude > sunAlt) { // find y/x of a point with maximum sun altitude
                     sunAlt = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
                 }
-                if (moonAltitude < moonAlt) { // this time for moon
+                if (moonAltitude > moonAlt) { // this time for moon
                     moonAlt = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
                 }
             }
