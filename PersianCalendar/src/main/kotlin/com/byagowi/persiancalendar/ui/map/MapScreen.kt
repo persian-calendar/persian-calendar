@@ -26,6 +26,8 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.astronomy.rotateVector
+import com.byagowi.persiancalendar.ui.astronomy.terra
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
@@ -43,12 +45,13 @@ import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.AstroVector
 import io.github.cosinekitty.astronomy.Body
-import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
-import io.github.cosinekitty.astronomy.Refraction
-import io.github.cosinekitty.astronomy.equator
-import io.github.cosinekitty.astronomy.horizon
+import io.github.cosinekitty.astronomy.RotationMatrix
+import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.rotationEqdHor
+import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -61,6 +64,8 @@ import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
+import kotlin.math.sqrt
+
 
 class MapScreen : Fragment(R.layout.fragment_map) {
     private val binding by viewKeeper(FragmentMapBinding::bind)
@@ -199,10 +204,17 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     private var solarDraw: SolarDraw? = null
 
-    private val nightMaskScale = 4
+    private val nightMaskScale = 1
     private val nightMask = Bitmap.createBitmap(
         360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
     )
+
+    // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
+    private fun verticalComponent(rot: RotationMatrix, ovec: AstroVector, bvec: AstroVector): Double {
+        val topo = AstroVector(bvec.x - ovec.x, bvec.y - ovec.y, bvec.z - ovec.z, bvec.t)
+        val hor = rotateVector(rot, topo)
+        return hor.z / sqrt(hor.x * hor.x + hor.y * hor.y + hor.z * hor.z)
+    }
 
     private fun createMap(
         date: GregorianCalendar,
@@ -220,30 +232,35 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         var moonX = .0f
         var moonY = .0f
         var moonAlt = .0
+
+        val geoSunEqj = geoVector(Body.Sun, time, Aberration.None)
+        val geoMoonEqj = geoVector(Body.Moon, time, Aberration.None)
+        val rot = rotationEqjEqd(time)
+        val geoSunEqd = rotateVector(rot, geoSunEqj)
+        val geoMoonEqd = rotateVector(rot, geoMoonEqj)
+
+        // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
         (0 until nightMask.width).forEach { x ->
             if (!displayNightMask) return@forEach
             (0 until nightMask.height).forEach { y ->
                 val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                 val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
-
                 val observer = Observer(latitude, longitude, .0)
-                val sunEquator =
-                    equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
-                val sunHorizon =
-                    horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
-                val moonEquator =
-                    equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
-                val moonHorizon =
-                    horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
 
-                val sunAltitude = sunHorizon.altitude
-                if (sunAltitude < 0) nightMask[x, y] =
-                    (-sunAltitude.toInt()).coerceAtMost(17) * 7 shl 24
-                if (sunAltitude > sunAlt) { // find y/x of a point with maximum sun altitude
+                // Use "val ovec = observerVector(time, observer, EquatorEpoch.OfDate)" instead
+                val ovec = terra(observer, time).position()
+
+                val observerRot = rotationEqdHor(time, observer)
+                val sunAltitude = verticalComponent(observerRot, ovec, geoSunEqd)
+                val moonAltitude = verticalComponent(observerRot, ovec, geoMoonEqd)
+
+                if (sunAltitude > 0) nightMask[x, y] =
+                    ((sunAltitude * 90 * 7).toInt()).coerceAtMost(120) shl 24
+
+                if (sunAltitude < sunAlt) { // find y/x of a point with maximum sun altitude
                     sunAlt = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
                 }
-                val moonAltitude = moonHorizon.altitude
-                if (moonAltitude > moonAlt) { // this time for moon
+                if (moonAltitude < moonAlt) { // this time for moon
                     moonAlt = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
                 }
             }
