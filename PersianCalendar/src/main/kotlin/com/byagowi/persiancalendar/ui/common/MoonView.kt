@@ -8,17 +8,19 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.Ecliptic
+import io.github.cosinekitty.astronomy.Spherical
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
+import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
-import kotlin.math.roundToInt
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val solarDraw = SolarDraw(context)
     private var animator: ValueAnimator? = null
-    private var sunMoonPosition: SunMoonPosition? = null
+    private var sun: Ecliptic? = null
+    private var moon: Spherical? = null
     var jdn = Jdn.today().value.toFloat()
         set(value) {
             animator?.removeAllUpdateListeners()
@@ -42,13 +44,15 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
 
     override fun onDraw(canvas: Canvas) {
         val cx = width / 2f
-        solarDraw.moon(canvas, sunMoonPosition ?: return, cx, cx, cx)
+        solarDraw.moon(canvas, sun ?: return, moon ?: return, cx, cx, cx)
     }
 
     fun update() {
         val date = Jdn(jdn.toLong()).toJavaCalendar()
-        date[Calendar.HOUR_OF_DAY] = ((jdn % 1) * 24).roundToInt().coerceIn(0, 23)
-        sunMoonPosition = date.calculateSunMoonPosition(coordinates)
+        date[Calendar.HOUR_OF_DAY] = 12
+        val astroTime = AstroTime(date)
+        sun = sunPosition(astroTime)
+        moon = eclipticGeoMoon(astroTime)
         invalidate()
     }
 }
