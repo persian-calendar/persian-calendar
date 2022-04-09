@@ -12,7 +12,14 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSkyRendererBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
+import io.github.cosinekitty.astronomy.Aberration
+import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.EquatorEpoch
+import io.github.cosinekitty.astronomy.Observer
+import io.github.cosinekitty.astronomy.Refraction
+import io.github.cosinekitty.astronomy.equator
+import io.github.cosinekitty.astronomy.horizon
 import java.util.*
 
 class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
@@ -34,15 +41,19 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
         if (coordinates == null) {
             Toast.makeText(view.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }
-        val sunPosition = GregorianCalendar().also {
+        val time = AstroTime(GregorianCalendar().also {
             val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
             it.time = Date(mapViewModel.state.value.time)
-        }.calculateSunMoonPosition(coordinates).sunPosition
+        }.time)
+        val horizon = coordinates?.let { Observer(it.latitude, it.longitude, it.elevation) }?.let {
+            val sunEquator = equator(Body.Sun, time, it, EquatorEpoch.OfDate, Aberration.None)
+            horizon(time, it, sunEquator.ra, sunEquator.dec, Refraction.None)
+        }
 
         fun update() = binding.image.setImageBitmap(
             panoRendo(
-                sunElevationDegrees = sunPosition?.altitude ?: 30.0,
-                sunAzimuthDegrees = sunPosition?.azimuth ?: 0.0,
+                sunElevationDegrees = horizon?.altitude ?: 30.0,
+                sunAzimuthDegrees = horizon?.azimuth ?: 0.0,
                 toneMap = ToneMap.values().getOrNull(binding.toneMap.selectedItemPosition)
                     ?: ToneMap.Reinhard,
                 zoom = binding.zoom.text?.toString()?.toDoubleOrNull() ?: .0
