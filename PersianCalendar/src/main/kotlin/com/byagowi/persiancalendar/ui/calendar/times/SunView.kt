@@ -21,7 +21,11 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
+import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.Ecliptic
+import io.github.cosinekitty.astronomy.Spherical
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
+import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import kotlin.math.PI
@@ -66,12 +70,16 @@ class SunView @JvmOverloads constructor(
             field = value
             invalidate()
         }
-    var sunMoonPosition: SunMoonPosition? = null
-        set(value) {
-            field = value
-            invalidate()
-        }
+    private var sun: Ecliptic? = null
+    private var moon: Spherical? = null
     private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
+
+    fun setTime(time: GregorianCalendar) {
+        val astroTime = AstroTime(time)
+        sun = sunPosition(astroTime)
+        moon = eclipticGeoMoon(astroTime)
+        invalidate()
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
@@ -159,7 +167,11 @@ class SunView @JvmOverloads constructor(
             if (current in .17f..0.83f) {
                 solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(current))
             } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) { // cancel parent flip
-                run { solarDraw.moon(canvas, sunMoonPosition ?: return@run, cx, cy, radius) }
+                run {
+                    solarDraw.moon(
+                        canvas, sun ?: return@run, moon ?: return@run, cx, cy, radius
+                    )
+                }
             }
         }
 

@@ -83,7 +83,6 @@ import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
-import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -515,7 +514,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         owghatBinding.sunView.let { sunView ->
             sunView.isVisible = if (isToday) {
                 sunView.prayTimes = prayTimes
-                sunView.sunMoonPosition = date.calculateSunMoonPosition(coordinates)
+                sunView.setTime(date)
                 true
             } else false
             if (isToday && mainBinding?.viewPager?.currentItem == OWGHAT_TAB) sunView.startAnimate()

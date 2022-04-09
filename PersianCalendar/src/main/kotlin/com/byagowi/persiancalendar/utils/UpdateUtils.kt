@@ -289,7 +289,7 @@ private fun createSunViewRemoteViews(
     remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForRendering(sunView, width, height)
     sunView.prayTimes = prayTimes
-    sunView.sunMoonPosition = jdn.toJavaCalendar().calculateSunMoonPosition(coordinates)
+    sunView.setTime(jdn.toJavaCalendar())
     sunView.initiate()
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
