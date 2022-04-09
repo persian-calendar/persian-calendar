@@ -1,6 +1,6 @@
 // copyedited from https://code.google.com/p/android-salat-times/source/browse/src/com/cepmuvakkit/times/view/QiblaCompassView.java
 // licensed under GPLv3
-package com.cepmuvakkit.times.view
+package com.byagowi.persiancalendar.ui.compass
 
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -38,7 +38,7 @@ import kotlin.math.min
 import kotlin.math.round
 import kotlin.math.roundToInt
 
-class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+class CompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     var angle = 0f
         set(value) {
