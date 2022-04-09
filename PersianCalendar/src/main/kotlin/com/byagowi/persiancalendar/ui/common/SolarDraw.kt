@@ -10,7 +10,6 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
@@ -37,20 +36,6 @@ class SolarDraw(context: Context) {
     }
     private val smallSunDrawable by lazy(LazyThreadSafetyMode.NONE) {
         context.getCompatDrawable(R.drawable.ic_sun_small)
-    }
-
-    fun moon(canvas: Canvas, sunMoonPosition: SunMoonPosition, cx: Float, cy: Float, r: Float) {
-        moonRect.set(cx - r, cy - r, cx + r, cy + r)
-        canvas.drawBitmap(moonBitmap, null, moonRect, null)
-        val arcWidth = (sunMoonPosition.lunarAge.absolutePhaseValue.toFloat() - .5f) * 2 * r
-        moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
-        ovalPath.rewind()
-        ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
-        ovalPath.arcTo(moonRect, 270f, 180f)
-        ovalPath.close()
-        canvas.withRotation(sunMoonPosition.lunarSunlitTilt.toFloat(), cx, cy) {
-            drawPath(ovalPath, moonShadowPaint)
-        }
     }
 
     fun moon(canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float) {

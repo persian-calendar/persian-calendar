@@ -21,8 +21,17 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
 import com.cepmuvakkit.times.posAlgo.EarthPosition
+import io.github.cosinekitty.astronomy.Aberration
+import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.EquatorEpoch
+import io.github.cosinekitty.astronomy.Observer
+import io.github.cosinekitty.astronomy.Refraction
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
+import io.github.cosinekitty.astronomy.equator
+import io.github.cosinekitty.astronomy.horizon
+import io.github.cosinekitty.astronomy.sunPosition
 import net.androgames.level.AngleDisplay
 import java.util.*
 import kotlin.math.min
@@ -87,7 +96,22 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private var radius = 0f // radius of Compass dial
     private var r = 0f // radius of Sun and Moon
 
-    private var sunMoonPosition = GregorianCalendar().calculateSunMoonPosition(coordinates)
+    private val observer = coordinates?.let { Observer(it.latitude, it.longitude, it.elevation) }
+    private var sunMoonState = observer?.let { SunMoonState(observer, GregorianCalendar()) }
+
+    class SunMoonState(observer: Observer, date: GregorianCalendar) {
+        private val time = AstroTime(date)
+        val sunEcliptic = sunPosition(time)
+        val moonEcliptic = eclipticGeoMoon(time)
+        private val sunEquator =
+            equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
+        val sunHorizon = horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
+        private val moonEquator =
+            equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
+        val moonHorizon = horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
+        val isNight get() = sunHorizon.run { altitude <= -10 }
+        val isMoonGone get() = moonHorizon.run { altitude <= -5 }
+    }
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
     private var sunProgress = Clock(Calendar.getInstance()).toMinutes() / fullDay
@@ -95,7 +119,7 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val enableShade = false
 
     fun setTime(time: GregorianCalendar) {
-        sunMoonPosition = time.calculateSunMoonPosition(coordinates)
+        sunMoonState = observer?.let { SunMoonState(it, time) }
         sunProgress = Clock(time).toMinutes() / fullDay
         invalidate()
     }
@@ -192,11 +216,11 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     private val shadeFactor = 1.5f
 
     private fun Canvas.drawSun() {
-        if (sunMoonPosition.isNight == true) return
-        val sunPosition = sunMoonPosition.sunPosition ?: return
-        val rotation = sunPosition.azimuth.toFloat() - 360
+        val sunMoonState = sunMoonState ?: return
+        if (sunMoonState.isNight) return
+        val rotation = sunMoonState.sunHorizon.azimuth.toFloat() - 360
         withRotation(rotation, cx, cy) {
-            val sunHeight = (sunPosition.altitude.toFloat() / 90 - 1) * radius
+            val sunHeight = (sunMoonState.sunHorizon.altitude.toFloat() / 90 - 1) * radius
             val sunColor = solarDraw.sunColor(sunProgress)
             sunPaint.color = sunColor
             drawLine(cx, cy - radius, cx, cy + radius, sunPaint)
@@ -206,13 +230,15 @@ class QiblaCompassView(context: Context, attrs: AttributeSet? = null) : View(con
     }
 
     private fun Canvas.drawMoon() {
-        if (sunMoonPosition.isMoonGone == true) return
-        val moonPosition = sunMoonPosition.moonPosition ?: return
-        withRotation(moonPosition.azimuth.toFloat() - 360, cx, cy) {
-            val moonHeight = (moonPosition.altitude.toFloat() / 90 - 1) * radius
+        val sunMoonState = sunMoonState ?: return
+        if (sunMoonState.isMoonGone) return
+        withRotation(sunMoonState.moonHorizon.azimuth.toFloat() - 360, cx, cy) {
+            val moonHeight = (sunMoonState.moonHorizon.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
             if (enableShade) drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
-            solarDraw.moon(this, sunMoonPosition, cx, cy + moonHeight, r * .8f)
+            val sun = sunMoonState.sunEcliptic
+            val moon = sunMoonState.moonEcliptic
+            solarDraw.moon(this, sun, moon, cx, cy + moonHeight, r * .8f)
         }
     }
 
