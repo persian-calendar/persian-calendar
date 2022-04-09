@@ -36,10 +36,10 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.viewKeeper
+import com.byagowi.persiancalendar.utils.EarthPosition
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.utils.EarthPosition
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.AstroTime
@@ -204,15 +204,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
     )
 
-    class SunMoonState(observer: Observer, time: AstroTime) {
-        private val sunEquator =
-            equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
-        val sunHorizon = horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
-        private val moonEquator =
-            equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
-        val moonHorizon = horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
-    }
-
     private fun createMap(
         date: GregorianCalendar,
         displayNightMask: Boolean,
@@ -234,14 +225,24 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             (0 until nightMask.height).forEach { y ->
                 val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                 val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
-                val sunMoon = SunMoonState(Observer(latitude, longitude, .0), time)
-                val sunAltitude = sunMoon.sunHorizon.altitude
+
+                val observer = Observer(latitude, longitude, .0)
+                val sunEquator =
+                    equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
+                val sunHorizon =
+                    horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
+                val moonEquator =
+                    equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
+                val moonHorizon =
+                    horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
+
+                val sunAltitude = sunHorizon.altitude
                 if (sunAltitude < 0) nightMask[x, y] =
                     (-sunAltitude.toInt()).coerceAtMost(17) * 7 shl 24
                 if (sunAltitude > sunAlt) { // find y/x of a point with maximum sun altitude
                     sunAlt = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
                 }
-                val moonAltitude = sunMoon.moonHorizon.altitude
+                val moonAltitude = moonHorizon.altitude
                 if (moonAltitude > moonAlt) { // this time for moon
                     moonAlt = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
                 }
