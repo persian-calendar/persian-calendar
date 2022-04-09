@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,7 @@ import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -184,6 +186,17 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
             it.add("Log 'Hello'").onClick { debugLog("Hello!") }
             it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
             it.add("Crash!").onClick { error("Unhandled Crash!") }
+        }
+        toolbar.menu.add("Start Day Dream").onClick {
+            // https://stackoverflow.com/a/23112947
+            runCatching {
+                startActivity(
+                    Intent(Intent.ACTION_MAIN)
+                        .setClassName(
+                            "com.android.systemui", "com.android.systemui.Somnambulator"
+                        )
+                )
+            }.onFailure(logException).getOrNull().debugAssertNotNull
         }
     }
 }
