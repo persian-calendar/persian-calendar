@@ -75,7 +75,7 @@ https://github.com/ilius/starcal
 
   * Saeed Rasooli <saeed.gnu@gmail.com>
   * Mola Pahnadayan <mola.mp@gmail.com>
-  * شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران‬، و شورای فرهنگ عمومی
+  * شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران، و شورای فرهنگ عمومی
   * رضا مرادی غیاث‌آبادی
 
   Copyright (C) 2017  Saeed Rasooli
@@ -96,7 +96,7 @@ https://github.com/ilius/starcal
 ----
 Android Salat Times - GPLv3
 https://code.google.com/p/android-salat-times
-QiblaCompassView.java and its dependencies
+QiblaCompassView.java
 
   Copyright (C) 2012  cepmuvakkit
 
@@ -177,12 +177,11 @@ https://github.com/avianey/Level
   along with Level. If not, see <http://www.gnu.org/licenses/>
 
 ----
-Equinox.go (ported) - MIT
-https://github.com/xyproto/calendar/blob/master/equinox.go
+Astronomy Engine - MIT
 
-  The MIT License (MIT)
+MIT License
 
-  Copyright (c) 2017 Alexander F Rødseth
+  Copyright (c) 2019-2022 Don Cross
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
