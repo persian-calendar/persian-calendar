@@ -20,7 +20,7 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
     var last = PointF()
     var start = PointF()
     var minScale = 1f
-    var maxScale = 4f
+    var maxScale = 16f
     var m: FloatArray
     var redundantXSpace = 0f
     var redundantYSpace = 0f
@@ -39,10 +39,6 @@ class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageV
         super.setImageBitmap(bm)
         bmWidth = bm.width.toFloat()
         bmHeight = bm.height.toFloat()
-    }
-
-    fun setMaxZoom(x: Float) {
-        maxScale = x
     }
 
     private inner class ScaleListener : SimpleOnScaleGestureListener() {
