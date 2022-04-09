@@ -12,7 +12,10 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.animation.ArgbEvaluatorCompat
+import io.github.cosinekitty.astronomy.Ecliptic
+import io.github.cosinekitty.astronomy.Spherical
 import kotlin.math.abs
+import kotlin.math.cos
 
 class SolarDraw(context: Context) {
 
@@ -50,6 +53,21 @@ class SolarDraw(context: Context) {
         }
     }
 
+    fun moon(canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float) {
+        moonRect.set(cx - r, cy - r, cx + r, cy + r)
+        canvas.drawBitmap(moonBitmap, null, moonRect, null)
+        val phase = (moon.lon - sun.elon).let { it + if (it < 0) 360 else 0 }
+        val arcWidth = (cos(Math.toRadians(phase)) * r).toFloat()
+        moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
+        ovalPath.rewind()
+        ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
+        ovalPath.arcTo(moonRect, 270f, 180f)
+        ovalPath.close()
+        canvas.withRotation(if (phase < 180.0) 180f else 0f, cx, cy) {
+            drawPath(ovalPath, moonShadowPaint)
+        }
+    }
+
     fun simpleMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(moonBitmap, null, moonRect, null)
@@ -69,11 +87,11 @@ class SolarDraw(context: Context) {
         context.getCompatDrawable(R.drawable.ic_earth).toBitmap(128, 128)
     }
 
-    fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunMoonPosition: SunMoonPosition) {
+    fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(earthDrawable, null, earthRect, null)
         earthRect.inset(r / 10, r / 10)
-        val sunDegree = -sunMoonPosition.sunEcliptic.λ.toFloat()
+        val sunDegree = -sunEcliptic.elon.toFloat()
         canvas.drawArc(earthRect, sunDegree + 90f, 180f, true, earthShadowPaint)
     }
 

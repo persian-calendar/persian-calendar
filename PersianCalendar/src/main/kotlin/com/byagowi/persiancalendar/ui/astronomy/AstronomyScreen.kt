@@ -26,8 +26,9 @@ import com.byagowi.persiancalendar.utils.generateAstronomyHeaderText
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.switchmaterial.SwitchMaterial
+import io.github.cosinekitty.astronomy.Ecliptic
+import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.launchIn
@@ -56,12 +57,18 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         if (viewModel.time.value == AstronomyViewModel.DEFAULT_TIME)
             viewModel.changeToDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
-        fun updateSolarView(time: GregorianCalendar, it: SunMoonPosition) {
+        fun updateSolarView(
+            time: GregorianCalendar,
+            sunPosition: Ecliptic,
+            moonPosition: Spherical
+        ) {
             val tropical = viewModel.isTropical.value
             val sunZodiac =
-                if (tropical) it.sunEcliptic.tropicalZodiac else it.sunEcliptic.iauZodiac
+                if (tropical) Zodiac.fromTropical(sunPosition.elon)
+                else Zodiac.fromIau(sunPosition.elon)
             val moonZodiac =
-                if (tropical) it.moonEcliptic.tropicalZodiac else it.moonEcliptic.iauZodiac
+                if (tropical) Zodiac.fromTropical(moonPosition.lon)
+                else Zodiac.fromIau(moonPosition.lon)
             binding.sunText.text = sunZodiac.format(view.context, true) // ☉☀️
             binding.moonText.text =
                 moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
@@ -90,7 +97,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         fun update(immediate: Boolean) {
             val context = context ?: return
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
-            binding.solarView.setTime(time, immediate) { updateSolarView(time, it) }
+            binding.solarView.setTime(time, immediate) { s, m -> updateSolarView(time, s, m) }
             val civilDate = time.toCivilDate()
             val thisYearSeasons = seasons(civilDate.year)
             val nextYearSeasons = seasons(civilDate.year + 1)
@@ -179,7 +186,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         viewModel.isTropical
             .onEach { isTropical ->
                 val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                binding.solarView.setTime(time, true) { updateSolarView(time, it) }
+                binding.solarView.setTime(time, true) { s, m -> updateSolarView(time, s, m) }
                 binding.solarView.isTropicalDegree = isTropical
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

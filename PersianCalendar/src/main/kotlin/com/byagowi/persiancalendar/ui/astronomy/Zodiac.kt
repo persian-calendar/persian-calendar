@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
-import com.cepmuvakkit.times.posAlgo.Ecliptic
+import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.persiancalendar.calendar.PersianDate
 import kotlin.math.floor
 
@@ -72,10 +72,10 @@ enum class Zodiac(
         fun fromPersianCalendar(persianDate: PersianDate) =
             values().getOrNull(persianDate.month - 1) ?: ARIES
 
-        fun fromIauEcliptic(ecliptic: Ecliptic) =
-            values().firstOrNull { ecliptic.λ < it.iauRangeEnd } ?: ARIES
+        fun fromIau(latitude: Double) =
+            values().firstOrNull { latitude < it.iauRangeEnd } ?: ARIES
 
-        fun fromTropicalEcliptic(ecliptic: Ecliptic) =
-            values().getOrNull(floor(ecliptic.λ / 30).toInt()) ?: ARIES
+        fun fromTropical(latitude: Double) =
+            values().getOrNull(floor(latitude / 30).toInt()) ?: ARIES
     }
 }

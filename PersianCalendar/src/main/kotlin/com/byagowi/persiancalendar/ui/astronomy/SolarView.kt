@@ -15,23 +15,34 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
-import com.byagowi.persiancalendar.utils.calculateSunMoonPosition
-import com.cepmuvakkit.times.posAlgo.SunMoonPosition
 import com.google.android.material.math.MathUtils
+import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.Ecliptic
+import io.github.cosinekitty.astronomy.Spherical
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
+import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
 import kotlin.math.min
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private var currentTime = System.currentTimeMillis() - DAY_IN_MILLIS // Initial animation
-    private var sunMoonPosition: SunMoonPosition? = null
+    private var sun: Ecliptic? = null
+    private var moon: Spherical? = null
     private var animator: ValueAnimator? = null
 
-    fun setTime(time: GregorianCalendar, immediate: Boolean, update: (SunMoonPosition) -> Unit) {
+    fun setTime(
+        time: GregorianCalendar,
+        immediate: Boolean,
+        update: (Ecliptic, Spherical) -> Unit
+    ) {
         animator?.removeAllUpdateListeners()
         if (immediate) {
             currentTime = time.timeInMillis
-            sunMoonPosition = time.calculateSunMoonPosition(null).also(update)
+            val astroTime = AstroTime(time)
+            val sun = sunPosition(astroTime).also { sun = it }
+            val moon = eclipticGeoMoon(astroTime).also { moon = it }
+            update(sun, moon)
             invalidate()
             return
         }
@@ -43,7 +54,9 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             it.addUpdateListener { _ ->
                 currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
                 date.timeInMillis = currentTime
-                sunMoonPosition = date.calculateSunMoonPosition(null).also(update)
+                val astroTime = AstroTime(date)
+                sun = sunPosition(astroTime)
+                moon = eclipticGeoMoon(astroTime)
                 invalidate()
             }
         }.start()
@@ -78,7 +91,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
 
     override fun onDraw(canvas: Canvas) {
-        val sunMoonPosition = sunMoonPosition ?: return
+        val sun = sun ?: return
+        val moon = moon ?: return
         val radius = min(width, height) / 2f
         arcRect.set(0f, 0f, 2 * radius, 2 * radius)
         val circleInset = radius * .05f
@@ -96,20 +110,20 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }
         }
         val cr = radius / 8f
-        solarDraw.earth(canvas, radius, radius, cr / 1.5f, sunMoonPosition)
-        val sunDegree = sunMoonPosition.sunEcliptic.λ.toFloat()
+        solarDraw.earth(canvas, radius, radius, cr / 1.5f, sun)
+        val sunDegree = sun.elon.toFloat()
         canvas.withRotation(-sunDegree + 90f, radius, radius) {
             solarDraw.sun(this, radius, radius / 3.5f, cr)
             canvas.withTranslation(x = radius, y = 0f) {
                 canvas.drawPath(trianglePath, sunIndicatorPaint)
             }
         }
-        val moonDegree = sunMoonPosition.moonEcliptic.λ.toFloat()
+        val moonDegree = moon.lon.toFloat()
         canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
         canvas.withRotation(-moonDegree + 90f, radius, radius) {
-            val moonDistance = sunMoonPosition.moonEcliptic.Δ / SunMoonPosition.LUNAR_DISTANCE
+            val moonDistance = moon.dist / 0.002569 // Lunar distance in AU
             solarDraw.moon(
-                this, sunMoonPosition, radius,
+                this, sun, moon, radius,
                 radius * moonDistance.toFloat() * .7f, cr / 1.9f
             )
             canvas.withTranslation(x = radius, y = 0f) {
