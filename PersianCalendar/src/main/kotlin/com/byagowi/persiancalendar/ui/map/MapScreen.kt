@@ -199,7 +199,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     private var solarDraw: SolarDraw? = null
 
-    private val nightMaskScale = 2
+    private val nightMaskScale = 4
     private val nightMask = Bitmap.createBitmap(
         360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
     )
