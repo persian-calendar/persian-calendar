@@ -192,7 +192,7 @@ dependencies {
     implementation("com.github.persian-calendar:praytimes:2.1.2")
     implementation("com.github.persian-calendar:calculator:9a8b4980873f8acf83cf119cf9bf3e31e5259c1d")
 
-    implementation("com.github.cosinekitty:astronomy:80b8f8c9faf89359c88c3e1cbd2d64990ee07481")
+    implementation("com.github.cosinekitty:astronomy:b1ebd8d0d7b1eca2a79b4cd0f4e3edbeefba27ba")
 
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.preference:preference-ktx:1.2.0")

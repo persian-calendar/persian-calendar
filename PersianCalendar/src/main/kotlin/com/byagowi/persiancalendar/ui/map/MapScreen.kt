@@ -26,8 +26,6 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.ui.astronomy.rotateVector
-import com.byagowi.persiancalendar.ui.astronomy.terra
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
@@ -47,6 +45,7 @@ import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.AstroVector
 import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.RotationMatrix
 import io.github.cosinekitty.astronomy.geoVector
@@ -212,7 +211,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
     private fun verticalComponent(rot: RotationMatrix, ovec: AstroVector, bvec: AstroVector): Double {
         val topo = AstroVector(bvec.x - ovec.x, bvec.y - ovec.y, bvec.z - ovec.z, bvec.t)
-        val hor = rotateVector(rot, topo)
+        val hor = rot.rotate(topo)
         return hor.z / sqrt(hor.x * hor.x + hor.y * hor.y + hor.z * hor.z)
     }
 
@@ -236,8 +235,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         val geoSunEqj = geoVector(Body.Sun, time, Aberration.None)
         val geoMoonEqj = geoVector(Body.Moon, time, Aberration.None)
         val rot = rotationEqjEqd(time)
-        val geoSunEqd = rotateVector(rot, geoSunEqj)
-        val geoMoonEqd = rotateVector(rot, geoMoonEqj)
+        val geoSunEqd = rot.rotate(geoSunEqj)
+        val geoMoonEqd = rot.rotate(geoMoonEqj)
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
         (0 until nightMask.width).forEach { x ->
@@ -246,10 +245,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                 val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
                 val observer = Observer(latitude, longitude, .0)
-
-                // Use "val ovec = observerVector(time, observer, EquatorEpoch.OfDate)" instead
-                val ovec = terra(observer, time).position()
-
+                val ovec = observer.toVector(time, EquatorEpoch.OfDate)
                 val observerRot = rotationEqdHor(time, observer)
                 val sunAltitude = verticalComponent(observerRot, ovec, geoSunEqd)
                 val moonAltitude = verticalComponent(observerRot, ovec, geoMoonEqd)
