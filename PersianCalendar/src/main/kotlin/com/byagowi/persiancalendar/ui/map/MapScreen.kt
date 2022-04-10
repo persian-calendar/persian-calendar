@@ -63,7 +63,6 @@ import kotlin.math.absoluteValue
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
-import kotlin.math.sqrt
 
 
 class MapScreen : Fragment(R.layout.fragment_map) {
@@ -209,10 +208,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     )
 
     // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
-    private fun verticalComponent(rot: RotationMatrix, ovec: AstroVector, bvec: AstroVector): Double {
-        val topo = AstroVector(bvec.x - ovec.x, bvec.y - ovec.y, bvec.z - ovec.z, bvec.t)
-        val hor = rot.rotate(topo)
-        return hor.z / sqrt(hor.x * hor.x + hor.y * hor.y + hor.z * hor.z)
+    private fun verticalComponent(
+        rot: RotationMatrix,
+        ovec: AstroVector,
+        bvec: AstroVector
+    ): Double {
+        val hor = rot.rotate(bvec - ovec)
+        return hor.z / hor.length()
     }
 
     private fun createMap(
@@ -227,10 +229,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         nightMask.eraseColor(Color.TRANSPARENT)
         var sunX = .0f
         var sunY = .0f
-        var sunAlt = .0
+        var sunMaxAltitde = .0
         var moonX = .0f
         var moonY = .0f
-        var moonAlt = .0
+        var moonMaxAltitude = .0
 
         val geoSunEqj = geoVector(Body.Sun, time, Aberration.None)
         val geoMoonEqj = geoVector(Body.Moon, time, Aberration.None)
@@ -250,14 +252,17 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 val sunAltitude = verticalComponent(observerRot, ovec, geoSunEqd)
                 val moonAltitude = verticalComponent(observerRot, ovec, geoMoonEqd)
 
-                if (sunAltitude < 0) nightMask[x, y] =
-                    ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120) shl 24
-
-                if (sunAltitude > sunAlt) { // find y/x of a point with maximum sun altitude
-                    sunAlt = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
+                if (sunAltitude < 0) {
+                    val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
+                    // This move the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
+                    nightMask[x, y] = value shl 24
                 }
-                if (moonAltitude > moonAlt) { // this time for moon
-                    moonAlt = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
+
+                if (sunAltitude > sunMaxAltitde) { // find y/x of a point with maximum sun altitude
+                    sunMaxAltitde = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
+                }
+                if (moonAltitude > moonMaxAltitude) { // this time for moon
+                    moonMaxAltitude = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
                 }
             }
         }
