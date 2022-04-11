@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.global.asrMethod
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.highLatitudesMethod
+import io.github.cosinekitty.astronomy.Observer
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
@@ -23,6 +24,8 @@ fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalend
     PrayTimes(calculationMethod, calendar, this, asrMethod, highLatitudesMethod)
 
 val Coordinates.isSouthernHemisphere get() = latitude < .0
+
+fun Coordinates.toObserver() = Observer(this.latitude, this.longitude, this.elevation)
 
 val logException = fun(e: Throwable) { Log.e(LOG_TAG, "Handled Exception", e) }
 

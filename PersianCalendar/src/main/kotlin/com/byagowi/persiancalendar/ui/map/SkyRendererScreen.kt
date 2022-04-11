@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSkyRendererBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.Body
@@ -45,7 +46,7 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
             val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
             it.time = Date(mapViewModel.state.value.time)
         }.time)
-        val horizon = coordinates?.let { Observer(it.latitude, it.longitude, it.elevation) }?.let {
+        val horizon = coordinates?.toObserver()?.let {
             val sunEquator = equator(Body.Sun, time, it, EquatorEpoch.OfDate, Aberration.None)
             horizon(time, it, sunEquator.ra, sunEquator.dec, Refraction.None)
         }

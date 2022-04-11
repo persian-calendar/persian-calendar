@@ -38,7 +38,10 @@ class SolarDraw(context: Context) {
         context.getCompatDrawable(R.drawable.ic_sun_small)
     }
 
-    fun moon(canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float) {
+    fun moon(
+        canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float,
+        angle: Float? = null
+    ) {
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         canvas.drawBitmap(moonBitmap, null, moonRect, null)
         val phase = (moon.lon - sun.elon).let { it + if (it < 0) 360 else 0 }
@@ -48,7 +51,7 @@ class SolarDraw(context: Context) {
         ovalPath.arcTo(moonOval, 90f, if (arcWidth > 0) 180f else -180f)
         ovalPath.arcTo(moonRect, 270f, 180f)
         ovalPath.close()
-        canvas.withRotation(if (phase < 180.0) 180f else 0f, cx, cy) {
+        canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
             drawPath(ovalPath, moonShadowPaint)
         }
     }

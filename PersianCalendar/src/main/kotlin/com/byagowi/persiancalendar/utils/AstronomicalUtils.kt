@@ -12,9 +12,19 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
+import io.github.cosinekitty.astronomy.Aberration
+import io.github.cosinekitty.astronomy.AstroTime
+import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.EquatorEpoch
+import io.github.cosinekitty.astronomy.Observer
+import io.github.cosinekitty.astronomy.Refraction
+import io.github.cosinekitty.astronomy.equator
+import io.github.cosinekitty.astronomy.horizon
+import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
+import kotlin.math.atan2
 
 // Based on Mehdi's work
 
@@ -77,3 +87,15 @@ private fun generateYearName(
     return "%s$spacedColon%s".format(context.getString(R.string.year_name), yearNames)
 }
 
+// https://github.com/cosinekitty/astronomy/blob/0547aaf/demo/csharp/camera/camera.cs#L98
+fun sunlitSideMoonTiltAngle(time: AstroTime, observer: Observer): Double {
+    val moonEquator = equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
+    val sunEquator = equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
+    val moonHorizontal =
+        horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
+    val vec = rotationEqdHor(time, observer)
+        .pivot(2, moonHorizontal.azimuth)
+        .pivot(1, moonHorizontal.altitude)
+        .rotate(sunEquator.vec)
+    return Math.toDegrees(atan2(vec.z, vec.y))
+}
