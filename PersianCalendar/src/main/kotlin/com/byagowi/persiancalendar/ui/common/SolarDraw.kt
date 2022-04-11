@@ -45,7 +45,7 @@ class SolarDraw(context: Context) {
         val arcWidth = (cos(Math.toRadians(phase)) * r).toFloat()
         moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
         ovalPath.rewind()
-        ovalPath.arcTo(moonOval, 90f, if (arcWidth < 0) 180f else -180f)
+        ovalPath.arcTo(moonOval, 90f, if (arcWidth > 0) 180f else -180f)
         ovalPath.arcTo(moonRect, 270f, 180f)
         ovalPath.close()
         canvas.withRotation(if (phase < 180.0) 180f else 0f, cx, cy) {
