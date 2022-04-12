@@ -13,11 +13,11 @@ import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
 import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import io.github.cosinekitty.astronomy.Aberration
-import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
+import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
@@ -88,7 +88,7 @@ private fun generateYearName(
 }
 
 // https://github.com/cosinekitty/astronomy/blob/0547aaf/demo/csharp/camera/camera.cs#L98
-fun sunlitSideMoonTiltAngle(time: AstroTime, observer: Observer): Double {
+fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
     val moonEquator = equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
     val sunEquator = equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
     val moonHorizontal =

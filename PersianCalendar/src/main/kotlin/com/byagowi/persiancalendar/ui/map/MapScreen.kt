@@ -42,12 +42,12 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Aberration
-import io.github.cosinekitty.astronomy.AstroTime
-import io.github.cosinekitty.astronomy.AstroVector
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.RotationMatrix
+import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.Vector
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
@@ -210,8 +210,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
     private fun verticalComponent(
         rot: RotationMatrix,
-        ovec: AstroVector,
-        bvec: AstroVector
+        ovec: Vector,
+        bvec: Vector
     ): Double {
         val hor = rot.rotate(bvec - ovec)
         return hor.z / hor.length()
@@ -225,7 +225,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         directPathDestination: Coordinates?
     ): Bitmap {
         val sink = getSinkBitmap()
-        val time = AstroTime(date)
+        val time = Time(date)
         nightMask.eraseColor(Color.TRANSPARENT)
         var sunX = .0f
         var sunY = .0f

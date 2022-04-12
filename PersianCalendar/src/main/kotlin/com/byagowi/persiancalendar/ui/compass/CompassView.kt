@@ -25,11 +25,11 @@ import com.byagowi.persiancalendar.utils.EarthPosition
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
-import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
+import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
@@ -102,7 +102,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private var sunMoonState = observer?.let { SunMoonState(observer, GregorianCalendar()) }
 
     private class SunMoonState(observer: Observer, date: GregorianCalendar) {
-        private val time = AstroTime(date)
+        private val time = Time(date)
         val sunEcliptic = sunPosition(time)
         val moonEcliptic = eclipticGeoMoon(time)
         private val sunEquator =

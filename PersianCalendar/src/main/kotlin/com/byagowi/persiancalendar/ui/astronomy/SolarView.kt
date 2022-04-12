@@ -16,9 +16,9 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.google.android.material.math.MathUtils
-import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
+import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
@@ -39,9 +39,9 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         animator?.removeAllUpdateListeners()
         if (immediate) {
             currentTime = time.timeInMillis
-            val astroTime = AstroTime(time)
-            val sun = sunPosition(astroTime).also { sun = it }
-            val moon = eclipticGeoMoon(astroTime).also { moon = it }
+            val time = Time(time)
+            val sun = sunPosition(time).also { sun = it }
+            val moon = eclipticGeoMoon(time).also { moon = it }
             update(sun, moon)
             invalidate()
             return
@@ -54,9 +54,9 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             it.addUpdateListener { _ ->
                 currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
                 date.timeInMillis = currentTime
-                val astroTime = AstroTime(date)
-                sun = sunPosition(astroTime)
-                moon = eclipticGeoMoon(astroTime)
+                val time = Time(date)
+                sun = sunPosition(time)
+                moon = eclipticGeoMoon(time)
                 invalidate()
             }
         }.start()

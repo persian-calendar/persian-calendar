@@ -21,9 +21,9 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
+import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.PrayTimes
@@ -75,9 +75,9 @@ class SunView @JvmOverloads constructor(
     private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
 
     fun setTime(time: GregorianCalendar) {
-        val astroTime = AstroTime(time)
-        sun = sunPosition(astroTime)
-        moon = eclipticGeoMoon(astroTime)
+        val time = Time(time)
+        sun = sunPosition(time)
+        moon = eclipticGeoMoon(time)
         invalidate()
     }
 

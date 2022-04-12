@@ -14,11 +14,11 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
-import io.github.cosinekitty.astronomy.AstroTime
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
+import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import java.util.*
@@ -42,7 +42,7 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
         if (coordinates == null) {
             Toast.makeText(view.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }
-        val time = AstroTime(GregorianCalendar().also {
+        val time = Time(GregorianCalendar().also {
             val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
             it.time = Date(mapViewModel.state.value.time)
         }.time)
