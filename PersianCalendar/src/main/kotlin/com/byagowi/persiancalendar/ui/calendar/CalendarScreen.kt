@@ -550,9 +550,12 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
                 val today = Jdn.today().toCalendar(type)
                 bringDate(
                     Jdn(
-                        type, if (date.year == -1)
+                        type,
+                        if (date.year == -1)
                             (today.year + if (date.month < today.month) 1 else 0)
-                        else date.year, date.month, date.dayOfMonth
+                        else date.year,
+                        date.month,
+                        date.dayOfMonth
                     )
                 )
                 searchView.onActionViewCollapsed()

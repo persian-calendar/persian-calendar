@@ -117,8 +117,18 @@ class EventsRepository(
             persianCalendarEvents.getAllEvents(), islamicCalendarEvents.getAllEvents(),
             nepaliCalendarEvents.getAllEvents(), gregorianCalendarEvents.getAllEvents()
         ).flatten() + listOf(
-            jdn.toPersianCalendar(), jdn.toGregorianCalendar(), jdn.toIslamicCalendar()
-        ).flatMap { irregularCalendarEventsStore.getEventsList(it.year, it.calendarType) }
+            jdn.toPersianCalendar(),
+            jdn.toGregorianCalendar(),
+            jdn.toIslamicCalendar(),
+            jdn.toNepaliCalendar()
+        ).flatMap {
+            val store = irregularCalendarEventsStore
+            val thisYear = store.getEventsList<CalendarEvent<*>>(it.year, it.calendarType)
+                .filter { event -> event.date.month >= it.month }
+            val nextYear = store.getEventsList<CalendarEvent<*>>(it.year + 1, it.calendarType)
+                .filter { event -> event.date.month < it.month }
+            thisYear + nextYear
+        }
     }
 
     private inline fun <reified T : CalendarEvent<out AbstractDate>> createEvent(
