@@ -57,6 +57,13 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         if (viewModel.time.value == AstronomyViewModel.DEFAULT_TIME)
             viewModel.changeToDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
+        binding.solarView.setOnLongClickListener longClick@ {
+            val activity = activity ?: return@longClick true
+            val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
+            showHoroscopesDialog(activity, time.time)
+            true
+        }
+
         fun updateSolarView(
             time: GregorianCalendar,
             sunPosition: Ecliptic,

@@ -41,7 +41,7 @@ import kotlin.math.floor
  *
  */
 enum class Zodiac(
-    private val iauRangeEnd: Double, private val emoji: String, @StringRes private val title: Int
+    private val iauRangeEnd: Double, val emoji: String, @StringRes private val title: Int
 ) {
     ARIES(33.18, "♈", R.string.aries),
     TAURUS(51.16, "♉", R.string.taurus),
