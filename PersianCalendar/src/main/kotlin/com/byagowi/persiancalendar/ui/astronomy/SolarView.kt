@@ -36,7 +36,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         private val time = Time.fromMillisecondsSince1970(currentTime)
         val sun = sunPosition(time)
         val moon = eclipticGeoMoon(time)
-        val moonTilt = lazy(LazyThreadSafetyMode.NONE) {
+        val moonTilt by lazy(LazyThreadSafetyMode.NONE) {
             coordinates?.let { coordinates ->
                 sunlitSideMoonTiltAngle(time, coordinates.toObserver()).toFloat()
             }
@@ -113,7 +113,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private fun drawMoonOnlyView(canvas: Canvas) {
         val radius = min(width, height) / 2f
         solarDraw.moon(
-            canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt.value
+            canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt
         )
     }
 
