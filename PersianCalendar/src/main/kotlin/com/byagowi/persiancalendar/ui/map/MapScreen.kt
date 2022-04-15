@@ -225,7 +225,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         directPathDestination: Coordinates?
     ): Bitmap {
         val sink = getSinkBitmap()
-        val time = Time(date)
+        val time = Time.fromMillisecondsSince1970(date.time.time)
         nightMask.eraseColor(Color.TRANSPARENT)
         var sunX = .0f
         var sunY = .0f

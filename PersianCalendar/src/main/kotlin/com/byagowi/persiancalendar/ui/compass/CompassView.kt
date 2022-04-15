@@ -102,7 +102,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private var sunMoonState = observer?.let { SunMoonState(observer, GregorianCalendar()) }
 
     private class SunMoonState(observer: Observer, date: GregorianCalendar) {
-        private val time = Time(date)
+        private val time = Time.fromMillisecondsSince1970(date.time.time)
         val sunEcliptic = sunPosition(time)
         val moonEcliptic = eclipticGeoMoon(time)
         private val sunEquator =

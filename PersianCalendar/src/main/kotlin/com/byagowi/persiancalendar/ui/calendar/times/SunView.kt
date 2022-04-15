@@ -75,9 +75,9 @@ class SunView @JvmOverloads constructor(
     private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
 
     fun setTime(time: GregorianCalendar) {
-        val time = Time(time)
-        sun = sunPosition(time)
-        moon = eclipticGeoMoon(time)
+        val date = Time.fromMillisecondsSince1970(time.time.time)
+        sun = sunPosition(date)
+        moon = eclipticGeoMoon(date)
         invalidate()
     }
 

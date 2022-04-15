@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import io.github.cosinekitty.astronomy.seasons
+import java.util.*
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
@@ -112,8 +113,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 equinox = context.getString(
                     R.string.spring_equinox,
                     formatNumber(date.year + addition),
-                    seasons(jdn.toGregorianCalendar().year).marchEquinox.toDate()
-                        .toJavaCalendar().formatDateAndTime()
+                    Date(
+                        seasons(jdn.toGregorianCalendar().year).marchEquinox
+                            .toMillisecondsSince1970()
+                    ).toJavaCalendar().formatDateAndTime()
                 )
             }
         }

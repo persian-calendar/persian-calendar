@@ -19,7 +19,7 @@ private fun formatAngle(value: Double): String {
 }
 
 fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
-    val time = Time(date)
+    val time = Time.fromMillisecondsSince1970(date.time)
     MaterialAlertDialogBuilder(activity)
         .setMessage(listOf(
             Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,

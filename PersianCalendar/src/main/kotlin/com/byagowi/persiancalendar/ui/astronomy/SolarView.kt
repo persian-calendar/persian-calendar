@@ -38,10 +38,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     ) {
         animator?.removeAllUpdateListeners()
         if (immediate) {
-            currentTime = time.timeInMillis
-            val time = Time(time)
-            val sun = sunPosition(time).also { sun = it }
-            val moon = eclipticGeoMoon(time).also { moon = it }
+            currentTime = time.time.time
+            val date = Time.fromMillisecondsSince1970(currentTime)
+            val sun = sunPosition(date).also { sun = it }
+            val moon = eclipticGeoMoon(date).also { moon = it }
             update(sun, moon)
             invalidate()
             return
@@ -50,13 +50,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             animator = it
             it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
             it.interpolator = AccelerateDecelerateInterpolator()
-            val date = GregorianCalendar()
             it.addUpdateListener { _ ->
                 currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
-                date.timeInMillis = currentTime
-                val time = Time(date)
-                sun = sunPosition(time)
-                moon = eclipticGeoMoon(time)
+                val date = Time.fromMillisecondsSince1970(currentTime)
+                sun = sunPosition(date)
+                moon = eclipticGeoMoon(date)
                 invalidate()
             }
         }.start()

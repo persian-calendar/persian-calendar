@@ -57,7 +57,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         if (viewModel.time.value == AstronomyViewModel.DEFAULT_TIME)
             viewModel.changeToDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
-        binding.solarView.setOnLongClickListener longClick@ {
+        binding.solarView.setOnLongClickListener longClick@{
             val activity = activity ?: return@longClick true
             val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
             showHoroscopesDialog(activity, time.time)
@@ -117,12 +117,14 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     2 -> binding.secondSeasonText
                     3 -> binding.thirdSeasonText
                     else -> binding.fourthSeasonText
-                }.text = when (it) {
-                    1 -> thisYearSeasons.juneSolstice
-                    2 -> thisYearSeasons.septemberEquinox
-                    3 -> thisYearSeasons.decemberSolstice
-                    else -> nextYearSeasons.marchEquinox
-                }.toDate().toJavaCalendar().formatDateAndTime()
+                }.text = Date(
+                    when (it) {
+                        1 -> thisYearSeasons.juneSolstice
+                        2 -> thisYearSeasons.septemberEquinox
+                        3 -> thisYearSeasons.decemberSolstice
+                        else -> nextYearSeasons.marchEquinox
+                    }.toMillisecondsSince1970()
+                ).toJavaCalendar().formatDateAndTime()
             }
         }
         update(false)

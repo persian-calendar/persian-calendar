@@ -42,10 +42,10 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
         if (coordinates == null) {
             Toast.makeText(view.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }
-        val time = Time(GregorianCalendar().also {
+        val time = Time.fromMillisecondsSince1970(run {
             val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
-            it.time = Date(mapViewModel.state.value.time)
-        }.time)
+            mapViewModel.state.value.time
+        })
         val horizon = coordinates?.toObserver()?.let {
             val sunEquator = equator(Body.Sun, time, it, EquatorEpoch.OfDate, Aberration.None)
             horizon(time, it, sunEquator.ra, sunEquator.dec, Refraction.None)

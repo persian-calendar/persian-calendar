@@ -52,7 +52,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
         val date = Jdn(jdn.toLong()).toJavaCalendar()
         val fractionOfDay = jdn % 1 // jdn is a float so it can do smooth transition
         date[Calendar.HOUR_OF_DAY] = (fractionOfDay * 24).roundToInt().coerceIn(0, 23)
-        val time = Time(date)
+        val time = Time.fromMillisecondsSince1970(date.time.time)
         sun = sunPosition(time)
         moon = eclipticGeoMoon(time)
         invalidate()
