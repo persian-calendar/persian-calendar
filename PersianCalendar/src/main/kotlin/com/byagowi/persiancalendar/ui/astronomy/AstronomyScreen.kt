@@ -92,6 +92,20 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             }
         }
 
+        binding.railView.itemIconTintList = null
+        binding.railView.menu.also { menu ->
+            menu.add("").setIcon(R.drawable.ic_earth).also {
+                if (viewModel.mode.value == AstronomyViewModel.Mode.Earth) it.isChecked = true
+            }.onClick {
+                viewModel.changeScreenMode(AstronomyViewModel.Mode.Earth)
+            }
+            menu.add("").setIcon(R.drawable.ic_moon).also {
+                if (viewModel.mode.value == AstronomyViewModel.Mode.Moon) it.isChecked = true
+            }.onClick {
+                viewModel.changeScreenMode(AstronomyViewModel.Mode.Moon)
+            }
+        }
+
         listOf(
             binding.firstSeasonChip to 4, binding.secondSeasonChip to 7,
             binding.thirdSeasonChip to 10, binding.fourthSeasonChip to 1
@@ -201,6 +215,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.resetButtonVisibilityEvent
             .onEach { resetButton.isVisible = it }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.mode
+            .onEach { binding.solarView.mode = it }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         // TOOO: figure out how to run update() from time flow
     }

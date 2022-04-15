@@ -11,10 +11,13 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
+import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
+import com.byagowi.persiancalendar.utils.toObserver
 import com.google.android.material.math.MathUtils
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
@@ -27,9 +30,25 @@ import kotlin.math.min
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private var currentTime = System.currentTimeMillis() - DAY_IN_MILLIS // Initial animation
-    private var sun: Ecliptic? = null
-    private var moon: Spherical? = null
     private var animator: ValueAnimator? = null
+
+    private class State(currentTime: Long) {
+        private val time = Time.fromMillisecondsSince1970(currentTime)
+        val sun = sunPosition(time)
+        val moon = eclipticGeoMoon(time)
+        val moonTilt = lazy(LazyThreadSafetyMode.NONE) {
+            coordinates?.let { coordinates ->
+                sunlitSideMoonTiltAngle(time, coordinates.toObserver()).toFloat()
+            }
+        }
+    }
+    private var state = State(currentTime)
+
+    var mode: AstronomyViewModel.Mode = AstronomyViewModel.Mode.Earth
+        set(value) {
+            field = value
+            invalidate()
+        }
 
     fun setTime(
         time: GregorianCalendar,
@@ -39,10 +58,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         animator?.removeAllUpdateListeners()
         if (immediate) {
             currentTime = time.time.time
-            val date = Time.fromMillisecondsSince1970(currentTime)
-            val sun = sunPosition(date).also { sun = it }
-            val moon = eclipticGeoMoon(date).also { moon = it }
-            update(sun, moon)
+            state = State(currentTime)
+            update(state.sun, state.moon)
             invalidate()
             return
         }
@@ -52,9 +69,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             it.interpolator = AccelerateDecelerateInterpolator()
             it.addUpdateListener { _ ->
                 currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
-                val date = Time.fromMillisecondsSince1970(currentTime)
-                sun = sunPosition(date)
-                moon = eclipticGeoMoon(date)
+                state = State(currentTime)
                 invalidate()
             }
         }.start()
@@ -89,8 +104,20 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
 
     override fun onDraw(canvas: Canvas) {
-        val sun = sun ?: return
-        val moon = moon ?: return
+        when (mode) {
+            AstronomyViewModel.Mode.Moon -> drawMoonOnlyView(canvas)
+            AstronomyViewModel.Mode.Earth -> drawEarthCentricView(canvas)
+        }
+    }
+
+    private fun drawMoonOnlyView(canvas: Canvas) {
+        val radius = min(width, height) / 2f
+        solarDraw.moon(
+            canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt.value
+        )
+    }
+
+    private fun drawEarthCentricView(canvas: Canvas) {
         val radius = min(width, height) / 2f
         arcRect.set(0f, 0f, 2 * radius, 2 * radius)
         val circleInset = radius * .05f
@@ -108,20 +135,20 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             }
         }
         val cr = radius / 8f
-        solarDraw.earth(canvas, radius, radius, cr / 1.5f, sun)
-        val sunDegree = sun.elon.toFloat()
+        solarDraw.earth(canvas, radius, radius, cr / 1.5f, state.sun)
+        val sunDegree = state.sun.elon.toFloat()
         canvas.withRotation(-sunDegree + 90f, radius, radius) {
             solarDraw.sun(this, radius, radius / 3.5f, cr)
             canvas.withTranslation(x = radius, y = 0f) {
                 canvas.drawPath(trianglePath, sunIndicatorPaint)
             }
         }
-        val moonDegree = moon.lon.toFloat()
+        val moonDegree = state.moon.lon.toFloat()
         canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
         canvas.withRotation(-moonDegree + 90f, radius, radius) {
-            val moonDistance = moon.dist / 0.002569 // Lunar distance in AU
+            val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
             solarDraw.moon(
-                this, sun, moon, radius,
+                this, state.sun, state.moon, radius,
                 radius * moonDistance.toFloat() * .7f, cr / 1.9f
             )
             canvas.withTranslation(x = radius, y = 0f) {
