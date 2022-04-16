@@ -55,7 +55,7 @@ class EquinoxTests {
     )
     fun test_not_change(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) {
         val calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Tehran"))
-        calendar.time = seasons(year).marchEquinox.toDate()
+        calendar.timeInMillis = seasons(year).marchEquinox.toMillisecondsSince1970()
         assertEquals(year, calendar[Calendar.YEAR])
         assertEquals(month, calendar[Calendar.MONTH] + 1)
         assertEquals(day, calendar[Calendar.DAY_OF_MONTH])
@@ -73,9 +73,9 @@ class EquinoxTests {
     @Test
     fun test_other_equinoxes() {
         val seasons = seasons(2020)
-        assertEquals(1584676197177, seasons.marchEquinox.toDate().time)
-        assertEquals(1592689413689, seasons.juneSolstice.toDate().time)
-        assertEquals(1600781456763, seasons.septemberEquinox.toDate().time)
-        assertEquals(1608544960981, seasons.decemberSolstice.toDate().time)
+        assertEquals(1584676197177, seasons.marchEquinox.toMillisecondsSince1970())
+        assertEquals(1592689413689, seasons.juneSolstice.toMillisecondsSince1970())
+        assertEquals(1600781456763, seasons.septemberEquinox.toMillisecondsSince1970())
+        assertEquals(1608544960981, seasons.decemberSolstice.toMillisecondsSince1970())
     }
 }

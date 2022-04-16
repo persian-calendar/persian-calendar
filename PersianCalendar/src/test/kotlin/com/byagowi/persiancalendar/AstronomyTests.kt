@@ -156,7 +156,7 @@ class AstronomyTests {
         listOf(
             seasons.marchEquinox to 1584676197177, seasons.juneSolstice to 1592689413689,
             seasons.septemberEquinox to 1600781456763, seasons.decemberSolstice to 1608544960981
-        ).map { (it, time) -> assertThat(it.toDate().time).isEqualTo(time) }
+        ).map { (it, time) -> assertThat(it.toMillisecondsSince1970()).isEqualTo(time) }
     }
 
     @Test
