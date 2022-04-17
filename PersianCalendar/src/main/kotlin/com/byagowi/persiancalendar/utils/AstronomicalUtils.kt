@@ -5,12 +5,12 @@ import android.icu.util.ChineseCalendar
 import android.os.Build
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
-import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -21,6 +21,9 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
+import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
+import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
+import io.github.cosinekitty.astronomy.searchLunarEclipse
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
@@ -49,19 +52,27 @@ fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean
 }
 
 fun generateAstronomyHeaderText(
-    time: GregorianCalendar,
+    date: GregorianCalendar,
     context: Context,
     persianDate: PersianDate
 ): String {
+    val time = Time.fromMillisecondsSince1970(date.time.time)
+    val observer = coordinates?.toObserver()
     return (listOf(
-        R.string.solar_eclipse to Eclipse.Category.SOLAR,
-        R.string.lunar_eclipse to Eclipse.Category.LUNAR
-    ).map { (title, eclipseCategory) ->
-        val eclipse = Eclipse(time, eclipseCategory, true)
-        val date = eclipse.maxPhaseDate.toJavaCalendar().formatDateAndTime()
-        (language.tryTranslateEclipseType(eclipse.type) ?: context.getString(title)) +
-                spacedColon + date
-    } + listOf(generateYearName(context, persianDate, true, time))).joinToString("\n")
+        if (observer != null) {
+            searchLocalSolarEclipse(time, observer).let { it.kind to it.peak.time }
+        } else {
+            searchGlobalSolarEclipse(time).let { it.kind to it.peak }
+        },
+        searchLunarEclipse(time).let { it.kind to it.peak }
+    ).mapIndexed { i, (kind, peak) ->
+        val formattedDate = Date(peak.toMillisecondsSince1970()).toJavaCalendar()
+            .formatDateAndTime()
+        val isSolar = i == 0
+        val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
+        (language.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
+                spacedColon + formattedDate
+    } + listOf(generateYearName(context, persianDate, true, date))).joinToString("\n")
 }
 
 private fun generateYearName(

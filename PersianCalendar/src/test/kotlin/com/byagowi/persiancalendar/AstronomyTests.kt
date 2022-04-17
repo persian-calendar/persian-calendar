@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar
 import android.icu.util.ChineseCalendar
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.astronomy.ChineseZodiac
-import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.ui.astronomy.LunarAge
 import com.byagowi.persiancalendar.ui.astronomy.Zodiac
 import com.google.common.truth.Truth.assertThat
@@ -46,37 +45,6 @@ class AstronomyTests {
 
         val nirobi = Coordinates(-1.286389, 36.817222, 1_795.0)
 //        assertThat($(time, nirobi, 0.0).lunarSunlitTilt).isWithin(1.0e0).of(.0)
-    }
-
-    @Test
-    fun `Basic Eclipse testing`() {
-        val nextSolarEclipse =
-            Eclipse(GregorianCalendar(2021, 12, 30), Eclipse.Category.SOLAR, true)
-        assertThat(nextSolarEclipse.maxPhaseDate.time).isEqualTo(1651351538312)
-        assertThat(nextSolarEclipse.gamma).isWithin(1.0e-10).of(-1.1873364080976627)
-        assertThat(nextSolarEclipse.phase).isWithin(1.0e-10).of(.6437521307583453)
-        assertThat(nextSolarEclipse.u).isWithin(1.0e-10).of(.014993006616545197)
-
-        val nextLunarEclipse =
-            Eclipse(GregorianCalendar(2021, 12, 30), Eclipse.Category.LUNAR, true)
-        assertThat(nextLunarEclipse.maxPhaseDate.time).isEqualTo(1652674277164)
-        assertThat(nextLunarEclipse.gamma).isWithin(1.0e-10).of(-.25690754557964146)
-        assertThat(nextLunarEclipse.phase).isWithin(1.0e-10).of(1.4071957485281614)
-        assertThat(nextLunarEclipse.u).isWithin(1.0e-10).of(-.010929228527489551)
-
-        val prevSolarEclipse =
-            Eclipse(GregorianCalendar(2021, 12, 30), Eclipse.Category.SOLAR, false)
-        assertThat(prevSolarEclipse.maxPhaseDate.time).isEqualTo(1638603148198)
-        assertThat(prevSolarEclipse.gamma).isWithin(1.0e-10).of(-.9551661328959204)
-        assertThat(prevSolarEclipse.phase).isWithin(1.0e-10).of(1.0)
-        assertThat(prevSolarEclipse.u).isWithin(1.0e-10).of(-.0083259217061097)
-
-        val prevLunarEclipse =
-            Eclipse(GregorianCalendar(2021, 12, 30), Eclipse.Category.LUNAR, false)
-        assertThat(prevLunarEclipse.maxPhaseDate.time).isEqualTo(1637312710047)
-        assertThat(prevLunarEclipse.gamma).isWithin(1.0e-10).of(-.45412353634065095)
-        assertThat(prevLunarEclipse.phase).isWithin(1.0e-10).of(.975060595761878)
-        assertThat(prevLunarEclipse.u).isWithin(1.0e-10).of(.027368438969125428)
     }
 
     @Test

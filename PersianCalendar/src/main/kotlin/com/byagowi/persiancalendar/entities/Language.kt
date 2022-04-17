@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.astronomy.Eclipse
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
+import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.persiancalendar.praytimes.CalculationMethod
 import java.util.*
 
@@ -323,29 +323,27 @@ enum class Language(val code: String, val nativeName: String) {
 
     // Too hard to translate and don't want to disappoint translators thus
     // not moved yet to our common i18n system
-    fun tryTranslateEclipseType(type: Eclipse.Type) = when (this) {
+    fun tryTranslateEclipseType(isSolar: Boolean, type: EclipseKind) = when (this) {
         EN_US, EN_IR -> {
-            when (type) {
-                Eclipse.Type.SolarNoncenral -> "Noncentral solar eclipse"
-                Eclipse.Type.SolarPartial -> "Partial solar eclipse"
-                Eclipse.Type.SolarCentralTotal -> "Central total solar eclipse"
-                Eclipse.Type.SolarCentralAnnular -> "Central Annular solar eclipse"
-                Eclipse.Type.SolarCentralAnnularTotal -> "Central Annular total solar eclipse"
-                Eclipse.Type.LunarUmbralTotal -> "Umbral total lunar eclipse"
-                Eclipse.Type.LunarUmbralPartial -> "Umbral partial lunar eclipse"
-                Eclipse.Type.LunarPenumbral -> "Lunar penumbral lunar eclipse"
+            when {
+                isSolar && type == EclipseKind.Annular -> "Annular solar eclipse"
+                isSolar && type == EclipseKind.Partial -> "Partial solar eclipse"
+                !isSolar && type == EclipseKind.Partial -> "Partial lunar eclipse"
+                !isSolar && type == EclipseKind.Penumbral -> "Lunar penumbral lunar eclipse"
+                isSolar && type == EclipseKind.Total -> "Total Solar eclipse"
+                !isSolar && type == EclipseKind.Total -> "Total Lunar eclipse"
+                else -> null
             }
         }
         FA, FA_AF -> {
-            when (type) {
-                Eclipse.Type.SolarNoncenral -> "خورشیدگرفتگی غیرمرکزی"
-                Eclipse.Type.SolarPartial -> "خورشیدگرفتگی جزئی"
-                Eclipse.Type.SolarCentralTotal -> "خورشیدگرفتگی کلی"
-                Eclipse.Type.SolarCentralAnnular -> "خورشیدگرفتگی حلقوی"
-                Eclipse.Type.SolarCentralAnnularTotal -> "خورشیدگرفتگی کلی حلقوی"
-                Eclipse.Type.LunarUmbralTotal -> "ماه‌گرفتگی کلی"
-                Eclipse.Type.LunarUmbralPartial -> "ماه‌گرفتگی جزئی"
-                Eclipse.Type.LunarPenumbral -> "ماه‌گرفتگی نیم‌سایه‌ای"
+            when {
+                isSolar && type == EclipseKind.Annular -> "خورشیدگرفتگی حلقه‌ای"
+                isSolar && type == EclipseKind.Partial -> "خورشیدگرفتگی جزئی"
+                !isSolar && type == EclipseKind.Partial -> "ماه‌گرفتگی جزئی"
+                !isSolar && type == EclipseKind.Penumbral -> "ماه‌گرفتگی نیم‌سایه‌ای"
+                isSolar && type == EclipseKind.Total -> "خورشیدگرفتگی کلی"
+                !isSolar && type == EclipseKind.Total -> "ماه‌گرفتگی کلی"
+                else -> null
             }
         }
         else -> null
