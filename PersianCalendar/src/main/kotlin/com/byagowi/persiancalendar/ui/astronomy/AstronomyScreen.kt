@@ -104,6 +104,11 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             }.onClick {
                 viewModel.changeScreenMode(AstronomyViewModel.Mode.Moon)
             }
+            menu.add("").setIcon(R.drawable.ic_sun_small).also {
+                if (viewModel.mode.value == AstronomyViewModel.Mode.Sun) it.isChecked = true
+            }.onClick {
+                viewModel.changeScreenMode(AstronomyViewModel.Mode.Sun)
+            }
         }
 
         listOf(
@@ -171,6 +176,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         var latestVibration = 0L
         binding.slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dx == 0) return
                 val current = System.currentTimeMillis()
                 if (current - lastButtonClickTimestamp < 2000) return
                 if (current >= latestVibration + 35_000 / abs(dx)) {

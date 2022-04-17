@@ -11,6 +11,7 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -19,12 +20,17 @@ import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
 import com.byagowi.persiancalendar.utils.toObserver
 import com.google.android.material.math.MathUtils
+import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
+import io.github.cosinekitty.astronomy.equatorialToEcliptic
+import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
+import kotlin.math.expm1
+import kotlin.math.ln1p
 import kotlin.math.min
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -41,7 +47,16 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 sunlitSideMoonTiltAngle(time, coordinates.toObserver()).toFloat()
             }
         }
+        val planets by lazy(LazyThreadSafetyMode.NONE) {
+            listOf(
+                Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
+                Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
+            ).map { body ->
+                body.name.substring(0, 3) to equatorialToEcliptic(helioVector(body, time))
+            }
+        }
     }
+
     private var state = State(currentTime)
 
     var mode: AstronomyViewModel.Mode = AstronomyViewModel.Mode.Earth
@@ -107,6 +122,34 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         when (mode) {
             AstronomyViewModel.Mode.Moon -> drawMoonOnlyView(canvas)
             AstronomyViewModel.Mode.Earth -> drawEarthCentricView(canvas)
+            AstronomyViewModel.Mode.Sun -> drawSolarSystemPlanetsView(canvas)
+        }
+    }
+
+    private val colorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = 5.dp
+        it.color = context.resolveColor(R.attr.colorTextNormal)
+    }
+    private val indicatorLength = 5.dp / 2
+
+    private fun drawSolarSystemPlanetsView(canvas: Canvas) {
+        val radius = min(width, height) / 2f
+        canvas.drawCircle(radius, radius, radius / 40, sunIndicatorPaint)
+        state.planets.forEach { (label, ecliptic) ->
+            canvas.withRotation(-ecliptic.elon.toFloat() + 90, radius, radius) {
+                canvas.drawText(
+                    label, radius, radius + ln1p(ecliptic.vec.length()).toFloat() * 80,
+                    colorTextPaint
+                )
+            }
+        }
+        (3..5).forEach { // indicator to show it is in logarithmic scale
+            val x = radius + expm1(it.toFloat())
+            canvas.drawLine(
+                x, radius - indicatorLength, x, radius + indicatorLength,
+                colorTextPaint
+            )
         }
     }
 
@@ -124,20 +167,20 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         arcRect.inset(circleInset, circleInset)
         canvas.drawArc(arcRect, 0f, 360f, true, zodiacBackgroundPaint)
         ranges.forEachIndexed { index, (start, end) ->
-            canvas.withRotation(-end + 90f, radius, radius) {
+            canvas.withRotation(-end + 90, radius, radius) {
                 if (index % 2 == 0) canvas.drawArc(
                     arcRect, -90f, end - start, true, zodiacForegroundPaint
                 )
                 drawLine(radius, circleInset, radius, radius, zodiacSeparatorPaint)
             }
-            canvas.withRotation(-(start + end) / 2 + 90f, radius, radius) {
+            canvas.withRotation(-(start + end) / 2 + 90, radius, radius) {
                 drawText(labels[index], radius, radius * .12f, zodiacPaint)
             }
         }
         val cr = radius / 8f
         solarDraw.earth(canvas, radius, radius, cr / 1.5f, state.sun)
         val sunDegree = state.sun.elon.toFloat()
-        canvas.withRotation(-sunDegree + 90f, radius, radius) {
+        canvas.withRotation(-sunDegree + 90, radius, radius) {
             solarDraw.sun(this, radius, radius / 3.5f, cr)
             canvas.withTranslation(x = radius, y = 0f) {
                 canvas.drawPath(trianglePath, sunIndicatorPaint)
@@ -145,7 +188,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }
         val moonDegree = state.moon.lon.toFloat()
         canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
-        canvas.withRotation(-moonDegree + 90f, radius, radius) {
+        canvas.withRotation(-moonDegree + 90, radius, radius) {
             val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
             solarDraw.moon(
                 this, state.sun, state.moon, radius,

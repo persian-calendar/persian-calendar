@@ -46,7 +46,7 @@ class AstronomyViewModel : ViewModel() {
         _mode.value = value
     }
 
-    enum class Mode { Earth, Moon }
+    enum class Mode { Earth, Moon, Sun }
 
     companion object {
         const val DEFAULT_TIME = Int.MIN_VALUE
