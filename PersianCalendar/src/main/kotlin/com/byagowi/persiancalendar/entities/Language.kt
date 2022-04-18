@@ -329,9 +329,9 @@ enum class Language(val code: String, val nativeName: String) {
                 isSolar && type == EclipseKind.Annular -> "Annular solar eclipse"
                 isSolar && type == EclipseKind.Partial -> "Partial solar eclipse"
                 !isSolar && type == EclipseKind.Partial -> "Partial lunar eclipse"
-                !isSolar && type == EclipseKind.Penumbral -> "Lunar penumbral lunar eclipse"
-                isSolar && type == EclipseKind.Total -> "Total Solar eclipse"
-                !isSolar && type == EclipseKind.Total -> "Total Lunar eclipse"
+                !isSolar && type == EclipseKind.Penumbral -> "Penumbral lunar eclipse"
+                isSolar && type == EclipseKind.Total -> "Total solar eclipse"
+                !isSolar && type == EclipseKind.Total -> "Total lunar eclipse"
                 else -> null
             }
         }
