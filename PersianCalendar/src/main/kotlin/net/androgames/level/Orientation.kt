@@ -1,9 +1,5 @@
-package net.androgames.level
-
-import kotlin.math.abs
-
 /*
- * This file is part of Level (an Android Bubble Level).
+ * This file was originally a part of Level (an Android Bubble Level).
  * <https://github.com/avianey/Level>
  *
  * Copyright (C) 2014 Antoine Vianey
@@ -21,6 +17,10 @@ import kotlin.math.abs
  * You should have received a copy of the GNU General Public License
  * along with Level. If not, see <http://www.gnu.org/licenses/>
  */
+package net.androgames.level
+
+import kotlin.math.abs
+
 enum class Orientation(val reverse: Int, val rotation: Int) {
     LANDING(1, 0), TOP(1, 0), RIGHT(1, 90), BOTTOM(-1, 180), LEFT(-1, -90);
 

@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -21,13 +22,13 @@ class AngleDisplay(
     private val lcd = Typeface.createFromAsset(context.assets, "fonts/lcd.ttf")
     private val lcdTextSize = 20.dp
     private val lcdForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resources.getColor(R.color.lcd_front)
+        it.color = ContextCompat.getColor(context, R.color.lcd_front)
         it.textSize = lcdTextSize
         it.typeface = lcd
         it.textAlign = Paint.Align.CENTER
     }
     private val lcdBackgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = context.resources.getColor(R.color.lcd_back)
+        it.color = ContextCompat.getColor(context, R.color.lcd_back)
         it.textSize = lcdTextSize
         it.typeface = lcd
         it.textAlign = Paint.Align.CENTER

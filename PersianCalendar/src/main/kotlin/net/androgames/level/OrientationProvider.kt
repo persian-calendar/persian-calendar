@@ -1,21 +1,5 @@
-package net.androgames.level
-
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
-import android.os.Build
-import android.view.Surface
-import androidx.core.content.getSystemService
-import androidx.fragment.app.FragmentActivity
-import com.byagowi.persiancalendar.utils.logException
-import kotlin.math.abs
-import kotlin.math.asin
-import kotlin.math.hypot
-import kotlin.math.min
-
 /*
- * This file is part of Level (an Android Bubble Level).
+ * This file was originally a part of Level (an Android Bubble Level).
  * <https://github.com/avianey/Level>
  *
  * Copyright (C) 2014 Antoine Vianey
@@ -33,6 +17,22 @@ import kotlin.math.min
  * You should have received a copy of the GNU General Public License
  * along with Level. If not, see <http://www.gnu.org/licenses/>
  */
+package net.androgames.level
+
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.os.Build
+import android.view.Surface
+import androidx.core.content.getSystemService
+import androidx.fragment.app.FragmentActivity
+import com.byagowi.persiancalendar.utils.logException
+import kotlin.math.abs
+import kotlin.math.asin
+import kotlin.math.hypot
+import kotlin.math.min
+
 class OrientationProvider(activity: FragmentActivity, private val view: LevelView) :
     SensorEventListener {
 

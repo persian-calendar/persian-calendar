@@ -1,3 +1,22 @@
+/*
+ * This file was originally a part of Level (an Android Bubble Level).
+ * <https://github.com/avianey/Level>
+ *
+ * Copyright (C) 2014 Antoine Vianey
+ *
+ * Level is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Level is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Level. If not, see <http://www.gnu.org/licenses/>
+ */
 package net.androgames.level
 
 import android.content.Context
@@ -19,25 +38,6 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.sin
 
-/*
- * This file is part of Level (an Android Bubble Level).
- * <https://github.com/avianey/Level>
- *
- * Copyright (C) 2014 Antoine Vianey
- *
- * Level is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Level is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Level. If not, see <http://www.gnu.org/licenses/>
- */
 class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
     private val angleDisplay = AngleDisplay(context)
