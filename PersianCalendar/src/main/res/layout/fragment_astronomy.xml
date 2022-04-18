@@ -201,9 +201,9 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
                     android:background="?attr/colorCard"
-                    app:itemIconSize="16dp"
+                    app:itemIconSize="20dp"
                     app:labelVisibilityMode="unlabeled"
-                    app:menuGravity="top" />
+                    app:menuGravity="center" />
 
             </FrameLayout>
 
