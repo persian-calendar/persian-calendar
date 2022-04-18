@@ -85,6 +85,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             it.addUpdateListener { _ ->
                 currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
                 state = State(currentTime)
+                update(state.sun, state.moon)
                 invalidate()
             }
         }.start()
