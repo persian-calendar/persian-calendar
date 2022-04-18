@@ -197,10 +197,10 @@
 
                 <com.google.android.material.navigationrail.NavigationRailView
                     android:id="@+id/rail_view"
-                    android:layout_width="48dp"
+                    android:layout_width="42dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
-                    android:background="?attr/colorCard"
+                    android:background="@android:color/transparent"
                     app:itemIconSize="20dp"
                     app:labelVisibilityMode="unlabeled"
                     app:menuGravity="center" />
