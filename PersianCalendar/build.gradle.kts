@@ -242,7 +242,7 @@ dependencies {
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
     minApi21Implementation("androidx.compose.material:material:$composeSecondaryVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha08")
+    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha09")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeSecondaryVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
