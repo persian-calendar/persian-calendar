@@ -20,8 +20,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -66,11 +68,11 @@ private fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: 
             )
             Text(stringResource(getPrayTimeName(prayerKey)), fontSize = 36.sp, style = textStyle)
             if (cityName != null) {
-                val visible = remember { mutableStateOf(false) }
+                var visible by remember { mutableStateOf(false) }
                 val density = LocalDensity.current
                 // Just an exaggerated demo for https://developer.android.com/jetpack/compose/animation#animatedvisibility
                 AnimatedVisibility(
-                    visible = visible.value,
+                    visible = visible,
                     enter = slideInVertically { with(density) { -40.dp.roundToPx() } }
                             + expandVertically(expandFrom = Alignment.Top)
                             + fadeIn(initialAlpha = 0.3f),
@@ -83,7 +85,7 @@ private fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: 
                         modifier = Modifier.padding(top = 10.dp).fillMaxWidth().height(200.dp)
                     )
                 }
-                visible.value = true
+                visible = true
             }
         }
     }

@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.databinding.FragmentComposeBinding
@@ -20,8 +22,8 @@ fun showComposeDialog(
     val decorView = (activity.window.decorView as? ViewGroup).debugAssertNotNull ?: return
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {
-            val isDialogOpen = remember { mutableStateOf(true) }
-            if (isDialogOpen.value) MdcTheme { dialog { isDialogOpen.value = false } }
+            var isDialogOpen by remember { mutableStateOf(true) }
+            if (isDialogOpen) MdcTheme { dialog { isDialogOpen = false } }
             else decorView.post { decorView.removeView(composeView) }
         }
     })
