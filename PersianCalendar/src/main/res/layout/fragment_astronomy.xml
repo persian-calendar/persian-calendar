@@ -189,6 +189,12 @@
                 android:layout_marginTop="16dp"
                 android:importantForAccessibility="no">
 
+                <com.byagowi.persiancalendar.ui.astronomy.SolarView
+                    android:id="@+id/solar_view"
+                    android:layout_width="290dp"
+                    android:layout_height="290dp"
+                    android:layout_gravity="center_horizontal" />
+
                 <com.google.android.material.navigationrail.NavigationRailView
                     android:id="@+id/rail_view"
                     android:layout_width="48dp"
@@ -198,12 +204,6 @@
                     app:itemIconSize="16dp"
                     app:labelVisibilityMode="unlabeled"
                     app:menuGravity="top" />
-
-                <com.byagowi.persiancalendar.ui.astronomy.SolarView
-                    android:id="@+id/solar_view"
-                    android:layout_width="290dp"
-                    android:layout_height="290dp"
-                    android:layout_gravity="center_horizontal" />
 
             </FrameLayout>
 
