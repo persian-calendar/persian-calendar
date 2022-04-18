@@ -17,6 +17,7 @@ import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -34,7 +35,6 @@ import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.sunPosition
-import net.androgames.level.AngleDisplay
 import java.util.*
 import kotlin.math.min
 import kotlin.math.round

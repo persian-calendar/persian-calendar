@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import net.androgames.level.OrientationProvider
 
 class LevelScreen : Fragment(R.layout.fragment_level) {
 
