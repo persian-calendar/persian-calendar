@@ -92,7 +92,7 @@ class AstronomyTests {
             (1..12).map { Season.fromPersianCalendar(PersianDate(1400, it, 29), null) }
         listOf(
             1..3 to Season.SPRING, 4..6 to Season.SUMMER,
-            7..9 to Season.FALL, 10..12 to Season.WINTER
+            7..9 to Season.AUTUMN, 10..12 to Season.WINTER
         ).forEach { (range, season) ->
             range.forEach { assertThat(noLocationSeasons[it - 1]).isEqualTo(season) }
         }
@@ -102,7 +102,7 @@ class AstronomyTests {
         }
         listOf(
             1..3 to Season.SPRING, 4..6 to Season.SUMMER,
-            7..9 to Season.FALL, 10..12 to Season.WINTER
+            7..9 to Season.AUTUMN, 10..12 to Season.WINTER
         ).forEach { (range, season) ->
             range.forEach { assertThat(northernHemisphereSeason[it - 1]).isEqualTo(season) }
         }
@@ -111,7 +111,7 @@ class AstronomyTests {
             Season.fromPersianCalendar(PersianDate(1400, it, 29), nirobi)
         }
         listOf(
-            1..3 to Season.FALL, 4..6 to Season.WINTER,
+            1..3 to Season.AUTUMN, 4..6 to Season.WINTER,
             7..9 to Season.SPRING, 10..12 to Season.SUMMER
         ).forEach { (range, season) ->
             range.forEach { assertThat(southernHemisphereSeasons[it - 1]).isEqualTo(season) }

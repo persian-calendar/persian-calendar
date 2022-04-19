@@ -236,7 +236,7 @@
     <string name="show_secondary_calendar">显示第二日历</string>
     <string name="season">季</string>
     <string name="summer">夏至</string>
-    <string name="fall">秋分</string>
+    <string name="autumn">秋分</string>
     <string name="winter">冬至</string>
     <string name="spring">春分</string>
     <string name="widget_prefer_system_colors">小部件跟随系统配色</string>
