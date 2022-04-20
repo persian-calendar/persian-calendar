@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
+import android.location.Address
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedColon
 import io.github.persiancalendar.praytimes.Coordinates
@@ -23,3 +24,6 @@ fun formatCoordinateISO6709(lat: Double, long: Double, alt: Double? = null) = li
     val seconds = ((degree - degree.toInt()) * 3600 % 60).toInt()
     "%d°%02d′%02d″%s".format(Locale.US, degree.toInt(), minutes, seconds, direction)
 } + (alt?.let { " %s%.1fm".format(Locale.US, if (alt < 0) "−" else "", abs(alt)) } ?: "")
+
+val Address.friendlyName: String?
+    get() = listOf(locality, subAdminArea, adminArea).firstOrNull { !it.isNullOrBlank() }

@@ -29,6 +29,7 @@ import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatCoordinate
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
+import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.saveLocation
 import com.byagowi.persiancalendar.variants.debugLog
@@ -100,17 +101,14 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
                     .firstOrNull()
                 countryCode = result?.countryCode
-                debugLog("Geocoder country code ${countryCode ?: "empty"}")
-                debugLog("Geocoder locality ${result?.locality ?: "empty"}")
-                result?.locality?.takeIf { it.isNotEmpty() }
+                result?.friendlyName
             }.onFailure(logException).getOrNull()
         }
         .flowOn(Dispatchers.IO)
-        .onEach { locality ->
-            debugLog("GPSLocationDialog: A geocoder locality result is received")
+        .onEach { friendlyLocationName ->
             binding.cityName.isVisible = true
-            binding.cityName.text = locality
-            cityName = locality
+            binding.cityName.text = friendlyLocationName
+            cityName = friendlyLocationName
         }
         .flowOn(Dispatchers.Main.immediate)
         .catch { logException(it) }

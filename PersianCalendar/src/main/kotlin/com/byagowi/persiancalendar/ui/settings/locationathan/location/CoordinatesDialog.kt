@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.friendlyName
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.saveLocation
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -52,23 +53,11 @@ fun showCoordinatesDialog(
                 val geocoder = Geocoder(activity, language.asSystemLocale())
                     .getFromLocation(latitude, longitude, 20)
                 withContext(Dispatchers.Main.immediate) {
-                    cityName = null
-                    val text = geocoder
-                        .mapIndexed { i, address ->
-                            if (i == 0) {
-                                cityName = address?.locality
-                                countryCode = address?.countryCode
-                            }
-                            ((0 until address.maxAddressLineIndex).mapNotNull {
-                                address.getAddressLine(it)
-                            } + listOfNotNull(
-                                address.adminArea, address.subAdminArea, address.locality,
-                                address.thoroughfare, address.postalCode, address.countryName,
-                                address.countryCode, address.phone, address.url
-                            )).joinToString(spacedComma)
-                        }.joinToString("\n")
-                    binding.geocoder.text = text
-                    binding.geocoder.isVisible = text.isNotEmpty()
+                    val result = geocoder.getOrNull(0)
+                    cityName = result?.friendlyName
+                    countryCode = result?.countryCode
+                    binding.geocoder.text = cityName ?: ""
+                    binding.geocoder.isVisible = !cityName.isNullOrBlank()
                 }
             }.onFailure(logException)
         }

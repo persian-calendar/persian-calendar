@@ -72,7 +72,7 @@
             android:id="@+id/geocoder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAlignment="textStart"
+            android:textAlignment="center"
             android:visibility="gone" />
 
     </LinearLayout>
