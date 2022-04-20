@@ -8,6 +8,7 @@ import android.view.Surface
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
@@ -34,11 +35,10 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
         binding.bottomAppbar.menu.add(R.string.level).also {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            it.onClick {
-                // If compass wasn't in backstack (level is brought from shortcut), navigate to it
-                if (!findNavController().popBackStack(R.id.compass, false))
-                    findNavController().navigateSafe(LevelScreenDirections.actionLevelToCompass())
-            }
+        }.onClick {
+            // If compass wasn't in backstack (level is brought from shortcut), navigate to it
+            if (!findNavController().popBackStack(R.id.compass, false))
+                findNavController().navigateSafe(LevelScreenDirections.actionLevelToCompass())
         }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener
@@ -46,6 +46,12 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
             binding.fab.setImageResource(if (stop) R.drawable.ic_stop else R.drawable.ic_play)
             binding.fab.contentDescription = getString(if (stop) R.string.stop else R.string.resume)
             if (stop) provider.startListening() else provider.stopListening()
+        }
+        if (BuildConfig.DEVELOPMENT) {
+            binding.appBar.toolbar.menu.add("").also {
+                it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_metronome)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }.onClick { showSignalGeneratorDialog(activity) }
         }
     }
 
