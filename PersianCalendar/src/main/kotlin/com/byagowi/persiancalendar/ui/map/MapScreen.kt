@@ -125,7 +125,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
 
         binding.map.onClick = { x: Float, y: Float ->
-            val latitude = 90 - y / mapScaleFactor + 1
+            val latitude = 90 - y / mapScaleFactor
             val longitude = x / mapScaleFactor - 180
             if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
         }

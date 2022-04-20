@@ -18,9 +18,13 @@ class ZoomableImageView(
     context: Context,
     attrs: AttributeSet? = null
 ) : AppCompatImageView(context, attrs) {
+    private val scaleDetector = ScaleGestureDetector(context, ScaleListener())
+    private val matrix = FloatArray(9)
+    private val viewMatrix = Matrix()
+    private val start = PointF()
+    private val last = PointF()
+
     private var mode = NONE
-    private var last = PointF()
-    private var start = PointF()
     private var minScale = 1f
     private var maxScale = 16f
     private var redundantXSpace = 0f
@@ -33,9 +37,11 @@ class ZoomableImageView(
     private var bitmapWidth = 0f
     private var bitmapHeight = 0f
 
-    private val viewMatrix = Matrix()
-    private val matrix = FloatArray(9)
-    private val scaleDetector = ScaleGestureDetector(context, ScaleListener())
+    init {
+        super.setClickable(true)
+        imageMatrix = viewMatrix
+        scaleType = ScaleType.MATRIX
+    }
 
     override fun setImageBitmap(bitmap: Bitmap) {
         super.setImageBitmap(bitmap)
@@ -118,12 +124,6 @@ class ZoomableImageView(
     }
 
     var onClick = fun(_: Float, _: Float) {}
-
-    init {
-        super.setClickable(true)
-        imageMatrix = viewMatrix
-        scaleType = ScaleType.MATRIX
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
