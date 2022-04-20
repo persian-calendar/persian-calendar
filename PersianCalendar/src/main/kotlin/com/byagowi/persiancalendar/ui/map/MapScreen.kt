@@ -229,7 +229,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         nightMask.eraseColor(Color.TRANSPARENT)
         var sunX = .0f
         var sunY = .0f
-        var sunMaxAltitde = .0
+        var sunMaxAltitude = .0
         var moonX = .0f
         var moonY = .0f
         var moonMaxAltitude = .0
@@ -258,8 +258,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     nightMask[x, y] = value shl 24
                 }
 
-                if (sunAltitude > sunMaxAltitde) { // find y/x of a point with maximum sun altitude
-                    sunMaxAltitde = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
+                if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
+                    sunMaxAltitude = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
                 }
                 if (moonAltitude > moonMaxAltitude) { // this time for moon
                     moonMaxAltitude = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
