@@ -132,23 +132,22 @@ class ZoomableImageView(
         viewMatrix.getValues(matrix)
         val x = matrix[Matrix.MTRANS_X]
         val y = matrix[Matrix.MTRANS_Y]
-        val curr = PointF(event.x, event.y)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                last[event.x] = event.y
+                last.set(event.x, event.y)
                 start.set(last)
                 mode = DRAG
             }
             MotionEvent.ACTION_POINTER_DOWN -> {
-                last[event.x] = event.y
+                last.set(event.x, event.y)
                 start.set(last)
                 mode = ZOOM
             }
             MotionEvent.ACTION_MOVE -> //if the mode is ZOOM or
                 //if the mode is DRAG and already zoomed
                 if (mode == ZOOM || mode == DRAG && saveScale > minScale) {
-                    var deltaX = curr.x - last.x // x difference
-                    var deltaY = curr.y - last.y // y difference
+                    var deltaX = event.x - last.x // x difference
+                    var deltaY = event.y - last.y // y difference
                     // width after applying current scale
                     val scaleWidth = (originalWidth * saveScale).roundToInt()
                     // height after applying current scale
@@ -174,13 +173,11 @@ class ZoomableImageView(
                     // move the image with the matrix
                     viewMatrix.postTranslate(deltaX, deltaY)
                     // set the last touch location to the current
-                    last[curr.x] = curr.y
+                    last.set(event.x, event.y)
                 }
             MotionEvent.ACTION_UP -> {
                 mode = NONE
-                val xDiff = abs(curr.x - start.x)
-                val yDiff = abs(curr.y - start.y)
-                if (xDiff < CLICK && yDiff < CLICK) {
+                if (event.x == start.x && event.y == start.y) {
                     performClick()
                     // https://stackoverflow.com/a/7418428
                     val inverse = Matrix()
@@ -201,6 +198,5 @@ class ZoomableImageView(
         private const val NONE = 0
         private const val DRAG = 1
         private const val ZOOM = 2
-        private const val CLICK = 3
     }
 }
