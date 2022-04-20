@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
@@ -187,13 +188,18 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
             it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
             it.add("Crash!").onClick { error("Unhandled Crash!") }
         }
-        toolbar.menu.add("Start Day Dream").onClick {
+        toolbar.menu.add("Dream Settings").onClick {
+            runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
+                .onFailure(logException).getOrNull().debugAssertNotNull
+        }
+        toolbar.menu.add("Start Dream").onClick {
             // https://stackoverflow.com/a/23112947
             runCatching {
                 startActivity(
                     Intent(Intent.ACTION_MAIN)
                         .setClassName(
-                            "com.android.systemui", "com.android.systemui.Somnambulator"
+                            "com.android.systemui",
+                            "com.android.systemui.Somnambulator"
                         )
                 )
             }.onFailure(logException).getOrNull().debugAssertNotNull
