@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -18,25 +19,25 @@ class ZoomableImageView(
     context: Context,
     attrs: AttributeSet? = null
 ) : AppCompatImageView(context, attrs) {
-    var viewMatrix = Matrix()
-    var mode = NONE
-    var last = PointF()
-    var start = PointF()
-    var minScale = 1f
-    var maxScale = 16f
-    var m: FloatArray
-    var redundantXSpace = 0f
-    var redundantYSpace = 0f
-    var width = 0f
-    var height = 0f
-    var saveScale = 1f
-    var right = 0f
-    var bottom = 0f
-    var origWidth = 0f
-    var origHeight = 0f
-    var bmWidth = 0f
-    var bmHeight = 0f
-    var mScaleDetector: ScaleGestureDetector
+    private var viewMatrix = Matrix()
+    private var mode = NONE
+    private var last = PointF()
+    private var start = PointF()
+    private var minScale = 1f
+    private var maxScale = 16f
+    private val m = FloatArray(9)
+    private var redundantXSpace = 0f
+    private var redundantYSpace = 0f
+    private var width = 0f
+    private var height = 0f
+    private var saveScale = 1f
+    private var right = 0f
+    private var bottom = 0f
+    private var origWidth = 0f
+    private var origHeight = 0f
+    private var bmWidth = 0f
+    private var bmHeight = 0f
+    private var mScaleDetector = ScaleGestureDetector(context, ScaleListener())
 
     override fun setImageBitmap(bm: Bitmap) {
         super.setImageBitmap(bm)
@@ -71,15 +72,11 @@ class ZoomableImageView(
                     val y = m[Matrix.MTRANS_Y]
                     if (mScaleFactor < 1) {
                         if ((origWidth * saveScale).roundToInt() < width) {
-                            if (y < -bottom) viewMatrix.postTranslate(
-                                0f,
-                                -(y + bottom)
-                            ) else if (y > 0) viewMatrix.postTranslate(0f, -y)
+                            if (y < -bottom) viewMatrix.postTranslate(0f, -(y + bottom))
+                            else if (y > 0) viewMatrix.postTranslate(0f, -y)
                         } else {
-                            if (x < -right) viewMatrix.postTranslate(
-                                -(x + right),
-                                0f
-                            ) else if (x > 0) viewMatrix.postTranslate(-x, 0f)
+                            if (x < -right) viewMatrix.postTranslate(-(x + right), 0f)
+                            else if (x > 0) viewMatrix.postTranslate(-x, 0f)
                         }
                     }
                 }
@@ -107,11 +104,10 @@ class ZoomableImageView(
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         width = MeasureSpec.getSize(widthMeasureSpec).toFloat()
         height = MeasureSpec.getSize(heightMeasureSpec).toFloat()
-        //Fit to screen.
-        val scale: Float
+        // Fit to screen.
         val scaleX = width / bmWidth
         val scaleY = height / bmHeight
-        scale = min(scaleX, scaleY)
+        val scale = min(scaleX, scaleY)
         viewMatrix.setScale(scale, scale)
         imageMatrix = viewMatrix
         saveScale = 1f
@@ -133,79 +129,79 @@ class ZoomableImageView(
 
     init {
         super.setClickable(true)
-        mScaleDetector = ScaleGestureDetector(context, ScaleListener())
-        viewMatrix.setTranslate(1f, 1f)
-        m = FloatArray(9)
         imageMatrix = viewMatrix
         scaleType = ScaleType.MATRIX
-        setOnTouchListener { v, event ->
-            mScaleDetector.onTouchEvent(event)
-            viewMatrix.getValues(m)
-            val x = m[Matrix.MTRANS_X]
-            val y = m[Matrix.MTRANS_Y]
-            val curr = PointF(event.x, event.y)
-            when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
-                    last[event.x] = event.y
-                    start.set(last)
-                    mode = DRAG
-                }
-                MotionEvent.ACTION_POINTER_DOWN -> {
-                    last[event.x] = event.y
-                    start.set(last)
-                    mode = ZOOM
-                }
-                MotionEvent.ACTION_MOVE ->                         //if the mode is ZOOM or
-                    //if the mode is DRAG and already zoomed
-                    if (mode == ZOOM || mode == DRAG && saveScale > minScale) {
-                        var deltaX = curr.x - last.x // x difference
-                        var deltaY = curr.y - last.y // y difference
-                        val scaleWidth = Math.round(origWidth * saveScale)
-                            .toFloat() // width after applying current scale
-                        val scaleHeight = Math.round(origHeight * saveScale)
-                            .toFloat() // height after applying current scale
-                        //if scaleWidth is smaller than the views width
-                        //in other words if the image width fits in the view
-                        //limit left and right movement
-                        if (scaleWidth < width) {
-                            deltaX = 0f
-                            if (y + deltaY > 0) deltaY = -y else if (y + deltaY < -bottom) deltaY =
-                                -(y + bottom)
-                        } else if (scaleHeight < height) {
-                            deltaY = 0f
-                            if (x + deltaX > 0) deltaX = -x else if (x + deltaX < -right) deltaX =
-                                -(x + right)
-                        } else {
-                            if (x + deltaX > 0) deltaX = -x else if (x + deltaX < -right) deltaX =
-                                -(x + right)
-                            if (y + deltaY > 0) deltaY = -y else if (y + deltaY < -bottom) deltaY =
-                                -(y + bottom)
-                        }
-                        //move the image with the matrix
-                        viewMatrix.postTranslate(deltaX, deltaY)
-                        //set the last touch location to the current
-                        last[curr.x] = curr.y
-                    }
-                MotionEvent.ACTION_UP -> {
-                    mode = NONE
-                    val xDiff = abs(curr.x - start.x).toInt()
-                    val yDiff = abs(curr.y - start.y).toInt()
-                    if (xDiff < CLICK && yDiff < CLICK) {
-                        performClick()
-                        // https://stackoverflow.com/a/7418428
-                        val inverse = Matrix()
-                        imageMatrix.invert(inverse)
-                        val touchPoint = floatArrayOf(event.x, event.y)
-                        inverse.mapPoints(touchPoint)
-                        onClick(touchPoint[0], touchPoint[1])
-                    }
-                }
-                MotionEvent.ACTION_POINTER_UP -> mode = NONE
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        mScaleDetector.onTouchEvent(event)
+        viewMatrix.getValues(m)
+        val x = m[Matrix.MTRANS_X]
+        val y = m[Matrix.MTRANS_Y]
+        val curr = PointF(event.x, event.y)
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                last[event.x] = event.y
+                start.set(last)
+                mode = DRAG
             }
-            imageMatrix = viewMatrix
-            invalidate()
-            true
+            MotionEvent.ACTION_POINTER_DOWN -> {
+                last[event.x] = event.y
+                start.set(last)
+                mode = ZOOM
+            }
+            MotionEvent.ACTION_MOVE -> //if the mode is ZOOM or
+                //if the mode is DRAG and already zoomed
+                if (mode == ZOOM || mode == DRAG && saveScale > minScale) {
+                    var deltaX = curr.x - last.x // x difference
+                    var deltaY = curr.y - last.y // y difference
+                    // width after applying current scale
+                    val scaleWidth = (origWidth * saveScale).roundToInt()
+                    // height after applying current scale
+                    val scaleHeight = (origHeight * saveScale).roundToInt()
+                    //if scaleWidth is smaller than the views width
+                    //in other words if the image width fits in the view
+                    //limit left and right movement
+                    if (scaleWidth < width) {
+                        deltaX = 0f
+                        if (y + deltaY > 0) deltaY = -y
+                        else if (y + deltaY < -bottom) deltaY = -(y + bottom)
+                    } else if (scaleHeight < height) {
+                        deltaY = 0f
+                        if (x + deltaX > 0) deltaX = -x
+                        else if (x + deltaX < -right) deltaX = -(x + right)
+                    } else {
+                        if (x + deltaX > 0) deltaX = -x
+                        else if (x + deltaX < -right) deltaX = -(x + right)
+
+                        if (y + deltaY > 0) deltaY = -y
+                        else if (y + deltaY < -bottom) deltaY = -(y + bottom)
+                    }
+                    //move the image with the matrix
+                    viewMatrix.postTranslate(deltaX, deltaY)
+                    //set the last touch location to the current
+                    last[curr.x] = curr.y
+                }
+            MotionEvent.ACTION_UP -> {
+                mode = NONE
+                val xDiff = abs(curr.x - start.x)
+                val yDiff = abs(curr.y - start.y)
+                if (xDiff < CLICK && yDiff < CLICK) {
+                    performClick()
+                    // https://stackoverflow.com/a/7418428
+                    val inverse = Matrix()
+                    imageMatrix.invert(inverse)
+                    val touchPoint = floatArrayOf(event.x, event.y)
+                    inverse.mapPoints(touchPoint)
+                    onClick(touchPoint[0], touchPoint[1])
+                }
+            }
+            MotionEvent.ACTION_POINTER_UP -> mode = NONE
         }
+        imageMatrix = viewMatrix
+        invalidate()
+        return true
     }
 
     companion object {
