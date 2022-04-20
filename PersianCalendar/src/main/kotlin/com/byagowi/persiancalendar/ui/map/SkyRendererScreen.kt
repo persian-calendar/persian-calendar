@@ -16,12 +16,10 @@ import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
-import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
-import java.util.*
 
 class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

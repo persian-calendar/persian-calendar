@@ -10,7 +10,6 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import androidx.appcompat.widget.AppCompatImageView
-import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
 

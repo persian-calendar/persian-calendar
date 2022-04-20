@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.about
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast

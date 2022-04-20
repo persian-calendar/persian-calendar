@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
-import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.persiancalendar.calendar.PersianDate
 import kotlin.math.floor
 
