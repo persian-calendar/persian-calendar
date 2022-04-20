@@ -16,7 +16,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.toLinearDate
 
-class CalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs),
+class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(context, attrs),
     View.OnClickListener {
 
     private var bindings = emptyList<CalendarItemBinding>()

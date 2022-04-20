@@ -14,7 +14,10 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 // https://stackoverflow.com/a/17649895
-class ZoomableImageView(context: Context, attr: AttributeSet?) : AppCompatImageView(context, attr) {
+class ZoomableImageView(
+    context: Context,
+    attrs: AttributeSet? = null
+) : AppCompatImageView(context, attrs) {
     var viewMatrix = Matrix()
     var mode = NONE
     var last = PointF()

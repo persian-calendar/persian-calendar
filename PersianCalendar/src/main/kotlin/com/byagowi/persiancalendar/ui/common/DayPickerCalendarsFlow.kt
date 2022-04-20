@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
-class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
+class DayPickerCalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(context, attrs) {
 
     var changeSelection = fun(_: CalendarType) {}
         private set

@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.getFromStringId
 import io.github.persiancalendar.praytimes.PrayTimes
 
-class TimesFlow(context: Context, attrs: AttributeSet?) : Flow(context, attrs) {
+class TimesFlow(context: Context, attrs: AttributeSet? = null) : Flow(context, attrs) {
 
     private var times = emptyList<Pair<@StringRes Int, TimeItemBinding>>()
     fun setup() {

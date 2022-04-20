@@ -302,7 +302,7 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
     }
 }
 
-class CheckerBoard(context: Context, attrs: AttributeSet?) : View(context, attrs) {
+class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
     override fun onDraw(canvas: Canvas) = canvas.drawPaint(checkerBoard)
 }
