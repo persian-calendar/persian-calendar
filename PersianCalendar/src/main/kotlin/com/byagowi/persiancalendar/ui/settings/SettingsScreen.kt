@@ -204,5 +204,16 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
                 )
             }.onFailure(logException).getOrNull().debugAssertNotNull
         }
+        toolbar.menu.add("Live Wallpaper Settings").onClick {
+            runCatching {
+                startActivity(
+                    Intent(Intent.ACTION_MAIN)
+                        .setClassName(
+                            "com.android.wallpaper.livepicker",
+                            "com.android.wallpaper.livepicker.LiveWallpaperActivity"
+                        )
+                )
+            }.onFailure(logException).getOrNull().debugAssertNotNull
+        }
     }
 }
