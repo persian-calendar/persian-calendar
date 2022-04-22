@@ -52,6 +52,10 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
                 it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_metronome)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             }.onClick { showSignalGeneratorDialog(activity) }
+            binding.appBar.toolbar.menu.add("").also {
+                it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_atom)
+                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            }.onClick { showPeriodicTableDialog(activity) }
         }
     }
 
