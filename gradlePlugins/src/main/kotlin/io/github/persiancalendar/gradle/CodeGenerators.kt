@@ -3,6 +3,7 @@ package io.github.persiancalendar.gradle
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
@@ -69,7 +70,7 @@ abstract class CodeGenerators : DefaultTask() {
             project.projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader",
         ).forEach { (textFile, fieldName) ->
             builder.addProperty(
-                PropertySpec.builder(fieldName, String::class)
+                PropertySpec.builder(fieldName, String::class, KModifier.CONST)
                     .initializer(buildCodeBlock { addStatement("%S", textFile.readText()) })
                     .build()
             )
