@@ -9,6 +9,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
@@ -18,8 +19,6 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.google.android.material.math.MathUtils
 import java.util.*
-import kotlin.math.expm1
-import kotlin.math.ln1p
 import kotlin.math.min
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -99,11 +98,18 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     private fun drawSolarSystemPlanetsView(canvas: Canvas) {
         val radius = min(width, height) / 2f
-        canvas.drawCircle(radius, radius, radius / 40, sunIndicatorPaint)
         colorTextPaint.textSize = radius / 12
+        circlesPaint.strokeWidth = radius / 9
+        circlesPaint.style = Paint.Style.FILL_AND_STROKE
+        (1..9).forEach {
+            circlesPaint.color = ColorUtils.setAlphaComponent(0x808080, (9 - it) * 0x10)
+            canvas.drawCircle(radius, radius, radius / 9 * it, circlesPaint)
+            circlesPaint.style = Paint.Style.STROKE
+        }
+        canvas.drawCircle(radius, radius, radius / 35, sunIndicatorPaint)
         state.planets.forEachIndexed { i, (label, ecliptic) ->
             canvas.withRotation(-ecliptic.elon.toFloat() + 90, radius, radius) {
-                canvas.drawText(label, radius, radius + radius / 9 * (1 + i), colorTextPaint)
+                canvas.drawText(resources.getString(label), radius, radius + radius / 9 * (1 + i), colorTextPaint)
             }
         }
     }
@@ -179,6 +185,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         it.color = 0x18808080
         it.style = Paint.Style.FILL
     }
+    private val circlesPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val zodiacSeparatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(com.google.android.material.R.attr.colorSurface)
         it.strokeWidth = .5.dp

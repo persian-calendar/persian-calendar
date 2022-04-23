@@ -343,6 +343,15 @@
     <string name="autumn">Sonbahar</string>
     <string name="winter">Kış</string>
     <string name="spring">İlkbahar</string>
+    <string name="mercury">Merkür</string>
+    <string name="venus">Venüs</string>
+    <string name="earth">Dünya</string>
+    <string name="mars">Mars</string>
+    <string name="jupiter">Jüpiter</string>
+    <string name="saturn">Satürn</string>
+    <string name="uranus">Uranüs</string>
+    <string name="neptune">Neptün</string>
+    <string name="pluto">Plüton</string>
     <string name="sun">Güneş</string>
     <string name="moon">Ay</string>
     <string name="widget_prefer_system_colors">Widget\'larda Sistem Renklendirmesini İzleyiniz</string>

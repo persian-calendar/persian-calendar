@@ -355,6 +355,15 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="autumn">Fall</string>
     <string name="winter">Winter</string>
     <string name="spring">Spring</string>
+    <string name="mercury">Mercury</string>
+    <string name="venus">Venus</string>
+    <string name="earth">Earth</string>
+    <string name="mars">Mars</string>
+    <string name="jupiter">Jupiter</string>
+    <string name="saturn">Saturn</string>
+    <string name="uranus">Uranus</string>
+    <string name="neptune">Neptune</string>
+    <string name="pluto">Pluto</string>
     <string name="sun">Sun</string>
     <string name="moon">Moon</string>
     <!-- Used in astronomy screen, see https://en.wikipedia.org/wiki/Tropical_year and https://en.wikipedia.org/wiki/Sidereal_and_tropical_astrology -->

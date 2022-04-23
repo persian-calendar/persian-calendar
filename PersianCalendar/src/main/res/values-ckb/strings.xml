@@ -343,6 +343,15 @@
     <string name="spring">بەهار</string>
     <string name="solar_eclipse">خۆرگیران</string>
     <string name="high_latitudes_method">شێوازی بەرزی</string>
+    <string name="mercury">زاوە</string>
+    <string name="venus">ڤینۆس</string>
+    <string name="earth">زەوی</string>
+    <string name="mars">مەریخ</string>
+    <string name="jupiter">ھورمز</string>
+    <string name="saturn">کەیوان</string>
+    <string name="uranus">یورانۆس</string>
+    <string name="neptune">نێپتوون</string>
+    <string name="pluto">پلووتۆ</string>
     <string name="sun">خۆر</string>
     <string name="moon">مانگ</string>
     <string name="autumn">پاییز</string>

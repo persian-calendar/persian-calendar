@@ -38,7 +38,7 @@ class AstronomyState(val date: GregorianCalendar) {
         listOf(
             Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
             Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-        ).map { body -> body.name to equatorialToEcliptic(helioVector(body, time)) }
+        ).map { planetsTitles.getValue(it) to equatorialToEcliptic(helioVector(it, time)) }
     }
 
     fun generateHeader(context: Context, persianDate: PersianDate): String {
@@ -58,5 +58,21 @@ class AstronomyState(val date: GregorianCalendar) {
             (language.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
                     spacedColon + formattedDate
         } + listOf(generateYearName(context, persianDate, true, date))).joinToString("\n")
+    }
+
+    companion object {
+        private val planetsTitles = mapOf(
+            Body.Mercury to R.string.mercury,
+            Body.Venus to R.string.venus,
+            Body.Earth to R.string.earth,
+            Body.Mars to R.string.mars,
+            Body.Jupiter to R.string.jupiter,
+            Body.Saturn to R.string.saturn,
+            Body.Uranus to R.string.uranus,
+            Body.Neptune to R.string.neptune,
+            Body.Pluto to R.string.pluto,
+            Body.Sun to R.string.sun,
+            Body.Moon to R.string.moon,
+        ).withDefault { R.string.empty }
     }
 }

@@ -352,6 +352,15 @@
     <string name="autumn">پاییز</string>
     <string name="winter">زمستان</string>
     <string name="spring">بهار</string>
+    <string name="mercury">عطارد</string>
+    <string name="venus">زهره</string>
+    <string name="earth">زمین</string>
+    <string name="mars">مریخ</string>
+    <string name="jupiter">مشتری</string>
+    <string name="saturn">زحل</string>
+    <string name="uranus">اورانوس</string>
+    <string name="neptune">نپتون</string>
+    <string name="pluto">پلوتون</string>
     <string name="sun">خورشید</string>
     <string name="moon">ماه</string>
     <string name="tropical">اعتدالی</string>

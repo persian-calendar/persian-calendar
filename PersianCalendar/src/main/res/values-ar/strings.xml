@@ -391,6 +391,15 @@
     <string name="show_secondary_calendar">إظهار التقويم الثانوي</string>
     <string name="season">موسم</string>
     <string name="nepal">نيبال</string>
+    <string name="mercury">عطارد</string>
+    <string name="venus">الزهرة</string>
+    <string name="earth">الأرض</string>
+    <string name="mars">المريخ</string>
+    <string name="jupiter">المشتري</string>
+    <string name="saturn">زحل</string>
+    <string name="uranus">أورانوس</string>
+    <string name="neptune">نبتون</string>
+    <string name="pluto">بلوتو</string>
     <string name="sun">الشمس</string>
     <string name="moon">القمر</string>
     <string name="solar_eclipse">كسوف الشمس</string>
