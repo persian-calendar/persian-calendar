@@ -94,28 +94,17 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     private val colorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
-        it.textSize = 5.dp
         it.color = context.resolveColor(R.attr.colorTextNormal)
     }
-    private val indicatorLength = 5.dp / 2
 
     private fun drawSolarSystemPlanetsView(canvas: Canvas) {
         val radius = min(width, height) / 2f
         canvas.drawCircle(radius, radius, radius / 40, sunIndicatorPaint)
-        state.planets.forEach { (label, ecliptic) ->
+        colorTextPaint.textSize = radius / 12
+        state.planets.forEachIndexed { i, (label, ecliptic) ->
             canvas.withRotation(-ecliptic.elon.toFloat() + 90, radius, radius) {
-                canvas.drawText(
-                    label, radius, radius + ln1p(ecliptic.vec.length()).toFloat() * 80,
-                    colorTextPaint
-                )
+                canvas.drawText(label, radius, radius + radius / 9 * (1 + i), colorTextPaint)
             }
-        }
-        (3..5).forEach { // indicator to show it is in logarithmic scale
-            val x = radius + expm1(it.toFloat())
-            canvas.drawLine(
-                x, radius - indicatorLength, x, radius + indicatorLength,
-                colorTextPaint
-            )
         }
     }
 

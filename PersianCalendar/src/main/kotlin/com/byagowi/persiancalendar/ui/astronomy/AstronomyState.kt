@@ -38,9 +38,7 @@ class AstronomyState(val date: GregorianCalendar) {
         listOf(
             Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
             Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-        ).map { body ->
-            body.name.substring(0, 3) to equatorialToEcliptic(helioVector(body, time))
-        }
+        ).map { body -> body.name to equatorialToEcliptic(helioVector(body, time)) }
     }
 
     fun generateHeader(context: Context, persianDate: PersianDate): String {
