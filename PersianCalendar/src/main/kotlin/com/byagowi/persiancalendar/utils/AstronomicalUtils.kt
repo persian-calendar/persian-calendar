@@ -5,7 +5,6 @@ import android.icu.util.ChineseCalendar
 import android.os.Build
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
@@ -21,9 +20,6 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
-import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
-import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
-import io.github.cosinekitty.astronomy.searchLunarEclipse
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*

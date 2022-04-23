@@ -31,10 +31,10 @@ import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
+import io.github.cosinekitty.astronomy.equatorialToEcliptic
+import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.horizon
-import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
 import kotlin.math.min
 import kotlin.math.round
@@ -103,8 +103,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
 
     private class SunMoonState(observer: Observer, date: GregorianCalendar) {
         private val time = Time.fromMillisecondsSince1970(date.time.time)
-        val sunEcliptic = sunPosition(time)
-        val moonEcliptic = eclipticGeoMoon(time)
+        val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
+        val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
         private val sunEquator =
             equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
         val sunHorizon = horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
@@ -240,12 +240,10 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             val moonHeight = (sunMoonState.moonHorizon.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
             if (enableShade) drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
-            val sun = sunMoonState.sunEcliptic
-            val moon = sunMoonState.moonEcliptic
             withRotation(-azimuth, cx, cy + moonHeight) {
                 solarDraw.moon(
-                    this, sun, moon, cx, cy + moonHeight, r * .8f,
-                    sunMoonState.moonTiltAngle
+                    this, sunMoonState.sun, sunMoonState.moon, cx, cy + moonHeight,
+                    r * .8f, sunMoonState.moonTiltAngle
                 )
             }
         }

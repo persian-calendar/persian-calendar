@@ -109,7 +109,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         canvas.drawCircle(radius, radius, radius / 35, sunIndicatorPaint)
         state.planets.forEachIndexed { i, (label, ecliptic) ->
             canvas.withRotation(-ecliptic.elon.toFloat() + 90, radius, radius) {
-                canvas.drawText(resources.getString(label), radius, radius + radius / 9 * (1 + i), colorTextPaint)
+                canvas.drawText(
+                    resources.getString(label), radius, radius + radius / 9 * (1 + i),
+                    colorTextPaint
+                )
             }
         }
     }
@@ -147,10 +150,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 canvas.drawPath(trianglePath, sunIndicatorPaint)
             }
         }
-        val moonDegree = state.moon.lon.toFloat()
+        val moonDegree = state.moon.elon.toFloat()
         canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
         canvas.withRotation(-moonDegree + 90, radius, radius) {
-            val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
+            val moonDistance = state.moon.vec.length() / 0.002569 // Lunar distance in AU
             solarDraw.moon(
                 this, state.sun, state.moon, radius,
                 radius * moonDistance.toFloat() * .7f, cr / 1.9f

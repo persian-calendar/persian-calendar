@@ -56,6 +56,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity) {
             it.textAlign = Paint.Align.CENTER
             it.textSize = 20.dp
         }
+
         override fun onDraw(canvas: Canvas) {
             canvas.drawCircle(r, r, r / 1.1f, paint)
             canvas.drawText(

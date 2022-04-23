@@ -73,8 +73,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 if (tropical) Zodiac.fromTropical(state.sun.elon)
                 else Zodiac.fromIau(state.sun.elon)
             val moonZodiac =
-                if (tropical) Zodiac.fromTropical(state.moon.lon)
-                else Zodiac.fromIau(state.moon.lon)
+                if (tropical) Zodiac.fromTropical(state.moon.elon)
+                else Zodiac.fromIau(state.moon.elon)
 
             binding.sunText.text = sunZodiac.format(view.context, true) // ☉☀️
             binding.moonText.text =

@@ -10,15 +10,15 @@ import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.byagowi.persiancalendar.utils.toObserver
+import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
+import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLunarEclipse
-import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 
@@ -27,8 +27,8 @@ class AstronomyState(val date: GregorianCalendar) {
     constructor(time: Long) : this(Date(time))
 
     private val time = Time.fromMillisecondsSince1970(date.time.time)
-    val sun = sunPosition(time)
-    val moon = eclipticGeoMoon(time)
+    val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
+    val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
     val moonTilt by lazy(LazyThreadSafetyMode.NONE) {
         coordinates?.let { coordinates ->
             sunlitSideMoonTiltAngle(time, coordinates.toObserver()).toFloat()

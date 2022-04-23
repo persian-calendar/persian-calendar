@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Ecliptic
-import io.github.cosinekitty.astronomy.Spherical
 import kotlin.math.abs
 import kotlin.math.cos
 
@@ -39,10 +38,10 @@ class SolarDraw(context: Context) {
     }
 
     fun moon(
-        canvas: Canvas, sun: Ecliptic, moon: Spherical, cx: Float, cy: Float, r: Float,
+        canvas: Canvas, sun: Ecliptic, moon: Ecliptic, cx: Float, cy: Float, r: Float,
         angle: Float? = null
     ) {
-        val phase = (moon.lon - sun.elon).let { it + if (it < 0) 360 else 0 }
+        val phase = (moon.elon - sun.elon).let { it + if (it < 0) 360 else 0 }
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
             moonRect.set(cx - r, cy - r, cx + r, cy + r)
             canvas.drawBitmap(moonBitmap, null, moonRect, null)
