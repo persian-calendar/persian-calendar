@@ -234,8 +234,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         var moonY = .0f
         var moonMaxAltitude = .0
 
-        val geoSunEqj = geoVector(Body.Sun, time, Aberration.None)
-        val geoMoonEqj = geoVector(Body.Moon, time, Aberration.None)
+        val geoSunEqj = geoVector(Body.Sun, time, Aberration.Corrected)
+        val geoMoonEqj = geoVector(Body.Moon, time, Aberration.Corrected)
         val rot = rotationEqjEqd(time)
         val geoSunEqd = rot.rotate(geoSunEqj)
         val geoMoonEqd = rot.rotate(geoMoonEqj)
