@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.switchmaterial.SwitchMaterial
+import io.github.cosinekitty.astronomy.SeasonsInfo
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.launchIn
@@ -61,6 +62,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             true
         }
 
+        val seasonsCache = mutableMapOf<Int, SeasonsInfo>()
+        fun calculateSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
+
         fun actualScreenUpdate(state: AstronomyState) {
             val context = context ?: return
 
@@ -78,9 +82,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             binding.time.text = state.date.formatDateAndTime()
 
             val civilDate = state.date.toCivilDate()
-            // TODO: Cache these two calculations
-            val thisYearSeasons = seasons(civilDate.year)
-            val nextYearSeasons = seasons(civilDate.year + 1)
+            val thisYearSeasons = calculateSeasons(civilDate.year)
+            val nextYearSeasons = calculateSeasons(civilDate.year + 1)
             val persianDate = PersianDate(civilDate)
             binding.headerInformation.text = state.generateHeader(context, persianDate)
 
