@@ -188,9 +188,9 @@ val minApi21Implementation by configurations
 dependencies {
     implementation("com.github.persian-calendar:calendar:1.2.0")
     implementation("com.github.persian-calendar:praytimes:2.1.2")
-    implementation("com.github.persian-calendar:calculator:9a8b4980873f8acf83cf119cf9bf3e31e5259c1d")
+    implementation("com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b")
 
-    implementation("com.github.cosinekitty:astronomy:23ed1cda5a36e97d7277c7f3fd4f14e1016d4080")
+    implementation("com.github.cosinekitty:astronomy:3ce32f88193b9cbd4fc9531d91700ca23e225785")
 
     implementation("androidx.appcompat:appcompat:1.4.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
