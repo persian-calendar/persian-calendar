@@ -83,7 +83,7 @@
     <string name="notify_date_lock_screen">Afficher les notifications sur l’écran de verrouillage</string>
     <string name="enable_notify">Notification permanente pour tous les types de date</string>
     <string name="notify_date">Activer la notification de la date</string>
-    <string name="ask_user_to_set_location">Définissez l\'emplacement dans les paramètres afin d\'afficher ce lieu correctement</string>
+    <string name="ask_user_to_set_location">Définissez l’emplacement dans les paramètres afin d’afficher ce lieu correctement</string>
     <string name="customize_widget_summary">Ce qu’il faut montrer des notifications et des widgets pour les rendre plus compacts</string>
     <string name="which_one_to_show">Lesquels afficher</string>
     <string name="customize_widget">Personnalisation des widgets</string>
@@ -270,8 +270,8 @@
     <string name="shift_work_night">Nuit</string>
     <string name="method_jafari">Shia Ithna-Ashari, Institut Leva, Qom</string>
     <string name="method_mwl">Ligue islamique mondiale</string>
-    <string name="method_isna">Société islamique d\'Amérique du Nord</string>
-    <string name="method_egypt">Autorité générale égyptienne d\'enquête</string>
+    <string name="method_isna">Société islamique d’Amérique du Nord</string>
+    <string name="method_egypt">Autorité générale égyptienne d’enquête</string>
     <string name="method_makkah">Université Oumm al-Qura, La Mecque</string>
     <string name="method_karachi">Université des sciences islamiques, Karachi</string>
     <string name="method_tehran">Institut de géophysique, Université de Téhéran</string>
@@ -339,7 +339,7 @@
     <string name="month_pray_times">Heures de prière du mois</string>
     <string name="high_latitudes_method">Méthode des hautes latitudes</string>
     <string name="high_latitudes_night_middle">Milieu de nuit</string>
-    <string name="high_latitudes_angle_based">Basé sur l\'angle</string>
+    <string name="high_latitudes_angle_based">Basé sur l’angle</string>
     <string name="high_latitudes_one_seventh">Un septième</string>
     <string name="none">None</string>
     <string name="show_sun_and_moon_path_in_24_hours">Afficher la trajectoire du Soleil et de la Lune en 24 heures</string>
@@ -362,4 +362,15 @@
     <string name="calculator">Calculatrice</string>
     <string name="chinese_calendar">Calendrier chinois</string>
     <string name="chinese">chinois</string>
+    <string name="mercury">Mercure</string>
+    <string name="venus">Vénus</string>
+    <string name="earth">La Terre</string>
+    <string name="mars">Mars</string>
+    <string name="jupiter">Jupiter</string>
+    <string name="saturn">Saturne</string>
+    <string name="uranus">Uranus</string>
+    <string name="neptune">Neptune</string>
+    <string name="pluto">Pluton</string>
+    <string name="screensaver_settings">Paramètres de l’économiseur d’écran</string>
+    <string name="live_wallpaper_settings">Paramètres du fond d’écran animé</string>
 </resources>
