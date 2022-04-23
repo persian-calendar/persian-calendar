@@ -65,9 +65,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         val seasonsCache = mutableMapOf<Int, SeasonsInfo>()
         fun calculateSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
 
-        fun actualScreenUpdate(state: AstronomyState) {
-            val context = context ?: return
+        val headerCache = mutableMapOf<Long, String>()
 
+        fun actualScreenUpdate(state: AstronomyState) {
             val tropical = viewModel.isTropical.value
             val sunZodiac =
                 if (tropical) Zodiac.fromTropical(state.sun.elon)
@@ -84,8 +84,10 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             val civilDate = state.date.toCivilDate()
             val thisYearSeasons = calculateSeasons(civilDate.year)
             val nextYearSeasons = calculateSeasons(civilDate.year + 1)
-            val persianDate = PersianDate(civilDate)
-            binding.headerInformation.text = state.generateHeader(context, persianDate)
+            val jdn = civilDate.toJdn()
+            binding.headerInformation.text = headerCache.getOrPut(jdn) {
+                state.generateHeader(context ?: return, PersianDate(jdn))
+            }
 
             (1..4).forEach {
                 when (it) {
