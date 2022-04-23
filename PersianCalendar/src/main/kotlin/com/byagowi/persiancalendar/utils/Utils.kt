@@ -54,6 +54,3 @@ val HighLatitudesMethod.titleStringId
     }
 
 fun Bundle.putJdn(key: String, jdn: Jdn) = putLong(key, jdn.value)
-
-fun Bundle.getJdnOrNull(key: String): Jdn? =
-    getLong(key, -1).takeIf { it != -1L }?.let { Jdn(it) }

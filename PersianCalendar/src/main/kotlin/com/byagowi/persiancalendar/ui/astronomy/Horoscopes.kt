@@ -1,6 +1,8 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.fragment.app.FragmentActivity
+import com.byagowi.persiancalendar.LRM
+import com.byagowi.persiancalendar.utils.planetsTitles
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -25,9 +27,10 @@ fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
             Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
             Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
         ).joinToString("\n") { body ->
-            body.name + equatorialToEcliptic(geoVector(body, time, Aberration.None)).let {
-                ": ${Zodiac.fromTropical(it.elon).emoji} ${
-                    formatAngle(it.elon % 30)
+            val name = activity.getString(planetsTitles.getValue(body))
+            name + equatorialToEcliptic(geoVector(body, time, Aberration.Corrected)).let {
+                ": $LRM${formatAngle(it.elon % 30)} ${
+                    Zodiac.fromTropical(it.elon).emoji
                 } ${"%,d".format(Locale.ENGLISH, (it.vec.length() * AU_IN_KM).roundToInt())} km"
             }
         })

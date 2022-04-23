@@ -82,3 +82,19 @@ fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
         .rotate(sunEquator.vec)
     return Math.toDegrees(atan2(vec.z, vec.y))
 }
+
+val planetsTitles by lazy(LazyThreadSafetyMode.NONE) {
+    mapOf(
+        Body.Mercury to R.string.mercury,
+        Body.Venus to R.string.venus,
+        Body.Earth to R.string.earth,
+        Body.Mars to R.string.mars,
+        Body.Jupiter to R.string.jupiter,
+        Body.Saturn to R.string.saturn,
+        Body.Uranus to R.string.uranus,
+        Body.Neptune to R.string.neptune,
+        Body.Pluto to R.string.pluto,
+        Body.Sun to R.string.sun,
+        Body.Moon to R.string.moon,
+    ).withDefault { R.string.empty }
+}

@@ -7,6 +7,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
+import com.byagowi.persiancalendar.utils.planetsTitles
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.byagowi.persiancalendar.utils.toObserver
@@ -35,10 +36,8 @@ class AstronomyState(val date: GregorianCalendar) {
         }
     }
     val planets by lazy(LazyThreadSafetyMode.NONE) {
-        listOf(
-            Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
-            Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-        ).map { planetsTitles.getValue(it) to equatorialToEcliptic(helioVector(it, time)) }
+        solarSystemPlanets
+            .map { planetsTitles.getValue(it) to equatorialToEcliptic(helioVector(it, time)) }
     }
 
     fun generateHeader(context: Context, persianDate: PersianDate): String {
@@ -61,18 +60,9 @@ class AstronomyState(val date: GregorianCalendar) {
     }
 
     companion object {
-        private val planetsTitles = mapOf(
-            Body.Mercury to R.string.mercury,
-            Body.Venus to R.string.venus,
-            Body.Earth to R.string.earth,
-            Body.Mars to R.string.mars,
-            Body.Jupiter to R.string.jupiter,
-            Body.Saturn to R.string.saturn,
-            Body.Uranus to R.string.uranus,
-            Body.Neptune to R.string.neptune,
-            Body.Pluto to R.string.pluto,
-            Body.Sun to R.string.sun,
-            Body.Moon to R.string.moon,
-        ).withDefault { R.string.empty }
+        private val solarSystemPlanets = listOf(
+            Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
+            Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
+        )
     }
 }
