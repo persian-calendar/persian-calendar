@@ -12,22 +12,11 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
-import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
-import com.byagowi.persiancalendar.utils.toObserver
 import com.google.android.material.math.MathUtils
-import io.github.cosinekitty.astronomy.Body
-import io.github.cosinekitty.astronomy.Ecliptic
-import io.github.cosinekitty.astronomy.Spherical
-import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.eclipticGeoMoon
-import io.github.cosinekitty.astronomy.equatorialToEcliptic
-import io.github.cosinekitty.astronomy.helioVector
-import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
 import kotlin.math.expm1
 import kotlin.math.ln1p
@@ -35,29 +24,11 @@ import kotlin.math.min
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private var currentTime = System.currentTimeMillis() - DAY_IN_MILLIS // Initial animation
     private var animator: ValueAnimator? = null
 
-    private class State(currentTime: Long) {
-        private val time = Time.fromMillisecondsSince1970(currentTime)
-        val sun = sunPosition(time)
-        val moon = eclipticGeoMoon(time)
-        val moonTilt by lazy(LazyThreadSafetyMode.NONE) {
-            coordinates?.let { coordinates ->
-                sunlitSideMoonTiltAngle(time, coordinates.toObserver()).toFloat()
-            }
-        }
-        val planets by lazy(LazyThreadSafetyMode.NONE) {
-            listOf(
-                Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
-                Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
-            ).map { body ->
-                body.name.substring(0, 3) to equatorialToEcliptic(helioVector(body, time))
-            }
-        }
-    }
-
-    private var state = State(currentTime)
+    private var state = AstronomyState(
+        Date(System.currentTimeMillis() - DAY_IN_MILLIS) // Initial animation
+    )
 
     var mode: AstronomyViewModel.Mode = AstronomyViewModel.Mode.Earth
         set(value) {
@@ -65,27 +36,21 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             invalidate()
         }
 
-    fun setTime(
-        time: GregorianCalendar,
-        immediate: Boolean,
-        update: (Ecliptic, Spherical) -> Unit
-    ) {
+    fun setTime(date: GregorianCalendar, immediate: Boolean, update: (AstronomyState) -> Unit) {
         animator?.removeAllUpdateListeners()
         if (immediate) {
-            currentTime = time.time.time
-            state = State(currentTime)
-            update(state.sun, state.moon)
+            state = AstronomyState(date)
+            update(state)
             invalidate()
             return
         }
-        ValueAnimator.ofFloat(currentTime.toFloat(), time.timeInMillis.toFloat()).also {
+        ValueAnimator.ofFloat(state.date.time.time.toFloat(), date.time.time.toFloat()).also {
             animator = it
             it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
             it.interpolator = AccelerateDecelerateInterpolator()
             it.addUpdateListener { _ ->
-                currentTime = ((it.animatedValue as? Float) ?: 0f).toLong()
-                state = State(currentTime)
-                update(state.sun, state.moon)
+                state = AstronomyState(((it.animatedValue as? Float) ?: 0f).toLong())
+                update(state)
                 invalidate()
             }
         }.start()

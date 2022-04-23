@@ -22,13 +22,10 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.generateAstronomyHeaderText
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.switchmaterial.SwitchMaterial
-import io.github.cosinekitty.astronomy.Ecliptic
-import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.launchIn
@@ -64,22 +61,44 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             true
         }
 
-        fun updateSolarView(
-            time: GregorianCalendar,
-            sunPosition: Ecliptic,
-            moonPosition: Spherical
-        ) {
+        fun actualScreenUpdate(state: AstronomyState) {
+            val context = context ?: return
+
             val tropical = viewModel.isTropical.value
             val sunZodiac =
-                if (tropical) Zodiac.fromTropical(sunPosition.elon)
-                else Zodiac.fromIau(sunPosition.elon)
+                if (tropical) Zodiac.fromTropical(state.sun.elon)
+                else Zodiac.fromIau(state.sun.elon)
             val moonZodiac =
-                if (tropical) Zodiac.fromTropical(moonPosition.lon)
-                else Zodiac.fromIau(moonPosition.lon)
+                if (tropical) Zodiac.fromTropical(state.moon.lon)
+                else Zodiac.fromIau(state.moon.lon)
+
             binding.sunText.text = sunZodiac.format(view.context, true) // ☉☀️
             binding.moonText.text =
                 moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
-            binding.time.text = time.formatDateAndTime()
+            binding.time.text = state.date.formatDateAndTime()
+
+            val civilDate = state.date.toCivilDate()
+            // TODO: Cache these two calculations
+            val thisYearSeasons = seasons(civilDate.year)
+            val nextYearSeasons = seasons(civilDate.year + 1)
+            val persianDate = PersianDate(civilDate)
+            binding.headerInformation.text = state.generateHeader(context, persianDate)
+
+            (1..4).forEach {
+                when (it) {
+                    1 -> binding.firstSeasonText
+                    2 -> binding.secondSeasonText
+                    3 -> binding.thirdSeasonText
+                    else -> binding.fourthSeasonText
+                }.text = Date(
+                    when (it) {
+                        1 -> thisYearSeasons.juneSolstice
+                        2 -> thisYearSeasons.septemberEquinox
+                        3 -> thisYearSeasons.decemberSolstice
+                        else -> nextYearSeasons.marchEquinox
+                    }.toMillisecondsSince1970()
+                ).toJavaCalendar().formatDateAndTime()
+            }
         }
 
         binding.appBar.toolbar.menu.add(R.string.tropical).also { menuItem ->
@@ -120,33 +139,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             chip.chipBackgroundColor = ColorStateList.valueOf(season.color)
         }
 
-        fun update(immediate: Boolean) {
-            val context = context ?: return
-            val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
-            binding.solarView.setTime(time, immediate) { s, m -> updateSolarView(time, s, m) }
-            val civilDate = time.toCivilDate()
-            val thisYearSeasons = seasons(civilDate.year)
-            val nextYearSeasons = seasons(civilDate.year + 1)
-            val persianDate = PersianDate(civilDate)
-            binding.headerInformation.text = generateAstronomyHeaderText(time, context, persianDate)
-
-            (1..4).forEach {
-                when (it) {
-                    1 -> binding.firstSeasonText
-                    2 -> binding.secondSeasonText
-                    3 -> binding.thirdSeasonText
-                    else -> binding.fourthSeasonText
-                }.text = Date(
-                    when (it) {
-                        1 -> thisYearSeasons.juneSolstice
-                        2 -> thisYearSeasons.septemberEquinox
-                        3 -> thisYearSeasons.decemberSolstice
-                        else -> nextYearSeasons.marchEquinox
-                    }.toMillisecondsSince1970()
-                ).toJavaCalendar().formatDateAndTime()
-            }
-        }
-        update(false)
+        // Tells solar view whether it needs to apply changes immediately or in a value animator
+        var immediate = false
 
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
@@ -156,16 +150,16 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                         .toCivilDate()
                 )
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
+                    immediate = false
                     viewModel.changeToDayOffset(jdn - Jdn.today())
-                    update(false)
                 }
             }
         }
 
         resetButton.onClick {
+            immediate = false
             viewModel.changeTime(0)
             resetButton.isVisible = false
-            update(false)
         }
 
         val viewDirection = if (resources.isRtl) -1 else 1
@@ -183,16 +177,16 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                     latestVibration = current
                 }
+                immediate = true
                 viewModel.addTime(dx * viewDirection)
-                update(true)
             }
         })
 
         fun buttonScrollSlider(days: Int): Boolean {
             lastButtonClickTimestamp = System.currentTimeMillis()
             binding.slider.smoothScrollBy(50 * days * viewDirection, 0)
+            immediate = false
             viewModel.addDayOffset(days)
-            update(false)
             return true
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
@@ -215,7 +209,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         viewModel.isTropical
             .onEach { isTropical ->
                 val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                binding.solarView.setTime(time, true) { s, m -> updateSolarView(time, s, m) }
+                binding.solarView.setTime(time, true, ::actualScreenUpdate)
                 binding.solarView.isTropicalDegree = isTropical
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -225,6 +219,11 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         viewModel.mode
             .onEach { binding.solarView.mode = it }
             .launchIn(viewLifecycleOwner.lifecycleScope)
-        // TOOO: figure out how to run update() from time flow
+        viewModel.time
+            .onEach {
+                val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
+                binding.solarView.setTime(time, immediate, ::actualScreenUpdate)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 }

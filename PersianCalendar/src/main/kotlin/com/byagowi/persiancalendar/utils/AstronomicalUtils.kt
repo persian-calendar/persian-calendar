@@ -51,31 +51,7 @@ fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean
     ).trim()
 }
 
-fun generateAstronomyHeaderText(
-    date: GregorianCalendar,
-    context: Context,
-    persianDate: PersianDate
-): String {
-    val time = Time.fromMillisecondsSince1970(date.time.time)
-    val observer = coordinates?.toObserver()
-    return (listOf(
-        if (observer != null) {
-            searchLocalSolarEclipse(time, observer).let { it.kind to it.peak.time }
-        } else {
-            searchGlobalSolarEclipse(time).let { it.kind to it.peak }
-        },
-        searchLunarEclipse(time).let { it.kind to it.peak }
-    ).mapIndexed { i, (kind, peak) ->
-        val formattedDate = Date(peak.toMillisecondsSince1970()).toJavaCalendar()
-            .formatDateAndTime()
-        val isSolar = i == 0
-        val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
-        (language.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
-                spacedColon + formattedDate
-    } + listOf(generateYearName(context, persianDate, true, date))).joinToString("\n")
-}
-
-private fun generateYearName(
+fun generateYearName(
     context: Context,
     persianDate: PersianDate,
     withEmoji: Boolean,
