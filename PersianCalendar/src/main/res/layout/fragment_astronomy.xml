@@ -193,7 +193,8 @@
                     android:id="@+id/solar_view"
                     android:layout_width="290dp"
                     android:layout_height="290dp"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
 
                 <com.google.android.material.navigationrail.NavigationRailView
                     android:id="@+id/rail_view"
