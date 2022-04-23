@@ -362,6 +362,8 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="calculator">Calculator</string>
     <string name="chinese_calendar">Chinese Calendar</string>
     <string name="chinese">Chinese</string>
+    <string name="live_wallpaper_settings">Live wallpaper settings</string>
+    <string name="screensaver_settings">Screensaver settings</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

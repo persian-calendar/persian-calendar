@@ -358,4 +358,6 @@
     <string name="calculator">حسابگر</string>
     <string name="chinese_calendar">تقویم چینی</string>
     <string name="chinese">چینی</string>
+    <string name="live_wallpaper_settings">تنظیمات کاغذ دیواری زنده</string>
+    <string name="screensaver_settings">تنظیمات محافظ صفحهٔ نمایش</string>
 </resources>

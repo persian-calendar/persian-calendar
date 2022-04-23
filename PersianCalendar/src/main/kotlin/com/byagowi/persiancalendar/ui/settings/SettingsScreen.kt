@@ -61,7 +61,7 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
             toolbar.setupMenuNavigation()
-            setupDevelopmentMenu(toolbar, binding, layoutInflater)
+            setupMenu(toolbar, binding, layoutInflater)
         }
 
         val args by navArgs<SettingsScreenArgs>()
@@ -108,9 +108,25 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
     }
 
     // Development only functionalities
-    private fun setupDevelopmentMenu(
+    private fun setupMenu(
         toolbar: MaterialToolbar, binding: FragmentSettingsBinding, inflater: LayoutInflater
     ) {
+        toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
+            runCatching {
+                startActivity(
+                    Intent(Intent.ACTION_MAIN).setClassName(
+                        "com.android.wallpaper.livepicker",
+                        "com.android.wallpaper.livepicker.LiveWallpaperActivity"
+                    )
+                )
+            }.onFailure(logException).getOrNull().debugAssertNotNull
+        }
+        toolbar.menu.add(R.string.screensaver_settings).onClick {
+            runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
+                .onFailure(logException).getOrNull().debugAssertNotNull
+        }
+
+        // Rest are development features
         if (!BuildConfig.DEVELOPMENT) return
         val activity = activity ?: return
         if (canEnableNewInterface) {
@@ -188,10 +204,6 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
             it.add("Handled Crash").onClick { logException(Exception("Logged Crash!")) }
             it.add("Crash!").onClick { error("Unhandled Crash!") }
         }
-        toolbar.menu.add("Dream Settings").onClick {
-            runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
-                .onFailure(logException).getOrNull().debugAssertNotNull
-        }
         toolbar.menu.add("Start Dream").onClick {
             // https://stackoverflow.com/a/23112947
             runCatching {
@@ -200,17 +212,6 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
                         .setClassName(
                             "com.android.systemui",
                             "com.android.systemui.Somnambulator"
-                        )
-                )
-            }.onFailure(logException).getOrNull().debugAssertNotNull
-        }
-        toolbar.menu.add("Live Wallpaper Settings").onClick {
-            runCatching {
-                startActivity(
-                    Intent(Intent.ACTION_MAIN)
-                        .setClassName(
-                            "com.android.wallpaper.livepicker",
-                            "com.android.wallpaper.livepicker.LiveWallpaperActivity"
                         )
                 )
             }.onFailure(logException).getOrNull().debugAssertNotNull
