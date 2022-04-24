@@ -124,11 +124,13 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
 
         binding.railView.itemIconTintList = null
         binding.railView.menu.also { menu ->
-            AstronomyMode.values().map { menu.add(it.title).setIcon(it.icon) to it }
-                .forEach { (item, mode) ->
+            val buttons = AstronomyMode.values().map { menu.add(it.title).setIcon(it.icon) to it }
+            binding.railView.post {
+                buttons.forEach { (item, mode) ->
                     if (viewModel.mode.value == mode) item.isChecked = true
                     item.onClick { viewModel.changeScreenMode(mode) }
                 }
+            }
         }
 
         listOf(
