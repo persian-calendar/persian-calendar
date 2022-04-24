@@ -28,6 +28,7 @@ import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import io.github.cosinekitty.astronomy.SeasonsInfo
 import io.github.cosinekitty.astronomy.seasons
+import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -82,25 +83,28 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             binding.time.text = state.date.formatDateAndTime()
 
             val civilDate = state.date.toCivilDate()
-            val thisYearSeasons = calculateSeasons(civilDate.year)
-            val nextYearSeasons = calculateSeasons(civilDate.year + 1)
             val jdn = civilDate.toJdn()
+            val persianDate = PersianDate(jdn)
             binding.headerInformation.text = headerCache.getOrPut(jdn) {
-                state.generateHeader(context ?: return, PersianDate(jdn))
+                state.generateHeader(context ?: return, persianDate)
             }
 
-            (1..4).forEach {
-                when (it) {
+            (1..4).forEach { i ->
+                when (i) {
                     1 -> binding.firstSeasonText
                     2 -> binding.secondSeasonText
                     3 -> binding.thirdSeasonText
                     else -> binding.fourthSeasonText
                 }.text = Date(
-                    when (it) {
-                        1 -> thisYearSeasons.juneSolstice
-                        2 -> thisYearSeasons.septemberEquinox
-                        3 -> thisYearSeasons.decemberSolstice
-                        else -> nextYearSeasons.marchEquinox
+                    calculateSeasons(
+                        CivilDate(PersianDate(persianDate.year, i * 3, 29)).year
+                    ).let {
+                        when (i) {
+                            1 -> it.juneSolstice
+                            2 -> it.septemberEquinox
+                            3 -> it.decemberSolstice
+                            else -> it.marchEquinox
+                        }
                     }.toMillisecondsSince1970()
                 ).toJavaCalendar().formatDateAndTime()
             }
