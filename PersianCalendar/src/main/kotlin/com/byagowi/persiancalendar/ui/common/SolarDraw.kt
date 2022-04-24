@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
@@ -24,8 +25,9 @@ class SolarDraw(context: Context) {
         canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false
     ) {
         val drawable = if (small) smallSunDrawable else sunDrawable
-        if (color != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            drawable.setTint(color)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            drawable.setTintList(color?.let(ColorStateList::valueOf))
+        }
         drawable.setBounds((cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt())
         drawable.draw(canvas)
     }
