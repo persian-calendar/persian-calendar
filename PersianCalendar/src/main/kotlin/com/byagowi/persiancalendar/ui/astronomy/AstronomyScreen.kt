@@ -118,17 +118,17 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
 
         binding.railView.itemIconTintList = null
         binding.railView.menu.also { menu ->
-            menu.add("").setIcon(R.drawable.ic_earth).also {
+            menu.add(R.string.earth).setIcon(R.drawable.ic_earth).also {
                 if (viewModel.mode.value == AstronomyViewModel.Mode.Earth) it.isChecked = true
             }.onClick {
                 viewModel.changeScreenMode(AstronomyViewModel.Mode.Earth)
             }
-            menu.add("").setIcon(R.drawable.ic_moon).also {
+            menu.add(R.string.moon).setIcon(R.drawable.ic_moon).also {
                 if (viewModel.mode.value == AstronomyViewModel.Mode.Moon) it.isChecked = true
             }.onClick {
                 viewModel.changeScreenMode(AstronomyViewModel.Mode.Moon)
             }
-            menu.add("").setIcon(R.drawable.ic_sun_small).also {
+            menu.add(R.string.sun).setIcon(R.drawable.ic_sun_small).also {
                 if (viewModel.mode.value == AstronomyViewModel.Mode.Sun) it.isChecked = true
             }.onClick {
                 viewModel.changeScreenMode(AstronomyViewModel.Mode.Sun)
