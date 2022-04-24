@@ -100,10 +100,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val textPathRect = RectF()
     private fun drawSolarSystemPlanetsView(canvas: Canvas) {
         val radius = min(width, height) / 2f
-        colorTextPaint.textSize = radius / 12
+        colorTextPaint.textSize = radius / 11
         circlesPaint.strokeWidth = radius / 9
         circlesPaint.style = Paint.Style.FILL_AND_STROKE
-        (1..9).forEach {
+        (1..8).forEach {
             circlesPaint.color = ColorUtils.setAlphaComponent(0x808080, (9 - it) * 0x10)
             canvas.drawCircle(radius, radius, radius / 9 * it, circlesPaint)
             circlesPaint.style = Paint.Style.STROKE

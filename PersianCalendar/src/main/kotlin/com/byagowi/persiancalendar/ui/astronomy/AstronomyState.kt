@@ -62,7 +62,7 @@ class AstronomyState(val date: GregorianCalendar) {
     companion object {
         private val solarSystemPlanets = listOf(
             Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
-            Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
+            Body.Saturn, Body.Uranus, Body.Neptune
         )
     }
 }
