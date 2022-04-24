@@ -29,7 +29,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         Date(System.currentTimeMillis() - DAY_IN_MILLIS) // Initial animation
     )
 
-    var mode: AstronomyViewModel.Mode = AstronomyViewModel.Mode.Earth
+    var mode: AstronomyMode = AstronomyMode.Earth
         set(value) {
             field = value
             invalidate()
@@ -85,9 +85,9 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     override fun onDraw(canvas: Canvas) {
         when (mode) {
-            AstronomyViewModel.Mode.Moon -> drawMoonOnlyView(canvas)
-            AstronomyViewModel.Mode.Earth -> drawEarthCentricView(canvas)
-            AstronomyViewModel.Mode.Sun -> drawSolarSystemPlanetsView(canvas)
+            AstronomyMode.Moon -> drawMoonOnlyView(canvas)
+            AstronomyMode.Earth -> drawEarthCentricView(canvas)
+            AstronomyMode.Sun -> drawSolarSystemPlanetsView(canvas)
         }
     }
 

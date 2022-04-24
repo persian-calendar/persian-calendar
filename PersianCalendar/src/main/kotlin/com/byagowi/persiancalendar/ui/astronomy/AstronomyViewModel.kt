@@ -13,8 +13,8 @@ class AstronomyViewModel : ViewModel() {
     private val _time = MutableStateFlow(DEFAULT_TIME)
     val time: StateFlow<Int> = _time // is offset in minutes
 
-    private val _mode = MutableStateFlow(Mode.Earth)
-    val mode: StateFlow<Mode> = _mode
+    private val _mode = MutableStateFlow(AstronomyMode.Earth)
+    val mode: StateFlow<AstronomyMode> = _mode
 
     // Events
     val resetButtonVisibilityEvent = time
@@ -42,11 +42,9 @@ class AstronomyViewModel : ViewModel() {
         _isTropical.value = value
     }
 
-    fun changeScreenMode(value: Mode) {
+    fun changeScreenMode(value: AstronomyMode) {
         _mode.value = value
     }
-
-    enum class Mode { Earth, Moon, Sun }
 
     companion object {
         const val DEFAULT_TIME = Int.MIN_VALUE

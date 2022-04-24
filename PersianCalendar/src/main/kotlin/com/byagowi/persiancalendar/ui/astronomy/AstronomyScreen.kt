@@ -8,7 +8,6 @@ import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -125,21 +124,11 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
 
         binding.railView.itemIconTintList = null
         binding.railView.menu.also { menu ->
-            menu.add(R.string.earth).setIcon(R.drawable.ic_earth).also {
-                if (viewModel.mode.value == AstronomyViewModel.Mode.Earth) it.isChecked = true
-            }.onClick {
-                viewModel.changeScreenMode(AstronomyViewModel.Mode.Earth)
-            }
-            menu.add(R.string.moon).setIcon(R.drawable.ic_moon).also {
-                if (viewModel.mode.value == AstronomyViewModel.Mode.Moon) it.isChecked = true
-            }.onClick {
-                viewModel.changeScreenMode(AstronomyViewModel.Mode.Moon)
-            }
-            menu.add(R.string.sun).setIcon(R.drawable.ic_sun_small).also {
-                if (viewModel.mode.value == AstronomyViewModel.Mode.Sun) it.isChecked = true
-            }.onClick {
-                viewModel.changeScreenMode(AstronomyViewModel.Mode.Sun)
-            }
+            AstronomyMode.values().map { menu.add(it.title).setIcon(it.icon) to it }
+                .forEach { (item, mode) ->
+                    if (viewModel.mode.value == mode) item.isChecked = true
+                    item.onClick { viewModel.changeScreenMode(mode) }
+                }
         }
 
         listOf(
@@ -158,7 +147,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
                 val startJdn = Jdn(
-                    GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
+                    GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
                         .toCivilDate()
                 )
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
@@ -238,7 +227,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         viewModel.mode
             .onEach {
                 binding.solarView.mode = it
-                val showTropicalRelatedElements = it == AstronomyViewModel.Mode.Earth
+                val showTropicalRelatedElements = it == AstronomyMode.Earth
                 tropicalMenuItem.isVisible = showTropicalRelatedElements
                 binding.sunStatusWrapper.isInvisible = !showTropicalRelatedElements
                 binding.moonStatusWrapper.isInvisible = !showTropicalRelatedElements
