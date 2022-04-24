@@ -68,7 +68,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
 
         val headerCache = mutableMapOf<Long, String>()
 
-        fun actualScreenUpdate(state: AstronomyState) {
+        fun screenUpdate(state: AstronomyState) {
             val tropical = viewModel.isTropical.value
             val sunZodiac =
                 if (tropical) Zodiac.fromTropical(state.sun.elon)
@@ -218,7 +218,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         viewModel.isTropical
             .onEach { isTropical ->
                 val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                binding.solarView.setTime(time, true, ::actualScreenUpdate)
+                screenUpdate(AstronomyState(time))
                 binding.solarView.isTropicalDegree = isTropical
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -231,7 +231,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         viewModel.time
             .onEach {
                 val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                binding.solarView.setTime(time, immediate, ::actualScreenUpdate)
+                binding.solarView.setTime(time, immediate, ::screenUpdate)
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
