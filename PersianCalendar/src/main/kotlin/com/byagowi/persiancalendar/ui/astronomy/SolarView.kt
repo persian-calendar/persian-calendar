@@ -96,6 +96,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         it.color = context.resolveColor(R.attr.colorTextNormal)
     }
 
+    private val textPath = Path()
+    private val textPathRect = RectF()
     private fun drawSolarSystemPlanetsView(canvas: Canvas) {
         val radius = min(width, height) / 2f
         colorTextPaint.textSize = radius / 12
@@ -109,10 +111,13 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
         canvas.drawCircle(radius, radius, radius / 35, sunIndicatorPaint)
         state.planets.forEachIndexed { i, (label, ecliptic) ->
             canvas.withRotation(-ecliptic.elon.toFloat() + 90, radius, radius) {
-                canvas.drawText(
-                    resources.getString(label), radius, radius + radius / 9 * (1 + i),
-                    colorTextPaint
+                textPath.rewind()
+                val rectSize = radius / 9 * (1 + i) * .95f
+                textPathRect.set(
+                    radius - rectSize, radius - rectSize, radius + rectSize, radius + rectSize
                 )
+                textPath.addArc(textPathRect, 0f, 180f)
+                canvas.drawTextOnPath(resources.getString(label), textPath, 0f, 0f, colorTextPaint)
             }
         }
     }
