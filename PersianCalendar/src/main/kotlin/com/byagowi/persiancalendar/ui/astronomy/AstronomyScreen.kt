@@ -122,7 +122,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             }
         }
 
-        binding.railView.itemIconTintList = null
+        binding.railView.itemIconTintList = null // makes it to not apply tint on modes icons
         binding.railView.menu.also { menu ->
             val buttons = AstronomyMode.values().map { menu.add(it.title).setIcon(it.icon) to it }
             binding.railView.post {
