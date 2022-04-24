@@ -1,11 +1,14 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
+import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -110,7 +113,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             }
         }
 
-        binding.appBar.toolbar.menu.add(R.string.tropical).also { menuItem ->
+        val tropicalMenuItem = binding.appBar.toolbar.menu.add(R.string.tropical).also { menuItem ->
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             menuItem.actionView = SwitchMaterial(binding.appBar.toolbar.context).also { switch ->
                 @SuppressLint("SetTextI18n")
@@ -214,6 +217,13 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
+        val layoutTransition = LayoutTransition().apply {
+            enableTransitionType(LayoutTransition.APPEARING or LayoutTransition.DISAPPEARING)
+            setAnimateParentHierarchy(false)
+        }
+        binding.firstColumn.layoutTransition = layoutTransition
+        binding.secondColumn.layoutTransition = layoutTransition
+
         // Setup view model change listeners
         viewModel.isTropical
             .onEach { isTropical ->
@@ -226,7 +236,13 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             .onEach { resetButton.isVisible = it }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.mode
-            .onEach { binding.solarView.mode = it }
+            .onEach {
+                binding.solarView.mode = it
+                val showTropicalRelatedElements = it == AstronomyViewModel.Mode.Earth
+                tropicalMenuItem.isVisible = showTropicalRelatedElements
+                binding.sunStatusWrapper.isInvisible = !showTropicalRelatedElements
+                binding.moonStatusWrapper.isInvisible = !showTropicalRelatedElements
+            }
             .launchIn(viewLifecycleOwner.lifecycleScope)
         viewModel.time
             .onEach {
