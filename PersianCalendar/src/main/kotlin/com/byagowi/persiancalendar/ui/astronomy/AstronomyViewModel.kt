@@ -61,6 +61,7 @@ class AstronomyViewModel : ViewModel() {
         animateTo(_minutesOffset.value + dayOffset * MINUTES_IN_DAY)
     }
 
+    // Slider has its own smooth changed so this is provided to bypass animation
     fun addTime(offset: Int) {
         _minutesOffset.value += offset
     }
