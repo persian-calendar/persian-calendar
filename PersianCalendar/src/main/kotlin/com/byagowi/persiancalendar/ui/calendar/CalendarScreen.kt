@@ -28,7 +28,10 @@ import androidx.core.text.inSpans
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.ChangeBounds
@@ -103,9 +106,8 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.calendar.AbstractDate
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlinx.html.body
@@ -164,9 +166,11 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             it.enableTransitionType(LayoutTransition.CHANGING)
             it.setAnimateParentHierarchy(false)
         }
-        viewModel.selectedDayChangeEvent
-            .onEach { showEvent(binding, it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.selectedDayChangeEvent
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collectLatest { showEvent(binding, it) }
+        }
         return binding.root
     }
 
@@ -191,16 +195,22 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         }
         binding.timesFlow.setup()
 
-        viewModel.selectedDayChangeEvent
-            .onEach { jdn -> setOwghat(binding, jdn, jdn == Jdn.today()) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.selectedTabIndex
-            .onEach {
-                if (it == OWGHAT_TAB) binding.sunView.startAnimate()
-                else binding.sunView.clear()
+        // Follows https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.selectedDayChangeEvent.collectLatest { jdn ->
+                        setOwghat(binding, jdn, jdn == Jdn.today())
+                    }
+                }
+                launch {
+                    viewModel.selectedTabIndex.collectLatest {
+                        if (it == OWGHAT_TAB) binding.sunView.startAnimate()
+                        else binding.sunView.clear()
+                    }
+                }
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
 
         return binding.root
     }
@@ -230,11 +240,13 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
 
         val tabs = listOfNotNull(
             R.string.calendar to CalendarsView(view.context).also { calendarsView ->
-                viewModel.selectedDayChangeEvent
-                    .onEach { jdn ->
-                        calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
-                    }
-                    .launchIn(viewLifecycleOwner.lifecycleScope)
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.selectedDayChangeEvent
+                        .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                        .collectLatest { jdn ->
+                            calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
+                        }
+                }
             },
             R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
             if (enableOwghatTab(view.context)) // The optional third tab
@@ -258,9 +270,11 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             it.onMonthSelected = { viewModel.changeSelectedMonth(it.selectedMonth) }
         }
 
-        viewModel.selectedMonth
-            .onEach { updateToolbar(binding, it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.selectedMonth
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collectLatest { updateToolbar(binding, it) }
+        }
 
         val tabsViewPager = binding.viewPager
         tabsViewPager.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -563,20 +577,23 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             val eventsAdapter =
                 SearchEventsAdapter(context, onQueryChanged = viewModel::searchEvent)
             it.setAdapter(eventsAdapter)
-            viewModel.eventsFlow
-                .onEach(eventsAdapter::setData)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.eventsFlow
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                    .collectLatest(eventsAdapter::setData)
+            }
         }
 
         toolbar.menu.add(R.string.return_to_today).also {
             it.icon = toolbarContext.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.onClick { bringDate(Jdn.today(), highlight = false) }
-
-            viewModel.todayButtonVisibilityEvent
-                .distinctUntilChanged()
-                .onEach { visibility -> it.isVisible = visibility }
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.todayButtonVisibilityEvent
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                    .distinctUntilChanged()
+                    .collectLatest(it::setVisible)
+            }
         }
         toolbar.menu.add(R.string.search_in_events).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
