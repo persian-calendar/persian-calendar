@@ -24,9 +24,6 @@ import io.github.persiancalendar.calendar.PersianDate
 import java.util.*
 
 class AstronomyState(val date: GregorianCalendar) {
-    constructor(time: Date) : this(GregorianCalendar().also { it.time = time })
-    constructor(time: Long) : this(Date(time))
-
     private val time = Time.fromMillisecondsSince1970(date.time.time)
     val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
     val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))

@@ -16,18 +16,13 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.google.android.material.math.MathUtils
 import java.util.*
 import kotlin.math.min
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 
-    private var animator: ValueAnimator? = null
-
-    private var state = AstronomyState(
-        Date(System.currentTimeMillis() - DAY_IN_MILLIS) // Initial animation
-    )
+    private var state = AstronomyState(GregorianCalendar())
 
     var mode: AstronomyMode = AstronomyMode.Earth
         set(value) {
@@ -35,24 +30,9 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
             invalidate()
         }
 
-    fun setTime(date: GregorianCalendar, immediate: Boolean, update: (AstronomyState) -> Unit) {
-        animator?.removeAllUpdateListeners()
-        if (immediate) {
-            state = AstronomyState(date)
-            update(state)
-            invalidate()
-            return
-        }
-        ValueAnimator.ofFloat(state.date.time.time.toFloat(), date.time.time.toFloat()).also {
-            animator = it
-            it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-            it.interpolator = AccelerateDecelerateInterpolator()
-            it.addUpdateListener { _ ->
-                state = AstronomyState(((it.animatedValue as? Float) ?: 0f).toLong())
-                update(state)
-                invalidate()
-            }
-        }.start()
+    fun setTime(astronomyState: AstronomyState) {
+        this.state = astronomyState
+        invalidate()
     }
 
     var isTropicalDegree = false

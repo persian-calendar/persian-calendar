@@ -57,13 +57,14 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
 
         val viewModel by viewModels<AstronomyViewModel>()
-        if (viewModel.time.value == AstronomyViewModel.DEFAULT_TIME)
-            viewModel.changeToDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
+        if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
+            viewModel.animateToDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
         binding.solarView.setOnLongClickListener longClick@{
-            val activity = activity ?: return@longClick true
-            val time = GregorianCalendar().also { it.add(Calendar.MINUTE, viewModel.time.value) }
-            showHoroscopesDialog(activity, time.time)
+            showHoroscopesDialog(
+                activity ?: return@longClick true,
+                viewModel.astronomyState.value.date.time
+            )
             true
         }
 
@@ -144,26 +145,18 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             chip.chipBackgroundColor = ColorStateList.valueOf(season.color)
         }
 
-        // Tells solar view whether it needs to apply changes immediately or in a value animator
-        var immediate = false
-
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {
-                val startJdn = Jdn(
-                    GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                        .toCivilDate()
-                )
+                val startJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate())
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
-                    immediate = false
-                    viewModel.changeToDayOffset(jdn - Jdn.today())
+                    viewModel.animateToDayOffset(jdn - Jdn.today())
                 }
             }
         }
 
         resetButton.onClick {
-            immediate = false
-            viewModel.changeTime(0)
+            viewModel.animateTo(0)
             resetButton.isVisible = false
         }
 
@@ -182,7 +175,6 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                     latestVibration = current
                 }
-                immediate = true
                 viewModel.addTime(dx * viewDirection)
             }
         })
@@ -190,8 +182,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         fun buttonScrollSlider(days: Int): Boolean {
             lastButtonClickTimestamp = System.currentTimeMillis()
             binding.slider.smoothScrollBy(50 * days * viewDirection, 0)
-            immediate = false
-            viewModel.addDayOffset(days)
+            viewModel.animateToAddDayOffset(days)
             return true
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
@@ -223,8 +214,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.isTropical.collectLatest {
-                        val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                        screenUpdate(AstronomyState(time))
+                        screenUpdate(viewModel.astronomyState.value)
                         binding.solarView.isTropicalDegree = it
                     }
                 }
@@ -241,9 +231,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     }
                 }
                 launch {
-                    viewModel.time.collectLatest {
-                        val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                        binding.solarView.setTime(time, immediate, ::screenUpdate)
+                    viewModel.astronomyState.collectLatest {
+                        binding.solarView.setTime(it)
+                        screenUpdate(it)
                     }
                 }
             }
