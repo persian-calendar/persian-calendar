@@ -247,7 +247,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                         binding.solarView.setTime(state)
                         screenUpdate(state)
 
-                        // The rest is to update Update moon icon of rail view
+                        // The rest is to update moon icon of rail view
                         Canvas(moonIcon).also {
                             val radius = moonDiameter / 2f
                             solarDraw.moon(it, state.sun, state.moon, radius, radius, radius)
