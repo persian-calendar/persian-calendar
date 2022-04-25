@@ -43,10 +43,10 @@ class SolarDraw(context: Context) {
         canvas: Canvas, sun: Ecliptic, moon: Ecliptic, cx: Float, cy: Float, r: Float,
         angle: Float? = null
     ) {
+        moonRect.set(cx - r, cy - r, cx + r, cy + r)
+        canvas.drawBitmap(moonBitmap, null, moonRect, null)
         val phase = (moon.elon - sun.elon).let { it + if (it < 0) 360 else 0 }
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
-            moonRect.set(cx - r, cy - r, cx + r, cy + r)
-            canvas.drawBitmap(moonBitmap, null, moonRect, null)
             val arcWidth = (cos(Math.toRadians(phase)) * r).toFloat()
             moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
             ovalPath.rewind()
