@@ -10,7 +10,9 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
 import com.byagowi.persiancalendar.entities.Jdn
@@ -25,9 +27,9 @@ import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
 import io.github.persiancalendar.calculator.eval
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class ConverterScreen : Fragment(R.layout.fragment_converter) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -97,74 +99,81 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
         }
 
         // Setup view model change listeners
-        viewModel.updateEvent
-            .onEach {
-                when (viewModel.screenMode.value) {
-                    ConverterScreenMode.Converter -> {
-                        val selectedCalendarType = viewModel.calendar.value
-                        binding.calendarsView.showCalendars(
-                            viewModel.selectedDate.value,
-                            selectedCalendarType, enabledCalendars - selectedCalendarType
-                        )
-                    }
-                    ConverterScreenMode.Distance -> {
-                        binding.resultText.textDirection = View.TEXT_DIRECTION_INHERIT
-                        binding.resultText.text = calculateDaysDifference(
-                            resources, viewModel.selectedDate.value,
-                            viewModel.secondSelectedDate.value, viewModel.calendar.value
-                        )
-                    }
-                    ConverterScreenMode.Calculator -> {
-                        binding.resultText.textDirection = View.TEXT_DIRECTION_LTR
-                        binding.resultText.text = runCatching {
-                            // running this inside a runCatching block is absolutely important
-                            eval(binding.inputText.text?.toString() ?: "")
-                        }.getOrElse { it.message }
+        // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.updateEvent.collectLatest {
+                        when (viewModel.screenMode.value) {
+                            ConverterScreenMode.Converter -> {
+                                val selectedCalendarType = viewModel.calendar.value
+                                binding.calendarsView.showCalendars(
+                                    viewModel.selectedDate.value,
+                                    selectedCalendarType,
+                                    enabledCalendars - selectedCalendarType
+                                )
+                            }
+                            ConverterScreenMode.Distance -> {
+                                binding.resultText.textDirection = View.TEXT_DIRECTION_INHERIT
+                                binding.resultText.text = calculateDaysDifference(
+                                    resources, viewModel.selectedDate.value,
+                                    viewModel.secondSelectedDate.value, viewModel.calendar.value
+                                )
+                            }
+                            ConverterScreenMode.Calculator -> {
+                                binding.resultText.textDirection = View.TEXT_DIRECTION_LTR
+                                binding.resultText.text = runCatching {
+                                    // running this inside a runCatching block is absolutely important
+                                    eval(binding.inputText.text?.toString() ?: "")
+                                }.getOrElse { it.message }
+                            }
+                        }
                     }
                 }
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.calendarChangeEvent
-            .onEach {
-                if (viewModel.screenMode.value == ConverterScreenMode.Distance)
-                    binding.secondDayPickerView.changeCalendarType(it)
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.todayButtonVisibilityEvent
-            .distinctUntilChanged()
-            .onEach(todayButton::setVisible)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.screenModeChangeEvent
-            .onEach {
-                when (viewModel.screenMode.value) {
-                    ConverterScreenMode.Converter -> {
-                        binding.inputTextWrapper.isVisible = false
-                        binding.secondDayPickerView.isVisible = false
-                        binding.dayPickerView.isVisible = true
-                        binding.resultText.isVisible = false
-                        binding.calendarsView.isVisible = true
-                        binding.resultCard.isVisible = true
+                launch {
+                    viewModel.calendarChangeEvent.collectLatest {
+                        if (viewModel.screenMode.value == ConverterScreenMode.Distance)
+                            binding.secondDayPickerView.changeCalendarType(it)
                     }
-                    ConverterScreenMode.Distance -> {
-                        binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
+                }
+                launch {
+                    viewModel.todayButtonVisibilityEvent
+                        .distinctUntilChanged()
+                        .collectLatest(todayButton::setVisible)
+                }
+                launch {
+                    viewModel.screenModeChangeEvent.collectLatest {
+                        when (viewModel.screenMode.value) {
+                            ConverterScreenMode.Converter -> {
+                                binding.inputTextWrapper.isVisible = false
+                                binding.secondDayPickerView.isVisible = false
+                                binding.dayPickerView.isVisible = true
+                                binding.resultText.isVisible = false
+                                binding.calendarsView.isVisible = true
+                                binding.resultCard.isVisible = true
+                            }
+                            ConverterScreenMode.Distance -> {
+                                binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
 
-                        binding.inputTextWrapper.isVisible = false
-                        binding.dayPickerView.isVisible = true
-                        binding.secondDayPickerView.isVisible = true
-                        binding.resultText.isVisible = true
-                        binding.calendarsView.isVisible = false
-                        binding.resultCard.isVisible = false
-                    }
-                    ConverterScreenMode.Calculator -> {
-                        binding.inputTextWrapper.isVisible = true
-                        binding.dayPickerView.isVisible = false
-                        binding.secondDayPickerView.isVisible = false
-                        binding.resultText.isVisible = true
-                        binding.calendarsView.isVisible = false
-                        binding.resultCard.isVisible = false
+                                binding.inputTextWrapper.isVisible = false
+                                binding.dayPickerView.isVisible = true
+                                binding.secondDayPickerView.isVisible = true
+                                binding.resultText.isVisible = true
+                                binding.calendarsView.isVisible = false
+                                binding.resultCard.isVisible = false
+                            }
+                            ConverterScreenMode.Calculator -> {
+                                binding.inputTextWrapper.isVisible = true
+                                binding.dayPickerView.isVisible = false
+                                binding.secondDayPickerView.isVisible = false
+                                binding.resultText.isVisible = true
+                                binding.calendarsView.isVisible = false
+                                binding.resultCard.isVisible = false
+                            }
+                        }
                     }
                 }
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 }
