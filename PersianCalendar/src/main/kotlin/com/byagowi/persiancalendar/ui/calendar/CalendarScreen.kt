@@ -38,7 +38,6 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -290,7 +289,6 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.changeSelectedTabIndex(position)
-                context?.appPrefs?.edit { putInt(LAST_CHOSEN_TAB_KEY, position) }
 
                 // Make sure view pager's height at least matches with the shown tab
                 binding.viewPager.width.takeIf { it != 0 }?.let { width ->
@@ -303,10 +301,10 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             }
         })
 
-        var lastTab = view.context.appPrefs.getInt(LAST_CHOSEN_TAB_KEY, CALENDARS_TAB)
-        if (lastTab >= tabs.size) lastTab = CALENDARS_TAB
-        viewModel.changeSelectedTabIndex(lastTab)
-        tabsViewPager.setCurrentItem(viewModel.selectedTabIndex.value, false)
+        tabsViewPager.setCurrentItem(
+            viewModel.selectedTabIndex.value.coerceAtMost(tabs.size - 1),
+            false
+        )
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
 
         binding.root.post {
