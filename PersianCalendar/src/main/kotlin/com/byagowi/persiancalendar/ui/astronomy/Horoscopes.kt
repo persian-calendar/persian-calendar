@@ -12,8 +12,9 @@ import io.github.cosinekitty.astronomy.geoVector
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
-const val AU_IN_KM = 149597871 // astronomical unit, ~earth/sun distance
+const val AU_IN_KM = 149597871L // astronomical unit, ~earth/sun distance
 
 private fun formatAngle(value: Double): String {
     val degrees = floor(value)
@@ -31,7 +32,7 @@ fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
             name + equatorialToEcliptic(geoVector(body, time, Aberration.Corrected)).let {
                 ": $LRM${formatAngle(it.elon % 30)} ${
                     Zodiac.fromTropical(it.elon).emoji
-                } ${"%,d".format(Locale.ENGLISH, (it.vec.length() * AU_IN_KM).roundToInt())} km"
+                } ${"%,d".format(Locale.ENGLISH, (it.vec.length() * AU_IN_KM).roundToLong())} km"
             }
         })
         .show()
