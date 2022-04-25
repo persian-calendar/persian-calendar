@@ -19,6 +19,8 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
@@ -52,8 +54,8 @@ import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.persiancalendar.praytimes.Coordinates
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
 import java.nio.ByteBuffer
 import java.util.*
@@ -130,24 +132,29 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
         }
 
-        viewModel.state.onEach { state ->
-            val date = GregorianCalendar().also { it.time = Date(state.time) }
+        // Setup view model change listener
+        // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.state
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collectLatest { state ->
+                    val date = GregorianCalendar().also { it.time = Date(state.time) }
+                    runCatching {
+                        val map = createMap(
+                            date = date,
+                            displayNightMask = state.displayNightMask,
+                            displayGrid = state.displayGrid,
+                            displayLocation = state.displayLocation,
+                            directPathDestination = state.directPathDestination
+                        ).also { map = it }
+                        binding.map.setImageBitmap(map)
+                    }.onFailure(logException)
 
-            runCatching {
-                val map = createMap(
-                    date = date,
-                    displayNightMask = state.displayNightMask,
-                    displayGrid = state.displayGrid,
-                    displayLocation = state.displayLocation,
-                    directPathDestination = state.directPathDestination
-                ).also { map = it }
-                binding.map.setImageBitmap(map)
-            }.onFailure(logException)
-
-            binding.date.text = date.formatDateAndTime()
-            binding.timeBar.isVisible = state.displayNightMask
-            directPathButton.icon.alpha = if (state.isDirectPathMode) 127 else 255
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+                    binding.date.text = date.formatDateAndTime()
+                    binding.timeBar.isVisible = state.displayNightMask
+                    directPathButton.icon.alpha = if (state.isDirectPathMode) 127 else 255
+                }
+        }
     }
 
     private var map: Bitmap? = null
