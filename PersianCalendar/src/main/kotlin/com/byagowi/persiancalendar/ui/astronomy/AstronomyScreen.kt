@@ -10,7 +10,9 @@ import android.view.View
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -32,8 +34,10 @@ import io.github.cosinekitty.astronomy.SeasonsInfo
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.abs
 
@@ -216,30 +220,35 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         binding.secondColumn.layoutTransition = layoutTransition
 
         // Setup view model change listeners
-        viewModel.isTropical
-            .onEach { isTropical ->
-                val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                screenUpdate(AstronomyState(time))
-                binding.solarView.isTropicalDegree = isTropical
+        // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.isTropical.collectLatest {
+                        val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
+                        screenUpdate(AstronomyState(time))
+                        binding.solarView.isTropicalDegree = it
+                    }
+                }
+                launch {
+                    viewModel.resetButtonVisibilityEvent.collectLatest { resetButton.isVisible = it }
+                }
+                launch {
+                    viewModel.mode.collectLatest {
+                        binding.solarView.mode = it
+                        val showTropicalRelatedElements = it == AstronomyMode.Earth
+                        tropicalMenuItem.isVisible = showTropicalRelatedElements
+                        binding.sunStatusWrapper.isInvisible = !showTropicalRelatedElements
+                        binding.moonStatusWrapper.isInvisible = !showTropicalRelatedElements
+                    }
+                }
+                launch {
+                    viewModel.time.collectLatest {
+                        val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
+                        binding.solarView.setTime(time, immediate, ::screenUpdate)
+                    }
+                }
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.resetButtonVisibilityEvent
-            .onEach { resetButton.isVisible = it }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.mode
-            .onEach {
-                binding.solarView.mode = it
-                val showTropicalRelatedElements = it == AstronomyMode.Earth
-                tropicalMenuItem.isVisible = showTropicalRelatedElements
-                binding.sunStatusWrapper.isInvisible = !showTropicalRelatedElements
-                binding.moonStatusWrapper.isInvisible = !showTropicalRelatedElements
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-        viewModel.time
-            .onEach {
-                val time = GregorianCalendar().apply { add(Calendar.MINUTE, viewModel.time.value) }
-                binding.solarView.setTime(time, immediate, ::screenUpdate)
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 }
