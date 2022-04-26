@@ -12,6 +12,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentSkyRendererBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -41,8 +42,10 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
             Toast.makeText(view.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }
         val time = Time.fromMillisecondsSince1970(run {
-            val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
-            mapViewModel.state.value.time
+            runCatching {
+                val mapViewModel by navGraphViewModels<MapViewModel>(R.id.map)
+                mapViewModel.state.value.time
+            }.onFailure(logException).getOrNull() ?: System.currentTimeMillis()
         })
         val horizon = coordinates?.toObserver()?.let {
             val sunEquator = equator(Body.Sun, time, it, EquatorEpoch.OfDate, Aberration.None)

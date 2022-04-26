@@ -1,51 +1,60 @@
 package com.byagowi.persiancalendar.ui.level
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.RectF
+import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.fragment.app.FragmentActivity
-import com.byagowi.persiancalendar.ui.map.ZoomableImageView
+import com.byagowi.persiancalendar.ui.map.ZoomableView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showPeriodicTableDialog(activity: FragmentActivity) {
-    val cellSize = 100
-    val bitmap = Bitmap.createBitmap(18 * cellSize, 9 * cellSize, Bitmap.Config.ARGB_8888)
+    val view = object : ZoomableView(activity) {
+        val cellSize = 100
+        init {
+            contentWidth = 100f * 18
+            contentHeight = 100f * 9
+            maxScale = 64f
+        }
 
-    val rect = RectF(0f, 0f, cellSize.toFloat(), cellSize.toFloat())
-    rect.inset(cellSize * .02f, cellSize * .02f)
-    val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
-        it.textAlign = Paint.Align.CENTER
-    }
-    val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
-        it.textAlign = Paint.Align.CENTER
-        it.color = Color.BLACK
-    }
-    Canvas(bitmap).also {
-        (0 until 18).forEach { i ->
-            (0 until 9).forEach { j ->
-                it.withTranslation(i * cellSize.toFloat(), j * cellSize.toFloat()) {
-                    val index = elementsIndices.getOrNull(i + j * 18)
-                        ?: return@withTranslation
-                    val details = elements[index - 1].split(",")
-                    rectPaint.color = elementsColor.getValue(index).toInt()
-                    it.drawRect(rect, rectPaint)
-                    textPaint.textSize = cellSize * .35f
-                    it.drawText(details[0], cellSize / 2f, cellSize * .37f, textPaint)
-                    it.drawText(index.toString(), cellSize / 2f, cellSize * .70f, textPaint)
-                    textPaint.textSize = cellSize * .15f
-                    it.drawText(details[1], cellSize / 2f, cellSize * .87f, textPaint)
+        val rect = RectF(0f, 0f, cellSize.toFloat(), cellSize.toFloat()).also {
+            it.inset(cellSize * .02f, cellSize * .02f)
+        }
+        val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.style = Paint.Style.FILL
+            it.textAlign = Paint.Align.CENTER
+        }
+        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.style = Paint.Style.FILL
+            it.textAlign = Paint.Align.CENTER
+            it.color = Color.BLACK
+        }
+
+        override fun zoomableDraw(canvas: Canvas, matrix: Matrix) {
+            canvas.withMatrix(matrix) {
+                (0 until 18).forEach { i ->
+                    (0 until 9).forEach { j ->
+                        withTranslation(i * cellSize.toFloat(), j * cellSize.toFloat()) {
+                            val index = elementsIndices.getOrNull(i + j * 18)
+                                ?: return@withTranslation
+                            val details = elements[index - 1].split(",")
+                            rectPaint.color = elementsColor.getValue(index).toInt()
+                            drawRect(rect, rectPaint)
+                            textPaint.textSize = cellSize * .35f
+                            drawText(details[0], cellSize / 2f, cellSize * .37f, textPaint)
+                            drawText(index.toString(), cellSize / 2f, cellSize * .70f, textPaint)
+                            textPaint.textSize = cellSize * .15f
+                            drawText(details[1], cellSize / 2f, cellSize * .87f, textPaint)
+                        }
+                    }
                 }
             }
         }
     }
 
-    val view = ZoomableImageView(activity)
-    view.setImageBitmap(bitmap)
     MaterialAlertDialogBuilder(activity)
         .setView(view)
         .show()

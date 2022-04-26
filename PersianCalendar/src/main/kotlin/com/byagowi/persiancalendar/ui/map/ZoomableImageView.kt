@@ -2,22 +2,18 @@ package com.byagowi.persiancalendar.ui.map
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
-import androidx.appcompat.widget.AppCompatImageView
+import android.view.View
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-// https://stackoverflow.com/a/17649895
-class ZoomableImageView(
-    context: Context,
-    attrs: AttributeSet? = null
-) : AppCompatImageView(context, attrs) {
+// Based on https://stackoverflow.com/a/17649895 but modified to draw itself instead
+open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val scaleDetector = ScaleGestureDetector(context, ScaleListener())
     private val matrix = FloatArray(9)
     private val viewMatrix = Matrix()
@@ -26,7 +22,7 @@ class ZoomableImageView(
 
     private var mode = NONE
     private var minScale = 1f
-    private var maxScale = 16f
+    protected var maxScale = 16f
     private var redundantXSpace = 0f
     private var redundantYSpace = 0f
     private var saveScale = 1f
@@ -34,22 +30,10 @@ class ZoomableImageView(
     private var bottom = 0f
     private var originalWidth = 0f
     private var originalHeight = 0f
-    private var bitmapWidth = 0f
-    private var bitmapHeight = 0f
+    protected var contentWidth = Float.NaN // Be sure to set these two before use
+    protected var contentHeight = Float.NaN
 
-    init {
-        super.setClickable(true)
-        imageMatrix = viewMatrix
-        scaleType = ScaleType.MATRIX
-    }
-
-    override fun setImageBitmap(bitmap: Bitmap) {
-        super.setImageBitmap(bitmap)
-        bitmapWidth = bitmap.width.toFloat()
-        bitmapHeight = bitmap.height.toFloat()
-    }
-
-    private inner class ScaleListener : SimpleOnScaleGestureListener() {
+    private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
             mode = ZOOM
             return true
@@ -103,16 +87,15 @@ class ZoomableImageView(
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         // Fit to screen.
-        val scaleX = width / bitmapWidth
-        val scaleY = height / bitmapHeight
+        val scaleX = width / contentWidth
+        val scaleY = height / contentHeight
         val scale = min(scaleX, scaleY)
         viewMatrix.setScale(scale, scale)
-        imageMatrix = viewMatrix
         saveScale = 1f
 
         // Center the image
-        redundantYSpace = height - scale * bitmapHeight
-        redundantXSpace = width - scale * bitmapWidth
+        redundantYSpace = height - scale * contentHeight
+        redundantXSpace = width - scale * contentWidth
         redundantYSpace /= 2
         redundantXSpace /= 2
         viewMatrix.postTranslate(redundantXSpace, redundantYSpace)
@@ -120,7 +103,6 @@ class ZoomableImageView(
         originalHeight = height - 2 * redundantYSpace
         right = width * saveScale - width - 2 * redundantXSpace * saveScale
         bottom = height * saveScale - height - 2 * redundantYSpace * saveScale
-        imageMatrix = viewMatrix
     }
 
     var onClick = fun(_: Float, _: Float) {}
@@ -180,7 +162,7 @@ class ZoomableImageView(
                     performClick()
                     // https://stackoverflow.com/a/7418428
                     val inverse = Matrix()
-                    imageMatrix.invert(inverse)
+                    viewMatrix.invert(inverse)
                     val touchPoint = floatArrayOf(event.x, event.y)
                     inverse.mapPoints(touchPoint)
                     onClick(touchPoint[0], touchPoint[1])
@@ -188,10 +170,14 @@ class ZoomableImageView(
             }
             MotionEvent.ACTION_POINTER_UP -> mode = NONE
         }
-        imageMatrix = viewMatrix
         invalidate()
         return true
     }
+
+    // User draw callback
+    open fun zoomableDraw(canvas: Canvas, matrix: Matrix) {}
+
+    override fun onDraw(canvas: Canvas) = zoomableDraw(canvas, viewMatrix)
 
     companion object {
         private const val NONE = 0

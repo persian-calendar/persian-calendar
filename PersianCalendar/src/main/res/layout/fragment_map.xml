@@ -13,9 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:importantForAccessibility="no"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.byagowi.persiancalendar.ui.map.ZoomableImageView
+        <com.byagowi.persiancalendar.ui.common.ZoomableImageView
             android:id="@+id/map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
