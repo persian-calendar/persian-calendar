@@ -17,7 +17,6 @@ import androidx.core.graphics.PathParser
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
-import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -87,12 +86,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
         val mapPath = PathParser.createPathFromPathData(mapPathBytes.decodeToString())
-        Canvas(referenceBitmap).also {
-            it.drawColor(0xFF809DB5.toInt())
-            it.withScale(1f / scaleDownFactor, 1f / scaleDownFactor) {
-                it.drawPath(mapPath, Paint().apply { color = 0xFFFBF8E5.toInt() })
-            }
-        }
 
         pinDrawable = view.context.getCompatDrawable(R.drawable.ic_pin)
 
@@ -129,7 +122,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             val textureSize = 1024
             val bitmap = Bitmap.createBitmap(textureSize, textureSize, Bitmap.Config.ARGB_8888)
             val matrix = Matrix().also {
-                it.setScale(textureSize.toFloat() / sinkWidth, textureSize.toFloat() / sinkHeight)
+                it.setScale(textureSize.toFloat() / mapWidth, textureSize.toFloat() / mapHeight)
             }
             binding.map.onDraw(Canvas(bitmap), matrix)
             showGlobeDialog(activity ?: return@onClick, bitmap)
@@ -149,19 +142,22 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
         }
 
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.isFilterBitmap = true }
+        val backgroundPaint = Paint().apply { color = 0xFF809DB5.toInt() }
+        val foregroundPaint = Paint().apply { color = 0xFFFBF8E5.toInt() }
         binding.map.onDraw = { canvas, matrix ->
-            canvas.drawBitmap(referenceBitmap, matrix, paint)
             canvas.withMatrix(matrix) {
+                drawRect(mapRect, backgroundPaint)
+                drawPath(mapPath, foregroundPaint)
+
                 if (viewModel.state.value.displayNightMask) nightMask.draw(this)
                 val coordinates = coordinates
                 if (coordinates != null && viewModel.state.value.displayLocation) {
                     val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                     val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                     pinDrawable.setBounds(
-                        userX.toInt() - 120 / 2,
-                        userY.toInt() - 110,
-                        userX.toInt() + 120 / 2,
+                        userX.toInt() - 240 / 2,
+                        userY.toInt() - 220,
+                        userX.toInt() + 240 / 2,
                         userY.toInt()
                     )
                     pinDrawable.draw(this)
@@ -201,25 +197,25 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     }
                 }
                 if (viewModel.state.value.displayGrid) {
-                    (0 until sinkWidth step sinkWidth / 24).forEachIndexed { i, x ->
+                    (0 until mapWidth step mapWidth / 24).forEachIndexed { i, x ->
                         if (i == 0 || i == 12) return@forEachIndexed
-                        drawLine(x.toFloat(), 0f, x.toFloat(), sinkHeight.toFloat(), gridPaint)
+                        drawLine(x.toFloat(), 0f, x.toFloat(), mapHeight.toFloat(), gridPaint)
                     }
-                    (0 until sinkHeight step sinkHeight / 12).forEachIndexed { i, y ->
+                    (0 until mapHeight step mapHeight / 12).forEachIndexed { i, y ->
                         if (i == 0 || i == 6) return@forEachIndexed
-                        drawLine(0f, y.toFloat(), sinkWidth.toFloat(), y.toFloat(), gridPaint)
+                        drawLine(0f, y.toFloat(), mapWidth.toFloat(), y.toFloat(), gridPaint)
                     }
-                    drawLine(sinkWidth / 2f, 0f, sinkWidth / 2f, sinkHeight / 1f, gridHalfPaint)
-                    drawLine(0f, sinkHeight / 2f, sinkWidth / 1f, sinkHeight / 2f, gridHalfPaint)
+                    drawLine(mapWidth / 2f, 0f, mapWidth / 2f, mapHeight / 1f, gridHalfPaint)
+                    drawLine(0f, mapHeight / 2f, mapWidth / 1f, mapHeight / 2f, gridHalfPaint)
                     parallelsLatitudes.forEach { y ->
-                        drawLine(0f, y, sinkWidth.toFloat(), y, parallelsPaint)
+                        drawLine(0f, y, mapWidth.toFloat(), y, parallelsPaint)
                     }
                 }
             }
         }
-        binding.map.contentWidth = sinkWidth.toFloat()
-        binding.map.contentHeight = sinkHeight.toFloat()
-        binding.map.maxScale = 64f
+        binding.map.contentWidth = mapWidth.toFloat()
+        binding.map.contentHeight = mapHeight.toFloat()
+        binding.map.maxScale = 512f
 
         // Setup view model change listener
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
@@ -260,14 +256,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
     }
 
-    private val scaleDownFactor = 2
-    private val mapScaleFactor = 16 / scaleDownFactor
-    private val sinkWidth = 360 * mapScaleFactor
-    private val sinkHeight = 180 * mapScaleFactor
-    private val referenceBitmap =
-        runCatching { Bitmap.createBitmap(sinkWidth, sinkHeight, Bitmap.Config.ARGB_8888) }
-            // in case of OOM
-            .getOrNull() ?: Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
+    private val mapScaleFactor = 16 // As the path bounds is 360*16 x 180*16
+    private val mapWidth = 360 * mapScaleFactor
+    private val mapHeight = 180 * mapScaleFactor
+    private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
     inner class NightMask {
         private val nightMaskScale = 1
@@ -281,11 +273,11 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         var solarDraw: SolarDraw? = null
 
         fun draw(canvas: Canvas) {
-            canvas.drawBitmap(nightMask, null, Rect(0, 0, sinkWidth, sinkHeight), null)
-            val scale = sinkWidth / nightMask.width
+            canvas.drawBitmap(nightMask, null, mapRect, null)
+            val scale = mapWidth / nightMask.width
             val solarDraw = solarDraw ?: return
-            solarDraw.simpleMoon(canvas, moonX * scale, moonY * scale, sinkWidth * .02f)
-            solarDraw.sun(canvas, sunX * scale, sunY * scale, sinkWidth * .025f)
+            solarDraw.simpleMoon(canvas, moonX * scale, moonY * scale, mapWidth * .02f)
+            solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f)
         }
 
         fun update(date: GregorianCalendar) {
@@ -340,7 +332,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     private val nightMask = NightMask()
 
-    private val gridLinesWidth = sinkWidth * .001f
+    private val gridLinesWidth = mapWidth * .001f
     private val gridPaint = Paint().also {
         it.strokeWidth = gridLinesWidth
         it.color = 0x80FFFFFF.toInt()
