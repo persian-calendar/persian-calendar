@@ -5,16 +5,18 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
-import androidx.core.graphics.BitmapCompat
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.scale
 import androidx.core.graphics.set
+import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
@@ -41,7 +43,6 @@ import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.EarthPosition
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -57,7 +58,6 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.io.ByteArrayInputStream
-import java.nio.ByteBuffer
 import java.util.*
 import java.util.zip.GZIPInputStream
 import kotlin.math.abs
@@ -84,7 +84,17 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         // binding.appBar.toolbar.setTitle(R.string.map)
         binding.appBar.toolbar.setupUpNavigation()
 
-        solarDraw = SolarDraw(view.context)
+        nightMask.solarDraw = SolarDraw(view.context)
+        val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
+        val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
+        val mapPath = PathParser.createPathFromPathData(mapPathBytes.decodeToString())
+        Canvas(referenceBitmap).also {
+            it.drawColor(0xFF809DB5.toInt())
+            it.withScale(1f / scaleDownFactor, 1f / scaleDownFactor) {
+                it.drawPath(mapPath, Paint().apply { color = 0xFFFBF8E5.toInt() })
+            }
+        }
+
         pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
@@ -116,7 +126,12 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (coordinates == null) bringGps() else viewModel.toggleDisplayLocation()
         }
         nightMaskButton.onClick { viewModel.toggleNightMask() }
-        globeViewButton.onClick { map?.also { showGlobeDialog(activity ?: return@also, it) } }
+        globeViewButton.onClick {
+            val bitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888)
+            val matrix = Matrix().also { it.setScale(512f / sinkWidth, 512f / sinkHeight) }
+            binding.map.onDraw(Canvas(bitmap), matrix)
+            showGlobeDialog(activity ?: return@onClick, bitmap)
+        }
 
         binding.root.layoutTransition = LayoutTransition().also {
             it.enableTransitionType(LayoutTransition.APPEARING)
@@ -134,37 +149,93 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.isFilterBitmap = true }
         binding.map.onDraw = { canvas, matrix ->
-            map?.also { canvas.drawBitmap(it, matrix, paint) }
+            canvas.drawBitmap(referenceBitmap, matrix, paint)
+            canvas.withMatrix(matrix) {
+                if (viewModel.state.value.displayNightMask) nightMask.draw(this)
+                val coordinates = coordinates
+                if (coordinates != null && viewModel.state.value.displayLocation) {
+                    val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
+                    val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
+                    pinRect.set(
+                        userX - pinBitmap.width / 2f / pinScaleDown,
+                        userY - pinBitmap.height / pinScaleDown,
+                        userX + pinBitmap.width / 2f / pinScaleDown,
+                        userY
+                    )
+                    drawBitmap(pinBitmap, null, pinRect, null)
+                }
+                val directPathDestination = viewModel.state.value.directPathDestination
+                if (coordinates != null && directPathDestination != null) {
+                    val from = EarthPosition(coordinates.latitude, coordinates.longitude)
+                    val to = EarthPosition(
+                        directPathDestination.latitude,
+                        directPathDestination.longitude
+                    )
+                    val points = from.intermediatePoints(to, 24).map { point ->
+                        val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
+                        val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
+                        userX to userY
+                    }
+                    points.forEachIndexed { i, (x1, y1) ->
+                        if (i >= points.size - 1) return@forEachIndexed
+                        val (x2, y2) = points[i + 1]
+                        if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
+                        pathPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
+                            i.toFloat() / points.size, Color.BLACK, Color.RED
+                        )
+                        drawLine(x1, y1, x2, y2, pathPaint)
+                    }
+                    val heading = from.toEarthHeading(to)
+                    val center = points[points.size / 2]
+                    val centerPlus1 = points[points.size / 2 + 1]
+                    val distance =
+                        "%,d km".format(Locale.ENGLISH, (heading.metres / 1000f).roundToInt())
+                    val textDegree = Math.toDegrees(
+                        atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
+                            .toDouble()
+                    ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
+                    withRotation(textDegree, center.first, center.second) {
+                        drawText(distance, center.first, center.second - 2.dp, textPaint)
+                    }
+                }
+                if (viewModel.state.value.displayGrid) {
+                    (0 until sinkWidth step sinkWidth / 24).forEachIndexed { i, x ->
+                        if (i == 0 || i == 12) return@forEachIndexed
+                        drawLine(x.toFloat(), 0f, x.toFloat(), sinkHeight.toFloat(), gridPaint)
+                    }
+                    (0 until sinkHeight step sinkHeight / 12).forEachIndexed { i, y ->
+                        if (i == 0 || i == 6) return@forEachIndexed
+                        drawLine(0f, y.toFloat(), sinkWidth.toFloat(), y.toFloat(), gridPaint)
+                    }
+                    drawLine(sinkWidth / 2f, 0f, sinkWidth / 2f, sinkHeight / 1f, gridHalfPaint)
+                    drawLine(0f, sinkHeight / 2f, sinkWidth / 1f, sinkHeight / 2f, gridHalfPaint)
+                    parallelsLatitudes.forEach { y ->
+                        drawLine(0f, y, sinkWidth.toFloat(), y, parallelsPaint)
+                    }
+                }
+            }
         }
+        binding.map.contentWidth = sinkWidth.toFloat()
+        binding.map.contentHeight = sinkHeight.toFloat()
 
         // Setup view model change listener
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
+        val dateSink = GregorianCalendar()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { state ->
-                    val date = GregorianCalendar().also { it.time = Date(state.time) }
-                    runCatching {
-                        val map = createMap(
-                            date = date,
-                            displayNightMask = state.displayNightMask,
-                            displayGrid = state.displayGrid,
-                            displayLocation = state.displayLocation,
-                            directPathDestination = state.directPathDestination
-                        ).also { map = it }
-                        binding.map.contentWidth = map.width.toFloat()
-                        binding.map.contentHeight = map.height.toFloat()
-                        binding.map.invalidate()
-                    }.onFailure(logException)
-
-                    binding.date.text = date.formatDateAndTime()
+                    if (state.displayNightMask && dateSink.timeInMillis != state.time) {
+                        dateSink.timeInMillis = state.time
+                        nightMask.update(dateSink)
+                    }
+                    binding.map.invalidate()
+                    binding.date.text = dateSink.formatDateAndTime()
                     binding.timeBar.isVisible = state.displayNightMask
                     directPathButton.icon.alpha = if (state.isDirectPathMode) 127 else 255
                 }
         }
     }
-
-    private var map: Bitmap? = null
 
     private fun onMapClick(latitude: Float, longitude: Float) {
         // Easter egg like feature, bring sky renderer fragment
@@ -190,167 +261,79 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val mapScaleFactor = 16 / scaleDownFactor
     private val sinkWidth = 360 * mapScaleFactor
     private val sinkHeight = 180 * mapScaleFactor
-    private val sinkBitmap = Bitmap.createBitmap(sinkWidth, sinkHeight, Bitmap.Config.ARGB_8888)
-    private var referenceBuffer: ByteBuffer? = null
-    private fun createReferenceBuffer(): ByteBuffer {
-        val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
-        val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
-        val mapPath = PathParser.createPathFromPathData(mapPathBytes.decodeToString())
-        // We assume creating reference map will be first use of sink also.
-        Canvas(sinkBitmap).also {
-            it.drawColor(0xFF809DB5.toInt())
-            it.withScale(1f / scaleDownFactor, 1f / scaleDownFactor) {
-                it.drawPath(mapPath, Paint().apply { color = 0xFFFBF8E5.toInt() })
-            }
+    private val referenceBitmap =
+        Bitmap.createBitmap(sinkWidth, sinkHeight, Bitmap.Config.ARGB_8888)
+
+    inner class NightMask {
+        private val nightMaskScale = 1
+        private val nightMask = Bitmap.createBitmap(
+            360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
+        )
+        private var sunX = .0f
+        private var sunY = .0f
+        private var moonX = .0f
+        private var moonY = .0f
+        var solarDraw: SolarDraw? = null
+
+        fun draw(canvas: Canvas) {
+            canvas.drawBitmap(nightMask, null, Rect(0, 0, sinkWidth, sinkHeight), null)
+            val scale = sinkWidth / nightMask.width
+            val solarDraw = solarDraw ?: return
+            solarDraw.simpleMoon(canvas, moonX * scale, moonY * scale, sinkWidth * .02f)
+            solarDraw.sun(canvas, sunX * scale, sunY * scale, sinkWidth * .025f)
         }
-        val buffer = ByteBuffer.allocate(BitmapCompat.getAllocationByteCount(sinkBitmap))
-        sinkBitmap.copyPixelsToBuffer(buffer)
-        return buffer
-    }
 
-    private fun getSinkBitmap(): Bitmap {
-        val src = referenceBuffer ?: createReferenceBuffer().also { referenceBuffer = it }
-        sinkBitmap.copyPixelsFromBuffer(src.also { it.rewind() })
-        return sinkBitmap
-    }
+        fun update(date: GregorianCalendar) {
+            val time = Time.fromMillisecondsSince1970(date.time.time)
+            nightMask.eraseColor(Color.TRANSPARENT)
+            var sunMaxAltitude = .0
+            var moonMaxAltitude = .0
 
-    private var solarDraw: SolarDraw? = null
+            val geoSunEqj = geoVector(Body.Sun, time, Aberration.Corrected)
+            val geoMoonEqj = geoVector(Body.Moon, time, Aberration.Corrected)
+            val rot = rotationEqjEqd(time)
+            val geoSunEqd = rot.rotate(geoSunEqj)
+            val geoMoonEqd = rot.rotate(geoMoonEqj)
 
-    private val nightMaskScale = 1
-    private val nightMask = Bitmap.createBitmap(
-        360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
-    )
+            // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
+            (0 until nightMask.width).forEach { x ->
+                (0 until nightMask.height).forEach { y ->
+                    val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
+                    val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
+                    val observer = Observer(latitude, longitude, .0)
+                    val ovec = observer.toVector(time, EquatorEpoch.OfDate)
+                    val observerRot = rotationEqdHor(time, observer)
+                    val sunAltitude = verticalComponent(observerRot, ovec, geoSunEqd)
+                    val moonAltitude = verticalComponent(observerRot, ovec, geoMoonEqd)
 
-    // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
-    private fun verticalComponent(
-        rot: RotationMatrix,
-        ovec: Vector,
-        bvec: Vector
-    ): Double {
-        val hor = rot.rotate(bvec - ovec)
-        return hor.z / hor.length()
-    }
+                    if (sunAltitude < 0) {
+                        val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
+                        // This move the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
+                        nightMask[x, y] = value shl 24
+                    }
 
-    private fun createMap(
-        date: GregorianCalendar,
-        displayNightMask: Boolean,
-        displayGrid: Boolean,
-        displayLocation: Boolean,
-        directPathDestination: Coordinates?
-    ): Bitmap {
-        val sink = getSinkBitmap()
-        val time = Time.fromMillisecondsSince1970(date.time.time)
-        nightMask.eraseColor(Color.TRANSPARENT)
-        var sunX = .0f
-        var sunY = .0f
-        var sunMaxAltitude = .0
-        var moonX = .0f
-        var moonY = .0f
-        var moonMaxAltitude = .0
-
-        val geoSunEqj = geoVector(Body.Sun, time, Aberration.Corrected)
-        val geoMoonEqj = geoVector(Body.Moon, time, Aberration.Corrected)
-        val rot = rotationEqjEqd(time)
-        val geoSunEqd = rot.rotate(geoSunEqj)
-        val geoMoonEqd = rot.rotate(geoMoonEqj)
-
-        // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
-        (0 until nightMask.width).forEach { x ->
-            if (!displayNightMask) return@forEach
-            (0 until nightMask.height).forEach { y ->
-                val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
-                val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
-                val observer = Observer(latitude, longitude, .0)
-                val ovec = observer.toVector(time, EquatorEpoch.OfDate)
-                val observerRot = rotationEqdHor(time, observer)
-                val sunAltitude = verticalComponent(observerRot, ovec, geoSunEqd)
-                val moonAltitude = verticalComponent(observerRot, ovec, geoMoonEqd)
-
-                if (sunAltitude < 0) {
-                    val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
-                    // This move the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
-                    nightMask[x, y] = value shl 24
-                }
-
-                if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
-                    sunMaxAltitude = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
-                }
-                if (moonAltitude > moonMaxAltitude) { // this time for moon
-                    moonMaxAltitude = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
+                    if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
+                        sunMaxAltitude = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
+                    }
+                    if (moonAltitude > moonMaxAltitude) { // this time for moon
+                        moonMaxAltitude = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
+                    }
                 }
             }
         }
-        val coordinates = coordinates
-        Canvas(sink).also {
-            it.drawBitmap(nightMask, null, Rect(0, 0, sinkWidth, sinkHeight), null)
-            val scale = sink.width / nightMask.width
-            if (displayGrid) {
-                (0 until sinkWidth step sinkWidth / 24).forEachIndexed { i, x ->
-                    if (i == 0 || i == 12) return@forEachIndexed
-                    it.drawLine(x.toFloat(), 0f, x.toFloat(), sink.height.toFloat(), gridPaint)
-                }
-                (0 until sinkHeight step sinkHeight / 12).forEachIndexed { i, y ->
-                    if (i == 0 || i == 6) return@forEachIndexed
-                    it.drawLine(0f, y.toFloat(), sink.width.toFloat(), y.toFloat(), gridPaint)
-                }
-                it.drawLine(sinkWidth / 2f, 0f, sinkWidth / 2f, sinkHeight / 1f, gridHalfPaint)
-                it.drawLine(0f, sinkHeight / 2f, sinkWidth / 1f, sinkHeight / 2f, gridHalfPaint)
-                parallelsLatitudes.forEach { y ->
-                    it.drawLine(0f, y, sink.width.toFloat(), y, parallelsPaint)
-                }
-            }
-            val solarDraw = solarDraw ?: return@also
-            if (displayNightMask) {
-                solarDraw.simpleMoon(it, moonX * scale, moonY * scale, sinkWidth * .02f)
-                solarDraw.sun(it, sunX * scale, sunY * scale, sinkWidth * .025f)
-            }
-            if (coordinates != null && displayLocation) {
-                val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
-                val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
-                pinRect.set(
-                    userX - pinBitmap.width / 2f / pinScaleDown,
-                    userY - pinBitmap.height / pinScaleDown,
-                    userX + pinBitmap.width / 2f / pinScaleDown,
-                    userY
-                )
-                it.drawBitmap(pinBitmap, null, pinRect, null)
-            }
-            if (coordinates != null && directPathDestination != null) {
-                val from = EarthPosition(coordinates.latitude, coordinates.longitude)
-                val to = EarthPosition(
-                    directPathDestination.latitude,
-                    directPathDestination.longitude
-                )
-                val points = from.intermediatePoints(to, 24).map { point ->
-                    val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
-                    val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
-                    userX to userY
-                }
-                points.forEachIndexed { i, (x1, y1) ->
-                    if (i >= points.size - 1) return@forEachIndexed
-                    val (x2, y2) = points[i + 1]
-                    if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
-                    pathPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
-                        i.toFloat() / points.size, Color.BLACK, Color.RED
-                    )
-                    it.drawLine(x1, y1, x2, y2, pathPaint)
-                }
-                val heading = from.toEarthHeading(to)
-                val center = points[points.size / 2]
-                val centerPlus1 = points[points.size / 2 + 1]
-                val distance =
-                    "%,d km".format(Locale.ENGLISH, (heading.metres / 1000f).roundToInt())
-                val textDegree = Math.toDegrees(
-                    atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
-                        .toDouble()
-                ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
-                it.withRotation(textDegree, center.first, center.second) {
-                    it.drawText(distance, center.first, center.second - 2.dp, textPaint)
-                }
-            }
+
+        // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
+        private fun verticalComponent(
+            rot: RotationMatrix,
+            ovec: Vector,
+            bvec: Vector
+        ): Double {
+            val hor = rot.rotate(bvec - ovec)
+            return hor.z / hor.length()
         }
-        return sink
     }
+
+    private val nightMask = NightMask()
 
     private val gridLinesWidth = sinkWidth * .001f
     private val gridPaint = Paint().also {

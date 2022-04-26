@@ -137,9 +137,7 @@ class GLRenderer(
             GLES20.glTexParameteri(
                 GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST
             )
-            val minified = bitmap.scale(512, 512)
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, minified, 0)
-            minified.recycle()
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
         }
         if (textureHandle[0] == 0) onError("Failed to load texture")
         this.textureHandle = textureHandle[0]
