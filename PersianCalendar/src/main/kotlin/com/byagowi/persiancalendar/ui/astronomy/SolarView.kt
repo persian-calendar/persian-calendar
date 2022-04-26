@@ -3,24 +3,26 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
+import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.google.android.material.math.MathUtils
 import java.util.*
 import kotlin.math.min
 
-class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
 
     private var state = AstronomyState(GregorianCalendar())
 
@@ -63,11 +65,13 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : View(context, a
 
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
 
-    override fun onDraw(canvas: Canvas) {
-        when (mode) {
-            AstronomyMode.Moon -> drawMoonOnlyView(canvas)
-            AstronomyMode.Earth -> drawEarthCentricView(canvas)
-            AstronomyMode.Sun -> drawSolarSystemPlanetsView(canvas)
+    override fun zoomableDraw(canvas: Canvas, matrix: Matrix) {
+        canvas.withMatrix(matrix) {
+            when (mode) {
+                AstronomyMode.Moon -> drawMoonOnlyView(this)
+                AstronomyMode.Earth -> drawEarthCentricView(this)
+                AstronomyMode.Sun -> drawSolarSystemPlanetsView(this)
+            }
         }
     }
 

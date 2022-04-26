@@ -64,12 +64,11 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
             viewModel.animateToAbsoluteDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
-        binding.solarView.setOnLongClickListener longClick@{
-            showHoroscopesDialog(
-                activity ?: return@longClick true,
-                viewModel.astronomyState.value.date.time
-            )
-            true
+        var clickCount = 0
+        binding.solarView.onClick = { _, _ ->
+            val activity = activity
+            if (++clickCount % 2 == 0 && activity != null)
+                showHoroscopesDialog(activity, viewModel.astronomyState.value.date.time)
         }
 
         binding.railView.itemIconTintList = null // makes it to not apply tint on modes icons

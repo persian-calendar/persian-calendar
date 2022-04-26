@@ -86,6 +86,8 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        if (contentWidth.isNaN()) contentWidth = w.toFloat()
+        if (contentHeight.isNaN()) contentHeight = h.toFloat()
         // Fit to screen.
         val scaleX = width / contentWidth
         val scaleY = height / contentHeight
