@@ -72,12 +72,38 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             true
         }
 
+        binding.railView.itemIconTintList = null // makes it to not apply tint on modes icons
+        val moonDiameter = 128
+        val moonIcon = Bitmap.createBitmap(moonDiameter, moonDiameter, Bitmap.Config.ARGB_8888)
+        val moonCanvas = Canvas(moonIcon)
+        val moonIconDrawable = BitmapDrawable(view.context.resources, moonIcon)
+        binding.railView.menu.also { menu ->
+            val buttons = enumValues<AstronomyMode>()
+                .associate { it to menu.add(it.title).setIcon(it.icon) }
+            binding.railView.post {
+                buttons.forEach { (mode, item) ->
+                    if (viewModel.mode.value == mode) item.isChecked = true
+                    item.onClick { viewModel.changeScreenMode(mode) }
+                }
+            }
+            // Special case for moon icon
+            buttons[AstronomyMode.Moon]?.icon = moonIconDrawable
+        }
+
         val seasonsCache = mutableMapOf<Int, SeasonsInfo>()
         fun calculateSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
-
         val headerCache = mutableMapOf<Long, String>()
+        val solarDraw = SolarDraw(view.context)
 
-        fun screenUpdate(state: AstronomyState) {
+        fun update(state: AstronomyState) {
+            binding.solarView.setTime(state)
+
+            run { // Update moon icon of rail view
+                val radius = moonDiameter / 2f
+                solarDraw.moon(moonCanvas, state.sun, state.moon, radius, radius, radius)
+                moonIconDrawable.invalidateSelf()
+            }
+
             val tropical = viewModel.isTropical.value
             val sunZodiac =
                 if (tropical) Zodiac.fromTropical(state.sun.elon)
@@ -127,23 +153,6 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 switch.isChecked = viewModel.isTropical.value
                 switch.setOnClickListener { viewModel.changeTropicalStatus(switch.isChecked) }
             }
-        }
-
-        binding.railView.itemIconTintList = null // makes it to not apply tint on modes icons
-        val moonDiameter = 128
-        val moonIcon = Bitmap.createBitmap(moonDiameter, moonDiameter, Bitmap.Config.ARGB_8888)
-        val moonIconDrawable = BitmapDrawable(view.context.resources, moonIcon)
-        binding.railView.menu.also { menu ->
-            val buttons = enumValues<AstronomyMode>()
-                .associate { it to menu.add(it.title).setIcon(it.icon) }
-            binding.railView.post {
-                buttons.forEach { (mode, item) ->
-                    if (viewModel.mode.value == mode) item.isChecked = true
-                    item.onClick { viewModel.changeScreenMode(mode) }
-                }
-            }
-            // Special case for moon icon
-            buttons[AstronomyMode.Moon]?.icon = moonIconDrawable
         }
 
         listOf(
@@ -224,7 +233,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.isTropical.collectLatest {
-                        screenUpdate(viewModel.astronomyState.value)
+                        update(viewModel.astronomyState.value)
                         binding.solarView.isTropicalDegree = it
                     }
                 }
@@ -240,20 +249,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                         binding.moonStatusWrapper.isInvisible = !showTropicalRelatedElements
                     }
                 }
-                launch {
-                    val solarDraw = SolarDraw(view.context)
-                    viewModel.astronomyState.collectLatest { state ->
-                        binding.solarView.setTime(state)
-                        screenUpdate(state)
-
-                        // The rest is to update moon icon of rail view
-                        Canvas(moonIcon).also {
-                            val radius = moonDiameter / 2f
-                            solarDraw.moon(it, state.sun, state.moon, radius, radius, radius)
-                        }
-                        moonIconDrawable.invalidateSelf()
-                    }
-                }
+                launch { viewModel.astronomyState.collectLatest(::update) }
             }
         }
     }
