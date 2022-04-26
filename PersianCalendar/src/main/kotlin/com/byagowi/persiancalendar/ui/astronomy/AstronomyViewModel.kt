@@ -17,17 +17,17 @@ class AstronomyViewModel : ViewModel() {
     private val _isTropical = MutableStateFlow(false)
     val isTropical: StateFlow<Boolean> = _isTropical
 
-    private val _minutesOffset = MutableStateFlow(DEFAULT_TIME)
-    val minutesOffset: StateFlow<Int> = _minutesOffset
-
     private val _mode = MutableStateFlow(AstronomyMode.Earth)
     val mode: StateFlow<AstronomyMode> = _mode
+
+    private val _minutesOffset = MutableStateFlow(DEFAULT_TIME)
+    val minutesOffset: StateFlow<Int> = _minutesOffset
 
     private var _astronomyState = MutableStateFlow(AstronomyState(GregorianCalendar()))
     var astronomyState: StateFlow<AstronomyState> = _astronomyState
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch { // Fill astronomyState with states generated from minutes offset
             val date = GregorianCalendar()
             _minutesOffset.collectLatest {
                 date.timeInMillis = System.currentTimeMillis() + it * ONE_MINUTE_IN_MILLIS
@@ -43,7 +43,7 @@ class AstronomyViewModel : ViewModel() {
 
     // Commands
     private var animator: ValueAnimator? = null
-    fun animateTo(value: Int) {
+    fun animateToAbsoluteMinutesOffset(value: Int) {
         animator?.removeAllUpdateListeners()
         ValueAnimator.ofInt(_minutesOffset.value, value).also {
             animator = it
@@ -53,21 +53,21 @@ class AstronomyViewModel : ViewModel() {
         }.start()
     }
 
-    fun animateToDayOffset(dayOffset: Int) {
-        animateTo(dayOffset * MINUTES_IN_DAY)
+    fun animateToAbsoluteDayOffset(dayOffset: Int) {
+        animateToAbsoluteMinutesOffset(dayOffset * MINUTES_IN_DAY)
     }
 
-    fun animateToAddDayOffset(dayOffset: Int) {
-        animateTo(_minutesOffset.value + dayOffset * MINUTES_IN_DAY)
+    fun animateToRelativeDayOffset(dayOffset: Int) {
+        animateToAbsoluteMinutesOffset(_minutesOffset.value + dayOffset * MINUTES_IN_DAY)
     }
 
     // This is provided to bypass view model provided animation for the screen's slider
     // which changes the values smoothly and doesn't need another filter in between.
-    fun addTime(offset: Int) {
+    fun addMinutesOffset(offset: Int) {
         _minutesOffset.value += offset
     }
 
-    fun changeTropical(value: Boolean) {
+    fun changeTropicalStatus(value: Boolean) {
         _isTropical.value = value
     }
 

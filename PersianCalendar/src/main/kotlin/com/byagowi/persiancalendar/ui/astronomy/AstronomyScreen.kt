@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
@@ -63,7 +62,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
 
         val viewModel by viewModels<AstronomyViewModel>()
         if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
-            viewModel.animateToDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
+            viewModel.animateToAbsoluteDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
         binding.solarView.setOnLongClickListener longClick@{
             showHoroscopesDialog(
@@ -126,7 +125,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 @SuppressLint("SetTextI18n")
                 switch.text = getString(R.string.tropical) + " "
                 switch.isChecked = viewModel.isTropical.value
-                switch.setOnClickListener { viewModel.changeTropical(switch.isChecked) }
+                switch.setOnClickListener { viewModel.changeTropicalStatus(switch.isChecked) }
             }
         }
 
@@ -161,13 +160,13 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             it.onClick {
                 val startJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate())
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
-                    viewModel.animateToDayOffset(jdn - Jdn.today())
+                    viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today())
                 }
             }
         }
 
         resetButton.onClick {
-            viewModel.animateTo(0)
+            viewModel.animateToAbsoluteMinutesOffset(0)
             resetButton.isVisible = false
         }
 
@@ -186,14 +185,14 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                     latestVibration = current
                 }
-                viewModel.addTime(dx * viewDirection)
+                viewModel.addMinutesOffset(dx * viewDirection)
             }
         })
 
         fun buttonScrollSlider(days: Int): Boolean {
             lastButtonClickTimestamp = System.currentTimeMillis()
             binding.slider.smoothScrollBy(50 * days * viewDirection, 0)
-            viewModel.animateToAddDayOffset(days)
+            viewModel.animateToRelativeDayOffset(days)
             return true
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
