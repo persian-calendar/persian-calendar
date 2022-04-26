@@ -14,7 +14,6 @@ import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.drawable.toBitmap
-import androidx.core.graphics.scale
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
@@ -127,8 +126,11 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
         nightMaskButton.onClick { viewModel.toggleNightMask() }
         globeViewButton.onClick {
-            val bitmap = Bitmap.createBitmap(512, 512, Bitmap.Config.ARGB_8888)
-            val matrix = Matrix().also { it.setScale(512f / sinkWidth, 512f / sinkHeight) }
+            val textureSize = 1024
+            val bitmap = Bitmap.createBitmap(textureSize, textureSize, Bitmap.Config.ARGB_8888)
+            val matrix = Matrix().also {
+                it.setScale(textureSize.toFloat() / sinkWidth, textureSize.toFloat() / sinkHeight)
+            }
             binding.map.onDraw(Canvas(bitmap), matrix)
             showGlobeDialog(activity ?: return@onClick, bitmap)
         }
@@ -157,9 +159,9 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                     val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                     pinRect.set(
-                        userX - pinBitmap.width / 2f / pinScaleDown,
-                        userY - pinBitmap.height / pinScaleDown,
-                        userX + pinBitmap.width / 2f / pinScaleDown,
+                        userX - pinBitmap.width / 2f,
+                        userY - pinBitmap.height,
+                        userX + pinBitmap.width / 2f,
                         userY
                     )
                     drawBitmap(pinBitmap, null, pinRect, null)
@@ -217,6 +219,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
         binding.map.contentWidth = sinkWidth.toFloat()
         binding.map.contentHeight = sinkHeight.toFloat()
+        binding.map.maxScale = 64f
 
         // Setup view model change listener
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
@@ -257,12 +260,14 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
     }
 
-    private val scaleDownFactor = 4
+    private val scaleDownFactor = 2
     private val mapScaleFactor = 16 / scaleDownFactor
     private val sinkWidth = 360 * mapScaleFactor
     private val sinkHeight = 180 * mapScaleFactor
     private val referenceBitmap =
-        Bitmap.createBitmap(sinkWidth, sinkHeight, Bitmap.Config.ARGB_8888)
+        runCatching { Bitmap.createBitmap(sinkWidth, sinkHeight, Bitmap.Config.ARGB_8888) }
+            // in case of OOM
+            .getOrNull() ?: Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888)
 
     inner class NightMask {
         private val nightMaskScale = 1
@@ -367,7 +372,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         it.pathEffect = DashPathEffect(floatArrayOf(5f, 5f), 0f)
     }
 
-    private val pinScaleDown = 2
     private val pinRect = RectF()
     private var pinBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
 }
