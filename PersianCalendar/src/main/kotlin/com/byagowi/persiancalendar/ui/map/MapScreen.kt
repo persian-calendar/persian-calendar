@@ -132,6 +132,11 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
         }
 
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.isFilterBitmap = true }
+        binding.map.onDraw = { canvas, matrix ->
+            map?.also { canvas.drawBitmap(it, matrix, paint) }
+        }
+
         // Setup view model change listener
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
         viewLifecycleOwner.lifecycleScope.launch {
@@ -147,7 +152,9 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                             displayLocation = state.displayLocation,
                             directPathDestination = state.directPathDestination
                         ).also { map = it }
-                        binding.map.setImageBitmap(map)
+                        binding.map.contentWidth = map.width.toFloat()
+                        binding.map.contentHeight = map.height.toFloat()
+                        binding.map.invalidate()
                     }.onFailure(logException)
 
                     binding.date.text = date.formatDateAndTime()

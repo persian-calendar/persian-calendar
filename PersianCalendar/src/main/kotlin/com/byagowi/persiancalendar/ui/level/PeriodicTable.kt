@@ -1,8 +1,6 @@
 package com.byagowi.persiancalendar.ui.level
 
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.RectF
 import androidx.core.graphics.withMatrix
@@ -12,43 +10,38 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showPeriodicTableDialog(activity: FragmentActivity) {
-    val view = object : ZoomableView(activity) {
-        val cellSize = 100
-        init {
-            contentWidth = 100f * 18
-            contentHeight = 100f * 9
-            maxScale = 64f
-        }
+    val zoomableView = ZoomableView(activity)
+    val cellSize = 100
+    zoomableView.contentWidth = 100f * 18
+    zoomableView.contentHeight = 100f * 9
+    zoomableView.maxScale = 64f
 
-        val rect = RectF(0f, 0f, cellSize.toFloat(), cellSize.toFloat()).also {
-            it.inset(cellSize * .02f, cellSize * .02f)
-        }
-        val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.FILL
-            it.textAlign = Paint.Align.CENTER
-        }
-        val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.style = Paint.Style.FILL
-            it.textAlign = Paint.Align.CENTER
-            it.color = Color.BLACK
-        }
-
-        override fun zoomableDraw(canvas: Canvas, matrix: Matrix) {
-            canvas.withMatrix(matrix) {
-                (0 until 18).forEach { i ->
-                    (0 until 9).forEach { j ->
-                        withTranslation(i * cellSize.toFloat(), j * cellSize.toFloat()) {
-                            val index = elementsIndices.getOrNull(i + j * 18)
-                                ?: return@withTranslation
-                            val details = elements[index - 1].split(",")
-                            rectPaint.color = elementsColor.getValue(index).toInt()
-                            drawRect(rect, rectPaint)
-                            textPaint.textSize = cellSize * .35f
-                            drawText(details[0], cellSize / 2f, cellSize * .37f, textPaint)
-                            drawText(index.toString(), cellSize / 2f, cellSize * .70f, textPaint)
-                            textPaint.textSize = cellSize * .15f
-                            drawText(details[1], cellSize / 2f, cellSize * .87f, textPaint)
-                        }
+    val rect = RectF(0f, 0f, cellSize.toFloat(), cellSize.toFloat()).also {
+        it.inset(cellSize * .02f, cellSize * .02f)
+    }
+    val rectPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.textAlign = Paint.Align.CENTER
+    }
+    val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.textAlign = Paint.Align.CENTER
+        it.color = Color.BLACK
+    }
+    zoomableView.onDraw = { canvas, matrix ->
+        canvas.withMatrix(matrix) {
+            (0 until 18).forEach { i ->
+                (0 until 9).forEach { j ->
+                    withTranslation(i * cellSize.toFloat(), j * cellSize.toFloat()) {
+                        val index = elementsIndices.getOrNull(i + j * 18) ?: return@withTranslation
+                        val details = elements[index - 1].split(",")
+                        rectPaint.color = elementsColor.getValue(index).toInt()
+                        drawRect(rect, rectPaint)
+                        textPaint.textSize = cellSize * .35f
+                        drawText(details[0], cellSize / 2f, cellSize * .37f, textPaint)
+                        drawText(index.toString(), cellSize / 2f, cellSize * .70f, textPaint)
+                        textPaint.textSize = cellSize * .15f
+                        drawText(details[1], cellSize / 2f, cellSize * .87f, textPaint)
                     }
                 }
             }
@@ -56,7 +49,7 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
     }
 
     MaterialAlertDialogBuilder(activity)
-        .setView(view)
+        .setView(zoomableView)
         .show()
 }
 

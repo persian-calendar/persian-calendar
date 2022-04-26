@@ -65,12 +65,14 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 
     private val labels = Zodiac.values().map { it.format(context, false, short = true) }
 
-    override fun zoomableDraw(canvas: Canvas, matrix: Matrix) {
-        canvas.withMatrix(matrix) {
-            when (mode) {
-                AstronomyMode.Moon -> drawMoonOnlyView(this)
-                AstronomyMode.Earth -> drawEarthCentricView(this)
-                AstronomyMode.Sun -> drawSolarSystemPlanetsView(this)
+    init {
+        onDraw = { canvas, matrix ->
+            canvas.withMatrix(matrix) {
+                when (mode) {
+                    AstronomyMode.Moon -> drawMoonOnlyView(this)
+                    AstronomyMode.Earth -> drawEarthCentricView(this)
+                    AstronomyMode.Sun -> drawSolarSystemPlanetsView(this)
+                }
             }
         }
     }

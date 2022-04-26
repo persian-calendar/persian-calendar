@@ -22,7 +22,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
 
     private var mode = NONE
     private var minScale = 1f
-    protected var maxScale = 16f
+    var maxScale = 16f
     private var redundantXSpace = 0f
     private var redundantYSpace = 0f
     private var saveScale = 1f
@@ -30,8 +30,8 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
     private var bottom = 0f
     private var originalWidth = 0f
     private var originalHeight = 0f
-    protected var contentWidth = Float.NaN // Be sure to set these two before use
-    protected var contentHeight = Float.NaN
+    var contentWidth = Float.NaN // Be sure to set these two before use
+    var contentHeight = Float.NaN
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
@@ -176,10 +176,8 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
         return true
     }
 
-    // User draw callback
-    open fun zoomableDraw(canvas: Canvas, matrix: Matrix) {}
-
-    override fun onDraw(canvas: Canvas) = zoomableDraw(canvas, viewMatrix)
+    var onDraw = fun(_: Canvas, _: Matrix) {}
+    override fun onDraw(canvas: Canvas) = onDraw(canvas, viewMatrix)
 
     companion object {
         private const val NONE = 0

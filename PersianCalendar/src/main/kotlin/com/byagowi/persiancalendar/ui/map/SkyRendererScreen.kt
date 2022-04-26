@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.graphics.Bitmap
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
@@ -52,15 +54,22 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
             horizon(time, it, sunEquator.ra, sunEquator.dec, Refraction.None)
         }
 
-        fun update() = binding.image.setImageBitmap(
-            panoRendo(
+        var bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.isFilterBitmap = true }
+        binding.image.onDraw = { canvas, matrix -> canvas.drawBitmap(bitmap, matrix, paint) }
+
+        fun update() {
+            bitmap = panoRendo(
                 sunElevationDegrees = horizon?.altitude ?: 30.0,
                 sunAzimuthDegrees = horizon?.azimuth ?: 0.0,
                 toneMap = ToneMap.values().getOrNull(binding.toneMap.selectedItemPosition)
                     ?: ToneMap.Reinhard,
                 zoom = binding.zoom.text?.toString()?.toDoubleOrNull() ?: .0
             )
-        )
+            binding.image.contentWidth = bitmap.width.toFloat()
+            binding.image.contentHeight = bitmap.height.toFloat()
+            binding.image.invalidate()
+        }
         update()
         binding.toneMap.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
