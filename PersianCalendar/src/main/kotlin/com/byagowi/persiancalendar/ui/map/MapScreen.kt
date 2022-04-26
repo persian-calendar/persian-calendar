@@ -8,12 +8,12 @@ import android.graphics.DashPathEffect
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.RectF
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.ShapeDrawable
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.core.graphics.PathParser
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
@@ -94,7 +94,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             }
         }
 
-        pinBitmap = view.context.getCompatDrawable(R.drawable.ic_pin).toBitmap(120, 110)
+        pinDrawable = view.context.getCompatDrawable(R.drawable.ic_pin)
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
@@ -158,13 +158,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 if (coordinates != null && viewModel.state.value.displayLocation) {
                     val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                     val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
-                    pinRect.set(
-                        userX - pinBitmap.width / 2f,
-                        userY - pinBitmap.height,
-                        userX + pinBitmap.width / 2f,
-                        userY
+                    pinDrawable.setBounds(
+                        userX.toInt() - 120 / 2,
+                        userY.toInt() - 110,
+                        userX.toInt() + 120 / 2,
+                        userY.toInt()
                     )
-                    drawBitmap(pinBitmap, null, pinRect, null)
+                    pinDrawable.draw(this)
                 }
                 val directPathDestination = viewModel.state.value.directPathDestination
                 if (coordinates != null && directPathDestination != null) {
@@ -372,6 +372,5 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         it.pathEffect = DashPathEffect(floatArrayOf(5f, 5f), 0f)
     }
 
-    private val pinRect = RectF()
-    private var pinBitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+    private var pinDrawable: Drawable = ShapeDrawable()
 }
