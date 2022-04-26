@@ -8,7 +8,7 @@ import android.graphics.RectF
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.fragment.app.FragmentActivity
-import com.byagowi.persiancalendar.ui.map.ZoomableView
+import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showPeriodicTableDialog(activity: FragmentActivity) {

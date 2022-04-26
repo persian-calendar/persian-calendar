@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.map
+package com.byagowi.persiancalendar.ui.common
 
 import android.annotation.SuppressLint
 import android.content.Context

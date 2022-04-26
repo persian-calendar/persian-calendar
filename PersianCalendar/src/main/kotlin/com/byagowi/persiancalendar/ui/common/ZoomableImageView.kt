@@ -6,7 +6,6 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.util.AttributeSet
-import com.byagowi.persiancalendar.ui.map.ZoomableView
 
 class ZoomableImageView(context: Context, attrs: AttributeSet? = null) :
     ZoomableView(context, attrs) {
