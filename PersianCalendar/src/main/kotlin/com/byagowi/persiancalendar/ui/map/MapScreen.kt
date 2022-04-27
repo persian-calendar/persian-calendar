@@ -144,20 +144,24 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
         val backgroundPaint = Paint().apply { color = 0xFF809DB5.toInt() }
         val foregroundPaint = Paint().apply { color = 0xFFFBF8E5.toInt() }
+        val matrixValues = FloatArray(9)
         binding.map.onDraw = { canvas, matrix ->
+            matrix.getValues(matrixValues)
+            // prevents sun/moon/pin unnecessary scale
+            val scaleBack = 1 / matrixValues[Matrix.MSCALE_X] / 5
             canvas.withMatrix(matrix) {
                 drawRect(mapRect, backgroundPaint)
                 drawPath(mapPath, foregroundPaint)
 
-                if (viewModel.state.value.displayNightMask) nightMask.draw(this)
+                if (viewModel.state.value.displayNightMask) nightMask.draw(this, scaleBack)
                 val coordinates = coordinates
                 if (coordinates != null && viewModel.state.value.displayLocation) {
                     val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                     val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                     pinDrawable.setBounds(
-                        userX.toInt() - 240 / 2,
-                        userY.toInt() - 220,
-                        userX.toInt() + 240 / 2,
+                        (userX - 240 * scaleBack / 2).roundToInt(),
+                        (userY - 220 * scaleBack).roundToInt(),
+                        (userX + 240 * scaleBack / 2).roundToInt(),
                         userY.toInt()
                     )
                     pinDrawable.draw(this)
@@ -272,12 +276,14 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         private var moonY = .0f
         var solarDraw: SolarDraw? = null
 
-        fun draw(canvas: Canvas) {
+        fun draw(canvas: Canvas, matrixScale: Float) {
             canvas.drawBitmap(nightMask, null, mapRect, null)
             val scale = mapWidth / nightMask.width
             val solarDraw = solarDraw ?: return
-            solarDraw.simpleMoon(canvas, moonX * scale, moonY * scale, mapWidth * .02f)
-            solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f)
+            solarDraw.simpleMoon(
+                canvas, moonX * scale, moonY * scale, mapWidth * .02f * matrixScale
+            )
+            solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f * matrixScale)
         }
 
         fun update(date: GregorianCalendar) {
