@@ -7,7 +7,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -32,19 +31,18 @@ class SolarDraw(context: Context) {
         drawable.draw(canvas)
     }
 
-    private val sunDrawable by lazy(LazyThreadSafetyMode.NONE) {
-        context.getCompatDrawable(R.drawable.ic_sun)
-    }
-    private val smallSunDrawable by lazy(LazyThreadSafetyMode.NONE) {
-        context.getCompatDrawable(R.drawable.ic_sun_small)
-    }
+    private val sunDrawable = context.getCompatDrawable(R.drawable.ic_sun)
+    private val smallSunDrawable = context.getCompatDrawable(R.drawable.ic_sun_small)
 
     fun moon(
         canvas: Canvas, sun: Ecliptic, moon: Ecliptic, cx: Float, cy: Float, r: Float,
         angle: Float? = null
     ) {
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
-        canvas.drawBitmap(moonBitmap, null, moonRect, null)
+        moonDrawable.setBounds( // same as above
+            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
+        )
+        moonDrawable.draw(canvas)
         val phase = (moon.elon - sun.elon).let { it + if (it < 0) 360 else 0 }
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
             val arcWidth = (cos(Math.toRadians(phase)) * r).toFloat()
@@ -58,11 +56,13 @@ class SolarDraw(context: Context) {
     }
 
     fun simpleMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
-        moonRect.set(cx - r, cy - r, cx + r, cy + r)
-        canvas.drawBitmap(moonBitmap, null, moonRect, null)
+        moonDrawable.setBounds(
+            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
+        )
+        moonDrawable.draw(canvas)
     }
 
-    private val moonBitmap = context.getCompatDrawable(R.drawable.ic_moon).toBitmap(192, 192)
+    private val moonDrawable = context.getCompatDrawable(R.drawable.ic_moon)
     private val ovalPath = Path()
     private val moonRect = RectF()
     private val moonOval = RectF()
@@ -72,13 +72,12 @@ class SolarDraw(context: Context) {
         it.style = Paint.Style.FILL_AND_STROKE
     }
 
-    private val earthDrawable by lazy(LazyThreadSafetyMode.NONE) {
-        context.getCompatDrawable(R.drawable.ic_earth).toBitmap(128, 128)
-    }
+    private val earthDrawable = context.getCompatDrawable(R.drawable.ic_earth)
 
     fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)
-        canvas.drawBitmap(earthDrawable, null, earthRect, null)
+        earthDrawable.setBounds((cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt())
+        earthDrawable.draw(canvas)
         earthRect.inset(r / 10, r / 10)
         val sunDegree = -sunEcliptic.elon.toFloat()
         canvas.drawArc(earthRect, sunDegree + 90f, 180f, true, earthShadowPaint)
