@@ -18,14 +18,14 @@
 |    +--- androidx.core:core:1.7.0
 |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.3.0
 |    |    +--- androidx.annotation:annotation-experimental:1.1.0
-|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.0
+|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.1
 |    |    |    +--- androidx.arch.core:core-runtime:2.1.0
 |    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
 |    |    |    |    \--- androidx.arch.core:core-common:2.1.0
 |    |    |    |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
-|    |    |    +--- androidx.lifecycle:lifecycle-common:2.4.0
+|    |    |    +--- androidx.lifecycle:lifecycle-common:2.4.1
 |    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
-|    |    |    |    \--- androidx.lifecycle:lifecycle-common-java8:2.4.0 (c)
+|    |    |    |    \--- androidx.lifecycle:lifecycle-common-java8:2.4.1 (c)
 |    |    |    +--- androidx.arch.core:core-common:2.1.0 (*)
 |    |    |    \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
 |    |    +--- androidx.versionedparcelable:versionedparcelable:1.1.1
@@ -41,7 +41,7 @@
 |    +--- androidx.activity:activity:1.2.4 -> 1.4.0
 |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
 |    |    +--- androidx.core:core:1.7.0 (*)
-|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.1 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.1
 |    |    |    \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
 |    |    +--- androidx.savedstate:savedstate:1.1.0 -> 1.2.0-beta01
@@ -51,14 +51,14 @@
 |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.31 -> 1.6.20 (*)
 |    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
 |    |    |    |    \--- androidx.core:core:1.7.0 (*)
-|    |    |    \--- androidx.lifecycle:lifecycle-common:2.4.0 (*)
+|    |    |    \--- androidx.lifecycle:lifecycle-common:2.4.0 -> 2.4.1 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1
 |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.3.0
 |    |    |    +--- androidx.savedstate:savedstate:1.1.0 -> 1.2.0-beta01 (*)
 |    |    |    +--- androidx.lifecycle:lifecycle-livedata-core:2.3.1
 |    |    |    |    +--- androidx.arch.core:core-common:2.1.0 (*)
 |    |    |    |    +--- androidx.arch.core:core-runtime:2.1.0 (*)
-|    |    |    |    \--- androidx.lifecycle:lifecycle-common:2.3.1 -> 2.4.0 (*)
+|    |    |    |    \--- androidx.lifecycle:lifecycle-common:2.3.1 -> 2.4.1 (*)
 |    |    |    \--- androidx.lifecycle:lifecycle-viewmodel:2.3.1 (*)
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.31 -> 1.6.20 (*)
 |    |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
@@ -112,7 +112,7 @@
 |    |    +--- androidx.collection:collection:1.1.0 (*)
 |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.3.0
 |    |    +--- androidx.lifecycle:lifecycle-process:2.4.0
-|    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.4.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.4.0 -> 2.4.1 (*)
 |    |    |    \--- androidx.startup:startup-runtime:1.0.0
 |    |    |         +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
 |    |    |         \--- androidx.tracing:tracing:1.0.0 (*)
@@ -123,7 +123,7 @@
 |    |    +--- androidx.collection:collection:1.1.0 (*)
 |    |    \--- androidx.core:core:1.3.0 -> 1.7.0 (*)
 |    +--- androidx.collection:collection:1.0.0 -> 1.1.0 (*)
-|    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.0 (*)
+|    +--- androidx.lifecycle:lifecycle-runtime:2.3.1 -> 2.4.1 (*)
 |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.1 (*)
 |    \--- androidx.resourceinspection:resourceinspection-annotation:1.0.0
 |         \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
@@ -137,8 +137,8 @@
 |    |    |    +--- androidx.activity:activity-ktx:1.2.3 -> 1.4.0
 |    |    |    |    +--- androidx.activity:activity:1.4.0 (*)
 |    |    |    |    +--- androidx.core:core-ktx:1.1.0 -> 1.7.0 (*)
-|    |    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1 -> 2.4.0
-|    |    |    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.4.0 (*)
+|    |    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1 -> 2.4.1
+|    |    |    |    |    +--- androidx.lifecycle:lifecycle-runtime:2.4.1 (*)
 |    |    |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.20 (*)
 |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0 -> 1.6.1
 |    |    |    |    |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1
@@ -233,7 +233,7 @@
 |    +--- androidx.dynamicanimation:dynamicanimation:1.0.0 (*)
 |    +--- androidx.annotation:annotation-experimental:1.0.0 -> 1.1.0
 |    +--- androidx.fragment:fragment:1.0.0 -> 1.4.1 (*)
-|    +--- androidx.lifecycle:lifecycle-runtime:2.0.0 -> 2.4.0 (*)
+|    +--- androidx.lifecycle:lifecycle-runtime:2.0.0 -> 2.4.1 (*)
 |    +--- androidx.recyclerview:recyclerview:1.0.0 -> 1.2.1 (*)
 |    +--- androidx.transition:transition:1.2.0 -> 1.4.1 (*)
 |    +--- androidx.vectordrawable:vectordrawable:1.1.0 (*)
@@ -244,7 +244,7 @@
 |    |    +--- androidx.navigation:navigation-runtime:2.4.2
 |    |    |    +--- androidx.navigation:navigation-common:2.4.2
 |    |    |    |    +--- androidx.annotation:annotation:1.1.0 -> 1.3.0
-|    |    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1 -> 2.4.0 (*)
+|    |    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1 -> 2.4.1 (*)
 |    |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1 (*)
 |    |    |    |    +--- androidx.savedstate:savedstate:1.0.0 -> 1.2.0-beta01 (*)
 |    |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1 (*)
@@ -252,7 +252,7 @@
 |    |    |    |    +--- androidx.core:core-ktx:1.1.0 -> 1.7.0 (*)
 |    |    |    |    \--- androidx.collection:collection-ktx:1.1.0 (*)
 |    |    |    +--- androidx.activity:activity-ktx:1.2.3 -> 1.4.0 (*)
-|    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1 -> 2.4.0 (*)
+|    |    |    +--- androidx.lifecycle:lifecycle-runtime-ktx:2.3.1 -> 2.4.1 (*)
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1 (*)
 |    |    |    +--- androidx.annotation:annotation-experimental:1.1.0
 |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.6.20 (*)
@@ -274,7 +274,7 @@
 +--- androidx.core:core-ktx:1.7.0 (*)
 +--- androidx.fragment:fragment-ktx:1.4.1 (*)
 +--- androidx.activity:activity-ktx:1.4.0 (*)
-+--- androidx.lifecycle:lifecycle-runtime-ktx:2.4.0 (*)
++--- androidx.lifecycle:lifecycle-runtime-ktx:2.4.1 (*)
 +--- androidx.browser:browser:1.4.0
 |    +--- androidx.collection:collection:1.1.0 (*)
 |    +--- androidx.concurrent:concurrent-futures:1.0.0 (*)
@@ -302,7 +302,7 @@
 |    |    +--- androidx.sqlite:sqlite-framework:2.1.0 (*)
 |    |    +--- androidx.core:core:1.1.0 -> 1.7.0 (*)
 |    |    \--- androidx.lifecycle:lifecycle-service:2.1.0
-|    |         \--- androidx.lifecycle:lifecycle-runtime:2.1.0 -> 2.4.0 (*)
+|    |         \--- androidx.lifecycle:lifecycle-runtime:2.1.0 -> 2.4.1 (*)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.30 -> 1.6.20 (*)
 |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0 -> 1.6.1 (*)
 +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1 (*)
@@ -364,10 +364,10 @@
 |    |    +--- androidx.customview:customview-poolingcontainer:1.0.0-alpha01
 |    |    |    +--- androidx.core:core-ktx:1.5.0 -> 1.7.0 (*)
 |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 -> 1.6.20 (*)
-|    |    +--- androidx.lifecycle:lifecycle-common-java8:2.3.0 -> 2.4.0
-|    |    |    +--- androidx.lifecycle:lifecycle-common:2.4.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-common-java8:2.3.0 -> 2.4.1
+|    |    |    +--- androidx.lifecycle:lifecycle-common:2.4.1 (*)
 |    |    |    \--- androidx.annotation:annotation:1.1.0 -> 1.3.0
-|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.0 -> 2.4.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.0 -> 2.4.1 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.0 -> 2.3.1 (*)
 |    |    +--- androidx.profileinstaller:profileinstaller:1.2.0-alpha02
 |    |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.3.0
@@ -434,7 +434,7 @@
 |    |    +--- androidx.compose.foundation:foundation-layout:1.1.1 -> 1.2.0-alpha08 (*)
 |    |    +--- androidx.compose.ui:ui-util:1.0.0 -> 1.2.0-alpha08 (*)
 |    |    +--- androidx.savedstate:savedstate:1.1.0 -> 1.2.0-beta01 (*)
-|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.0 -> 2.4.0 (*)
+|    |    +--- androidx.lifecycle:lifecycle-runtime:2.3.0 -> 2.4.1 (*)
 |    |    \--- androidx.lifecycle:lifecycle-viewmodel:2.3.0 -> 2.3.1 (*)
 |    +--- com.google.android.material:material:1.5.0 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.10 -> 1.6.20 (*)
@@ -458,7 +458,7 @@
 |    +--- androidx.compose.ui:ui-graphics:1.0.1 -> 1.2.0-alpha08 (*)
 |    +--- androidx.compose.ui:ui-text:1.0.1 -> 1.2.0-alpha08 (*)
 |    +--- androidx.compose.ui:ui-util:1.0.0 -> 1.2.0-alpha08 (*)
-|    +--- androidx.lifecycle:lifecycle-runtime:2.3.0 -> 2.4.0 (*)
+|    +--- androidx.lifecycle:lifecycle-runtime:2.3.0 -> 2.4.1 (*)
 |    +--- androidx.lifecycle:lifecycle-viewmodel:2.3.0 -> 2.3.1 (*)
 |    +--- androidx.savedstate:savedstate-ktx:1.2.0-beta01 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.20
