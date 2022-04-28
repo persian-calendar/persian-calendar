@@ -78,7 +78,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         val moonIconDrawable = BitmapDrawable(view.context.resources, moonIcon)
         binding.railView.menu.also { menu ->
             val buttons = enumValues<AstronomyMode>()
-                .associate { it to menu.add(it.title).setIcon(it.icon) }
+                .associateWith { menu.add(it.title).setIcon(it.icon) }
             binding.railView.post {
                 buttons.forEach { (mode, item) ->
                     if (viewModel.mode.value == mode) item.isChecked = true
