@@ -42,7 +42,7 @@ class AthanNotification : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        intent ?: return super.onStartCommand(intent, flags, startId)
+        intent ?: return START_STICKY
 
         applyAppLanguage(this)
 
