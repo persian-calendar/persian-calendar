@@ -3,14 +3,11 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.animation.ValueAnimator
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import java.util.*
 
 class AstronomyViewModel : ViewModel() {
@@ -23,18 +20,17 @@ class AstronomyViewModel : ViewModel() {
     private val _minutesOffset = MutableStateFlow(DEFAULT_TIME)
     val minutesOffset: StateFlow<Int> = _minutesOffset
 
-    private var _astronomyState = MutableStateFlow(AstronomyState(GregorianCalendar()))
+    private val dateSink = GregorianCalendar() // Just to avoid recreating it everytime
+    private var _astronomyState = MutableStateFlow(AstronomyState(dateSink))
     var astronomyState: StateFlow<AstronomyState> = _astronomyState
 
-    init {
-        viewModelScope.launch { // Fill astronomyState with states generated from minutes offset
-            val date = GregorianCalendar()
-            _minutesOffset.collectLatest {
-                date.timeInMillis = System.currentTimeMillis() + it * ONE_MINUTE_IN_MILLIS
-                _astronomyState.value = AstronomyState(date)
-            }
-        }
-    }
+    // Both minutesOffset and astronomyState keep some sort of time state, astronomyState however
+    // is meant to be used in animation thus is the visible one and the other is to keep final
+    // animation value so we should keep the two in sync manually with a slight difference.
+    //
+    // The separation has the benefit of not making reset button visible on initial animation
+    // of the screen entrance and makes one day button to exactly jump 24h regardless of current
+    // animation of the screen.
 
     // Events
     val resetButtonVisibilityEvent = minutesOffset
@@ -42,15 +38,27 @@ class AstronomyViewModel : ViewModel() {
         .distinctUntilChanged()
 
     // Commands
+    private fun setAstronomyState(value: Int) {
+        dateSink.timeInMillis = System.currentTimeMillis() + value * ONE_MINUTE_IN_MILLIS
+        _astronomyState.value = AstronomyState(dateSink)
+    }
+
     private var animator: ValueAnimator? = null
+    private val interpolator = AccelerateDecelerateInterpolator()
     fun animateToAbsoluteMinutesOffset(value: Int) {
         animator?.removeAllUpdateListeners()
-        ValueAnimator.ofInt(_minutesOffset.value, value).also {
+        ValueAnimator.ofInt(
+            // If the animation is still going on use its current value to not have jumps
+            if (animator?.isRunning == true) animator?.animatedValue as? Int ?: 0
+            else _minutesOffset.value,
+            value
+        ).also {
             animator = it
             it.duration = 400 // android.R.integer.config_mediumAnimTime
-            it.interpolator = AccelerateDecelerateInterpolator()
-            it.addUpdateListener { _ -> _minutesOffset.value = it.animatedValue as? Int ?: 0 }
+            it.interpolator = interpolator
+            it.addUpdateListener { _ -> setAstronomyState(it.animatedValue as? Int ?: 0) }
         }.start()
+        _minutesOffset.value = value
     }
 
     fun animateToAbsoluteDayOffset(dayOffset: Int) {
@@ -65,6 +73,7 @@ class AstronomyViewModel : ViewModel() {
     // which changes the values smoothly and doesn't need another filter in between.
     fun addMinutesOffset(offset: Int) {
         _minutesOffset.value += offset
+        setAstronomyState(_minutesOffset.value)
     }
 
     fun changeTropicalStatus(value: Boolean) {
