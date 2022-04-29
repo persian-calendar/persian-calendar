@@ -102,9 +102,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             buttons[AstronomyMode.Moon]?.icon = moonIconDrawable
         }
 
-        val seasonsCache = mutableMapOf<Int, SeasonsInfo>()
+        val seasonsCache = hashMapOf<Int, SeasonsInfo>()
         fun calculateSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
-        val headerCache = mutableMapOf<Long, String>()
+        val headerCache = hashMapOf<Long, String>()
 
         fun update(state: AstronomyState) {
             binding.solarView.setTime(state)
