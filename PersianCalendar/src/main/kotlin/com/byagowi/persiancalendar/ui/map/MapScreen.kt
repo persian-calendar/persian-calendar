@@ -251,13 +251,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (viewModel.state.value.isDirectPathMode) {
                 viewModel.changeDirectPathDestination(coordinates)
             } else {
-                showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
+                showCoordinatesDialog(it, coordinates)
             }
         }
     }
 
     private fun bringGps() {
-        showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
+        showGPSLocationDialog(activity ?: return)
     }
 
     private val mapScaleFactor = 16 // As the path bounds is 360*16 x 180*16
