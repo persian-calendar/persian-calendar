@@ -132,11 +132,9 @@ private fun createEventsList(
 ): Map<Jdn, List<CalendarEvent<*>>> {
     val baseJdn = Jdn(date)
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
-    return (0 until mainCalendar.getMonthLength(date.year, date.month)).associate {
-        val jdn = baseJdn + it
-        val events = eventsRepository?.getEvents(jdn, deviceEvents) ?: emptyList()
-        jdn to events
-    }
+    return (0 until mainCalendar.getMonthLength(date.year, date.month))
+        .map { baseJdn + it }
+        .associateWith { eventsRepository?.getEvents(it, deviceEvents) ?: emptyList() }
 }
 
 private fun formatEventsList(
