@@ -17,6 +17,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
 import io.github.persiancalendar.calendar.AbstractDate
+import kotlin.math.min
 
 class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(context, attrs) {
 
@@ -33,8 +34,15 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         addCellSpacing(4.dp.toInt())
     }
 
-    fun initializeForRendering(@ColorInt textColor: Int, height: Int, today: AbstractDate) {
-        val sharedData = SharedDayViewData(context, height / 7f, textColor)
+    fun initializeForRendering(
+        @ColorInt textColor: Int,
+        width: Int,
+        height: Int,
+        today: AbstractDate
+    ) {
+        val sharedData = SharedDayViewData(
+            context, height / 7f, min(width, height) / 7f, textColor
+        )
         daysAdapter = DaysAdapter(context, sharedData, null)
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)

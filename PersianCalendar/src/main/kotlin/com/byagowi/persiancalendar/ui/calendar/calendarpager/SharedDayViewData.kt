@@ -16,15 +16,17 @@ import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
 class SharedDayViewData(
-    context: Context, height: Float, @ColorInt private val widgetTextColor: Int? = null
+    context: Context, height: Float, diameter: Float = height,
+    @ColorInt private val widgetTextColor: Int? = null
 ) {
 
     val isArabicScript = language.isArabicScript
     val dayOffset = if (isArabicDigitSelected) 0f else 3.sp
     val circlesPadding = 1.dp
-    val eventYOffset = height * 7 / 40
-    val eventIndicatorRadius = height * 2 / 40
-    private val eventIndicatorsGap = height * 2 / 40
+    val headerYOffset = -diameter * 10 / 40
+    val eventYOffset = diameter * 12 / 40
+    val eventIndicatorRadius = diameter * 2 / 40
+    private val eventIndicatorsGap = diameter * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
 
     val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
@@ -62,8 +64,8 @@ class SharedDayViewData(
         it.color = widgetTextColor ?: context.resolveColor(R.attr.colorCurrentDay)
     }
 
-    private val textSize = height * (if (isArabicDigitSelected) 18 else 25) / 40
-    private val headerTextSize = height * 11 / 40
+    private val textSize = diameter * (if (isArabicDigitSelected) 18 else 25) / 40
+    private val headerTextSize = diameter * 11 / 40
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
@@ -110,7 +112,7 @@ class SharedDayViewData(
     }
     val weekDayInitialsTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
-        it.textSize = height * 20 / 40
+        it.textSize = diameter * 20 / 40
         it.color = colorTextDayName
         addShadowIfNeeded(it)
     }
@@ -118,7 +120,7 @@ class SharedDayViewData(
     val widgetFooterTextPaint = widgetTextColor?.let { widgetTextColor ->
         Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.textAlign = Paint.Align.CENTER
-            it.textSize = height * 20 / 40
+            it.textSize = diameter * 20 / 40
             it.color = widgetTextColor
             it.alpha = 90
         }
