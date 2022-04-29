@@ -51,7 +51,7 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
             binding.appBar.toolbar.menu.add("").also {
                 it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_metronome)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            }.onClick { showSignalGeneratorDialog(activity) }
+            }.onClick { showSignalGeneratorDialog(activity, viewLifecycleOwner.lifecycle) }
             binding.appBar.toolbar.menu.add("").also {
                 it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_atom)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
