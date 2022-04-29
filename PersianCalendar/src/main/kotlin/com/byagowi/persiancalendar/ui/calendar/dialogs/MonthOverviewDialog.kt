@@ -134,7 +134,7 @@ private fun createEventsList(
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
     return (0 until mainCalendar.getMonthLength(date.year, date.month)).associate {
         val jdn = baseJdn + it
-        val events = eventsRepository?.getEvents(jdn, deviceEvents) ?: listOf()
+        val events = eventsRepository?.getEvents(jdn, deviceEvents) ?: emptyList()
         jdn to events
     }
 }

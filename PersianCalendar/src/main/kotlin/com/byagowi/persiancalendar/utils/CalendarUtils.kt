@@ -83,7 +83,7 @@ fun getA11yDaySummary(
         }
     }
 
-    val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: listOf()
+    val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList()
     val holidays = getEventsTitle(
         events, true,
         compact = true, showDeviceCalendarEvents = true, insertRLM = false, addIsHoliday = false

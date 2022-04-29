@@ -557,7 +557,7 @@ private fun create4x2RemoteViews(
 private fun setEventsInWidget(
     context: Context, jdn: Jdn, remoteViews: RemoteViews, holidaysId: Int, eventsId: Int
 ) {
-    val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: listOf()
+    val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList()
     val holidays = getEventsTitle(
         events, holiday = true, compact = true, showDeviceCalendarEvents = true,
         insertRLM = context.resources.isRtl, addIsHoliday = isHighTextContrastEnabled
@@ -643,7 +643,7 @@ private fun updateNotification(
     }
 
     if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: listOf()
+        val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList()
         val holidays = getEventsTitle(
             events, holiday = true,
             compact = true, showDeviceCalendarEvents = true, insertRLM = context.resources.isRtl,
