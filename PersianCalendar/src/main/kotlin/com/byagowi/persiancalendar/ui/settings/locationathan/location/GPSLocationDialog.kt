@@ -138,7 +138,9 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
     var isOneProviderEnabled = false
     val locationListener = object : LocationListener {
         @Deprecated("")
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+        }
+
         override fun onLocationChanged(location: Location) {
             coordinatesFlow.value =
                 Coordinates(location.latitude, location.longitude, location.altitude)

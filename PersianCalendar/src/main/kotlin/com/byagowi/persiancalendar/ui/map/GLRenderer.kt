@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.GLUtils
-import androidx.core.graphics.scale
 import com.byagowi.persiancalendar.generated.commonVertexShader
 import com.byagowi.persiancalendar.variants.debugLog
 import java.nio.ByteBuffer

@@ -76,7 +76,9 @@ class SolarDraw(context: Context) {
 
     fun earth(canvas: Canvas, cx: Float, cy: Float, r: Float, sunEcliptic: Ecliptic) {
         earthRect.set(cx - r, cy - r, cx + r, cy + r)
-        earthDrawable.setBounds((cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt())
+        earthDrawable.setBounds(
+            (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
+        )
         earthDrawable.draw(canvas)
         earthRect.inset(r / 10, r / 10)
         val sunDegree = -sunEcliptic.elon.toFloat()

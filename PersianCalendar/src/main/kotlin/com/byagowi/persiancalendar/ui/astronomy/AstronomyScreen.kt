@@ -237,7 +237,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     }
                 }
                 launch {
-                    viewModel.resetButtonVisibilityEvent.collectLatest { resetButton.isVisible = it }
+                    viewModel.resetButtonVisibilityEvent.collectLatest {
+                        resetButton.isVisible = it
+                    }
                 }
                 launch {
                     viewModel.mode.collectLatest {

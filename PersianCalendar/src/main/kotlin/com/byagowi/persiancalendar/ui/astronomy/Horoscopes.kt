@@ -30,9 +30,13 @@ fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
         ).joinToString("\n") { body ->
             val name = activity.getString(planetsTitles.getValue(body))
             name + equatorialToEcliptic(geoVector(body, time, Aberration.Corrected)).let {
-                ": $LRM${formatAngle(it.elon % 30)} ${
-                    Zodiac.fromTropical(it.elon).emoji
-                } ${"%,d".format(Locale.ENGLISH, (it.vec.length() * AU_IN_KM).roundToLong())} km"
+                ": %s%s %s %,d km".format(
+                    Locale.ENGLISH,
+                    LRM,
+                    formatAngle(it.elon % 30), // Remaining angle
+                    Zodiac.fromTropical(it.elon).emoji,
+                    (it.vec.length() * AU_IN_KM).roundToLong()
+                )
             }
         })
         .show()
