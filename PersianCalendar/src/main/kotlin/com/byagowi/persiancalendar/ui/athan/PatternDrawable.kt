@@ -88,6 +88,7 @@ class PatternDrawable(
 
     override fun setAlpha(alpha: Int) = Unit
     override fun setColorFilter(colorFilter: ColorFilter?) = Unit
+    @Deprecated("", ReplaceWith("PixelFormat.OPAQUE", "android.graphics.PixelFormat"))
     override fun getOpacity(): Int = PixelFormat.OPAQUE
 }
 

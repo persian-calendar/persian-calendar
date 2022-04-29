@@ -3,9 +3,10 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.ColorFilter
+import android.graphics.PixelFormat
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.MenuItem
@@ -42,6 +43,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.abs
+import kotlin.math.min
 
 class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -71,11 +73,22 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 showHoroscopesDialog(activity, viewModel.astronomyState.value.date.time)
         }
 
+        val moonIconDrawable = object : Drawable() {
+            override fun setAlpha(alpha: Int) = Unit
+            override fun setColorFilter(colorFilter: ColorFilter?) = Unit
+
+            @Deprecated("", ReplaceWith("PixelFormat.OPAQUE", "android.graphics.PixelFormat"))
+            override fun getOpacity(): Int = PixelFormat.OPAQUE
+
+            private val solarDraw = SolarDraw(view.context)
+            override fun draw(canvas: Canvas) {
+                val radius = min(bounds.width(), bounds.height()) / 2f
+                val sun = viewModel.astronomyState.value.sun
+                val moon = viewModel.astronomyState.value.moon
+                solarDraw.moon(canvas, sun, moon, radius, radius, radius)
+            }
+        }
         binding.railView.itemIconTintList = null // makes it to not apply tint on modes icons
-        val moonDiameter = 128
-        val moonIcon = Bitmap.createBitmap(moonDiameter, moonDiameter, Bitmap.Config.ARGB_8888)
-        val moonCanvas = Canvas(moonIcon)
-        val moonIconDrawable = BitmapDrawable(view.context.resources, moonIcon)
         binding.railView.menu.also { menu ->
             val buttons = enumValues<AstronomyMode>()
                 .associateWith { menu.add(it.title).setIcon(it.icon) }
@@ -92,16 +105,10 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         val seasonsCache = mutableMapOf<Int, SeasonsInfo>()
         fun calculateSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
         val headerCache = mutableMapOf<Long, String>()
-        val solarDraw = SolarDraw(view.context)
 
         fun update(state: AstronomyState) {
             binding.solarView.setTime(state)
-
-            run { // Update moon icon of rail view
-                val radius = moonDiameter / 2f
-                solarDraw.moon(moonCanvas, state.sun, state.moon, radius, radius, radius)
-                moonIconDrawable.invalidateSelf()
-            }
+            moonIconDrawable.invalidateSelf() // Update moon icon of rail view
 
             val tropical = viewModel.isTropical.value
             val sunZodiac =
