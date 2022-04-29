@@ -40,9 +40,8 @@ class WidgetMonthView : WidgetProvider()
 //class Widget4x1dateOnly : WidgetProvider()
 
 class AgeWidget : WidgetProvider() {
-    override fun onDeleted(context: Context?, appWidgetIds: IntArray) {
-        context ?: return
-        if (appWidgetIds.isEmpty()) return
+    override fun onDeleted(context: Context?, appWidgetIds: IntArray?) {
+        if (context == null || appWidgetIds == null || appWidgetIds.isEmpty()) return
         context.appPrefs.edit {
             appWidgetIds.forEach {
                 remove(PREF_SELECTED_WIDGET_BACKGROUND_COLOR + it)
