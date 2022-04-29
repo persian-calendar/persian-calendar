@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
+import kotlin.math.absoluteValue
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -160,7 +161,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
                 }
             MotionEvent.ACTION_UP -> {
                 mode = NONE
-                if (event.x == start.x && event.y == start.y) {
+                if ((event.x - start.x).absoluteValue < 5 && (event.y - start.y).absoluteValue < 5) {
                     performClick()
                     // https://stackoverflow.com/a/7418428
                     val inverse = Matrix()
