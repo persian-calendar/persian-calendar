@@ -18,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.GpsLocationDialogBinding
@@ -45,10 +46,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 
-fun showGPSLocationDialog(activity: FragmentActivity) {
-    val viewLifecycleOwner = activity.supportFragmentManager
-        .primaryNavigationFragment?.viewLifecycleOwner ?: return
-
+fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: LifecycleOwner) {
     if (ActivityCompat.checkSelfPermission(
             activity, Manifest.permission.ACCESS_FINE_LOCATION
         ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(

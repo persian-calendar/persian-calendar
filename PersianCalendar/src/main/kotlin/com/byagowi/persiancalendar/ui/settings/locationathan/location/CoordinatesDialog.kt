@@ -27,10 +27,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
-fun showCoordinatesDialog(activity: FragmentActivity, inputCoordinates: Coordinates? = null) {
-    val viewLifecycleOwner = activity.supportFragmentManager
-        .primaryNavigationFragment?.viewLifecycleOwner ?: return
-
+fun showCoordinatesDialog(
+    activity: FragmentActivity,
+    viewLifecycleOwner: LifecycleOwner,
+    inputCoordinates: Coordinates? = null
+) {
     val coordinates = inputCoordinates ?: coordinates
     val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)
 

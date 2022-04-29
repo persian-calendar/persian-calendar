@@ -73,7 +73,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val activity = activity ?: return
         preferenceScreen = preferenceManager.createPreferenceScreen(activity).build {
             section(R.string.location) {
-                clickable(onClick = { showGPSLocationDialog(activity) }) {
+                clickable(onClick = { showGPSLocationDialog(activity, viewLifecycleOwner) }) {
                     title(R.string.gps_location)
                     summary(R.string.gps_location_help)
                 }
@@ -82,7 +82,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.location_help)
                     this@LocationAthanFragment.selectedLocationPreference = this
                 }
-                clickable(onClick = { showCoordinatesDialog(activity) }) {
+                clickable(onClick = { showCoordinatesDialog(activity, viewLifecycleOwner) }) {
                     title(R.string.coordination)
                     this@LocationAthanFragment.coordinatesPreference = this
                 }
