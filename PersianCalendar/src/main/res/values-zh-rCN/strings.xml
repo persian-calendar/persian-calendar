@@ -345,4 +345,15 @@
     <string name="week_days_name_column">日历区域的星期栏，%1$s</string>
     <string name="equivalent_to">在其他日历中对应的日期为</string>
     <string name="holiday_reason">这一天是节假日，%1$s</string>
+    <string name="pluto">冥王星</string>
+    <string name="venus">金星</string>
+    <string name="mercury">水星</string>
+    <string name="mars">火星</string>
+    <string name="jupiter">木星</string>
+    <string name="earth">地球</string>
+    <string name="uranus">天王星</string>
+    <string name="neptune">海王星</string>
+    <string name="screensaver_settings">屏保设置</string>
+    <string name="live_wallpaper_settings">动态壁纸设置</string>
+    <string name="saturn">土星</string>
 </resources>
