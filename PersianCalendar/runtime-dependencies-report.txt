@@ -308,4 +308,4 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.6.20 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.6.10 -> 1.6.20
 +--- com.google.openlocationcode:openlocationcode:1.0.4
-\--- com.google.zxing:core:3.4.1
+\--- com.google.zxing:core:3.5.0
