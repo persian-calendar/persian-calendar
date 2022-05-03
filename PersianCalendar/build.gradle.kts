@@ -35,8 +35,8 @@ if (enableFirebaseInNightlyBuilds) {
 //   val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-val composeVersion = "1.2.0-alpha08"
-val composeSecondaryVersion = "1.1.1"
+val composeCompilerVersion = "1.2.0-alpha08"
+val composeVersion = "1.1.1"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
@@ -155,7 +155,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
+        kotlinCompilerExtensionVersion = composeCompilerVersion
     }
 
     if (isMinApi21Build) {
@@ -242,14 +242,14 @@ dependencies {
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material:material:$composeSecondaryVersion")
+    minApi21Implementation("androidx.compose.material:material:$composeVersion")
     minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha10")
-    minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeSecondaryVersion")
+    minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
-        androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeSecondaryVersion")
+        androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
     }
-    minApi21Implementation("androidx.compose.ui:ui-tooling:$composeSecondaryVersion")
+    minApi21Implementation("androidx.compose.ui:ui-tooling:$composeVersion")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
 
