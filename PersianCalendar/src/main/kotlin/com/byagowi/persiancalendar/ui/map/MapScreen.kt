@@ -223,7 +223,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
         // Setup view model change listener
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
-        val dateSink = GregorianCalendar()
+        val dateSink = GregorianCalendar().also { it.add(Calendar.DATE, -1) } // for initial update
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
