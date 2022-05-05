@@ -38,6 +38,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         }
         it.root.setupExpandableAccessibilityDescription()
         it.extraInformationContainer.isVisible = false
+        it.extraInformationContainer.layoutTransition = LayoutTransition().also {
+            it.enableTransitionType(LayoutTransition.APPEARING)
+            it.setAnimateParentHierarchy(false)
+        }
     }
     private var isExpanded = false
 
