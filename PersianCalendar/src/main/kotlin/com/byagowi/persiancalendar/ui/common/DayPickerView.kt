@@ -77,7 +77,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             selectedCalendarType = it[0].first
             selectedCalendarListener(selectedCalendarType)
         }
-        binding.calendarsFlow.setup(calendarTypes) {
+        binding.calendars.setup(calendarTypes) {
             selectedCalendarType = it
             selectedCalendarListener(selectedCalendarType)
             jdn = currentJdn
@@ -108,7 +108,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     // To use in init or when the picker is secondary, selectedCalendarListener isn't called
     fun changeCalendarType(calendarType: CalendarType) {
         selectedCalendarType = calendarType
-        binding.calendarsFlow.changeSelection(calendarType)
+        binding.calendars.changeSelection(calendarType)
         jdn = currentJdn
     }
 }

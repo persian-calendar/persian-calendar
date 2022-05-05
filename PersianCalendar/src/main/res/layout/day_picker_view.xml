@@ -6,29 +6,22 @@
     android:minWidth="400dp"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/calendars"
-        android:layout_width="match_parent"
+    <HorizontalScrollView
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:gravity="center"
-        android:paddingTop="@dimen/padding_item"
-        android:paddingBottom="@dimen/padding_item">
+        android:layout_width="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:paddingBottom="8dp">
 
-        <com.byagowi.persiancalendar.ui.common.DayPickerCalendarsFlow
-            android:id="@+id/calendars_flow"
-            android:layout_width="0dp"
+        <com.byagowi.persiancalendar.ui.common.DayPickerButtonsGroup
+            android:id="@+id/calendars"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:flow_horizontalAlign="center"
-            app:flow_horizontalGap="8dp"
-            app:flow_horizontalStyle="packed"
-            app:flow_verticalGap="2dp"
-            app:flow_wrapMode="chain"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            app:singleSelection="true" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
 
     <LinearLayout
         android:layout_width="match_parent"
