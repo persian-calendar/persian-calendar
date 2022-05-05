@@ -728,7 +728,7 @@ fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
 
 private fun RemoteViews.configureClock(@IdRes viewId: Int) {
     if (isForcedIranTimeEnabled) setString(viewId, "setTimeZone", "Asia/Tehran")
-    val clockFormat = if (clockIn24) "H:mm" else "h:mm"
+    val clockFormat = if (clockIn24) "kk:mm" else "h:mm"
     setCharSequence(viewId, "setFormat12Hour", clockFormat)
     setCharSequence(viewId, "setFormat24Hour", clockFormat)
 }
