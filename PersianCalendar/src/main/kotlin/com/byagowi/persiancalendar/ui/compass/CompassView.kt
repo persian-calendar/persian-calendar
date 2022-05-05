@@ -23,18 +23,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.EarthPosition
-import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
 import com.byagowi.persiancalendar.utils.toObserver
-import io.github.cosinekitty.astronomy.Aberration
-import io.github.cosinekitty.astronomy.Body
-import io.github.cosinekitty.astronomy.EquatorEpoch
-import io.github.cosinekitty.astronomy.Observer
-import io.github.cosinekitty.astronomy.Refraction
-import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.equator
-import io.github.cosinekitty.astronomy.equatorialToEcliptic
-import io.github.cosinekitty.astronomy.geoVector
-import io.github.cosinekitty.astronomy.horizon
 import java.util.*
 import kotlin.math.min
 import kotlin.math.round
@@ -99,22 +88,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private var r = 0f // radius of Sun and Moon
 
     private val observer = coordinates?.toObserver()
-    private var sunMoonState = observer?.let { SunMoonState(observer, GregorianCalendar()) }
-
-    private class SunMoonState(observer: Observer, date: GregorianCalendar) {
-        private val time = Time.fromMillisecondsSince1970(date.time.time)
-        val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
-        val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
-        private val sunEquator =
-            equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.None)
-        val sunHorizon = horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
-        private val moonEquator =
-            equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.None)
-        val moonHorizon = horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
-        val isNight get() = sunHorizon.run { altitude <= -10 }
-        val isMoonGone get() = moonHorizon.run { altitude <= -5 }
-        val moonTiltAngle = sunlitSideMoonTiltAngle(time, observer).toFloat()
-    }
+    private var astronomyState = observer?.let { AstronomyState(it, GregorianCalendar()) }
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
     private var sunProgress = Clock(Calendar.getInstance()).toMinutes() / fullDay
@@ -122,7 +96,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private val enableShade = false
 
     fun setTime(time: GregorianCalendar) {
-        sunMoonState = observer?.let { SunMoonState(it, time) }
+        astronomyState = observer?.let { AstronomyState(it, time) }
         sunProgress = Clock(time).toMinutes() / fullDay
         invalidate()
     }
@@ -135,6 +109,11 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             field = value
             invalidate()
         }
+    private val planetsPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
+        it.color = ContextCompat.getColor(context, R.color.qibla_color)
+        it.textSize = 12.sp
+        it.textAlign = Paint.Align.CENTER
+    }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
         it.textSize = 12.sp
@@ -177,6 +156,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             drawPath(northwardShapePath, northArrowPaint)
             if (coordinates != null) {
                 drawQibla()
+                drawPlanets()
                 drawMoon()
                 drawSun()
             }
@@ -219,11 +199,11 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private val shadeFactor = 1.5f
 
     private fun Canvas.drawSun() {
-        val sunMoonState = sunMoonState ?: return
-        if (sunMoonState.isNight) return
-        val rotation = sunMoonState.sunHorizon.azimuth.toFloat()
+        val astronomyState = astronomyState ?: return
+        if (astronomyState.isNight) return
+        val rotation = astronomyState.sunHorizon.azimuth.toFloat()
         withRotation(rotation, cx, cy) {
-            val sunHeight = (sunMoonState.sunHorizon.altitude.toFloat() / 90 - 1) * radius
+            val sunHeight = (astronomyState.sunHorizon.altitude.toFloat() / 90 - 1) * radius
             val sunColor = solarDraw.sunColor(sunProgress)
             sunPaint.color = sunColor
             drawLine(cx, cy - radius, cx, cy + radius, sunPaint)
@@ -233,18 +213,36 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     }
 
     private fun Canvas.drawMoon() {
-        val sunMoonState = sunMoonState ?: return
-        if (sunMoonState.isMoonGone) return
-        val azimuth = sunMoonState.moonHorizon.azimuth.toFloat()
+        val astronomyState = astronomyState ?: return
+        if (astronomyState.isMoonGone) return
+        val azimuth = astronomyState.moonHorizon.azimuth.toFloat()
         withRotation(azimuth, cx, cy) {
-            val moonHeight = (sunMoonState.moonHorizon.altitude.toFloat() / 90 - 1) * radius
+            val moonHeight = (astronomyState.moonHorizon.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
             if (enableShade) drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
             withRotation(-azimuth, cx, cy + moonHeight) {
                 solarDraw.moon(
-                    this, sunMoonState.sun, sunMoonState.moon, cx, cy + moonHeight,
-                    r * .8f, sunMoonState.moonTiltAngle
+                    this, astronomyState.sun, astronomyState.moon, cx, cy + moonHeight,
+                    r * .8f, astronomyState.moonTiltAngle
                 )
+            }
+        }
+    }
+
+    private fun Canvas.drawPlanets() {
+        val astronomyState = astronomyState ?: return
+        planetsPaint.alpha = (127 - astronomyState.sunHorizon.altitude.toInt() * 3).coerceIn(0, 255)
+        astronomyState.planets.forEach { (title, planetHorizon) ->
+            val azimuth = planetHorizon.azimuth.toFloat()
+            val planetHeight = (planetHorizon.altitude.toFloat() / 90 - 1) * radius
+            withRotation(-azimuth, cx, cy) {
+                drawCircle(cx, cy + planetHeight, radius / 120, planetsPaint)
+                withRotation(azimuth, cx, cy + planetHeight) {
+                    drawText(
+                        resources.getString(title), cx, cy + planetHeight - radius / 40,
+                        planetsPaint
+                    )
+                }
             }
         }
     }
