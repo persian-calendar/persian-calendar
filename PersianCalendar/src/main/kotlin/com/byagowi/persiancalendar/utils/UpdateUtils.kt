@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
@@ -189,8 +190,30 @@ fun update(context: Context, updateDate: Boolean) {
         }
     }
 
-    // Notification
     updateNotification(context, title, subtitle, jdn, date, owghat)
+    updateLauncherIcon(context)
+}
+
+fun updateLauncherIcon(context: Context) {
+    val today = (1..3).random()
+    (1..3).forEach {
+        context.packageManager.setComponentEnabledSetting(
+            ComponentName(
+                context.applicationContext.packageName,
+                "com.byagowi.persiancalendar.Day$it"
+            ),
+            if (it == today) PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+            else PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+            PackageManager.DONT_KILL_APP
+        )
+    }
+    context.packageManager.setComponentEnabledSetting(
+        ComponentName(
+            context.applicationContext.packageName,
+            "com.byagowi.persiancalendar" + ".MainIcon"
+        ),
+        PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP
+    )
 }
 
 @StringRes
