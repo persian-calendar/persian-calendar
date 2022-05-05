@@ -47,13 +47,21 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
             binding.dayPicker.also {
                 it.minValue = 1
-                it.maxValue = selectedCalendarType.getMonthLength(date.year, date.month)
                 it.value = date.dayOfMonth
-                it.setFormatter(::formatNumber)
+                reinitializeDayPicker(it, date.year, date.month)
                 it.isVerticalScrollBarEnabled = false
             }
             selectedDayListener(value)
         }
+
+    private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
+        dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
+        val monthStart = Jdn(selectedCalendarType, year, month, 1)
+        binding.dayPicker.setFormatter {
+            (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it)
+        }
+        binding.dayPicker.invalidate()
+    }
 
     private val todayJdn = Jdn.today()
     private var currentJdn = todayJdn
@@ -79,7 +87,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
-            binding.dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
+            reinitializeDayPicker(binding.dayPicker, year, month)
             binding.monthPicker.maxValue = selectedCalendarType.getYearMonths(year)
 
             currentJdn = jdn
