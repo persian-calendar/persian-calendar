@@ -235,9 +235,9 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
         astronomyState.planets.forEach { (title, planetHorizon) ->
             val azimuth = planetHorizon.azimuth.toFloat()
             val planetHeight = (planetHorizon.altitude.toFloat() / 90 - 1) * radius
-            withRotation(-azimuth, cx, cy) {
+            withRotation(azimuth, cx, cy) {
                 drawCircle(cx, cy + planetHeight, radius / 120, planetsPaint)
-                withRotation(azimuth, cx, cy + planetHeight) {
+                withRotation(-azimuth, cx, cy + planetHeight) {
                     drawText(
                         resources.getString(title), cx, cy + planetHeight - radius / 40,
                         planetsPaint
