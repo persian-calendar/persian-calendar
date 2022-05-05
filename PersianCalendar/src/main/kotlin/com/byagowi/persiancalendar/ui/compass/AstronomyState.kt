@@ -8,7 +8,6 @@ import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.Topocentric
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
