@@ -16,68 +16,69 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
+            android:id="@+id/converter_root"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="8dp">
 
-            <LinearLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/input_text_wrapper"
+                style="@style/AppTextInputLayoutFilledBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/view_padding"
-                android:paddingTop="8dp"
-                android:paddingRight="@dimen/view_padding">
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginRight="@dimen/view_padding"
+                android:layout_marginBottom="@dimen/card_margin"
+                android:layoutDirection="ltr">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/AppTextInputLayoutFilledBox"
-                    android:id="@+id/input_text_wrapper"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/input_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="16dp"
-                    android:layoutDirection="ltr">
+                    android:layout_marginTop="@dimen/card_margin"
+                    android:gravity="top"
+                    android:inputType="textMultiLine"
+                    android:minLines="5" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/input_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/card_margin"
-                        android:gravity="top"
-                        android:inputType="textMultiLine"
-                        android:minLines="5" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
+            <com.byagowi.persiancalendar.ui.common.DayPickerView
+                android:id="@+id/day_picker_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginRight="@dimen/view_padding" />
 
-                <com.byagowi.persiancalendar.ui.common.DayPickerView
-                    android:id="@+id/day_picker_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+            <TextView
+                android:id="@+id/result_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginRight="@dimen/view_padding"
+                android:textAlignment="center"
+                android:textIsSelectable="true"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/result_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/view_padding"
-                    android:paddingRight="@dimen/view_padding"
-                    android:textAlignment="center"
-                    android:textIsSelectable="true"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-
-                <com.byagowi.persiancalendar.ui.common.DayPickerView
-                    android:id="@+id/second_day_picker_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone" />
-
-            </LinearLayout>
+            <com.byagowi.persiancalendar.ui.common.DayPickerView
+                android:id="@+id/second_day_picker_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/view_padding"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginRight="@dimen/view_padding"
+                android:visibility="gone" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/result_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginLeft="@dimen/view_padding"
                 android:layout_marginBottom="32dp"
+                android:layout_marginTop="@dimen/card_margin"
+                android:layout_marginRight="@dimen/view_padding"
                 app:cardBackgroundColor="?attr/colorCard"
                 app:cardCornerRadius="@dimen/common_radius"
                 app:cardElevation="@dimen/card_elevation">
