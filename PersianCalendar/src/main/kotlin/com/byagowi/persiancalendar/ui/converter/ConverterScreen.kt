@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import android.animation.LayoutTransition
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -96,6 +97,11 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
         binding.inputText.setText(viewModel.inputText.value)
         binding.inputText.doOnTextChanged { text, _, _, _ ->
             viewModel.changeCalculatorInput(text?.toString() ?: "")
+        }
+
+        binding.converterRoot.layoutTransition = LayoutTransition().apply {
+            enableTransitionType(LayoutTransition.CHANGE_DISAPPEARING or LayoutTransition.CHANGE_APPEARING)
+            setAnimateParentHierarchy(false)
         }
 
         // Setup view model change listeners
