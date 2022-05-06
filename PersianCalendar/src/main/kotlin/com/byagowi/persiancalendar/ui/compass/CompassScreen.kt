@@ -32,6 +32,7 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
@@ -202,6 +203,16 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
                         putBoolean(PREF_SHOW_QIBLA_IN_COMPASS, binding.compassView.isShowQibla)
                     }
                 }
+            }
+        }
+        if (BuildConfig.DEVELOPMENT) {
+            binding.appBar.toolbar.menu.add("Do a rotation").onClick {
+                ValueAnimator.ofFloat(0f, 360f).also {
+                    it.duration = TEN_SECONDS_IN_MILLIS
+                    it.addUpdateListener { _ ->
+                        binding.compassView.angle += it.animatedValue as? Float ?: 0f
+                    }
+                }.start()
             }
         }
 
