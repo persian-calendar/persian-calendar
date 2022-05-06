@@ -220,7 +220,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             val moonHeight = (astronomyState.moonHorizon.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
             if (enableShade) drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
-            withRotation(-azimuth, cx, cy + moonHeight) {
+            withRotation(-azimuth + angle, cx, cy + moonHeight) {
                 solarDraw.moon(
                     this, astronomyState.sun, astronomyState.moon, cx, cy + moonHeight,
                     r * .8f, astronomyState.moonTiltAngle
@@ -237,7 +237,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             val planetHeight = (planetHorizon.altitude.toFloat() / 90 - 1) * radius
             withRotation(azimuth, cx, cy) {
                 drawCircle(cx, cy + planetHeight, radius / 120, planetsPaint)
-                withRotation(-azimuth, cx, cy + planetHeight) {
+                withRotation(-azimuth + angle, cx, cy + planetHeight) {
                     drawText(
                         resources.getString(title), cx, cy + planetHeight - radius / 40,
                         planetsPaint
