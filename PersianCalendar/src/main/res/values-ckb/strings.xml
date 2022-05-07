@@ -361,9 +361,11 @@
     <string name="are_you_sure">ئایا دڵنیایت؟</string>
     <string name="month_pray_times">کاتی نوێژەکانی مانگ</string>
     <string name="high_latitudes_night_middle">ناوەڕاستی شەو</string>
-    <string name="high_latitudes_one_seventh">یەک لە حەوت</string>
+    <string name="high_latitudes_one_seventh">یەک حەوتی</string>
     <string name="none">هیچ</string>
     <string name="show_sun_and_moon_path_in_24_hours">پیشاندانی ڕێڕەوی خۆر و مانگ لە 24 کاتژمێردا</string>
     <string name="chinese_calendar">ڕۆژژمێری چینی</string>
     <string name="chinese">چینی</string>
+    <string name="screensaver_settings">ڕێکخستنەکانی شاشەپارێز</string>
+    <string name="live_wallpaper_settings">ڕێکخستنەکانی پەڕەی دیواری زیندوو</string>
 </resources>
