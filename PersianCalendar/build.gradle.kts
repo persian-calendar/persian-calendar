@@ -46,7 +46,7 @@ android {
         getByName("main").kotlin.srcDir(generatedAppSrcDir)
     }
 
-    compileSdk = 31
+    compileSdk = 32
     buildToolsVersion = "30.0.3"
 
     buildFeatures {
@@ -67,7 +67,7 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         // = if (enableFirebaseInNightlyBuilds) 19 else 17
         minSdk = 17
-        targetSdk = 31
+        targetSdk = 32
         versionCode = 760
         versionName = "7.6.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
