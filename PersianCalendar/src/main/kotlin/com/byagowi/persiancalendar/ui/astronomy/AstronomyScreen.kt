@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -158,6 +159,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 switch.text = getString(R.string.tropical) + " "
                 switch.isChecked = viewModel.isTropical.value
                 switch.setOnClickListener { viewModel.changeTropicalStatus(switch.isChecked) }
+            }.also {
+                // Animate visibility of the switch, a bit hacky way to retrieve the view parent
+                it.post { (it.parent as? ViewGroup)?.setupDefaultLayoutTransition() }
             }
         }
 
