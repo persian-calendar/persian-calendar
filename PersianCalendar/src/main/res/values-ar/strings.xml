@@ -412,4 +412,6 @@
     <string name="calculator">حاسبة</string>
     <string name="chinese_calendar">التقويم الصيني</string>
     <string name="chinese">صيني</string>
+    <string name="screensaver_settings">إعدادات شاشة التوقف</string>
+    <string name="live_wallpaper_settings">إعدادات الخلفية المتحركة</string>
 </resources>
