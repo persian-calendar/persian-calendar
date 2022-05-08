@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.animation.LayoutTransition
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -36,6 +35,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.EarthPosition
@@ -128,10 +128,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             showGlobeDialog(activity ?: return@onClick, bitmap)
         }
 
-        binding.root.layoutTransition = LayoutTransition().also {
-            it.enableTransitionType(LayoutTransition.APPEARING)
-            it.setAnimateParentHierarchy(false)
-        }
+        binding.root.setupDefaultLayoutTransition()
         view.context.appPrefs.registerOnSharedPreferenceChangeListener { _, key ->
             if (key == PREF_LATITUDE) viewModel.turnOnDisplayLocation()
         }

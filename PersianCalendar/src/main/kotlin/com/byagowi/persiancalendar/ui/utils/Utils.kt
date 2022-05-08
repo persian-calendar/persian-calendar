@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
+import android.animation.LayoutTransition
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -183,6 +184,13 @@ fun View.setupExpandableAccessibilityDescription() {
             )
         }
     })
+}
+
+fun ViewGroup.setupDefaultLayoutTransition() {
+    this.layoutTransition = LayoutTransition().also {
+        it.enableTransitionType(LayoutTransition.CHANGING)
+        it.setAnimateParentHierarchy(false) // this essentially was important to prevent rare crashes
+    }
 }
 
 fun FragmentActivity.askForLocationPermission() {

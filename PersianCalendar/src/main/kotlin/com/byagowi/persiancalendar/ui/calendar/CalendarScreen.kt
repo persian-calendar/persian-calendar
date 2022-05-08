@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.Manifest
-import android.animation.LayoutTransition
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
@@ -78,6 +77,7 @@ import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
+import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.EventsRepository
@@ -161,10 +161,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
 
     private fun createEventsTab(inflater: LayoutInflater, container: ViewGroup?): View {
         val binding = EventsTabContentBinding.inflate(inflater, container, false)
-        binding.eventsContent.layoutTransition = LayoutTransition().also {
-            it.enableTransitionType(LayoutTransition.CHANGING)
-            it.setAnimateParentHierarchy(false)
-        }
+        binding.eventsContent.setupDefaultLayoutTransition()
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedDayChangeEvent
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
@@ -188,10 +185,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         }
         binding.root.setupExpandableAccessibilityDescription()
         binding.cityName.text = binding.root.context.appPrefs.cityName
-        binding.times.layoutTransition = LayoutTransition().also {
-            it.enableTransitionType(LayoutTransition.APPEARING)
-            it.setAnimateParentHierarchy(false)
-        }
+        binding.times.setupDefaultLayoutTransition()
         binding.timesFlow.setup()
 
         // Follows https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware

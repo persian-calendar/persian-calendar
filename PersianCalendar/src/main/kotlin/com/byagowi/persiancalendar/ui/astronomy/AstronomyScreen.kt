@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import android.animation.LayoutTransition
 import android.annotation.SuppressLint
 import android.content.res.ColorStateList
 import android.graphics.Canvas
@@ -29,6 +28,7 @@ import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isRtl
@@ -226,12 +226,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
-        val layoutTransition = LayoutTransition().apply {
-            enableTransitionType(LayoutTransition.APPEARING or LayoutTransition.DISAPPEARING)
-            setAnimateParentHierarchy(false)
-        }
-        binding.firstColumn.layoutTransition = layoutTransition
-        binding.secondColumn.layoutTransition = layoutTransition
+        binding.firstColumn.setupDefaultLayoutTransition()
+        binding.secondColumn.setupDefaultLayoutTransition()
 
         // Setup view model change listeners
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware

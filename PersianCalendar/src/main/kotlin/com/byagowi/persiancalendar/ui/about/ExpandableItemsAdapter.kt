@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.animation.LayoutTransition
 import android.text.method.LinkMovementMethod
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 
 class ExpandableItemsAdapter(private val sections: List<Pair<CharSequence, CharSequence>>) :
@@ -31,10 +31,7 @@ class ExpandableItemsAdapter(private val sections: List<Pair<CharSequence, CharS
         init {
             binding.body.movementMethod = LinkMovementMethod.getInstance()
             binding.body.setOnClickListener(this)
-            binding.root.layoutTransition = LayoutTransition().also {
-                it.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
-                it.setAnimateParentHierarchy(false)
-            }
+            binding.root.setupDefaultLayoutTransition()
             binding.root.setOnClickListener(this)
             binding.root.setupExpandableAccessibilityDescription()
         }

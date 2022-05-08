@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.animation.LayoutTransition
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
@@ -17,6 +16,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -32,16 +32,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).also {
         it.root.setOnClickListener { toggle() }
-        it.root.layoutTransition = LayoutTransition().apply {
-            enableTransitionType(LayoutTransition.APPEARING or LayoutTransition.DISAPPEARING)
-            setAnimateParentHierarchy(false)
-        }
+        it.root.setupDefaultLayoutTransition()
         it.root.setupExpandableAccessibilityDescription()
         it.extraInformationContainer.isVisible = false
-        it.extraInformationContainer.layoutTransition = LayoutTransition().also {
-            it.enableTransitionType(LayoutTransition.APPEARING)
-            it.setAnimateParentHierarchy(false)
-        }
+        it.extraInformationContainer.setupDefaultLayoutTransition()
     }
     private var isExpanded = false
 
