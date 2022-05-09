@@ -47,8 +47,8 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
             binding.dayPicker.also {
                 it.minValue = 1
-                it.value = date.dayOfMonth
                 reinitializeDayPicker(it, date.year, date.month)
+                it.value = date.dayOfMonth // important to happen _after_ the reinitialization
                 it.isVerticalScrollBarEnabled = false
             }
             selectedDayListener(value)
