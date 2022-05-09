@@ -186,7 +186,7 @@ fun View.setupExpandableAccessibilityDescription() {
     })
 }
 
-fun ViewGroup.setupDefaultLayoutTransition() {
+fun ViewGroup.setupLayoutTransition() {
     this.layoutTransition = LayoutTransition().also {
         it.enableTransitionType(LayoutTransition.CHANGING)
         it.setAnimateParentHierarchy(false) // this essentially was important to prevent rare crashes

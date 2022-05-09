@@ -10,8 +10,8 @@ import androidx.transition.TransitionManager
 import com.byagowi.persiancalendar.databinding.ExpandableItemBinding
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
+import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 
 class ExpandableItemsAdapter(private val sections: List<Pair<CharSequence, CharSequence>>) :
     RecyclerView.Adapter<ExpandableItemsAdapter.ViewHolder>() {
@@ -31,7 +31,7 @@ class ExpandableItemsAdapter(private val sections: List<Pair<CharSequence, CharS
         init {
             binding.body.movementMethod = LinkMovementMethod.getInstance()
             binding.body.setOnClickListener(this)
-            binding.root.setupDefaultLayoutTransition()
+            binding.root.setupLayoutTransition()
             binding.root.setOnClickListener(this)
             binding.root.setupExpandableAccessibilityDescription()
         }

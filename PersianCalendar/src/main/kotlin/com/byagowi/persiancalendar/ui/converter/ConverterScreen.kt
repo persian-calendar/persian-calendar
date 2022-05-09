@@ -21,7 +21,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
+import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -99,7 +99,7 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
             viewModel.changeCalculatorInput(text?.toString() ?: "")
         }
 
-        binding.converterRoot.setupDefaultLayoutTransition()
+        binding.converterRoot.setupLayoutTransition()
 
         // Setup view model change listeners
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware

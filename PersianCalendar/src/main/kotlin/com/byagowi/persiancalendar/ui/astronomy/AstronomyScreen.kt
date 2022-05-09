@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
+import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isRtl
@@ -161,7 +161,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 switch.setOnClickListener { viewModel.changeTropicalStatus(switch.isChecked) }
             }.also {
                 // Animate visibility of the switch, a bit hacky way to retrieve the view parent
-                it.post { (it.parent as? ViewGroup)?.setupDefaultLayoutTransition() }
+                it.post { (it.parent as? ViewGroup)?.setupLayoutTransition() }
             }
         }
 
@@ -230,8 +230,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
-        binding.firstColumn.setupDefaultLayoutTransition()
-        binding.secondColumn.setupDefaultLayoutTransition()
+        binding.firstColumn.setupLayoutTransition()
+        binding.secondColumn.setupLayoutTransition()
 
         // Setup view model change listeners
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware

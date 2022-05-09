@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.ui.utils.addViewsToFlow
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
+import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
@@ -27,7 +27,7 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(contex
         if (bindings.isEmpty()) {
             bindings = calendarsToShow.map {
                 CalendarItemBinding.inflate(context.layoutInflater).also {
-                    it.container.setupDefaultLayoutTransition()
+                    it.container.setupLayoutTransition()
                 }
             }
             addViewsToFlow(bindings.map {

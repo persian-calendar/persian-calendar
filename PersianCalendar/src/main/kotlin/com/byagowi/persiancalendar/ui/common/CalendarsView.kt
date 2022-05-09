@@ -16,8 +16,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.setupDefaultLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
+import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.utils.EventsStore
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -32,10 +32,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     private val binding = CalendarsViewBinding.inflate(context.layoutInflater, this, true).also {
         it.root.setOnClickListener { toggle() }
-        it.root.setupDefaultLayoutTransition()
+        it.root.setupLayoutTransition()
         it.root.setupExpandableAccessibilityDescription()
         it.extraInformationContainer.isVisible = false
-        it.extraInformationContainer.setupDefaultLayoutTransition()
+        it.extraInformationContainer.setupLayoutTransition()
     }
     private var isExpanded = false
 
