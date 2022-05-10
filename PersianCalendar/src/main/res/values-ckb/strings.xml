@@ -213,7 +213,7 @@
     <string name="center_align_widgets">ھێنانە ناوەڕاستی ویجت</string>
     <string name="n_till">%1$s بۆ %2$s</string>
     <plurals name="shift_work_record_title">
-        <item quantity="one">%1$s ڕۆژ %2$s</item>
+        <item quantity="one">ڕۆژێک %2$s</item>
         <item quantity="other">%1$s ڕۆژ %2$s</item>
     </plurals>
     <string name="recurs">پاتەکردنەوە</string>
@@ -231,7 +231,7 @@
     <string name="select_widgets_background_color">ھەڵبژاردنی ڕەنگی دڵخواز بۆ باکگراوندی ویجیت</string>
     <string name="share">ھاوبەشی</string>
     <string name="enable_location_services">راژەی شوێن چالاک نییە، تکایه بۆ بەکارھێنانی ئەم تایبەتمەندییە، چالاکی بکە.</string>
-    <string name="widget_age_name">ڕۆژژمێری فارسی (سن)</string>
+    <string name="widget_age_name">ڕۆژژمێری فارسی (تەمەن)</string>
     <string name="age_widget_title">سەردێڕی ویجیت</string>
     <string name="select_date">ھەڵبژاردنی ڕێککەوت</string>
     <plurals name="n_days">
@@ -283,8 +283,8 @@
     <string name="view_source">نیشاندانی سەرچاوە</string>
     <string name="widget_customization_other_calendars">ڕۆژژمێرەکانی تر لە ویجیتی ٤×١ و ٢×٢دا</string>
     <string name="widget_customization_non_holiday_events">ئەو بۆنانەی کە پشوودان نین لە ویجیتی ٢×٢ و ئاگاداریدا</string>
-    <string name="widget_customization_owghat">کاتی نوێژ لەسەر ویجیتەکان و ئاگانامەکان (ئەگەر دانراوە)</string>
-    <string name="widget_customization_owghat_location">شوێن لە لای کاتی شەرعیدا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
+    <string name="widget_customization_owghat">کاتە شەرعییەکان لە ویجیت و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
+    <string name="widget_customization_owghat_location">شوێن لە لای کاتە شەرعییەکاندا لە ویجیتی ٢×٢ و ئاگاداریدا (ئەگەر ڕێکخرابێ)</string>
     <string name="farvardin">خاکەلێوە</string>
     <string name="ordibehesht">گوڵان</string>
     <string name="khordad">جۆزەردان</string>
@@ -335,11 +335,11 @@
     <string name="nepali_calendar_short">نیپالی</string>
     <string name="season">وەرز</string>
     <string name="show_secondary_calendar">ڕۆژژمێری لاوەکی نیشان بدە</string>
-    <string name="widget_prefer_system_colors">بەدواکەوتنی ڕەنگکردنی سیستەم لە ویجیتەکان</string>
+    <string name="widget_prefer_system_colors">شوێنکەوتنی ڕەنگکاریی سیستەم لە ویجیتەکاندا</string>
     <string name="enable_new_interface">چالاککردنی ڕووکاری نوێ</string>
-    <string name="calculator">ژمێرەر</string>
-    <string name="asr_hanafi_juristic">ڕێبازی نوێژی عەسری حەنفی</string>
-    <string name="high_latitudes_angle_based">بەپێی گۆشەی بنچینەیی</string>
+    <string name="calculator">حسێبکەر</string>
+    <string name="asr_hanafi_juristic">شێوازی نوێژی ئێوارەی حەنەفی</string>
+    <string name="high_latitudes_angle_based">بەپێی گۆشە</string>
     <string name="spring">بەهار</string>
     <string name="solar_eclipse">خۆرگیران</string>
     <string name="high_latitudes_method">شێوازی بەرزی</string>
@@ -357,15 +357,15 @@
     <string name="autumn">پاییز</string>
     <string name="winter">زستان</string>
     <string name="lunar_eclipse">مانگگیران</string>
-    <string name="summer">هاوین</string>
-    <string name="are_you_sure">ئایا دڵنیایت؟</string>
-    <string name="month_pray_times">کاتی نوێژەکانی مانگ</string>
+    <string name="summer">ھاوین</string>
+    <string name="are_you_sure">دڵنیای؟</string>
+    <string name="month_pray_times">کاتە شەرعییەکانی مانگ</string>
     <string name="high_latitudes_night_middle">ناوەڕاستی شەو</string>
-    <string name="high_latitudes_one_seventh">یەک حەوتی</string>
-    <string name="none">هیچ</string>
-    <string name="show_sun_and_moon_path_in_24_hours">پیشاندانی ڕێڕەوی خۆر و مانگ لە 24 کاتژمێردا</string>
+    <string name="high_latitudes_one_seventh">حەوت یەک</string>
+    <string name="none">ھیچیان</string>
+    <string name="show_sun_and_moon_path_in_24_hours">نیشاندانی بازی خۆر و مانگ لە ٢٤ کاتکۆی داھاتوودا</string>
     <string name="chinese_calendar">ڕۆژژمێری چینی</string>
     <string name="chinese">چینی</string>
     <string name="screensaver_settings">ڕێکخستنەکانی شاشەپارێز</string>
-    <string name="live_wallpaper_settings">ڕێکخستنەکانی پەڕەی دیواری زیندوو</string>
+    <string name="live_wallpaper_settings">ڕێکخستنەکانی دیوارکاغەزی زیندوو</string>
 </resources>
