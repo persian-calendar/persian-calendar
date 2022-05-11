@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
@@ -41,6 +42,7 @@ import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.EarthPosition
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -81,6 +83,19 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         // Don't set the title as we got lots of icons
         // binding.appBar.toolbar.setTitle(R.string.map)
         binding.appBar.toolbar.setupUpNavigation()
+
+        runCatching {
+            // Set time from Astronomy screen state if available
+            val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
+            viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
+
+            // If astronomy viewmodel is in backstack, let's change that also
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.state
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                    .collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
+            }
+        }.onFailure(logException)
 
         nightMask.solarDraw = SolarDraw(view.context)
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }

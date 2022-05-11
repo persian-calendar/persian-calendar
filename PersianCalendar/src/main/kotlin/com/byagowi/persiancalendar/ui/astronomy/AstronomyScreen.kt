@@ -17,7 +17,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
@@ -28,6 +30,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
@@ -63,7 +66,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             it.isVisible = false
         }
 
-        val viewModel by viewModels<AstronomyViewModel>()
+        val viewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
         if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
             viewModel.animateToAbsoluteDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
@@ -181,6 +184,12 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
                     viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today())
                 }
+            }
+        }
+        binding.appBar.toolbar.menu.add(R.string.map).also {
+            it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
+            it.onClick {
+                findNavController().navigateSafe(AstronomyScreenDirections.actionAstronomyToMap())
             }
         }
 

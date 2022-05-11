@@ -7,6 +7,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import java.util.*
 
 class MapViewModel : ViewModel() {
     private val _state = MutableStateFlow(MapState())
@@ -27,6 +28,10 @@ class MapViewModel : ViewModel() {
 
     fun addTenDays() {
         _state.update { it.copy(time = it.time + DAY_IN_MILLIS * 10) }
+    }
+
+    fun changeToTime(time: Date) {
+        _state.update { it.copy(time = time.time) }
     }
 
     fun toggleNightMask() {

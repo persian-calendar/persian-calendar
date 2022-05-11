@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import java.util.*
+import kotlin.math.roundToInt
 
 class AstronomyViewModel : ViewModel() {
     private val _isTropical = MutableStateFlow(false)
@@ -73,6 +74,14 @@ class AstronomyViewModel : ViewModel() {
     // which changes the values smoothly and doesn't need another filter in between.
     fun addMinutesOffset(offset: Int) {
         _minutesOffset.value += offset
+        setAstronomyState(_minutesOffset.value)
+    }
+
+    // Command to be issued from MapScreen when astronomy screen is in its backstack so we like to
+    // have them in sync
+    fun changeToTime(time: Long) {
+        _minutesOffset.value =
+            ((time - System.currentTimeMillis()) / ONE_MINUTE_IN_MILLIS).toFloat().roundToInt()
         setAstronomyState(_minutesOffset.value)
     }
 
