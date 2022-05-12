@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.NumberPicker
 import androidx.core.view.isVisible
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
@@ -31,8 +32,8 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             val date = value.toCalendar(selectedCalendarType)
             binding.yearPicker.also {
                 val today = todayJdn.toCalendar(selectedCalendarType)
-                it.minValue = today.year - 200
-                it.maxValue = today.year + 200
+                it.minValue = today.year - 200 * if (BuildConfig.DEVELOPMENT) 10 else 1
+                it.maxValue = today.year + 200 * if (BuildConfig.DEVELOPMENT) 10 else 1
                 it.value = date.year
                 it.setFormatter(::formatNumber)
                 it.isVerticalScrollBarEnabled = false
