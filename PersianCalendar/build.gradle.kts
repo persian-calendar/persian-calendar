@@ -180,6 +180,8 @@ android {
         jvmTarget = "11"
     }
 
+    namespace = "com.byagowi.persiancalendar"
+
     lint { disable += listOf("MissingTranslation") }
 }
 
