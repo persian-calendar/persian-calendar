@@ -32,8 +32,8 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             val date = value.toCalendar(selectedCalendarType)
             binding.yearPicker.also {
                 val today = todayJdn.toCalendar(selectedCalendarType)
-                it.minValue = today.year - 200 * if (BuildConfig.DEVELOPMENT) 10 else 1
-                it.maxValue = today.year + 200 * if (BuildConfig.DEVELOPMENT) 10 else 1
+                it.minValue = if (BuildConfig.DEVELOPMENT) 1 else today.year - 200
+                it.maxValue = today.year + 200
                 it.value = date.year
                 it.setFormatter(::formatNumber)
                 it.isVerticalScrollBarEnabled = false
