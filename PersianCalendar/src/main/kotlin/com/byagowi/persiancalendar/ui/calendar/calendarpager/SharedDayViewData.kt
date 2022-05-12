@@ -7,7 +7,7 @@ import android.os.Build
 import android.util.TypedValue
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
-import androidx.annotation.IdRes
+import androidx.annotation.DrawableRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -36,7 +36,7 @@ class SharedDayViewData(
         paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
 
-    @IdRes
+    @DrawableRes
     val selectableItemBackground = if (widgetTextColor == null) TypedValue().also {
         context.theme.resolveAttribute(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
