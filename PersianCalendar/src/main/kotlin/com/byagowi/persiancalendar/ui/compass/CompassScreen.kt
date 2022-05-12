@@ -210,7 +210,7 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
                 ValueAnimator.ofFloat(0f, 360f).also {
                     it.duration = TEN_SECONDS_IN_MILLIS
                     it.addUpdateListener { _ ->
-                        binding.compassView.angle += it.animatedValue as? Float ?: 0f
+                        binding.compassView.angle = it.animatedValue as? Float ?: 0f
                     }
                 }.start()
             }
