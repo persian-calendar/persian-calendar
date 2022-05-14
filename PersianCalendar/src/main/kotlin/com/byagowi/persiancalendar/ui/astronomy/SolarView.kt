@@ -130,7 +130,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 flingAnimation.setStartVelocity(
                     rotationDirection * 4 * hypot(
                         velocityTracker?.xVelocity ?: 0f,
-                        velocityTracker?.xVelocity ?: 0f
+                        velocityTracker?.yVelocity ?: 0f
                     )
                 )
                 flingAnimation.start()
