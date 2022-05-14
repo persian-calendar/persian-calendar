@@ -69,7 +69,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             viewModel.animateToAbsoluteDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
 
         var clickCount = 0
-        binding.solarView.onClick = { _, _ ->
+        binding.solarView.setOnClickListener {
             val activity = activity
             if (++clickCount % 2 == 0 && activity != null)
                 showHoroscopesDialog(activity, viewModel.astronomyState.value.date.time)
@@ -213,6 +213,11 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     viewModel.addMinutesOffset((dx * viewDirection).toInt())
                 }
             }
+        }
+
+        binding.solarView.rotationalMinutesChange = { offset ->
+            viewModel.addMinutesOffset(offset)
+            binding.slider.manualScrollBy(offset / 200f, 0f)
         }
 
         fun buttonScrollSlider(days: Int): Boolean {

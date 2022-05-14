@@ -1,25 +1,35 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.VelocityTracker
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
+import androidx.dynamicanimation.animation.FlingAnimation
+import androidx.dynamicanimation.animation.FloatValueHolder
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.math.MathUtils
 import java.util.*
+import kotlin.math.PI
+import kotlin.math.atan2
+import kotlin.math.hypot
 import kotlin.math.min
+import kotlin.math.sign
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
 
@@ -74,6 +84,62 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 }
             }
         }
+    }
+
+    var rotationalMinutesChange = { _: Int -> }
+    private var previousAngle = 0f
+    private var rotationSpeed = 0
+    private val flingAnimation = FlingAnimation(FloatValueHolder())
+        .addUpdateListener { _, _, velocity ->
+            rotationalMinutesChange(velocity.toInt())
+            invalidate()
+        }
+    private var velocityTracker: VelocityTracker? = null
+    private var rotationDirection = 0
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        super.onTouchEvent(event)
+        if (mode != AstronomyMode.Earth || saveScale != 1f) return true
+        val r = width / 2
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                velocityTracker = VelocityTracker.obtain()
+                flingAnimation.cancel()
+                previousAngle = atan2(event.y - r, event.x - r)
+                rotationSpeed = if (hypot(event.x - r, event.y - r) > r / 2)
+                    525949 // minutes in solar year
+                else 42524 // minutes in lunar month
+            }
+            MotionEvent.ACTION_MOVE -> {
+                velocityTracker?.addMovement(event)
+                val currentAngle = atan2(event.y - r, event.x - r)
+                val rawAngleChange = currentAngle - previousAngle
+                val angleChange =
+                    if (rawAngleChange > PI) 2 * PI.toFloat() - rawAngleChange
+                    else if (rawAngleChange < -PI) 2 * PI.toFloat() + rawAngleChange
+                    else rawAngleChange
+                debugLog(angleChange.toString())
+                val minutesChange = -(angleChange * rotationSpeed / PI.toFloat() / 2).toInt()
+                rotationDirection = minutesChange.sign
+                rotationalMinutesChange(minutesChange)
+                previousAngle = currentAngle
+            }
+            MotionEvent.ACTION_UP -> {
+                velocityTracker?.computeCurrentVelocity(1000)
+                flingAnimation.setStartVelocity(
+                    rotationDirection * 4 * hypot(
+                        velocityTracker?.xVelocity ?: 0f,
+                        velocityTracker?.xVelocity ?: 0f
+                    )
+                )
+                flingAnimation.start()
+                velocityTracker?.recycle()
+                velocityTracker = null
+                previousAngle = 0f
+            }
+        }
+        return true
     }
 
     private val colorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

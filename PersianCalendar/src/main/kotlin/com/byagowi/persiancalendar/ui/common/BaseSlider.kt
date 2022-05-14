@@ -69,5 +69,11 @@ open class BaseSlider(context: Context, attrs: AttributeSet? = null) : View(cont
         if (enableVerticalSlider) flingAnimationY.setStartVelocity(velocityY).start()
     }
 
+    fun manualScrollBy(x: Float, y: Float) {
+        positionX.value += x
+        positionY.value += y
+        invalidate()
+    }
+
     var onScrollListener = { _: Float, _: Float -> } // dx, dy
 }
