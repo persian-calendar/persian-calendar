@@ -110,7 +110,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 previousAngle = atan2(event.y - r, event.x - r)
                 rotationSpeed = if (hypot(event.x - r, event.y - r) > r / 2)
                     525949 // minutes in solar year
-                else 42524 // minutes in lunar month
+                else 39341 // 27.32 days in minutes, https://en.wikipedia.org/wiki/Orbit_of_the_Moon
             }
             MotionEvent.ACTION_MOVE -> {
                 velocityTracker?.addMovement(event)
