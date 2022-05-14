@@ -18,9 +18,17 @@ void main() {
     vec2 xy = u_resolution / 2.0 - gl_FragCoord.xy; // screen center
     float r = length(xy); // radius from screen center
     if (r < R) {
-        float z = sqrt(R * R - r * r); // height of points over globe surface
+        float alpha = u_y;
+        float beta = -u_time;
+        float gamma = 0.0;
+        // https://en.wikipedia.org/wiki/Rotation_matrix#General_rotations
+        vec3 xyz = mat3(
+            cos(beta) , sin(alpha) * sin(beta) * cos(gamma) - cos(alpha) * sin(gamma), cos(alpha) * sin(beta) * cos(gamma) + sin(alpha) * sin(gamma),
+            0         , sin(alpha) * sin(beta) * sin(gamma) + cos(alpha) * cos(gamma), cos(alpha) * sin(beta) * sin(gamma) - sin(alpha) * cos(gamma),
+            -sin(beta), sin(alpha) * cos(beta)                                       , cos(alpha) * cos(beta)
+        ) * vec3(xy, sqrt(R * R - r * r)); // the third component, z, is height of points over globe surface
         // Converts x/y/z to texture coordinates https://en.wikibooks.org/wiki/GLSL_Programming/GLUT/Textured_Spheres
-        vec2 longLat = vec2(-atan(xy.x, z) / PI / 2.0 - u_time / 10.0, asin(xy.y / R) / PI + .5);
+        vec2 longLat = vec2(-atan(xyz.x, xyz.z) / PI / 2.0, asin(xyz.y / R) / PI + .5);
         gl_FragColor = texture2D(u_tex0, longLat);
     } else {
         float v = 4.4 - r / R * 3.7; // Globe's glow

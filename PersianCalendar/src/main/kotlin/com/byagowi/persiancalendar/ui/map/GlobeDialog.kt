@@ -9,6 +9,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.lang.Math.PI
 
 fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
     val frame = FrameLayout(activity)
@@ -27,7 +28,8 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
                 if (dx != 0f && renderer.overriddenTime == 0f)
                     renderer.overriddenTime = System.nanoTime() / 1e9f
                 renderer.overriddenTime += dx / 200
-                renderer.overriddenY += dy / 200
+                renderer.overriddenY = (renderer.overriddenY + dy / 200)
+                    .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
             }
         })
     }
