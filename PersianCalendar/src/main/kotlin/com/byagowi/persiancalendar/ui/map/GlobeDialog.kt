@@ -6,9 +6,8 @@ import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.generated.globeFragmentShader
-import com.byagowi.persiancalendar.ui.common.EmptySlider
+import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
@@ -22,14 +21,14 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
         glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
         renderer.fragmentShader = globeFragmentShader
         frame.addView(glView)
-        frame.addView(EmptySlider(activity).also {
-            it.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    if (dx != 0 && renderer.overriddenTime == 0f)
-                        renderer.overriddenTime = System.nanoTime() / 1e9f
-                    renderer.overriddenTime -= dx / 200f
-                }
-            })
+        frame.addView(BaseSlider(activity).also {
+            it.enableVerticalSlider = true
+            it.onScrollListener = { dx: Float, dy: Float ->
+                if (dx != 0f && renderer.overriddenTime == 0f)
+                    renderer.overriddenTime = System.nanoTime() / 1e9f
+                renderer.overriddenTime += dx / 200
+                renderer.overriddenY += dy / 200
+            }
         })
     }
     val dialog = MaterialAlertDialogBuilder(activity)

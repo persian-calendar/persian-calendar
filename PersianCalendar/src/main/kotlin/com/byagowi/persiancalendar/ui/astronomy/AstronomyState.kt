@@ -57,9 +57,12 @@ class AstronomyState(val date: GregorianCalendar) {
     }
 
     companion object {
-        private val solarSystemPlanets = listOf(
-            Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
-            Body.Saturn, Body.Uranus, Body.Neptune
-        )
+        // Don't remove lazy from this otherwise this will crash due to mis-order of initialization
+        private val solarSystemPlanets by lazy(LazyThreadSafetyMode.NONE) {
+            listOf(
+                Body.Mercury, Body.Venus, Body.Earth, Body.Mars, Body.Jupiter,
+                Body.Saturn, Body.Uranus, Body.Neptune
+            )
+        }
     }
 }

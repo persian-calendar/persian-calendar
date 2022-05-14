@@ -11,8 +11,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
-import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.ui.common.EmptySlider
+import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.Dispatchers
@@ -54,7 +53,7 @@ fun getSolfegeNoteLabel(note: Int) = SOLFEGE_NOTATION[note % 12] + ((note / 12) 
 fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecycle) {
     val currentSemitone = MutableStateFlow(MIDDLE_A_SEMITONE)
 
-    val view = object : EmptySlider(activity) {
+    val view = object : BaseSlider(activity) {
         val paint = Paint().also {
             it.color = Color.GREEN
             it.style = Paint.Style.FILL
@@ -91,12 +90,10 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
         }
     }
 
-    view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            currentSemitone.value = (currentSemitone.value + dx / 1000.0)
-                .coerceIn(15.0, 135.0) // Clamps it in terms of semitones
-        }
-    })
+    view.onScrollListener = { dx, _ ->
+        currentSemitone.value = (currentSemitone.value - dx / 1000.0)
+            .coerceIn(15.0, 135.0) // Clamps it in terms of semitones
+    }
 
     val sampleRate = 44100
     val buffer = ShortArray(sampleRate * 10)

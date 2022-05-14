@@ -13,14 +13,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
-import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
 import com.byagowi.persiancalendar.entities.Jdn
@@ -201,25 +199,25 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         val viewDirection = if (resources.isRtl) -1 else 1
 
         var lastButtonClickTimestamp = System.currentTimeMillis()
-        binding.slider.smoothScrollBy(200 * viewDirection, 0)
+        binding.slider.smoothScrollBy(250f * viewDirection, 0f)
 
         var latestVibration = 0L
-        binding.slider.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dx == 0) return
+        binding.slider.onScrollListener = { dx, _ ->
+            if (dx != 0f) {
                 val current = System.currentTimeMillis()
-                if (current - lastButtonClickTimestamp < 2000) return
-                if (current >= latestVibration + 35_000 / abs(dx)) {
-                    binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                    latestVibration = current
+                if (current - lastButtonClickTimestamp > 2000) {
+                    if (current >= latestVibration + 35_000 / abs(dx)) {
+                        binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        latestVibration = current
+                    }
+                    viewModel.addMinutesOffset((dx * viewDirection).toInt())
                 }
-                viewModel.addMinutesOffset(dx * viewDirection)
             }
-        })
+        }
 
         fun buttonScrollSlider(days: Int): Boolean {
             lastButtonClickTimestamp = System.currentTimeMillis()
-            binding.slider.smoothScrollBy(50 * days * viewDirection, 0)
+            binding.slider.smoothScrollBy(250f * days * viewDirection, 0f)
             viewModel.animateToRelativeDayOffset(days)
             return true
         }

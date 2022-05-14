@@ -3,6 +3,7 @@ precision highp float;
 #endif
 uniform vec2 u_resolution;
 uniform float u_time;
+uniform float u_y;
 uniform sampler2D u_tex0;
 
 const float PI = 3.1415926;
@@ -19,12 +20,12 @@ void main() {
     if (r < R) {
         float z = sqrt(R * R - r * r); // height of points over globe surface
         // Converts x/y/z to texture coordinates https://en.wikibooks.org/wiki/GLSL_Programming/GLUT/Textured_Spheres
-        vec2 longLat = vec2((-atan(xy.x, z) / PI - u_time / 5.0) * 0.5, (asin(xy.y / R) / PI + .5));
+        vec2 longLat = vec2(-atan(xy.x, z) / PI / 2.0 - u_time / 10.0, asin(xy.y / R) / PI + .5);
         gl_FragColor = texture2D(u_tex0, longLat);
     } else {
         float v = 4.4 - r / R * 3.7; // Globe's glow
         // Adds random stars
-        if (rand(vec2(floor(mod(u_time * 10.0 + xy.x / 4.0, 1000.0)), floor(xy.y / 4.0))) > 0.997)
+        if (rand(vec2(floor(mod(u_time * 10.0 + xy.x / 4.0, 1000.0)), floor(xy.y / 4.0 + u_y * 10.0))) > 0.997)
             v = 1.0;
         gl_FragColor = vec4(v, v, v, 1.0);
     }
