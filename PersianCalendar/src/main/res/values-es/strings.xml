@@ -367,4 +367,15 @@
     <string name="calculator">Calculadora</string>
     <string name="chinese_calendar">Calendario chino</string>
     <string name="chinese">chino</string>
+    <string name="pluto">Plutón</string>
+    <string name="mercury">Mercurio</string>
+    <string name="venus">Venus</string>
+    <string name="earth">Tierra</string>
+    <string name="mars">Marte</string>
+    <string name="jupiter">Júpiter</string>
+    <string name="saturn">Saturno</string>
+    <string name="uranus">Uranus</string>
+    <string name="neptune">Neptuno</string>
+    <string name="live_wallpaper_settings">Ajustes de fondo de pantalla en vivo</string>
+    <string name="screensaver_settings">Ajustes del salvapantallas</string>
 </resources>
