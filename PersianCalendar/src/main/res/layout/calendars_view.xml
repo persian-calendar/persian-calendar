@@ -104,7 +104,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <com.byagowi.persiancalendar.ui.common.ExtendedCircularProgressIndicator
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/month_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -124,7 +124,7 @@
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp">
 
-                <com.byagowi.persiancalendar.ui.common.ExtendedCircularProgressIndicator
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/season_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
@@ -142,7 +142,7 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical">
 
-                <com.byagowi.persiancalendar.ui.common.ExtendedCircularProgressIndicator
+                <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/year_progress"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

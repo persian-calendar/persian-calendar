@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.common
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.core.view.isVisible
@@ -25,6 +26,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import io.github.cosinekitty.astronomy.seasons
 import java.util.*
 
@@ -48,9 +50,11 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         binding.extraInformationContainer.isVisible = isExpanded
         binding.moonPhaseView.isVisible = isExpanded && isAstronomicalExtraFeaturesEnabled
-        binding.seasonProgress.enableAnimation = isExpanded
-        binding.monthProgress.enableAnimation = isExpanded
-        binding.yearProgress.enableAnimation = isExpanded
+    }
+
+    private fun CircularProgressIndicator.animateToValue(value: Int) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) setProgress(value, true)
+        else progress = value
     }
 
     fun hideMoreIcon() {
@@ -125,11 +129,11 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         val (seasonPassedDays, seasonDaysCount) = jdn.calculatePersianSeasonPassedDaysAndCount()
         binding.seasonProgress.max = seasonDaysCount
-        binding.seasonProgress.progress = seasonPassedDays
+        binding.seasonProgress.animateToValue(seasonPassedDays)
         binding.monthProgress.max = mainCalendar.getMonthLength(date.year, date.month)
-        binding.monthProgress.progress = date.dayOfMonth
+        binding.monthProgress.animateToValue(date.dayOfMonth)
         binding.yearProgress.max = endOfYearJdn - startOfYearJdn
-        binding.yearProgress.progress = jdn - startOfYearJdn
+        binding.yearProgress.animateToValue(jdn - startOfYearJdn)
 
         // a11y
         binding.root.contentDescription = getA11yDaySummary(
