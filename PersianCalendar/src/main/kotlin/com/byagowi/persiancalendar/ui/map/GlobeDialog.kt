@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
-import android.view.ScaleGestureDetector.*
+import android.view.ScaleGestureDetector.SimpleOnScaleGestureListener
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -26,6 +26,22 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
         renderer.fragmentShader = globeFragmentShader
         frame.addView(glView)
         frame.addView(object : BaseSlider(activity) {
+            init {
+                enableVerticalSlider = true
+                onScrollListener = { dx: Float, dy: Float ->
+                    if (dx != 0f && renderer.overriddenTime == 0f)
+                        renderer.overriddenTime = System.nanoTime() / 1e9f
+                    renderer.overriddenTime += dx / 200
+                    renderer.overriddenY = (renderer.overriddenY + dy / 200)
+                        .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
+                }
+            }
+
+            override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+                scaleDetector.onTouchEvent(event)
+                return isInScale || super.dispatchTouchEvent(event)
+            }
+
             private var isInScale = false
             private val scaleListener = object : SimpleOnScaleGestureListener() {
                 override fun onScale(detector: ScaleGestureDetector): Boolean {
@@ -43,20 +59,6 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
                 }
             }
             private val scaleDetector = ScaleGestureDetector(context, scaleListener)
-
-            override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-                scaleDetector.onTouchEvent(event)
-                return isInScale || super.dispatchTouchEvent(event)
-            }
-        }.also {
-            it.enableVerticalSlider = true
-            it.onScrollListener = { dx: Float, dy: Float ->
-                if (dx != 0f && renderer.overriddenTime == 0f)
-                    renderer.overriddenTime = System.nanoTime() / 1e9f
-                renderer.overriddenTime += dx / 200
-                renderer.overriddenY = (renderer.overriddenY + dy / 200)
-                    .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
-            }
         })
     }
     val dialog = MaterialAlertDialogBuilder(activity)
