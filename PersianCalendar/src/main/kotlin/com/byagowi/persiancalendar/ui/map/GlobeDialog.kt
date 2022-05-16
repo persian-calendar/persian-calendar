@@ -47,7 +47,8 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
             private var isInScale = false
             private val scaleListener = object : SimpleOnScaleGestureListener() {
                 override fun onScale(detector: ScaleGestureDetector): Boolean {
-                    renderer.overriddenZoom *= detector.scaleFactor
+                    renderer.overriddenZoom =
+                        (renderer.overriddenZoom * detector.scaleFactor).coerceIn(.25f, 6f)
                     return true
                 }
 
