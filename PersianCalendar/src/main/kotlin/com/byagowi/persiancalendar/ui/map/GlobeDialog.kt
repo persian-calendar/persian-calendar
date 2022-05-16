@@ -27,13 +27,15 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
         frame.addView(glView)
         frame.addView(object : BaseSlider(activity) {
             init {
+                val startTime = System.nanoTime()
                 enableVerticalSlider = true
                 onScrollListener = { dx: Float, dy: Float ->
                     if (dx != 0f && renderer.overriddenTime == 0f)
-                        renderer.overriddenTime = System.nanoTime() / 1e9f
-                    renderer.overriddenTime += dx / 200
-                    renderer.overriddenY = (renderer.overriddenY + dy / 200)
-                        .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
+                        renderer.overriddenTime = (System.nanoTime() - startTime) / 1e9f
+                    renderer.overriddenTime += dx / renderer.overriddenZoom / 200
+                    renderer.overriddenY =
+                        (renderer.overriddenY + dy / renderer.overriddenZoom / 200)
+                            .coerceIn(-PI.toFloat() / 3, PI.toFloat() / 3)
                 }
             }
 
@@ -61,9 +63,11 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
             private val scaleDetector = ScaleGestureDetector(context, scaleListener)
         })
     }
+
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(frame)
         .show()
+
     // Just close the dialog when activity is paused so we don't get ANR after app switch and etc.
     activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
         if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
