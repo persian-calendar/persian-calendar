@@ -50,7 +50,14 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         binding.extraInformationContainer.isVisible = isExpanded
         binding.moonPhaseView.isVisible = isExpanded && isAstronomicalExtraFeaturesEnabled
+
+        binding.monthProgress.toggle(isExpanded)
+        binding.seasonProgress.toggle(isExpanded)
+        binding.yearProgress.toggle(isExpanded)
     }
+
+    private fun CircularProgressIndicator.toggle(visibility: Boolean) =
+        if (visibility) show() else hide()
 
     private fun CircularProgressIndicator.animateToValue(value: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) setProgress(value, true)

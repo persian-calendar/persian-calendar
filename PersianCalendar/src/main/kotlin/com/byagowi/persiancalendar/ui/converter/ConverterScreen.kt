@@ -58,7 +58,9 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
             toolbar.addView(spinner)
         }
 
-        binding.calendarsView.toggle()
+        binding.calendarsView.post { // is in 'post' as otherwise will show ann empty circular indicator
+            binding.calendarsView.toggle()
+        }
         binding.calendarsView.hideMoreIcon()
 
         val todayJdn = Jdn.today()

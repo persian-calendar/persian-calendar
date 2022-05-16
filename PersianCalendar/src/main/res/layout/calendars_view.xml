@@ -107,7 +107,9 @@
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/month_progress"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:showAnimationBehavior="outward"
+                    app:showDelay="@integer/material_motion_duration_medium_1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -127,7 +129,9 @@
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/season_progress"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:showAnimationBehavior="outward"
+                    app:showDelay="@integer/material_motion_duration_medium_1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -145,7 +149,9 @@
                 <com.google.android.material.progressindicator.CircularProgressIndicator
                     android:id="@+id/year_progress"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    app:showAnimationBehavior="outward"
+                    app:showDelay="@integer/material_motion_duration_medium_1" />
 
                 <TextView
                     android:layout_width="wrap_content"
