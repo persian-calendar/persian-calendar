@@ -2,6 +2,9 @@ package com.byagowi.persiancalendar.ui.map
 
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
+import android.view.ScaleGestureDetector.*
 import android.widget.FrameLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -22,7 +25,30 @@ fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
         glView.renderMode = GLSurfaceView.RENDERMODE_CONTINUOUSLY
         renderer.fragmentShader = globeFragmentShader
         frame.addView(glView)
-        frame.addView(BaseSlider(activity).also {
+        frame.addView(object : BaseSlider(activity) {
+            private var isInScale = false
+            private val scaleListener = object : SimpleOnScaleGestureListener() {
+                override fun onScale(detector: ScaleGestureDetector): Boolean {
+                    renderer.overriddenZoom *= detector.scaleFactor
+                    return true
+                }
+
+                override fun onScaleBegin(detector: ScaleGestureDetector): Boolean {
+                    isInScale = true
+                    return super.onScaleBegin(detector)
+                }
+
+                override fun onScaleEnd(detector: ScaleGestureDetector) {
+                    isInScale = false
+                }
+            }
+            private val scaleDetector = ScaleGestureDetector(context, scaleListener)
+
+            override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+                scaleDetector.onTouchEvent(event)
+                return isInScale || super.dispatchTouchEvent(event)
+            }
+        }.also {
             it.enableVerticalSlider = true
             it.onScrollListener = { dx: Float, dy: Float ->
                 if (dx != 0f && renderer.overriddenTime == 0f)

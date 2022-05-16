@@ -17,12 +17,14 @@ class GLRenderer(
 ) : GLSurfaceView.Renderer {
     var overriddenTime = 0f
     var overriddenY = 0f
+    var overriddenZoom = 1f
 
     private var program = 0
     private var positionHandle = 0
     private var resolutionHandle = 0
     private var timeHandle = 0
     private var yHandle = 0
+    private var zoomHandle = 0
     private var verticesHandle = 0
     private var textureHandle = 0
     private var textureUniformHandle = 0
@@ -87,6 +89,7 @@ class GLRenderer(
             timeHandle, if (overriddenTime == 0f) System.nanoTime() / 1e9f else overriddenTime
         )
         GLES20.glUniform1f(yHandle, overriddenY)
+        GLES20.glUniform1f(zoomHandle, overriddenZoom)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
         GLES20.glDisableVertexAttribArray(positionHandle)
     }
@@ -111,6 +114,7 @@ class GLRenderer(
         resolutionHandle = GLES20.glGetUniformLocation(program, "u_resolution")
         timeHandle = GLES20.glGetUniformLocation(program, "u_time")
         yHandle = GLES20.glGetUniformLocation(program, "u_y")
+        zoomHandle = GLES20.glGetUniformLocation(program, "u_zoom")
         textureUniformHandle = GLES20.glGetUniformLocation(program, "u_tex0")
     }
 

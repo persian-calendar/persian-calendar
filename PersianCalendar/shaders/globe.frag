@@ -4,6 +4,7 @@ precision highp float;
 uniform vec2 u_resolution;
 uniform float u_time;
 uniform float u_y;
+uniform float u_zoom;
 uniform sampler2D u_tex0;
 
 const float PI = 3.1415926;
@@ -15,12 +16,13 @@ float rand(vec2 co) {
 
 void main() {
     float R = min(u_resolution.x, u_resolution.y) / 3.0; // supposed circle/globe radius
+    if (u_zoom != .0) R *= u_zoom;
     vec2 xy = u_resolution / 2.0 - gl_FragCoord.xy; // screen center
     float r = length(xy); // radius from screen center
     float u_x = mod(u_time, PI * 40.0); // prevents loss of accuracy as addition of a big number (time) to small numbers
     if (r < R) {
         // https://en.wikipedia.org/wiki/Rotation_matrix#General_rotations
-        vec3 xyz = mat3(1.0, 0.0, 0.0, 0, cos(-u_y), -sin(-u_y), 0, sin(-u_y), cos(-u_y)) *
+        vec3 xyz = mat3(1.0, .0, .0, .0, cos(-u_y), -sin(-u_y), .0, sin(-u_y), cos(-u_y)) *
             vec3(xy, sqrt(R * R - r * r)); // the third component, z, is height of points over globe surface
         // Converts x/y/z to texture coordinates https://en.wikibooks.org/wiki/GLSL_Programming/GLUT/Textured_Spheres
         vec2 longLat = vec2((-atan(xyz.x, xyz.z) - u_x) / PI / 2.0, asin(xyz.y / R) / PI + .5);
