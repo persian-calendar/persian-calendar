@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.level
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Path
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
@@ -40,10 +41,19 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
             x.value = w / 2f
             y.value = h / 2f
             r = w / 20f
+            path.rewind()
+            path.moveTo(x.value, y.value)
         }
 
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.GRAY }
+        private val linesPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+            it.color = Color.GRAY
+            it.style = Paint.Style.STROKE
+        }
+        private val path = Path()
         override fun onDraw(canvas: Canvas) {
+            path.lineTo(x.value, y.value)
+            canvas.drawPath(path, linesPaint)
             canvas.drawCircle(x.value, y.value, r, paint)
             if (x.value < r) {
                 x.value = r
