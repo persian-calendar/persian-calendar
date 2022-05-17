@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Matrix
@@ -110,8 +109,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
 
     var onClick = fun(_: Float, _: Float) {}
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         scaleDetector.onTouchEvent(event)
         viewMatrix.getValues(matrix)
         val x = matrix[Matrix.MTRANS_X]

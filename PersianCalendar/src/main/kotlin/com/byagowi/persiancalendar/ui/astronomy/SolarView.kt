@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.animation.ValueAnimator
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -97,10 +96,9 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     private var velocityTracker: VelocityTracker? = null
     private var rotationDirection = 0
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         parent?.requestDisallowInterceptTouchEvent(true)
-        super.onTouchEvent(event)
+        super.dispatchTouchEvent(event)
         if (mode != AstronomyMode.Earth || saveScale != 1f) return true
         val r = width / 2
         when (event.action) {

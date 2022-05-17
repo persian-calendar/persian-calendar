@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.level
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -36,15 +35,14 @@ fun showColorPickerDialog(activity: FragmentActivity) {
             ViewGroup.LayoutParams.WRAP_CONTENT
         )
         val colorCircle = CircleColorPickerView(activity).also { it.layoutParams = layoutParams }
+        addView(colorCircle)
         addView(Slider(activity).also {
             it.layoutParams = layoutParams
             it.addOnChangeListener { _, value, _ -> colorCircle.setBrightness(value) }
             it.valueFrom = 0f
             it.valueTo = 100f
         })
-        addView(colorCircle)
     }
-
     MaterialAlertDialogBuilder(activity)
         .setView(view)
         .show()
@@ -125,8 +123,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
 
     var onColorPicked = fun (@ColorInt _: Int) {}
 
-    @SuppressLint("ClickableViewAccessibility")
-    override fun onTouchEvent(event: MotionEvent): Boolean {
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         val r = bitmap.width / 2
         val radius = hypot(event.x - r, event.y - r).coerceAtMost(r * PADDING_FACTOR - 2f)
         val angle = atan2(event.y - r, event.x - r)
