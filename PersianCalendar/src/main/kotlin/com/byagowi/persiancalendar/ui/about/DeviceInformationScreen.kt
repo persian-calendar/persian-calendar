@@ -5,7 +5,6 @@ import android.animation.ObjectAnimator
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
@@ -29,6 +28,7 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
+import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
@@ -184,7 +184,7 @@ private fun createCheckerRoundedBoard(
 ) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return@also
     val tileSize2x = tileSize.toInt() * 2
-    val bitmap = Bitmap.createBitmap(tileSize2x, tileSize2x, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(tileSize2x, tileSize2x)
     val fill = Paint(Paint.ANTI_ALIAS_FLAG)
     fill.style = Paint.Style.FILL
     fill.color = color

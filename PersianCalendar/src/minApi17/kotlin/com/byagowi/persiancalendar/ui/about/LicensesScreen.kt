@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.about
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -14,6 +13,7 @@ import android.text.SpannableString
 import android.text.style.ReplacementSpan
 import android.text.util.Linkify
 import android.view.View
+import androidx.core.graphics.createBitmap
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.text.scale
@@ -48,7 +48,7 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
                 val padding = 1.dp
                 val width = bounds.width() + padding.toInt() * 2
                 val height = bounds.height()
-                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+                val bitmap = createBitmap(width, height)
                 Canvas(bitmap).drawText(text, padding, height.toFloat(), paint)
                 return BitmapDrawable(view.context.resources, bitmap)
             }

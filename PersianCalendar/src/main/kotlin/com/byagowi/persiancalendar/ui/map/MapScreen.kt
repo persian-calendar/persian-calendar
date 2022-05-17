@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
@@ -13,6 +12,7 @@ import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
 import androidx.core.graphics.PathParser
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
@@ -135,7 +135,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         nightMaskButton.onClick { viewModel.toggleNightMask() }
         globeViewButton.onClick {
             val textureSize = 1024
-            val bitmap = Bitmap.createBitmap(textureSize, textureSize, Bitmap.Config.ARGB_8888)
+            val bitmap = createBitmap(textureSize, textureSize)
             val matrix = Matrix().also {
                 it.setScale(textureSize.toFloat() / mapWidth, textureSize.toFloat() / mapHeight)
             }
@@ -279,9 +279,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     inner class NightMask {
         private val nightMaskScale = 1
-        private val nightMask = Bitmap.createBitmap(
-            360 / nightMaskScale, 180 / nightMaskScale, Bitmap.Config.ARGB_8888
-        )
+        private val nightMask = createBitmap(360 / nightMaskScale, 180 / nightMaskScale)
         private var sunX = .0f
         private var sunY = .0f
         private var moonX = .0f

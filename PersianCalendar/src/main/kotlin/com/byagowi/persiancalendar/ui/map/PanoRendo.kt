@@ -7,8 +7,8 @@ package com.byagowi.persiancalendar.ui.map
 // unexpected, yet, isn't mentioned anywhere also.
 // So this isn't published with the same license of the project for now as far as I can say.
 
-import android.graphics.Bitmap
 import android.graphics.Color
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import kotlin.math.PI
 import kotlin.math.acos
@@ -61,7 +61,7 @@ fun panoRendo(
     val x1 = if (zoom != .0) 800 else 400
     val y1 = if (zoom != .0) 200 else x1
     val y2 = if (zoom != .0) (y1 * (1 + EH / y0)).toInt() else y1
-    val result = Bitmap.createBitmap(x1, y2, Bitmap.Config.ARGB_8888)
+    val result = createBitmap(x1, y2)
     val cosS = sin(sunElevation)
     val sinS = cos(sunElevation)
     val HS = if (cosS > 0) altitude else altitude - 6371.0 * (1 - sinS)

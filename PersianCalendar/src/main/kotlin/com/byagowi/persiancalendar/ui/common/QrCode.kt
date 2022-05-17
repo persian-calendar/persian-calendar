@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui.common
 
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.widget.ImageView
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.fragment.app.FragmentActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -13,7 +13,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 
 private fun textToQrCodeBitmap(text: String): Bitmap {
     val size = 768
-    val bitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(size, size)
     val bitMatrix = QRCodeWriter().encode(
         text, BarcodeFormat.QR_CODE, size, size, mapOf(
             EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.M,

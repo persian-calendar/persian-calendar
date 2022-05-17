@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.level
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ComposeShader
@@ -16,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.annotation.ColorInt
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.withTranslation
 import androidx.fragment.app.FragmentActivity
@@ -49,7 +49,7 @@ fun showColorPickerDialog(activity: FragmentActivity) {
 }
 
 class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
-    private var bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+    private var bitmap = createBitmap(1, 1)
     private var lastX = -1f
     private var lastY = -1f
     private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL }
@@ -92,8 +92,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
     private fun generateReferenceCircle() {
         val min = min(width, height)
         val radius = min / 2f
-        if (bitmap.width != min || bitmap.height != min)
-            bitmap = Bitmap.createBitmap(min, min, Bitmap.Config.ARGB_8888)
+        if (bitmap.width != min || bitmap.height != min) bitmap = createBitmap(min, min)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         val radialGradient = RadialGradient(
             radius, radius, radius * PADDING_FACTOR, Color.WHITE,

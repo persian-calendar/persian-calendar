@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.athan
 
-import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
@@ -16,6 +15,7 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.or
 import androidx.core.graphics.plus
 import androidx.core.graphics.withRotation
@@ -72,9 +72,7 @@ class PatternDrawable(
             ::ThirdPattern,
             // ::FourthPattern
         ).random()(tintColor, 80.dp)
-        val bitmap = Bitmap.createBitmap(
-            pattern.width.toInt(), pattern.height.toInt(), Bitmap.Config.ARGB_8888
-        )
+        val bitmap = createBitmap(pattern.width.toInt(), pattern.height.toInt())
         Canvas(bitmap).also(pattern::draw)
         foregroundPaint.shader = BitmapShader(bitmap, pattern.tileModeX, pattern.tileModeY)
         centerX = listOf(-.5f, .5f, 1.5f).random() * bounds.width()

@@ -1,10 +1,10 @@
 package com.byagowi.persiancalendar.utils
 
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Rect
+import androidx.core.graphics.createBitmap
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.preferredDigits
@@ -18,7 +18,7 @@ fun createStatusIcon(dayOfMonth: Int): Bitmap {
     val bounds = Rect()
     paint.color = Color.WHITE
     paint.getTextBounds(text, 0, text.length, bounds)
-    val bitmap = Bitmap.createBitmap(90, 90, Bitmap.Config.ARGB_8888)
+    val bitmap = createBitmap(90, 90)
     Canvas(bitmap).drawText(text, 45f, 45 + bounds.height() / 2f, paint)
     return bitmap
 }

@@ -25,7 +25,6 @@ package com.byagowi.persiancalendar.ui.settings.common
 
 import android.content.Context
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
@@ -41,6 +40,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import androidx.annotation.ColorInt
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.ColorUtils
@@ -211,7 +211,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
 // https://stackoverflow.com/a/58471997
 fun createCheckerBoard(tileSize: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
     shader = BitmapShader(
-        Bitmap.createBitmap(tileSize * 2, tileSize * 2, Bitmap.Config.ARGB_8888).apply {
+        createBitmap(tileSize * 2, tileSize * 2).apply {
             Canvas(this).apply {
                 val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                     style = Paint.Style.FILL
