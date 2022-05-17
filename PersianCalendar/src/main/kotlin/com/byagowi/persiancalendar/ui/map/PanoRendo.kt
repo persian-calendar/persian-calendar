@@ -7,6 +7,7 @@ package com.byagowi.persiancalendar.ui.map
 // unexpected, yet, isn't mentioned anywhere also.
 // So this isn't published with the same license of the project for now as far as I can say.
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
