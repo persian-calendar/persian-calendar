@@ -52,14 +52,12 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
     private var bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     private var lastX = -1f
     private var lastY = -1f
-    private val fillPaint = Paint().also {
-        it.style = Paint.Style.FILL
-    }
-    private val strokePaint = Paint().also {
+    private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL }
+    private val strokePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.color = Color.WHITE
     }
-    private val shadowPaint = Paint().also {
+    private val shadowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
     }
     private var brightness = 0f
@@ -96,7 +94,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
         val radius = min / 2f
         if (bitmap.width != min || bitmap.height != min)
             bitmap = Bitmap.createBitmap(min, min, Bitmap.Config.ARGB_8888)
-        val paint = Paint()
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         val radialGradient = RadialGradient(
             radius, radius, radius * PADDING_FACTOR, Color.WHITE,
             0x00FFFFFF, Shader.TileMode.CLAMP

@@ -154,8 +154,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
         }
 
-        val backgroundPaint = Paint().apply { color = 0xFF809DB5.toInt() }
-        val foregroundPaint = Paint().apply { color = 0xFFFBF8E5.toInt() }
+        val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF809DB5.toInt() }
+        val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFBF8E5.toInt() }
         val matrixValues = FloatArray(9)
         binding.map.onDraw = { canvas, matrix ->
             matrix.getValues(matrixValues)
@@ -351,15 +351,15 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val nightMask = NightMask()
 
     private val gridLinesWidth = mapWidth * .001f
-    private val gridPaint = Paint().also {
+    private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = gridLinesWidth
         it.color = 0x80FFFFFF.toInt()
     }
-    private val gridHalfPaint = Paint().also {
+    private val gridHalfPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = gridLinesWidth
         it.color = 0x80808080.toInt()
     }
-    private val pathPaint = Paint().also {
+    private val pathPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = gridLinesWidth * 2
         it.style = Paint.Style.STROKE
     }
@@ -376,7 +376,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         66.566667, // https://en.wikipedia.org/wiki/Arctic_Circle
         -66.566667, // https://en.wikipedia.org/wiki/Antarctic_Circle
     ).map { (90 - it.toFloat()) * mapScaleFactor }
-    private val parallelsPaint = Paint().also {
+    private val parallelsPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.strokeWidth = gridLinesWidth
         it.color = 0x80800000.toInt()
         it.pathEffect = DashPathEffect(floatArrayOf(5f, 5f), 0f)

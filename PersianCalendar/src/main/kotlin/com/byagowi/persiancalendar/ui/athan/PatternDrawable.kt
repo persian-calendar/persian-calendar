@@ -55,8 +55,8 @@ class PatternDrawable(
         else -> 0xFF283593
     }.toInt()
 
-    private val backgroundPaint = Paint()
-    private val foregroundPaint = Paint()
+    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var centerX = 0f
     private var centerY = 0f
     override fun onBoundsChange(bounds: Rect?) {
@@ -144,7 +144,7 @@ private class SecondPattern(@ColorInt private val tintColor: Int, private val si
     override val tileModeY = Shader.TileMode.MIRROR
 
     override fun draw(canvas: Canvas) {
-        val paint = Paint().also {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.STROKE
             it.color = ColorUtils.setAlphaComponent(tintColor, 0x40)
             it.strokeWidth = width / 40
@@ -198,7 +198,7 @@ private class FourthPattern(@ColorInt private val tintColor: Int, size: Float) :
     override val tileModeY = Shader.TileMode.MIRROR
 
     override fun draw(canvas: Canvas) {
-        val paint = Paint().also {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.STROKE
             it.color = ColorUtils.setAlphaComponent(tintColor, 0x40)
             it.strokeWidth = width / 40
@@ -235,7 +235,7 @@ private class SpiralPattern(@ColorInt private val tintColor: Int, size: Float) :
 
     override fun draw(canvas: Canvas) {
         val path = pattern()
-        val paint = Paint().also {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.style = Paint.Style.STROKE
             it.color = ColorUtils.setAlphaComponent(tintColor, 0x80)
             it.strokeWidth = width / 80

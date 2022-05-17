@@ -54,7 +54,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
     val currentSemitone = MutableStateFlow(MIDDLE_A_SEMITONE)
 
     val view = object : BaseSlider(activity) {
-        val paint = Paint().also {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.color = Color.GREEN
             it.style = Paint.Style.FILL
         }
