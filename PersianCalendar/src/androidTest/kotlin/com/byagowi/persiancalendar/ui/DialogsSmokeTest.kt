@@ -15,7 +15,6 @@ import com.byagowi.persiancalendar.ui.about.showEmailDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
-import com.byagowi.persiancalendar.ui.common.showQrCode
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.showHolidaysTypesDialog
@@ -46,7 +45,6 @@ class DialogsSmokeTest {
             { showDayPickerDialog(it, Jdn.today(), R.string.accept) {} },
             { showMonthOverviewDialog(it, Jdn.today().toCalendar(mainCalendar)) },
             { showShiftWorkDialog(it, Jdn.today()) },
-            { showQrCode(it, "http://example.com") },
             { showIconsDemoDialog(it) },
             { showTypographyDemoDialog(it) },
             { showColorPickerDialog(it, true, "ABC") },
