@@ -8,7 +8,6 @@ import android.view.Surface
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
@@ -46,16 +45,6 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
             binding.fab.setImageResource(if (stop) R.drawable.ic_stop else R.drawable.ic_play)
             binding.fab.contentDescription = getString(if (stop) R.string.stop else R.string.resume)
             if (stop) provider.startListening() else provider.stopListening()
-        }
-        if (BuildConfig.DEVELOPMENT) {
-            binding.appBar.toolbar.menu.add("").also {
-                it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_metronome)
-                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            }.onClick { showSignalGeneratorDialog(activity, viewLifecycleOwner.lifecycle) }
-            binding.appBar.toolbar.menu.add("").also {
-                it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_atom)
-                it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            }.onClick { showPeriodicTableDialog(activity) }
         }
     }
 
