@@ -199,17 +199,15 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                         )
                         drawLine(x1, y1, x2, y2, pathPaint)
                     }
-                    val heading = from.toEarthHeading(to)
                     val center = points[points.size / 2]
                     val centerPlus1 = points[points.size / 2 + 1]
-                    val distance =
-                        "%,d km".format(Locale.ENGLISH, (heading.metres / 1000f).roundToInt())
                     val textDegree = Math.toDegrees(
                         atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
                             .toDouble()
                     ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
+                    val heading = from.toEarthHeading(to)
                     withRotation(textDegree, center.first, center.second) {
-                        drawText(distance, center.first, center.second - 2.dp, textPaint)
+                        drawText(heading.km, center.first, center.second - 2.dp, textPaint)
                     }
                 }
                 if (viewModel.state.value.displayGrid) {

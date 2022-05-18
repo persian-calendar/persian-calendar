@@ -250,13 +250,12 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private fun Canvas.drawQibla() {
         if (!isShowQibla) return
         val qiblaHeading = qiblaHeading ?: return
-        withRotation(qiblaHeading.heading.toFloat(), cx, cy) {
+        withRotation(qiblaHeading.heading, cx, cy) {
             drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
             val textCenter = cy - radius / 2
             withRotation(90f, cx, textCenter) {
-                val distance =
-                    "%,d km".format(Locale.ENGLISH, (qiblaHeading.metres / 1000f).roundToInt())
+                val distance = qiblaHeading.km
                 drawText(distance, cx, textCenter + 4.dp, textStrokePaint)
                 drawText(distance, cx, textCenter + 4.dp, textPaint)
             }

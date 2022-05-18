@@ -1,39 +1,26 @@
 package com.byagowi.persiancalendar.utils
 
+import android.location.Location
+import java.util.*
 import kotlin.math.PI
-import kotlin.math.acos
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.hypot
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sin
 import kotlin.math.sqrt
 
 data class EarthPosition(val latitude: Double, val longitude: Double) {
-    class EarthHeading(val heading: Double, val metres: Long)
+    class EarthHeading(metres: Float, val heading: Float) {
+        val km = "%,d km".format(Locale.ENGLISH, (metres / 1000).roundToInt())
+    }
 
     fun toEarthHeading(target: EarthPosition): EarthHeading {
-        // great circle formula from:
-        // https://web.archive.org/web/20161209044600/http://williams.best.vwh.net/avform.htm
-        val lat1 = Math.toRadians(latitude) //7155849931833333333e-19 0.71
-        val lat2 = Math.toRadians(target.latitude) //3737913479489224943e-19 0.373
-        val lon1 = Math.toRadians(-longitude) //-5055637064497558276 e-19 -0.505
-        val lon2 = Math.toRadians(-target.longitude) //-69493192920839161e-17  -0.69
-        val a = sin((lat1 - lat2) / 2)
-        val b = sin((lon1 - lon2) / 2)
-        // https://en.wikipedia.org/wiki/Haversine_formula
-        val d = 2 * asin(sqrt(a * a + cos(lat1) * cos(lat2) * b * b)) //3774840207564380360e-19
-        //d=2*asin(sqrt((sin((lat1-lat2)/2))^2 + cos(lat1)*cos(lat2)*(sin((lon1-lon2)/2))^2))
-        // double c=a*a+Math.cos(lat1)*Math.cos(lat2))*b*b
-        val tc1 = if (d > 0) {
-            //tc1=acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))
-            val x = acos((sin(lat2) - sin(lat1) * cos(d)) / (sin(d) * cos(lat1)))
-            /*2646123918118404228e-18*/
-            if (sin(lon2 - lon1) < 0) x else 2 * PI - x
-        } else 0.0
-        //  tc1=2*pi-acos((sin(lat2)-sin(lat1)*cos(d))/(sin(d)*cos(lat1)))
-        return EarthHeading(Math.toDegrees(tc1), (d * 6371e3).toLong())
+        val result = FloatArray(3)
+        Location.distanceBetween(latitude, longitude, target.latitude, target.longitude, result)
+        return EarthHeading(result[0], result[1])
     }
 
     // Ported from https://www.movable-type.co.uk/scripts/latlong.html MIT License

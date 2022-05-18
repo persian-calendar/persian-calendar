@@ -343,9 +343,8 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
         eastAnnouncer.check(binding.root.context, isNearToDegree(90f, angle))
         southAnnouncer.check(binding.root.context, isNearToDegree(180f, angle))
         westAnnouncer.check(binding.root.context, isNearToDegree(270f, angle))
-        val qiblaHeading = binding.compassView.qiblaHeading?.heading?.toFloat()
-        if (qiblaHeading != null) {
-            qiblaAnnouncer.check(binding.root.context, isNearToDegree(qiblaHeading, angle))
+        binding.compassView.qiblaHeading?.heading?.also {
+            qiblaAnnouncer.check(binding.root.context, isNearToDegree(it, angle))
         }
     }
 
