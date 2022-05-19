@@ -1,19 +1,23 @@
 package com.byagowi.persiancalendar.service
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
 import android.os.Build
 import android.service.dreams.DreamService
 import android.view.ContextThemeWrapper
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import android.widget.FrameLayout
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
-import com.byagowi.persiancalendar.ui.utils.dp
+import kotlin.math.min
 import kotlin.random.Random
 
 class PersianCalendarDreamService : DreamService() {
@@ -47,7 +51,8 @@ class PersianCalendarDreamService : DreamService() {
         super.onAttachedToWindow()
         isInteractive = true
         isFullscreen = true
-        setContentView(FrameLayout(this).also { frame ->
+
+        val backgroundView = View(this).also {
             val isNightMode = Theme.isNightMode(this)
             val accentColor = if (Theme.isDynamicColorAvailable()) getColor(
                 if (isNightMode) android.R.color.system_accent1_200
@@ -57,25 +62,70 @@ class PersianCalendarDreamService : DreamService() {
                 preferredTintColor = accentColor,
                 darkBaseColor = Theme.isNightMode(this)
             )
-            frame.background = pattern
+            it.background = pattern
             valueAnimator.addUpdateListener {
                 pattern.rotationDegree = valueAnimator.animatedValue as? Float ?: 0f
                 pattern.invalidateSelf()
             }
-            frame.setOnClickListener {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) wakeUp() else finish()
+            it.setOnClickListener {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) wakeUp()
+                else finish()
             }
-            frame.addView(AppCompatImageView(ContextThemeWrapper(this, R.style.LightTheme)).also {
-                it.layoutParams = FrameLayout.LayoutParams(100.dp.toInt(), 100.dp.toInt())
-                it.setImageResource(R.drawable.ic_play)
-                var play = false
-                it.setOnClickListener { _ ->
-                    play = !play
-                    it.setImageResource(if (play) R.drawable.ic_stop else R.drawable.ic_play)
-                    if (play) audioTrack.play() else audioTrack.pause()
-                }
-            })
-        })
+        }
+
+        val button = AppCompatImageView(ContextThemeWrapper(this, R.style.LightTheme)).also {
+            it.setImageResource(R.drawable.ic_play)
+            var play = false
+            it.setOnClickListener { _ ->
+                play = !play
+                it.setImageResource(if (play) R.drawable.ic_stop else R.drawable.ic_play)
+                if (play) audioTrack.play() else audioTrack.pause()
+            }
+        }
+
+        // Make the play/stop button movable using ViewDragHelper and ViewGroup
+        val screen = object : ViewGroup(this) {
+            init {
+                addView(backgroundView)
+                addView(button)
+            }
+
+            override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
+            override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+                super.onSizeChanged(w, h, oldw, oldh)
+                backgroundView.layout(0, 0, w, h)
+                button.layout(0, 0, min(w, h) / 5, min(w, h) / 5)
+            }
+
+            // Make play button of the screen movable
+            private val callback = object : ViewDragHelper.Callback() {
+                override fun tryCaptureView(child: View, pointerId: Int) = child == button
+                override fun onViewPositionChanged(
+                    changedView: View, left: Int, top: Int, dx: Int, dy: Int
+                ) = invalidate()
+                override fun getViewHorizontalDragRange(child: View): Int = width
+                override fun getViewVerticalDragRange(child: View): Int = height
+                override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
+                    left.coerceIn(0, width - child.width)
+                override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
+                    top.coerceIn(0, height - child.height)
+                override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
+                    bringChildToFront(capturedChild)
+            }
+            private val dragHelper = ViewDragHelper.create(this, callback)
+
+            override fun onInterceptTouchEvent(event: MotionEvent): Boolean =
+                dragHelper.shouldInterceptTouchEvent(event)
+
+            @SuppressLint("ClickableViewAccessibility")
+            override fun onTouchEvent(event: MotionEvent): Boolean {
+                dragHelper.processTouchEvent(event)
+                return true
+            }
+        }
+
+        setContentView(screen)
+
         listOf(valueAnimator::start, valueAnimator::reverse).random()()
     }
 
