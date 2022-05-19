@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -8,8 +9,10 @@ import android.graphics.Color
 import android.graphics.ComposeShader
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.Point
 import android.graphics.PorterDuff
 import android.graphics.RadialGradient
+import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.SweepGradient
@@ -29,16 +32,20 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.Scroller
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import androidx.core.graphics.PathParser
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.core.widget.doAfterTextChanged
+import androidx.customview.widget.ViewDragHelper
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
 import androidx.dynamicanimation.animation.SpringAnimation
@@ -47,13 +54,13 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
-import com.byagowi.persiancalendar.ui.utils.MorphedPath
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -90,9 +97,7 @@ fun showHiddenDialog(activity: FragmentActivity) {
     val root = LinearLayout(activity)
     root.orientation = LinearLayout.VERTICAL
     root.addView(
-        TabLayout(
-            activity, null, R.style.TabLayoutColored
-        ).also { tabLayout ->
+        TabLayout(activity, null, R.style.TabLayoutColored).also { tabLayout ->
             val tintColor = activity.resolveColor(R.attr.normalTabTextColor)
             listOf(
                 R.drawable.ic_developer to -1,
@@ -135,9 +140,7 @@ fun showHiddenDialog(activity: FragmentActivity) {
             "m 100 0 l -100 100 l 100 100 l 100 -100 z",
             "m 50 50 l 0 100 l 100 0 l 0 -100 z"
         )
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-            it.color = Color.BLACK
-        }
+        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.BLACK }
 
         init {
             val scale = 100.dp.toInt()
@@ -146,9 +149,7 @@ fun showHiddenDialog(activity: FragmentActivity) {
             }
         }
 
-        override fun onDraw(canvas: Canvas) {
-            canvas.drawPath(pathMorph.path, paint)
-        }
+        override fun onDraw(canvas: Canvas) = canvas.drawPath(pathMorph.path, paint)
 
         fun setFraction(value: Float) {
             pathMorph.interpolateTo(value)
@@ -180,6 +181,25 @@ fun showHiddenDialog(activity: FragmentActivity) {
     })
 
     BottomSheetDialog(activity).also { it.setContentView(root) }.show()
+}
+
+class MorphedPath(fromPath: String, toPath: String) {
+    val path = Path()
+
+    private val nodesFrom = PathParser.createNodesFromPathData(fromPath)
+    private val currentNodes = PathParser.deepCopyNodes(nodesFrom)
+    private val nodesTo = PathParser.createNodesFromPathData(toPath)
+
+    init {
+        if (BuildConfig.DEVELOPMENT) check(PathParser.canMorph(nodesFrom, nodesTo))
+        interpolateTo(0f)
+    }
+
+    fun interpolateTo(fraction: Float) {
+        PathParser.interpolatePathDataNodes(currentNodes, nodesFrom, nodesTo, fraction)
+        path.rewind()
+        PathParser.PathDataNode.nodesToPath(currentNodes, path)
+    }
 }
 
 fun showShaderSandboxDialog(activity: FragmentActivity) {
@@ -867,6 +887,104 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
         }
     }
 
+    MaterialAlertDialogBuilder(activity)
+        .setView(view)
+        .show()
+}
+
+fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
+    // This id based on https://gist.github.com/pskink/b747e89c1e1a1e314ca6 but relatively changed
+    val view = object : ViewGroup(activity) {
+        private val bounds = List(9) { Rect() }
+        override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {}
+        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+            super.onSizeChanged(w, h, oldw, oldh)
+            val w3 = w / 3
+            val h3 = h / 3
+            bounds.forEachIndexed { i, r ->
+                r.set(0, 0, w3, h3)
+                r.offset(w3 * (i % 3), h3 * (i / 3))
+                getChildAt(i).layout(r.left, r.top, r.right, r.bottom)
+            }
+        }
+
+        private val callback = object : ViewDragHelper.Callback() {
+            override fun tryCaptureView(view: View, i: Int): Boolean = true
+            override fun onViewPositionChanged(
+                changedView: View, left: Int, top: Int, dx: Int, dy: Int
+            ) = invalidate()
+
+            override fun getViewHorizontalDragRange(child: View): Int = width
+            override fun getViewVerticalDragRange(child: View): Int = height
+            override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
+                bringChildToFront(capturedChild)
+
+            override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+                val pos = computeFinalPosition(releasedChild, xvel, yvel)
+                dragHelper.settleCapturedViewAt(pos.x, pos.y)
+                invalidate()
+            }
+
+            private fun computeFinalPosition(child: View, xvel: Float, yvel: Float): Point {
+                val r = Rect()
+                child.getHitRect(r)
+                var cx = r.centerX()
+                var cy = r.centerY()
+                if (xvel != 0f || yvel != 0f) {
+                    val s = Scroller(context) // Creating a view just to use its computation doesn't look cool
+                    val w2: Int = r.width() / 2
+                    val h2: Int = r.height() / 2
+                    s.fling(cx, cy, xvel.toInt(), yvel.toInt(), w2, width - w2, h2, height - h2)
+                    cx = s.finalX
+                    cy = s.finalY
+                }
+                bounds.forEach { if (it.contains(cx, cy)) return Point(it.left, it.top) }
+                return Point()
+            }
+
+            override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
+                left.coerceIn(0, width - child.width)
+
+            override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
+                top.coerceIn(0, height - child.height)
+        }
+        private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
+
+        override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+            val action = event.action
+            if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+                dragHelper.cancel()
+                return false
+            }
+            return dragHelper.shouldInterceptTouchEvent(event)
+        }
+
+        @SuppressLint("ClickableViewAccessibility")
+        override fun onTouchEvent(event: MotionEvent): Boolean {
+            dragHelper.processTouchEvent(event)
+            return true
+        }
+
+        override fun computeScroll() {
+            if (dragHelper.continueSettling(true)) invalidate()
+        }
+
+        init {
+            (0 until 360 step 40)
+                .map { Color.HSVToColor(floatArrayOf(it.toFloat(), 100f, 1f)) }
+                .shuffled()
+                .mapIndexed { i, color ->
+                    TextView(context).also {
+                        it.textSize = 32f
+                        it.textAlignment = View.TEXT_ALIGNMENT_CENTER
+                        it.setBackgroundColor(color)
+                        var clickedCount = i
+                        it.text = clickedCount.toString()
+                        it.setOnClickListener { _ -> it.text = (++clickedCount).toString() }
+                    }
+                }.forEach(::addView)
+        }
+    }
     MaterialAlertDialogBuilder(activity)
         .setView(view)
         .show()
