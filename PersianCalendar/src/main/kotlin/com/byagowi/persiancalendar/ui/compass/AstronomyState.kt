@@ -34,8 +34,9 @@ class AstronomyState(observer: Observer, date: GregorianCalendar) {
     val moonTiltAngle = sunlitSideMoonTiltAngle(time, observer).toFloat()
 
     companion object {
-        private val visiblePlanets = listOf( // So called naked-eye planets
-            Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn, Body.Uranus
-        )
+        private val visiblePlanets by lazy(LazyThreadSafetyMode.NONE) {
+            // So called naked-eye planets, more safe to have it in lazy block
+            listOf(Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn, Body.Uranus)
+        }
     }
 }
