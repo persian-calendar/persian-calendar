@@ -103,24 +103,47 @@ class PersianCalendarDreamService : DreamService() {
                 override fun onViewPositionChanged(
                     changedView: View, left: Int, top: Int, dx: Int, dy: Int
                 ) = invalidate()
+
+                override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
+                    val centerX = releasedChild.left + releasedChild.width / 2
+                    val finalLeft = if (centerX < width / 2) 0 else width - releasedChild.width
+                    val centerY = releasedChild.top + releasedChild.height / 2
+                    val finalTop = if (centerY < height / 2) 0 else height - releasedChild.height
+                    dragHelper.settleCapturedViewAt(finalLeft, finalTop)
+                    invalidate()
+                }
+
                 override fun getViewHorizontalDragRange(child: View): Int = width
                 override fun getViewVerticalDragRange(child: View): Int = height
                 override fun clampViewPositionHorizontal(child: View, left: Int, dx: Int): Int =
                     left.coerceIn(0, width - child.width)
+
                 override fun clampViewPositionVertical(child: View, top: Int, dy: Int): Int =
                     top.coerceIn(0, height - child.height)
+
                 override fun onViewCaptured(capturedChild: View, activePointerId: Int) =
                     bringChildToFront(capturedChild)
             }
-            private val dragHelper = ViewDragHelper.create(this, callback)
+            private val dragHelper: ViewDragHelper = ViewDragHelper.create(this, callback)
 
-            override fun onInterceptTouchEvent(event: MotionEvent): Boolean =
-                dragHelper.shouldInterceptTouchEvent(event)
+
+            override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+                val action = event.action
+                if (action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP) {
+                    dragHelper.cancel()
+                    return false
+                }
+                return dragHelper.shouldInterceptTouchEvent(event)
+            }
 
             @SuppressLint("ClickableViewAccessibility")
             override fun onTouchEvent(event: MotionEvent): Boolean {
                 dragHelper.processTouchEvent(event)
                 return true
+            }
+
+            override fun computeScroll() {
+                if (dragHelper.continueSettling(true)) invalidate()
             }
         }
 
