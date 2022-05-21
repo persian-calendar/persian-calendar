@@ -173,11 +173,11 @@ inline fun MenuItem.onClick(crossinline action: () -> Unit) =
 fun View.setupExpandableAccessibilityDescription() {
     ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {
         override fun onInitializeAccessibilityNodeInfo(
-            host: View?,
-            info: AccessibilityNodeInfoCompat?
+            host: View,
+            info: AccessibilityNodeInfoCompat
         ) {
             super.onInitializeAccessibilityNodeInfo(host, info)
-            info?.addAction(
+            info.addAction(
                 AccessibilityNodeInfoCompat.AccessibilityActionCompat(
                     AccessibilityNodeInfoCompat.ACTION_CLICK, resources.getString(R.string.more)
                 )
