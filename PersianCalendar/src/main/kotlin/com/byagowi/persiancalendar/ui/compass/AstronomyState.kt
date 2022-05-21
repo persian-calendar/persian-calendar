@@ -36,7 +36,7 @@ class AstronomyState(observer: Observer, date: GregorianCalendar) {
     companion object {
         private val visiblePlanets by lazy(LazyThreadSafetyMode.NONE) {
             // So called naked-eye planets, more safe to have it in lazy block
-            listOf(Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn, Body.Uranus)
+            listOf(Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter, Body.Saturn)
         }
     }
 }
