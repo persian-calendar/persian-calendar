@@ -17,6 +17,7 @@ import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.random.Random
 
@@ -97,6 +98,10 @@ class PersianCalendarDreamService : DreamService() {
                 button.layout(0, 0, min(w, h) / 5, min(w, h) / 5)
             }
 
+            private val centroids by lazy(LazyThreadSafetyMode.NONE) {
+                listOf(0 to 0, 0 to height, width to 0, width to height, width / 2 to height / 2)
+            }
+
             // Make play button of the screen movable
             private val callback = object : ViewDragHelper.Callback() {
                 override fun tryCaptureView(child: View, pointerId: Int) = child == button
@@ -105,11 +110,15 @@ class PersianCalendarDreamService : DreamService() {
                 ) = invalidate()
 
                 override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-                    val centerX = releasedChild.left + releasedChild.width / 2
-                    val finalLeft = if (centerX < width / 2) 0 else width - releasedChild.width
-                    val centerY = releasedChild.top + releasedChild.height / 2
-                    val finalTop = if (centerY < height / 2) 0 else height - releasedChild.height
-                    dragHelper.settleCapturedViewAt(finalLeft, finalTop)
+                    val centerX = releasedChild.left + releasedChild.width / 2.0
+                    val centerY = releasedChild.top + releasedChild.height / 2.0
+                    val (x, y) = centroids.minByOrNull { (centroidX, centroidY) ->
+                        hypot(centroidX - centerX, centroidY - centerY)
+                    } ?: return
+                    dragHelper.settleCapturedViewAt(
+                        (x - releasedChild.width / 2).coerceIn(0, width - releasedChild.width),
+                        (y - releasedChild.height / 2).coerceIn(0, height - releasedChild.height)
+                    )
                     invalidate()
                 }
 
