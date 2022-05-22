@@ -68,8 +68,8 @@ android {
         // = if (enableFirebaseInNightlyBuilds) 19 else 17
         minSdk = 17
         targetSdk = 32
-        versionCode = 760
-        versionName = "7.6.0"
+        versionCode = 765
+        versionName = "7.6.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         if (!isMinApi21Build) vectorDrawables.useSupportLibrary = true
         resourceConfigurations += listOf(
