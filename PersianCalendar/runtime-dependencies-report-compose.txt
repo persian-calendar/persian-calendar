@@ -447,7 +447,6 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.6.21 (*)
 |    \--- androidx.compose.ui:ui:1.1.1 -> 1.2.0-beta02 (*)
 +--- androidx.compose.ui:ui:1.1.1 -> 1.2.0-beta02 (*)
-+--- androidx.compose.material:material:1.1.1 -> 1.2.0-beta02 (*)
 +--- androidx.compose.material3:material3:1.0.0-alpha12
 |    +--- androidx.compose.animation:animation-core:1.1.1 (*)
 |    +--- androidx.compose.foundation:foundation:1.2.0-beta02 (*)
