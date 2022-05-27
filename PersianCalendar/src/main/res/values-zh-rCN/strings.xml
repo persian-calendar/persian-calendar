@@ -320,7 +320,7 @@
     <string name="shift_work_days_head">时长</string>
     <string name="preview">预览</string>
     <string name="ignore">忽略</string>
-    <string name="high_latitudes_method">高纬度模式</string>
+    <string name="high_latitudes_method">高纬度地区计算方式</string>
     <string name="calculator">时间计算器</string>
     <string name="abdulbasit">阿卜杜勒·巴西推·阿卜杜·赛迈德</string>
     <string name="muharram">1 月</string>
@@ -356,4 +356,8 @@
     <string name="screensaver_settings">屏保设置</string>
     <string name="live_wallpaper_settings">动态壁纸设置</string>
     <string name="saturn">土星</string>
+    <string name="high_latitudes_night_middle">午夜</string>
+    <string name="asr_hanafi_juristic">哈乃斐派法定晡礼</string>
+    <string name="high_latitudes_one_seventh">七等分</string>
+    <string name="high_latitudes_angle_based">基于高度角</string>
 </resources>
