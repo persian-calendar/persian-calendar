@@ -13,7 +13,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.databinding.FragmentComposeBinding
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.android.material.composethemeadapter3.Mdc3Theme
 
 fun showComposeDialog(
     activity: FragmentActivity,
@@ -23,7 +23,7 @@ fun showComposeDialog(
     decorView.addView(ComposeView(activity).also { composeView ->
         composeView.setContent {
             var isDialogOpen by remember { mutableStateOf(true) }
-            if (isDialogOpen) MdcTheme { dialog { isDialogOpen = false } }
+            if (isDialogOpen) Mdc3Theme { dialog { isDialogOpen = false } }
             else decorView.post { decorView.removeView(composeView) }
         }
     })
@@ -42,7 +42,7 @@ private fun createComposeView(
     composeView.layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT
     )
-    composeView.setContent { MdcTheme { Surface { content(setTitle, setSubtitle) } } }
+    composeView.setContent { Mdc3Theme { Surface { content(setTitle, setSubtitle) } } }
     binding.root.addView(composeView)
     return binding.root
 }

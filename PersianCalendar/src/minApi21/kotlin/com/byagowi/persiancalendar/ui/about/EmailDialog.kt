@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
-import com.google.android.material.composethemeadapter.MdcTheme
+import com.google.android.material.composethemeadapter3.Mdc3Theme
 
 fun showEmailDialog(activity: FragmentActivity) =
     showComposeDialog(activity) { EmailAlertDialog(it) }
@@ -62,4 +62,4 @@ private fun EmailAlertDialog(closeDialog: () -> Unit) {
 
 @Preview
 @Composable
-private fun EmailAlertDialogPreview() = MdcTheme { EmailAlertDialog {} }
+private fun EmailAlertDialogPreview() = Mdc3Theme { EmailAlertDialog {} }

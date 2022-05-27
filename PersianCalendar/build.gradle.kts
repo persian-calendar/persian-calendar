@@ -237,7 +237,7 @@ dependencies {
     }
 
     minApi21Implementation("androidx.activity:activity-compose:1.4.0")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter:1.1.10")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.10")
     val accompanistVersion = "0.23.1"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
@@ -247,8 +247,8 @@ dependencies {
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
         androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
+        debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
     }
-    minApi21Implementation("androidx.compose.ui:ui-tooling:$composeVersion")
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
 
