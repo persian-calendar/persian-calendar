@@ -38,12 +38,12 @@ class AstronomyTests {
 //        assertThat($(time, null, 0.0).lunarAge.tithi).isEqualTo(12)
 //        assertThat($(time, null, 0.0).lunarSunlitTilt).isWithin(1.0e0).of(180.0)
 
-        val kathmandu = Coordinates(27.7172, 85.324, 1_400.0)
+//        val kathmandu = Coordinates(27.7172, 85.324, 1_400.0)
 //        assertThat($(time, kathmandu, 0.0).lunarAge.days).isWithin(1.0e-2).of(11.31)
 //        assertThat($(time, kathmandu, 0.0).lunarAge.tithi).isEqualTo(12)
 //        assertThat($(time, kathmandu, 0.0).lunarSunlitTilt).isWithin(1.0e0).of(180.0)
 
-        val nirobi = Coordinates(-1.286389, 36.817222, 1_795.0)
+//        val nirobi = Coordinates(-1.286389, 36.817222, 1_795.0)
 //        assertThat($(time, nirobi, 0.0).lunarSunlitTilt).isWithin(1.0e0).of(.0)
     }
 
@@ -129,10 +129,10 @@ class AstronomyTests {
 
     @Test
     fun `Lunar Sunlit Tilt`() {
-        val time = GregorianCalendar(TimeZone.getTimeZone("UTC")).also {
-            it.clear()
-            it.set(2021, Calendar.JANUARY, 10, 4, 0, 0)
-        }
+//        val time = GregorianCalendar(TimeZone.getTimeZone("UTC")).also {
+//            it.clear()
+//            it.set(2021, Calendar.JANUARY, 10, 4, 0, 0)
+//        }
 //        assertThat(
 //            lunarSunlitTilt(
 //                // Equatorial(19.451750, -21.930057, 0.983402),

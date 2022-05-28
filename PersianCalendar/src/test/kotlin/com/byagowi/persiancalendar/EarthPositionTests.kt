@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.utils.EarthPosition
+import com.byagowi.persiancalendar.entities.EarthPosition
 import com.google.common.truth.Truth.assertThat
 import org.junit.jupiter.api.Test
 

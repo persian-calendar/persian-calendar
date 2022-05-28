@@ -1,7 +1,6 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.entities
 
 import androidx.annotation.VisibleForTesting
-import com.byagowi.persiancalendar.entities.CalendarEvent
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 

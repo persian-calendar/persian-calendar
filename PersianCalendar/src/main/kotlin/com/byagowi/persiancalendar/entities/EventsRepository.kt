@@ -1,12 +1,8 @@
-package com.byagowi.persiancalendar.utils
+package com.byagowi.persiancalendar.entities
 
 import android.content.SharedPreferences
 import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
-import com.byagowi.persiancalendar.entities.CalendarEvent
-import com.byagowi.persiancalendar.entities.CalendarType
-import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.generated.CalendarRecord
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.generated.gregorianEvents
@@ -18,6 +14,8 @@ import com.byagowi.persiancalendar.global.islamicMonths
 import com.byagowi.persiancalendar.global.nepaliMonths
 import com.byagowi.persiancalendar.global.persianMonths
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.utils.calendarType
+import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate

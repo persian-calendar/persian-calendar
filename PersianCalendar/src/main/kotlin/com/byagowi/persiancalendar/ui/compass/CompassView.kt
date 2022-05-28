@@ -16,18 +16,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.EarthPosition
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.*
 import kotlin.math.min
 import kotlin.math.round
-import kotlin.math.roundToInt
 
 class CompassView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
 

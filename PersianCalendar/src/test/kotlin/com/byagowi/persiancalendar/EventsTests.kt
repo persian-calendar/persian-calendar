@@ -4,8 +4,8 @@ import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.utils.EventsRepository
-import com.byagowi.persiancalendar.utils.EventsStore
+import com.byagowi.persiancalendar.entities.EventsRepository
+import com.byagowi.persiancalendar.entities.EventsStore
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate

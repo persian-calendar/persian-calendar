@@ -51,6 +51,8 @@ import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.entities.Clock
+import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
+import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.calculationMethod
