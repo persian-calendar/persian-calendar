@@ -43,7 +43,7 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
         val spinner = Spinner(binding.appBar.toolbar.context)
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
-            ConverterScreenMode.values().map { it.title }.map(spinner.context::getString)
+            enumValues<ConverterScreenMode>().map { it.title }.map(spinner.context::getString)
         )
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit

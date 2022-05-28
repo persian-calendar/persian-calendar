@@ -51,7 +51,7 @@ class AstronomyTests {
     fun `Zodiac from Persian calendar`() {
         (1..12).forEach {
             assertEquals(
-                Zodiac.values()[it - 1],
+                enumValues<Zodiac>()[it - 1],
                 Zodiac.fromPersianCalendar(PersianDate(1400, it, 1))
             )
         }
@@ -61,12 +61,12 @@ class AstronomyTests {
     @Test
     fun `Zodiac from ecliptic`() {
         listOf(10, 40, 60, 100, 130, 140, 180, 230, 260, 280, 310, 320, 350).zip(
-            Zodiac.values() + listOf(Zodiac.ARIES)
+            enumValues<Zodiac>() + listOf(Zodiac.ARIES)
         ) { longitude, zodiac ->
             assertEquals(zodiac, Zodiac.fromIau(longitude.toDouble()))
         }
         (0..11).map { 10 + it * 30 }
-            .zip(Zodiac.values() + listOf(Zodiac.ARIES)) { longitude, zodiac ->
+            .zip(enumValues<Zodiac>() + listOf(Zodiac.ARIES)) { longitude, zodiac ->
                 assertEquals(zodiac, Zodiac.fromTropical(longitude.toDouble()))
             }
     }
@@ -76,11 +76,11 @@ class AstronomyTests {
         listOf(
             10.88, 42.17, 72.3, 106.46, 127.39, 154.32,
             198.755, 233.37, 256.915, 286.875, 307.105, 330.15
-        ).zip(Zodiac.values()) { centerOfZodiac, zodiac ->
+        ).zip(enumValues<Zodiac>()) { centerOfZodiac, zodiac ->
             val average = zodiac.iauRange.sum() / 2
             assertThat(average).isWithin(1.0e-10).of(centerOfZodiac)
         }
-        (0..11).zip(Zodiac.values()) { it, zodiac ->
+        (0..11).zip(enumValues<Zodiac>()) { it, zodiac ->
             val average = zodiac.tropicalRange.sum() / 2
             assertThat(average).isWithin(1.0e-10).of(it * 30.0 + 15)
         }

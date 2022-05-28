@@ -291,7 +291,7 @@ fun updateStoredPreference(context: Context) {
     // TODO: probably can be done in applyAppLanguage itself?
     if (language.language != resources.getString(R.string.code)) applyAppLanguage(context)
 
-    calendarTypesTitleAbbr = CalendarType.values().map { context.getString(it.shortTitle) }
+    calendarTypesTitleAbbr = enumValues<CalendarType>().map { context.getString(it.shortTitle) }
 
     shiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "")
         .splitIgnoreEmpty(",")

@@ -9,7 +9,7 @@ import com.byagowi.persiancalendar.utils.saveLanguage
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showLanguagePreferenceDialog(activity: FragmentActivity) {
-    val languages = Language.values().toList()
+    val languages = enumValues<Language>().toList()
     val names = languages.map { it.nativeName }.toTypedArray()
     MaterialAlertDialogBuilder(activity)
         .setTitle(R.string.language)

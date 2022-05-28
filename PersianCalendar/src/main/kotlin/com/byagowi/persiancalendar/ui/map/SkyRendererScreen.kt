@@ -36,7 +36,7 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
         binding.toneMap.adapter = ArrayAdapter(
             view.context,
             androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-            ToneMap.values().map { it.toString() }
+            enumValues<ToneMap>().map { it.toString() }
         )
 
         val coordinates = coordinates
@@ -62,7 +62,7 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
             bitmap = panoRendo(
                 sunElevationDegrees = horizon?.altitude ?: 30.0,
                 sunAzimuthDegrees = horizon?.azimuth ?: 0.0,
-                toneMap = ToneMap.values().getOrNull(binding.toneMap.selectedItemPosition)
+                toneMap = enumValues<ToneMap>().getOrNull(binding.toneMap.selectedItemPosition)
                     ?: ToneMap.Reinhard,
                 zoom = binding.zoom.text?.toString()?.toDoubleOrNull() ?: .0
             )

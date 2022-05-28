@@ -16,7 +16,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 fun showCalendarPreferenceDialog(activity: FragmentActivity, onEmpty: () -> Unit) {
     val enabledCalendarTypes = enabledCalendars
     val orderedCalendarTypes =
-        enabledCalendars + (CalendarType.values().toList() - enabledCalendars.toSet()) -
+        enabledCalendars + (enumValues<CalendarType>().toList() - enabledCalendars.toSet()) -
                 // Don't show Nepali on default locales, at least for now.
                 if (language.showNepaliCalendar) emptySet() else setOf(CalendarType.NEPALI)
     val adapter = RecyclerListAdapter(orderedCalendarTypes.map { calendarType ->

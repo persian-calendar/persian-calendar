@@ -91,15 +91,15 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 this@LocationAthanFragment.athanPreferenceCategory = this
                 singleSelect(
                     PREF_PRAY_TIME_METHOD,
-                    CalculationMethod.values().map { getString(it.titleStringId) },
-                    CalculationMethod.values().map { it.name },
+                    enumValues<CalculationMethod>().map { getString(it.titleStringId) },
+                    enumValues<CalculationMethod>().map { it.name },
                     DEFAULT_PRAY_TIME_METHOD,
                     R.string.pray_methods_calculation
                 ) { title(R.string.pray_methods) }
                 singleSelect(
                     PREF_HIGH_LATITUDES_METHOD,
-                    HighLatitudesMethod.values().map { getString(it.titleStringId) },
-                    HighLatitudesMethod.values().map { it.name },
+                    enumValues<HighLatitudesMethod>().map { getString(it.titleStringId) },
+                    enumValues<HighLatitudesMethod>().map { it.name },
                     DEFAULT_HIGH_LATITUDES_METHOD,
                     R.string.high_latitudes_method
                 ) {

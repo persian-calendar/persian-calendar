@@ -57,8 +57,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
                 singleSelect(
                     PREF_THEME,
-                    Theme.values().map { getString(it.title) },
-                    Theme.values().map { it.key },
+                    enumValues<Theme>().map { getString(it.title) },
+                    enumValues<Theme>().map { it.key },
                     Theme.SYSTEM_DEFAULT.key,
                     R.string.select_skin
                 ) { title(R.string.select_skin) }
