@@ -27,9 +27,18 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
+import com.google.android.material.transition.MaterialFadeThrough
 import kotlin.math.roundToInt
 
 class LicensesScreen : Fragment(R.layout.fragment_licenses) {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialFadeThrough()
+        enterTransition = MaterialFadeThrough()
+        returnTransition = MaterialFadeThrough()
+        reenterTransition = MaterialFadeThrough()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentLicensesBinding.bind(view)
