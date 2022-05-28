@@ -36,7 +36,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
                 activity.setTheme(
                     if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
                 )
-                DynamicColors.applyIfAvailable(activity)
+                DynamicColors.applyToActivityIfAvailable(activity)
             } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
 
             // Apply blur considerations only if is supported by the device
