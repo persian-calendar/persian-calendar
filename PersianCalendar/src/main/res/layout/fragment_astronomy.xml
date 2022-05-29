@@ -102,6 +102,7 @@
 
                         <TextView
                             android:id="@+id/sunText"
+                            style="@style/astronomyChipCaptionAutoSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
@@ -177,6 +178,7 @@
 
                         <TextView
                             android:id="@+id/moonText"
+                            style="@style/astronomyChipCaptionAutoSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical" />
