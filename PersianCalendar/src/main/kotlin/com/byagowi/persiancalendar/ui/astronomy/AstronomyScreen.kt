@@ -6,6 +6,7 @@ import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.MenuItem
@@ -100,8 +101,13 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     item.onClick { viewModel.changeScreenMode(mode) }
                 }
             }
+
             // Special case for moon icon
             buttons[AstronomyMode.Moon]?.icon = moonIconDrawable
+            // Reset sun tint color as it can be set by other screens
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                buttons[AstronomyMode.Sun]?.icon?.setTintList(null)
+            }
         }
 
         val seasonsCache = hashMapOf<Int, SeasonsInfo>()
