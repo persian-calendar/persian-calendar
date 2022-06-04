@@ -12,7 +12,6 @@ val enableFirebaseInNightlyBuilds = false
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
     id("androidx.navigation.safeargs.kotlin")
     id("io.github.persiancalendar.appbuildplugin") apply true
 }
