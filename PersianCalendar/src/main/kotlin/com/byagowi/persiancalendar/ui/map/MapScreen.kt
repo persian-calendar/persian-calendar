@@ -85,15 +85,16 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.appBar.toolbar.setupUpNavigation()
 
         runCatching {
-            // Set time from Astronomy screen state if available
-            val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
-            viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
-
-            // If astronomy viewmodel is in backstack, let's change that also
-            viewLifecycleOwner.lifecycleScope.launch {
-                viewModel.state
-                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                    .collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
+            // Set time from Astronomy screen state if we are brought from the screen to here directly
+            if (findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
+                val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
+                viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
+                // Let's apply changes here to astronomy screen's view model also
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewModel.state
+                        .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                        .collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
+                }
             }
         }.onFailure(logException)
 
