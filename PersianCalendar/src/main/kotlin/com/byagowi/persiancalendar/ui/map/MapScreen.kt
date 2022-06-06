@@ -42,7 +42,6 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
-import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -84,19 +83,17 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         // binding.appBar.toolbar.setTitle(R.string.map)
         binding.appBar.toolbar.setupUpNavigation()
 
-        runCatching {
-            // Set time from Astronomy screen state if we are brought from the screen to here directly
-            if (findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
-                val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
-                viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
-                // Let's apply changes here to astronomy screen's view model also
-                viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.state
-                        .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                        .collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
-                }
+        // Set time from Astronomy screen state if we are brought from the screen to here directly
+        if (findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
+            val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
+            viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
+            // Let's apply changes here to astronomy screen's view model also
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.state
+                    .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                    .collectLatest { state -> astronomyViewModel.changeToTime(state.time) }
             }
-        }.onFailure(logException)
+        }
 
         nightMask.solarDraw = SolarDraw(view.context)
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
