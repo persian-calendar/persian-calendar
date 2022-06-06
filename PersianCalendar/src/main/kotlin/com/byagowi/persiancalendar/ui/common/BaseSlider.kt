@@ -56,8 +56,8 @@ open class BaseSlider(context: Context, attrs: AttributeSet? = null) : View(cont
             velocityX: Float,
             velocityY: Float
         ): Boolean {
-            flingAnimationX.setStartVelocity(velocityX).start()
-            if (enableVerticalSlider) flingAnimationY.setStartVelocity(velocityY).start()
+            flingAnimationX.setStartVelocity(velocityX / 2).start()
+            if (enableVerticalSlider) flingAnimationY.setStartVelocity(velocityY / 2).start()
             return true
         }
     })

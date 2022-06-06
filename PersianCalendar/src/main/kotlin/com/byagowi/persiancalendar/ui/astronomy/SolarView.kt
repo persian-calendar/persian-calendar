@@ -127,7 +127,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             MotionEvent.ACTION_UP -> {
                 velocityTracker?.computeCurrentVelocity(1000)
                 flingAnimation.setStartVelocity(
-                    rotationDirection * 4 * hypot(
+                    rotationDirection * 2 * hypot(
                         velocityTracker?.xVelocity ?: 0f,
                         velocityTracker?.yVelocity ?: 0f
                     )
