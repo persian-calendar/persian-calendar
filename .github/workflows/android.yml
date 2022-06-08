@@ -1,5 +1,8 @@
 name: Android CI
 
+permissions:
+  contents: read
+
 on: [push]
 
 jobs:
