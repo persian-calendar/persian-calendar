@@ -191,20 +191,20 @@ dependencies {
 
     implementation("com.github.cosinekitty:astronomy:v2.1.0")
 
-    implementation("androidx.appcompat:appcompat:1.4.1")
+    implementation("androidx.appcompat:appcompat:1.4.2")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
-    implementation("com.google.android.material:material:1.6.0")
+    implementation("com.google.android.material:material:1.6.1")
 
     val navVersion = "2.4.2"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
-    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.core:core-ktx:1.8.0")
     val fragmentVersion = "1.4.1"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
