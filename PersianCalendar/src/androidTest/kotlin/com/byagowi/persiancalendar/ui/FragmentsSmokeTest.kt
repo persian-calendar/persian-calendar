@@ -9,8 +9,6 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
-import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreenArgs
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
@@ -35,7 +33,7 @@ class FragmentsSmokeTest {
     fun themesSmokeTest() {
         listOf(
             R.style.DynamicLightTheme, R.style.DynamicDarkTheme, R.style.LightTheme,
-            R.style.DarkTheme, R.style.ModernTheme, R.style.BlueTheme, R.style.BlackTheme
+            R.style.DarkTheme, R.style.ModernTheme, R.style.AquaTheme, R.style.BlackTheme
         ).forEach { launchFragmentInContainer<CalendarScreen>(themeResId = it) }
     }
 
