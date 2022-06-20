@@ -267,7 +267,7 @@
         <item name="colorAppointment">@color/dark_accent</item>
     </style>
 
-    <style name="BlueTheme" parent="BaseLightTheme">
+    <style name="AquaTheme" parent="BaseLightTheme">
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorPrimaryDark">@color/blue_primary</item>

@@ -245,7 +245,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="theme_light">Light</string>
     <string name="theme_dark">Dark</string>
     <string name="theme_modern">Modern</string>
-    <string name="theme_blue">Blue</string>
+    <string name="theme_aqua">Aqua</string>
     <string name="theme_black">Black</string>
     <!--Calendars-->
     <string name="shamsi_calendar">Persian Calendar</string>

@@ -20,7 +20,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
     LIGHT("LightTheme", R.string.theme_light, R.style.LightTheme),
     DARK("DarkTheme", R.string.theme_dark, R.style.DarkTheme),
     MODERN("ClassicTheme"/*legacy*/, R.string.theme_modern, R.style.ModernTheme),
-    BLUE("BlueTheme", R.string.theme_blue, R.style.BlueTheme),
+    BLUE("BlueTheme", R.string.theme_aqua, R.style.AquaTheme),
     BLACK("BlackTheme", R.string.theme_black, R.style.BlackTheme);
 
     companion object {

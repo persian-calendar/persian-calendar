@@ -196,7 +196,7 @@
     <string name="theme_light">浅色</string>
     <string name="theme_dark">深色</string>
     <string name="theme_modern">现代</string>
-    <string name="theme_blue">蓝色</string>
+    <string name="theme_aqua">蓝色</string>
     <string name="prefer_linear_date">以纯数字形式显示日期</string>
     <string name="select_widgets_background_color">自定义小部件背景的颜色</string>
     <string name="widget_background_color">小部件背景颜色</string>
