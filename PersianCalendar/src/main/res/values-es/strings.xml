@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="code">es</string>
+    <string name="code">en</string>
     <!--Global-->
     <string name="app_name">Calendario persa</string>
     <string name="widget_name">Calendario persa</string>
