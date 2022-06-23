@@ -345,4 +345,26 @@
     <string name="widget_prefer_system_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
     <string name="nepal">नेपाल</string>
     <string name="calculator">क्यालकुलेटर</string>
+    <string name="live_wallpaper_settings"></string>
+    <string name="chinese_calendar"></string>
+    <string name="lunar_eclipse"></string>
+    <string name="pluto"></string>
+    <string name="solar_eclipse"></string>
+    <string name="tropical"></string>
+    <string name="screensaver_settings"></string>
+    <string name="neptune"></string>
+    <string name="uranus"></string>
+    <string name="moon"></string>
+    <string name="summer"></string>
+    <string name="winter"></string>
+    <string name="spring"></string>
+    <string name="sun"></string>
+    <string name="autumn"></string>
+    <string name="mercury"></string>
+    <string name="venus"></string>
+    <string name="earth"></string>
+    <string name="mars"></string>
+    <string name="jupiter"></string>
+    <string name="saturn"></string>
+    <string name="chinese"></string>
 </resources>
