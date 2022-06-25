@@ -322,7 +322,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
         }
     }
 
-    var onColorPicked = fun (@ColorInt _: Int) {}
+    var onColorPicked = fun(@ColorInt _: Int) {}
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         val r = bitmap.width / 2
@@ -931,7 +931,8 @@ fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
                 var cx = r.centerX()
                 var cy = r.centerY()
                 if (xvel != 0f || yvel != 0f) {
-                    val s = Scroller(context) // Creating a view just to use its computation doesn't look cool
+                    val s =
+                        Scroller(context) // Creating a view just to use its computation doesn't look cool
                     val w2: Int = r.width() / 2
                     val h2: Int = r.height() / 2
                     s.fling(cx, cy, xvel.toInt(), yvel.toInt(), w2, width - w2, h2, height - h2)
