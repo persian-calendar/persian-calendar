@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
@@ -64,9 +65,21 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
             listOf(
                 "GPLv3" to view.context.getCompatDrawable(R.drawable.ic_info),
                 KotlinVersion.CURRENT.toString() to createTextIcon("Kotlin"),
-                "API " + Build.VERSION.SDK_INT to
+                "API ${Build.VERSION.SDK_INT}" to
                         view.context.getCompatDrawable(R.drawable.ic_motorcycle)
-            ).map { (title, icon) -> it.add(title).setIcon(icon) }
+            ).mapIndexed { i, (title, icon) ->
+                // Easter egg testing dialog
+                var clickCount = 0
+                it.add(title).setIcon(icon).onClick {
+                    activity?.let {
+                        if (++clickCount % 10 == 0) listOf(
+                            ::showPeriodicTableDialog,
+                            ::showSpringDemoDialog,
+                            ::showFlingDemoDialog,
+                        )[i](it)
+                    }
+                }
+            }
         }
 
         // Based on https://stackoverflow.com/a/34623367
