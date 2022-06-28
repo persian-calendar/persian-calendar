@@ -370,4 +370,5 @@
     <string name="live_wallpaper_settings">تنظیمات کاغذ دیواری زنده</string>
     <string name="screensaver_settings">تنظیمات محافظ صفحهٔ نمایش</string>
     <string name="enable_notification">مایلید اعلان تاریخ برنامه فعال شود؟</string>
+    <string name="add_quick_settings_tile">افزودن کاشی تنظیمات سریع</string>
 </resources>

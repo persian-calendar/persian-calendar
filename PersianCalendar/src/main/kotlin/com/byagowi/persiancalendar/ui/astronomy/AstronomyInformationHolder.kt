@@ -31,8 +31,8 @@ class AstronomyInformationHolder(context: Context, attrs: AttributeSet? = null) 
             content
         } else {
             val binding = AstronomyInformationHolderBinding.inflate(context.layoutInflater)
-            setTitle = { binding.title.text = it }
             setColor = { binding.title.chipBackgroundColor = ColorStateList.valueOf(it) }
+            setTitle = binding.title::setText
             setValue = binding.value::setText
             binding.root
         })

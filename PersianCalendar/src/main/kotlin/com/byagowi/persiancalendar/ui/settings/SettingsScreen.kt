@@ -1,6 +1,10 @@
 package com.byagowi.persiancalendar.ui.settings
 
+import android.app.StatusBarManager
+import android.content.ComponentName
 import android.content.Intent
+import android.graphics.drawable.Icon
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -11,6 +15,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.edit
+import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,6 +33,7 @@ import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.global.enableNewInterface
 import com.byagowi.persiancalendar.service.AlarmWorker
+import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
@@ -125,6 +131,20 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
             runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
                 .onFailure(logException).getOrNull().debugAssertNotNull
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            toolbar.menu.add(getString(R.string.add_quick_settings_tile)).onClick {
+                val context = toolbar.context
+                context.getSystemService<StatusBarManager>()?.requestAddTileService(
+                    ComponentName(
+                        context.packageName,
+                        PersianCalendarTileService::class.qualifiedName ?: ""
+                    ),
+                    getString(R.string.app_name),
+                    Icon.createWithResource(context, R.drawable.day19),
+                    {},
+                    {}
+                )
+            }
 
         // Rest are development features
         if (!BuildConfig.DEVELOPMENT) return
