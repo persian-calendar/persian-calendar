@@ -207,11 +207,6 @@ vec4 main(vec2 fragCoord) {
         }
     }
 
-    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
-        super.onSizeChanged(w, h, oldw, oldh)
-        invalidate()
-    }
-
     override fun onDraw(canvas: Canvas) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             shader?.setFloatUniform("iTime", (System.nanoTime() - startTime) / 1e9f)
