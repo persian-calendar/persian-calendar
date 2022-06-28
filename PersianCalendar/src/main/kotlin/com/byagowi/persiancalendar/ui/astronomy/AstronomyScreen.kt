@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.PixelFormat
@@ -126,9 +125,12 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 if (tropical) Zodiac.fromTropical(state.moon.elon)
                 else Zodiac.fromIau(state.moon.elon)
 
-            binding.sunText.text = sunZodiac.format(view.context, true) // ☉☀️
-            binding.moonText.text =
+            binding.sun.setValue(
+                sunZodiac.format(view.context, true) // ☉☀️
+            )
+            binding.moon.setValue(
                 moonZodiac.format(binding.root.context, true) // ☽it.moonPhaseEmoji
+            )
             binding.time.text = state.date.formatDateAndTime()
 
             val civilDate = state.date.toCivilDate()
@@ -140,22 +142,24 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
 
             (1..4).forEach { i ->
                 when (i) {
-                    1 -> binding.firstSeasonText
-                    2 -> binding.secondSeasonText
-                    3 -> binding.thirdSeasonText
-                    else -> binding.fourthSeasonText
-                }.text = Date(
-                    calculateSeasons(
-                        CivilDate(PersianDate(persianDate.year, i * 3, 29)).year
-                    ).let {
-                        when (i) {
-                            1 -> it.juneSolstice
-                            2 -> it.septemberEquinox
-                            3 -> it.decemberSolstice
-                            else -> it.marchEquinox
-                        }
-                    }.toMillisecondsSince1970()
-                ).toJavaCalendar().formatDateAndTime()
+                    1 -> binding.firstSeason
+                    2 -> binding.secondSeason
+                    3 -> binding.thirdSeason
+                    else -> binding.fourthSeason
+                }.setValue(
+                    Date(
+                        calculateSeasons(
+                            CivilDate(PersianDate(persianDate.year, i * 3, 29)).year
+                        ).let {
+                            when (i) {
+                                1 -> it.juneSolstice
+                                2 -> it.septemberEquinox
+                                3 -> it.decemberSolstice
+                                else -> it.marchEquinox
+                            }
+                        }.toMillisecondsSince1970()
+                    ).toJavaCalendar().formatDateAndTime()
+                )
             }
         }
 
@@ -173,13 +177,18 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
 
         listOf(
-            binding.firstSeasonChip to 4, binding.secondSeasonChip to 7,
-            binding.thirdSeasonChip to 10, binding.fourthSeasonChip to 1
-        ).map { (chip, month) -> // 'month' is month number of first Persian month in the season
+            binding.firstSeason to 4, binding.secondSeason to 7,
+            binding.thirdSeason to 10, binding.fourthSeason to 1
+        ).map { (holder, month) -> // 'month' is month number of first Persian month in the season
             val season = Season.fromPersianCalendar(PersianDate(1400, month, 1), coordinates)
-            chip.setText(season.nameStringId)
-            chip.chipBackgroundColor = ColorStateList.valueOf(season.color)
+            holder.setTitle(getString(season.nameStringId))
+            holder.setColor(season.color)
         }
+
+        binding.sun.setTitle(getString(R.string.sun))
+        binding.sun.setColor(0xcceaaa00.toInt())
+        binding.moon.setTitle(getString(R.string.moon))
+        binding.moon.setColor(0xcc606060.toInt())
 
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
@@ -271,8 +280,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                         binding.solarView.mode = it
                         val showTropicalRelatedElements = it == AstronomyMode.Earth
                         tropicalMenuItem.isVisible = showTropicalRelatedElements
-                        binding.sunStatusWrapper.isInvisible = !showTropicalRelatedElements
-                        binding.moonStatusWrapper.isInvisible = !showTropicalRelatedElements
+                        binding.sun.isInvisible = !showTropicalRelatedElements
+                        binding.moon.isInvisible = !showTropicalRelatedElements
                     }
                 }
                 launch { viewModel.astronomyState.collectLatest(::update) }

@@ -42,72 +42,24 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:orientation="horizontal">
+                        android:id="@+id/firstSeason"
+                        android:layout_marginTop="4dp" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/firstSeasonChip"
-                            style="@style/astronomyChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/firstSeasonText"
-                            style="@style/astronomyChipCaptionAutoSize"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:orientation="horizontal">
+                        android:id="@+id/thirdSeason"
+                        android:layout_marginTop="4dp" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/thirdSeasonChip"
-                            style="@style/astronomyChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/thirdSeasonText"
-                            style="@style/astronomyChipCaptionAutoSize"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/sun_status_wrapper"
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:id="@+id/sun"
                         android:gravity="center_horizontal"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/sunChip"
-                            style="@style/astronomyChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/sun"
-                            app:chipBackgroundColor="#cceaaa00" />
-
-                        <TextView
-                            android:id="@+id/sunText"
-                            style="@style/astronomyChipCaptionAutoSize"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical" />
-
-                    </LinearLayout>
+                        android:layout_marginTop="16dp" />
 
                 </LinearLayout>
 
@@ -118,72 +70,24 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:orientation="horizontal">
+                        android:id="@+id/secondSeason"
+                        android:layout_marginTop="4dp" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/secondSeasonChip"
-                            style="@style/astronomyChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/secondSeasonText"
-                            style="@style/astronomyChipCaptionAutoSize"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:orientation="horizontal">
+                        android:id="@+id/fourthSeason"
+                        android:layout_marginTop="4dp" />
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/fourthSeasonChip"
-                            style="@style/astronomyChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:id="@+id/fourthSeasonText"
-                            style="@style/astronomyChipCaptionAutoSize"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/moon_status_wrapper"
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:id="@+id/moon"
                         android:gravity="center_horizontal"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/moonChip"
-                            style="@style/astronomyChip"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/moon"
-                            app:chipBackgroundColor="#cc606060" />
-
-                        <TextView
-                            android:id="@+id/moonText"
-                            style="@style/astronomyChipCaptionAutoSize"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical" />
-
-                    </LinearLayout>
+                        android:layout_marginTop="16dp" />
 
                 </LinearLayout>
 
