@@ -9,6 +9,7 @@ import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.RuntimeShader
 import android.graphics.Shader
 import android.hardware.Sensor
 import android.hardware.SensorManager
@@ -174,7 +175,50 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
 
 class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
-    override fun onDraw(canvas: Canvas) = canvas.drawPaint(checkerBoard)
+    private val startTime = System.nanoTime()
+    private val shader by lazy(LazyThreadSafetyMode.NONE) {
+        runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                RuntimeShader(
+                    """
+uniform float iTime;
+uniform int width;
+vec4 main(vec2 fragCoord) {
+  float w = float(width) / 10;
+  float2 p = fragCoord - float2(w, w) / 2;
+  float x = (mod(p.x, w) - w / 2) / w;
+  float y = (mod(p.y - iTime * 10, w) - w / 2) / w;
+  float c = mod(floor(p.x / w) + floor((p.y + iTime * 10) / w), 2);
+  float a = 1 - sqrt(x * x + y * y) * c;
+  return half4(.5, .5, .5, a);
+}""".trimIndent()
+                ).also {
+                    it.setIntUniform(
+                        "width",
+                        context.resources?.displayMetrics?.widthPixels ?: 400
+                    )
+                }
+            } else null
+        }.onFailure(logException).getOrNull()
+    }
+    private val shaderPaint = Paint().also {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            it.shader = shader
+        }
+    }
+
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        invalidate()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            shader?.setFloatUniform("iTime", (System.nanoTime() - startTime) / 1e9f)
+            canvas.drawPaint(shaderPaint)
+            invalidate()
+        } else canvas.drawPaint(checkerBoard)
+    }
 }
 
 // https://stackoverflow.com/a/58471997
