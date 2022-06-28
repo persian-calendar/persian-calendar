@@ -1,23 +1,34 @@
 package com.byagowi.persiancalendar.utils
 
+import android.app.LocaleManager
 import android.content.Context
 import android.content.res.Resources
+import android.os.Build
+import android.os.LocaleList
 import android.view.View
+import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.preferredDigits
 import java.util.*
 
+
 // Context preferably should be activity context not application
 fun applyAppLanguage(context: Context) {
-    val locale = language.asSystemLocale()
-    Locale.setDefault(locale)
-    val resources = context.resources
-    val config = resources.configuration
-    config.setLocale(locale)
-    config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
-    resources.updateConfiguration(config, resources.displayMetrics)
+    // TODO: Use https://developer.android.com/about/versions/13/features/app-languages suggestions
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        context.getSystemService<LocaleManager>()?.applicationLocales =
+            LocaleList(Locale.forLanguageTag(language.code))
+    } else {
+        val locale = language.asSystemLocale()
+        Locale.setDefault(locale)
+        val resources = context.resources
+        val config = resources.configuration
+        config.setLocale(locale)
+        config.setLayoutDirection(if (language.isLessKnownRtl) Language.FA.asSystemLocale() else locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
 }
 
 //fun Context.withLocale(): Context {
