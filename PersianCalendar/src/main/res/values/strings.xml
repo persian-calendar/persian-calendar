@@ -373,6 +373,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="chinese">Chinese</string>
     <string name="live_wallpaper_settings">Live wallpaper settings</string>
     <string name="screensaver_settings">Screensaver settings</string>
+    <string name="enable_notification">Would you like to enable date notification?</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

@@ -52,7 +52,7 @@ fun showCoordinatesDialog(
                 val geocoder = Geocoder(activity, language.asSystemLocale())
                     .getFromLocation(latitude, longitude, 20)
                 withContext(Dispatchers.Main.immediate) {
-                    val result = geocoder.getOrNull(0)
+                    val result = geocoder?.getOrNull(0)
                     cityName = result?.friendlyName
                     countryCode = result?.countryCode
                     binding.geocoder.text = cityName ?: ""

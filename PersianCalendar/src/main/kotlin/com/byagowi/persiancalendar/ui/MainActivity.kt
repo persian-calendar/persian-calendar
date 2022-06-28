@@ -34,7 +34,9 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
+import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
+import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
@@ -274,7 +276,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
             }
             PREF_NOTIFY_DATE -> {
-                if (!prefs.getBoolean(PREF_NOTIFY_DATE, true)) {
+                if (!prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
                     stopService(Intent(this, ApplicationService::class.java))
                     startEitherServiceOrWorker(applicationContext)
                 }
@@ -302,6 +304,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     if (navController?.currentDestination?.id == R.id.calendar)
                         navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
                 }
+            }
+            POST_NOTIFICATION_PERMISSION_REQUEST_CODE -> {
+                val isGranted = ActivityCompat.checkSelfPermission(
+                    this, Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+                appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, isGranted) }
+                updateStoredPreference(this)
+                if (isGranted) update(this, updateDate = true)
             }
         }
     }

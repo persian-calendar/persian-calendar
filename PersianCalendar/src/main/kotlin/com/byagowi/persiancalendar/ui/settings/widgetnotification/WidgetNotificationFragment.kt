@@ -1,9 +1,14 @@
 package com.byagowi.persiancalendar.ui.settings.widgetnotification
 
+import android.Manifest
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.core.app.ActivityCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.TwoStatePreference
+import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
@@ -33,6 +38,7 @@ import com.byagowi.persiancalendar.ui.settings.section
 import com.byagowi.persiancalendar.ui.settings.summary
 import com.byagowi.persiancalendar.ui.settings.switch
 import com.byagowi.persiancalendar.ui.settings.title
+import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
@@ -41,6 +47,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
 
     private var widgetTextColorPreferences: Preference? = null
     private var widgetBackgroundColorPreferences: Preference? = null
+    private var notifyDatePreference: TwoStatePreference? = null
     private var notifyDateLockScreenPreference: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -50,9 +57,22 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                 // Hide notification category if we are in widgets configuration
                 if (arguments?.getBoolean(IS_WIDGETS_CONFIGURATION, false) == true)
                     isVisible = false
-                switch(PREF_NOTIFY_DATE, true) {
+                switch(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE) {
                     title(R.string.notify_date)
                     summary(R.string.enable_notify)
+                    setOnPreferenceChangeListener { _, _ ->
+                        isChecked = if (ActivityCompat.checkSelfPermission(
+                                activity, Manifest.permission.POST_NOTIFICATIONS
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            activity.askForPostNotificationPermission()
+                            false
+                        } else {
+                            !isChecked
+                        }
+                        false
+                    }
+                    notifyDatePreference = this
                 }
                 switch(PREF_NOTIFY_DATE_LOCK_SCREEN, true) {
                     title(R.string.notify_date_lock_screen)
@@ -127,8 +147,9 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         sharedPreferences ?: return
-        notifyDateLockScreenPreference?.isVisible =
-            sharedPreferences.getBoolean(PREF_NOTIFY_DATE, true)
+        val isNotifyDate = sharedPreferences.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)
+        notifyDatePreference?.isChecked = isNotifyDate
+        notifyDateLockScreenPreference?.isVisible = isNotifyDate
         if (Theme.isDynamicColor(sharedPreferences)) {
             val prefersSystemColors =
                 sharedPreferences.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)

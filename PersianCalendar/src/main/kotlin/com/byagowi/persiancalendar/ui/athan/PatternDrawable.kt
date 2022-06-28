@@ -59,8 +59,9 @@ class PatternDrawable(
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var centerX = 0f
     private var centerY = 0f
-    override fun onBoundsChange(bounds: Rect?) {
-        super.onBoundsChange(bounds ?: return)
+
+    override fun onBoundsChange(bounds: Rect) {
+        super.onBoundsChange(bounds)
         backgroundPaint.shader = LinearGradient(
             0f, 0f, 0f, bounds.bottom.toFloat(),
             tintColor, if (darkBaseColor) Color.BLACK else Color.WHITE,

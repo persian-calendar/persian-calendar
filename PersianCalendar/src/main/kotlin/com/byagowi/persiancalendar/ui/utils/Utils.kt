@@ -7,6 +7,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -30,6 +31,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.helper.widget.Flow
+import androidx.core.app.ActivityCompat
 import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -45,6 +47,7 @@ import androidx.navigation.findNavController
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
+import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.ui.DrawerHost
@@ -223,6 +226,13 @@ fun FragmentActivity.askForCalendarPermission() {
         }
         .setNegativeButton(R.string.cancel) { dialog, _ -> dialog.cancel() }
         .show()
+}
+
+fun FragmentActivity.askForPostNotificationPermission() {
+    requestPermissions(
+        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+        POST_NOTIFICATION_PERMISSION_REQUEST_CODE
+    )
 }
 
 fun Window.makeWallpaperTransparency() {

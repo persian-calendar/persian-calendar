@@ -184,4 +184,9 @@
         android:importantForAccessibility="no"
         app:tint="?attr/colorAccent" />
 
+    <include
+        android:id="@+id/buttons_bar"
+        layout="@layout/settings_buttons_bar"
+        android:visibility="gone" />
+
 </LinearLayout>

@@ -1,11 +1,13 @@
 package com.byagowi.persiancalendar
 
 import android.graphics.Color
+import android.os.Build
 
 const val LOG_TAG = "PersianCalendar"
 
 const val LOCATION_PERMISSION_REQUEST_CODE = 23
 const val CALENDAR_READ_PERMISSION_REQUEST_CODE = 55
+const val POST_NOTIFICATION_PERMISSION_REQUEST_CODE = 38
 
 const val LAST_CHOSEN_TAB_KEY = "LastChosenTab"
 
@@ -72,7 +74,7 @@ const val DEFAULT_WIDGET_IN_24 = false
 const val DEFAULT_IRAN_TIME = false
 const val DEFAULT_LOCAL_DIGITS = true
 const val DEFAULT_WIDGET_CLOCK = true
-const val DEFAULT_NOTIFY_DATE = true
+val DEFAULT_NOTIFY_DATE = Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU
 const val DEFAULT_NOTIFICATION_ATHAN = false
 const val DEFAULT_ASCENDING_ATHAN_VOLUME = false
 const val DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true

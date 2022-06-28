@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.text.TextPaint
@@ -37,10 +38,12 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
+import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
@@ -74,6 +77,7 @@ import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.CalendarsView
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
+import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -232,15 +236,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         mainBinding = binding
 
         val tabs = listOfNotNull(
-            R.string.calendar to CalendarsView(view.context).also { calendarsView ->
-                viewLifecycleOwner.lifecycleScope.launch {
-                    viewModel.selectedDayChangeEvent
-                        .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                        .collectLatest { jdn ->
-                            calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
-                        }
-                }
-            },
+            R.string.calendar to createCalendarsTab(view.context),
             R.string.events to createEventsTab(layoutInflater, view.parent as ViewGroup),
             if (enableOwghatTab(view.context)) // The optional third tab
                 R.string.owghat to createOwghatTab(layoutInflater, view.parent as ViewGroup)
@@ -317,6 +313,40 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
             appBar.toolbar.setupMenuNavigation()
             appBar.root.hideToolbarBottomShadow()
         }
+    }
+
+    private fun createCalendarsTab(context: Context): View {
+        val calendarsView = CalendarsView(context)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.selectedDayChangeEvent
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+                .collectLatest { jdn ->
+                    calendarsView.showCalendars(jdn, mainCalendar, enabledCalendars)
+                }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(), Manifest.permission.READ_CALENDAR
+            ) != PackageManager.PERMISSION_GRANTED &&
+            (PREF_NOTIFY_DATE !in context.appPrefs ||
+                    !context.appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
+        ) {
+            calendarsView.buttonsBar.settings.setOnClickListener {
+                calendarsView.buttonsBar.root.isVisible = false
+                activity?.askForPostNotificationPermission()
+            }
+            calendarsView.buttonsBar.discard.setOnClickListener {
+                calendarsView.buttonsBar.root.isVisible = false
+                context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, false) }
+            }
+            calendarsView.buttonsBar.header.text = getString(R.string.enable_notification)
+            calendarsView.buttonsBar.root.isVisible = true
+            calendarsView.buttonsBar.settings.setText(R.string.notify_date)
+        }
+
+        return calendarsView
     }
 
     private fun addEventOnCalendar(jdn: Jdn) {

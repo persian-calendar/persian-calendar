@@ -39,6 +39,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         it.extraInformationContainer.isVisible = false
         it.extraInformationContainer.setupLayoutTransition()
     }
+    val buttonsBar get() = binding.buttonsBar
     private var isExpanded = false
 
     fun toggle() {

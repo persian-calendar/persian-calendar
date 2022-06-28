@@ -99,7 +99,7 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
             runCatching {
                 val result = Geocoder(activity, language.asSystemLocale())
                     .getFromLocation(coordinates.latitude, coordinates.longitude, 1)
-                    .firstOrNull()
+                    ?.firstOrNull()
                 countryCode = result?.countryCode
                 result?.friendlyName
             }.onFailure(logException).getOrNull()

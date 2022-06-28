@@ -243,7 +243,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     binding.map.invalidate()
                     binding.date.text = dateSink.formatDateAndTime()
                     binding.timeBar.isVisible = state.displayNightMask
-                    directPathButton.icon.alpha = if (state.isDirectPathMode) 127 else 255
+                    directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
                 }
         }
     }
