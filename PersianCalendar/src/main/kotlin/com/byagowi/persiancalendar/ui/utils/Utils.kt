@@ -27,6 +27,7 @@ import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
 import androidx.browser.customtabs.CustomTabsIntent
@@ -228,6 +229,7 @@ fun FragmentActivity.askForCalendarPermission() {
         .show()
 }
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun FragmentActivity.askForPostNotificationPermission() {
     requestPermissions(
         arrayOf(Manifest.permission.POST_NOTIFICATIONS),

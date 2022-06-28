@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.widgetnotification
 import android.Manifest
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.preference.Preference
@@ -61,7 +62,8 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                     title(R.string.notify_date)
                     summary(R.string.enable_notify)
                     setOnPreferenceChangeListener { _, _ ->
-                        isChecked = if (ActivityCompat.checkSelfPermission(
+                        isChecked = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                            ActivityCompat.checkSelfPermission(
                                 activity, Manifest.permission.POST_NOTIFICATIONS
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
