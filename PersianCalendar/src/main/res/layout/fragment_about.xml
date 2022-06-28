@@ -192,6 +192,7 @@
 
             <LinearLayout
                 style="@style/AboutCard"
+                android:id="@+id/developers_section"
                 android:background="?attr/colorCard">
 
                 <TextView

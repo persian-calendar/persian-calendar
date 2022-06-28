@@ -150,6 +150,14 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
             }
         }
 
+
+        // Chip view inflation crashes in Android 4 as lack RippleDrawable apparently and material's
+        // internal bug so let's just hide it there
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            binding.developersSection.isVisible = false
+            return
+        }
+
         listOf(
             R.string.about_developers_list to R.drawable.ic_developer,
             R.string.about_designers_list to R.drawable.ic_designer,
@@ -161,9 +169,9 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
                 Chip(context).also { chip ->
                     chip.ensureAccessibleTouchTarget(0)
                     chip.setOnClickListener(chipClick)
-                    val parts = it.split(": ")
-                    chip.tag = parts[0]
-                    chip.text = parts[1]
+                    val (username, displayName) = it.split(": ")
+                    chip.tag = username
+                    chip.text = displayName
                     chip.chipIcon = icon
                     chip.setChipIconTintResource(chipsIconTintId)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
