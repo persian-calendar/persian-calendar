@@ -131,8 +131,8 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
             runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
                 .onFailure(logException).getOrNull().debugAssertNotNull
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            toolbar.menu.add(getString(R.string.add_quick_settings_tile)).onClick {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            toolbar.menu.add(R.string.add_quick_settings_tile).onClick {
                 val context = toolbar.context
                 context.getSystemService<StatusBarManager>()?.requestAddTileService(
                     ComponentName(
@@ -145,6 +145,7 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
                     {}
                 )
             }
+        }
 
         // Rest are development features
         if (!BuildConfig.DEVELOPMENT) return
