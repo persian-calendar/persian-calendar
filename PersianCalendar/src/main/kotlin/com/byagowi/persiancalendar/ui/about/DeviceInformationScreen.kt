@@ -191,7 +191,7 @@ vec4 main(vec2 fragCoord) {
   float c = mod(floor(p.x / w) + floor((p.y + iTime * 10) / w), 2);
   float a = 1 - sqrt(x * x + y * y) * c;
   return half4(.5, .5, .5, a);
-}""".trimIndent()
+}"""
                 ).also {
                     it.setIntUniform(
                         "width",
