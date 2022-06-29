@@ -178,27 +178,23 @@ class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context
     private val startTime = System.nanoTime()
     private val shader by lazy(LazyThreadSafetyMode.NONE) {
         runCatching {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                RuntimeShader(
-                    """
-uniform float iTime;
-uniform int width;
-vec4 main(vec2 fragCoord) {
-  float w = float(width) / 10;
-  float2 p = fragCoord - float2(w, w) / 2;
-  float x = (mod(p.x, w) - w / 2) / w;
-  float y = (mod(p.y - iTime * 10, w) - w / 2) / w;
-  float c = mod(floor(p.x / w) + floor((p.y + iTime * 10) / w), 2);
-  float a = 1 - sqrt(x * x + y * y) * c;
-  return half4(.5, .5, .5, a);
-}"""
-                ).also {
-                    it.setIntUniform(
-                        "width",
-                        context.resources?.displayMetrics?.widthPixels ?: 400
-                    )
-                }
-            } else null
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return@runCatching null
+            RuntimeShader(
+                """
+    uniform float iTime;
+    uniform int width;
+    vec4 main(vec2 fragCoord) {
+      float w = float(width) / 10;
+      float2 p = fragCoord - float2(w, w) / 2;
+      float x = (mod(p.x, w) - w / 2) / w;
+      float y = (mod(p.y - iTime * 10, w) - w / 2) / w;
+      float c = mod(floor(p.x / w) + floor((p.y + iTime * 10) / w), 2);
+      float a = 1 - sqrt(x * x + y * y) * c;
+      return half4(.5, .5, .5, a);
+    }"""
+            ).also {
+                it.setIntUniform("width", context.resources?.displayMetrics?.widthPixels ?: 400)
+            }
         }.onFailure(logException).getOrNull().debugAssertNotNull
     }
     private val shaderPaint = Paint().also {
