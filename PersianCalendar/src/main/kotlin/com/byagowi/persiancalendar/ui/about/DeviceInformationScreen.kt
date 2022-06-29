@@ -199,7 +199,7 @@ vec4 main(vec2 fragCoord) {
                     )
                 }
             } else null
-        }.onFailure(logException).getOrNull()
+        }.onFailure(logException).getOrNull().debugAssertNotNull
     }
     private val shaderPaint = Paint().also {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
