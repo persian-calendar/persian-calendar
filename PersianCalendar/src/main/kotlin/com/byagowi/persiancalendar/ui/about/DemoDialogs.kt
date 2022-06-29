@@ -78,7 +78,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import java.util.*
+import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.absoluteValue
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -88,6 +90,7 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sign
 import kotlin.math.sin
+import kotlin.random.Random
 
 //
 // These are somehow a sandbox to test things not used in the app yet and can be removed anytime.
@@ -881,6 +884,9 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
                 MotionEvent.ACTION_UP -> {
                     horizontalSpring.animateToFinalPosition(width / 2f)
                     verticalSpring.animateToFinalPosition(height / 2f)
+
+                    val angle = atan2(y.value - width / 2f, x.value - height / 2f)
+                    createSoundTick(angle * 10.0).play()
                 }
             }
             return true
@@ -1012,4 +1018,70 @@ fun showQrCode(activity: FragmentActivity, text: String) {
     MaterialAlertDialogBuilder(activity)
         .setView(ImageView(activity).also { it.setImageBitmap(textToQrCodeBitmap(text)) })
         .show()
+}
+
+// Based on https://habr.com/ru/post/514844/ and https://timiskhakov.github.io/posts/programming-guitar-music
+private fun guitarString(
+    frequency: Double,
+    duration: Double = 1.0,
+    sampleRate: Int = 44100,
+    p: Double = .9,
+    beta: Double = .1,
+    s: Double = .1,
+    c: Double = .1,
+    l: Double = .1
+): ShortArray {
+    val n = (sampleRate / frequency).roundToInt()
+
+    // Pick-direction lowpass filter
+    val random = (0 until n).runningFold(Random.nextDouble() * 2 - 1) { lastOut, _ ->
+        (1 - p) * (Random.nextDouble() * 2 - 1) + p * lastOut
+    }
+
+    // Pick-position comb filter
+    val pick = (beta * n + 1 / 2).roundToInt().let { if (it == 0) n else it }
+    val noise = DoubleArray(random.size) { random[it] - if (it < pick) .0 else random[it - pick] }
+
+    val samples = DoubleArray((sampleRate * duration).roundToInt())
+    (0 until n).forEach { samples[it] = noise[it] }
+
+    fun delayLine(i: Int) = samples.getOrNull(i - n) ?: .0
+
+    // String-dampling filter.
+    fun stringDamplingFilter(i: Int) = 0.996 * ((1 - s) * delayLine(i) + s * delayLine(i - 1))
+
+    // First-order string-tuning allpass filter
+    (n until samples.size).forEach {
+        samples[it] =
+            c * (stringDamplingFilter(it) - samples[it - 1]) + stringDamplingFilter(it - 1)
+    }
+
+    // Dynamic-level lowpass filter. L ∈ (0, 1/3)
+    val wTilde = PI * frequency / sampleRate
+    val buffer = DoubleArray(samples.size)
+    buffer[0] = wTilde / (1 + wTilde) * samples[0]
+    (1 until samples.size).forEach {
+        buffer[it] =
+            wTilde / (1 + wTilde) * (samples[it] + samples[it - 1]) + (1 - wTilde) / (1 + wTilde) * buffer[it - 1]
+    }
+    samples.indices
+        .forEach { samples[it] = ((l.pow(4 / 3.0)) * samples[it]) + (1 - l) * buffer[it] }
+
+    val max = samples.maxOf { it.absoluteValue }
+    return samples.map { (it / max * Short.MAX_VALUE).roundToInt().toShort() }.toShortArray()
+}
+
+fun createSoundTick(offset: Double): AudioTrack {
+    val sampleRate = 44100
+    val buffer = guitarString(
+        getStandardFrequency(offset + MIDDLE_A_SEMITONE),
+        sampleRate = sampleRate,
+        duration = 4.0
+    )
+    val audioTrack = AudioTrack(
+        AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+        AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
+    )
+    audioTrack.write(buffer, 0, buffer.size)
+    return audioTrack
 }

@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -34,8 +33,6 @@ class DaysAdapter(
     var startingDayOfWeek: Int = 0
     var weekOfYearStart: Int = 0
     var weeksCount: Int = 0
-
-    val secondaryCalendar = PREF_SECONDARY_CALENDAR_IN_TABLE
 
     private var monthDeviceEvents: DeviceCalendarEventsStore = EventsStore.empty()
     private var selectedDay = -1
