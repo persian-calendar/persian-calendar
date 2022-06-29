@@ -386,26 +386,32 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
             path.lineTo(x.value, y.value)
             canvas.drawPath(path, linesPaint)
             canvas.drawCircle(x.value, y.value, r, paint)
+            var isWallHit = false
             if (x.value < r) {
                 x.value = r
                 horizontalFling.cancel()
                 horizontalFling.setStartVelocity(-storedVelocityX).start()
+                isWallHit = true
             }
             if (x.value > width - r) {
                 x.value = width - r
                 horizontalFling.cancel()
                 horizontalFling.setStartVelocity(-storedVelocityX).start()
+                isWallHit = true
             }
             if (y.value < r) {
                 y.value = r
                 verticalFling.cancel()
                 verticalFling.setStartVelocity(-storedVelocityY).start()
+                isWallHit = true
             }
             if (y.value > height - r) {
                 y.value = height - r
                 verticalFling.cancel()
                 verticalFling.setStartVelocity(-storedVelocityY).start()
+                isWallHit = true
             }
+            if (isWallHit) createSoundTick(Random.nextDouble() * 20).play()
         }
 
         private var velocityTracker: VelocityTracker? = null
