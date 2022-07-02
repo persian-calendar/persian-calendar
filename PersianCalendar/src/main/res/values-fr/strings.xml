@@ -373,4 +373,6 @@
     <string name="pluto">Pluton</string>
     <string name="screensaver_settings">Paramètres de l’économiseur d’écran</string>
     <string name="live_wallpaper_settings">Paramètres du fond d’écran animé</string>
+    <string name="enable_notification">Voulez-vous activer la notification de la date \?</string>
+    <string name="add_quick_settings_tile">Ajouter une tuile de réglages rapides</string>
 </resources>
