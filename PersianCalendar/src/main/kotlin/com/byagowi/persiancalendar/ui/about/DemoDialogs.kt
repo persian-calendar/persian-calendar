@@ -54,7 +54,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
-import androidx.lifecycle.findViewTreeLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -417,6 +416,7 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
             }
             if (isWallHit) lifecycle.launch { playSoundTick(Random.nextDouble() * 20) }
         }
+
         private val lifecycle = activity.lifecycleScope
 
         private var velocityTracker: VelocityTracker? = null
