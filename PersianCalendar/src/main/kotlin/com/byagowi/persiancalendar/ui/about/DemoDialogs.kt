@@ -54,6 +54,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
@@ -77,6 +79,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.math.PI
 import kotlin.math.abs
@@ -411,8 +415,9 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
                 verticalFling.setStartVelocity(-storedVelocityY).start()
                 isWallHit = true
             }
-            if (isWallHit) createSoundTick(Random.nextDouble() * 20).play()
+            if (isWallHit) lifecycle.launch { playSoundTick(Random.nextDouble() * 20) }
         }
+        private val lifecycle = activity.lifecycleScope
 
         private var velocityTracker: VelocityTracker? = null
         override fun dispatchTouchEvent(event: MotionEvent): Boolean {
@@ -891,12 +896,14 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
                     horizontalSpring.animateToFinalPosition(width / 2f)
                     verticalSpring.animateToFinalPosition(height / 2f)
 
-                    val angle = atan2(y.value - width / 2f, x.value - height / 2f)
-                    createSoundTick(angle * 10.0).play()
+                    val angle = atan2(y.value - height / 2f, x.value - width / 2f)
+                    lifecycle.launch { playSoundTick(angle * 10.0) }
                 }
             }
             return true
         }
+
+        private val lifecycle = activity.lifecycleScope
     }
 
     MaterialAlertDialogBuilder(activity)
@@ -1077,17 +1084,19 @@ private fun guitarString(
     return samples.map { (it / max * Short.MAX_VALUE).roundToInt().toShort() }.toShortArray()
 }
 
-fun createSoundTick(offset: Double): AudioTrack {
-    val sampleRate = 44100
-    val buffer = guitarString(
-        getStandardFrequency(offset + MIDDLE_A_SEMITONE),
-        sampleRate = sampleRate,
-        duration = 4.0
-    )
-    val audioTrack = AudioTrack(
-        AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
-        AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
-    )
-    audioTrack.write(buffer, 0, buffer.size)
-    return audioTrack
+suspend fun playSoundTick(offset: Double) {
+    withContext(Dispatchers.IO) {
+        val sampleRate = 44100
+        val buffer = guitarString(
+            getStandardFrequency(offset + MIDDLE_A_SEMITONE),
+            sampleRate = sampleRate,
+            duration = 4.0
+        )
+        val audioTrack = AudioTrack(
+            AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO,
+            AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
+        )
+        audioTrack.write(buffer, 0, buffer.size)
+        audioTrack.play()
+    }
 }
