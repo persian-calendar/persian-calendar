@@ -13,6 +13,7 @@ import android.text.SpannableString
 import android.text.style.ReplacementSpan
 import android.text.util.Linkify
 import android.view.View
+import android.widget.Toast
 import androidx.core.graphics.createBitmap
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
@@ -71,12 +72,14 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
                 // Easter egg testing dialog
                 var clickCount = 0
                 it.add(title).setIcon(icon).onClick {
-                    activity?.let {
-                        if (++clickCount % 10 == 0) listOf(
+                    val activity = activity ?: return@onClick
+                    when (++clickCount % 10) {
+                        0 -> listOf(
                             ::showPeriodicTableDialog,
                             ::showSpringDemoDialog,
                             ::showFlingDemoDialog,
-                        )[i](it)
+                        )[i](activity)
+                        9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
