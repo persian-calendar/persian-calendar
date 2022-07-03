@@ -34,7 +34,7 @@ if (enableFirebaseInNightlyBuilds) {
 //   val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-val composeCompilerVersion = "1.2.0-beta01"
+val composeCompilerVersion = "1.2.0"
 val composeVersion = "1.1.1"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
@@ -209,8 +209,8 @@ dependencies {
     val fragmentVersion = "1.4.1"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
-    implementation("androidx.activity:activity-ktx:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.1")
+    implementation("androidx.activity:activity-ktx:1.5.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0")
 
     implementation("androidx.browser:browser:1.4.0")
 
@@ -236,13 +236,13 @@ dependencies {
         implementation("com.google.firebase:firebase-perf-ktx")
     }
 
-    minApi21Implementation("androidx.activity:activity-compose:1.4.0")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.12")
+    minApi21Implementation("androidx.activity:activity-compose:1.5.0")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.14")
     val accompanistVersion = "0.23.1"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha13")
+    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha14")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
@@ -319,18 +319,22 @@ tasks.register("moveToApiFlavors") {
         File(File(minApi17Target).parent).mkdirs()
         val minApi21Target = source.replace("/main/", "/minApi21/")
         File(File(minApi21Target).parent).mkdirs()
-        println("cp $source $minApi21Target".execute().text)
-        println("git add $minApi21Target".execute().text)
-        println("git mv $source $minApi17Target".execute().text)
-        println("git status".execute().text)
+        listOf(
+            "cp $source $minApi21Target",
+            "git add $minApi21Target",
+            "git mv $source $minApi17Target",
+            "git status",
+        ).forEach { println(it.execute().text) }
     }
 }
 
 tasks.register("mergeWeblate") {
     doLast {
         val weblateRepository = "https://hosted.weblate.org/git/persian-calendar/persian-calendar/"
-        println("git remote add weblate $weblateRepository".execute().text)
-        println("git remote update weblate".execute().text)
-        println("git merge weblate/main".execute().text)
+        listOf(
+            "git remote add weblate $weblateRepository",
+            "git remote update weblate",
+            "git merge weblate/main",
+        ).forEach { println(it.execute().text) }
     }
 }
