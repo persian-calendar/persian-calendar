@@ -18,7 +18,7 @@ jobs:
           COMMITS: ${{ toJson(github.event.commits) }}
         run: |
           TEMPLATE='.[] | "[\(.id[:8])](\(.url)) • [\(.author.username)](https://github.com/\(.author.username))
-          \(.message | gsub("(?<m>[&_*\\[\\]()~>#+\\-=|{}.!`'"'"'])"; "\\\(.m)"))
+          \(.message | gsub("&", "%26") | gsub("(?<m>[_*\\[\\]()~>#+\\-=|{}.!`'"'"'])"; "\\\(.m)"))
           "'
           (
             printf 'text='
