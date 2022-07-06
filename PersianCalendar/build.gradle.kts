@@ -225,7 +225,7 @@ dependencies {
     implementation("com.google.zxing:core:3.5.0")
 
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
-    debugImplementation("com.android.support:multidex:2.0.0")
+    debugImplementation("androidx.multidex:multidex:2.0.1")
 
     if (enableFirebaseInNightlyBuilds) {
         // For development builds only, they aren't and most likely won't ever be used in stable releases
