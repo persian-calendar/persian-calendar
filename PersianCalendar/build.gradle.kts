@@ -46,7 +46,7 @@ android {
     }
 
     compileSdk = 33
-    buildToolsVersion = "30.0.3"
+    buildToolsVersion = "33.0.0"
 
     buildFeatures {
         viewBinding = true
