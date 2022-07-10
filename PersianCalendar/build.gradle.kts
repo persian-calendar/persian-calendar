@@ -200,7 +200,7 @@ dependencies {
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
     implementation("com.google.android.material:material:1.6.1")
 
-    val navVersion = "2.4.2"
+    val navVersion = "2.5.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
