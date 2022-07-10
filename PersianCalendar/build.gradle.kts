@@ -5,7 +5,7 @@ fun String.execute() = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
 // Firebase is exclusively used in nightly builds not stable release
-val enableFirebaseInNightlyBuilds = false
+// val enableFirebaseInNightlyBuilds = false
 // Disable firebase build for now
 // gradle.startParameter.taskNames.any { "Nightly" in it || "nightly" in it }
 
@@ -16,11 +16,11 @@ plugins {
     id("io.github.persiancalendar.appbuildplugin") apply true
 }
 
-if (enableFirebaseInNightlyBuilds) {
-    plugins.apply("com.google.gms.google-services")
-    plugins.apply("com.google.firebase.firebase-perf")
-    plugins.apply("com.google.firebase.crashlytics")
-}
+// if (enableFirebaseInNightlyBuilds) {
+//     plugins.apply("com.google.gms.google-services")
+//     plugins.apply("com.google.firebase.firebase-perf")
+//     plugins.apply("com.google.firebase.crashlytics")
+// }
 
 // Disabled due to F-Droid inability to parse dynamic versioning
 //   val versionMajor = 1
@@ -227,14 +227,14 @@ dependencies {
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("androidx.multidex:multidex:2.0.1")
 
-    if (enableFirebaseInNightlyBuilds) {
-        // For development builds only, they aren't and most likely won't ever be used in stable releases
-        implementation(platform("com.google.firebase:firebase-bom:29.1.0"))
-        // BoM specifies individual Firebase libraries versions so we don't need to.
-        implementation("com.google.firebase:firebase-crashlytics-ktx")
-        implementation("com.google.firebase:firebase-analytics-ktx")
-        implementation("com.google.firebase:firebase-perf-ktx")
-    }
+    // if (enableFirebaseInNightlyBuilds) {
+    //     // For development builds only, they aren't and most likely won't ever be used in stable releases
+    //     implementation(platform("com.google.firebase:firebase-bom:29.1.0"))
+    //     // BoM specifies individual Firebase libraries versions so we don't need to.
+    //     implementation("com.google.firebase:firebase-crashlytics-ktx")
+    //     implementation("com.google.firebase:firebase-analytics-ktx")
+    //     implementation("com.google.firebase:firebase-perf-ktx")
+    // }
 
     minApi21Implementation("androidx.activity:activity-compose:1.5.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.14")
