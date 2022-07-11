@@ -19,11 +19,13 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.jsonPrimitive
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.ProjectLayout
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.configurationcache.extensions.capitalized
 import java.io.File
+import javax.inject.Inject
 
 abstract class CodeGenerators : DefaultTask() {
 
@@ -42,11 +44,14 @@ abstract class CodeGenerators : DefaultTask() {
     @InputDirectory
     abstract fun getGeneratedAppSrcDir(): Property<File>
 
+    @get:Inject
+    abstract val pl: ProjectLayout
+
     @TaskAction
     fun action() {
         val generatedAppSrcDir = getGeneratedAppSrcDir().get()
         generatedAppSrcDir.mkdirs()
-        val projectDir = project.projectDir
+        val projectDir = pl.projectDirectory.asFile
         listOf(
             "events" to ::generateEventsCode,
             "cities" to ::generateCitiesCode,
@@ -62,12 +67,14 @@ abstract class CodeGenerators : DefaultTask() {
 
     private fun createTextStore(generatedAppSrcDir: File) {
         val builder = FileSpec.builder(packageName, "TextStore")
+        val projectDir = pl.projectDirectory.asFile
+        val rootDir = pl.projectDirectory.asFile.parentFile
         listOf(
-            project.rootDir / "THANKS.md" to "credits",
-            project.rootDir / "FAQ.fa.md" to "faq",
-            project.projectDir / "shaders" / "common.vert" to "commonVertexShader",
-            project.projectDir / "shaders" / "globe.frag" to "globeFragmentShader",
-            project.projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader",
+            rootDir / "THANKS.md" to "credits",
+            rootDir / "FAQ.fa.md" to "faq",
+            projectDir / "shaders" / "common.vert" to "commonVertexShader",
+            projectDir / "shaders" / "globe.frag" to "globeFragmentShader",
+            projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader",
         ).forEach { (textFile, fieldName) ->
             builder.addProperty(
                 PropertySpec.builder(fieldName, String::class, KModifier.CONST)
