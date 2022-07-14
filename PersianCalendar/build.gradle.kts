@@ -216,7 +216,7 @@ dependencies {
 
     implementation("androidx.work:work-runtime-ktx:2.7.1")
 
-    val coroutinesVersion = "1.6.3"
+    val coroutinesVersion = "1.6.4"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.5")
