@@ -11,7 +11,7 @@ jobs:
     outputs:
       SHOULD_BUILD: ${{ steps.check.outputs.shouldBuild }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
@@ -31,7 +31,7 @@ jobs:
     needs: evaluateChanges
     if: ${{ needs.evaluateChanges.outputs.SHOULD_BUILD == 'true' }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
