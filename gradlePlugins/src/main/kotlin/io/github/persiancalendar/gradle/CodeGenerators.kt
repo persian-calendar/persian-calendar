@@ -68,7 +68,7 @@ abstract class CodeGenerators : DefaultTask() {
     private fun createTextStore(generatedAppSrcDir: File) {
         val builder = FileSpec.builder(packageName, "TextStore")
         val projectDir = pl.projectDirectory.asFile
-        val rootDir = pl.projectDirectory.asFile.parentFile
+        val rootDir = projectDir.parentFile
         listOf(
             rootDir / "THANKS.md" to "credits",
             rootDir / "FAQ.fa.md" to "faq",
@@ -186,7 +186,6 @@ abstract class CodeGenerators : DefaultTask() {
                     .build()
             )
         }
-        @OptIn(ExperimentalStdlibApi::class)
         builder.addProperty(
             PropertySpec
                 .builder("irregularRecurringEvents", typeNameOf<List<Map<String, String>>>())
@@ -284,7 +283,7 @@ abstract class CodeGenerators : DefaultTask() {
     )
 
     private fun generateDistrictsCode(districtsJson: File, builder: FileSpec.Builder) {
-        @OptIn(ExperimentalStdlibApi::class, ExperimentalSerializationApi::class)
+        @OptIn(ExperimentalSerializationApi::class)
         builder.addProperty(
             PropertySpec.builder("districtsStore", typeNameOf<List<Pair<String, List<String>>>>())
                 .initializer(buildCodeBlock {
