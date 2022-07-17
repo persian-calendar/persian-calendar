@@ -52,8 +52,8 @@ android {
         viewBinding = true
     }
 
-    val gitVersionProvider = providers.of(io.github.persiancalendar.gradle.GitVersionValueSource::class) {}
-    val gitVersion = gitVersionProvider.get()
+    val gitInfoProvider = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}
+    val gitInfo = gitInfoProvider.get()
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
@@ -68,7 +68,7 @@ android {
             "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
             "ne", "zh-rCN"
         )
-        setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitVersion")
+        setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitInfo")
     }
 
     signingConfigs {
@@ -89,7 +89,7 @@ android {
     buildTypes {
         create("nightly") {
             signingConfig = signingConfigs.getByName("nightly")
-            versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion-nightly"
+            versionNameSuffix = "-${defaultConfig.versionName}-$gitInfo-nightly"
             applicationIdSuffix = ".nightly"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -102,7 +102,7 @@ android {
         }
 
         getByName("debug") {
-            versionNameSuffix = "-${defaultConfig.versionName}-$gitVersion"
+            versionNameSuffix = "-${defaultConfig.versionName}-$gitInfo"
             buildConfigField("boolean", "DEVELOPMENT", "true")
             applicationIdSuffix = ".debug"
             multiDexEnabled = true

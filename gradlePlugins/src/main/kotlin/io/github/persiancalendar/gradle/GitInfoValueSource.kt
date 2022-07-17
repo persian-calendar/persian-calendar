@@ -6,7 +6,7 @@ import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
-abstract class GitVersionValueSource : ValueSource<String, ValueSourceParameters.None> {
+abstract class GitInfoValueSource : ValueSource<String, ValueSourceParameters.None> {
     @get:Inject
     abstract val execOperations: ExecOperations
 
