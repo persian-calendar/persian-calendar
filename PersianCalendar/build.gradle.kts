@@ -58,8 +58,9 @@ android {
         "git rev-parse --short HEAD", // git hash, e.g. 2426d51f
         "git status -s" // i == 3, whether repo's dir is clean, -dirty is appended if smt is uncommitted
     ).mapIndexedNotNull { i, cmd ->
-        cmd.execute().text?.trim()
-            ?.takeIf { it.isNotEmpty() }.let { if (i == 3 && it != null) "dirty" else it }
+        providers.exec {
+            commandLine(cmd.split(" "))
+        }.standardOutput.asText.get().trim().takeIf { it.isNotEmpty() }.let { if (i == 3 && it != null) "dirty" else it }
     }.joinToString("-")
 
     defaultConfig {
