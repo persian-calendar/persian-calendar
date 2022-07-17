@@ -10,21 +10,18 @@ abstract class GitVersionValueSource : ValueSource<String, ValueSourceParameters
     @get:Inject
     abstract val execOperations: ExecOperations
 
-    override fun obtain(): String {
+    override fun obtain(): String = listOf(
+        "git rev-parse --abbrev-ref HEAD", // branch, e.g. main
+        "git rev-list HEAD --count", // number of commits in history, e.g. 3724
+        "git rev-parse --short HEAD", // git hash, e.g. 2426d51f
+        "git status -s" // i == 3, whether repo's dir is clean, -dirty is appended if smt is uncommitted
+    ).mapIndexedNotNull { i, cmd ->
         val output = ByteArrayOutputStream()
-        val gitVersion = listOf(
-            "git rev-parse --abbrev-ref HEAD", // branch, e.g. main
-            "git rev-list HEAD --count", // number of commits in history, e.g. 3724
-            "git rev-parse --short HEAD", // git hash, e.g. 2426d51f
-            "git status -s" // i == 3, whether repo's dir is clean, -dirty is appended if smt is uncommitted
-        ).mapIndexedNotNull { i, cmd ->
-            execOperations.exec {
-                commandLine(cmd.split(" "))
-                standardOutput = output
-            }
-            output.toByteArray().decodeToString().trim().takeIf { it.isNotEmpty() }
-                .let { if (i == 3 && it != null) "dirty" else it }.also { output.reset() }
-        }.joinToString("-")
-        return gitVersion
-    }
+        execOperations.exec {
+            commandLine(cmd.split(" "))
+            standardOutput = output
+        }
+        output.toByteArray().decodeToString().trim().takeIf { it.isNotEmpty() }
+            .let { if (i == 3 && it != null) "dirty" else it }
+    }.joinToString("-")
 }
