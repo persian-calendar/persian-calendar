@@ -125,6 +125,8 @@
 
     <style name="DynamicDarkTheme" parent="DarkTheme" />
 
+    <style name="DynamicBlackTheme" parent="DarkTheme" />
+
     <style name="DarkTheme" parent="BaseDarkTheme">
         <item name="android:windowBackground">@color/dark_primary</item>
 

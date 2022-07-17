@@ -29,12 +29,19 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
 
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)
-            if (theme != SYSTEM_DEFAULT) return activity.setTheme(theme.styleRes)
+            if (theme != SYSTEM_DEFAULT &&
+                // Let's use dynamic colors also in black theme of Android 12
+                !(isDynamicColorAvailable() && theme == BLACK)
+            ) return activity.setTheme(theme.styleRes)
             val isNightModeEnabled = isNightMode(activity)
 
             if (isDynamicColorAvailable()) {
                 activity.setTheme(
-                    if (isNightModeEnabled) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
+                    when {
+                        theme == BLACK -> R.style.DynamicBlackTheme
+                        isNightModeEnabled -> R.style.DynamicDarkTheme
+                        else -> R.style.DynamicLightTheme
+                    }
                 )
                 DynamicColors.applyToActivityIfAvailable(activity)
             } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
