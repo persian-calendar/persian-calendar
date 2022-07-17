@@ -4,7 +4,6 @@ import org.gradle.api.provider.ValueSource
 import org.gradle.api.provider.ValueSourceParameters
 import org.gradle.process.ExecOperations
 import java.io.ByteArrayOutputStream
-import java.nio.charset.Charset
 import javax.inject.Inject
 
 abstract class GitVersionValueSource : ValueSource<String, ValueSourceParameters.None> {
@@ -23,7 +22,7 @@ abstract class GitVersionValueSource : ValueSource<String, ValueSourceParameters
                 commandLine(cmd.split(" "))
                 standardOutput = output
             }
-            String(output.toByteArray(), Charset.defaultCharset()).trim().takeIf { it.isNotEmpty() }
+            output.toByteArray().decodeToString().trim().takeIf { it.isNotEmpty() }
                 .let { if (i == 3 && it != null) "dirty" else it }.also { output.reset() }
         }.joinToString("-")
         return gitVersion
