@@ -44,18 +44,18 @@ jobs:
       - name: Build and send apks to telegram
         run: |
           # TODO: Clean up the duplication here
-          ./gradlew assembleMinApi17Nightly
+          ./gradlew assembleMinApi17Nightly --no-configuration-cache
           apk_dir="$(find . -type f -iname *.apk)"
           curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
           rm "$apk_dir"
-          ./gradlew assembleMinApi21Nightly
+          ./gradlew assembleMinApi21Nightly --no-configuration-cache
           apk_dir="$(find . -type f -iname *.apk)"
           curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
 
       - name: Update the runtime dependencies report
         run: |
-          ./gradlew PersianCalendar:dependencies --configuration minApi17ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
-          ./gradlew PersianCalendar:dependencies --configuration minApi21ReleaseRuntimeClasspath | grep -e '--- ' > PersianCalendar/runtime-dependencies-report-compose.txt
+          ./gradlew PersianCalendar:dependencies --configuration minApi17ReleaseRuntimeClasspath --no-configuration-cache | grep -e '--- ' > PersianCalendar/runtime-dependencies-report.txt
+          ./gradlew PersianCalendar:dependencies --configuration minApi21ReleaseRuntimeClasspath --no-configuration-cache | grep -e '--- ' > PersianCalendar/runtime-dependencies-report-compose.txt
 
       - name: Add and commit the report
         uses: EndBug/add-and-commit@2d7c2e89fcb436f8e139cc80813bd030bdd40c4b
