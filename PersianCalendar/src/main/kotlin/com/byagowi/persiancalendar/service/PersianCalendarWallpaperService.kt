@@ -37,13 +37,13 @@ class PersianCalendarWallpaperService : WallpaperService() {
             val surfaceHolder = surfaceHolder
             rotationDegree += .05f * direction
             runCatching {
-                val result = surfaceHolder.lockCanvas()
+                val result = surfaceHolder.lockCanvas() ?: return@runCatching
                 result.getClipBounds(bounds)
                 patternDrawable.bounds = bounds
                 patternDrawable.rotationDegree = rotationDegree
                 patternDrawable.draw(result)
-                result
-            }.onSuccess(surfaceHolder::unlockCanvasAndPost).onFailure(logException)
+                surfaceHolder.unlockCanvasAndPost(result)
+            }.onFailure(logException)
             handler.removeCallbacks(drawRunner)
             if (visible) handler.postDelayed(drawRunner, 1000 / 10)
         }
