@@ -181,19 +181,29 @@ class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return@runCatching null
             RuntimeShader(
                 """
-    uniform float iTime;
-    uniform int width;
-    vec4 main(vec2 fragCoord) {
-      float w = float(width) / 10;
-      float2 p = fragCoord - float2(w, w) / 2;
-      float x = (mod(p.x, w) - w / 2) / w;
-      float y = (mod(p.y - iTime * 10, w) - w / 2) / w;
-      float c = mod(floor(p.x / w) + floor((p.y + iTime * 10) / w), 2);
-      float a = 1 - sqrt(x * x + y * y) * c;
-      return half4(.5, .5, .5, a);
-    }"""
+uniform float iTime;
+uniform vec2 iResolution;
+// Source: @notargs https://twitter.com/notargs/status/1250468645030858753
+float f(vec3 p) {
+    p.z -= iTime * 10.;
+    float a = p.z * .1;
+    p.xy *= mat2(cos(a), sin(a), -sin(a), cos(a));
+    return .1 - length(cos(p.xy) + sin(p.yz));
+}
+
+half4 main(vec2 fragcoord) {
+    vec3 d = .5 - fragcoord.xy1 / iResolution.y;
+    vec3 p = vec3(0);
+    for (int i = 0; i < 10; i++) {
+        p += f(p) * d;
+    }
+    return ((sin(p) + vec3(2, 5, 12)) / length(p)).xyz1;
+}
+"""
             ).also {
-                it.setIntUniform("width", context.resources?.displayMetrics?.widthPixels ?: 400)
+                val width = context.resources?.displayMetrics?.widthPixels?.toFloat() ?: 800f
+                val height = context.resources?.displayMetrics?.heightPixels?.toFloat() ?: 800f
+                it.setFloatUniform("iResolution", width, height)
             }
         }.onFailure(logException).getOrNull().debugAssertNotNull
     }
