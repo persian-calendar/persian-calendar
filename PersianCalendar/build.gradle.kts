@@ -53,7 +53,7 @@ android {
     }
 
     val gitInfo =
-        providers.of(io.github.persiancalendar.gradle.GitVersionValueSource::class) {}.get()
+        providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
 
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
