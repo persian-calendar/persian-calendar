@@ -432,9 +432,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             binding.navHostFragment.translationX =
                 slideOffset * drawerView.width.toFloat() * slidingDirection
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && blurs.isNotEmpty()) {
-                binding.navHostFragment.setRenderEffect(
-                    blurs[((blurs.size - 1) * slideOffset).roundToInt()]
-                )
+                val blurIndex = ((blurs.size - 1) * slideOffset).roundToInt()
+                binding.navHostFragment.setRenderEffect(blurs[blurIndex])
+                binding.navigation.getHeaderView(0)
+                    .setRenderEffect(blurs[blurs.size - 1 - blurIndex])
             }
             binding.root.bringChildToFront(drawerView)
             binding.root.requestLayout()
