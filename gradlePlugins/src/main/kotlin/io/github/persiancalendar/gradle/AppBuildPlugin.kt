@@ -32,6 +32,7 @@ class AppBuildPlugin : Plugin<Project> {
             inputs.file(projectDir / "shaders" / "common.vert")
             inputs.file(projectDir / "shaders" / "globe.frag")
             inputs.file(projectDir / "shaders" / "sandbox.frag")
+            inputs.file(projectDir / "shaders" / "demo.frag")
             outputs.file(generateDir / "TextStore.kt")
         }
     }

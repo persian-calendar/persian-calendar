@@ -1,10 +1,12 @@
 #ifdef GL_ES
 precision highp float;
 #endif
+
 uniform float u_time;
 uniform vec2 u_resolution;
+
+// Source: @notargs https://twitter.com/notargs/status/1250468645030858753
 void main() {
-    // https://twitter.com/notargs/status/1250468645030858753
     vec3 d = .5 - vec3(gl_FragCoord.xy, 1.0) / u_resolution.y, p, o;
     for (int i = 0; i < 32; ++i) {
         o = p;
