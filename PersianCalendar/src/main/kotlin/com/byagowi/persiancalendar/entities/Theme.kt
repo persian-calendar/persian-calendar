@@ -77,8 +77,12 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
         fun isDynamicColorAvailable() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-        fun isDynamicColor(prefs: SharedPreferences?) =
-            isDynamicColorAvailable() && isDefault(prefs)
+        fun isDynamicColor(prefs: SharedPreferences?): Boolean {
+            return isDynamicColorAvailable() && when (prefs.theme) {
+                SYSTEM_DEFAULT.key, BLACK.key -> true
+                else -> false
+            }
+        }
 
         fun isNightMode(context: Context): Boolean =
             context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
