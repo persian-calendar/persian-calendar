@@ -31,11 +31,11 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
             val theme = getCurrent(activity)
             if (theme != SYSTEM_DEFAULT &&
                 // Let's use dynamic colors also in black theme of Android 12
-                !(isDynamicColorAvailable() && theme == BLACK)
+                !(DynamicColors.isDynamicColorAvailable() && theme == BLACK)
             ) return activity.setTheme(theme.styleRes)
             val isNightModeEnabled = isNightMode(activity)
 
-            if (isDynamicColorAvailable()) {
+            if (DynamicColors.isDynamicColorAvailable()) {
                 activity.setTheme(
                     when {
                         theme == BLACK -> R.style.DynamicBlackTheme
@@ -71,14 +71,9 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
 
         fun isDefault(prefs: SharedPreferences?) = prefs.theme == SYSTEM_DEFAULT.key
 
-        // DynamicColors.isDynamicColorAvailable() checks for particular brands but sooner or later
-        // all the brands will have dynamic colors, let's skip its check.
-        @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
-        fun isDynamicColorAvailable() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
-
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
         fun isDynamicColor(prefs: SharedPreferences?): Boolean {
-            return isDynamicColorAvailable() && when (prefs.theme) {
+            return DynamicColors.isDynamicColorAvailable() && when (prefs.theme) {
                 SYSTEM_DEFAULT.key, BLACK.key -> true
                 else -> false
             }

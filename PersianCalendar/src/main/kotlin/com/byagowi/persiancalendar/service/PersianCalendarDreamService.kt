@@ -17,6 +17,7 @@ import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.google.android.material.color.DynamicColors
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.random.Random
@@ -55,7 +56,7 @@ class PersianCalendarDreamService : DreamService() {
 
         val backgroundView = View(this).also {
             val isNightMode = Theme.isNightMode(this)
-            val accentColor = if (Theme.isDynamicColorAvailable()) getColor(
+            val accentColor = if (DynamicColors.isDynamicColorAvailable()) getColor(
                 if (isNightMode) android.R.color.system_accent1_200
                 else android.R.color.system_accent1_400
             ) else null
