@@ -503,7 +503,7 @@ private val elementsColor = buildMap {
     listOf(4, 12, 20, 38, 56, 88).forEach { put(it, 0xffffdead) } // Alkaline earth metals
     (57..71).forEach { put(it, 0xffffbfff) } // Lanthanides
     (89..103).forEach { put(it, 0xffff99cc) } // Actinides
-    listOf(1, 5, 6, 7, 8, 15, 16, 34).forEach { put(it, 0xffa0ffa0) } // Other nonmetals
+    listOf(1, 6, 7, 8, 15, 16, 34).forEach { put(it, 0xffa0ffa0) } // Other nonmetals
     listOf(5, 14, 32, 33, 51, 52).forEach { put(it, 0xffcccc99) } // Metalloids
     // Other nonmetals
     listOf(13, 31, 49, 50, 81, 82, 83, 84, 113, 114, 115, 116).forEach { put(it, 0xffcccccc) }
