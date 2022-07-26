@@ -55,6 +55,8 @@ android {
     val gitInfo =
         providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
 
+    namespace = "com.byagowi.persiancalendar"
+
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         // = if (enableFirebaseInNightlyBuilds) 19 else 17
