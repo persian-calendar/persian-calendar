@@ -498,14 +498,20 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
         .show()
 }
 
-private val elementsColor = mapOf(
-    1 to 0xffb0c0e6, 7 to 0xffb0c0e6, 8 to 0xffb0c0e6, 9 to 0xffb0c0e6, 16 to 0xffb0c0e6,
-    17 to 0xffb0c0e6, 35 to 0xffb0c0e6, 53 to 0xffb0c0e6,
-    2 to 0xffe0b0e6, 10 to 0xffe0b0e6, 18 to 0xffe0b0e6, 36 to 0xffe0b0e6, 54 to 0xffe0b0e6,
-    86 to 0xffe0b0e6, 118 to 0xffe0b0e6,
-    5 to 0xffb0e0e6, 6 to 0xffb0e0e6, 14 to 0xffb0e0e6, 15 to 0xffb0e0e6, 32 to 0xffb0e0e6,
-    34 to 0xffb0e0e6, 52 to 0xffb0e0e6,
-).withDefault { 0xffeee8aa }
+private Element
+
+private val elementsColor = buildMap {
+    listOf(3, 11, 19, 37, 55, 87).forEach { put(it, 0xffff9d9d) } // Alkali metals
+    listOf(4, 12, 20, 38, 56, 88).forEach { put(it, 0xffffdead) } // Alkaline earth metals
+    (57..71).forEach { put(it, 0xffffbfff) } // Lanthanides
+    (89..103).forEach { put(it, 0xffff99cc) } // Actinides
+    listOf(1, 5, 6, 7, 8, 15, 16, 34).forEach { put(it, 0xffa0ffa0) } // Other nonmetals
+    listOf(5, 14, 32, 33, 51, 52).forEach { put(it, 0xffcccc99) } // Metalloids
+    // Other nonmetals
+    listOf(13, 31, 49, 50, 81, 82, 83, 84, 113, 114, 115, 116).forEach { put(it, 0xffcccccc) }
+    listOf(9, 17, 35, 53, 85, 117).forEach { put(it, 0xffffff99) } // Halogens
+    listOf(2, 10, 18, 36, 54, 86, 118).forEach { put(it, 0xffc0ffff) } // Noble gases
+}.withDefault { 0xffffc0c0 } // Transition metals
 
 private val elementsIndices = buildList {
     var i = 1
