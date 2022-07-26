@@ -498,8 +498,6 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
         .show()
 }
 
-private Element
-
 private val elementsColor = buildMap {
     listOf(3, 11, 19, 37, 55, 87).forEach { put(it, 0xffff9d9d) } // Alkali metals
     listOf(4, 12, 20, 38, 56, 88).forEach { put(it, 0xffffdead) } // Alkaline earth metals
