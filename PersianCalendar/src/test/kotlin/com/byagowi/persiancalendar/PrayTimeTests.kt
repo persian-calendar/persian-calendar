@@ -6,10 +6,22 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.PrayTimes
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import java.util.*
 import kotlin.test.assertEquals
 
 class PrayTimeTests {
+    @ParameterizedTest
+    @EnumSource(CalculationMethod::class)
+    fun `smoke test different calculation methods`(method: CalculationMethod) {
+        PrayTimes(
+            method,
+            createCalendar("GMT-4:00", 2018, 9, 5),
+            Coordinates(43.0, -80.0, 0.0),
+            AsrMethod.Standard
+        )
+    }
 
     @Test
     fun `pray times calculations correctness`() {
