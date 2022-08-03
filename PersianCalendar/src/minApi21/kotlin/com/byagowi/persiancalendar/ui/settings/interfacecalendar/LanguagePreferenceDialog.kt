@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -56,7 +55,6 @@ private fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
                             .height(40.dp)
                             .clickable { onClick(item) }
                     ) {
-                        @OptIn(ExperimentalMaterial3Api::class)
                         RadioButton(selected = item == language, onClick = { onClick(item) })
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(item.nativeName)
