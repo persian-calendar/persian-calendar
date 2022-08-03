@@ -204,8 +204,8 @@ dependencies {
     val fragmentVersion = "1.4.1"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
-    implementation("androidx.activity:activity-ktx:1.5.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.0")
+    implementation("androidx.activity:activity-ktx:1.5.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
 
     implementation("androidx.browser:browser:1.4.0")
 
@@ -231,13 +231,13 @@ dependencies {
     //     implementation("com.google.firebase:firebase-perf-ktx")
     // }
 
-    minApi21Implementation("androidx.activity:activity-compose:1.5.0")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.14")
+    minApi21Implementation("androidx.activity:activity-compose:1.5.1")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.15")
     val accompanistVersion = "0.25.0"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha14")
+    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha15")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
