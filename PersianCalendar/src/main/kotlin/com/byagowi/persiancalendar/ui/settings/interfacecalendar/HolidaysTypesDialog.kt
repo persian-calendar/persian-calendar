@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showHolidaysTypesDialog(activity: FragmentActivity) {
@@ -68,12 +69,12 @@ fun showHolidaysTypesDialog(activity: FragmentActivity) {
 
     // Parents update logic
     fun updateParents() = hierarchy.forEach { (parent, children) ->
-        parent.isChecked = children.any { it.isChecked }
-        val isMixed = parent.isChecked && !children.all { it.isChecked }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            parent.buttonDrawable?.alpha = if (isMixed) 127 else 255
-        } else {
-            parent.alpha = if (isMixed) .5f else 1f
+        val isChecked = children.any { it.isChecked }
+        val isMixed = isChecked && !children.all { it.isChecked }
+        parent.checkedState = when {
+            isMixed -> MaterialCheckBox.STATE_INDETERMINATE
+            isChecked -> MaterialCheckBox.STATE_CHECKED
+            else -> MaterialCheckBox.STATE_UNCHECKED
         }
     }
     updateParents()
