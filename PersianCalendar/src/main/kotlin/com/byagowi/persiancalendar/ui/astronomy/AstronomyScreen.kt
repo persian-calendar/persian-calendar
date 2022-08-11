@@ -36,7 +36,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.materialswitch.MaterialSwitch
 import io.github.cosinekitty.astronomy.SeasonsInfo
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
@@ -165,7 +165,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
 
         val tropicalMenuItem = binding.appBar.toolbar.menu.add(R.string.tropical).also { menuItem ->
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-            menuItem.actionView = SwitchMaterial(binding.appBar.toolbar.context).also { switch ->
+            menuItem.actionView = MaterialSwitch(binding.appBar.toolbar.context).also { switch ->
                 @SuppressLint("SetTextI18n")
                 switch.text = getString(R.string.tropical) + " "
                 switch.isChecked = viewModel.isTropical.value

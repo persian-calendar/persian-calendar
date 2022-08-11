@@ -107,6 +107,7 @@ inline fun PreferenceCategory.multiSelect(
 inline fun PreferenceCategory.switch(
     key: String, defaultValue: Boolean, crossinline block: SwitchPreferenceCompat.() -> Unit
 ) = this.addPreference(SwitchPreferenceCompat(this.context).also {
+    it.widgetLayoutResource = R.layout.preference_material_switch
     it.key = key
     it.setDefaultValue(defaultValue)
     it.isIconSpaceReserved = false

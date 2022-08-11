@@ -73,7 +73,6 @@
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="switchStyle">@style/AppSwitchStyle</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -97,7 +96,6 @@
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="switchStyle">@style/AppSwitchStyle</item>
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -452,13 +450,6 @@
         <item name="android:maxLines">1</item>
         <item name="autoSizeMinTextSize">8dp</item>
         <item name="autoSizeTextType">uniform</item>
-    </style>
-
-    <style name="AppSwitchStyle" parent="Widget.Material3.CompoundButton.Switch">
-        <item name="track">@drawable/switch_track</item>
-        <item name="android:thumb">@drawable/switch_thumb</item>
-        <item name="thumbTint">@color/switch_thumb_tint</item>
-        <item name="trackTint">@color/switch_track_tint</item>
     </style>
 
     <style name="AppOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
