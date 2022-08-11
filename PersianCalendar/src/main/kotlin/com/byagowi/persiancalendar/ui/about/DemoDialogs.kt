@@ -44,6 +44,7 @@ import androidx.core.graphics.get
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
+import androidx.core.text.HtmlCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.customview.widget.ViewDragHelper
 import androidx.dynamicanimation.animation.FlingAnimation
@@ -494,6 +495,13 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
     }
 
     MaterialAlertDialogBuilder(activity)
+        .setTitle(
+            HtmlCompat.fromHtml(
+                "<small>1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6</small>"
+                    .replace(Regex("(\\w)(\\d+)"), "$1<sup><small>$2</small></sup>"),
+                HtmlCompat.FROM_HTML_MODE_LEGACY
+            )
+        )
         .setView(zoomableView)
         .show()
 }
