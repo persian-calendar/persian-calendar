@@ -34,7 +34,7 @@ plugins {
 //   val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-val composeCompilerVersion = "1.3.0-rc01"
+val composeCompilerVersion = "1.3.0"
 val composeVersion = "1.2.0"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
@@ -187,7 +187,7 @@ dependencies {
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     implementation("com.github.cosinekitty:astronomy:v2.1.2")
 
-    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("androidx.appcompat:appcompat:1.5.0")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.cardview:cardview:1.0.0")
@@ -195,13 +195,13 @@ dependencies {
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
     implementation("com.google.android.material:material:1.6.1")
 
-    val navVersion = "2.5.0"
+    val navVersion = "2.5.1"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
     implementation("androidx.core:core-ktx:1.8.0")
-    val fragmentVersion = "1.4.1"
+    val fragmentVersion = "1.5.2"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
     implementation("androidx.activity:activity-ktx:1.5.1")
@@ -237,7 +237,7 @@ dependencies {
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha15")
+    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha16")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
