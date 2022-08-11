@@ -166,8 +166,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         val tropicalMenuItem = binding.appBar.toolbar.menu.add(R.string.tropical).also { menuItem ->
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             menuItem.actionView = MaterialSwitch(binding.appBar.toolbar.context).also { switch ->
-                @SuppressLint("SetTextI18n")
-                switch.text = getString(R.string.tropical) + " "
+                switch.setText(R.string.tropical)
                 switch.isChecked = viewModel.isTropical.value
                 switch.setOnClickListener { viewModel.changeTropicalStatus(switch.isChecked) }
             }.also {
