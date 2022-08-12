@@ -1,0 +1,28 @@
+on:
+  workflow_run:
+    workflows: [Android CI]
+    types: [completed]
+    branch: [main]
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Notify about the success
+        run: |
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
+            -d disable_notification=true \
+            -d message_id=3716 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - name: Notify about the build failure
+        run: |
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
+            -d disable_notification=true \
+            -d message_id=3715 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+
