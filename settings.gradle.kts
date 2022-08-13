@@ -16,4 +16,3 @@ dependencyResolutionManagement {
 rootProject.name = "persian-calendar"
 include(":PersianCalendar")
 includeBuild("gradlePlugins")
-enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
