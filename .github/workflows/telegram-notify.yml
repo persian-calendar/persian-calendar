@@ -24,7 +24,7 @@ jobs:
         run: |
           (
             printenv COMMITS | jq -r "$TEMPLATE"
-            printf '📅 @Persian\_Calendar'
+            printf '📅 @Persian_Calendar'
           ) | \
           jq -R --slurp '{
             text: .,
