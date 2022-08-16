@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
-import android.annotation.SuppressLint
 import android.graphics.Canvas
 import android.graphics.ColorFilter
 import android.graphics.PixelFormat
@@ -11,6 +10,7 @@ import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -168,7 +169,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             menuItem.actionView = MaterialSwitch(binding.appBar.toolbar.context).also { switch ->
                 switch.setText(R.string.tropical)
                 switch.isChecked = viewModel.isTropical.value
-                switch.setOnClickListener { viewModel.changeTropicalStatus(switch.isChecked) }
+                switch.setOnCheckedListenerWithDeferredAnimation(viewModel::changeTropicalStatus)
             }.also {
                 // Animate visibility of the switch, a bit hacky way to retrieve the view parent
                 it.post { (it.parent as? ViewGroup)?.setupLayoutTransition() }
@@ -284,6 +285,24 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     }
                 }
                 launch { viewModel.astronomyState.collectLatest(::update) }
+            }
+        }
+    }
+
+    // This is a hack to re-enable switch animation on the screen. Switch animation doesn't work
+    // when other parts of the screen are also updated at the same time so this reverts the change
+    // and re-applies the actual value in the next iteration of the event loop, i.e. `post`.
+    private fun CompoundButton.setOnCheckedListenerWithDeferredAnimation(listener: (Boolean) -> Unit) {
+        if (isTalkBackEnabled) return setOnCheckedChangeListener { _, value -> listener(value) }
+        var disableListener = false
+        setOnCheckedChangeListener { _, value ->
+            if (disableListener) return@setOnCheckedChangeListener
+            disableListener = true
+            isChecked = !value
+            listener(value)
+            post {
+                isChecked = value
+                disableListener = false
             }
         }
     }
