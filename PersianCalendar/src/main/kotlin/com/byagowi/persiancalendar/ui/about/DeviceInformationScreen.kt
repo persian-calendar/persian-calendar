@@ -23,6 +23,7 @@ import android.os.Bundle
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.util.AttributeSet
+import android.view.InputDevice
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -340,6 +341,7 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
             "Sensors", activity.getSystemService<SensorManager>()
                 ?.getSensorList(Sensor.TYPE_ALL)?.joinToString("\n")
         ),
+        Item("Input Device", InputDevice.getDeviceIds().map(InputDevice::getDevice).joinToString()),
         Item(
             "System Features",
             activity.packageManager?.systemAvailableFeatures?.joinToString("\n")
