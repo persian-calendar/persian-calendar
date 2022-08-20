@@ -139,7 +139,6 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
 
         binding.bottomNavigation.menu.also {
             var clickCount = 0
-            val click = { if (++clickCount % 10 == 0) activity?.let(::showHiddenDialog) }
             listOf(
                 R.drawable.ic_developer to Build.VERSION.RELEASE,
                 R.drawable.ic_settings to "API " + Build.VERSION.SDK_INT,
@@ -147,7 +146,16 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
                         else @Suppress("DEPRECATION") Build.CPU_ABI,
                 R.drawable.ic_device_information_white to Build.MODEL
-            ).forEach { (icon, title) -> it.add(title).setIcon(icon).onClick(click) }
+            ).forEachIndexed { i, (icon, title) ->
+                it.add(title).setIcon(icon).onClick {
+                    if (++clickCount % 10 != 0) return@onClick
+                    when (i) {
+                        1 -> showSensorTestDialog(activity ?: return@onClick)
+                        2 -> showInputDeviceTestDialog(activity ?: return@onClick)
+                        else -> showHiddenDialog(activity ?: return@onClick)
+                    }
+                }
+            }
         }
     }
 }

@@ -110,12 +110,13 @@ private class ShiftWorkItemsAdapter(
             val context = binding.root.context
 
             binding.lengthSpinner.adapter = ArrayAdapter(
-                context, android.R.layout.simple_spinner_dropdown_item, (0..14).map(::formatNumber)
+                context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+                (0..14).map(::formatNumber)
             )
 
             binding.editText.also { editText ->
                 editText.setAdapter(object : ArrayAdapter<String>(
-                    context, android.R.layout.simple_spinner_dropdown_item
+                    context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item
                 ) {
                     private val titles = shiftWorkTitles.values.toList()
                     override fun getItem(position: Int) = titles[position]

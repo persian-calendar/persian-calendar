@@ -16,6 +16,10 @@ import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.SweepGradient
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
@@ -23,19 +27,25 @@ import android.opengl.GLSurfaceView
 import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Scroller
+import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorInt
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.PathParser
@@ -45,6 +55,8 @@ import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.customview.widget.ViewDragHelper
 import androidx.dynamicanimation.animation.FlingAnimation
@@ -1111,4 +1123,88 @@ suspend fun playSoundTick(offset: Double) {
         audioTrack.write(buffer, 0, buffer.size)
         audioTrack.play()
     }
+}
+
+fun showSensorTestDialog(activity: FragmentActivity) {
+    val sensorManager = activity.getSystemService<SensorManager>() ?: return
+    val root = LinearLayout(activity)
+    val spinner = Spinner(activity)
+    root.orientation = LinearLayout.VERTICAL
+    root.addView(spinner)
+    val textView = TextView(activity)
+    root.addView(textView)
+    val sensors = sensorManager.getSensorList(Sensor.TYPE_ALL)
+    spinner.adapter = ArrayAdapter(
+        spinner.context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+        listOf("Select a sensor") + sensors
+    )
+    textView.setPadding(8.dp.toInt())
+    textView.isVisible = false
+    textView.textDirection = View.TEXT_DIRECTION_LTR
+    var previousListener: SensorEventListener? = null
+    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            textView.isVisible = position != 0
+            if (previousListener != null) sensorManager.unregisterListener(previousListener)
+            if (position != 0) {
+                val sensor = sensors.getOrNull(position - 1) ?: return
+                val sensorDescription = sensor.toString()
+                val listener = object : SensorEventListener {
+                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                        Toast.makeText(activity, "Accuracy is changed", Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onSensorChanged(event: SensorEvent?) {
+                        event ?: return
+                        @SuppressLint("SetTextI18n")
+                        textView.text = sensorDescription + "\n" + event.values.joinToString("\n")
+                    }
+                }
+                sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+                previousListener = listener
+            }
+        }
+    }
+
+    val dialog = MaterialAlertDialogBuilder(activity)
+        .setView(root)
+        .setOnDismissListener { sensorManager.unregisterListener(previousListener) }
+        .show()
+
+    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
+    })
+}
+
+
+fun showInputDeviceTestDialog(activity: FragmentActivity) {
+    MaterialAlertDialogBuilder(activity)
+        .setView(object : AppCompatEditText(activity) {
+            init {
+                setPadding(8.dp.toInt())
+                textSize = 4.dp
+            }
+
+            fun log(any: Any?) {
+                text?.appendLine()
+                text?.appendLine(any.toString())
+            }
+
+            override fun onGenericMotionEvent(event: MotionEvent?): Boolean {
+                log(event)
+                return super.onGenericMotionEvent(event)
+            }
+
+            override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+                log(event)
+                return super.onKeyDown(keyCode, event)
+            }
+
+            override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
+                log(event)
+                return super.onKeyUp(keyCode, event)
+            }
+        })
+        .show()
 }
