@@ -33,4 +33,3 @@ jobs:
             -d disable_notification=true \
             -d message_id=3715 \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
-

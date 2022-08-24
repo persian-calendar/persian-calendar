@@ -43,14 +43,18 @@ jobs:
 
       - name: Build and send apks to telegram
         run: |
-          # TODO: Clean up the duplication here
+          upload_apk() {
+            apk_path="$(find . -type f -iname *.apk)"
+            curl -F document=@"$apk_path" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
+              -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+              -d caption=$(ls -l --block-size=K "$apk_path" | awk '{ print $5 }') \
+              -d parse_mode=HTML
+            rm "$apk_path"
+          }
           ./gradlew assembleMinApi17Nightly
-          apk_dir="$(find . -type f -iname *.apk)"
-          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
-          rm "$apk_dir"
+          upload_apk
           ./gradlew assembleMinApi21Nightly
-          apk_dir="$(find . -type f -iname *.apk)"
-          curl -F document=@"$apk_dir" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument?chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+          upload_apk
 
       - name: Update the runtime dependencies report
         run: |
