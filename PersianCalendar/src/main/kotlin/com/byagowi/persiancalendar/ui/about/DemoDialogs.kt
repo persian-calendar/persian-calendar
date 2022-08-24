@@ -1159,14 +1159,13 @@ fun showSensorTestDialog(activity: FragmentActivity) {
 
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
-            val h = height
+            val h2 = height / 2
             val max = log.maxOf { it.maxOfOrNull { it.absoluteValue } ?: 0f }.coerceAtLeast(1f)
-            val d = log[0].size.takeIf { it != 0 } ?: return
             log[0].indices.forEach { n ->
                 val path = paths[n.coerceAtMost(paths.size - 1)]
                 path.rewind()
-                log.forEachIndexed l@ { x, it ->
-                    val y = (if (it.size > n) it[n] else return@l) / max * h / 6 + h * (n + 1) / d
+                log.forEachIndexed { x, it ->
+                    val y = (if (it.size > n) it[n] else return@forEachIndexed) / max * h2 + h2
                     if (x == 0) path.moveTo(x.toFloat(), y) else path.lineTo(x.toFloat(), y)
                 }
                 paintSink.color = when (n) {
