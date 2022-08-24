@@ -1151,24 +1151,21 @@ fun showSensorTestDialog(activity: FragmentActivity) {
         }
 
         private val path = Path()
-        fun createPaint(@ColorInt color: Int) = Paint().also {
+        private val grayPaint = Paint().also {
             it.strokeWidth = 1.dp
             it.style = Paint.Style.STROKE
-            it.color = color
+            it.color = Color.GRAY
         }
 
-        private val grayPaint = createPaint(Color.GRAY)
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
             val h = height / 2
             path.rewind()
+            val max = log.maxOf { it.maxOfOrNull { it.absoluteValue } ?: 0f }.coerceAtLeast(1f)
             log[0].indices.forEach { n ->
-                val max = log.maxOf { if (it.size > n) it[n].absoluteValue else 0f }
-                    .coerceAtLeast(1f)
-                log.forEachIndexed { i, it ->
-                    val x = i * 2 + 1f
+                log.forEachIndexed { x, it ->
                     val y = (if (it.size > n) it[n] else return@forEachIndexed) / max * h / 2 + h
-                    if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+                    if (x == 0) path.moveTo(x.toFloat(), y) else path.lineTo(x.toFloat(), y)
                 }
                 canvas.drawPath(path, grayPaint)
             }
@@ -1184,36 +1181,48 @@ fun showSensorTestDialog(activity: FragmentActivity) {
     textView.isVisible = false
     textView.textDirection = View.TEXT_DIRECTION_LTR
     var previousListener: SensorEventListener? = null
+    var samplingPeriod = SensorManager.SENSOR_DELAY_NORMAL
+    fun listenToSensor() {
+        val position = spinner.selectedItemPosition
+        textView.isVisible = position != 0
+        if (previousListener != null) sensorManager.unregisterListener(previousListener)
+        if (position != 0) {
+            val sensor = sensors.getOrNull(position - 1) ?: return
+            val sensorDescription = sensor.toString()
+            textView.text = sensorDescription
+            val listener = object : SensorEventListener {
+                override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+                    Toast.makeText(activity, "Accuracy is changed", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onSensorChanged(event: SensorEvent?) {
+                    val v = event?.values ?: return
+                    @SuppressLint("SetTextI18n")
+                    textView.text = sensorDescription + "\nn: ${v.size}\n" +
+                            v.joinToString("\n") + run {
+                        if (v.size == 3) "\n|v| ${sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])}"
+                        else ""
+                    }
+                    log[counter++ % width] = v.clone()
+                }
+            }
+            sensorManager.registerListener(listener, sensor, samplingPeriod)
+            previousListener = listener
+            initiateLog()
+        }
+    }
+    textView.setOnClickListener {
+        samplingPeriod = when (samplingPeriod) {
+            SensorManager.SENSOR_DELAY_NORMAL -> SensorManager.SENSOR_DELAY_UI
+            SensorManager.SENSOR_DELAY_UI -> SensorManager.SENSOR_DELAY_GAME
+            else -> SensorManager.SENSOR_DELAY_NORMAL
+        }
+        listenToSensor()
+    }
     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) = Unit
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            textView.isVisible = position != 0
-            if (previousListener != null) sensorManager.unregisterListener(previousListener)
-            if (position != 0) {
-                val sensor = sensors.getOrNull(position - 1) ?: return
-                val sensorDescription = sensor.toString()
-                textView.text = sensorDescription
-                val listener = object : SensorEventListener {
-                    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                        Toast.makeText(activity, "Accuracy is changed", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onSensorChanged(event: SensorEvent?) {
-                        val v = event?.values ?: return
-                        @SuppressLint("SetTextI18n")
-                        textView.text = sensorDescription + "\nn: ${v.size}\n" +
-                                v.joinToString("\n") + run {
-                            if (v.size == 3) "\n|v| ${sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])}"
-                            else ""
-                        }
-                        log[counter++ % width] = v.clone()
-                    }
-                }
-                sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
-                previousListener = listener
-                initiateLog()
-            }
-        }
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
+            listenToSensor()
     }
 
     MaterialAlertDialogBuilder(activity)
