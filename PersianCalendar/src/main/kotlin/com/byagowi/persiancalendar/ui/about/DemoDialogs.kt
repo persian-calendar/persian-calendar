@@ -45,6 +45,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
@@ -1132,7 +1133,47 @@ fun showSensorTestDialog(activity: FragmentActivity) {
     val spinner = Spinner(activity)
     root.orientation = LinearLayout.VERTICAL
     root.addView(spinner)
-    val textView = TextView(activity)
+    var width = 1
+    val emptyFloat = floatArrayOf()
+    val log = MutableList(width) { emptyFloat }
+    var counter = 0
+    fun initiateLog() {
+        counter = 0
+        log.clear()
+        log.addAll(List(width) { emptyFloat })
+    }
+
+    val textView = object : AppCompatTextView(activity) {
+        override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+            super.onSizeChanged(w, h, oldw, oldh)
+            width = w
+            initiateLog()
+        }
+
+        private val path = Path()
+        fun createPaint(@ColorInt color: Int) = Paint().also {
+            it.strokeWidth = 1.dp
+            it.style = Paint.Style.STROKE
+            it.color = color
+        }
+
+        private val grayPaint = createPaint(Color.GRAY)
+        override fun onDraw(canvas: Canvas) {
+            super.onDraw(canvas)
+            val h = height / 2
+            path.rewind()
+            log[0].indices.forEach { n ->
+                val max = log.maxOf { if (it.size > n) it[n].absoluteValue else 0f }
+                    .coerceAtLeast(1f)
+                log.forEachIndexed { i, it ->
+                    val x = i * 2 + 1f
+                    val y = (if (it.size > n) it[n] else return@forEachIndexed) / max * h / 2 + h
+                    if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
+                }
+                canvas.drawPath(path, grayPaint)
+            }
+        }
+    }
     root.addView(textView)
     val sensors = sensorManager.getSensorList(Sensor.TYPE_ALL)
     spinner.adapter = ArrayAdapter(
@@ -1160,28 +1201,27 @@ fun showSensorTestDialog(activity: FragmentActivity) {
                     override fun onSensorChanged(event: SensorEvent?) {
                         val v = event?.values ?: return
                         @SuppressLint("SetTextI18n")
-                        textView.text = sensorDescription + "\n" + v.joinToString("\n") + run {
-                            if (v.size == 3) "\n|v| ${sqrt(v[0] * v[0] + v[1] * v[1] + v[1] * v[1])}"
+                        textView.text = sensorDescription + "\nn: ${v.size}\n" +
+                                v.joinToString("\n") + run {
+                            if (v.size == 3) "\n|v| ${sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2])}"
                             else ""
                         }
+                        log[counter++ % width] = v.clone()
                     }
                 }
                 sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
                 previousListener = listener
+                initiateLog()
             }
         }
     }
 
-    val dialog = MaterialAlertDialogBuilder(activity)
+    MaterialAlertDialogBuilder(activity)
         .setView(root)
         .setPositiveButton(R.string.close, null)
         .setCancelable(false)
         .setOnDismissListener { sensorManager.unregisterListener(previousListener) }
         .show()
-
-    activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_STOP) dialog.cancel()
-    })
 }
 
 
