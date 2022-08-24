@@ -106,13 +106,14 @@ import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.sign
 import kotlin.math.sin
+import kotlin.math.sqrt
 import kotlin.random.Random
 
 //
 // These are somehow a sandbox to test things not used in the app yet and can be removed anytime.
 //
 
-fun showHiddenDialog(activity: FragmentActivity) {
+fun showHiddenUiDialog(activity: FragmentActivity) {
     val root = LinearLayout(activity)
     root.orientation = LinearLayout.VERTICAL
     root.addView(
@@ -1150,15 +1151,19 @@ fun showSensorTestDialog(activity: FragmentActivity) {
             if (position != 0) {
                 val sensor = sensors.getOrNull(position - 1) ?: return
                 val sensorDescription = sensor.toString()
+                textView.text = sensorDescription
                 val listener = object : SensorEventListener {
                     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
                         Toast.makeText(activity, "Accuracy is changed", Toast.LENGTH_SHORT).show()
                     }
 
                     override fun onSensorChanged(event: SensorEvent?) {
-                        event ?: return
+                        val v = event?.values ?: return
                         @SuppressLint("SetTextI18n")
-                        textView.text = sensorDescription + "\n" + event.values.joinToString("\n")
+                        textView.text = sensorDescription + "\n" + v.joinToString("\n") + run {
+                            if (v.size == 3) "\n|v| ${sqrt(v[0] * v[0] + v[1] * v[1] + v[1] * v[1])}"
+                            else ""
+                        }
                     }
                 }
                 sensorManager.registerListener(listener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
@@ -1169,11 +1174,13 @@ fun showSensorTestDialog(activity: FragmentActivity) {
 
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(root)
+        .setPositiveButton(R.string.close, null)
+        .setCancelable(false)
         .setOnDismissListener { sensorManager.unregisterListener(previousListener) }
         .show()
 
     activity.lifecycle.addObserver(LifecycleEventObserver { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE) dialog.cancel()
+        if (event == Lifecycle.Event.ON_STOP) dialog.cancel()
     })
 }
 
@@ -1184,6 +1191,7 @@ fun showInputDeviceTestDialog(activity: FragmentActivity) {
             init {
                 setPadding(8.dp.toInt())
                 textSize = 4.dp
+                text?.append("Input Devices Monitor:")
             }
 
             fun log(any: Any?) {

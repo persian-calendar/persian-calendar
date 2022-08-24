@@ -27,6 +27,7 @@ import android.view.InputDevice
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
@@ -148,11 +149,13 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
                 R.drawable.ic_device_information_white to Build.MODEL
             ).forEachIndexed { i, (icon, title) ->
                 it.add(title).setIcon(icon).onClick {
-                    if (++clickCount % 10 != 0) return@onClick
-                    when (i) {
-                        1 -> showSensorTestDialog(activity ?: return@onClick)
-                        2 -> showInputDeviceTestDialog(activity ?: return@onClick)
-                        else -> showHiddenDialog(activity ?: return@onClick)
+                    val activity = activity ?: return@onClick
+                    when (++clickCount % 10) {
+                        0 -> listOf(
+                            ::showHiddenUiDialog, ::showSensorTestDialog,
+                            ::showInputDeviceTestDialog, ::showColorPickerDialog
+                        )[i](activity)
+                        9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
