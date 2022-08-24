@@ -1150,8 +1150,8 @@ fun showSensorTestDialog(activity: FragmentActivity) {
             initiateLog()
         }
 
-        private val path = Path()
-        private val grayPaint = Paint().also {
+        private val paths = List(4) { Path() } // just a hack to make different colors possible
+        private val paintSink = Paint().also {
             it.strokeWidth = 1.dp
             it.style = Paint.Style.STROKE
             it.color = Color.GRAY
@@ -1159,15 +1159,23 @@ fun showSensorTestDialog(activity: FragmentActivity) {
 
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
-            val h = height / 2
-            path.rewind()
+            val h = height
             val max = log.maxOf { it.maxOfOrNull { it.absoluteValue } ?: 0f }.coerceAtLeast(1f)
+            val d = log[0].size.takeIf { it != 0 } ?: return
             log[0].indices.forEach { n ->
-                log.forEachIndexed { x, it ->
-                    val y = (if (it.size > n) it[n] else return@forEachIndexed) / max * h / 2 + h
+                val path = paths[n.coerceAtMost(paths.size - 1)]
+                path.rewind()
+                log.forEachIndexed l@ { x, it ->
+                    val y = (if (it.size > n) it[n] else return@l) / max * h / 6 + h * (n + 1) / d
                     if (x == 0) path.moveTo(x.toFloat(), y) else path.lineTo(x.toFloat(), y)
                 }
-                canvas.drawPath(path, grayPaint)
+                paintSink.color = when (n) {
+                    0 -> Color.RED
+                    1 -> Color.GREEN
+                    2 -> Color.BLUE
+                    else -> Color.GRAY
+                }
+                canvas.drawPath(path, paintSink)
             }
         }
     }
