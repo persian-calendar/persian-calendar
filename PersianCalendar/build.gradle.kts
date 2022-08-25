@@ -35,7 +35,7 @@ plugins {
 
 // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 val composeCompilerVersion = "1.3.0"
-val composeVersion = "1.2.0"
+val composeVersion = "1.2.1"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
@@ -232,12 +232,12 @@ dependencies {
     // }
 
     minApi21Implementation("androidx.activity:activity-compose:1.5.1")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.15")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.16")
     val accompanistVersion = "0.25.1"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-alpha16")
+    minApi21Implementation("androidx.compose.material3:material3:1.0.0-beta01")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
