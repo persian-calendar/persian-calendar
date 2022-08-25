@@ -45,10 +45,11 @@ jobs:
         run: |
           upload_apk() {
             apk_path="$(find . -type f -iname *.apk)"
-            curl -F document=@"$apk_path" https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
-              -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-              -d caption=$(ls -l --block-size=K "$apk_path" | awk '{ print $5 }') \
-              -d parse_mode=HTML
+            curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
+              -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
+              -F caption=$(ls -l --block-size=K "$apk_path" | awk '{ print $5 }') \
+              -F parse_mode=HTML \
+              -F document=@"$apk_path"
             rm "$apk_path"
           }
           ./gradlew assembleMinApi17Nightly

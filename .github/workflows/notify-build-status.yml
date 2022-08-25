@@ -12,7 +12,7 @@ jobs:
       - name: Unpin all messages
         run: |
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinAllChatMessages \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
       - name: Notify about the success
         run: |
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
@@ -26,7 +26,7 @@ jobs:
       - name: Unpin all messages
         run: |
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinAllChatMessages \
-          -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
       - name: Notify about the build failure
         run: |
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
