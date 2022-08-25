@@ -2,7 +2,7 @@ on:
   workflow_run:
     workflows: [Android CI]
     types: [completed]
-    branch: [main]
+    branches: [main]
 
 jobs:
   on-success:
