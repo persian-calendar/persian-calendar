@@ -8,7 +8,7 @@ name: Notify
     branches:
     - main
 jobs:
-  step-0:
+  notify:
     runs-on: ubuntu-latest
     steps:
     - id: step-0

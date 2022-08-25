@@ -12,13 +12,12 @@ val workflow = workflow(
     on = listOf(Push(listOf("main"))),
     sourceFile = __FILE__.toPath(),
 ) {
-    job(id = "step-0", runsOn = UbuntuLatest)
+    job(id = "notify", runsOn = UbuntuLatest)
     {
         val template = """
                 '.[] | "[\(.id[:8])](\(.url)) • [\(.author.username)](https://github.com/\(.author.username))
                 \(.message | gsub("(?<m>[-_*\\[\\]()~>#+=|{}.!`'"'"'])"; "\\\(.m)"))"'
                 """.trimIndent()
-
         val telegramToken = "\${{ secrets.TELEGRAM_TOKEN }}"
         val chatId = "\${{ secrets.TELEGRAM_TOKEN }}"
         run(
