@@ -1,0 +1,32 @@
+# This file was generated using Kotlin DSL (.github/workflows/workflow.main.kts).
+# If you want to modify the workflow, please change the Kotlin file and regenerate this YAML file.
+# Generated with https://github.com/krzema12/github-actions-kotlin-dsl
+
+name: Notify
+'on':
+  push:
+    branches:
+    - main
+jobs:
+  step-0:
+    runs-on: ubuntu-latest
+    steps:
+    - id: step-0
+      name: Notify
+      env:
+        COMMITS: ${{ toJson(github.event.commits) }}
+      run: |2-
+                      (
+                        printenv COMMITS | jq -r "'.[] | "[\(.id[:8])](\(.url)) • [\(.author.username)](https://github.com/\(.author.username))
+        \(.message | gsub("(?<m>[-_*\\[\\]()~>#+=|{}.!`'"'"'])"; "\\\(.m)"))"'"
+                        printf '📅 @Persian_Calendar'
+                      ) | \
+                      jq -R --slurp '{
+                        text: .,
+                        disable_web_page_preview: true,
+                        chat_id: "${{ secrets.TELEGRAM_TOKEN }}",
+                        parse_mode: "HTML"
+                      }' | \
+                      curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
+                        -H 'Content-Type: application/json' \
+                        --data-binary @-
