@@ -13,12 +13,6 @@ jobs:
         run: |
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinAllChatMessages \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
-      - name: Notify about the success
-        run: |
-          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
-            -d disable_notification=true \
-            -d message_id=3716 \
-            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
