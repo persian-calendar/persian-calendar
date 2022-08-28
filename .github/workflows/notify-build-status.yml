@@ -30,6 +30,6 @@ jobs:
       - name: Notify about the build failure
         run: |
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
-            -d disable_notification=true \
+            -d disable_notification=false \
             -d message_id=3715 \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
