@@ -193,7 +193,7 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
-    implementation("com.google.android.material:material:1.7.0-beta01")
+    implementation("com.google.android.material:material:1.7.0-rc01")
 
     val navVersion = "2.5.1"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
@@ -232,7 +232,7 @@ dependencies {
     // }
 
     minApi21Implementation("androidx.activity:activity-compose:1.5.1")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.16")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.17")
     val accompanistVersion = "0.25.1"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
