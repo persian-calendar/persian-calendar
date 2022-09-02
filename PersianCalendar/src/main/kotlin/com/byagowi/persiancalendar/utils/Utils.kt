@@ -6,11 +6,9 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.asrMethod
-import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.global.highLatitudesMethod
 import io.github.cosinekitty.astronomy.Observer
+import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
@@ -20,8 +18,20 @@ import kotlin.math.abs
 
 fun String.splitIgnoreEmpty(delim: String) = this.split(delim).filter { it.isNotEmpty() }
 
-fun Coordinates.calculatePrayTimes(calendar: GregorianCalendar = GregorianCalendar()) =
-    PrayTimes(calculationMethod, calendar, this, asrMethod, highLatitudesMethod)
+fun Coordinates.calculatePrayTimes(
+    calendar: GregorianCalendar = GregorianCalendar(),
+    calculationMethod: CalculationMethod = com.byagowi.persiancalendar.global.calculationMethod,
+    asrMethod: AsrMethod = com.byagowi.persiancalendar.global.asrMethod,
+    highLatitudesMethod: HighLatitudesMethod = com.byagowi.persiancalendar.global.highLatitudesMethod
+): PrayTimes {
+    val year = calendar[GregorianCalendar.YEAR]
+    val month = calendar[GregorianCalendar.MONTH] + 1
+    val day = calendar[GregorianCalendar.DAY_OF_MONTH]
+    val offset = calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0)
+    return PrayTimes(
+        calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod
+    )
+}
 
 val Coordinates.isSouthernHemisphere get() = latitude < .0
 
