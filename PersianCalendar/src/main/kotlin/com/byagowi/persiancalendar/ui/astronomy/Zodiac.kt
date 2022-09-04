@@ -62,7 +62,7 @@ enum class Zodiac(
     }
 
     private val iauPreviousRangeEnd
-        get() = ((values().getOrNull(ordinal - 1)?.iauRangeEnd) ?: PISCES.iauRangeEnd - 360)
+        get() = values().getOrNull(ordinal - 1)?.iauRangeEnd ?: (PISCES.iauRangeEnd - 360)
 
     val iauRange get() = listOf(iauPreviousRangeEnd, iauRangeEnd)
     val tropicalRange get() = listOf(ordinal * 30.0, (ordinal + 1) * 30.0)
