@@ -187,7 +187,7 @@ dependencies {
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     implementation("com.github.ebraminio:astronomy:a92b42df54c6a232d02387b5337643934f588fbc")
 
-    implementation("androidx.appcompat:appcompat:1.5.0")
+    implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
     implementation("androidx.cardview:cardview:1.0.0")
@@ -200,7 +200,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
-    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.core:core-ktx:1.9.0")
     val fragmentVersion = "1.5.2"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
@@ -232,12 +232,12 @@ dependencies {
     // }
 
     minApi21Implementation("androidx.activity:activity-compose:1.5.1")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.17")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.18")
     val accompanistVersion = "0.25.1"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-beta01")
+    minApi21Implementation("androidx.compose.material3:material3:1.0.0-beta02")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
