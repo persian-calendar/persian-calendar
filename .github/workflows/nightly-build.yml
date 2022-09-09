@@ -47,7 +47,7 @@ jobs:
             apk_path="$(find . -type f -iname *.apk)"
             curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
               -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-              -F caption=$(ls -l --block-size=K "$apk_path" | awk '{ print "Size: $5" }') \
+              -F "caption=Size: $(ls -l --block-size=K "$apk_path" | awk '{ print $5 }')" \
               -F parse_mode=HTML \
               -F document=@"$apk_path"
             rm "$apk_path"
