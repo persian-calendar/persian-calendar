@@ -43,7 +43,8 @@ jobs:
 
       - name: Build and send apks to telegram
         run: |
-          upload_apk() {
+          for TASK in assembleMinApi17Nightly assembleMinApi21Nightly; do
+            ./gradlew $TASK
             apk_path="$(find . -type f -iname *.apk)"
             curl https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendDocument \
               -F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
@@ -51,11 +52,7 @@ jobs:
               -F parse_mode=HTML \
               -F document=@"$apk_path"
             rm "$apk_path"
-          }
-          ./gradlew assembleMinApi17Nightly
-          upload_apk
-          ./gradlew assembleMinApi21Nightly
-          upload_apk
+          done
 
       - name: Update the runtime dependencies report
         run: |
