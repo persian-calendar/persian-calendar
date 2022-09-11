@@ -43,6 +43,7 @@ import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.google.android.material.animation.ArgbEvaluatorCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
@@ -72,7 +73,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
     private val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
     private val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
-    private val nightMaskButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
+    private val maskTypeButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
     private val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
 
     private val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
@@ -95,7 +96,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             }
         }
 
-        nightMask.solarDraw = SolarDraw(view.context)
+        mapMask.solarDraw = SolarDraw(view.context)
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
         val mapPath = PathParser.createPathFromPathData(mapPathBytes.decodeToString())
@@ -130,7 +131,18 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         locationButton.onClick {
             if (coordinates == null) bringGps() else viewModel.toggleDisplayLocation()
         }
-        nightMaskButton.onClick { viewModel.toggleNightMask() }
+        maskTypeButton.onClick {
+            if (viewModel.state.value.maskType == MaskType.None) {
+                MaterialAlertDialogBuilder(context ?: return@onClick)
+                    .setItems(enumValues<MaskType>().map { it.toString() }.toTypedArray()) { d, i ->
+                        viewModel.changeMaskType(enumValues<MaskType>()[i])
+                        d.dismiss()
+                    }
+                    .show()
+            } else {
+                viewModel.changeMaskType(MaskType.None)
+            }
+        }
         globeViewButton.onClick {
             val textureSize = 1024
             val bitmap = createBitmap(textureSize, textureSize)
@@ -163,7 +175,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 drawRect(mapRect, backgroundPaint)
                 drawPath(mapPath, foregroundPaint)
 
-                if (viewModel.state.value.displayNightMask) nightMask.draw(this, scaleBack)
+                mapMask.draw(this, scaleBack)
                 val coordinates = coordinates
                 if (coordinates != null && viewModel.state.value.displayLocation) {
                     val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
@@ -231,18 +243,14 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
         // Setup view model change listener
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
-        val dateSink = GregorianCalendar().also { it.add(Calendar.DATE, -1) } // for initial update
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.state
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { state ->
-                    if (state.displayNightMask && dateSink.timeInMillis != state.time) {
-                        dateSink.timeInMillis = state.time
-                        nightMask.update(dateSink)
-                    }
+                    mapMask.update(state.time, state.maskType)
                     binding.map.invalidate()
-                    binding.date.text = dateSink.formatDateAndTime()
-                    binding.timeBar.isVisible = state.displayNightMask
+                    binding.date.text = mapMask.formattedTime
+                    binding.timeBar.isVisible = mapMask.formattedTime.isNotEmpty()
                     directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
                 }
         }
@@ -273,7 +281,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
-    inner class NightMask {
+    inner class MapMask {
         private val nightMaskScale = 1
         private val nightMask = createBitmap(360 / nightMaskScale, 180 / nightMaskScale)
         private var sunX = .0f
@@ -281,8 +289,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         private var moonX = .0f
         private var moonY = .0f
         var solarDraw: SolarDraw? = null
+        var formattedTime = ""
 
         fun draw(canvas: Canvas, matrixScale: Float) {
+            if (currentMaskType == MaskType.None) return
             canvas.drawBitmap(nightMask, null, mapRect, null)
             val scale = mapWidth / nightMask.width
             val solarDraw = solarDraw ?: return
@@ -292,8 +302,21 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f * matrixScale)
         }
 
-        fun update(date: GregorianCalendar) {
-            val time = Time.fromMillisecondsSince1970(date.time.time)
+        private val dateSink =
+            GregorianCalendar().also { it.add(Calendar.DATE, -1) } // for initial update
+        private var currentMaskType = MaskType.None
+        fun update(timeInMillis: Long, maskType: MaskType) {
+            if (maskType == MaskType.None) {
+                currentMaskType = maskType
+                formattedTime = ""
+                return
+            }
+            if (maskType == currentMaskType && dateSink.timeInMillis == timeInMillis) return
+            dateSink.timeInMillis = timeInMillis
+            formattedTime = dateSink.formatDateAndTime()
+            currentMaskType = maskType
+
+            val time = Time.fromMillisecondsSince1970(timeInMillis)
             nightMask.eraseColor(Color.TRANSPARENT)
             var sunMaxAltitude = .0
             var moonMaxAltitude = .0
@@ -310,10 +333,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
                     val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
                     val observer = Observer(latitude, longitude, .0)
-                    val ovec = observer.toVector(time, EquatorEpoch.OfDate)
+                    val observerVec = observer.toVector(time, EquatorEpoch.OfDate)
                     val observerRot = rotationEqdHor(time, observer)
-                    val sunAltitude = verticalComponent(observerRot, ovec, geoSunEqd)
-                    val moonAltitude = verticalComponent(observerRot, ovec, geoMoonEqd)
+                    val sunAltitude = verticalComponent(observerRot, observerVec, geoSunEqd)
+                    val moonAltitude = verticalComponent(observerRot, observerVec, geoMoonEqd)
 
                     if (sunAltitude < 0) {
                         val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
@@ -332,17 +355,11 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
-        private fun verticalComponent(
-            rot: RotationMatrix,
-            ovec: Vector,
-            bvec: Vector
-        ): Double {
-            val hor = rot.rotate(bvec - ovec)
-            return hor.z / hor.length()
-        }
+        private fun verticalComponent(rot: RotationMatrix, oVec: Vector, bVec: Vector): Double =
+            rot.rotate(bVec - oVec).let { it.z / it.length() }
     }
 
-    private val nightMask = NightMask()
+    private val mapMask = MapMask()
 
     private val gridLinesWidth = mapWidth * .001f
     private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

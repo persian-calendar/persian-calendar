@@ -34,8 +34,8 @@ class MapViewModel : ViewModel() {
         _state.update { it.copy(time = time.time) }
     }
 
-    fun toggleNightMask() {
-        _state.update { it.copy(displayNightMask = !it.displayNightMask) }
+    fun changeMaskType(maskType: MaskType) {
+        _state.update { it.copy(maskType = maskType) }
     }
 
     fun toggleDisplayLocation() {

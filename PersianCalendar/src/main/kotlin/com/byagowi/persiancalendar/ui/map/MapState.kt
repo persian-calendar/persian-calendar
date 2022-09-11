@@ -4,9 +4,14 @@ import io.github.persiancalendar.praytimes.Coordinates
 
 data class MapState(
     val time: Long = System.currentTimeMillis(),
-    val displayNightMask: Boolean = true,
+    val maskType: MaskType = MaskType.DayNight,
     val displayLocation: Boolean = true,
     val displayGrid: Boolean = false,
     val isDirectPathMode: Boolean = false,
     val directPathDestination: Coordinates? = null
 )
+
+enum class MaskType {
+    None,
+    DayNight
+}
