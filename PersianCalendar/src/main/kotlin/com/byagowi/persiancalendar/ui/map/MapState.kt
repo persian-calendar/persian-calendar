@@ -11,7 +11,10 @@ data class MapState(
     val directPathDestination: Coordinates? = null
 )
 
-enum class MaskType {
-    None,
-    DayNight
+enum class MaskType(val title: String) {
+    None("None"),
+    DayNight("Day-night map"),
+    MagneticFieldStrength("Magnetic field strength"),
+    MagneticDeclination("Magnetic declination"),
+    MagneticInclination("Magnetic inclination")
 }

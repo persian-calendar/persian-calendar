@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
+import android.hardware.GeomagneticField
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -134,9 +135,9 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         maskTypeButton.onClick {
             if (viewModel.state.value.maskType == MaskType.None) {
                 MaterialAlertDialogBuilder(context ?: return@onClick)
-                    .setItems(enumValues<MaskType>().map { it.toString() }.toTypedArray()) { d, i ->
+                    .setItems(enumValues<MaskType>().map { it.title }.toTypedArray()) { dialog, i ->
                         viewModel.changeMaskType(enumValues<MaskType>()[i])
-                        d.dismiss()
+                        dialog.dismiss()
                     }
                     .show()
             } else {
@@ -283,18 +284,20 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     inner class MapMask {
         private val nightMaskScale = 1
-        private val nightMask = createBitmap(360 / nightMaskScale, 180 / nightMaskScale)
+        private val mapMask = createBitmap(360 / nightMaskScale, 180 / nightMaskScale)
         private var sunX = .0f
         private var sunY = .0f
         private var moonX = .0f
         private var moonY = .0f
+        private val pointsValues = FloatArray(180 * 360)
         var solarDraw: SolarDraw? = null
         var formattedTime = ""
 
         fun draw(canvas: Canvas, matrixScale: Float) {
             if (currentMaskType == MaskType.None) return
-            canvas.drawBitmap(nightMask, null, mapRect, null)
-            val scale = mapWidth / nightMask.width
+            canvas.drawBitmap(mapMask, null, mapRect, null)
+            if (currentMaskType != MaskType.DayNight) return
+            val scale = mapWidth / mapMask.width
             val solarDraw = solarDraw ?: return
             solarDraw.simpleMoon(
                 canvas, moonX * scale, moonY * scale, mapWidth * .02f * matrixScale
@@ -302,8 +305,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f * matrixScale)
         }
 
-        private val dateSink =
-            GregorianCalendar().also { it.add(Calendar.DATE, -1) } // for initial update
+        private val dateSink = GregorianCalendar()
         private var currentMaskType = MaskType.None
         fun update(timeInMillis: Long, maskType: MaskType) {
             if (maskType == MaskType.None) {
@@ -315,9 +317,48 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             dateSink.timeInMillis = timeInMillis
             formattedTime = dateSink.formatDateAndTime()
             currentMaskType = maskType
+            mapMask.eraseColor(Color.TRANSPARENT)
+            when (maskType) {
+                MaskType.DayNight -> writeDayNightMask(timeInMillis)
+                MaskType.MagneticFieldStrength,
+                MaskType.MagneticDeclination,
+                MaskType.MagneticInclination -> writeMagneticMap(timeInMillis, maskType)
+                else -> Unit
+            }
+        }
 
+        private fun writeMagneticMap(timeInMillis: Long, maskType: MaskType) {
+            (0 until 360).forEach { x ->
+                (0 until 180).forEach { y ->
+                    val latitude = mapMask.height / 2f - y
+                    val longitude = x - mapMask.width / 2f
+                    val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
+                    pointsValues[x + y * 360] = when (maskType) {
+                        MaskType.MagneticFieldStrength -> field.fieldStrength
+                        MaskType.MagneticDeclination -> field.declination
+                        MaskType.MagneticInclination -> field.inclination
+                        else -> 0f
+                    }
+                }
+            }
+            val max = pointsValues.max()
+            if (max == 0f) return
+            (0 until 360).forEach { x ->
+                (0 until 180).forEach { y ->
+                    val value = pointsValues[x + y * 360]
+                    mapMask[x, y] = when (maskType) {
+                        MaskType.MagneticDeclination, MaskType.MagneticInclination ->
+                            (value.absoluteValue.toInt() shl 24) + if (value > 0) 0xFF0000 else 0xFF
+                        MaskType.MagneticFieldStrength ->
+                            (pointsValues[x + y * 360] / max * 255).toInt() shl 24
+                        else -> Color.TRANSPARENT
+                    }
+                }
+            }
+        }
+
+        private fun writeDayNightMask(timeInMillis: Long) {
             val time = Time.fromMillisecondsSince1970(timeInMillis)
-            nightMask.eraseColor(Color.TRANSPARENT)
             var sunMaxAltitude = .0
             var moonMaxAltitude = .0
 
@@ -328,10 +369,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             val geoMoonEqd = rot.rotate(geoMoonEqj)
 
             // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
-            (0 until nightMask.width).forEach { x ->
-                (0 until nightMask.height).forEach { y ->
-                    val latitude = ((nightMask.height / 2 - y) * nightMaskScale).toDouble()
-                    val longitude = ((x - nightMask.width / 2) * nightMaskScale).toDouble()
+            (0 until mapMask.width).forEach { x ->
+                (0 until mapMask.height).forEach { y ->
+                    val latitude = mapMask.height / 2.0 - y
+                    val longitude = x - mapMask.width / 2.0
                     val observer = Observer(latitude, longitude, .0)
                     val observerVec = observer.toVector(time, EquatorEpoch.OfDate)
                     val observerRot = rotationEqdHor(time, observer)
@@ -341,7 +382,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     if (sunAltitude < 0) {
                         val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
                         // This move the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
-                        nightMask[x, y] = value shl 24
+                        mapMask[x, y] = value shl 24
                     }
 
                     if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
