@@ -369,4 +369,5 @@
     <string name="add_quick_settings_tile">Hızlı ayarlar kutucuğu ekle</string>
     <string name="live_wallpaper_settings">Canlı duvar kağıdı ayarları</string>
     <string name="screensaver_settings">Ekran koruyucu ayarları</string>
+    <string name="true_north">Gerçek kuzey</string>
 </resources>

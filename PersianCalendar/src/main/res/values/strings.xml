@@ -375,6 +375,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="screensaver_settings">Screensaver settings</string>
     <string name="enable_notification">Would you like to enable date notification?</string>
     <string name="add_quick_settings_tile">Add Quick Settings tile</string>
+    <string name="true_north">True north</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>

@@ -37,6 +37,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
                 invalidate()
             }
         }
+    private val trueNorth get() = angle + if (isTrueNorth) astronomyState?.declination ?: 0f else 0f
 
     private val northwardShapePath = Path()
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -108,6 +109,11 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             field = value
             invalidate()
         }
+    var isTrueNorth = false
+        set(value) {
+            field = value
+            invalidate()
+        }
     private val planetsPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
         it.textSize = 12.sp
@@ -149,8 +155,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     }
 
     override fun onDraw(canvas: Canvas) {
-        angleDisplay.draw(canvas, (round(angle) + 360f) % 360f)
-        canvas.withRotation(-angle, cx, cy) {
+        angleDisplay.draw(canvas, (round(trueNorth) + 360f) % 360f)
+        canvas.withRotation(-trueNorth, cx, cy) {
             drawDial()
             drawPath(northwardShapePath, northArrowPaint)
             if (coordinates != null) {
@@ -219,7 +225,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             val moonHeight = (astronomyState.moonHorizon.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
             if (enableShade) drawLine(cx, cy, cx, cy - moonHeight / shadeFactor, moonShadePaint)
-            withRotation(-azimuth + angle, cx, cy + moonHeight) {
+            withRotation(-azimuth + trueNorth, cx, cy + moonHeight) {
                 solarDraw.moon(
                     this, astronomyState.sun, astronomyState.moon, cx, cy + moonHeight,
                     r * .8f, astronomyState.moonTiltAngle
@@ -236,7 +242,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             val planetHeight = (planetHorizon.altitude.toFloat() / 90 - 1) * radius
             withRotation(azimuth, cx, cy) {
                 drawCircle(cx, cy + planetHeight, radius / 120, planetsPaint)
-                withRotation(-azimuth + angle, cx, cy + planetHeight) {
+                withRotation(-azimuth + trueNorth, cx, cy + planetHeight) {
                     drawText(
                         resources.getString(title), cx, cy + planetHeight - radius / 40,
                         planetsPaint

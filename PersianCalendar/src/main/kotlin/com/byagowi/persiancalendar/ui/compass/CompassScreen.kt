@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
+import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
 import com.byagowi.persiancalendar.entities.Clock
@@ -190,6 +191,19 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
                     binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_in_24_hours)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 it.onClick(::animateMoonAndSun)
+            }
+            binding.appBar.toolbar.menu.add("True north").also { menu ->
+                val prefs = binding.root.context.appPrefs
+                binding.compassView.isTrueNorth = prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
+                menu.isCheckable = true
+                menu.isChecked = binding.compassView.isTrueNorth
+                menu.onClick {
+                    binding.compassView.isTrueNorth = !binding.compassView.isTrueNorth
+                    menu.isChecked = binding.compassView.isTrueNorth
+                    prefs.edit {
+                        putBoolean(PREF_TRUE_NORTH_IN_COMPASS, binding.compassView.isTrueNorth)
+                    }
+                }
             }
             binding.appBar.toolbar.menu.add(R.string.qibla).also { menu ->
                 val prefs = binding.root.context.appPrefs

@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.compass
 
+import android.hardware.GeomagneticField
 import com.byagowi.persiancalendar.utils.planetsTitles
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
 import io.github.cosinekitty.astronomy.Aberration
@@ -32,6 +33,10 @@ class AstronomyState(observer: Observer, date: GregorianCalendar) {
         if (horizon.altitude <= -5) null else planetsTitles.getValue(it) to horizon
     }
     val moonTiltAngle = sunlitSideMoonTiltAngle(time, observer).toFloat()
+    val declination = GeomagneticField(
+        observer.latitude.toFloat(), observer.longitude.toFloat(), observer.height.toFloat(),
+        date.time.time
+    ).declination
 
     companion object {
         // Naked-eye planets

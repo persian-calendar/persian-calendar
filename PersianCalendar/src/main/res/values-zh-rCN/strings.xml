@@ -360,4 +360,5 @@
     <string name="asr_hanafi_juristic">哈乃斐派法定晡礼</string>
     <string name="high_latitudes_one_seventh">七等分</string>
     <string name="high_latitudes_angle_based">基于高度角</string>
+    <string name="true_north">真北</string>
 </resources>

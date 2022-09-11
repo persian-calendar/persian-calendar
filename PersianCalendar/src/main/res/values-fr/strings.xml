@@ -375,4 +375,5 @@
     <string name="live_wallpaper_settings">Paramètres du fond d’écran animé</string>
     <string name="enable_notification">Voulez-vous activer la notification de la date \?</string>
     <string name="add_quick_settings_tile">Ajouter une tuile de réglages rapides</string>
+    <string name="true_north">Vrai Nord</string>
 </resources>
