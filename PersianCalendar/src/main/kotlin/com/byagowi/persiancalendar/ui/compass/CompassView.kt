@@ -154,10 +154,10 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
             drawDial()
             drawPath(northwardShapePath, northArrowPaint)
             if (coordinates != null) {
-                drawQibla()
-                drawPlanets()
                 drawMoon()
                 drawSun()
+                drawQibla()
+                drawPlanets()
             }
         }
     }
