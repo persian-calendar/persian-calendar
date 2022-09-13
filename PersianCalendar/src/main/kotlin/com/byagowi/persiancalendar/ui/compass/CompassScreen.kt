@@ -192,7 +192,7 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 it.onClick(::animateMoonAndSun)
             }
-            binding.appBar.toolbar.menu.add("True north").also { menu ->
+            binding.appBar.toolbar.menu.add(R.string.true_north).also { menu ->
                 val prefs = binding.root.context.appPrefs
                 binding.compassView.isTrueNorth = prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
                 menu.isCheckable = true
