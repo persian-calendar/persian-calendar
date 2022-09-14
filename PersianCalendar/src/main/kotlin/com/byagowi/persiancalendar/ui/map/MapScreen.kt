@@ -283,8 +283,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
     inner class MapMask {
-        private val nightMaskScale = 1
-        private val mapMask = createBitmap(360 / nightMaskScale, 180 / nightMaskScale)
+        private val mapMask = createBitmap(360, 180)
         private var sunX = .0f
         private var sunY = .0f
         private var moonX = .0f
@@ -341,16 +340,17 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     }
                 }
             }
-            val max = pointsValues.max()
-            if (max == 0f) return
             (0 until 360).forEach { x ->
                 (0 until 180).forEach { y ->
                     val value = pointsValues[x + y * 360]
                     mapMask[x, y] = when (maskType) {
-                        MaskType.MagneticDeclination, MaskType.MagneticInclination ->
-                            (value.absoluteValue.toInt() shl 24) + if (value > 0) 0xFF0000 else 0xFF
+                        MaskType.MagneticDeclination, MaskType.MagneticInclination -> when {
+                            value > 1 -> ((value * 255 / 180).toInt() shl 24) + 0xFF0000
+                            value < -1 -> ((-value + 255 / 180).toInt() shl 24) + 0xFF
+                            else -> ((30 - value.absoluteValue * 30).toInt() shl 24) + 0xFF00
+                        }
                         MaskType.MagneticFieldStrength ->
-                            (pointsValues[x + y * 360] / max * 255).toInt() shl 24
+                            (pointsValues[x + y * 360] / 68000/*65 μT*/ * 255).toInt() shl 24
                         else -> Color.TRANSPARENT
                     }
                 }
