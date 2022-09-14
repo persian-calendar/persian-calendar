@@ -52,8 +52,7 @@ android {
         viewBinding = true
     }
 
-    val gitInfo =
-        providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
+    val gitInfo = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
 
     namespace = "com.byagowi.persiancalendar"
 
@@ -112,8 +111,7 @@ android {
 
         getByName("release") {
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
             isMinifyEnabled = true
             isShrinkResources = true
