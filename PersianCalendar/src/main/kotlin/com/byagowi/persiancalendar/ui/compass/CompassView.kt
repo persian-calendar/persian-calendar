@@ -39,6 +39,10 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
         }
     private val trueNorth get() = angle + if (isTrueNorth) astronomyState?.declination ?: 0f else 0f
 
+    // This applies true north correction if it isn't enabled by user but does nothing if is already on
+    private fun fixForTrueNorth(angle: Float) =
+        angle - (if (!isTrueNorth) astronomyState?.declination ?: 0f else 0f)
+
     private val northwardShapePath = Path()
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.RED
@@ -206,7 +210,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private fun Canvas.drawSun() {
         val astronomyState = astronomyState ?: return
         if (astronomyState.isNight) return
-        val rotation = astronomyState.sunHorizon.azimuth.toFloat()
+        val rotation = fixForTrueNorth(astronomyState.sunHorizon.azimuth.toFloat())
         withRotation(rotation, cx, cy) {
             val sunHeight = (astronomyState.sunHorizon.altitude.toFloat() / 90 - 1) * radius
             val sunColor = solarDraw.sunColor(sunProgress)
@@ -220,7 +224,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private fun Canvas.drawMoon() {
         val astronomyState = astronomyState ?: return
         if (astronomyState.isMoonGone) return
-        val azimuth = astronomyState.moonHorizon.azimuth.toFloat()
+        val azimuth = fixForTrueNorth(astronomyState.moonHorizon.azimuth.toFloat())
         withRotation(azimuth, cx, cy) {
             val moonHeight = (astronomyState.moonHorizon.altitude.toFloat() / 90 - 1) * radius
             drawLine(cx, cy - radius, cx, cy + radius, moonPaint)
@@ -238,7 +242,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
         val astronomyState = astronomyState ?: return
         planetsPaint.alpha = (127 - astronomyState.sunHorizon.altitude.toInt() * 3).coerceIn(0, 255)
         astronomyState.planets.forEach { (title, planetHorizon) ->
-            val azimuth = planetHorizon.azimuth.toFloat()
+            val azimuth = fixForTrueNorth(planetHorizon.azimuth.toFloat())
             val planetHeight = (planetHorizon.altitude.toFloat() / 90 - 1) * radius
             withRotation(azimuth, cx, cy) {
                 drawCircle(cx, cy + planetHeight, radius / 120, planetsPaint)
@@ -255,7 +259,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private fun Canvas.drawQibla() {
         if (!isShowQibla) return
         val qiblaHeading = qiblaHeading ?: return
-        withRotation(qiblaHeading.heading, cx, cy) {
+        withRotation(fixForTrueNorth(qiblaHeading.heading), cx, cy) {
             drawLine(cx, cy - radius, cx, cy + radius, qiblaPaint)
             drawBitmap(kaaba, cx - kaaba.width / 2, cy - radius - kaaba.height / 2, null)
             val textCenter = cy - radius / 2
