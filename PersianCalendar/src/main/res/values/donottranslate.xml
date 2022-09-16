@@ -57,4 +57,7 @@ omasouri: Omid Masouri"</string>
     <string name="show_location_label" translatable="false">Location</string>
     <string name="show_night_mask_label" translatable="false">Night Mask</string>
     <string name="show_globe_view_label" translatable="false">3D Globe</string>
+    <string name="magnetic_field_strength" translatable="false">Magnetic field strength</string>
+    <string name="magnetic_declination" translatable="false">Magnetic declination</string>
+    <string name="magnetic_inclination" translatable="false">Magnetic inclination</string>
 </resources>

@@ -1,5 +1,7 @@
 package com.byagowi.persiancalendar.ui.map
 
+import androidx.annotation.StringRes
+import com.byagowi.persiancalendar.R
 import io.github.persiancalendar.praytimes.Coordinates
 
 data class MapState(
@@ -11,10 +13,10 @@ data class MapState(
     val directPathDestination: Coordinates? = null
 )
 
-enum class MaskType(val title: String) {
-    None("None"),
-    DayNight("Day-night map"),
-    MagneticFieldStrength("Magnetic field strength"),
-    MagneticDeclination("Magnetic declination"),
-    MagneticInclination("Magnetic inclination")
+enum class MaskType(@StringRes val title: Int) {
+    None(R.string.none),
+    DayNight(R.string.show_night_mask_label),
+    MagneticFieldStrength(R.string.magnetic_field_strength),
+    MagneticDeclination(R.string.magnetic_declination),
+    MagneticInclination(R.string.magnetic_inclination)
 }

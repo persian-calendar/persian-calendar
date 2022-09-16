@@ -134,8 +134,11 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
         maskTypeButton.onClick {
             if (viewModel.state.value.maskType == MaskType.None) {
-                MaterialAlertDialogBuilder(context ?: return@onClick)
-                    .setItems(enumValues<MaskType>().map { it.title }.toTypedArray()) { dialog, i ->
+                val context = context ?: return@onClick
+                val titles =
+                    enumValues<MaskType>().map { it.title }.map(context::getString).toTypedArray()
+                MaterialAlertDialogBuilder(context)
+                    .setItems(titles) { dialog, i ->
                         viewModel.changeMaskType(enumValues<MaskType>()[i])
                         dialog.dismiss()
                     }
@@ -288,7 +291,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         private var sunY = .0f
         private var moonX = .0f
         private var moonY = .0f
-        private val pointsValues = FloatArray(180 * 360)
         var solarDraw: SolarDraw? = null
         var formattedTime = ""
 
@@ -332,27 +334,18 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     val latitude = mapMask.height / 2f - y
                     val longitude = x - mapMask.width / 2f
                     val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
-                    pointsValues[x + y * 360] = when (maskType) {
-                        MaskType.MagneticFieldStrength -> field.fieldStrength
-                        MaskType.MagneticDeclination -> field.declination
-                        MaskType.MagneticInclination -> field.inclination
-                        else -> 0f
-                    }
-                }
-            }
-            (0 until 360).forEach { x ->
-                (0 until 180).forEach { y ->
-                    val value = pointsValues[x + y * 360]
-                    mapMask[x, y] = when (maskType) {
-                        MaskType.MagneticDeclination, MaskType.MagneticInclination -> when {
+                    mapMask[x, y] = if (maskType != MaskType.MagneticFieldStrength) {
+                        val value = when (maskType) {
+                            MaskType.MagneticDeclination -> field.declination
+                            MaskType.MagneticInclination -> field.inclination
+                            else -> 0f
+                        }
+                        when {
                             value > 1 -> ((value * 255 / 180).toInt() shl 24) + 0xFF0000
                             value < -1 -> ((-value + 255 / 180).toInt() shl 24) + 0xFF
                             else -> ((30 - value.absoluteValue * 30).toInt() shl 24) + 0xFF00
                         }
-                        MaskType.MagneticFieldStrength ->
-                            (pointsValues[x + y * 360] / 68000/*65 μT*/ * 255).toInt() shl 24
-                        else -> Color.TRANSPARENT
-                    }
+                    } else (field.fieldStrength / 68000/*25-65 μT*/ * 255).toInt() shl 24
                 }
             }
         }
