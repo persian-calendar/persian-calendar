@@ -247,8 +247,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 .collectLatest { state ->
                     updateMask(state.time, state.maskType)
                     binding.map.invalidate()
-                    binding.date.text = formattedTime
-                    binding.timeBar.isVisible = formattedTime.isNotEmpty()
+                    binding.date.text = maskFormattedTime
+                    binding.timeBar.isVisible = maskFormattedTime.isNotEmpty()
                     directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
                 }
         }
@@ -282,7 +282,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private var moonX = .0f
     private var moonY = .0f
     private var solarDraw: SolarDraw? = null
-    private var formattedTime = ""
+    private var maskFormattedTime = ""
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         if (currentMaskType == MaskType.None) return
@@ -301,12 +301,12 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private fun updateMask(timeInMillis: Long, maskType: MaskType) {
         if (maskType == MaskType.None) {
             currentMaskType = maskType
-            formattedTime = ""
+            maskFormattedTime = ""
             return
         }
         if (maskType == currentMaskType && dateSink.timeInMillis == timeInMillis) return
         dateSink.timeInMillis = timeInMillis
-        formattedTime = dateSink.formatDateAndTime()
+        maskFormattedTime = dateSink.formatDateAndTime()
         currentMaskType = maskType
         mapMask.eraseColor(Color.TRANSPARENT)
         when (maskType) {
@@ -364,7 +364,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
                 if (sunAltitude < 0) {
                     val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
-                    // This move the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
+                    // This moves the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
                     mapMask[x, y] = value shl 24
                 }
 
