@@ -96,7 +96,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             }
         }
 
-        solarDraw = SolarDraw(view.context)
+        maskSolarDraw = SolarDraw(view.context)
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
         val mapPath = PathParser.createPathFromPathData(mapPathBytes.decodeToString())
@@ -276,39 +276,42 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
-    private val mapMask = createBitmap(360, 180)
-    private var sunX = .0f
-    private var sunY = .0f
-    private var moonX = .0f
-    private var moonY = .0f
-    private var solarDraw: SolarDraw? = null
+    private val maskMap = createBitmap(360, 180)
+    private var maskSunX = .0f
+    private var maskSunY = .0f
+    private var maskMoonX = .0f
+    private var maskMoonY = .0f
+    private var maskSolarDraw: SolarDraw? = null
     private var maskFormattedTime = ""
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
-        if (currentMaskType == MaskType.None) return
-        canvas.drawBitmap(mapMask, null, mapRect, null)
-        if (currentMaskType != MaskType.DayNight) return
-        val scale = mapWidth / mapMask.width
-        val solarDraw = solarDraw ?: return
-        solarDraw.simpleMoon(
-            canvas, moonX * scale, moonY * scale, mapWidth * .02f * matrixScale
-        )
-        solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f * matrixScale)
+        if (maskCurrentType == MaskType.None) return
+        canvas.drawBitmap(maskMap, null, mapRect, null)
+        if (maskCurrentType == MaskType.DayNight) {
+            val scale = mapWidth / maskMap.width
+            val solarDraw = maskSolarDraw ?: return
+            solarDraw.simpleMoon(
+                canvas, maskMoonX * scale, maskMoonY * scale, mapWidth * .02f * matrixScale
+            )
+            solarDraw.sun(
+                canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale
+            )
+        }
     }
 
-    private val dateSink = GregorianCalendar()
-    private var currentMaskType = MaskType.None
+    private val maskDateSink = GregorianCalendar()
+    private var maskCurrentType = MaskType.None
     private fun updateMask(timeInMillis: Long, maskType: MaskType) {
         if (maskType == MaskType.None) {
-            currentMaskType = maskType
+            maskCurrentType = maskType
             maskFormattedTime = ""
             return
         }
-        if (maskType == currentMaskType && dateSink.timeInMillis == timeInMillis) return
-        dateSink.timeInMillis = timeInMillis
-        maskFormattedTime = dateSink.formatDateAndTime()
-        currentMaskType = maskType
-        mapMask.eraseColor(Color.TRANSPARENT)
+        if (maskType == maskCurrentType && maskDateSink.timeInMillis == timeInMillis) return
+        maskDateSink.timeInMillis = timeInMillis
+        maskFormattedTime = maskDateSink.formatDateAndTime()
+        maskCurrentType = maskType
+        maskMap.eraseColor(Color.TRANSPARENT)
         when (maskType) {
             MaskType.DayNight -> writeDayNightMask(timeInMillis)
             MaskType.MagneticFieldStrength,
@@ -321,10 +324,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private fun writeMagneticMap(timeInMillis: Long, maskType: MaskType) {
         (0 until 360).forEach { x ->
             (0 until 180).forEach { y ->
-                val latitude = mapMask.height / 2f - y
-                val longitude = x - mapMask.width / 2f
+                val latitude = maskMap.height / 2f - y
+                val longitude = x - maskMap.width / 2f
                 val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
-                mapMask[x, y] = if (maskType != MaskType.MagneticFieldStrength) {
+                maskMap[x, y] = if (maskType != MaskType.MagneticFieldStrength) {
                     val value = when (maskType) {
                         MaskType.MagneticDeclination -> field.declination
                         MaskType.MagneticInclination -> field.inclination
@@ -352,10 +355,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         val geoMoonEqd = rot.rotate(geoMoonEqj)
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
-        (0 until mapMask.width).forEach { x ->
-            (0 until mapMask.height).forEach { y ->
-                val latitude = mapMask.height / 2.0 - y
-                val longitude = x - mapMask.width / 2.0
+        (0 until maskMap.width).forEach { x ->
+            (0 until maskMap.height).forEach { y ->
+                val latitude = maskMap.height / 2.0 - y
+                val longitude = x - maskMap.width / 2.0
                 val observer = Observer(latitude, longitude, .0)
                 val observerVec = observer.toVector(time, EquatorEpoch.OfDate)
                 val observerRot = rotationEqdHor(time, observer)
@@ -365,14 +368,14 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 if (sunAltitude < 0) {
                     val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
                     // This moves the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
-                    mapMask[x, y] = value shl 24
+                    maskMap[x, y] = value shl 24
                 }
 
                 if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
-                    sunMaxAltitude = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
+                    sunMaxAltitude = sunAltitude; maskSunX = x.toFloat(); maskSunY = y.toFloat()
                 }
                 if (moonAltitude > moonMaxAltitude) { // this time for moon
-                    moonMaxAltitude = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
+                    moonMaxAltitude = moonAltitude; maskMoonX = x.toFloat(); maskMoonY = y.toFloat()
                 }
             }
         }
