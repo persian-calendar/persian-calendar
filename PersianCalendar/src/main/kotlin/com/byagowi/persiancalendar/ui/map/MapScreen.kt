@@ -24,11 +24,14 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
 import com.byagowi.persiancalendar.entities.EarthPosition
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
@@ -42,19 +45,30 @@ import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
+import com.byagowi.persiancalendar.utils.toCivilDate
 import com.google.android.material.animation.ArgbEvaluatorCompat
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.Direction
 import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
+import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.RotationMatrix
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.Vector
+import io.github.cosinekitty.astronomy.degreesToRadians
+import io.github.cosinekitty.astronomy.elongation
+import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.horizon
+import io.github.cosinekitty.astronomy.libration
+import io.github.cosinekitty.astronomy.radiansToDegrees
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
+import io.github.cosinekitty.astronomy.searchRiseSet
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -63,9 +77,13 @@ import java.util.*
 import java.util.zip.GZIPInputStream
 import kotlin.math.abs
 import kotlin.math.absoluteValue
+import kotlin.math.acos
 import kotlin.math.atan2
+import kotlin.math.cos
 import kotlin.math.hypot
+import kotlin.math.pow
 import kotlin.math.roundToInt
+import kotlin.math.sin
 
 class MapScreen : Fragment(R.layout.fragment_map) {
     private val binding by viewKeeper(FragmentMapBinding::bind)
@@ -106,7 +124,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
             binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            viewModel.subtractOneHour()
+            if (maskCurrentType.isMoonVisibility) viewModel.subtractOneDay()
+            else viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener {
             viewModel.subtractTenDays()
@@ -115,7 +134,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            viewModel.addOneHour()
+            if (maskCurrentType.isMoonVisibility) viewModel.addOneDay()
+            else viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener {
             viewModel.addTenDays()
@@ -134,9 +154,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         maskTypeButton.onClick {
             if (viewModel.state.value.maskType == MaskType.None) {
                 val context = context ?: return@onClick
-                val titles = enumValues<MaskType>().drop(1).map { context.getString(it.title) }
+                val options = enumValues<MaskType>()
+                    .drop(1) // Hide "None" option
+                    // Hide moon visibilities for now unless is a development build
+                    .filter { !it.isMoonVisibility || BuildConfig.DEVELOPMENT }
+                val titles = options.map { context.getString(it.title) }
                 MaterialAlertDialogBuilder(context).setItems(titles.toTypedArray()) { dialog, i ->
-                    viewModel.changeMaskType(enumValues<MaskType>()[i + 1])
+                    viewModel.changeMaskType(options[i])
                     dialog.dismiss()
                 }.show()
             } else viewModel.changeMaskType(MaskType.None)
@@ -277,6 +301,9 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
     private val maskMap = createBitmap(360, 180)
+    private val maskMapMoonScaleDown = 8
+    private val maskMapMoonVisibility =
+        createBitmap(360 / maskMapMoonScaleDown, 180 / maskMapMoonScaleDown)
     private var maskSunX = .0f
     private var maskSunY = .0f
     private var maskMoonX = .0f
@@ -286,7 +313,9 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         if (maskCurrentType == MaskType.None) return
-        canvas.drawBitmap(maskMap, null, mapRect, null)
+        if (maskCurrentType.isMoonVisibility)
+            canvas.drawBitmap(maskMapMoonVisibility, null, mapRect, null)
+        else canvas.drawBitmap(maskMap, null, mapRect, null)
         if (maskCurrentType == MaskType.DayNight) {
             val scale = mapWidth / maskMap.width
             val solarDraw = maskSolarDraw ?: return
@@ -309,14 +338,24 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
         if (maskType == maskCurrentType && maskDateSink.timeInMillis == timeInMillis) return
         maskDateSink.timeInMillis = timeInMillis
-        maskFormattedTime = maskDateSink.formatDateAndTime()
         maskCurrentType = maskType
-        maskMap.eraseColor(Color.TRANSPARENT)
         when (maskType) {
             MaskType.DayNight -> writeDayNightMask(timeInMillis)
             MaskType.MagneticFieldStrength,
             MaskType.MagneticDeclination,
-            MaskType.MagneticInclination -> writeMagneticMap(timeInMillis, maskType)
+            MaskType.MagneticInclination -> {
+                maskFormattedTime = maskDateSink.formatDateAndTime()
+                maskMap.eraseColor(Color.TRANSPARENT)
+                writeMagneticMap(timeInMillis, maskType)
+            }
+            MaskType.Yallop, MaskType.Odeh -> {
+                maskFormattedTime = formatDate(
+                    Jdn(maskDateSink.toCivilDate()).toCalendar(mainCalendar),
+                    forceNonNumerical = true
+                )
+                maskMapMoonVisibility.eraseColor(Color.TRANSPARENT)
+                writeMoonVisibilityMap(maskDateSink, maskType)
+            }
             else -> Unit
         }
     }
@@ -324,8 +363,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private fun writeMagneticMap(timeInMillis: Long, maskType: MaskType) {
         (0 until 360).forEach { x ->
             (0 until 180).forEach { y ->
-                val latitude = maskMap.height / 2f - y
-                val longitude = x - maskMap.width / 2f
+                val latitude = 180 / 2f - y
+                val longitude = x - 360 / 2f
                 val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
                 maskMap[x, y] = if (maskType != MaskType.MagneticFieldStrength) {
                     val value = when (maskType) {
@@ -355,10 +394,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         val geoMoonEqd = rot.rotate(geoMoonEqj)
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
-        (0 until maskMap.width).forEach { x ->
-            (0 until maskMap.height).forEach { y ->
-                val latitude = maskMap.height / 2.0 - y
-                val longitude = x - maskMap.width / 2.0
+        (0 until 360).forEach { x ->
+            (0 until 180).forEach { y ->
+                val latitude = 180 / 2.0 - y
+                val longitude = x - 360 / 2.0
                 val observer = Observer(latitude, longitude, .0)
                 val observerVec = observer.toVector(time, EquatorEpoch.OfDate)
                 val observerRot = rotationEqdHor(time, observer)
@@ -384,6 +423,78 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
     private fun verticalComponent(rot: RotationMatrix, oVec: Vector, bVec: Vector): Double =
         rot.rotate(bVec - oVec).let { it.z / it.length() }
+
+    private fun writeMoonVisibilityMap(date: GregorianCalendar, maskType: MaskType) {
+        val isYallop = maskType == MaskType.Yallop
+        val baseTime = Time(
+            date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1,
+            date.get(Calendar.DAY_OF_MONTH) + 1, 0, 0, .0
+        )
+        // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
+        (0 until 360 / maskMapMoonScaleDown).forEach { x ->
+            (0 until 180 / maskMapMoonScaleDown).forEach heightForEach@{ y ->
+                val latitude = 180 / 2.0 - y * maskMapMoonScaleDown
+                val longitude = x * maskMapMoonScaleDown - 360 / 2.0
+                val observer = Observer(latitude, longitude, .0)
+                val time = baseTime.addDays(-longitude / 360)
+                val sunset = searchRiseSet(Body.Sun, observer, Direction.Set, time, 1.0)
+                val moonset = searchRiseSet(Body.Moon, observer, Direction.Set, time, 1.0)
+                if (sunset == null || moonset == null) return@heightForEach
+                val lagTime = moonset.ut - sunset.ut
+                if (lagTime < 0) {
+                    maskMapMoonVisibility[x, y] = 0x70FF0000
+                    return@heightForEach
+                }
+                val bestTime = sunset.addDays(lagTime * 4.0 / 9)
+                val sunEquator = equator(
+                    Body.Sun, bestTime, observer, EquatorEpoch.OfDate, Aberration.Corrected
+                )
+                val sunHorizon =
+                    horizon(bestTime, observer, sunEquator.ra, sunEquator.dec, Refraction.None)
+                val sunAz = sunHorizon.azimuth
+                val moonEquator = equator(
+                    Body.Moon, bestTime, observer, EquatorEpoch.OfDate, Aberration.Corrected
+                )
+                val liberation = libration(bestTime)
+                val moonHorizon =
+                    horizon(bestTime, observer, moonEquator.ra, moonEquator.dec, Refraction.None)
+                val moonAlt = moonHorizon.altitude
+                val moonAz = moonHorizon.azimuth
+                val SD = liberation.diamDeg * 60 / 2
+                val lunarParallax = SD / 0.27245
+                val SD_topo =
+                    SD * (1 + (sin(moonAlt.degreesToRadians()) * sin((lunarParallax / 60).degreesToRadians())))
+                val ARCL = if (isYallop) elongation(Body.Moon, bestTime).elongation
+                else sunEquator.vec.angleWith(moonEquator.vec)
+                val DAZ = sunAz - moonAz
+                val ARCV = acos(
+                    cos(ARCL.degreesToRadians()) / cos(DAZ.degreesToRadians()).coerceIn(-1.0, 1.0)
+                ).radiansToDegrees()
+                val W_topo = SD_topo * (1 - (cos(ARCL.degreesToRadians())))
+                if (isYallop) {
+                    val q = (ARCV - (11.8371 - 6.3226 * W_topo + .7319 * W_topo.pow(2)
+                            - .1018 * W_topo.pow(3))) / 10
+                    maskMapMoonVisibility[x, y] = when {
+                        q > +.216 -> 0x7F3EFF00 // Crescent easily visible
+                        q > -.014 -> 0x7F3EFF6D // Crescent visible under perfect conditions
+                        q > -.160 -> 0x7F00FF9E // May need optical aid to find crescent
+                        q > -.232 -> 0x7F00FFFA // Will need optical aid to find crescent
+                        q > -.293 -> 0x7F3C78FF // Crescent not visible with telescope
+                        else -> Color.TRANSPARENT
+                    }
+                } else {
+                    val V = ARCV - (7.1651 - 6.3226 * W_topo + .7319 * W_topo.pow(2)
+                            - .1018 * W_topo.pow(3))
+                    maskMapMoonVisibility[x, y] = when {
+                        V >= 5.65 -> 0x7F3EFF00 // Crescent is visible by naked eye
+                        V >= 2.00 -> 0x7F00FF9E // Crescent is visible by optical aid
+                        V >= -.96 -> 0x7F3C78FF // Crescent is visible only by optical aid
+                        else -> Color.TRANSPARENT
+                    }
+                }
+            }
+        }
+    }
 
     private val gridLinesWidth = mapWidth * .001f
     private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

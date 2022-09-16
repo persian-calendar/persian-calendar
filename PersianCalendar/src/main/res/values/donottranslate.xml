@@ -60,4 +60,6 @@ omasouri: Omid Masouri"</string>
     <string name="magnetic_field_strength" translatable="false">Magnetic field strength</string>
     <string name="magnetic_declination" translatable="false">Magnetic declination</string>
     <string name="magnetic_inclination" translatable="false">Magnetic inclination</string>
+    <string name="moon_visibility_yallop" translatable="false">Moon visibility (Yallop)</string>
+    <string name="moon_visibility_odeh" translatable="false">Moon visibility (Odeh)</string>
 </resources>

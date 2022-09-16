@@ -22,6 +22,14 @@ class MapViewModel : ViewModel() {
         _state.update { it.copy(time = it.time + ONE_HOUR_IN_MILLIS) }
     }
 
+    fun subtractOneDay() {
+        _state.update { it.copy(time = it.time - DAY_IN_MILLIS) }
+    }
+
+    fun addOneDay() {
+        _state.update { it.copy(time = it.time + DAY_IN_MILLIS) }
+    }
+
     fun subtractTenDays() {
         _state.update { it.copy(time = it.time - DAY_IN_MILLIS * 10) }
     }
