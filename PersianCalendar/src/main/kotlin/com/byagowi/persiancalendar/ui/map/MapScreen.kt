@@ -135,11 +135,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         maskTypeButton.onClick {
             if (viewModel.state.value.maskType == MaskType.None) {
                 val context = context ?: return@onClick
-                val titles =
-                    enumValues<MaskType>().map { it.title }.map(context::getString).toTypedArray()
+                val titles = enumValues<MaskType>().drop(1).map { context.getString(it.title) }
                 MaterialAlertDialogBuilder(context)
-                    .setItems(titles) { dialog, i ->
-                        viewModel.changeMaskType(enumValues<MaskType>()[i])
+                    .setItems(titles.toTypedArray()) { dialog, i ->
+                        viewModel.changeMaskType(enumValues<MaskType>()[i + 1])
                         dialog.dismiss()
                     }
                     .show()
