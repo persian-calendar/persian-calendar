@@ -67,7 +67,6 @@ import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.roundToInt
 
-
 class MapScreen : Fragment(R.layout.fragment_map) {
     private val binding by viewKeeper(FragmentMapBinding::bind)
     private val directPathButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path) }
@@ -97,7 +96,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             }
         }
 
-        mapMask.solarDraw = SolarDraw(view.context)
+        solarDraw = SolarDraw(view.context)
         val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
         val mapPath = PathParser.createPathFromPathData(mapPathBytes.decodeToString())
@@ -136,15 +135,11 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (viewModel.state.value.maskType == MaskType.None) {
                 val context = context ?: return@onClick
                 val titles = enumValues<MaskType>().drop(1).map { context.getString(it.title) }
-                MaterialAlertDialogBuilder(context)
-                    .setItems(titles.toTypedArray()) { dialog, i ->
-                        viewModel.changeMaskType(enumValues<MaskType>()[i + 1])
-                        dialog.dismiss()
-                    }
-                    .show()
-            } else {
-                viewModel.changeMaskType(MaskType.None)
-            }
+                MaterialAlertDialogBuilder(context).setItems(titles.toTypedArray()) { dialog, i ->
+                    viewModel.changeMaskType(enumValues<MaskType>()[i + 1])
+                    dialog.dismiss()
+                }.show()
+            } else viewModel.changeMaskType(MaskType.None)
         }
         globeViewButton.onClick {
             val textureSize = 1024
@@ -178,7 +173,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 drawRect(mapRect, backgroundPaint)
                 drawPath(mapPath, foregroundPaint)
 
-                mapMask.draw(this, scaleBack)
+                drawMask(this, scaleBack)
                 val coordinates = coordinates
                 if (coordinates != null && viewModel.state.value.displayLocation) {
                     val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
@@ -250,10 +245,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             viewModel.state
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { state ->
-                    mapMask.update(state.time, state.maskType)
+                    updateMask(state.time, state.maskType)
                     binding.map.invalidate()
-                    binding.date.text = mapMask.formattedTime
-                    binding.timeBar.isVisible = mapMask.formattedTime.isNotEmpty()
+                    binding.date.text = formattedTime
+                    binding.timeBar.isVisible = formattedTime.isNotEmpty()
                     directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
                 }
         }
@@ -265,14 +260,11 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             findNavController().navigateSafe(MapScreenDirections.actionMapToSkyRenderer())
             return
         }
-        activity?.also {
-            val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-            if (viewModel.state.value.isDirectPathMode) {
-                viewModel.changeDirectPathDestination(coordinates)
-            } else {
-                showCoordinatesDialog(it, viewLifecycleOwner, coordinates)
-            }
-        }
+        val activity = activity ?: return
+        val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+        if (viewModel.state.value.isDirectPathMode)
+            viewModel.changeDirectPathDestination(coordinates)
+        else showCoordinatesDialog(activity, viewLifecycleOwner, coordinates)
     }
 
     private fun bringGps() {
@@ -284,115 +276,111 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
-    inner class MapMask {
-        private val mapMask = createBitmap(360, 180)
-        private var sunX = .0f
-        private var sunY = .0f
-        private var moonX = .0f
-        private var moonY = .0f
-        var solarDraw: SolarDraw? = null
-        var formattedTime = ""
+    private val mapMask = createBitmap(360, 180)
+    private var sunX = .0f
+    private var sunY = .0f
+    private var moonX = .0f
+    private var moonY = .0f
+    private var solarDraw: SolarDraw? = null
+    private var formattedTime = ""
 
-        fun draw(canvas: Canvas, matrixScale: Float) {
-            if (currentMaskType == MaskType.None) return
-            canvas.drawBitmap(mapMask, null, mapRect, null)
-            if (currentMaskType != MaskType.DayNight) return
-            val scale = mapWidth / mapMask.width
-            val solarDraw = solarDraw ?: return
-            solarDraw.simpleMoon(
-                canvas, moonX * scale, moonY * scale, mapWidth * .02f * matrixScale
-            )
-            solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f * matrixScale)
-        }
-
-        private val dateSink = GregorianCalendar()
-        private var currentMaskType = MaskType.None
-        fun update(timeInMillis: Long, maskType: MaskType) {
-            if (maskType == MaskType.None) {
-                currentMaskType = maskType
-                formattedTime = ""
-                return
-            }
-            if (maskType == currentMaskType && dateSink.timeInMillis == timeInMillis) return
-            dateSink.timeInMillis = timeInMillis
-            formattedTime = dateSink.formatDateAndTime()
-            currentMaskType = maskType
-            mapMask.eraseColor(Color.TRANSPARENT)
-            when (maskType) {
-                MaskType.DayNight -> writeDayNightMask(timeInMillis)
-                MaskType.MagneticFieldStrength,
-                MaskType.MagneticDeclination,
-                MaskType.MagneticInclination -> writeMagneticMap(timeInMillis, maskType)
-                else -> Unit
-            }
-        }
-
-        private fun writeMagneticMap(timeInMillis: Long, maskType: MaskType) {
-            (0 until 360).forEach { x ->
-                (0 until 180).forEach { y ->
-                    val latitude = mapMask.height / 2f - y
-                    val longitude = x - mapMask.width / 2f
-                    val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
-                    mapMask[x, y] = if (maskType != MaskType.MagneticFieldStrength) {
-                        val value = when (maskType) {
-                            MaskType.MagneticDeclination -> field.declination
-                            MaskType.MagneticInclination -> field.inclination
-                            else -> 0f
-                        }
-                        when {
-                            value > 1 -> ((value * 255 / 180).toInt() shl 24) + 0xFF0000
-                            value < -1 -> ((-value + 255 / 180).toInt() shl 24) + 0xFF
-                            else -> ((30 - value.absoluteValue * 30).toInt() shl 24) + 0xFF00
-                        }
-                    } else (field.fieldStrength / 68000/*25-65 μT*/ * 255).toInt() shl 24
-                }
-            }
-        }
-
-        private fun writeDayNightMask(timeInMillis: Long) {
-            val time = Time.fromMillisecondsSince1970(timeInMillis)
-            var sunMaxAltitude = .0
-            var moonMaxAltitude = .0
-
-            val geoSunEqj = geoVector(Body.Sun, time, Aberration.Corrected)
-            val geoMoonEqj = geoVector(Body.Moon, time, Aberration.Corrected)
-            val rot = rotationEqjEqd(time)
-            val geoSunEqd = rot.rotate(geoSunEqj)
-            val geoMoonEqd = rot.rotate(geoMoonEqj)
-
-            // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
-            (0 until mapMask.width).forEach { x ->
-                (0 until mapMask.height).forEach { y ->
-                    val latitude = mapMask.height / 2.0 - y
-                    val longitude = x - mapMask.width / 2.0
-                    val observer = Observer(latitude, longitude, .0)
-                    val observerVec = observer.toVector(time, EquatorEpoch.OfDate)
-                    val observerRot = rotationEqdHor(time, observer)
-                    val sunAltitude = verticalComponent(observerRot, observerVec, geoSunEqd)
-                    val moonAltitude = verticalComponent(observerRot, observerVec, geoMoonEqd)
-
-                    if (sunAltitude < 0) {
-                        val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
-                        // This move the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
-                        mapMask[x, y] = value shl 24
-                    }
-
-                    if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
-                        sunMaxAltitude = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
-                    }
-                    if (moonAltitude > moonMaxAltitude) { // this time for moon
-                        moonMaxAltitude = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
-                    }
-                }
-            }
-        }
-
-        // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
-        private fun verticalComponent(rot: RotationMatrix, oVec: Vector, bVec: Vector): Double =
-            rot.rotate(bVec - oVec).let { it.z / it.length() }
+    private fun drawMask(canvas: Canvas, matrixScale: Float) {
+        if (currentMaskType == MaskType.None) return
+        canvas.drawBitmap(mapMask, null, mapRect, null)
+        if (currentMaskType != MaskType.DayNight) return
+        val scale = mapWidth / mapMask.width
+        val solarDraw = solarDraw ?: return
+        solarDraw.simpleMoon(
+            canvas, moonX * scale, moonY * scale, mapWidth * .02f * matrixScale
+        )
+        solarDraw.sun(canvas, sunX * scale, sunY * scale, mapWidth * .025f * matrixScale)
     }
 
-    private val mapMask = MapMask()
+    private val dateSink = GregorianCalendar()
+    private var currentMaskType = MaskType.None
+    private fun updateMask(timeInMillis: Long, maskType: MaskType) {
+        if (maskType == MaskType.None) {
+            currentMaskType = maskType
+            formattedTime = ""
+            return
+        }
+        if (maskType == currentMaskType && dateSink.timeInMillis == timeInMillis) return
+        dateSink.timeInMillis = timeInMillis
+        formattedTime = dateSink.formatDateAndTime()
+        currentMaskType = maskType
+        mapMask.eraseColor(Color.TRANSPARENT)
+        when (maskType) {
+            MaskType.DayNight -> writeDayNightMask(timeInMillis)
+            MaskType.MagneticFieldStrength,
+            MaskType.MagneticDeclination,
+            MaskType.MagneticInclination -> writeMagneticMap(timeInMillis, maskType)
+            else -> Unit
+        }
+    }
+
+    private fun writeMagneticMap(timeInMillis: Long, maskType: MaskType) {
+        (0 until 360).forEach { x ->
+            (0 until 180).forEach { y ->
+                val latitude = mapMask.height / 2f - y
+                val longitude = x - mapMask.width / 2f
+                val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
+                mapMask[x, y] = if (maskType != MaskType.MagneticFieldStrength) {
+                    val value = when (maskType) {
+                        MaskType.MagneticDeclination -> field.declination
+                        MaskType.MagneticInclination -> field.inclination
+                        else -> 0f
+                    }
+                    when {
+                        value > 1 -> ((value * 255 / 180).toInt() shl 24) + 0xFF0000
+                        value < -1 -> ((-value + 255 / 180).toInt() shl 24) + 0xFF
+                        else -> ((30 - value.absoluteValue * 30).toInt() shl 24) + 0xFF00
+                    }
+                } else (field.fieldStrength / 68000/*25-65 μT*/ * 255).toInt() shl 24
+            }
+        }
+    }
+
+    private fun writeDayNightMask(timeInMillis: Long) {
+        val time = Time.fromMillisecondsSince1970(timeInMillis)
+        var sunMaxAltitude = .0
+        var moonMaxAltitude = .0
+
+        val geoSunEqj = geoVector(Body.Sun, time, Aberration.Corrected)
+        val geoMoonEqj = geoVector(Body.Moon, time, Aberration.Corrected)
+        val rot = rotationEqjEqd(time)
+        val geoSunEqd = rot.rotate(geoSunEqj)
+        val geoMoonEqd = rot.rotate(geoMoonEqj)
+
+        // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
+        (0 until mapMask.width).forEach { x ->
+            (0 until mapMask.height).forEach { y ->
+                val latitude = mapMask.height / 2.0 - y
+                val longitude = x - mapMask.width / 2.0
+                val observer = Observer(latitude, longitude, .0)
+                val observerVec = observer.toVector(time, EquatorEpoch.OfDate)
+                val observerRot = rotationEqdHor(time, observer)
+                val sunAltitude = verticalComponent(observerRot, observerVec, geoSunEqd)
+                val moonAltitude = verticalComponent(observerRot, observerVec, geoMoonEqd)
+
+                if (sunAltitude < 0) {
+                    val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
+                    // This move the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
+                    mapMask[x, y] = value shl 24
+                }
+
+                if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
+                    sunMaxAltitude = sunAltitude; sunX = x.toFloat(); sunY = y.toFloat()
+                }
+                if (moonAltitude > moonMaxAltitude) { // this time for moon
+                    moonMaxAltitude = moonAltitude; moonX = x.toFloat(); moonY = y.toFloat()
+                }
+            }
+        }
+    }
+
+    // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp#L122
+    private fun verticalComponent(rot: RotationMatrix, oVec: Vector, bVec: Vector): Double =
+        rot.rotate(bVec - oVec).let { it.z / it.length() }
 
     private val gridLinesWidth = mapWidth * .001f
     private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
