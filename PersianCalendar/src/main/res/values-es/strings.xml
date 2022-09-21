@@ -379,4 +379,6 @@
     <string name="live_wallpaper_settings">Ajustes de fondo de pantalla en vivo</string>
     <string name="screensaver_settings">Ajustes del salvapantallas</string>
     <string name="true_north">Norte verdadero</string>
+    <string name="enable_notification">¿Desea activar la notificación de la fecha\?</string>
+    <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
 </resources>
