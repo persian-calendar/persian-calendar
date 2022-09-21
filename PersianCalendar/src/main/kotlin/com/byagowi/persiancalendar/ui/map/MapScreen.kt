@@ -340,7 +340,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         maskDateSink.timeInMillis = timeInMillis
         maskCurrentType = maskType
         when (maskType) {
-            MaskType.DayNight -> writeDayNightMask(timeInMillis)
+            MaskType.DayNight -> {
+                maskMap.eraseColor(Color.TRANSPARENT)
+                writeDayNightMask(timeInMillis)
+            }
             MaskType.MagneticFieldStrength,
             MaskType.MagneticDeclination,
             MaskType.MagneticInclination -> {
