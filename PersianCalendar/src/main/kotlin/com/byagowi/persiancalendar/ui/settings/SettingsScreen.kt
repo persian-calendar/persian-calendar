@@ -34,6 +34,8 @@ import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.global.enableNewInterface
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
+import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
+import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment

@@ -12,6 +12,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.about.showEmailDialog
+import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
+import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.calendar.dialogs.showMonthOverviewDialog
 import com.byagowi.persiancalendar.ui.calendar.shiftwork.showShiftWorkDialog
@@ -29,8 +31,6 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.showDistri
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showLocationPreferenceDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showProvinceDialog
-import com.byagowi.persiancalendar.ui.settings.showIconsDemoDialog
-import com.byagowi.persiancalendar.ui.settings.showTypographyDemoDialog
 import org.junit.Test
 import org.junit.runner.RunWith
 

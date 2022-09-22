@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
-import android.os.Build
 import android.text.method.LinkMovementMethod
 import androidx.core.content.edit
 import androidx.core.text.HtmlCompat

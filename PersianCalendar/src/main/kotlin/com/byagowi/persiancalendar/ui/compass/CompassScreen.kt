@@ -194,7 +194,8 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
             }
             binding.appBar.toolbar.menu.add(R.string.true_north).also { menu ->
                 val prefs = binding.root.context.appPrefs
-                binding.compassView.isTrueNorth = prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
+                binding.compassView.isTrueNorth =
+                    prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
                 menu.isCheckable = true
                 menu.isChecked = binding.compassView.isTrueNorth
                 menu.onClick {

@@ -25,6 +25,7 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import android.opengl.GLSurfaceView
 import android.os.Build
+import android.text.style.TextAppearanceSpan
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.KeyEvent
@@ -56,7 +57,10 @@ import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.core.text.HtmlCompat
+import androidx.core.text.buildSpannedString
+import androidx.core.text.inSpans
 import androidx.core.view.isVisible
+import androidx.core.view.setMargins
 import androidx.core.view.setPadding
 import androidx.core.widget.doAfterTextChanged
 import androidx.customview.widget.ViewDragHelper
@@ -69,6 +73,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
@@ -78,9 +84,16 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.sp
+import com.byagowi.persiancalendar.utils.createStatusIcon
+import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.progressindicator.LinearProgressIndicator
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.android.material.shape.TriangleEdgeTreatment
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
 import com.google.zxing.BarcodeFormat
@@ -1272,3 +1285,64 @@ fun showInputDeviceTestDialog(activity: FragmentActivity) {
         })
         .show()
 }
+
+// Debug only dialog to check validity of dynamic icons generation
+fun showIconsDemoDialog(activity: FragmentActivity) {
+    MaterialAlertDialogBuilder(activity)
+        .setView(RecyclerView(activity).also {
+            it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
+                override fun getItemCount() = 62
+                override fun getItemViewType(position: Int) = position
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+                    object : RecyclerView.ViewHolder(ShapeableImageView(activity).apply {
+                        val day = viewType / 2 + 1
+                        when (viewType % 2) {
+                            0 -> setImageResource(getDayIconResource(day))
+                            1 -> setImageBitmap(createStatusIcon(day))
+                        }
+                        layoutParams = ViewGroup.MarginLayoutParams(36.dp.toInt(), 36.dp.toInt())
+                            .apply { setMargins(4.dp.toInt()) }
+                        shapeAppearanceModel = ShapeAppearanceModel.Builder()
+                            .setAllCorners(CornerFamily.ROUNDED, 8.dp)
+                            .setAllEdges(TriangleEdgeTreatment(4.dp, true))
+                            .build()
+                        setBackgroundColor(Color.DKGRAY)
+                    }) {}
+            }
+            it.layoutManager = GridLayoutManager(activity, 8)
+            it.setBackgroundColor(Color.WHITE)
+        })
+        .setNegativeButton(R.string.cancel, null)
+        .show()
+}
+
+fun showTypographyDemoDialog(activity: FragmentActivity) {
+    val text = buildSpannedString {
+        textAppearances.forEach { (appearanceName, appearanceId) ->
+            val textAppearance = TextAppearanceSpan(activity, appearanceId)
+            inSpans(textAppearance) { append(appearanceName) }
+            append(" ${(textAppearance.textSize / 1.sp).roundToInt()}sp")
+            appendLine()
+        }
+    }
+    MaterialAlertDialogBuilder(activity).setView(TextView(activity).also { it.text = text }).show()
+}
+
+private val textAppearances = listOf(
+    "DisplayLarge" to com.google.android.material.R.style.TextAppearance_Material3_DisplayLarge,
+    "DisplayMedium" to com.google.android.material.R.style.TextAppearance_Material3_DisplayMedium,
+    "DisplaySmall" to com.google.android.material.R.style.TextAppearance_Material3_DisplaySmall,
+    "HeadlineLarge" to com.google.android.material.R.style.TextAppearance_Material3_HeadlineLarge,
+    "HeadlineMedium" to com.google.android.material.R.style.TextAppearance_Material3_HeadlineMedium,
+    "HeadlineSmall" to com.google.android.material.R.style.TextAppearance_Material3_HeadlineSmall,
+    "TitleLarge" to com.google.android.material.R.style.TextAppearance_Material3_TitleLarge,
+    "TitleMedium" to com.google.android.material.R.style.TextAppearance_Material3_TitleMedium,
+    "TitleSmall" to com.google.android.material.R.style.TextAppearance_Material3_TitleSmall,
+    "BodyLarge" to com.google.android.material.R.style.TextAppearance_Material3_BodyLarge,
+    "BodyMedium" to com.google.android.material.R.style.TextAppearance_Material3_BodyMedium,
+    "BodySmall" to com.google.android.material.R.style.TextAppearance_Material3_BodySmall,
+    "LabelLarge" to com.google.android.material.R.style.TextAppearance_Material3_LabelLarge,
+    "LabelMedium" to com.google.android.material.R.style.TextAppearance_Material3_LabelMedium,
+    "LabelSmall" to com.google.android.material.R.style.TextAppearance_Material3_LabelSmall
+)
