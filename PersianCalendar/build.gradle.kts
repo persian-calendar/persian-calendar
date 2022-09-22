@@ -183,7 +183,7 @@ dependencies {
     implementation("com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b")
 
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
-    implementation("com.github.cosinekitty:astronomy:afd6f4835f3a20f454e9ae4ad3d043f971a1c306")
+    implementation("com.github.cosinekitty:astronomy:v2.1.3")
 
     implementation("androidx.appcompat:appcompat:1.5.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
