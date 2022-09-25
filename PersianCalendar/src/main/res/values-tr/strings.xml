@@ -90,15 +90,15 @@
     <string name="preview">Önizleme</string>
     <plurals name="n_days">
         <item quantity="one">%1$s yıl</item>
-        <item quantity="other">%1$s yıllar</item>
+        <item quantity="other">%1$s yıll</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s ay</item>
-        <item quantity="other">%1$s aylar</item>
+        <item quantity="other">%1$s ayy</item>
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s gün</item>
-        <item quantity="other">%1$s günler</item>
+        <item quantity="other">%1$s günn</item>
     </plurals>
     <string name="age_widget_title">Widget Başlığı</string>
     <string name="select_date">Tarih seçiniz</string>
@@ -127,12 +127,12 @@
     <string name="spaced_comma">", "</string>
     <string name="spaced_and">" ve "</string>
     <plurals name="n_minutes">
-        <item quantity="one">%1$s dakika</item>
-        <item quantity="other">%1$s dakikalar</item>
+        <item quantity="one">%1$s dakik</item>
+        <item quantity="other">%1$s dakika</item>
     </plurals>
     <plurals name="n_hours">
         <item quantity="one">%1$s saat</item>
-        <item quantity="other">%1$s saatler</item>
+        <item quantity="other">%1$s saatt</item>
     </plurals>
     <string name="shift_work_reset_button">Devre dışı bırak veya yeniden programla</string>
     <string name="shift_work_starting_date">Takvimde seçilen %1$s, vardiyalı çalışmaya başlama günüdür.</string>
@@ -144,7 +144,7 @@
     <string name="week_days_name_column">Gün tablosundaki %1$s sütunu</string>
     <string name="next_x">Gelecek %1$s</string>
     <string name="previous_x">Önceki %1$s</string>
-    <string name="about_developers">Geliştiriciler (rastgele sıralanmış)</string>
+    <string name="about_developers">Geliştiriciler (rastgele sıralanmıştır)</string>
     <string name="about_noClient">Yüklü e-posta istemcisi yok</string>
     <string name="about_email_sum">Uygulamanın yazarlarına kişisel e-posta gönder</string>
     <string name="about_sendMail">E-Posta</string>
@@ -175,7 +175,7 @@
     <string name="notification_athan">Ezan Bildirimi</string>
     <string name="athan_alarm_summary">Namaz vakti için ezan uyarıları</string>
     <string name="athan_alarm">Ezan Alarmı</string>
-    <string name="athan_gap_summary">Uyarı Ezan\'dan ne kadar önce tetiklenmesi gerekir (dakika olarak)</string>
+    <string name="athan_gap_summary">Uyarı Ezan\'dan kaç dakika önce yapılsın</string>
     <string name="athan_gap">Ezan Okutma</string>
     <string name="pray_methods_calculation">Namaz vakitleri ve Kıble pusulası için hesaplama yöntemleri</string>
     <string name="pray_methods">Hesaplama yöntemleri</string>
@@ -220,7 +220,7 @@
     <string name="astronomy">Astronomi</string>
     <string name="calendars_priority_summary">Takvimleri önceliği gösterecek veya gizleyecek şekilde ayarlayın</string>
     <string name="calendars_priority">Takvim Önceliği</string>
-    <string name="show_device_calendar_events_summary">Kişisel takvim etkinliklerini gösterme</string>
+    <string name="show_device_calendar_events_summary">Kişisel takvim etkinliklerini göster</string>
     <string name="show_device_calendar_events">Kişisel Takvim Etkinlikleri</string>
     <string name="events_summary">Gösterilecek Etkinlikler</string>
     <string name="enable_native_digits">Arapça Rakamları Etkinleştir</string>
@@ -297,7 +297,7 @@
     <string name="year_name">Yıl Adı</string>
     <string name="date_copied_clipboard">%1$s panoya kopyalanmıştır.</string>
     <string name="end_of_year_diff">Yıl sonuna %1$s gün var (~%2$s hafta veya %3$s ay)</string>
-    <string name="start_of_year_diff">Yıl başından itibaren %1$s gün geçmiştir (~%2$s hafta veya %3$s ay)</string>
+    <string name="start_of_year_diff">Yıl başından itibaren %1$s gün geçti (~%2$s hafta veya %3$s ay)</string>
     <string name="days_distance">Yaklaşan Etkinliğe Kalan Gün</string>
     <string name="search_in_events">Etkinliklerde Ara</string>
     <string name="go">Git</string>
@@ -330,7 +330,7 @@
     <string name="asr_hanafi_juristic">İkindi Hanefi Fıkıh Metodu</string>
     <string name="enable_new_interface">Yeni arayüzü etkinleştirin</string>
     <string name="are_you_sure">Emin misiniz\?</string>
-    <string name="month_pray_times">Ayın namaz vakitleri</string>
+    <string name="month_pray_times">Aylık namaz vakitleri</string>
     <string name="country_emoji">🇹🇷</string>
     <string name="nepal">Nepal</string>
     <string name="nepali_calendar">Nepal Takvimi</string>
