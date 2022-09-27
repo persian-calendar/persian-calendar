@@ -56,10 +56,11 @@ omasouri: Omid Masouri"</string>
     <string name="show_my_location_label" translatable="false">GPS</string>
     <string name="show_location_label" translatable="false">Location</string>
     <string name="show_night_mask_label" translatable="false">Night mask</string>
+    <string name="moon_visibility" translatable="false">Moon visibility</string>
     <string name="show_globe_view_label" translatable="false">3D globe</string>
     <string name="magnetic_field_strength" translatable="false">Magnetic field strength</string>
     <string name="magnetic_declination" translatable="false">Magnetic declination</string>
     <string name="magnetic_inclination" translatable="false">Magnetic inclination</string>
-    <string name="moon_visibility_yallop" translatable="false">Moon visibility (Yallop)</string>
-    <string name="moon_visibility_odeh" translatable="false">Moon visibility (Odeh)</string>
+    <string name="crescent_visibility_yallop" translatable="false">Crescent evening visibility (Yallop)</string>
+    <string name="crescent_visibility_odeh" translatable="false">Crescent evening visibility (Odeh)</string>
 </resources>

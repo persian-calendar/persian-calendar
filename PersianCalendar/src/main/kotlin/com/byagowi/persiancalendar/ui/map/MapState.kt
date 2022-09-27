@@ -13,12 +13,13 @@ data class MapState(
     val directPathDestination: Coordinates? = null
 )
 
-enum class MaskType(@StringRes val title: Int, val isMoonVisibility: Boolean = false) {
+enum class MaskType(@StringRes val title: Int, val isCrescentVisibility: Boolean = false) {
     None(R.string.none),
     DayNight(R.string.show_night_mask_label),
+    MoonVisibility(R.string.moon_visibility),
     MagneticFieldStrength(R.string.magnetic_field_strength),
     MagneticDeclination(R.string.magnetic_declination),
     MagneticInclination(R.string.magnetic_inclination),
-    Yallop(R.string.moon_visibility_yallop, isMoonVisibility = true),
-    Odeh(R.string.moon_visibility_odeh, isMoonVisibility = true)
+    Yallop(R.string.moon_visibility_yallop, isCrescentVisibility = true),
+    Odeh(R.string.moon_visibility_odeh, isCrescentVisibility = true)
 }

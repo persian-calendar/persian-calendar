@@ -124,7 +124,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
             binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (maskCurrentType.isMoonVisibility) viewModel.subtractOneDay()
+            if (maskCurrentType.isCrescentVisibility) viewModel.subtractOneDay()
             else viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener {
@@ -134,7 +134,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (maskCurrentType.isMoonVisibility) viewModel.addOneDay()
+            if (maskCurrentType.isCrescentVisibility) viewModel.addOneDay()
             else viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener {
@@ -157,7 +157,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 val options = enumValues<MaskType>()
                     .drop(1) // Hide "None" option
                     // Hide moon visibilities for now unless is a development build
-                    .filter { !it.isMoonVisibility || BuildConfig.DEVELOPMENT }
+                    .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
                 val titles = options.map { context.getString(it.title) }
                 MaterialAlertDialogBuilder(context).setItems(titles.toTypedArray()) { dialog, i ->
                     viewModel.changeMaskType(options[i])
@@ -313,10 +313,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         if (maskCurrentType == MaskType.None) return
-        if (maskCurrentType.isMoonVisibility)
+        if (maskCurrentType.isCrescentVisibility)
             canvas.drawBitmap(maskMapMoonVisibility, null, mapRect, null)
         else canvas.drawBitmap(maskMap, null, mapRect, null)
-        if (maskCurrentType == MaskType.DayNight) {
+        if (maskCurrentType == MaskType.DayNight || maskCurrentType == MaskType.MoonVisibility) {
             val scale = mapWidth / maskMap.width
             val solarDraw = maskSolarDraw ?: return
             solarDraw.simpleMoon(
@@ -328,7 +328,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
     }
 
-    private val maskDateSink = GregorianCalendar()
+    private val maskDateSink = GregorianCalendar().also { --it.timeInMillis }
     private var maskCurrentType = MaskType.None
     private fun updateMask(timeInMillis: Long, maskType: MaskType) {
         if (maskType == MaskType.None) {
@@ -340,7 +340,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         maskDateSink.timeInMillis = timeInMillis
         maskCurrentType = maskType
         when (maskType) {
-            MaskType.DayNight -> {
+            MaskType.DayNight, MaskType.MoonVisibility -> {
+                maskFormattedTime = maskDateSink.formatDateAndTime()
                 maskMap.eraseColor(Color.TRANSPARENT)
                 writeDayNightMask(timeInMillis)
             }
@@ -396,6 +397,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         val geoSunEqd = rot.rotate(geoSunEqj)
         val geoMoonEqd = rot.rotate(geoMoonEqj)
 
+        val isMoonVisibility = maskCurrentType == MaskType.MoonVisibility
+
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
         (0 until 360).forEach { x ->
             (0 until 180).forEach { y ->
@@ -407,10 +410,18 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 val sunAltitude = verticalComponent(observerRot, observerVec, geoSunEqd)
                 val moonAltitude = verticalComponent(observerRot, observerVec, geoMoonEqd)
 
-                if (sunAltitude < 0) {
-                    val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
-                    // This moves the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
-                    maskMap[x, y] = value shl 24
+                if (isMoonVisibility) {
+                    if (moonAltitude > 0) {
+                        val value = ((moonAltitude * 90 * 7).toInt()).coerceAtMost(120)
+                        // This moves the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
+                        maskMap[x, y] = (value shl 24) + 0xF4F4F4
+                    }
+                } else {
+                    if (sunAltitude < 0) {
+                        val value = ((-sunAltitude * 90 * 7).toInt()).coerceAtMost(120)
+                        // This moves the value to alpha channel so ARGB 0x0000007F becomes 0x7F000000
+                        maskMap[x, y] = value shl 24
+                    }
                 }
 
                 if (sunAltitude > sunMaxAltitude) { // find y/x of a point with maximum sun altitude
