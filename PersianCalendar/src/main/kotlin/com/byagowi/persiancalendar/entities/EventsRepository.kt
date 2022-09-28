@@ -96,7 +96,7 @@ class EventsRepository(
     private val gregorianCalendarEvents = GregorianCalendarEventsStore(gregorianEvents.mapNotNull {
         createEvent(it, CalendarType.GREGORIAN)
     })
-    private val nepaliCalendarEvents = NepaliCalendarEventsStore(nepaliEvents.mapNotNull { it ->
+    private val nepaliCalendarEvents = NepaliCalendarEventsStore(nepaliEvents.mapNotNull {
         createEvent(it, CalendarType.NEPALI)
     })
 
