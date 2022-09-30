@@ -302,7 +302,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
 
     private val maskMap = createBitmap(360, 180)
     private val maskMapMoonScaleDown = 8
-    private val maskMapMoonVisibility =
+    private val maskMapCrescentVisibility =
         createBitmap(360 / maskMapMoonScaleDown, 180 / maskMapMoonScaleDown)
     private var maskSunX = .0f
     private var maskSunY = .0f
@@ -314,7 +314,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         if (maskCurrentType == MaskType.None) return
         if (maskCurrentType.isCrescentVisibility)
-            canvas.drawBitmap(maskMapMoonVisibility, null, mapRect, null)
+            canvas.drawBitmap(maskMapCrescentVisibility, null, mapRect, null)
         else canvas.drawBitmap(maskMap, null, mapRect, null)
         if (maskCurrentType == MaskType.DayNight || maskCurrentType == MaskType.MoonVisibility) {
             val scale = mapWidth / maskMap.width
@@ -357,8 +357,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     Jdn(maskDateSink.toCivilDate()).toCalendar(mainCalendar),
                     forceNonNumerical = true
                 )
-                maskMapMoonVisibility.eraseColor(Color.TRANSPARENT)
-                writeMoonVisibilityMap(maskDateSink, maskType)
+                maskMapCrescentVisibility.eraseColor(Color.TRANSPARENT)
+                writeCrescentVisibilityMap(maskDateSink, maskType)
             }
             else -> Unit
         }
@@ -438,7 +438,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private fun verticalComponent(rot: RotationMatrix, oVec: Vector, bVec: Vector): Double =
         rot.rotate(bVec - oVec).let { it.z / it.length() }
 
-    private fun writeMoonVisibilityMap(date: GregorianCalendar, maskType: MaskType) {
+    private fun writeCrescentVisibilityMap(date: GregorianCalendar, maskType: MaskType) {
         val isYallop = maskType == MaskType.Yallop
         val baseTime = Time(
             date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1,
@@ -456,7 +456,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 if (sunset == null || moonset == null) return@heightForEach
                 val lagTime = moonset.ut - sunset.ut
                 if (lagTime < 0) {
-                    maskMapMoonVisibility[x, y] = 0x70FF0000
+                    maskMapCrescentVisibility[x, y] = 0x70FF0000
                     return@heightForEach
                 }
                 val bestTime = sunset.addDays(lagTime * 4.0 / 9)
@@ -488,7 +488,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 if (isYallop) {
                     val q = (ARCV - (11.8371 - 6.3226 * W_topo + .7319 * W_topo.pow(2)
                             - .1018 * W_topo.pow(3))) / 10
-                    maskMapMoonVisibility[x, y] = when {
+                    maskMapCrescentVisibility[x, y] = when {
                         q > +.216 -> 0x7F3EFF00 // Crescent easily visible
                         q > -.014 -> 0x7F3EFF6D // Crescent visible under perfect conditions
                         q > -.160 -> 0x7F00FF9E // May need optical aid to find crescent
@@ -499,7 +499,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 } else {
                     val V = ARCV - (7.1651 - 6.3226 * W_topo + .7319 * W_topo.pow(2)
                             - .1018 * W_topo.pow(3))
-                    maskMapMoonVisibility[x, y] = when {
+                    maskMapCrescentVisibility[x, y] = when {
                         V >= 5.65 -> 0x7F3EFF00 // Crescent is visible by naked eye
                         V >= 2.00 -> 0x7F00FF9E // Crescent is visible by optical aid
                         V >= -.96 -> 0x7F3C78FF // Crescent is visible only by optical aid
