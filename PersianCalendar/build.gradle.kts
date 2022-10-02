@@ -34,7 +34,7 @@ plugins {
 //   val baseVersionName = "$versionMajor.$versionMinor.$versionPatch"
 
 // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-val composeCompilerVersion = "1.3.0"
+val composeCompilerVersion = "1.3.1"
 val composeVersion = "1.2.1"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
