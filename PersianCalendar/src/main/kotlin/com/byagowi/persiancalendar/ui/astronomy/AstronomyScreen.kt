@@ -170,9 +170,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 switch.setText(R.string.tropical)
                 switch.isChecked = viewModel.isTropical.value
                 switch.setOnCheckedListenerWithDeferredAnimation(viewModel::changeTropicalStatus)
-            }.also {
                 // Animate visibility of the switch, a bit hacky way to retrieve the view parent
-                it.post { (it.parent as? ViewGroup)?.setupLayoutTransition() }
+                switch.post { (switch.parent as? ViewGroup)?.setupLayoutTransition() }
             }
         }
 
