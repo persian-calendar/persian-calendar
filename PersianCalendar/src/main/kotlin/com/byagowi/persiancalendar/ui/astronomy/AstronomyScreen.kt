@@ -111,7 +111,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
 
         val seasonsCache = hashMapOf<Int, SeasonsInfo>()
-        fun calculateSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
+        fun cachedSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
         val headerCache = hashMapOf<Long, String>()
 
         fun update(state: AstronomyState) {
@@ -138,7 +138,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             val jdn = civilDate.toJdn()
             val persianDate = PersianDate(jdn)
             binding.headerInformation.text = headerCache.getOrPut(jdn) {
-                state.generateHeader(context ?: return, persianDate)
+                state.generateHeader(context ?: return@getOrPut "", persianDate)
             }
 
             (1..4).forEach { i ->
@@ -149,7 +149,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     else -> binding.fourthSeason
                 }.setValue(
                     Date(
-                        calculateSeasons(
+                        cachedSeasons(
                             CivilDate(PersianDate(persianDate.year, i * 3, 29)).year
                         ).let {
                             when (i) {
