@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import androidx.core.os.postDelayed
 import com.byagowi.persiancalendar.ASR_KEY
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DHUHR_KEY
@@ -130,10 +131,10 @@ class AthanNotification : Service() {
 
         startForeground(notificationId, notificationBuilder.build())
 
-        Handler(Looper.getMainLooper()).postDelayed({
+        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) {
             notificationManager?.cancel(notificationId)
             stopSelf()
-        }, SIX_MINUTES_IN_MILLIS)
+        }
 
         return super.onStartCommand(intent, flags, startId)
     }

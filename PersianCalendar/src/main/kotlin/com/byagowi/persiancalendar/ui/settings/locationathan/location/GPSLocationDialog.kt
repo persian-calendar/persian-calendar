@@ -14,6 +14,7 @@ import android.os.Looper
 import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
+import androidx.core.os.postDelayed
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
@@ -133,8 +134,6 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
         }.onFailure(logException)
     }
 
-    val handler = Handler(Looper.getMainLooper())
-    val checkGPSProviderCallback = Runnable { checkGPSProvider() }
     var isOneProviderEnabled = false
     val locationListener = object : LocationListener {
         @Deprecated("")
@@ -167,7 +166,9 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
         )
     }
 
-    handler.postDelayed(checkGPSProviderCallback, THIRTY_SECONDS_IN_MILLIS)
+    val handler = Handler(Looper.getMainLooper())
+    val checkGPSProviderCallback =
+        handler.postDelayed(THIRTY_SECONDS_IN_MILLIS) { checkGPSProvider() }
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .create()

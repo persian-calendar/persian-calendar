@@ -52,6 +52,8 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.component1
+import androidx.core.graphics.component2
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.set
@@ -979,8 +981,8 @@ fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
                 bringChildToFront(capturedChild)
 
             override fun onViewReleased(releasedChild: View, xvel: Float, yvel: Float) {
-                val pos = computeFinalPosition(releasedChild, xvel, yvel)
-                dragHelper.settleCapturedViewAt(pos.x, pos.y)
+                val (x, y) = computeFinalPosition(releasedChild, xvel, yvel)
+                dragHelper.settleCapturedViewAt(x, y)
                 invalidate()
             }
 

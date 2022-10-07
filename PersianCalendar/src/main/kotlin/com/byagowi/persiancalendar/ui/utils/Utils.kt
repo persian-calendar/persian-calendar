@@ -10,7 +10,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Base64
@@ -35,6 +34,7 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
@@ -239,7 +239,7 @@ fun Window.makeWallpaperTransparency() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         this.navigationBarColor = Color.TRANSPARENT
     this.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
-    this.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    this.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 }
 
 fun prepareViewForRendering(view: View, width: Int, height: Int) {
