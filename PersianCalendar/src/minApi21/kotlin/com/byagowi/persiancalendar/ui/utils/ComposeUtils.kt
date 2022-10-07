@@ -10,6 +10,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
+import androidx.core.view.minusAssign
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.databinding.FragmentComposeBinding
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -24,7 +25,7 @@ fun showComposeDialog(
         composeView.setContent {
             var isDialogOpen by remember { mutableStateOf(true) }
             if (isDialogOpen) Mdc3Theme { dialog { isDialogOpen = false } }
-            else decorView.post { decorView.removeView(composeView) }
+            else decorView.post { decorView -= composeView }
         }
     })
 }

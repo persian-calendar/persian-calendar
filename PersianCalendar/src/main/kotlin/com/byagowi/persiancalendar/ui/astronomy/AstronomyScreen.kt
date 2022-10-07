@@ -11,6 +11,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
+import androidx.core.util.lruCache
 import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -38,7 +39,6 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.materialswitch.MaterialSwitch
-import io.github.cosinekitty.astronomy.SeasonsInfo
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
@@ -66,14 +66,16 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
 
         val viewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
-        if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME)
-            viewModel.animateToAbsoluteDayOffset(navArgs<AstronomyScreenArgs>().value.dayOffset)
+        if (viewModel.minutesOffset.value == AstronomyViewModel.DEFAULT_TIME) viewModel.animateToAbsoluteDayOffset(
+            navArgs<AstronomyScreenArgs>().value.dayOffset
+        )
 
         var clickCount = 0
         binding.solarView.setOnClickListener {
             val activity = activity
-            if (++clickCount % 2 == 0 && activity != null)
-                showHoroscopesDialog(activity, viewModel.astronomyState.value.date.time)
+            if (++clickCount % 2 == 0 && activity != null) showHoroscopesDialog(
+                activity, viewModel.astronomyState.value.date.time
+            )
         }
 
         val moonIconDrawable = object : Drawable() {
@@ -93,8 +95,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
         binding.railView.itemIconTintList = null // makes it to not apply tint on modes icons
         binding.railView.menu.also { menu ->
-            val buttons = enumValues<AstronomyMode>()
-                .associateWith { menu.add(it.title).setIcon(it.icon) }
+            val buttons =
+                enumValues<AstronomyMode>().associateWith { menu.add(it.title).setIcon(it.icon) }
             binding.railView.post { // Needs to be done in .post so selected button is applied correctly
                 buttons.forEach { (mode, item) ->
                     if (viewModel.mode.value == mode) item.isChecked = true
@@ -110,21 +112,21 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             }
         }
 
-        val seasonsCache = hashMapOf<Int, SeasonsInfo>()
-        fun cachedSeasons(year: Int) = seasonsCache.getOrPut(year) { seasons(year) }
-        val headerCache = hashMapOf<Long, String>()
+        val seasonsCache = lruCache(1024, create = ::seasons)
+        val headerCache = lruCache(1024, create = { it: Jdn ->
+            val context = context
+            if (context == null) "" else viewModel.astronomyState.value.generateHeader(context, it)
+        })
 
         fun update(state: AstronomyState) {
             binding.solarView.setTime(state)
             moonIconDrawable.invalidateSelf() // Update moon icon of rail view
 
             val tropical = viewModel.isTropical.value
-            val sunZodiac =
-                if (tropical) Zodiac.fromTropical(state.sun.elon)
-                else Zodiac.fromIau(state.sun.elon)
-            val moonZodiac =
-                if (tropical) Zodiac.fromTropical(state.moon.elon)
-                else Zodiac.fromIau(state.moon.elon)
+            val sunZodiac = if (tropical) Zodiac.fromTropical(state.sun.elon)
+            else Zodiac.fromIau(state.sun.elon)
+            val moonZodiac = if (tropical) Zodiac.fromTropical(state.moon.elon)
+            else Zodiac.fromIau(state.moon.elon)
 
             binding.sun.setValue(
                 sunZodiac.format(view.context, true) // ☉☀️
@@ -135,11 +137,8 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             binding.time.text = state.date.formatDateAndTime()
 
             val civilDate = state.date.toCivilDate()
-            val jdn = civilDate.toJdn()
-            val persianDate = PersianDate(jdn)
-            binding.headerInformation.text = headerCache.getOrPut(jdn) {
-                state.generateHeader(context ?: return@getOrPut "", persianDate)
-            }
+            val jdn = Jdn(civilDate)
+            binding.headerInformation.text = headerCache[jdn]
 
             (1..4).forEach { i ->
                 when (i) {
@@ -149,9 +148,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                     else -> binding.fourthSeason
                 }.setValue(
                     Date(
-                        cachedSeasons(
-                            CivilDate(PersianDate(persianDate.year, i * 3, 29)).year
-                        ).let {
+                        seasonsCache[CivilDate(
+                            PersianDate(jdn.toPersianCalendar().year, i * 3, 29)
+                        ).year].let {
                             when (i) {
                                 1 -> it.juneSolstice
                                 2 -> it.septemberEquinox
@@ -176,8 +175,10 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
 
         listOf(
-            binding.firstSeason to 4, binding.secondSeason to 7,
-            binding.thirdSeason to 10, binding.fourthSeason to 1
+            binding.firstSeason to 4,
+            binding.secondSeason to 7,
+            binding.thirdSeason to 10,
+            binding.fourthSeason to 1
         ).map { (holder, month) -> // 'month' is month number of first Persian month in the season
             val season = Season.fromPersianCalendar(PersianDate(1400, month, 1), coordinates)
             holder.setTitle(getString(season.nameStringId))
