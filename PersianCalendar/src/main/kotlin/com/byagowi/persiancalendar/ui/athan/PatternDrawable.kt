@@ -15,6 +15,7 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.and
+import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.or
 import androidx.core.graphics.plus
@@ -74,7 +75,7 @@ class PatternDrawable(
             // ::FourthPattern
         ).random()(tintColor, 80.dp)
         val bitmap = createBitmap(pattern.width.toInt(), pattern.height.toInt())
-        Canvas(bitmap).also(pattern::draw)
+            .applyCanvas(pattern::draw)
         foregroundPaint.shader = BitmapShader(bitmap, pattern.tileModeX, pattern.tileModeY)
         centerX = listOf(-.5f, .5f, 1.5f).random() * bounds.width()
         centerY = listOf(-.5f, .5f, 1.5f).random() * bounds.height()

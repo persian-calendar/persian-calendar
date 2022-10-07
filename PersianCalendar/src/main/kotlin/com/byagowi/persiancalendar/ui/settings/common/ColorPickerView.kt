@@ -43,6 +43,7 @@ import androidx.annotation.ColorInt
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.view.isVisible
 import androidx.core.view.setPadding
@@ -209,19 +210,17 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
 }
 
 // https://stackoverflow.com/a/58471997
-fun createCheckerBoard(tileSize: Int) = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-    shader = BitmapShader(
-        createBitmap(tileSize * 2, tileSize * 2).apply {
-            Canvas(this).apply {
-                val fill = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-                    style = Paint.Style.FILL
-                    color = 0x22000000
-                }
-                drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
-                drawRect(
-                    tileSize.toFloat(), tileSize.toFloat(), tileSize * 2f, tileSize * 2f, fill
-                )
+fun createCheckerBoard(tileSize: Int) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
+    paint.shader = BitmapShader(
+        createBitmap(tileSize * 2, tileSize * 2).applyCanvas {
+            val fill = Paint(Paint.ANTI_ALIAS_FLAG).also {
+                it.style = Paint.Style.FILL
+                it.color = 0x22000000
             }
+            drawRect(0f, 0f, tileSize.toFloat(), tileSize.toFloat(), fill)
+            drawRect(
+                tileSize.toFloat(), tileSize.toFloat(), tileSize * 2f, tileSize * 2f, fill
+            )
         }, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT
     )
 }

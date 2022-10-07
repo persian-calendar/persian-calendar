@@ -14,6 +14,7 @@ import android.text.style.ReplacementSpan
 import android.text.util.Linkify
 import android.view.View
 import android.widget.Toast
+import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
@@ -60,7 +61,7 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
                 val width = bounds.width() + padding.toInt() * 2
                 val height = bounds.height()
                 val bitmap = createBitmap(width, height)
-                Canvas(bitmap).drawText(text, padding, height.toFloat(), paint)
+                    .applyCanvas { drawText(text, padding, height.toFloat(), paint) }
                 return BitmapDrawable(view.context.resources, bitmap)
             }
             listOf(

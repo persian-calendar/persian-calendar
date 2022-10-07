@@ -31,6 +31,7 @@ import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
+import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.net.toUri
 import androidx.core.text.buildSpannedString
@@ -221,13 +222,14 @@ private fun createCheckerRoundedBoard(
 ) = Paint(Paint.ANTI_ALIAS_FLAG).also { paint ->
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return@also
     val tileSize2x = tileSize.toInt() * 2
-    val bitmap = createBitmap(tileSize2x, tileSize2x)
-    val fill = Paint(Paint.ANTI_ALIAS_FLAG)
-    fill.style = Paint.Style.FILL
-    fill.color = color
-    val canvas = Canvas(bitmap)
-    canvas.drawRoundRect(0f, 0f, tileSize, tileSize, r, r, fill)
-    canvas.drawRoundRect(tileSize, tileSize, tileSize * 2f, tileSize * 2f, r, r, fill)
+    val fill = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.color = color
+    }
+    val bitmap = createBitmap(tileSize2x, tileSize2x).applyCanvas {
+        drawRoundRect(0f, 0f, tileSize, tileSize, r, r, fill)
+        drawRoundRect(tileSize, tileSize, tileSize * 2f, tileSize * 2f, r, r, fill)
+    }
     paint.shader = BitmapShader(bitmap, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT)
 }
 

@@ -51,6 +51,7 @@ import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.core.graphics.PathParser
+import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.set
@@ -343,7 +344,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
             .toIntArray()
         val sweepGradient = SweepGradient(radius, radius, colors, null)
         paint.shader = ComposeShader(sweepGradient, radialGradient, PorterDuff.Mode.SRC_OVER)
-        Canvas(bitmap).drawCircle(radius, radius, radius * PADDING_FACTOR, paint)
+        bitmap.applyCanvas { drawCircle(radius, radius, radius * PADDING_FACTOR, paint) }
     }
 
     override fun onDraw(canvas: Canvas) {
