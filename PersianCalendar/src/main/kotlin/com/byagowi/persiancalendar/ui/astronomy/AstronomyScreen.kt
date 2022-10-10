@@ -113,9 +113,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
 
         val seasonsCache = lruCache(1024, create = ::seasons)
-        val headerCache = lruCache(1024, create = { it: Jdn ->
+        val headerCache = lruCache(1024, create = { jdn: Jdn ->
             val context = context
-            if (context == null) "" else viewModel.astronomyState.value.generateHeader(context, it)
+            if (context == null) "" else viewModel.astronomyState.value.generateHeader(context, jdn)
         })
 
         fun update(state: AstronomyState) {

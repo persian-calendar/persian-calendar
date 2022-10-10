@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.entities
 
+import androidx.core.util.lruCache
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -11,19 +12,21 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 
 class IrregularCalendarEventsStore(private val eventsRepository: EventsRepository) {
-    private val persianEvents = mutableMapOf<Int, List<CalendarEvent.PersianCalendarEvent>>()
-    private val islamicEvents = mutableMapOf<Int, List<CalendarEvent.IslamicCalendarEvent>>()
-    private val gregorianEvents = mutableMapOf<Int, List<CalendarEvent.GregorianCalendarEvent>>()
-    private val nepaliEvents = mutableMapOf<Int, List<CalendarEvent.NepaliCalendarEvent>>()
+    private fun createCache(type: CalendarType) =
+        lruCache(1024, create = { year: Int -> generateEntry(year, type) })
+
+    private val persianEvents = createCache(CalendarType.SHAMSI)
+    private val islamicEvents = createCache(CalendarType.ISLAMIC)
+    private val gregorianEvents = createCache(CalendarType.GREGORIAN)
+    private val nepaliEvents = createCache(CalendarType.NEPALI)
 
     @Suppress("UNCHECKED_CAST")
     fun <T : CalendarEvent<*>> getEventsList(year: Int, type: CalendarType): List<T> {
-        fun <T : CalendarEvent<*>> generate() = generateEntry(year, type) as? List<T> ?: emptyList()
         return when (type) {
-            CalendarType.SHAMSI -> persianEvents.getOrPut(year, ::generate)
-            CalendarType.ISLAMIC -> islamicEvents.getOrPut(year, ::generate)
-            CalendarType.GREGORIAN -> gregorianEvents.getOrPut(year, ::generate)
-            CalendarType.NEPALI -> nepaliEvents.getOrPut(year, ::generate)
+            CalendarType.SHAMSI -> persianEvents[year]
+            CalendarType.ISLAMIC -> islamicEvents[year]
+            CalendarType.GREGORIAN -> gregorianEvents[year]
+            CalendarType.NEPALI -> nepaliEvents[year]
         } as? List<T> ?: emptyList()
     }
 
