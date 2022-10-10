@@ -441,8 +441,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private fun writeCrescentVisibilityMap(date: GregorianCalendar, maskType: MaskType) {
         val isYallop = maskType == MaskType.Yallop
         val baseTime = Time(
-            date.get(Calendar.YEAR), date.get(Calendar.MONTH) + 1,
-            date.get(Calendar.DAY_OF_MONTH) + 1, 0, 0, .0
+            date[Calendar.YEAR], date[Calendar.MONTH] + 1,
+            date[Calendar.DAY_OF_MONTH] + 1, 0, 0, .0
         )
         // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
         (0 until 360 / maskMapMoonScaleDown).forEach { x ->

@@ -60,7 +60,7 @@ fun generateYearName(
         ),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val date = ChineseCalendar((time ?: Jdn(persianDate).toJavaCalendar()).time)
-            val year = date.get(ChineseCalendar.YEAR)
+            val year = date[ChineseCalendar.YEAR]
             language.inParentheses.format(
                 ChineseZodiac.fromChineseCalendar(date).format(context, withEmoji),
                 context.getString(R.string.chinese) + spacedComma + formatNumber(year)
