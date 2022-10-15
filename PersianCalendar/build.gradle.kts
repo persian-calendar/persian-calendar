@@ -178,7 +178,7 @@ android {
 val minApi21Implementation by configurations
 
 dependencies {
-    implementation("com.github.persian-calendar:calendar:1.2.1")
+    implementation("com.github.persian-calendar:calendar:1.2.2")
     implementation("com.github.persian-calendar:praytimes:3.0.0")
     implementation("com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b")
 
