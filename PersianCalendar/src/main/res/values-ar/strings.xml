@@ -416,4 +416,5 @@
     <string name="live_wallpaper_settings">إعدادات الخلفية المتحركة</string>
     <string name="enable_notification">هل ترغب في تفعيل تنبيه التاريخ؟</string>
     <string name="add_quick_settings_tile">إضافة إعدادات السريعة</string>
+    <string name="true_north">الشمال الحقيقي</string>
 </resources>
