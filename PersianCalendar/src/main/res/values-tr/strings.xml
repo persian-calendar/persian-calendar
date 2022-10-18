@@ -98,7 +98,7 @@
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s gün</item>
-        <item quantity="other">%1$s günn</item>
+        <item quantity="other">%1$s gün</item>
     </plurals>
     <string name="age_widget_title">Widget Başlığı</string>
     <string name="select_date">Tarih seçiniz</string>
@@ -121,7 +121,7 @@
     </plurals>
     <string name="n_till">%2$s \'na %1$s var</string>
     <string name="center_align_widgets">Widget\'ları ortaya hizalayın</string>
-    <string name="center_align_widgets_summary">4x1 ve 2x2 widget\'ları ortaya hizala</string>
+    <string name="center_align_widgets_summary">4x1 ve 2x2 Widget\'ları ortaya hizala</string>
     <string name="device_information">Cihaz Bilgisi</string>
     <string name="spaced_colon">": "</string>
     <string name="spaced_comma">", "</string>
@@ -354,7 +354,7 @@
     <string name="pluto">Plüton</string>
     <string name="sun">Güneş</string>
     <string name="moon">Ay</string>
-    <string name="widget_prefer_system_colors">Widget\'larda Sistem Renklendirmesini İzleyiniz</string>
+    <string name="widget_prefer_system_colors">Widget Arka Plan Renklendirilsin</string>
     <string name="high_latitudes_method">Yüksek Enlemler Alan Yöntemi</string>
     <string name="high_latitudes_night_middle">Gece Yarısı</string>
     <string name="high_latitudes_angle_based">Açı Tabanlı</string>
