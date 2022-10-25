@@ -199,7 +199,7 @@ dependencies {
 
     minApi21Implementation("androidx.activity:activity-compose:1.6.0")
     minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.20")
-    val accompanistVersion = "0.25.1"
+    val accompanistVersion = "0.27.0"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
