@@ -1327,6 +1327,7 @@
     { "holiday": false, "month": 9, "day": 21, "title": "روز جهانی صلح", "type": "International" },
     { "holiday": false, "month": 9, "day": 30, "title": "روز جهانی ترجمه", "type": "International" },
     { "holiday": false, "month": 10, "day": 1, "title": "روز بین‌المللی قهوه", "type": "International" },
+    { "holiday": false, "month": 10, "day": 5, "title": "روز جهانی معلم", "type": "International" },
     { "holiday": false, "month": 10, "day": 10, "title": "روز جهانی بهداشت روان", "type": "International" },
     { "holiday": false, "month": 10, "day": 11, "title": "روز جهانی دختران", "type": "International" },
     { "holiday": false, "month": 10, "day": 15, "title": "روز جهانی هنر", "type": "International" },
