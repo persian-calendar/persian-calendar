@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="more">ہور</string>
+    <string name="app_name">فارسی تقویم</string>
+    <string name="settings">سیٹنگاں</string>
+    <string name="widget_name">فارسی تقویم</string>
+    <string name="help">مدد</string>
+    <string name="cancel">رد کرو</string>
+    <string name="code">pa-PK</string>
+    <string name="add">شامل کرو</string>
+    <string name="continue_button">جاری رکھو</string>
+    <string name="update">نواں کرو</string>
+    <string name="calendar">کیلنڈر</string>
+    <string name="compass">کمپاس</string>
+    <string name="about">بارے</string>
+    <string name="exit">بند کرو</string>
+    <string name="today">اج</string>
+    <string name="go">جاؤ</string>
+    <string name="days_distance">دوری</string>
+</resources>
