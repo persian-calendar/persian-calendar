@@ -13,7 +13,7 @@
 +--- com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b
 |    +--- org.antlr:antlr4-runtime:4.9.3
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.7.20 (*)
-+--- com.github.cosinekitty:astronomy:v2.1.7
++--- com.github.cosinekitty:astronomy:v2.1.8
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.7.20 (*)
 +--- androidx.appcompat:appcompat:1.5.1
 |    +--- androidx.activity:activity:1.5.1 -> 1.6.0
