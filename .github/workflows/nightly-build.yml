@@ -1,6 +1,7 @@
 name: Nightly Build
 
 on:
+  workflow_dispatch: # to be able to run the workflow manually if needed
   schedule:
     - cron: '0 0 * * *' # once a day
 
