@@ -80,7 +80,7 @@
     <string name="notify_date_lock_screen">اعلان‌لاری کلیدلی صفحه‌ده گؤستر</string>
     <string name="notify_date_lock_screen_summary">سیستم‌ده تنظیم اولسا ایشلیئر</string>
     <string name="warn_if_events_not_set">موناسیبت‌لری فعال ائتمک اۆچون تنظیماتا گئدین</string>
-    <string name="days_distance">سۆره: %1$s گۆن (~%2$s ایل و %3$s آی و %4$s گۆن)</string>
+    <string name="days_distance">سۆره</string>
     <string name="calendars_priority">تقویم‌لرین گؤستریش اولویتی</string>
     <string name="calendars_priority_summary">اساس تقویم‌ین تنظیمی و تقویم‌لرین گؤسترمک یا گؤرستممک اولویت‌لری</string>
     <string name="week_of_year">ایل‌ین هفته‌سی</string>
