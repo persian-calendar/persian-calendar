@@ -40,7 +40,7 @@ fun applyAppLanguage(context: Context) {
 //    return createConfigurationContext(config)
 //}
 
-val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL
+val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.isLessKnownRtl
 
 fun formatNumber(number: Double): String {
     if (isArabicDigitSelected) return number.toString()
