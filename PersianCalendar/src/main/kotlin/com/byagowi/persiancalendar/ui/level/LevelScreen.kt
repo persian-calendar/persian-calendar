@@ -19,6 +19,7 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 class LevelScreen : Fragment(R.layout.fragment_level) {
 
     private var provider: OrientationProvider? = null
+    private var isStopped = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,17 +45,23 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
             val stop = !provider.isListening
             binding.fab.setImageResource(if (stop) R.drawable.ic_stop else R.drawable.ic_play)
             binding.fab.contentDescription = getString(if (stop) R.string.stop else R.string.resume)
+            isStopped = !stop
             if (stop) provider.startListening() else provider.stopListening()
+            setRotationPrevention(stop)
         }
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onResume() {
         super.onResume()
-        provider?.startListening()
-        if (provider?.isListening != true) return // don't tweak orientation if no sensor available
+        if (!isStopped) provider?.startListening()
+        setRotationPrevention(provider?.isListening == true)
+    }
+
+    private fun setRotationPrevention(stopRotation: Boolean) {
         // https://stackoverflow.com/a/20017878
-        activity?.requestedOrientation = when (activity?.windowManager?.defaultDisplay?.rotation) {
+        val current = if (stopRotation) activity?.windowManager?.defaultDisplay?.rotation else null
+        activity?.requestedOrientation = when (current) {
             Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
             Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
             Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
@@ -65,7 +72,7 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
 
     override fun onPause() {
         if (provider?.isListening == true) provider?.stopListening()
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        setRotationPrevention(false)
         super.onPause()
     }
 }
