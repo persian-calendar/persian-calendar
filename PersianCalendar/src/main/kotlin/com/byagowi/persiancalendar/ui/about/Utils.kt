@@ -1,10 +1,12 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
+import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
@@ -19,7 +21,27 @@ fun getCreditsSections() = credits
         Triple(parts[0], parts.getOrNull(1), lines.drop(1).joinToString("\n").trim())
     }
 
+fun appStandbyStatus(context: Context): String? {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return null
+    return runCatching {
+        val code = context.getSystemService<UsageStatsManager>()?.appStandbyBucket
+        (mapOf(
+            5 to "EXEMPTED",
+            UsageStatsManager.STANDBY_BUCKET_ACTIVE to "ACTIVE",
+            UsageStatsManager.STANDBY_BUCKET_WORKING_SET to "WORKING_SET",
+            UsageStatsManager.STANDBY_BUCKET_FREQUENT to "FREQUENT",
+            UsageStatsManager.STANDBY_BUCKET_RARE to "RARE",
+            45 to "RESTRICTED",
+            50 to "NEVER"
+        )[code] ?: code.toString())
+    }.getOrNull()
+}
+
 fun launchEmailIntent(context: Context, message: String) {
+    val bucket =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+            "\nStandby Bucket: ${appStandbyStatus(context)}"
+        else ""
     val email = "persian-calendar-admin@googlegroups.com"
     val subject = context.getString(R.string.app_name)
     val body = """$message
@@ -31,7 +53,7 @@ fun launchEmailIntent(context: Context, message: String) {
 Manufacturer: ${Build.MANUFACTURER}
 Model: ${Build.MODEL}
 Android Version: ${Build.VERSION.RELEASE}
-App Version Code: ${context.packageName} ${BuildConfig.VERSION_CODE}"""
+App Version Code: ${context.packageName} ${BuildConfig.VERSION_CODE} $bucket"""
 
     // https://stackoverflow.com/a/62597382
     val selectorIntent = Intent(Intent.ACTION_SENDTO).apply {

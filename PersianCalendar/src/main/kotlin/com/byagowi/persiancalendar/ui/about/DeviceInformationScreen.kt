@@ -316,6 +316,7 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
                     ).map { (title: String, id: Int) -> "$title: ${it.getLongProperty(id)}" }
                 }?.joinToString("\n") else ""
         ),
+        Item("App Standby Bucket", appStandbyStatus(activity)),
         Item("Display Metrics", activity.resources?.displayMetrics?.toString() ?: ""),
         Item(
             "Display Cutout", if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) run {

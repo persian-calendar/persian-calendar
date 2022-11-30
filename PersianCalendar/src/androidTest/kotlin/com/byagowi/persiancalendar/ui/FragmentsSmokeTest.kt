@@ -7,7 +7,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
-import com.byagowi.persiancalendar.ui.about.DeviceInformationScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
