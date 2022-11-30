@@ -459,11 +459,11 @@
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10 -> 1.7.20
 |    +--- com.google.android.material:material:1.7.0-rc01 -> 1.7.0 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.20 (*)
-+--- com.google.accompanist:accompanist-flowlayout:0.27.1
++--- com.google.accompanist:accompanist-flowlayout:0.28.0
 |    +--- androidx.compose.foundation:foundation:1.3.1 (*)
 |    +--- androidx.compose.ui:ui-util:1.3.1 (*)
 |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 (*)
-+--- com.google.accompanist:accompanist-drawablepainter:0.27.1
++--- com.google.accompanist:accompanist-drawablepainter:0.28.0
 |    +--- androidx.compose.ui:ui:1.3.1 (*)
 |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 (*)
 +--- androidx.compose.ui:ui:1.2.1 -> 1.3.1 (*)
