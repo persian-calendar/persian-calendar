@@ -14,10 +14,14 @@ import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
+import io.github.cosinekitty.astronomy.EquatorEpoch
+import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
+import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLunarEclipse
@@ -27,10 +31,21 @@ class AstronomyState(val date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)
     val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
     val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
+    private val observer by lazy(LazyThreadSafetyMode.NONE) { coordinates?.toObserver() }
     val moonTilt by lazy(LazyThreadSafetyMode.NONE) {
-        coordinates?.let { coordinates ->
-            sunlitSideMoonTiltAngle(time, coordinates.toObserver()).toFloat()
-        }
+        observer?.let { observer -> sunlitSideMoonTiltAngle(time, observer).toFloat() }
+    }
+    val sunAltitude by lazy(LazyThreadSafetyMode.NONE) {
+        val observer = observer ?: return@lazy null
+        val sunEquator =
+            equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.Corrected)
+        horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.Normal).altitude
+    }
+    val moonAltitude by lazy(LazyThreadSafetyMode.NONE) {
+        val observer = observer ?: return@lazy null
+        val moonEquator =
+            equator(Body.Moon, time, observer, EquatorEpoch.OfDate, Aberration.Corrected)
+        horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.Normal).altitude
     }
     val planets by lazy(LazyThreadSafetyMode.NONE) {
         solarSystemPlanets

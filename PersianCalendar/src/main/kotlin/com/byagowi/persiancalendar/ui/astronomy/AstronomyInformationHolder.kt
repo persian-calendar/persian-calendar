@@ -20,7 +20,7 @@ class AstronomyInformationHolder(context: Context, attrs: AttributeSet? = null) 
         private set
 
     init {
-        // Chip view inflation crashes in Android 4 as lack RippleDrawable apparently and material's
+        // Chip view inflation crashes in Android 4 as lack of RippleDrawable apparently and material's
         // internal bug so let's just hide it there
         addView(if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             val content = TextView(context)

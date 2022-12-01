@@ -21,9 +21,11 @@ class SolarDraw(context: Context) {
         ArgbEvaluatorCompat.getInstance().evaluate(progress, 0xFFFFF9C4.toInt(), 0xFFFF9100.toInt())
 
     fun sun(
-        canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false
+        canvas: Canvas, cx: Float, cy: Float, r: Float, color: Int? = null, small: Boolean = false,
+        alpha: Int = 255
     ) {
         val drawable = if (small) smallSunDrawable else sunDrawable
+        drawable.alpha = alpha
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             drawable.setTintList(color?.let(ColorStateList::valueOf))
         }
@@ -36,13 +38,15 @@ class SolarDraw(context: Context) {
 
     fun moon(
         canvas: Canvas, sun: Ecliptic, moon: Ecliptic, cx: Float, cy: Float, r: Float,
-        angle: Float? = null
+        angle: Float? = null, alpha: Int = 255
     ) {
+        moonShadowPaint.alpha = alpha
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         moonDrawable.setBounds( // same as above
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
         )
         moonDrawable.draw(canvas)
+        moonDrawable.alpha = alpha
         val phase = (moon.elon - sun.elon).let { it + if (it < 0) 360 else 0 }
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
             val arcWidth = (cos(Math.toRadians(phase)) * r).toFloat()
@@ -56,6 +60,7 @@ class SolarDraw(context: Context) {
     }
 
     fun simpleMoon(canvas: Canvas, cx: Float, cy: Float, r: Float) {
+        moonDrawable.alpha = 255
         moonDrawable.setBounds(
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
         )

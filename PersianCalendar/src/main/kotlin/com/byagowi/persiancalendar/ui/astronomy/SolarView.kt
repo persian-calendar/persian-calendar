@@ -174,9 +174,16 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 
     private fun drawMoonOnlyView(canvas: Canvas) {
         val radius = min(width, height) / 2f
+        val moonAltitude = state.moonAltitude
         solarDraw.moon(
-            canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt
+            canvas, state.sun, state.moon, radius, radius, radius / 3, state.moonTilt,
+            alpha =
+            if (moonAltitude == null) 255 else (200 + moonAltitude.toInt() * 3).coerceIn(0, 255)
         )
+        state.sunAltitude?.also { sunAltitude ->
+            val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
+            solarDraw.sun(canvas, radius, radius, radius / 2.45f, alpha = alpha)
+        }
     }
 
     private fun drawEarthCentricView(canvas: Canvas) {
