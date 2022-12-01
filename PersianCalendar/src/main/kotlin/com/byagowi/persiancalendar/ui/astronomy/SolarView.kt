@@ -182,7 +182,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         )
         state.sunAltitude?.also { sunAltitude ->
             val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
-            solarDraw.sun(canvas, radius, radius, radius / 2.45f, alpha = alpha)
+            solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
         }
     }
 
