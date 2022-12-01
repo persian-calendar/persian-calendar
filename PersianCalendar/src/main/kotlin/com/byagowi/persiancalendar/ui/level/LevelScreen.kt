@@ -3,9 +3,14 @@ package com.byagowi.persiancalendar.ui.level
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.os.PowerManager
 import android.view.MenuItem
 import android.view.Surface
 import android.view.View
+import androidx.core.content.getSystemService
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
@@ -15,11 +20,13 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
+import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 
 class LevelScreen : Fragment(R.layout.fragment_level) {
 
     private var provider: OrientationProvider? = null
     private var isStopped = false
+    private var lockCleanup: (() -> Unit)? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,7 +38,9 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
         val activity = activity ?: return
         provider = OrientationProvider(activity, binding.levelView)
         val announcer = SensorEventAnnouncer(R.string.level)
-        binding.levelView.onIsLevel = { isLevel -> announcer.check(activity, isLevel) }
+        binding.levelView.onIsLevel = { isLevel ->
+            announcer.check(activity, isLevel, lockCleanup != null)
+        }
         binding.bottomAppbar.menu.add(R.string.level).also {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
@@ -39,6 +48,41 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
             // If compass wasn't in backstack (level is brought from shortcut), navigate to it
             if (!findNavController().popBackStack(R.id.compass, false))
                 findNavController().navigateSafe(LevelScreenDirections.actionLevelToCompass())
+        }
+
+        binding.appBar.toolbar.menu.add(R.string.lock).also { menuItem ->
+            menuItem.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock)
+            menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            var lock: PowerManager.WakeLock? = null
+            menuItem.onClick {
+                if (lock != null) return@onClick lockCleanup?.invoke().let { }
+
+                lock = activity.getSystemService<PowerManager>()?.newWakeLock(
+                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
+                    "persiancalendar:level"
+                )
+                lock?.acquire(SIX_MINUTES_IN_MILLIS)
+                // TODO: We should change the icon after the six minutes here also
+
+                menuItem.icon =
+                    binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock_open)
+
+                val windowInsetsController =
+                    WindowCompat.getInsetsController(activity.window, activity.window.decorView)
+                windowInsetsController.systemBarsBehavior =
+                    WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+                // TODO: We should fill the system status bar space also
+
+                lockCleanup = {
+                    windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+                    lock?.release()
+                    lock = null
+                    menuItem.icon =
+                        binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock)
+                    lockCleanup = null
+                }
+            }
         }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener
@@ -73,6 +117,7 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
     override fun onPause() {
         if (provider?.isListening == true) provider?.stopListening()
         setRotationPrevention(false)
+        lockCleanup?.invoke()
         super.onPause()
     }
 }

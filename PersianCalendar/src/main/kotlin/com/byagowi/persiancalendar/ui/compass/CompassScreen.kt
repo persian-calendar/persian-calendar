@@ -157,14 +157,11 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
             toolbar.setupMenuNavigation()
         }
 
-        binding.bottomAppbar.menu.add(R.string.help).also {
-            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_info_in_menu)
+        binding.bottomAppbar.menu.add(R.string.level).also {
+            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_level)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
-                showLongSnackbar(
-                    if (sensorNotFound) R.string.compass_not_found
-                    else R.string.calibrate_compass_summary, 5000
-                )
+                findNavController().navigateSafe(CompassScreenDirections.actionCompassToLevel())
             }
         }
         binding.bottomAppbar.menu.add(R.string.map).also {
@@ -175,11 +172,14 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
                     .navigateSafe(CompassScreenDirections.actionCompassToMap())
             }
         }
-        binding.bottomAppbar.menu.add(R.string.level).also {
-            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_level)
+        binding.bottomAppbar.menu.add(R.string.help).also {
+            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_info_in_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
-                findNavController().navigateSafe(CompassScreenDirections.actionCompassToLevel())
+                showLongSnackbar(
+                    if (sensorNotFound) R.string.compass_not_found
+                    else R.string.calibrate_compass_summary, 5000
+                )
             }
         }
 

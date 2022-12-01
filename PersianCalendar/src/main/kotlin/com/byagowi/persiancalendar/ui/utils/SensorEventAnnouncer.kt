@@ -13,8 +13,8 @@ class SensorEventAnnouncer(@StringRes private val text: Int, initialState: Boole
     private var state = initialState
     private var lastAnnounce = -1L
 
-    fun check(context: Context, newState: Boolean) {
-        if (!isTalkBackEnabled) return
+    fun check(context: Context, newState: Boolean, isLocked: Boolean = false) {
+        if (!isTalkBackEnabled && !isLocked) return
         if (newState && !state) {
             val now = System.currentTimeMillis()
             if (now - lastAnnounce > 2000L) { // 2 seconds
