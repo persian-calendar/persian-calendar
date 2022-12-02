@@ -18,7 +18,7 @@ class SensorEventAnnouncer(@StringRes private val text: Int, initialState: Boole
         if (newState && !state) {
             val now = System.currentTimeMillis()
             if (now - lastAnnounce > 2000L) { // 2 seconds
-                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+                if (isTalkBackEnabled) Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
                 // https://stackoverflow.com/a/29423018
                 context.getSystemService<AudioManager>()
                     ?.playSoundEffect(AudioManager.FX_KEY_CLICK)
