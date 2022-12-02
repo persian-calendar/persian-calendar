@@ -67,6 +67,8 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
                 menuItem.icon =
                     binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock_open)
 
+                binding.bottomAppbar.performHide(true)
+
                 val windowInsetsController =
                     WindowCompat.getInsetsController(activity.window, activity.window.decorView)
                 windowInsetsController.systemBarsBehavior =
@@ -80,6 +82,7 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
                     lock = null
                     menuItem.icon =
                         binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock)
+                    binding.bottomAppbar.performShow(true)
                     lockCleanup = null
                 }
             }
