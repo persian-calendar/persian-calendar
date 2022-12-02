@@ -20,7 +20,7 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
+import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 
 class LevelScreen : Fragment(R.layout.fragment_level) {
 
@@ -61,8 +61,8 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
                     PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
                     "persiancalendar:level"
                 )
-                lock?.acquire(SIX_MINUTES_IN_MILLIS)
-                // TODO: We should change the icon after the six minutes here also
+                lock?.acquire(FIFTEEN_MINUTES_IN_MILLIS)
+                // TODO: We should change the icon after the fifteen minutes here also
 
                 menuItem.icon =
                     binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock_open)
