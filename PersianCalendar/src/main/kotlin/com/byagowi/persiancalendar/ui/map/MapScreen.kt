@@ -1,13 +1,12 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Rect
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.ShapeDrawable
 import android.hardware.GeomagneticField
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
@@ -114,17 +113,12 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             }
         }
 
-        maskSolarDraw = SolarDraw(view.context)
-        val zippedMapPath = resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
-        val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
-        val mapPath = PathParser.createPathFromPathData(mapPathBytes.decodeToString())
-
-        pinDrawable = view.context.getCompatDrawable(R.drawable.ic_pin)
+        val mapDraw = MapDraw(view.context)
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
             binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (maskCurrentType.isCrescentVisibility) viewModel.subtractOneDay()
+            if (mapDraw.maskCurrentType.isCrescentVisibility) viewModel.subtractOneDay()
             else viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener {
@@ -134,7 +128,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (maskCurrentType.isCrescentVisibility) viewModel.addOneDay()
+            if (mapDraw.maskCurrentType.isCrescentVisibility) viewModel.addOneDay()
             else viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener {
@@ -169,7 +163,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             val textureSize = 1024
             val bitmap = createBitmap(textureSize, textureSize)
             val matrix = Matrix().also {
-                it.setScale(textureSize.toFloat() / mapWidth, textureSize.toFloat() / mapHeight)
+                it.setScale(
+                    textureSize.toFloat() / mapDraw.mapWidth,
+                    textureSize.toFloat() / mapDraw.mapHeight
+                )
             }
             binding.map.onDraw(Canvas(bitmap), matrix)
             showGlobeDialog(activity ?: return@onClick, bitmap)
@@ -181,86 +178,20 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
 
         binding.map.onClick = { x: Float, y: Float ->
-            val latitude = 90 - y / mapScaleFactor
-            val longitude = x / mapScaleFactor - 180
+            val latitude = 90 - y / mapDraw.mapScaleFactor
+            val longitude = x / mapDraw.mapScaleFactor - 180
             if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
         }
 
-        val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF809DB5.toInt() }
-        val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFBF8E5.toInt() }
-        val matrixValues = FloatArray(9)
         binding.map.onDraw = { canvas, matrix ->
-            matrix.getValues(matrixValues)
-            // prevents sun/moon/pin unnecessary scale
-            val scaleBack = 1 / matrixValues[Matrix.MSCALE_X] / 5
-            canvas.withMatrix(matrix) {
-                drawRect(mapRect, backgroundPaint)
-                drawPath(mapPath, foregroundPaint)
-
-                drawMask(this, scaleBack)
-                val coordinates = coordinates
-                if (coordinates != null && viewModel.state.value.displayLocation) {
-                    val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
-                    val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
-                    pinDrawable.setBounds(
-                        (userX - 240 * scaleBack / 2).roundToInt(),
-                        (userY - 220 * scaleBack).roundToInt(),
-                        (userX + 240 * scaleBack / 2).roundToInt(),
-                        userY.toInt()
-                    )
-                    pinDrawable.draw(this)
-                }
-                val directPathDestination = viewModel.state.value.directPathDestination
-                if (coordinates != null && directPathDestination != null) {
-                    val from = EarthPosition(coordinates.latitude, coordinates.longitude)
-                    val to = EarthPosition(
-                        directPathDestination.latitude,
-                        directPathDestination.longitude
-                    )
-                    val points = from.intermediatePoints(to, 24).map { point ->
-                        val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
-                        val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
-                        userX to userY
-                    }
-                    points.forEachIndexed { i, (x1, y1) ->
-                        if (i >= points.size - 1) return@forEachIndexed
-                        val (x2, y2) = points[i + 1]
-                        if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
-                        pathPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
-                            i.toFloat() / points.size, Color.BLACK, Color.RED
-                        )
-                        drawLine(x1, y1, x2, y2, pathPaint)
-                    }
-                    val center = points[points.size / 2]
-                    val centerPlus1 = points[points.size / 2 + 1]
-                    val textDegree = Math.toDegrees(
-                        atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
-                            .toDouble()
-                    ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
-                    val heading = from.toEarthHeading(to)
-                    withRotation(textDegree, center.first, center.second) {
-                        drawText(heading.km, center.first, center.second - 2.dp, textPaint)
-                    }
-                }
-                if (viewModel.state.value.displayGrid) {
-                    (0 until mapWidth step mapWidth / 24).forEachIndexed { i, x ->
-                        if (i == 0 || i == 12) return@forEachIndexed
-                        drawLine(x.toFloat(), 0f, x.toFloat(), mapHeight.toFloat(), gridPaint)
-                    }
-                    (0 until mapHeight step mapHeight / 12).forEachIndexed { i, y ->
-                        if (i == 0 || i == 6) return@forEachIndexed
-                        drawLine(0f, y.toFloat(), mapWidth.toFloat(), y.toFloat(), gridPaint)
-                    }
-                    drawLine(mapWidth / 2f, 0f, mapWidth / 2f, mapHeight / 1f, gridHalfPaint)
-                    drawLine(0f, mapHeight / 2f, mapWidth / 1f, mapHeight / 2f, gridHalfPaint)
-                    parallelsLatitudes.forEach { y ->
-                        drawLine(0f, y, mapWidth.toFloat(), y, parallelsPaint)
-                    }
-                }
-            }
+            val state = viewModel.state.value
+            mapDraw.draw(
+                canvas, matrix, state.displayLocation, state.directPathDestination,
+                state.displayGrid
+            )
         }
-        binding.map.contentWidth = mapWidth.toFloat()
-        binding.map.contentHeight = mapHeight.toFloat()
+        binding.map.contentWidth = mapDraw.mapWidth.toFloat()
+        binding.map.contentHeight = mapDraw.mapHeight.toFloat()
         binding.map.maxScale = 512f
 
         // Setup view model change listener
@@ -269,10 +200,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             viewModel.state
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { state ->
-                    updateMask(state.time, state.maskType)
+                    mapDraw.updateMask(state.time, state.maskType)
                     binding.map.invalidate()
-                    binding.date.text = maskFormattedTime
-                    binding.timeBar.isVisible = maskFormattedTime.isNotEmpty()
+                    binding.date.text = mapDraw.maskFormattedTime
+                    binding.timeBar.isVisible = mapDraw.maskFormattedTime.isNotEmpty()
                     directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
                 }
         }
@@ -294,10 +225,20 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private fun bringGps() {
         showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
     }
+}
 
-    private val mapScaleFactor = 16 // As the path bounds is 360*16 x 180*16
-    private val mapWidth = 360 * mapScaleFactor
-    private val mapHeight = 180 * mapScaleFactor
+class MapDraw(context: Context) {
+    private val maskSolarDraw = SolarDraw(context)
+    private val pinDrawable = context.getCompatDrawable(R.drawable.ic_pin)
+    private val mapPath = run {
+        val zippedMapPath = context.resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
+        val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
+        PathParser.createPathFromPathData(mapPathBytes.decodeToString())
+    }
+
+    val mapScaleFactor = 16 // As the path bounds is 360*16 x 180*16
+    val mapWidth = 360 * mapScaleFactor
+    val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
     private val maskMap = createBitmap(360, 180)
@@ -308,8 +249,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     private var maskSunY = .0f
     private var maskMoonX = .0f
     private var maskMoonY = .0f
-    private var maskSolarDraw: SolarDraw? = null
-    private var maskFormattedTime = ""
+    var maskFormattedTime = ""
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         if (maskCurrentType == MaskType.None) return
@@ -318,19 +258,18 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         else canvas.drawBitmap(maskMap, null, mapRect, null)
         if (maskCurrentType == MaskType.DayNight || maskCurrentType == MaskType.MoonVisibility) {
             val scale = mapWidth / maskMap.width
-            val solarDraw = maskSolarDraw ?: return
-            solarDraw.simpleMoon(
+            maskSolarDraw.simpleMoon(
                 canvas, maskMoonX * scale, maskMoonY * scale, mapWidth * .02f * matrixScale
             )
-            solarDraw.sun(
+            maskSolarDraw.sun(
                 canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale
             )
         }
     }
 
     private val maskDateSink = GregorianCalendar().also { --it.timeInMillis }
-    private var maskCurrentType = MaskType.None
-    private fun updateMask(timeInMillis: Long, maskType: MaskType) {
+    var maskCurrentType = MaskType.None
+    fun updateMask(timeInMillis: Long, maskType: MaskType) {
         if (maskType == MaskType.None) {
             maskCurrentType = maskType
             maskFormattedTime = ""
@@ -542,5 +481,80 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         it.pathEffect = DashPathEffect(floatArrayOf(5f, 5f), 0f)
     }
 
-    private var pinDrawable: Drawable = ShapeDrawable()
+    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF809DB5.toInt() }
+    private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFBF8E5.toInt() }
+    private val matrixValues = FloatArray(9)
+
+    fun draw(
+        canvas: Canvas, matrix: Matrix,
+        displayLocation: Boolean, directPathDestination: Coordinates?, displayGrid: Boolean
+    ) {
+        matrix.getValues(matrixValues)
+        // prevents sun/moon/pin unnecessary scale
+        val scaleBack = 1 / matrixValues[Matrix.MSCALE_X] / 5
+        canvas.withMatrix(matrix) {
+            drawRect(mapRect, backgroundPaint)
+            drawPath(mapPath, foregroundPaint)
+
+            drawMask(this, scaleBack)
+            val coordinates = coordinates
+            if (coordinates != null && displayLocation) {
+                val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
+                val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
+                pinDrawable.setBounds(
+                    (userX - 240 * scaleBack / 2).roundToInt(),
+                    (userY - 220 * scaleBack).roundToInt(),
+                    (userX + 240 * scaleBack / 2).roundToInt(),
+                    userY.toInt()
+                )
+                pinDrawable.draw(this)
+            }
+            if (coordinates != null && directPathDestination != null) {
+                val from = EarthPosition(coordinates.latitude, coordinates.longitude)
+                val to = EarthPosition(
+                    directPathDestination.latitude,
+                    directPathDestination.longitude
+                )
+                val points = from.intermediatePoints(to, 24).map { point ->
+                    val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
+                    val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
+                    userX to userY
+                }
+                points.forEachIndexed { i, (x1, y1) ->
+                    if (i >= points.size - 1) return@forEachIndexed
+                    val (x2, y2) = points[i + 1]
+                    if (hypot(x2 - x1, y2 - y1) > 90 * mapScaleFactor) return@forEachIndexed
+                    pathPaint.color = ArgbEvaluatorCompat.getInstance().evaluate(
+                        i.toFloat() / points.size, Color.BLACK, Color.RED
+                    )
+                    drawLine(x1, y1, x2, y2, pathPaint)
+                }
+                val center = points[points.size / 2]
+                val centerPlus1 = points[points.size / 2 + 1]
+                val textDegree = Math.toDegrees(
+                    atan2(centerPlus1.second - center.second, centerPlus1.first - center.first)
+                        .toDouble()
+                ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
+                val heading = from.toEarthHeading(to)
+                withRotation(textDegree, center.first, center.second) {
+                    drawText(heading.km, center.first, center.second - 2.dp, textPaint)
+                }
+            }
+            if (displayGrid) {
+                (0 until mapWidth step mapWidth / 24).forEachIndexed { i, x ->
+                    if (i == 0 || i == 12) return@forEachIndexed
+                    drawLine(x.toFloat(), 0f, x.toFloat(), mapHeight.toFloat(), gridPaint)
+                }
+                (0 until mapHeight step mapHeight / 12).forEachIndexed { i, y ->
+                    if (i == 0 || i == 6) return@forEachIndexed
+                    drawLine(0f, y.toFloat(), mapWidth.toFloat(), y.toFloat(), gridPaint)
+                }
+                drawLine(mapWidth / 2f, 0f, mapWidth / 2f, mapHeight / 1f, gridHalfPaint)
+                drawLine(0f, mapHeight / 2f, mapWidth / 1f, mapHeight / 2f, gridHalfPaint)
+                parallelsLatitudes.forEach { y ->
+                    drawLine(0f, y, mapWidth.toFloat(), y, parallelsPaint)
+                }
+            }
+        }
+    }
 }

@@ -11,6 +11,8 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.Path
 import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -26,8 +28,11 @@ import androidx.annotation.StringRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import androidx.core.graphics.applyCanvas
+import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.graphics.withClip
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
@@ -48,6 +53,7 @@ import com.byagowi.persiancalendar.Widget1x1
 import com.byagowi.persiancalendar.Widget2x2
 import com.byagowi.persiancalendar.Widget4x1
 import com.byagowi.persiancalendar.Widget4x2
+import com.byagowi.persiancalendar.WidgetMap
 import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.entities.Clock
@@ -74,6 +80,8 @@ import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
+import com.byagowi.persiancalendar.ui.map.MapDraw
+import com.byagowi.persiancalendar.ui.map.MaskType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
@@ -189,6 +197,9 @@ fun update(context: Context, updateDate: Boolean) {
         updateFromRemoteViews<WidgetMonthView>(context) { width, height, _ ->
             createMonthViewRemoteViews(context, width, height, date)
         }
+        updateFromRemoteViews<WidgetMap>(context) { width, height, _ ->
+            createMapRemoteViews(context, width, height)
+        }
     }
 
     // Notification
@@ -279,6 +290,13 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
     return remoteViews
 }
 
+private fun Path.writeRoundnessClip(width: Int, height: Int) {
+    ShapeAppearancePathProvider().calculatePath(
+        ShapeAppearanceModel().withCornerSize(roundPixelSize), 1f,
+        RectF(0f, 0f, width.toFloat(), height.toFloat()), this
+    )
+}
+
 private fun createSunViewRemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, prayTimes: PrayTimes?
 ): RemoteViews {
@@ -295,12 +313,7 @@ private fun createSunViewRemoteViews(
     sunView.initiate()
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-    ) {
-        ShapeAppearancePathProvider().calculatePath(
-            ShapeAppearanceModel().withCornerSize(roundPixelSize), 1f,
-            RectF(0f, 0f, width.toFloat(), height.toFloat()), sunView.clippingPath
-        )
-    }
+    ) sunView.clippingPath.writeRoundnessClip(width, height)
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.message,
         if (coordinates == null) context.getString(R.string.ask_user_to_set_location) else ""
@@ -337,6 +350,25 @@ private fun createMonthViewRemoteViews(
     remoteViews.setImageViewBitmap(R.id.image, monthView.drawToBitmap())
     remoteViews.setContentDescription(R.id.image, monthView.contentDescription)
     remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent())
+    return remoteViews
+}
+
+private fun createMapRemoteViews(
+    context: Context, width: Int, height: Int
+): RemoteViews {
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
+    val mapDraw = MapDraw(context)
+    mapDraw.updateMask(System.currentTimeMillis(), MaskType.DayNight)
+    val matrix = Matrix()
+    matrix.setScale(width.toFloat() / mapDraw.mapWidth, height.toFloat() / mapDraw.mapHeight)
+    val bitmap = createBitmap(width, height).applyCanvas {
+        withClip(Path().also { it.writeRoundnessClip(width, height) }) {
+            mapDraw.draw(this, matrix, true, null, false)
+        }
+    }
+    remoteViews.setImageViewBitmap(R.id.image, bitmap)
+    remoteViews.setContentDescription(R.id.image, context.getString(R.string.map))
+    remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent("MAP"))
     return remoteViews
 }
 
@@ -757,10 +789,11 @@ private fun RemoteViews.setTextViewTextOrHideIfEmpty(viewId: Int, text: CharSequ
     }
 }
 
-private fun Context.launchAppPendingIntent(): PendingIntent? {
+private fun Context.launchAppPendingIntent(action: String? = null): PendingIntent? {
     return PendingIntent.getActivity(
         this, 0,
-        Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+        Intent(this, MainActivity::class.java).setAction(action)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
         PendingIntent.FLAG_UPDATE_CURRENT or
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
     )
