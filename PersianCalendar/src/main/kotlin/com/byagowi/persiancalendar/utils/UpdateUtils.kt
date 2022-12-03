@@ -55,6 +55,7 @@ import com.byagowi.persiancalendar.Widget4x1
 import com.byagowi.persiancalendar.Widget4x2
 import com.byagowi.persiancalendar.WidgetMap
 import com.byagowi.persiancalendar.WidgetMonthView
+import com.byagowi.persiancalendar.WidgetMoon
 import com.byagowi.persiancalendar.WidgetSunView
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
@@ -78,8 +79,10 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.whatToShowOnWidgets
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.MainActivity
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyState
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
+import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MaskType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
@@ -93,6 +96,7 @@ import com.google.android.material.shape.ShapeAppearancePathProvider
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
+import kotlin.math.min
 
 
 private const val NOTIFICATION_ID = 1001
@@ -199,6 +203,9 @@ fun update(context: Context, updateDate: Boolean) {
         }
         updateFromRemoteViews<WidgetMap>(context) { width, height, _ ->
             createMapRemoteViews(context, width, height)
+        }
+        updateFromRemoteViews<WidgetMoon>(context) { width, height, _ ->
+            createMoonRemoteViews(context, width, height)
         }
     }
 
@@ -367,6 +374,22 @@ private fun createMapRemoteViews(context: Context, width: Int, height: Int): Rem
     remoteViews.setImageViewBitmap(R.id.image, bitmap)
     remoteViews.setContentDescription(R.id.image, context.getString(R.string.map))
     remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent("MAP"))
+    return remoteViews
+}
+
+private fun createMoonRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
+    val solarDraw = SolarDraw(context)
+    val bitmap = createBitmap(width, height).applyCanvas {
+        val state = AstronomyState(GregorianCalendar())
+        solarDraw.moon(
+            this, state.sun, state.moon, width / 2f, height / 2f, min(width, height) / 2f,
+            state.moonTilt, state.moonAltitude
+        )
+    }
+    remoteViews.setImageViewBitmap(R.id.image, bitmap)
+    remoteViews.setContentDescription(R.id.image, context.getString(R.string.map))
+    remoteViews.setOnClickPendingIntent(R.id.image, context.launchAppPendingIntent("ASTRONOMY"))
     return remoteViews
 }
 

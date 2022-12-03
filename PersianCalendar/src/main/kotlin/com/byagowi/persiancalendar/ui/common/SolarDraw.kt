@@ -38,8 +38,10 @@ class SolarDraw(context: Context) {
 
     fun moon(
         canvas: Canvas, sun: Ecliptic, moon: Ecliptic, cx: Float, cy: Float, r: Float,
-        angle: Float? = null, alpha: Int = 255
+        angle: Float? = null, moonAltitude: Double? = null
     ) {
+        val alpha =
+            if (moonAltitude == null) 255 else (200 + moonAltitude.toInt() * 3).coerceIn(0, 255)
         moonShadowPaint.alpha = alpha
         moonRect.set(cx - r, cy - r, cx + r, cy + r)
         moonDrawable.setBounds( // same as above
