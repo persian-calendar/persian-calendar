@@ -363,7 +363,20 @@ private fun createMonthViewRemoteViews(
 private fun createMapRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
     val size = min(width / 2, height)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
-    val mapDraw = MapDraw(context)
+    val isNightMode = Theme.isNightMode(context)
+    val backgroundColor =
+        if (prefersWidgetsDynamicColors) context.getColor(
+            if (isNightMode) android.R.color.system_accent2_800
+            else android.R.color.system_accent2_50
+        )
+        else null
+    val foregroundColor =
+        if (prefersWidgetsDynamicColors) context.getColor(
+            if (isNightMode) android.R.color.system_accent1_50
+            else android.R.color.system_accent1_600
+        )
+        else null
+    val mapDraw = MapDraw(context, backgroundColor, foregroundColor)
     mapDraw.updateMask(System.currentTimeMillis(), MaskType.DayNight)
     val matrix = Matrix()
     matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)

@@ -227,7 +227,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
     }
 }
 
-class MapDraw(context: Context) {
+class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundColor: Int? = null) {
     private val maskSolarDraw = SolarDraw(context)
     private val pinDrawable = context.getCompatDrawable(R.drawable.ic_pin)
     private val mapPath = run {
@@ -481,8 +481,12 @@ class MapDraw(context: Context) {
         it.pathEffect = DashPathEffect(floatArrayOf(5f, 5f), 0f)
     }
 
-    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF809DB5.toInt() }
-    private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFFFBF8E5.toInt() }
+    private val backgroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = mapBackgroundColor ?: 0xFF809DB5.toInt()
+    }
+    private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = mapForegroundColor ?: 0xFFFBF8E5.toInt()
+    }
     private val matrixValues = FloatArray(9)
 
     fun draw(
