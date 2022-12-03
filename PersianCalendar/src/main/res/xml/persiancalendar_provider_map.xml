@@ -7,5 +7,4 @@
     android:previewImage="@drawable/widget_map"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="600000"
-    android:widgetCategory="keyguard|home_screen"
-    android:widgetFeatures="reconfigurable|configuration_optional" />
+    android:widgetCategory="keyguard|home_screen" />

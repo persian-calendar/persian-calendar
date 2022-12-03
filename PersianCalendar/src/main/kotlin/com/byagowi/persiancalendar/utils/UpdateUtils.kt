@@ -353,9 +353,7 @@ private fun createMonthViewRemoteViews(
     return remoteViews
 }
 
-private fun createMapRemoteViews(
-    context: Context, width: Int, height: Int
-): RemoteViews {
+private fun createMapRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val mapDraw = MapDraw(context)
     mapDraw.updateMask(System.currentTimeMillis(), MaskType.DayNight)
