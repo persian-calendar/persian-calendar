@@ -361,13 +361,14 @@ private fun createMonthViewRemoteViews(
 }
 
 private fun createMapRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
+    val size = min(width / 2, height)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val mapDraw = MapDraw(context)
     mapDraw.updateMask(System.currentTimeMillis(), MaskType.DayNight)
     val matrix = Matrix()
-    matrix.setScale(width.toFloat() / mapDraw.mapWidth, height.toFloat() / mapDraw.mapHeight)
-    val bitmap = createBitmap(width, height).applyCanvas {
-        withClip(Path().also { it.writeRoundnessClip(width, height) }) {
+    matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
+    val bitmap = createBitmap(size * 2, size).applyCanvas {
+        withClip(Path().also { it.writeRoundnessClip(size * 2, size) }) {
             mapDraw.draw(this, matrix, true, null, false)
         }
     }
