@@ -88,6 +88,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
 
         binding.appBar.toolbar.inflateMenu(R.menu.map_menu)
+        fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
         directPathButton.onClick {
             if (coordinates == null) bringGps() else viewModel.toggleDirectPathMode()
         }
@@ -131,7 +132,18 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.map.onClick = { x: Float, y: Float ->
             val latitude = 90 - y / mapDraw.mapScaleFactor
             val longitude = x / mapDraw.mapScaleFactor - 180
-            if (abs(latitude) < 90 && abs(longitude) < 180) onMapClick(latitude, longitude)
+            if (abs(latitude) < 90 && abs(longitude) < 180) {
+                // Easter egg like feature, bring sky renderer fragment
+                if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.state.value.displayGrid) {
+                    findNavController().navigateSafe(MapScreenDirections.actionMapToSkyRenderer())
+                } else {
+                    val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
+                    if (viewModel.state.value.isDirectPathMode)
+                        viewModel.changeDirectPathDestination(coordinates)
+                    else
+                        activity?.let { showCoordinatesDialog(it, viewLifecycleOwner, coordinates) }
+                }
+            }
         }
 
         binding.map.onDraw = { canvas, matrix ->
@@ -158,23 +170,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
                 }
         }
-    }
-
-    private fun onMapClick(latitude: Float, longitude: Float) {
-        // Easter egg like feature, bring sky renderer fragment
-        if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.state.value.displayGrid) {
-            findNavController().navigateSafe(MapScreenDirections.actionMapToSkyRenderer())
-            return
-        }
-        val activity = activity ?: return
-        val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)
-        if (viewModel.state.value.isDirectPathMode)
-            viewModel.changeDirectPathDestination(coordinates)
-        else showCoordinatesDialog(activity, viewLifecycleOwner, coordinates)
-    }
-
-    private fun bringGps() {
-        showGPSLocationDialog(activity ?: return, viewLifecycleOwner)
     }
 }
 
