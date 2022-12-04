@@ -36,18 +36,19 @@ import kotlin.math.abs
 import kotlin.math.absoluteValue
 
 class MapScreen : Fragment(R.layout.fragment_map) {
-    private val binding by viewKeeper(FragmentMapBinding::bind)
-    private val directPathButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path) }
-    private val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
-    private val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
-    private val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
-    private val maskTypeButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
-    private val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
-
-    private val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val binding = FragmentMapBinding.bind(view)
+        val directPathButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path) }
+        val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
+        val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
+        val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
+        val maskTypeButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
+        val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
+
+        val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
+
         // Don't set the title as we got lots of icons
         // binding.appBar.toolbar.setTitle(R.string.map)
         binding.appBar.toolbar.setupUpNavigation()
@@ -172,4 +173,3 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         }
     }
 }
-

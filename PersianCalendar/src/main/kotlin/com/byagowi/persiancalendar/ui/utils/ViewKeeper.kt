@@ -18,10 +18,10 @@ import kotlin.properties.ReadOnlyProperty
  *
  * Created by Farhad Beigirad on 3/1/22.
  */
-fun <T> viewKeeper(bind: (View) -> T): ReadOnlyProperty<Fragment, T> {
-    return ReadOnlyProperty { fragment, property ->
+fun <T> Fragment.viewKeeper(bind: (View) -> T): ReadOnlyProperty<Unit?, T> {
+    return ReadOnlyProperty { _, property ->
         val tag = property.name.hashCode()
-        val fragmentView = fragment.requireView()
+        val fragmentView = requireView()
         @Suppress("UNCHECKED_CAST")
         fragmentView.getTag(tag) as? T ?: bind(fragmentView).also { fragmentView.setTag(tag, it) }
     }
