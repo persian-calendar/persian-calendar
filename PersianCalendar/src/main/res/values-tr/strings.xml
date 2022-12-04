@@ -11,7 +11,7 @@
     <string name="ordibehesht">Ordibehesht</string>
     <string name="farvardin">Farvardin</string>
     <string name="esfand">Esfand</string>
-    <string name="warn_if_events_not_set">Tercih edilen tatilleri ve etkinlikleri seçmek ve göstermek için \"Ayarlar\"ı kontrol ediniz</string>
+    <string name="warn_if_events_not_set">Tercih edilen tatilleri ve etkinlikleri seçmek ve göstermek için \"Ayarlar\"ı ziyaret edin</string>
     <string name="pleasewaitgps">Lütfen bekleyin… Bir dakika sonra yine hiçbir şey görünmüyorsa, muhtemelen diğer seçenekleri denemelisiniz</string>
     <string name="customize_widget_summary">Daha belirgin hale getirmek için bildirim ve widget\'larda ne gösterilmelidir</string>
     <string name="shift_work_starting_date_edit">%1$s, daha önce seçilen vardiyalı çalışma başlangıç günüdür.</string>
@@ -87,18 +87,18 @@
     <string name="theme_light">Açık Renk</string>
     <string name="theme_default">Sistem Varsayılanı</string>
     <string name="ignore">Yok say, göz ardı et</string>
-    <string name="preview">Önizleme</string>
+    <string name="preview">Ön izleme</string>
     <plurals name="n_days">
-        <item quantity="one">%1$s yıl</item>
-        <item quantity="other">%1$s yıll</item>
+        <item quantity="one">%1$s gün</item>
+        <item quantity="other">%1$s gün</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s ay</item>
-        <item quantity="other">%1$s ayy</item>
+        <item quantity="other">%1$s ay</item>
     </plurals>
     <plurals name="n_years">
-        <item quantity="one">%1$s gün</item>
-        <item quantity="other">%1$s gün</item>
+        <item quantity="one">%1$s yıl</item>
+        <item quantity="other">%1$s yıl</item>
     </plurals>
     <string name="age_widget_title">Widget Başlığı</string>
     <string name="select_date">Tarih seçiniz</string>
@@ -117,7 +117,7 @@
     <string name="recurs">Tekrarlar</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s gün</item>
-        <item quantity="other">%1$s %2$s günler</item>
+        <item quantity="other">%1$s %2$s gün</item>
     </plurals>
     <string name="n_till">%2$s \'na %1$s var</string>
     <string name="center_align_widgets">Widget\'ları ortaya hizalayın</string>
@@ -127,12 +127,12 @@
     <string name="spaced_comma">", "</string>
     <string name="spaced_and">" ve "</string>
     <plurals name="n_minutes">
-        <item quantity="one">%1$s dakik</item>
+        <item quantity="one">%1$s dakika</item>
         <item quantity="other">%1$s dakika</item>
     </plurals>
     <plurals name="n_hours">
         <item quantity="one">%1$s saat</item>
-        <item quantity="other">%1$s saatt</item>
+        <item quantity="other">%1$s saat</item>
     </plurals>
     <string name="shift_work_reset_button">Devre dışı bırak veya yeniden programla</string>
     <string name="shift_work_starting_date">Takvimde seçilen %1$s, vardiyalı çalışmaya başlama günüdür.</string>
@@ -145,7 +145,7 @@
     <string name="next_x">Gelecek %1$s</string>
     <string name="previous_x">Önceki %1$s</string>
     <string name="about_developers">Geliştiriciler (rastgele sıralanmıştır)</string>
-    <string name="about_noClient">Yüklü e-posta istemcisi yok</string>
+    <string name="about_noClient">Kurulu e-posta istemcisi yok</string>
     <string name="about_email_sum">Uygulamanın yazarlarına kişisel e-posta gönder</string>
     <string name="about_sendMail">E-Posta</string>
     <string name="about_report_bug_sum">Tercih edilen hata raporlama veya yeni özellik isteme, GitHub hesabına ihtiyaç duyar</string>
@@ -243,13 +243,13 @@
     <string name="calibrate_compass_summary">Pusula sensörünün doğruluğunu artırmak için telefonunuzu herhangi bir manyetik nesneden uzaklaştırın, cihazı her yöne ileri geri eğin ve döndürün.</string>
     <string name="compass_not_found">Pusula sensörü bulunamadı</string>
     <string name="date_exception">Girilen Gün Geçerli Değil.</string>
-    <string name="select_day">Gün Seçiniz</string>
+    <string name="select_day">Gün Seçin</string>
     <string name="day">Gün</string>
-    <string name="select_month">Ay Seçiniz</string>
+    <string name="select_month">Ay Seçin</string>
     <string name="month">Ay</string>
-    <string name="select_year">Yıl Seçiniz</string>
-    <string name="year">Sene</string>
-    <string name="select_type_date">Tarih Türünü Seçiniz</string>
+    <string name="select_year">Yıl Seçin</string>
+    <string name="year">Yıl</string>
+    <string name="select_type_date">Tarih Türünü Seçin</string>
     <string name="spring_equinox">Yılın İlkbahar Gündönümü Zamanı (Ekinoks) %1$s: %2$s</string>
     <string name="midnight">Gece Yarısı</string>
     <string name="isha">Yatsı Ezanı</string>
@@ -295,7 +295,7 @@
     <string name="animal_year_name_rooster">Horoz</string>
     <string name="animal_year_name_monkey">Maymun</string>
     <string name="year_name">Yıl Adı</string>
-    <string name="date_copied_clipboard">%1$s panoya kopyalanmıştır.</string>
+    <string name="date_copied_clipboard">%1$s panoya kopyalandı.</string>
     <string name="end_of_year_diff">Yıl sonuna %1$s gün var (~%2$s hafta veya %3$s ay)</string>
     <string name="start_of_year_diff">Yıl başından itibaren %1$s gün geçti (~%2$s hafta veya %3$s ay)</string>
     <string name="days_distance">Yaklaşan Etkinliğe Kalan Gün</string>
@@ -370,4 +370,5 @@
     <string name="live_wallpaper_settings">Canlı duvar kağıdı ayarları</string>
     <string name="screensaver_settings">Ekran koruyucu ayarları</string>
     <string name="true_north">Gerçek kuzey</string>
+    <string name="lock">Kilitle</string>
 </resources>
