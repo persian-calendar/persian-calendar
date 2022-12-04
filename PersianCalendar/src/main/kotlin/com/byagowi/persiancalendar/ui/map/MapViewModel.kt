@@ -42,8 +42,8 @@ class MapViewModel : ViewModel() {
         _state.update { it.copy(time = time.time) }
     }
 
-    fun changeMaskType(maskType: MaskType) {
-        _state.update { it.copy(maskType = maskType) }
+    fun changemapType(mapType: MapType) {
+        _state.update { it.copy(mapType = mapType) }
     }
 
     fun toggleDisplayLocation() {

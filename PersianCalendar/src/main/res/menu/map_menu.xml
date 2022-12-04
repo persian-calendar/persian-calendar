@@ -27,7 +27,7 @@
         android:title="@string/show_location_label"
         app:showAsAction="always" />
     <item
-        android:id="@+id/menu_night_mask"
+        android:id="@+id/menu_map_type"
         android:icon="@drawable/ic_nightlight"
         android:title="@string/show_night_mask_label"
         app:showAsAction="always" />

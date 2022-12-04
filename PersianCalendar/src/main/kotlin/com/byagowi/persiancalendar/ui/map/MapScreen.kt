@@ -44,7 +44,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
         val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
         val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
-        val maskTypeButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_night_mask) }
+        val mapTypeButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_map_type) }
         val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
 
         val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
@@ -70,7 +70,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
             binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (mapDraw.maskCurrentType.isCrescentVisibility) viewModel.subtractOneDay()
+            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.subtractOneDay()
             else viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener {
@@ -80,7 +80,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (mapDraw.maskCurrentType.isCrescentVisibility) viewModel.addOneDay()
+            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addOneDay()
             else viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener {
@@ -98,19 +98,19 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         locationButton.onClick {
             if (coordinates == null) bringGps() else viewModel.toggleDisplayLocation()
         }
-        maskTypeButton.onClick {
-            if (viewModel.state.value.maskType == MaskType.None) {
+        mapTypeButton.onClick {
+            if (viewModel.state.value.mapType == MapType.None) {
                 val context = context ?: return@onClick
-                val options = enumValues<MaskType>()
+                val options = enumValues<MapType>()
                     .drop(1) // Hide "None" option
                     // Hide moon visibilities for now unless is a development build
                     .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
                 val titles = options.map { context.getString(it.title) }
                 MaterialAlertDialogBuilder(context).setItems(titles.toTypedArray()) { dialog, i ->
-                    viewModel.changeMaskType(options[i])
+                    viewModel.changemapType(options[i])
                     dialog.dismiss()
                 }.show()
-            } else viewModel.changeMaskType(MaskType.None)
+            } else viewModel.changemapType(MapType.None)
         }
         globeViewButton.onClick {
             val textureSize = 1024
@@ -164,7 +164,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             viewModel.state
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { state ->
-                    mapDraw.updateMask(state.time, state.maskType)
+                    mapDraw.updateMap(state.time, state.mapType)
                     binding.map.invalidate()
                     binding.date.text = mapDraw.maskFormattedTime
                     binding.timeBar.isVisible = mapDraw.maskFormattedTime.isNotEmpty()

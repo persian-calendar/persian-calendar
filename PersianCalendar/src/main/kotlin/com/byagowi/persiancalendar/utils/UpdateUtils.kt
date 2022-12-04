@@ -84,7 +84,7 @@ import com.byagowi.persiancalendar.ui.calendar.calendarpager.MonthView
 import com.byagowi.persiancalendar.ui.calendar.times.SunView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
-import com.byagowi.persiancalendar.ui.map.MaskType
+import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
@@ -377,7 +377,7 @@ private fun createMapRemoteViews(context: Context, width: Int, height: Int): Rem
         )
         else null
     val mapDraw = MapDraw(context, backgroundColor, foregroundColor)
-    mapDraw.updateMask(System.currentTimeMillis(), MaskType.DayNight)
+    mapDraw.updateMap(System.currentTimeMillis(), MapType.DayNight)
     val matrix = Matrix()
     matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
     val bitmap = createBitmap(size * 2, size).applyCanvas {
