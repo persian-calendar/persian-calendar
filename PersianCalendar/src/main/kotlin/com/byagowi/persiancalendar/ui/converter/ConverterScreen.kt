@@ -46,7 +46,7 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             spinner.background =
                 view.context.getCompatDrawable(R.drawable.conveter_spinner_background)
-            spinner.setPaddingRelative(0, 0, 20.dp.toInt(), 0)
+            spinner.setPaddingRelative(0, 0, 24.dp.toInt(), 0)
         }
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
