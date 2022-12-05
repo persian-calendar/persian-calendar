@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -19,6 +20,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
@@ -41,6 +43,11 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
         binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
 
         val spinner = Spinner(binding.appBar.toolbar.context)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            spinner.background =
+                view.context.getCompatDrawable(R.drawable.conveter_spinner_background)
+            spinner.setPaddingRelative(0, 0, 20.dp.toInt(), 0)
+        }
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
             enumValues<ConverterScreenMode>().map { it.title }.map(spinner.context::getString)
