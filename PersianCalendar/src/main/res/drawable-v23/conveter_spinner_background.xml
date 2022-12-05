@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:width="24dp"
         android:height="24dp"
-        android:drawable="@drawable/ic_arrow_down_24dp"
-        android:gravity="end|center_vertical"
-        tools:ignore="PrivateResource" />
+        android:gravity="end|center_vertical">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:viewportWidth="24.0"
+            android:viewportHeight="24.0">
+            <path
+                android:fillColor="?attr/menuIconColor"
+                android:pathData="M12,16.41l-6.71,-6.7l1.42,-1.42l5.29,5.3l5.29,-5.3l1.42,1.42z" />
+        </vector>
+
+    </item>
 
     <item android:drawable="?android:selectableItemBackgroundBorderless" />
 
