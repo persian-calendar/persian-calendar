@@ -24,6 +24,7 @@ import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
 import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
@@ -94,9 +95,13 @@ class AthanNotification : Service() {
         val prayTimes = coordinates?.calculatePrayTimes()
         val subtitle = when (athanKey) {
             FAJR_KEY -> listOf(R.string.sunrise)
-            DHUHR_KEY -> listOf(R.string.asr, R.string.sunset)
+            DHUHR_KEY ->
+                if (calculationMethod.isJafari) listOf(R.string.sunset)
+                else listOf(R.string.asr, R.string.sunset)
             ASR_KEY -> listOf(R.string.sunset)
-            MAGHRIB_KEY -> listOf(R.string.isha, R.string.midnight)
+            MAGHRIB_KEY ->
+                if (calculationMethod.isJafari) listOf(R.string.midnight)
+                else listOf(R.string.isha, R.string.midnight)
             ISHA_KEY -> listOf(R.string.midnight)
             else -> listOf(R.string.midnight)
         }.joinToString(" - ") {
