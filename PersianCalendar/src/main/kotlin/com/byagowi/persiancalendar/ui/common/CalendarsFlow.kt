@@ -43,7 +43,6 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(contex
             binding.linear.text = date.toLinearDate()
             binding.linear.contentDescription = date.toLinearDate()
             binding.day.contentDescription = firstCalendarString
-            binding.month.contentDescription = firstCalendarString
             binding.day.text = formatNumber(date.dayOfMonth)
             binding.month.text = date.monthName
         }
