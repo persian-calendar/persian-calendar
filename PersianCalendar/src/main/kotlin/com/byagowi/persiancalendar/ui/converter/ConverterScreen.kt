@@ -63,7 +63,7 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
                 )
                 it.setPadding(16, 0, 16, 0)
             }
-            val spinner = Spinner(view.context)
+            val spinner = Spinner(binding.appBar.toolbar.context)
             spinnerFrameLayout.addView(spinner)
             binding.appBar.toolbar.addView(spinnerFrameLayout)
             spinner
