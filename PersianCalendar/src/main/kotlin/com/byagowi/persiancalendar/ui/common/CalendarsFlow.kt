@@ -27,11 +27,12 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(contex
         if (bindings.isEmpty()) {
             bindings = calendarsToShow.map {
                 CalendarItemBinding.inflate(context.layoutInflater).also {
-                    it.container.setupLayoutTransition()
+                    it.root.setupLayoutTransition()
                 }
             }
             addViewsToFlow(bindings.map {
-                it.container.setOnClickListener(this)
+                it.day.setOnClickListener(this)
+                it.month.setOnClickListener(this)
                 it.linear.setOnClickListener(this)
                 it.root
             })
@@ -41,12 +42,10 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(contex
             val firstCalendarString = formatDate(date)
             binding.linear.text = date.toLinearDate()
             binding.linear.contentDescription = date.toLinearDate()
-            binding.container.contentDescription = firstCalendarString
-            binding.day.contentDescription = ""
+            binding.day.contentDescription = firstCalendarString
+            binding.month.contentDescription = firstCalendarString
             binding.day.text = formatNumber(date.dayOfMonth)
-            binding.monthYear.contentDescription = ""
-            binding.monthYear.text =
-                listOf(date.monthName, formatNumber(date.year)).joinToString("\n")
+            binding.month.text = date.monthName
         }
     }
 

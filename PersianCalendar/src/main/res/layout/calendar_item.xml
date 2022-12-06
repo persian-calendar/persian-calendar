@@ -3,43 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:minWidth="@dimen/calendar_item_size"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/container"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="top|center_horizontal|fill_vertical"
-        android:orientation="horizontal">
+        android:layout_marginBottom="-12dp"
+        android:textColor="?attr/colorTextNormal"
+        android:textSize="48sp"
+        tools:text="23" />
 
-        <TextView
-            android:id="@+id/day"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="4sp"
-            android:textColor="?attr/colorTextNormal"
-            android:textSize="32sp"
-            tools:text="23" />
-
-        <TextView
-            android:id="@+id/month_year"
-            android:lineSpacingMultiplier="0.9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:textColor="?attr/colorTextNormal"
-            android:textSize="@dimen/text_size_description"
-            tools:text="May\n1999" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:lineSpacingMultiplier="0.9"
+        android:textColor="?attr/colorTextNormal"
+        android:textSize="@dimen/text_size_description"
+        tools:text="May" />
 
     <TextView
         android:id="@+id/linear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:textColor="?attr/colorTextSecond"
         android:textSize="@dimen/text_size_description"
         tools:text="1/1/1990" />
