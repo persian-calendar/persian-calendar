@@ -1,12 +1,16 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.Spinner
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -23,12 +27,15 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
 import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -42,7 +49,25 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
         val viewModel by viewModels<ConverterViewModel>()
         binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
 
-        val spinner = Spinner(binding.appBar.toolbar.context)
+        val spinner = run {
+            val spinnerFrameLayout = FrameLayout(view.context)
+            spinnerFrameLayout.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT, 36.dp.toInt()
+            )
+            spinnerFrameLayout.background = MaterialShapeDrawable().also {
+                it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(32.dp)
+                it.fillColor = ColorStateList.valueOf(
+                    ColorUtils.setAlphaComponent(
+                        view.context.resolveColor(R.attr.menuIconColor), 16
+                    )
+                )
+                it.setPadding(16, 0, 16, 0)
+            }
+            val spinner = Spinner(view.context)
+            spinnerFrameLayout.addView(spinner)
+            binding.appBar.toolbar.addView(spinnerFrameLayout)
+            spinner
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             spinner.background =
                 view.context.getCompatDrawable(R.drawable.conveter_spinner_background)
@@ -60,10 +85,7 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
         }
         spinner.setSelection(viewModel.screenMode.value.ordinal)
 
-        binding.appBar.toolbar.let { toolbar ->
-            toolbar.setupMenuNavigation()
-            toolbar.addView(spinner)
-        }
+        binding.appBar.toolbar.setupMenuNavigation()
 
         binding.calendarsView.post { // is in 'post' as otherwise will show ann empty circular indicator
             binding.calendarsView.toggle()
