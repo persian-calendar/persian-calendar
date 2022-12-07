@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
-import android.widget.Spinner
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -63,7 +63,7 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
                 )
                 it.setPadding(16, 0, 16, 0)
             }
-            val spinner = Spinner(binding.appBar.toolbar.context)
+            val spinner = AppCompatSpinner(binding.appBar.toolbar.context)
             spinnerFrameLayout.addView(spinner)
             binding.appBar.toolbar.addView(spinnerFrameLayout)
             spinner

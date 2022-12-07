@@ -13,8 +13,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:importantForAccessibility="no"
+        android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.byagowi.persiancalendar.ui.common.ZoomableView
@@ -35,7 +35,7 @@
         android:padding="8dp"
         tools:ignore="HardcodedText">
 
-        <androidx.appcompat.widget.AppCompatSpinner
+        <Spinner
             android:id="@+id/tone_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -52,10 +52,10 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/zoom"
-                android:text="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="number|numberDecimal|numberSigned" />
+                android:inputType="number|numberDecimal|numberSigned"
+                android:text="1" />
 
         </LinearLayout>
 

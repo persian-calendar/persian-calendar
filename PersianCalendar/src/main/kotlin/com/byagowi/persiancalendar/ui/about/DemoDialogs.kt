@@ -41,11 +41,11 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Scroller
-import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatSpinner
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -1146,7 +1146,7 @@ suspend fun playSoundTick(offset: Double) {
 fun showSensorTestDialog(activity: FragmentActivity) {
     val sensorManager = activity.getSystemService<SensorManager>() ?: return
     val root = LinearLayout(activity)
-    val spinner = Spinner(activity)
+    val spinner = AppCompatSpinner(activity)
     root.orientation = LinearLayout.VERTICAL
     root.addView(spinner)
     var width = 1
