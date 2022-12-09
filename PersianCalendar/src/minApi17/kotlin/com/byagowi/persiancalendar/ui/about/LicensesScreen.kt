@@ -64,15 +64,15 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
         }
 
         @SuppressLint("SetTextI18n")
-        binding.eventsStats.text = """
+        binding.eventsStats.text = """Events count:
 Persian Events: ${persianEvents.size + 1}
 Islamic Events: ${islamicEvents.size + 1}
 Gregorian Events: ${gregorianEvents.size + 1}
 Nepali Events: ${nepaliEvents.size + 1}
 Irregular Recurring Events: ${irregularRecurringEvents.size + 1}
+
 Sources:
-${EventType.values().joinToString("\n") { "${it.name}: ${it.source}" }}
-        """
+${EventType.values().joinToString("\n") { "${it.name}: ${it.source}" }}"""
         Linkify.addLinks(binding.eventsStats, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
         val sideSheet = SideSheetBehavior.from(binding.standardSideSheet)
         sideSheet.addCallback(object : SideSheetCallback() {
