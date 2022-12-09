@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.about
 
+import android.annotation.SuppressLint
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -9,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.SpannableString
 import android.text.style.ReplacementSpan
 import android.text.util.Linkify
@@ -16,6 +19,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
+import androidx.core.os.postDelayed
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.text.scale
@@ -24,12 +28,21 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
+import com.byagowi.persiancalendar.generated.EventType
+import com.byagowi.persiancalendar.generated.gregorianEvents
+import com.byagowi.persiancalendar.generated.irregularRecurringEvents
+import com.byagowi.persiancalendar.generated.islamicEvents
+import com.byagowi.persiancalendar.generated.nepaliEvents
+import com.byagowi.persiancalendar.generated.persianEvents
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.sp
+import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
+import com.google.android.material.sidesheet.SideSheetBehavior
+import com.google.android.material.sidesheet.SideSheetCallback
 import com.google.android.material.transition.MaterialFadeThrough
 import kotlin.math.roundToInt
 
@@ -49,6 +62,27 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
             it.setTitle(R.string.about_license_title)
             it.setupUpNavigation()
         }
+
+        @SuppressLint("SetTextI18n")
+        binding.eventsStats.text = """
+Persian Events: ${persianEvents.size + 1}
+Islamic Events: ${islamicEvents.size + 1}
+Gregorian Events: ${gregorianEvents.size + 1}
+Nepali Events: ${nepaliEvents.size + 1}
+Irregular Recurring Events: ${irregularRecurringEvents.size + 1}
+Sources:
+${EventType.values().joinToString("\n") { "${it.name}: ${it.source}" }}
+        """
+        Linkify.addLinks(binding.eventsStats, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
+        val sideSheet = SideSheetBehavior.from(binding.standardSideSheet)
+        sideSheet.addCallback(object : SideSheetCallback() {
+            override fun onSlide(sheet: View, slideOffset: Float) = Unit
+            override fun onStateChanged(sheet: View, newState: Int) {
+                if (newState == SideSheetBehavior.STATE_EXPANDED)
+                    Handler(Looper.getMainLooper())
+                        .postDelayed(TWO_SECONDS_IN_MILLIS) { sideSheet.hide() }
+            }
+        })
 
         binding.railView.menu.also {
             fun createTextIcon(text: String): Drawable {

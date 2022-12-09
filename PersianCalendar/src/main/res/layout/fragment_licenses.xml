@@ -35,4 +35,20 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/standard_side_sheet"
+        style="@style/Widget.Material3.SideSheet"
+        android:layout_width="256dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="com.google.android.material.sidesheet.SideSheetBehavior">
+
+        <TextView
+            android:id="@+id/events_stats"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="20dp" />
+
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
