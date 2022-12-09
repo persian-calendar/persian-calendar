@@ -21,6 +21,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.text.buildSpannedString
@@ -105,7 +106,6 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.utils.readDayDeviceEvents
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import io.github.persiancalendar.calendar.AbstractDate
@@ -557,7 +557,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         }
     }
 
-    private fun setupMenu(toolbar: MaterialToolbar, calendarPager: CalendarPager) {
+    private fun setupMenu(toolbar: Toolbar, calendarPager: CalendarPager) {
         val toolbarContext = toolbar.context // context wrapped with toolbar related theme
         val context = calendarPager.context // context usable for normal dialogs
 

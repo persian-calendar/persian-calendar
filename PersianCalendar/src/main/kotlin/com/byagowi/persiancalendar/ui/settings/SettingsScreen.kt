@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
@@ -49,7 +50,6 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -117,7 +117,7 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
 
     // Development only functionalities
     private fun setupMenu(
-        toolbar: MaterialToolbar, binding: FragmentSettingsBinding, inflater: LayoutInflater
+        toolbar: Toolbar, binding: FragmentSettingsBinding, inflater: LayoutInflater
     ) {
         toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
             runCatching {

@@ -19,6 +19,7 @@ import androidx.annotation.IdRes
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
@@ -82,7 +83,6 @@ import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -397,7 +397,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
     }.show()
 
-    override fun setupToolbarWithDrawer(toolbar: MaterialToolbar) {
+    override fun setupToolbarWithDrawer(toolbar: Toolbar) {
         val listener = ActionBarDrawerToggle(
             this, binding.root, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description, R.string.close

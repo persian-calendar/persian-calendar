@@ -5,15 +5,25 @@
     android:layout_height="match_parent"
     android:background="?attr/colorCard">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/navigationBarColor">
+
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="?attr/appToolbarTheme"
+            app:popupTheme="?attr/appToolbarPopupTheme" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:importantForAccessibility="no"
+        android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.byagowi.persiancalendar.ui.common.ZoomableView

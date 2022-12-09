@@ -40,18 +40,18 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentMapBinding.bind(view)
-        val directPathButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_direct_path) }
-        val gridButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_grid) }
-        val myLocationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_my_location) }
-        val locationButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_location) }
-        val mapTypeButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_map_type) }
-        val globeViewButton by viewKeeper { binding.appBar.toolbar.menu.findItem(R.id.menu_globe_view) }
+        val directPathButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_direct_path) }
+        val gridButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_grid) }
+        val myLocationButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_my_location) }
+        val locationButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_location) }
+        val mapTypeButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_map_type) }
+        val globeViewButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_globe_view) }
 
         val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
         // Don't set the title as we got lots of icons
-        // binding.appBar.toolbar.setTitle(R.string.map)
-        binding.appBar.toolbar.setupUpNavigation()
+        // binding.toolbar.setTitle(R.string.map)
+        binding.toolbar.setupUpNavigation()
 
         // Set time from Astronomy screen state if we are brought from the screen to here directly
         if (findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
@@ -88,7 +88,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             true
         }
 
-        binding.appBar.toolbar.inflateMenu(R.menu.map_menu)
+        binding.toolbar.inflateMenu(R.menu.map_menu)
         fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
         directPathButton.onClick {
             if (coordinates == null) bringGps() else viewModel.toggleDirectPathMode()

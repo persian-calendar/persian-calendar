@@ -28,6 +28,7 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.graphics.drawable.DrawerArrowDrawable
+import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.app.ShareCompat
@@ -54,7 +55,6 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -118,13 +118,13 @@ fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String)
     }, getString(R.string.share)))
 }.onFailure(logException).let {}
 
-fun MaterialToolbar.setupUpNavigation() {
+fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
     setNavigationContentDescription(androidx.navigation.ui.R.string.nav_app_bar_navigate_up_description)
     setNavigationOnClickListener { findNavController().navigateUp() }
 }
 
-fun MaterialToolbar.setupMenuNavigation() {
+fun Toolbar.setupMenuNavigation() {
     (context.getActivity() as? DrawerHost)?.setupToolbarWithDrawer(this)
 }
 

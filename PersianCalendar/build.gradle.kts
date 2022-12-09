@@ -168,7 +168,7 @@ dependencies {
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
-    implementation("com.google.android.material:material:1.7.0")
+    implementation("com.google.android.material:material:1.8.0-beta01")
 
     val navVersion = "2.5.1"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
@@ -179,7 +179,7 @@ dependencies {
     val fragmentVersion = "1.5.2"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
-    implementation("androidx.activity:activity-ktx:1.6.0")
+    implementation("androidx.activity:activity-ktx:1.6.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
 
     implementation("androidx.browser:browser:1.4.0")
@@ -197,13 +197,13 @@ dependencies {
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("androidx.multidex:multidex:2.0.1")
 
-    minApi21Implementation("androidx.activity:activity-compose:1.6.0")
-    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.0.20")
+    minApi21Implementation("androidx.activity:activity-compose:1.6.1")
+    minApi21Implementation("com.google.android.material:compose-theme-adapter-3:1.1.1")
     val accompanistVersion = "0.28.0"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.0.0-rc01")
+    minApi21Implementation("androidx.compose.material3:material3:1.1.0-alpha02")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
@@ -232,7 +232,7 @@ dependencies {
     androidTestImplementation("androidx.test:runner:$androidTestVersion")
     androidTestImplementation("androidx.test:rules:$androidTestVersion")
     androidTestImplementation("androidx.test:core-ktx:$androidTestVersion")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test.ext:junit:1.1.4")
     val espressoVersion = "3.4.0"
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
