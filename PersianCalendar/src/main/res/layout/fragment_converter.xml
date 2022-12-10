@@ -52,12 +52,12 @@
 
             <TextView
                 android:id="@+id/result_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/view_padding"
                 android:layout_marginTop="@dimen/card_margin"
                 android:layout_marginRight="@dimen/view_padding"
-                android:textAlignment="center"
                 android:textIsSelectable="true"
                 android:textSize="16sp"
                 android:visibility="gone" />
@@ -76,9 +76,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/view_padding"
-                android:layout_marginBottom="32dp"
                 android:layout_marginTop="@dimen/card_margin"
                 android:layout_marginRight="@dimen/view_padding"
+                android:layout_marginBottom="32dp"
                 app:cardCornerRadius="@dimen/common_radius"
                 app:cardElevation="@dimen/card_elevation">
 
