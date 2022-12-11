@@ -191,8 +191,8 @@
             </LinearLayout>
 
             <LinearLayout
-                style="@style/AboutCard"
                 android:id="@+id/developers_section"
+                style="@style/AboutCard"
                 android:background="?attr/colorCard">
 
                 <TextView

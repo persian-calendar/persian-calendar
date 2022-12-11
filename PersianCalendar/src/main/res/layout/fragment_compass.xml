@@ -12,8 +12,8 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <com.google.android.material.slider.Slider
             android:id="@+id/time_slider"

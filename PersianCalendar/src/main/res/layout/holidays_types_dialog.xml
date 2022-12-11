@@ -15,75 +15,75 @@
         <!-- Iran -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/iran"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="42dp"
             tools:text="iran" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/iran_holidays"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/iran_holidays" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/iran_others"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/iran_others" />
 
         <!-- Afghanistan -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/afghanistan"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="42dp"
             tools:text="afghanistan" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/afghanistan_holidays"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/afghanistan_holidays" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/afghanistan_others"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/afghanistan_others" />
 
         <!-- Nepal -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/nepal"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="42dp"
             android:text="@string/nepal"
             android:visibility="gone" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/nepal_holidays"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/holiday"
             android:visibility="gone" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/nepal_others"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/other_holidays"
             android:visibility="gone" />
 
@@ -96,18 +96,18 @@
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/iran_ancient"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/iran_ancient" />
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/international"
-            android:minHeight="42dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="28dp"
+            android:minHeight="42dp"
             android:text="@string/international" />
 
     </LinearLayout>

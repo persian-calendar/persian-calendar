@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".WidgetMap"
-    android:theme="@style/WidgetTheme">
+    android:theme="@style/WidgetTheme"
+    tools:context=".WidgetMap">
 
     <ImageView
         android:id="@+id/image"

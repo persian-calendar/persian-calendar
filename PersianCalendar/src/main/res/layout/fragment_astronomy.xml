@@ -43,23 +43,23 @@
                     android:orientation="vertical">
 
                     <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:id="@+id/firstSeason"
-                        android:layout_marginTop="4dp" />
-
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/thirdSeason"
                         android:layout_marginTop="4dp" />
 
                     <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                        android:id="@+id/thirdSeason"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp" />
+
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                        android:id="@+id/sun"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/sun"
-                        android:gravity="center_horizontal"
-                        android:layout_marginTop="16dp" />
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal" />
 
                 </LinearLayout>
 
@@ -71,23 +71,23 @@
                     android:orientation="vertical">
 
                     <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:id="@+id/secondSeason"
-                        android:layout_marginTop="4dp" />
-
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/fourthSeason"
                         android:layout_marginTop="4dp" />
 
                     <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                        android:id="@+id/fourthSeason"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp" />
+
+                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                        android:id="@+id/moon"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/moon"
-                        android:gravity="center_horizontal"
-                        android:layout_marginTop="16dp" />
+                        android:layout_marginTop="16dp"
+                        android:gravity="center_horizontal" />
 
                 </LinearLayout>
 
