@@ -202,7 +202,7 @@ fun update(context: Context, updateDate: Boolean) {
             createMonthViewRemoteViews(context, width, height, date)
         }
         updateFromRemoteViews<WidgetMap>(context) { width, height, _ ->
-            createMapRemoteViews(context, width, height)
+            createMapRemoteViews(context, width, height, now)
         }
         updateFromRemoteViews<WidgetMoon>(context) { width, height, _ ->
             createMoonRemoteViews(context, width, height)
@@ -210,7 +210,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     // Notification
-    updateNotification(context, title, subtitle, jdn, date, owghat)
+    updateNotification(context, title, subtitle, jdn, date, owghat, now)
 }
 
 @StringRes
@@ -360,7 +360,9 @@ private fun createMonthViewRemoteViews(
     return remoteViews
 }
 
-private fun createMapRemoteViews(context: Context, width: Int, height: Int): RemoteViews {
+private fun createMapRemoteViews(
+    context: Context, width: Int, height: Int, time: Long
+): RemoteViews {
     val size = min(width / 2, height)
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_map)
     val isNightMode = Theme.isNightMode(context)
@@ -377,7 +379,7 @@ private fun createMapRemoteViews(context: Context, width: Int, height: Int): Rem
         )
         else null
     val mapDraw = MapDraw(context, backgroundColor, foregroundColor)
-    mapDraw.updateMap(System.currentTimeMillis(), MapType.DayNight)
+    mapDraw.updateMap(time, MapType.DayNight)
     val matrix = Matrix()
     matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
     val bitmap = createBitmap(size * 2, size).applyCanvas {
@@ -646,7 +648,8 @@ private fun setEventsInWidget(
 }
 
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
+    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String,
+    time: Long
 ) {
     if (!isNotifyDate) {
         if (enableWorkManager)
@@ -756,7 +759,7 @@ private fun updateNotification(
         }
     }
 
-    if (BuildConfig.DEVELOPMENT) builder.setWhen(System.currentTimeMillis())
+    if (BuildConfig.DEVELOPMENT) builder.setWhen(time)
 
     if (enableWorkManager) notificationManager?.notify(NOTIFICATION_ID, builder.build())
     else context.runCatching {
