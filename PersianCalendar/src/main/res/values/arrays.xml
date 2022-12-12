@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-We used to use arrays.xml a lot specially as that was easier to use with preferences we kept in xml
+We used to use arrays.xml a lot specially as that was easier to use with preferences we kept in xml,
 but now we deliberately avoid using it as it isn't translatable in Weblate platform, proved is hard
 to maintain in long run where new keys needs to be added and so, and as we moved our preferences
 from xml to a locally baked Kotlin DSL which works with Kotlin lists anyway.
---><resources />
+-->
+<resources/>
