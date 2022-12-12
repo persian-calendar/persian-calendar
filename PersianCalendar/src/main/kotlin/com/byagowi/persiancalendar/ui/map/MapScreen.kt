@@ -4,7 +4,10 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
+import android.view.MenuItem
 import android.view.View
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.core.graphics.createBitmap
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -22,11 +25,11 @@ import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
@@ -40,12 +43,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentMapBinding.bind(view)
-        val directPathButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_direct_path) }
-        val gridButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_grid) }
-        val myLocationButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_my_location) }
-        val locationButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_location) }
-        val mapTypeButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_map_type) }
-        val globeViewButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_globe_view) }
 
         val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
@@ -88,17 +85,36 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             true
         }
 
-        binding.toolbar.inflateMenu(R.menu.map_menu)
         fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
-        directPathButton.onClick {
-            if (coordinates == null) bringGps() else viewModel.toggleDirectPathMode()
+        fun createMenuButton(@StringRes stringId: Int, @DrawableRes drawableId: Int): MenuItem {
+            val button = binding.toolbar.menu.add(stringId)
+            button.icon = binding.toolbar.context.getCompatDrawable(drawableId)
+            button.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+            return button
         }
-        gridButton.onClick { viewModel.toggleDisplayGrid() }
-        myLocationButton.onClick { bringGps() }
-        locationButton.onClick {
-            if (coordinates == null) bringGps() else viewModel.toggleDisplayLocation()
+        createMenuButton(R.string.show_globe_view_label, R.drawable.ic_3d_rotation).onClick {
+            val textureSize = 1024
+            val bitmap = createBitmap(textureSize, textureSize)
+            val matrix = Matrix().also {
+                it.setScale(
+                    textureSize.toFloat() / mapDraw.mapWidth,
+                    textureSize.toFloat() / mapDraw.mapHeight
+                )
+            }
+            binding.map.onDraw(Canvas(bitmap), matrix)
+            showGlobeDialog(activity ?: return@onClick, bitmap)
         }
-        mapTypeButton.onClick {
+        val directPathButton =
+            createMenuButton(R.string.show_direct_path_label, R.drawable.ic_distance_icon)
+        directPathButton
+            .onClick { if (coordinates == null) bringGps() else viewModel.toggleDirectPathMode() }
+        createMenuButton(R.string.show_grid_label, R.drawable.ic_grid_3x3)
+            .onClick { viewModel.toggleDisplayGrid() }
+        createMenuButton(R.string.show_my_location_label, R.drawable.ic_my_location)
+            .onClick { bringGps() }
+        createMenuButton(R.string.show_location_label, R.drawable.ic_location_on)
+            .onClick { if (coordinates == null) bringGps() else viewModel.toggleDisplayLocation() }
+        createMenuButton(R.string.show_night_mask_label, R.drawable.ic_nightlight).onClick {
             if (viewModel.state.value.mapType == MapType.None) {
                 val context = context ?: return@onClick
                 val options = enumValues<MapType>()
@@ -111,18 +127,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     dialog.dismiss()
                 }.show()
             } else viewModel.changeMapType(MapType.None)
-        }
-        globeViewButton.onClick {
-            val textureSize = 1024
-            val bitmap = createBitmap(textureSize, textureSize)
-            val matrix = Matrix().also {
-                it.setScale(
-                    textureSize.toFloat() / mapDraw.mapWidth,
-                    textureSize.toFloat() / mapDraw.mapHeight
-                )
-            }
-            binding.map.onDraw(Canvas(bitmap), matrix)
-            showGlobeDialog(activity ?: return@onClick, bitmap)
         }
 
         binding.root.setupLayoutTransition()
