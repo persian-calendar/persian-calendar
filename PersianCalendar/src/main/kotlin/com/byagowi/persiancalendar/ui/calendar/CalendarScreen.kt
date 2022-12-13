@@ -328,7 +328,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             ActivityCompat.checkSelfPermission(
-                requireContext(), Manifest.permission.READ_CALENDAR
+                context, Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED &&
             (PREF_NOTIFY_DATE !in context.appPrefs ||
                     !context.appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
