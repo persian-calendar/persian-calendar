@@ -42,7 +42,7 @@ class MapViewModel : ViewModel() {
         _state.update { it.copy(time = time.time) }
     }
 
-    fun changemapType(mapType: MapType) {
+    fun changeMapType(mapType: MapType) {
         _state.update { it.copy(mapType = mapType) }
     }
 

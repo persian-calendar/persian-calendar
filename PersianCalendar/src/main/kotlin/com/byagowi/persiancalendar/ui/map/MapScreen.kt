@@ -107,10 +107,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                     .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
                 val titles = options.map { context.getString(it.title) }
                 MaterialAlertDialogBuilder(context).setItems(titles.toTypedArray()) { dialog, i ->
-                    viewModel.changemapType(options[i])
+                    viewModel.changeMapType(options[i])
                     dialog.dismiss()
                 }.show()
-            } else viewModel.changemapType(MapType.None)
+            } else viewModel.changeMapType(MapType.None)
         }
         globeViewButton.onClick {
             val textureSize = 1024
