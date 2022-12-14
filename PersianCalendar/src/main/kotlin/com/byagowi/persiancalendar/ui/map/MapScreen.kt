@@ -26,7 +26,6 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
-import com.byagowi.persiancalendar.ui.utils.viewKeeper
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
@@ -40,12 +39,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding = FragmentMapBinding.bind(view)
-        val directPathButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_direct_path) }
-        val gridButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_grid) }
-        val myLocationButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_my_location) }
-        val locationButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_location) }
-        val mapTypeButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_map_type) }
-        val globeViewButton by viewKeeper { binding.toolbar.menu.findItem(R.id.menu_globe_view) }
+        binding.toolbar.inflateMenu(R.menu.map_menu)
+        val directPathButton = binding.toolbar.menu.findItem(R.id.menu_direct_path)
+        val gridButton = binding.toolbar.menu.findItem(R.id.menu_grid)
+        val myLocationButton = binding.toolbar.menu.findItem(R.id.menu_my_location)
+        val locationButton = binding.toolbar.menu.findItem(R.id.menu_location)
+        val mapTypeButton = binding.toolbar.menu.findItem(R.id.menu_map_type)
+        val globeViewButton = binding.toolbar.menu.findItem(R.id.menu_globe_view)
 
         val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
 
@@ -88,7 +88,6 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             true
         }
 
-        binding.toolbar.inflateMenu(R.menu.map_menu)
         fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
         directPathButton.onClick {
             if (coordinates == null) bringGps() else viewModel.toggleDirectPathMode()
