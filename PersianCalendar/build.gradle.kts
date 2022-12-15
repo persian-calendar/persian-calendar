@@ -223,7 +223,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junit5Version")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit5Version")
 
-    testImplementation("org.mockito:mockito-core:4.9.0")
+    testImplementation("org.mockito:mockito-core:4.10.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.1.0")
 
     testImplementation("com.google.truth:truth:1.1.3")
