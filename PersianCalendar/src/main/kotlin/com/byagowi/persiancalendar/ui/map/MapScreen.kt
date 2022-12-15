@@ -73,20 +73,14 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.subtractOneDay()
             else viewModel.subtractOneHour()
         }
-        binding.startArrow.setOnLongClickListener {
-            viewModel.subtractTenDays()
-            true
-        }
+        binding.startArrow.setOnLongClickListener { viewModel.subtractTenDays(); true }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addOneDay()
             else viewModel.addOneHour()
         }
-        binding.endArrow.setOnLongClickListener {
-            viewModel.addTenDays()
-            true
-        }
+        binding.endArrow.setOnLongClickListener { viewModel.addTenDays(); true }
 
         fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
         directPathButton.onClick {
@@ -114,12 +108,10 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         globeViewButton.onClick {
             val textureSize = 1024
             val bitmap = createBitmap(textureSize, textureSize)
-            val matrix = Matrix().also {
-                it.setScale(
-                    textureSize.toFloat() / mapDraw.mapWidth,
-                    textureSize.toFloat() / mapDraw.mapHeight
-                )
-            }
+            val matrix = Matrix()
+            matrix.setScale(
+                textureSize.toFloat() / mapDraw.mapWidth, textureSize.toFloat() / mapDraw.mapHeight
+            )
             binding.map.onDraw(Canvas(bitmap), matrix)
             showGlobeDialog(activity ?: return@onClick, bitmap)
         }
