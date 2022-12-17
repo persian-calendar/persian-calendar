@@ -11,6 +11,7 @@ import androidx.core.content.getSystemService
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
@@ -57,17 +58,12 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
             menuItem.onClick {
                 if (lock != null) return@onClick lockCleanup?.invoke().let { }
 
-                lock = activity.getSystemService<PowerManager>()?.newWakeLock(
-                    PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
-                    "persiancalendar:level"
-                )
+                lock = activity.getSystemService<PowerManager>()
+                    ?.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "persiancalendar:level")
                 lock?.acquire(FIFTEEN_MINUTES_IN_MILLIS)
-                // TODO: We should change the icon after the fifteen minutes here also
-
-                menuItem.icon =
-                    binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock_open)
 
                 binding.bottomAppbar.performHide(true)
+                binding.appBar.toolbar.isVisible = false
 
                 val windowInsetsController =
                     WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -77,16 +73,16 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
                 // TODO: We should fill the system status bar space also
 
                 lockCleanup = {
+                    binding.appBar.toolbar.isVisible = true
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
                     lock?.release()
                     lock = null
-                    menuItem.icon =
-                        binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock)
                     binding.bottomAppbar.performShow(true)
                     lockCleanup = null
                 }
             }
         }
+        binding.levelView.setOnClickListener { lockCleanup?.invoke() }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener
             val stop = !provider.isListening
