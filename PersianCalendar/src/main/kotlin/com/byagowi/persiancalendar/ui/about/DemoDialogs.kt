@@ -90,6 +90,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
+import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
@@ -1139,7 +1140,7 @@ suspend fun playSoundTick(offset: Double) {
             AudioFormat.ENCODING_PCM_16BIT, buffer.size, AudioTrack.MODE_STATIC
         )
         audioTrack.write(buffer, 0, buffer.size)
-        audioTrack.play()
+        runCatching { audioTrack.play() }.onFailure(logException)
     }
 }
 
