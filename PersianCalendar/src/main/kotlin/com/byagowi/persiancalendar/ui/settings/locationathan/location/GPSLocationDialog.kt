@@ -180,7 +180,9 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
     viewLifecycleOwner.lifecycle.addObserver(lifeCycleObserver)
     dialog.setOnDismissListener {
         debugLog("GPSLocationDialog: Dialog is dismissed")
-        coordinatesFlow.value?.let { coordinate ->
+        coordinatesFlow.value?.let { (latitude, longitude) ->
+            // Don't set elevation/altitude even from GPS, See #1011
+            val coordinate = Coordinates(latitude, longitude, 0.0)
             activity.appPrefs.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
         }
 
