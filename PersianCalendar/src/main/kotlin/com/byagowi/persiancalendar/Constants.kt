@@ -93,9 +93,10 @@ const val BROADCAST_UPDATE_APP = "BROADCAST_UPDATE_APP"
 const val KEY_EXTRA_PRAYER = "prayer_name"
 const val KEY_EXTRA_PRAYER_TIME = "prayer_time"
 
+const val ZWNJ = "\u200C"
+const val ZWJ = "\u200D"
 const val LRM = "\u200E"
 const val RLM = "\u200F"
-const val ZWJ = "\u200D"
 
 const val EN_DASH = "–"
 
