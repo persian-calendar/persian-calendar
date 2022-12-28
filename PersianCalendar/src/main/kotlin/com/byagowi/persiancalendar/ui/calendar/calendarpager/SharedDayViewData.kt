@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
@@ -64,7 +66,8 @@ class SharedDayViewData(
         it.color = widgetTextColor ?: context.resolveColor(R.attr.colorCurrentDay)
     }
 
-    private val textSize = diameter * (if (isArabicDigitSelected) 18 else 25) / 40
+    private val textSize =
+        diameter * (if (mainCalendarDigits === Language.ARABIC_DIGITS) 18 else 25) / 40
     private val headerTextSize = diameter * 11 / 40
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

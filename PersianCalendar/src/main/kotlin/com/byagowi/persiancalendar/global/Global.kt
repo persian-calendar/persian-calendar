@@ -118,6 +118,11 @@ var coordinates: Coordinates? = null
 var enabledCalendars = listOf(CalendarType.SHAMSI, CalendarType.GREGORIAN, CalendarType.ISLAMIC)
     private set
 val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SHAMSI
+val mainCalendarDigits
+    get() =
+        if (secondaryCalendar == null) preferredDigits
+        else if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
+        else mainCalendar.preferredDigits
 val secondaryCalendar
     get() =
         if (secondaryCalendarEnabled) enabledCalendars.getOrNull(1) else null

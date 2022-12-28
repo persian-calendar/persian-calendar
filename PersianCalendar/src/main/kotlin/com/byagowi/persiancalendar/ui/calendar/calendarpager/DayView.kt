@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isHighTextContrastEnabled
+import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -126,8 +127,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
         jdn: Jdn, dayOfMonth: Int, header: String
     ) = setAll(
-        text = formatNumber(dayOfMonth), isToday = isToday, isSelected = isSelected,
-        hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,
+        text = formatNumber(dayOfMonth, mainCalendarDigits), isToday = isToday,
+        isSelected = isSelected, hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,
         dayOfMonth = dayOfMonth, header = header, isHoliday = isHoliday || jdn.isWeekEnd()
     )
 
