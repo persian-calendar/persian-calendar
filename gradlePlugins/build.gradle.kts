@@ -1,6 +1,6 @@
 plugins {
     `kotlin-dsl`
-    val kotlinVersion = "1.7.22"
+    val kotlinVersion = "1.8.0"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
 }
