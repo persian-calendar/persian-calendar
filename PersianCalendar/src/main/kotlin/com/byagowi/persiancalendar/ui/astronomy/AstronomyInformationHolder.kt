@@ -9,6 +9,7 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.byagowi.persiancalendar.databinding.AstronomyInformationHolderBinding
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 
 class AstronomyInformationHolder(context: Context, attrs: AttributeSet? = null) :
     LinearLayoutCompat(context, attrs) {
@@ -35,5 +36,6 @@ class AstronomyInformationHolder(context: Context, attrs: AttributeSet? = null) 
             setValue = binding.value::setText
             binding.root
         })
+        setupLayoutTransition()
     }
 }

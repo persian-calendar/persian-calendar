@@ -257,9 +257,6 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
         binding.endArrow.contentDescription = getString(R.string.next_x, getString(R.string.day))
 
-        binding.firstColumn.setupLayoutTransition()
-        binding.secondColumn.setupLayoutTransition()
-
         // Setup view model change listeners
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
         viewLifecycleOwner.lifecycleScope.launch {
