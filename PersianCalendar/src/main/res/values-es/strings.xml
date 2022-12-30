@@ -381,4 +381,5 @@
     <string name="true_north">Norte verdadero</string>
     <string name="enable_notification">¿Desea activar la notificación de la fecha\?</string>
     <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
+    <string name="lock">Bloquear</string>
 </resources>
