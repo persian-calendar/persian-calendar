@@ -17,8 +17,10 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.FragmentMapBinding
+import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
+import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
@@ -27,10 +29,13 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
+import com.byagowi.persiancalendar.utils.toCivilDate
+import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
@@ -70,17 +75,25 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
             binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.subtractOneDay()
+            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
             else viewModel.subtractOneHour()
         }
-        binding.startArrow.setOnLongClickListener { viewModel.subtractTenDays(); true }
+        binding.startArrow.setOnLongClickListener { viewModel.addDays(-10); true }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
             binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addOneDay()
+            if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
             else viewModel.addOneHour()
         }
-        binding.endArrow.setOnLongClickListener { viewModel.addTenDays(); true }
+        binding.endArrow.setOnLongClickListener { viewModel.addDays(10); true }
+        binding.date.setOnClickListener { viewModel.changeToTime(Date()) }
+        binding.date.setOnLongClickListener {
+            val currentJdn = Jdn(Date(viewModel.state.value.time).toJavaCalendar().toCivilDate())
+            showDayPickerDialog(
+                activity ?: return@setOnLongClickListener true, currentJdn, R.string.accept
+            ) { jdn -> viewModel.addDays(jdn - currentJdn) }
+            true
+        }
 
         fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
         directPathButton.onClick {
