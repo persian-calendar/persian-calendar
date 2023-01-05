@@ -29,7 +29,6 @@ import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
 
 class AthanActivity : ComponentActivity() {
-
     private val ascendingVolumeStep = 6
     private var currentVolumeSteps = 1
     private val handler = Handler(Looper.getMainLooper())
@@ -138,9 +137,8 @@ class AthanActivity : ComponentActivity() {
         if (isAscendingAthanVolumeEnabled) handler.post(ascendVolume)
 
         runCatching {
-            getSystemService<TelephonyManager>()?.listen(
-                phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE
-            )
+            getSystemService<TelephonyManager>()
+                ?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
         }.onFailure(logException)
     }
 
@@ -156,9 +154,8 @@ class AthanActivity : ComponentActivity() {
         alreadyStopped = true
 
         runCatching {
-            getSystemService<TelephonyManager>()?.listen(
-                phoneStateListener, PhoneStateListener.LISTEN_NONE
-            )
+            getSystemService<TelephonyManager>()
+                ?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
             phoneStateListener = null
         }.onFailure(logException)
 

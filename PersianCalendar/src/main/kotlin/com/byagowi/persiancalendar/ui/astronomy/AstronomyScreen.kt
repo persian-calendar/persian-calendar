@@ -222,7 +222,10 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 val current = System.currentTimeMillis()
                 if (current - lastButtonClickTimestamp > 2000) {
                     if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                        binding.slider.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        binding.slider.performHapticFeedback(
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) HapticFeedbackConstants.CLOCK_TICK
+                            else HapticFeedbackConstants.LONG_PRESS
+                        )
                         latestVibration = current
                     }
                     viewModel.addMinutesOffset((dx * viewDirection).toInt())
