@@ -62,6 +62,7 @@ class AthanNotification : Service() {
             )
         }.onFailure(logException)
 
+        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 notificationChannelId, getString(R.string.athan),
@@ -72,7 +73,7 @@ class AthanNotification : Service() {
                 it.lightColor = Color.GREEN
                 it.vibrationPattern = LongArray(2) { 500 }
                 it.enableVibration(true)
-                it.setBypassDnd(true)
+                it.setBypassDnd(athanKey == FAJR_KEY)
                 it.setSound(
                     soundUri, AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -85,7 +86,6 @@ class AthanNotification : Service() {
             notificationManager?.createNotificationChannel(notificationChannel)
         }
 
-        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
         val cityName = this.appPrefs.cityName
         val prayTimeName = getString(getPrayTimeName(athanKey))
         val title =
