@@ -8,7 +8,7 @@ import android.telephony.TelephonyManager
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.utils.logException
 
-class PreventPhoneCallIntervention(private val callback: () -> Unit) {
+class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
     var stopListener = {}
     fun startListener(context: Context) {
         val telephonyManager = runCatching { context.getSystemService<TelephonyManager>() }
@@ -18,7 +18,7 @@ class PreventPhoneCallIntervention(private val callback: () -> Unit) {
                 override fun onCallStateChanged(state: Int) {
                     if (state == TelephonyManager.CALL_STATE_RINGING ||
                         state == TelephonyManager.CALL_STATE_OFFHOOK
-                    ) callback()
+                    ) onCallDetect()
                 }
             }
             telephonyManager.registerTelephonyCallback(context.mainExecutor, listener)
@@ -32,7 +32,7 @@ class PreventPhoneCallIntervention(private val callback: () -> Unit) {
                 override fun onCallStateChanged(state: Int, incomingNumber: String) {
                     if (state == TelephonyManager.CALL_STATE_RINGING ||
                         state == TelephonyManager.CALL_STATE_OFFHOOK
-                    ) callback()
+                    ) onCallDetect()
                 }
             }
             runCatching { telephonyManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE) }
