@@ -143,9 +143,9 @@ class AthanNotification : Service() {
         }
 
         val preventPhoneCallIntervention = PreventPhoneCallIntervention(::stop)
-        preventPhoneCallIntervention.start(this)
+        preventPhoneCallIntervention.startListener(this)
         Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) {
-            preventPhoneCallIntervention.stop(this)
+            preventPhoneCallIntervention.stopListener()
             stop()
         }
 

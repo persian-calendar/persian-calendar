@@ -127,7 +127,7 @@ class AthanActivity : ComponentActivity() {
 
         if (isAscendingAthanVolumeEnabled) handler.post(ascendVolume)
 
-        preventPhoneCallIntervention.start(this)
+        preventPhoneCallIntervention.startListener(this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -140,7 +140,7 @@ class AthanActivity : ComponentActivity() {
     private fun stop() {
         if (alreadyStopped) return
         alreadyStopped = true
-        preventPhoneCallIntervention.stop(this)
+        preventPhoneCallIntervention.stopListener()
 
         ringtone?.stop()
 
