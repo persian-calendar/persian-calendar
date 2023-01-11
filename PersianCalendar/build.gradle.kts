@@ -217,7 +217,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
 
-    testImplementation("org.junit.platform:junit-platform-runner:1.9.1")
+    testImplementation("org.junit.platform:junit-platform-runner:1.9.2")
     val junit5Version = "5.9.2"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit5Version")
     testImplementation("org.junit.jupiter:junit-jupiter-params:$junit5Version")
