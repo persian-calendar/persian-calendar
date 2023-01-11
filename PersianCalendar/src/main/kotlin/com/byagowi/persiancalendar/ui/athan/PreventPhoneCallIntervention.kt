@@ -10,6 +10,8 @@ import com.byagowi.persiancalendar.utils.logException
 
 class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
     var stopListener = {}
+        private set
+
     fun startListener(context: Context) {
         val telephonyManager = runCatching { context.getSystemService<TelephonyManager>() }
             .onFailure(logException).getOrNull() ?: return
