@@ -10,8 +10,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.telephony.PhoneStateListener
-import android.telephony.TelephonyManager
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.core.content.getSystemService
@@ -36,6 +34,7 @@ class AthanActivity : ComponentActivity() {
     private var alreadyStopped = false
     private var spentSeconds = 0
     private var originalVolume = -1
+    private val preventPhoneCallIntervention = PreventPhoneCallIntervention(::stop)
     private val stopTask = object : Runnable {
         override fun run() = runCatching {
             spentSeconds += 5
@@ -53,14 +52,6 @@ class AthanActivity : ComponentActivity() {
                 ?.setStreamVolume(AudioManager.STREAM_ALARM, currentVolumeSteps, 0)
             handler.postDelayed(this, TimeUnit.SECONDS.toMillis(ascendingVolumeStep.toLong()))
             if (currentVolumeSteps == 10) handler.removeCallbacks(this)
-        }
-    }
-
-    private var phoneStateListener: PhoneStateListener? = object : PhoneStateListener() {
-        override fun onCallStateChanged(state: Int, incomingNumber: String) {
-            if (state == TelephonyManager.CALL_STATE_RINGING || state == TelephonyManager.CALL_STATE_OFFHOOK) {
-                stop()
-            }
         }
     }
 
@@ -136,10 +127,7 @@ class AthanActivity : ComponentActivity() {
 
         if (isAscendingAthanVolumeEnabled) handler.post(ascendVolume)
 
-        runCatching {
-            getSystemService<TelephonyManager>()
-                ?.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
-        }.onFailure(logException)
+        preventPhoneCallIntervention.start(this)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -152,12 +140,7 @@ class AthanActivity : ComponentActivity() {
     private fun stop() {
         if (alreadyStopped) return
         alreadyStopped = true
-
-        runCatching {
-            getSystemService<TelephonyManager>()
-                ?.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
-            phoneStateListener = null
-        }.onFailure(logException)
+        preventPhoneCallIntervention.stop(this)
 
         ringtone?.stop()
 

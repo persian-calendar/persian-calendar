@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -136,9 +137,16 @@ class AthanNotification : Service() {
 
         startForeground(notificationId, notificationBuilder.build())
 
-        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) {
+        fun stop() {
             notificationManager?.cancel(notificationId)
             stopSelf()
+        }
+
+        val preventPhoneCallIntervention = PreventPhoneCallIntervention(::stop)
+        preventPhoneCallIntervention.start(this)
+        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) {
+            preventPhoneCallIntervention.stop(this)
+            stop()
         }
 
         return super.onStartCommand(intent, flags, startId)
