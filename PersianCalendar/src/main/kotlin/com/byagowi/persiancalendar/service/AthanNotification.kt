@@ -137,17 +137,16 @@ class AthanNotification : Service() {
 
         startForeground(notificationId, notificationBuilder.build())
 
-        fun stop() {
+        var stop = {}
+        val preventPhoneCallIntervention = PreventPhoneCallIntervention(stop)
+        stop = {
+            preventPhoneCallIntervention.stopListener()
             notificationManager?.cancel(notificationId)
             stopSelf()
         }
 
-        val preventPhoneCallIntervention = PreventPhoneCallIntervention(::stop)
         preventPhoneCallIntervention.startListener(this)
-        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) {
-            preventPhoneCallIntervention.stopListener()
-            stop()
-        }
+        Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) { stop() }
 
         return super.onStartCommand(intent, flags, startId)
     }
