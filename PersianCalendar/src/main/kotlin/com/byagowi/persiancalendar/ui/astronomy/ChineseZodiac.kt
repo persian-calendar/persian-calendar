@@ -112,11 +112,9 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
             setOf(MONKEY, PIG, RAT, OX, SNAKE, GOAT, RABBIT),
             setOf(RAT, ROOSTER, DOG, DRAGON, HORSE, OX, TIGER)
         )
-        private val poorMatchRaw = listOf(
-            HORSE, GOAT, MONKEY, ROOSTER, DOG, PIG, RAT, OX, TIGER, RABBIT, DRAGON, SNAKE
-        )
-        private val harmfulMatchRaw = listOf(
-            GOAT, HORSE, SNAKE, DRAGON, RABBIT, TIGER, OX, RAT, PIG, DOG, ROOSTER, MONKEY
-        )
+        private val poorMatchRaw =
+            listOf(HORSE, GOAT, MONKEY, ROOSTER, DOG, PIG, RAT, OX, TIGER, RABBIT, DRAGON, SNAKE)
+        private val harmfulMatchRaw =
+            listOf(GOAT, HORSE, SNAKE, DRAGON, RABBIT, TIGER, OX, RAT, PIG, DOG, ROOSTER, MONKEY)
     }
 }

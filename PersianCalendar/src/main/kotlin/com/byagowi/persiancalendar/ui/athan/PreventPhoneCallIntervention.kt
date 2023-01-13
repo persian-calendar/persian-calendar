@@ -28,25 +28,30 @@ class PreventPhoneCallIntervention(private val onCallDetect: () -> Unit) {
             val listener = object : TelephonyCallback(), TelephonyCallback.CallStateListener {
                 override fun onCallStateChanged(state: Int) = onStateChange(state)
             }
-            telephonyManager.registerTelephonyCallback(context.mainExecutor, listener)
-            stopListener = {
-                runCatching { telephonyManager.unregisterTelephonyCallback(listener) }
-                    .onFailure(logException)
-                stopListener = {}
-            }
-        } else @Suppress("DEPRECATION") {
-            val listener = object : PhoneStateListener() {
-                @Deprecated("", ReplaceWith(""))
-                override fun onCallStateChanged(state: Int, incomingNumber: String) =
-                    onStateChange(state)
-            }
-            runCatching { telephonyManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE) }
+            runCatching {
+                telephonyManager.registerTelephonyCallback(context.mainExecutor, listener)
+                stopListener = {
+                    runCatching { telephonyManager.unregisterTelephonyCallback(listener) }
+                        .onFailure(logException)
+                    stopListener = {}
+                }
+            }.onFailure(logException).onFailure { startFallbackListener(telephonyManager) }
+        } else startFallbackListener(telephonyManager)
+    }
+
+    @Suppress("DEPRECATION")
+    private fun startFallbackListener(telephonyManager: TelephonyManager) {
+        val listener = object : PhoneStateListener() {
+            @Deprecated("", ReplaceWith(""))
+            override fun onCallStateChanged(state: Int, incomingNumber: String) =
+                onStateChange(state)
+        }
+        runCatching { telephonyManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE) }
+            .onFailure(logException)
+        stopListener = {
+            runCatching { telephonyManager.listen(listener, PhoneStateListener.LISTEN_NONE) }
                 .onFailure(logException)
-            stopListener = {
-                runCatching { telephonyManager.listen(listener, PhoneStateListener.LISTEN_NONE) }
-                    .onFailure(logException)
-                stopListener = {}
-            }
+            stopListener = {}
         }
     }
 }
