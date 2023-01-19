@@ -196,6 +196,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 activity ?: return@setOnClickListener, currentJdn, R.string.accept
             ) { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - currentJdn) }
         }
+        binding.time.setOnLongClickListener { viewModel.animateToAbsoluteMinutesOffset(0); true }
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
             it.onClick {

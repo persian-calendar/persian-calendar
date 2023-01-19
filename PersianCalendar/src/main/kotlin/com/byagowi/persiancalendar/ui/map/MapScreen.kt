@@ -86,14 +86,13 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             else viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener { viewModel.addDays(10); true }
-        binding.date.setOnClickListener { viewModel.changeToTime(Date()) }
-        binding.date.setOnLongClickListener {
+        binding.date.setOnClickListener {
             val currentJdn = Jdn(Date(viewModel.state.value.time).toJavaCalendar().toCivilDate())
             showDayPickerDialog(
-                activity ?: return@setOnLongClickListener true, currentJdn, R.string.accept
+                activity ?: return@setOnClickListener, currentJdn, R.string.accept
             ) { jdn -> viewModel.addDays(jdn - currentJdn) }
-            true
         }
+        binding.date.setOnLongClickListener { viewModel.changeToTime(Date()); true }
 
         fun bringGps() = activity?.let { showGPSLocationDialog(it, viewLifecycleOwner) }.let { }
         directPathButton.onClick {
