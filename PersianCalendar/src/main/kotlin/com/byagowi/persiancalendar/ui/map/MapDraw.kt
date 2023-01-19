@@ -66,7 +66,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
         PathParser.createPathFromPathData(mapPathBytes.decodeToString())
     }
 
-    val mapScaleFactor = 16 // As the path bounds is 360*16 x 180*16
+    val mapScaleFactor = 16 // As the path bounds is 360x180 *16
     val mapWidth = 360 * mapScaleFactor
     val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)

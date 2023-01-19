@@ -1,4 +1,4 @@
-package com.byagowi.persiancalendar.ui.athan;
+package com.byagowi.persiancalendar.ui.athan
 
 import android.content.Context
 import android.os.Build
