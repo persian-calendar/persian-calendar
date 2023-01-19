@@ -27,6 +27,8 @@ import kotlin.math.atan2
 
 // Based on Mehdi's work
 
+fun isMoonInScorpio(jdn: Jdn) = isMoonInScorpio(jdn.toPersianCalendar(), jdn.toIslamicCalendar())
+
 fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
     (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
             persianDate.month).toInt() % 12 == 8
