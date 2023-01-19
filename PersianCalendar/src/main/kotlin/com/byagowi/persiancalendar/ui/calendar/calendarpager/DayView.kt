@@ -100,8 +100,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun setAll(
         text: String, isToday: Boolean = false, isSelected: Boolean = false,
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
-        jdn: Jdn? = null, dayOfMonth: Int = -1, header: String = "",
-        isWeekNumber: Boolean = false
+        jdn: Jdn? = null, dayOfMonth: Int = -1, header: String = "", isWeekNumber: Boolean = false
     ) {
         this.text = text
         this.today = isToday
@@ -114,9 +113,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.header = listOfNotNull(
             if (isAstronomicalExtraFeaturesEnabled && jdn != null && isMoonInScorpio(jdn))
                 sharedDayViewData?.scorpioSign else null,
-            if (secondaryCalendar != null && jdn != null)
-                formatNumber(jdn.toCalendar(secondaryCalendar).dayOfMonth, secondaryCalendarDigits)
-            else null,
+            if (secondaryCalendar == null || jdn == null) null else
+                formatNumber(jdn.toCalendar(secondaryCalendar).dayOfMonth, secondaryCalendarDigits),
             header,
         ).joinToString(" ")
         sharedDayViewData.debugAssertNotNull?.also { shared ->
