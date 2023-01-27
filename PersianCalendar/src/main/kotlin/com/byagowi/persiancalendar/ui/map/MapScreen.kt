@@ -86,6 +86,7 @@ class MapScreen : Fragment(R.layout.fragment_map) {
             else viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener { viewModel.addDays(10); true }
+        binding.dateParent.setupLayoutTransition()
         binding.date.setOnClickListener {
             val currentJdn = Jdn(Date(viewModel.state.value.time).toJavaCalendar().toCivilDate())
             showDayPickerDialog(

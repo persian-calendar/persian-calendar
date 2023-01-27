@@ -48,12 +48,20 @@
             android:layout_gravity="start|center_vertical"
             app:tint="?attr/colorAccent" />
 
-        <TextView
-            android:id="@+id/date"
+        <FrameLayout
+            android:id="@+id/date_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:textAlignment="center" />
+            android:layout_gravity="center">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textAlignment="center" />
+
+        </FrameLayout>
 
         <com.byagowi.persiancalendar.ui.common.ArrowView
             android:id="@+id/end_arrow"
