@@ -106,7 +106,7 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
 
         binding.appBar.toolbar.menu.add(R.string.share).also { menu ->
             menu.icon =
-                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_content_copy)
+                binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
             menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             val jdn = binding.dayPickerView.jdn
