@@ -190,21 +190,17 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         binding.moon.setTitle(getString(R.string.moon))
         binding.moon.setColor(0xcc606060.toInt())
 
-        binding.time.setOnClickListener {
+        fun bringDate() {
             val currentJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate())
-            showDayPickerDialog(
-                activity ?: return@setOnClickListener, currentJdn, R.string.accept
-            ) { jdn -> viewModel.animateToAbsoluteDayOffset(jdn - currentJdn) }
+            showDayPickerDialog(activity ?: return, currentJdn, R.string.accept) { jdn ->
+                viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today())
+            }
         }
+        binding.time.setOnClickListener { bringDate() }
         binding.time.setOnLongClickListener { viewModel.animateToAbsoluteMinutesOffset(0); true }
         binding.appBar.toolbar.menu.add(R.string.goto_date).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
-            it.onClick {
-                val startJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate())
-                showDayPickerDialog(activity ?: return@onClick, startJdn, R.string.go) { jdn ->
-                    viewModel.animateToAbsoluteDayOffset(jdn - Jdn.today())
-                }
-            }
+            it.onClick(::bringDate)
         }
         binding.appBar.toolbar.menu.add(R.string.map).also {
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
