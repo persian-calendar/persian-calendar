@@ -21,7 +21,7 @@ jobs:
           distribution: "temurin"
 
       - name: Cache Gradle dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
@@ -40,7 +40,7 @@ jobs:
 
       - name: Archive reports for failed build
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: reports
           path: "*/build/reports"
