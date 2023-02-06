@@ -20,9 +20,9 @@ jobs:
         id: check
         run: |
           if [[ $(git rev-list --after="24 hours" main) ]]; then
-            echo ::set-output name=shouldBuild::true
+            echo shouldBuild=true >> $GITHUB_OUTPUT
           else
-            echo ::set-output name=shouldBuild::false
+            echo shouldBuild=false >> $GITHUB_OUTPUT
           fi
 
 
