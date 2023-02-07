@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.saveLanguage
-import com.google.android.material.composethemeadapter3.Mdc3Theme
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 fun showLanguagePreferenceDialog(activity: FragmentActivity) =
     showComposeDialog(activity) { LanguagePreferenceDialog(it) }

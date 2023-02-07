@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.showComposeDialog
-import com.google.android.material.composethemeadapter3.Mdc3Theme
+import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
 fun showEmailDialog(activity: FragmentActivity) =
     showComposeDialog(activity) { EmailAlertDialog(it) }
