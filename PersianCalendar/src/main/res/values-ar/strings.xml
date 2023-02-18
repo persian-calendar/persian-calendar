@@ -417,4 +417,5 @@
     <string name="enable_notification">هل ترغب في تفعيل تنبيه التاريخ؟</string>
     <string name="add_quick_settings_tile">إضافة إعدادات السريعة</string>
     <string name="true_north">الشمال الحقيقي</string>
+    <string name="lock">قفل</string>
 </resources>
