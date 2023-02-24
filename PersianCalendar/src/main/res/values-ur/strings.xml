@@ -189,7 +189,7 @@
     <string name="qibla">قبله</string>
     <string name="outdated_app">به دلیل قدیمی بودن نسخه مناسبت‌های ممکن صحیح نباشد</string>
     <string name="update">بروزرسانی</string>
-    <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %1$s: %2$s</string>
+    <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="ask_user_to_set_location">برای نمایش اوقات شرعی مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">حذف</string>

@@ -13,14 +13,14 @@
     <string name="native_digits">رقم‌های فارسی</string>
     <string name="showing_clock_on_widget">نمایش ساعت در ویجت‌ها</string>
     <string name="clock_on_widget">ساعت در ویجت</string>
-    <string name="showing_clock_in_24">نمایش ساعت به صورت ۲۴تایی</string>
+    <string name="showing_clock_in_24">نمایش ساعت به‌صورت ۲۴تایی</string>
     <string name="clock_in_24">۲۴ ساعته</string>
     <string name="about">درباره</string>
     <string name="gpl_logo">نشان پروانهٔ جامع همگانی گنو</string>
     <string name="date_converter">تبدیل تاریخ</string>
     <string name="widget_text_color">رنگ نوشته‌های ویجت</string>
     <string name="select_widgets_text_color">انتخاب رنگ دلخواه برای نوشته‌های ویجت</string>
-    <string name="notify_date">فعال کردن اعلان</string>
+    <string name="notify_date">فعال‌کردن اعلان</string>
     <string name="enable_notify">اعلان همیشگی برای تاریخ‌ها</string>
     <string name="select_skin">انتخاب پوسته</string>
     <string name="skin">پوسته</string>
@@ -33,7 +33,7 @@
     <string name="gps_location_help">اگر از این طریق ممکن باشد، نیازی به سایر تنظیمات این بخش نیست</string>
     <string name="location">موقعیت</string>
     <string name="location_help">اگر در فهرست نبود، مختصات را در زیر وارد کنید</string>
-    <string name="showing_iran_time">نمایش ویجت، نوار اعلان و برنامه به وقت ایران در همه جا، مناسب ایرانیان خارج</string>
+    <string name="showing_iran_time">نمایش ویجت، نوار اعلان و برنامه به‌وقت ایران در همه‌جا، مناسب ایرانیان خارج از ایران</string>
     <string name="iran_time">وقت ایران</string>
     <string name="compass">قطب‌نما</string>
     <string name="compass_not_found">ظاهراً دستگاه شما دارای سنسور قطب‌نما نیست</string>
@@ -44,9 +44,9 @@
     <string name="athan_alarm">اذان‌ها</string>
     <string name="athan_volume_summary">تنظیم حجم صدای اذان</string>
     <string name="athan_volume">حجم صدا</string>
-    <string name="athan_disabled_summary">برای فعال کردن تنظیمات اذان ابتدا مکان را تنظیم کنید</string>
+    <string name="athan_disabled_summary">برای فعال‌کردن تنظیمات اذان ابتدا مکان را تنظیم کنید</string>
     <string name="athan_gap">فاصلهٔ بین اذان واقعی و اذان برنامه</string>
-    <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا در آورده شود</string>
+    <string name="athan_gap_summary">چند دقیقه پیش از اذان، هشدار به صدا درآورده شود</string>
     <string name="close">بستن</string>
     <string name="open">گشودن</string>
     <string name="imsak">امساک</string>
@@ -79,7 +79,7 @@
     <string name="pleasewaitgps">کمی درنگ کنید… اگر پس از یک دقیقه نتیجه‌ای حاصل نشد مطمئن شوید که جی‌پی‌اس دستگاه از تنظیمات فعال است. اگر فعال‌سازی آن کارساز نبود، احتمالاً باید گزینه‌های دیگر را بیازمایید</string>
     <string name="notify_date_lock_screen">نمایش اعلان در قفل صفحه</string>
     <string name="notify_date_lock_screen_summary">فقط هنگامی که شیوه‌ای برای محافظت از گوشی تنظیم شده باشد کار می‌کند.</string>
-    <string name="warn_if_events_not_set">جهت فعال کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
+    <string name="warn_if_events_not_set">جهت فعال‌کردن رویدادها و مناسبت‌ها و نیز انتخاب مناسبت‌های مورد نظرتان به تنظیمات مراجعه کنید</string>
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
@@ -118,7 +118,7 @@
     <string name="about_noClient">برنامه‌ای جهت ارسال رایانامه نصب نیست</string>
     <string name="about_developers">توسعه‌دهندگان (ترتیب تصادفی)</string>
     <string name="about_support_developers">پشتیبانی از توسعه‌دهنده</string>
-    <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده نشده در راهنما</string>
+    <string name="about_email_sum">ارسال رایانامهٔ شخصی برای نویسنده‌های برنامه برای موارد پاسخ داده‌نشده در راهنما</string>
     <string name="gps_internet_desc">لطفاً موقعیت‌یاب (GPS) و اینترنت را برای یافتن جهت قبله یا جهت جغرافیایی روشن نمایید.
 \n
 \nبرنامه تنها یک‌بار برای یک مکان نیاز به این دسترسی‌ها دارد، اما در صورتی که مکان شما تغییر کند دوباره نیازمند تنظیم است.</string>
@@ -190,7 +190,7 @@
     <string name="qibla">قبله</string>
     <string name="outdated_app">تقویم به‌روز نیست؛ مناسبت‌ها ممکن است نادرست باشد</string>
     <string name="update">بروزرسانی</string>
-    <string name="spring_equinox">لحظه اعتدال بهاری و تحویل سال %1$s: %2$s</string>
+    <string name="spring_equinox">لحظهٔ اعتدال بهاری و تحویل سال %1$s: %2$s</string>
     <string name="shift_work_settings">تنظیم شیفت‌کاری</string>
     <string name="ask_user_to_set_location">برای نمایش صحیح این بخش مکان خود را در تنظیمات انتخاب نمایید</string>
     <string name="remove">حذف</string>
@@ -209,8 +209,8 @@
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_information">اطلاعات دستگاه</string>
-    <string name="center_align_widgets_summary">وسط‌چین کردن ویجت‌های ۲×۲ و ۴×۱</string>
-    <string name="center_align_widgets">وسط‌چین کردن ویجت</string>
+    <string name="center_align_widgets_summary">وسط‌چین‌کردن ویجت‌های ۲×۲ و ۴×۱</string>
+    <string name="center_align_widgets">وسط‌چین‌کردن ویجت</string>
     <string name="n_till">%1$s تا %2$s</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">یک روز %2$s</item>
@@ -221,13 +221,13 @@
     <string name="pm">ب.ظ</string>
     <string name="holiday">تعطیل</string>
     <string name="shift_work_days_head">طول</string>
-    <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان</string>
-    <string name="prefer_linear_date">نمایش تاریخ به صورت عددی</string>
+    <string name="prefer_linear_date_summary">استفاده از ۱۳۹۰/۱/۱ شمسی به‌جای ۱ فرودین ۱۳۹۰ در ویجت و اعلان</string>
+    <string name="prefer_linear_date">نمایش تاریخ به‌صورت عددی</string>
     <string name="month_overview">مناسبت‌های ماه</string>
     <string name="map">نقشه</string>
     <string name="ascending_athan_volume">صدای افزایشی اذان</string>
     <string name="enable_ascending_athan_volume">صدای اذان طی یک دقیقه به حداکثر خود می‌رسد</string>
-    <string name="widget_background_color">رنگ پس‌زمینه ویجت</string>
+    <string name="widget_background_color">رنگ پس‌زمینهٔ ویجت</string>
     <string name="select_widgets_background_color">انتخاب رنگ دلخواه برای پس‌زمینه ویجت</string>
     <string name="share">هم‌رسانی</string>
     <string name="enable_location_services">خدمات موقعیت غیرفعال است، برای استفاده از این ویژگی لطفاً آن را فعال سازید.</string>
@@ -247,7 +247,7 @@
         <item quantity="other">%1$s سال</item>
     </plurals>
     <string name="preview">پیش‌نمایش</string>
-    <string name="ignore">نادیده گرفتن</string>
+    <string name="ignore">نادیده‌گرفتن</string>
     <string name="theme_default">پیش‌فرض دستگاه</string>
     <string name="theme_light">روشن</string>
     <string name="theme_dark">تاریک</string>
@@ -280,7 +280,7 @@
     <string name="iran_official_events">مرکز تقویم دانشگاه تهران، رسمی</string>
     <string name="afghanistan_events">افغانستان</string>
     <string name="other_holidays">سایر</string>
-    <string name="view_source">مشاهده منبع</string>
+    <string name="view_source">مشاهدهٔ منبع</string>
     <string name="widget_customization_other_calendars">سایر تقویم‌ها در ویجت ۴×۱ و ۲×۲</string>
     <string name="widget_customization_non_holiday_events">مناسبت‌های غیر تعطیل در ویجت ۲×۲ و اعلان</string>
     <string name="widget_customization_owghat">اوقات شرعی در ویجت و اعلان (در صورت تنظیم بودن)</string>
