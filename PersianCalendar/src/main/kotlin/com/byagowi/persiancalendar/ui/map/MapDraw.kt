@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,12 +10,12 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
 import android.os.Build
-import android.util.Half
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
+import androidx.core.util.toHalf
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
@@ -87,8 +86,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 var x = 0f
                 var i = 0
                 while (dataInputStream.available() > 0) {
-                    @SuppressLint("HalfFloat") // Not sure why needs this
-                    val y = Half.toFloat(dataInputStream.readShort())
+                    val y = dataInputStream.readShort().toHalf().toFloat()
                     if (y.isNaN()) {
                         i = 0
                     } else {
