@@ -29,6 +29,8 @@ Assets
   https://github.com/GNOME/epiphany/blob/a308ad5/data/icons/hicolor/scalable/apps/org.gnome.Epiphany.svg
 * worldmap.gz is derived from https://github.com/nvkelso/natural-earth-vector/blob/master/50m_physical/ne_50m_land.shp
   which is released under public domain.
+* tectonicplates is derived from https://github.com/fraxen/tectonicplates/blob/master/GeoJSON/PB2002_boundaries.json
+  which is released under ODC-By v1.0.
 * نوای اعلان و انیمیشن: برنا تصویر رسانه
 
 ----

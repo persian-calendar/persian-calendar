@@ -1,13 +1,17 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
+import android.os.Build
+import android.util.Half
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
@@ -21,6 +25,8 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.scaleBy
+import com.byagowi.persiancalendar.ui.utils.translateBy
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.toCivilDate
@@ -46,6 +52,7 @@ import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.cosinekitty.astronomy.searchRiseSet
 import io.github.persiancalendar.praytimes.Coordinates
 import java.io.ByteArrayInputStream
+import java.io.DataInputStream
 import java.util.*
 import java.util.zip.GZIPInputStream
 import kotlin.math.absoluteValue
@@ -60,16 +67,45 @@ import kotlin.math.sin
 class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundColor: Int? = null) {
     private val solarDraw = SolarDraw(context)
     private val pinDrawable = context.getCompatDrawable(R.drawable.ic_pin)
+
+    val mapScaleFactor = 16 // As the path bounds is 360x180 *16
+    val mapWidth = 360 * mapScaleFactor
+    val mapHeight = 180 * mapScaleFactor
+    private val mapRect = Rect(0, 0, mapWidth, mapHeight)
+
     private val mapPath = run {
         val zippedMapPath = context.resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
         PathParser.createPathFromPathData(mapPathBytes.decodeToString())
     }
 
-    val mapScaleFactor = 16 // As the path bounds is 360x180 *16
-    val mapWidth = 360 * mapScaleFactor
-    val mapHeight = 180 * mapScaleFactor
-    private val mapRect = Rect(0, 0, mapWidth, mapHeight)
+    private val tectonicPlates: Path = run {
+        context.resources.openRawResource(R.raw.tectonicplates).use { inputStream ->
+            val dataInputStream = DataInputStream(inputStream)
+            Path().also {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    var x = 0f
+                    var i = 0
+                    while (dataInputStream.available() > 0) {
+                        @SuppressLint("HalfFloat") // Not sure why needs this
+                        val y = Half.toFloat(dataInputStream.readShort())
+                        if (y.isNaN()) {
+                            i = 0
+                        } else {
+                            if (i % 2 == 0) x = y
+                            else {
+                                if (i == 1) it.moveTo(x, y) else it.lineTo(x, y)
+                            }
+                            ++i
+                        }
+                    }
+                }
+            }
+                // Make it the same scale as mapPath
+                .translateBy(180f, -90f)
+                .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
+        }
+    }
 
     private val maskMap = createBitmap(360, 180)
     private val maskMapMoonScaleDown = 8
@@ -82,18 +118,23 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     var maskFormattedTime = ""
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
-        if (currentMapType == MapType.None) return
-        if (currentMapType.isCrescentVisibility)
-            canvas.drawBitmap(maskMapCrescentVisibility, null, mapRect, null)
-        else canvas.drawBitmap(maskMap, null, mapRect, null)
-        if (currentMapType == MapType.DayNight || currentMapType == MapType.MoonVisibility) {
-            val scale = mapWidth / maskMap.width
-            solarDraw.simpleMoon(
-                canvas, maskMoonX * scale, maskMoonY * scale, mapWidth * .02f * matrixScale
-            )
-            solarDraw.sun(
-                canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale
-            )
+        when (currentMapType) {
+            MapType.None -> Unit
+            MapType.DayNight, MapType.MoonVisibility -> {
+                canvas.drawBitmap(maskMap, null, mapRect, null)
+                val scale = mapWidth / maskMap.width
+                solarDraw.simpleMoon(
+                    canvas, maskMoonX * scale, maskMoonY * scale, mapWidth * .02f * matrixScale
+                )
+                solarDraw.sun(
+                    canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale
+                )
+            }
+            MapType.MagneticInclination, MapType.MagneticDeclination, MapType.MagneticFieldStrength ->
+                canvas.drawBitmap(maskMap, null, mapRect, null)
+            MapType.TectonicPlates -> canvas.drawPath(tectonicPlates, tectonicPlatesPaint)
+            MapType.Yallop, MapType.Odeh ->
+                canvas.drawBitmap(maskMapCrescentVisibility, null, mapRect, null)
         }
     }
 
@@ -318,6 +359,11 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     }
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = mapForegroundColor ?: 0xFFFBF8E5.toInt()
+    }
+    private val tectonicPlatesPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.STROKE
+        strokeWidth = 5.dp
+        color = mapForegroundColor ?: 0x80C43C39.toInt()
     }
     private val matrixValues = FloatArray(9)
 

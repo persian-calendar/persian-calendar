@@ -10,6 +10,7 @@ enum class MapType(@StringRes val title: Int, val isCrescentVisibility: Boolean 
     MagneticFieldStrength(R.string.magnetic_field_strength),
     MagneticDeclination(R.string.magnetic_declination),
     MagneticInclination(R.string.magnetic_inclination),
+    TectonicPlates(R.string.tectonic_plates),
     Yallop(R.string.crescent_visibility_yallop, isCrescentVisibility = true),
     Odeh(R.string.crescent_visibility_odeh, isCrescentVisibility = true)
 }

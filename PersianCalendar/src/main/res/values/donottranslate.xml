@@ -63,6 +63,7 @@ shhonarmandi: Shayan Honarmandi"</string>
     <string name="magnetic_field_strength" translatable="false">Magnetic field strength</string>
     <string name="magnetic_declination" translatable="false">Magnetic declination</string>
     <string name="magnetic_inclination" translatable="false">Magnetic inclination</string>
+    <string name="tectonic_plates" translatable="false">Tectonic plates</string>
     <string name="crescent_visibility_yallop" translatable="false">Crescent evening visibility (Yallop)</string>
     <string name="crescent_visibility_odeh" translatable="false">Crescent evening visibility (Odeh)</string>
 </resources>

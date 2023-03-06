@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.map
 
 import android.graphics.Canvas
 import android.graphics.Matrix
+import android.os.Build
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -109,6 +110,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
                 val context = context ?: return@onClick
                 val options = enumValues<MapType>()
                     .drop(1) // Hide "None" option
+                    // Don't show tectonic plates in < 26 as lack of half precision support
+                    .filter { it != MapType.TectonicPlates || Build.VERSION.SDK_INT >= Build.VERSION_CODES.O }
                     // Hide moon visibilities for now unless is a development build
                     .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }
                 val titles = options.map { context.getString(it.title) }
