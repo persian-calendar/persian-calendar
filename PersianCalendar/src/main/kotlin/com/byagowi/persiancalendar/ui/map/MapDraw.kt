@@ -73,13 +73,13 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
 
-    private val mapPath = run {
+    private val mapPath: Path = run {
         val zippedMapPath = context.resources.openRawResource(R.raw.worldmap).use { it.readBytes() }
         val mapPathBytes = GZIPInputStream(ByteArrayInputStream(zippedMapPath)).readBytes()
         PathParser.createPathFromPathData(mapPathBytes.decodeToString())
     }
 
-    private val tectonicPlates: Path = run {
+    private val tectonicPlates: Path by lazy(LazyThreadSafetyMode.NONE) {
         context.resources.openRawResource(R.raw.tectonicplates).use { inputStream ->
             val dataInputStream = DataInputStream(inputStream)
             Path().also {
