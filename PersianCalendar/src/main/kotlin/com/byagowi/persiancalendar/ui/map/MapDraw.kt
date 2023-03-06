@@ -80,31 +80,30 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     }
 
     private val tectonicPlates: Path by lazy(LazyThreadSafetyMode.NONE) {
-        context.resources.openRawResource(R.raw.tectonicplates).use { inputStream ->
-            val dataInputStream = DataInputStream(inputStream)
-            Path().also {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    var x = 0f
-                    var i = 0
-                    while (dataInputStream.available() > 0) {
-                        @SuppressLint("HalfFloat") // Not sure why needs this
-                        val y = Half.toFloat(dataInputStream.readShort())
-                        if (y.isNaN()) {
-                            i = 0
-                        } else {
-                            if (i % 2 == 0) x = y
-                            else {
-                                if (i == 1) it.moveTo(x, y) else it.lineTo(x, y)
-                            }
-                            ++i
+        val zipped = context.resources.openRawResource(R.raw.tectonicplates).use { it.readBytes() }
+        val dataInputStream = DataInputStream(GZIPInputStream(ByteArrayInputStream(zipped)))
+        Path().also {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                var x = 0f
+                var i = 0
+                while (dataInputStream.available() > 0) {
+                    @SuppressLint("HalfFloat") // Not sure why needs this
+                    val y = Half.toFloat(dataInputStream.readShort())
+                    if (y.isNaN()) {
+                        i = 0
+                    } else {
+                        if (i % 2 == 0) x = y
+                        else {
+                            if (i == 1) it.moveTo(x, y) else it.lineTo(x, y)
                         }
+                        ++i
                     }
                 }
             }
-                // Make it the same scale as mapPath
-                .translateBy(180f, -90f)
-                .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
         }
+            // Make it the same scale as mapPath
+            .translateBy(180f, -90f)
+            .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
     }
 
     private val maskMap = createBitmap(360, 180)
