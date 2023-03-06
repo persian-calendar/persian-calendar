@@ -50,7 +50,6 @@ import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.cosinekitty.astronomy.searchRiseSet
 import io.github.persiancalendar.praytimes.Coordinates
-import java.io.ByteArrayInputStream
 import java.io.DataInputStream
 import java.util.*
 import java.util.zip.GZIPInputStream
@@ -87,12 +86,12 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 var i = 0
                 while (dataInputStream.available() > 0) {
                     val y = dataInputStream.readShort().toHalf().toFloat()
-                    if (y.isNaN()) {
-                        i = 0
-                    } else {
-                        if (i % 2 == 0) x = y
-                        else {
-                            if (i == 1) it.moveTo(x, y) else it.lineTo(x, y)
+                    if (y.isNaN()) i = 0
+                    else {
+                        when {
+                            i % 2 == 0 -> x = y
+                            i == 1 -> it.moveTo(x, y)
+                            else -> it.lineTo(x, y)
                         }
                         ++i
                     }
