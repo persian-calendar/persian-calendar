@@ -540,6 +540,9 @@
     { "holiday": false, "month": 6, "day": 31, "type": "Iran",
       "title": "آغاز هفتهٔ دفاع مقدّس" },
 
+    { "holiday": false, "month": 7, "day": 2, "type": "Iran",
+      "title": "روز بزرگداشت شهدای منا" },
+
     { "holiday": false, "month": 7, "day": 4, "type": "Iran",
       "title": "روز سرباز" },
 
@@ -1085,8 +1088,6 @@
       "title": "اربعین حسینی" },
     { "holiday": false, "month": 2, "day": 27, "type": "Iran",
       "title": "روز وقف" },
-    { "holiday": false, "month": 2, "day": 27, "type": "Iran",
-      "title": "روز بزرگداشت شهدای منا" },
     { "holiday": true, "month": 2, "day": 28, "type": "Iran",
       "title": "رحلت حضرت رسول اکرم (ص) (۱۱ ه‍.ق) – شهادت حضرت امام حسن مجتبی (ع) (۵۰ ه‍.ق)" },
     { "holiday": false, "month": 3, "day": 1, "type": "Iran",
