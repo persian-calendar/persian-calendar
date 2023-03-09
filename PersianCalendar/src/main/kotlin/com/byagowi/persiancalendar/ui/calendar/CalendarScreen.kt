@@ -175,7 +175,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
     }
 
     private fun createOwghatTab(inflater: LayoutInflater, container: ViewGroup?): View {
-        coordinates ?: return createOwghatTabPlaceholder(inflater, container)
+        coordinates.value ?: return createOwghatTabPlaceholder(inflater, container)
         val binding = OwghatTabContentBinding.inflate(inflater, container, false)
 
         var isExpanded = false

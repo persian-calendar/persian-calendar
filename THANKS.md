@@ -27,9 +27,11 @@ Assets
   https://github.com/mozilla/fxemoji/blob/gh-pages/svgs/nature/u2600-sunrays.svg
 * ic_earth is derived from Epiphany's logo
   https://github.com/GNOME/epiphany/blob/a308ad5/data/icons/hicolor/scalable/apps/org.gnome.Epiphany.svg
-* worldmap.gz is derived from https://github.com/nvkelso/natural-earth-vector/blob/master/50m_physical/ne_50m_land.shp
-  which is released under public domain.
-* tectonicplates is derived from https://github.com/fraxen/tectonicplates/blob/master/GeoJSON/PB2002_boundaries.json
+* worldmap.txt is derived from ne_50m_land.shp of https://github.com/nvkelso/natural-earth-vector
+  which is in the public domain.
+* timezones.txt is derived from https://www.naturalearthdata.com/downloads/10m-cultural-vectors/timezones/
+  which is in the public domain.
+* tectonicplates.txt is derived from PB2002_boundaries.sbx of https://github.com/fraxen/tectonicplates
   which is released under ODC-By v1.0.
 * نوای اعلان و انیمیشن: برنا تصویر رسانه
 

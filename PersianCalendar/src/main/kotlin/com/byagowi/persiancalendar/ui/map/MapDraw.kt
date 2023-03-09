@@ -9,13 +9,12 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
-import android.os.Build
+import androidx.annotation.RawRes
 import androidx.core.graphics.PathParser
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
-import androidx.core.util.toHalf
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
@@ -50,9 +49,7 @@ import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.cosinekitty.astronomy.searchRiseSet
 import io.github.persiancalendar.praytimes.Coordinates
-import java.io.DataInputStream
 import java.util.*
-import java.util.zip.GZIPInputStream
 import kotlin.math.absoluteValue
 import kotlin.math.acos
 import kotlin.math.atan2
@@ -70,38 +67,31 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     val mapWidth = 360 * mapScaleFactor
     val mapHeight = 180 * mapScaleFactor
     private val mapRect = Rect(0, 0, mapWidth, mapHeight)
-
-    private val mapPath: Path = run {
-        val zipped = context.resources.openRawResource(R.raw.worldmap)
-        val mapPath = GZIPInputStream(zipped).readBytes().decodeToString()
-        PathParser.createPathFromPathData(mapPath)
+    private fun createPathFromResourceText(context: Context, @RawRes id: Int): Path {
+        val path = context.resources.openRawResource(id).readBytes().decodeToString()
+        return PathParser.createPathFromPathData(path)
     }
 
-    private val tectonicPlates: Path by lazy(LazyThreadSafetyMode.NONE) {
-        val zipped = context.resources.openRawResource(R.raw.tectonicplates)
-        val dataInputStream = DataInputStream(GZIPInputStream(zipped))
-        Path().also {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                var x = 0f
-                var i = 0
-                while (dataInputStream.available() > 0) {
-                    val y = dataInputStream.readShort().toHalf().toFloat()
-                    if (y.isNaN()) i = 0
-                    else {
-                        when {
-                            i % 2 == 0 -> x = y
-                            i == 1 -> it.moveTo(x, y)
-                            else -> it.lineTo(x, y)
-                        }
-                        ++i
-                    }
-                }
-            }
-        }
+    private val mapPath: Path = createPathFromResourceText(context, R.raw.worldmap)
+    private val timezones: Path by lazy(LazyThreadSafetyMode.NONE) {
+        createPathFromResourceText(context, R.raw.timezones)
+            // `topojson['transform']` result, turn it to degrees scale
+            .scaleBy(0.17586713f, 0.08793366f)
+            .translateBy(-180f, -90f)
             // Make it the same scale as mapPath
             .translateBy(180f, -90f)
             .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
     }
+    private val tectonicPlates: Path by lazy(LazyThreadSafetyMode.NONE) {
+        createPathFromResourceText(context, R.raw.tectonicplates)
+            // `topojson['transform']` result, turn it to degrees scale
+            .scaleBy(0.17586713f, 0.074727945f)
+            .translateBy(-180f, -66.1632f)
+            // Make it the same scale as mapPath
+            .translateBy(180f, -90f)
+            .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
+    }
+    // How the two above are created: https://gist.github.com/ebraminio/8313cff47813a5c9f98278c7ee8cde4e
 
     private val maskMap = createBitmap(360, 180)
     private val maskMapMoonScaleDown = 8
@@ -128,7 +118,8 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
             }
             MapType.MagneticInclination, MapType.MagneticDeclination, MapType.MagneticFieldStrength ->
                 canvas.drawBitmap(maskMap, null, mapRect, null)
-            MapType.TectonicPlates -> canvas.drawPath(tectonicPlates, tectonicPlatesPaint)
+            MapType.TimeZones -> canvas.drawPath(timezones, miscPaint)
+            MapType.TectonicPlates -> canvas.drawPath(tectonicPlates, miscPaint)
             MapType.Yallop, MapType.Odeh ->
                 canvas.drawBitmap(maskMapCrescentVisibility, null, mapRect, null)
         }
@@ -356,10 +347,10 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = mapForegroundColor ?: 0xFFFBF8E5.toInt()
     }
-    private val tectonicPlatesPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+    private val miscPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 5.dp
-        color = mapForegroundColor ?: 0x80C43C39.toInt()
+        color = mapForegroundColor ?: 0x80393CC4.toInt()
     }
     private val matrixValues = FloatArray(9)
 

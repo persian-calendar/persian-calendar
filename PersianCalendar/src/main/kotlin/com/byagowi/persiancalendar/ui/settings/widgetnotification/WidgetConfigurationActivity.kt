@@ -23,7 +23,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
     private fun finishAndSuccess() {
         intent?.extras?.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID).also { i ->
             setResult(
-                AppCompatActivity.RESULT_OK,
+                RESULT_OK,
                 Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, i)
             )
         }

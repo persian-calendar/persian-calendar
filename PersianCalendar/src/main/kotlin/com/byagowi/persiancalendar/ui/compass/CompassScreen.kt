@@ -318,7 +318,10 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
             )
             if (BuildConfig.DEVELOPMENT)
                 Toast.makeText(context, "dev: orientation", Toast.LENGTH_LONG).show()
-            if (coordinates.value == null) showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
+            if (coordinates.value == null) showLongSnackbar(
+                R.string.set_location,
+                Snackbar.LENGTH_SHORT
+            )
         } else if (accelerometerSensor != null && magnetometerSensor != null) {
             sensorManager.registerListener(
                 accelerometerMagneticSensorListener, accelerometerSensor,
@@ -330,7 +333,8 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
             )
             if (BuildConfig.DEVELOPMENT)
                 Toast.makeText(context, "dev: acc+magnet", Toast.LENGTH_LONG).show()
-            if (coordinates.value == null) showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
+            if (coordinates.value == null)
+                showLongSnackbar(R.string.set_location, Snackbar.LENGTH_SHORT)
         } else {
             showLongSnackbar(R.string.compass_not_found, Snackbar.LENGTH_SHORT)
             sensorNotFound = true
