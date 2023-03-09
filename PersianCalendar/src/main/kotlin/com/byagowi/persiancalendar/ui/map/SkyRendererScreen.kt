@@ -39,7 +39,7 @@ class SkyRendererScreen : Fragment(R.layout.fragment_sky_renderer) {
             enumValues<ToneMap>().map { it.toString() }
         )
 
-        val coordinates = coordinates
+        val coordinates = coordinates.value
         if (coordinates == null) {
             Toast.makeText(view.context, "Location is not set", Toast.LENGTH_SHORT).show()
         }

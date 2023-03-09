@@ -180,7 +180,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
             binding.thirdSeason to 10,
             binding.fourthSeason to 1
         ).map { (holder, month) -> // 'month' is month number of first Persian month in the season
-            val season = Season.fromPersianCalendar(PersianDate(1400, month, 1), coordinates)
+            val season = Season.fromPersianCalendar(PersianDate(1400, month, 1), coordinates.value)
             holder.setTitle(getString(season.nameStringId))
             holder.setColor(season.color)
         }

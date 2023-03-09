@@ -375,7 +375,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
             drawPath(mapPath, foregroundPaint)
 
             drawMask(this, scaleBack)
-            val coordinates = coordinates
+            val coordinates = coordinates.value
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor

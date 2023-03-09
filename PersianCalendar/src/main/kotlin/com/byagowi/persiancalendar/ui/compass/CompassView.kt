@@ -91,7 +91,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private var radius = 0f // radius of Compass dial
     private var r = 0f // radius of Sun and Moon
 
-    private val observer = coordinates?.toObserver()
+    private val observer = coordinates.value?.toObserver()
     private var astronomyState = observer?.let { AstronomyState(it, GregorianCalendar()) }
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
@@ -105,7 +105,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
         invalidate()
     }
 
-    val qiblaHeading = coordinates?.run {
+    val qiblaHeading = coordinates.value?.run {
         EarthPosition(latitude, longitude).toEarthHeading(EarthPosition(21.422522, 39.826181))
     }
     var isShowQibla = true

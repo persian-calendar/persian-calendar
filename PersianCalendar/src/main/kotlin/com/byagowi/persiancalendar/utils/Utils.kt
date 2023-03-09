@@ -53,7 +53,8 @@ val CalculationMethod.titleStringId
 
 // Midnight sun occurs at latitudes from 65°44' to 90° north or south as
 // https://en.wikipedia.org/wiki/Midnight_sun
-val enableHighLatitudesConfiguration get() = coordinates?.let { abs(it.latitude) > 50 } ?: false
+val enableHighLatitudesConfiguration: Boolean
+    get() = coordinates.value?.let { abs(it.latitude) > 50 } ?: false
 
 val HighLatitudesMethod.titleStringId
     get(): @StringRes Int = when (this) {

@@ -535,7 +535,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
     }
 
     private fun setOwghat(owghatBinding: OwghatTabContentBinding, jdn: Jdn, isToday: Boolean) {
-        val coordinates = coordinates ?: return
+        val coordinates = coordinates.value ?: return
 
         val date = jdn.toJavaCalendar()
         val prayTimes = coordinates.calculatePrayTimes(date)
@@ -680,7 +680,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
     }
 
     private fun createOwghatHtmlReport(date: AbstractDate): String = createHTML().html {
-        val coordinates = coordinates ?: return@html
+        val coordinates = coordinates.value ?: return@html
         attributes["lang"] = language.language
         attributes["dir"] = if (resources.isRtl) "rtl" else "ltr"
         head {

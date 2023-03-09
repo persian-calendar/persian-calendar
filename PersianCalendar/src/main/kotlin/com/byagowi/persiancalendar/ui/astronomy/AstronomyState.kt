@@ -31,7 +31,7 @@ class AstronomyState(val date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)
     val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
     val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
-    private val observer by lazy(LazyThreadSafetyMode.NONE) { coordinates?.toObserver() }
+    private val observer by lazy(LazyThreadSafetyMode.NONE) { coordinates.value?.toObserver() }
     val moonTilt by lazy(LazyThreadSafetyMode.NONE) {
         observer?.let { observer -> sunlitSideMoonTiltAngle(time, observer).toFloat() }
     }
@@ -53,7 +53,7 @@ class AstronomyState(val date: GregorianCalendar) {
     }
 
     fun generateHeader(context: Context, jdn: Jdn): String {
-        val observer = coordinates?.toObserver()
+        val observer = coordinates.value?.toObserver()
         return (listOf(
             if (observer != null)
                 searchLocalSolarEclipse(time, observer).let { it.kind to it.peak.time }

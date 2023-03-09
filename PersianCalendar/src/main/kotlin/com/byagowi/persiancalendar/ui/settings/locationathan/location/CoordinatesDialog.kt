@@ -32,7 +32,7 @@ fun showCoordinatesDialog(
     viewLifecycleOwner: LifecycleOwner,
     inputCoordinates: Coordinates? = null
 ) {
-    val coordinates = inputCoordinates ?: coordinates
+    val coordinates = inputCoordinates ?: coordinates.value
     val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)
 
     val coordinatesEdits = listOf(binding.latitude, binding.longitude, binding.altitude)

@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         val persian = creationDateJdn.toPersianCalendar()
         run {
             val header = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-            val season = Season.fromPersianCalendar(persian, coordinates)
+            val season = Season.fromPersianCalendar(persian, coordinates.value)
             header.seasonImage.setImageResource(season.imageId)
             header.seasonImage.contentDescription = getString(season.nameStringId)
         }

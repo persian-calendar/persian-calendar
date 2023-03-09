@@ -155,7 +155,7 @@ fun update(context: Context, updateDate: Boolean) {
 
     // region owghat calculations
     val nowClock = Clock(Date().toJavaCalendar(forceLocalTime = true))
-    val prayTimes = coordinates?.calculatePrayTimes()
+    val prayTimes = coordinates.value?.calculatePrayTimes()
 
     @StringRes
     val nextOwghatId = prayTimes?.getNextOwghatTimeId(nowClock)
@@ -323,7 +323,7 @@ private fun createSunViewRemoteViews(
     ) sunView.clippingPath.writeRoundnessClip(width, height)
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.message,
-        if (coordinates == null) context.getString(R.string.ask_user_to_set_location) else ""
+        if (coordinates.value == null) context.getString(R.string.ask_user_to_set_location) else ""
     )
 
     // These are used to generate preview,
