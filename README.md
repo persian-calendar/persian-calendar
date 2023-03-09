@@ -49,5 +49,5 @@ https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)
 ## Build
 
 1. In Android Studio, File > New > Project from Version Control.
-1. Use `https://github.com/persian-calendar/persian-calendar` as URL, click the clone button.
+2. Use `https://github.com/persian-calendar/persian-calendar` as URL, click the clone button.
 
