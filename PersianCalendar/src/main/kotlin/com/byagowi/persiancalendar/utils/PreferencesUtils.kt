@@ -26,6 +26,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.overrideCoordinatesGlobalVariable
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.*
 
@@ -55,14 +56,17 @@ fun SharedPreferences.saveCity(city: CityItem) = edit {
 
 fun SharedPreferences.saveLocation(
     coordinates: Coordinates, cityName: String, countryCode: String = "IR"
-) = edit {
-    putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinates.latitude))
-    putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinates.longitude))
-    // Don't store elevation on Iranian cities, it degrades the calculations quality
-    val elevation = if (countryCode == "IR") .0 else coordinates.elevation
-    putString(PREF_ALTITUDE, "%f".format(Locale.ENGLISH, elevation))
-    putString(PREF_GEOCODED_CITYNAME, cityName)
-    putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
+) {
+    edit {
+        putString(PREF_LATITUDE, "%f".format(Locale.ENGLISH, coordinates.latitude))
+        putString(PREF_LONGITUDE, "%f".format(Locale.ENGLISH, coordinates.longitude))
+        // Don't store elevation on Iranian cities, it degrades the calculations quality
+        val elevation = if (countryCode == "IR") .0 else coordinates.elevation
+        putString(PREF_ALTITUDE, "%f".format(Locale.ENGLISH, elevation))
+        putString(PREF_GEOCODED_CITYNAME, cityName)
+        putString(PREF_SELECTED_LOCATION, DEFAULT_CITY)
+    }
+    overrideCoordinatesGlobalVariable(coordinates)
 }
 
 // Preferences changes be applied automatically when user requests a language change

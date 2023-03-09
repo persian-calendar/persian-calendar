@@ -345,3 +345,8 @@ fun updateStoredPreference(context: Context) {
         }
     }.onFailure(logException).getOrNull() ?: false
 }
+
+// A very special case to trig coordinates mechanism in saveLocation
+fun overrideCoordinatesGlobalVariable(coordinates: Coordinates) {
+    coordinates_.value = coordinates
+}

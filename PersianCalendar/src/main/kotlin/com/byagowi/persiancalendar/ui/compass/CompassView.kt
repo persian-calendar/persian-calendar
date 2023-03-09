@@ -163,7 +163,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
         canvas.withRotation(-trueNorth, cx, cy) {
             drawDial()
             drawPath(northwardShapePath, northArrowPaint)
-            if (coordinates != null) {
+            if (coordinates.value != null) {
                 drawMoon()
                 drawSun()
                 drawQibla()

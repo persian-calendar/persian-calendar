@@ -187,7 +187,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         val context = context ?: return
         sharedPreferences ?: return
         updateStoredPreference(context) // So vital to have this to have updated preferences here
-        athanPreferenceCategory?.forEach { it.isVisible = coordinates != null }
+        athanPreferenceCategory?.forEach { it.isVisible = coordinates.value != null }
         asrCalculationHanafiJuristicPreference?.isVisible = !calculationMethod.isJafari
         highLatitudesMethodPreference?.isVisible = enableHighLatitudesConfiguration
 

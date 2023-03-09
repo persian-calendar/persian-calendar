@@ -185,7 +185,7 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
 
         binding.fab.setOnClickListener { stopCompass(!stopped) }
 
-        if (coordinates != null) {
+        if (coordinates.value != null) {
             binding.appBar.toolbar.menu.add(R.string.show_sun_and_moon_path_in_24_hours).also {
                 it.icon =
                     binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_in_24_hours)

@@ -155,7 +155,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
 
     private fun enableOwghatTab(context: Context): Boolean {
         val appPrefs = context.appPrefs
-        return coordinates != null || // if coordinates is set, should be shown
+        return coordinates.value != null || // if coordinates is set, should be shown
                 (language.isPersian && // The placeholder isn't translated to other languages
                         // The user is already dismissed the third tab
                         !appPrefs.getBoolean(PREF_DISABLE_OWGHAT, false) &&
@@ -645,7 +645,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
                 showMonthOverviewDialog(activity ?: return@onClick, viewModel.selectedMonth.value)
             }
         }
-        if (coordinates != null) {
+        if (coordinates.value != null) {
             toolbar.menu.add(R.string.month_pray_times).also {
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER)
                 it.onClick {
