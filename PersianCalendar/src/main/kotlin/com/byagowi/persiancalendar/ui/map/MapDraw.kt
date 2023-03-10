@@ -92,7 +92,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
             .translateBy(180f, -90f)
             .scaleBy(mapScaleFactor.toFloat(), -mapScaleFactor.toFloat())
     }
-    // How the two below are created: https://gist.github.com/ebraminio/8313cff47813a5c9f98278c7ee8cde4e
+    // How the two above are created: https://gist.github.com/ebraminio/8313cff47813a5c9f98278c7ee8cde4e
 
     private val maskMap = createBitmap(360, 180)
     private val maskMapMoonScaleDown = 8
