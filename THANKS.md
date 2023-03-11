@@ -31,7 +31,7 @@ Assets
   which is in the public domain.
 * timezones.txt is derived from https://www.naturalearthdata.com/downloads/10m-cultural-vectors/timezones/
   which is in the public domain.
-* tectonicplates.txt is derived from PB2002_boundaries.sbx of https://github.com/fraxen/tectonicplates
+* tectonicplates.txt is derived from PB2002_boundaries.shp of https://github.com/fraxen/tectonicplates
   which is released under ODC-By v1.0.
 * نوای اعلان و انیمیشن: برنا تصویر رسانه
 
