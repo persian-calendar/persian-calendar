@@ -3,7 +3,6 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.DashPathEffect
@@ -13,6 +12,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withRotation
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.toObserver
@@ -84,7 +85,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
         it.strokeWidth = 1.dp
         it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
-    private val kaaba = BitmapFactory.decodeResource(resources, R.drawable.kaaba)
+    private val kaaba = context
+        .getCompatDrawable(R.drawable.emojione_1f54b).toBitmap(32.dp.toInt(), 32.dp.toInt())
 
     private var cx = 0f
     private var cy = 0f // Center of Compass (cx, cy)
