@@ -85,8 +85,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
         it.strokeWidth = 1.dp
         it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
-    private val kaaba = context
-        .getCompatDrawable(R.drawable.emojione_1f54b).toBitmap(32.dp.toInt(), 32.dp.toInt())
+    private val kaaba = context.getCompatDrawable(R.drawable.kaaba)
+        .toBitmap(32.dp.toInt(), 32.dp.toInt())
 
     private var cx = 0f
     private var cy = 0f // Center of Compass (cx, cy)
