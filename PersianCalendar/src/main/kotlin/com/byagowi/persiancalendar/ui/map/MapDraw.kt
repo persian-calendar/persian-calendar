@@ -20,6 +20,8 @@ import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.qiblaLatitude
+import com.byagowi.persiancalendar.qiblaLongitude
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -103,6 +105,11 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     private var maskMoonX = .0f
     private var maskMoonY = .0f
     var maskFormattedTime = ""
+    var drawKaaba: Boolean = false
+
+    private val kaabaIcon by lazy(LazyThreadSafetyMode.NONE) {
+        context.getCompatDrawable(R.drawable.kaaba)
+    }
 
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         when (currentMapType) {
@@ -367,6 +374,15 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
             drawPath(mapPath, foregroundPaint)
 
             drawMask(this, scaleBack)
+            if (drawKaaba) {
+                val userX = (qiblaLongitude.toFloat() + 180) * mapScaleFactor
+                val userY = (90 - qiblaLatitude.toFloat()) * mapScaleFactor
+                kaabaIcon.setBounds(
+                    (userX - 8).roundToInt(), (userY - 8).roundToInt(),
+                    (userX + 8).roundToInt(), (userY + 8).roundToInt(),
+                )
+                kaabaIcon.draw(this)
+            }
             val coordinates = coordinates.value
             if (coordinates != null && displayLocation) {
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor

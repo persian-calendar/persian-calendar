@@ -163,20 +163,21 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.map.contentHeight = mapDraw.mapHeight.toFloat()
         binding.map.maxScale = 512f
 
+        fun onStateUpdate(state: MapState) {
+            mapDraw.drawKaaba = coordinates.value != null && state.displayLocation
+            mapDraw.updateMap(state.time, state.mapType)
+            binding.map.invalidate()
+            binding.date.text = mapDraw.maskFormattedTime
+            binding.timeBar.isVisible = mapDraw.maskFormattedTime.isNotEmpty()
+            directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
+        }
+
         // Setup view model change listener
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.state.collectLatest { state ->
-                        mapDraw.updateMap(state.time, state.mapType)
-                        binding.map.invalidate()
-                        binding.date.text = mapDraw.maskFormattedTime
-                        binding.timeBar.isVisible = mapDraw.maskFormattedTime.isNotEmpty()
-                        directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
-                    }
-                }
-                launch { coordinates.collectLatest { binding.map.invalidate() } }
+                launch { viewModel.state.collectLatest(::onStateUpdate) }
+                launch { coordinates.collectLatest { onStateUpdate(viewModel.state.value) } }
             }
         }
     }

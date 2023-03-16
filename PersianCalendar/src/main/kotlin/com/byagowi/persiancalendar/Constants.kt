@@ -131,3 +131,6 @@ val TIME_NAMES = listOf(
     R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
     R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
 )
+
+const val qiblaLatitude = 21.422522
+const val qiblaLongitude = 39.826181
