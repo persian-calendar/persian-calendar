@@ -20,7 +20,7 @@ Assets
 * {spring,summer,fall,winter}.jpg by Lotta Nieminen (CC BY NC 4.0)
   https://www.behance.net/gallery/21015893/Google-Calendar
 * Material design icons, https://github.com/google/material-design-icons (CC-BY 4.0)
-* emojione_1f54b.xml from Emoji One project, v2, 1f54b.svg, http://emojione.com (CC BY 4.0)
+* kaaba.xml from Emoji One project, v2, 1f54b.svg, http://emojione.com (CC BY 4.0)
 * ic_moon is derived from Google Noto Emoji but highly tweaked
   https://github.com/googlefonts/noto-emoji/blob/main/svg/emoji_u1f315.svg
 * ic_sun is derived from Mozilla's Emoji but highly tweaked
