@@ -10,6 +10,7 @@ import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
 import com.byagowi.persiancalendar.EN_DASH
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -122,7 +123,7 @@ fun Calendar.toCivilDate() =
 
 fun Date.toJavaCalendar(forceLocalTime: Boolean = false): Calendar = Calendar.getInstance().also {
     if (!forceLocalTime && isForcedIranTimeEnabled)
-        it.timeZone = TimeZone.getTimeZone("Asia/Tehran")
+        it.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
     it.time = this
 }
 

@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.AgeWidget
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
 import com.byagowi.persiancalendar.DEFAULT_SELECTED_WIDGET_TEXT_COLOR
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
@@ -799,7 +800,7 @@ fun RemoteViews.setDirection(@IdRes viewId: Int, context: Context) {
 }
 
 private fun RemoteViews.configureClock(@IdRes viewId: Int) {
-    if (isForcedIranTimeEnabled) setString(viewId, "setTimeZone", "Asia/Tehran")
+    if (isForcedIranTimeEnabled) setString(viewId, "setTimeZone", IRAN_TIMEZONE_ID)
     val clockFormat = if (clockIn24) "kk:mm" else "h:mm"
     setCharSequence(viewId, "setFormat12Hour", clockFormat)
     setCharSequence(viewId, "setFormat24Hour", clockFormat)
