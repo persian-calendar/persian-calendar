@@ -122,8 +122,8 @@ class AstronomyTests {
     fun `Season equinox`() {
         val seasons = seasons(2020)
         listOf(
-            seasons.marchEquinox to 1584676197177, seasons.juneSolstice to 1592689413689,
-            seasons.septemberEquinox to 1600781456763, seasons.decemberSolstice to 1608544960981
+            seasons.marchEquinox to 1584676196290, seasons.juneSolstice to 1592689411284,
+            seasons.septemberEquinox to 1600781459379, seasons.decemberSolstice to 1608544962334
         ).map { (it, time) -> assertThat(it.toMillisecondsSince1970()).isEqualTo(time) }
     }
 
