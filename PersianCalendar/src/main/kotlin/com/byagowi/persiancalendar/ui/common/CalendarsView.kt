@@ -13,6 +13,7 @@ import com.byagowi.persiancalendar.databinding.CalendarsViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.language
@@ -129,8 +130,10 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 equinox = context.getString(
                     R.string.spring_equinox,
                     formatNumber(equinoxYear),
+                    // TODO: to be removed soon
                     // Special case 1402's equinox due to confusion of 12:54 am for users
-                    if (equinoxYear == 1402 && calendar.timeZone.id == IRAN_TIMEZONE_ID)
+                    if (equinoxYear == 1402 && calendar.timeZone.id == IRAN_TIMEZONE_ID
+                        && language == Language.FA)
                         formatNumber("00:54 بامداد، 1 فروردین 1402")
                     else calendar.formatDateAndTime()
                 )
