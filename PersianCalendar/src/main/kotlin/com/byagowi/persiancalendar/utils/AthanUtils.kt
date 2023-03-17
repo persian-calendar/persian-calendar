@@ -121,7 +121,10 @@ fun scheduleAlarms(context: Context) {
         ((context.appPrefs.getString(PREF_ATHAN_GAP, null)?.toDoubleOrNull()
             ?: .0) * 60.0 * 1000.0).toLong()
 
-    val prayTimes = coordinates.value?.calculatePrayTimes() ?: return
+    val prayTimes = coordinates.value?.calculatePrayTimes(
+        // Don't override as maybe user intentionally have changed the clock
+        overrideIranDst = false
+    ) ?: return
     // convert spacedComma separated string to a set
     enabledAlarms.forEachIndexed { i, name ->
         scheduleAlarm(context, name, Calendar.getInstance().also {

@@ -1,8 +1,10 @@
 package com.byagowi.persiancalendar.utils
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.StringRes
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
@@ -22,12 +24,18 @@ fun Coordinates.calculatePrayTimes(
     calendar: GregorianCalendar = GregorianCalendar(),
     calculationMethod: CalculationMethod = com.byagowi.persiancalendar.global.calculationMethod,
     asrMethod: AsrMethod = com.byagowi.persiancalendar.global.asrMethod,
-    highLatitudesMethod: HighLatitudesMethod = com.byagowi.persiancalendar.global.highLatitudesMethod
+    highLatitudesMethod: HighLatitudesMethod = com.byagowi.persiancalendar.global.highLatitudesMethod,
+    overrideIranDst: Boolean = true,
 ): PrayTimes {
     val year = calendar[GregorianCalendar.YEAR]
     val month = calendar[GregorianCalendar.MONTH] + 1
     val day = calendar[GregorianCalendar.DAY_OF_MONTH]
-    val offset = calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0)
+    val offset = calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0).let {
+        if (it == 4.5 && overrideIranDst && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
+            calendar.timeZone.id == IRAN_TIMEZONE_ID
+        ) 3.5
+        else it
+    }
     return PrayTimes(
         calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod
     )

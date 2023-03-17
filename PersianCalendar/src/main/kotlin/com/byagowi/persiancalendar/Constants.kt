@@ -134,3 +134,5 @@ val TIME_NAMES = listOf(
 
 const val qiblaLatitude = 21.422522
 const val qiblaLongitude = 39.826181
+
+const val IRAN_TIMEZONE_ID = "Asia/Tehran"
