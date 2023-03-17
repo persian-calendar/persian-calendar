@@ -132,7 +132,7 @@ val TIME_NAMES = listOf(
     R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
 )
 
-const val qiblaLatitude = 21.422522
-const val qiblaLongitude = 39.826181
+const val QIBLA_LATITUDE = 21.422522
+const val QIBLA_LONGITUDE = 39.826181
 
 const val IRAN_TIMEZONE_ID = "Asia/Tehran"

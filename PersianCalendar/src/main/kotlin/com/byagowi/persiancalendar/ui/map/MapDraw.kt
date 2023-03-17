@@ -20,8 +20,8 @@ import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.qiblaLatitude
-import com.byagowi.persiancalendar.qiblaLongitude
+import com.byagowi.persiancalendar.QIBLA_LATITUDE
+import com.byagowi.persiancalendar.QIBLA_LONGITUDE
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -375,8 +375,8 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
 
             drawMask(this, scaleBack)
             if (drawKaaba) {
-                val userX = (qiblaLongitude.toFloat() + 180) * mapScaleFactor
-                val userY = (90 - qiblaLatitude.toFloat()) * mapScaleFactor
+                val userX = (QIBLA_LONGITUDE.toFloat() + 180) * mapScaleFactor
+                val userY = (90 - QIBLA_LATITUDE.toFloat()) * mapScaleFactor
                 kaabaIcon.setBounds(
                     (userX - 8).roundToInt(), (userY - 8).roundToInt(),
                     (userX + 8).roundToInt(), (userY + 8).roundToInt(),

@@ -18,8 +18,8 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.coordinates
-import com.byagowi.persiancalendar.qiblaLatitude
-import com.byagowi.persiancalendar.qiblaLongitude
+import com.byagowi.persiancalendar.QIBLA_LATITUDE
+import com.byagowi.persiancalendar.QIBLA_LONGITUDE
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -110,7 +110,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     }
 
     val qiblaHeading = coordinates.value?.run {
-        val qibla = EarthPosition(qiblaLatitude, qiblaLongitude)
+        val qibla = EarthPosition(QIBLA_LATITUDE, QIBLA_LONGITUDE)
         EarthPosition(latitude, longitude).toEarthHeading(qibla)
     }
     var isShowQibla = true
