@@ -31,7 +31,7 @@ fun Coordinates.calculatePrayTimes(
     val month = calendar[GregorianCalendar.MONTH] + 1
     val day = calendar[GregorianCalendar.DAY_OF_MONTH]
     val offset = (calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0)).let {
-        if (it == 4.5 && overrideIranDst && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
+        if (it == 4.5 && overrideIranDst && Build.VERSION.SDK_INT <= Build.VERSION_CODES.TIRAMISU &&
             calendar.timeZone.id == IRAN_TIMEZONE_ID
         ) 3.5
         else it
