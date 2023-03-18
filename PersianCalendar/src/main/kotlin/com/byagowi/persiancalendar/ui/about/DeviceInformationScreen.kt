@@ -138,17 +138,24 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
 
         binding.bottomNavigation.menu.also {
             listOf(
-                R.drawable.ic_developer to Build.VERSION.RELEASE,
-                R.drawable.ic_settings to "API " + Build.VERSION.SDK_INT,
-                R.drawable.ic_motorcycle to
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
-                        else @Suppress("DEPRECATION") Build.CPU_ABI,
-                R.drawable.ic_device_information_white to Build.MODEL
-            ).forEachIndexed { i, (icon, title) ->
-                val dialog = listOf(
-                    ::showHiddenUiDialog, ::showSensorTestDialog,
-                    ::showInputDeviceTestDialog, ::showColorPickerDialog
-                )[i]
+                Triple(R.drawable.ic_developer, Build.VERSION.RELEASE, ::showHiddenUiDialog),
+                Triple(
+                    R.drawable.ic_settings,
+                    "API " + Build.VERSION.SDK_INT,
+                    ::showSensorTestDialog
+                ),
+                Triple(
+                    R.drawable.ic_motorcycle,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) Build.SUPPORTED_ABIS[0]
+                    else @Suppress("DEPRECATION") Build.CPU_ABI,
+                    ::showInputDeviceTestDialog
+                ),
+                Triple(
+                    R.drawable.ic_device_information_white,
+                    Build.MODEL,
+                    ::showColorPickerDialog
+                ),
+            ).forEach { (icon, title, dialog) ->
                 val easterEggController = EasterEggController(dialog)
                 it.add(title).setIcon(icon).onClick { easterEggController.handleClick(activity) }
             }

@@ -98,16 +98,22 @@ ${EventType.values().joinToString("\n") { "${it.name}: ${it.source}" }}"""
                 return BitmapDrawable(view.context.resources, bitmap)
             }
             listOf(
-                "GPLv3" to view.context.getCompatDrawable(R.drawable.ic_info),
-                KotlinVersion.CURRENT.toString() to createTextIcon("Kotlin"),
-                "API ${Build.VERSION.SDK_INT}" to
-                        view.context.getCompatDrawable(R.drawable.ic_motorcycle)
-            ).mapIndexed { i, (title, icon) ->
-                val dialog = listOf(
-                    ::showShaderSandboxDialog,
-                    ::showSpringDemoDialog,
-                    ::showFlingDemoDialog,
-                )[i]
+                Triple(
+                    "GPLv3",
+                    view.context.getCompatDrawable(R.drawable.ic_info),
+                    ::showShaderSandboxDialog
+                ),
+                Triple(
+                    KotlinVersion.CURRENT.toString(),
+                    createTextIcon("Kotlin"),
+                    ::showSpringDemoDialog
+                ),
+                Triple(
+                    "API ${Build.VERSION.SDK_INT}",
+                    view.context.getCompatDrawable(R.drawable.ic_motorcycle),
+                    ::showFlingDemoDialog
+                ),
+            ).forEach { (title, icon, dialog) ->
                 val easterEggController = EasterEggController(dialog)
                 it.add(title).setIcon(icon).onClick { easterEggController.handleClick(activity) }
             }
