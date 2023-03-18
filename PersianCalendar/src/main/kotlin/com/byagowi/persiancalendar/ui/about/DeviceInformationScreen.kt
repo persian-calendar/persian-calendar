@@ -27,7 +27,6 @@ import android.view.InputDevice
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.content.getSystemService
@@ -138,7 +137,6 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
         }
 
         binding.bottomNavigation.menu.also {
-            var clickCount = 0
             listOf(
                 R.drawable.ic_developer to Build.VERSION.RELEASE,
                 R.drawable.ic_settings to "API " + Build.VERSION.SDK_INT,
@@ -147,16 +145,12 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
                         else @Suppress("DEPRECATION") Build.CPU_ABI,
                 R.drawable.ic_device_information_white to Build.MODEL
             ).forEachIndexed { i, (icon, title) ->
-                it.add(title).setIcon(icon).onClick {
-                    val activity = activity ?: return@onClick
-                    when (++clickCount % 10) {
-                        0 -> listOf(
-                            ::showHiddenUiDialog, ::showSensorTestDialog,
-                            ::showInputDeviceTestDialog, ::showColorPickerDialog
-                        )[i](activity)
-                        9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
-                    }
-                }
+                val dialog = listOf(
+                    ::showHiddenUiDialog, ::showSensorTestDialog,
+                    ::showInputDeviceTestDialog, ::showColorPickerDialog
+                )[i]
+                val easterEggController = EasterEggController(dialog)
+                it.add(title).setIcon(icon).onClick { easterEggController.handleClick(activity) }
             }
         }
     }

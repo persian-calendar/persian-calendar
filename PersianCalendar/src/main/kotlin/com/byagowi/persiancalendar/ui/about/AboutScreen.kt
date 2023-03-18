@@ -9,7 +9,6 @@ import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.net.toUri
@@ -90,17 +89,11 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
                 context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@also
             it.setImageDrawable(animation)
             animation.start()
-            var clickCount = 0
+            val easterEggController = EasterEggController(::showPeriodicTableDialog)
             it.setOnClickListener {
                 animation.stop()
                 animation.start()
-                runCatching {
-                    val activity = activity ?: return@setOnClickListener
-                    when (++clickCount % 10) {
-                        0 -> activity.let(::showPeriodicTableDialog)
-                        9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
-                    }
-                }.onFailure(logException)
+                easterEggController.handleClick(activity)
             }
         }
 
