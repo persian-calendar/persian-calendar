@@ -97,7 +97,7 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
                 runCatching {
                     val activity = activity ?: return@setOnClickListener
                     when (++clickCount % 10) {
-                        0 -> activity.let(::showShaderSandboxDialog)
+                        0 -> activity.let(::showPeriodicTableDialog)
                         9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
                     }
                 }.onFailure(logException)

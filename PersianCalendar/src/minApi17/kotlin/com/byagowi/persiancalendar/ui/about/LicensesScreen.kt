@@ -110,7 +110,7 @@ ${EventType.values().joinToString("\n") { "${it.name}: ${it.source}" }}"""
                     val activity = activity ?: return@onClick
                     when (++clickCount % 10) {
                         0 -> listOf(
-                            ::showPeriodicTableDialog,
+                            ::showShaderSandboxDialog,
                             ::showSpringDemoDialog,
                             ::showFlingDemoDialog,
                         )[i](activity)
