@@ -116,15 +116,18 @@
                     app:labelVisibilityMode="unlabeled"
                     app:menuGravity="center" />
 
-                <ImageView
+                <TextView
                     android:id="@+id/map_icon"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
-                    android:layout_margin="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="3dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:contentDescription="@string/map"
                     android:src="@drawable/ic_map"
+                    android:text="@string/map_emoji"
+                    android:textSize="22dp"
                     android:tooltipText="@string/map" />
 
             </FrameLayout>
