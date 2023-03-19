@@ -28,7 +28,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
     var maxScale = 16f
     private var redundantXSpace = 0f
     private var redundantYSpace = 0f
-    protected var saveScale = 1f
+    protected var currentScale = 1f
     private var right = 0f
     private var bottom = 0f
     private var originalWidth = 0f
@@ -44,25 +44,25 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
 
         override fun onScale(detector: ScaleGestureDetector): Boolean {
             var scaleFactor = detector.scaleFactor
-            val origScale = saveScale
-            saveScale *= scaleFactor
-            if (saveScale > maxScale) {
-                saveScale = maxScale
+            val origScale = currentScale
+            currentScale *= scaleFactor
+            if (currentScale > maxScale) {
+                currentScale = maxScale
                 scaleFactor = maxScale / origScale
-            } else if (saveScale < minScale) {
-                saveScale = minScale
+            } else if (currentScale < minScale) {
+                currentScale = minScale
                 scaleFactor = minScale / origScale
             }
-            right = width * saveScale - width - 2 * redundantXSpace * saveScale
-            bottom = height * saveScale - height - 2 * redundantYSpace * saveScale
-            if (originalWidth * saveScale <= width || originalHeight * saveScale <= height) {
+            right = width * currentScale - width - 2 * redundantXSpace * currentScale
+            bottom = height * currentScale - height - 2 * redundantYSpace * currentScale
+            if (originalWidth * currentScale <= width || originalHeight * currentScale <= height) {
                 viewMatrix.postScale(scaleFactor, scaleFactor, width / 2f, height / 2f)
                 if (scaleFactor < 1) {
                     viewMatrix.getValues(matrix)
                     val x = matrix[Matrix.MTRANS_X]
                     val y = matrix[Matrix.MTRANS_Y]
                     if (scaleFactor < 1) {
-                        if ((originalWidth * saveScale).roundToInt() < width) {
+                        if ((originalWidth * currentScale).roundToInt() < width) {
                             if (y < -bottom) viewMatrix.postTranslate(0f, -(y + bottom))
                             else if (y > 0) viewMatrix.postTranslate(0f, -y)
                         } else {
@@ -96,7 +96,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
         val scaleY = height / contentHeight
         val scale = min(scaleX, scaleY)
         viewMatrix.setScale(scale, scale)
-        saveScale = 1f
+        currentScale = 1f
 
         // Center the image
         redundantYSpace = height - scale * contentHeight
@@ -106,8 +106,8 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
         viewMatrix.postTranslate(redundantXSpace, redundantYSpace)
         originalWidth = width - 2 * redundantXSpace
         originalHeight = height - 2 * redundantYSpace
-        right = width * saveScale - width - 2 * redundantXSpace * saveScale
-        bottom = height * saveScale - height - 2 * redundantYSpace * saveScale
+        right = width * currentScale - width - 2 * redundantXSpace * currentScale
+        bottom = height * currentScale - height - 2 * redundantYSpace * currentScale
     }
 
     var onClick = fun(_: Float, _: Float) {}
@@ -118,11 +118,11 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
 
     init {
         horizontalFling.addUpdateListener { _, _, velocity ->
-            applyVelocity(velocity / saveScale / 5, 0f)
+            applyVelocity(velocity / currentScale / 5, 0f)
             invalidate()
         }
         verticalFling.addUpdateListener { _, _, velocity ->
-            applyVelocity(0f, velocity / saveScale / 5)
+            applyVelocity(0f, velocity / currentScale / 5)
             invalidate()
         }
     }
@@ -135,9 +135,9 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
         var dx = deltaX
         var dy = deltaY
         // width after applying current scale
-        val scaleWidth = (originalWidth * saveScale).roundToInt()
+        val scaleWidth = (originalWidth * currentScale).roundToInt()
         // height after applying current scale
-        val scaleHeight = (originalHeight * saveScale).roundToInt()
+        val scaleHeight = (originalHeight * currentScale).roundToInt()
         // if scaleWidth is smaller than the views width
         // in other words if the image width fits in the view
         // limit left and right movement
@@ -179,7 +179,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
             }
             MotionEvent.ACTION_MOVE -> // if the mode is ZOOM or
                 // if the mode is DRAG and already zoomed
-                if (mode == ZOOM || mode == DRAG && saveScale > minScale) {
+                if (mode == ZOOM || mode == DRAG && currentScale > minScale) {
                     applyVelocity(event.x - last.x, event.y - last.y)
                     last.set(event.x, event.y)
                     velocityTracker?.addMovement(event)

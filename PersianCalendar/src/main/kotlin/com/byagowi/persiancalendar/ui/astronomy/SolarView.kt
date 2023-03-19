@@ -99,7 +99,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         parent?.requestDisallowInterceptTouchEvent(true)
         super.dispatchTouchEvent(event)
-        if (mode != AstronomyMode.Earth || saveScale != 1f) return true
+        if (mode != AstronomyMode.Earth || currentScale != 1f) return true
         val r = width / 2
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
