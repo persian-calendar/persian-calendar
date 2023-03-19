@@ -52,7 +52,6 @@ shhonarmandi: Shayan Honarmandi"</string>
     <string name="moazzenzadeh" translatable="false">رحیم مؤذن‌زاده اردبیلی</string>
     <string name="entezar" translatable="false">انتظار، روح‌الله کاظمی‌زاده</string>
     <string name="empty" translatable="false" />
-    <string name="map_emoji" translatable="false">🗺️</string>
     <!--  Map  -->
     <string name="show_direct_path_label" translatable="false">Direct path</string>
     <string name="show_grid_label" translatable="false">Grid</string>
