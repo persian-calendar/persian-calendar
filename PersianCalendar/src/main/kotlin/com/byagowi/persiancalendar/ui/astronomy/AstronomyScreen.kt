@@ -208,6 +208,9 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 findNavController().navigateSafe(AstronomyScreenDirections.actionAstronomyToMap())
             }
         }
+        binding.mapIcon.setOnClickListener {
+            findNavController().navigateSafe(AstronomyScreenDirections.actionAstronomyToMap())
+        }
 
         resetButton.onClick {
             viewModel.animateToAbsoluteMinutesOffset(0)
