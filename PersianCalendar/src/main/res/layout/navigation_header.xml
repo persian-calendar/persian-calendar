@@ -9,7 +9,8 @@
         android:id="@+id/seasons_carousel"
         android:layout_width="match_parent"
         android:layout_height="196dp"
-        android:layout_margin="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         android:importantForAccessibility="noHideDescendants" />
