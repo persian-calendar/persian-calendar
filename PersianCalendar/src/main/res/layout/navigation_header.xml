@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/seasons_carousel"
+<com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="196dp"
+    android:layout_height="match_parent"
+    android:layout_marginStart="12dp"
     android:layout_marginTop="40dp"
+    android:layout_marginEnd="12dp"
     android:layout_marginBottom="20dp"
-    android:clipChildren="false"
-    android:clipToPadding="false"
-    android:importantForAccessibility="noHideDescendants" />
+    android:importantForAccessibility="noHideDescendants"
+    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/seasons_pager"
+        android:layout_width="match_parent"
+        android:layout_height="196dp" />
+
+</com.google.android.material.carousel.MaskableFrameLayout>

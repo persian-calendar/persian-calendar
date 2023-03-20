@@ -33,8 +33,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
-import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
@@ -52,6 +50,7 @@ import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
+import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -84,7 +83,6 @@ import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -179,10 +177,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
 
-        (binding.navigation.getHeaderView(0) as? RecyclerView)?.debugAssertNotNull?.also {
-            it.layoutManager = CarouselLayoutManager()
-            LinearSnapHelper().attachToRecyclerView(it)
+        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
             it.adapter = SeasonsAdapter()
+            it.currentItem = SeasonsAdapter.toActualIndex(0) - 4
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
@@ -448,8 +445,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             val persian = creationDateJdn.toPersianCalendar()
             val seasonIndex = Season.seasonIndexFromPersianCalendar(persian, coordinates.value)
-            (binding.navigation.getHeaderView(0) as? RecyclerView)?.debugAssertNotNull
-                ?.smoothScrollToPosition(SeasonsAdapter.toActualIndex(seasonIndex))
+            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+                .seasonsPager.setCurrentItem(SeasonsAdapter.toActualIndex(seasonIndex), true)
         }
 
         override fun onDrawerClosed(drawerView: View) {
