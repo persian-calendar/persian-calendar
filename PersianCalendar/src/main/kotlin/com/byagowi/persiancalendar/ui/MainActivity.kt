@@ -34,6 +34,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
@@ -51,7 +52,6 @@ import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ActivityMainBinding
-import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
@@ -179,10 +179,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
 
-        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).also {
-            it.seasonsCarousel.layoutManager = CarouselLayoutManager()
-            LinearSnapHelper().attachToRecyclerView(it.seasonsCarousel)
-            it.seasonsCarousel.adapter = SeasonsAdapter()
+        (binding.navigation.getHeaderView(0) as? RecyclerView)?.debugAssertNotNull?.also {
+            it.layoutManager = CarouselLayoutManager()
+            LinearSnapHelper().attachToRecyclerView(it)
+            it.adapter = SeasonsAdapter()
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
@@ -448,8 +448,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             val persian = creationDateJdn.toPersianCalendar()
             val seasonIndex = Season.seasonIndexFromPersianCalendar(persian, coordinates.value)
-            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-                .seasonsCarousel.smoothScrollToPosition(SeasonsAdapter.toActualIndex(seasonIndex))
+            (binding.navigation.getHeaderView(0) as? RecyclerView)?.debugAssertNotNull
+                ?.smoothScrollToPosition(SeasonsAdapter.toActualIndex(seasonIndex))
         }
 
         override fun onDrawerClosed(drawerView: View) {
