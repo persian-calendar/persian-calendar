@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.utils.startEitherServiceOrWorker
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
+import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
@@ -177,12 +178,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
 
-        val persian = creationDateJdn.toPersianCalendar()
-        run {
-            val header = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-            val season = Season.fromPersianCalendar(persian, coordinates.value)
-            header.seasonImage.setImageResource(season.imageId)
-            header.seasonImage.contentDescription = getString(season.nameStringId)
+        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).also {
+            it.seasonsCarousel.layoutManager = CarouselLayoutManager()
+            it.seasonsCarousel.adapter = SeasonsAdapter()
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
@@ -191,7 +189,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-            persian.year > supportedYearOfIranCalendar
+            creationDateJdn.toPersianCalendar().year > supportedYearOfIranCalendar
         ) showAppIsOutDatedSnackbar()
 
         applyAppLanguage(this)
@@ -445,6 +443,11 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         override fun onDrawerOpened(drawerView: View) {
             super.onDrawerOpened(drawerView)
             onBackPressedCloseDrawerCallback.isEnabled = true
+
+            val persian = creationDateJdn.toPersianCalendar()
+            val seasonIndex = Season.seasonIndexFromPersianCalendar(persian, coordinates.value)
+            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+                .seasonsCarousel.smoothScrollToPosition(SeasonsAdapter.toActualIndex(seasonIndex))
         }
 
         override fun onDrawerClosed(drawerView: View) {

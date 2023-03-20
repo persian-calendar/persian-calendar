@@ -7,7 +7,6 @@
     <dimen name="icon_margin">16dp</dimen>
     <dimen name="arrow_size">26dp</dimen>
     <dimen name="padding_item">8dp</dimen>
-    <dimen name="drawer_header_height">190dp</dimen>
 
     <dimen name="common_radius">24dp</dimen>
     <dimen name="card_elevation">8dp</dimen>

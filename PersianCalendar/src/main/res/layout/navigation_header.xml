@@ -5,12 +5,13 @@
     android:importantForAccessibility="no"
     android:orientation="vertical">
 
-    <!-- Its content description is replaced by code -->
-    <ImageView
-        android:id="@+id/season_image"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/seasons_carousel"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/drawer_header_height"
-        android:contentDescription="@string/app_name"
-        android:scaleType="centerCrop" />
+        android:layout_height="196dp"
+        android:layout_margin="16dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:importantForAccessibility="noHideDescendants" />
 
 </LinearLayout>
