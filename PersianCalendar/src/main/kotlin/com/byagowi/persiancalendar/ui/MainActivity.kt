@@ -54,10 +54,8 @@ import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
-import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
-import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.enableNewInterface
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
@@ -179,7 +177,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
             it.adapter = SeasonsAdapter()
-            it.currentItem = SeasonsAdapter.toActualIndex(0) - 4
+            it.currentItem = SeasonsAdapter.getCurrentIndex() - 3
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
@@ -443,10 +441,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             super.onDrawerOpened(drawerView)
             onBackPressedCloseDrawerCallback.isEnabled = true
 
-            val persian = creationDateJdn.toPersianCalendar()
-            val seasonIndex = Season.seasonIndexFromPersianCalendar(persian, coordinates.value)
             NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-                .seasonsPager.setCurrentItem(SeasonsAdapter.toActualIndex(seasonIndex), true)
+                .seasonsPager.setCurrentItem(SeasonsAdapter.getCurrentIndex(), true)
         }
 
         override fun onDrawerClosed(drawerView: View) {
