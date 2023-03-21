@@ -2,12 +2,12 @@ package com.byagowi.persiancalendar.ui
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.databinding.SeasonCarouselItemBinding
+import com.byagowi.persiancalendar.databinding.SeasonItemBinding
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
 class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder>() {
-    class SeasonImageViewHolder(val binding: SeasonCarouselItemBinding) :
+    class SeasonImageViewHolder(val binding: SeasonItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(
@@ -15,7 +15,7 @@ class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder
         viewType: Int
     ): SeasonImageViewHolder {
         return SeasonImageViewHolder(
-            SeasonCarouselItemBinding.inflate(parent.context.layoutInflater, parent, false)
+            SeasonItemBinding.inflate(parent.context.layoutInflater, parent, false)
         )
     }
 
@@ -23,7 +23,7 @@ class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder
 
     private val seasons = enumValues<Season>()
     override fun onBindViewHolder(holder: SeasonImageViewHolder, position: Int) {
-        holder.binding.seasonImage.setImageResource(seasons[position % 4].imageId)
+        holder.binding.root.setImageResource(seasons[position % 4].imageId)
     }
 
     companion object {
