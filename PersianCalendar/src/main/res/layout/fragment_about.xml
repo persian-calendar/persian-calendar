@@ -19,41 +19,48 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <com.google.android.material.carousel.MaskableFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/navigationBarColor"
-                android:gravity="center"
-                android:orientation="horizontal">
+                app:shapeAppearance="@style/shapeAppearanceBottomCornerExtraLarge">
 
-                <FrameLayout
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
+                    android:background="?attr/navigationBarColor"
+                    android:gravity="center"
+                    android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/about_header"
-                        android:layout_width="wrap_content"
+                    <FrameLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:lineSpacingMultiplier="1.25"
-                        android:padding="20dp"
-                        android:textAlignment="textStart"
-                        android:textColor="?attr/colorTextDay"
-                        tools:ignore="RtlCompat" />
+                        android:layout_weight="1">
 
-                </FrameLayout>
+                        <TextView
+                            android:id="@+id/about_header"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:lineSpacingMultiplier="1.25"
+                            android:padding="20dp"
+                            android:textAlignment="textStart"
+                            android:textColor="?attr/colorTextDay"
+                            tools:ignore="RtlCompat" />
 
-                <ImageView
-                    android:id="@+id/icon"
-                    android:layout_width="0dp"
-                    android:layout_height="250dp"
-                    android:layout_weight="1"
-                    android:importantForAccessibility="no"
-                    android:scaleX="1.25"
-                    android:scaleY="1.25" />
+                    </FrameLayout>
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="0dp"
+                        android:layout_height="250dp"
+                        android:layout_weight="1"
+                        android:importantForAccessibility="no"
+                        android:scaleX="1.25"
+                        android:scaleY="1.25" />
+
+                </LinearLayout>
+
+            </com.google.android.material.carousel.MaskableFrameLayout>
 
             <LinearLayout
                 android:id="@+id/app_license"

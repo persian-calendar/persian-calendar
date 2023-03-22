@@ -10,13 +10,20 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        style="@style/TabLayoutColored"
+    <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/coloredTabBackground"
-        app:tabBackground="?attr/selectableItemBackground" />
+        app:shapeAppearance="@style/shapeAppearanceBottomCornerLarge">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            style="@style/TabLayoutColored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/coloredTabBackground"
+            app:tabBackground="?attr/selectableItemBackground" />
+
+    </com.google.android.material.carousel.MaskableFrameLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"

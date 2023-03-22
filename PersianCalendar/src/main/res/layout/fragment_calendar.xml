@@ -21,11 +21,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
-                android:id="@+id/calendarPager"
+            <com.google.android.material.carousel.MaskableFrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/grid_calendar_height"
-                android:background="?attr/colorMonthsBackground" />
+                android:layout_height="wrap_content"
+                app:shapeAppearance="@style/shapeAppearanceBottomCornerExtraLarge">
+
+                <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+                    android:id="@+id/calendarPager"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/grid_calendar_height"
+                    android:background="?attr/colorMonthsBackground" />
+
+            </com.google.android.material.carousel.MaskableFrameLayout>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
