@@ -77,11 +77,13 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.coroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
+import com.byagowi.persiancalendar.ui.SeasonsAdapter
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
@@ -92,6 +94,7 @@ import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.progressindicator.LinearProgressIndicator
@@ -1365,3 +1368,21 @@ private val textAppearances = listOf(
     "LabelMedium" to com.google.android.material.R.style.TextAppearance_Material3_LabelMedium,
     "LabelSmall" to com.google.android.material.R.style.TextAppearance_Material3_LabelSmall
 )
+
+fun showCarouselDialog(activity: FragmentActivity) {
+    MaterialAlertDialogBuilder(activity).setView(FrameLayout(activity).also { root ->
+        root.addView(RecyclerView(activity).also {
+            it.layoutManager = CarouselLayoutManager()
+            it.adapter = SeasonsAdapter()
+            it.setHasFixedSize(true) // Just as an optimization
+            it.layoutParams = ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                196.dp.roundToInt()
+            )
+            PagerSnapHelper().attachToRecyclerView(it)
+            // LinearSnapHelper().attachToRecyclerView(it)
+            it.scrollToPosition(0)
+            it.smoothScrollToPosition(12)
+        })
+    }).show()
+}

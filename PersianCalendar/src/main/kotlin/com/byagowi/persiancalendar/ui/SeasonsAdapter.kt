@@ -25,7 +25,7 @@ class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder
 
     private val seasons = enumValues<Season>()
     override fun onBindViewHolder(holder: SeasonImageViewHolder, position: Int) {
-        holder.binding.root.setImageResource(seasons[position % 4].imageId)
+        holder.binding.image.setImageResource(seasons[position % 4].imageId)
     }
 
     companion object {
