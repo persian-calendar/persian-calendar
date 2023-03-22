@@ -33,6 +33,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
+import androidx.viewpager2.widget.MarginPageTransformer
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
@@ -178,6 +179,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
             it.adapter = SeasonsAdapter()
             it.currentItem = SeasonsAdapter.getCurrentIndex() - 3
+            it.setPageTransformer(MarginPageTransformer(8.dp.roundToInt()))
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
