@@ -10,6 +10,8 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Path
+import android.graphics.RectF
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Base64
@@ -56,6 +58,8 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.android.material.shape.ShapeAppearancePathProvider
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -250,6 +254,15 @@ fun prepareViewForRendering(view: View, width: Int, height: Int) {
         View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
     )
     view.layout(0, 0, width, height)
+}
+
+fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
+    val path = Path()
+    ShapeAppearancePathProvider().calculatePath(
+        ShapeAppearanceModel().withCornerSize(roundSize), 1f,
+        RectF(0f, 0f, width.toFloat(), height.toFloat()), path
+    )
+    return path
 }
 
 // Whether we can enable the new interface

@@ -87,6 +87,7 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
+import com.byagowi.persiancalendar.ui.utils.createRoundPath
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -298,13 +299,6 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
     return remoteViews
 }
 
-private fun Path.writeRoundnessClip(width: Int, height: Int) {
-    ShapeAppearancePathProvider().calculatePath(
-        ShapeAppearanceModel().withCornerSize(roundPixelSize), 1f,
-        RectF(0f, 0f, width.toFloat(), height.toFloat()), this
-    )
-}
-
 private fun createSunViewRemoteViews(
     context: Context, width: Int, height: Int, jdn: Jdn, prayTimes: PrayTimes?
 ): RemoteViews {
@@ -321,7 +315,7 @@ private fun createSunViewRemoteViews(
     sunView.initiate()
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
-    ) sunView.clippingPath.writeRoundnessClip(width, height)
+    ) sunView.clippingPath = createRoundPath(width, height, roundPixelSize)
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.message,
         if (coordinates.value == null) context.getString(R.string.ask_user_to_set_location) else ""
@@ -384,7 +378,7 @@ private fun createMapRemoteViews(
     val matrix = Matrix()
     matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
     val bitmap = createBitmap(size * 2, size).applyCanvas {
-        withClip(Path().also { it.writeRoundnessClip(size * 2, size) }) {
+        withClip(createRoundPath(size * 2, size, roundPixelSize)) {
             mapDraw.draw(this, matrix, true, null, false)
         }
     }

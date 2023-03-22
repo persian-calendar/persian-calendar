@@ -119,7 +119,7 @@ class SunView @JvmOverloads constructor(
     }
 
     // A home-screen widget with background has some roundness that is taken care by a passed path
-    val clippingPath = Path()
+    var clippingPath = Path()
 
     private fun mainDraw(canvas: Canvas) {
         val width = width
