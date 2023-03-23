@@ -179,12 +179,12 @@ dependencies {
     val fragmentVersion = "1.5.2"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
-    implementation("androidx.activity:activity-ktx:1.6.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.0")
+    implementation("androidx.activity:activity-ktx:1.7.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
     implementation("androidx.browser:browser:1.5.0")
 
-    implementation("androidx.work:work-runtime-ktx:2.8.0")
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
 
     val coroutinesVersion = "1.6.4"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
@@ -197,13 +197,13 @@ dependencies {
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("androidx.multidex:multidex:2.0.1")
 
-    minApi21Implementation("androidx.activity:activity-compose:1.6.1")
+    minApi21Implementation("androidx.activity:activity-compose:1.7.0")
     val accompanistVersion = "0.30.0"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-themeadapter-material3:$accompanistVersion")
     minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.1.0-alpha08")
+    minApi21Implementation("androidx.compose.material3:material3:1.1.0-beta01")
     minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
