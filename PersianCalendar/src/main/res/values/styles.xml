@@ -458,7 +458,7 @@
         <item name="cornerSizeTopRight">0dp</item>
     </style>
 
-    <style name="shapeAppearanceBottomCornerLarge" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
+    <style name="shapeAppearanceBottomCornerLarge" parent="ShapeAppearance.Material3.Corner.Large">
         <item name="cornerFamily">?attr/shapeCornerFamily</item>
         <item name="cornerSizeTopLeft">0dp</item>
         <item name="cornerSizeTopRight">0dp</item>
