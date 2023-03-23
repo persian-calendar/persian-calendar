@@ -188,29 +188,30 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
 
 class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val checkerBoard = createCheckerRoundedBoard(40f, 8f, Color.parseColor("#100A0A0A"))
-    private val startTime = System.nanoTime()
-    private val shader by lazy(LazyThreadSafetyMode.NONE) {
-        runCatching {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return@runCatching null
-            RuntimeShader(demoRuntimeShader).also {
-                val width = context.resources?.displayMetrics?.widthPixels?.toFloat() ?: 800f
-                val height = context.resources?.displayMetrics?.heightPixels?.toFloat() ?: 800f
-                it.setFloatUniform("iResolution", width, height)
-            }
-        }.onFailure(logException).getOrNull().debugAssertNotNull
-    }
-    private val shaderPaint = Paint().also {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            it.shader = shader
-        }
-    }
+    // private val startTime = System.nanoTime()
+    // private val shader by lazy(LazyThreadSafetyMode.NONE) {
+    //     runCatching {
+    //         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return@runCatching null
+    //         RuntimeShader(demoRuntimeShader).also {
+    //             val width = context.resources?.displayMetrics?.widthPixels?.toFloat() ?: 800f
+    //             val height = context.resources?.displayMetrics?.heightPixels?.toFloat() ?: 800f
+    //             it.setFloatUniform("iResolution", width, height)
+    //         }
+    //     }.onFailure(logException).getOrNull().debugAssertNotNull
+    // }
+    // private val shaderPaint = Paint().also {
+    //     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+    //         it.shader = shader
+    //     }
+    // }
 
     override fun onDraw(canvas: Canvas) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            shader?.setFloatUniform("iTime", (System.nanoTime() - startTime) / 1e9f)
-            canvas.drawPaint(shaderPaint)
-            invalidate()
-        } else canvas.drawPaint(checkerBoard)
+        // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        //     shader?.setFloatUniform("iTime", (System.nanoTime() - startTime) / 1e9f)
+        //     canvas.drawPaint(shaderPaint)
+        //     invalidate()
+        // } else
+        canvas.drawPaint(checkerBoard)
     }
 }
 
