@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp">
 
     <Button
         android:id="@+id/add_button"
@@ -20,26 +21,33 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/edit_text_parent"
-            style="@style/AppTextInputLayoutFilledBoxDenseExposedDropdownMenu"
-            android:layout_width="match_parent"
+        <com.google.android.material.carousel.MaskableFrameLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@null"
-            app:boxStrokeWidth="0dp"
-            app:boxStrokeWidthFocused="0dp"
-            app:errorEnabled="false">
+            app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
 
-            <AutoCompleteTextView
-                android:id="@+id/edit_text"
-                android:layout_width="146dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edit_text_parent"
+                style="@style/AppTextInputLayoutFilledBoxDenseExposedDropdownMenu"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/empty"
-                android:inputType="textNoSuggestions"
-                android:maxLines="1"
-                android:padding="0dp" />
+                app:boxBackgroundColor="@null"
+                app:boxStrokeWidth="0dp"
+                app:boxStrokeWidthFocused="0dp"
+                app:errorEnabled="false">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/edit_text"
+                    android:layout_width="146dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/empty"
+                    android:inputType="textNoSuggestions"
+                    android:maxLines="1"
+                    android:padding="0dp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </com.google.android.material.carousel.MaskableFrameLayout>
 
         <Spinner
             android:id="@+id/length_spinner"
