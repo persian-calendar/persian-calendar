@@ -78,6 +78,7 @@
                     android:id="@+id/licenses"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
@@ -96,6 +97,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/about_license_sum"
                         android:textColor="?attr/colorTextSecond"
                         android:textSize="12sp" />
@@ -143,6 +146,7 @@
                     android:id="@+id/reportBug"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
@@ -161,6 +165,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/about_report_bug_sum"
                         android:textColor="?attr/colorTextSecond"
                         android:textSize="12sp" />
@@ -171,6 +177,7 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:focusable="true"
@@ -189,6 +196,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="28dp"
+                        android:layout_marginEnd="8dp"
                         android:text="@string/about_email_sum"
                         android:textColor="?attr/colorTextSecond"
                         android:textSize="12sp" />
