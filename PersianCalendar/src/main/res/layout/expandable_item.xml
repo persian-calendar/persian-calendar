@@ -1,44 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.carousel.MaskableFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:orientation="vertical"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
 
-        <com.byagowi.persiancalendar.ui.common.ArrowView
-            android:id="@+id/expansion_arrow"
-            android:layout_width="@dimen/arrow_size"
-            android:layout_height="@dimen/arrow_size"
-            android:importantForAccessibility="no"
-            app:tint="?attr/colorAccent"
-            tools:ignore="HardcodedText" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.byagowi.persiancalendar.ui.common.ArrowView
+                android:id="@+id/expansion_arrow"
+                android:layout_width="@dimen/arrow_size"
+                android:layout_height="@dimen/arrow_size"
+                android:importantForAccessibility="no"
+                app:tint="?attr/colorAccent"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/arrow_size"
+                android:gravity="center_vertical"
+                android:scrollbars="none"
+                android:textSize="16sp"
+                tools:text="Title" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/body"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/arrow_size"
-            android:gravity="center_vertical"
-            android:scrollbars="none"
-            android:textSize="16sp"
-            tools:text="Title" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="27dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="12dp"
+            android:fontFamily="monospace"
+            tools:text="Body" />
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/body"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="monospace"
-        tools:text="Context" />
-
-</LinearLayout>
+</com.google.android.material.carousel.MaskableFrameLayout>
