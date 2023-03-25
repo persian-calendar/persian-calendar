@@ -37,7 +37,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
                 it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
                 it.interpolator = AccelerateDecelerateInterpolator()
                 it.addUpdateListener { _ ->
-                    field = ((it.animatedValue as? Float) ?: return@addUpdateListener)
+                    field = it.animatedValue as? Float ?: return@addUpdateListener
                     update()
                 }
             }.start()

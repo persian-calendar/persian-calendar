@@ -26,8 +26,8 @@ fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onCl
             it.interpolator = LinearInterpolator()
             it.repeatMode = ValueAnimator.RESTART
             it.repeatCount = ValueAnimator.INFINITE
-            it.addUpdateListener {
-                pattern.rotationDegree = it.animatedValue as? Float ?: 0f
+            it.addUpdateListener { valueAnimator ->
+                pattern.rotationDegree = valueAnimator.animatedValue as? Float ?: 0f
                 pattern.invalidateSelf()
             }
             listOf(it::start, it::reverse).random()()

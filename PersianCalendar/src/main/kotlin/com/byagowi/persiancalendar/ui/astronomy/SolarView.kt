@@ -53,7 +53,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                     resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
                 animator.interpolator = AccelerateDecelerateInterpolator()
                 animator.addUpdateListener { _ ->
-                    val fraction = ((animator.animatedValue as? Float) ?: 0f)
+                    val fraction = animator.animatedValue as? Float ?: 0f
                     ranges.indices.forEach {
                         ranges[it][0] = MathUtils.lerp(
                             iauRanges[it][0], tropicalRanges[it][0], fraction
