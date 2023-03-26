@@ -82,8 +82,8 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
             override fun onTabReselected(tab: TabLayout.Tab?) = Unit
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.position?.also(viewModel::changeSelectedTab)
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                viewModel.changeSelectedTab(tab.position)
             }
         })
         binding.viewPager.adapter = object : FragmentStateAdapter(this) {
