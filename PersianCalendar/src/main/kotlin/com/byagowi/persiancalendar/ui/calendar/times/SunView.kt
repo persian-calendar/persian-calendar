@@ -27,6 +27,7 @@ import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
 import kotlin.math.PI
@@ -77,7 +78,7 @@ class SunView @JvmOverloads constructor(
 
     fun setTime(date: GregorianCalendar) {
         val time = Time.fromMillisecondsSince1970(date.time.time)
-        sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
+        sun = sunPosition(time)
         moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
         invalidate()
     }

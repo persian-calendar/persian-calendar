@@ -14,6 +14,7 @@ import io.github.cosinekitty.astronomy.Ecliptic
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -54,7 +55,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
         val fractionOfDay = jdn % 1 // jdn is a float so it can do smooth transition
         date[Calendar.HOUR_OF_DAY] = (fractionOfDay * 24).roundToInt().coerceIn(0, 23)
         val time = Time.fromMillisecondsSince1970(date.time.time)
-        sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
+        sun = sunPosition(time)
         moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
         invalidate()
     }

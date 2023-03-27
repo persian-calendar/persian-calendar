@@ -25,11 +25,12 @@ import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLunarEclipse
+import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
 
 class AstronomyState(val date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)
-    val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
+    val sun = sunPosition(time)
     val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
     private val observer by lazy(LazyThreadSafetyMode.NONE) { coordinates.value?.toObserver() }
     val moonTilt by lazy(LazyThreadSafetyMode.NONE) {

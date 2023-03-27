@@ -13,11 +13,12 @@ import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.horizon
+import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
 
 class AstronomyState(observer: Observer, date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)
-    val sun = equatorialToEcliptic(geoVector(Body.Sun, time, Aberration.Corrected))
+    val sun = sunPosition(time)
     val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
     private val sunEquator =
         equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.Corrected)
