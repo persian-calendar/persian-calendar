@@ -6,8 +6,11 @@ import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import io.github.persiancalendar.calendar.PersianDate
+import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.Coordinates
+import java.util.*
+import kotlin.math.floor
 
 enum class Season(
     @StringRes val nameStringId: Int, @DrawableRes val imageId: Int, @ColorInt val color: Int
@@ -18,12 +21,11 @@ enum class Season(
     WINTER(R.string.winter, R.drawable.winter, 0xcc5580aa.toInt());
 
     companion object {
-        fun fromPersianCalendar(persianDate: PersianDate, coordinates: Coordinates?): Season {
-            val seasonIndex = ((persianDate.month - 1) / 3).let {
-                // Southern hemisphere
-                if (coordinates?.isSouthernHemisphere == true) (it + 2) % 4
-                else it
-            }
+        fun fromDate(date: Date, coordinates: Coordinates?): Season {
+            val sunLongitude = sunPosition(Time.fromMillisecondsSince1970(date.time)).elon
+            val seasonIndex = floor(sunLongitude / 90).toInt()
+                // Southern hemisphere consideration
+                .let { if (coordinates?.isSouthernHemisphere == true) (it + 2) % 4 else it }
             return values().getOrNull(seasonIndex).debugAssertNotNull ?: SPRING
         }
     }

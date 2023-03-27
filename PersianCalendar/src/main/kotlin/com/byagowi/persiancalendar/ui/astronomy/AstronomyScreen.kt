@@ -36,6 +36,7 @@ import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isRtl
+import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.toCivilDate
 import com.byagowi.persiancalendar.utils.toJavaCalendar
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -175,12 +176,13 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
         }
 
         listOf(
-            binding.firstSeason to 4,
-            binding.secondSeason to 7,
-            binding.thirdSeason to 10,
-            binding.fourthSeason to 1
-        ).map { (holder, month) -> // 'month' is month number of first Persian month in the season
-            val season = Season.fromPersianCalendar(PersianDate(1400, month, 1), coordinates.value)
+            binding.firstSeason, binding.secondSeason, binding.thirdSeason, binding.fourthSeason
+        ).zip(
+            if (coordinates.value?.isSouthernHemisphere == true)
+                listOf(Season.WINTER, Season.SPRING, Season.SUMMER, Season.AUTUMN)
+            else
+                listOf(Season.SUMMER, Season.AUTUMN, Season.WINTER, Season.SPRING)
+        ).forEach { (holder, season) ->
             holder.setTitle(getString(season.nameStringId))
             holder.setColor(season.color)
         }

@@ -3,10 +3,10 @@ package com.byagowi.persiancalendar.ui
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.SeasonItemBinding
-import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import java.util.*
 
 class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder>() {
     class SeasonImageViewHolder(val binding: SeasonItemBinding) :
@@ -31,9 +31,7 @@ class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder
     companion object {
         private fun toActualIndex(index: Int): Int = 4 * 100 + index
 
-        fun getCurrentIndex(): Int {
-            val date = Jdn.today().toPersianCalendar()
-            return toActualIndex(Season.fromPersianCalendar(date, coordinates.value).ordinal)
-        }
+        fun getCurrentIndex(): Int =
+            toActualIndex(Season.fromDate(Date(), coordinates.value).ordinal)
     }
 }
