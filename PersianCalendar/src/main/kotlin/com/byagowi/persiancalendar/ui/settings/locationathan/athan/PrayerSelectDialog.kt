@@ -8,13 +8,13 @@ import com.byagowi.persiancalendar.PREF_ATHAN_ALARM
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.getPrayTimeName
-import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
+import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.utils.startAthan
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showPrayerSelectDialog(activity: FragmentActivity) {
     val alarms = (activity.appPrefs.getString(PREF_ATHAN_ALARM, null) ?: "")
-        .splitIgnoreEmpty(",").toMutableSet()
+        .splitFilterNotEmpty(",").toMutableSet()
 
     val checked = ATHANS_LIST.map { it in alarms }.toBooleanArray()
     val prayTimesNames = ATHANS_LIST.map { activity.getString(getPrayTimeName(it)) }.toTypedArray()

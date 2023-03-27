@@ -111,7 +111,7 @@ private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching 
 fun getEnabledAlarms(context: Context): Set<String> {
     if (coordinates.value == null) return emptySet()
     return (context.appPrefs.getString(PREF_ATHAN_ALARM, null)?.trim() ?: return emptySet())
-        .splitIgnoreEmpty(",")
+        .splitFilterNotEmpty(",")
         .toSet()
 }
 

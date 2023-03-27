@@ -63,7 +63,7 @@ import com.byagowi.persiancalendar.utils.getJdnOrNull
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.scheduleAlarms
-import com.byagowi.persiancalendar.utils.splitIgnoreEmpty
+import com.byagowi.persiancalendar.utils.splitFilterNotEmpty
 import com.byagowi.persiancalendar.utils.storedCity
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
@@ -268,7 +268,7 @@ fun updateStoredPreference(context: Context) {
         )
         val otherCalendars =
             (prefs.getString(PREF_OTHER_CALENDARS_KEY, null) ?: language.defaultOtherCalendars)
-                .splitIgnoreEmpty(",").map(CalendarType::valueOf)
+                .splitFilterNotEmpty(",").map(CalendarType::valueOf)
         enabledCalendars = (listOf(mainCalendar) + otherCalendars).distinct()
         secondaryCalendarEnabled = prefs.getBoolean(
             PREF_SECONDARY_CALENDAR_IN_TABLE, DEFAULT_SECONDARY_CALENDAR_IN_TABLE
@@ -301,8 +301,8 @@ fun updateStoredPreference(context: Context) {
     calendarTypesTitleAbbr = enumValues<CalendarType>().map { context.getString(it.shortTitle) }
 
     shiftWorks = (prefs.getString(PREF_SHIFT_WORK_SETTING, null) ?: "")
-        .splitIgnoreEmpty(",")
-        .map { it.splitIgnoreEmpty("=") }
+        .splitFilterNotEmpty(",")
+        .map { it.splitFilterNotEmpty("=") }
         .filter { it.size == 2 }
         .map { ShiftWorkRecord(it[0], it[1].toIntOrNull() ?: 1) }
     shiftWorkPeriod = shiftWorks.sumOf { it.length }
