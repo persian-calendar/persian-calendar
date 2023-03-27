@@ -9,9 +9,8 @@ import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Observer
 import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
-import io.github.cosinekitty.astronomy.equatorialToEcliptic
-import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
@@ -19,7 +18,7 @@ import java.util.*
 class AstronomyState(observer: Observer, date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)
     val sun = sunPosition(time)
-    val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
+    val moon = eclipticGeoMoon(time)
     private val sunEquator =
         equator(Body.Sun, time, observer, EquatorEpoch.OfDate, Aberration.Corrected)
     val sunHorizon = horizon(time, observer, sunEquator.ra, sunEquator.dec, Refraction.Normal)

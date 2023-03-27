@@ -7,8 +7,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.sunPosition
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.roundToInt
@@ -28,16 +30,20 @@ fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
             Body.Sun, Body.Moon, Body.Mercury, Body.Venus, Body.Mars, Body.Jupiter,
             Body.Saturn, Body.Uranus, Body.Neptune, Body.Pluto
         ).joinToString("\n") { body ->
-            val name = activity.getString(planetsTitles.getValue(body))
-            name + equatorialToEcliptic(geoVector(body, time, Aberration.Corrected)).let {
-                ": %s%s %s %,d km".format(
-                    Locale.ENGLISH,
-                    LRM,
-                    formatAngle(it.elon % 30), // Remaining angle
-                    Zodiac.fromTropical(it.elon).emoji,
-                    (it.vec.length() * AU_IN_KM).roundToLong()
-                )
+            val (longitude, distance) = when (body) {
+                Body.Sun -> sunPosition(time).let { it.elon to it.vec.length() }
+                Body.Moon -> eclipticGeoMoon(time).let { it.lon to it.dist }
+                else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
+                    .let { it.elon to it.vec.length() }
             }
+            val name = activity.getString(planetsTitles.getValue(body))
+            name + ": %s%s %s %,d km".format(
+                Locale.ENGLISH,
+                LRM,
+                formatAngle(longitude % 30), // Remaining angle
+                Zodiac.fromTropical(longitude).emoji,
+                (distance * AU_IN_KM).roundToLong()
+            )
         })
         .show()
 }

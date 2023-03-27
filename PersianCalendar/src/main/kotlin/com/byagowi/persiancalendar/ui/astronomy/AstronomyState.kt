@@ -17,6 +17,7 @@ import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
 import io.github.cosinekitty.astronomy.Refraction
 import io.github.cosinekitty.astronomy.Time
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
 import io.github.cosinekitty.astronomy.geoVector
@@ -31,7 +32,7 @@ import java.util.*
 class AstronomyState(val date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)
     val sun = sunPosition(time)
-    val moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
+    val moon = eclipticGeoMoon(time)
     private val observer by lazy(LazyThreadSafetyMode.NONE) { coordinates.value?.toObserver() }
     val moonTilt by lazy(LazyThreadSafetyMode.NONE) {
         observer?.let { observer -> sunlitSideMoonTiltAngle(time, observer).toFloat() }

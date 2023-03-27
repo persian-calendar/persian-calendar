@@ -21,12 +21,10 @@ import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
-import io.github.cosinekitty.astronomy.Aberration
-import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.Ecliptic
+import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
-import io.github.cosinekitty.astronomy.equatorialToEcliptic
-import io.github.cosinekitty.astronomy.geoVector
+import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -73,13 +71,13 @@ class SunView @JvmOverloads constructor(
             invalidate()
         }
     private var sun: Ecliptic? = null
-    private var moon: Ecliptic? = null
+    private var moon: Spherical? = null
     private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
 
     fun setTime(date: GregorianCalendar) {
         val time = Time.fromMillisecondsSince1970(date.time.time)
         sun = sunPosition(time)
-        moon = equatorialToEcliptic(geoVector(Body.Moon, time, Aberration.Corrected))
+        moon = eclipticGeoMoon(time)
         invalidate()
     }
 

@@ -210,10 +210,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 canvas.drawPath(trianglePath, sunIndicatorPaint)
             }
         }
-        val moonDegree = state.moon.elon.toFloat()
+        val moonDegree = state.moon.lon.toFloat()
         canvas.drawCircle(radius, radius, radius * .3f, moonOrbitPaint)
         canvas.withRotation(-moonDegree + 90, radius, radius) {
-            val moonDistance = state.moon.vec.length() / 0.002569 // Lunar distance in AU
+            val moonDistance = state.moon.dist / 0.002569 // Lunar distance in AU
             solarDraw.moon(
                 this, state.sun, state.moon, radius,
                 radius * moonDistance.toFloat() * .7f, cr / 1.9f
