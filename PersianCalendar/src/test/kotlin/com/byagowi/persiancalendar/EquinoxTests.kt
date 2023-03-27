@@ -56,7 +56,7 @@ class EquinoxTests {
         "2002, 3, 20, 22, 46, 0" /* should be 2 */
     )
     fun test_not_change(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone(IRAN_TIMEZONE_ID))
+        val calendar = GregorianCalendar(TimeZone.getTimeZone(IRAN_TIMEZONE_ID))
         calendar.timeInMillis = seasons(year).marchEquinox.toMillisecondsSince1970()
         assertEquals(year, calendar[Calendar.YEAR])
         assertEquals(month, calendar[Calendar.MONTH] + 1)
