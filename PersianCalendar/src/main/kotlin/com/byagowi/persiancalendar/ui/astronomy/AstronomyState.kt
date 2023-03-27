@@ -20,7 +20,6 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.equatorialToEcliptic
-import io.github.cosinekitty.astronomy.geoVector
 import io.github.cosinekitty.astronomy.helioVector
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
