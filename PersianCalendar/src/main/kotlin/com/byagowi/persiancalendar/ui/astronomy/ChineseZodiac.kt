@@ -60,8 +60,8 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
             values().getOrNull((persianDate.year + 5) % 12) ?: RAT
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun fromChineseCalendar(date: ChineseCalendar): ChineseZodiac =
-            values().getOrNull((date[ChineseCalendar.YEAR] - 1) % 12) ?: RAT
+        fun fromChineseCalendar(chineseDate: ChineseCalendar): ChineseZodiac =
+            values().getOrNull((chineseDate[ChineseCalendar.YEAR] - 1) % 12) ?: RAT
 
         /*
          * Compatibilities, they should be turned into formula eventually.
