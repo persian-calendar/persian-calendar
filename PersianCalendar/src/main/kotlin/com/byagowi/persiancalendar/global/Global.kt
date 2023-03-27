@@ -31,7 +31,6 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
-import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
@@ -55,7 +54,6 @@ import com.byagowi.persiancalendar.entities.EventsRepository
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
-import com.byagowi.persiancalendar.ui.utils.canEnableNewInterface
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -108,8 +106,6 @@ var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
 var asrMethod = AsrMethod.Standard
     private set
 var highLatitudesMethod = HighLatitudesMethod.NightMiddle
-    private set
-var enableNewInterface = false
     private set
 var language = Language.FA
     private set
@@ -221,9 +217,6 @@ fun updateStoredPreference(context: Context) {
     language = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
         ?: Language.preferredDefaultLanguage
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
-
-    enableNewInterface = canEnableNewInterface &&
-            prefs.getBoolean(PREF_NEW_INTERFACE, false) //shouldEnableNewInterface)
 
     preferredDigits =
         if (!prefs.getBoolean(PREF_LOCAL_DIGITS, DEFAULT_LOCAL_DIGITS) ||

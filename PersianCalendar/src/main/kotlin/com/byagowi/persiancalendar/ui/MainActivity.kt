@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui
 
 import android.Manifest
-import android.app.ActivityManager
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -23,7 +22,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.core.content.getSystemService
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
@@ -57,7 +55,6 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.configureCalendarsAndLoadEvents
-import com.byagowi.persiancalendar.global.enableNewInterface
 import com.byagowi.persiancalendar.global.initGlobal
 import com.byagowi.persiancalendar.global.isIranHolidaysEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
@@ -71,7 +68,6 @@ import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -83,8 +79,6 @@ import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.byagowi.persiancalendar.utils.update
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.roundToInt
 
@@ -123,20 +117,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(it.root)
         }
         ensureDirectionality()
-
-        if (enableNewInterface &&
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
-            getSystemService<ActivityManager>()?.isLowRamDevice == false
-        ) {
-            window?.makeWallpaperTransparency()
-            binding.root.fitsSystemWindows = false
-            binding.root.background = MaterialShapeDrawable().also {
-                it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(16.dp)
-            }
-            binding.root.clipToOutline = true
-            binding.root.alpha = 0.96f
-            binding.root.fitsSystemWindows = false
-        }
 
         binding.root.addDrawerListener(createDrawerListener())
 
