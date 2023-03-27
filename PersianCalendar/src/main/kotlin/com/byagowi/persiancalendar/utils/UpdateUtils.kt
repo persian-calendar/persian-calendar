@@ -152,7 +152,7 @@ fun update(context: Context, updateDate: Boolean) {
     val prefs = context.appPrefs
 
     // region owghat calculations
-    val nowClock = Clock(Date().toJavaCalendar(forceLocalTime = true))
+    val nowClock = Clock(Date().toGregorianCalendar(forceLocalTime = true))
     val prayTimes = coordinates.value?.calculatePrayTimes()
 
     @StringRes
@@ -307,7 +307,7 @@ private fun createSunViewRemoteViews(
     remoteViews.setRoundBackground(R.id.image_background, width, height)
     prepareViewForRendering(sunView, width, height)
     sunView.prayTimes = prayTimes
-    sunView.setTime(jdn.toJavaCalendar())
+    sunView.setTime(jdn.toGregorianCalendar())
     sunView.initiate()
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR

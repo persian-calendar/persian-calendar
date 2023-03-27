@@ -122,7 +122,7 @@ fun GregorianCalendar.toCivilDate(): CivilDate {
     return CivilDate(this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH])
 }
 
-fun Date.toJavaCalendar(forceLocalTime: Boolean = false): GregorianCalendar {
+fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar {
     val calendar = GregorianCalendar()
     if (!forceLocalTime && isForcedIranTimeEnabled)
         calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
@@ -167,8 +167,8 @@ private fun readDeviceEvents(
         }.map {
             val startDate = Date(it.getLong(3))
             val endDate = Date(it.getLong(4))
-            val startCalendar = startDate.toJavaCalendar()
-            val endCalendar = endDate.toJavaCalendar()
+            val startCalendar = startDate.toGregorianCalendar()
+            val endCalendar = endDate.toGregorianCalendar()
             fun GregorianCalendar.clock() = Clock(this).toBasicFormatString()
             CalendarEvent.DeviceCalendarEvent(
                 id = it.getInt(0),
@@ -191,10 +191,16 @@ private fun readDeviceEvents(
 }.onFailure(logException).getOrNull() ?: emptyList()
 
 fun Context.readDayDeviceEvents(jdn: Jdn) =
-    DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toJavaCalendar(), DAY_IN_MILLIS))
+    DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toGregorianCalendar(), DAY_IN_MILLIS))
 
 fun Context.readMonthDeviceEvents(jdn: Jdn) =
-    DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toJavaCalendar(), 32L * DAY_IN_MILLIS))
+    DeviceCalendarEventsStore(
+        readDeviceEvents(
+            this,
+            jdn.toGregorianCalendar(),
+            32L * DAY_IN_MILLIS
+        )
+    )
 
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
     this, GregorianCalendar().apply { add(Calendar.YEAR, -1) },

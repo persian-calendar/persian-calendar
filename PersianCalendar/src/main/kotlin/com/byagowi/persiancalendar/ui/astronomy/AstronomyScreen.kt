@@ -38,7 +38,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.isSouthernHemisphere
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.google.android.material.materialswitch.MaterialSwitch
 import io.github.cosinekitty.astronomy.seasons
 import io.github.persiancalendar.calendar.CivilDate
@@ -159,7 +159,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                                 else -> it.marchEquinox
                             }
                         }.toMillisecondsSince1970()
-                    ).toJavaCalendar().formatDateAndTime()
+                    ).toGregorianCalendar().formatDateAndTime()
                 )
             }
         }

@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
 import com.byagowi.persiancalendar.utils.planetsTitles
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
-import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -61,7 +61,7 @@ class AstronomyState(val date: GregorianCalendar) {
             else searchGlobalSolarEclipse(time).let { it.kind to it.peak },
             searchLunarEclipse(time).let { it.kind to it.peak }
         ).mapIndexed { i, (kind, peak) ->
-            val formattedDate = Date(peak.toMillisecondsSince1970()).toJavaCalendar()
+            val formattedDate = Date(peak.toMillisecondsSince1970()).toGregorianCalendar()
                 .formatDateAndTime()
             val isSolar = i == 0
             val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse

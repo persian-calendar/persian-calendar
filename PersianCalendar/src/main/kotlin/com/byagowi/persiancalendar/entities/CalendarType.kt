@@ -59,7 +59,7 @@ enum class CalendarType(
 
     fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int = when (this) {
         ISLAMIC -> baseJdn.toIslamicCalendar().monthsDistanceTo(toJdn.toIslamicCalendar())
-        GREGORIAN -> baseJdn.toGregorianCalendar().monthsDistanceTo(toJdn.toGregorianCalendar())
+        GREGORIAN -> baseJdn.toCivilCalendar().monthsDistanceTo(toJdn.toCivilCalendar())
         SHAMSI -> baseJdn.toPersianCalendar().monthsDistanceTo(toJdn.toPersianCalendar())
         NEPALI -> baseJdn.toNepaliCalendar().monthsDistanceTo(toJdn.toNepaliCalendar())
     }

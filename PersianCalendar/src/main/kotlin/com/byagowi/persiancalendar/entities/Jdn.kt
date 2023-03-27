@@ -4,7 +4,7 @@ import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekEnds
 import com.byagowi.persiancalendar.utils.applyWeekStartOffsetToWeekDay
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
@@ -28,13 +28,13 @@ value class Jdn(val value: Long) {
 
     fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
         CalendarType.ISLAMIC -> toIslamicCalendar()
-        CalendarType.GREGORIAN -> toGregorianCalendar()
+        CalendarType.GREGORIAN -> toCivilCalendar()
         CalendarType.SHAMSI -> toPersianCalendar()
         CalendarType.NEPALI -> toNepaliCalendar()
     }
 
     fun toIslamicCalendar() = IslamicDate(value)
-    fun toGregorianCalendar() = CivilDate(value)
+    fun toCivilCalendar() = CivilDate(value)
     fun toPersianCalendar() = PersianDate(value)
     fun toNepaliCalendar() = NepaliDate(value)
 
@@ -47,8 +47,8 @@ value class Jdn(val value: Long) {
     // Difference of two Jdn values in days
     operator fun minus(other: Jdn): Int = (value - other.value).toInt()
 
-    fun toJavaCalendar(): GregorianCalendar = GregorianCalendar().also {
-        val gregorian = this.toGregorianCalendar()
+    fun toGregorianCalendar(): GregorianCalendar = GregorianCalendar().also {
+        val gregorian = this.toCivilCalendar()
         it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
     }
 
@@ -69,6 +69,6 @@ value class Jdn(val value: Long) {
     }
 
     companion object {
-        fun today() = Jdn(Date().toJavaCalendar().toCivilDate())
+        fun today() = Jdn(Date().toGregorianCalendar().toCivilDate())
     }
 }

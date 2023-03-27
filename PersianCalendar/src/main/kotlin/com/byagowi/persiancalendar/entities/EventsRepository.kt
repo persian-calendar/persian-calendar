@@ -106,7 +106,7 @@ class EventsRepository(
             islamicCalendarEvents.getEvents(jdn.toIslamicCalendar(), irregularCalendarEventsStore),
             nepaliCalendarEvents.getEvents(jdn.toNepaliCalendar(), irregularCalendarEventsStore),
             gregorianCalendarEvents
-                .getEvents(jdn.toGregorianCalendar(), irregularCalendarEventsStore, deviceEvents)
+                .getEvents(jdn.toCivilCalendar(), irregularCalendarEventsStore, deviceEvents)
         ).flatten()
     }
 
@@ -116,7 +116,7 @@ class EventsRepository(
             nepaliCalendarEvents.getAllEvents(), gregorianCalendarEvents.getAllEvents()
         ).flatten() + listOf(
             jdn.toPersianCalendar(),
-            jdn.toGregorianCalendar(),
+            jdn.toCivilCalendar(),
             jdn.toIslamicCalendar(),
             jdn.toNepaliCalendar()
         ).flatMap {

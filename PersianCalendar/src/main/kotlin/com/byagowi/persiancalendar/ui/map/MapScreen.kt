@@ -32,7 +32,7 @@ import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.toCivilDate
-import com.byagowi.persiancalendar.utils.toJavaCalendar
+import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
@@ -90,7 +90,8 @@ class MapScreen : Fragment(R.layout.fragment_map) {
         binding.endArrow.setOnLongClickListener { viewModel.addDays(10); true }
         binding.dateParent.setupLayoutTransition()
         binding.date.setOnClickListener {
-            val currentJdn = Jdn(Date(viewModel.state.value.time).toJavaCalendar().toCivilDate())
+            val currentJdn =
+                Jdn(Date(viewModel.state.value.time).toGregorianCalendar().toCivilDate())
             showDayPickerDialog(
                 activity ?: return@setOnClickListener, currentJdn, R.string.accept
             ) { jdn -> viewModel.addDays(jdn - currentJdn) }

@@ -90,7 +90,7 @@ class AstronomyTests {
     @Test
     fun `Season from Persian calendar`() {
         val noLocationSeasons = (1..12).map {
-            Season.fromDate(Jdn(PersianDate(1400, it, 28)).toJavaCalendar().time, null)
+            Season.fromDate(Jdn(PersianDate(1400, it, 28)).toGregorianCalendar().time, null)
         }
         listOf(
             1..3 to Season.SPRING, 4..6 to Season.SUMMER,
@@ -100,13 +100,13 @@ class AstronomyTests {
         }
         val northernHemisphereSeason = (1..12).map {
             val kathmandu = Coordinates(27.7172, 85.324, 1_400.0)
-            Season.fromDate(Jdn(PersianDate(1400, it, 28)).toJavaCalendar().time, kathmandu)
+            Season.fromDate(Jdn(PersianDate(1400, it, 28)).toGregorianCalendar().time, kathmandu)
         }
         assertThat(noLocationSeasons).isEqualTo(northernHemisphereSeason)
 
         val southernHemisphereSeasons = (1..12).map {
             val nirobi = Coordinates(-1.286389, 36.817222, 1_795.0)
-            Season.fromDate(Jdn(PersianDate(1400, it, 28)).toJavaCalendar().time, nirobi)
+            Season.fromDate(Jdn(PersianDate(1400, it, 28)).toGregorianCalendar().time, nirobi)
         }
         listOf(
             1..3 to Season.AUTUMN, 4..6 to Season.WINTER,

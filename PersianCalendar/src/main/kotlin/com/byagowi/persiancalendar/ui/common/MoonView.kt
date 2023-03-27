@@ -49,7 +49,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
     }
 
     fun update() {
-        val date = Jdn(jdn.toLong()).toJavaCalendar()
+        val date = Jdn(jdn.toLong()).toGregorianCalendar()
         val fractionOfDay = jdn % 1 // jdn is a float so it can do smooth transition
         date[Calendar.HOUR_OF_DAY] = (fractionOfDay * 24).roundToInt().coerceIn(0, 23)
         val time = Time.fromMillisecondsSince1970(date.time.time)

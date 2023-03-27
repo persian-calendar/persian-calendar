@@ -380,7 +380,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         registerForActivityResult(object : ActivityResultContract<Jdn, Void?>() {
             override fun parseResult(resultCode: Int, intent: Intent?): Void? = null
             override fun createIntent(context: Context, input: Jdn): Intent {
-                val time = input.toJavaCalendar().timeInMillis
+                val time = input.toGregorianCalendar().timeInMillis
                 return Intent(Intent.ACTION_INSERT)
                     .setData(CalendarContract.Events.CONTENT_URI)
                     .putExtra(
@@ -537,7 +537,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
     private fun setOwghat(owghatBinding: OwghatTabContentBinding, jdn: Jdn, isToday: Boolean) {
         val coordinates = coordinates.value ?: return
 
-        val date = jdn.toJavaCalendar()
+        val date = jdn.toGregorianCalendar()
         val prayTimes = coordinates.calculatePrayTimes(date)
         owghatBinding.timesFlow.update(prayTimes)
         owghatBinding.moonView.isVisible = !isToday
@@ -716,7 +716,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
                         tr {
                             val prayTimes = coordinates.calculatePrayTimes(
                                 Jdn(mainCalendar.createDate(date.year, date.month, day))
-                                    .toJavaCalendar()
+                                    .toGregorianCalendar()
                             )
                             th { +formatNumber(day + 1) }
                             TIME_NAMES.forEach {
