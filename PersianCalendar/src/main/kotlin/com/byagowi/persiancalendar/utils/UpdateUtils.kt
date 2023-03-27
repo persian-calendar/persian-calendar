@@ -8,11 +8,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.ColorStateList
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.graphics.Matrix
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
@@ -29,7 +27,6 @@ import androidx.core.content.getSystemService
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.drawable.IconCompat
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withClip
 import androidx.core.view.drawToBitmap
 import com.byagowi.persiancalendar.AgeWidget
@@ -85,13 +82,12 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
+import com.byagowi.persiancalendar.ui.utils.createRoundBitmap
 import com.byagowi.persiancalendar.ui.utils.createRoundPath
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.variants.debugLog
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -766,16 +762,7 @@ private fun RemoteViews.setRoundBackground(
     when {
         prefersWidgetsDynamicColors -> setImageViewResource(viewId, R.drawable.widget_background)
         color == DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR -> setImageViewResource(viewId, 0)
-        else -> setImageViewBitmap(viewId, createRoundDrawable(color).toBitmap(width, height))
-    }
-}
-
-private fun createRoundDrawable(@ColorInt color: Int): Drawable {
-    return MaterialShapeDrawable().also {
-        it.fillColor = ColorStateList.valueOf(color)
-        // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
-        // Apply a round corner which is the default in Android 12
-        it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundPixelSize)
+        else -> setImageViewBitmap(viewId, createRoundBitmap(width, height, color, roundPixelSize))
     }
 }
 
