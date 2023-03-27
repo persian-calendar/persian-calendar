@@ -68,7 +68,7 @@ class AstronomyState(val date: GregorianCalendar) {
             (language.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
                     spacedColon + formattedDate
         } + listOf(
-            generateYearName(context, jdn.toPersianCalendar(), true, date)
+            generateYearName(context, jdn.toPersianDate(), true, date)
         )).joinToString("\n")
     }
 

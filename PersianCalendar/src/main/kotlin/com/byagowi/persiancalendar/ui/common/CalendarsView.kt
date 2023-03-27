@@ -122,8 +122,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 val addition = if (date.month == 12) 1 else 0
                 val equinoxYear = date.year + addition
                 val calendar = Date(
-                    seasons(jdn.toCivilCalendar().year).marchEquinox
-                        .toMillisecondsSince1970()
+                    seasons(jdn.toCivilDate().year).marchEquinox.toMillisecondsSince1970()
                 ).toGregorianCalendar()
                 equinox = context.getString(
                     R.string.spring_equinox,

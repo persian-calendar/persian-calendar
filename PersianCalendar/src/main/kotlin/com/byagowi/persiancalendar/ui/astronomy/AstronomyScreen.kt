@@ -150,7 +150,7 @@ class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
                 }.setValue(
                     Date(
                         seasonsCache[CivilDate(
-                            PersianDate(jdn.toPersianCalendar().year, i * 3, 29)
+                            PersianDate(jdn.toPersianDate().year, i * 3, 29)
                         ).year].let {
                             when (i) {
                                 1 -> it.juneSolstice

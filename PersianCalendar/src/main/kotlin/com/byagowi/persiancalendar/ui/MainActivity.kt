@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         if (mainCalendar == CalendarType.SHAMSI && isIranHolidaysEnabled &&
-            creationDateJdn.toPersianCalendar().year > supportedYearOfIranCalendar
+            creationDateJdn.toPersianDate().year > supportedYearOfIranCalendar
         ) showAppIsOutDatedSnackbar()
 
         applyAppLanguage(this)

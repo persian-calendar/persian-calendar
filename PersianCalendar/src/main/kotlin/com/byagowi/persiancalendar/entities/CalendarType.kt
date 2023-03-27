@@ -58,10 +58,10 @@ enum class CalendarType(
     }
 
     fun getMonthsDistance(baseJdn: Jdn, toJdn: Jdn): Int = when (this) {
-        ISLAMIC -> baseJdn.toIslamicCalendar().monthsDistanceTo(toJdn.toIslamicCalendar())
-        GREGORIAN -> baseJdn.toCivilCalendar().monthsDistanceTo(toJdn.toCivilCalendar())
-        SHAMSI -> baseJdn.toPersianCalendar().monthsDistanceTo(toJdn.toPersianCalendar())
-        NEPALI -> baseJdn.toNepaliCalendar().monthsDistanceTo(toJdn.toNepaliCalendar())
+        ISLAMIC -> baseJdn.toIslamicDate().monthsDistanceTo(toJdn.toIslamicDate())
+        GREGORIAN -> baseJdn.toCivilDate().monthsDistanceTo(toJdn.toCivilDate())
+        SHAMSI -> baseJdn.toPersianDate().monthsDistanceTo(toJdn.toPersianDate())
+        NEPALI -> baseJdn.toNepaliDate().monthsDistanceTo(toJdn.toNepaliDate())
     }
 
     fun getMonthStartFromMonthsDistance(baseJdn: Jdn, monthsDistance: Int): AbstractDate {

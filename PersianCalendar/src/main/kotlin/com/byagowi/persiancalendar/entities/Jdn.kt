@@ -27,16 +27,16 @@ value class Jdn(val value: Long) {
     fun isWeekEnd() = weekEnds[dayOfWeek]
 
     fun toCalendar(calendar: CalendarType): AbstractDate = when (calendar) {
-        CalendarType.ISLAMIC -> toIslamicCalendar()
-        CalendarType.GREGORIAN -> toCivilCalendar()
-        CalendarType.SHAMSI -> toPersianCalendar()
-        CalendarType.NEPALI -> toNepaliCalendar()
+        CalendarType.ISLAMIC -> toIslamicDate()
+        CalendarType.GREGORIAN -> toCivilDate()
+        CalendarType.SHAMSI -> toPersianDate()
+        CalendarType.NEPALI -> toNepaliDate()
     }
 
-    fun toIslamicCalendar() = IslamicDate(value)
-    fun toCivilCalendar() = CivilDate(value)
-    fun toPersianCalendar() = PersianDate(value)
-    fun toNepaliCalendar() = NepaliDate(value)
+    fun toIslamicDate() = IslamicDate(value)
+    fun toCivilDate() = CivilDate(value)
+    fun toPersianDate() = PersianDate(value)
+    fun toNepaliDate() = NepaliDate(value)
 
     fun createMonthDaysList(monthLength: Int) = (value until value + monthLength).map(::Jdn)
 
@@ -48,7 +48,7 @@ value class Jdn(val value: Long) {
     operator fun minus(other: Jdn): Int = (value - other.value).toInt()
 
     fun toGregorianCalendar(): GregorianCalendar = GregorianCalendar().also {
-        val gregorian = this.toCivilCalendar()
+        val gregorian = this.toCivilDate()
         it.set(gregorian.year, gregorian.month - 1, gregorian.dayOfMonth)
     }
 
@@ -60,7 +60,7 @@ value class Jdn(val value: Long) {
     val dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
     fun calculatePersianSeasonPassedDaysAndCount(): Pair<Int, Int> {
-        val persianDate = this.toPersianCalendar()
+        val persianDate = this.toPersianDate()
         val season = (persianDate.month - 1) / 3
         val seasonBeginning = PersianDate(persianDate.year, season * 3 + 1, 1)
         val seasonBeginningJdn = Jdn(seasonBeginning)
