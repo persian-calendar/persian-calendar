@@ -18,20 +18,13 @@ enum class Season(
     WINTER(R.string.winter, R.drawable.winter, 0xcc5580aa.toInt());
 
     companion object {
-        fun seasonIndexFromPersianCalendar(
-            persianDate: PersianDate,
-            coordinates: Coordinates?
-        ): Int {
-            return ((persianDate.month - 1) / 3).let {
+        fun fromPersianCalendar(persianDate: PersianDate, coordinates: Coordinates?): Season {
+            val seasonIndex = ((persianDate.month - 1) / 3).let {
                 // Southern hemisphere
                 if (coordinates?.isSouthernHemisphere == true) (it + 2) % 4
                 else it
             }
-        }
-
-        fun fromPersianCalendar(persianDate: PersianDate, coordinates: Coordinates?): Season {
-            return values().getOrNull(seasonIndexFromPersianCalendar(persianDate, coordinates))
-                .debugAssertNotNull ?: SPRING
+            return values().getOrNull(seasonIndex).debugAssertNotNull ?: SPRING
         }
     }
 }

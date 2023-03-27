@@ -32,8 +32,8 @@ class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder
         private fun toActualIndex(index: Int): Int = 4 * 100 + index
 
         fun getCurrentIndex(): Int {
-            val jdn = Jdn.today().toPersianCalendar()
-            return toActualIndex(Season.seasonIndexFromPersianCalendar(jdn, coordinates.value))
+            val date = Jdn.today().toPersianCalendar()
+            return toActualIndex(Season.fromPersianCalendar(date, coordinates.value).ordinal)
         }
     }
 }
