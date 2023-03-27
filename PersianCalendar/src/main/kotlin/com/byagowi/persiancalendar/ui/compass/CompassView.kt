@@ -99,7 +99,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : View(context,
     private var astronomyState = observer?.let { AstronomyState(it, GregorianCalendar()) }
 
     private val fullDay = Clock(24, 0).toMinutes().toFloat()
-    private var sunProgress = Clock(Calendar.getInstance()).toMinutes() / fullDay
+    private var sunProgress = Clock(GregorianCalendar()).toMinutes() / fullDay
 
     private val enableShade = false
 

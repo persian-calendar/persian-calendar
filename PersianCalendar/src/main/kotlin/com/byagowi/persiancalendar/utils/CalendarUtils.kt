@@ -118,25 +118,30 @@ fun getA11yDaySummary(
     }
 }
 
-fun Calendar.toCivilDate() =
-    CivilDate(this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH])
-
-fun Date.toJavaCalendar(forceLocalTime: Boolean = false): Calendar = Calendar.getInstance().also {
-    if (!forceLocalTime && isForcedIranTimeEnabled)
-        it.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
-    it.time = this
+fun GregorianCalendar.toCivilDate(): CivilDate {
+    return CivilDate(this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH])
 }
 
-fun Calendar.formatDateAndTime(): String = language.timeAndDateFormat.format(
-    Clock(this).toFormattedString(forcedIn12 = true),
-    formatDate(Jdn(this.toCivilDate()).toCalendar(mainCalendar), forceNonNumerical = true)
-)
+fun Date.toJavaCalendar(forceLocalTime: Boolean = false): GregorianCalendar {
+    val calendar = GregorianCalendar()
+    if (!forceLocalTime && isForcedIranTimeEnabled)
+        calendar.timeZone = TimeZone.getTimeZone(IRAN_TIMEZONE_ID)
+    calendar.time = this
+    return calendar
+}
+
+fun GregorianCalendar.formatDateAndTime(): String {
+    return language.timeAndDateFormat.format(
+        Clock(this).toFormattedString(forcedIn12 = true),
+        formatDate(Jdn(this.toCivilDate()).toCalendar(mainCalendar), forceNonNumerical = true)
+    )
+}
 
 // Google Meet generates weird and ugly descriptions with lines having such patterns, let's get rid of them
 private val descriptionCleaningPattern = Regex("^-::~[:~]+:-$", RegexOption.MULTILINE)
 
 private fun readDeviceEvents(
-    context: Context, startingDate: Calendar, rangeInMillis: Long
+    context: Context, startingDate: GregorianCalendar, rangeInMillis: Long
 ): List<CalendarEvent.DeviceCalendarEvent> = if (!isShowDeviceCalendarEvents ||
     ActivityCompat.checkSelfPermission(
         context, Manifest.permission.READ_CALENDAR
@@ -164,7 +169,7 @@ private fun readDeviceEvents(
             val endDate = Date(it.getLong(4))
             val startCalendar = startDate.toJavaCalendar()
             val endCalendar = endDate.toJavaCalendar()
-            fun Calendar.clock() = Clock(this).toBasicFormatString()
+            fun GregorianCalendar.clock() = Clock(this).toBasicFormatString()
             CalendarEvent.DeviceCalendarEvent(
                 id = it.getInt(0),
                 title =
@@ -192,7 +197,7 @@ fun Context.readMonthDeviceEvents(jdn: Jdn) =
     DeviceCalendarEventsStore(readDeviceEvents(this, jdn.toJavaCalendar(), 32L * DAY_IN_MILLIS))
 
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
-    this, Calendar.getInstance().apply { add(Calendar.YEAR, -1) },
+    this, GregorianCalendar().apply { add(Calendar.YEAR, -1) },
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
 )
 

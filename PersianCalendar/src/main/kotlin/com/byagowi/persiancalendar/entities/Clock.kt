@@ -12,7 +12,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.*
 
 data class Clock(val hours: Int, val minutes: Int) {
-    constructor(date: Calendar) : this(date[Calendar.HOUR_OF_DAY], date[Calendar.MINUTE])
+    constructor(date: GregorianCalendar) : this(date[Calendar.HOUR_OF_DAY], date[Calendar.MINUTE])
 
     fun toMinutes() = hours * 60 + minutes
 

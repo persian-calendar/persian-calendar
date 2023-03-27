@@ -27,7 +27,7 @@ class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker
     }
 
     private fun scheduleDayChangesUpdates() {
-        val remainedMillis = Calendar.getInstance().also {
+        val remainedMillis = GregorianCalendar().also {
             it[Calendar.HOUR_OF_DAY] = 0
             it[Calendar.MINUTE] = 0
             it[Calendar.SECOND] = 1

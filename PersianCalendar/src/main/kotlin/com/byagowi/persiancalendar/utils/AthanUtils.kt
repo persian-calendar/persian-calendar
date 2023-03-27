@@ -124,7 +124,7 @@ fun scheduleAlarms(context: Context) {
     val prayTimes = coordinates.value?.calculatePrayTimes() ?: return
     // convert spacedComma separated string to a set
     enabledAlarms.forEachIndexed { i, name ->
-        scheduleAlarm(context, name, Calendar.getInstance().also {
+        scheduleAlarm(context, name, GregorianCalendar().also {
             // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
             val alarmTime = prayTimes.getFromStringId(getPrayTimeName(name))
             it[Calendar.HOUR_OF_DAY] = alarmTime.hours

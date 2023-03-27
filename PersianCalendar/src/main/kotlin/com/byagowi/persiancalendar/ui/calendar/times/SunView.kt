@@ -218,7 +218,7 @@ class SunView @JvmOverloads constructor(
 
         val sunset = Clock.fromHoursFraction(prayTimes.sunset).toMinutes().toFloat()
         val sunrise = Clock.fromHoursFraction(prayTimes.sunrise).toMinutes().toFloat()
-        val now = Clock(Calendar.getInstance(Locale.getDefault())).toMinutes().toFloat()
+        val now = Clock(GregorianCalendar()).toMinutes().toFloat()
 
         fun Float.safeDiv(other: Float) = if (other == 0f) 0f else this / other
         current = when {
