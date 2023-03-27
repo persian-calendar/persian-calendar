@@ -27,11 +27,12 @@ import kotlin.math.atan2
 
 // Based on Mehdi's work
 
-fun isMoonInScorpio(jdn: Jdn) = isMoonInScorpio(jdn.toPersianDate(), jdn.toIslamicDate())
+fun isMoonInScorpio(jdn: Jdn): Boolean = isMoonInScorpio(jdn.toPersianDate(), jdn.toIslamicDate())
 
-fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate) =
-    (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
+fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean {
+    return (((islamicDate.dayOfMonth + 1) * 12.2f + (persianDate.dayOfMonth + 1)) / 30f +
             persianDate.month).toInt() % 12 == 8
+}
 
 fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean): String {
     if (!isAstronomicalExtraFeaturesEnabled) return ""
