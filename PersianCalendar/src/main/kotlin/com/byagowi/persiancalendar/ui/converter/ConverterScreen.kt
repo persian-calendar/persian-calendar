@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.converter
 
-import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
@@ -24,6 +23,7 @@ import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.utils.createRoundDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -34,8 +34,6 @@ import com.byagowi.persiancalendar.ui.utils.shareText
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
-import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -54,15 +52,11 @@ class ConverterScreen : Fragment(R.layout.fragment_converter) {
             spinnerFrameLayout.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, 36.dp.toInt()
             )
-            spinnerFrameLayout.background = MaterialShapeDrawable().also {
-                it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(32.dp)
-                it.fillColor = ColorStateList.valueOf(
-                    ColorUtils.setAlphaComponent(
-                        view.context.resolveColor(R.attr.menuIconColor), 16
-                    )
-                )
-                it.setPadding(16, 0, 16, 0)
-            }
+            val spinnerColor = ColorUtils.setAlphaComponent(
+                view.context.resolveColor(R.attr.menuIconColor), 16
+            )
+            spinnerFrameLayout.background = createRoundDrawable(spinnerColor, 32.dp)
+            spinnerFrameLayout.setPadding(6.dp.toInt(), 0, 6.dp.toInt(), 0)
             val spinner = AppCompatSpinner(binding.appBar.toolbar.context)
             spinnerFrameLayout.addView(spinner)
             binding.appBar.toolbar.addView(spinnerFrameLayout)

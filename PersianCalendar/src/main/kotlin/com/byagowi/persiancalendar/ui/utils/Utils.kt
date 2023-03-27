@@ -13,6 +13,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Path
 import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Base64
@@ -38,7 +39,6 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
@@ -260,20 +260,16 @@ fun prepareViewForRendering(view: View, width: Int, height: Int) {
 }
 
 fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
-    val path = Path()
-    ShapeAppearancePathProvider().calculatePath(
-        ShapeAppearanceModel().withCornerSize(roundSize), 1f,
-        RectF(0f, 0f, width.toFloat(), height.toFloat()), path
-    )
-    return path
+    val roundPath = Path()
+    val appearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
+    val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+    ShapeAppearancePathProvider().calculatePath(appearanceModel, 1f, rect, roundPath)
+    return roundPath
 }
 
-fun createRoundBitmap(width: Int, height: Int, @ColorInt color: Int, roundSize: Float): Bitmap {
-    val drawable = MaterialShapeDrawable().also {
-        it.fillColor = ColorStateList.valueOf(color)
-        // https://developer.android.com/about/versions/12/features/widgets#ensure-compatibility
-        // Apply a round corner which is the default in Android 12
-        it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
-    }
-    return drawable.toBitmap(width, height)
+fun createRoundDrawable(@ColorInt color: Int, roundSize: Float): Drawable {
+    val shapeDrawable = MaterialShapeDrawable()
+    shapeDrawable.fillColor = ColorStateList.valueOf(color)
+    shapeDrawable.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
+    return shapeDrawable
 }
