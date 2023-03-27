@@ -67,7 +67,7 @@ fun startEitherServiceOrWorker(context: Context) {
     if (enableWorkManager) {
         runCatching {
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-                UPDATE_TAG, ExistingPeriodicWorkPolicy.REPLACE,
+                UPDATE_TAG, ExistingPeriodicWorkPolicy.UPDATE,
                 // An hourly task to call UpdateWorker.doWork
                 PeriodicWorkRequest.Builder(UpdateWorker::class.java, 1L, TimeUnit.HOURS).build()
             )
