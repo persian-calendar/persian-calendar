@@ -103,4 +103,44 @@
     <string name="owghat">Время молитвы</string>
     <string name="isha">Иша</string>
     <string name="midnight">Полночь</string>
+    <string name="select_skin">Выберите кожа</string>
+    <string name="native_digits">Родные цифры</string>
+    <string name="enable_native_digits">Включить собственные цифры</string>
+    <string name="events_summary">События, чтобы показать</string>
+    <string name="show_device_calendar_events">События личного календаря</string>
+    <string name="show_device_calendar_events_summary">Показать события личного календаря</string>
+    <string name="calendars_priority">Календари Приоритет</string>
+    <string name="calendars_priority_summary">Установите календари, чтобы показать приоритет или скрыть их</string>
+    <string name="astronomy">астрономия</string>
+    <string name="astronomical_info_summary">Показать дополнительную информацию, такую как созвездие, древние названия лет и луна в скорпионе</string>
+    <string name="week_of_year">Неделя года</string>
+    <string name="week_of_year_summary">Показать неделю года в календаре</string>
+    <string name="week_start">Начало недели</string>
+    <string name="week_start_summary">Выберите день начала недели</string>
+    <string name="week_ends">выходные</string>
+    <string name="week_ends_summary">Выберите выходные дни</string>
+    <string name="islamic_offset">исламский офсет</string>
+    <string name="islamic_offset_summary">Настройте исламский календарь, добавив число</string>
+    <string name="clock_in_24">Часы в 24 часа</string>
+    <string name="showing_clock_in_24">Показать часы в 24 часа</string>
+    <string name="widget_text_color">Цвет текста виджета</string>
+    <string name="select_widgets_text_color">Выберите собственный цвет для текстов виджетов</string>
+    <string name="clock_on_widget">Часы на виджете</string>
+    <string name="showing_clock_on_widget">Показать часы на виджете</string>
+    <string name="iran_time">Иранское время</string>
+    <string name="showing_iran_time">Виджеты и уведомления в часовом поясе Ирана</string>
+    <string name="customize_widget">Настройка виджета</string>
+    <string name="which_one_to_show">Какие показать</string>
+    <string name="enable_notify">Постоянное уведомление для всех типов дат</string>
+    <string name="notify_date_lock_screen">Показать уведомление на экране блокировки</string>
+    <string name="notify_date_lock_screen_summary">Только если установлен метод защиты экрана блокировки.</string>
+    <string name="gps_location">Получить местоположение от GPS или сети</string>
+    <string name="gps_location_help">Другие варианты не нужны, если это возможно</string>
+    <string name="notify_date">Включить уведомление о дате</string>
+    <string name="customize_widget_summary">Что показывать из уведомлений и виджетов, чтобы сделать их компактнее</string>
+    <string name="ask_user_to_set_location">Установите местоположение в настройках, чтобы это место отображалось корректно</string>
+    <string name="gps_internet_desc">Пожалуйста, включите GPS устройства и подключение к Интернету, чтобы определить ваше местоположение.
+\n
+\nПриложению это нужно только один раз, однако, если вы переедете в новое место, доступ к GPS и Интернету потребуется снова.</string>
+    <string name="pleasewaitgps">Пожалуйста, подождите... Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты.</string>
 </resources>
