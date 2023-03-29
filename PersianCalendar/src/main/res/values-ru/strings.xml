@@ -208,7 +208,7 @@
     <string name="sun_view">Вид на солнце</string>
     <string name="asr_hanafi_juristic">Ханафитский аср юридический метод</string>
     <string name="enable_new_interface">Включите новый интерфейс</string>
-    <string name="are_you_sure">Ты уверен\?</string>
+    <string name="are_you_sure">Ты уверен?</string>
     <string name="month_pray_times">Время молитвы за месяц</string>
     <string name="high_latitudes_method">Метод высоких широт</string>
     <string name="high_latitudes_night_middle">Середина ночи</string>
@@ -338,7 +338,7 @@
     <string name="wednesday_short">Ср</string>
     <string name="thursday_short">Чт</string>
     <string name="friday_short">Пт</string>
-    <string name="enable_notification">Хотите включить уведомление о дате\?</string>
+    <string name="enable_notification">Хотите включить уведомление о дате?</string>
     <string name="add_quick_settings_tile">Добавить плитку быстрых настроек</string>
     <string name="true_north">Истинный север</string>
     <string name="lock">Запирать</string>
