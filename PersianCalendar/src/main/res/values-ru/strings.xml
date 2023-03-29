@@ -1,2 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="code">ru</string>
+    <string name="widget_mini_name">Персидский календарь (мини)</string>
+    <string name="widget_age_name">Персидский календарь (возраст)</string>
+    <string name="close">Закрывать</string>
+    <string name="open">открыть</string>
+    <string name="accept">OK</string>
+    <string name="add">Добавить</string>
+    <string name="help">Помощь</string>
+    <string name="more">Более</string>
+    <string name="cancel">Отмена</string>
+    <string name="continue_button">Продолжить</string>
+    <string name="calendar">Календарь</string>
+    <string name="date_converter">Конвертер дат</string>
+    <string name="compass">Компас</string>
+    <string name="settings">Настройки</string>
+    <string name="about">описание</string>
+    <string name="exit">выйти</string>
+    <string name="add_event">Добавить событие</string>
+    <string name="return_to_today">Вернуться к сегодняшнему</string>
+    <string name="goto_date">Перейти на свидание</string>
+    <string name="go">Идти</string>
+    <string name="search_in_events">Поиск в событиях</string>
+    <string name="app_name">Персидский календарь</string>
+    <string name="widget_name">Персидский календарь</string>
+    <string name="outdated_app">Из-за того, что они устарели, вещи могут быть неточными</string>
+    <string name="update">ОБНОВИТЬ</string>
+    <string name="device_calendar_does_not_support">Календарь устройства не поддерживает действие</string>
+    <string name="today">Сегодня</string>
+</resources>
