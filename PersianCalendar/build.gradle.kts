@@ -44,7 +44,7 @@ android {
         if (!isMinApi21Build) vectorDrawables.useSupportLibrary = true
         resourceConfigurations += listOf(
             "en", "fa", "ckb", "ar", "ur", "ps", "glk", "azb", "ja", "fr", "es", "tr", "kmr", "tg",
-            "ne", "zh-rCN"
+            "ne", "zh-rCN", "ru"
         )
         setProperty("archivesBaseName", "PersianCalendar-$versionName-$gitInfo")
     }
