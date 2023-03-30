@@ -271,6 +271,7 @@ enum class Language(val code: String, val nativeName: String) {
         EN_IR -> weekDaysInitialsInEnglishIran
         TG -> weekDaysInitialsInTajiki
         NE -> weekDaysInitialsInNepali
+        RU -> weekDaysInitialsInRussian
         ZH_CN -> weekDaysInitialsInChinese
         else -> getWeekDays(context).map { it.substring(0, 1) }
     }
@@ -437,6 +438,9 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val weekDaysInitialsInTajiki = listOf7Items(
             "Шн", "Як", "Дш", "Сш", "Чш", "Пш", "Ҷм"
+        )
+        val weekDaysInitialsInRussian = listOf7Items(
+            "Сб", "Вс", "Пн", "Вт", "Ср", "Чт", "Пт"
         )
 
         // https://github.com/techgaun/ad-bs-converter/blob/4731f2c/src/converter.js
