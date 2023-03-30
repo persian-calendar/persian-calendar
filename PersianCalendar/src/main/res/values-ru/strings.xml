@@ -4,7 +4,7 @@
     <string name="widget_mini_name">Персидский календарь (мини)</string>
     <string name="widget_age_name">Персидский календарь (возраст)</string>
     <string name="close">Закрывать</string>
-    <string name="open">открыть</string>
+    <string name="open">Открыть</string>
     <string name="accept">OK</string>
     <string name="add">Добавить</string>
     <string name="help">Помощь</string>
@@ -15,7 +15,7 @@
     <string name="date_converter">Конвертер дат</string>
     <string name="compass">Компас</string>
     <string name="settings">Настройки</string>
-    <string name="about">описание</string>
+    <string name="about">Описание</string>
     <string name="exit">выйти</string>
     <string name="add_event">Добавить событие</string>
     <string name="return_to_today">Вернуться к сегодняшнему</string>
@@ -36,7 +36,7 @@
     <string name="animal_year_name_monkey">Обезьяна</string>
     <string name="animal_year_name_rooster">Петух</string>
     <string name="animal_year_name_dog">Собака</string>
-    <string name="animal_year_name_pig">свинья</string>
+    <string name="animal_year_name_pig">Свинья</string>
     <string name="animal_year_name_rat">Крыса</string>
     <string name="animal_year_name_ox">Бык</string>
     <string name="animal_year_name_tiger">Тигр</string>
@@ -99,7 +99,7 @@
     <string name="language">Язык</string>
     <string name="skin">Кожа</string>
     <string name="sunrise">Восход</string>
-    <string name="n_hours_minutes">%1$sh %2$sm</string>
+    <string name="n_hours_minutes">%1$sh %2$s m</string>
     <string name="owghat">Время молитвы</string>
     <string name="isha">Иша</string>
     <string name="midnight">Полночь</string>
@@ -111,7 +111,7 @@
     <string name="show_device_calendar_events_summary">Показать события личного календаря</string>
     <string name="calendars_priority">Календари Приоритет</string>
     <string name="calendars_priority_summary">Установите календари, чтобы показать приоритет или скрыть их</string>
-    <string name="astronomy">астрономия</string>
+    <string name="astronomy">Астрономия</string>
     <string name="astronomical_info_summary">Показать дополнительную информацию, такую как созвездие, древние названия лет и луна в скорпионе</string>
     <string name="week_of_year">Неделя года</string>
     <string name="week_of_year_summary">Показать неделю года в календаре</string>
@@ -119,7 +119,7 @@
     <string name="week_start_summary">Выберите день начала недели</string>
     <string name="week_ends">выходные</string>
     <string name="week_ends_summary">Выберите выходные дни</string>
-    <string name="islamic_offset">исламский офсет</string>
+    <string name="islamic_offset">Исламский офсет</string>
     <string name="islamic_offset_summary">Настройте исламский календарь, добавив число</string>
     <string name="clock_in_24">Часы в 24 часа</string>
     <string name="showing_clock_in_24">Показать часы в 24 часа</string>
@@ -142,7 +142,7 @@
     <string name="gps_internet_desc">Пожалуйста, включите GPS устройства и подключение к Интернету, чтобы определить ваше местоположение.
 \n
 \nПриложению это нужно только один раз, однако, если вы переедете в новое место, доступ к GPS и Интернету потребуется снова.</string>
-    <string name="pleasewaitgps">Пожалуйста, подождите... Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты.</string>
+    <string name="pleasewaitgps">Пожалуйста, подождите... Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
     <string name="center_align_widgets_summary">Выравнивание по центру виджетов 4x1 и 2x2</string>
@@ -227,7 +227,7 @@
     <string name="mercury">Меркурий</string>
     <string name="country_emoji">🇷🇺🇺🇦</string>
     <string name="show_secondary_calendar">Показать дополнительный календарь</string>
-    <string name="season">сезон</string>
+    <string name="season">Сезон</string>
     <string name="nepal">Непал</string>
     <string name="solar_eclipse">Солнечное затмение</string>
     <string name="lunar_eclipse">Лунное затмение</string>
@@ -259,14 +259,14 @@
     <string name="in_city_time">в %1$s</string>
     <string name="pray_methods">Методы расчета</string>
     <string name="athan_gap">Азан Зазор</string>
-    <string name="athan_gap_summary">За какое время до азана должен сработать будильник (в минутах)</string>
+    <string name="athan_gap_summary">За какое время до Aзана должен сработать будильник (в минутах)</string>
     <string name="athan_alarm_summary">Молитвы, чтобы вызвать тревогу для</string>
     <string name="notification_athan">Уведомление об азане</string>
     <string name="athan_alarm">Аза́н Будильник</string>
     <string name="enable_notification_athan">Показывать азан в виде уведомления и вибрации устройства</string>
-    <string name="enable_ascending_athan_volume">Громкость атана достигает максимального значения за одну минуту</string>
+    <string name="enable_ascending_athan_volume">Громкость азана достигает максимального значения за одну минуту</string>
     <string name="abdulbasit">Абдул-Басит Абдель-Самад</string>
-    <string name="custom_notification_is_set">Пользовательское уведомление только что установлено</string>
+    <string name="custom_notification_is_set">Пользовательское уведомление просто настроено</string>
     <string name="returned_to_default">Возврат к умолчанию</string>
     <string name="athan_volume">Громкость азана</string>
     <string name="location_access">доступ к геопозиции</string>
@@ -276,8 +276,8 @@
     <string name="about_license_sum">Проверьте лицензию GPLv3 и другие условия лицензии, используемые в Persian Calendar.</string>
     <string name="about_support_developers">Поддержка разработчиков</string>
     <string name="about_report_bug">Сообщить об ошибке на GitHub</string>
-    <string name="about_report_bug_sum">Для предпочтительного сообщения об ошибках или запроса новой функции требуется учетная запись GitHub.</string>
-    <string name="about_sendMail">е-мейл</string>
+    <string name="about_report_bug_sum">Для предпочтительного сообщения об ошибках или запроса новой функции требуется учетная запись GitHub</string>
+    <string name="about_sendMail">электронная почта</string>
     <string name="about_email_sum">Отправить личную электронную почту авторам приложения</string>
     <string name="about_noClient">Почтовый клиент не установлен</string>
     <string name="about_developers">Разработчики (случайно заказанные)</string>
@@ -334,7 +334,7 @@
     <string name="enable_notification">Хотите включить уведомление о дате\?</string>
     <string name="add_quick_settings_tile">Добавить плитку быстрых настроек</string>
     <string name="true_north">Истинный север</string>
-    <string name="lock">запирать</string>
+    <string name="lock">Запирать</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s день</item>
         <item quantity="few">%1$s %2$s дней</item>
@@ -355,15 +355,15 @@
     </plurals>
     <plurals name="n_days">
         <item quantity="one">%1$s день</item>
-        <item quantity="few">%1$s days</item>
-        <item quantity="many">%1$s days</item>
-        <item quantity="other">%1$s days</item>
+        <item quantity="few">%1$s дни</item>
+        <item quantity="many">%1$s дни</item>
+        <item quantity="other">%1$s дни</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s месяц</item>
-        <item quantity="few">%1$s months</item>
-        <item quantity="many">%1$s months</item>
-        <item quantity="other">%1$s months</item>
+        <item quantity="few">%1$s месяцы</item>
+        <item quantity="many">%1$s месяцы</item>
+        <item quantity="other">%1$s месяцы</item>
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s год</item>
@@ -373,9 +373,9 @@
     </plurals>
     <string name="pray_methods_calculation">Методы расчета времени молитвы и компаса Киблы</string>
     <string name="ascending_athan_volume">Восходящий Громкость азана</string>
-    <string name="custom_athan">Выберите Атан</string>
-    <string name="default_athan">азан по умолчанию</string>
-    <string name="default_athan_summary">Вернуться к азану по умолчанию</string>
+    <string name="custom_athan">Выберите Азан</string>
+    <string name="default_athan">Aзан по умолчанию</string>
+    <string name="default_athan_summary">Вернуть азан по умолчанию</string>
     <string name="athan_volume_summary">Установите громкость будильника</string>
     <string name="athan_disabled_summary">Чтобы установить будильник Азанa, выберите место или введите координаты выше</string>
     <string name="phone_location_required">Для этой части приложения требуется разрешение на определение местоположения. Если вы выберете запрет, вам придется ввести широту и долготу вручную.</string>
