@@ -134,10 +134,8 @@ import kotlin.random.Random
 // These are somehow a sandbox to test things not used in the app yet and can be removed anytime.
 //
 
-class EasterEggController(
-    val callback: (FragmentActivity) -> Unit,
+class EasterEggController(val callback: (FragmentActivity) -> Unit) {
     private var clickCount: Int = 0
-) {
     fun handleClick(activity: FragmentActivity?) {
         activity ?: return
         runCatching {
