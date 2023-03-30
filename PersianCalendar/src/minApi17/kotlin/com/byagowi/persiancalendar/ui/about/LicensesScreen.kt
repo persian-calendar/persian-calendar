@@ -114,8 +114,8 @@ ${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
                     ::showFlingDemoDialog
                 ),
             ).forEach { (title, icon, dialog) ->
-                val easterEggController = EasterEggController(dialog)
-                it.add(title).setIcon(icon).onClick { easterEggController.handleClick(activity) }
+                val clickHandler = createEasterEggClickHandler(dialog)
+                it.add(title).setIcon(icon).onClick { clickHandler(activity) }
             }
         }
 

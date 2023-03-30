@@ -89,11 +89,11 @@ class AboutScreen : Fragment(R.layout.fragment_about) {
                 context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@also
             it.setImageDrawable(animation)
             animation.start()
-            val easterEggController = EasterEggController(::showPeriodicTableDialog)
+            val clickHandler = createEasterEggClickHandler(::showPeriodicTableDialog)
             it.setOnClickListener {
                 animation.stop()
                 animation.start()
-                easterEggController.handleClick(activity)
+                clickHandler(activity)
             }
         }
 

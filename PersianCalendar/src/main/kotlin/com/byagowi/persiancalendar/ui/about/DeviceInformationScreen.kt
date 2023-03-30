@@ -154,8 +154,8 @@ class DeviceInformationScreen : Fragment(R.layout.fragment_device_information) {
                     ::showColorPickerDialog
                 ),
             ).forEach { (icon, title, dialog) ->
-                val easterEggController = EasterEggController(dialog)
-                it.add(title).setIcon(icon).onClick { easterEggController.handleClick(activity) }
+                val clickHandler = createEasterEggClickHandler(dialog)
+                it.add(title).setIcon(icon).onClick { clickHandler(activity) }
             }
         }
     }

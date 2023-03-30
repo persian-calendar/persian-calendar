@@ -134,11 +134,10 @@ import kotlin.random.Random
 // These are somehow a sandbox to test things not used in the app yet and can be removed anytime.
 //
 
-class EasterEggController(val callback: (FragmentActivity) -> Unit) {
-    private var clickCount: Int = 0
-    fun handleClick(activity: FragmentActivity?) {
-        activity ?: return
-        runCatching {
+fun createEasterEggClickHandler(callback: (FragmentActivity) -> Unit): (FragmentActivity?) -> Unit {
+    var clickCount = 0
+    return { activity: FragmentActivity? ->
+        if (activity != null) runCatching {
             when (++clickCount % 10) {
                 0 -> callback(activity)
                 9 -> Toast.makeText(activity, "One more to go!", Toast.LENGTH_SHORT).show()
