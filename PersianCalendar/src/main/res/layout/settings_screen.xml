@@ -3,31 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorCard"
+    android:background="?attr/coloredTabBackground"
     android:orientation="vertical">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        style="@style/TabLayoutColored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
     <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:shapeAppearance="@style/shapeAppearanceBottomCornerLarge">
+        android:background="?attr/colorCard"
+        app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout"
-            style="@style/TabLayoutColored"
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/coloredTabBackground"
-            app:tabBackground="?attr/selectableItemBackground" />
+            android:layout_height="match_parent" />
 
     </com.google.android.material.carousel.MaskableFrameLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -19,34 +19,35 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/colorMonthsBackground"
             android:orientation="vertical">
+
+            <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
+                android:id="@+id/calendarPager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/grid_calendar_height" />
 
             <com.google.android.material.carousel.MaskableFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:shapeAppearance="@style/shapeAppearanceBottomCornerExtraLarge">
+                app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
-                <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
-                    android:id="@+id/calendarPager"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/TabLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/grid_calendar_height"
-                    android:background="?attr/colorMonthsBackground" />
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorCard"
+                    app:tabBackground="?attr/selectableItemBackground" />
 
             </com.google.android.material.carousel.MaskableFrameLayout>
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                style="@style/TabLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorCard"
-                app:tabBackground="?attr/selectableItemBackground" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:background="?attr/colorCard"
                 android:minHeight="220sp" />
 
         </LinearLayout>

@@ -17,215 +17,223 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?attr/navigationBarColor"
             android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <FrameLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/about_header"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:lineSpacingMultiplier="1.25"
+                        android:padding="20dp"
+                        android:textAlignment="textStart"
+                        android:textColor="?attr/colorTextDay"
+                        tools:ignore="RtlCompat" />
+
+                </FrameLayout>
+
+                <ImageView
+                    android:id="@+id/icon"
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_weight="1"
+                    android:importantForAccessibility="no"
+                    android:scaleX="1.25"
+                    android:scaleY="1.25" />
+
+            </LinearLayout>
 
             <com.google.android.material.carousel.MaskableFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:shapeAppearance="@style/shapeAppearanceBottomCornerExtraLarge">
+                android:background="?attr/colorCard"
+                app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
                 <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/navigationBarColor"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1">
+                    <LinearLayout
+                        android:id="@+id/app_license"
+                        style="@style/AboutCard"
+                        android:background="?attr/colorCard">
 
                         <TextView
-                            android:id="@+id/about_header"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:lineSpacingMultiplier="1.25"
-                            android:padding="20dp"
-                            android:textAlignment="textStart"
-                            android:textColor="?attr/colorTextDay"
-                            tools:ignore="RtlCompat" />
+                            android:layout_margin="5dp"
+                            android:text="@string/licenses"
+                            android:textColor="?attr/colorTextDrawer" />
 
-                    </FrameLayout>
+                        <LinearLayout
+                            android:id="@+id/licenses"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/icon"
-                        android:layout_width="0dp"
-                        android:layout_height="250dp"
-                        android:layout_weight="1"
-                        android:importantForAccessibility="no"
-                        android:scaleX="1.25"
-                        android:scaleY="1.25" />
+                            <TextView
+                                android:id="@+id/licenses_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:text="@string/about_license_title"
+                                android:textColor="?attr/colorTextDrawer"
+                                android:textStyle="bold"
+                                app:drawableTint="?attr/colorDrawerIcon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="28dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/about_license_sum"
+                                android:textColor="?attr/colorTextSecond"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/help_card"
+                        style="@style/AboutCard"
+                        android:background="?attr/colorCard">
+
+                        <TextView
+                            android:id="@+id/help_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="5dp"
+                            android:text="@string/help"
+                            android:textColor="?attr/colorTextDrawer"
+                            android:textStyle="bold"
+                            app:drawableTint="?attr/colorDrawerIcon" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/help_sections_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/support"
+                        style="@style/AboutCard"
+                        android:background="?attr/colorCard">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/about_support_developers"
+                            android:textColor="?attr/colorTextDrawer" />
+
+                        <LinearLayout
+                            android:id="@+id/reportBug"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/report_bug_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:text="@string/about_report_bug"
+                                android:textColor="?attr/colorTextDrawer"
+                                android:textStyle="bold"
+                                app:drawableTint="?attr/colorDrawerIcon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="28dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/about_report_bug_sum"
+                                android:textColor="?attr/colorTextSecond"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="4dp"
+                            android:background="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/email_title"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawablePadding="5dp"
+                                android:text="@string/about_sendMail"
+                                android:textColor="?attr/colorTextDrawer"
+                                android:textStyle="bold"
+                                app:drawableTint="?attr/colorDrawerIcon" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="28dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/about_email_sum"
+                                android:textColor="?attr/colorTextSecond"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/developers_section"
+                        style="@style/AboutCard"
+                        android:background="?attr/colorCard">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
+                            android:text="@string/about_developers"
+                            android:textColor="?attr/colorTextDrawer" />
+
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/developers"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
+                            android:orientation="vertical" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </com.google.android.material.carousel.MaskableFrameLayout>
-
-            <LinearLayout
-                android:id="@+id/app_license"
-                style="@style/AboutCard"
-                android:background="?attr/colorCard">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="@string/licenses"
-                    android:textColor="?attr/colorTextDrawer" />
-
-                <LinearLayout
-                    android:id="@+id/licenses"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/licenses_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:text="@string/about_license_title"
-                        android:textColor="?attr/colorTextDrawer"
-                        android:textStyle="bold"
-                        app:drawableTint="?attr/colorDrawerIcon" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="28dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/about_license_sum"
-                        android:textColor="?attr/colorTextSecond"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/help_card"
-                style="@style/AboutCard"
-                android:background="?attr/colorCard">
-
-                <TextView
-                    android:id="@+id/help_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="5dp"
-                    android:text="@string/help"
-                    android:textColor="?attr/colorTextDrawer"
-                    android:textStyle="bold"
-                    app:drawableTint="?attr/colorDrawerIcon" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/help_sections_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layoutDirection="rtl" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/support"
-                style="@style/AboutCard"
-                android:background="?attr/colorCard">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="@string/about_support_developers"
-                    android:textColor="?attr/colorTextDrawer" />
-
-                <LinearLayout
-                    android:id="@+id/reportBug"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/report_bug_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:text="@string/about_report_bug"
-                        android:textColor="?attr/colorTextDrawer"
-                        android:textStyle="bold"
-                        app:drawableTint="?attr/colorDrawerIcon" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="28dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/about_report_bug_sum"
-                        android:textColor="?attr/colorTextSecond"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/email_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawablePadding="5dp"
-                        android:text="@string/about_sendMail"
-                        android:textColor="?attr/colorTextDrawer"
-                        android:textStyle="bold"
-                        app:drawableTint="?attr/colorDrawerIcon" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="28dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="@string/about_email_sum"
-                        android:textColor="?attr/colorTextSecond"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/developers_section"
-                style="@style/AboutCard"
-                android:background="?attr/colorCard">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="@string/about_developers"
-                    android:textColor="?attr/colorTextDrawer" />
-
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/developers"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layoutDirection="ltr"
-                    android:orientation="vertical" />
-
-            </LinearLayout>
 
         </LinearLayout>
 

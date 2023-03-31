@@ -4,138 +4,146 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorCard">
+    android:background="?attr/navigationBarColor">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <ScrollView
+    <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:background="?attr/colorCard"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="95dp">
-
-            <TextView
-                android:id="@+id/header_information"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/view_padding"
-                android:textIsSelectable="true" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/view_padding"
-                android:layout_marginRight="@dimen/view_padding"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:paddingBottom="95dp">
+
+                <TextView
+                    android:id="@+id/header_information"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/view_padding"
+                    android:textIsSelectable="true" />
 
                 <LinearLayout
-                    android:id="@+id/first_column"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginLeft="@dimen/view_padding"
+                    android:layout_marginRight="@dimen/view_padding"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
 
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:id="@+id/firstSeason"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/first_column"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:id="@+id/thirdSeason"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp" />
+                        <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                            android:id="@+id/firstSeason"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp" />
 
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:id="@+id/sun"
-                        android:layout_width="match_parent"
+                        <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                            android:id="@+id/thirdSeason"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp" />
+
+                        <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                            android:id="@+id/sun"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_horizontal" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/second_column"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_horizontal" />
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                            android:id="@+id/secondSeason"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp" />
+
+                        <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                            android:id="@+id/fourthSeason"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp" />
+
+                        <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
+                            android:id="@+id/moon"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center_horizontal" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/second_column"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="290dp"
+                    android:layout_marginTop="16dp"
+                    android:importantForAccessibility="no">
 
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:id="@+id/secondSeason"
+                    <com.byagowi.persiancalendar.ui.astronomy.SolarView
+                        android:id="@+id/solar_view"
+                        android:layout_width="290dp"
+                        android:layout_height="290dp"
+                        android:layout_gravity="center_horizontal"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
+
+                    <com.google.android.material.navigationrail.NavigationRailView
+                        android:id="@+id/rail_view"
+                        android:layout_width="42dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="start"
+                        android:background="@android:color/transparent"
+                        app:itemIconSize="20dp"
+                        app:labelVisibilityMode="unlabeled"
+                        app:menuGravity="center" />
+
+                    <TextView
+                        android:id="@+id/map_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp" />
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="3dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="@string/map"
+                        android:text="🗺"
+                        android:textSize="22dp"
+                        android:tooltipText="@string/map"
+                        tools:ignore="HardcodedText,SpUsage,UnusedAttribute" />
 
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:id="@+id/fourthSeason"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp" />
-
-                    <com.byagowi.persiancalendar.ui.astronomy.AstronomyInformationHolder
-                        android:id="@+id/moon"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_horizontal" />
-
-                </LinearLayout>
+                </FrameLayout>
 
             </LinearLayout>
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="290dp"
-                android:layout_marginTop="16dp"
-                android:importantForAccessibility="no">
+        </ScrollView>
 
-                <com.byagowi.persiancalendar.ui.astronomy.SolarView
-                    android:id="@+id/solar_view"
-                    android:layout_width="290dp"
-                    android:layout_height="290dp"
-                    android:layout_gravity="center_horizontal"
-                    android:background="?attr/selectableItemBackgroundBorderless" />
-
-                <com.google.android.material.navigationrail.NavigationRailView
-                    android:id="@+id/rail_view"
-                    android:layout_width="42dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="start"
-                    android:background="@android:color/transparent"
-                    app:itemIconSize="20dp"
-                    app:labelVisibilityMode="unlabeled"
-                    app:menuGravity="center" />
-
-                <TextView
-                    android:id="@+id/map_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="3dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/map"
-                    android:text="🗺"
-                    android:textSize="22dp"
-                    android:tooltipText="@string/map"
-                    tools:ignore="HardcodedText,SpUsage,UnusedAttribute" />
-
-            </FrameLayout>
-
-        </LinearLayout>
-
-    </ScrollView>
+    </com.google.android.material.carousel.MaskableFrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
