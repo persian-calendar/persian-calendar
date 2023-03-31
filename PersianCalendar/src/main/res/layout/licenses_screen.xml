@@ -3,37 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorCard">
+    android:background="?attr/navigationBarColor">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
-    <LinearLayout
+    <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:background="?attr/colorCard"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
-        <com.google.android.material.navigationrail.NavigationRailView
-            android:id="@+id/rail_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="?attr/colorCard"
-            app:labelVisibilityMode="labeled"
-            app:menuGravity="top" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layoutDirection="ltr"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:scrollbars="vertical"
-            android:textDirection="ltr" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <com.google.android.material.navigationrail.NavigationRailView
+                android:id="@+id/rail_view"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="?attr/colorCard"
+                android:paddingTop="4dp"
+                android:paddingStart="0dp"
+                android:paddingEnd="4dp"
+                app:labelVisibilityMode="labeled"
+                app:menuGravity="top" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layoutDirection="ltr"
+                android:paddingStart="12dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="4dp"
+                android:scrollbars="vertical"
+                android:textDirection="ltr" />
+
+        </LinearLayout>
+
+    </com.google.android.material.carousel.MaskableFrameLayout>
 
     <LinearLayout
         android:id="@+id/standard_side_sheet"
