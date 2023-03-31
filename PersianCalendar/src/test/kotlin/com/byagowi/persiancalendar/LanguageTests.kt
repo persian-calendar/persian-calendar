@@ -14,6 +14,7 @@ class LanguageTests {
             "چراگاه, جیراكیاه",
             "ژاله, زیاله",
             "اکرام, اكرام",
+            "سال, سال",
         ]
     )
     fun `should replace characters correctly`(from: String, to: String) {

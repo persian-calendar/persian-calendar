@@ -365,7 +365,7 @@ enum class Language(val code: String, val nativeName: String) {
 
         @VisibleForTesting
         fun prepareForArabicSort(text: String): String =
-            text.map { arabicSortReplacements.getOrDefault(it, it) }.joinToString("")
+            text.map { arabicSortReplacements[it] ?: it }.joinToString("")
 
         private val persianCalendarMonths = listOf12Items(
             R.string.farvardin, R.string.ordibehesht, R.string.khordad,
