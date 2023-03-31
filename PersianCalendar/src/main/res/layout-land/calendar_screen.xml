@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorCard"
+    android:background="?attr/navigationBarColor"
     android:orientation="vertical">
 
     <include
@@ -21,35 +21,44 @@
             android:layout_height="match_parent"
             android:background="?attr/colorMonthsBackground" />
 
-        <LinearLayout
+        <com.google.android.material.carousel.MaskableFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:background="?attr/colorCard"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tabLayout"
-                style="@style/TabLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorCard"
-                app:tabBackground="?attr/selectableItemBackground" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:scrollbars="none">
-
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/viewPager"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabLayout"
+                    style="@style/TabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="220sp" />
+                    android:background="?attr/colorCard"
+                    app:tabBackground="?attr/selectableItemBackground" />
 
-            </ScrollView>
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:scrollbars="none">
 
-        </LinearLayout>
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="220sp" />
+
+                </ScrollView>
+
+            </LinearLayout>
+
+        </com.google.android.material.carousel.MaskableFrameLayout>
 
     </LinearLayout>
 
