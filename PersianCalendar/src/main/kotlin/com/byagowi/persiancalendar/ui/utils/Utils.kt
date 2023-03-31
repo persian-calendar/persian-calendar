@@ -258,18 +258,3 @@ fun prepareViewForRendering(view: View, width: Int, height: Int) {
     )
     view.layout(0, 0, width, height)
 }
-
-fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
-    val roundPath = Path()
-    val appearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
-    val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
-    ShapeAppearancePathProvider().calculatePath(appearanceModel, 1f, rect, roundPath)
-    return roundPath
-}
-
-fun createRoundDrawable(@ColorInt color: Int, roundSize: Float): Drawable {
-    val shapeDrawable = MaterialShapeDrawable()
-    shapeDrawable.fillColor = ColorStateList.valueOf(color)
-    shapeDrawable.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
-    return shapeDrawable
-}

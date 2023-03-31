@@ -8,9 +8,13 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.Path
+import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
@@ -83,12 +87,13 @@ import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
-import com.byagowi.persiancalendar.ui.utils.createRoundDrawable
-import com.byagowi.persiancalendar.ui.utils.createRoundPath
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.variants.debugLog
+import com.google.android.material.shape.MaterialShapeDrawable
+import com.google.android.material.shape.ShapeAppearanceModel
+import com.google.android.material.shape.ShapeAppearancePathProvider
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.*
@@ -258,6 +263,21 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
             ).show()
         }
     }
+}
+
+fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
+    val roundPath = Path()
+    val appearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
+    val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
+    ShapeAppearancePathProvider().calculatePath(appearanceModel, 1f, rect, roundPath)
+    return roundPath
+}
+
+fun createRoundDrawable(@ColorInt color: Int, roundSize: Float): Drawable {
+    val shapeDrawable = MaterialShapeDrawable()
+    shapeDrawable.fillColor = ColorStateList.valueOf(color)
+    shapeDrawable.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
+    return shapeDrawable
 }
 
 private fun getWidgetBackgroundColor(
