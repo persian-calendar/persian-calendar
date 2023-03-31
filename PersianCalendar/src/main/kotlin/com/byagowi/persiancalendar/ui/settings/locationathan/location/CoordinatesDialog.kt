@@ -13,7 +13,7 @@ import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.DialogCoordinatesBinding
+import com.byagowi.persiancalendar.databinding.CoordinatesDialogBinding
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -33,7 +33,7 @@ fun showCoordinatesDialog(
     inputCoordinates: Coordinates? = null
 ) {
     val coordinates = inputCoordinates ?: coordinates.value
-    val binding = DialogCoordinatesBinding.inflate(activity.layoutInflater)
+    val binding = CoordinatesDialogBinding.inflate(activity.layoutInflater)
 
     val coordinatesEdits = listOf(binding.latitude, binding.longitude, binding.altitude)
     val coordinatesKeys = listOf(PREF_LATITUDE, PREF_LONGITUDE, PREF_ALTITUDE)
