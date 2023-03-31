@@ -93,6 +93,7 @@
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent
         </item>
+        <item name="popupMenuBackground">@drawable/popup_background</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
@@ -116,6 +117,7 @@
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent
         </item>
+        <item name="popupMenuBackground">@drawable/popup_background</item>
     </style>
 
     <!-- Their actual definition is in v31/styles.xml -->

@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:paddingStart="6dp"
-            android:paddingEnd="20dp" />
+            android:paddingEnd="20dp"
+            android:popupBackground="@drawable/popup_background" />
 
     </com.google.android.material.carousel.MaskableFrameLayout>
 
