@@ -8,22 +8,21 @@
         android:layout_width="wrap_content"
         android:layout_height="34dp"
         android:background="@color/converter_spinner_background"
-        android:paddingStart="6dp"
-        android:paddingEnd="6dp"
         app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
 
         <com.byagowi.persiancalendar.ui.common.ArrowView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
-            android:importantForAccessibility="no" />
+            android:importantForAccessibility="no"
+            android:padding="6dp" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/converter_spinner_background"
-            android:paddingStart="0dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingStart="6dp"
             android:paddingEnd="20dp" />
 
     </com.google.android.material.carousel.MaskableFrameLayout>
