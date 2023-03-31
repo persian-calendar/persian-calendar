@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorCard">
+    android:background="?attr/navigationBarColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,11 +24,20 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.byagowi.persiancalendar.ui.common.ZoomableView
-            android:id="@+id/map"
+        <com.google.android.material.carousel.MaskableFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="@string/map" />
+            android:background="?attr/colorCard"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
+
+            <com.byagowi.persiancalendar.ui.common.ZoomableView
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/map" />
+
+        </com.google.android.material.carousel.MaskableFrameLayout>
 
     </LinearLayout>
 
