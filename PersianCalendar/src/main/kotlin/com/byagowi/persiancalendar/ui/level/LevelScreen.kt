@@ -52,7 +52,8 @@ class LevelScreen : Fragment(R.layout.level_screen) {
         }
 
         binding.appBar.toolbar.menu.add(R.string.lock).also { menuItem ->
-            menuItem.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_lock)
+            val toolbarContext = binding.appBar.toolbar.context
+            menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_lock_open)
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             var lock: PowerManager.WakeLock? = null
             menuItem.onClick {
