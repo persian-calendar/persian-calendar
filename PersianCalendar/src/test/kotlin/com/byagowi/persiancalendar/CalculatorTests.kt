@@ -45,10 +45,8 @@ class CalculatorTests {
 
     @ParameterizedTest
     @CsvSource(
-        value = [
-            "5+ 5 5 6 +  7",
-            "7 / 5 * ((2 + 2) / (((5 -7) + 2) * 2)",
-        ]
+        "5+ 5 5 6 +  7",
+        "7 / 5 * ((2 + 2) / (((5 -7) + 2) * 2)",
     )
     fun `test errors`(input: String) {
         assertFails { eval(input) }

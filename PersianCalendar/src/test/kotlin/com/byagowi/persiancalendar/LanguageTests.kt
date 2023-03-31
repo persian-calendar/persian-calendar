@@ -8,14 +8,12 @@ import kotlin.test.assertEquals
 class LanguageTests {
     @ParameterizedTest
     @CsvSource(
-        value = [
-            "بیل, بيل",
-            "پگاه, بیكیاه",
-            "چراگاه, جیراكیاه",
-            "ژاله, زیاله",
-            "اکرام, اكرام",
-            "سال, سال",
-        ]
+        "بیل, بيل",
+        "پگاه, بیكیاه",
+        "چراگاه, جیراكیاه",
+        "ژاله, زیاله",
+        "اکرام, اكرام",
+        "سال, سال",
     )
     fun `should replace characters correctly`(from: String, to: String) {
         assertEquals(Language.prepareForArabicSort(from), to)
