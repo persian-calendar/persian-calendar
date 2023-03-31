@@ -15,7 +15,7 @@
         android:animateLayoutChanges="true"
         android:background="?attr/colorCard"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+        app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <com.google.android.material.slider.Slider
             android:id="@+id/time_slider"
