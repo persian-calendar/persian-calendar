@@ -15,7 +15,7 @@ class LanguageTests {
         "اکرام, اكرام",
         "سال, سال",
     )
-    fun `should replace characters correctly`(from: String, to: String) {
-        assertEquals(Language.prepareForArabicSort(from), to)
+    fun `should replace characters correctly`(source: String, expected: String) {
+        assertEquals(expected, Language.prepareForArabicSort(source))
     }
 }
