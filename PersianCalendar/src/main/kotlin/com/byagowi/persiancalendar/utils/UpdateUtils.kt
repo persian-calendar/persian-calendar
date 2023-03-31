@@ -265,7 +265,7 @@ private inline fun <reified T> AppWidgetManager.updateFromRemoteViews(
     }
 }
 
-fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
+private fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
     val roundPath = Path()
     val appearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
     val rect = RectF(0f, 0f, width.toFloat(), height.toFloat())
@@ -273,7 +273,7 @@ fun createRoundPath(width: Int, height: Int, roundSize: Float): Path {
     return roundPath
 }
 
-fun createRoundDrawable(@ColorInt color: Int, roundSize: Float): Drawable {
+private fun createRoundDrawable(@ColorInt color: Int, roundSize: Float): Drawable {
     val shapeDrawable = MaterialShapeDrawable()
     shapeDrawable.fillColor = ColorStateList.valueOf(color)
     shapeDrawable.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(roundSize)
