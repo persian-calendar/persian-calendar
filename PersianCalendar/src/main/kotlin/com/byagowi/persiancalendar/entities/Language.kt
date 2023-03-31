@@ -260,20 +260,13 @@ enum class Language(val code: String, val nativeName: String) {
 
     fun getWeekDays(context: Context): List<String> = when (this) {
         FA, EN_IR, FA_AF -> weekDaysInPersian
-        NE -> weekDaysInNepali
         else -> weekDays.map(context::getString)
     }
 
     fun getWeekDaysInitials(context: Context): List<String> = when (this) {
-        AR -> weekDaysInitialsInArabic
-        AZB -> weekDaysInitialsInAzerbaijani
-        TR -> weekDaysInitialsInTurkish
         EN_IR -> weekDaysInitialsInEnglishIran
-        TG -> weekDaysInitialsInTajiki
-        NE -> weekDaysInitialsInNepali
-        RU -> weekDaysInitialsInRussian
-        ZH_CN -> weekDaysInitialsInChinese
-        else -> getWeekDays(context).map { it.substring(0, 1) }
+        FA, FA_AF -> weekDaysInitialsInPersian
+        else -> weekDaysInitials.map(context::getString)
     }
 
     fun getCountryName(cityItem: CityItem): String = when {
@@ -390,6 +383,11 @@ enum class Language(val code: String, val nativeName: String) {
             R.string.saturday, R.string.sunday, R.string.monday, R.string.tuesday,
             R.string.wednesday, R.string.thursday, R.string.friday
         )
+        private val weekDaysInitials = listOf7Items(
+            R.string.saturday_short, R.string.sunday_short, R.string.monday_short,
+            R.string.tuesday_short, R.string.wednesday_short, R.string.thursday_short,
+            R.string.friday_short
+        )
 
         // These are special cases and new ones should be translated in strings.xml of the language
         private val persianCalendarMonthsInPersian = listOf12Items(
@@ -421,26 +419,11 @@ enum class Language(val code: String, val nativeName: String) {
         private val weekDaysInPersian = listOf7Items(
             "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
         )
-        private val weekDaysInitialsInArabic = listOf7Items(
-            "سب", "أح", "اث", "ثل", "أر", "خم", "جم"
-        )
-        private val weekDaysInitialsInAzerbaijani = listOf7Items(
-            "یئل", "سۆد", "دۇز", "آرا", "اوْد", "سۇ", "آینی"
-        )
-        private val weekDaysInitialsInChinese = listOf7Items(
-            "六", "日", "一", "二", "三", "四", "五"
-        )
-        private val weekDaysInitialsInTurkish = listOf7Items(
-            "Ct", "Pz", "Pt", "Sa", "Ça", "Pe", "Cu"
+        private val weekDaysInitialsInPersian = listOf7Items(
+            "ش", "ی", "د", "س", "چ", "و", "ج"
         )
         private val weekDaysInitialsInEnglishIran = listOf7Items(
             "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo"
-        )
-        private val weekDaysInitialsInTajiki = listOf7Items(
-            "Шн", "Як", "Дш", "Сш", "Чш", "Пш", "Ҷм"
-        )
-        val weekDaysInitialsInRussian = listOf7Items(
-            "Сб", "Вс", "Пн", "Вт", "Ср", "Чт", "Пт"
         )
 
         // https://github.com/techgaun/ad-bs-converter/blob/4731f2c/src/converter.js
@@ -452,15 +435,6 @@ enum class Language(val code: String, val nativeName: String) {
         val nepaliMonthsInEnglish = listOf12Items(
             "Baisakh", "Jestha", "Ashadh", "Shrawan", "Bhadra", "Ashwin",
             "Kartik", "Mangsir", "Paush", "Mangh", "Falgun", "Chaitra"
-        )
-
-        // https://github.com/techgaun/get-nepday-of-week/blob/02b6ffc/index.js#L19
-        // probably should be provided from the translations though
-        val weekDaysInNepali = listOf7Items(
-            "शनिबार", "आइतबार", "सोमबार", "मंगलबार", "बुधबार", "बिहिबार", "शुक्रबार"
-        )
-        val weekDaysInitialsInNepali = listOf7Items(
-            "श", "आ", "सो", "मं", "बु", "बि", "शु"
         )
 
         private val irCodeOrder = listOf("zz", "ir", "tr", "af", "iq")

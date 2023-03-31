@@ -327,6 +327,13 @@
     <string name="wednesday">بدھ</string>
     <string name="thursday">جمعرات</string>
     <string name="friday">جمعہ</string>
+    <string name="saturday_short">س</string>
+    <string name="sunday_short">ا</string>
+    <string name="monday_short">پ</string>
+    <string name="tuesday_short">م</string>
+    <string name="wednesday_short">ب</string>
+    <string name="thursday_short">ج</string>
+    <string name="friday_short">ج</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
     <string name="country_emoji">🇵🇰🇮🇳</string>

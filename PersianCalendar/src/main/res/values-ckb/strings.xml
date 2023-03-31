@@ -328,6 +328,13 @@
     <string name="wednesday">چوارشەممە</string>
     <string name="thursday">پێنجشەممە</string>
     <string name="friday">ھەینی</string>
+    <string name="saturday_short">ش</string>
+    <string name="sunday_short">ی</string>
+    <string name="monday_short">د</string>
+    <string name="tuesday_short">س</string>
+    <string name="wednesday_short">چ</string>
+    <string name="thursday_short">پ</string>
+    <string name="friday_short">ھ</string>
     <string name="sun_view">نیشاندانی خۆر</string>
     <string name="country_emoji">🇮🇷🇮🇶</string>
     <string name="nepal">نیپال</string>

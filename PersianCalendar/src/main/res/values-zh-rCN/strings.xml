@@ -176,8 +176,6 @@
     <string name="about_noClient">未安装任何邮件应用</string>
     <string name="shift_work_starting_date">当前日历上选择的日期（%1$s）将作为倒班的起始日。</string>
     <string name="spaced_and">和</string>
-    <string name="tuesday">星期二</string>
-    <string name="monday">星期一</string>
     <string name="islamic_calendar">伊斯兰历</string>
     <string name="theme_black">黑色</string>
     <string name="iran_official_events">伊朗官方（波斯语）</string>
@@ -223,9 +221,18 @@
     <string name="july">7 月</string>
     <string name="saturday">星期六</string>
     <string name="sunday">星期日</string>
+    <string name="monday">星期一</string>
+    <string name="tuesday">星期二</string>
     <string name="wednesday">星期三</string>
     <string name="thursday">星期四</string>
     <string name="friday">星期五</string>
+    <string name="saturday_short">六</string>
+    <string name="sunday_short">日</string>
+    <string name="monday_short">一</string>
+    <string name="tuesday_short">二</string>
+    <string name="wednesday_short">三</string>
+    <string name="thursday_short">四</string>
+    <string name="friday_short">五</string>
     <string name="are_you_sure">你确定吗？</string>
     <string name="august">8 月</string>
     <string name="september">9 月</string>

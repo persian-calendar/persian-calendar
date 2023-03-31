@@ -214,7 +214,6 @@
     </plurals>
     <string name="islamic_calendar_short">исломӣ</string>
     <string name="shift_work_off">Хомӯш</string>
-    <string name="monday">Душанбе</string>
     <string name="method_jafari">Дувоздаҳ шиъа, Институти Лава, Қум</string>
     <string name="method_tehran">Донишкадаи геофизик, Донишгоҳи Теҳрон</string>
     <string name="iran_holidays">Рӯзҳои истироҳат дар Эрон</string>
@@ -260,9 +259,17 @@
     <string name="september">Сентябр</string>
     <string name="saturday">Шанбе</string>
     <string name="sunday">Якшанбе</string>
+    <string name="monday">Душанбе</string>
     <string name="tuesday">Сешанбе</string>
     <string name="thursday">Панҷшанбе</string>
     <string name="friday">Ҷумъа</string>
+    <string name="saturday_short">Шн</string>
+    <string name="sunday_short">Як</string>
+    <string name="monday_short">Дш</string>
+    <string name="tuesday_short">Сш</string>
+    <string name="wednesday_short">Чш</string>
+    <string name="thursday_short">Пш</string>
+    <string name="friday_short">Ҷм</string>
     <string name="are_you_sure">Шумо мутмаъин ҳастед\?</string>
     <string name="method_mwl">Лигаи ҷаҳонии мусалмонон</string>
     <string name="method_isna">Ҷамъияти исломии Амрикои Шимолӣ</string>

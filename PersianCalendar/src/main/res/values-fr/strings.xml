@@ -332,6 +332,13 @@
     <string name="wednesday">mercredi</string>
     <string name="thursday">jeudi</string>
     <string name="friday">vendredi</string>
+    <string name="saturday_short">s</string>
+    <string name="sunday_short">d</string>
+    <string name="monday_short">l</string>
+    <string name="tuesday_short">m</string>
+    <string name="wednesday_short">m</string>
+    <string name="thursday_short">j</string>
+    <string name="friday_short">v</string>
     <string name="sun_view">Vue Soleil</string>
     <string name="asr_hanafi_juristic">Méthode juridique Hanafi Asr</string>
     <string name="enable_new_interface">Activer la nouvelle interface</string>

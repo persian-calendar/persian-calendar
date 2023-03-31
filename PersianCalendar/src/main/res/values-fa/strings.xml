@@ -328,6 +328,13 @@
     <string name="wednesday">چهارشنبه</string>
     <string name="thursday">پنجشنبه</string>
     <string name="friday">جمعه</string>
+    <string name="saturday_short">ش</string>
+    <string name="sunday_short">ی</string>
+    <string name="monday_short">د</string>
+    <string name="tuesday_short">س</string>
+    <string name="wednesday_short">چ</string>
+    <string name="thursday_short">پ</string>
+    <string name="friday_short">ج</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
     <string name="enable_new_interface">فعال‌سازی ظاهر جدید</string>

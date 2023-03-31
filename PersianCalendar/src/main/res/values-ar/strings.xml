@@ -324,6 +324,13 @@
     <string name="wednesday">الأربعاء</string>
     <string name="thursday">الخميس</string>
     <string name="friday">الجمعة</string>
+    <string name="saturday_short">سب</string>
+    <string name="sunday_short">أح</string>
+    <string name="monday_short">اث</string>
+    <string name="tuesday_short">ثل</string>
+    <string name="wednesday_short">أر</string>
+    <string name="thursday_short">خم</string>
+    <string name="friday_short">جم</string>
     <string name="sun_view">عرض الشمس</string>
     <string name="asr_hanafi_juristic">طريقة الحنفي في حساب وقت صلاة العصر</string>
     <string name="enable_new_interface">تفعيل الواجهة الجديدة</string>

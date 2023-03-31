@@ -142,7 +142,7 @@
     <string name="gps_internet_desc">Пожалуйста, включите GPS устройства и подключение к Интернету, чтобы определить ваше местоположение.
 \n
 \nПриложению это нужно только один раз, однако, если вы переедете в новое место, доступ к GPS и Интернету потребуется снова.</string>
-    <string name="pleasewaitgps">Пожалуйста, подождите... Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты</string>
+    <string name="pleasewaitgps">Пожалуйста, подождите… Если через минуту ничего не появилось, вам, вероятно, следует попробовать другие варианты</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
     <string name="center_align_widgets_summary">Выравнивание по центру виджетов 4x1 и 2x2</string>
@@ -160,7 +160,6 @@
     <string name="method_isna">Исламское общество Северной Америки</string>
     <string name="february">Февраль</string>
     <string name="november">Ноябрь</string>
-    <string name="thursday">Четверг</string>
     <string name="shift_work_off">Откл</string>
     <string name="method_mwl">Мусульманская мировая лига</string>
     <string name="iran_holidays">отпуске в Иране</string>
@@ -184,7 +183,6 @@
     <string name="aban">Абан</string>
     <string name="dhu_al_hijjah">Ду аль-Хиджа</string>
     <string name="august">Август</string>
-    <string name="friday">Пятница</string>
     <string name="other_holidays">Другие</string>
     <string name="farvardin">Фарвардин</string>
     <string name="ordibehesht">Ордибехешт</string>
@@ -205,9 +203,6 @@
     <string name="october">Октябрь</string>
     <string name="december">Декабрь</string>
     <string name="sun">Солнце</string>
-    <string name="monday">Понедельник</string>
-    <string name="tuesday">Вторник</string>
-    <string name="wednesday">Среда</string>
     <string name="high_latitudes_angle_based">Угол на основе</string>
     <string name="nepali_calendar_short">Непальский</string>
     <string name="earth">Земля</string>
@@ -331,6 +326,18 @@
     <string name="shawwal">Шавваль</string>
     <string name="saturday">Суббота</string>
     <string name="sunday">Воскресенье</string>
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="thursday">Четверг</string>
+    <string name="friday">Пятница</string>
+    <string name="saturday_short">Сб</string>
+    <string name="sunday_short">Вс</string>
+    <string name="monday_short">Пн</string>
+    <string name="tuesday_short">Вт</string>
+    <string name="wednesday_short">Ср</string>
+    <string name="thursday_short">Чт</string>
+    <string name="friday_short">Пт</string>
     <string name="enable_notification">Хотите включить уведомление о дате\?</string>
     <string name="add_quick_settings_tile">Добавить плитку быстрых настроек</string>
     <string name="true_north">Истинный север</string>

@@ -332,6 +332,13 @@
     <string name="wednesday">اوْدگونو</string>
     <string name="thursday">سۇگونو</string>
     <string name="friday">آینی‌گون</string>
+    <string name="saturday_short">یئل</string>
+    <string name="sunday_short">سۆد</string>
+    <string name="monday_short">دۇز</string>
+    <string name="tuesday_short">آرا</string>
+    <string name="wednesday_short">اوْد</string>
+    <string name="thursday_short">سۇ</string>
+    <string name="friday_short">آینی</string>
     <string name="sun_view">خورشیدنما</string>
     <string name="asr_hanafi_juristic">شیوهٔ محاسبهٔ اذان عصر حنفی</string>
     <string name="country_emoji">🇮🇷</string>

@@ -225,6 +225,13 @@
     <string name="wednesday">水曜日</string>
     <string name="thursday">木曜日</string>
     <string name="friday">金曜日</string>
+    <string name="saturday_short">土</string>
+    <string name="sunday_short">日</string>
+    <string name="monday_short">月</string>
+    <string name="tuesday_short">火</string>
+    <string name="wednesday_short">水</string>
+    <string name="thursday_short">木</string>
+    <string name="friday_short">金</string>
     <string name="country_emoji">🇯🇵</string>
     <string name="nepal">ネパール</string>
     <string name="calculator">電卓</string>
