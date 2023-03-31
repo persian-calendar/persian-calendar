@@ -29,8 +29,8 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.LOG_TAG
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentSettingsBinding
 import com.byagowi.persiancalendar.databinding.NumericBinding
+import com.byagowi.persiancalendar.databinding.SettingsScreenBinding
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.showCarouselDialog
@@ -58,11 +58,11 @@ import java.util.concurrent.TimeUnit
  * MEHDIMYADI
  */
 
-class SettingsScreen : Fragment(R.layout.fragment_settings) {
+class SettingsScreen : Fragment(R.layout.settings_screen) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentSettingsBinding.bind(view)
+        val binding = SettingsScreenBinding.bind(view)
         binding.appBar.root.hideToolbarBottomShadow()
         binding.appBar.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.settings)
@@ -115,7 +115,7 @@ class SettingsScreen : Fragment(R.layout.fragment_settings) {
 
     // Development only functionalities
     private fun setupMenu(
-        toolbar: Toolbar, binding: FragmentSettingsBinding, inflater: LayoutInflater
+        toolbar: Toolbar, binding: SettingsScreenBinding, inflater: LayoutInflater
     ) {
         toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
             runCatching {

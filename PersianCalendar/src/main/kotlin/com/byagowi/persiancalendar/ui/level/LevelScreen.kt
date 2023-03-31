@@ -15,7 +15,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentLevelBinding
+import com.byagowi.persiancalendar.databinding.LevelScreenBinding
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -23,7 +23,7 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 
-class LevelScreen : Fragment(R.layout.fragment_level) {
+class LevelScreen : Fragment(R.layout.level_screen) {
 
     private var provider: OrientationProvider? = null
     private var isStopped = false
@@ -31,7 +31,7 @@ class LevelScreen : Fragment(R.layout.fragment_level) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentLevelBinding.bind(view)
+        val binding = LevelScreenBinding.bind(view)
         binding.appBar.toolbar.also { toolbar ->
             toolbar.setTitle(R.string.level)
             toolbar.setupUpNavigation()

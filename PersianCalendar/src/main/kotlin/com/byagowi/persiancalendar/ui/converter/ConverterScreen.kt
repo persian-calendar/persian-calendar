@@ -18,7 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentConverterBinding
+import com.byagowi.persiancalendar.databinding.ConverterScreenBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -39,10 +39,10 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
-class ConverterScreen : Fragment(R.layout.fragment_converter) {
+class ConverterScreen : Fragment(R.layout.converter_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentConverterBinding.bind(view)
+        val binding = ConverterScreenBinding.bind(view)
 
         val viewModel by viewModels<ConverterViewModel>()
         binding.dayPickerView.changeCalendarType(viewModel.calendar.value)

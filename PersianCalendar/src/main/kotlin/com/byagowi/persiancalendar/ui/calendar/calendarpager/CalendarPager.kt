@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentMonthBinding
+import com.byagowi.persiancalendar.databinding.MonthFragmentBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.ArrowView
@@ -73,7 +73,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
     inner class PagerAdapter : RecyclerView.Adapter<PagerAdapter.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
-            FragmentMonthBinding.inflate(parent.context.layoutInflater, parent, false)
+            MonthFragmentBinding.inflate(parent.context.layoutInflater, parent, false)
         )
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
@@ -84,7 +84,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             context, resources.getDimension(R.dimen.grid_calendar_height) / 7 - 4.5.sp
         )
 
-        inner class ViewHolder(val binding: FragmentMonthBinding) :
+        inner class ViewHolder(val binding: MonthFragmentBinding) :
             RecyclerView.ViewHolder(binding.root) {
 
             var pageRefresh = fun(_: Boolean, _: Jdn?) {}

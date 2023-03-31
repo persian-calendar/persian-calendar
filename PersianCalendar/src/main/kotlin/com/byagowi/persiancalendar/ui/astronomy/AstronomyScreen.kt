@@ -21,7 +21,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentAstronomyBinding
+import com.byagowi.persiancalendar.databinding.AstronomyScreenBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
@@ -49,10 +49,10 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.min
 
-class AstronomyScreen : Fragment(R.layout.fragment_astronomy) {
+class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentAstronomyBinding.bind(view)
+        val binding = AstronomyScreenBinding.bind(view)
 
         binding.appBar.toolbar.let {
             it.setTitle(R.string.astronomy)

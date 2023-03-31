@@ -26,7 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentLicensesBinding
+import com.byagowi.persiancalendar.databinding.LicensesScreenBinding
 import com.byagowi.persiancalendar.generated.EventType
 import com.byagowi.persiancalendar.generated.gregorianEvents
 import com.byagowi.persiancalendar.generated.irregularRecurringEvents
@@ -45,7 +45,7 @@ import com.google.android.material.sidesheet.SideSheetCallback
 import com.google.android.material.transition.MaterialFadeThrough
 import kotlin.math.roundToInt
 
-class LicensesScreen : Fragment(R.layout.fragment_licenses) {
+class LicensesScreen : Fragment(R.layout.licenses_screen) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         exitTransition = MaterialFadeThrough()
@@ -56,7 +56,7 @@ class LicensesScreen : Fragment(R.layout.fragment_licenses) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentLicensesBinding.bind(view)
+        val binding = LicensesScreenBinding.bind(view)
         binding.appBar.toolbar.let {
             it.setTitle(R.string.about_license_title)
             it.setupUpNavigation()

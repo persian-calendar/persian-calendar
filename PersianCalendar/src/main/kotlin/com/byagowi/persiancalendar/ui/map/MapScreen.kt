@@ -18,7 +18,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentMapBinding
+import com.byagowi.persiancalendar.databinding.MapScreenBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.astronomy.AstronomyViewModel
@@ -41,11 +41,11 @@ import java.util.*
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
-class MapScreen : Fragment(R.layout.fragment_map) {
+class MapScreen : Fragment(R.layout.map_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentMapBinding.bind(view)
+        val binding = MapScreenBinding.bind(view)
         binding.toolbar.inflateMenu(R.menu.map_menu)
         val directPathButton = binding.toolbar.menu.findItem(R.id.menu_direct_path)
         val gridButton = binding.toolbar.menu.findItem(R.id.menu_grid)

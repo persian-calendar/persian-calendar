@@ -25,7 +25,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.PREF_SHOW_QIBLA_IN_COMPASS
 import com.byagowi.persiancalendar.PREF_TRUE_NORTH_IN_COMPASS
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.FragmentCompassBinding
+import com.byagowi.persiancalendar.databinding.CompassScreenBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
@@ -47,10 +47,10 @@ import kotlin.math.roundToInt
 /**
  * Compass/Qibla activity
  */
-class CompassScreen : Fragment(R.layout.fragment_compass) {
+class CompassScreen : Fragment(R.layout.compass_screen) {
 
     private var stopped = false
-    private var binding: FragmentCompassBinding? = null
+    private var binding: CompassScreenBinding? = null
     private var sensorManager: SensorManager? = null
     private var orientationSensor: Sensor? = null
     private var accelerometerSensor: Sensor? = null
@@ -146,7 +146,7 @@ class CompassScreen : Fragment(R.layout.fragment_compass) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = FragmentCompassBinding.bind(view)
+        val binding = CompassScreenBinding.bind(view)
         this.binding = binding
 
         binding.appBar.toolbar.let { toolbar ->

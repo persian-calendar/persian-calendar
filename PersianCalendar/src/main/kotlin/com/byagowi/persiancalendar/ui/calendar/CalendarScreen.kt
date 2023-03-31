@@ -49,8 +49,8 @@ import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.TIME_NAMES
+import com.byagowi.persiancalendar.databinding.CalendarScreenBinding
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
-import com.byagowi.persiancalendar.databinding.FragmentCalendarBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabPlaceholderBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -130,9 +130,9 @@ import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
 
-class CalendarScreen : Fragment(R.layout.fragment_calendar) {
+class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
-    private var mainBinding: FragmentCalendarBinding? = null
+    private var mainBinding: CalendarScreenBinding? = null
     private var searchView: SearchView? = null
 
     override fun onDestroyView() {
@@ -232,7 +232,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val binding = FragmentCalendarBinding.bind(view)
+        val binding = CalendarScreenBinding.bind(view)
         mainBinding = binding
 
         val tabs = listOfNotNull(
@@ -364,7 +364,7 @@ class CalendarScreen : Fragment(R.layout.fragment_calendar) {
         }
     }
 
-    private fun updateToolbar(binding: FragmentCalendarBinding, date: AbstractDate) {
+    private fun updateToolbar(binding: CalendarScreenBinding, date: AbstractDate) {
         val toolbar = binding.appBar.toolbar
         val secondaryCalendar = secondaryCalendar
         if (secondaryCalendar == null) {
