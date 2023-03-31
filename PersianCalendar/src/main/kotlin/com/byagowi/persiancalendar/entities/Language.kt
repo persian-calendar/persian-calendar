@@ -346,22 +346,26 @@ enum class Language(val code: String, val nativeName: String) {
         fun valueOfLanguageCode(languageCode: String): Language? =
             values().find { it.code == languageCode }
 
+        private val arabicSortReplacements = mapOf(
+            'ی' to "ي",
+            'ک' to "ك",
+            'گ' to "كی",
+            'ژ' to "زی",
+            'چ' to "جی",
+            'پ' to "بی",
+            'و' to "نی",
+            'ڕ' to "ری",
+            'ڵ' to "لی",
+            'ڤ' to "فی",
+            'ۆ' to "وی",
+            'ێ' to "یی",
+            'ھ' to "نی",
+            'ە' to "هی",
+        )
+
         @VisibleForTesting
-        fun prepareForArabicSort(text: String) = text
-            .replace("ی", "ي")
-            .replace("ک", "ك")
-            .replace("گ", "كی")
-            .replace("ژ", "زی")
-            .replace("چ", "جی")
-            .replace("پ", "بی")
-            .replace("و", "نی")
-            .replace("ڕ", "ری")
-            .replace("ڵ", "لی")
-            .replace("ڤ", "فی")
-            .replace("ۆ", "وی")
-            .replace("ێ", "یی")
-            .replace("ھ", "نی")
-            .replace("ە", "هی")
+        fun prepareForArabicSort(text: String): String =
+            text.map { arabicSortReplacements.getOrDefault(it, it) }.joinToString("")
 
         private val persianCalendarMonths = listOf12Items(
             R.string.farvardin, R.string.ordibehesht, R.string.khordad,
