@@ -53,7 +53,7 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
 
         private fun getCurrent(context: Context): Theme {
             val key = context.appPrefs.theme
-            return values().find { it.key == key } ?: SYSTEM_DEFAULT
+            return enumValues<Theme>().find { it.key == key } ?: SYSTEM_DEFAULT
         }
 
         @StyleRes

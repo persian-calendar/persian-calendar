@@ -9,6 +9,7 @@ enum class ConverterScreenMode(@StringRes val title: Int) {
     Calculator(R.string.calculator);
 
     companion object {
-        fun fromPosition(position: Int): ConverterScreenMode = values()[position]
+        fun fromPosition(position: Int): ConverterScreenMode =
+            enumValues<ConverterScreenMode>()[position]
     }
 }

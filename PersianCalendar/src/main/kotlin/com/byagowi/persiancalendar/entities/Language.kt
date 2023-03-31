@@ -344,7 +344,7 @@ enum class Language(val code: String, val nativeName: String) {
             }
 
         fun valueOfLanguageCode(languageCode: String): Language? =
-            values().find { it.code == languageCode }
+            enumValues<Language>().find { it.code == languageCode }
 
         private val arabicSortReplacements = mapOf(
             'ی' to "ي",

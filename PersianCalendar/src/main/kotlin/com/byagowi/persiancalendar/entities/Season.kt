@@ -26,7 +26,7 @@ enum class Season(
             val seasonIndex = floor(sunLongitude / 90).toInt()
                 // Southern hemisphere consideration
                 .let { if (coordinates?.isSouthernHemisphere == true) (it + 2) % 4 else it }
-            return values().getOrNull(seasonIndex).debugAssertNotNull ?: SPRING
+            return enumValues<Season>().getOrNull(seasonIndex).debugAssertNotNull ?: SPRING
         }
     }
 }

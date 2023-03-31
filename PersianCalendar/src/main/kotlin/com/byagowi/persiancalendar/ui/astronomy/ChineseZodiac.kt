@@ -56,12 +56,15 @@ enum class ChineseZodiac(@StringRes private val title: Int, private val emoji: S
     val harmfulMatch get() = harmfulMatchRaw[ordinal]
 
     companion object {
-        fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac =
-            values().getOrNull((persianDate.year + 5) % 12) ?: RAT
+        fun fromPersianCalendar(persianDate: PersianDate): ChineseZodiac {
+            return enumValues<ChineseZodiac>().getOrNull((persianDate.year + 5) % 12) ?: RAT
+        }
 
         @RequiresApi(Build.VERSION_CODES.N)
-        fun fromChineseCalendar(chineseDate: ChineseCalendar): ChineseZodiac =
-            values().getOrNull((chineseDate[ChineseCalendar.YEAR] - 1) % 12) ?: RAT
+        fun fromChineseCalendar(chineseDate: ChineseCalendar): ChineseZodiac {
+            return enumValues<ChineseZodiac>().getOrNull((chineseDate[ChineseCalendar.YEAR] - 1) % 12)
+                ?: RAT
+        }
 
         /*
          * Compatibilities, they should be turned into formula eventually.
