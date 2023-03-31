@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.entities
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.listOf12Items
@@ -300,22 +301,6 @@ enum class Language(val code: String, val nativeName: String) {
         else -> text
     }
 
-    private fun prepareForArabicSort(text: String) = text
-        .replace("ی", "ي")
-        .replace("ک", "ك")
-        .replace("گ", "كی")
-        .replace("ژ", "زی")
-        .replace("چ", "جی")
-        .replace("پ", "بی")
-        .replace("و", "نی")
-        .replace("ڕ", "ری")
-        .replace("ڵ", "لی")
-        .replace("ڤ", "فی")
-        .replace("ۆ", "وی")
-        .replace("ێ", "یی")
-        .replace("ھ", "نی")
-        .replace("ە", "هی")
-
     // Too hard to translate and don't want to disappoint translators thus
     // not moved yet to our common i18n system
     fun tryTranslateEclipseType(isSolar: Boolean, type: EclipseKind) = when (this) {
@@ -360,6 +345,23 @@ enum class Language(val code: String, val nativeName: String) {
 
         fun valueOfLanguageCode(languageCode: String): Language? =
             values().find { it.code == languageCode }
+
+        @VisibleForTesting
+        fun prepareForArabicSort(text: String) = text
+            .replace("ی", "ي")
+            .replace("ک", "ك")
+            .replace("گ", "كی")
+            .replace("ژ", "زی")
+            .replace("چ", "جی")
+            .replace("پ", "بی")
+            .replace("و", "نی")
+            .replace("ڕ", "ری")
+            .replace("ڵ", "لی")
+            .replace("ڤ", "فی")
+            .replace("ۆ", "وی")
+            .replace("ێ", "یی")
+            .replace("ھ", "نی")
+            .replace("ە", "هی")
 
         private val persianCalendarMonths = listOf12Items(
             R.string.farvardin, R.string.ordibehesht, R.string.khordad,
