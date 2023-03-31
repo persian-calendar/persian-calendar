@@ -1,15 +1,10 @@
 package com.byagowi.persiancalendar.ui.converter
 
-import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.FrameLayout
-import androidx.appcompat.widget.AppCompatSpinner
-import androidx.core.graphics.ColorUtils
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -19,15 +14,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ConverterScreenBinding
+import com.byagowi.persiancalendar.databinding.ConverterSpinnerBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
-import com.byagowi.persiancalendar.ui.utils.createRoundDrawable
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
+import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -48,24 +42,10 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
 
         val spinner = run {
-            val spinnerFrameLayout = FrameLayout(view.context)
-            spinnerFrameLayout.layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, 36.dp.toInt()
-            )
-            val spinnerColor = ColorUtils.setAlphaComponent(
-                view.context.resolveColor(R.attr.menuIconColor), 16
-            )
-            spinnerFrameLayout.background = createRoundDrawable(spinnerColor, 32.dp)
-            spinnerFrameLayout.setPadding(6.dp.toInt(), 0, 6.dp.toInt(), 0)
-            val spinner = AppCompatSpinner(binding.appBar.toolbar.context)
-            spinnerFrameLayout.addView(spinner)
-            binding.appBar.toolbar.addView(spinnerFrameLayout)
-            spinner
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            spinner.background =
-                view.context.getCompatDrawable(R.drawable.conveter_spinner_background)
-            spinner.setPaddingRelative(0, 0, 24.dp.toInt(), 0)
+            val toolbarContext = binding.appBar.toolbar.context
+            val spinnerBinding = ConverterSpinnerBinding.inflate(toolbarContext.layoutInflater)
+            binding.appBar.toolbar.addView(spinnerBinding.root)
+            spinnerBinding.spinner
         }
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
