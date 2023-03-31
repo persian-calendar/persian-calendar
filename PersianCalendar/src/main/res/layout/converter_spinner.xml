@@ -15,7 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:importantForAccessibility="no"
-            android:padding="4dp" />
+            android:paddingStart="0dp"
+            android:paddingEnd="6dp" />
 
         <Spinner
             android:id="@+id/spinner"
@@ -23,7 +24,7 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:paddingStart="4dp"
-            android:paddingEnd="18dp"
+            android:paddingEnd="24dp"
             android:popupBackground="@drawable/popup_background" />
 
     </com.google.android.material.carousel.MaskableFrameLayout>
