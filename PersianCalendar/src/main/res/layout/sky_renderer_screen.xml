@@ -17,7 +17,7 @@
         android:orientation="horizontal"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <com.byagowi.persiancalendar.ui.common.ZoomableView
+        <com.byagowi.persiancalendar.ui.common.InteractiveView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
