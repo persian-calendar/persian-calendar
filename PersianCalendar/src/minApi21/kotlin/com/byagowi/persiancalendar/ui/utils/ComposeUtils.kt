@@ -12,7 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.view.minusAssign
 import androidx.fragment.app.FragmentActivity
-import com.byagowi.persiancalendar.databinding.FragmentComposeBinding
+import com.byagowi.persiancalendar.databinding.ComposeScreenBinding
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.accompanist.themeadapter.material3.Mdc3Theme
 
@@ -34,7 +34,7 @@ private fun createComposeView(
     layoutInflater: LayoutInflater, isUpNavigation: Boolean,
     content: @Composable (setTitle: (String) -> Unit, setSubtitle: (String) -> Unit) -> Unit
 ): View {
-    val binding = FragmentComposeBinding.inflate(layoutInflater)
+    val binding = ComposeScreenBinding.inflate(layoutInflater)
     val toolbar = binding.appBar.toolbar
     val setTitle = { value: String -> toolbar.title = value }
     val setSubtitle = { value: String -> toolbar.subtitle = value }
