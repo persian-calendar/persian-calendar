@@ -15,15 +15,15 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
             android:importantForAccessibility="no"
-            android:padding="6dp" />
+            android:padding="4dp" />
 
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:paddingStart="6dp"
-            android:paddingEnd="20dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="18dp"
             android:popupBackground="@drawable/popup_background" />
 
     </com.google.android.material.carousel.MaskableFrameLayout>
