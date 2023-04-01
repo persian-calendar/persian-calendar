@@ -37,8 +37,7 @@
                     style="@style/TabLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorCard"
-                    app:tabBackground="?attr/selectableItemBackground" />
+                    android:background="?attr/colorCard" />
 
             </com.google.android.material.carousel.MaskableFrameLayout>
 
