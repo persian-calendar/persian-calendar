@@ -365,7 +365,7 @@ enum class Language(val code: String, val nativeName: String) {
 
         private fun guessLanguageFromKeyboards(context: Context): Language = runCatching {
             val imm = context.getSystemService<InputMethodManager>() ?: return EN_US
-            val imeMethods = context.getSystemService<InputMethodManager>()?.enabledInputMethodList
+            val imeMethods = imm.enabledInputMethodList
             for (method in imeMethods ?: emptyList()) {
                 for (submethod in imm.getEnabledInputMethodSubtypeList(method, true)) {
                     if (submethod.mode == "keyboard") {
