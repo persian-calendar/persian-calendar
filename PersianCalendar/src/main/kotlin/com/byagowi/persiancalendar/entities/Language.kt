@@ -10,6 +10,7 @@ import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAQ_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.TURKEY_TIMEZONE_ID
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
@@ -355,6 +356,7 @@ enum class Language(val code: String, val nativeName: String) {
                     IRAN_TIMEZONE_ID -> FA
                     AFGHANISTAN_TIMEZONE_ID -> FA_AF
                     IRAQ_TIMEZONE_ID -> AR
+                    TURKEY_TIMEZONE_ID -> TR
                     // TODO: Guess can be expanded with even more timezones,
                     //  we will need a map of timezone ids to language tags
                     else -> guessLanguageFromKeyboards(context)
