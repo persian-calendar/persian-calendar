@@ -9,6 +9,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAQ_TIMEZONE_ID
+import com.byagowi.persiancalendar.NEPAL_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.TURKEY_TIMEZONE_ID
 import com.byagowi.persiancalendar.global.spacedComma
@@ -357,6 +358,7 @@ enum class Language(val code: String, val nativeName: String) {
                     AFGHANISTAN_TIMEZONE_ID -> FA_AF
                     IRAQ_TIMEZONE_ID -> AR
                     TURKEY_TIMEZONE_ID -> TR
+                    NEPAL_TIMEZONE_ID -> NE
                     // TODO: Guess can be expanded with even more timezones,
                     //  we will need a map of timezone ids to language tags
                     else -> guessLanguageFromKeyboards(context)
