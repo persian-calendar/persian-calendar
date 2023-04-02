@@ -2,16 +2,22 @@ package com.byagowi.persiancalendar.entities
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
+import android.view.inputmethod.InputMethodManager
 import androidx.annotation.VisibleForTesting
+import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.listOf12Items
 import com.byagowi.persiancalendar.utils.listOf7Items
+import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.variants.debugLog
 import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.persiancalendar.praytimes.CalculationMethod
 import java.util.*
+
 
 enum class Language(val code: String, val nativeName: String) {
     // The following order is used for language change dialog also
@@ -341,16 +347,38 @@ enum class Language(val code: String, val nativeName: String) {
         private val userTimeZoneId = TimeZone.getDefault().id ?: IRAN_TIMEZONE_ID
 
         // Preferred app language for certain locale
-        val preferredDefaultLanguage: Language
-            get() = when (userDeviceLanguage) {
+        fun getPreferredDefaultLanguage(context: Context): Language {
+            return when (userDeviceLanguage) {
                 FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
                 "en", EN_US.code -> when (userTimeZoneId) {
                     IRAN_TIMEZONE_ID -> FA
                     AFGHANISTAN_TIMEZONE_ID -> FA_AF
-                    else -> EN_US
+                    else -> guessLanguageFromKeyboards(context)
                 }
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
+        }
+
+        private fun guessLanguageFromKeyboards(context: Context): Language = runCatching {
+            val imm = context.getSystemService<InputMethodManager>() ?: return EN_US
+            val imeMethods = context.getSystemService<InputMethodManager>()?.enabledInputMethodList
+            for (method in imeMethods ?: emptyList()) {
+                for (submethod in imm.getEnabledInputMethodSubtypeList(method, true)) {
+                    if (submethod.mode == "keyboard") {
+                        val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            submethod.languageTag
+                        } else submethod.locale
+                        debugLog("Language: $locale available in keyboards")
+                        val language = valueOfLanguageCode(locale)
+                            ?: valueOfLanguageCode(locale.split("-").firstOrNull() ?: "")
+                        // Use the knowledge only to detect Persian language
+                        // as others might be surprising
+                        if (language == FA || language == FA_AF) return language
+                    }
+                }
+            }
+            return EN_US
+        }.onFailure(logException).getOrNull() ?: EN_US
 
         fun valueOfLanguageCode(languageCode: String): Language? =
             enumValues<Language>().find { it.code == languageCode }

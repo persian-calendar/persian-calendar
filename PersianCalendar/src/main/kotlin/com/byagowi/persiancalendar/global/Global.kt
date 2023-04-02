@@ -215,7 +215,7 @@ fun updateStoredPreference(context: Context) {
     val prefs = context.appPrefs
 
     language = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
-        ?: Language.preferredDefaultLanguage
+        ?: Language.getPreferredDefaultLanguage(context)
     easternGregorianArabicMonths = prefs.getBoolean(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false)
 
     preferredDigits =
