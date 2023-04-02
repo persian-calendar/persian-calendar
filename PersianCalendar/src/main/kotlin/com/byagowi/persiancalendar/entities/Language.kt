@@ -372,7 +372,7 @@ enum class Language(val code: String, val nativeName: String) {
                         val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             submethod.languageTag
                         } else submethod.locale
-                        debugLog("Language: $locale available in keyboards")
+                        debugLog("Language: $locale is available in keyboards")
                         val language = valueOfLanguageCode(locale)
                             ?: valueOfLanguageCode(locale.split("-").firstOrNull() ?: "")
                         // Use the knowledge only to detect Persian language
