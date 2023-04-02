@@ -137,3 +137,4 @@ const val QIBLA_LONGITUDE = 39.826181
 
 const val IRAN_TIMEZONE_ID = "Asia/Tehran"
 const val AFGHANISTAN_TIMEZONE_ID = "Asia/Kabul"
+const val IRAQ_TIMEZONE_ID = "Asia/Baghdad"
