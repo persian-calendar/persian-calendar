@@ -353,18 +353,21 @@ enum class Language(val code: String, val nativeName: String) {
         fun getPreferredDefaultLanguage(context: Context): Language {
             return when (userDeviceLanguage) {
                 FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
-                "en", EN_US.code -> when (userTimeZoneId) {
-                    IRAN_TIMEZONE_ID -> FA
-                    AFGHANISTAN_TIMEZONE_ID -> FA_AF
-                    IRAQ_TIMEZONE_ID -> AR
-                    TURKEY_TIMEZONE_ID -> TR
-                    NEPAL_TIMEZONE_ID -> NE
-                    // TODO: Guess can be expanded with even more timezones,
-                    //  we will need a map of timezone ids to language tags
-                    else -> guessLanguageFromKeyboards(context)
-                }
+                "en", EN_US.code ->
+                    guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(context)
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
+        }
+
+        private fun guessLanguageFromTimezoneId(): Language? = when (userTimeZoneId) {
+            // TODO: Guess can be expanded with even more timezones,
+            //  we will need a map of timezone ids to language tags
+            IRAN_TIMEZONE_ID -> FA
+            AFGHANISTAN_TIMEZONE_ID -> FA_AF
+            IRAQ_TIMEZONE_ID -> AR
+            TURKEY_TIMEZONE_ID -> TR
+            NEPAL_TIMEZONE_ID -> NE
+            else -> null
         }
 
         private fun guessLanguageFromKeyboards(context: Context): Language = runCatching {
