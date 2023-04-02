@@ -3,6 +3,8 @@ package com.byagowi.persiancalendar.entities
 import android.annotation.SuppressLint
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import com.byagowi.persiancalendar.AFGHANISTAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.utils.listOf12Items
@@ -336,10 +338,17 @@ enum class Language(val code: String, val nativeName: String) {
         @SuppressLint("ConstantLocale")
         private val userDeviceCountry = Locale.getDefault().country ?: "IR"
 
+        private val userTimeZoneId = TimeZone.getDefault().id ?: IRAN_TIMEZONE_ID
+
         // Preferred app language for certain locale
-        val preferredDefaultLanguage
+        val preferredDefaultLanguage: Language
             get() = when (userDeviceLanguage) {
-                FA.code, "en", EN_US.code -> if (userDeviceCountry == "AF") FA_AF else FA
+                FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
+                "en", EN_US.code -> when (userTimeZoneId) {
+                    IRAN_TIMEZONE_ID -> FA
+                    AFGHANISTAN_TIMEZONE_ID -> FA_AF
+                    else -> EN_US
+                }
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
 
