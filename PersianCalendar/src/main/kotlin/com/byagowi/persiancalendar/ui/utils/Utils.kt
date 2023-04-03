@@ -165,6 +165,7 @@ fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
 fun Context.getAnimatedDrawable(@DrawableRes animatedDrawableRes: Int) =
     AnimatedVectorDrawableCompat.create(this, animatedDrawableRes)
 
+// https://stackoverflow.com/a/48421144 but doesn't seem to be needed anymore?
 fun AppBarLayout.hideToolbarBottomShadow() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) outlineProvider = null
 }
