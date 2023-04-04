@@ -198,7 +198,7 @@ dependencies {
     debugImplementation("androidx.multidex:multidex:2.0.1")
 
     minApi21Implementation("androidx.activity:activity-compose:1.7.0")
-    val accompanistVersion = "0.30.0"
+    val accompanistVersion = "0.30.1"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-themeadapter-material3:$accompanistVersion")
