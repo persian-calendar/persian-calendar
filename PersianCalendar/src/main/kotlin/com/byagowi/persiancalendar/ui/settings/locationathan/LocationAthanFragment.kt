@@ -205,7 +205,6 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         athanPreferenceCategory?.setSummary(
             if (coordinates.value == null) R.string.athan_disabled_summary else R.string.empty
         )
-        coordinatesPreference?.isEnabled = cityName == null
         coordinatesPreference?.summary = coordinates.value
             ?.run { formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != .0 }) }
         athanPreferenceCategory?.forEach {

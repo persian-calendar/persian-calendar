@@ -83,9 +83,16 @@ fun showCoordinatesDialog(
                     }
                 }
             }
-            if (parts.size == 3) activity.appPrefs.saveLocation(
-                Coordinates(parts[0], parts[1], parts[2]), cityName ?: "", countryCode ?: ""
-            ) else activity.appPrefs.edit { coordinatesKeys.forEach(::remove) }
+            if (parts.size == 3) {
+                val newCoordinates = Coordinates(parts[0], parts[1], parts[2])
+                if (newCoordinates != coordinates) {
+                    activity.appPrefs.saveLocation(
+                        newCoordinates,
+                        cityName ?: "",
+                        countryCode ?: ""
+                    )
+                }
+            } else activity.appPrefs.edit { coordinatesKeys.forEach(::remove) }
         }
         .setNegativeButton(R.string.cancel, null)
 
