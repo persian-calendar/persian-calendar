@@ -35,6 +35,7 @@
 
     "https://raw.githubusercontent.com/ilius/starcal/master/plugins/iran-ancient-data.txt",
     "جشن‌های باستانی ایران",
+    "Ardalan Razavi",
     "رضا مرادی غیاث‌آبادی (www.ghiasabadi.com) سعید رسولی <saeed.gnu@gmail.com>",
 
     "http://www.un.org/en/sections/observances/international-days/"
@@ -859,185 +860,125 @@
       "title": "روز ملّی‌شدن صنعت نفت ایران (۱۳۲۹ ه‍.ش)" },
 
 
-    { "holiday": false, "month": 1, "day": 6, "type": "AncientIran",
-      "title": "روز امید، روز شادباش‌نویسی" },
+    { "holiday": false, "month": 1, "day": 1, "type": "AncientIran",
+      "title": "جشن نوروز، نوروز جمشیدی (جمشید پیشدادی) - ابتدای بهار" },
 
-    { "holiday": false, "month": 1, "day": 10, "type": "AncientIran",
-      "title": "جشن آبانگاه" },
+    { "holiday": false, "month": 1, "day": 6, "type": "AncientIran",
+      "title": "نوروز بزرگ (هودرو)، زادروز آشو زرتشت - روییدن مشی و مشیانه" },
+
+    { "holiday": false, "month": 1, "day": 7, "type": "AncientIran",
+      "title": "آیین نیایش پیر هریشت از ۷ تا ۱۱ فروردین" },
 
     { "holiday": false, "month": 1, "day": 13, "type": "AncientIran",
-      "title": "جشن سیزده‌بدر" },
-
-    { "holiday": false, "month": 1, "day": 17, "type": "AncientIran",
-      "title": "سروش‌روز، جشن سروشگان" },
+      "title": "سیزده نوروز، سیزده‌بدر" },
 
     { "holiday": false, "month": 1, "day": 19, "type": "AncientIran",
-      "title": "فرورین‌روز، جشن فروردینگان" },
+      "title": "جشن فرودینگان" },
 
     { "holiday": false, "month": 2, "day": 2, "type": "AncientIran",
-      "title": "جشن گیاه‌آوری" },
-
-    { "holiday": false, "month": 2, "day": 3, "type": "AncientIran",
-      "title": "اردیبهشت‌روز، جشن اردیبهشتگان" },
+      "title": "جشن اردیبهشتگان، پوشیدن لباس سپید به نشانه پاکی" },
 
     { "holiday": false, "month": 2, "day": 10, "type": "AncientIran",
-      "title": "جشن چهلم نوروز" },
+      "title": "جشن چلمو (چله بهار) - گاهان بار میدیوزرم‌گاه از ۱۰ تا ۱۴ اردیبهشت" },
 
-    { "holiday": false, "month": 2, "day": 15, "type": "AncientIran",
-      "title": "گاهنبار میدیوزَرِم، جشن میانهٔ بهار، جشن بهاربُد / روز پیام‌آوری زرتشت" },
+    { "holiday": false, "month": 2, "day": 18, "type": "AncientIran",
+      "title": "جشن پنجاه بدر" },
 
-    { "holiday": false, "month": 3, "day": 1, "type": "AncientIran",
-      "title": "ارغاسوان، جشن گرما" },
+    { "holiday": false, "month": 2, "day": 25, "type": "AncientIran",
+      "title": "بزرگداشت استاد توس فردوسی بزرگ" },
 
-    { "holiday": false, "month": 3, "day": 6, "type": "AncientIran",
-      "title": "خردادروز، جشن خردادگان" },
+    { "holiday": false, "month": 3, "day": 4, "type": "AncientIran",
+      "title": "جشن خوردادگان، امشاسپند خورداد نگاهبان آبها" },
 
-    { "holiday": false, "month": 4, "day": 1, "type": "AncientIran",
-      "title": "جشن آب‌پاشونک، جشن آغاز تابستان / سال نو در گاهشماری گاهنباری / دیدار طلوع خورشید در تقویم آفتابی چارتاقی نیاسر" },
+    { "holiday": false, "month": 3, "day": 24, "type": "AncientIran",
+      "title": "آیین نیایش ستی پیر و پیر سبز (چک چک)" },
 
-    { "holiday": false, "month": 4, "day": 6, "type": "AncientIran",
-      "title": "جشن نیلوفر" },
+    { "holiday": false, "month": 3, "day": 29, "type": "AncientIran",
+      "title": "جشن ابتدای تیر ماه، آب پاشونک" },
+
+    { "holiday": false, "month": 4, "day": 2, "type": "AncientIran",
+      "title": "آیین نیایش پیر نارستانه" },
+
+    { "holiday": false, "month": 4, "day": 8, "type": "AncientIran",
+      "title": "گاهان بار میدیوشهیم‌گاه از ۸ تا ۱۲ تیر" },
+
+    { "holiday": false, "month": 4, "day": 10, "type": "AncientIran",
+      "title": "جشن تیرگان، آب پاشونک" },
 
     { "holiday": false, "month": 4, "day": 13, "type": "AncientIran",
-      "title": "تیرروز، جشن تیرگان" },
+      "title": "آیین نیایش پارس بانو از ۱۳ تا ۱۷ تیر" },
 
-    { "holiday": false, "month": 4, "day": 15, "type": "AncientIran",
-      "title": "جشن خام‌خواری" },
+    { "holiday": false, "month": 5, "day": 3, "type": "AncientIran",
+      "title": "جشن امردادگان، امشاسپند امرداد نگاهبان رستنی‌ها" },
 
-    { "holiday": false, "month": 5, "day": 7, "type": "AncientIran",
-      "title": "مردادروز، جشن مردادگان" },
+    { "holiday": false, "month": 5, "day": 6, "type": "AncientIran",
+      "title": "جشن چله تابستان" },
 
-    { "holiday": false, "month": 5, "day": 10, "type": "AncientIran",
-      "title": "جشن چلهٔ تابستان" },
+    { "holiday": false, "month": 5, "day": 12, "type": "AncientIran",
+      "title": "آیین نیایش پیر نارکی از ۱۲ تا ۱۶ مرداد" },
 
-    { "holiday": false, "month": 5, "day": 15, "type": "AncientIran",
-      "title": "گاهنبار میدیوشِم، جشن میانهٔ تابستان" },
-
-    { "holiday": false, "month": 5, "day": 18, "type": "AncientIran",
-      "title": "جشن مَی‌خواره" },
-
-    { "holiday": false, "month": 6, "day": 1, "type": "AncientIran",
-      "title": "فغدیه، جشن خنکی هوا" },
+    { "holiday": false, "month": 5, "day": 30, "type": "AncientIran",
+      "title": "جشن شهریورگان، امشاسپند شهریور نگاهبان فلزات" },
 
     { "holiday": false, "month": 6, "day": 3, "type": "AncientIran",
-      "title": "جشن کشمین" },
+      "title": "جشن خزان" },
 
-    { "holiday": false, "month": 6, "day": 4, "type": "AncientIran",
-      "title": "شهریورروز، جشن شهریورگان / زادروز داراب (کوروش) / عروج مانی" },
+    { "holiday": false, "month": 6, "day": 21, "type": "AncientIran",
+      "title": "گاهان‌بار پتیه‌شهیم‌گاه از ۲۱ تا ۲۵ شهریور" },
 
-    { "holiday": false, "month": 6, "day": 8, "type": "AncientIran",
-      "title": "خزان‌جشن" },
+    { "holiday": false, "month": 7, "day": 10, "type": "AncientIran",
+      "title": "جشن مهرگان" },
 
-    { "holiday": false, "month": 6, "day": 15, "type": "AncientIran",
-      "title": "بازارجشن" },
-
-    { "holiday": false, "month": 6, "day": 31, "type": "AncientIran",
-      "title": "گاهنبار پَتیَه‌شَهیم، جشن پایان تابستان" },
-
-    { "holiday": false, "month": 7, "day": 1, "type": "AncientIran",
-      "title": "جشن میتراکانا / سال نو هخامنشی" },
-
-    { "holiday": false, "month": 7, "day": 12, "type": "AncientIran",
-      "title": "آیین قالیشویان اردهال، بازماندی از تیرگان" },
-
-    { "holiday": false, "month": 7, "day": 13, "type": "AncientIran",
-      "title": "تیرروز، جشن تیرروزی" },
-
-    { "holiday": false, "month": 7, "day": 16, "type": "AncientIran",
-      "title": "مهرروز، جشن مهرگان" },
-
-    { "holiday": false, "month": 7, "day": 21, "type": "AncientIran",
-      "title": "رام‌روز، جشن رام‌روزی / جشن پیروزی کاوه و فریدون" },
+    { "holiday": false, "month": 8, "day": 4, "type": "AncientIran",
+      "title": "جشن آبانگان" },
 
     { "holiday": false, "month": 8, "day": 7, "type": "AncientIran",
       "title": "روز کوروش بزرگ" },
 
-    { "holiday": false, "month": 8, "day": 10, "type": "AncientIran",
-      "title": "آبان‌روز، جشن آبانگان" },
+    { "holiday": false, "month": 8, "day": 9, "type": "AncientIran",
+      "title": "جشن پاییزانه" },
 
-    { "holiday": false, "month": 8, "day": 15, "type": "AncientIran",
-      "title": "گاهنبار اَیاثرَم، جشن میانهٔ پاییز" },
+    { "holiday": false, "month": 8, "day": 21, "type": "AncientIran",
+      "title": "جشن گالشی" },
 
-    { "holiday": false, "month": 9, "day": 1, "type": "AncientIran",
-      "title": "آذرجشن" },
+    { "holiday": false, "month": 9, "day": 3, "type": "AncientIran",
+      "title": "جشن آذرگان" },
 
-    { "holiday": false, "month": 9, "day": 9, "type": "AncientIran",
-      "title": "آذرروز، جشن آذرگان" },
+    { "holiday": false, "month": 9, "day": 25, "type": "AncientIran",
+      "title": "اولین جشن دی‌گان" },
 
     { "holiday": false, "month": 9, "day": 30, "type": "AncientIran",
-      "title": "گاهنبار میدیارِم، جشن میانهٔ سال گاهنباری (از مبدأ آغاز تابستان)" },
+      "title": "جشن شب یلدا" },
 
-    { "holiday": false, "month": 10, "day": 1, "type": "AncientIran",
-      "title": "روز میلاد خورشید، جشن خرم‌روز / نخستین جشن دیگان / دیدار طلوع خورشید در تقویم آفتابی چارتاقی نیاسر" },
-
-    { "holiday": false, "month": 10, "day": 5, "type": "AncientIran",
-      "title": "بازارجشن" },
+    { "holiday": false, "month": 10, "day": 2, "type": "AncientIran",
+      "title": "دومین جشن دی‌گان" },
 
     { "holiday": false, "month": 10, "day": 8, "type": "AncientIran",
-      "title": "دی‌به‌آذرروز، دومین جشن دیگان" },
+      "title": "جشن سیر و سور" },
 
-    { "holiday": false, "month": 10, "day": 14, "type": "AncientIran",
-      "title": "سیرسور، جشن گیاه‌خواری" },
+    { "holiday": false, "month": 10, "day": 9, "type": "AncientIran",
+      "title": "سومین جشن دی‌گان" },
 
-    { "holiday": false, "month": 10, "day": 15, "type": "AncientIran",
-      "title": "جشن پیکرتراشی / دی‌به‌مهرروز، سومین جشن دیگان" },
+    { "holiday": false, "month": 10, "day": 17, "type": "AncientIran",
+      "title": "چهارمین جشن دی‌گان" },
 
-    { "holiday": false, "month": 10, "day": 16, "type": "AncientIran",
-      "title": "جشن درامزینان، جشن درفش‌ها" },
+    { "holiday": false, "month": 10, "day": 26, "type": "AncientIran",
+      "title": "جشن بهمنگان، روز پدر، بهمن (منش نیک) امشاسپند" },
 
-    { "holiday": false, "month": 10, "day": 23, "type": "AncientIran",
-      "title": "دی‌به‌دین‌روز، چهارمین جشن دیگان" },
+    { "holiday": false, "month": 10, "day": 29, "type": "AncientIran",
+      "title": "جشن نوسده" },
 
-    { "holiday": false, "month": 11, "day": 1, "type": "AncientIran",
-      "title": "زادروز فردوسی" },
-
-    { "holiday": false, "month": 11, "day": 2, "type": "AncientIran",
-      "title": "بهمن‌روز، جشن بهمنگان" },
-
-    { "holiday": false, "month": 11, "day": 4, "type": "AncientIran",
-      "title": "شهریورروز، آغاز پادشاهی داراب (کوروش)" },
-
-    { "holiday": false, "month": 11, "day": 5, "type": "AncientIran",
-      "title": "جشن نوسَره" },
+    { "holiday": false, "month": 11, "day": 9, "type": "AncientIran",
+      "title": "جشن میانه زمستان" },
 
     { "holiday": false, "month": 11, "day": 10, "type": "AncientIran",
-      "title": "آبان‌روز، جشن سَدَه، آتش‌افروزی بر بام‌ها / نمایش‌بازی همگانی" },
+      "title": "جشن سده، آتش افروزی به هنگام غروب آفتاب" },
 
-    { "holiday": false, "month": 11, "day": 15, "type": "AncientIran",
-      "title": "جشن میانهٔ زمستان" },
+    { "holiday": false, "month": 11, "day": 29, "type": "AncientIran",
+      "title": "جشن اسفندگان، روز مادر و روز عشق پاک" },
 
-    { "holiday": false, "month": 11, "day": 22, "type": "AncientIran",
-      "title": "بادروز، جشن بادروزی" },
-
-    { "holiday": false, "month": 12, "day": 1, "type": "AncientIran",
-      "title": "جشن اسفندی / جشن آبسالان، بهارجشن / نمایش‌بازی همگانی" },
-
-    { "holiday": false, "month": 12, "day": 5, "type": "AncientIran",
-      "title": "اسفندروز، جشن اسفندگان، گرامیداشت زمین و بانوان / جشن برزگران" },
-
-    { "holiday": false, "month": 12, "day": 10, "type": "AncientIran",
-      "title": "جشن وخشنکام" },
-
-    { "holiday": false, "month": 12, "day": 19, "type": "AncientIran",
-      "title": "جشن نوروز رودها" },
-
-    { "holiday": false, "month": 12, "day": 20, "type": "AncientIran",
-      "title": "جشن گلدان" },
-
-    { "holiday": false, "month": 12, "day": 25, "type": "AncientIran",
-      "title": "هزارهٔ شاهنامه، هزارمین سالگرد پایان سرایش شاهنامهٔ فردوسی" },
-
-    { "holiday": false, "month": 12, "day": 26, "type": "AncientIran",
-      "title": "فروردگان" },
-
-    { "holiday": false, "month": 12, "day": 29, "type": "AncientIran",
-      "title": "گاهنبار هَمَسپَتمَدَم، جشن پایان زمستان (در آخرین روز سال) / جشن اوشیدر (نجات‌بخش ایرانی) در دریاچهٔ هامون و کوه خواجه / آتش‌افروزی بر بام‌ها در استقبال از نوروز" },
-
-    { "holiday": false, "month": 1, "day": 6, "type": "AncientIran",
-      "title": "روز تولد زرتشت" },
-
-    { "holiday": false, "month": 10, "day": 5, "type": "AncientIran",
-      "title": "روز درگذشت زرتشت" }
+    { "holiday": false, "month": 12, "day": 14, "type": "AncientIran",
+      "title": "جشن گلدان (اینجه)، روز درختکاری" }
   ],
 
   "Hijri Calendar": [

@@ -81,6 +81,7 @@ https://github.com/ilius/starcal
   * Mola Pahnadayan <mola.mp@gmail.com>
   * شورای مرکز تقویم مؤسسهٔ ژئوفیزیک دانشگاه تهران، و شورای فرهنگ عمومی
   * رضا مرادی غیاث‌آبادی
+  * Ardalan Razavi
 
   Copyright (C) 2017  Saeed Rasooli
 
