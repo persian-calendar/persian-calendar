@@ -38,20 +38,23 @@ class EventsTest {
         val repository = EventsRepository(setOf(EventsRepository.iranAncientKey), Language.FA)
         assertEquals(IslamicDate.useUmmAlQura, false)
 
-        (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
+        assertEquals(0, (1..30).map { IslamicDate(1400, 2, it) }.flatMap {
             repository.irregularCalendarEventsStore
                 .getEvents<CalendarEvent.IslamicCalendarEvent>(it)
-        }.let { assertEquals(0, it.size) }
+        }.size)
 
-        repository.irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
-            1400, CalendarType.SHAMSI
-        ).let { assertEquals(1, it.size) }
+        assertEquals(
+            1,
+            repository.irregularCalendarEventsStore.getEventsList<CalendarEvent.PersianCalendarEvent>(
+                1400, CalendarType.SHAMSI
+            ).size
+        )
 
         assertEquals(
             1, repository.getEvents(Jdn(PersianDate(1400, 12, 24)), EventsStore.empty()).size
         )
         assertEquals(
-            1, repository.getEvents(Jdn(PersianDate(1400, 12, 1)), EventsStore.empty()).size
+            1, repository.getEvents(Jdn(PersianDate(1400, 12, 14)), EventsStore.empty()).size
         )
     }
 
