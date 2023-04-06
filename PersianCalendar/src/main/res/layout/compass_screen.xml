@@ -21,17 +21,17 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorCard">
 
-            <com.google.android.material.slider.Slider
-                android:id="@+id/time_slider"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone" />
-
             <com.byagowi.persiancalendar.ui.compass.CompassView
                 android:id="@+id/compass_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="75dp" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/time_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
         </FrameLayout>
 
