@@ -58,13 +58,13 @@
             <com.google.android.material.carousel.MaskableFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorCard"
-                android:paddingStart="12dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="12dp"
                 app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
                 <LinearLayout
+                    android:background="?attr/colorCard"
+                    android:paddingStart="12dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="12dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">

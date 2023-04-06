@@ -13,21 +13,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:animateLayoutChanges="true"
-        android:background="?attr/colorCard"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
-        <com.google.android.material.slider.Slider
-            android:id="@+id/time_slider"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:background="?attr/colorCard">
 
-        <com.byagowi.persiancalendar.ui.compass.CompassView
-            android:id="@+id/compass_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="75dp" />
+            <com.google.android.material.slider.Slider
+                android:id="@+id/time_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <com.byagowi.persiancalendar.ui.compass.CompassView
+                android:id="@+id/compass_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="75dp" />
+
+        </FrameLayout>
 
     </com.google.android.material.carousel.MaskableFrameLayout>
 

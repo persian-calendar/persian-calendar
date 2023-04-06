@@ -7,25 +7,31 @@
     <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="wrap_content"
         android:layout_height="34dp"
-        android:background="@color/converter_spinner_background"
         app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
 
-        <com.byagowi.persiancalendar.ui.common.ArrowView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|end"
-            android:importantForAccessibility="no"
-            android:paddingStart="0dp"
-            android:paddingEnd="6dp" />
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/converter_spinner_background">
 
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:paddingStart="4dp"
-            android:paddingEnd="24dp"
-            android:popupBackground="@drawable/popup_background" />
+            <com.byagowi.persiancalendar.ui.common.ArrowView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:importantForAccessibility="no"
+                android:paddingStart="0dp"
+                android:paddingEnd="6dp" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:paddingStart="4dp"
+                android:paddingEnd="24dp"
+                android:popupBackground="@drawable/popup_background" />
+
+        </FrameLayout>
 
     </com.google.android.material.carousel.MaskableFrameLayout>
 

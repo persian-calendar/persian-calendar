@@ -19,10 +19,10 @@
     <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorCard"
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <androidx.viewpager2.widget.ViewPager2
+            android:background="?attr/colorCard"
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
