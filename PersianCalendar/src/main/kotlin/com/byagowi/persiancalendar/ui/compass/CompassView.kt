@@ -29,8 +29,10 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.toObserver
 import java.util.*
+import kotlin.math.cbrt
 import kotlin.math.min
 import kotlin.math.round
+import kotlin.math.roundToInt
 
 class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
 
@@ -51,7 +53,6 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.RED
         it.style = Paint.Style.FILL
-        it.alpha = 100
     }
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.qibla_color)
@@ -163,7 +164,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
 
     private val matrixValues = FloatArray(9)
     init {
-        maxScale = 2.5f
+        maxScale = 2f
         val textSize = 12.sp
         onDraw = fun(canvas: Canvas, matrix: Matrix) {
             matrix.getValues(matrixValues)
@@ -171,6 +172,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             planetsPaint.textSize = textSize * scale
             textPaint.textSize = textSize * scale
             textStrokePaint.textSize = textSize * scale
+            northArrowPaint.alpha = (100 * cbrt(scale)).roundToInt()
 
             angleDisplay.draw(canvas, (round(trueNorth) + 360f) % 360f)
             canvas.withRotation(-trueNorth, cx, cy) {
