@@ -104,7 +104,7 @@ class CalendarLibraryTests {
             val islamicDate = IslamicDate(it[1][0], it[1][1], it[1][2])
 
             assertEquals(jdn, islamicDate.toJdn())
-            assertTrue(islamicDate == IslamicDate(jdn))
+            assertEquals(islamicDate, IslamicDate(jdn))
         }
         IslamicDate.useUmmAlQura = false
 
