@@ -74,6 +74,9 @@
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">
+            ?attr/systemNavigationBarColor
+        </item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -98,6 +101,9 @@
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">
+            ?attr/systemNavigationBarColor
+        </item>
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -135,9 +141,6 @@
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/dark_primary_dark
-        </item>
         <item name="systemNavigationBarColor">@color/dark_primary_dark</item>
         <item name="navigationBarColor">@color/dark_primary</item>
 
@@ -184,9 +187,6 @@
         <item name="colorPrimary">@color/black_accent</item>
         <item name="colorPrimaryDark">@color/black_primary_dark</item>
         <item name="colorAccent">@color/black_accent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/black_primary_dark
-        </item>
         <item name="systemNavigationBarColor">@color/black_primary_dark</item>
         <item name="navigationBarColor">@color/black_primary</item>
 
@@ -231,9 +231,6 @@
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/light_primary_dark
-        </item>
         <item name="systemNavigationBarColor">@color/light_primary_dark</item>
         <item name="navigationBarColor">@color/light_primary</item>
 
@@ -278,9 +275,6 @@
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorPrimaryDark">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/blue_icon_drawer
-        </item>
         <item name="systemNavigationBarColor">@color/blue_icon_drawer</item>
         <item name="navigationBarColor">@color/blue_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
@@ -326,9 +320,6 @@
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            @color/modern_primary
-        </item>
         <item name="systemNavigationBarColor">@color/modern_primary</item>
         <item name="navigationBarColor">@color/modern_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
