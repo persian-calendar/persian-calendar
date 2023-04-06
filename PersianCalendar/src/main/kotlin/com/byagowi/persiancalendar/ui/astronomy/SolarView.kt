@@ -17,7 +17,7 @@ import androidx.core.graphics.withTranslation
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.ui.common.InteractiveView
+import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -30,7 +30,7 @@ import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.sign
 
-class SolarView(context: Context, attrs: AttributeSet? = null) : InteractiveView(context, attrs) {
+class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
 
     private var state = AstronomyState(GregorianCalendar())
 

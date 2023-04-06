@@ -85,7 +85,7 @@ import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
 import com.byagowi.persiancalendar.ui.SeasonsAdapter
 import com.byagowi.persiancalendar.ui.common.BaseSlider
-import com.byagowi.persiancalendar.ui.common.InteractiveView
+import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -502,7 +502,7 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
 }
 
 fun showPeriodicTableDialog(activity: FragmentActivity) {
-    val zoomableView = InteractiveView(activity)
+    val zoomableView = ZoomableView(activity)
     val cellSize = 100
     zoomableView.contentWidth = 100f * 18
     zoomableView.contentHeight = 100f * 9

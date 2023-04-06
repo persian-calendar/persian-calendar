@@ -22,7 +22,7 @@ import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.common.AngleDisplay
-import com.byagowi.persiancalendar.ui.common.InteractiveView
+import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -33,7 +33,7 @@ import java.util.*
 import kotlin.math.min
 import kotlin.math.round
 
-class CompassView(context: Context, attrs: AttributeSet? = null) : InteractiveView(context, attrs) {
+class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
 
     var angle = 0f
         set(value) {
