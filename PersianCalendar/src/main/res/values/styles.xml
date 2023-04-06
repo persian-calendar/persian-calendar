@@ -2,6 +2,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <attr name="navigationBarColor" format="reference" />
+    <attr name="systemNavigationBarColor" format="reference" />
     <attr name="colorMonthsBackground" format="reference" />
     <attr name="colorCard" format="reference" />
     <attr name="colorAppointment" format="reference" />
@@ -137,6 +138,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/dark_primary_dark
         </item>
+        <item name="systemNavigationBarColor">@color/dark_primary_dark</item>
         <item name="navigationBarColor">@color/dark_primary</item>
 
         <item name="colorCard">@color/dark_card_background</item>
@@ -185,6 +187,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/black_primary_dark
         </item>
+        <item name="systemNavigationBarColor">@color/black_primary_dark</item>
         <item name="navigationBarColor">@color/black_primary</item>
 
         <item name="colorCard">@color/black_card_background</item>
@@ -231,6 +234,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/light_primary_dark
         </item>
+        <item name="systemNavigationBarColor">@color/light_primary_dark</item>
         <item name="navigationBarColor">@color/light_primary</item>
 
         <item name="colorCard">@color/light_card_background</item>
@@ -277,6 +281,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/blue_icon_drawer
         </item>
+        <item name="systemNavigationBarColor">@color/blue_icon_drawer</item>
         <item name="navigationBarColor">@color/blue_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
@@ -324,6 +329,7 @@
         <item name="android:navigationBarColor" tools:targetApi="lollipop">
             @color/modern_primary
         </item>
+        <item name="systemNavigationBarColor">@color/modern_primary</item>
         <item name="navigationBarColor">@color/modern_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
 
@@ -458,6 +464,12 @@
         <item name="cornerFamily">?attr/shapeCornerFamily</item>
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
+    <style name="shapeAppearanceBottomCornerExtraLarge" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
     </style>
 
     <style name="AppOutlinedButton" parent="Widget.Material3.Button.OutlinedButton" />
