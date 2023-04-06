@@ -406,12 +406,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         } else emptyList()
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
-            binding.navHostFragmentContainer.translationX =
+            binding.navHostFragment.translationX =
                 slideOffset * drawerView.width.toFloat() * slidingDirection
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && blurs.isNotEmpty()) {
                 val blurIndex =
                     if (slideOffset.isNaN()) 0 else ((blurs.size - 1) * slideOffset).roundToInt()
-                binding.navHostFragmentContainer.setRenderEffect(blurs[blurIndex])
+                binding.navHostFragment.setRenderEffect(blurs[blurIndex])
                 binding.navigation.getHeaderView(0)
                     .setRenderEffect(blurs[blurs.size - 1 - blurIndex])
             }

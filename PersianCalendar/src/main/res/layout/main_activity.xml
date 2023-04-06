@@ -7,28 +7,13 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <FrameLayout
-        android:id="@+id/navHostFragmentContainer"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navHostFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/navigationBarColor">
-
-        <com.google.android.material.carousel.MaskableFrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:shapeAppearance="@style/shapeAppearanceBottomCornerExtraLarge">
-
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/navHostFragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/navigation_graph" />
-
-        </com.google.android.material.carousel.MaskableFrameLayout>
-
-    </FrameLayout>
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/navigation_graph" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation"
