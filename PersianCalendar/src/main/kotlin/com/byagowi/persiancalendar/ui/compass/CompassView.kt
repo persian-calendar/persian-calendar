@@ -31,6 +31,7 @@ import com.byagowi.persiancalendar.utils.toObserver
 import java.util.*
 import kotlin.math.cbrt
 import kotlin.math.min
+import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.roundToInt
 
@@ -65,7 +66,6 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.color = Color.LTGRAY
-        it.strokeWidth = 1.dp
     }
     private val moonShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x808080FF.toInt()
@@ -73,10 +73,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.strokeWidth = 9.dp
         it.strokeCap = Paint.Cap.ROUND
     }
-    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.STROKE
-        it.strokeWidth = 1.dp
-    }
+    private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.STROKE }
     private val sunShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x80808080.toInt()
         it.style = Paint.Style.STROKE
@@ -86,7 +83,6 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF009000.toInt()
         it.style = Paint.Style.FILL_AND_STROKE
-        it.strokeWidth = 1.dp
         it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
     private val kaaba = context.getCompatDrawable(R.drawable.kaaba)
@@ -166,6 +162,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     init {
         maxScale = 2f
         val textSize = 12.sp
+        val dashSize = 1.dp
         onDraw = fun(canvas: Canvas, matrix: Matrix) {
             matrix.getValues(matrixValues)
             val scale = matrixValues[Matrix.MSCALE_X]
@@ -173,6 +170,9 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             textPaint.textSize = textSize * scale
             textStrokePaint.textSize = textSize * scale
             northArrowPaint.alpha = (100 * cbrt(scale)).roundToInt()
+            qiblaPaint.strokeWidth = dashSize * scale
+            moonPaint.strokeWidth = dashSize * scale
+            sunPaint.strokeWidth = dashSize * scale
 
             angleDisplay.draw(canvas, (round(trueNorth) + 360f) % 360f)
             canvas.withRotation(-trueNorth, cx, cy) {
