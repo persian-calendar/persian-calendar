@@ -9,7 +9,7 @@
         android:id="@+id/main_activity"
         android:name="com.byagowi.persiancalendar.ui.MainActivity"
         android:label="@string/app_name"
-        tools:layout="@layout/activity_main" />
+        tools:layout="@layout/main_activity" />
 
     <fragment
         android:id="@+id/calendar"

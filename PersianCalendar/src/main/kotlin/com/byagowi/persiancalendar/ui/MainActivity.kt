@@ -48,7 +48,7 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.ActivityMainBinding
+import com.byagowi.persiancalendar.databinding.MainActivityBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     private var creationDateJdn = Jdn.today()
     private var settingHasChanged = false
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: MainActivityBinding
 
     private val onBackPressedCloseDrawerCallback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = binding.root.closeDrawer(GravityCompat.START)
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         readAndStoreDeviceCalendarEventsOfTheDay(applicationContext)
         update(applicationContext, false)
 
-        binding = ActivityMainBinding.inflate(layoutInflater).also {
+        binding = MainActivityBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
         ensureDirectionality()
