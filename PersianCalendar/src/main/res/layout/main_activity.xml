@@ -11,7 +11,7 @@
         android:id="@+id/navHostFragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/systemNavigationBarColor">
+        android:background="?attr/navigationBarColor">
 
         <com.google.android.material.carousel.MaskableFrameLayout
             android:layout_width="match_parent"
