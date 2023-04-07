@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorCard">
+    android:background="?attr/colorSurface">
 
     <include
         android:id="@+id/app_bar"
@@ -61,7 +61,7 @@
                 app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
                 <LinearLayout
-                    android:background="?attr/colorCard"
+                    android:background="?attr/colorSurface"
                     android:paddingStart="12dp"
                     android:paddingTop="4dp"
                     android:paddingEnd="12dp"
@@ -72,7 +72,7 @@
                     <LinearLayout
                         android:id="@+id/app_license"
                         style="@style/AboutCard"
-                        android:background="?attr/colorCard">
+                        android:background="?attr/colorSurface">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -117,7 +117,7 @@
                     <LinearLayout
                         android:id="@+id/help_card"
                         style="@style/AboutCard"
-                        android:background="?attr/colorCard">
+                        android:background="?attr/colorSurface">
 
                         <TextView
                             android:id="@+id/help_title"
@@ -140,7 +140,7 @@
                     <LinearLayout
                         android:id="@+id/support"
                         style="@style/AboutCard"
-                        android:background="?attr/colorCard">
+                        android:background="?attr/colorSurface">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -216,7 +216,7 @@
                     <LinearLayout
                         android:id="@+id/developers_section"
                         style="@style/AboutCard"
-                        android:background="?attr/colorCard">
+                        android:background="?attr/colorSurface">
 
                         <TextView
                             android:layout_width="wrap_content"

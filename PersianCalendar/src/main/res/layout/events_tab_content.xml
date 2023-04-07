@@ -13,7 +13,7 @@
         android:shadowDy="0"
         android:shadowRadius="2"
         android:textAlignment="center"
-        android:textColor="?attr/colorCard"
+        android:textColor="?attr/colorSurface"
         android:textSize="70sp" />
 
     <LinearLayout
