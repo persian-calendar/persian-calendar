@@ -158,6 +158,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     }
 
     private val matrixValues = FloatArray(9)
+
     init {
         maxScale = 2f
         val textSize = 12.sp
