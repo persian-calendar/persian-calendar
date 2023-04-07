@@ -12,11 +12,11 @@
     <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorCard"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <ScrollView
+            android:background="?attr/colorCard"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
