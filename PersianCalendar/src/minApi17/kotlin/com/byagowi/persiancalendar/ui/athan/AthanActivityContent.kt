@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.ActivityAthanBinding
+import com.byagowi.persiancalendar.databinding.AthanActivityBinding
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.utils.fadeIn
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
@@ -16,7 +16,7 @@ import com.byagowi.persiancalendar.utils.getPrayTimeName
 
 fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onClick: () -> Unit) {
     val cityName = activity.appPrefs.cityName
-    activity.setContentView(ActivityAthanBinding.inflate(activity.layoutInflater).also { binding ->
+    activity.setContentView(AthanActivityBinding.inflate(activity.layoutInflater).also { binding ->
         binding.athanName.setText(getPrayTimeName(prayerKey))
         binding.place.fadeIn(TWO_SECONDS_IN_MILLIS)
         binding.root.setOnClickListener { onClick() }

@@ -12,7 +12,7 @@ import androidx.fragment.app.commit
 import com.byagowi.persiancalendar.PREF_SELECTED_DATE_AGE_WIDGET
 import com.byagowi.persiancalendar.PREF_TITLE_AGE_WIDGET
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.ActivityAgeWidgetConfigureBinding
+import com.byagowi.persiancalendar.databinding.AgeWidgetConfigureActivityBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
@@ -44,7 +44,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
-        val binding = ActivityAgeWidgetConfigureBinding.inflate(layoutInflater).also {
+        val binding = AgeWidgetConfigureActivityBinding.inflate(layoutInflater).also {
             setContentView(it.root)
         }
 
