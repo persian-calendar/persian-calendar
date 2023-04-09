@@ -29,10 +29,4 @@
         <attr name="coloredTabIndicatorColor" format="reference" />
         <attr name="colorTextDaySelected" format="reference" />
     </declare-styleable>
-
-    <declare-styleable name="sunView">
-        <attr name="sunViewHorizonColor" format="reference" />
-        <attr name="sunViewTimelineColor" format="reference" />
-        <attr name="sunViewTaglineColor" format="reference" />
-    </declare-styleable>
 </resources>

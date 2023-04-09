@@ -12,6 +12,7 @@ import android.view.View
 import android.view.animation.DecelerateInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withClip
 import androidx.core.graphics.withScale
 import com.byagowi.persiancalendar.R
@@ -43,9 +44,10 @@ class SunView @JvmOverloads constructor(
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
-    private val horizonColor = textColor ?: context.resolveColor(R.attr.sunViewHorizonColor)
-    private val timelineColor = textColor ?: context.resolveColor(R.attr.sunViewTimelineColor)
-    private val taggingColor = textColor ?: context.resolveColor(R.attr.sunViewTaglineColor)
+    private val linesColor = ColorUtils.setAlphaComponent(
+        textColor ?: context.resolveColor(com.google.android.material.R.attr.colorControlNormal),
+        0x60
+    )
     private val nightColor = ContextCompat.getColor(context, R.color.sun_view_night_color)
     private val dayColor = ContextCompat.getColor(context, R.color.sun_view_day_color)
     private val daySecondColor = ContextCompat.getColor(context, R.color.sun_view_day_second_color)
@@ -146,19 +148,13 @@ class SunView @JvmOverloads constructor(
             paint.also {
                 it.strokeWidth = 3f
                 it.style = Paint.Style.STROKE
-                it.color = timelineColor
+                it.color = linesColor
             }
             drawPath(curvePath, paint)
-
             // draw horizon line
-            paint.color = horizonColor
             drawLine(0f, height * .75f, width.toFloat(), height * .75f, paint)
-
             // draw sunset and sunrise tag line indicator
-            paint.also {
-                it.color = taggingColor
-                it.strokeWidth = 2f
-            }
+            paint.strokeWidth = 2f
             drawLine(width * .17f, height * .3f, width * .17f, height * .7f, paint)
             drawLine(width * .83f, height * .3f, width * .83f, height * .7f, paint)
             drawLine(width / 2f, height * .7f, width / 2f, height * .8f, paint)
