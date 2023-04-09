@@ -36,7 +36,7 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: set up JDK
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: '17'
