@@ -105,13 +105,6 @@
     <color name="modern_drag_icon_color">#880A0A0A</color>
 
     <!-- Custom view SunView default colors -->
-    <color name="sun_view_horizon_color_light">#32000000</color>
-    <color name="sun_view_timeline_color_light">#32000000</color>
-    <color name="sun_view_tagline_color_light">#14000000</color>
-    <color name="sun_view_horizon_color_dark">#eeeeee</color>
-    <color name="sun_view_timeline_color_dark">#eeeeee</color>
-    <color name="sun_view_tagline_color_dark">#c1eeeeee</color>
-
     <color name="sun_view_sunrise_text_color">#FF9800</color>
     <color name="sun_view_midday_text_color">#FFC107</color>
     <color name="sun_view_sunset_text_color">#F22424</color>
