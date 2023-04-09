@@ -1,34 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: This should be merged with Material's owned colorPrimary someday -->
-    <attr name="colorAppBar" format="reference" />
-    <!-- TODO This should be merged with Material's owned colorOnPrimary someday -->
-    <attr name="colorOnAppBar" format="reference" />
-    <!-- This is the bottom screen navigation bar of the system -->
-    <attr name="navigationBarColor" format="reference" />
-    <!-- This is a redirect to colorAppBar thus colorAppBar
-         but the blue theme has a custom months background -->
-    <attr name="colorMonthsBackground" format="reference" />
-    <attr name="colorAppointment" format="reference" />
-    <attr name="colorTextNormal" format="reference" />
-    <attr name="colorTextSecond" format="reference" />
-    <attr name="colorTextHoliday" format="reference" />
-    <attr name="colorHoliday" format="reference" />
-    <attr name="colorTextDrawer" format="reference" />
-    <attr name="colorTextDayName" format="reference" />
-    <!-- Previous and Next month buttons color -->
-    <attr name="colorMonthSwitch" format="reference" />
-    <attr name="colorCurrentDay" format="reference" />
-    <attr name="colorSelectDay" format="reference" />
-    <attr name="colorEventIndicator" format="reference" />
-    <attr name="colorDrawerIcon" format="reference" />
-    <attr name="normalTabTextColor" format="reference" />
-    <attr name="appToolbarTheme" format="reference" />
-    <attr name="appToolbarPopupTheme" format="reference" />
-    <attr name="coloredTabIndicatorColor" format="reference" />
-    <attr name="colorTextDaySelected" format="reference" />
-
     <!-- its v31 version is more interesting -->
     <style name="WidgetTheme" />
 
