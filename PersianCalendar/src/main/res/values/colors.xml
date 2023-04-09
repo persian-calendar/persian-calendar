@@ -25,7 +25,6 @@
     <color name="dark_text_day">#ffffff</color>
     <color name="dark_text_day_name">#9e9e9e</color>
     <color name="dark_month_switch">#1de9b6</color>
-    <color name="dark_text_athan">#ffffff</color>
     <color name="dark_surface_background">#21282E</color>
     <color name="dark_current_day">#64ffda</color>
     <color name="dark_select_day">#e0e0e0</color>
@@ -45,7 +44,6 @@
     <color name="black_text_day">#ffffff</color>
     <color name="black_text_day_name">#9e9e9e</color>
     <color name="black_month_switch">#82B1FF</color>
-    <color name="black_text_athan">#ffffff</color>
     <color name="black_surface_background">#000000</color>
     <color name="black_current_day">#82B1FF</color>
     <color name="black_select_day">#e0e0e0</color>
@@ -65,7 +63,6 @@
     <color name="light_text_day">#ffffff</color>
     <color name="light_text_day_name">#b2dfdb</color>
     <color name="light_month_switch">#ff7043</color>
-    <color name="light_text_athan">#ffffff</color>
     <color name="light_surface_background">#fafafa</color>
     <color name="light_current_day">#ff7043</color>
     <color name="light_select_day">#eff2f1</color>
@@ -85,7 +82,6 @@
     <color name="blue_text_day">#ffffff</color>
     <color name="blue_text_day_name">#b2dfdb</color>
     <color name="blue_month_switch">#ff7043</color>
-    <color name="blue_text_athan">#ffffff</color>
     <color name="blue_surface_background">#fafafa</color>
     <color name="blue_current_day">#ff7043</color>
     <color name="blue_select_day">#F5F5F5</color>
@@ -105,7 +101,6 @@
     <color name="modern_text_day">#000000</color>
     <color name="modern_text_day_name">#424242</color>
     <color name="modern_month_switch">#42AFBF</color>
-    <color name="modern_text_athan">#ffffff</color>
     <color name="modern_surface_background">#fafafa</color>
     <color name="modern_current_day">#42AFBF</color>
     <color name="modern_select_day">#DDDEE2</color>
