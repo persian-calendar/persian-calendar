@@ -11,7 +11,6 @@
          but the blue theme has a custom months background -->
     <attr name="colorMonthsBackground" format="reference" />
     <attr name="colorAppointment" format="reference" />
-    <attr name="colorTextPrimary" format="reference" />
     <attr name="colorTextNormal" format="reference" />
     <attr name="colorTextSecond" format="reference" />
     <attr name="colorTextHoliday" format="reference" />
@@ -141,7 +140,6 @@
         <item name="colorAppBar">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
-        <item name="colorTextPrimary">@color/dark_text_primary</item>
         <item name="colorTextNormal">@color/dark_text_normal</item>
         <item name="colorTextSecond">@color/dark_text_second</item>
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
@@ -180,7 +178,6 @@
         <item name="colorAppBar">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
-        <item name="colorTextPrimary">@color/black_text_primary</item>
         <item name="colorTextNormal">@color/black_text_normal</item>
         <item name="colorTextSecond">@color/black_text_second</item>
         <item name="colorTextHoliday">@color/black_text_holiday</item>
@@ -217,7 +214,6 @@
         <item name="colorAppBar">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
-        <item name="colorTextPrimary">@color/light_text_primary</item>
         <item name="colorTextNormal">@color/light_text_normal</item>
         <item name="colorTextSecond">@color/light_text_second</item>
         <item name="colorTextHoliday">@color/light_text_holiday</item>
@@ -256,7 +252,6 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
         <item name="colorSurface">@color/blue_surface_background</item>
-        <item name="colorTextPrimary">@color/blue_text_primary</item>
         <item name="colorTextNormal">@color/blue_text_normal</item>
         <item name="colorTextSecond">@color/blue_text_second</item>
         <item name="colorTextHoliday">@color/blue_text_holiday</item>
@@ -294,7 +289,6 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
-        <item name="colorTextPrimary">@color/modern_text_primary</item>
         <item name="colorTextNormal">@color/modern_text_normal</item>
         <item name="colorTextSecond">@color/modern_text_second</item>
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
