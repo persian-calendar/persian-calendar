@@ -53,9 +53,6 @@
         <item name="sunViewHorizonColor">@color/sun_view_horizon_color_dark</item>
         <item name="sunViewTimelineColor">@color/sun_view_timeline_color_dark</item>
         <item name="sunViewTaglineColor">@color/sun_view_tagline_color_dark</item>
-        <item name="sunViewSunriseTextColor">@color/sun_view_sunrise_text_color_dark</item>
-        <item name="sunViewMiddayTextColor">@color/sun_view_midday_text_color_dark</item>
-        <item name="sunViewSunsetTextColor">@color/sun_view_sunset_text_color_dark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent
@@ -80,9 +77,6 @@
         <item name="sunViewHorizonColor">@color/sun_view_horizon_color_light</item>
         <item name="sunViewTimelineColor">@color/sun_view_timeline_color_light</item>
         <item name="sunViewTaglineColor">@color/sun_view_tagline_color_light</item>
-        <item name="sunViewSunriseTextColor">@color/sun_view_sunrise_text_color_light</item>
-        <item name="sunViewMiddayTextColor">@color/sun_view_midday_text_color_light</item>
-        <item name="sunViewSunsetTextColor">@color/sun_view_sunset_text_color_light</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent

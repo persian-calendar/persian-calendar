@@ -46,12 +46,15 @@ class SunView @JvmOverloads constructor(
     private val horizonColor = textColor ?: context.resolveColor(R.attr.sunViewHorizonColor)
     private val timelineColor = textColor ?: context.resolveColor(R.attr.sunViewTimelineColor)
     private val taggingColor = textColor ?: context.resolveColor(R.attr.sunViewTaglineColor)
-    private val nightColor = ContextCompat.getColor(context, R.color.sViewNightColor)
-    private val dayColor = ContextCompat.getColor(context, R.color.sViewDayColor)
-    private val daySecondColor = ContextCompat.getColor(context, R.color.sViewDaySecondColor)
-    private val sunriseTextColor = textColor ?: context.resolveColor(R.attr.sunViewSunriseTextColor)
-    private val middayTextColor = textColor ?: context.resolveColor(R.attr.sunViewMiddayTextColor)
-    private val sunsetTextColor = textColor ?: context.resolveColor(R.attr.sunViewSunsetTextColor)
+    private val nightColor = ContextCompat.getColor(context, R.color.sun_view_night_color)
+    private val dayColor = ContextCompat.getColor(context, R.color.sun_view_day_color)
+    private val daySecondColor = ContextCompat.getColor(context, R.color.sun_view_day_second_color)
+    private val sunriseTextColor =
+        textColor ?: ContextCompat.getColor(context, R.color.sun_view_sunrise_text_color)
+    private val middayTextColor =
+        textColor ?: ContextCompat.getColor(context, R.color.sun_view_midday_text_color)
+    private val sunsetTextColor =
+        textColor ?: ContextCompat.getColor(context, R.color.sun_view_sunset_text_color)
     private val colorTextSecond = textColor ?: context.resolveColor(R.attr.colorTextSecond)
 
     internal var width: Int = 0

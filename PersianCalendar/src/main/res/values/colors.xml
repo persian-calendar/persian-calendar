@@ -111,15 +111,13 @@
     <color name="sun_view_horizon_color_dark">#eeeeee</color>
     <color name="sun_view_timeline_color_dark">#eeeeee</color>
     <color name="sun_view_tagline_color_dark">#c1eeeeee</color>
-    <color name="sViewDayColor">#74BBEF</color>
-    <color name="sViewDaySecondColor">#B2D5F1</color>
-    <color name="sViewNightColor">#383C7C</color>
-    <color name="sun_view_sunrise_text_color_light">#FF9800</color>
-    <color name="sun_view_midday_text_color_light">#FFC107</color>
-    <color name="sun_view_sunset_text_color_light">#B71C1C</color>
-    <color name="sun_view_sunrise_text_color_dark">#FF9800</color>
-    <color name="sun_view_midday_text_color_dark">#FFC107</color>
-    <color name="sun_view_sunset_text_color_dark">#F22424</color>
+
+    <color name="sun_view_sunrise_text_color">#FF9800</color>
+    <color name="sun_view_midday_text_color">#FFC107</color>
+    <color name="sun_view_sunset_text_color">#F22424</color>
+    <color name="sun_view_day_color">#74BBEF</color>
+    <color name="sun_view_day_second_color">#B2D5F1</color>
+    <color name="sun_view_night_color">#383C7C</color>
 
     <!-- == Level == -->
     <color name="black_reflect">#FF666666</color>

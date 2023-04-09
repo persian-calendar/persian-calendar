@@ -34,8 +34,5 @@
         <attr name="sunViewHorizonColor" format="reference" />
         <attr name="sunViewTimelineColor" format="reference" />
         <attr name="sunViewTaglineColor" format="reference" />
-        <attr name="sunViewSunriseTextColor" format="reference" />
-        <attr name="sunViewMiddayTextColor" format="reference" />
-        <attr name="sunViewSunsetTextColor" format="reference" />
     </declare-styleable>
 </resources>
