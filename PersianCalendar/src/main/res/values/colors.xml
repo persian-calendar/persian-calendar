@@ -23,7 +23,6 @@
     <color name="dark_text_holiday">#ef6c00</color>
     <color name="dark_holiday">#e65100</color>
     <color name="dark_text_day">#ffffff</color>
-    <color name="dark_text_today">#ffffff</color>
     <color name="dark_text_day_name">#9e9e9e</color>
     <color name="dark_month_switch">#1de9b6</color>
     <color name="dark_text_athan">#ffffff</color>
@@ -45,7 +44,6 @@
     <color name="black_text_holiday">#ef6c00</color>
     <color name="black_holiday">#e65100</color>
     <color name="black_text_day">#ffffff</color>
-    <color name="black_text_today">#ffffff</color>
     <color name="black_text_day_name">#9e9e9e</color>
     <color name="black_month_switch">#82B1FF</color>
     <color name="black_text_athan">#ffffff</color>
@@ -67,7 +65,6 @@
     <color name="light_text_holiday">#d84315</color>
     <color name="light_holiday">#ff8a65</color>
     <color name="light_text_day">#ffffff</color>
-    <color name="light_text_today">#ffffff</color>
     <color name="light_text_day_name">#b2dfdb</color>
     <color name="light_month_switch">#ff7043</color>
     <color name="light_text_athan">#ffffff</color>
@@ -89,7 +86,6 @@
     <color name="blue_text_holiday">#d84315</color>
     <color name="blue_holiday">#ff8a65</color>
     <color name="blue_text_day">#ffffff</color>
-    <color name="blue_text_today">#ffffff</color>
     <color name="blue_text_day_name">#b2dfdb</color>
     <color name="blue_month_switch">#ff7043</color>
     <color name="blue_text_athan">#ffffff</color>
@@ -111,7 +107,6 @@
     <color name="modern_text_holiday">#E51C23</color>
     <color name="modern_holiday">#E51C23</color>
     <color name="modern_text_day">#000000</color>
-    <color name="modern_text_today">#42AFBF</color>
     <color name="modern_text_day_name">#424242</color>
     <color name="modern_month_switch">#42AFBF</color>
     <color name="modern_text_athan">#ffffff</color>
