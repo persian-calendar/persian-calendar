@@ -5,8 +5,6 @@
         <attr name="colorAppBar" format="reference" />
         <!-- TODO This should be merged with Material's owned colorOnPrimary someday -->
         <attr name="colorOnAppBar" format="reference" />
-        <!-- This is the bottom screen navigation bar of the system -->
-        <attr name="navigationBarColor" format="reference" />
         <!-- This is a redirect to colorAppBar thus colorAppBar
              but the blue theme has a custom months background -->
         <attr name="colorMonthsBackground" format="reference" />

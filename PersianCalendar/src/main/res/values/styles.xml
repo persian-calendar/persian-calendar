@@ -37,9 +37,7 @@
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            ?attr/navigationBarColor
-        </item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
         <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
@@ -58,9 +56,7 @@
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">
-            ?attr/navigationBarColor
-        </item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
         <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
@@ -91,7 +87,6 @@
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
-        <item name="navigationBarColor">@color/dark_primary_dark</item>
         <item name="colorAppBar">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
@@ -121,7 +116,6 @@
         <item name="colorPrimary">@color/black_accent</item>
         <item name="colorPrimaryDark">@color/black_primary_dark</item>
         <item name="colorAccent">@color/black_accent</item>
-        <item name="navigationBarColor">@color/black_primary_dark</item>
         <item name="colorAppBar">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
@@ -149,7 +143,6 @@
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="navigationBarColor">@color/light_primary_dark</item>
         <item name="colorAppBar">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
@@ -178,7 +171,6 @@
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorPrimaryDark">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
-        <item name="navigationBarColor">@color/blue_icon_drawer</item>
         <item name="colorAppBar">@color/blue_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
@@ -207,7 +199,6 @@
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
-        <item name="navigationBarColor">@color/modern_primary</item>
         <item name="colorAppBar">@color/modern_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
 
@@ -238,7 +229,6 @@
     <style name="AthanTheme" parent="ModernTheme">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowTranslucentNavigation" tools:ignore="NewApi">true</item>
-        <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/white</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 

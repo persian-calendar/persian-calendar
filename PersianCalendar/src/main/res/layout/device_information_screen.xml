@@ -22,7 +22,7 @@
             <com.byagowi.persiancalendar.ui.about.CheckerBoard
                 android:id="@+id/expandedImage"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="132dp"
                 android:background="?attr/colorAppBar"
                 android:importantForAccessibility="no"
                 android:scaleType="center"
@@ -31,6 +31,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
+                android:layout_marginTop="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="?attr/appToolbarTheme"

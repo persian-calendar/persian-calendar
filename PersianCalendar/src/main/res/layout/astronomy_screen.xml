@@ -151,6 +151,7 @@
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
         android:orientation="vertical"
+        android:fitsSystemWindows="true"
         android:padding="8dp">
 
         <TextView
