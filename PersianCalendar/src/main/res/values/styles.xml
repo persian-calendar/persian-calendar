@@ -85,7 +85,6 @@
         <item name="android:windowBackground">@color/dark_primary</item>
 
         <item name="colorPrimary">@color/dark_accent</item>
-        <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
         <item name="colorAppBar">@color/dark_primary</item>
 
@@ -114,7 +113,6 @@
         <item name="android:windowBackground">@color/black_primary</item>
 
         <item name="colorPrimary">@color/black_accent</item>
-        <item name="colorPrimaryDark">@color/black_primary_dark</item>
         <item name="colorAccent">@color/black_accent</item>
         <item name="colorAppBar">@color/black_primary</item>
 
@@ -141,7 +139,6 @@
 
     <style name="LightTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/light_primary</item>
-        <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
         <item name="colorAppBar">@color/light_primary</item>
 

@@ -13,7 +13,6 @@
         <item name="colorAccent">@android:color/system_accent1_800</item>
         <item name="colorAppBar">@android:color/system_accent1_50</item>
         <item name="colorPrimary">@android:color/system_accent3_800</item>
-        <item name="colorPrimaryDark">@android:color/system_accent1_50</item>
         <item name="colorSurface">@android:color/system_accent1_10</item>
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_600</item>
         <item name="colorMonthSwitch">@android:color/system_accent3_600</item>
@@ -30,7 +29,6 @@
         <item name="colorAccent">@android:color/system_accent1_100</item>
         <item name="colorAppBar">@android:color/system_neutral1_800</item>
         <item name="colorPrimary">@android:color/system_accent3_200</item>
-        <item name="colorPrimaryDark">@android:color/system_neutral1_800</item>
         <item name="colorSurface">@android:color/system_neutral1_900</item>
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_300</item>
         <item name="colorMonthSwitch">@android:color/system_accent1_50</item>
@@ -47,7 +45,6 @@
         <item name="colorAccent">@android:color/system_accent1_100</item>
         <item name="colorAppBar">@android:color/system_neutral1_1000</item>
         <item name="colorPrimary">@android:color/system_accent3_200</item>
-        <item name="colorPrimaryDark">@android:color/system_neutral1_1000</item>
         <item name="colorSurface">@android:color/system_neutral1_1000</item>
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_300</item>
         <item name="colorMonthSwitch">@android:color/system_accent1_50</item>
