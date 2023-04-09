@@ -19,7 +19,6 @@
     <attr name="colorTextDayName" format="reference" />
     <attr name="colorMonthSwitch" format="reference" />
     <attr name="colorTextAthan" format="reference" />
-    <attr name="colorDivider" format="reference" />
     <attr name="colorCurrentDay" format="reference" />
     <attr name="colorTextDayCurrent" format="reference" />
     <attr name="colorSelectDay" format="reference" />
@@ -148,7 +147,6 @@
         <item name="colorTextDayCurrent">@color/dark_text_day</item>
         <item name="colorTextDayName">@color/dark_text_day_name</item>
         <item name="colorTextAthan">@color/dark_text_athan</item>
-        <item name="colorDivider">@color/dark_divider</item>
         <item name="colorCurrentDay">@color/dark_current_day</item>
         <item name="colorSelectDay">@color/dark_select_day</item>
         <item name="colorEventIndicator">@color/dark_event_indicator</item>
@@ -185,7 +183,6 @@
         <item name="colorTextDayCurrent">@color/black_text_day</item>
         <item name="colorTextDayName">@color/black_text_day_name</item>
         <item name="colorTextAthan">@color/black_text_athan</item>
-        <item name="colorDivider">@color/black_divider</item>
         <item name="colorCurrentDay">@color/black_current_day</item>
         <item name="colorSelectDay">@color/black_select_day</item>
         <item name="colorEventIndicator">@color/black_event_indicator</item>
@@ -220,7 +217,6 @@
         <item name="colorTextDayCurrent">@color/light_text_day</item>
         <item name="colorTextDayName">@color/light_text_day_name</item>
         <item name="colorTextAthan">@color/light_text_athan</item>
-        <item name="colorDivider">@color/light_divider</item>
         <item name="colorCurrentDay">@color/light_current_day</item>
         <item name="colorSelectDay">@color/light_select_day</item>
         <item name="colorEventIndicator">@color/light_event_indicator</item>
@@ -257,7 +253,6 @@
         <item name="colorTextDayCurrent">@color/blue_text_day</item>
         <item name="colorTextDayName">@color/blue_text_day_name</item>
         <item name="colorTextAthan">@color/blue_text_athan</item>
-        <item name="colorDivider">@color/blue_divider</item>
         <item name="colorCurrentDay">@color/blue_current_day</item>
         <item name="colorSelectDay">@color/blue_select_day</item>
         <item name="colorEventIndicator">@color/blue_event_indicator</item>
@@ -293,7 +288,6 @@
         <item name="colorTextDayCurrent">@color/modern_text_day</item>
         <item name="colorTextDayName">@color/modern_text_day_name</item>
         <item name="colorTextAthan">@color/modern_text_athan</item>
-        <item name="colorDivider">@color/modern_divider</item>
         <item name="colorCurrentDay">@color/modern_current_day</item>
         <item name="colorSelectDay">@color/modern_select_day</item>
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
