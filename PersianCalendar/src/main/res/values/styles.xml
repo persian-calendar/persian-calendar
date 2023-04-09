@@ -35,7 +35,6 @@
     <attr name="dragIconColor" format="reference" />
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
-    <attr name="dialogBackgroundColor" format="color" />
 
     <!-- its v31 version is more interesting -->
     <style name="WidgetTheme" />
@@ -92,7 +91,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
-        <item name="dialogBackgroundColor">#70606060</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent
         </item>
@@ -119,7 +117,6 @@
         <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
         <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
-        <item name="dialogBackgroundColor">#C0FFFFFF</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent
         </item>
