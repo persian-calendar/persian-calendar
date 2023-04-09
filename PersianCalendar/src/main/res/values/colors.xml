@@ -105,21 +105,21 @@
     <color name="modern_drag_icon_color">#880A0A0A</color>
 
     <!-- Custom view SunView default colors -->
-    <color name="sViewHorizonColorLight">#32000000</color>
-    <color name="sViewTimelineColorLight">#32000000</color>
-    <color name="sViewTaglineColorLight">#14000000</color>
-    <color name="sViewHorizonColorDark">#eeeeee</color>
-    <color name="sViewTimelineColorDark">#eeeeee</color>
-    <color name="sViewTaglineColorDark">#c1eeeeee</color>
+    <color name="sun_view_horizon_color_light">#32000000</color>
+    <color name="sun_view_timeline_color_light">#32000000</color>
+    <color name="sun_view_tagline_color_light">#14000000</color>
+    <color name="sun_view_horizon_color_dark">#eeeeee</color>
+    <color name="sun_view_timeline_color_dark">#eeeeee</color>
+    <color name="sun_view_tagline_color_dark">#c1eeeeee</color>
     <color name="sViewDayColor">#74BBEF</color>
     <color name="sViewDaySecondColor">#B2D5F1</color>
     <color name="sViewNightColor">#383C7C</color>
-    <color name="sViewSunriseTextColorLight">#FF9800</color>
-    <color name="sViewMiddayTextColorLight">#FFC107</color>
-    <color name="sViewSunsetTextColorLight">#B71C1C</color>
-    <color name="sViewSunriseTextColorDark">#FF9800</color>
-    <color name="sViewMiddayTextColorDark">#FFC107</color>
-    <color name="sViewSunsetTextColorDark">#F22424</color>
+    <color name="sun_view_sunrise_text_color_light">#FF9800</color>
+    <color name="sun_view_midday_text_color_light">#FFC107</color>
+    <color name="sun_view_sunset_text_color_light">#B71C1C</color>
+    <color name="sun_view_sunrise_text_color_dark">#FF9800</color>
+    <color name="sun_view_midday_text_color_dark">#FFC107</color>
+    <color name="sun_view_sunset_text_color_dark">#F22424</color>
 
     <!-- == Level == -->
     <color name="black_reflect">#FF666666</color>

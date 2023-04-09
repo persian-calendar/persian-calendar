@@ -43,15 +43,15 @@ class SunView @JvmOverloads constructor(
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dayPaint =
         Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.FILL_AND_STROKE }
-    private val horizonColor = textColor ?: context.resolveColor(R.attr.SunViewHorizonColor)
-    private val timelineColor = textColor ?: context.resolveColor(R.attr.SunViewTimelineColor)
-    private val taggingColor = textColor ?: context.resolveColor(R.attr.SunViewTaglineColor)
+    private val horizonColor = textColor ?: context.resolveColor(R.attr.sunViewHorizonColor)
+    private val timelineColor = textColor ?: context.resolveColor(R.attr.sunViewTimelineColor)
+    private val taggingColor = textColor ?: context.resolveColor(R.attr.sunViewTaglineColor)
     private val nightColor = ContextCompat.getColor(context, R.color.sViewNightColor)
     private val dayColor = ContextCompat.getColor(context, R.color.sViewDayColor)
     private val daySecondColor = ContextCompat.getColor(context, R.color.sViewDaySecondColor)
-    private val sunriseTextColor = textColor ?: context.resolveColor(R.attr.SunViewSunriseTextColor)
-    private val middayTextColor = textColor ?: context.resolveColor(R.attr.SunViewMiddayTextColor)
-    private val sunsetTextColor = textColor ?: context.resolveColor(R.attr.SunViewSunsetTextColor)
+    private val sunriseTextColor = textColor ?: context.resolveColor(R.attr.sunViewSunriseTextColor)
+    private val middayTextColor = textColor ?: context.resolveColor(R.attr.sunViewMiddayTextColor)
+    private val sunsetTextColor = textColor ?: context.resolveColor(R.attr.sunViewSunsetTextColor)
     private val colorTextSecond = textColor ?: context.resolveColor(R.attr.colorTextSecond)
 
     internal var width: Int = 0

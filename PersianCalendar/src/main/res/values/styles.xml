@@ -50,12 +50,12 @@
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorDark</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorDark</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorDark</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorDark</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorDark</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorDark</item>
+        <item name="sunViewHorizonColor">@color/sun_view_horizon_color_dark</item>
+        <item name="sunViewTimelineColor">@color/sun_view_timeline_color_dark</item>
+        <item name="sunViewTaglineColor">@color/sun_view_tagline_color_dark</item>
+        <item name="sunViewSunriseTextColor">@color/sun_view_sunrise_text_color_dark</item>
+        <item name="sunViewMiddayTextColor">@color/sun_view_midday_text_color_dark</item>
+        <item name="sunViewSunsetTextColor">@color/sun_view_sunset_text_color_dark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent
@@ -77,12 +77,12 @@
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-        <item name="SunViewHorizonColor">@color/sViewHorizonColorLight</item>
-        <item name="SunViewTimelineColor">@color/sViewTimelineColorLight</item>
-        <item name="SunViewTaglineColor">@color/sViewTaglineColorLight</item>
-        <item name="SunViewSunriseTextColor">@color/sViewSunriseTextColorLight</item>
-        <item name="SunViewMiddayTextColor">@color/sViewMiddayTextColorLight</item>
-        <item name="SunViewSunsetTextColor">@color/sViewSunsetTextColorLight</item>
+        <item name="sunViewHorizonColor">@color/sun_view_horizon_color_light</item>
+        <item name="sunViewTimelineColor">@color/sun_view_timeline_color_light</item>
+        <item name="sunViewTaglineColor">@color/sun_view_tagline_color_light</item>
+        <item name="sunViewSunriseTextColor">@color/sun_view_sunrise_text_color_light</item>
+        <item name="sunViewMiddayTextColor">@color/sun_view_midday_text_color_light</item>
+        <item name="sunViewSunsetTextColor">@color/sun_view_sunset_text_color_light</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="android:statusBarColor" tools:targetApi="lollipop">
             @android:color/transparent

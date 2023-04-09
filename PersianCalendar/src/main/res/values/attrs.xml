@@ -31,11 +31,11 @@
     </declare-styleable>
 
     <declare-styleable name="sunView">
-        <attr name="SunViewHorizonColor" format="reference" />
-        <attr name="SunViewTimelineColor" format="reference" />
-        <attr name="SunViewTaglineColor" format="reference" />
-        <attr name="SunViewSunriseTextColor" format="reference" />
-        <attr name="SunViewMiddayTextColor" format="reference" />
-        <attr name="SunViewSunsetTextColor" format="reference" />
+        <attr name="sunViewHorizonColor" format="reference" />
+        <attr name="sunViewTimelineColor" format="reference" />
+        <attr name="sunViewTaglineColor" format="reference" />
+        <attr name="sunViewSunriseTextColor" format="reference" />
+        <attr name="sunViewMiddayTextColor" format="reference" />
+        <attr name="sunViewSunsetTextColor" format="reference" />
     </declare-styleable>
 </resources>
