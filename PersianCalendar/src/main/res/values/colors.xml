@@ -29,7 +29,6 @@
     <color name="dark_month_switch">#1de9b6</color>
     <color name="dark_text_athan">#ffffff</color>
     <color name="dark_divider">#1E252A</color>
-    <color name="dark_background">#1E252A</color>
     <color name="dark_surface_background">#21282E</color>
     <color name="dark_current_day">#64ffda</color>
     <color name="dark_select_day">#e0e0e0</color>
@@ -55,7 +54,6 @@
     <color name="black_month_switch">#82B1FF</color>
     <color name="black_text_athan">#ffffff</color>
     <color name="black_divider">#000000</color>
-    <color name="black_background">#000000</color>
     <color name="black_surface_background">#000000</color>
     <color name="black_current_day">#82B1FF</color>
     <color name="black_select_day">#e0e0e0</color>
@@ -81,7 +79,6 @@
     <color name="light_month_switch">#ff7043</color>
     <color name="light_text_athan">#ffffff</color>
     <color name="light_divider">#e0e0e0</color>
-    <color name="light_background">#f4f4f4</color>
     <color name="light_surface_background">#fafafa</color>
     <color name="light_current_day">#ff7043</color>
     <color name="light_select_day">#eff2f1</color>
@@ -107,7 +104,6 @@
     <color name="blue_month_switch">#ff7043</color>
     <color name="blue_text_athan">#ffffff</color>
     <color name="blue_divider">#e0e0e0</color>
-    <color name="blue_background">#f4f4f4</color>
     <color name="blue_surface_background">#fafafa</color>
     <color name="blue_current_day">#ff7043</color>
     <color name="blue_select_day">#F5F5F5</color>
@@ -133,7 +129,6 @@
     <color name="modern_month_switch">#42AFBF</color>
     <color name="modern_text_athan">#ffffff</color>
     <color name="modern_divider">#e0e0e0</color>
-    <color name="modern_background">#f4f4f4</color>
     <color name="modern_surface_background">#fafafa</color>
     <color name="modern_current_day">#42AFBF</color>
     <color name="modern_select_day">#DDDEE2</color>

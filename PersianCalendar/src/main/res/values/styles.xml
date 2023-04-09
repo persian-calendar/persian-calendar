@@ -8,7 +8,6 @@
     <attr name="navigationBarColor" format="reference" />
     <attr name="colorMonthsBackground" format="reference" />
     <attr name="colorAppointment" format="reference" />
-    <attr name="colorBackground" format="reference" />
     <attr name="colorTextPrimary" format="reference" />
     <attr name="colorIcon" format="reference" />
     <attr name="colorTextNormal" format="reference" />
@@ -140,7 +139,6 @@
         <item name="colorAppBar">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
-        <item name="colorBackground">@color/dark_background</item>
         <item name="colorTextPrimary">@color/dark_text_primary</item>
         <item name="colorIcon">@color/dark_icon</item>
         <item name="colorTextNormal">@color/dark_text_normal</item>
@@ -183,7 +181,6 @@
         <item name="colorAppBar">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
-        <item name="colorBackground">@color/black_background</item>
         <item name="colorTextPrimary">@color/black_text_primary</item>
         <item name="colorIcon">@color/black_icon</item>
         <item name="colorTextNormal">@color/black_text_normal</item>
@@ -224,7 +221,6 @@
         <item name="colorAppBar">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
-        <item name="colorBackground">@color/light_background</item>
         <item name="colorTextPrimary">@color/light_text_primary</item>
         <item name="colorIcon">@color/light_icon</item>
         <item name="colorTextNormal">@color/light_text_normal</item>
@@ -251,7 +247,7 @@
         <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="dragIconColor">@color/light_drag_icon_color</item>
-        <item name="coloredTabIndicatorColor">@color/light_background</item>
+        <item name="coloredTabIndicatorColor">@color/light_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
     </style>
@@ -266,7 +262,6 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
         <item name="colorSurface">@color/blue_surface_background</item>
-        <item name="colorBackground">@color/blue_background</item>
         <item name="colorTextPrimary">@color/blue_text_primary</item>
         <item name="colorIcon">@color/blue_icon</item>
         <item name="colorTextNormal">@color/blue_text_normal</item>
@@ -293,7 +288,7 @@
         <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="dragIconColor">@color/blue_drag_icon_color</item>
-        <item name="coloredTabIndicatorColor">@color/blue_background</item>
+        <item name="coloredTabIndicatorColor">@color/blue_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
     </style>
@@ -308,7 +303,6 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
-        <item name="colorBackground">@color/modern_background</item>
         <item name="colorTextPrimary">@color/modern_text_primary</item>
         <item name="colorIcon">@color/modern_icon</item>
         <item name="colorTextNormal">@color/modern_text_normal</item>
