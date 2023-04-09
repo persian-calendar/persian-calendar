@@ -360,15 +360,15 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
         strokeWidth = 5.dp
         color = mapForegroundColor ?: 0x80393CC4.toInt()
     }
-    private val matrixValues = FloatArray(9)
+    private val matrixProperties = FloatArray(9)
 
     fun draw(
         canvas: Canvas, matrix: Matrix,
         displayLocation: Boolean, directPathDestination: Coordinates?, displayGrid: Boolean
     ) {
-        matrix.getValues(matrixValues)
+        matrix.getValues(matrixProperties)
         // prevents sun/moon/pin unnecessary scale
-        val scaleBack = 1 / matrixValues[Matrix.MSCALE_X] / 5
+        val scaleBack = 1 / matrixProperties[Matrix.MSCALE_X] / 5
         canvas.withMatrix(matrix) {
             drawRect(mapRect, backgroundPaint)
             drawPath(mapPath, foregroundPaint)
