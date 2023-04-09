@@ -38,7 +38,6 @@
     <color name="dark_drawer_select">#1E252A</color>
     <color name="dark_icon">#00bfa5</color>
     <color name="dark_icon_drawer">#00bfa5</color>
-    <color name="dark_menu_icon_color">#88ffffff</color>
     <color name="dark_drag_icon_color">#88ffffff</color>
 
     <color name="black_primary">#000000</color>
@@ -65,7 +64,6 @@
     <color name="black_drawer_select">#1F81C6</color>
     <color name="black_icon">#448AFF</color>
     <color name="black_icon_drawer">#448AFF</color>
-    <color name="black_menu_icon_color">#88ffffff</color>
     <color name="black_drag_icon_color">#88ffffff</color>
 
     <color name="light_primary">#00695c</color>
@@ -92,7 +90,6 @@
     <color name="light_drawer_select">#eeeeee</color>
     <color name="light_icon">#00897b</color>
     <color name="light_icon_drawer">#00897b</color>
-    <color name="light_menu_icon_color">#88ffffff</color>
     <color name="light_drag_icon_color">#880A0A0A</color>
 
     <color name="blue_primary">#00838f</color>
@@ -119,7 +116,6 @@
     <color name="blue_drawer_select">#eeeeee</color>
     <color name="blue_icon">#0D47A1</color>
     <color name="blue_icon_drawer">#1a237e</color>
-    <color name="blue_menu_icon_color">#88ffffff</color>
     <color name="blue_drag_icon_color">#880A0A0A</color>
 
     <color name="modern_primary">#fafafa</color>
@@ -146,7 +142,6 @@
     <color name="modern_drawer_select">#eeeeee</color>
     <color name="modern_icon">#587994</color>
     <color name="modern_icon_drawer">#587994</color>
-    <color name="modern_menu_icon_color">#880A0A0A</color>
     <color name="modern_drag_icon_color">#880A0A0A</color>
 
     <!-- Custom view SunView default colors -->

@@ -158,14 +158,14 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         }
 
         binding.bottomAppbar.menu.add(R.string.level).also {
-            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_level)
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_level)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController().navigateSafe(CompassScreenDirections.actionCompassToLevel())
             }
         }
         binding.bottomAppbar.menu.add(R.string.map).also {
-            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_map)
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_map)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController()
@@ -173,7 +173,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
             }
         }
         binding.bottomAppbar.menu.add(R.string.help).also {
-            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_info_in_menu)
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_info_in_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 showLongSnackbar(
