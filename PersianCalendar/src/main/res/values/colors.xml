@@ -34,7 +34,6 @@
     <color name="dark_select_day">#e0e0e0</color>
     <color name="dark_event_indicator">#e0e0e0</color>
     <color name="dark_drawer_select">#1E252A</color>
-    <color name="dark_icon">#00bfa5</color>
     <color name="dark_icon_drawer">#00bfa5</color>
     <color name="dark_drag_icon_color">#88ffffff</color>
 
@@ -58,7 +57,6 @@
     <color name="black_select_day">#e0e0e0</color>
     <color name="black_event_indicator">#e0e0e0</color>
     <color name="black_drawer_select">#1F81C6</color>
-    <color name="black_icon">#448AFF</color>
     <color name="black_icon_drawer">#448AFF</color>
     <color name="black_drag_icon_color">#88ffffff</color>
 
@@ -82,7 +80,6 @@
     <color name="light_select_day">#eff2f1</color>
     <color name="light_event_indicator">#eff2f1</color>
     <color name="light_drawer_select">#eeeeee</color>
-    <color name="light_icon">#00897b</color>
     <color name="light_icon_drawer">#00897b</color>
     <color name="light_drag_icon_color">#880A0A0A</color>
 
@@ -106,7 +103,6 @@
     <color name="blue_select_day">#F5F5F5</color>
     <color name="blue_event_indicator">#eff2f1</color>
     <color name="blue_drawer_select">#eeeeee</color>
-    <color name="blue_icon">#0D47A1</color>
     <color name="blue_icon_drawer">#1a237e</color>
     <color name="blue_drag_icon_color">#880A0A0A</color>
 
