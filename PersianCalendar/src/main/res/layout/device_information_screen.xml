@@ -9,21 +9,21 @@
         android:id="@+id/appbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/appBarColor">
+        android:background="?attr/colorAppBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="?attr/appToolbarTheme"
-            app:contentScrim="?attr/appBarColor"
+            app:contentScrim="?attr/colorAppBar"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.byagowi.persiancalendar.ui.about.CheckerBoard
                 android:id="@+id/expandedImage"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
-                android:background="?attr/appBarColor"
+                android:background="?attr/colorAppBar"
                 android:importantForAccessibility="no"
                 android:scaleType="center"
                 app:layout_collapseMode="parallax"

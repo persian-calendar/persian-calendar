@@ -17,7 +17,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/appBarColor"
+            android:background="?attr/colorAppBar"
             android:orientation="vertical">
 
             <LinearLayout
@@ -39,7 +39,7 @@
                         android:lineSpacingMultiplier="1.25"
                         android:padding="20dp"
                         android:textAlignment="textStart"
-                        android:textColor="?attr/colorTextDay"
+                        android:textColor="?attr/colorOnAppBar"
                         tools:ignore="RtlCompat" />
 
                 </FrameLayout>

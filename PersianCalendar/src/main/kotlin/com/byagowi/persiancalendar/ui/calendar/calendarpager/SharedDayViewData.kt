@@ -79,7 +79,7 @@ class SharedDayViewData(
         addShadowIfNeeded(it)
     }
 
-    private val colorTextDay = widgetTextColor ?: context.resolveColor(R.attr.colorTextDay)
+    private val colorTextDay = widgetTextColor ?: context.resolveColor(R.attr.colorOnAppBar)
     val dayOfMonthNumberTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
         it.textSize = textSize

@@ -2,8 +2,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- TODO: Many of these should be replaced with Material's own naming,
-          e.g. appBarColor -> colorPrimary -->
-    <attr name="appBarColor" format="reference" />
+          e.g. colorAppBar -> colorPrimary, colorOnAppBar -> colorOnPrimary -->
+    <attr name="colorAppBar" format="reference" />
+    <attr name="colorOnAppBar" format="reference" />
     <attr name="navigationBarColor" format="reference" />
     <attr name="colorMonthsBackground" format="reference" />
     <attr name="colorAppointment" format="reference" />
@@ -15,7 +16,6 @@
     <attr name="colorTextHoliday" format="reference" />
     <attr name="colorHoliday" format="reference" />
     <attr name="colorTextDrawer" format="reference" />
-    <attr name="colorTextDay" format="reference" />
     <attr name="colorTextToday" format="reference" />
     <attr name="colorTextDayName" format="reference" />
     <attr name="colorMonthSwitch" format="reference" />
@@ -137,7 +137,7 @@
         <item name="colorPrimaryDark">@color/dark_primary_dark</item>
         <item name="colorAccent">@color/dark_accent</item>
         <item name="navigationBarColor">@color/dark_primary_dark</item>
-        <item name="appBarColor">@color/dark_primary</item>
+        <item name="colorAppBar">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
         <item name="colorBackground">@color/dark_background</item>
@@ -148,7 +148,7 @@
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
         <item name="colorHoliday">@color/dark_holiday</item>
         <item name="colorTextDrawer">@color/dark_text_drawer</item>
-        <item name="colorTextDay">@color/dark_text_day</item>
+        <item name="colorOnAppBar">@color/dark_text_day</item>
         <item name="colorTextDayCurrent">@color/dark_text_day</item>
         <item name="colorTextToday">@color/dark_text_today</item>
         <item name="colorTextDayName">@color/dark_text_day_name</item>
@@ -180,7 +180,7 @@
         <item name="colorPrimaryDark">@color/black_primary_dark</item>
         <item name="colorAccent">@color/black_accent</item>
         <item name="navigationBarColor">@color/black_primary_dark</item>
-        <item name="appBarColor">@color/black_primary</item>
+        <item name="colorAppBar">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
         <item name="colorBackground">@color/black_background</item>
@@ -191,7 +191,7 @@
         <item name="colorTextHoliday">@color/black_text_holiday</item>
         <item name="colorHoliday">@color/black_holiday</item>
         <item name="colorTextDrawer">@color/black_text_drawer</item>
-        <item name="colorTextDay">@color/black_text_day</item>
+        <item name="colorOnAppBar">@color/black_text_day</item>
         <item name="colorTextDayCurrent">@color/black_text_day</item>
         <item name="colorTextToday">@color/black_text_today</item>
         <item name="colorTextDayName">@color/black_text_day_name</item>
@@ -221,7 +221,7 @@
         <item name="colorPrimaryDark">@color/light_primary_dark</item>
         <item name="colorAccent">@color/light_accent</item>
         <item name="navigationBarColor">@color/light_primary_dark</item>
-        <item name="appBarColor">@color/light_primary</item>
+        <item name="colorAppBar">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
         <item name="colorBackground">@color/light_background</item>
@@ -232,7 +232,7 @@
         <item name="colorTextHoliday">@color/light_text_holiday</item>
         <item name="colorHoliday">@color/light_holiday</item>
         <item name="colorTextDrawer">@color/light_text_drawer</item>
-        <item name="colorTextDay">@color/light_text_day</item>
+        <item name="colorOnAppBar">@color/light_text_day</item>
         <item name="colorTextDayCurrent">@color/light_text_day</item>
         <item name="colorTextToday">@color/light_text_today</item>
         <item name="colorTextDayName">@color/light_text_day_name</item>
@@ -262,7 +262,7 @@
         <item name="colorPrimaryDark">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
         <item name="navigationBarColor">@color/blue_icon_drawer</item>
-        <item name="appBarColor">@color/blue_primary</item>
+        <item name="colorAppBar">@color/blue_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
         <item name="colorSurface">@color/blue_surface_background</item>
@@ -274,7 +274,7 @@
         <item name="colorTextHoliday">@color/blue_text_holiday</item>
         <item name="colorHoliday">@color/blue_holiday</item>
         <item name="colorTextDrawer">@color/blue_text_drawer</item>
-        <item name="colorTextDay">@color/blue_text_day</item>
+        <item name="colorOnAppBar">@color/blue_text_day</item>
         <item name="colorTextDayCurrent">@color/blue_text_day</item>
         <item name="colorTextToday">@color/blue_text_today</item>
         <item name="colorTextDayName">@color/blue_text_day_name</item>
@@ -304,7 +304,7 @@
         <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
         <item name="navigationBarColor">@color/modern_primary</item>
-        <item name="appBarColor">@color/modern_primary</item>
+        <item name="colorAppBar">@color/modern_primary</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
@@ -316,7 +316,7 @@
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
         <item name="colorHoliday">@color/modern_holiday</item>
         <item name="colorTextDrawer">@color/modern_text_drawer</item>
-        <item name="colorTextDay">@color/modern_text_day</item>
+        <item name="colorOnAppBar">@color/modern_text_day</item>
         <item name="colorTextDayCurrent">@color/modern_text_day</item>
         <item name="colorTextToday">@color/modern_text_today</item>
         <item name="colorTextDayName">@color/modern_text_day_name</item>
@@ -393,8 +393,8 @@
     <style name="TabLayoutColored" parent="Widget.Material3.TabLayout.OnSurface">
         <item name="tabIndicatorColor">?attr/coloredTabIndicatorColor</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabBackground">?attr/appBarColor</item>
-        <item name="tabTextColor">?attr/colorTextDay</item>
+        <item name="tabBackground">?attr/colorAppBar</item>
+        <item name="tabTextColor">?attr/colorOnAppBar</item>
     </style>
 
     <style name="TabTextAppearance" parent="TextAppearance.Design.Tab">
