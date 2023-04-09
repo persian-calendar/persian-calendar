@@ -27,7 +27,6 @@
     <attr name="colorTextDayCurrent" format="reference" />
     <attr name="colorSelectDay" format="reference" />
     <attr name="colorEventIndicator" format="reference" />
-    <attr name="colorDrawerBackground" format="reference" />
     <attr name="colorDrawerSelect" format="reference" />
     <attr name="colorDrawerIcon" format="reference" />
     <attr name="normalTabTextColor" format="reference" />
@@ -159,7 +158,6 @@
         <item name="colorCurrentDay">@color/dark_current_day</item>
         <item name="colorSelectDay">@color/dark_select_day</item>
         <item name="colorEventIndicator">@color/dark_event_indicator</item>
-        <item name="colorDrawerBackground">@color/dark_drawer_background</item>
         <item name="colorDrawerSelect">@color/dark_drawer_select</item>
         <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
         <item name="colorMonthSwitch">@color/dark_month_switch</item>
@@ -200,7 +198,6 @@
         <item name="colorCurrentDay">@color/black_current_day</item>
         <item name="colorSelectDay">@color/black_select_day</item>
         <item name="colorEventIndicator">@color/black_event_indicator</item>
-        <item name="colorDrawerBackground">@color/black_drawer_background</item>
         <item name="colorDrawerSelect">@color/black_drawer_select</item>
         <item name="colorDrawerIcon">@color/black_icon_drawer</item>
         <item name="colorMonthSwitch">@color/black_month_switch</item>
@@ -239,7 +236,6 @@
         <item name="colorCurrentDay">@color/light_current_day</item>
         <item name="colorSelectDay">@color/light_select_day</item>
         <item name="colorEventIndicator">@color/light_event_indicator</item>
-        <item name="colorDrawerBackground">@color/light_drawer_background</item>
         <item name="colorDrawerSelect">@color/light_drawer_select</item>
         <item name="colorDrawerIcon">@color/light_icon_drawer</item>
         <item name="colorMonthSwitch">@color/light_month_switch</item>
@@ -280,7 +276,6 @@
         <item name="colorCurrentDay">@color/blue_current_day</item>
         <item name="colorSelectDay">@color/blue_select_day</item>
         <item name="colorEventIndicator">@color/blue_event_indicator</item>
-        <item name="colorDrawerBackground">@color/blue_drawer_background</item>
         <item name="colorDrawerSelect">@color/blue_drawer_select</item>
         <item name="colorDrawerIcon">@color/blue_icon_drawer</item>
         <item name="colorMonthSwitch">@color/blue_month_switch</item>
@@ -320,7 +315,6 @@
         <item name="colorCurrentDay">@color/modern_current_day</item>
         <item name="colorSelectDay">@color/modern_select_day</item>
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
-        <item name="colorDrawerBackground">@color/modern_drawer_background</item>
         <item name="colorDrawerSelect">@color/modern_drawer_select</item>
         <item name="colorDrawerIcon">@color/modern_icon_drawer</item>
         <item name="colorMonthSwitch">@color/modern_month_switch</item>>
