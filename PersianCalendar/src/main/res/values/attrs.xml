@@ -7,12 +7,5 @@
         <attr name="SunViewSunriseTextColor" format="reference" />
         <attr name="SunViewMiddayTextColor" format="reference" />
         <attr name="SunViewSunsetTextColor" format="reference" />
-        <attr name="SunViewNightColor" format="color" />
-        <attr name="SunViewDayColor" format="color" />
-        <attr name="SunViewDaySecondColor" format="color" />
-        <attr name="SunViewSunColor" format="color" />
-        <attr name="SunViewBeforeMiddayColor" format="color" />
-        <attr name="SunViewAfterMiddayColor" format="color" />
-        <attr name="SunViewEveningColor" format="color" />
     </declare-styleable>
 </resources>
