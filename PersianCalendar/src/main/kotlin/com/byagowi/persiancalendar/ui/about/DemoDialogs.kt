@@ -151,7 +151,6 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
     root.orientation = LinearLayout.VERTICAL
     root.addView(
         TabLayout(activity, null, R.style.TabLayoutColored).also { tabLayout ->
-            val tintColor = activity.resolveColor(R.attr.normalTabTextColor)
             listOf(
                 R.drawable.ic_developer to -1,
                 R.drawable.ic_translator to 0,
@@ -161,9 +160,6 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
             ).map { (iconId: Int, badgeNumber: Int) ->
                 tabLayout.addTab(tabLayout.newTab().also { tab ->
                     tab.setIcon(iconId)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        tab.icon?.setTint(tintColor)
-                    }
                     tab.orCreateBadge.also { badge ->
                         badge.isVisible = badgeNumber >= 0
                         if (badgeNumber > 0) badge.number = badgeNumber

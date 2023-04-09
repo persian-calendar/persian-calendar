@@ -22,7 +22,7 @@
         <item name="colorCurrentDay">@android:color/system_accent1_600</item>
         <item name="colorHoliday">@android:color/system_accent1_400</item>
         <item name="colorTextHoliday">@android:color/system_accent1_400</item>
-        <item name="colorSelectDay">@android:color/system_accent2_100</item>
+        <item name="colorSelectedDay">@android:color/system_accent2_100</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_900</item>
         <item name="colorAppointment">@android:color/system_accent1_400</item>
     </style>
@@ -39,7 +39,7 @@
         <item name="colorCurrentDay">@android:color/system_accent1_200</item>
         <item name="colorHoliday">@android:color/system_accent1_200</item>
         <item name="colorTextHoliday">@android:color/system_accent1_200</item>
-        <item name="colorSelectDay">@android:color/system_accent2_300</item>
+        <item name="colorSelectedDay">@android:color/system_accent2_300</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_50</item>
         <item name="colorAppointment">@android:color/system_accent1_300</item>
     </style>
@@ -56,7 +56,7 @@
         <item name="colorCurrentDay">@android:color/system_accent1_200</item>
         <item name="colorHoliday">@android:color/system_accent1_200</item>
         <item name="colorTextHoliday">@android:color/system_accent1_200</item>
-        <item name="colorSelectDay">@android:color/system_accent2_300</item>
+        <item name="colorSelectedDay">@android:color/system_accent2_300</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_50</item>
         <item name="colorAppointment">@android:color/system_accent1_300</item>
     </style>

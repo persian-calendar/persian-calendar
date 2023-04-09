@@ -103,14 +103,12 @@
         <item name="colorOnAppBar">@color/dark_text_day</item>
         <item name="colorTextDayName">@color/dark_text_day_name</item>
         <item name="colorCurrentDay">@color/dark_current_day</item>
-        <item name="colorSelectDay">@color/dark_select_day</item>
+        <item name="colorSelectedDay">@color/dark_selected_day</item>
         <item name="colorEventIndicator">@color/dark_event_indicator</item>
         <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
         <item name="colorMonthSwitch">@color/dark_month_switch</item>
 
         <item name="android:textColor">@color/dark_text_normal</item>
-
-        <item name="normalTabTextColor">@color/tab_background_select_dark</item>
 
         <item name="coloredTabIndicatorColor">@color/dark_accent</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
@@ -135,14 +133,12 @@
         <item name="colorOnAppBar">@color/black_text_day</item>
         <item name="colorTextDayName">@color/black_text_day_name</item>
         <item name="colorCurrentDay">@color/black_current_day</item>
-        <item name="colorSelectDay">@color/black_select_day</item>
+        <item name="colorSelectedDay">@color/black_selected_day</item>
         <item name="colorEventIndicator">@color/black_event_indicator</item>
         <item name="colorDrawerIcon">@color/black_icon_drawer</item>
         <item name="colorMonthSwitch">@color/black_month_switch</item>
 
         <item name="android:textColor">@color/black_text_normal</item>
-
-        <item name="normalTabTextColor">@color/tab_background_select_dark</item>
 
         <item name="coloredTabIndicatorColor">@color/black_accent</item>
         <item name="colorTextDaySelected">@color/black_primary</item>
@@ -165,14 +161,12 @@
         <item name="colorOnAppBar">@color/light_text_day</item>
         <item name="colorTextDayName">@color/light_text_day_name</item>
         <item name="colorCurrentDay">@color/light_current_day</item>
-        <item name="colorSelectDay">@color/light_select_day</item>
+        <item name="colorSelectedDay">@color/light_selected_day</item>
         <item name="colorEventIndicator">@color/light_event_indicator</item>
         <item name="colorDrawerIcon">@color/light_icon_drawer</item>
         <item name="colorMonthSwitch">@color/light_month_switch</item>
 
         <item name="android:textColor">@color/light_text_normal</item>
-
-        <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="coloredTabIndicatorColor">@color/light_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
@@ -197,14 +191,12 @@
         <item name="colorOnAppBar">@color/blue_text_day</item>
         <item name="colorTextDayName">@color/blue_text_day_name</item>
         <item name="colorCurrentDay">@color/blue_current_day</item>
-        <item name="colorSelectDay">@color/blue_select_day</item>
+        <item name="colorSelectedDay">@color/blue_selected_day</item>
         <item name="colorEventIndicator">@color/blue_event_indicator</item>
         <item name="colorDrawerIcon">@color/blue_icon_drawer</item>
         <item name="colorMonthSwitch">@color/blue_month_switch</item>
 
         <item name="android:textColor">@color/blue_text_normal</item>
-
-        <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="coloredTabIndicatorColor">@color/blue_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
@@ -228,14 +220,12 @@
         <item name="colorOnAppBar">@color/modern_text_day</item>
         <item name="colorTextDayName">@color/modern_text_day_name</item>
         <item name="colorCurrentDay">@color/modern_current_day</item>
-        <item name="colorSelectDay">@color/modern_select_day</item>
+        <item name="colorSelectedDay">@color/modern_selected_day</item>
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
         <item name="colorDrawerIcon">@color/modern_icon_drawer</item>
         <item name="colorMonthSwitch">@color/modern_month_switch</item>>
 
         <item name="android:textColor">@color/modern_text_normal</item>
-
-        <item name="normalTabTextColor">@color/tab_background_select</item>
 
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
@@ -289,7 +279,6 @@
         <item name="tabIconTint">?attr/colorTextSecond</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabBackground">?attr/colorSurface</item>
-        <item name="tabTextColor">?attr/normalTabTextColor</item>
     </style>
 
     <style name="TabLayoutColored" parent="Widget.Material3.TabLayout.OnSurface">

@@ -59,7 +59,7 @@ class SharedDayViewData(
 
     val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
-        it.color = context.resolveColor(R.attr.colorSelectDay)
+        it.color = context.resolveColor(R.attr.colorSelectedDay)
     }
 
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {

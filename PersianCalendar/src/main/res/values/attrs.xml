@@ -20,10 +20,9 @@
         <!-- Previous and Next month buttons color -->
         <attr name="colorMonthSwitch" format="reference" />
         <attr name="colorCurrentDay" format="reference" />
-        <attr name="colorSelectDay" format="reference" />
+        <attr name="colorSelectedDay" format="reference" />
         <attr name="colorEventIndicator" format="reference" />
         <attr name="colorDrawerIcon" format="reference" />
-        <attr name="normalTabTextColor" format="reference" />
         <attr name="appToolbarTheme" format="reference" />
         <attr name="appToolbarPopupTheme" format="reference" />
         <attr name="coloredTabIndicatorColor" format="reference" />
