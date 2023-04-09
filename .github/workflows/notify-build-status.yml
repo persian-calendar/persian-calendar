@@ -11,8 +11,13 @@ jobs:
     steps:
       - name: Unpin failure message
         run: |
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
+            -d disable_notification=false \
+            -d message_id=3716 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+          sleep 1
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinChatMessage \
-            -d message_id=3715 \
+            -d message_id=3716 \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
   on-failure:
     runs-on: ubuntu-latest
@@ -22,5 +27,9 @@ jobs:
         run: |
           curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/pinChatMessage \
             -d disable_notification=false \
+            -d message_id=3715 \
+            -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
+          sleep 1
+          curl -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/unpinChatMessage \
             -d message_id=3715 \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }}
