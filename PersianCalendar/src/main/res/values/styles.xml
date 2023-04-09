@@ -26,7 +26,6 @@
     <attr name="normalTabTextColor" format="reference" />
     <attr name="appToolbarTheme" format="reference" />
     <attr name="appToolbarPopupTheme" format="reference" />
-    <attr name="dragIconColor" format="reference" />
     <attr name="coloredTabIndicatorColor" format="reference" />
     <attr name="colorTextDaySelected" format="reference" />
 
@@ -153,7 +152,6 @@
 
         <item name="normalTabTextColor">@color/tab_background_select_dark</item>
 
-        <item name="dragIconColor">@color/dark_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/dark_accent</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
@@ -186,7 +184,6 @@
 
         <item name="normalTabTextColor">@color/tab_background_select_dark</item>
 
-        <item name="dragIconColor">@color/black_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/black_accent</item>
         <item name="colorTextDaySelected">@color/black_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
@@ -217,7 +214,6 @@
 
         <item name="normalTabTextColor">@color/tab_background_select</item>
 
-        <item name="dragIconColor">@color/light_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/light_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
@@ -250,7 +246,6 @@
 
         <item name="normalTabTextColor">@color/tab_background_select</item>
 
-        <item name="dragIconColor">@color/blue_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/blue_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
@@ -282,7 +277,6 @@
 
         <item name="normalTabTextColor">@color/tab_background_select</item>
 
-        <item name="dragIconColor">@color/modern_drag_icon_color</item>
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
         <item name="colorAppointment">@color/modern_accent</item>
