@@ -10,16 +10,17 @@
         layout="@layout/app_bar" />
 
     <com.google.android.material.carousel.MaskableFrameLayout
+        android:id="@+id/maskableFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <FrameLayout
+            android:id="@+id/paddingFrameLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/colorSurface"
-            android:paddingTop="16dp">
+            android:background="?attr/colorSurface">
 
             <com.byagowi.persiancalendar.ui.level.RulerView
                 android:layout_width="match_parent"

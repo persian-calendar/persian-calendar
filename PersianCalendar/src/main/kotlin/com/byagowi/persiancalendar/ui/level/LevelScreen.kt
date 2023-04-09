@@ -12,16 +12,19 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.LevelScreenBinding
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
+import com.google.android.material.shape.ShapeAppearanceModel
 
 class LevelScreen : Fragment(R.layout.level_screen) {
 
@@ -52,6 +55,10 @@ class LevelScreen : Fragment(R.layout.level_screen) {
         }
 
         binding.appBar.toolbar.menu.add(R.string.lock).also { menuItem ->
+            binding.maskableFrameLayout.shapeAppearanceModel =
+                ShapeAppearanceModel().withCornerSize(28.dp)
+            binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
+
             val toolbarContext = binding.appBar.toolbar.context
             menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_lock_open)
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
@@ -65,6 +72,8 @@ class LevelScreen : Fragment(R.layout.level_screen) {
 
                 binding.bottomAppbar.performHide(true)
                 binding.appBar.toolbar.isVisible = false
+                binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
+                binding.paddingFrameLayout.updatePadding(top = 0)
 
                 val windowInsetsController =
                     WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -75,6 +84,9 @@ class LevelScreen : Fragment(R.layout.level_screen) {
 
                 lockCleanup = {
                     binding.appBar.toolbar.isVisible = true
+                    binding.maskableFrameLayout.shapeAppearanceModel =
+                        ShapeAppearanceModel().withCornerSize(28.dp)
+                    binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
                     lock?.release()
                     lock = null
