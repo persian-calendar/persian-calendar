@@ -25,7 +25,7 @@
 
     <style name="SplashScreenTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="lollipop">true</item>
+        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen
         </item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
@@ -37,7 +37,6 @@
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.Material3.Dark.NoActionBar">
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
         <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
@@ -49,14 +48,10 @@
         <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">
-            @android:color/transparent
-        </item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
         <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
@@ -68,9 +63,6 @@
         <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
-        <item name="android:statusBarColor" tools:targetApi="lollipop">
-            @android:color/transparent
-        </item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
     </style>
 
@@ -169,7 +161,6 @@
         <item name="colorPrimaryDark">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
         <item name="colorAppBar">@color/blue_primary</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
 
         <item name="colorSurface">@color/blue_surface_background</item>
         <item name="colorTextNormal">@color/blue_text_normal</item>
@@ -197,7 +188,6 @@
         <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
         <item name="colorAppBar">@color/modern_primary</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
         <item name="colorTextNormal">@color/modern_text_normal</item>
@@ -225,8 +215,6 @@
 
     <style name="AthanTheme" parent="ModernTheme">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
     </style>
 
     <!-- But in v31/styles.xml it is overridden to not have shadow -->

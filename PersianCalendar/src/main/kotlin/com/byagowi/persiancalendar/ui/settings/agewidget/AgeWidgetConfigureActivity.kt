@@ -16,6 +16,7 @@ import com.byagowi.persiancalendar.databinding.AgeWidgetConfigureActivityBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
+import com.byagowi.persiancalendar.ui.utils.transparentStatusAndNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createAgeRemoteViews
@@ -39,6 +40,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
+        transparentStatusAndNavigation()
 
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.

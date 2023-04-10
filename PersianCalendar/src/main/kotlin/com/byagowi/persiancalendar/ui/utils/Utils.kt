@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
 import android.animation.LayoutTransition
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -35,6 +36,7 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
@@ -241,6 +243,53 @@ fun Window.makeWallpaperTransparency() {
         this.navigationBarColor = Color.TRANSPARENT
     this.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
     this.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+}
+
+// From https://stackoverflow.com/a/62483455 with some modification
+fun Activity.transparentStatusAndNavigation(
+    systemUiScrim: Int = Color.parseColor("#40000000") // 25% black
+) {
+    val isLightTheme = ColorUtils.calculateLuminance(resolveColor(R.attr.colorAppBar)) > 0.5
+
+    var systemUiVisibility = 0
+    // Use a dark scrim by default since light status is API 23+
+    var statusBarColor = systemUiScrim
+    //  Use a dark scrim by default since light nav bar is API 27+
+    var navigationBarColor = systemUiScrim
+    val winParams = window.attributes
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (isLightTheme)
+            systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        statusBarColor = Color.TRANSPARENT
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (isLightTheme)
+            systemUiVisibility =
+                systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        navigationBarColor = Color.TRANSPARENT
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        systemUiVisibility = systemUiVisibility or
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+        window.decorView.systemUiVisibility = systemUiVisibility
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+        winParams.flags = winParams.flags or
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        winParams.flags = winParams.flags and
+                (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
+                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION).inv()
+        window.statusBarColor = statusBarColor
+        window.navigationBarColor = navigationBarColor
+    }
+
+    window.attributes = winParams
 }
 
 fun prepareViewForRendering(view: View, width: Int, height: Int) {

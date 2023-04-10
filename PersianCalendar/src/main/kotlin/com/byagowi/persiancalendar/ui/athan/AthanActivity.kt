@@ -16,6 +16,7 @@ import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.KEY_EXTRA_PRAYER
+import com.byagowi.persiancalendar.ui.utils.transparentStatusAndNavigation
 import com.byagowi.persiancalendar.utils.FIVE_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TEN_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.THIRTY_SECONDS_IN_MILLIS
@@ -63,6 +64,8 @@ class AthanActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        transparentStatusAndNavigation()
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER) ?: ""
         val isFajr = prayerKey == FAJR_KEY
