@@ -55,10 +55,10 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.style = Paint.Style.FILL
     }
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
-        it.color = ContextCompat.getColor(context, R.color.qibla_color)
+        it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
     }
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = ContextCompat.getColor(context, R.color.qibla_color)
+        it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
         it.strokeWidth = 0.5.dp
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
@@ -121,11 +121,11 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             invalidate()
         }
     private val planetsPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
-        it.color = ContextCompat.getColor(context, R.color.qibla_color)
+        it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
         it.textAlign = Paint.Align.CENTER
     }
     private val textPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
-        it.color = ContextCompat.getColor(context, R.color.qibla_color)
+        it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
         it.textAlign = Paint.Align.CENTER
     }
     private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
