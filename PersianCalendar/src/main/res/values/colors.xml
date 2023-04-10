@@ -2,6 +2,8 @@
 <resources>
     <color name="ic_launcher_background">#26A69A</color>
 
+    <color name="converter_spinner_background">#88888888</color>
+
     <color name="primary_container_light">#E0E0E0</color>
     <color name="primary_container_dark">#404040</color>
 
