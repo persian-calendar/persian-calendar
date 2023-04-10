@@ -249,8 +249,6 @@ fun Window.makeWallpaperTransparency() {
 fun Activity.transparentStatusAndNavigation(
     systemUiScrim: Int = Color.parseColor("#40000000") // 25% black
 ) {
-    val isLightTheme = ColorUtils.calculateLuminance(resolveColor(R.attr.colorAppBar)) > 0.5
-
     var systemUiVisibility = 0
     // Use a dark scrim by default since light status is API 23+
     var statusBarColor = systemUiScrim
@@ -259,14 +257,16 @@ fun Activity.transparentStatusAndNavigation(
     val winParams = window.attributes
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (isLightTheme)
+        if (ColorUtils.calculateLuminance(resolveColor(R.attr.colorAppBar)) > 0.5)
             systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         statusBarColor = Color.TRANSPARENT
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        if (isLightTheme)
-            systemUiVisibility =
-                systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+        if (ColorUtils.calculateLuminance(
+                resolveColor(com.google.android.material.R.attr.colorSurface)
+            ) > 0.5
+        ) systemUiVisibility =
+            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         navigationBarColor = Color.TRANSPARENT
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
