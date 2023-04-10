@@ -58,6 +58,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
             binding.maskableFrameLayout.shapeAppearanceModel =
                 ShapeAppearanceModel().withCornerSize(28.dp)
             binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
+            binding.paddingFrameLayout.fitsSystemWindows = true
 
             val toolbarContext = binding.appBar.toolbar.context
             menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_lock_open)
@@ -74,6 +75,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 binding.appBar.toolbar.isVisible = false
                 binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
                 binding.paddingFrameLayout.updatePadding(top = 0)
+                binding.paddingFrameLayout.fitsSystemWindows = false
 
                 val windowInsetsController =
                     WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -87,6 +89,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                     binding.maskableFrameLayout.shapeAppearanceModel =
                         ShapeAppearanceModel().withCornerSize(28.dp)
                     binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
+                    binding.paddingFrameLayout.fitsSystemWindows = false
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
                     lock?.release()
                     lock = null
