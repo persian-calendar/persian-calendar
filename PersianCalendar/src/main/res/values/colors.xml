@@ -95,7 +95,7 @@
     <color name="modern_event_indicator">#000000</color>
     <color name="modern_icon_drawer">#587994</color>
 
-    <!-- Custom view SunView default colors -->
+    <!-- == SunView == -->
     <color name="sun_view_sunrise_text_color">#FF9800</color>
     <color name="sun_view_midday_text_color">#FFC107</color>
     <color name="sun_view_sunset_text_color">#F22424</color>

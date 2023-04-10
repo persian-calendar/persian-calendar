@@ -211,6 +211,25 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             update(applicationContext, true)
             settingHasChanged = false // reset for the next time
         }
+
+        // This is a workaround for bottom app bar not getting insets on older devices
+        // It should be resolved using fitsSystemWindows but in reality it won't
+        // TODO: It's broken in 28 but maybe is ok since 29 or 30 and setting it to 31 is too much?
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            val window = window ?: return
+            when (destination.id) {
+                R.id.level, R.id.compass, R.id.deviceInformation -> {
+                    window.decorView.systemUiVisibility =
+                        window.decorView.systemUiVisibility and
+                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION.inv()
+                }
+                else -> {
+                    window.decorView.systemUiVisibility =
+                        window.decorView.systemUiVisibility or
+                                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                }
+            }
+        }
     }
 
     private fun navigateTo(@IdRes id: Int) {
