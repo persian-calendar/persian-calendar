@@ -11,8 +11,6 @@
         <attr name="colorAppointment" format="reference" />
         <attr name="colorTextHoliday" format="reference" />
         <attr name="colorHoliday" format="reference" />
-        <!-- Previous and Next month buttons color -->
-        <attr name="colorMonthSwitch" format="reference" />
         <attr name="colorCurrentDay" format="reference" />
         <attr name="colorSelectedDay" format="reference" />
         <attr name="colorEventIndicator" format="reference" />

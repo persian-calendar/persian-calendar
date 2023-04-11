@@ -85,7 +85,6 @@
         <item name="colorCurrentDay">@color/dark_current_day</item>
         <item name="colorSelectedDay">@color/dark_selected_day</item>
         <item name="colorEventIndicator">@color/dark_event_indicator</item>
-        <item name="colorMonthSwitch">@color/dark_month_switch</item>
 
         <item name="coloredTabIndicatorColor">@color/dark_accent</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
@@ -104,7 +103,6 @@
         <item name="colorCurrentDay">@color/black_current_day</item>
         <item name="colorSelectedDay">@color/black_selected_day</item>
         <item name="colorEventIndicator">@color/black_event_indicator</item>
-        <item name="colorMonthSwitch">@color/black_month_switch</item>
 
         <item name="coloredTabIndicatorColor">@color/black_accent</item>
         <item name="colorTextDaySelected">@color/black_primary</item>
@@ -123,7 +121,6 @@
         <item name="colorCurrentDay">@color/light_current_day</item>
         <item name="colorSelectedDay">@color/light_selected_day</item>
         <item name="colorEventIndicator">@color/light_event_indicator</item>
-        <item name="colorMonthSwitch">@color/light_month_switch</item>
 
         <item name="coloredTabIndicatorColor">@color/light_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
@@ -146,7 +143,6 @@
         <item name="colorCurrentDay">@color/blue_current_day</item>
         <item name="colorSelectedDay">@color/blue_selected_day</item>
         <item name="colorEventIndicator">@color/blue_event_indicator</item>
-        <item name="colorMonthSwitch">@color/blue_month_switch</item>
 
         <item name="coloredTabIndicatorColor">@color/blue_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
@@ -168,7 +164,6 @@
         <item name="colorCurrentDay">@color/modern_current_day</item>
         <item name="colorSelectedDay">@color/modern_selected_day</item>
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
-        <item name="colorMonthSwitch">@color/modern_month_switch</item>>
 
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
