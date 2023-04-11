@@ -157,7 +157,6 @@
     <style name="AquaTheme" parent="BaseLightTheme">
         <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
-        <item name="colorPrimaryDark">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
         <item name="colorAppBar">@color/blue_primary</item>
 
@@ -187,7 +186,6 @@
 
     <style name="ModernTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/modern_accent</item>
-        <item name="colorPrimaryDark">@color/modern_primary</item>
         <item name="colorAccent">@color/modern_accent</item>
         <item name="colorAppBar">@color/modern_primary</item>
 
