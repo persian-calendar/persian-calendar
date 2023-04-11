@@ -166,7 +166,7 @@
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
 
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
-        <item name="colorTextDaySelected">@color/modern_text_normal</item>
+        <item name="colorTextDaySelected">@color/modern_text_day</item>
         <item name="colorAppointment">@color/modern_accent</item>
     </style>
 
