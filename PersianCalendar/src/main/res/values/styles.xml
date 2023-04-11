@@ -59,7 +59,7 @@
         <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
+        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="android:typeface">sans</item>
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
@@ -149,6 +149,9 @@
         <item name="coloredTabIndicatorColor">@color/light_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
+
+        <!-- As has a relatively dark app toolbar color -->
+        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
     </style>
 
     <style name="AquaTheme" parent="BaseLightTheme">
@@ -177,6 +180,9 @@
         <item name="coloredTabIndicatorColor">@color/blue_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
+
+        <!-- As has a relatively dark app toolbar color -->
+        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
     </style>
 
     <style name="ModernTheme" parent="BaseLightTheme">
@@ -204,8 +210,6 @@
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
         <item name="colorAppointment">@color/modern_accent</item>
-
-        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
     </style>
 
     <style name="AthanTheme" parent="ModernTheme">
