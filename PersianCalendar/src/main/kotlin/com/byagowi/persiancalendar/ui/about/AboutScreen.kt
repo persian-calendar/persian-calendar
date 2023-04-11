@@ -139,7 +139,11 @@ class AboutScreen : Fragment(R.layout.about_screen) {
         val context = binding.root.context
 
         val chipsIconTintId = TypedValue().apply {
-            context.theme.resolveAttribute(R.attr.colorDrawerIcon, this, true)
+            context.theme.resolveAttribute(
+                com.google.android.material.R.attr.colorAccent,
+                this,
+                true
+            )
         }.resourceId
 
         val chipClick = View.OnClickListener {

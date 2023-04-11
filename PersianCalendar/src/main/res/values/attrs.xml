@@ -16,7 +16,6 @@
         <attr name="colorCurrentDay" format="reference" />
         <attr name="colorSelectedDay" format="reference" />
         <attr name="colorEventIndicator" format="reference" />
-        <attr name="colorDrawerIcon" format="reference" />
         <attr name="appToolbarTheme" format="reference" />
         <attr name="appToolbarPopupTheme" format="reference" />
         <attr name="coloredTabIndicatorColor" format="reference" />

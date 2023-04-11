@@ -99,7 +99,7 @@
                                 android:text="@string/about_license_title"
                                 android:textColor="?android:attr/textColorPrimary"
                                 android:textStyle="bold"
-                                app:drawableTint="?attr/colorDrawerIcon" />
+                                app:drawableTint="?attr/colorAccent" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
                             android:text="@string/help"
                             android:textColor="?android:attr/textColorPrimary"
                             android:textStyle="bold"
-                            app:drawableTint="?attr/colorDrawerIcon" />
+                            app:drawableTint="?attr/colorAccent" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/help_sections_recycler_view"
@@ -167,7 +167,7 @@
                                 android:text="@string/about_report_bug"
                                 android:textColor="?android:attr/textColorPrimary"
                                 android:textStyle="bold"
-                                app:drawableTint="?attr/colorDrawerIcon" />
+                                app:drawableTint="?attr/colorAccent" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -198,7 +198,7 @@
                                 android:text="@string/about_sendMail"
                                 android:textColor="?android:attr/textColorPrimary"
                                 android:textStyle="bold"
-                                app:drawableTint="?attr/colorDrawerIcon" />
+                                app:drawableTint="?attr/colorAccent" />
 
                             <TextView
                                 android:layout_width="wrap_content"
