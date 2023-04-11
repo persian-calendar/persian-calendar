@@ -82,7 +82,6 @@
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
         <item name="colorHoliday">@color/dark_holiday</item>
         <item name="colorOnAppBar">@color/dark_text_day</item>
-        <item name="colorTextDayName">@color/dark_text_day_name</item>
         <item name="colorCurrentDay">@color/dark_current_day</item>
         <item name="colorSelectedDay">@color/dark_selected_day</item>
         <item name="colorEventIndicator">@color/dark_event_indicator</item>
@@ -103,7 +102,6 @@
         <item name="colorTextHoliday">@color/black_text_holiday</item>
         <item name="colorHoliday">@color/black_holiday</item>
         <item name="colorOnAppBar">@color/black_text_day</item>
-        <item name="colorTextDayName">@color/black_text_day_name</item>
         <item name="colorCurrentDay">@color/black_current_day</item>
         <item name="colorSelectedDay">@color/black_selected_day</item>
         <item name="colorEventIndicator">@color/black_event_indicator</item>
@@ -124,7 +122,6 @@
         <item name="colorTextHoliday">@color/light_text_holiday</item>
         <item name="colorHoliday">@color/light_holiday</item>
         <item name="colorOnAppBar">@color/light_text_day</item>
-        <item name="colorTextDayName">@color/light_text_day_name</item>
         <item name="colorCurrentDay">@color/light_current_day</item>
         <item name="colorSelectedDay">@color/light_selected_day</item>
         <item name="colorEventIndicator">@color/light_event_indicator</item>
@@ -149,7 +146,6 @@
         <item name="colorTextHoliday">@color/blue_text_holiday</item>
         <item name="colorHoliday">@color/blue_holiday</item>
         <item name="colorOnAppBar">@color/blue_text_day</item>
-        <item name="colorTextDayName">@color/blue_text_day_name</item>
         <item name="colorCurrentDay">@color/blue_current_day</item>
         <item name="colorSelectedDay">@color/blue_selected_day</item>
         <item name="colorEventIndicator">@color/blue_event_indicator</item>
@@ -173,7 +169,6 @@
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
         <item name="colorHoliday">@color/modern_holiday</item>
         <item name="colorOnAppBar">@color/modern_text_day</item>
-        <item name="colorTextDayName">@color/modern_text_day_name</item>
         <item name="colorCurrentDay">@color/modern_current_day</item>
         <item name="colorSelectedDay">@color/modern_selected_day</item>
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
