@@ -14,6 +14,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.LevelScreenBinding
@@ -34,6 +36,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRotationLock()
         val binding = LevelScreenBinding.bind(view)
         binding.appBar.toolbar.also { toolbar ->
             toolbar.setTitle(R.string.level)
@@ -106,7 +109,6 @@ class LevelScreen : Fragment(R.layout.level_screen) {
             binding.fab.contentDescription = getString(if (stop) R.string.stop else R.string.resume)
             isStopped = !stop
             if (stop) provider.startListening() else provider.stopListening()
-            setRotationPrevention(stop)
         }
     }
 
@@ -114,25 +116,30 @@ class LevelScreen : Fragment(R.layout.level_screen) {
     override fun onResume() {
         super.onResume()
         if (!isStopped) provider?.startListening()
-        setRotationPrevention(provider?.isListening == true)
     }
 
-    private fun setRotationPrevention(stopRotation: Boolean) {
-        // https://stackoverflow.com/a/20017878
-        val current = if (stopRotation) activity?.windowManager?.defaultDisplay?.rotation else null
-        activity?.requestedOrientation = when (current) {
+    override fun onPause() {
+        if (provider?.isListening == true) provider?.stopListening()
+        lockCleanup?.invoke()
+        super.onPause()
+    }
+}
+
+// https://stackoverflow.com/a/75984863
+private fun Fragment.setupRotationLock() {
+    lifecycle.addObserver(LifecycleEventObserver { _, event ->
+        val activity = activity ?: return@LifecycleEventObserver
+        if (event != Lifecycle.Event.ON_PAUSE && event != Lifecycle.Event.ON_RESUME)
+            return@LifecycleEventObserver
+        val destination =
+            if (event == Lifecycle.Event.ON_PAUSE) null
+            else @Suppress("DEPRECATION") activity.windowManager?.defaultDisplay?.rotation
+        activity.requestedOrientation = when (destination) {
             Surface.ROTATION_180 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT
             Surface.ROTATION_270 -> ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
             Surface.ROTATION_0 -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
             Surface.ROTATION_90 -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             else -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
-    }
-
-    override fun onPause() {
-        if (provider?.isListening == true) provider?.stopListening()
-        setRotationPrevention(false)
-        lockCleanup?.invoke()
-        super.onPause()
-    }
+    })
 }
