@@ -81,7 +81,6 @@
         <item name="colorSurface">@color/dark_surface_background</item>
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
         <item name="colorHoliday">@color/dark_holiday</item>
-        <item name="colorTextDrawer">@color/dark_text_drawer</item>
         <item name="colorOnAppBar">@color/dark_text_day</item>
         <item name="colorTextDayName">@color/dark_text_day_name</item>
         <item name="colorCurrentDay">@color/dark_current_day</item>
@@ -103,7 +102,6 @@
         <item name="colorSurface">@color/black_surface_background</item>
         <item name="colorTextHoliday">@color/black_text_holiday</item>
         <item name="colorHoliday">@color/black_holiday</item>
-        <item name="colorTextDrawer">@color/black_text_drawer</item>
         <item name="colorOnAppBar">@color/black_text_day</item>
         <item name="colorTextDayName">@color/black_text_day_name</item>
         <item name="colorCurrentDay">@color/black_current_day</item>
@@ -125,7 +123,6 @@
         <item name="colorSurface">@color/light_surface_background</item>
         <item name="colorTextHoliday">@color/light_text_holiday</item>
         <item name="colorHoliday">@color/light_holiday</item>
-        <item name="colorTextDrawer">@color/light_text_drawer</item>
         <item name="colorOnAppBar">@color/light_text_day</item>
         <item name="colorTextDayName">@color/light_text_day_name</item>
         <item name="colorCurrentDay">@color/light_current_day</item>
@@ -151,7 +148,6 @@
         <item name="colorSurface">@color/blue_surface_background</item>
         <item name="colorTextHoliday">@color/blue_text_holiday</item>
         <item name="colorHoliday">@color/blue_holiday</item>
-        <item name="colorTextDrawer">@color/blue_text_drawer</item>
         <item name="colorOnAppBar">@color/blue_text_day</item>
         <item name="colorTextDayName">@color/blue_text_day_name</item>
         <item name="colorCurrentDay">@color/blue_current_day</item>
@@ -176,7 +172,6 @@
         <item name="colorSurface">@color/modern_surface_background</item>
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
         <item name="colorHoliday">@color/modern_holiday</item>
-        <item name="colorTextDrawer">@color/modern_text_drawer</item>
         <item name="colorOnAppBar">@color/modern_text_day</item>
         <item name="colorTextDayName">@color/modern_text_day_name</item>
         <item name="colorCurrentDay">@color/modern_current_day</item>

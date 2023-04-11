@@ -6,4 +6,4 @@
     android:layout_height="?attr/listPreferredItemHeight"
     android:background="?attr/colorSurface"
     android:textAppearance="?attr/textAppearanceListItemSmall"
-    android:textColor="?attr/colorTextDrawer" />
+    android:textColor="?android:attr/textColorPrimary" />

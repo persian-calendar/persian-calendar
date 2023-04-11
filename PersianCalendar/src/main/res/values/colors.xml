@@ -84,6 +84,7 @@
     <color name="modern_selected_day">#DDDEE2</color>
     <color name="modern_event_indicator">#000000</color>
     <color name="modern_icon_drawer">#587994</color>
+    <color name="modern_text_normal">#232323</color>
 
     <!-- == SunView == -->
     <color name="sun_view_sunrise_text_color">#FF9800</color>

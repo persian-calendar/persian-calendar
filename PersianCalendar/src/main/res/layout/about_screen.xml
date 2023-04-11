@@ -79,7 +79,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:text="@string/licenses"
-                            android:textColor="?attr/colorTextDrawer" />
+                            android:textColor="?android:attr/textColorPrimary" />
 
                         <LinearLayout
                             android:id="@+id/licenses"
@@ -97,7 +97,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="5dp"
                                 android:text="@string/about_license_title"
-                                android:textColor="?attr/colorTextDrawer"
+                                android:textColor="?android:attr/textColorPrimary"
                                 android:textStyle="bold"
                                 app:drawableTint="?attr/colorDrawerIcon" />
 
@@ -125,7 +125,7 @@
                             android:layout_height="wrap_content"
                             android:drawablePadding="5dp"
                             android:text="@string/help"
-                            android:textColor="?attr/colorTextDrawer"
+                            android:textColor="?android:attr/textColorPrimary"
                             android:textStyle="bold"
                             app:drawableTint="?attr/colorDrawerIcon" />
 
@@ -147,7 +147,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:text="@string/about_support_developers"
-                            android:textColor="?attr/colorTextDrawer" />
+                            android:textColor="?android:attr/textColorPrimary" />
 
                         <LinearLayout
                             android:id="@+id/reportBug"
@@ -165,7 +165,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="5dp"
                                 android:text="@string/about_report_bug"
-                                android:textColor="?attr/colorTextDrawer"
+                                android:textColor="?android:attr/textColorPrimary"
                                 android:textStyle="bold"
                                 app:drawableTint="?attr/colorDrawerIcon" />
 
@@ -196,7 +196,7 @@
                                 android:layout_height="wrap_content"
                                 android:drawablePadding="5dp"
                                 android:text="@string/about_sendMail"
-                                android:textColor="?attr/colorTextDrawer"
+                                android:textColor="?android:attr/textColorPrimary"
                                 android:textStyle="bold"
                                 app:drawableTint="?attr/colorDrawerIcon" />
 
@@ -223,7 +223,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:text="@string/about_developers"
-                            android:textColor="?attr/colorTextDrawer" />
+                            android:textColor="?android:attr/textColorPrimary" />
 
                         <com.google.android.material.chip.ChipGroup
                             android:id="@+id/developers"

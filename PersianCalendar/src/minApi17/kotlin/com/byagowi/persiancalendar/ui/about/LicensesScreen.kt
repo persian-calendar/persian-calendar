@@ -139,7 +139,7 @@ ${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
                 paint.color =
                     view.context.resolveColor(com.google.android.material.R.attr.colorSurfaceDim)
                 canvas.drawRoundRect(rect, 25.dp, 25.dp, paint)
-                paint.color = view.context.resolveColor(R.attr.colorTextDrawer)
+                paint.color = view.context.resolveColor(android.R.attr.textColorPrimary)
                 canvas.drawText(text ?: "", start, end, x + sidePadding, y.toFloat(), paint)
             }
         }

@@ -17,7 +17,6 @@
         <item name="colorSurface">@android:color/system_accent1_10</item>
         <item name="colorTextHoliday">@android:color/system_accent1_400</item>
         <item name="colorHoliday">@android:color/system_accent1_400</item>
-        <item name="colorTextDrawer">@color/modern_text_drawer</item>
         <item name="colorOnAppBar">@color/modern_text_day</item>
         <item name="colorTextDayName">@color/modern_text_day_name</item>
         <item name="colorCurrentDay">@android:color/system_accent1_600</item>
@@ -39,7 +38,6 @@
         <item name="colorSurface">@android:color/system_neutral1_900</item>
         <item name="colorTextHoliday">@android:color/system_accent1_200</item>
         <item name="colorHoliday">@android:color/system_accent1_200</item>
-        <item name="colorTextDrawer">@color/black_text_drawer</item>
         <item name="colorOnAppBar">@color/black_text_day</item>
         <item name="colorTextDayName">@color/black_text_day_name</item>
         <item name="colorCurrentDay">@android:color/system_accent1_200</item>
