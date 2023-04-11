@@ -31,8 +31,7 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(contex
                 }
             }
             addViewsToFlow(bindings.map {
-                it.day.setOnClickListener(this)
-                it.month.setOnClickListener(this)
+                it.topPart.setOnClickListener(this)
                 it.linear.setOnClickListener(this)
                 it.root
             })
@@ -40,12 +39,13 @@ class CalendarsFlow(context: Context, attrs: AttributeSet? = null) : Flow(contex
         bindings.zip(calendarsToShow) { binding, calendarType ->
             val date = jdn.toCalendar(calendarType)
             val firstCalendarString = formatDate(date)
+
+            binding.day.text = formatNumber(date.dayOfMonth)
+            binding.month.text = date.monthName
+            binding.topPart.contentDescription = firstCalendarString
+
             binding.linear.text = date.toLinearDate()
             binding.linear.contentDescription = date.toLinearDate()
-            binding.day.contentDescription = firstCalendarString
-            binding.day.text = formatNumber(date.dayOfMonth)
-            binding.month.contentDescription = firstCalendarString
-            binding.month.text = date.monthName
         }
     }
 
