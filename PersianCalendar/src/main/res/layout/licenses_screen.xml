@@ -16,9 +16,9 @@
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <LinearLayout
-            android:background="?attr/colorSurface"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="?attr/colorSurface"
             android:orientation="horizontal">
 
             <com.google.android.material.navigationrail.NavigationRailView
@@ -26,8 +26,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="?attr/colorSurface"
-                android:paddingTop="4dp"
                 android:paddingStart="0dp"
+                android:paddingTop="4dp"
                 android:paddingEnd="4dp"
                 app:labelVisibilityMode="labeled"
                 app:menuGravity="top" />

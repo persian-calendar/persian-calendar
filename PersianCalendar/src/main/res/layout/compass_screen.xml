@@ -17,10 +17,10 @@
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <FrameLayout
-            android:fitsSystemWindows="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSurface">
+            android:background="?attr/colorSurface"
+            android:fitsSystemWindows="true">
 
             <com.byagowi.persiancalendar.ui.compass.CompassView
                 android:id="@+id/compass_view"

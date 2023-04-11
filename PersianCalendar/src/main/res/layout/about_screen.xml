@@ -61,13 +61,13 @@
                 app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
                 <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="?attr/colorSurface"
+                    android:orientation="vertical"
                     android:paddingStart="12dp"
                     android:paddingTop="4dp"
-                    android:paddingEnd="12dp"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:paddingEnd="12dp">
 
                     <LinearLayout
                         android:id="@+id/app_license"
