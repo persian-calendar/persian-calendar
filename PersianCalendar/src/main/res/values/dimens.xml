@@ -3,8 +3,6 @@
     <dimen name="card_margin">8dp</dimen>
     <dimen name="card_padding">16dp</dimen>
     <dimen name="view_padding">16dp</dimen>
-    <dimen name="converter_padding">8dp</dimen>
-    <dimen name="icon_margin">16dp</dimen>
     <dimen name="arrow_size">26dp</dimen>
     <dimen name="padding_item">8dp</dimen>
 
