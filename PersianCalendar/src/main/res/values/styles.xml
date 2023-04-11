@@ -205,7 +205,6 @@
         <item name="colorTextDaySelected">@color/modern_text_normal</item>
         <item name="colorAppointment">@color/modern_accent</item>
 
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
     </style>
 
