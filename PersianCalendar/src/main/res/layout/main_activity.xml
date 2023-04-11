@@ -22,6 +22,6 @@
         android:background="?attr/colorSurface"
         app:headerLayout="@layout/navigation_header"
         app:itemIconTint="?attr/colorDrawerIcon"
-        app:itemTextColor="?attr/colorTextNormal" />
+        app:itemTextColor="?android:attr/textColorPrimary" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

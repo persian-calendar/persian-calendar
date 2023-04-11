@@ -8,10 +8,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:shadowColor="?attr/colorTextNormal"
+        android:shadowColor="?attr/colorAccent"
         android:shadowDx="0"
         android:shadowDy="0"
-        android:shadowRadius="2"
+        android:shadowRadius="4"
         android:textAlignment="center"
         android:textColor="?attr/colorSurface"
         android:textSize="70sp" />
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/no_event"
-            android:textColor="?attr/colorTextSecond"
+            android:textColor="?android:attr/textColorSecondary"
             android:textSize="@dimen/text_size_description" />
 
         <TextView
@@ -44,14 +44,14 @@
             android:id="@+id/device_event_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorTextNormal"
+            android:textColor="?android:attr/textColorPrimary"
             android:textSize="@dimen/text_size_description" />
 
         <TextView
             android:id="@+id/event_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorTextNormal"
+            android:textColor="?android:attr/textColorPrimary"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description" />
 

@@ -143,7 +143,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 
     private val colorTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
-        it.color = context.resolveColor(R.attr.colorTextNormal)
+        it.color = context.resolveColor(android.R.attr.textColorPrimary)
     }
 
     private val textPath = Path()

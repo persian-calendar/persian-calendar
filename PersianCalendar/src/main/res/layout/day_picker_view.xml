@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/day"
-                android:textColor="?attr/colorTextSecond"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/text_size_description" />
 
             <NumberPicker
@@ -68,7 +68,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/month"
-                android:textColor="?attr/colorTextSecond"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/text_size_description" />
 
             <NumberPicker
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/year"
-                android:textColor="?attr/colorTextSecond"
+                android:textColor="?android:attr/textColorSecondary"
                 android:textSize="@dimen/text_size_description" />
 
             <NumberPicker

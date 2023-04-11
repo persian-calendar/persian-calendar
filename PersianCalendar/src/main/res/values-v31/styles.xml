@@ -15,8 +15,6 @@
         <item name="colorAppBar">@android:color/system_accent1_50</item>
 
         <item name="colorSurface">@android:color/system_accent1_10</item>
-        <item name="colorTextNormal">@color/modern_text_normal</item>
-        <item name="colorTextSecond">@color/modern_text_second</item>
         <item name="colorTextHoliday">@android:color/system_accent1_400</item>
         <item name="colorHoliday">@android:color/system_accent1_400</item>
         <item name="colorTextDrawer">@color/modern_text_drawer</item>
@@ -41,8 +39,6 @@
         <item name="colorAppBar">@android:color/system_neutral1_800</item>
 
         <item name="colorSurface">@android:color/system_neutral1_900</item>
-        <item name="colorTextNormal">@color/black_text_normal</item>
-        <item name="colorTextSecond">@color/black_text_second</item>
         <item name="colorTextHoliday">@android:color/system_accent1_200</item>
         <item name="colorHoliday">@android:color/system_accent1_200</item>
         <item name="colorTextDrawer">@color/black_text_drawer</item>

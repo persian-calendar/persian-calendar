@@ -79,8 +79,6 @@
         <item name="colorAppBar">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
-        <item name="colorTextNormal">@color/dark_text_normal</item>
-        <item name="colorTextSecond">@color/dark_text_second</item>
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
         <item name="colorHoliday">@color/dark_holiday</item>
         <item name="colorTextDrawer">@color/dark_text_drawer</item>
@@ -105,8 +103,6 @@
         <item name="colorAppBar">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
-        <item name="colorTextNormal">@color/black_text_normal</item>
-        <item name="colorTextSecond">@color/black_text_second</item>
         <item name="colorTextHoliday">@color/black_text_holiday</item>
         <item name="colorHoliday">@color/black_holiday</item>
         <item name="colorTextDrawer">@color/black_text_drawer</item>
@@ -131,8 +127,6 @@
         <item name="colorAppBar">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
-        <item name="colorTextNormal">@color/light_text_normal</item>
-        <item name="colorTextSecond">@color/light_text_second</item>
         <item name="colorTextHoliday">@color/light_text_holiday</item>
         <item name="colorHoliday">@color/light_holiday</item>
         <item name="colorTextDrawer">@color/light_text_drawer</item>
@@ -161,8 +155,6 @@
         <item name="colorAppBar">@color/blue_primary</item>
 
         <item name="colorSurface">@color/blue_surface_background</item>
-        <item name="colorTextNormal">@color/blue_text_normal</item>
-        <item name="colorTextSecond">@color/blue_text_second</item>
         <item name="colorTextHoliday">@color/blue_text_holiday</item>
         <item name="colorHoliday">@color/blue_holiday</item>
         <item name="colorTextDrawer">@color/blue_text_drawer</item>
@@ -190,8 +182,6 @@
         <item name="colorAppBar">@color/modern_primary</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
-        <item name="colorTextNormal">@color/modern_text_normal</item>
-        <item name="colorTextSecond">@color/modern_text_second</item>
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
         <item name="colorHoliday">@color/modern_holiday</item>
         <item name="colorTextDrawer">@color/modern_text_drawer</item>
@@ -248,7 +238,6 @@
         <item name="tabIndicatorColor">?attr/colorAccent</item>
         <item name="tabIndicatorHeight">3dp</item>
         <item name="android:textSize">@dimen/text_size_title</item>
-        <item name="tabIconTint">?attr/colorTextSecond</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
         <item name="tabBackground">?attr/colorSurface</item>
     </style>

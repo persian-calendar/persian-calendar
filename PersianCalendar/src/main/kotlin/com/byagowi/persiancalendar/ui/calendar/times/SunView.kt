@@ -57,7 +57,8 @@ class SunView @JvmOverloads constructor(
         textColor ?: ContextCompat.getColor(context, R.color.sun_view_midday_text_color)
     private val sunsetTextColor =
         textColor ?: ContextCompat.getColor(context, R.color.sun_view_sunset_text_color)
-    private val colorTextSecond = textColor ?: context.resolveColor(R.attr.colorTextSecond)
+    private val textColorSecondary =
+        textColor ?: context.resolveColor(android.R.attr.textColorSecondary)
 
     internal var width: Int = 0
     internal var height: Int = 0
@@ -197,7 +198,7 @@ class SunView @JvmOverloads constructor(
             it.textAlign = Paint.Align.CENTER
             it.strokeWidth = 0f
             it.style = Paint.Style.FILL
-            it.color = colorTextSecond
+            it.color = textColorSecondary
         }
         canvas.drawText(
             dayLengthString, width * if (isRtl) .70f else .30f, height * .94f, paint

@@ -61,7 +61,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="@dimen/padding_item"
-        android:textColor="?attr/colorTextNormal"
+        android:textColor="?android:attr/textColorPrimary"
         android:textIsSelectable="true"
         android:textSize="12sp" />
 
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="@dimen/padding_item"
-            android:textColor="?attr/colorTextNormal"
+            android:textColor="?android:attr/textColorPrimary"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description" />
 
@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/padding_item"
-            android:textColor="?attr/colorTextNormal"
+            android:textColor="?android:attr/textColorPrimary"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description"
             tools:text="@string/days_distance" />
@@ -168,7 +168,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="@dimen/padding_item"
-            android:textColor="?attr/colorTextNormal"
+            android:textColor="?android:attr/textColorPrimary"
             android:textIsSelectable="true"
             android:textSize="@dimen/text_size_description"
             tools:text="@string/days_distance" />

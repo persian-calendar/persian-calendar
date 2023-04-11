@@ -9,8 +9,6 @@
              but the blue theme has a custom months background -->
         <attr name="colorMonthsBackground" format="reference" />
         <attr name="colorAppointment" format="reference" />
-        <attr name="colorTextNormal" format="reference" />
-        <attr name="colorTextSecond" format="reference" />
         <attr name="colorTextHoliday" format="reference" />
         <attr name="colorHoliday" format="reference" />
         <attr name="colorTextDrawer" format="reference" />
