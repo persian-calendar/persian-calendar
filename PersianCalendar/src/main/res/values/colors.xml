@@ -17,8 +17,6 @@
 
     <color name="dark_primary">#1E252A</color>
     <color name="dark_accent">#1DE9B6</color>
-    <color name="dark_text_normal">#ffffff</color>
-    <color name="dark_text_second">#cfcfcf</color>
     <color name="dark_text_drawer">#ffffff</color>
     <color name="dark_text_holiday">#ef6c00</color>
     <color name="dark_holiday">#e65100</color>
@@ -33,8 +31,6 @@
 
     <color name="black_primary">#000000</color>
     <color name="black_accent">#1CB2E8</color>
-    <color name="black_text_normal">#ffffff</color>
-    <color name="black_text_second">#cfcfcf</color>
     <color name="black_text_drawer">#ffffff</color>
     <color name="black_text_holiday">#ef6c00</color>
     <color name="black_holiday">#e65100</color>
@@ -49,8 +45,6 @@
 
     <color name="light_primary">#00695c</color>
     <color name="light_accent">#00796b</color>
-    <color name="light_text_normal">#232323</color>
-    <color name="light_text_second">#737373</color>
     <color name="light_text_drawer">#737373</color>
     <color name="light_text_holiday">#d84315</color>
     <color name="light_holiday">#ff8a65</color>
@@ -65,8 +59,6 @@
 
     <color name="blue_primary">#00838f</color>
     <color name="blue_accent">#1a237e</color>
-    <color name="blue_text_normal">#232323</color>
-    <color name="blue_text_second">#737373</color>
     <color name="blue_text_drawer">#737373</color>
     <color name="blue_text_holiday">#d84315</color>
     <color name="blue_holiday">#ff8a65</color>
@@ -81,8 +73,6 @@
 
     <color name="modern_primary">#fafafa</color>
     <color name="modern_accent">#42AFBF</color>
-    <color name="modern_text_normal">#232323</color>
-    <color name="modern_text_second">#737373</color>
     <color name="modern_text_drawer">#737373</color>
     <color name="modern_text_holiday">#E51C23</color>
     <color name="modern_holiday">#E51C23</color>

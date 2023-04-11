@@ -90,8 +90,6 @@
         <item name="colorDrawerIcon">@color/dark_icon_drawer</item>
         <item name="colorMonthSwitch">@color/dark_month_switch</item>
 
-        <item name="android:textColor">@color/dark_text_normal</item>
-
         <item name="coloredTabIndicatorColor">@color/dark_accent</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
@@ -114,8 +112,6 @@
         <item name="colorDrawerIcon">@color/black_icon_drawer</item>
         <item name="colorMonthSwitch">@color/black_month_switch</item>
 
-        <item name="android:textColor">@color/black_text_normal</item>
-
         <item name="coloredTabIndicatorColor">@color/black_accent</item>
         <item name="colorTextDaySelected">@color/black_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
@@ -137,8 +133,6 @@
         <item name="colorEventIndicator">@color/light_event_indicator</item>
         <item name="colorDrawerIcon">@color/light_icon_drawer</item>
         <item name="colorMonthSwitch">@color/light_month_switch</item>
-
-        <item name="android:textColor">@color/light_text_normal</item>
 
         <item name="coloredTabIndicatorColor">@color/light_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
@@ -166,8 +160,6 @@
         <item name="colorDrawerIcon">@color/blue_icon_drawer</item>
         <item name="colorMonthSwitch">@color/blue_month_switch</item>
 
-        <item name="android:textColor">@color/blue_text_normal</item>
-
         <item name="coloredTabIndicatorColor">@color/blue_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
@@ -192,8 +184,6 @@
         <item name="colorEventIndicator">@color/modern_event_indicator</item>
         <item name="colorDrawerIcon">@color/modern_icon_drawer</item>
         <item name="colorMonthSwitch">@color/modern_month_switch</item>>
-
-        <item name="android:textColor">@color/modern_text_normal</item>
 
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_normal</item>

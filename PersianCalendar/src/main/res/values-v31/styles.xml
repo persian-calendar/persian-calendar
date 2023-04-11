@@ -26,8 +26,6 @@
         <item name="colorDrawerIcon">@android:color/system_accent1_900</item>
         <item name="colorMonthSwitch">@android:color/system_accent3_600</item>
 
-        <item name="android:textColor">@color/modern_text_normal</item>
-
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_600</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_900</item>
         <item name="colorAppointment">@android:color/system_accent1_400</item>
@@ -49,8 +47,6 @@
         <item name="colorEventIndicator">@color/black_event_indicator</item>
         <item name="colorDrawerIcon">@android:color/system_accent1_100</item>
         <item name="colorMonthSwitch">@android:color/system_accent1_50</item>
-
-        <item name="android:textColor">@color/black_text_normal</item>
 
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_300</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_50</item>
