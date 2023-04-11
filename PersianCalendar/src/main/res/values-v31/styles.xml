@@ -17,11 +17,11 @@
         <item name="colorSurface">@android:color/system_accent1_10</item>
         <item name="colorTextHoliday">@android:color/system_accent1_400</item>
         <item name="colorHoliday">@android:color/system_accent1_400</item>
-        <item name="colorOnAppBar">@color/modern_text_day</item>
-        <item name="colorTextDayName">@color/modern_text_day_name</item>
+        <item name="colorOnAppBar">@android:color/system_neutral1_1000</item>
+        <item name="colorTextDayName">@android:color/system_neutral1_700</item>
         <item name="colorCurrentDay">@android:color/system_accent1_600</item>
         <item name="colorSelectedDay">@android:color/system_accent2_100</item>
-        <item name="colorEventIndicator">@color/modern_event_indicator</item>
+        <item name="colorEventIndicator">@android:color/system_neutral1_1000</item>
         <item name="colorDrawerIcon">@android:color/system_accent1_900</item>
         <item name="colorMonthSwitch">@android:color/system_accent3_600</item>
 
@@ -38,11 +38,11 @@
         <item name="colorSurface">@android:color/system_neutral1_900</item>
         <item name="colorTextHoliday">@android:color/system_accent1_200</item>
         <item name="colorHoliday">@android:color/system_accent1_200</item>
-        <item name="colorOnAppBar">@color/black_text_day</item>
-        <item name="colorTextDayName">@color/black_text_day_name</item>
+        <item name="colorOnAppBar">@android:color/system_neutral1_0</item>
+        <item name="colorTextDayName">@android:color/system_neutral1_400</item>
         <item name="colorCurrentDay">@android:color/system_accent1_200</item>
         <item name="colorSelectedDay">@android:color/system_accent2_300</item>
-        <item name="colorEventIndicator">@color/black_event_indicator</item>
+        <item name="colorEventIndicator">@android:color/system_neutral1_100</item>
         <item name="colorDrawerIcon">@android:color/system_accent1_100</item>
         <item name="colorMonthSwitch">@android:color/system_accent1_50</item>
 
