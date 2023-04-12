@@ -61,14 +61,12 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
                     viewMatrix.getValues(matrix)
                     val x = matrix[Matrix.MTRANS_X]
                     val y = matrix[Matrix.MTRANS_Y]
-                    if (scaleFactor < 1) {
-                        if ((originalWidth * currentScale).roundToInt() < width) {
-                            if (y < -bottom) viewMatrix.postTranslate(0f, -(y + bottom))
-                            else if (y > 0) viewMatrix.postTranslate(0f, -y)
-                        } else {
-                            if (x < -right) viewMatrix.postTranslate(-(x + right), 0f)
-                            else if (x > 0) viewMatrix.postTranslate(-x, 0f)
-                        }
+                    if ((originalWidth * currentScale).roundToInt() < width) {
+                        if (y < -bottom) viewMatrix.postTranslate(0f, -(y + bottom))
+                        else if (y > 0) viewMatrix.postTranslate(0f, -y)
+                    } else {
+                        if (x < -right) viewMatrix.postTranslate(-(x + right), 0f)
+                        else if (x > 0) viewMatrix.postTranslate(-x, 0f)
                     }
                 }
             } else {
