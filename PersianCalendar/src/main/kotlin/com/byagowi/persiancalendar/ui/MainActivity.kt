@@ -436,6 +436,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 navigateTo(clickedItem)
                 clickedItem = 0
             }
+
+            // Make sure drawer seasons pager won't be in an inconsistent position if navigated too fast
+            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+                .seasonsPager.setCurrentItem(SeasonsAdapter.getCurrentIndex(), false)
         }
     }
 }
