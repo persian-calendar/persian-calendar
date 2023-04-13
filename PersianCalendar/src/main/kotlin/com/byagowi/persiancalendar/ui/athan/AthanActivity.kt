@@ -12,6 +12,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
@@ -62,10 +63,16 @@ class AthanActivity : ComponentActivity() {
             ?.setStreamVolume(AudioManager.STREAM_ALARM, originalVolume, 0)
     }
 
+    private val onBackPressedCloseCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() = stop()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         transparentStatusAndNavigation()
+
+        onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 
         val prayerKey = intent.getStringExtra(KEY_EXTRA_PRAYER) ?: ""
         val isFajr = prayerKey == FAJR_KEY
@@ -137,8 +144,6 @@ class AthanActivity : ComponentActivity() {
         super.onWindowFocusChanged(hasFocus)
         if (!hasFocus) stop()
     }
-
-    override fun onBackPressed() = stop()
 
     private fun stop() {
         if (alreadyStopped) return
