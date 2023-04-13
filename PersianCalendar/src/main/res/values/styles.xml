@@ -36,7 +36,9 @@
         <item name="colorPrimary">@color/light_primary</item>
     </style>
 
-    <style name="BaseDarkTheme" parent="Theme.Material3.Dark.NoActionBar">
+    <style name="BaseDarkTheme" parent="Theme.Material3.DynamicColors.Dark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
@@ -51,7 +53,9 @@
         <item name="popupMenuBackground">@drawable/popup_background</item>
     </style>
 
-    <style name="BaseLightTheme" parent="Theme.Material3.Light.NoActionBar">
+    <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
         <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
