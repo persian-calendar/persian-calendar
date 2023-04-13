@@ -438,8 +438,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
 
             // Make sure drawer seasons pager won't be in an inconsistent position if navigated too fast
-            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
-                .seasonsPager.setCurrentItem(SeasonsAdapter.getCurrentIndex(), false)
+            val header = NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+            header.seasonsPager.setCurrentItem(header.seasonsPager.currentItem, false)
         }
     }
 }
