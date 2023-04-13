@@ -109,64 +109,67 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private var viscosityValue = 1.0
     private var firstTime = true
 
+    private fun onOrientationChange(newOrientation: Orientation) {
+        orientation = newOrientation
+        middleX = canvasWidth / 2
+        middleY = canvasHeight / 2 - angleDisplay.displayGap
+        when (newOrientation) {
+            Orientation.LANDING -> {
+                levelWidth = levelMaxDimension
+                levelHeight = levelMaxDimension
+            }
+            Orientation.TOP, Orientation.BOTTOM, Orientation.LEFT, Orientation.RIGHT -> {
+                levelWidth = canvasWidth - 2 * angleDisplay.displayGap
+                levelHeight = (levelWidth * LEVEL_ASPECT_RATIO).toInt()
+            }
+        }
+        viscosityValue = levelWidth.toDouble()
+        minLevelX = middleX - levelWidth / 2
+        maxLevelX = middleX + levelWidth / 2
+        minLevelY = middleY - levelHeight / 2
+        maxLevelY = middleY + levelHeight / 2
+
+        // bubble
+        halfBubbleWidth = (levelWidth * BUBBLE_WIDTH / 2).toInt()
+        halfBubbleHeight = (halfBubbleWidth * BUBBLE_ASPECT_RATIO).toInt()
+        val bubbleWidth = 2 * halfBubbleWidth
+        val bubbleHeight = 2 * halfBubbleHeight
+        maxBubble = (maxLevelY - bubbleHeight * BUBBLE_CROPPING).toInt()
+        minBubble = maxBubble - bubbleHeight
+
+        // display
+        val displayY = when (newOrientation) {
+            Orientation.LEFT, Orientation.RIGHT ->
+                (canvasHeight - canvasWidth) / 2 + canvasWidth - angleDisplay.displayGap
+            else -> canvasHeight
+        }
+        angleDisplay.updatePlacement(middleX, displayY)
+
+        // marker
+        halfMarkerGap = (levelWidth * MARKER_GAP / 2).toInt()
+
+        // autres
+        levelMinusBubbleWidth = levelWidth - bubbleWidth - 2 * levelBorderWidth
+        levelMinusBubbleHeight = levelHeight - bubbleHeight - 2 * levelBorderWidth
+
+        // positionnement
+        level1D.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
+        level2D.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
+        marker2D.setBounds(
+            middleX - halfMarkerGap - markerThickness,
+            middleY - halfMarkerGap - markerThickness,
+            middleX + halfMarkerGap + markerThickness,
+            middleY + halfMarkerGap + markerThickness
+        )
+        x = (maxLevelX + minLevelX).toDouble() / 2
+        y = (maxLevelY + minLevelY).toDouble() / 2
+    }
+
     fun setOrientation(
         newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float
     ) {
-        if (orientation == null || orientation != newOrientation) {
-            orientation = newOrientation
-            middleX = canvasWidth / 2
-            middleY = canvasHeight / 2 - angleDisplay.displayGap
-            when (newOrientation) {
-                Orientation.LANDING -> {
-                    levelWidth = levelMaxDimension
-                    levelHeight = levelMaxDimension
-                }
-                Orientation.TOP, Orientation.BOTTOM, Orientation.LEFT, Orientation.RIGHT -> {
-                    levelWidth = canvasWidth - 2 * angleDisplay.displayGap
-                    levelHeight = (levelWidth * LEVEL_ASPECT_RATIO).toInt()
-                }
-            }
-            viscosityValue = levelWidth.toDouble()
-            minLevelX = middleX - levelWidth / 2
-            maxLevelX = middleX + levelWidth / 2
-            minLevelY = middleY - levelHeight / 2
-            maxLevelY = middleY + levelHeight / 2
-
-            // bubble
-            halfBubbleWidth = (levelWidth * BUBBLE_WIDTH / 2).toInt()
-            halfBubbleHeight = (halfBubbleWidth * BUBBLE_ASPECT_RATIO).toInt()
-            val bubbleWidth = 2 * halfBubbleWidth
-            val bubbleHeight = 2 * halfBubbleHeight
-            maxBubble = (maxLevelY - bubbleHeight * BUBBLE_CROPPING).toInt()
-            minBubble = maxBubble - bubbleHeight
-
-            // display
-            val displayY = when (newOrientation) {
-                Orientation.LEFT, Orientation.RIGHT ->
-                    (canvasHeight - canvasWidth) / 2 + canvasWidth - angleDisplay.displayGap
-                else -> canvasHeight
-            }
-            angleDisplay.updatePlacement(middleX, displayY)
-
-            // marker
-            halfMarkerGap = (levelWidth * MARKER_GAP / 2).toInt()
-
-            // autres
-            levelMinusBubbleWidth = levelWidth - bubbleWidth - 2 * levelBorderWidth
-            levelMinusBubbleHeight = levelHeight - bubbleHeight - 2 * levelBorderWidth
-
-            // positionnement
-            level1D.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
-            level2D.setBounds(minLevelX, minLevelY, maxLevelX, maxLevelY)
-            marker2D.setBounds(
-                middleX - halfMarkerGap - markerThickness,
-                middleY - halfMarkerGap - markerThickness,
-                middleX + halfMarkerGap + markerThickness,
-                middleY + halfMarkerGap + markerThickness
-            )
-            x = (maxLevelX + minLevelX).toDouble() / 2
-            y = (maxLevelY + minLevelY).toDouble() / 2
-        }
+        if (orientation == null || orientation != newOrientation)
+            onOrientationChange(newOrientation)
         when (orientation) {
             Orientation.TOP, Orientation.BOTTOM -> {
                 angle1 = abs(newBalance)
@@ -221,6 +224,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             max(h, w) - 2 * (sensorGap + 3 * angleDisplay.displayGap + angleDisplay.lcdHeight)
         )
         angleDisplay.updatePlacement(canvasWidth / 2, canvasHeight)
+        onOrientationChange(orientation ?: Orientation.LANDING)
     }
 
     public override fun onDraw(canvas: Canvas) {
