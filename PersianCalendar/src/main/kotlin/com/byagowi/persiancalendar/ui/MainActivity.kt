@@ -414,8 +414,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 val blurIndex =
                     if (slideOffset.isNaN()) 0 else ((blurs.size - 1) * slideOffset).roundToInt()
                 binding.navHostFragment.setRenderEffect(blurs[blurIndex])
-                binding.navigation.getHeaderView(0)
-                    .setRenderEffect(blurs[blurs.size - 1 - blurIndex])
+                binding.navigation.setRenderEffect(blurs[blurs.size - 1 - blurIndex])
             }
             binding.root.bringChildToFront(drawerView)
             binding.root.requestLayout()
