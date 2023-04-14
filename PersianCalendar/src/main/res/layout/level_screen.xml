@@ -23,6 +23,7 @@
             android:background="?attr/colorSurface">
 
             <com.byagowi.persiancalendar.ui.level.RulerView
+                android:id="@+id/rulerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

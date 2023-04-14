@@ -101,7 +101,11 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 }
             }
         }
-        binding.levelView.setOnClickListener { lockCleanup?.invoke() }
+        binding.levelView.setOnClickListener {
+            val lockCleanup = lockCleanup
+            if (lockCleanup != null) lockCleanup.invoke()
+            else binding.rulerView.cmInchFlip = !binding.rulerView.cmInchFlip
+        }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener
             val stop = !provider.isListening

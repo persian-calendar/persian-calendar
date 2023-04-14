@@ -23,12 +23,18 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val thirdLevel = 8.dp
     private val topTextOffset = 9.dp
     private val textOffset = 10.dp - textSize / 2
+    var cmInchFlip = true
+        set(value) {
+            field = value
+            invalidate()
+        }
+
     override fun onDraw(canvas: Canvas) {
         val dpi = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
             resources.displayMetrics.ydpi else resources.displayMetrics.xdpi
 
         // Inch
-        paint.textAlign = Paint.Align.LEFT
+        paint.textAlign = if (cmInchFlip) Paint.Align.RIGHT else Paint.Align.LEFT
         val steps = dpi / 4f
         (0..(height / steps).toInt()).forEach { i ->
             val y = steps * i
@@ -36,7 +42,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 i % 4 == 0 -> {
                     val label = if (i == 0) "0 in" else "${i / 4}"
                     canvas.drawText(
-                        label, textSideOffset,
+                        label, if (cmInchFlip) width - textSideOffset else textSideOffset,
                         if (i == 0) topTextOffset else y + textOffset, paint
                     )
                     firstLevel
@@ -44,11 +50,14 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 i % 2 == 0 -> secondLevel
                 else -> thirdLevel
             }
-            canvas.drawLine(0f, y, w, y, paint)
+            canvas.drawLine(
+                if (cmInchFlip) width * 1f else 0f, y,
+                if (cmInchFlip) width - w else w, y, paint
+            )
         }
 
         // Centimeter
-        paint.textAlign = Paint.Align.RIGHT
+        paint.textAlign = if (cmInchFlip) Paint.Align.LEFT else Paint.Align.RIGHT
         val cmSteps = dpi / 2.54 / 10
         (0..(height / cmSteps).toInt()).forEach { i ->
             val y = cmSteps.toFloat() * i
@@ -56,7 +65,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 i % 10 == 0 -> {
                     val label = if (i == 0) "0 cm" else "${i / 10}"
                     canvas.drawText(
-                        label, width - textSideOffset,
+                        label, if (cmInchFlip) textSideOffset else width - textSideOffset,
                         if (i == 0) topTextOffset else y + textOffset, paint
                     )
                     firstLevel
@@ -64,7 +73,9 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 i % 5 == 0 -> secondLevel
                 else -> thirdLevel
             }
-            canvas.drawLine(width.toFloat(), y, width - w, y, paint)
+            canvas.drawLine(
+                if (cmInchFlip) 0f else width * 1f, y,
+                if (cmInchFlip) w else width - w, y, paint)
         }
     }
 }
