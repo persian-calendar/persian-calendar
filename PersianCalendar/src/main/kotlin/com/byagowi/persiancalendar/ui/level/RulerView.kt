@@ -23,7 +23,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val thirdLevel = 8.dp
     private val topTextOffset = 9.dp
     private val textOffset = 10.dp - textSize / 2
-    var cmInchFlip = true
+    var cmInchFlip = false
         set(value) {
             field = value
             invalidate()
