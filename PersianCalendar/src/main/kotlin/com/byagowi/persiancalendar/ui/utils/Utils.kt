@@ -263,13 +263,11 @@ fun Activity.transparentStatusAndNavigation(
     WindowCompat.setDecorFitsSystemWindows(window, false)
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (isPrimaryColorLight)
-            insetsController.isAppearanceLightStatusBars = true
+        if (isPrimaryColorLight) insetsController.isAppearanceLightStatusBars = true
         statusBarColor = Color.TRANSPARENT
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        if (isSurfaceColorLight)
-            insetsController.isAppearanceLightNavigationBars = true
+        if (isSurfaceColorLight) insetsController.isAppearanceLightNavigationBars = true
         navigationBarColor = Color.TRANSPARENT
     }
 
