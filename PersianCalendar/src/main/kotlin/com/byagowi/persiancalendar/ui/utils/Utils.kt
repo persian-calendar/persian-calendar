@@ -246,7 +246,7 @@ fun Window.makeWallpaperTransparency() {
     this.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 }
 
-// From https://stackoverflow.com/a/62483455 with some modification
+// From https://stackoverflow.com/a/76018821 with some modification
 fun Activity.transparentStatusAndNavigation(
     systemUiScrim: Int = Color.parseColor("#40000000") // 25% black
 ) {
@@ -254,7 +254,6 @@ fun Activity.transparentStatusAndNavigation(
     var statusBarColor = systemUiScrim
     //  Use a dark scrim by default since light nav bar is API 27+
     var navigationBarColor = systemUiScrim
-    val winParams = window.attributes
 
     val isPrimaryColorLight = ColorUtils.calculateLuminance(resolveColor(R.attr.colorAppBar)) > 0.5
     val isSurfaceColorLight = ColorUtils.calculateLuminance(
@@ -262,7 +261,6 @@ fun Activity.transparentStatusAndNavigation(
     ) > 0.5
 
     WindowCompat.setDecorFitsSystemWindows(window, false)
-
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         if (isPrimaryColorLight)
@@ -275,6 +273,7 @@ fun Activity.transparentStatusAndNavigation(
         navigationBarColor = Color.TRANSPARENT
     }
 
+    val winParams = window.attributes
     var flags = winParams.flags
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         flags = flags or
@@ -287,11 +286,9 @@ fun Activity.transparentStatusAndNavigation(
         window.statusBarColor = statusBarColor
         window.navigationBarColor = navigationBarColor
     }
-
     // We need a translucent status if icons are light themselves and app's drawer, which uses surface color, is opened
     if (!isPrimaryColorLight && isSurfaceColorLight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
         flags = flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-
     winParams.flags = flags
     window.attributes = winParams
 }
