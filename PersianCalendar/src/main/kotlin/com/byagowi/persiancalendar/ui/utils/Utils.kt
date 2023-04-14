@@ -278,18 +278,19 @@ fun Activity.transparentStatusAndNavigation(
             systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         window.decorView.systemUiVisibility = systemUiVisibility
     }
+    var flags = winParams.flags
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-        winParams.flags = winParams.flags or
+        flags = flags or
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
                 WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        winParams.flags = winParams.flags and
-                (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
-                        WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION).inv()
+        flags = flags and (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
+                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION).inv()
         window.statusBarColor = statusBarColor
         window.navigationBarColor = navigationBarColor
     }
+    winParams.flags = flags
 
     window.attributes = winParams
 }
