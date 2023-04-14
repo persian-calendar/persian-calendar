@@ -256,16 +256,18 @@ fun Activity.transparentStatusAndNavigation(
     var navigationBarColor = systemUiScrim
     val winParams = window.attributes
 
+    val isPrimaryColorLight = ColorUtils.calculateLuminance(resolveColor(R.attr.colorAppBar)) > 0.5
+    val isSurfaceColorLight = ColorUtils.calculateLuminance(
+        resolveColor(com.google.android.material.R.attr.colorSurface)
+    ) > 0.5
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (ColorUtils.calculateLuminance(resolveColor(R.attr.colorAppBar)) > 0.5)
-            systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        if (isPrimaryColorLight) systemUiVisibility =
+            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         statusBarColor = Color.TRANSPARENT
     }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        if (ColorUtils.calculateLuminance(
-                resolveColor(com.google.android.material.R.attr.colorSurface)
-            ) > 0.5
-        ) systemUiVisibility =
+        if (isSurfaceColorLight) systemUiVisibility =
             systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
         navigationBarColor = Color.TRANSPARENT
     }
@@ -290,7 +292,8 @@ fun Activity.transparentStatusAndNavigation(
         window.statusBarColor = statusBarColor
         window.navigationBarColor = navigationBarColor
     }
-    winParams.flags = flags
+    if (!isPrimaryColorLight && isSurfaceColorLight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        winParams.flags = flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
 
     window.attributes = winParams
 }
