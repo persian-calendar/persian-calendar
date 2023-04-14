@@ -471,7 +471,7 @@ enum class Language(val code: String, val nativeName: String) {
             "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
         )
         private val weekDaysInitialsInPersian = listOf7Items(
-            "ش", "ی", "د", "س", "چ", "و", "ج"
+            "ش", "ی", "د", "س", "چ", "پ", "ج"
         )
         private val weekDaysInitialsInEnglishIran = listOf7Items(
             "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo"
