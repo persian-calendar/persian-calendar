@@ -402,9 +402,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         private val blurs = if (
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && windowManager.isCrossWindowBlurEnabled
-        ) (0..4).map {
+        ) (0..10).map {
             if (it == 0) null
-            else RenderEffect.createBlurEffect(it * 6f, it * 6f, Shader.TileMode.CLAMP)
+            else RenderEffect.createBlurEffect(it * 3f, it * 3f, Shader.TileMode.CLAMP)
         } else emptyList()
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
