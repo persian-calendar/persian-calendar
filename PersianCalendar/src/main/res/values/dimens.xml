@@ -14,8 +14,6 @@
     <dimen name="grid_calendar_land_width">340sp</dimen>
     <dimen name="grid_calendar_padding_bottom">4sp</dimen>
 
-    <dimen name="item_calendar_margin_top">4dp</dimen>
-
     <dimen name="text_size_title">16sp</dimen>
     <dimen name="text_size_description">14sp</dimen>
     <dimen name="text_size_note">14sp</dimen>

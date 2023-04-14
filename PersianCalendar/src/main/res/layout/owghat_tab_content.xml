@@ -22,13 +22,11 @@
         android:layout_marginBottom="28dp"
         android:visibility="gone" />
 
-    <!-- Times -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/times"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/padding_item"
-        android:paddingBottom="@dimen/padding_item">
+        android:paddingTop="@dimen/padding_item">
 
         <com.byagowi.persiancalendar.ui.calendar.times.TimesFlow
             android:id="@+id/times_flow"
@@ -44,7 +42,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:orientation="horizontal">
 
