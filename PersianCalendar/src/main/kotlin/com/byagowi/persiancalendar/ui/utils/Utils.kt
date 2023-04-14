@@ -41,6 +41,7 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
@@ -249,7 +250,6 @@ fun Window.makeWallpaperTransparency() {
 fun Activity.transparentStatusAndNavigation(
     systemUiScrim: Int = Color.parseColor("#40000000") // 25% black
 ) {
-    var systemUiVisibility = 0
     // Use a dark scrim by default since light status is API 23+
     var statusBarColor = systemUiScrim
     //  Use a dark scrim by default since light nav bar is API 27+
@@ -261,25 +261,27 @@ fun Activity.transparentStatusAndNavigation(
         resolveColor(com.google.android.material.R.attr.colorSurface)
     ) > 0.5
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (isPrimaryColorLight) systemUiVisibility =
-            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-        statusBarColor = Color.TRANSPARENT
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        if (isSurfaceColorLight) systemUiVisibility =
-            systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-        navigationBarColor = Color.TRANSPARENT
-    }
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        systemUiVisibility = systemUiVisibility or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+        var systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        // Where it isn't broken
+        // Where it bottom appbar isn't unable to find its place
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
         window.decorView.systemUiVisibility = systemUiVisibility
     }
+
+    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (isPrimaryColorLight)
+            insetsController.isAppearanceLightStatusBars = true
+        statusBarColor = Color.TRANSPARENT
+    }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (isSurfaceColorLight)
+            insetsController.isAppearanceLightNavigationBars = true
+        navigationBarColor = Color.TRANSPARENT
+    }
+
     var flags = winParams.flags
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
         flags = flags or
@@ -293,7 +295,7 @@ fun Activity.transparentStatusAndNavigation(
         window.navigationBarColor = navigationBarColor
     }
 
-    // We need a translucent status if icon are light themselves and drawer, which uses surface color, is opened
+    // We need a translucent status if icons are light themselves and app's drawer, which uses surface color, is opened
     if (!isPrimaryColorLight && isSurfaceColorLight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
         winParams.flags = flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
 
