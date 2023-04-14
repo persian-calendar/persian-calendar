@@ -261,14 +261,7 @@ fun Activity.transparentStatusAndNavigation(
         resolveColor(com.google.android.material.R.attr.colorSurface)
     ) > 0.5
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-        var systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        // Where it bottom appbar isn't unable to find its place
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-            systemUiVisibility = systemUiVisibility or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-        window.decorView.systemUiVisibility = systemUiVisibility
-    }
+    WindowCompat.setDecorFitsSystemWindows(window, false)
 
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -297,8 +290,9 @@ fun Activity.transparentStatusAndNavigation(
 
     // We need a translucent status if icons are light themselves and app's drawer, which uses surface color, is opened
     if (!isPrimaryColorLight && isSurfaceColorLight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-        winParams.flags = flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
+        flags = flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
 
+    winParams.flags = flags
     window.attributes = winParams
 }
 

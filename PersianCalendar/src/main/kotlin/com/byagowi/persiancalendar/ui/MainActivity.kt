@@ -23,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.core.view.GravityCompat
+import androidx.core.view.WindowCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -210,6 +211,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             applyAppLanguage(this)
             update(applicationContext, true)
             settingHasChanged = false // reset for the next time
+        }
+
+        // Where it bottom appbar isn't unable to find its place
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            val decorFitsSystemWindows = when (destination.id) {
+                R.id.level, R.id.compass, R.id.deviceInformation -> true
+                else -> false
+            }
+            WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows)
         }
     }
 
