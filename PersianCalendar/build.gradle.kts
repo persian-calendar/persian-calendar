@@ -175,7 +175,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.10.0")
     val fragmentVersion = "1.5.2"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
