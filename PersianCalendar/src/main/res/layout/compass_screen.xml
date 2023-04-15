@@ -5,9 +5,19 @@
     android:layout_height="match_parent"
     android:background="?attr/colorAppBar">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorAppBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="?attr/appToolbarTheme"
+            app:popupTheme="?attr/appToolbarPopupTheme" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
@@ -19,14 +29,12 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSurface"
-            android:fitsSystemWindows="true">
+            android:background="?attr/colorSurface">
 
             <com.byagowi.persiancalendar.ui.compass.CompassView
                 android:id="@+id/compass_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="75dp" />
+                android:layout_height="match_parent" />
 
             <com.google.android.material.slider.Slider
                 android:id="@+id/time_slider"

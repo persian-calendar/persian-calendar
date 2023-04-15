@@ -5,9 +5,19 @@
     android:layout_height="match_parent"
     android:background="?attr/colorAppBar">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorAppBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="?attr/appToolbarTheme"
+            app:popupTheme="?attr/appToolbarPopupTheme" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.carousel.MaskableFrameLayout
         android:id="@+id/maskableFrameLayout"
@@ -31,7 +41,6 @@
                 android:id="@+id/level_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="75dp"
                 android:importantForAccessibility="no" />
 
         </FrameLayout>

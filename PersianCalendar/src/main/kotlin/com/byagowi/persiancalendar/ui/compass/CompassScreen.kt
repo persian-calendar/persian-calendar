@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.Surface
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
@@ -18,7 +19,10 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.byagowi.persiancalendar.BuildConfig
@@ -29,6 +33,7 @@ import com.byagowi.persiancalendar.databinding.CompassScreenBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.SensorEventAnnouncer
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -149,7 +154,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         val binding = CompassScreenBinding.bind(view)
         this.binding = binding
 
-        binding.appBar.toolbar.let { toolbar ->
+        binding.toolbar.let { toolbar ->
             toolbar.setTitle(R.string.compass)
             toolbar.subtitle = view.context.appPrefs.cityName ?: coordinates.value?.run {
                 formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
@@ -158,14 +163,14 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         }
 
         binding.bottomAppbar.menu.add(R.string.level).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_level)
+            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_level)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController().navigateSafe(CompassScreenDirections.actionCompassToLevel())
             }
         }
         binding.bottomAppbar.menu.add(R.string.map).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_map)
+            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_map)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 findNavController()
@@ -173,7 +178,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
             }
         }
         binding.bottomAppbar.menu.add(R.string.help).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_info_in_menu)
+            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_info_in_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             it.onClick {
                 showLongSnackbar(
@@ -186,13 +191,13 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         binding.fab.setOnClickListener { stopCompass(!stopped) }
 
         if (coordinates.value != null) {
-            binding.appBar.toolbar.menu.add(R.string.show_sun_and_moon_path_in_24_hours).also {
+            binding.toolbar.menu.add(R.string.show_sun_and_moon_path_in_24_hours).also {
                 it.icon =
-                    binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_in_24_hours)
+                    binding.toolbar.context.getCompatDrawable(R.drawable.ic_in_24_hours)
                 it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
                 it.onClick(::animateMoonAndSun)
             }
-            binding.appBar.toolbar.menu.add(R.string.true_north).also { menu ->
+            binding.toolbar.menu.add(R.string.true_north).also { menu ->
                 val prefs = binding.root.context.appPrefs
                 binding.compassView.isTrueNorth =
                     prefs.getBoolean(PREF_TRUE_NORTH_IN_COMPASS, false)
@@ -206,7 +211,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
                     }
                 }
             }
-            binding.appBar.toolbar.menu.add(R.string.qibla).also { menu ->
+            binding.toolbar.menu.add(R.string.qibla).also { menu ->
                 val prefs = binding.root.context.appPrefs
                 binding.compassView.isShowQibla = prefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
                 menu.isCheckable = true
@@ -221,7 +226,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
             }
         }
         if (BuildConfig.DEVELOPMENT) {
-            binding.appBar.toolbar.menu.add("Do a rotation").onClick {
+            binding.toolbar.menu.add("Do a rotation").onClick {
                 ValueAnimator.ofFloat(0f, 360f).also {
                     it.duration = TEN_SECONDS_IN_MILLIS
                     it.addUpdateListener { _ ->
@@ -244,7 +249,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         binding.timeSlider.addOnChangeListener { slider, value, fromUser ->
             val time = GregorianCalendar()
             time.add(Calendar.MINUTE, (value * 60f).roundToInt())
-            binding.appBar.toolbar.title =
+            binding.toolbar.title =
                 if (value == 0f || fromUser) slider.resources.getString(R.string.compass)
                 else Clock(time).toBasicFormatString()
             binding.compassView.setTime(time)
@@ -260,6 +265,23 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
                 stopAnimator = true
             }
         })
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
+            binding.bottomAppbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = insets.bottom
+            }
+            binding.fab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = insets.bottom
+            }
+            binding.compassView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = insets.bottom + 75.dp.toInt()
+            }
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun stopCompass(stop: Boolean) {

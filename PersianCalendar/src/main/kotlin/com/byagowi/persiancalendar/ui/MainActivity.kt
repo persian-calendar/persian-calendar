@@ -212,15 +212,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             update(applicationContext, true)
             settingHasChanged = false // reset for the next time
         }
-
-        // Where it bottom appbar isn't unable to find its place
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-            val decorFitsSystemWindows = when (destination.id) {
-                R.id.level, R.id.compass -> true
-                else -> false
-            }
-            WindowCompat.setDecorFitsSystemWindows(window, decorFitsSystemWindows)
-        }
     }
 
     private fun navigateTo(@IdRes id: Int) {
