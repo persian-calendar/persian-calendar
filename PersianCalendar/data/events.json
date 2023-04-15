@@ -1245,7 +1245,6 @@
     { "holiday": false, "month": 4, "day": 23, "title": "روز جهانی کتاب و حق مؤلف", "type": "International" },
     { "holiday": false, "month": 4, "day": 25, "title": "روز جهانی مالاریا", "type": "International" },
     { "holiday": false, "month": 4, "day": 27, "title": "روز جهانی گرافیک", "type": "International" },
-    { "holiday": false, "month": 4, "day": 28, "title": "روز جهانی روان‌شناس و مشاور", "type": "International" },
     { "holiday": false, "month": 5, "day": 3, "title": "روز جهانی آزادی مطبوعات", "type": "International" },
     { "holiday": false, "month": 5, "day": 12, "title": "روز جهانی پرستار", "type": "International" },
     { "holiday": false, "month": 5, "day": 15, "title": "روز جهانی خانواده", "type": "International" },
