@@ -380,4 +380,5 @@
     <string name="add_quick_settings_tile">افزودن کاشی تنظیمات سریع</string>
     <string name="true_north">شمال حقیقی</string>
     <string name="lock">قفل</string>
+    <string name="full_screen">تمام‌صفحه</string>
 </resources>

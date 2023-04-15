@@ -56,15 +56,22 @@ class LevelScreen : Fragment(R.layout.level_screen) {
             if (!findNavController().popBackStack(R.id.compass, false))
                 findNavController().navigateSafe(LevelScreenDirections.actionLevelToCompass())
         }
+        binding.maskableFrameLayout.shapeAppearanceModel =
+            ShapeAppearanceModel().withCornerSize(28.dp)
+        binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
+        binding.paddingFrameLayout.fitsSystemWindows = true
 
-        binding.appBar.toolbar.menu.add(R.string.lock).also { menuItem ->
-            binding.maskableFrameLayout.shapeAppearanceModel =
-                ShapeAppearanceModel().withCornerSize(28.dp)
-            binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
-            binding.paddingFrameLayout.fitsSystemWindows = true
-
+        binding.appBar.toolbar.menu.add("cm / in").also { menuItem ->
             val toolbarContext = binding.appBar.toolbar.context
-            menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_lock_open)
+            menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_sync_alt)
+            menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
+            menuItem.onClick {
+                binding.rulerView.cmInchFlip = !binding.rulerView.cmInchFlip
+            }
+        }
+        binding.appBar.toolbar.menu.add(getString(R.string.full_screen)).also { menuItem ->
+            val toolbarContext = binding.appBar.toolbar.context
+            menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_fullscreen)
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             var lock: PowerManager.WakeLock? = null
             menuItem.onClick {
@@ -101,11 +108,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 }
             }
         }
-        binding.levelView.setOnClickListener {
-            val lockCleanup = lockCleanup
-            if (lockCleanup != null) lockCleanup.invoke()
-            else binding.rulerView.cmInchFlip = !binding.rulerView.cmInchFlip
-        }
+        binding.levelView.setOnClickListener { lockCleanup?.invoke() }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener
             val stop = !provider.isListening
