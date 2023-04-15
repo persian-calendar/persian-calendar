@@ -8,7 +8,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
-import android.view.VelocityTracker
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withMatrix
@@ -16,14 +15,14 @@ import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
-import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
+import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.math.MathUtils
-import java.util.*
+import java.util.GregorianCalendar
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.hypot
@@ -93,17 +92,21 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             rotationalMinutesChange(velocity.toInt())
             invalidate()
         }
-    private var velocityTracker: VelocityTracker? = null
     private var rotationDirection = 0
+
+    private val flingDetector = createFlingDetector(context) { velocityX, velocityY ->
+        flingAnimation.setStartVelocity(rotationDirection * 2 * hypot(velocityX, velocityY))
+        true
+    }
 
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         parent?.requestDisallowInterceptTouchEvent(true)
         super.dispatchTouchEvent(event)
         if (mode != AstronomyMode.Earth || currentScale != 1f) return true
         val r = width / 2
+        flingDetector.onTouchEvent(event)
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                velocityTracker = VelocityTracker.obtain()
                 flingAnimation.cancel()
                 previousAngle = atan2(event.y - r, event.x - r)
                 rotationSpeed = if (hypot(event.x - r, event.y - r) > r / 2)
@@ -111,7 +114,6 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 else 39341 // 27.32 days in minutes, https://en.wikipedia.org/wiki/Orbit_of_the_Moon
             }
             MotionEvent.ACTION_MOVE -> {
-                velocityTracker?.addMovement(event)
                 val currentAngle = atan2(event.y - r, event.x - r)
                 val rawAngleChange = currentAngle - previousAngle
                 val angleChange =
@@ -125,16 +127,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 previousAngle = currentAngle
             }
             MotionEvent.ACTION_UP -> {
-                velocityTracker?.computeCurrentVelocity(1000)
-                flingAnimation.setStartVelocity(
-                    rotationDirection * 2 * hypot(
-                        velocityTracker?.xVelocity ?: 0f,
-                        velocityTracker?.yVelocity ?: 0f
-                    )
-                )
                 flingAnimation.start()
-                velocityTracker?.recycle()
-                velocityTracker = null
                 previousAngle = 0f
             }
         }

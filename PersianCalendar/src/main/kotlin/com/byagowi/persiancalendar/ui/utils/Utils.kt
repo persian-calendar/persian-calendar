@@ -15,8 +15,10 @@ import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Base64
 import android.util.TypedValue
+import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -299,4 +301,16 @@ fun prepareViewForRendering(view: View, width: Int, height: Int) {
         View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.AT_MOST)
     )
     view.layout(0, 0, width, height)
+}
+
+fun createFlingDetector(
+    context: Context, callback: (velocityX: Float, velocityY: Float) -> Boolean
+): GestureDetector {
+    class FlingListener : GestureDetector.SimpleOnGestureListener() {
+        override fun onFling(
+            e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float
+        ) = callback(velocityX, velocityY)
+    }
+
+    return GestureDetector(context, FlingListener())
 }

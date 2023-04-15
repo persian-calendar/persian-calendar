@@ -30,7 +30,6 @@ import android.util.AttributeSet
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.MotionEvent
-import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
@@ -87,6 +86,7 @@ import com.byagowi.persiancalendar.ui.SeasonsAdapter
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
+import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.createStatusIcon
@@ -461,30 +461,28 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
 
         private val lifecycle = activity.lifecycleScope
 
-        private var velocityTracker: VelocityTracker? = null
+        private val flingDetector = createFlingDetector(context) { velocityX, velocityY ->
+            horizontalFling.setStartVelocity(velocityX).start()
+            verticalFling.setStartVelocity(velocityY).start()
+            true
+        }
+
         override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+            flingDetector.onTouchEvent(event)
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    velocityTracker = VelocityTracker.obtain()
                     horizontalFling.cancel()
                     verticalFling.cancel()
                     previousX = event.x
                     previousY = event.y
                 }
+
                 MotionEvent.ACTION_MOVE -> {
-                    velocityTracker?.addMovement(event)
                     x.value += event.x - previousX
                     y.value += event.y - previousY
                     previousX = event.x
                     previousY = event.y
                     invalidate()
-                }
-                MotionEvent.ACTION_UP -> {
-                    velocityTracker?.computeCurrentVelocity(1000)
-                    horizontalFling.setStartVelocity(velocityTracker?.xVelocity ?: 0f).start()
-                    verticalFling.setStartVelocity(velocityTracker?.yVelocity ?: 0f).start()
-                    velocityTracker?.recycle()
-                    velocityTracker = null
                 }
             }
             return true
