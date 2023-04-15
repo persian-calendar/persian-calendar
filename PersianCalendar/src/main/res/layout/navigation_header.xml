@@ -7,10 +7,7 @@
     <com.google.android.material.carousel.MaskableFrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_margin="12dp"
         android:importantForAccessibility="noHideDescendants"
         app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
 
