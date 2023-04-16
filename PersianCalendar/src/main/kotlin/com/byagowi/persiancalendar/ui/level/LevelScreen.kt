@@ -123,14 +123,9 @@ class LevelScreen : Fragment(R.layout.level_screen) {
             binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top
             }
-            binding.bottomAppbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom
-            }
+            binding.bottomAppbar.updatePadding(bottom = insets.bottom)
             binding.fab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom
-            }
-            binding.rulerView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom
+                bottomMargin = insets.bottom / 2
             }
             binding.levelView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = if (insets.bottom != 0) insets.bottom + 75.dp.toInt() else 0
