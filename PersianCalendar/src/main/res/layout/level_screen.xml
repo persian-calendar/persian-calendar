@@ -62,15 +62,14 @@
         app:layout_anchor="@id/bottom_appbar"
         app:srcCompat="@drawable/ic_stop" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/exit_fullscreen"
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/exit_full_screen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
         android:layout_marginTop="80dp"
-        android:contentDescription="@string/exit_full_screen"
+        android:text="@string/exit_full_screen"
         android:visibility="invisible"
-        app:fabSize="mini"
-        app:srcCompat="@drawable/ic_fullscreen_exit" />
+        app:icon="@drawable/ic_fullscreen_exit" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

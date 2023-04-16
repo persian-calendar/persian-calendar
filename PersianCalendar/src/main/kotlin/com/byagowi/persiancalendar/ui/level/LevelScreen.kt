@@ -14,6 +14,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
+import androidx.core.view.postDelayed
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -29,7 +30,9 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
+import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.google.android.material.shape.ShapeAppearanceModel
+import kotlin.random.Random
 
 class LevelScreen : Fragment(R.layout.level_screen) {
 
@@ -86,7 +89,14 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 binding.toolbar.isVisible = false
                 binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
                 binding.paddingFrameLayout.updatePadding(top = 0)
-                binding.exitFullscreen.show()
+                binding.exitFullScreen.show()
+                binding.exitFullScreen.extend()
+                val exitToken = Random.nextInt()
+                binding.exitFullScreen.setTag("EXIT_TOKEN".hashCode(), exitToken)
+                binding.exitFullScreen.postDelayed(TWO_SECONDS_IN_MILLIS) {
+                    if (binding.exitFullScreen.getTag("EXIT_TOKEN".hashCode()) == exitToken)
+                        binding.exitFullScreen.shrink()
+                }
 
                 val windowInsetsController =
                     WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -100,7 +110,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                     binding.maskableFrameLayout.shapeAppearanceModel = defaultMask
                     binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
-                    binding.exitFullscreen.hide()
+                    binding.exitFullScreen.hide()
                     lock?.release()
                     lock = null
                     binding.bottomAppbar.performShow(true)
@@ -108,7 +118,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 }
             }
         }
-        binding.exitFullscreen.setOnClickListener { lockCleanup?.invoke() }
+        binding.exitFullScreen.setOnClickListener { lockCleanup?.invoke() }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener
             val stop = !provider.isListening
