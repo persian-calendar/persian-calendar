@@ -43,12 +43,11 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
-import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
-import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
+import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
@@ -349,8 +348,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             ActivityCompat.checkSelfPermission(
                 context, Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED &&
-            (PREF_NOTIFY_DATE !in context.appPrefs ||
-                    !context.appPrefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE))
+            PREF_NOTIFY_IGNORED !in context.appPrefs
         ) {
             calendarsView.buttonsBar.settings.setOnClickListener {
                 calendarsView.buttonsBar.root.isVisible = false
@@ -358,7 +356,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             }
             calendarsView.buttonsBar.discard.setOnClickListener {
                 calendarsView.buttonsBar.root.isVisible = false
-                context.appPrefs.edit { putBoolean(PREF_NOTIFY_DATE, false) }
+                context.appPrefs.edit { putBoolean(PREF_NOTIFY_IGNORED, true) }
             }
             calendarsView.buttonsBar.header.text = getString(R.string.enable_notification)
             calendarsView.buttonsBar.root.isVisible = true
