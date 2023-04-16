@@ -27,6 +27,7 @@ import androidx.core.content.edit
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.isVisible
+import androidx.core.view.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -258,6 +259,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             )
             it.onMonthSelected = { viewModel.changeSelectedMonth(it.selectedMonth) }
         }
+        binding.addEvent.setOnClickListener { addEventOnCalendar(viewModel.selectedDay.value) }
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedMonth
@@ -288,6 +290,11 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                     )
                     binding.viewPager.minimumHeight = tabs[position].second.measuredHeight
                 }
+
+                if (position == EVENTS_TAB) {
+                    binding.addEvent.show()
+                    binding.addEvent.postDelayed(TWO_SECONDS_IN_MILLIS) { binding.addEvent.shrink() }
+                } else binding.addEvent.hide()
             }
         })
 
