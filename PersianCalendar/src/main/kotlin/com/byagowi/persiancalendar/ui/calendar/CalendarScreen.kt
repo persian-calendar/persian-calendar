@@ -26,8 +26,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -80,6 +83,7 @@ import com.byagowi.persiancalendar.ui.common.CalendarsView
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
@@ -319,6 +323,14 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         binding.appBar.let { appBar ->
             appBar.toolbar.setupMenuNavigation()
             appBar.root.hideToolbarBottomShadow()
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.addEvent) { addEvent, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = insets.bottom + 20.dp.toInt()
+            }
+            WindowInsetsCompat.CONSUMED
         }
     }
 

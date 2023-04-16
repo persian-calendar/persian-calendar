@@ -58,8 +58,8 @@
         android:id="@+id/add_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="60dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="20dp"
         android:text="@string/add_event"
         android:visibility="gone"
         app:icon="@drawable/ic_add" />
