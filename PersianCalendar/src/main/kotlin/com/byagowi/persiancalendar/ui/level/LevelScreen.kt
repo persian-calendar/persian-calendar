@@ -142,6 +142,17 @@ class LevelScreen : Fragment(R.layout.level_screen) {
             }
             WindowInsetsCompat.CONSUMED
         }
+
+        // It could be animated but it doesn't look that smooth so skip for now
+        // val insetsCallback = object : WindowInsetsAnimationCompat.Callback(DISPATCH_MODE_STOP) {
+        //     override fun onProgress(
+        //         insets: WindowInsetsCompat,
+        //         runningAnimations: MutableList<WindowInsetsAnimationCompat>
+        //     ): WindowInsetsCompat {
+        //         return WindowInsetsCompat.CONSUMED
+        //     }
+        // }
+        // ViewCompat.setWindowInsetsAnimationCallback(binding.root, insetsCallback)
     }
 
     @SuppressLint("SourceLockedOrientationActivity")
