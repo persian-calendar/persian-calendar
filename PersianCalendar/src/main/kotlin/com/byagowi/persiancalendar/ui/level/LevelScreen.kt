@@ -32,7 +32,6 @@ import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.google.android.material.shape.ShapeAppearanceModel
-import kotlin.random.Random
 
 class LevelScreen : Fragment(R.layout.level_screen) {
 
@@ -90,12 +89,8 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
                 binding.paddingFrameLayout.updatePadding(top = 0)
                 binding.exitFullScreen.show()
-                binding.exitFullScreen.extend()
-                val exitToken = Random.nextInt()
-                binding.exitFullScreen.setTag("EXIT_TOKEN".hashCode(), exitToken)
                 binding.exitFullScreen.postDelayed(TWO_SECONDS_IN_MILLIS) {
-                    if (binding.exitFullScreen.getTag("EXIT_TOKEN".hashCode()) == exitToken)
-                        binding.exitFullScreen.shrink()
+                    binding.exitFullScreen.shrink()
                 }
 
                 val windowInsetsController =
