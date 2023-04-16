@@ -86,6 +86,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 binding.toolbar.isVisible = false
                 binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
                 binding.paddingFrameLayout.updatePadding(top = 0)
+                binding.exitFullscreen.show()
 
                 val windowInsetsController =
                     WindowCompat.getInsetsController(activity.window, activity.window.decorView)
@@ -99,6 +100,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                     binding.maskableFrameLayout.shapeAppearanceModel = defaultMask
                     binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
+                    binding.exitFullscreen.hide()
                     lock?.release()
                     lock = null
                     binding.bottomAppbar.performShow(true)
@@ -106,7 +108,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 }
             }
         }
-        binding.levelView.setOnClickListener { lockCleanup?.invoke() }
+        binding.exitFullscreen.setOnClickListener { lockCleanup?.invoke() }
         binding.fab.setOnClickListener {
             val provider = provider ?: return@setOnClickListener
             val stop = !provider.isListening

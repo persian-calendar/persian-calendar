@@ -385,6 +385,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="true_north">True north</string>
     <string name="lock">Lock</string>
     <string name="full_screen">Full Screen</string>
+    <string name="exit_full_screen">Exit Full Screen</string>
 
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s day</item>
