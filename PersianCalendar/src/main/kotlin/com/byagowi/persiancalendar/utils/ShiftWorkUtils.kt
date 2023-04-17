@@ -30,6 +30,7 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
 
     val title = shiftWorkTitles[type] ?: type
     return if (abbreviated && title.isNotEmpty())
-        title.substring(0, 1) + (if (language.isArabic) ZWJ else "")
+        title.split("/").joinToString("/") { it.trim().substring(0, 1) } +
+                (if (language.isArabic) ZWJ else "")
     else title
 }
