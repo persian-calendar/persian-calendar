@@ -15,6 +15,7 @@ import com.byagowi.persiancalendar.databinding.ShiftWorkItemBinding
 import com.byagowi.persiancalendar.databinding.ShiftWorkSettingsBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.entities.ShiftWorkRecord
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.shiftWorkTitles
 import com.byagowi.persiancalendar.global.spacedColon
@@ -118,7 +119,9 @@ private class ShiftWorkItemsAdapter(
                 editText.setAdapter(object : ArrayAdapter<String>(
                     context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item
                 ) {
-                    private val titles = shiftWorkTitles.values.toList()
+                    private val titles =
+                        shiftWorkTitles.values.toList() + language.additionalShiftWorkTitles
+
                     override fun getItem(position: Int) = titles[position]
                     override fun getCount(): Int = titles.size
                 })

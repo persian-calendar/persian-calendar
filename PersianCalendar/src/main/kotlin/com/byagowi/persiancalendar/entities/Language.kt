@@ -242,6 +242,12 @@ enum class Language(val code: String, val nativeName: String) {
             else -> setOf("6") // 6 means Friday
         }
 
+    val additionalShiftWorkTitles: List<String>
+        get() = when (this) {
+            FA -> listOf("مرخصی", "صبح/شب", "صبح/عصر", "عصر/شب")
+            else -> emptyList()
+        }
+
     fun getPersianMonths(context: Context): List<String> = when (this) {
         FA, EN_IR -> persianCalendarMonthsInPersian
         FA_AF -> persianCalendarMonthsInDari
