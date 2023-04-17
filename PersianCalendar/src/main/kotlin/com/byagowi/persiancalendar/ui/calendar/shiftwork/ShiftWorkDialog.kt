@@ -161,7 +161,7 @@ private class ShiftWorkItemsAdapter(
                         parent: AdapterView<*>, view: View, position: Int, id: Long
                     ) {
                         rows = rows.mapIndexed { i, x ->
-                            if (i == bindingAdapterPosition) ShiftWorkRecord(x.type, position)
+                            if (i == bindingAdapterPosition) ShiftWorkRecord(x.type, position + 1)
                             else x
                         }
                         updateShiftWorkResult()
@@ -169,7 +169,7 @@ private class ShiftWorkItemsAdapter(
                 }
 
             binding.addButton.setOnClickListener {
-                rows = rows + ShiftWorkRecord("r", 0)
+                rows = rows + ShiftWorkRecord("r", 1)
                 notifyItemInserted(bindingAdapterPosition)
                 notifyItemChanged(rows.size) // ensure the add button will be removed after a certain size
                 updateShiftWorkResult()
@@ -188,7 +188,7 @@ private class ShiftWorkItemsAdapter(
             val shiftWorkRecord = rows[position]
             binding.editTextParent.prefixText = "\n${formatNumber(position + 1)}$spacedColon"
             binding.editTextParent.prefixTextView.textSize = 12f
-            binding.lengthSpinner.setSelection(shiftWorkRecord.length)
+            binding.lengthSpinner.setSelection(shiftWorkRecord.length - 1)
             binding.editText.setText(shiftWorkKeyToString(shiftWorkRecord.type))
             binding.detail.isVisible = true
             binding.addButton.isVisible = false
