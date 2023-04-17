@@ -227,7 +227,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             view.updatePadding(bottom = insets.bottom)
-            WindowInsetsCompat.CONSUMED
+            windowInsets
         }
         return view
     }
