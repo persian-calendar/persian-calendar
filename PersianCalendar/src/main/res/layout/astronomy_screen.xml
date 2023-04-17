@@ -147,11 +147,11 @@
     </com.google.android.material.carousel.MaskableFrameLayout>
 
     <LinearLayout
+        android:id="@+id/slider_wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:padding="8dp">
 

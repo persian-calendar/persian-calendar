@@ -48,7 +48,7 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.PersianDate
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -277,6 +277,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
         ViewCompat.setOnApplyWindowInsetsListener(binding.contentRoot) { contentRoot, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             contentRoot.updatePadding(bottom = insets.bottom)
+            binding.sliderWrapper.updatePadding(bottom = insets.bottom)
             WindowInsetsCompat.CONSUMED
         }
 
