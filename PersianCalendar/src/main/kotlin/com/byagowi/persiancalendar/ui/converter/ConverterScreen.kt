@@ -5,7 +5,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -104,7 +107,13 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             viewModel.changeCalculatorInput(text?.toString() ?: "")
         }
 
-        binding.converterRoot.setupLayoutTransition()
+        binding.contentRoot.setupLayoutTransition()
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.contentRoot) { contentRoot, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            contentRoot.updatePadding(bottom = insets.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
 
         // Setup view model change listeners
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware

@@ -22,6 +22,9 @@ import androidx.core.os.postDelayed
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.text.scale
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -161,5 +164,11 @@ ${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
         val itemDecoration = DividerItemDecoration(context, layoutManager.orientation)
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.addItemDecoration(itemDecoration)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.recyclerView) { recyclerView, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            recyclerView.updatePadding(bottom = insets.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
     }
 }

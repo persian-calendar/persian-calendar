@@ -169,6 +169,7 @@ class DeviceInformationScreen : Fragment(R.layout.device_information_screen) {
                 topMargin = insets.top
             }
             binding.bottomNavigation.updatePadding(bottom = insets.bottom)
+            binding.recyclerView.updatePadding(bottom = insets.bottom)
             WindowInsetsCompat.CONSUMED
         }
     }

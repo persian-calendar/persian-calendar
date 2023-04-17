@@ -7,14 +7,20 @@ import android.media.RingtoneManager
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.forEach
+import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
@@ -210,5 +216,19 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         athanPreferenceCategory?.forEach {
             it.isVisible = it.isVisible && coordinates.value != null
         }
+    }
+
+    override fun onCreateRecyclerView(
+        inflater: LayoutInflater,
+        parent: ViewGroup,
+        savedInstanceState: Bundle?
+    ): RecyclerView {
+        val view = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
+        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(bottom = insets.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
+        return view
     }
 }
