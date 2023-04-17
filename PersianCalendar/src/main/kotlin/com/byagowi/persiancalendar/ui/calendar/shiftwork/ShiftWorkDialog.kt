@@ -112,7 +112,7 @@ private class ShiftWorkItemsAdapter(
 
             binding.lengthSpinner.adapter = ArrayAdapter(
                 context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-                (0..14).map(::formatNumber)
+                (1..14).map(::formatNumber)
             )
 
             binding.editText.also { editText ->
