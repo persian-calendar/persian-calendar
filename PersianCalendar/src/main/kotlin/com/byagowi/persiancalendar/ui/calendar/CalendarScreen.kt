@@ -91,6 +91,7 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HAND_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.calculatePrayTimes
@@ -296,7 +297,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
 
                 if (position == EVENTS_TAB) {
                     binding.addEvent.show()
-                    binding.addEvent.postDelayed(TWO_SECONDS_IN_MILLIS) { binding.addEvent.shrink() }
+                    binding.addEvent.postDelayed(THREE_SECONDS_AND_HAND_IN_MILLIS) {
+                        binding.addEvent.shrink()
+                    }
                 } else binding.addEvent.hide()
             }
         })

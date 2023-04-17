@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.FIFTEEN_MINUTES_IN_MILLIS
-import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HAND_IN_MILLIS
 import com.google.android.material.shape.ShapeAppearanceModel
 
 class LevelScreen : Fragment(R.layout.level_screen) {
@@ -89,7 +89,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
                 binding.paddingFrameLayout.updatePadding(top = 0)
                 binding.exitFullScreen.show()
-                binding.exitFullScreen.postDelayed(TWO_SECONDS_IN_MILLIS) {
+                binding.exitFullScreen.postDelayed(THREE_SECONDS_AND_HAND_IN_MILLIS) {
                     binding.exitFullScreen.shrink()
                 }
 
