@@ -5,8 +5,12 @@ import android.graphics.Matrix
 import android.os.Bundle
 import android.view.HapticFeedbackConstants
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.graphics.createBitmap
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -26,6 +30,7 @@ import com.byagowi.persiancalendar.ui.calendar.dialogs.showDayPickerDialog
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
@@ -37,7 +42,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Date
 import kotlin.math.abs
 import kotlin.math.absoluteValue
 
@@ -175,6 +180,17 @@ class MapScreen : Fragment(R.layout.map_screen) {
             binding.date.text = mapDraw.maskFormattedTime
             binding.timeBar.isVisible = mapDraw.maskFormattedTime.isNotEmpty()
             directPathButton.icon?.alpha = if (state.isDirectPathMode) 127 else 255
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.appBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
+            binding.timeBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = insets.bottom + 16.dp.toInt()
+            }
+            WindowInsetsCompat.CONSUMED
         }
 
         // Setup view model change listener

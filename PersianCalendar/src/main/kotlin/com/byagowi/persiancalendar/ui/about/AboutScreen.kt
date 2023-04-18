@@ -8,6 +8,7 @@ import android.text.util.Linkify
 import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.browser.customtabs.CustomTabsIntent
@@ -18,6 +19,7 @@ import androidx.core.text.scale
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -137,9 +139,12 @@ class AboutScreen : Fragment(R.layout.about_screen) {
 
         setupContributorsList(binding)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.contentRoot) { contentRoot, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            contentRoot.updatePadding(bottom = insets.bottom)
+            binding.contentRoot.updatePadding(bottom = insets.bottom)
+            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
             WindowInsetsCompat.CONSUMED
         }
     }

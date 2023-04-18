@@ -3,11 +3,13 @@ package com.byagowi.persiancalendar.ui.converter
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -109,9 +111,12 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
 
         binding.contentRoot.setupLayoutTransition()
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.contentRoot) { contentRoot, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            contentRoot.updatePadding(bottom = insets.bottom)
+            binding.contentRoot.updatePadding(bottom = insets.bottom)
+            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
             WindowInsetsCompat.CONSUMED
         }
 
@@ -130,6 +135,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                     enabledCalendars - selectedCalendarType
                                 )
                             }
+
                             ConverterScreenMode.Distance -> {
                                 binding.resultText.textDirection = View.TEXT_DIRECTION_INHERIT
                                 binding.resultText.text = calculateDaysDifference(
@@ -137,6 +143,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                     viewModel.secondSelectedDate.value, viewModel.calendar.value
                                 )
                             }
+
                             ConverterScreenMode.Calculator -> {
                                 binding.resultText.textDirection = View.TEXT_DIRECTION_LTR
                                 binding.resultText.text = runCatching {
@@ -169,6 +176,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.calendarsView.isVisible = true
                                 binding.resultCard.isVisible = true
                             }
+
                             ConverterScreenMode.Distance -> {
                                 binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
 
@@ -179,6 +187,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.calendarsView.isVisible = false
                                 binding.resultCard.isVisible = false
                             }
+
                             ConverterScreenMode.Calculator -> {
                                 binding.inputTextWrapper.isVisible = true
                                 binding.dayPickerView.isVisible = false

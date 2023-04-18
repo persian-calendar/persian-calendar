@@ -15,6 +15,7 @@ import androidx.core.util.lruCache
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isInvisible
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -274,10 +275,13 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
         binding.firstColumn.setupLayoutTransition()
         binding.secondColumn.setupLayoutTransition()
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.contentRoot) { contentRoot, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.contentRoot) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            contentRoot.updatePadding(bottom = insets.bottom)
+            binding.contentRoot.updatePadding(bottom = insets.bottom)
             binding.sliderWrapper.updatePadding(bottom = insets.bottom)
+            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
             WindowInsetsCompat.CONSUMED
         }
 

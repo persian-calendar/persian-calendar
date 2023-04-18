@@ -11,10 +11,10 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorAppBar"
-            android:fitsSystemWindows="true">
+            android:background="?attr/colorAppBar">
 
             <com.google.android.material.search.SearchBar
                 android:id="@+id/toolbar"
@@ -54,7 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="16dp"
-        android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:padding="8dp">
 

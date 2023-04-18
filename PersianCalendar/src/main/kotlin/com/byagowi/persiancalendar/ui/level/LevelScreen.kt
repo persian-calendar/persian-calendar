@@ -43,7 +43,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
         super.onViewCreated(view, savedInstanceState)
         setupRotationLock()
         val binding = LevelScreenBinding.bind(view)
-        binding.toolbar.also { toolbar ->
+        binding.appBar.toolbar.also { toolbar ->
             toolbar.setTitle(R.string.level)
             toolbar.setupUpNavigation()
         }
@@ -54,7 +54,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
             announcer.check(activity, isLevel, lockCleanup != null)
         }
         binding.bottomAppbar.menu.add(R.string.level).also {
-            it.icon = binding.toolbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
+            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             // If compass wasn't in backstack (level is brought from shortcut), navigate to it
@@ -62,18 +62,18 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 findNavController().navigateSafe(LevelScreenDirections.actionLevelToCompass())
         }
 
-        binding.toolbar.menu.add("cm / in").also { menuItem ->
-            val toolbarContext = binding.toolbar.context
+        binding.appBar.toolbar.menu.add("cm / in").also { menuItem ->
+            val toolbarContext = binding.appBar.toolbar.context
             menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_sync_alt)
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             menuItem.onClick {
                 binding.rulerView.cmInchFlip = !binding.rulerView.cmInchFlip
             }
         }
-        binding.toolbar.menu.add(getString(R.string.full_screen)).also { menuItem ->
+        binding.appBar.toolbar.menu.add(getString(R.string.full_screen)).also { menuItem ->
             val defaultMask = binding.maskableFrameLayout.shapeAppearanceModel
             binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
-            val toolbarContext = binding.toolbar.context
+            val toolbarContext = binding.appBar.toolbar.context
             menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_fullscreen)
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             var lock: PowerManager.WakeLock? = null
@@ -85,7 +85,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 lock?.acquire(FIFTEEN_MINUTES_IN_MILLIS)
 
                 binding.bottomAppbar.performHide(true)
-                binding.toolbar.isVisible = false
+                binding.appBar.toolbar.isVisible = false
                 binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
                 binding.paddingFrameLayout.updatePadding(top = 0)
                 binding.exitFullScreen.show()
@@ -101,7 +101,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 // TODO: We should fill the system status bar space also
 
                 lockCleanup = {
-                    binding.toolbar.isVisible = true
+                    binding.appBar.toolbar.isVisible = true
                     binding.maskableFrameLayout.shapeAppearanceModel = defaultMask
                     binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
@@ -125,7 +125,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top
             }
             binding.bottomAppbar.updatePadding(bottom = insets.bottom)

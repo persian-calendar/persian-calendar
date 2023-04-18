@@ -16,6 +16,7 @@ import android.text.SpannableString
 import android.text.style.ReplacementSpan
 import android.text.util.Linkify
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.os.postDelayed
@@ -24,6 +25,7 @@ import androidx.core.text.inSpans
 import androidx.core.text.scale
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -165,9 +167,12 @@ ${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
         binding.recyclerView.layoutManager = layoutManager
         binding.recyclerView.addItemDecoration(itemDecoration)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.recyclerView) { recyclerView, windowInsets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            recyclerView.updatePadding(bottom = insets.bottom)
+            binding.recyclerView.updatePadding(bottom = insets.bottom)
+            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
             WindowInsetsCompat.CONSUMED
         }
     }

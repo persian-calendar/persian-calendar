@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -18,6 +19,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -39,6 +43,7 @@ import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -97,6 +102,14 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         view.post {
             binding.viewPager.setCurrentItem(initiallySelectedTab, true)
             view.context.appPrefs.edit { putBoolean(PREF_HAS_EVER_VISITED, true) }
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.appBar.root) { appBar, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            appBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = insets.top
+            }
+            windowInsets
         }
     }
 

@@ -309,7 +309,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             viewModel.selectedTabIndex.value.coerceAtMost(tabs.size - 1),
             false
         )
-        setupMenu(binding.toolbar, binding.calendarPager)
+        setupMenu(binding.appBar.toolbar, binding.calendarPager)
 
         binding.root.post {
             binding.root.context.appPrefs.edit {
@@ -323,13 +323,13 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             bringDate(Jdn.today(), monthChange = false, highlight = false)
         }
 
-        binding.toolbar.setupMenuNavigation()
-        binding.appBar.hideToolbarBottomShadow()
+        binding.appBar.toolbar.setupMenuNavigation()
+        binding.appBar.root.hideToolbarBottomShadow()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             tabs.forEach { (_, view) -> view.updatePadding(bottom = insets.bottom) }
-            binding.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = insets.top
             }
             binding.addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -388,13 +388,14 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
     }
 
     private fun updateToolbar(binding: CalendarScreenBinding, date: AbstractDate) {
+        val toolbar = binding.appBar.toolbar
         val secondaryCalendar = secondaryCalendar
         if (secondaryCalendar == null) {
-            binding.toolbar.title = date.monthName
-            binding.toolbar.subtitle = formatNumber(date.year)
+            toolbar.title = date.monthName
+            toolbar.subtitle = formatNumber(date.year)
         } else {
-            binding.toolbar.title = language.my.format(date.monthName, formatNumber(date.year))
-            binding.toolbar.subtitle = monthFormatForSecondaryCalendar(date, secondaryCalendar)
+            toolbar.title = language.my.format(date.monthName, formatNumber(date.year))
+            toolbar.subtitle = monthFormatForSecondaryCalendar(date, secondaryCalendar)
         }
     }
 
