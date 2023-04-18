@@ -35,12 +35,16 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekStartOffset
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.GregorianCalendar
+import java.util.TimeZone
 import kotlin.math.abs
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
@@ -300,7 +304,13 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
         from.year != to.year -> listOf(from, to).joinToString(EN_DASH) {
             language.my.format(it.monthName, formatNumber(it.year))
         }
-        else -> language.my.format(from.monthName + EN_DASH + to.monthName, formatNumber(from.year))
+
+        else -> language.my.format(
+            (from.month..to.month).joinToString(EN_DASH) {
+                from.calendarType.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
+            },
+            formatNumber(from.year)
+        )
     }
 }
 
