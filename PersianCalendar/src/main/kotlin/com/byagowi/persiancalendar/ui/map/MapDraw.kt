@@ -112,6 +112,8 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
         context.getCompatDrawable(R.drawable.kaaba)
     }
 
+    var markersScale = 1f
+
     private fun drawMask(canvas: Canvas, matrixScale: Float) {
         when (currentMapType) {
             MapType.None -> Unit
@@ -119,10 +121,10 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 canvas.drawBitmap(maskMap, null, mapRect, null)
                 val scale = mapWidth / maskMap.width
                 solarDraw.simpleMoon(
-                    canvas, maskMoonX * scale, maskMoonY * scale, mapWidth * .02f * matrixScale
+                    canvas, maskMoonX * scale, maskMoonY * scale, mapWidth * .02f * matrixScale * markersScale
                 )
                 solarDraw.sun(
-                    canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale
+                    canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale * markersScale
                 )
             }
 
@@ -394,9 +396,9 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 val userX = (coordinates.longitude.toFloat() + 180) * mapScaleFactor
                 val userY = (90 - coordinates.latitude.toFloat()) * mapScaleFactor
                 pinDrawable.setBounds(
-                    (userX - 240 * scaleBack / 2).roundToInt(),
-                    (userY - 220 * scaleBack).roundToInt(),
-                    (userX + 240 * scaleBack / 2).roundToInt(),
+                    (userX - 240 * markersScale * scaleBack / 2).roundToInt(),
+                    (userY - 220 * markersScale * scaleBack).roundToInt(),
+                    (userX + 240 * markersScale * scaleBack / 2).roundToInt(),
                     userY.toInt()
                 )
                 pinDrawable.draw(this)

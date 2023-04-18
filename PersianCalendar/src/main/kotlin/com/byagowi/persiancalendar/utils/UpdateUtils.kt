@@ -391,6 +391,7 @@ private fun createMapRemoteViews(
         )
         else null
     val mapDraw = MapDraw(context, backgroundColor, foregroundColor)
+    mapDraw.markersScale = .75f
     mapDraw.updateMap(time, MapType.DayNight)
     val matrix = Matrix()
     matrix.setScale(size * 2f / mapDraw.mapWidth, size.toFloat() / mapDraw.mapHeight)
