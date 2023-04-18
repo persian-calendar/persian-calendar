@@ -6,9 +6,20 @@
     android:background="?attr/colorSurface"
     android:orientation="vertical">
 
-    <include
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorAppBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="?attr/appToolbarTheme"
+            app:popupTheme="?attr/appToolbarPopupTheme" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:layout_width="match_parent"
