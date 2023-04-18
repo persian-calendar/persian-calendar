@@ -2,12 +2,11 @@ package com.byagowi.persiancalendar.ui.common
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.GestureDetector
-import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.MotionEvent
 import android.view.View
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
+import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 
 open class BaseSlider(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     var enableVerticalSlider = false
@@ -23,46 +22,43 @@ open class BaseSlider(context: Context, attrs: AttributeSet? = null) : View(cont
             onScrollListener(0f, velocity / 10)
             invalidate()
         }
-    private val gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
-        var scrollStartX = 0f
-        var scrollStartY = 0f
 
-        override fun onDown(e: MotionEvent): Boolean {
-            scrollStartX = positionX.value
-            flingAnimationX.cancel()
-            if (enableVerticalSlider) {
-                scrollStartY = positionY.value
-                flingAnimationY.cancel()
+    private var scrollStartX = 0f
+    private var scrollStartY = 0f
+    private var previousX = 0f
+    private var previousY = 0f
+
+    private val flingDetector = createFlingDetector(context) { velocityX, velocityY ->
+        flingAnimationX.setStartVelocity(velocityX / 2).start()
+        if (enableVerticalSlider) flingAnimationY.setStartVelocity(velocityY / 2).start()
+        true
+    }
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        flingDetector.onTouchEvent(event)
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                scrollStartX = positionX.value
+                flingAnimationX.cancel()
+                if (enableVerticalSlider) {
+                    scrollStartY = positionY.value
+                    flingAnimationY.cancel()
+                }
+                previousX = event.x
+                previousY = event.y
             }
-            return true
-        }
 
-        override fun onScroll(
-            e1: MotionEvent,
-            e2: MotionEvent,
-            distanceX: Float,
-            distanceY: Float
-        ): Boolean {
-            positionX.value = e2.x - scrollStartX
-            if (enableVerticalSlider) positionY.value = e2.y - scrollStartY
-            onScrollListener(-distanceX, -distanceY)
-            invalidate()
-            return true
+            MotionEvent.ACTION_MOVE -> {
+                positionX.value = event.x - scrollStartX
+                if (enableVerticalSlider) positionY.value = event.y - scrollStartY
+                onScrollListener(previousX - event.x, previousY - event.y)
+                previousX = event.x
+                previousY = event.y
+                invalidate()
+            }
         }
-
-        override fun onFling(
-            e1: MotionEvent,
-            e2: MotionEvent,
-            velocityX: Float,
-            velocityY: Float
-        ): Boolean {
-            flingAnimationX.setStartVelocity(velocityX / 2).start()
-            if (enableVerticalSlider) flingAnimationY.setStartVelocity(velocityY / 2).start()
-            return true
-        }
-    })
-
-    override fun dispatchTouchEvent(event: MotionEvent) = gestureDetector.onTouchEvent(event)
+        return true
+    }
 
     fun smoothScrollBy(velocityX: Float, velocityY: Float) {
         flingAnimationX.setStartVelocity(velocityX).start()
