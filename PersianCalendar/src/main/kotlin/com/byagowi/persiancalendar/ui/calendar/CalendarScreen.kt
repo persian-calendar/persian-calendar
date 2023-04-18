@@ -335,6 +335,11 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             binding.addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = insets.bottom + 20.dp.toInt()
             }
+            val imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+            // Content root is only available in portrait mode
+            binding.contentRoot?.updatePadding(
+                bottom = (imeInsets.bottom - insets.bottom).coerceAtLeast(0)
+            )
             WindowInsetsCompat.CONSUMED
         }
     }
