@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
+import android.content.DialogInterface
 import android.text.InputFilter
 import android.view.View
 import android.view.ViewGroup
@@ -56,14 +57,19 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
     binding.recurs.setOnCheckedChangeListener { _, isChecked -> viewModel.changeRecurs(isChecked) }
     binding.root.onCheckIsTextEditor()
 
-    MaterialAlertDialogBuilder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .setPositiveButton(R.string.accept) { _, _ ->
             viewModel.changeShiftWorks(shiftWorkItemAdapter.rows)
             saveShiftWorkState(activity, viewModel)
         }
+        .setNeutralButton(R.string.add, null)
         .setNegativeButton(R.string.cancel, null)
         .show()
+
+    dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {
+        shiftWorkItemAdapter.add();
+    }
 }
 
 private class ShiftWorkItemsAdapter(
@@ -94,13 +100,20 @@ private class ShiftWorkItemsAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(position)
 
-    override fun getItemCount(): Int = rows.size + 1
+    override fun getItemCount(): Int = rows.size
 
     fun reset() {
         val previousSize = rows.size
         rows = emptyList()
         notifyItemRangeChanged(0, 2)
         if (previousSize > 1) notifyItemRangeRemoved(2, previousSize + 1)
+        updateShiftWorkResult()
+    }
+
+    fun add() {
+        rows = rows + ShiftWorkRecord("r", 1)
+        notifyItemInserted(rows.size - 1)
+        notifyItemChanged(rows.size) // ensure the add button will be removed after a certain size
         updateShiftWorkResult()
     }
 
@@ -167,13 +180,6 @@ private class ShiftWorkItemsAdapter(
                         updateShiftWorkResult()
                     }
                 }
-
-            binding.addButton.setOnClickListener {
-                rows = rows + ShiftWorkRecord("r", 1)
-                notifyItemInserted(bindingAdapterPosition)
-                notifyItemChanged(rows.size) // ensure the add button will be removed after a certain size
-                updateShiftWorkResult()
-            }
         }
 
         fun remove() {
@@ -191,10 +197,8 @@ private class ShiftWorkItemsAdapter(
             binding.lengthSpinner.setSelection(shiftWorkRecord.length - 1)
             binding.editText.setText(shiftWorkKeyToString(shiftWorkRecord.type))
             binding.detail.isVisible = true
-            binding.addButton.isVisible = false
         } else {
             binding.detail.isVisible = false
-            binding.addButton.isVisible = rows.size < 20
         }
     }
 }

@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textAlignment="center"
+        android:layout_marginBottom="8dp"
         android:textSize="12sp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -45,6 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/empty"
+        android:autofillHints=""
+        android:inputType=""
         android:visibility="gone" />
 
 </LinearLayout>
