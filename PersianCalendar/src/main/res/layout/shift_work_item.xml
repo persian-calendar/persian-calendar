@@ -27,34 +27,34 @@
                 android:id="@+id/edit_text"
                 android:layout_width="146dp"
                 android:layout_height="wrap_content"
-                    android:hint="@string/empty"
-                    android:inputType="textNoSuggestions"
-                    android:maxLines="1"
-                    android:padding="0dp" />
+                android:hint="@string/empty"
+                android:inputType="textNoSuggestions"
+                android:maxLines="1"
+                android:padding="0dp" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.carousel.MaskableFrameLayout>
+    </com.google.android.material.carousel.MaskableFrameLayout>
 
-        <Spinner
-            android:id="@+id/length_spinner"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:padding="0dp"
-            android:popupBackground="@drawable/popup_background" />
+    <Spinner
+        android:id="@+id/length_spinner"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:padding="0dp"
+        android:popupBackground="@drawable/popup_background" />
 
-        <LinearLayout
-            android:id="@+id/remove"
-            android:layout_width="48dp"
-            android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/remove"
+        android:layout_width="48dp"
+        android:layout_height="match_parent">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_vertical"
-                android:contentDescription="@string/remove"
-                app:srcCompat="@drawable/ic_remove_button" />
-
-        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/remove"
+            app:srcCompat="@drawable/ic_remove_button" />
 
     </LinearLayout>
+
+</LinearLayout>

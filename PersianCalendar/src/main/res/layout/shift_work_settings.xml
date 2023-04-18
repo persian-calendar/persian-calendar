@@ -29,9 +29,9 @@
         android:id="@+id/result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
         android:textAlignment="center"
-        android:layout_marginBottom="8dp"
         android:textSize="12sp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -45,8 +45,8 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/empty"
         android:autofillHints=""
+        android:hint="@string/empty"
         android:inputType=""
         android:visibility="gone" />
 

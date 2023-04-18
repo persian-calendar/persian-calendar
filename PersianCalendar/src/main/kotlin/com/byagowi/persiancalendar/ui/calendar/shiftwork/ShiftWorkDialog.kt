@@ -68,7 +68,7 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
         .show()
 
     dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {
-        shiftWorkItemAdapter.add();
+        shiftWorkItemAdapter.add()
     }
 }
 
