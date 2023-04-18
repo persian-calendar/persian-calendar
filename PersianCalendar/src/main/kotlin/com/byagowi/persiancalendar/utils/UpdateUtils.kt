@@ -96,7 +96,8 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.ShapeAppearancePathProvider
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.praytimes.PrayTimes
-import java.util.*
+import java.util.Date
+import java.util.GregorianCalendar
 import kotlin.math.min
 
 
@@ -705,6 +706,7 @@ private fun updateNotification(
                     deviceCalendarEvents = deviceCalendarEvents, withZodiac = true,
                     withOtherCalendars = true, withTitle = false
                 ) + if (owghat.isEmpty()) "" else spacedComma + owghat
+
                 subtitle.isEmpty() -> subtitle
                 else -> toPrepend + subtitle
             }

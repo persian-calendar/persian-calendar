@@ -8,7 +8,8 @@ import io.github.persiancalendar.praytimes.Coordinates
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import java.util.*
+import java.util.GregorianCalendar
+import java.util.TimeZone
 import kotlin.test.assertEquals
 
 class PrayTimeTests {

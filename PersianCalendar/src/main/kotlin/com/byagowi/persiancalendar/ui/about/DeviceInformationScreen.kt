@@ -74,7 +74,7 @@ import kotlinx.html.th
 import kotlinx.html.thead
 import kotlinx.html.tr
 import kotlinx.html.unsafe
-import java.util.*
+import java.util.Locale
 import kotlin.math.hypot
 
 /**

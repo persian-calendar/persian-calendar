@@ -46,7 +46,8 @@ import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
 

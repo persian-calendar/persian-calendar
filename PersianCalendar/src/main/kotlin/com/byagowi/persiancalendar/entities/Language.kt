@@ -17,7 +17,8 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.cosinekitty.astronomy.EclipseKind
 import io.github.persiancalendar.praytimes.CalculationMethod
-import java.util.*
+import java.util.Locale
+import java.util.TimeZone
 
 
 enum class Language(val code: String, val nativeName: String) {
@@ -384,7 +385,7 @@ enum class Language(val code: String, val nativeName: String) {
                     if (submethod.mode == "keyboard") {
                         val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                             submethod.languageTag
-                        } else submethod.locale
+                        } else @Suppress("DEPRECATION") submethod.locale
                         debugLog("Language: '$locale' is available in keyboards")
                         if (locale.isEmpty()) continue
                         val language = valueOfLanguageCode(locale)
