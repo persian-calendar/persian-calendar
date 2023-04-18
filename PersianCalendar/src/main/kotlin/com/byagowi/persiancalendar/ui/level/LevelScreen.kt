@@ -72,7 +72,8 @@ class LevelScreen : Fragment(R.layout.level_screen) {
         }
         binding.appBar.toolbar.menu.add(getString(R.string.full_screen)).also { menuItem ->
             val defaultMask = binding.maskableFrameLayout.shapeAppearanceModel
-            binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
+            val rulerNonFullScreenTopSpace = 25.dp.toInt()
+            binding.paddingFrameLayout.updatePadding(top = rulerNonFullScreenTopSpace)
             val toolbarContext = binding.appBar.toolbar.context
             menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_fullscreen)
             menuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
@@ -103,7 +104,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 lockCleanup = {
                     binding.appBar.toolbar.isVisible = true
                     binding.maskableFrameLayout.shapeAppearanceModel = defaultMask
-                    binding.paddingFrameLayout.updatePadding(top = 16.dp.toInt())
+                    binding.paddingFrameLayout.updatePadding(top = rulerNonFullScreenTopSpace)
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
                     binding.exitFullScreen.hide()
                     lock?.release()
