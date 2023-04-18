@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
 import android.content.DialogInterface
 import android.text.InputFilter
+import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -27,6 +28,7 @@ import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+
 
 fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
     val viewModel = ShiftWorkViewModel()
@@ -58,6 +60,7 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
     binding.recurs.isChecked = viewModel.recurs.value
     binding.recurs.setOnCheckedChangeListener { _, isChecked -> viewModel.changeRecurs(isChecked) }
     binding.root.onCheckIsTextEditor()
+    binding.result.movementMethod = ScrollingMovementMethod()
 
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
@@ -68,7 +71,6 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
         .setNeutralButton(R.string.add, null)
         .setNegativeButton(R.string.cancel, null)
         .show()
-
     val addButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull
     shiftWorkItemAdapter.addButton = addButton
     addButton?.setOnClickListener { shiftWorkItemAdapter.add() }
