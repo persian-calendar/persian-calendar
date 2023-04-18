@@ -115,6 +115,8 @@ private class ShiftWorkItemsAdapter(
         notifyItemInserted(rows.size - 1)
         notifyItemChanged(rows.size) // ensure the add button will be removed after a certain size
         updateShiftWorkResult()
+        // Scroll to button on addition
+        binding.recyclerView.scrollToPosition(rows.size - 1)
     }
 
     inner class ViewHolder(private val binding: ShiftWorkItemBinding) :
