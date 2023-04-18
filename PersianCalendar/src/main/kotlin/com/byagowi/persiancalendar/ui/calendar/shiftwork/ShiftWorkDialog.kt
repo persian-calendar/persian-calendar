@@ -60,7 +60,6 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
     binding.recurs.isChecked = viewModel.recurs.value
     binding.recurs.setOnCheckedChangeListener { _, isChecked -> viewModel.changeRecurs(isChecked) }
     binding.root.onCheckIsTextEditor()
-    binding.result.movementMethod = ScrollingMovementMethod()
 
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
