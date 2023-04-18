@@ -1,10 +1,11 @@
 package com.byagowi.persiancalendar.ui.about
 
-import androidx.appcompat.app.AlertDialog
+import android.content.DialogInterface
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EmailDialogBinding
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showEmailDialog(activity: FragmentActivity) {
@@ -18,7 +19,7 @@ fun showEmailDialog(activity: FragmentActivity) {
         .setNegativeButton(R.string.cancel, null)
         .show()
 
-    val positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+    val positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE).debugAssertNotNull
     positiveButton?.isEnabled = false
     emailBinding.inputText.doAfterTextChanged {
         positiveButton?.isEnabled = (it?.toString() ?: "").isNotBlank()
