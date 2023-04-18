@@ -13,7 +13,8 @@ import io.github.persiancalendar.praytimes.Coordinates
 import org.junit.jupiter.api.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
-import java.util.*
+import java.util.GregorianCalendar
+import java.util.TimeZone
 import kotlin.test.assertEquals
 
 class AstronomyTests {

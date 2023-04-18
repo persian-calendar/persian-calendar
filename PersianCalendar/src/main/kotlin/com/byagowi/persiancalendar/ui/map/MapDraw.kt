@@ -51,7 +51,8 @@ import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.cosinekitty.astronomy.searchRiseSet
 import io.github.persiancalendar.praytimes.Coordinates
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 import kotlin.math.absoluteValue
 import kotlin.math.acos
 import kotlin.math.atan2
@@ -124,8 +125,10 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                     canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale
                 )
             }
+
             MapType.MagneticInclination, MapType.MagneticDeclination, MapType.MagneticFieldStrength ->
                 canvas.drawBitmap(maskMap, null, mapRect, null)
+
             MapType.TimeZones -> canvas.drawPath(timezones, miscPaint)
             MapType.TectonicPlates -> canvas.drawPath(tectonicPlates, miscPaint)
             MapType.Yallop, MapType.Odeh ->
@@ -152,6 +155,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 maskMap.eraseColor(Color.TRANSPARENT)
                 writeDayNightMask(timeInMillis)
             }
+
             MapType.MagneticFieldStrength,
             MapType.MagneticDeclination,
             MapType.MagneticInclination -> {
@@ -159,6 +163,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 maskMap.eraseColor(Color.TRANSPARENT)
                 writeMagneticMap(timeInMillis, mapType)
             }
+
             MapType.Yallop, MapType.Odeh -> {
                 maskFormattedTime = formatDate(
                     Jdn(maskDateSink.toCivilDate()).toCalendar(mainCalendar),
@@ -167,6 +172,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 maskMapCrescentVisibility.eraseColor(Color.TRANSPARENT)
                 writeCrescentVisibilityMap(maskDateSink, mapType)
             }
+
             else -> Unit
         }
     }

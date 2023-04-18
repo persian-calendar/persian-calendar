@@ -20,7 +20,8 @@ import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 
 val enableWorkManager: Boolean get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O

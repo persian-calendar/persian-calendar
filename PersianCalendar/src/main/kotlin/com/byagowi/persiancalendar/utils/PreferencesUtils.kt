@@ -28,7 +28,7 @@ import com.byagowi.persiancalendar.generated.citiesStore
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.overrideCoordinatesGlobalVariable
 import io.github.persiancalendar.praytimes.Coordinates
-import java.util.*
+import java.util.Locale
 
 val Context.appPrefs: SharedPreferences get() = PreferenceManager.getDefaultSharedPreferences(this)
 
@@ -80,11 +80,13 @@ fun SharedPreferences.saveLanguage(language: Language) = edit {
             if (enabledHolidays.isEmpty || enabledHolidays.onlyIranHolidaysIsEnabled)
                 putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.afghanistanDefault)
         }
+
         language.isIranExclusive -> {
             val enabledHolidays = EventsRepository(this@saveLanguage, language, emptySet())
             if (enabledHolidays.isEmpty || enabledHolidays.onlyAfghanistanHolidaysIsEnabled)
                 putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.iranDefault)
         }
+
         language.isNepali -> {
             putStringSet(PREF_HOLIDAY_TYPES, EventsRepository.nepalDefault)
         }

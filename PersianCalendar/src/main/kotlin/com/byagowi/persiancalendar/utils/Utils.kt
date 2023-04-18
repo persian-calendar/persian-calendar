@@ -15,7 +15,7 @@ import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.PrayTimes
-import java.util.*
+import java.util.GregorianCalendar
 import kotlin.math.absoluteValue
 
 // .split() turns an empty string into an array with an empty string which is undesirable

@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.entities.CityItem
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.preferredDigits
-import java.util.*
+import java.util.Locale
 
 
 // Context preferably should be activity context not application

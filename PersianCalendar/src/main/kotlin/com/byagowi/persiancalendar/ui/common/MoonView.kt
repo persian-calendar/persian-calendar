@@ -13,7 +13,7 @@ import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
-import java.util.*
+import java.util.Calendar
 import kotlin.math.roundToInt
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {

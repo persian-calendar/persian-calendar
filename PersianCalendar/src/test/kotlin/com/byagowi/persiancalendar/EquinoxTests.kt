@@ -4,7 +4,9 @@ import io.github.cosinekitty.astronomy.seasons
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
+import java.util.TimeZone
 import kotlin.test.assertEquals
 
 class EquinoxTests {

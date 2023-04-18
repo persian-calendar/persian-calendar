@@ -28,7 +28,7 @@ import com.byagowi.persiancalendar.utils.getZodiacInfo
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import io.github.cosinekitty.astronomy.seasons
-import java.util.*
+import java.util.Date
 
 class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 

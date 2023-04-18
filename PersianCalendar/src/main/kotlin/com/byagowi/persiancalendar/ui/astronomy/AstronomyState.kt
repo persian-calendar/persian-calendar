@@ -26,7 +26,8 @@ import io.github.cosinekitty.astronomy.searchGlobalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLocalSolarEclipse
 import io.github.cosinekitty.astronomy.searchLunarEclipse
 import io.github.cosinekitty.astronomy.sunPosition
-import java.util.*
+import java.util.Date
+import java.util.GregorianCalendar
 
 class AstronomyState(val date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)

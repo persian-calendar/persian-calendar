@@ -755,11 +755,13 @@ fun showRotationalSpringDemoDialog(activity: FragmentActivity) {
                     radiusSpring.cancel()
                     rotationalSpring.cancel()
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     radius.value = hypot(event.x - centerX, event.y - centerY)
                     theta.value = atan2(event.y - centerY, event.x - centerX) * 180
                     invalidate()
                 }
+
                 MotionEvent.ACTION_UP -> {
                     radiusSpring.animateToFinalPosition(0f)
                     rotationalSpring.animateToFinalPosition(0f)
@@ -936,6 +938,7 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
                     previousX = event.x
                     previousY = event.y
                 }
+
                 MotionEvent.ACTION_MOVE -> {
                     x.value += event.x - previousX
                     y.value += event.y - previousY
@@ -943,6 +946,7 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
                     previousY = event.y
                     invalidate()
                 }
+
                 MotionEvent.ACTION_UP -> {
                     horizontalSpring.animateToFinalPosition(width / 2f)
                     verticalSpring.animateToFinalPosition(height / 2f)

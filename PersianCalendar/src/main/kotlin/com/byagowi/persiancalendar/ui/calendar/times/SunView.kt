@@ -28,7 +28,7 @@ import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
 import io.github.persiancalendar.praytimes.PrayTimes
-import java.util.*
+import java.util.GregorianCalendar
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sqrt

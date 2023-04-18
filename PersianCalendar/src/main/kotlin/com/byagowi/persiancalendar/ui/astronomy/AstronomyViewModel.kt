@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import java.util.*
+import java.util.GregorianCalendar
 import kotlin.math.roundToInt
 
 class AstronomyViewModel : ViewModel() {

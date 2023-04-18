@@ -13,7 +13,7 @@ import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.equator
 import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.sunPosition
-import java.util.*
+import java.util.GregorianCalendar
 
 class AstronomyState(observer: Observer, date: GregorianCalendar) {
     private val time = Time.fromMillisecondsSince1970(date.time.time)

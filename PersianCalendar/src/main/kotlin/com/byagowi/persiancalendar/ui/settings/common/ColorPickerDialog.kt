@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.util.*
+import java.util.Locale
 
 fun showColorPickerDialog(activity: FragmentActivity, isBackgroundPick: Boolean, key: String) {
     val initialColor = activity.appPrefs.getString(key, null)?.let(Color::parseColor)

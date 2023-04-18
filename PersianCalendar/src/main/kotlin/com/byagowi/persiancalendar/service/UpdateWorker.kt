@@ -12,7 +12,8 @@ import com.byagowi.persiancalendar.utils.DAY_IN_MILLIS
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.update
 import kotlinx.coroutines.coroutineScope
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 
 class UpdateWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {

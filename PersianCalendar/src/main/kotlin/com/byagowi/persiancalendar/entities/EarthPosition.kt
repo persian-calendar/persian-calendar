@@ -1,7 +1,7 @@
 package com.byagowi.persiancalendar.entities
 
 import android.location.Location
-import java.util.*
+import java.util.Locale
 import kotlin.math.PI
 import kotlin.math.asin
 import kotlin.math.atan2

@@ -46,7 +46,8 @@ import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.praytimes.PrayTimes
-import java.util.*
+import java.util.Calendar
+import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
@@ -164,8 +165,10 @@ private fun scheduleAlarm(context: Context, alarmTimeName: String, timeInMillis:
     when {
         Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1 ->
             am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+
         Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2 ->
             am.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
+
         else -> am.set(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 }

@@ -266,6 +266,7 @@ enum class Language(val code: String, val nativeName: String) {
             if (easternGregorianArabicMonths) easternGregorianCalendarMonths
             else gregorianCalendarMonths.map(context::getString)
         }
+
         else -> gregorianCalendarMonths.map(context::getString)
     }
 
@@ -330,6 +331,7 @@ enum class Language(val code: String, val nativeName: String) {
                 else -> null
             }
         }
+
         FA, FA_AF -> {
             when {
                 isSolar && type == EclipseKind.Annular -> "خورشیدگرفتگی حلقه‌ای"
@@ -341,6 +343,7 @@ enum class Language(val code: String, val nativeName: String) {
                 else -> null
             }
         }
+
         else -> null
     }
 
@@ -359,6 +362,7 @@ enum class Language(val code: String, val nativeName: String) {
                 FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
                 "en", EN_US.code ->
                     guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(context)
+
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
         }

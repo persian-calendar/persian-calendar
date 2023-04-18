@@ -7,7 +7,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import java.util.*
+import java.util.Date
 
 class MapViewModel : ViewModel() {
     private val _state = MutableStateFlow(MapState())

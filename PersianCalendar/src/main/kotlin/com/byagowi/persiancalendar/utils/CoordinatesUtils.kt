@@ -5,7 +5,7 @@ import android.location.Address
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.spacedColon
 import io.github.persiancalendar.praytimes.Coordinates
-import java.util.*
+import java.util.Locale
 import kotlin.math.abs
 
 fun formatCoordinate(context: Context, coordinates: Coordinates, separator: String) =

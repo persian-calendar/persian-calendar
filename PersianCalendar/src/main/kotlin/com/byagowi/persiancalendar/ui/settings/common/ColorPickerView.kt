@@ -49,7 +49,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.core.view.updatePadding
 import androidx.core.widget.doOnTextChanged
-import java.util.*
+import java.util.Locale
 
 class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {

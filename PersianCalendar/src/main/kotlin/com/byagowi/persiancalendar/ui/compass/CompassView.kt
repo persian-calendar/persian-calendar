@@ -28,7 +28,7 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.toObserver
-import java.util.*
+import java.util.GregorianCalendar
 import kotlin.math.cbrt
 import kotlin.math.min
 import kotlin.math.round

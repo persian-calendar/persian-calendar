@@ -22,7 +22,7 @@ import io.github.cosinekitty.astronomy.horizon
 import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.PersianDate
-import java.util.*
+import java.util.GregorianCalendar
 import kotlin.math.atan2
 
 // Based on Mehdi's work

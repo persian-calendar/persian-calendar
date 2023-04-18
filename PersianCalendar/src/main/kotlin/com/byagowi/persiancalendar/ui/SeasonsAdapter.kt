@@ -6,7 +6,7 @@ import com.byagowi.persiancalendar.databinding.SeasonItemBinding
 import com.byagowi.persiancalendar.entities.Season
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import java.util.*
+import java.util.Date
 
 class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder>() {
     class SeasonImageViewHolder(val binding: SeasonItemBinding) :
