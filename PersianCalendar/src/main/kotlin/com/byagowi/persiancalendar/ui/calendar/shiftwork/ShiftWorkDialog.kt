@@ -98,7 +98,7 @@ private class ShiftWorkItemsAdapter(
 
     fun reset() {
         val previousSize = rows.size
-        rows = listOf(ShiftWorkRecord("d", 0))
+        rows = emptyList()
         notifyItemRangeChanged(0, 2)
         if (previousSize > 1) notifyItemRangeRemoved(2, previousSize + 1)
         updateShiftWorkResult()
