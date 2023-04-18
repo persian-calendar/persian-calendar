@@ -18,6 +18,7 @@ import com.byagowi.persiancalendar.DEFAULT_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CLOCK
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_IN_24
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.PREF_ALTITUDE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
@@ -72,6 +73,7 @@ import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.util.TimeZone
 
 private val monthNameEmptyList = List(12) { "" }
 var persianMonths = monthNameEmptyList
@@ -227,6 +229,7 @@ fun updateStoredPreference(context: Context) {
     clockIn24 = prefs.getBoolean(PREF_WIDGET_IN_24, DEFAULT_WIDGET_IN_24)
     isForcedIranTimeEnabled = language.showIranTimeOption
             && prefs.getBoolean(PREF_IRAN_TIME, DEFAULT_IRAN_TIME)
+            && TimeZone.getDefault().id != IRAN_TIMEZONE_ID
     isNotifyDateOnLockScreen = prefs.getBoolean(
         PREF_NOTIFY_DATE_LOCK_SCREEN,
         DEFAULT_NOTIFY_DATE_LOCK_SCREEN
@@ -315,6 +318,7 @@ fun updateStoredPreference(context: Context) {
             amString = DEFAULT_AM
             pmString = DEFAULT_PM
         }
+
         else -> {
             amString = context.getString(R.string.am)
             pmString = context.getString(R.string.pm)
