@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Button
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.FragmentActivity
@@ -24,6 +25,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.formatDate
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
@@ -67,13 +69,15 @@ fun showShiftWorkDialog(activity: FragmentActivity, selectedJdn: Jdn) {
         .setNegativeButton(R.string.cancel, null)
         .show()
 
-    dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener {
-        shiftWorkItemAdapter.add()
-    }
+    val addButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull
+    shiftWorkItemAdapter.addButton = addButton
+    addButton?.setOnClickListener { shiftWorkItemAdapter.add() }
 }
 
 private class ShiftWorkItemsAdapter(
-    var rows: List<ShiftWorkRecord>, private val binding: ShiftWorkSettingsBinding
+    var rows: List<ShiftWorkRecord>,
+    private val binding: ShiftWorkSettingsBinding,
+    var addButton: Button? = null
 ) : RecyclerView.Adapter<ShiftWorkItemsAdapter.ViewHolder>() {
 
     init {
@@ -92,6 +96,7 @@ private class ShiftWorkItemsAdapter(
             binding.result.text = it
             binding.result.isVisible = it.isNotEmpty()
         }
+        addButton?.isEnabled = rows.size < 40
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
