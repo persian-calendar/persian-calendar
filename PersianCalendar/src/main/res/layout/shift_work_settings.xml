@@ -34,7 +34,7 @@
         android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:maxLines="1"
+        android:maxLines="2"
         android:textAlignment="center"
         android:textSize="12sp" />
 
