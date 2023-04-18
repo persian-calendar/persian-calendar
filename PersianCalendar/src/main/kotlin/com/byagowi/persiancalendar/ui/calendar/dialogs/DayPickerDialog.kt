@@ -31,6 +31,6 @@ fun showDayPickerDialog(
     val today = Jdn.today()
     val todayButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull
     todayButton?.setOnClickListener { dayPickerView.jdn = today }
-    todayButton.isVisible = jdn != today
-    dayPickerView.selectedDayListener = { todayButton.isVisible = it != today }
+    todayButton?.isVisible = jdn != today
+    dayPickerView.selectedDayListener = { todayButton?.isVisible = it != today }
 }
