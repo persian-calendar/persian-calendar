@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
+import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -120,6 +121,7 @@ import kotlin.math.absoluteValue
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
+import kotlin.math.floor
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.pow
@@ -531,6 +533,12 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
                 }
             }
         }
+    }
+    zoomableView.onClick = { x, y ->
+        val index = floor(x / cellSize).toInt() + floor(y / cellSize).toInt() * 18
+        val atomicNumber = elementsIndices.getOrNull(index)
+        val element = atomicNumber?.let { elements.getOrNull(it - 1) }
+        debugLog(element ?: "N/A")
     }
 
     MaterialAlertDialogBuilder(activity)
