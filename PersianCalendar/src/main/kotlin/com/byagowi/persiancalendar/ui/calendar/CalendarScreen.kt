@@ -326,19 +326,20 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         binding.appBar.toolbar.setupMenuNavigation()
         binding.appBar.root.hideToolbarBottomShadow()
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            tabs.forEach { (_, view) -> view.updatePadding(bottom = insets.bottom) }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            tabs.forEach { (_, view) -> view.updatePadding(bottom = systemBarsInsets.bottom) }
             binding.appBar.toolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = insets.top
+                topMargin = systemBarsInsets.top
             }
+            val allInsets =
+                insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
             binding.addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom + 20.dp.toInt()
+                bottomMargin = allInsets.bottom + 20.dp.toInt()
             }
-            val imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
             // Content root is only available in portrait mode
             binding.contentRoot?.updatePadding(
-                bottom = (imeInsets.bottom - insets.bottom).coerceAtLeast(0)
+                bottom = (allInsets.bottom - systemBarsInsets.bottom).coerceAtLeast(0)
             )
             WindowInsetsCompat.CONSUMED
         }
