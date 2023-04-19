@@ -17,6 +17,7 @@ import androidx.preference.TwoStatePreference
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
 import com.byagowi.persiancalendar.DEFAULT_WIDGET_CUSTOMIZATIONS
+import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.NON_HOLIDAYS_EVENTS_KEY
 import com.byagowi.persiancalendar.OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.OWGHAT_KEY
@@ -47,6 +48,7 @@ import com.byagowi.persiancalendar.ui.settings.switch
 import com.byagowi.persiancalendar.ui.settings.title
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.utils.appPrefs
+import java.util.TimeZone
 
 // Consider that it is used both in MainActivity and WidgetConfigurationActivity
 class WidgetNotificationFragment : PreferenceFragmentCompat(),
@@ -89,8 +91,11 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                 }
             }
             section(R.string.pref_widget) {
+                val isIranTimeVisible =
+                    (language.showIranTimeOption || mainCalendar == CalendarType.SHAMSI) &&
+                            TimeZone.getDefault().id != IRAN_TIMEZONE_ID
                 // Mark the rest of options as advanced
-                initialExpandedChildrenCount = 6
+                initialExpandedChildrenCount = 6 - if (isIranTimeVisible) 0 else 1
                 switch(PREF_WIDGETS_PREFER_SYSTEM_COLORS, Theme.isDynamicColor(activity.appPrefs)) {
                     title(R.string.widget_prefer_system_colors)
                     isVisible = Theme.isDynamicColor(activity.appPrefs)
@@ -128,7 +133,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                 switch(PREF_IRAN_TIME, false) {
                     title(R.string.iran_time)
                     summary(R.string.showing_iran_time)
-                    isVisible = language.showIranTimeOption || mainCalendar == CalendarType.SHAMSI
+                    isVisible = isIranTimeVisible
                 }
                 val widgetCustomizations = listOf(
                     OTHER_CALENDARS_KEY to R.string.widget_customization_other_calendars,
