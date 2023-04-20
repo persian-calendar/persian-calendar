@@ -14,12 +14,13 @@
         android:id="@+id/tab_layout"
         style="@style/TabLayoutColored"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="?attr/colorAppBar" />
 
     <com.google.android.material.carousel.MaskableFrameLayout
+        android:id="@+id/roundness_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/roundness_frame"
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <androidx.viewpager2.widget.ViewPager2
