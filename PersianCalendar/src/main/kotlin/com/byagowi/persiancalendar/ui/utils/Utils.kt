@@ -248,7 +248,7 @@ fun Window.makeWallpaperTransparency() {
     this.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 }
 
-class StatusAndNavigationTransparency(activity: Activity) {
+class SystemBarsTransparency(activity: Activity) {
     val isPrimaryColorLight = ColorUtils.calculateLuminance(
         activity.resolveColor(R.attr.colorAppBar)
     ) > 0.5
@@ -271,10 +271,10 @@ class StatusAndNavigationTransparency(activity: Activity) {
 }
 
 // From https://stackoverflow.com/a/76018821 with some modification
-fun Activity.transparentStatusAndNavigation() {
+fun Activity.transparentSystemBars() {
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
 
-    val transparencyState = StatusAndNavigationTransparency(this)
+    val transparencyState = SystemBarsTransparency(this)
     if (transparencyState.isPrimaryColorLight)
         insetsController.isAppearanceLightStatusBars = true
     if (transparencyState.isSurfaceColorLight)

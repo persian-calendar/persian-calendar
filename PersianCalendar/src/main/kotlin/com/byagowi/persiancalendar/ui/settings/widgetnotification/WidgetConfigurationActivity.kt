@@ -14,7 +14,7 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.makeWallpaperTransparency
-import com.byagowi.persiancalendar.ui.utils.transparentStatusAndNavigation
+import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.createSampleRemoteViews
@@ -43,7 +43,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
-        transparentStatusAndNavigation()
+        transparentSystemBars()
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseCallback)
 

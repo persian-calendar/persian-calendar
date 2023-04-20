@@ -70,12 +70,12 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
-import com.byagowi.persiancalendar.ui.utils.StatusAndNavigationTransparency
+import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
-import com.byagowi.persiancalendar.ui.utils.transparentStatusAndNavigation
+import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
 import com.byagowi.persiancalendar.utils.isRtl
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Theme.apply(this)
         applyAppLanguage(this)
         super.onCreate(savedInstanceState)
-        transparentStatusAndNavigation()
+        transparentSystemBars()
 
         onBackPressedDispatcher.addCallback(this, onBackPressedCloseDrawerCallback)
         initGlobal(this)
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 rightMargin = insets.right
             }
             binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                val transparencyState = StatusAndNavigationTransparency(this@MainActivity)
+                val transparencyState = SystemBarsTransparency(this@MainActivity)
                 topMargin = if (!transparencyState.shouldStatusBarTransparent) insets.top else 0
 
                 val isForcefulNavigationBarColorApplied =
