@@ -70,6 +70,7 @@ import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
+import com.byagowi.persiancalendar.ui.utils.StatusAndNavigationTransparency
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -188,14 +189,20 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 leftMargin = insets.left
                 rightMargin = insets.right
             }
-            if (// Where there is transparent navigation anyway
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                // Not a good way to detect not gesture navigation, 24dp vs normal, 48dp
-                insets.bottom > 36.dp
-            ) {
-                binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = insets.bottom
-                }
+            binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                val transparencyState = StatusAndNavigationTransparency(this@MainActivity)
+                topMargin = if (!transparencyState.shouldStatusBarTransparent) insets.top else 0
+
+                val isForcefulNavigationBarColorApplied =
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                            // This detects not presence of gesture navigation as it doesn't have
+                            // forceful color and this perhaps is an ugly way to detect that.
+                            // Gesture navigation height: 24dp. Other navigation height: 48dp
+                            insets.bottom > 36.dp
+                val shouldApplyBottomInset = isForcefulNavigationBarColorApplied ||
+                        // Or a non transparent color is applied to navigation
+                        !transparencyState.shouldNavigationBarTransparent
+                bottomMargin = if (shouldApplyBottomInset) insets.bottom else 0
             }
             binding.navigation.getHeaderView(0).updatePadding(top = insets.top)
             windowInsets
