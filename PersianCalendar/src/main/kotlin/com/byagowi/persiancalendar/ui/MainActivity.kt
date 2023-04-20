@@ -424,7 +424,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
         private fun slidingAnimation(drawerView: View, slideOffset: Float) {
             binding.navHostFragment.translationX =
-                slideOffset * drawerView.width.toFloat() * slidingDirection
+                slideOffset * drawerView.width.toFloat() * slidingDirection * .97f
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && blurs.isNotEmpty()) {
                 val blurIndex =
                     if (slideOffset.isNaN()) 0 else ((blurs.size - 1) * slideOffset).roundToInt()
