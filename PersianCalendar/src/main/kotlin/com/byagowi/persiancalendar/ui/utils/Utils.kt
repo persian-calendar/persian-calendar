@@ -259,15 +259,21 @@ class SystemBarsTransparency(activity: Activity) {
     private val isLightStatusBarCapabilityExist = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     private val isLightNavigationBarCapabilityExist = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
+    // Before Lollipop settings system bars color wasn't possible anyway
+    private val isSettingSystemBarsColorAvailable =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+
     // Either primary color, what we use behind above status icons, isn't light so we don't need to worry
     // about not being able to set isAppearanceLightStatusBars or let's check the sdk version so
     // we at least use isAppearanceLightStatusBars.
-    val shouldStatusBarTransparent = !isPrimaryColorLight || isLightStatusBarCapabilityExist
+    val shouldStatusBarTransparent =
+        (!isPrimaryColorLight || isLightStatusBarCapabilityExist) && isSettingSystemBarsColorAvailable
 
     // Either surface color, what we use behind below navigation icons, isn't light so we don't need to worry
     // about not being able to set isAppearanceLightNavigationBars or let's check the sdk version so
     // we at least use isAppearanceLightStatusBars.
-    val shouldNavigationBarTransparent = !isSurfaceColorLight || isLightNavigationBarCapabilityExist
+    val shouldNavigationBarTransparent =
+        (!isSurfaceColorLight || isLightNavigationBarCapabilityExist) && isSettingSystemBarsColorAvailable
 }
 
 // From https://stackoverflow.com/a/76018821 with some modification
