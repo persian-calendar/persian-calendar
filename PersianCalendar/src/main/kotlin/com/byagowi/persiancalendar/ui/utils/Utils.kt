@@ -248,30 +248,44 @@ fun Window.makeWallpaperTransparency() {
     this.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 }
 
-// From https://stackoverflow.com/a/76018821 with some modification
-fun Activity.transparentStatusAndNavigation(
-    systemUiScrim: Int = Color.parseColor("#40000000") // 25% black
-) {
-    // Use a dark scrim by default since light status is API 23+
-    var statusBarColor = systemUiScrim
-    //  Use a dark scrim by default since light nav bar is API 27+
-    var navigationBarColor = systemUiScrim
-
-    val isPrimaryColorLight = ColorUtils.calculateLuminance(resolveColor(R.attr.colorAppBar)) > 0.5
+class StatusAndNavigationTransparency(activity: Activity) {
+    val isPrimaryColorLight = ColorUtils.calculateLuminance(
+        activity.resolveColor(R.attr.colorAppBar)
+    ) > 0.5
     val isSurfaceColorLight = ColorUtils.calculateLuminance(
-        resolveColor(com.google.android.material.R.attr.colorSurface)
+        activity.resolveColor(com.google.android.material.R.attr.colorSurface)
     ) > 0.5
 
-    WindowCompat.setDecorFitsSystemWindows(window, false)
+    private val isLightStatusBarCapabilityExist = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    private val isLightNavigationBarCapabilityExist = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
+
+    // Either primary color, what we use behind above status icons, isn't light so we don't need to worry
+    // about not being able to set isAppearanceLightStatusBars or let's check the sdk version so
+    // we at least use isAppearanceLightStatusBars.
+    val shouldStatusBarTransparent = !isPrimaryColorLight || isLightStatusBarCapabilityExist
+
+    // Either surface color, what we use behind below navigation icons, isn't light so we don't need to worry
+    // about not being able to set isAppearanceLightNavigationBars or let's check the sdk version so
+    // we at least use isAppearanceLightStatusBars.
+    val shouldNavigationBarTransparent = !isSurfaceColorLight || isLightNavigationBarCapabilityExist
+}
+
+// From https://stackoverflow.com/a/76018821 with some modification
+fun Activity.transparentStatusAndNavigation() {
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        if (isPrimaryColorLight) insetsController.isAppearanceLightStatusBars = true
-        statusBarColor = Color.TRANSPARENT
-    } else if (!isPrimaryColorLight) statusBarColor = Color.TRANSPARENT
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        if (isSurfaceColorLight) insetsController.isAppearanceLightNavigationBars = true
-        navigationBarColor = Color.TRANSPARENT
-    } else if (!isSurfaceColorLight) navigationBarColor = Color.TRANSPARENT
+
+    val transparencyState = StatusAndNavigationTransparency(this)
+    if (transparencyState.isPrimaryColorLight)
+        insetsController.isAppearanceLightStatusBars = true
+    if (transparencyState.isSurfaceColorLight)
+        insetsController.isAppearanceLightNavigationBars = true
+
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    val systemUiScrim = Color.parseColor("#40000000") // 25% black
+    val statusBarColor =
+        if (transparencyState.shouldStatusBarTransparent) Color.TRANSPARENT else systemUiScrim
+    val navigationBarColor =
+        if (transparencyState.shouldNavigationBarTransparent) Color.TRANSPARENT else systemUiScrim
 
     val winParams = window.attributes
     var flags = winParams.flags
