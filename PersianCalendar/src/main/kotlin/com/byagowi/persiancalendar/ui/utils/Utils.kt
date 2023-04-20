@@ -267,11 +267,11 @@ fun Activity.transparentStatusAndNavigation(
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         if (isPrimaryColorLight) insetsController.isAppearanceLightStatusBars = true
         statusBarColor = Color.TRANSPARENT
-    }
+    } else if (!isPrimaryColorLight) statusBarColor = Color.TRANSPARENT
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         if (isSurfaceColorLight) insetsController.isAppearanceLightNavigationBars = true
         navigationBarColor = Color.TRANSPARENT
-    }
+    } else if (!isSurfaceColorLight) navigationBarColor = Color.TRANSPARENT
 
     val winParams = window.attributes
     var flags = winParams.flags
