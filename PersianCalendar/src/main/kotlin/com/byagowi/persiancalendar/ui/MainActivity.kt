@@ -189,9 +189,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 leftMargin = insets.left
                 rightMargin = insets.right
             }
+            val transparencyState = SystemBarsTransparency(this@MainActivity)
             binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                val transparencyState = SystemBarsTransparency(this@MainActivity)
-                topMargin = if (!transparencyState.shouldStatusBarTransparent) insets.top else 0
+                topMargin = if (transparencyState.shouldStatusBarTransparent) 0 else insets.top
 
                 val isForcefulNavigationBarColorApplied =
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
@@ -204,7 +204,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         !transparencyState.shouldNavigationBarTransparent
                 bottomMargin = if (shouldApplyBottomInset) insets.bottom else 0
             }
-            binding.navigation.getHeaderView(0).updatePadding(top = insets.top)
+            binding.navigation.getHeaderView(0).updatePadding(
+                top = if (transparencyState.shouldStatusBarTransparent) insets.top else 0
+            )
             windowInsets
         }
     }
