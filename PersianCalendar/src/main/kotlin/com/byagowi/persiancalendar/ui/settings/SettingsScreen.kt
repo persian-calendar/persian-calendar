@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.NumericBinding
 import com.byagowi.persiancalendar.databinding.SettingsScreenBinding
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.showCarouselDialog
@@ -54,6 +55,8 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.shape.CornerFamily
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.concurrent.TimeUnit
@@ -110,6 +113,13 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
                 topMargin = insets.top
             }
             windowInsets
+        }
+
+        if (!language.isArabicScript) {
+            binding.roundnessFrame.shapeAppearanceModel = ShapeAppearanceModel.Builder()
+                .setTopLeftCorner(CornerFamily.ROUNDED, 16.dp)
+                .setTopRightCorner(CornerFamily.ROUNDED, 16.dp)
+                .build()
         }
     }
 
