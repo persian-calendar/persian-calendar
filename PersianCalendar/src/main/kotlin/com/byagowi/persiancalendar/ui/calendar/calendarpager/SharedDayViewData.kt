@@ -10,6 +10,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.graphics.ColorUtils
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarDigits
@@ -31,7 +32,7 @@ class SharedDayViewData(
     val eventIndicatorRadius = diameter * 2 / 40
     private val eventIndicatorsGap = diameter * 2 / 40
     val eventIndicatorsCentersDistance = 2 * eventIndicatorRadius + eventIndicatorsGap
-    val scorpioSign = context.getString(R.string.scorpio).first()
+    val scorpioSign = context.getString(R.string.scorpio).first() + if (isArabicScript) ZWJ else ""
 
     val layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height.toInt())
 
