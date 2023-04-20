@@ -286,9 +286,6 @@ fun Activity.transparentStatusAndNavigation(
         window.statusBarColor = statusBarColor
         window.navigationBarColor = navigationBarColor
     }
-    // We need a translucent status if icons are light themselves and app's drawer, which uses surface color, is opened
-    if (!isPrimaryColorLight && isSurfaceColorLight && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
-        flags = flags or WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
     winParams.flags = flags
     window.attributes = winParams
 }
