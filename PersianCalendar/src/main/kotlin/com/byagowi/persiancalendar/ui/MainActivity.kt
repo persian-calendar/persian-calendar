@@ -188,6 +188,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 leftMargin = insets.left
                 rightMargin = insets.right
             }
+            if (// Where there is transparent navigation anyway
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+                // Not a good way to detect not gesture navigation, 24dp vs normal, 48dp
+                insets.bottom > 36.dp
+            ) {
+                binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = insets.bottom
+                }
+            }
             binding.navigation.getHeaderView(0).updatePadding(top = insets.top)
             windowInsets
         }
@@ -254,6 +263,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             LAST_CHOSEN_TAB_KEY -> return // don't run the expensive update and etc on tab changes
             PREF_ISLAMIC_OFFSET ->
                 prefs.edit { putJdn(PREF_ISLAMIC_OFFSET_SET_DATE, Jdn.today()) }
+
             PREF_SHOW_DEVICE_CALENDAR_EVENTS -> {
                 if (prefs.getBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, true) &&
                     ActivityCompat.checkSelfPermission(
@@ -261,6 +271,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                     ) != PackageManager.PERMISSION_GRANTED
                 ) askForCalendarPermission()
             }
+
             PREF_APP_LANGUAGE -> restartToSettings()
             PREF_NEW_INTERFACE -> restartToSettings()
             PREF_THEME -> {
@@ -269,12 +280,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 // from null => SystemDefault which makes no difference
                 if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
             }
+
             PREF_NOTIFY_DATE -> {
                 if (!prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {
                     stopService(Intent(this, ApplicationService::class.java))
                     startEitherServiceOrWorker(applicationContext)
                 }
             }
+
             PREF_EASTERN_GREGORIAN_ARABIC_MONTHS -> loadLanguageResources(this)
         }
 
@@ -299,6 +312,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
                 }
             }
+
             POST_NOTIFICATION_PERMISSION_REQUEST_CODE -> {
                 val isGranted = ActivityCompat.checkSelfPermission(
                     this, Manifest.permission.POST_NOTIFICATIONS
@@ -339,6 +353,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 binding.root.openDrawer(GravityCompat.START)
             true
         }
+
         else -> super.onKeyDown(keyCode, event)
     }
 
