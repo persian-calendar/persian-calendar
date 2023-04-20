@@ -51,7 +51,7 @@ open class BaseSlider(context: Context, attrs: AttributeSet? = null) : View(cont
             MotionEvent.ACTION_MOVE -> {
                 positionX.value = event.x - scrollStartX
                 if (enableVerticalSlider) positionY.value = event.y - scrollStartY
-                onScrollListener(previousX - event.x, previousY - event.y)
+                onScrollListener(event.x - previousX, event.y - previousY)
                 previousX = event.x
                 previousY = event.y
                 invalidate()
