@@ -60,6 +60,4 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <color name="shortcut_color">@android:color/system_accent1_800</color>
-
 </resources>

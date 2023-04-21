@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="shortcut_color">#00796b</color>
+
     <color name="ic_launcher_background">#26A69A</color>
 
     <color name="converter_spinner_background">#48888888</color>

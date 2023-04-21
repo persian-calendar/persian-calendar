@@ -281,6 +281,4 @@
 
     <style name="AppTextInputLayoutFilledBoxDenseExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu" />
 
-    <color name="shortcut_color">#00796b</color>
-
 </resources>
