@@ -2,6 +2,11 @@
 <resources>
     <color name="shortcut_color">#00796b</color>
 
+    <color name="splash_icon_color_1">#23a79b</color>
+    <color name="splash_icon_color_2">#2d6d68</color>
+    <color name="splash_icon_color_3">#00695c</color>
+    <color name="splash_icon_color_ribbon">#de2f14</color>
+
     <color name="ic_launcher_background">#26A69A</color>
 
     <color name="converter_spinner_background">#48888888</color>

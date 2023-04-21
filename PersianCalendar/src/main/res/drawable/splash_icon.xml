@@ -11,13 +11,13 @@
         android:scaleX=".60"
         android:scaleY=".60">
         <path
-            android:fillColor="#23a79b"
+            android:fillColor="@color/splash_icon_color_1"
             android:pathData="M301.033,298.187m-294.044,0a294.044,294.044 45,1 1,588.088 0a294.044,294.044 135,1 1,-588.088 0" />
         <path
-            android:fillColor="#2d6d68"
+            android:fillColor="@color/splash_icon_color_2"
             android:pathData="M292.2,4.3c162.4,-1 294.9,129.8 295.9,292.1S458.3,591.2 295.9,592.2" />
         <path
-            android:fillColor="#00695c"
+            android:fillColor="@color/splash_icon_color_3"
             android:pathData="M299.8,4.2c162.4,-0.9 294.8,130.1 295.6,292.4S465.3,591.2 302.9,592.1" />
         <group>
             <clip-path
@@ -46,7 +46,7 @@
         </group>
         <path
             android:name="ribbon"
-            android:fillColor="#de2f14"
+            android:fillColor="@color/splash_icon_color_ribbon"
             android:pathData="M64.7,123.4v52.9l46.4,34.9l46.2,-34.8V39.7C106.5,39.7 64.7,77.4 64.7,123.4z" />
         <path
             android:fillColor="#343434"
