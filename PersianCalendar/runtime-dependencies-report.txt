@@ -457,7 +457,7 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.7.21 -> 1.8.20 (*)
 |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 (*)
 +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 (*)
-+--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.0
++--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.1
 |    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10 -> 1.8.20 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10 -> 1.8.20
 +--- com.google.openlocationcode:openlocationcode:1.0.4
