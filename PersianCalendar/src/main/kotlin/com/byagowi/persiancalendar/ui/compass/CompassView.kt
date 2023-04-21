@@ -51,7 +51,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
 
     private val northwardShapePath = Path()
     private val northArrowPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.RED
+        it.color = ContextCompat.getColor(context, R.color.north_arrow)
         it.style = Paint.Style.FILL
     }
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
