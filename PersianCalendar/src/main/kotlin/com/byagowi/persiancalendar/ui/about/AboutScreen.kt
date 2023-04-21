@@ -1,6 +1,9 @@
 package com.byagowi.persiancalendar.ui.about
 
 import android.content.Intent
+import android.graphics.RenderEffect
+import android.graphics.RuntimeShader
+import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import android.text.SpannableString
@@ -41,6 +44,7 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.supportedYearOfIranCalendar
 import com.google.android.material.chip.Chip
+import kotlin.random.Random
 
 class AboutScreen : Fragment(R.layout.about_screen) {
 
@@ -94,11 +98,13 @@ class AboutScreen : Fragment(R.layout.about_screen) {
                 context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@also
             it.setImageDrawable(animation)
             animation.start()
-            val clickHandler = createEasterEggClickHandler(::showPeriodicTableDialog)
-            it.setOnClickListener {
+            val clickHandlerDialog = createEasterEggClickHandler(::showPeriodicTableDialog)
+            val clickHandlerIcon = createIconRandomEffects(it)
+            it.setOnClickListener { _ ->
                 animation.stop()
                 animation.start()
-                clickHandler(activity)
+                clickHandlerDialog(activity)
+                clickHandlerIcon()
             }
         }
 

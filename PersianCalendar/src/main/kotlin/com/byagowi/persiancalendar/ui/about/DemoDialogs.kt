@@ -14,6 +14,8 @@ import android.graphics.PorterDuff
 import android.graphics.RadialGradient
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.RenderEffect
+import android.graphics.RuntimeShader
 import android.graphics.Shader
 import android.graphics.SweepGradient
 import android.hardware.Sensor
@@ -114,6 +116,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.intellij.lang.annotations.Language
 import java.util.Locale
 import kotlin.math.PI
 import kotlin.math.abs
@@ -146,6 +149,65 @@ fun createEasterEggClickHandler(callback: (FragmentActivity) -> Unit): (Fragment
         }.onFailure(logException)
     }
 }
+
+fun createIconRandomEffects(view: View): () -> Unit {
+    var clickCount = 0
+    return {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            runCatching {
+                view.setRenderEffect(
+                    when (clickCount++ % 2) {
+                        0 -> {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                val colorShader = RuntimeShader(demoRenderEffect)
+                                colorShader.setFloatUniform("angle", Random.nextFloat())
+                                RenderEffect.createRuntimeShaderEffect(
+                                    colorShader, "content"
+                                )
+                            } else null
+                        }
+
+                        else -> {
+                            val r = Random.nextFloat() * 20
+                            RenderEffect.createBlurEffect(r, r, Shader.TileMode.CLAMP)
+                        }
+                    }
+                )
+            }.onFailure(logException).getOrNull()
+        }
+    }
+}
+
+@Language("AGSL")
+val demoRenderEffect = """
+uniform shader content;
+
+uniform float angle;
+
+// https://gist.github.com/983/e170a24ae8eba2cd174f
+half3 rgb2hsv(half3 c) {
+    half4 K = half4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+    half4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+    half4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+
+    float d = q.x - min(q.w, q.y);
+    float e = 1.0e-10;
+    return half3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+}
+
+half3 hsv2rgb(half3 c) {
+    half4 K = half4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    half3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+half4 main(float2 fragCoord) {
+    half4 color = content.eval(fragCoord);
+    half3 hsv = rgb2hsv(color.rgb);
+    hsv.x = mod(hsv.x + angle, 1);
+    return half4(hsv2rgb(hsv), color.a);
+}
+"""
 
 fun showHiddenUiDialog(activity: FragmentActivity) {
     val root = LinearLayout(activity)
