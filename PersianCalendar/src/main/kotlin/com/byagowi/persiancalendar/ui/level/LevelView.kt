@@ -118,6 +118,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
                 levelWidth = levelMaxDimension
                 levelHeight = levelMaxDimension
             }
+
             Orientation.TOP, Orientation.BOTTOM, Orientation.LEFT, Orientation.RIGHT -> {
                 levelWidth = canvasWidth - 2 * angleDisplay.displayGap
                 levelHeight = (levelWidth * LEVEL_ASPECT_RATIO).toInt()
@@ -141,6 +142,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         val displayY = when (newOrientation) {
             Orientation.LEFT, Orientation.RIGHT ->
                 (canvasHeight - canvasWidth) / 2 + canvasWidth - angleDisplay.displayGap
+
             else -> canvasHeight
         }
         angleDisplay.updatePlacement(middleX, displayY)
@@ -161,20 +163,22 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
             middleX + halfMarkerGap + markerThickness,
             middleY + halfMarkerGap + markerThickness
         )
-        x = (maxLevelX + minLevelX).toDouble() / 2
-        y = (maxLevelY + minLevelY).toDouble() / 2
     }
 
     fun setOrientation(
         newOrientation: Orientation, newPitch: Float, newRoll: Float, newBalance: Float
     ) {
-        if (orientation == null || orientation != newOrientation)
+        if (orientation == null || orientation != newOrientation) {
             onOrientationChange(newOrientation)
+            x = (maxLevelX + minLevelX) / 2.0
+            y = (maxLevelY + minLevelY) / 2.0
+        }
         when (orientation) {
             Orientation.TOP, Orientation.BOTTOM -> {
                 angle1 = abs(newBalance)
                 angleX = sin(Math.toRadians(newBalance.toDouble())) / MAX_SINUS
             }
+
             Orientation.LANDING -> {
                 angle2 = abs(newRoll)
                 angleX = sin(Math.toRadians(newRoll.toDouble())) / MAX_SINUS
@@ -184,6 +188,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     angle1 = 180 - angle1
                 }
             }
+
             Orientation.RIGHT, Orientation.LEFT -> {
                 angle1 = abs(newPitch)
                 angleY = sin(Math.toRadians(newPitch.toDouble())) / MAX_SINUS
@@ -191,6 +196,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     angle1 = 180 - angle1
                 }
             }
+
             else -> Unit
         }
         // correction des angles affiches
@@ -247,8 +253,10 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
         when (orientation) {
             Orientation.TOP, Orientation.BOTTOM ->
                 speedX = orientation.reverse * (angleX - posX) * viscosityValue
+
             Orientation.LEFT, Orientation.RIGHT ->
                 speedX = orientation.reverse * (angleY - posX) * viscosityValue
+
             Orientation.LANDING -> {
                 val posY = (2 * y - minLevelY - maxLevelY) / levelMinusBubbleHeight
                 speedX = (angleX - posX) * viscosityValue
