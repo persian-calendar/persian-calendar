@@ -26,7 +26,7 @@
     <string name="widget_name">Персидский календарь</string>
     <string name="outdated_app">Из-за того, что они устарели, вещи могут быть неточными</string>
     <string name="update">ОБНОВИТЬ</string>
-    <string name="device_calendar_does_not_support">Календарь устройства не поддерживает действие</string>
+    <string name="device_does_not_support">Календарь устройства не поддерживает действие</string>
     <string name="today">Сегодня</string>
     <string name="days_distance">Расстояние</string>
     <string name="start_of_year_diff">%1$s дней (~%2$s недель или %3$s месяцев) с начала года</string>

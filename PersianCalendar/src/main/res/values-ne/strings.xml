@@ -26,7 +26,7 @@
     <string name="about">बारे</string>
     <string name="exit">बाहिर निस्कनुहोस्</string>
     <string name="add_event">घटना थप्नुहोस्</string>
-    <string name="device_calendar_does_not_support">मोबाइलको क्यालेन्डरले कार्यलाई समर्थन गर्दैन</string>
+    <string name="device_does_not_support">मोबाइलको क्यालेन्डरले कार्यलाई समर्थन गर्दैन</string>
     <string name="today">आज</string>
     <string name="return_to_today">आज मा फर्कनुहोस्</string>
     <string name="goto_date">मिति मा जानुहोस्</string>

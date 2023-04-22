@@ -25,7 +25,7 @@
     <string name="exit">Salir</string>
     <!--Calendar-->
     <string name="add_event">Añadir evento</string>
-    <string name="device_calendar_does_not_support">El calendario del dispositivo no admite está acción</string>
+    <string name="device_does_not_support">El calendario del dispositivo no admite está acción</string>
     <string name="today">Hoy</string>
     <string name="return_to_today">Volver a Hoy</string>
     <string name="goto_date">Ir a fecha</string>

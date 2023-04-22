@@ -44,7 +44,7 @@
     <string name="calendar">Тақвим</string>
     <string name="settings">Танзимот</string>
     <string name="exit">Хуруҷ</string>
-    <string name="device_calendar_does_not_support">Тақвими дастгоҳ ин амалро дастгирӣ намекунад</string>
+    <string name="device_does_not_support">Тақвими дастгоҳ ин амалро дастгирӣ намекунад</string>
     <string name="today">Имрӯз</string>
     <string name="return_to_today">Бозгашт ба имрӯз</string>
     <string name="goto_date">Ба сана равед</string>

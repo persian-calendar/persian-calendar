@@ -132,7 +132,7 @@ class DeviceInformationScreen : Fragment(R.layout.device_information_screen) {
                 }.onFailure(logException).onFailure {
                     Snackbar.make(
                         binding.root,
-                        R.string.device_calendar_does_not_support,
+                        R.string.device_does_not_support,
                         Snackbar.LENGTH_SHORT
                     ).show()
                 }

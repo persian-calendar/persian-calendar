@@ -311,7 +311,7 @@
     <string name="goto_date">Belirli Bir Tarihe Git</string>
     <string name="return_to_today">Bugüne Dön</string>
     <string name="today">Bugün</string>
-    <string name="device_calendar_does_not_support">Aygıt Takvimi Bu Eylemi Desteklemiyor</string>
+    <string name="device_does_not_support">Aygıt Takvimi Bu Eylemi Desteklemiyor</string>
     <string name="add_event">Yeni Bir Etkinlik Ekle</string>
     <string name="exit">Çıkış</string>
     <string name="about">Hakkında</string>

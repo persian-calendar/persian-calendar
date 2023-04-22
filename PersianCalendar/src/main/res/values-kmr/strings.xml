@@ -44,7 +44,7 @@
     <string name="go">Here</string>
     <string name="goto_date">Here Dîrokê</string>
     <string name="today">Îro</string>
-    <string name="device_calendar_does_not_support">Rojhejmêra amûrê vî karî piştevanî nake</string>
+    <string name="device_does_not_support">Rojhejmêra amûrê vî karî piştevanî nake</string>
     <string name="add_event">Zêdekirina bûyerê</string>
     <string name="exit">Derkevtin</string>
     <string name="about">Derbare</string>

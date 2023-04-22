@@ -85,7 +85,7 @@
     <string name="show_device_calendar_events_summary">نمایش رویدادهای شخصی</string>
     <string name="show_device_calendar_events">رویدادهای شخصی</string>
     <string name="add_event">افزودن رویداد</string>
-    <string name="device_calendar_does_not_support">تقویم دستگاه از این کنش پشتیبانی نمی‌کند</string>
+    <string name="device_does_not_support">تقویم دستگاه از این کنش پشتیبانی نمی‌کند</string>
     <string name="customize_widget_summary">چه چیزهایی در ویجت‌ها و اعلان نمایش داده شوند</string>
     <string name="customize_widget">شخصی‌سازی ویجت‌ها و اعلان</string>
     <string name="add">افزودن</string>

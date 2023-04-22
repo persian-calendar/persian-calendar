@@ -24,7 +24,7 @@
     <string name="exit">خروج</string>
     <!--Calendar-->
     <string name="add_event">إضافة حدث جديد</string>
-    <string name="device_calendar_does_not_support">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
+    <string name="device_does_not_support">تطبيق التقويم الجهاز لا يدعم هذه عملية</string>
     <string name="today">اليوم</string>
     <string name="return_to_today">الرجوع إلى اليوم</string>
     <string name="goto_date">الذهاب إلى تاريخٍ معين</string>

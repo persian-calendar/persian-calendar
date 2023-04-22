@@ -20,7 +20,7 @@
     <string name="settings">设置</string>
     <string name="exit">退出</string>
     <string name="add_event">添加日程</string>
-    <string name="device_calendar_does_not_support">您的设备日历不支持此操作。</string>
+    <string name="device_does_not_support">您的设备日历不支持此操作。</string>
     <string name="today">今日</string>
     <string name="return_to_today">跳转到今日</string>
     <string name="goto_date">跳转到日期</string>

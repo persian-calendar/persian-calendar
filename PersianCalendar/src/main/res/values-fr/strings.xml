@@ -189,7 +189,7 @@
     <string name="goto_date">Aller à la date</string>
     <string name="return_to_today">Retour à aujourd’hui</string>
     <string name="today">Aujourd’hui</string>
-    <string name="device_calendar_does_not_support">Le calendrier du périphérique ne prend pas en charge l’action</string>
+    <string name="device_does_not_support">Le calendrier du périphérique ne prend pas en charge l’action</string>
     <string name="add_event">Ajouter un évènement</string>
     <string name="exit">Quitter</string>
     <string name="about">À propos</string>

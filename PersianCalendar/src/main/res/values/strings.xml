@@ -25,7 +25,7 @@
     <string name="exit">Exit</string>
     <!--Calendar-->
     <string name="add_event">Add event</string>
-    <string name="device_calendar_does_not_support">"Device calendar doesn't support the action"</string>
+    <string name="device_does_not_support">"The device doesn't support this action"</string>
     <string name="today">Today</string>
     <string name="return_to_today">Return to today</string>
     <string name="goto_date">Go to date</string>

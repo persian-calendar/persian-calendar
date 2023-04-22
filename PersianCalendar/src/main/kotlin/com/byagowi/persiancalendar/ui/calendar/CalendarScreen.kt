@@ -387,7 +387,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         ) activity.askForCalendarPermission() else {
             runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
                 Snackbar.make(
-                    view ?: return, R.string.device_calendar_does_not_support,
+                    view ?: return, R.string.device_does_not_support,
                     Snackbar.LENGTH_SHORT
                 ).also { it.considerSystemBarsInsets() }.show()
             }
@@ -448,7 +448,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 }.onFailure(logException).onFailure {
                     Snackbar.make(
                         textView,
-                        R.string.device_calendar_does_not_support,
+                        R.string.device_does_not_support,
                         Snackbar.LENGTH_SHORT
                     ).also { it.considerSystemBarsInsets() }.show()
                 }.let {}
