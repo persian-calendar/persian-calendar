@@ -165,7 +165,7 @@ fun createIconRandomEffects(view: View): () -> Unit {
                     RenderEffect.createBlurEffect(r, r, Shader.TileMode.CLAMP)
                 }
             )
-        }.onFailure(logException).getOrNull()
+        }.onFailure(logException)
     }
 }
 
