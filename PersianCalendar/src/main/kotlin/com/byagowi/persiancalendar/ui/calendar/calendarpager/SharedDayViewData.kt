@@ -26,9 +26,7 @@ class SharedDayViewData(
 ) {
 
     val isArabicScript = language.isArabicScript
-    val dayOffset = if (isArabicDigitSelected) 0f else 3.sp
     val circlesPadding = 1.dp
-    val headerYOffset = -diameter * 10 / 40
     val eventYOffset = diameter * 12 / 40
     val eventIndicatorRadius = diameter * 2 / 40
     private val eventIndicatorsGap = diameter * 2 / 40
@@ -70,10 +68,13 @@ class SharedDayViewData(
         it.color = widgetTextColor ?: context.resolveColor(R.attr.colorCurrentDay)
     }
 
-    private val textSize =
-        diameter * (if (mainCalendarDigits === Language.ARABIC_DIGITS) 18 else 25) / 40
-    private val headerTextSize = diameter / 40 *
-            (if (secondaryCalendarDigits === Language.ARABIC_DIGITS) 11 else 15)
+    private val mainCalendarDigitsIsArabic = mainCalendarDigits === Language.ARABIC_DIGITS
+    private val textSize = diameter * (if (mainCalendarDigitsIsArabic) 18 else 25) / 40
+    val dayOffset = if (mainCalendarDigitsIsArabic) 0f else 3.sp
+
+    private val secondaryCalendarDigitsIsArabic = secondaryCalendarDigits === Language.ARABIC_DIGITS
+    private val headerTextSize = diameter / 40 * (if (secondaryCalendarDigitsIsArabic) 11 else 15)
+    val headerYOffset = -diameter * (if (secondaryCalendarDigitsIsArabic) 10 else 7) / 40
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
