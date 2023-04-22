@@ -349,7 +349,7 @@
     <string name="show_sun_and_moon_path_in_24_hours">24 घण्टामा सूर्य र चन्द्र मार्ग देखाउनुहोस्</string>
     <string name="dhu_al_hijjah">धु उल हिज्जा</string>
     <string name="asr_hanafi_juristic">Hanafi Asr न्यायिक विधि</string>
-    <string name="widget_prefer_system_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
+    <string name="widget_prefer_device_colors">विजेटहरूमा प्रणाली रङ पालना गर्नुहोस्</string>
     <string name="nepal">नेपाल</string>
     <string name="calculator">क्यालकुलेटर</string>
 </resources>

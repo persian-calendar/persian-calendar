@@ -246,7 +246,7 @@
     <string name="autumn">秋分</string>
     <string name="winter">冬至</string>
     <string name="spring">春分</string>
-    <string name="widget_prefer_system_colors">小部件跟随系统配色</string>
+    <string name="widget_prefer_device_colors">小部件跟随系统配色</string>
     <string name="none">不使用</string>
     <plurals name="n_minutes">
         <item quantity="other">%1$s 分</item>

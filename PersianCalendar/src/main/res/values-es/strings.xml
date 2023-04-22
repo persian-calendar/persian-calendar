@@ -359,7 +359,7 @@
     <string name="high_latitudes_night_middle">Medianoche</string>
     <string name="widget_customization_other_calendars">Otros clendarios en widget 1x4 y 2x2</string>
     <string name="shift_work_off">Descanso</string>
-    <string name="widget_prefer_system_colors">Seguir el color del sistema en widgets</string>
+    <string name="widget_prefer_device_colors">Seguir el color del sistema en widgets</string>
     <string name="month_pray_times">Tiempos de oración del mes</string>
     <string name="high_latitudes_method">Método de latitudes altas</string>
     <string name="high_latitudes_one_seventh">Un séptimo</string>

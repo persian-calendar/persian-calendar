@@ -393,7 +393,7 @@
     </plurals>
     <string name="show_sun_and_moon_path_in_24_hours">عرض مسار الشمس والقمر في 24 ساعة</string>
     <string name="nepali_calendar_short">نيبالي</string>
-    <string name="widget_prefer_system_colors">اتبع تلوين النظام في المصغر</string>
+    <string name="widget_prefer_device_colors">اتبع تلوين النظام في المصغر</string>
     <string name="nepali_calendar">التقويم النيبالي</string>
     <string name="show_secondary_calendar">إظهار التقويم الثانوي</string>
     <string name="season">موسم</string>

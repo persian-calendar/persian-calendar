@@ -361,7 +361,7 @@
     <string name="pluto">Plüton</string>
     <string name="sun">Güneş</string>
     <string name="moon">Ay</string>
-    <string name="widget_prefer_system_colors">Widget Arka Plan Renklendirilsin</string>
+    <string name="widget_prefer_device_colors">Widget Arka Plan Renklendirilsin</string>
     <string name="high_latitudes_method">Yüksek Enlemler Alan Yöntemi</string>
     <string name="high_latitudes_night_middle">Gece Yarısı</string>
     <string name="high_latitudes_angle_based">Açı Tabanlı</string>

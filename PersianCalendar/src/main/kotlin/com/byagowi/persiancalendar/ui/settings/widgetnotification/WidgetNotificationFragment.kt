@@ -97,7 +97,7 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
                 // Mark the rest of options as advanced
                 initialExpandedChildrenCount = 6 - if (isIranTimeVisible) 0 else 1
                 switch(PREF_WIDGETS_PREFER_SYSTEM_COLORS, Theme.isDynamicColor(activity.appPrefs)) {
-                    title(R.string.widget_prefer_system_colors)
+                    title(R.string.widget_prefer_device_colors)
                     isVisible = Theme.isDynamicColor(activity.appPrefs)
                 }
                 clickable(onClick = {

@@ -342,7 +342,7 @@
     <string name="nepali_calendar_short">نیپالی</string>
     <string name="season">وەرز</string>
     <string name="show_secondary_calendar">ڕۆژژمێری لاوەکی نیشان بدە</string>
-    <string name="widget_prefer_system_colors">شوێنکەوتنی ڕەنگکاریی سیستەم لە ویجیتەکاندا</string>
+    <string name="widget_prefer_device_colors">شوێنکەوتنی ڕەنگکاریی سیستەم لە ویجیتەکاندا</string>
     <string name="enable_new_interface">چالاککردنی ڕووکاری نوێ</string>
     <string name="calculator">حسێبکەر</string>
     <string name="asr_hanafi_juristic">شێوازی نوێژی ئێوارەی حەنەفی</string>

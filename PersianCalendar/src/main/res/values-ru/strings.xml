@@ -215,7 +215,7 @@
     <string name="high_latitudes_night_middle">Середина ночи</string>
     <string name="none">Никто</string>
     <string name="show_sun_and_moon_path_in_24_hours">Показать путь Солнца и Луны за 24 часа</string>
-    <string name="widget_prefer_system_colors">Следите за раскраской системы в виджетах</string>
+    <string name="widget_prefer_device_colors">Следите за раскраской системы в виджетах</string>
     <string name="nepali_calendar">Непале Календарь</string>
     <string name="high_latitudes_one_seventh">Одна седьмая</string>
     <string name="summer">Лето</string>
