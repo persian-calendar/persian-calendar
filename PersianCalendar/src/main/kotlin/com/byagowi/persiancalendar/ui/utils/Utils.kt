@@ -44,7 +44,10 @@ import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -61,6 +64,7 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import java.io.ByteArrayOutputStream
 import java.io.File
 
@@ -308,6 +312,14 @@ fun Activity.transparentSystemBars() {
     }
     winParams.flags = flags
     window.attributes = winParams
+}
+
+fun Snackbar.considerSystemBarsInsets() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return // not needed in 30 >=
+    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        // Not the best way but setOnApplyWindowInsetsListener refuses to give the value
+        bottomMargin = (48 + 8).dp.toInt()
+    }
 }
 
 fun prepareViewForRendering(view: View, width: Int, height: Int) {

@@ -73,6 +73,7 @@ import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.SystemBarsTransparency
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.bringMarketPage
+import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
@@ -395,6 +396,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         Snackbar.make(
             binding.root, "✖  Change app language?", Snackbar.LENGTH_INDEFINITE
         ).also {
+            it.considerSystemBarsInsets()
             it.view.layoutDirection = View.LAYOUT_DIRECTION_LTR
             it.view.setOnClickListener { _ -> it.dismiss() }
             it.setAction("Settings") {
@@ -411,6 +413,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     fun showAppIsOutDatedSnackbar() = Snackbar.make(
         binding.root, getString(R.string.outdated_app), 10000
     ).also {
+        it.considerSystemBarsInsets()
         it.setAction(getString(R.string.update)) { bringMarketPage() }
         it.setActionTextColor(ContextCompat.getColor(it.context, R.color.dark_accent))
     }.show()

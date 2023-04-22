@@ -48,6 +48,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
 import com.byagowi.persiancalendar.databinding.DeviceInformationScreenBinding
+import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
@@ -517,7 +518,9 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
             activity.copyToClipboard(deviceInformationItems[bindingAdapterPosition].content) {
                 val view = activity.findViewById<View?>(android.R.id.content).debugAssertNotNull
                     ?: return@copyToClipboard
-                Snackbar.make(view, it, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(view, it, Snackbar.LENGTH_SHORT).also { snackBar ->
+                    snackBar.considerSystemBarsInsets()
+                }.show()
             }
         }
     }
