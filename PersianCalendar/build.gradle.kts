@@ -111,7 +111,7 @@ android {
         }
     }
 
-    packagingOptions {
+    packaging {
         resources.excludes += "DebugProbesKt.bin"
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
