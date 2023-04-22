@@ -31,9 +31,9 @@ fun Coordinates.calculatePrayTimes(
     val year = calendar[GregorianCalendar.YEAR]
     val month = calendar[GregorianCalendar.MONTH] + 1
     val day = calendar[GregorianCalendar.DAY_OF_MONTH]
-    val offset = (calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0)).let {
-        if (it == 4.5 && calendar.timeZone.id == IRAN_TIMEZONE_ID) 3.5 else it
-    }
+    val offset = (calendar.timeZone.getOffset(calendar.time.time) / (60 * 60 * 1000.0))
+        // This turns GMT+4:30 to GMT+3:30 as Iran has abandoned summer but older devices aren't unaware
+        .let { if (it == 4.5 && calendar.timeZone.id == IRAN_TIMEZONE_ID) 3.5 else it }
     return PrayTimes(
         calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod
     )
