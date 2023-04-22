@@ -75,7 +75,6 @@ abstract class CodeGenerators : DefaultTask() {
             projectDir / "shaders" / "common.vert" to "commonVertexShader",
             projectDir / "shaders" / "globe.frag" to "globeFragmentShader",
             projectDir / "shaders" / "sandbox.frag" to "sandboxFragmentShader",
-            projectDir / "shaders" / "demo.frag" to "demoRuntimeShader",
         ).forEach { (textFile, fieldName) ->
             builder.addProperty(
                 PropertySpec.builder(fieldName, String::class, KModifier.CONST)
