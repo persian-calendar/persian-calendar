@@ -1,11 +1,13 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -46,11 +48,13 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         val viewModel by viewModels<ConverterViewModel>()
         binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
 
-        val spinner = run {
+        val spinner = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val toolbarContext = binding.appBar.toolbar.context
             val spinnerBinding = ConverterSpinnerBinding.inflate(toolbarContext.layoutInflater)
             binding.appBar.toolbar.addView(spinnerBinding.root)
             spinnerBinding.spinner
+        } else Spinner(binding.appBar.toolbar.context).also {
+            binding.appBar.toolbar.addView(it)
         }
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
