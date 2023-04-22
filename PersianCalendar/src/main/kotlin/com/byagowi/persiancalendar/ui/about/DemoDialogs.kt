@@ -151,44 +151,35 @@ fun createEasterEggClickHandler(callback: (FragmentActivity) -> Unit): (Fragment
 }
 
 fun createIconRandomEffects(view: View): () -> Unit {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return {}
     var clickCount = 0
     return {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            runCatching {
-                view.setRenderEffect(
-                    when (clickCount++ % 2) {
-                        0 -> {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                val colorShader = RuntimeShader(demoRenderEffect)
-                                colorShader.setFloatUniform("angle", Random.nextFloat())
-                                RenderEffect.createRuntimeShaderEffect(
-                                    colorShader, "content"
-                                )
-                            } else null
-                        }
-
-                        else -> {
-                            val r = Random.nextFloat() * 20
-                            RenderEffect.createBlurEffect(r, r, Shader.TileMode.CLAMP)
-                        }
-                    }
-                )
-            }.onFailure(logException).getOrNull()
-        }
+        runCatching {
+            view.setRenderEffect(
+                if (clickCount++ % 2 == 0) {
+                    val colorShader = RuntimeShader(colorShiftEffect)
+                    colorShader.setFloatUniform("colorShift", Random.nextFloat())
+                    RenderEffect.createRuntimeShaderEffect(colorShader, "content")
+                } else {
+                    val r = Random.nextFloat() * 30
+                    RenderEffect.createBlurEffect(r, r, Shader.TileMode.CLAMP)
+                }
+            )
+        }.onFailure(logException).getOrNull()
     }
 }
 
 @Language("AGSL")
-val demoRenderEffect = """
+private const val colorShiftEffect = """
 uniform shader content;
 
-uniform float angle;
+uniform float colorShift;
 
 // https://gist.github.com/983/e170a24ae8eba2cd174f
 half3 rgb2hsv(half3 c) {
     half4 K = half4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
-    half4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
-    half4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+    half4 p = mix(half4(c.bg, K.wz), half4(c.gb, K.xy), step(c.b, c.g));
+    half4 q = mix(half4(p.xyw, c.r), half4(c.r, p.yzx), step(p.x, c.r));
 
     float d = q.x - min(q.w, q.y);
     float e = 1.0e-10;
@@ -204,7 +195,7 @@ half3 hsv2rgb(half3 c) {
 half4 main(float2 fragCoord) {
     half4 color = content.eval(fragCoord);
     half3 hsv = rgb2hsv(color.rgb);
-    hsv.x = mod(hsv.x + angle, 1);
+    hsv.x = mod(hsv.x + colorShift, 1);
     return half4(hsv2rgb(hsv), color.a);
 }
 """
