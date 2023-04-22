@@ -52,6 +52,7 @@ import com.byagowi.persiancalendar.ui.settings.singleSelect
 import com.byagowi.persiancalendar.ui.settings.summary
 import com.byagowi.persiancalendar.ui.settings.switch
 import com.byagowi.persiancalendar.ui.settings.title
+import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
@@ -185,7 +186,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             putString(PREF_ATHAN_URI, uri)
         }
         view?.let {
-            Snackbar.make(it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(it, R.string.custom_notification_is_set, Snackbar.LENGTH_SHORT)
+                .also { snackBar -> snackBar.considerSystemBarsInsets() }.show()
         }
     }
 

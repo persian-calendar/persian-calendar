@@ -83,6 +83,7 @@ import com.byagowi.persiancalendar.ui.common.CalendarsView
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
+import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
@@ -388,7 +389,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 Snackbar.make(
                     view ?: return, R.string.device_calendar_does_not_support,
                     Snackbar.LENGTH_SHORT
-                ).show()
+                ).also { it.considerSystemBarsInsets() }.show()
             }
         }
     }
@@ -449,7 +450,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                         textView,
                         R.string.device_calendar_does_not_support,
                         Snackbar.LENGTH_SHORT
-                    ).show()
+                    ).also { it.considerSystemBarsInsets() }.show()
                 }.let {}
 
                 override fun updateDrawState(ds: TextPaint) {
@@ -481,7 +482,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 withZodiac = true, withOtherCalendars = true, withTitle = true
             ),
             Snackbar.LENGTH_SHORT
-        ).show()
+        ).also { it.considerSystemBarsInsets() }.show()
     }
 
     private fun showEvent(eventsBinding: EventsTabContentBinding, jdn: Jdn) {
