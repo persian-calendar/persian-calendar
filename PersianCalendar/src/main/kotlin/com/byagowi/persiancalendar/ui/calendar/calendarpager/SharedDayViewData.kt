@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.ZWJ
 import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendarDigits
+import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
@@ -71,7 +72,8 @@ class SharedDayViewData(
 
     private val textSize =
         diameter * (if (mainCalendarDigits === Language.ARABIC_DIGITS) 18 else 25) / 40
-    private val headerTextSize = diameter * 11 / 40
+    private val headerTextSize = diameter / 40 *
+            (if (secondaryCalendarDigits === Language.ARABIC_DIGITS) 11 else 15)
 
     val dayOfMonthNumberTextHolidayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.textAlign = Paint.Align.CENTER
