@@ -60,6 +60,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                 dayIsSelected -> shared.dayOfMonthNumberTextSelectedPaint
                 else /*!dayIsSelected*/ -> shared.dayOfMonthNumberTextPaint
             }
+
             isWeekNumber -> shared.weekNumberTextPaint
             else -> shared.weekDayInitialsTextPaint
         }
@@ -83,6 +84,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                     // use textPaint for holiday event when a11y's high contrast is enabled
                     isHighTextContrastEnabled && holiday && paint == shared.eventIndicatorPaint ->
                         shared.dayOfMonthNumberTextHolidayPaint
+
                     else -> paint
                 }
             )

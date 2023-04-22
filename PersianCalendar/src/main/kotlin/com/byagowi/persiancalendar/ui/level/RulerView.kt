@@ -47,6 +47,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     )
                     firstLevel
                 }
+
                 i % 2 == 0 -> secondLevel
                 else -> thirdLevel
             }
@@ -70,12 +71,14 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
                     )
                     firstLevel
                 }
+
                 i % 5 == 0 -> secondLevel
                 else -> thirdLevel
             }
             canvas.drawLine(
                 if (cmInchFlip) 0f else width * 1f, y,
-                if (cmInchFlip) w else width - w, y, paint)
+                if (cmInchFlip) w else width - w, y, paint
+            )
         }
     }
 }

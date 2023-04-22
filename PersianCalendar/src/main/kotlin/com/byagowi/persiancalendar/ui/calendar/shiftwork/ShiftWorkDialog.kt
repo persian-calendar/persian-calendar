@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.calendar.shiftwork
 
 import android.content.DialogInterface
 import android.text.InputFilter
-import android.text.method.ScrollingMovementMethod
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView

@@ -113,6 +113,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                     525949 // minutes in solar year
                 else 39341 // 27.32 days in minutes, https://en.wikipedia.org/wiki/Orbit_of_the_Moon
             }
+
             MotionEvent.ACTION_MOVE -> {
                 val currentAngle = atan2(event.y - r, event.x - r)
                 val rawAngleChange = currentAngle - previousAngle
@@ -126,6 +127,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 rotationalMinutesChange(minutesChange)
                 previousAngle = currentAngle
             }
+
             MotionEvent.ACTION_UP -> {
                 flingAnimation.start()
                 previousAngle = 0f

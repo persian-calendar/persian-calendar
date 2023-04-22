@@ -175,11 +175,13 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
                 start.set(last)
                 mode = DRAG
             }
+
             MotionEvent.ACTION_POINTER_DOWN -> {
                 last.set(event.x, event.y)
                 start.set(last)
                 mode = ZOOM
             }
+
             MotionEvent.ACTION_MOVE -> // if the mode is ZOOM or
                 // if the mode is DRAG and already zoomed
                 if (mode == ZOOM || mode == DRAG && currentScale > minScale) {
@@ -187,6 +189,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
                     last.set(event.x, event.y)
                     invalidate()
                 }
+
             MotionEvent.ACTION_UP -> {
                 mode = NONE
                 if ((event.x - start.x).absoluteValue < 5 && (event.y - start.y).absoluteValue < 5) {
@@ -199,6 +202,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
                     onClick(touchPoint[0], touchPoint[1])
                 }
             }
+
             MotionEvent.ACTION_POINTER_UP -> mode = NONE
         }
         invalidate()

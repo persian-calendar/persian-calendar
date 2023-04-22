@@ -57,6 +57,7 @@ class EventsRepository(
             // Enable Iranian events of Gregorian calendar even if itself isn't enabled
             record.type == EventType.Iran && international && calendarType == CalendarType.GREGORIAN ->
                 false
+
             else -> true
         }
     }
@@ -143,14 +144,17 @@ class EventsRepository(
                 val date = PersianDate(-1, record.month, record.day)
                 CalendarEvent.PersianCalendarEvent(title, holiday, date)
             }
+
             CalendarType.GREGORIAN -> {
                 val date = CivilDate(-1, record.month, record.day)
                 CalendarEvent.GregorianCalendarEvent(title, holiday, date)
             }
+
             CalendarType.ISLAMIC -> {
                 val date = IslamicDate(-1, record.month, record.day)
                 CalendarEvent.IslamicCalendarEvent(title, holiday, date)
             }
+
             CalendarType.NEPALI -> {
                 val date = NepaliDate(-1, record.month, record.day)
                 CalendarEvent.NepaliCalendarEvent(title, holiday, date)

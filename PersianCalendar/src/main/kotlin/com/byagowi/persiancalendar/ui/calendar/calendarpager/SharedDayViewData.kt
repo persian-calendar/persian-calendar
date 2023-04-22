@@ -18,7 +18,6 @@ import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.sp
-import com.byagowi.persiancalendar.utils.isArabicDigitSelected
 
 class SharedDayViewData(
     context: Context, height: Float, diameter: Float = height,

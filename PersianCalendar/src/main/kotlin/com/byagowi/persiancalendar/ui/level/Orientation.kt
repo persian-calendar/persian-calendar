@@ -28,6 +28,7 @@ enum class Orientation(val reverse: Int, val rotation: Int) {
         BOTTOM, TOP -> balance <= sensibility && balance >= -sensibility
         LANDING -> roll <= sensibility && roll >= -sensibility &&
                 (abs(pitch) <= sensibility || abs(pitch) >= 180 - sensibility)
+
         LEFT, RIGHT -> abs(pitch) <= sensibility || abs(pitch) >= 180 - sensibility
     }
 }

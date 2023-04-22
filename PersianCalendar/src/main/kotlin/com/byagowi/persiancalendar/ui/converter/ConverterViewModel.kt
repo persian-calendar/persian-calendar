@@ -35,6 +35,7 @@ class ConverterViewModel : ViewModel() {
             ConverterScreenMode.Converter -> selectedDate.value != today
             ConverterScreenMode.Distance ->
                 selectedDate.value != today || secondSelectedDate.value != today
+
             ConverterScreenMode.Calculator -> false
         }
     }

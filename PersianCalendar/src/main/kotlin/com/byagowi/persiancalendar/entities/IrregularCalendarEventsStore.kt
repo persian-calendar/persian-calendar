@@ -61,21 +61,25 @@ class IrregularCalendarEventsStore(private val eventsRepository: EventsRepositor
                     val day = event["day"]?.toIntOrNull() ?: return@mapNotNull null
                     type.createDate(year, month, day)
                 }
+
                 "nth day from" -> {
                     val nth = event["nth"]?.toIntOrNull() ?: return@mapNotNull null
                     val day = event["day"]?.toIntOrNull() ?: return@mapNotNull null
                     val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
                     (Jdn(type, year, month, day) + nth - 1).toCalendar(type)
                 }
+
                 "end of month" -> {
                     val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
                     type.createDate(year, month, type.getMonthLength(year, month))
                 }
+
                 "last weekday of month" -> {
                     val month = event["month"]?.toIntOrNull() ?: return@mapNotNull null
                     val weekDay = event["weekday"]?.toIntOrNull() ?: return@mapNotNull null
                     type.createDate(year, month, type.getLastWeekDayOfMonth(year, month, weekDay))
                 }
+
                 else -> return@mapNotNull null
             }
             val title = "${event["title"] ?: return@mapNotNull null} (${formatNumber(year)})"

@@ -98,15 +98,19 @@ class OrientationProvider(activity: FragmentActivity, private val view: LevelVie
             Surface.ROTATION_270 -> SensorManager.remapCoordinateSystem(
                 R, SensorManager.AXIS_MINUS_Y, SensorManager.AXIS_X, outR
             )
+
             Surface.ROTATION_180 -> SensorManager.remapCoordinateSystem(
                 R, SensorManager.AXIS_MINUS_X, SensorManager.AXIS_MINUS_Y, outR
             )
+
             Surface.ROTATION_90 -> SensorManager.remapCoordinateSystem(
                 R, SensorManager.AXIS_Y, SensorManager.AXIS_MINUS_X, outR
             )
+
             Surface.ROTATION_0 -> SensorManager.remapCoordinateSystem(
                 R, SensorManager.AXIS_X, SensorManager.AXIS_Y, outR
             )
+
             else -> SensorManager.remapCoordinateSystem(
                 R, SensorManager.AXIS_X, SensorManager.AXIS_Y, outR
             )

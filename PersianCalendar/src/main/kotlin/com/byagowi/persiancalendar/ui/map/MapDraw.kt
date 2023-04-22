@@ -121,10 +121,16 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 canvas.drawBitmap(maskMap, null, mapRect, null)
                 val scale = mapWidth / maskMap.width
                 solarDraw.simpleMoon(
-                    canvas, maskMoonX * scale, maskMoonY * scale, mapWidth * .02f * matrixScale * markersScale
+                    canvas,
+                    maskMoonX * scale,
+                    maskMoonY * scale,
+                    mapWidth * .02f * matrixScale * markersScale
                 )
                 solarDraw.sun(
-                    canvas, maskSunX * scale, maskSunY * scale, mapWidth * .025f * matrixScale * markersScale
+                    canvas,
+                    maskSunX * scale,
+                    maskSunY * scale,
+                    mapWidth * .025f * matrixScale * markersScale
                 )
             }
 
