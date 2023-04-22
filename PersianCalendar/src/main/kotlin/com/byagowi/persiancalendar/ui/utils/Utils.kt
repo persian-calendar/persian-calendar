@@ -280,6 +280,8 @@ class SystemBarsTransparency(activity: Activity) {
 
 // From https://stackoverflow.com/a/76018821 with some modification
 fun Activity.transparentSystemBars() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
+
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
 
     val transparencyState = SystemBarsTransparency(this)
