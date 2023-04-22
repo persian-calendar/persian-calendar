@@ -315,6 +315,7 @@ fun Activity.transparentSystemBars() {
 }
 
 fun Snackbar.considerSystemBarsInsets() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return // no insets tweak here either
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return // not needed in 30 >=
     view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         // Not the best way but setOnApplyWindowInsetsListener refuses to give the value
