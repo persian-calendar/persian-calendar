@@ -121,7 +121,8 @@ val mainCalendar inline get() = enabledCalendars.getOrNull(0) ?: CalendarType.SH
 val mainCalendarDigits
     get() =
         if (secondaryCalendar == null) preferredDigits
-        else if (!language.canHaveLocalDigits) Language.ARABIC_DIGITS
+        else if (!language.canHaveLocalDigits || preferredDigits === Language.ARABIC_DIGITS)
+            Language.ARABIC_DIGITS
         else mainCalendar.preferredDigits
 val secondaryCalendar
     get() =
