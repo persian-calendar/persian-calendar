@@ -54,7 +54,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
             announcer.check(activity, isLevel, lockCleanup != null)
         }
         binding.bottomAppbar.menu.add(R.string.level).also {
-            it.icon = binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
+            it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_compass_menu)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             // If compass wasn't in backstack (level is brought from shortcut), navigate to it

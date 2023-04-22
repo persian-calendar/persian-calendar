@@ -41,8 +41,7 @@
         android:id="@+id/bottom_appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:backgroundTint="?attr/colorAppBar" />
+        android:layout_gravity="bottom" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
