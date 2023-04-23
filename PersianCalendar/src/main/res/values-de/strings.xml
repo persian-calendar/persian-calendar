@@ -1,4 +1,357 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="code">de</string>
+
+    <string name="app_name">Persischer Kalender</string>
+    <string name="widget_name">Persischer Kalender</string>
+    <string name="widget_mini_name">Persischer Kalender (mini)</string>
+    <string name="widget_age_name">Persischer Kalender (Alter)</string>
+    <string name="close">Schließen</string>
+    <string name="open">Offen</string>
+    <string name="accept">OK</string>
+    <string name="add">Hinzufügen</string>
+    <string name="help">Hilfe</string>
+    <string name="more">Mehr</string>
+    <string name="cancel">Stornieren</string>
+    <string name="continue_button">Weitermachen</string>
+    <string name="outdated_app">Da es veraltet ist, können die Dinge ungenau sein</string>
+    <string name="update">Aktualisieren</string>
+
+    <string name="calendar">Kalender</string>
+    <string name="date_converter">Datumskonverter</string>
+    <string name="compass">Kompass</string>
+    <string name="settings">Einstellungen</string>
+    <string name="about">Um</string>
+    <string name="exit">Ausfahrt</string>
+
+    <string name="add_event">Ereignis hinzufügen</string>
+    <string name="device_does_not_support">"Das Gerät unterstützt diese Aktion nicht"</string>
+    <string name="today">Heute</string>
+    <string name="return_to_today">Zurück zu heute</string>
+    <string name="goto_date">Gehen Sie zum Datum</string>
+    <string name="go">Gehen</string>
+    <string name="search_in_events">Suchen Sie in Veranstaltungen</string>
+    <string name="days_distance">Distanz</string>
+    <string name="start_of_year_diff">%1$s Tage (~%2$s Wochen oder %3$s Monate) ab Jahresbeginn</string>
+    <string name="end_of_year_diff">%1$s Tage (~%2$s Wochen oder %3$s Monate) bis zum Jahresende</string>
+    <string name="date_copied_clipboard">„%1$s“ wurde in die Zwischenablage kopiert.</string>
+    <string name="year_name">Jahresname</string>
+    <string name="animal_year_name_monkey">Affe</string>
+    <string name="animal_year_name_rooster">Hahn</string>
+    <string name="animal_year_name_dog">Hund</string>
+    <string name="animal_year_name_pig">Schwein</string>
+    <string name="animal_year_name_rat">Ratte</string>
+    <string name="animal_year_name_ox">Ochse</string>
+    <string name="animal_year_name_tiger">Tiger</string>
+    <string name="animal_year_name_rabbit">Kaninchen</string>
+    <string name="animal_year_name_dragon">Drachen</string>
+    <string name="animal_year_name_snake">Schlange</string>
+    <string name="animal_year_name_horse">Pferd</string>
+    <string name="animal_year_name_goat">Schaf</string>
+    <string name="zodiac">Tierkreis</string>
+    <string name="capricorn">Steinbock</string>
+    <string name="aquarius">Wassermann</string>
+    <string name="pisces">Fische</string>
+    <string name="aries">Widder</string>
+    <string name="taurus">Stier</string>
+    <string name="gemini">Zwillinge</string>
+    <string name="cancer">Krebs</string>
+    <string name="leo">Löwe</string>
+    <string name="virgo">Jungfrau</string>
+    <string name="libra">Waage</string>
+    <string name="scorpio">Skorpion</string>
+    <string name="sagittarius">Schütze</string>
+    <string name="moonInScorpio">Mond steht im Skorpion</string>
+    <string name="events">Veranstaltungen</string>
+    <string name="no_event">Keine Veranstaltung oder Termin für diesen Tag.</string>
+    <string name="warn_if_events_not_set">Besuchen Sie die Einstellungen, um bevorzugte Feiertage und Ereignisse auszuwählen und anzuzeigen</string>
+    <string name="sunriseSunView">Sonnenaufgang</string>
+    <string name="middaySunView">Mittag</string>
+    <string name="sunsetSunView">Sonnenuntergang</string>
+    <string name="length_of_day">Tageszeit</string>
+    <string name="remaining_daylight">Verblieben</string>
+    <string name="n_hours_minutes">%1$sh %2$sm</string>
+    <string name="owghat">Gebetszeiten</string>
+    <string name="imsak">Imsak</string>
+    <string name="fajr">Fajr</string>
+    <string name="sunrise">Sonnenaufgang</string>
+    <string name="dhuhr">Dhuhr</string>
+    <string name="asr">Asr</string>
+    <string name="sunset">Sonnenuntergang</string>
+    <string name="maghrib">Maghrib</string>
+    <string name="isha">Ischa</string>
+    <string name="midnight">Mitternacht</string>
+    <string name="spring_equinox">Frühlings-Tagundnachtgleiche Zeit des Jahres %1$s: %2$s</string>
+
+    <string name="select_type_date">Datumstyp auswählen</string>
+    <string name="year">Jahr</string>
+    <string name="select_year">Jahr auswählen</string>
+    <string name="month">Monat</string>
+    <string name="select_month">Wähle einen Monat</string>
+    <string name="day">Tag</string>
+    <string name="select_day">Tag auswählen</string>
+    <string name="date_exception">"Der eingegebene Tag ist ungültig."</string>
+
+    <string name="compass_not_found">Kompasssensor nicht gefunden</string>
+    <string name="calibrate_compass_summary">Um die Genauigkeit des Kompasssensors zu verbessern, entfernen Sie das Telefon von magnetischen Objekten, neigen und drehen Sie das Gerät um jede Achse vor und zurück.</string>
+    <string name="level">Eben</string>
+    <string name="stop">Stoppen</string>
+    <string name="resume">Fortsetzen</string>
+    <string name="set_location">Um den Standort von Sonne und Mond sowie die Qibla-Richtung zu haben, stellen Sie den Standort in den Einstellungen ein.</string>
+    <string name="north">Norden</string>
+    <string name="east">Ost</string>
+    <string name="south">Süd</string>
+    <string name="west">Westen</string>
+    <string name="qibla">Qibla</string>
+
+    <string name="pref_widget">Widget</string>
+    <string name="pref_notification">Benachrichtigung</string>
+
+    <string name="pref_interface">Schnittstelle</string>
+    <string name="language">Sprache</string>
+    <string name="skin">Haut</string>
+    <string name="select_skin">Wählen Sie eine Haut aus</string>
+    <string name="native_digits">Einheimische Ziffern</string>
+    <string name="enable_native_digits">Aktivieren Sie native Ziffern</string>
+    <string name="events_summary">Ereignisse zu zeigen</string>
+    <string name="show_device_calendar_events">Persönliche Kalenderereignisse</string>
+    <string name="show_device_calendar_events_summary">Zeigen Sie persönliche Kalenderereignisse an</string>
+    <string name="calendars_priority">Kalenderpriorität</string>
+    <string name="calendars_priority_summary">Stellen Sie Kalender so ein, dass sie Priorität anzeigen oder sie ausblenden</string>
+    <string name="astronomy">Astronomie</string>
+    <string name="astronomical_info_summary">"Zusätzliche Informationen wie Sternbild, alte Jahresnamen und Mond im Skorpion anzeigen"</string>
+    <string name="week_of_year">Woche des Jahres</string>
+    <string name="week_of_year_summary">Zeigen Sie die Woche des Jahres im Kalender an</string>
+    <string name="week_start">Wochenstart</string>
+    <string name="week_start_summary">Wochenstarttag auswählen</string>
+    <string name="week_ends">Wochenenden</string>
+    <string name="week_ends_summary">Wochenendtage auswählen</string>
+    <string name="islamic_offset">Islamischer Ausgleich</string>
+    <string name="islamic_offset_summary">Passen Sie den islamischen Kalender an, indem Sie eine Zahl hinzufügen</string>
+    <string name="clock_in_24">Uhr in 24 Stunden</string>
+    <string name="showing_clock_in_24">Zeigen Sie die Uhr in 24 Stunden</string>
+
+    <string name="widget_text_color">Widget-Textfarbe</string>
+    <string name="select_widgets_text_color">Wählen Sie eine benutzerdefinierte Farbe für Widget-Texte aus</string>
+    <string name="clock_on_widget">Uhr auf dem Widget</string>
+    <string name="showing_clock_on_widget">Uhr im Widget anzeigen</string>
+    <string name="iran_time">Iranische Zeit</string>
+    <string name="showing_iran_time">Widgets und Benachrichtigungen in der Zeitzone Iran</string>
+    <string name="customize_widget">Widget-Anpassung</string>
+    <string name="which_one_to_show">Welche zeigen</string>
+    <string name="customize_widget_summary">Was von Benachrichtigungen und Widgets angezeigt werden soll, um sie kompakter zu machen</string>
+    <string name="ask_user_to_set_location">Legen Sie den Standort in den Einstellungen fest, um diesen Ort korrekt anzuzeigen</string>
+    <string name="notify_date">Datumsbenachrichtigung aktivieren</string>
+    <string name="enable_notify">Permanente Benachrichtigung für alle Datumstypen</string>
+    <string name="notify_date_lock_screen">Benachrichtigung auf dem Sperrbildschirm anzeigen</string>
+    <string name="notify_date_lock_screen_summary">Nur wenn eine Sicherheitsmethode für den Sperrbildschirm eingestellt ist.</string>
+
+    <string name="gps_location">Holen Sie sich den Standort von GPS oder Netzwerk</string>
+    <string name="gps_location_help">Andere Optionen werden nicht benötigt, wenn dies möglich ist</string>
+    <string name="gps_internet_desc">"Aktivieren Sie bitte das GPS und die Internetverbindung des Geräts, um Ihren Standort zu finden.
+
+Die App benötigt dies nur einmal, aber wenn Sie an einen neuen Ort ziehen, ist erneut der Zugriff auf GPS und Internet erforderlich.</string>
+    <string name="pleasewaitgps">Bitte warten… Wenn nach einer Minute nichts angezeigt wird, sollten Sie wahrscheinlich andere Optionen ausprobieren</string>
+    <string name="location">Standort</string>
+    <string name="location_help">Wenn keiner von ihnen, geben Sie es unten an</string>
+    <string name="latitude">Breite</string>
+    <string name="longitude">Längengrad</string>
+    <string name="altitude">Höhe</string>
+    <string name="altitude_praytime">Meter (wahlweise)</string>
+    <string name="coordination">Koordinierung</string>
+    <string name="athan">Athan</string>
+    <string name="in_city_time">in %1$s</string>
+    <string name="pray_methods">Berechnungsmethoden</string>
+    <string name="pray_methods_calculation">Berechnungsmethoden für Gebetszeiten und Qibla-Kompass</string>
+    <string name="athan_gap">Athan Lücke</string>
+    <string name="athan_gap_summary">Wie lange vor dem Athaner soll der Alarm ausgelöst werden (in Minuten)</string>
+    <string name="athan_alarm">Athaner Alarm</string>
+    <string name="athan_alarm_summary">Gebete, um den Alarm auszulösen</string>
+    <string name="notification_athan">Athan-Benachrichtigung</string>
+    <string name="enable_notification_athan">Athan als Benachrichtigung und Gerätevibration anzeigen</string>
+    <string name="ascending_athan_volume">Aufsteigendes Volumen</string>
+    <string name="enable_ascending_athan_volume">Die Athan-Lautstärke erreicht den Maximalwert in einer Minute</string>
+    <string name="custom_athan">Wählen Sie Athan</string>
+    <string name="abdulbasit">Abdul-Basit Abdel-Samad</string>
+    <string name="custom_notification_is_set">Benutzerdefinierte Benachrichtigung ist nur eingestellt</string>
+    <string name="default_athan">Standard-Athan</string>
+    <string name="default_athan_summary">Zurück zum Standard Athan</string>
+    <string name="returned_to_default">Auf Standard zurückgesetzt</string>
+    <string name="athan_volume">Athaner Band</string>
+    <string name="athan_volume_summary">Stellen Sie die Lautstärke für den Alarm ein</string>
+    <string name="athan_disabled_summary">Um den Athaner-Alarm einzustellen, wählen Sie einen Ort oder geben Sie die Koordinaten oben ein</string>
+
+    <string name="location_access">Standortzugriff</string>
+    <string name="phone_location_required">Dieser Teil der App benötigt eine Standortberechtigung, wenn Sie ablehnen wählen, müssen Sie Ihren Breiten- und Längengrad manuell eingeben.</string>
+    <string name="calendar_access">Kalenderzugriff</string>
+    <string name="phone_calendar_required">Dieser Teil der App benötigt eine Kalenderberechtigung, wenn Sie dies zulassen, werden Ihre persönlichen Ereignisse im Kalender angezeigt.</string>
+
+    <string name="gpl_logo">GPL-Logo</string>
+    <string name="version">Version %1$s</string>
+    <string name="licenses">Lizenz</string>
+    <string name="about_license_title">Anwendungslizenz</string>
+    <string name="about_license_sum">Überprüfen Sie die GPLv3-Lizenz und andere Lizenzbedingungen, die auf Persian Calendar verwendet werden.</string>
+    <string name="about_support_developers">Entwicklerunterstützung</string>
+    <string name="about_report_bug">Fehler auf GitHub melden</string>
+    <string name="about_report_bug_sum">Das bevorzugte Melden von Fehlern oder das Anfordern neuer Funktionen erfordert ein GitHub-Konto</string>
+    <string name="about_sendMail">Email</string>
+    <string name="about_email_sum">Senden Sie eine persönliche E-Mail an die Autoren der App</string>
+    <string name="about_noClient">Es ist kein E-Mail-Client installiert</string>
+    <string name="about_developers">Entwickler (zufällig geordnet)</string>
+
+    <string name="previous_x">Vorherige %1$s</string>
+
+    <string name="next_x">Nächste %1$s</string>
+
+    <string name="week_days_name_column">%1$s-Spalte in der Tagestabelle</string>
+
+    <string name="equivalent_to">Gleichwertig</string>
+
+    <string name="holiday_reason">Urlaub wegen %1$s</string>
+
+    <string name="nth_week_of_year">%1$s Woche des Jahres</string>
+
+    <string name="shift_work_settings">Schichtarbeitseinstellungen</string>
+    <string name="remove">Entfernen</string>
+    <string name="shift_work_starting_date">Der im Kalender ausgewählte %1$s ist der Tag, an dem die Schichtarbeit beginnt.</string>
+    <string name="shift_work_starting_date_edit">Der zuvor ausgewählte %1$s ist der gewählte Starttag für die Schichtarbeit.</string>
+    <string name="shift_work_reset_button">Deaktivieren oder neu programmieren</string>
+    <string name="spaced_and">" und "</string>
+    <string name="spaced_comma">", "</string>
+    <string name="spaced_colon">": "</string>
+    <string name="device_information">Geräteinformation</string>
+    <string name="center_align_widgets_summary">Zentriert ausgerichtete 4x1- und 2x2-Widgets</string>
+    <string name="center_align_widgets">Richten Sie die Widgets zentriert aus</string>
+    <string name="n_till">%1$s bis %2$s</string>
+    <string name="recurs">Wiederkehrend</string>
+    <string name="am">BIN</string>
+    <string name="pm">PN</string>
+    <string name="holiday">Urlaub</string>
+    <string name="shift_work_days_head">Dauer</string>
+    <string name="prefer_linear_date_summary">Verwenden Sie 2000/1/1 statt 1. Januar 2000 in Widgets und Benachrichtigungen</string>
+    <string name="prefer_linear_date">Bevorzugen Sie numerische Datumsangaben</string>
+    <string name="month_overview">"Ereignisse des Monats"</string>
+    <string name="map">Karte</string>
+    <string name="widget_background_color">Widget-Hintergrundfarbe</string>
+    <string name="select_widgets_background_color">Wählen Sie eine benutzerdefinierte Farbe für den Widget-Hintergrund aus</string>
+    <string name="share">Aktie</string>
+    <string name="enable_location_services">Die Ortungsdienste sind deaktiviert. Bitte schalten Sie sie ein, um die Funktion zu verwenden.</string>
+    <string name="select_date">Datum auswählen</string>
+    <string name="age_widget_title">Widget-Titel</string>
+    <string name="preview">Vorschau</string>
+    <string name="ignore">Ignorieren</string>
+
+    <string name="theme_default">Systemfehler</string>
+    <string name="theme_light">Licht</string>
+    <string name="theme_dark">Dunkel</string>
+    <string name="theme_modern">Modern</string>
+    <string name="theme_aqua">Aqua</string>
+    <string name="theme_black">Schwarz</string>
+
+    <string name="shamsi_calendar">Persischer Kalender</string>
+    <string name="islamic_calendar">Islamischer Kalender</string>
+    <string name="gregorian_calendar">Gregorianischer Kalender</string>
+    <string name="shamsi_calendar_short">persisch</string>
+    <string name="islamic_calendar_short">islamisch</string>
+    <string name="gregorian_calendar_short">Gregorianisch</string>
+
+    <string name="shift_work_morning">Morgen</string>
+    <string name="shift_work_off">Aus</string>
+    <string name="shift_work_evening">Abend</string>
+    <string name="shift_work_night">Nacht</string>
+
+    <string name="method_jafari">Shia Ithna-Ashari, Leva-Institut, Qum</string>
+    <string name="method_mwl">Muslimische Weltliga</string>
+    <string name="method_isna">Islamische Gesellschaft Nordamerikas</string>
+    <string name="method_egypt">Ägyptische Allgemeine Vermessungsbehörde</string>
+    <string name="method_makkah">Umm Al-Qura Universität, Mekka</string>
+    <string name="method_karachi">Universität für Islamische Wissenschaften, Karatschi</string>
+    <string name="method_tehran">Institut für Geophysik, Universität Teheran</string>
+
+    <string name="iran_holidays">Feiertage im Iran</string>
+    <string name="iran_ancient">Alter Iran (auf Persisch)</string>
+    <string name="iran_others">Andere Iran-Ereignisse</string>
+    <string name="international">Internationale Veranstaltungen (auf Persisch)</string>
+    <string name="afghanistan_holidays">Feiertage in Afghanistan</string>
+    <string name="afghanistan_others">Andere Afghanistan-Veranstaltungen</string>
+    <string name="iran_official_events">Iran, offiziell (auf Persisch)</string>
+    <string name="afghanistan_events">Afghanistan (auf Persisch)</string>
+    <string name="other_holidays">Andere</string>
+    <string name="view_source">Quelltext anzeigen</string>
+
+    <string name="widget_customization_other_calendars">Andere Kalender auf 1x4- und 2x2-Widgets</string>
+    <string name="widget_customization_non_holiday_events">Nicht-Feiertage auf 2x2-Widget und Benachrichtigung</string>
+    <string name="widget_customization_owghat">Gebetszeiten auf Widgets und Benachrichtigung (falls eingestellt)</string>
+    <string name="widget_customization_owghat_location">Ort der Gebetszeiten auf 2x2 und Benachrichtigung (falls eingestellt)</string>
+
+    <string name="january">Januar</string>
+    <string name="february">Februar</string>
+    <string name="march">Marsch</string>
+    <string name="april">April</string>
+    <string name="may">Dürfen</string>
+    <string name="june">Juni</string>
+    <string name="july">Juli</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">Oktober</string>
+    <string name="november">November</string>
+    <string name="december">Dezember</string>
+
+    <string name="saturday">Samstag</string>
+    <string name="sunday">Sonntag</string>
+    <string name="monday">Montag</string>
+    <string name="tuesday">Dienstag</string>
+    <string name="wednesday">Mittwoch</string>
+    <string name="thursday">Donnerstag</string>
+    <string name="friday">Freitag</string>
+
+    <string name="sun_view">Sonnenansicht</string>
+    <string name="asr_hanafi_juristic">Juristische Methode der Hanafi Asr</string>
+    <string name="enable_new_interface">Aktivieren Sie die neue Schnittstelle</string>
+    <string name="are_you_sure">Bist du dir sicher?</string>
+    <string name="month_pray_times">Gebetszeiten des Monats</string>
+    <string name="high_latitudes_method">Methode der hohen Breitengrade</string>
+    <string name="high_latitudes_night_middle">Nacht Mitte</string>
+    <string name="high_latitudes_angle_based">Winkelbasiert</string>
+    <string name="high_latitudes_one_seventh">Ein Siebtel</string>
+    <string name="none">Keiner</string>
+    <string name="show_sun_and_moon_path_in_24_hours">Zeigen Sie den Weg von Sonne und Mond in 24 Stunden an</string>
+    <string name="widget_prefer_device_colors">Folgen Sie der Gerätefärbung in Widgets</string>
+    <string name="nepali_calendar">Nepalesischer Kalender</string>
+    <string name="nepali_calendar_short">Nepali</string>
+    <string name="country_emoji">🇩🇪🇦🇹🇨🇭</string>
+    <string name="show_secondary_calendar">Zweitkalender anzeigen</string>
+    <string name="season">Jahreszeit</string>
+    <string name="nepal">Nepal</string>
+    <string name="solar_eclipse">Sonnenfinsternis</string>
+    <string name="lunar_eclipse">Mondfinsternis</string>
+    <string name="summer">Sommer</string>
+    <string name="autumn">Fallen</string>
+    <string name="winter">Winter</string>
+    <string name="spring">Frühling</string>
+    <string name="mercury">Quecksilber</string>
+    <string name="venus">Venus</string>
+    <string name="earth">Erde</string>
+    <string name="mars">Mars</string>
+    <string name="jupiter">Jupiter</string>
+    <string name="saturn">Saturn</string>
+    <string name="uranus">Uranus</string>
+    <string name="neptune">Neptun</string>
+    <string name="pluto">Pluto</string>
+    <string name="sun">Sonne</string>
+    <string name="moon">Mond</string>
+
+    <string name="tropical">Tropisch</string>
+    <string name="calculator">Taschenrechner</string>
+    <string name="chinese_calendar">Chinesischer Kalender</string>
+    <string name="chinese">Chinesisch</string>
+    <string name="live_wallpaper_settings">Live-Wallpaper-Einstellungen</string>
+    <string name="screensaver_settings">Bildschirmschoner-Einstellungen</string>
+    <string name="enable_notification">Möchten Sie die Datumsbenachrichtigung aktivieren?</string>
+    <string name="add_quick_settings_tile">Kachel Schnelleinstellungen hinzufügen</string>
+    <string name="true_north">Wahrer Norden</string>
+    <string name="lock">Sperren</string>
+    <string name="full_screen">Ganzer Bildschirm</string>
+    <string name="exit_full_screen">Beenden Sie den Vollbildmodus</string>
+
 </resources>
