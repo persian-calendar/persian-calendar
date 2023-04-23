@@ -34,14 +34,13 @@ fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean
             persianDate.month).toInt() % 12 == 8
 }
 
-fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean, short: Boolean): String {
+fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean): String {
     if (!isAstronomicalExtraFeaturesEnabled) return ""
     val persianDate = jdn.toPersianDate()
     val islamicDate = jdn.toIslamicDate()
     val moonInScorpioText = if (isMoonInScorpio(persianDate, islamicDate))
         context.getString(R.string.moonInScorpio) else ""
 
-    if (short) return moonInScorpioText
     return "%s\n%s$spacedColon%s\n%s".format(
         generateYearName(context, persianDate, withEmoji),
         context.getString(R.string.zodiac),

@@ -78,7 +78,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.moonPhaseView.jdn = jdn.value.toFloat()
 
         binding.zodiac.also {
-            it.text = getZodiacInfo(context, jdn, withEmoji = true, short = false)
+            it.text = getZodiacInfo(context, jdn, withEmoji = true)
             it.isVisible = it.text.isNotEmpty()
         }
 
