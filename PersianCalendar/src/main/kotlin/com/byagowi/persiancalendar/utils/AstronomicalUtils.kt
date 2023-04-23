@@ -5,7 +5,6 @@ import android.icu.util.ChineseCalendar
 import android.os.Build
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
@@ -34,18 +33,18 @@ fun isMoonInScorpio(persianDate: PersianDate, islamicDate: IslamicDate): Boolean
             persianDate.month).toInt() % 12 == 8
 }
 
-fun getZodiacInfo(context: Context, jdn: Jdn, withEmoji: Boolean): String {
-    if (!isAstronomicalExtraFeaturesEnabled) return ""
-    val persianDate = jdn.toPersianDate()
-    val islamicDate = jdn.toIslamicDate()
-    val moonInScorpioText = if (isMoonInScorpio(persianDate, islamicDate))
-        context.getString(R.string.moonInScorpio) else ""
+fun isMoonInScorpio(context: Context, jdn: Jdn): String {
+    val persian = jdn.toPersianDate()
+    val islamic = jdn.toIslamicDate()
+    return if (isMoonInScorpio(persian, islamic)) context.getString(R.string.moonInScorpio) else ""
+}
 
-    return "%s\n%s$spacedColon%s\n%s".format(
+fun generateZodiacInformation(context: Context, jdn: Jdn, withEmoji: Boolean): String {
+    val persianDate = jdn.toPersianDate()
+    return "%s\n%s$spacedColon%s".format(
         generateYearName(context, persianDate, withEmoji),
         context.getString(R.string.zodiac),
-        Zodiac.fromPersianCalendar(persianDate).format(context, withEmoji),
-        moonInScorpioText
+        Zodiac.fromPersianCalendar(persianDate).format(context, withEmoji)
     ).trim()
 }
 

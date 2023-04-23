@@ -65,6 +65,15 @@
         android:textIsSelectable="true"
         android:textSize="12sp" />
 
+    <TextView
+        android:id="@+id/moon_in_scorpio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textIsSelectable="true"
+        android:textSize="@dimen/text_size_description" />
+
     <LinearLayout
         android:id="@+id/extra_information_container"
         android:layout_width="match_parent"

@@ -23,8 +23,9 @@ import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.formatNumber
+import com.byagowi.persiancalendar.utils.generateZodiacInformation
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
-import com.byagowi.persiancalendar.utils.getZodiacInfo
+import com.byagowi.persiancalendar.utils.isMoonInScorpio
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import io.github.cosinekitty.astronomy.seasons
@@ -77,8 +78,16 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.weekDayName.text = jdn.dayOfWeekName
         binding.moonPhaseView.jdn = jdn.value.toFloat()
 
+        binding.moonInScorpio.also {
+            if (isAstronomicalExtraFeaturesEnabled) {
+                it.text = isMoonInScorpio(context, jdn)
+            }
+            it.isVisible = it.text.isNotEmpty()
+        }
         binding.zodiac.also {
-            it.text = getZodiacInfo(context, jdn, withEmoji = true)
+            if (isAstronomicalExtraFeaturesEnabled) {
+                it.text = generateZodiacInformation(context, jdn, withEmoji = true)
+            }
             it.isVisible = it.text.isNotEmpty()
         }
 

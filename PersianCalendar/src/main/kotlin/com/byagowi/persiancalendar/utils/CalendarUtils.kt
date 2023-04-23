@@ -22,6 +22,7 @@ import com.byagowi.persiancalendar.global.calendarTypesTitleAbbr
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.eventsRepository
 import com.byagowi.persiancalendar.global.holidayString
+import com.byagowi.persiancalendar.global.isAstronomicalExtraFeaturesEnabled
 import com.byagowi.persiancalendar.global.isForcedIranTimeEnabled
 import com.byagowi.persiancalendar.global.isShowDeviceCalendarEvents
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
@@ -116,9 +117,10 @@ fun getA11yDaySummary(
             .append(context.getString(R.string.nth_week_of_year, formatNumber(weekOfYearStart)))
     }
 
-    if (withZodiac) {
-        val zodiac = getZodiacInfo(context, jdn, withEmoji = false)
-        if (zodiac.isNotEmpty()) appendLine().appendLine().append(zodiac)
+    if (withZodiac && isAstronomicalExtraFeaturesEnabled) {
+        appendLine().appendLine()
+            .appendLine(generateZodiacInformation(context, jdn, withEmoji = false))
+            .append(isMoonInScorpio(context, jdn))
     }
 }
 
