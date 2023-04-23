@@ -45,8 +45,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     fun toggle() {
         isExpanded = !isExpanded
 
-        binding.expansionArrow
-            .animateTo(if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN)
+        binding.expansionArrow.animateTo(if (isExpanded) ArrowView.Direction.UP else ArrowView.Direction.DOWN)
         TransitionManager.beginDelayedTransition(binding.root, ChangeBounds())
 
         binding.extraInformationContainer.isVisible = isExpanded
@@ -93,7 +92,8 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             binding.also {
                 it.diffDate.isVisible = true
                 it.diffDate.text = listOf(
-                    context.getString(R.string.days_distance), spacedColon,
+                    context.getString(R.string.days_distance),
+                    spacedColon,
                     calculateDaysDifference(resources, jdn)
                 ).joinToString("")
             }
@@ -106,12 +106,16 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         val weeksCount = endOfYearJdn.getWeekOfYear(startOfYearJdn)
 
         val startOfYearText = context.getString(
-            R.string.start_of_year_diff, formatNumber(jdn - startOfYearJdn + 1),
-            formatNumber(currentWeek), formatNumber(date.month)
+            R.string.start_of_year_diff,
+            formatNumber(jdn - startOfYearJdn + 1),
+            formatNumber(currentWeek),
+            formatNumber(date.month)
         )
         val endOfYearText = context.getString(
-            R.string.end_of_year_diff, formatNumber(endOfYearJdn - jdn),
-            formatNumber(weeksCount - currentWeek), formatNumber(12 - date.month)
+            R.string.end_of_year_diff,
+            formatNumber(endOfYearJdn - jdn),
+            formatNumber(weeksCount - currentWeek),
+            formatNumber(12 - date.month)
         )
         binding.startAndEndOfYearDiff.text =
             listOf(startOfYearText, endOfYearText).joinToString("\n")
@@ -125,9 +129,7 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     seasons(jdn.toCivilDate().year).marchEquinox.toMillisecondsSince1970()
                 ).toGregorianCalendar()
                 equinox = context.getString(
-                    R.string.spring_equinox,
-                    formatNumber(equinoxYear),
-                    calendar.formatDateAndTime()
+                    R.string.spring_equinox, formatNumber(equinoxYear), calendar.formatDateAndTime()
                 )
             }
         }
@@ -146,8 +148,13 @@ class CalendarsView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         // a11y
         binding.root.contentDescription = getA11yDaySummary(
-            context, jdn, isToday, EventsStore.empty(),
-            withZodiac = true, withOtherCalendars = true, withTitle = true
+            context,
+            jdn,
+            isToday,
+            EventsStore.empty(),
+            withZodiac = true,
+            withOtherCalendars = true,
+            withTitle = true
         )
     }
 }
