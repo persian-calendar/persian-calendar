@@ -28,6 +28,7 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
 
     val title = shiftWorkTitles[type] ?: type
     return if (abbreviated && title.isNotEmpty())
-        title.split("/").joinToString("/") { it.trim().substring(0, 1) }
+        title.split("/").map { it.trim() }.filter { it.isNotEmpty() }
+            .joinToString("/") { it.substring(0, 1) }
     else title
 }
