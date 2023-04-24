@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorAppBar">
+
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar" />
+
+    <com.google.android.material.carousel.MaskableFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurface"
+            android:orientation="vertical">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/AppOutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="افزودن" />
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/AppOutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="کاهش" />
+
+        </LinearLayout>
+
+    </com.google.android.material.carousel.MaskableFrameLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
