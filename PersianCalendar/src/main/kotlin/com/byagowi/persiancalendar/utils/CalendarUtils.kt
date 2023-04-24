@@ -303,8 +303,13 @@ fun monthFormatForSecondaryCalendar(date: AbstractDate, secondaryCalendar: Calen
     ).toCalendar(secondaryCalendar)
     return when {
         from.month == to.month -> language.my.format(from.monthName, formatNumber(from.year))
-        from.year != to.year -> listOf(from, to).joinToString(EN_DASH) {
-            language.my.format(it.monthName, formatNumber(it.year))
+        from.year != to.year -> listOf(
+            from.year to from.month..secondaryCalendar.getYearMonths(from.year),
+            to.year to 1..to.month
+        ).joinToString(EN_DASH) { (year, months) ->
+            language.my.format(months.joinToString(EN_DASH) {
+                from.calendarType.monthsNames.getOrNull(it - 1).debugAssertNotNull ?: ""
+            }, formatNumber(year))
         }
 
         else -> language.my.format(
