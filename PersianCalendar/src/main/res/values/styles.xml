@@ -114,7 +114,7 @@
     <style name="LightTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="screenBackground">@color/light_primary</item>
+        <item name="screenBackground">@drawable/light_shade_background</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
         <item name="colorTextHoliday">@color/light_text_holiday</item>

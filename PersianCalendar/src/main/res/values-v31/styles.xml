@@ -12,7 +12,7 @@
     <style name="DynamicLightTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@android:color/system_accent3_800</item>
         <item name="colorAccent">@android:color/system_accent1_800</item>
-        <item name="screenBackground">@android:color/system_accent1_50</item>
+        <item name="screenBackground">@drawable/dynamic_light_shade_background</item>
 
         <item name="colorSurface">@android:color/system_accent1_10</item>
         <item name="colorTextHoliday">@android:color/system_accent1_400</item>
