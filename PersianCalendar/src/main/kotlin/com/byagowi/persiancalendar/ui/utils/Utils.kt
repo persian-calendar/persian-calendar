@@ -278,8 +278,16 @@ class SystemBarsTransparency(activity: Activity) {
         (!isSurfaceColorLight || isLightNavigationBarCapabilityExist) && isSettingSystemBarsColorAvailable
 }
 
-// From https://stackoverflow.com/a/76018821 with some modification
+/**
+ * Make system bars (status and navigation bars) transparent as far as possible, also disables
+ * decor view insets so we should consider the insets ourselves.
+ *
+ * From https://stackoverflow.com/a/76018821 with some modification
+ * Also have a look at [com.google.android.material.internal.EdgeToEdgeUtils.applyEdgeToEdge]
+ */
 fun Activity.transparentSystemBars() {
+    // Android 4 is hard to debug and probably ViewCompat.setOnApplyWindowInsetsListener isn't
+    // reporting any value so let's skip and simplify
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
 
     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
@@ -291,27 +299,11 @@ fun Activity.transparentSystemBars() {
         insetsController.isAppearanceLightNavigationBars = true
 
     WindowCompat.setDecorFitsSystemWindows(window, false)
-    val systemUiScrim = Color.parseColor("#40000000") // 25% black
-    val statusBarColor =
+    val systemUiScrim = ColorUtils.setAlphaComponent(Color.BLACK, 0x40) // 25% black
+    window.statusBarColor =
         if (transparencyState.shouldStatusBarTransparent) Color.TRANSPARENT else systemUiScrim
-    val navigationBarColor =
+    window.navigationBarColor =
         if (transparencyState.shouldNavigationBarTransparent) Color.TRANSPARENT else systemUiScrim
-
-    val winParams = window.attributes
-    var flags = winParams.flags
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-        flags = flags or
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION
-    }
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        flags = flags and (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or
-                WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION).inv()
-        window.statusBarColor = statusBarColor
-        window.navigationBarColor = navigationBarColor
-    }
-    winParams.flags = flags
-    window.attributes = winParams
 }
 
 fun Snackbar.considerSystemBarsInsets() {
