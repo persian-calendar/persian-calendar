@@ -156,7 +156,7 @@
     <style name="ModernTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorAccent">@color/modern_accent</item>
-        <item name="screenBackground">@color/modern_primary</item>
+        <item name="screenBackground">@drawable/modern_shade_background</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
