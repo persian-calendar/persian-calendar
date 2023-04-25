@@ -78,7 +78,7 @@
     <style name="DarkTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorAccent">@color/dark_accent</item>
-        <item name="screenBackground">@color/dark_primary</item>
+        <item name="screenBackground">@drawable/dark_shade_background</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
