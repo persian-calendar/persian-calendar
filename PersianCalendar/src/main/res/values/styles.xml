@@ -39,7 +39,6 @@
     <style name="BaseDarkTheme" parent="Theme.Material3.DynamicColors.Dark">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -56,7 +55,6 @@
     <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorMonthsBackground">?attr/colorAppBar</item>
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -80,7 +78,7 @@
     <style name="DarkTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorAccent">@color/dark_accent</item>
-        <item name="colorAppBar">@color/dark_primary</item>
+        <item name="screenBackground">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
         <item name="colorTextHoliday">@color/dark_text_holiday</item>
@@ -98,7 +96,7 @@
     <style name="BlackTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/black_accent</item>
         <item name="colorAccent">@color/black_accent</item>
-        <item name="colorAppBar">@color/black_primary</item>
+        <item name="screenBackground">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
         <item name="colorTextHoliday">@color/black_text_holiday</item>
@@ -116,7 +114,7 @@
     <style name="LightTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="colorAppBar">@color/light_primary</item>
+        <item name="screenBackground">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
         <item name="colorTextHoliday">@color/light_text_holiday</item>
@@ -135,10 +133,9 @@
     </style>
 
     <style name="AquaTheme" parent="BaseLightTheme">
-        <item name="colorMonthsBackground">@drawable/blue_shade_background</item>
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
-        <item name="colorAppBar">@color/blue_primary</item>
+        <item name="screenBackground">@drawable/blue_shade_background</item>
 
         <item name="colorSurface">@color/blue_surface_background</item>
         <item name="colorTextHoliday">@color/blue_text_holiday</item>
@@ -159,7 +156,7 @@
     <style name="ModernTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorAccent">@color/modern_accent</item>
-        <item name="colorAppBar">@color/modern_primary</item>
+        <item name="screenBackground">@color/modern_primary</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
         <item name="colorTextHoliday">@color/modern_text_holiday</item>
@@ -219,7 +216,7 @@
     <style name="TabLayoutColored" parent="Widget.Material3.TabLayout.OnSurface">
         <item name="tabIndicatorColor">?attr/coloredTabIndicatorColor</item>
         <item name="tabTextAppearance">@style/TabTextAppearance</item>
-        <item name="tabBackground">?attr/colorAppBar</item>
+        <item name="tabBackground">@android:color/transparent</item>
         <item name="tabTextColor">?attr/colorOnAppBar</item>
     </style>
 

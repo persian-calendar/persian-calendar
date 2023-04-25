@@ -252,8 +252,8 @@ fun Window.makeWallpaperTransparency() {
 
 class SystemBarsTransparency(activity: Activity) {
     val isPrimaryColorLight = ColorUtils.calculateLuminance(
-        activity.resolveColor(R.attr.colorAppBar)
-    ) > 0.5
+        activity.resolveColor(R.attr.colorOnAppBar)
+    ) < 0.5
     val isSurfaceColorLight = ColorUtils.calculateLuminance(
         activity.resolveColor(com.google.android.material.R.attr.colorSurface)
     ) > 0.5

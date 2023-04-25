@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorAppBar"
     android:orientation="vertical">
 
     <include
@@ -15,7 +14,7 @@
         style="@style/TabLayoutColored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorAppBar" />
+        android:background="@android:color/transparent" />
 
     <com.google.android.material.carousel.MaskableFrameLayout
         android:id="@+id/roundness_frame"

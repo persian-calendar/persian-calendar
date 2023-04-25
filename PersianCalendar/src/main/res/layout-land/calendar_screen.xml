@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorAppBar"
     android:orientation="vertical">
 
     <include
@@ -19,8 +18,7 @@
         <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
             android:id="@+id/calendarPager"
             android:layout_width="@dimen/grid_calendar_land_width"
-            android:layout_height="match_parent"
-            android:background="?attr/colorMonthsBackground" />
+            android:layout_height="match_parent" />
 
         <com.google.android.material.carousel.MaskableFrameLayout
             android:layout_width="match_parent"

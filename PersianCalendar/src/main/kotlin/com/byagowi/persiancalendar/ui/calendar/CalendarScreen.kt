@@ -28,6 +28,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.core.view.postDelayed
 import androidx.core.view.updateLayoutParams
@@ -287,16 +288,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.changeSelectedTabIndex(position)
-
-                // Make sure view pager's height at least matches with the shown tab
-                binding.viewPager.width.takeIf { it != 0 }?.let { width ->
-                    tabs[position].second.measure(
-                        View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-                    )
-                    binding.viewPager.minimumHeight = tabs[position].second.measuredHeight
-                }
-
+                makeViewPagerHeightToAtLeastFitTheScreen(binding, tabs)
                 if (position == EVENTS_TAB) {
                     binding.addEvent.show()
                     binding.addEvent.postDelayed(THREE_SECONDS_AND_HALF_IN_MILLIS) {
@@ -307,8 +299,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         })
 
         tabsViewPager.setCurrentItem(
-            viewModel.selectedTabIndex.value.coerceAtMost(tabs.size - 1),
-            false
+            viewModel.selectedTabIndex.value.coerceAtMost(tabs.size - 1), false
         )
         setupMenu(binding.appBar.toolbar, binding.calendarPager)
 
@@ -339,10 +330,34 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 bottomMargin = allInsets.bottom + 20.dp.toInt()
             }
             // Content root is only available in portrait mode
-            binding.contentRoot?.updatePadding(
+            binding.portraitContentRoot?.updatePadding(
                 bottom = (allInsets.bottom - systemBarsInsets.bottom).coerceAtLeast(0)
             )
             WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun makeViewPagerHeightToAtLeastFitTheScreen(
+        binding: CalendarScreenBinding,
+        tabs: List<Pair<Int, View>>
+    ) {
+        binding.root.doOnNextLayout {
+            val width = binding.viewPager.width.takeIf { it != 0 } ?: return@doOnNextLayout
+            binding.root.measure(
+                View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            )
+            val selectedTab = tabs[binding.viewPager.currentItem].second
+            val minimumHeight = listOfNotNull(
+                selectedTab.measuredHeight,
+                binding.portraitContentRoot?.let {
+                    val calendarHeight = binding.calendarPager.measuredHeight
+                    binding.root.measuredHeight -
+                            (calendarHeight + binding.tabLayout.measuredHeight)
+                }
+            ).max()
+            binding.viewPager.minimumHeight = minimumHeight
+            selectedTab.minimumHeight = minimumHeight
         }
     }
 
