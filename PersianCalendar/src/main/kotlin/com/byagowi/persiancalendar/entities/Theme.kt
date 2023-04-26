@@ -32,7 +32,8 @@ enum class Theme(
         private val SharedPreferences?.theme
             get() = this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
 
-        fun supportsGradient(context: Context) = getCurrent(context).supportsGradient
+        fun supportsGradient(context: Context) = getCurrent(context).supportsGradient &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)
@@ -60,8 +61,9 @@ enum class Theme(
                 ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
             } else activity.setTheme(theme.styleRes)
 
-            if (!activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT))
-                activity.setTheme(R.style.NoGradientOverride)
+            if (!activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+                || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+            ) activity.setTheme(R.style.NoGradientOverride)
         }
 
         private fun getCurrent(context: Context): Theme {
