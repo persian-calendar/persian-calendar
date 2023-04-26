@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="shade_angle">225</integer>
+    <integer name="gradient_angle">225</integer>
 </resources>

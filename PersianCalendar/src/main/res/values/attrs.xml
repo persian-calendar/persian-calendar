@@ -3,7 +3,7 @@
     <declare-styleable name="appTheme">
         <attr name="screenBackground" format="reference" />
         <attr name="screenBackgroundColor" format="reference" />
-        <attr name="screenBackgroundShade" format="reference" />
+        <attr name="screenBackgroundGradient" format="reference" />
         <!-- TODO This should be merged with Material's owned colorOnPrimary someday -->
         <attr name="colorOnAppBar" format="reference" />
         <attr name="colorAppointment" format="reference" />

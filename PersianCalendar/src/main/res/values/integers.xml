@@ -2,5 +2,5 @@
 <resources>
     <integer name="navigation_anim_time">@android:integer/config_shortAnimTime</integer>
     <!-- There is a override of this in -ldrtl -->
-    <integer name="shade_angle">315</integer>
+    <integer name="gradient_angle">315</integer>
 </resources>
