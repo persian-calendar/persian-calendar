@@ -39,7 +39,7 @@
     <style name="BaseDarkTheme" parent="Theme.Material3.DynamicColors.Dark">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="screenBackground">?attr/screenBackgroundGradient</item>
+        <item name="screenBackground">@drawable/gradient_background</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -59,7 +59,7 @@
     <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="screenBackground">?attr/screenBackgroundGradient</item>
+        <item name="screenBackground">@drawable/gradient_background</item>
         <item name="colorPrimaryContainer">@color/primary_container_light</item>
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
@@ -86,7 +86,8 @@
     <style name="DarkTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorAccent">@color/dark_accent</item>
-        <item name="screenBackgroundGradient">@drawable/dark_gradient_background</item>
+        <item name="screenBackgroundGradientStart">@color/dark_gradient_start</item>
+        <item name="screenBackgroundGradientEnd">@color/dark_gradient_end</item>
         <item name="screenBackgroundColor">@color/dark_primary</item>
 
         <item name="colorSurface">@color/dark_surface_background</item>
@@ -105,7 +106,8 @@
     <style name="BlackTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/black_accent</item>
         <item name="colorAccent">@color/black_accent</item>
-        <item name="screenBackgroundGradient">@color/black_primary</item>
+        <item name="screenBackgroundGradientStart">@color/black_gradient_start</item>
+        <item name="screenBackgroundGradientEnd">@color/black_gradient_end</item>
         <item name="screenBackgroundColor">@color/black_primary</item>
 
         <item name="colorSurface">@color/black_surface_background</item>
@@ -124,7 +126,8 @@
     <style name="LightTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/light_primary</item>
         <item name="colorAccent">@color/light_accent</item>
-        <item name="screenBackgroundGradient">@drawable/light_gradient_background</item>
+        <item name="screenBackgroundGradientStart">@color/light_gradient_start</item>
+        <item name="screenBackgroundGradientEnd">@color/light_gradient_end</item>
         <item name="screenBackgroundColor">@color/light_primary</item>
 
         <item name="colorSurface">@color/light_surface_background</item>
@@ -146,7 +149,8 @@
     <style name="AquaTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorAccent">@color/blue_accent</item>
-        <item name="screenBackgroundGradient">@drawable/blue_gradient_background</item>
+        <item name="screenBackgroundGradientStart">@color/blue_gradient_start</item>
+        <item name="screenBackgroundGradientEnd">@color/blue_gradient_end</item>
         <item name="screenBackgroundColor">@color/blue_accent</item>
 
         <item name="colorSurface">@color/blue_surface_background</item>
@@ -168,7 +172,8 @@
     <style name="ModernTheme" parent="BaseLightTheme">
         <item name="colorPrimary">@color/modern_accent</item>
         <item name="colorAccent">@color/modern_accent</item>
-        <item name="screenBackgroundGradient">@drawable/modern_gradient_background</item>
+        <item name="screenBackgroundGradientStart">@color/modern_gradient_start</item>
+        <item name="screenBackgroundGradientEnd">@color/modern_gradient_end</item>
         <item name="screenBackgroundColor">@color/modern_primary</item>
 
         <item name="colorSurface">@color/modern_surface_background</item>
