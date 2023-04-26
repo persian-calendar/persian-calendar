@@ -111,7 +111,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                             it.duration = 3000L
                             it.interpolator = AccelerateDecelerateInterpolator()
                             it.addUpdateListener { value ->
-                                view.rotation = value.animatedValue as Float
+                                view.rotation = value.animatedValue as? Float ?: 0f
                             }
                         }.start()
                     })

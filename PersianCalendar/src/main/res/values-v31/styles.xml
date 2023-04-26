@@ -26,6 +26,10 @@
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_600</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_900</item>
         <item name="colorAppointment">@android:color/system_accent1_400</item>
+
+        <item name="sunViewNightColor">@color/sun_view_widget_night_color</item>
+        <item name="sunViewDayColor">@color/sun_view_widget_day_color</item>
+        <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
     </style>
 
     <style name="DynamicDarkTheme" parent="BaseDarkTheme">
@@ -45,6 +49,10 @@
         <item name="coloredTabIndicatorColor">@android:color/system_accent1_300</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_50</item>
         <item name="colorAppointment">@android:color/system_accent1_300</item>
+
+        <item name="sunViewNightColor">@color/sun_view_widget_night_color</item>
+        <item name="sunViewDayColor">@color/sun_view_widget_day_color</item>
+        <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
     </style>
 
     <style name="DynamicBlackTheme" parent="DynamicDarkTheme">

@@ -276,7 +276,7 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
             valueAnimator.addUpdateListener {
                 progressBar.indeterminateDrawable?.colorFilter =
                     BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                        it.animatedValue as Int, BlendModeCompat.SRC_ATOP
+                        it.animatedValue as? Int ?: 0, BlendModeCompat.SRC_ATOP
                     )
             }
         }.start()

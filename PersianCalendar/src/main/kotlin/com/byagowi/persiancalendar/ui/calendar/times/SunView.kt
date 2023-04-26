@@ -48,9 +48,16 @@ class SunView @JvmOverloads constructor(
         textColor ?: context.resolveColor(com.google.android.material.R.attr.colorControlNormal),
         0x60
     )
-    private val nightColor = ContextCompat.getColor(context, R.color.sun_view_night_color)
-    private val dayColor = ContextCompat.getColor(context, R.color.sun_view_day_color)
-    private val daySecondColor = ContextCompat.getColor(context, R.color.sun_view_day_second_color)
+    private val isInWidgetRender = textColor != null
+    private val nightColor =
+        if (isInWidgetRender) ContextCompat.getColor(context, R.color.sun_view_widget_night_color)
+        else context.resolveColor(R.attr.sunViewNightColor)
+    private val dayColor =
+        if (isInWidgetRender) ContextCompat.getColor(context, R.color.sun_view_widget_day_color)
+        else context.resolveColor(R.attr.sunViewDayColor)
+    private val midDayColor =
+        if (isInWidgetRender) ContextCompat.getColor(context, R.color.sun_view_widget_midday_color)
+        else context.resolveColor(R.attr.sunViewMidDayColor)
     private val sunriseTextColor =
         textColor ?: ContextCompat.getColor(context, R.color.sun_view_sunrise_text_color)
     private val middayTextColor =
@@ -94,7 +101,7 @@ class SunView @JvmOverloads constructor(
         height = h - 18
 
         dayPaint.shader = LinearGradient(
-            width * .17f, 0f, width / 2f, 0f, dayColor, daySecondColor,
+            width * .17f, 0f, width / 2f, 0f, dayColor, midDayColor,
             Shader.TileMode.MIRROR
         )
 
@@ -246,7 +253,7 @@ class SunView @JvmOverloads constructor(
     fun startAnimate() {
         initiate()
         // "current" has the final value after #initiate() call, let's animate from zero to it.
-        ValueAnimator.ofFloat(0F, current).also {
+        ValueAnimator.ofFloat(0f, current).also {
             it.duration = 1500L
             it.interpolator = DecelerateInterpolator()
             it.addUpdateListener(this)
@@ -259,7 +266,7 @@ class SunView @JvmOverloads constructor(
     }
 
     override fun onAnimationUpdate(valueAnimator: ValueAnimator) {
-        current = valueAnimator.animatedValue as Float
+        current = valueAnimator.animatedValue as? Float ?: 0f
         invalidate()
     }
 

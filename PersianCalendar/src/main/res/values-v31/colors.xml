@@ -2,7 +2,7 @@
 <resources>
     <color name="shortcut_color">@android:color/system_accent1_800</color>
 
-    <color name="sun_view_day_color">@android:color/system_accent1_300</color>
-    <color name="sun_view_day_second_color">@android:color/system_accent1_100</color>
-    <color name="sun_view_night_color">@android:color/system_accent1_700</color>
+    <color name="sun_view_widget_day_color">@android:color/system_accent1_300</color>
+    <color name="sun_view_widget_midday_color">@android:color/system_accent1_100</color>
+    <color name="sun_view_widget_night_color">@android:color/system_accent1_700</color>
 </resources>
