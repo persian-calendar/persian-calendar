@@ -382,4 +382,6 @@
     <string name="lock">قفل</string>
     <string name="full_screen">تمام‌صفحه</string>
     <string name="exit_full_screen">خروج از تمام‌صفحه</string>
+    <string name="color_gradient">شیب رنگی</string>
+    <string name="color_gradient_summary">استفاده از شیب در رنگ‌های پوسته</string>
 </resources>

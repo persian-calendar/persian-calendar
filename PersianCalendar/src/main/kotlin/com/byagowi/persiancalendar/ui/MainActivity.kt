@@ -52,6 +52,7 @@ import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.MainActivityBinding
 import com.byagowi.persiancalendar.databinding.NavigationHeaderBinding
@@ -284,6 +285,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             PREF_APP_LANGUAGE -> restartToSettings()
             PREF_NEW_INTERFACE -> restartToSettings()
+            PREF_THEME_GRADIENT -> restartToSettings()
             PREF_THEME -> {
                 // Restart activity if theme is changed and don't if app theme
                 // has just got a default value by preferences as going

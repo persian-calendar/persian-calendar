@@ -15,6 +15,7 @@ import androidx.core.view.updatePadding
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
+import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
 import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
@@ -24,6 +25,7 @@ import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_SHOW_WEEK_OF_YEAR_NUMBER
 import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
@@ -61,13 +63,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     else title(R.string.language)
                     summary = language.nativeName
                 }
-                singleSelect(
-                    PREF_THEME,
-                    enumValues<Theme>().map { getString(it.title) },
-                    enumValues<Theme>().map { it.key },
-                    Theme.SYSTEM_DEFAULT.key,
-                    R.string.select_skin
-                ) { title(R.string.select_skin) }
                 switch(PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, false) {
                     if (language.isArabic) {
                         title = "السنة الميلادية بالاسماء الشرقية"
@@ -78,6 +73,17 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     title(R.string.native_digits)
                     summary(R.string.enable_native_digits)
                     if (!language.canHaveLocalDigits) isVisible = false
+                }
+                singleSelect(
+                    PREF_THEME,
+                    enumValues<Theme>().map { getString(it.title) },
+                    enumValues<Theme>().map { it.key },
+                    Theme.SYSTEM_DEFAULT.key,
+                    R.string.select_skin
+                ) { title(R.string.select_skin) }
+                switch(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT) {
+                    title(R.string.color_gradient)
+                    summary(R.string.color_gradient_summary)
                 }
             }
             section(R.string.calendar) {
@@ -90,7 +96,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 switch(PREF_SHOW_DEVICE_CALENDAR_EVENTS, false) {
                     title(R.string.show_device_calendar_events)
                     summary(R.string.show_device_calendar_events_summary)
-                    setOnPreferenceChangeListener { _, _ ->
+                    this.setOnPreferenceChangeListener { _, _ ->
                         isChecked = if (ActivityCompat.checkSelfPermission(
                                 activity, Manifest.permission.READ_CALENDAR
                             ) != PackageManager.PERMISSION_GRANTED

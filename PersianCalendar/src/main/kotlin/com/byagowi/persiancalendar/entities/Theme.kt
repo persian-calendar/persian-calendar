@@ -8,7 +8,9 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.appcompat.app.AppCompatActivity
+import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_THEME
+import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.color.DynamicColors
@@ -50,7 +52,9 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
                     activity.windowManager.isCrossWindowBlurEnabled
                 ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
             } else activity.setTheme(theme.styleRes)
-            // activity.setTheme(R.style.NoGradientOverride)
+
+            if (!activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT))
+                activity.setTheme(R.style.NoGradientOverride)
         }
 
         private fun getCurrent(context: Context): Theme {

@@ -52,6 +52,7 @@ const val PREF_TITLE_AGE_WIDGET = "TitleForAgeWidget"
 const val PREF_ATHAN_ALARM = "AthanAlarm"
 const val PREF_ATHAN_GAP = "AthanGap"
 const val PREF_THEME = "Theme"
+const val PREF_THEME_GRADIENT = "ThemeGradient"
 const val PREF_NEW_INTERFACE = "NewInterface"
 const val PREF_HOLIDAY_TYPES = "holiday_types"
 const val PREF_WEEK_START = "WeekStart"
@@ -83,6 +84,7 @@ const val DEFAULT_NOTIFY_DATE_LOCK_SCREEN = true
 const val DEFAULT_ATHAN_VOLUME = 3
 const val DEFAULT_ISLAMIC_OFFSET = "0"
 const val DEFAULT_SECONDARY_CALENDAR_IN_TABLE = false
+const val DEFAULT_THEME_GRADIENT = true
 
 const val LOAD_APP_ID = 1000
 const val THREE_HOURS_APP_ID = 1010
