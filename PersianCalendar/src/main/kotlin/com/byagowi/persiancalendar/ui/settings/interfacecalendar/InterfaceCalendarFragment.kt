@@ -84,6 +84,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 switch(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT) {
                     title(R.string.color_gradient)
                     summary(R.string.color_gradient_summary)
+                    if (!Theme.supportsGradient(activity)) isVisible = false
                 }
             }
             section(R.string.calendar) {

@@ -15,17 +15,24 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.google.android.material.color.DynamicColors
 
-enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private val styleRes: Int) {
+enum class Theme(
+    val key: String,
+    @StringRes val title: Int,
+    @StyleRes private val styleRes: Int,
+    private val supportsGradient: Boolean = true
+) {
     SYSTEM_DEFAULT("SystemDefault", R.string.theme_default, R.style.LightTheme),
     LIGHT("LightTheme", R.string.theme_light, R.style.LightTheme),
     DARK("DarkTheme", R.string.theme_dark, R.style.DarkTheme),
     MODERN("ClassicTheme"/*legacy*/, R.string.theme_modern, R.style.ModernTheme),
     AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua, R.style.AquaTheme),
-    BLACK("BlackTheme", R.string.theme_black, R.style.BlackTheme);
+    BLACK("BlackTheme", R.string.theme_black, R.style.BlackTheme, supportsGradient = false);
 
     companion object {
         private val SharedPreferences?.theme
             get() = this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
+
+        fun supportsGradient(context: Context) = getCurrent(context).supportsGradient
 
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)

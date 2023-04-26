@@ -40,6 +40,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
+import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -48,7 +49,6 @@ import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
 import com.byagowi.persiancalendar.PREF_LAST_APP_VISIT_VERSION
-import com.byagowi.persiancalendar.PREF_NEW_INTERFACE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.PREF_THEME
@@ -184,6 +184,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         applyAppLanguage(this)
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
+        previousAppThemeGradientValue =
+            appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { root, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -221,6 +223,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private var previousAppThemeValue: String? = null
+    private var previousAppThemeGradientValue: Boolean? = null
 
     private val navHostFragment by lazy {
         (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment)
@@ -284,13 +287,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
 
             PREF_APP_LANGUAGE -> restartToSettings()
-            PREF_NEW_INTERFACE -> restartToSettings()
-            PREF_THEME_GRADIENT -> restartToSettings()
             PREF_THEME -> {
                 // Restart activity if theme is changed and don't if app theme
                 // has just got a default value by preferences as going
                 // from null => SystemDefault which makes no difference
                 if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
+            }
+            PREF_THEME_GRADIENT -> {
+                // Same way for theme gradient
+                if (previousAppThemeGradientValue != null) restartToSettings()
             }
 
             PREF_NOTIFY_DATE -> {
