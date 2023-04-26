@@ -27,28 +27,30 @@ enum class Theme(val key: String, @StringRes val title: Int, @StyleRes private v
 
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)
-            if (theme != SYSTEM_DEFAULT &&
+            if (theme == SYSTEM_DEFAULT ||
                 // Let's use dynamic colors also in black theme of Android 12
-                !(DynamicColors.isDynamicColorAvailable() && theme == BLACK)
-            ) return activity.setTheme(theme.styleRes)
-            val isNightModeEnabled = isNightMode(activity)
+                DynamicColors.isDynamicColorAvailable() && theme == BLACK
+            ) {
+                val isNightModeEnabled = isNightMode(activity)
 
-            if (DynamicColors.isDynamicColorAvailable()) {
-                activity.setTheme(
-                    when {
-                        theme == BLACK -> R.style.DynamicBlackTheme
-                        isNightModeEnabled -> R.style.DynamicDarkTheme
-                        else -> R.style.DynamicLightTheme
-                    }
-                )
-                DynamicColors.applyToActivityIfAvailable(activity)
-            } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
+                if (DynamicColors.isDynamicColorAvailable()) {
+                    activity.setTheme(
+                        when {
+                            theme == BLACK -> R.style.DynamicBlackTheme
+                            isNightModeEnabled -> R.style.DynamicDarkTheme
+                            else -> R.style.DynamicLightTheme
+                        }
+                    )
+                    DynamicColors.applyToActivityIfAvailable(activity)
+                } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
 
-            // Apply blur considerations only if is supported by the device
-            if (
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                activity.windowManager.isCrossWindowBlurEnabled
-            ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
+                // Apply blur considerations only if is supported by the device
+                if (
+                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                    activity.windowManager.isCrossWindowBlurEnabled
+                ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
+            } else activity.setTheme(theme.styleRes)
+            // activity.setTheme(R.style.NoGradientOverride)
         }
 
         private fun getCurrent(context: Context): Theme {
