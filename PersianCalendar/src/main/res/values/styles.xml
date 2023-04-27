@@ -147,21 +147,21 @@
     </style>
 
     <style name="AquaTheme" parent="BaseLightTheme">
-        <item name="colorPrimary">@color/blue_primary</item>
-        <item name="colorAccent">@color/blue_accent</item>
-        <item name="screenBackgroundGradientStart">@color/blue_gradient_start</item>
-        <item name="screenBackgroundGradientEnd">@color/blue_gradient_end</item>
-        <item name="screenBackgroundColor">@color/blue_accent</item>
+        <item name="colorPrimary">@color/aqua_primary</item>
+        <item name="colorAccent">@color/aqua_accent</item>
+        <item name="screenBackgroundGradientStart">@color/aqua_gradient_start</item>
+        <item name="screenBackgroundGradientEnd">@color/aqua_gradient_end</item>
+        <item name="screenBackgroundColor">@color/aqua_accent</item>
 
-        <item name="colorSurface">@color/blue_surface_background</item>
-        <item name="colorTextHoliday">@color/blue_text_holiday</item>
-        <item name="colorHoliday">@color/blue_holiday</item>
-        <item name="colorOnAppBar">@color/blue_text_day</item>
-        <item name="colorCurrentDay">@color/blue_current_day</item>
-        <item name="colorSelectedDay">@color/blue_selected_day</item>
-        <item name="colorEventIndicator">@color/blue_event_indicator</item>
+        <item name="colorSurface">@color/aqua_surface_background</item>
+        <item name="colorTextHoliday">@color/aqua_text_holiday</item>
+        <item name="colorHoliday">@color/aqua_holiday</item>
+        <item name="colorOnAppBar">@color/aqua_text_day</item>
+        <item name="colorCurrentDay">@color/aqua_current_day</item>
+        <item name="colorSelectedDay">@color/aqua_selected_day</item>
+        <item name="colorEventIndicator">@color/aqua_event_indicator</item>
 
-        <item name="coloredTabIndicatorColor">@color/blue_surface_background</item>
+        <item name="coloredTabIndicatorColor">@color/aqua_surface_background</item>
         <item name="colorTextDaySelected">@color/dark_primary</item>
         <item name="colorAppointment">@color/dark_accent</item>
 

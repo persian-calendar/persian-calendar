@@ -61,17 +61,17 @@
     <color name="light_selected_day">#eff2f1</color>
     <color name="light_event_indicator">#eff2f1</color>
 
-    <color name="blue_primary">#00838f</color>
-    <color name="blue_accent">#1a237e</color>
-    <color name="blue_gradient_start">#00838F</color>
-    <color name="blue_gradient_end">#1a237e</color>
-    <color name="blue_text_holiday">#d84315</color>
-    <color name="blue_holiday">#ff8a65</color>
-    <color name="blue_text_day">#ffffff</color>
-    <color name="blue_surface_background">#fafafa</color>
-    <color name="blue_current_day">#ff7043</color>
-    <color name="blue_selected_day">#F5F5F5</color>
-    <color name="blue_event_indicator">#eff2f1</color>
+    <color name="aqua_primary">#00838f</color>
+    <color name="aqua_accent">#1a237e</color>
+    <color name="aqua_gradient_start">#00838F</color>
+    <color name="aqua_gradient_end">#1a237e</color>
+    <color name="aqua_text_holiday">#d84315</color>
+    <color name="aqua_holiday">#ff8a65</color>
+    <color name="aqua_text_day">#ffffff</color>
+    <color name="aqua_surface_background">#fafafa</color>
+    <color name="aqua_current_day">#ff7043</color>
+    <color name="aqua_selected_day">#F5F5F5</color>
+    <color name="aqua_event_indicator">#eff2f1</color>
 
     <color name="modern_primary">#fafafa</color>
     <color name="modern_accent">#376E9F</color>
