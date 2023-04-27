@@ -63,6 +63,10 @@
         <item name="screenBackgroundGradientEnd">@android:color/system_neutral1_1000</item>
     </style>
 
+    <style name="DynamicBlackSurfaceOverride">
+        <item name="colorSurface">@android:color/system_neutral1_1000</item>
+    </style>
+
     <style name="AlertDialogThemeBlurSupportedOverlay">
         <item name="materialAlertDialogTheme">@style/AlertDialogThemeBlurSupported</item>
     </style>
