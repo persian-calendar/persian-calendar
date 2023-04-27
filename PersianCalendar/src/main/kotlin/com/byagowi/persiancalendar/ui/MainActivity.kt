@@ -40,7 +40,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
-import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
@@ -184,8 +183,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         applyAppLanguage(this)
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
-        previousAppThemeGradientValue =
-            appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+        previousAppThemeGradientValueWasSet = PREF_THEME_GRADIENT in appPrefs
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { root, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -223,7 +221,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private var previousAppThemeValue: String? = null
-    private var previousAppThemeGradientValue: Boolean? = null
+    private var previousAppThemeGradientValueWasSet: Boolean = true
 
     private val navHostFragment by lazy {
         (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment)
@@ -293,9 +291,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 // from null => SystemDefault which makes no difference
                 if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
             }
+
             PREF_THEME_GRADIENT -> {
-                // Same way for theme gradient
-                if (previousAppThemeGradientValue != null) restartToSettings()
+                // Restart only if previous value was set otherwise it's just a transition to default
+                if (previousAppThemeGradientValueWasSet) restartToSettings()
             }
 
             PREF_NOTIFY_DATE -> {
