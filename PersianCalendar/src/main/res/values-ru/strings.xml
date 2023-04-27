@@ -344,37 +344,37 @@
     <string name="lock">Запирать</string>
     <plurals name="shift_work_record_title">
         <item quantity="one">%1$s %2$s день</item>
-        <item quantity="few">%1$s %2$s дней</item>
+        <item quantity="few">%1$s %2$s дня</item>
         <item quantity="many">%1$s %2$s дней</item>
         <item quantity="other">%1$s %2$s дней</item>
     </plurals>
     <plurals name="n_minutes">
         <item quantity="one">%1$s минута</item>
-        <item quantity="few">%1$s минут</item>
+        <item quantity="few">%1$s минуты</item>
         <item quantity="many">%1$s минут</item>
         <item quantity="other">%1$s минут</item>
     </plurals>
     <plurals name="n_hours">
         <item quantity="one">%1$s час</item>
-        <item quantity="few">%1$s часов</item>
+        <item quantity="few">%1$s часа</item>
         <item quantity="many">%1$s часов</item>
         <item quantity="other">%1$s часов</item>
     </plurals>
     <plurals name="n_days">
         <item quantity="one">%1$s день</item>
-        <item quantity="few">%1$s дни</item>
-        <item quantity="many">%1$s дни</item>
-        <item quantity="other">%1$s дни</item>
+        <item quantity="few">%1$s дня</item>
+        <item quantity="many">%1$s дней</item>
+        <item quantity="other">%1$s дней</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s месяц</item>
-        <item quantity="few">%1$s месяцы</item>
-        <item quantity="many">%1$s месяцы</item>
-        <item quantity="other">%1$s месяцы</item>
+        <item quantity="few">%1$s месяца</item>
+        <item quantity="many">%1$s месяцев</item>
+        <item quantity="other">%1$s месяцев</item>
     </plurals>
     <plurals name="n_years">
         <item quantity="one">%1$s год</item>
-        <item quantity="few">%1$s лет</item>
+        <item quantity="few">%1$s года</item>
         <item quantity="many">%1$s лет</item>
         <item quantity="other">%1$s лет</item>
     </plurals>
