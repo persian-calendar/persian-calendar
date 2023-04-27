@@ -69,11 +69,6 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                         summary = "كانون الثاني، شباط، آذار، …"
                     } else isVisible = false
                 }
-                switch(PREF_LOCAL_DIGITS, true) {
-                    title(R.string.native_digits)
-                    summary(R.string.enable_native_digits)
-                    if (!language.canHaveLocalDigits) isVisible = false
-                }
                 singleSelect(
                     PREF_THEME,
                     enumValues<Theme>().map { getString(it.title) },
@@ -81,10 +76,17 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     Theme.SYSTEM_DEFAULT.key,
                     R.string.select_skin
                 ) { title(R.string.select_skin) }
+                // TODO: To be integrated into the theme selection dialog one day
                 switch(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT) {
                     title(R.string.color_gradient)
                     summary(R.string.color_gradient_summary)
                     if (!Theme.supportsGradient(activity)) isVisible = false
+                }
+                // TODO: To be integrated into the language selection dialog one day
+                switch(PREF_LOCAL_DIGITS, true) {
+                    title(R.string.native_digits)
+                    summary(R.string.enable_native_digits)
+                    if (!language.canHaveLocalDigits) isVisible = false
                 }
             }
             section(R.string.calendar) {
