@@ -342,7 +342,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         tabs: List<Pair<Int, View>>
     ) {
         binding.root.doOnNextLayout {
-            val width = binding.viewPager.width.takeIf { it != 0 } ?: return@doOnNextLayout
+            val width = binding.root.width.takeIf { it != 0 } ?: return@doOnNextLayout
             binding.root.measure(
                 View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
