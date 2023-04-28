@@ -20,6 +20,8 @@
         android:id="@+id/roundness_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
         app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
         <androidx.viewpager2.widget.ViewPager2

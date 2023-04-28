@@ -88,6 +88,10 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 binding.bottomAppbar.performHide(true)
                 binding.appBar.toolbar.isVisible = false
                 binding.maskableFrameLayout.shapeAppearanceModel = ShapeAppearanceModel()
+                binding.maskableFrameLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    leftMargin = 0
+                    rightMargin = 0
+                }
                 binding.paddingFrameLayout.updatePadding(top = 0)
                 binding.exitFullScreen.show()
                 binding.exitFullScreen.postDelayed(THREE_SECONDS_AND_HALF_IN_MILLIS) {
@@ -104,6 +108,10 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 lockCleanup = {
                     binding.appBar.toolbar.isVisible = true
                     binding.maskableFrameLayout.shapeAppearanceModel = defaultMask
+                    binding.maskableFrameLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                        leftMargin = 2.dp.toInt()
+                        rightMargin = 2.dp.toInt()
+                    }
                     binding.paddingFrameLayout.updatePadding(top = rulerNonFullScreenTopSpace)
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
                     binding.exitFullScreen.hide()

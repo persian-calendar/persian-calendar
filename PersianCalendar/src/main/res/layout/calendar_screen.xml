@@ -30,6 +30,8 @@
             <com.google.android.material.carousel.MaskableFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
                 <com.google.android.material.tabs.TabLayout
@@ -45,6 +47,8 @@
                 android:id="@+id/viewPager"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 android:layout_weight="1"
                 android:background="?attr/colorSurface"
                 android:minHeight="220sp" />

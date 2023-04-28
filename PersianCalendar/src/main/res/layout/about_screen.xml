@@ -56,6 +56,8 @@
             <com.google.android.material.carousel.MaskableFrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
                 app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
                 <LinearLayout
