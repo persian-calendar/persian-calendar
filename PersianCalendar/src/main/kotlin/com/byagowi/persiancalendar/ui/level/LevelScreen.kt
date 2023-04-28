@@ -109,8 +109,8 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                     binding.appBar.toolbar.isVisible = true
                     binding.maskableFrameLayout.shapeAppearanceModel = defaultMask
                     binding.maskableFrameLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                        leftMargin = 2.dp.toInt()
-                        rightMargin = 2.dp.toInt()
+                        leftMargin = 4.dp.toInt()
+                        rightMargin = 4.dp.toInt()
                     }
                     binding.paddingFrameLayout.updatePadding(top = rulerNonFullScreenTopSpace)
                     windowInsetsController.show(WindowInsetsCompat.Type.systemBars())
