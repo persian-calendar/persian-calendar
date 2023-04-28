@@ -114,6 +114,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         }
 
         binding.contentRoot.setupLayoutTransition()
+        binding.landscapeSecondPane?.setupLayoutTransition()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -178,7 +179,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.dayPickerView.isVisible = true
                                 binding.resultText.isVisible = false
                                 binding.calendarsView.isVisible = true
-                                binding.resultCard.isVisible = true
+                                binding.resultCard?.isVisible = true
                             }
 
                             ConverterScreenMode.Distance -> {
@@ -189,7 +190,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.secondDayPickerView.isVisible = true
                                 binding.resultText.isVisible = true
                                 binding.calendarsView.isVisible = false
-                                binding.resultCard.isVisible = false
+                                binding.resultCard?.isVisible = false
                             }
 
                             ConverterScreenMode.Calculator -> {
@@ -198,7 +199,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.secondDayPickerView.isVisible = false
                                 binding.resultText.isVisible = true
                                 binding.calendarsView.isVisible = false
-                                binding.resultCard.isVisible = false
+                                binding.resultCard?.isVisible = false
                             }
                         }
                     }
