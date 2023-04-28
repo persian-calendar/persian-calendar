@@ -25,15 +25,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="12dp">
+                android:paddingLeft="8dp"
+                android:paddingTop="16dp"
+                android:paddingRight="8dp">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/input_text_wrapper"
                     style="@style/AppTextInputLayoutFilledBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:layout_marginLeft="@dimen/view_padding"
+                    android:layout_marginTop="4dp"
                     android:layout_marginRight="@dimen/view_padding"
                     android:layout_marginBottom="@dimen/card_margin"
                     android:layoutDirection="ltr">
