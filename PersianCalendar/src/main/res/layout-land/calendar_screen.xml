@@ -10,10 +10,10 @@
         layout="@layout/app_bar" />
 
     <LinearLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:orientation="horizontal">
 
         <com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
             android:id="@+id/calendarPager"
@@ -23,7 +23,6 @@
         <com.google.android.material.carousel.MaskableFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
             app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
 
             <LinearLayout
@@ -64,9 +63,9 @@
         android:id="@+id/add_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
         android:text="@string/add_event"
         android:visibility="gone"
+        android:layout_marginEnd="20dp"
         app:icon="@drawable/ic_add"
         app:layout_anchor="@id/viewPager"
         app:layout_anchorGravity="bottom|end" />
