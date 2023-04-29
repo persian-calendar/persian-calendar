@@ -376,7 +376,7 @@
     <string name="screensaver_settings">ڕێکخستنەکانی شاشەپارێز</string>
     <string name="live_wallpaper_settings">ڕێکخستنەکانی دیوارکاغەزی زیندوو</string>
     <string name="tropical">خولگەیی</string>
-    <string name="enable_notification">ئایا دەتەوێت ئاگادارکردنەوەی بەروار چالاک بکەیت؟</string>
+    <string name="enable_notification">دەتەوێت ئاگاداریی ڕێککەوت چالاک بکەیت؟</string>
     <string name="add_quick_settings_tile">زیادکردنی ڕێکخستنە خێراکان</string>
     <string name="true_north">باکووری ڕاستەقینە</string>
     <string name="lock">قفڵکردن</string>
