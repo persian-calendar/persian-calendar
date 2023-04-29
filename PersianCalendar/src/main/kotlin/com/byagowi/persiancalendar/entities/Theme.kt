@@ -52,12 +52,13 @@ enum class Theme(
                         }
                     )
                     DynamicColors.applyToActivityIfAvailable(activity)
-                    // Make sure it's colorSurface is completely black in dynamic themes
-                    when {
-                        !isNightModeEnabled -> activity.setTheme(R.style.DynamicLightSurfaceOverride)
-                        theme == BLACK -> activity.setTheme(R.style.DynamicBlackSurfaceOverride)
-                        else -> Unit
-                    }
+                    activity.setTheme(
+                        when {
+                            theme == BLACK -> R.style.DynamicBlackSurfaceOverride
+                            isNightModeEnabled -> R.style.DynamicDarkSurfaceOverride
+                            else -> R.style.DynamicLightSurfaceOverride
+                        }
+                    )
                 } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
 
                 // Apply blur considerations only if is supported by the device
