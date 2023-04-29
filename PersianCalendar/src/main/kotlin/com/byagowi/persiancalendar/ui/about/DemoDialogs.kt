@@ -27,6 +27,7 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import android.opengl.GLSurfaceView
 import android.os.Build
+import android.text.Spanned
 import android.text.style.TextAppearanceSpan
 import android.util.AttributeSet
 import android.view.Gravity
@@ -37,6 +38,7 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -94,7 +96,6 @@ import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -587,23 +588,42 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
             }
         }
     }
-    zoomableView.onClick = { x, y ->
-        val index = floor(x / cellSize).toInt() + floor(y / cellSize).toInt() * 18
-        val atomicNumber = elementsIndices.getOrNull(index)
-        val element = atomicNumber?.let { elements.getOrNull(it - 1) }
-        debugLog(element ?: "N/A")
+
+    fun formatTitle(input: String): Spanned {
+        return HtmlCompat.fromHtml(
+            "<small><small>$input</small></small>"
+                .replace(Regex("([a-zA-Z])(\\d+)"), "$1<sup><small>$2</small></sup>"),
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
     }
 
-    MaterialAlertDialogBuilder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         .setTitle(
-            HtmlCompat.fromHtml(
-                "<small><small>1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6</small></small>"
-                    .replace(Regex("(\\w)(\\d+)"), "$1<sup><small>$2</small></sup>"),
-                HtmlCompat.FROM_HTML_MODE_LEGACY
+            formatTitle(
+                "1s2 | 2s2 2p6 | 3s2 3p6 | 3d10 4s2 4p6 | 4d10 5s2 5p6 | 4f14 5d10 6s2 6p6 | 5f14 6d10 7s2 7p6"
             )
         )
         .setView(zoomableView)
         .show()
+
+    zoomableView.onClick = { x, y ->
+        val index = floor(x / cellSize).toInt() + floor(y / cellSize).toInt() * 18
+        elementsIndices.getOrNull(index)?.let { atomicNumber ->
+            val info = elements.getOrNull(atomicNumber - 1)?.split(",") ?: return@let
+            dialog.setTitle(formatTitle("$atomicNumber ${info[0]} ${info[1]}<br>${info[2]}"))
+        }
+        if (index == 161) {
+            MaterialAlertDialogBuilder(activity)
+                .setView(EditText(activity).also {
+                    it.layoutDirection = View.LAYOUT_DIRECTION_LTR
+                    it.textDirection = View.TEXT_DIRECTION_LTR
+                    it.setText(elements.reversed()
+                        .mapIndexed { index, s -> "${elements.size - index},$s" }
+                        .joinToString("\n"))
+                })
+                .show()
+        }
+    }
 }
 
 private val elementsColor = buildMap {
@@ -643,125 +663,135 @@ private val elementsIndices = buildList {
     }
 }
 
+// Based on https://en.wikipedia.org/wiki/Template:Infobox_element/symbol-to-electron-configuration
+// Algorithmic atomic configuration won't be perfect, see also https://github.com/xanecs/aufbau-principle
 private val elements = """
-H,Hydrogen
-He,Helium
-Li,Lithium
-Be,Beryllium
-B,Boron
-C,Carbon
-N,Nitrogen
-O,Oxygen
-F,Fluorine
-Ne,Neon
-Na,Sodium
-Mg,Magnesium
-Al,Aluminium
-Si,Silicon
-P,Phosphorus
-S,Sulfur
-Cl,Chlorine
-Ar,Argon
-K,Potassium
-Ca,Calcium
-Sc,Scandium
-Ti,Titanium
-V,Vanadium
-Cr,Chromium
-Mn,Manganese
-Fe,Iron
-Co,Cobalt
-Ni,Nickel
-Cu,Copper
-Zn,Zinc
-Ga,Gallium
-Ge,Germanium
-As,Arsenic
-Se,Selenium
-Br,Bromine
-Kr,Krypton
-Rb,Rubidium
-Sr,Strontium
-Y,Yttrium
-Zr,Zirconium
-Nb,Niobium
-Mo,Molybdenum
-Tc,Technetium
-Ru,Ruthenium
-Rh,Rhodium
-Pd,Palladium
-Ag,Silver
-Cd,Cadmium
-In,Indium
-Sn,Tin
-Sb,Antimony
-Te,Tellurium
-I,Iodine
-Xe,Xenon
-Cs,Caesium
-Ba,Barium
-La,Lanthanum
-Ce,Cerium
-Pr,Praseodymium
-Nd,Neodymium
-Pm,Promethium
-Sm,Samarium
-Eu,Europium
-Gd,Gadolinium
-Tb,Terbium
-Dy,Dysprosium
-Ho,Holmium
-Er,Erbium
-Tm,Thulium
-Yb,Ytterbium
-Lu,Lutetium
-Hf,Hafnium
-Ta,Tantalum
-W,Tungsten
-Re,Rhenium
-Os,Osmium
-Ir,Iridium
-Pt,Platinum
-Au,Gold
-Hg,Mercury
-Tl,Thallium
-Pb,Lead
-Bi,Bismuth
-Po,Polonium
-At,Astatine
-Rn,Radon
-Fr,Francium
-Ra,Radium
-Ac,Actinium
-Th,Thorium
-Pa,Protactinium
-U,Uranium
-Np,Neptunium
-Pu,Plutonium
-Am,Americium
-Cm,Curium
-Bk,Berkelium
-Cf,Californium
-Es,Einsteinium
-Fm,Fermium
-Md,Mendelevium
-No,Nobelium
-Lr,Lawrencium
-Rf,Rutherfordium
-Db,Dubnium
-Sg,Seaborgium
-Bh,Bohrium
-Hs,Hassium
-Mt,Meitnerium
-Ds,Darmstadtium
-Rg,Roentgenium
-Cn,Copernicium
-Nh,Nihonium
-Fl,Flerovium
-Mc,Moscovium
-Lv,Livermorium
-Ts,Tennessine
-Og,Oganesson
+H,Hydrogen,1s1
+He,Helium,1s2
+Li,Lithium,[He] 2s1
+Be,Beryllium,[He] 2s2
+B,Boron,[He] 2s2 2p1
+C,Carbon,[He] 2s2 2p2
+N,Nitrogen,[He] 2s2 2p3
+O,Oxygen,[He] 2s2 2p4
+F,Fluorine,[He] 2s2 2p5
+Ne,Neon,[He] 2s2 2p6
+Na,Sodium,[Ne] 3s1
+Mg,Magnesium,[Ne] 3s2
+Al,Aluminium,[Ne] 3s2 3p1
+Si,Silicon,[Ne] 3s2 3p2
+P,Phosphorus,[Ne] 3s2 3p3
+S,Sulfur,[Ne] 3s2 3p4
+Cl,Chlorine,[Ne] 3s2 3p5
+Ar,Argon,[Ne] 3s2 3p6
+K,Potassium,[Ar] 4s1
+Ca,Calcium,[Ar] 4s2
+Sc,Scandium,[Ar] 3d1 4s2
+Ti,Titanium,[Ar] 3d2 4s2
+V,Vanadium,[Ar] 3d3 4s2
+Cr,Chromium,[Ar] 3d5 4s1
+Mn,Manganese,[Ar] 3d5 4s2
+Fe,Iron,[Ar] 3d6 4s2
+Co,Cobalt,[Ar] 3d7 4s2
+Ni,Nickel,[Ar] 3d8 4s2 or [Ar] 3d9 4s1
+Cu,Copper,[Ar] 3d10 4s1
+Zn,Zinc,[Ar] 3d10 4s2
+Ga,Gallium,[Ar] 3d10 4s2 4p1
+Ge,Germanium,[Ar] 3d10 4s2 4p2
+As,Arsenic,[Ar] 3d10 4s2 4p3
+Se,Selenium,[Ar] 3d10 4s2 4p4
+Br,Bromine,[Ar] 3d10 4s2 4p5
+Kr,Krypton,[Ar] 3d10 4s2 4p6
+Rb,Rubidium,[Kr] 5s1
+Sr,Strontium,[Kr] 5s2
+Y,Yttrium,[Kr] 4d1 5s2
+Zr,Zirconium,[Kr] 4d2 5s2
+Nb,Niobium,[Kr] 4d4 5s1
+Mo,Molybdenum,[Kr] 4d5 5s1
+Tc,Technetium,[Kr] 4d5 5s2
+Ru,Ruthenium,[Kr] 4d7 5s1
+Rh,Rhodium,[Kr] 4d8 5s1
+Pd,Palladium,[Kr] 4d10
+Ag,Silver,[Kr] 4d10 5s1
+Cd,Cadmium,[Kr] 4d10 5s2
+In,Indium,[Kr] 4d10 5s2 5p1
+Sn,Tin,[Kr] 4d10 5s2 5p2
+Sb,Antimony,[Kr] 4d10 5s2 5p3
+Te,Tellurium,[Kr] 4d10 5s2 5p4
+I,Iodine,[Kr] 4d10 5s2 5p5
+Xe,Xenon,[Kr] 4d10 5s2 5p6
+Cs,Caesium,[Xe] 6s1
+Ba,Barium,[Xe] 6s2
+La,Lanthanum,[Xe] 5d1 6s2
+Ce,Cerium,[Xe] 4f1 5d1 6s2
+Pr,Praseodymium,[Xe] 4f3 6s2
+Nd,Neodymium,[Xe] 4f4 6s2
+Pm,Promethium,[Xe] 4f5 6s2
+Sm,Samarium,[Xe] 4f6 6s2
+Eu,Europium,[Xe] 4f7 6s2
+Gd,Gadolinium,[Xe] 4f7 5d1 6s2
+Tb,Terbium,[Xe] 4f9 6s2
+Dy,Dysprosium,[Xe] 4f10 6s2
+Ho,Holmium,[Xe] 4f11 6s2
+Er,Erbium,[Xe] 4f12 6s2
+Tm,Thulium,[Xe] 4f13 6s2
+Yb,Ytterbium,[Xe] 4f14 6s2
+Lu,Lutetium,[Xe] 4f14 5d1 6s2
+Hf,Hafnium,[Xe] 4f14 5d2 6s2
+Ta,Tantalum,[Xe] 4f14 5d3 6s2
+W,Tungsten,[Xe] 4f14 5d4 6s2
+Re,Rhenium,[Xe] 4f14 5d5 6s2
+Os,Osmium,[Xe] 4f14 5d6 6s2
+Ir,Iridium,[Xe] 4f14 5d7 6s2
+Pt,Platinum,[Xe] 4f14 5d9 6s1
+Au,Gold,[Xe] 4f14 5d10 6s1
+Hg,Mercury,[Xe] 4f14 5d10 6s2
+Tl,Thallium,[Xe] 4f14 5d10 6s2 6p1 (to check)
+Pb,Lead,[Xe] 4f14 5d10 6s2 6p2
+Bi,Bismuth,[Xe] 4f14 5d10 6s2 6p3
+Po,Polonium,[Xe] 4f14 5d10 6s2 6p4
+At,Astatine,[Xe] 4f14 5d10 6s2 6p5
+Rn,Radon,[Xe] 4f14 5d10 6s2 6p6
+Fr,Francium,[Rn] 7s1
+Ra,Radium,[Rn] 7s2
+Ac,Actinium,[Rn] 6d1 7s2
+Th,Thorium,[Rn] 6d2 7s2
+Pa,Protactinium,[Rn] 5f2 6d1 7s2
+U,Uranium,[Rn] 5f3 6d1 7s2
+Np,Neptunium,[Rn] 5f4 6d1 7s2
+Pu,Plutonium,[Rn] 5f6 7s2
+Am,Americium,[Rn] 5f7 7s2
+Cm,Curium,[Rn] 5f7 6d1 7s2
+Bk,Berkelium,[Rn] 5f9 7s2
+Cf,Californium,[Rn] 5f10 7s2
+Es,Einsteinium,[Rn] 5f11 7s2
+Fm,Fermium,[Rn] 5f12 7s2
+Md,Mendelevium,[Rn] 5f13 7s2
+No,Nobelium,[Rn] 5f14 7s2
+Lr,Lawrencium,[Rn] 5f14 7s2 7p1 (modern calculations all favour the 7p1)
+Rf,Rutherfordium,[Rn] 5f14 6d2 7s2
+Db,Dubnium,[Rn] 5f14 6d3 7s2
+Sg,Seaborgium,[Rn] 5f14 6d4 7s2
+Bh,Bohrium,[Rn] 5f14 6d5 7s2
+Hs,Hassium,[Rn] 5f14 6d6 7s2
+Mt,Meitnerium,[Rn] 5f14 6d7 7s2
+Ds,Darmstadtium,[Rn] 5f14 6d8 7s2
+Rg,Roentgenium,[Rn] 5f14 6d9 7s2
+Cn,Copernicium,[Rn] 5f14 6d10 7s2
+Nh,Nihonium,[Rn] 5f14 6d10 7s2 7p1
+Fl,Flerovium,[Rn] 5f14 6d10 7s2 7p2
+Mc,Moscovium,[Rn] 5f14 6d10 7s2 7p3
+Lv,Livermorium,[Rn] 5f14 6d10 7s2 7p4
+Ts,Tennessine,[Rn] 5f14 6d10 7s2 7p5
+Og,Oganesson,[Rn] 5f14 6d10 7s2 7p6
+Uue,Ununennium,[Og] 8s1 (predicted)
+Ubn,Unbinilium,[Og] 8s2 (predicted)
+Ubu,Unbiunium,[Og] 8s2 8p1 (predicted)
+Ubb,Unbibium,[Og] 7d1 8s2 8p1
+Ubt,Unbitrium,
+Ubq,Unbiquadium,[Og] 6f3 8s2 8p1
+Ubc,Unbipentium,
+Ubh,Unbihexium,[Og] 5g2 6f3 8s2 8p1
 """.trim().split("\n")
 
 fun showRotationalSpringDemoDialog(activity: FragmentActivity) {
