@@ -379,5 +379,5 @@
     <string name="enable_notification">دەتەوێت ئاگاداریی ڕێککەوت چالاک بکەیت؟</string>
     <string name="add_quick_settings_tile">زیادکردنی ڕێکخستنە خێراکان</string>
     <string name="true_north">باکووری ڕاستەقینە</string>
-    <string name="lock">قفڵکردن</string>
+    <string name="lock">قفڵ</string>
 </resources>
