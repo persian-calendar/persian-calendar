@@ -509,7 +509,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         val holidays = getEventsTitle(
             events,
             holiday = true, compact = false, showDeviceCalendarEvents = false, insertRLM = false,
-            addIsHoliday = isHighTextContrastEnabled
+            addIsHoliday = true
         )
         val nonHolidays = getEventsTitle(
             events,
