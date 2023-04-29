@@ -96,7 +96,7 @@ class AboutScreen : Fragment(R.layout.about_screen) {
             animation.start()
             val clickHandlerDialog = createEasterEggClickHandler(::showPeriodicTableDialog)
             val clickHandlerIcon = createIconRandomEffects(it)
-            it.setOnClickListener { _ ->
+            it.setOnClickListener {
                 animation.stop()
                 animation.start()
                 clickHandlerDialog(activity)
