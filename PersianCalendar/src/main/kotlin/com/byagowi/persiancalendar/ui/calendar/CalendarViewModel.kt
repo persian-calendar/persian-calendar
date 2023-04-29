@@ -13,7 +13,9 @@ import com.byagowi.persiancalendar.ui.calendar.searchevent.SearchEventsRepositor
 import com.byagowi.persiancalendar.utils.appPrefs
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -34,8 +36,8 @@ class CalendarViewModel @JvmOverloads constructor(
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> get() = _selectedTabIndex
 
-    private val _eventsFlow = MutableStateFlow<List<CalendarEvent<*>>>(emptyList())
-    val eventsFlow: StateFlow<List<CalendarEvent<*>>> get() = _eventsFlow
+    private val _eventsFlow = MutableSharedFlow<List<CalendarEvent<*>>>()
+    val eventsFlow: SharedFlow<List<CalendarEvent<*>>> get() = _eventsFlow
 
     // Events
     val selectedDayChangeEvent: Flow<Jdn> get() = _selectedDay
@@ -59,7 +61,7 @@ class CalendarViewModel @JvmOverloads constructor(
     }
 
     fun searchEvent(query: CharSequence) {
-        viewModelScope.launch { _eventsFlow.value = repository.findEvent(query) }
+        viewModelScope.launch { _eventsFlow.emit(repository.findEvent(query)) }
     }
 
     // Events store cache needs to be invalidated as preferences of enabled events can be changed
