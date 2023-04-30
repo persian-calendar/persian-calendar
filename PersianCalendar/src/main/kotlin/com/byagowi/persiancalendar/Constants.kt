@@ -129,11 +129,6 @@ const val ISHA_KEY = "ISHA"
 
 val ATHANS_LIST = listOf(FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY)
 
-val TIME_NAMES = listOf(
-    R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
-    R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
-)
-
 const val QIBLA_LATITUDE = 21.422522
 const val QIBLA_LONGITUDE = 39.826181
 

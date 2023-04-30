@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.PREF_ATHAN_VOLUME
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.service.AlarmWorker
@@ -198,3 +199,12 @@ fun PrayTimes.getFromStringId(@StringRes stringId: Int) = Clock.fromHoursFractio
         else -> .0
     }
 )
+
+private val TIME_NAMES = listOf(
+    R.string.imsak, R.string.fajr, R.string.sunrise, R.string.dhuhr, R.string.asr,
+    R.string.sunset, R.string.maghrib, R.string.isha, R.string.midnight
+)
+
+fun getTimeNames(): List<Int> {
+    return if (calculationMethod.isJafari) TIME_NAMES else TIME_NAMES - R.string.sunset
+}

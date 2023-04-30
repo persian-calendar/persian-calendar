@@ -53,7 +53,6 @@ import com.byagowi.persiancalendar.PREF_NOTIFY_IGNORED
 import com.byagowi.persiancalendar.PREF_OTHER_CALENDARS_KEY
 import com.byagowi.persiancalendar.PREF_SECONDARY_CALENDAR_IN_TABLE
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.TIME_NAMES
 import com.byagowi.persiancalendar.databinding.CalendarScreenBinding
 import com.byagowi.persiancalendar.databinding.EventsTabContentBinding
 import com.byagowi.persiancalendar.databinding.OwghatTabContentBinding
@@ -106,6 +105,7 @@ import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getEventsTitle
 import com.byagowi.persiancalendar.utils.getFromStringId
 import com.byagowi.persiancalendar.utils.getShiftWorkTitle
+import com.byagowi.persiancalendar.utils.getTimeNames
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.utils.monthFormatForSecondaryCalendar
@@ -752,7 +752,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 thead {
                     tr {
                         th { +getString(R.string.day) }
-                        TIME_NAMES.forEach { th { +getString(it) } }
+                        getTimeNames().forEach { th { +getString(it) } }
                     }
                 }
                 tbody {
@@ -763,7 +763,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                                     .toGregorianCalendar()
                             )
                             th { +formatNumber(day + 1) }
-                            TIME_NAMES.forEach {
+                            getTimeNames().forEach {
                                 td { +prayTimes.getFromStringId(it).toBasicFormatString() }
                             }
                         }
