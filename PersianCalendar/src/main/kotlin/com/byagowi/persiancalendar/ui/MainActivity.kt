@@ -26,8 +26,8 @@ import androidx.core.content.edit
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isInvisible
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -206,9 +206,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                         !transparencyState.shouldNavigationBarTransparent
                 bottomMargin = if (shouldApplyBottomInset) insets.bottom else 0
             }
-            binding.navigation.getHeaderView(0).updatePadding(
-                top = if (transparencyState.shouldStatusBarTransparent) insets.top else 0
-            )
+            NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
+                .statusBarPlaceHolder.let { placeHolder ->
+                    placeHolder.updateLayoutParams {
+                        this@updateLayoutParams.height =
+                            if (transparencyState.shouldStatusBarTransparent) insets.top else 0
+                    }
+                    placeHolder.isInvisible = !transparencyState.needsVisibleStatusBarPlaceHolder
+                }
             windowInsets
         }
     }

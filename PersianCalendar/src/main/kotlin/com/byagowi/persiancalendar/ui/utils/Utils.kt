@@ -257,6 +257,7 @@ class SystemBarsTransparency(activity: Activity) {
     val isSurfaceColorLight = ColorUtils.calculateLuminance(
         activity.resolveColor(com.google.android.material.R.attr.colorSurface)
     ) > 0.5
+    val needsVisibleStatusBarPlaceHolder = !isPrimaryColorLight && isSurfaceColorLight
 
     private val isLightStatusBarCapabilityExist = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     private val isLightNavigationBarCapabilityExist = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
