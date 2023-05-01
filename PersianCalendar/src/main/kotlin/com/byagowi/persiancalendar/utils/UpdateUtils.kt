@@ -220,14 +220,16 @@ fun update(context: Context, updateDate: Boolean) {
 @StringRes
 private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
     val clock = current.toHoursFraction()
+    val isJafari = calculationMethod.isJafari
     return when {
         fajr > clock -> R.string.fajr
         sunrise > clock -> R.string.sunrise
         dhuhr > clock -> R.string.dhuhr
-        !calculationMethod.isJafari && asr > clock -> R.string.asr
-        sunset > clock -> R.string.sunset
+        !isJafari && asr > clock -> R.string.asr
+        // Sunset and Maghrib are different only in Jafari, skip if isn't Jafari
+        isJafari && sunset > clock -> R.string.sunset
         maghrib > clock -> R.string.maghrib
-        !calculationMethod.isJafari && isha > clock -> R.string.isha
+        !isJafari && isha > clock -> R.string.isha
         midnight > clock -> R.string.midnight
         // TODO: this is today's, not tomorrow
         else -> R.string.fajr

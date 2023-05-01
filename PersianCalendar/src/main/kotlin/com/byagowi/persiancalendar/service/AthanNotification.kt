@@ -98,9 +98,9 @@ class AthanNotification : Service() {
             FAJR_KEY -> listOf(R.string.sunrise)
             DHUHR_KEY ->
                 if (calculationMethod.isJafari) listOf(R.string.sunset)
-                else listOf(R.string.asr, R.string.sunset)
+                else listOf(R.string.asr, R.string.maghrib)
 
-            ASR_KEY -> listOf(R.string.sunset)
+            ASR_KEY -> listOf(R.string.maghrib)
             MAGHRIB_KEY ->
                 if (calculationMethod.isJafari) listOf(R.string.midnight)
                 else listOf(R.string.isha, R.string.midnight)
