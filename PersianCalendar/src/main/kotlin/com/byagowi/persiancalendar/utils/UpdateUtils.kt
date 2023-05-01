@@ -225,10 +225,12 @@ private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
         fajr > clock -> R.string.fajr
         sunrise > clock -> R.string.sunrise
         dhuhr > clock -> R.string.dhuhr
+        // No need to show Asr for Jafari calculation methods
         !isJafari && asr > clock -> R.string.asr
         // Sunset and Maghrib are different only in Jafari, skip if isn't Jafari
         isJafari && sunset > clock -> R.string.sunset
         maghrib > clock -> R.string.maghrib
+        // No need to show Isha for Jafari calculation methods
         !isJafari && isha > clock -> R.string.isha
         midnight > clock -> R.string.midnight
         // TODO: this is today's, not tomorrow
