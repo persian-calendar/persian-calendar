@@ -13,6 +13,7 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
+import io.github.persiancalendar.praytimes.MidnightMethod
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.GregorianCalendar
 import kotlin.math.absoluteValue
@@ -26,6 +27,7 @@ fun Coordinates.calculatePrayTimes(
     calculationMethod: CalculationMethod = com.byagowi.persiancalendar.global.calculationMethod,
     asrMethod: AsrMethod = com.byagowi.persiancalendar.global.asrMethod,
     highLatitudesMethod: HighLatitudesMethod = com.byagowi.persiancalendar.global.highLatitudesMethod,
+    midnightMethod: MidnightMethod = com.byagowi.persiancalendar.global.midnightMethod,
 ): PrayTimes {
     val year = calendar[GregorianCalendar.YEAR]
     val month = calendar[GregorianCalendar.MONTH] + 1
@@ -34,7 +36,8 @@ fun Coordinates.calculatePrayTimes(
         // This turns GMT+4:30 to GMT+3:30 as Iran has abandoned summer but older devices aren't unaware
         .let { if (it == 4.5 && calendar.timeZone.id == IRAN_TIMEZONE_ID) 3.5 else it }
     return PrayTimes(
-        calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod
+        calculationMethod, year, month, day, offset, this, asrMethod, highLatitudesMethod,
+        midnightMethod
     )
 }
 
