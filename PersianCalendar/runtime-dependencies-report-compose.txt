@@ -9,7 +9,7 @@
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.21
 |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.8.21 (*)
 +--- com.github.persian-calendar:calendar:1.2.2
-+--- com.github.persian-calendar:praytimes:3.1.0
++--- com.github.persian-calendar:praytimes:3.1.2
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21 (*)
 +--- com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b
 |    +--- org.antlr:antlr4-runtime:4.9.3

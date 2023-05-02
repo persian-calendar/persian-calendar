@@ -32,6 +32,7 @@ import com.byagowi.persiancalendar.PREF_LATITUDE
 import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
 import com.byagowi.persiancalendar.PREF_LONGITUDE
 import com.byagowi.persiancalendar.PREF_MAIN_CALENDAR_KEY
+import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE
 import com.byagowi.persiancalendar.PREF_NOTIFY_DATE_LOCK_SCREEN
@@ -71,6 +72,7 @@ import io.github.persiancalendar.praytimes.AsrMethod
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.Coordinates
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
+import io.github.persiancalendar.praytimes.MidnightMethod
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.TimeZone
@@ -109,6 +111,8 @@ var isNotifyDate = DEFAULT_NOTIFY_DATE
 var notificationAthan = DEFAULT_NOTIFICATION_ATHAN
     private set
 var calculationMethod = CalculationMethod.valueOf(DEFAULT_PRAY_TIME_METHOD)
+    private set
+var midnightMethod = calculationMethod.defaultMidnight
     private set
 var asrMethod = AsrMethod.Standard
     private set
@@ -260,6 +264,10 @@ fun updateStoredPreference(context: Context) {
             language.isHanafiMajority
         )
     ) AsrMethod.Standard else AsrMethod.Hanafi
+    midnightMethod = context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
+        ?.let(MidnightMethod::valueOf)
+        ?.takeIf { !it.isJafariOnly || calculationMethod.isJafari }
+        ?: calculationMethod.defaultMidnight
     highLatitudesMethod = HighLatitudesMethod.valueOf(
         if (!enableHighLatitudesConfiguration) DEFAULT_HIGH_LATITUDES_METHOD
         else prefs.getString(PREF_HIGH_LATITUDES_METHOD, null) ?: DEFAULT_HIGH_LATITUDES_METHOD

@@ -25,11 +25,13 @@ import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
+import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
 import com.byagowi.persiancalendar.PREF_ATHAN_URI
 import com.byagowi.persiancalendar.PREF_HIGH_LATITUDES_METHOD
+import com.byagowi.persiancalendar.PREF_MIDNIGHT_METHOD
 import com.byagowi.persiancalendar.PREF_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.PREF_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.R
@@ -58,9 +60,11 @@ import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.enableHighLatitudesConfiguration
 import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.utils.titleStringId
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import io.github.persiancalendar.praytimes.CalculationMethod
 import io.github.persiancalendar.praytimes.HighLatitudesMethod
+import io.github.persiancalendar.praytimes.MidnightMethod
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -75,6 +79,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var highLatitudesMethodPreference: Preference? = null
     private var ascendingAthanVolumePreference: Preference? = null
     private var athanVolumeDialogPreference: Preference? = null
+    private var midnightMethodSelectPreference: Preference? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activity = activity ?: return
@@ -147,12 +152,67 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     summary(R.string.athan_volume_summary)
                     athanVolumeDialogPreference = this
                 }
+                clickable(
+                    onClick = {
+                        val methodsToShow = enumValues<MidnightMethod>()
+                            .filter { !it.isJafariOnly || calculationMethod.isJafari }
+                        val entryValues = listOf("DEFAULT") + methodsToShow.map { it.name }
+                        val entries = listOf(getString(calculationMethod.titleStringId)) +
+                                methodsToShow.map { midnightMethodToString(it) }
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.midnight)
+                            .setNegativeButton(R.string.cancel, null)
+                            .setSingleChoiceItems(
+                                entries.toTypedArray(),
+                                entryValues.indexOf(
+                                    context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
+                                        ?: "DEFAULT"
+                                )
+                            ) { dialog, which ->
+                                context.appPrefs.edit {
+                                    if (which == 0) remove(PREF_MIDNIGHT_METHOD)
+                                    else putString(PREF_MIDNIGHT_METHOD, entryValues[which])
+                                }
+                                midnightMethodSelectPreference?.summary = entries[which]
+                                dialog.dismiss()
+                            }
+                            .show()
+                    }
+                ) {
+                    this@LocationAthanFragment.midnightMethodSelectPreference = this
+                    setTitle(R.string.midnight)
+                    setMidnightMethodPreferenceSummary()
+                }
             }
         }
 
         val appPrefs = activity.appPrefs
         onSharedPreferenceChanged(appPrefs, null)
         appPrefs.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    private fun setMidnightMethodPreferenceSummary() {
+        val context = context ?: return
+        midnightMethodSelectPreference?.summary =
+            context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
+                ?.let { midnightMethodToString(MidnightMethod.valueOf(it)) }
+                ?: getString(calculationMethod.titleStringId)
+    }
+
+    private fun midnightMethodToString(method: MidnightMethod): String {
+        return when (method) {
+            MidnightMethod.MidSunsetToSunrise ->
+                listOf(R.string.sunset, R.string.sunrise)
+
+            MidnightMethod.MidSunsetToFajr ->
+                listOf(R.string.sunset, R.string.fajr)
+
+            MidnightMethod.MidMaghribToSunrise ->
+                listOf(R.string.maghrib, R.string.sunrise)
+
+            MidnightMethod.MidMaghribToFajr ->
+                listOf(R.string.maghrib, R.string.fajr)
+        }.joinToString(EN_DASH) { getString(it) }
     }
 
     private class PickRingtoneContract : ActivityResultContract<Unit, String?>() {
@@ -218,6 +278,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         athanPreferenceCategory?.forEach {
             it.isVisible = it.isVisible && coordinates.value != null
         }
+        setMidnightMethodPreferenceSummary()
     }
 
     override fun onCreateRecyclerView(
