@@ -248,7 +248,8 @@
         <item quantity="other">%1$s días</item>
     </plurals>
     <plurals name="n_months">
-        <item quantity="one">%1$s mese</item>
+        <item quantity="one">%1$s mes</item>
+        <item quantity="many"></item>
         <item quantity="other">%1$s meses</item>
     </plurals>
     <plurals name="n_years">
@@ -386,7 +387,7 @@
     <string name="live_wallpaper_settings">Ajustes de fondo de pantalla en vivo</string>
     <string name="screensaver_settings">Ajustes del salvapantallas</string>
     <string name="true_north">Norte verdadero</string>
-    <string name="enable_notification">¿Desea activar la notificación de la fecha\?</string>
+    <string name="enable_notification">¿Desea habilitar la notificación de la fecha\?</string>
     <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
     <string name="lock">Bloquear</string>
     <string name="exit_full_screen">Salir de la pantalla completa</string>
