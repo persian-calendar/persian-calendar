@@ -249,7 +249,6 @@
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s mes</item>
-        <item quantity="many"></item>
         <item quantity="other">%1$s meses</item>
     </plurals>
     <plurals name="n_years">
