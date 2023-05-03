@@ -39,7 +39,7 @@ enum class Theme(
             val theme = getCurrent(activity)
             if (theme == SYSTEM_DEFAULT ||
                 // Let's use dynamic colors also in black theme of Android 12
-                DynamicColors.isDynamicColorAvailable() && theme == BLACK
+                (DynamicColors.isDynamicColorAvailable() && theme == BLACK)
             ) {
                 val isNightModeEnabled = isNightMode(activity)
 
