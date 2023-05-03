@@ -60,13 +60,13 @@ enum class Theme(
                         }
                     )
                 } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
-
-                // Apply blur considerations only if is supported by the device
-                if (
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
-                    activity.windowManager.isCrossWindowBlurEnabled
-                ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
             } else activity.setTheme(theme.styleRes)
+
+            // Apply blur considerations only if is supported by the device
+            if (
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
+                activity.windowManager.isCrossWindowBlurEnabled
+            ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
 
             if (!activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
                 || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
