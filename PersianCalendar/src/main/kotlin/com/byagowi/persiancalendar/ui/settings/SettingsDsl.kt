@@ -67,7 +67,8 @@ inline fun PreferenceCategory.singleSelect(
                     dialog.dismiss()
                 }
                 .show()
-        }) {
+        }
+    ) {
         preference = this
         if (summaryResId != null) setSummary(summaryResId)
         else summary = entries[entryValues.indexOf(
