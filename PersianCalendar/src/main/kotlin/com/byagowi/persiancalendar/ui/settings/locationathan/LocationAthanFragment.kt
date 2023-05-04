@@ -158,10 +158,8 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         val methodsToShow = enumValues<MidnightMethod>()
                             .filter { !it.isJafariOnly || calculationMethod.isJafari }
                         val entryValues = listOf("DEFAULT") + methodsToShow.map { it.name }
-                        val entries = listOf(
-                            getString(calculationMethod.titleStringId) + spacedComma +
-                                    midnightMethodToString(calculationMethod.defaultMidnight)
-                        ) + methodsToShow.map(::midnightMethodToString)
+                        val entries = listOf(midnightDefaultTitle()) +
+                                methodsToShow.map(::midnightMethodToString)
                         MaterialAlertDialogBuilder(context)
                             .setTitle(R.string.midnight)
                             .setNegativeButton(R.string.cancel, null)
@@ -194,12 +192,17 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
         appPrefs.registerOnSharedPreferenceChangeListener(this)
     }
 
+    private fun midnightDefaultTitle(): String {
+        return getString(calculationMethod.titleStringId) + spacedComma +
+                midnightMethodToString(calculationMethod.defaultMidnight)
+    }
+
     private fun setMidnightMethodPreferenceSummary() {
         val context = context ?: return
         midnightMethodSelectPreference?.summary =
             context.appPrefs.getString(PREF_MIDNIGHT_METHOD, null)
                 ?.let { midnightMethodToString(MidnightMethod.valueOf(it)) }
-                ?: getString(calculationMethod.titleStringId)
+                ?: midnightDefaultTitle()
     }
 
     private fun midnightMethodToString(method: MidnightMethod): String {
