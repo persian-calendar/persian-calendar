@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.language
+import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.settings.build
 import com.byagowi.persiancalendar.ui.settings.clickable
@@ -157,8 +158,10 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                         val methodsToShow = enumValues<MidnightMethod>()
                             .filter { !it.isJafariOnly || calculationMethod.isJafari }
                         val entryValues = listOf("DEFAULT") + methodsToShow.map { it.name }
-                        val entries = listOf(getString(calculationMethod.titleStringId)) +
-                                methodsToShow.map { midnightMethodToString(it) }
+                        val entries = listOf(
+                            getString(calculationMethod.titleStringId) + spacedComma +
+                                    midnightMethodToString(calculationMethod.defaultMidnight)
+                        ) + methodsToShow.map(::midnightMethodToString)
                         MaterialAlertDialogBuilder(context)
                             .setTitle(R.string.midnight)
                             .setNegativeButton(R.string.cancel, null)
