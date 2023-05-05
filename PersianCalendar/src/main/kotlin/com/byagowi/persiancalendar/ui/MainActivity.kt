@@ -197,7 +197,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
             val transparencyState = SystemBarsTransparency(this@MainActivity)
             binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = if (transparencyState.shouldStatusBarTransparent) 0 else insets.top
+                topMargin = if (transparencyState.shouldStatusBarBeTransparent) 0 else insets.top
 
                 val isForcefulNavigationBarColorApplied =
                     Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
@@ -207,14 +207,14 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                             insets.bottom > 36.dp
                 val shouldApplyBottomInset = isForcefulNavigationBarColorApplied ||
                         // Or a non transparent color is applied to navigation
-                        !transparencyState.shouldNavigationBarTransparent
+                        !transparencyState.shouldNavigationBarBeTransparent
                 bottomMargin = if (shouldApplyBottomInset) insets.bottom else 0
             }
             NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
                 .statusBarPlaceHolder.let { placeHolder ->
                     placeHolder.updateLayoutParams {
                         this@updateLayoutParams.height =
-                            if (transparencyState.shouldStatusBarTransparent) insets.top else 0
+                            if (transparencyState.shouldStatusBarBeTransparent) insets.top else 0
                     }
                     placeHolder.isInvisible = !transparencyState.needsVisibleStatusBarPlaceHolder
                 }
