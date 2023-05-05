@@ -24,7 +24,7 @@
         <item name="colorSelectedDay">@android:color/system_neutral1_800</item>
         <item name="colorEventIndicator">@android:color/system_neutral1_0</item>
 
-        <item name="coloredTabIndicatorColor">@android:color/system_accent1_300</item>
+        <item name="coloredTabIndicatorColor">?attr/colorPrimaryInverse</item>
         <item name="colorTextDaySelected">@android:color/system_accent2_0</item>
         <item name="colorAppointment">@android:color/system_accent1_200</item>
 
