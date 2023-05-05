@@ -93,6 +93,7 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupExpandableAccessibilityDescription
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.THREE_SECONDS_AND_HALF_IN_MILLIS
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -348,13 +349,19 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
             )
             val selectedTab = tabs[binding.viewPager.currentItem].second
+            val tabWidth = binding.viewPager.width.takeIf { it != 0 } ?: return@doOnNextLayout
+            selectedTab.measure(
+                View.MeasureSpec.makeMeasureSpec(tabWidth, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+            )
             val minimumHeight = listOfNotNull(
                 selectedTab.measuredHeight,
                 binding.portraitContentRoot?.let {
                     val calendarHeight = binding.calendarPager.measuredHeight
                     binding.root.measuredHeight -
                             (calendarHeight + binding.tabLayout.measuredHeight)
-                }
+                },
+                220.sp.toInt()
             ).max()
             binding.viewPager.minimumHeight = minimumHeight
             selectedTab.minimumHeight = minimumHeight
