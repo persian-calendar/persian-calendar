@@ -1,9 +1,12 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.media.RingtoneManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.Settings
@@ -11,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
 import androidx.core.net.toUri
 import androidx.core.view.ViewCompat
@@ -19,6 +23,7 @@ import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import androidx.preference.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.DEFAULT_ASCENDING_ATHAN_VOLUME
@@ -26,6 +31,7 @@ import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_NOTIFICATION_ATHAN
 import com.byagowi.persiancalendar.DEFAULT_PRAY_TIME_METHOD
 import com.byagowi.persiancalendar.EN_DASH
+import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_ASCENDING_ATHAN_VOLUME
 import com.byagowi.persiancalendar.PREF_ASR_HANAFI_JURISTIC
 import com.byagowi.persiancalendar.PREF_ATHAN_NAME
@@ -55,6 +61,7 @@ import com.byagowi.persiancalendar.ui.settings.singleSelect
 import com.byagowi.persiancalendar.ui.settings.summary
 import com.byagowi.persiancalendar.ui.settings.switch
 import com.byagowi.persiancalendar.ui.settings.title
+import com.byagowi.persiancalendar.ui.utils.askForPostNotificationPermission
 import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.cityName
@@ -69,7 +76,6 @@ import io.github.persiancalendar.praytimes.MidnightMethod
 
 class LocationAthanFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
-
     private val defaultAthanName get() = context?.getString(R.string.default_athan) ?: ""
 
     private var coordinatesPreference: Preference? = null
@@ -81,6 +87,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
     private var ascendingAthanVolumePreference: Preference? = null
     private var athanVolumeDialogPreference: Preference? = null
     private var midnightMethodSelectPreference: Preference? = null
+    private var notificationAthanSwitchPreference: SwitchPreferenceCompat? = null
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activity = activity ?: return
@@ -142,6 +149,22 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                     title(R.string.notification_athan)
                     summary(R.string.enable_notification_athan)
                     disableDependentsState = true
+                    setOnPreferenceChangeListener { _, _ ->
+                        isChecked = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                            ActivityCompat.checkSelfPermission(
+                                activity, Manifest.permission.POST_NOTIFICATIONS
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            activity.askForPostNotificationPermission(
+                                POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
+                            )
+                            false
+                        } else {
+                            !isChecked
+                        }
+                        false
+                    }
+                    this@LocationAthanFragment.notificationAthanSwitchPreference = this
                 }
                 switch(PREF_ASCENDING_ATHAN_VOLUME, DEFAULT_ASCENDING_ATHAN_VOLUME) {
                     title(R.string.ascending_athan_volume)
@@ -285,6 +308,9 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
             it.isVisible = it.isVisible && coordinates.value != null
         }
         setMidnightMethodPreferenceSummary()
+        if (key == PREF_NOTIFICATION_ATHAN)
+            notificationAthanSwitchPreference?.isChecked =
+                sharedPreferences.getBoolean(PREF_NOTIFICATION_ATHAN, DEFAULT_NOTIFICATION_ATHAN)
     }
 
     override fun onCreateRecyclerView(

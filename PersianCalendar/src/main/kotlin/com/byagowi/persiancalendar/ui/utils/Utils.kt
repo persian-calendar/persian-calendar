@@ -53,7 +53,7 @@ import androidx.navigation.findNavController
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
-import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE
+import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.ui.DrawerHost
@@ -236,10 +236,10 @@ fun FragmentActivity.askForCalendarPermission() {
 }
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-fun FragmentActivity.askForPostNotificationPermission() {
+fun FragmentActivity.askForPostNotificationPermission(requestCode: Int) {
     requestPermissions(
         arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-        POST_NOTIFICATION_PERMISSION_REQUEST_CODE
+        requestCode
     )
 }
 

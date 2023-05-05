@@ -45,6 +45,7 @@ import androidx.transition.ChangeBounds
 import androidx.transition.TransitionManager
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.BuildConfig
+import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_DISABLE_OWGHAT
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
@@ -379,7 +380,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         ) {
             calendarsView.buttonsBar.settings.setOnClickListener {
                 calendarsView.buttonsBar.root.isVisible = false
-                activity?.askForPostNotificationPermission()
+                activity?.askForPostNotificationPermission(
+                    POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
+                )
             }
             calendarsView.buttonsBar.discard.setOnClickListener {
                 calendarsView.buttonsBar.root.isVisible = false
