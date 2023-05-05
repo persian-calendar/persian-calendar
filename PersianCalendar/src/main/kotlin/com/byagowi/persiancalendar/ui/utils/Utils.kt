@@ -45,6 +45,7 @@ import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
@@ -298,13 +299,16 @@ fun Activity.transparentSystemBars() {
     // reporting any value so let's skip and simplify
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
 
-    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
-
     val transparencyState = SystemBarsTransparency(this)
-    if (transparencyState.isPrimaryColorLight)
-        insetsController.isAppearanceLightStatusBars = true
-    if (transparencyState.isSurfaceColorLight)
-        insetsController.isAppearanceLightNavigationBars = true
+
+    if (transparencyState.isPrimaryColorLight || transparencyState.isSurfaceColorLight) {
+        val insetsController: WindowInsetsControllerCompat =
+            WindowCompat.getInsetsController(window, window.decorView)
+        if (transparencyState.isPrimaryColorLight)
+            insetsController.isAppearanceLightStatusBars = true
+        if (transparencyState.isSurfaceColorLight)
+            insetsController.isAppearanceLightNavigationBars = true
+    }
 
     WindowCompat.setDecorFitsSystemWindows(window, false)
     val systemUiScrim = ColorUtils.setAlphaComponent(Color.BLACK, 0x40) // 25% black
