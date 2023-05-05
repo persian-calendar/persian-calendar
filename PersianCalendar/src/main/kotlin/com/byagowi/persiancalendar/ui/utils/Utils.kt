@@ -14,6 +14,7 @@ import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Base64
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.LayoutInflater
@@ -137,6 +138,13 @@ fun Toolbar.setupMenuNavigation() {
 // https://stackoverflow.com/a/58249983
 private tailrec fun Context.getActivity(): FragmentActivity? = this as? FragmentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
+
+fun Context.tryGetDisplayMetrics(): DisplayMetrics? {
+    val displayMetrics = DisplayMetrics()
+    getActivity()?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
+        ?: return null
+    return displayMetrics
+}
 
 @ColorInt
 fun Context.resolveColor(@AttrRes attribute: Int) = TypedValue().let {

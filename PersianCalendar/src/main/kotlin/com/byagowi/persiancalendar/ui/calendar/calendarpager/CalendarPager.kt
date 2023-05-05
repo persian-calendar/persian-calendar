@@ -1,9 +1,12 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
+import android.content.res.Configuration
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.core.view.doOnAttach
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
@@ -13,6 +16,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.sp
+import com.byagowi.persiancalendar.ui.utils.tryGetDisplayMetrics
 import io.github.persiancalendar.calendar.AbstractDate
 import java.lang.ref.WeakReference
 
@@ -80,9 +84,33 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
         override fun getItemCount() = monthsLimit
 
-        private val sharedDayViewData = SharedDayViewData(
-            context, resources.getDimension(R.dimen.grid_calendar_height) / 7 - 4.5.sp
-        )
+        private val displayMetrics = context?.tryGetDisplayMetrics()
+        private val suitableHeight = listOfNotNull(
+            resources.getDimension(R.dimen.grid_calendar_height),
+            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+                displayMetrics?.heightPixels?.let { it / 2.4f }
+            else null
+        ).max()
+        private val cellHeight = suitableHeight / 7 - 4.5.sp
+        private val sharedDayViewData = SharedDayViewData(context, cellHeight)
+
+        init {
+            if (displayMetrics != null) doOnAttach {
+                updateLayoutParams {
+                    when (resources.configuration.orientation) {
+                        Configuration.ORIENTATION_PORTRAIT -> this.height = suitableHeight.toInt()
+
+                        Configuration.ORIENTATION_LANDSCAPE -> this.width =
+                            (displayMetrics.widthPixels / 2.05f).coerceIn(
+                                resources.getDimension(R.dimen.grid_calendar_land_width),
+                                resources.getDimension(R.dimen.grid_calendar_land_width_max)
+                            ).toInt()
+
+                        else -> Unit
+                    }
+                }
+            }
+        }
 
         inner class ViewHolder(val binding: MonthPageBinding) :
             RecyclerView.ViewHolder(binding.root) {
@@ -119,6 +147,9 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                         true
                     }
                 }
+
+                binding.previous.updateLayoutParams { this.height = (cellHeight / 1.4).toInt() }
+                binding.next.updateLayoutParams { this.height = (cellHeight / 1.4).toInt() }
 
                 addViewHolder(this)
             }
