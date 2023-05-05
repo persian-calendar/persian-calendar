@@ -18,7 +18,7 @@
 
         <item name="colorSurface">@android:color/system_accent1_10</item>
         <item name="colorTextHoliday">@android:color/system_accent1_500</item>
-        <item name="colorHoliday">@android:color/system_accent1_100</item>
+        <item name="colorHoliday">?attr/colorPrimaryInverse</item>
         <item name="colorOnAppBar">@android:color/system_neutral1_0</item>
         <item name="colorCurrentDay">@android:color/system_accent1_400</item>
         <item name="colorSelectedDay">@android:color/system_neutral1_800</item>
