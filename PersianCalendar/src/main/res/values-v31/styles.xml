@@ -71,7 +71,7 @@
     </style>
 
     <style name="DynamicLightSurfaceOverride">
-        <item name="colorSurface">@android:color/system_accent1_10</item>
+        <item name="colorSurface">@android:color/system_accent2_10</item>
     </style>
 
     <style name="DynamicDarkSurfaceOverride" />
