@@ -31,14 +31,17 @@
                     android:id="@+id/header_information"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/view_padding"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
                     android:textIsSelectable="true" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/view_padding"
-                    android:layout_marginRight="@dimen/view_padding"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
                     android:baselineAligned="false"
                     android:orientation="horizontal">
 
