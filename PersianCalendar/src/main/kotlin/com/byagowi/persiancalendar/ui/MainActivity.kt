@@ -107,7 +107,9 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     private lateinit var binding: MainActivityBinding
 
     private val onBackPressedCloseDrawerCallback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = binding.root.closeDrawer(GravityCompat.START)
+        override fun handleOnBackPressed() {
+            binding.drawer?.closeDrawer(GravityCompat.START)
+        }
     }
 
     private val exitId = View.generateViewId()
@@ -131,7 +133,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
         ensureDirectionality()
 
-        binding.root.addDrawerListener(createDrawerListener())
+        binding.drawer?.addDrawerListener(createDrawerListener())
 
         listOf(
             Triple(R.id.calendar, R.drawable.ic_date_range, R.string.calendar),
@@ -381,19 +383,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
-    // Checking for the ancient "menu" key
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?) = when (keyCode) {
-        KeyEvent.KEYCODE_MENU -> {
-            if (binding.root.isDrawerOpen(GravityCompat.START))
-                binding.root.closeDrawer(GravityCompat.START)
-            else
-                binding.root.openDrawer(GravityCompat.START)
-            true
-        }
-
-        else -> super.onKeyDown(keyCode, event)
-    }
-
     private fun restartToSettings() {
         val intent = intent
         intent?.action = "SETTINGS"
@@ -407,9 +396,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         when (val itemId = selectedMenuItem.itemId) {
             exitId -> finish()
             else -> {
-                binding.root.closeDrawer(GravityCompat.START)
-                if (navHostFragment?.navController?.currentDestination?.id != itemId) {
-                    clickedItem = itemId
+                val drawer = binding.drawer
+                if (drawer == null) {
+                    if (navHostFragment?.navController?.currentDestination?.id != itemId) {
+                        clickedItem = itemId
+                        navigateTo(itemId)
+                    }
+                } else {
+                    drawer.closeDrawer(GravityCompat.START)
+                    if (navHostFragment?.navController?.currentDestination?.id != itemId) {
+                        clickedItem = itemId
+                    }
                 }
                 applyAppLanguage(this)
             }
@@ -446,16 +443,17 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }.show()
 
     override fun setupToolbarWithDrawer(toolbar: Toolbar) {
+        val drawer = binding.drawer ?: return
         val listener = ActionBarDrawerToggle(
-            this, binding.root, toolbar,
+            this, drawer, toolbar,
             androidx.navigation.ui.R.string.nav_app_bar_open_drawer_description, R.string.close
         ).also { it.syncState() }
 
-        binding.root.addDrawerListener(listener)
-        toolbar.setNavigationOnClickListener { binding.root.openDrawer(GravityCompat.START) }
+        drawer.addDrawerListener(listener)
+        toolbar.setNavigationOnClickListener { drawer.openDrawer(GravityCompat.START) }
         toolbar.findViewTreeLifecycleOwner()?.lifecycle?.addObserver(LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_DESTROY) {
-                binding.root.removeDrawerListener(listener)
+                drawer.removeDrawerListener(listener)
                 toolbar.setNavigationOnClickListener(null)
             }
         })

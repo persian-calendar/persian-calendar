@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="start">
+        android:orientation="horizontal">
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation"
+            android:layout_width="330dp"
+            android:layout_height="match_parent"
+            app:headerLayout="@layout/navigation_header"
+            app:itemIconTint="?attr/colorAccent"
+            app:itemTextColor="?android:attr/textColorPrimary" />
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/navHostFragment"
@@ -20,15 +26,6 @@
             app:defaultNavHost="true"
             app:navGraph="@navigation/navigation_graph" />
 
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/navigation_header"
-            app:itemIconTint="?attr/colorAccent"
-            app:itemTextColor="?android:attr/textColorPrimary" />
-
-    </androidx.drawerlayout.widget.DrawerLayout>
+    </LinearLayout>
 
 </FrameLayout>
