@@ -140,13 +140,6 @@ fun Toolbar.setupMenuNavigation() {
 private tailrec fun Context.getActivity(): FragmentActivity? = this as? FragmentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
-fun Context.tryGetDisplayMetrics(): DisplayMetrics? {
-    val displayMetrics = DisplayMetrics()
-    getActivity()?.windowManager?.defaultDisplay?.getMetrics(displayMetrics)
-        ?: return null
-    return displayMetrics
-}
-
 @ColorInt
 fun Context.resolveColor(@AttrRes attribute: Int) = TypedValue().let {
     theme.resolveAttribute(attribute, it, true)
