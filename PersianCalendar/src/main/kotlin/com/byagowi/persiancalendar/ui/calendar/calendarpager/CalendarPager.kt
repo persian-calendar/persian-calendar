@@ -87,9 +87,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         private val displayMetrics = context?.tryGetDisplayMetrics()
         private val suitableHeight = listOfNotNull(
             resources.getDimension(R.dimen.grid_calendar_height),
-            if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-                displayMetrics?.heightPixels?.let { it / 2.4f }
-            else null
+            displayMetrics?.heightPixels?.let { it / 2.2f }
         ).max().coerceAtMost(resources.getDimension(R.dimen.grid_calendar_height_max))
         private val cellHeight = suitableHeight / 7 - 4.5.sp
         private val sharedDayViewData = SharedDayViewData(context, cellHeight)
