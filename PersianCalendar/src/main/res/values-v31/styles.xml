@@ -80,6 +80,13 @@
         <item name="colorSurface">@android:color/system_neutral1_1000</item>
     </style>
 
+    <style name="DynamicModernOverride">
+        <item name="screenBackgroundGradientStart">@android:color/system_accent1_0</item>
+        <item name="screenBackgroundGradientEnd">@android:color/system_accent1_50</item>
+        <item name="screenBackgroundColor">@android:color/system_neutral1_0</item>
+        <item name="colorSurface">@android:color/system_neutral1_0</item>
+    </style>
+
     <style name="AlertDialogThemeBlurSupportedOverlay">
         <item name="materialAlertDialogTheme">@style/AlertDialogThemeBlurSupported</item>
     </style>
