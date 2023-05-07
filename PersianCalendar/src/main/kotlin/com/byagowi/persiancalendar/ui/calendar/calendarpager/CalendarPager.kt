@@ -86,7 +86,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         private val monthViewInitializer by lazy(LazyThreadSafetyMode.NONE) {
             val suitableHeight = listOfNotNull(
                 resources.getDimension(R.dimen.grid_calendar_height),
-                context.resources.displayMetrics.heightPixels / 2.2f
+                resources.displayMetrics.heightPixels / 2.2f
             ).max().coerceAtMost(resources.getDimension(R.dimen.grid_calendar_height_max))
 
             updateLayoutParams {
@@ -94,8 +94,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     Configuration.ORIENTATION_PORTRAIT -> this.height = suitableHeight.toInt()
 
                     Configuration.ORIENTATION_LANDSCAPE -> this.width =
-                        (context.resources.displayMetrics.widthPixels / 2.05f).coerceIn(
-                            resources.getDimension(R.dimen.grid_calendar_land_width),
+                        (resources.displayMetrics.widthPixels / 2.05f).coerceAtMost(
                             resources.getDimension(R.dimen.grid_calendar_land_width_max)
                         ).toInt()
 
