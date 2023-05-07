@@ -39,8 +39,8 @@ enum class Theme(
             val theme = getCurrent(activity)
             val isDynamicColorAvailable = DynamicColors.isDynamicColorAvailable()
             if (theme == SYSTEM_DEFAULT ||
-                // Let's use dynamic colors also in black theme of Android 12
-                (isDynamicColorAvailable && theme == BLACK)
+                // Let's use dynamic colors also in black and modern theme of Android 12
+                (isDynamicColorAvailable && (theme == BLACK || theme == MODERN))
             ) {
                 val isNightModeEnabled = isNightMode(activity)
 
@@ -48,6 +48,7 @@ enum class Theme(
                     activity.setTheme(
                         when {
                             theme == BLACK -> R.style.DynamicBlackTheme
+                            theme == MODERN -> R.style.DynamicModernTheme
                             isNightModeEnabled -> R.style.DynamicDarkTheme
                             else -> R.style.DynamicLightTheme
                         }
@@ -56,17 +57,13 @@ enum class Theme(
                     activity.setTheme(
                         when {
                             theme == BLACK -> R.style.DynamicBlackSurfaceOverride
+                            theme == MODERN -> R.style.DynamicModernSurfaceOverride
                             isNightModeEnabled -> R.style.DynamicDarkSurfaceOverride
                             else -> R.style.DynamicLightSurfaceOverride
                         }
                     )
                 } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
             } else activity.setTheme(theme.styleRes)
-
-            if (isDynamicColorAvailable && theme == MODERN) {
-                DynamicColors.applyToActivityIfAvailable(activity)
-                activity.setTheme(R.style.DynamicModernOverride)
-            }
 
             // Apply blur considerations only if is supported by the device
             if (

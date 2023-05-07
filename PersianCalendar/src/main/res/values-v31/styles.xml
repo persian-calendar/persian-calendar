@@ -70,6 +70,30 @@
         <item name="sunViewMidDayColor">@android:color/system_accent1_600</item>
     </style>
 
+    <style name="DynamicModernTheme" parent="BaseLightTheme">
+        <item name="colorPrimary">@android:color/system_accent3_800</item>
+        <item name="colorAccent">@android:color/system_accent1_800</item>
+        <item name="screenBackgroundGradientStart">@android:color/system_accent1_0</item>
+        <item name="screenBackgroundGradientEnd">@android:color/system_accent1_100</item>
+        <item name="screenBackgroundColor">?attr/colorSurface</item>
+
+        <item name="colorSurface">@android:color/system_accent1_10</item>
+        <item name="colorTextHoliday">@color/modern_text_holiday</item>
+        <item name="colorHoliday">@color/modern_holiday</item>
+        <item name="colorOnAppBar">@android:color/system_neutral1_1000</item>
+        <item name="colorCurrentDay">@android:color/system_accent1_600</item>
+        <item name="colorSelectedDay">@android:color/system_accent2_100</item>
+        <item name="colorEventIndicator">@android:color/system_neutral1_1000</item>
+
+        <item name="coloredTabIndicatorColor">@android:color/system_accent1_600</item>
+        <item name="colorTextDaySelected">@android:color/system_accent2_900</item>
+        <item name="colorAppointment">@android:color/system_accent1_400</item>
+
+        <item name="sunViewNightColor">@color/sun_view_widget_night_color</item>
+        <item name="sunViewDayColor">@color/sun_view_widget_day_color</item>
+        <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
+    </style>
+
     <style name="DynamicLightSurfaceOverride">
         <item name="colorSurface">@android:color/system_accent2_10</item>
     </style>
@@ -80,12 +104,7 @@
         <item name="colorSurface">@android:color/system_neutral1_1000</item>
     </style>
 
-    <style name="DynamicModernOverride">
-        <item name="screenBackgroundGradientStart">@android:color/system_accent1_0</item>
-        <item name="screenBackgroundGradientEnd">@android:color/system_accent1_50</item>
-        <item name="screenBackgroundColor">@android:color/system_neutral1_0</item>
-        <item name="colorSurface">@android:color/system_neutral1_0</item>
-    </style>
+    <style name="DynamicModernSurfaceOverride" />
 
     <style name="AlertDialogThemeBlurSupportedOverlay">
         <item name="materialAlertDialogTheme">@style/AlertDialogThemeBlurSupported</item>
