@@ -13,11 +13,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.view.isVisible
 import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.color.DynamicColors
 import kotlin.math.hypot
 import kotlin.math.min
@@ -77,13 +79,16 @@ class PersianCalendarDreamService : DreamService() {
             }
         }
 
-        val button = AppCompatImageView(ContextThemeWrapper(this, R.style.LightTheme)).also {
-            it.setImageResource(R.drawable.ic_play)
+        val button = AppCompatImageView(ContextThemeWrapper(this, R.style.LightTheme))
+        run {
+            button.setImageResource(R.drawable.ic_play)
             var play = false
-            it.setOnClickListener { _ ->
-                play = !play
-                it.setImageResource(if (play) R.drawable.ic_stop else R.drawable.ic_play)
-                if (play) audioTrack.play() else audioTrack.pause()
+            button.setOnClickListener { _ ->
+                runCatching {
+                    play = !play
+                    if (play) audioTrack.play() else audioTrack.pause()
+                    button.setImageResource(if (play) R.drawable.ic_stop else R.drawable.ic_play)
+                }.onFailure(logException).onFailure { button.isVisible = false }
             }
         }
 
