@@ -198,17 +198,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             val transparencyState = SystemBarsTransparency(this@MainActivity)
             binding.navigation.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = if (transparencyState.shouldStatusBarBeTransparent) 0 else insets.top
-
-                val isForcefulNavigationBarColorApplied =
-                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                            // This detects not presence of gesture navigation as it doesn't have
-                            // forceful color and this perhaps is an ugly way to detect that.
-                            // Gesture navigation height: 24dp. Other navigation height: 48dp
-                            insets.bottom > 36.dp
-                val shouldApplyBottomInset = isForcefulNavigationBarColorApplied ||
-                        // Or a non transparent color is applied to navigation
-                        !transparencyState.shouldNavigationBarBeTransparent
-                bottomMargin = if (shouldApplyBottomInset) insets.bottom else 0
+                bottomMargin =
+                    if (transparencyState.shouldNavigationBarBeTransparent) 0 else insets.bottom
             }
             NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
                 .statusBarPlaceHolder.let { placeHolder ->

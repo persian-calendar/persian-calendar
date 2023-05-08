@@ -304,6 +304,10 @@ fun Activity.transparentSystemBars() {
         if (transparencyState.shouldStatusBarBeTransparent) Color.TRANSPARENT else systemUiScrim
     window.navigationBarColor =
         if (transparencyState.shouldNavigationBarBeTransparent) Color.TRANSPARENT else systemUiScrim
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        window.isNavigationBarContrastEnforced = false
+    }
 }
 
 fun Snackbar.considerSystemBarsInsets() {
