@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui
 
 import android.appwidget.AppWidgetManager
+import android.os.Build
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -31,9 +32,14 @@ class FragmentsSmokeTest {
     @Test
     fun themesSmokeTest() {
         listOf(
-            R.style.DynamicLightTheme, R.style.DynamicDarkTheme, R.style.LightTheme,
-            R.style.DarkTheme, R.style.ModernTheme, R.style.AquaTheme, R.style.BlackTheme
-        ).forEach { launchFragmentInContainer<CalendarScreen>(themeResId = it) }
+            R.style.LightTheme, R.style.DarkTheme, R.style.ModernTheme, R.style.AquaTheme,
+            R.style.BlackTheme
+        ).let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) it + listOf(
+                R.style.DynamicLightTheme, R.style.DynamicBlackTheme, R.style.DynamicDarkTheme,
+                R.style.DynamicModernTheme
+            ) else it
+        }.forEach { launchFragmentInContainer<CalendarScreen>(themeResId = it) }
     }
 
     @Test
