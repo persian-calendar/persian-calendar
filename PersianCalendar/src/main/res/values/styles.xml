@@ -41,6 +41,9 @@
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
+        <item name="sunViewNightColor">@color/sun_view_night_color</item>
+        <item name="sunViewDayColor">@color/sun_view_day_color</item>
+        <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
@@ -48,6 +51,9 @@
         <item name="colorSecondaryContainer">@color/secondary_container_light</item>
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
+        <item name="sunViewNightColor">@color/sun_view_night_color</item>
+        <item name="sunViewDayColor">@color/sun_view_day_color</item>
+        <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
     </style>
 
     <!-- Applied to all themes -->
@@ -63,9 +69,6 @@
         <!-- Make Arabic letters separated -->
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
-        <item name="sunViewNightColor">@color/sun_view_night_color</item>
-        <item name="sunViewDayColor">@color/sun_view_day_color</item>
-        <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
