@@ -20,7 +20,7 @@ class AngleDisplay(
 ) {
 
     private val lcd = Typeface.createFromAsset(context.assets, "fonts/lcd.ttf")
-    private val lcdTextSize = 20.dp
+    private val lcdTextSize = 20 * context.resources.dp
     private val lcdForegroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.lcd_front)
         it.textSize = lcdTextSize
@@ -42,8 +42,8 @@ class AngleDisplay(
     private val displayFormat = DecimalFormat(defaultFormat).also {
         it.decimalFormatSymbols = DecimalFormatSymbols(Locale.ENGLISH)
     }
-    private val displayPadding = 8.dp.toInt()
-    val displayGap = 24.dp.toInt()
+    private val displayPadding = (8 * context.resources.dp).toInt()
+    val displayGap = (24 * context.resources.dp).toInt()
 
     fun updatePlacement(x: Int, y: Int) {
         displayRect.set(

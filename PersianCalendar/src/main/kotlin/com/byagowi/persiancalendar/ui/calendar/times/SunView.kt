@@ -85,7 +85,7 @@ class SunView @JvmOverloads constructor(
         }
     private var sun: Ecliptic? = null
     private var moon: Spherical? = null
-    private val fontSize = if (language.isArabicScript) 14.dp else 11.5.dp
+    private val fontSize = (if (language.isArabicScript) 14f else 11.5f) * resources.dp
 
     fun setTime(date: GregorianCalendar) {
         val time = Time.fromMillisecondsSince1970(date.time.time)

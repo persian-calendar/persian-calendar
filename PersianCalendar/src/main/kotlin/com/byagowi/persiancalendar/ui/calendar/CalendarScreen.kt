@@ -328,7 +328,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
             val allInsets =
                 insets.getInsets(WindowInsetsCompat.Type.ime() or WindowInsetsCompat.Type.systemBars())
             binding.addEvent.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = allInsets.bottom + 20.dp.toInt()
+                bottomMargin = allInsets.bottom + (20 * resources.dp).toInt()
             }
             // Content root is only available in portrait mode
             binding.portraitContentRoot?.updatePadding(
@@ -363,7 +363,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                     binding.root.measuredHeight -
                             (calendarHeight + binding.tabLayout.measuredHeight)
                 },
-                220.sp.toInt()
+                (220 * resources.sp).toInt()
             ).max()
             binding.viewPager.minimumHeight = minimumHeight
             selectedTab.minimumHeight = minimumHeight

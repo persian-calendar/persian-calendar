@@ -10,19 +10,19 @@ import android.view.View
 import com.byagowi.persiancalendar.ui.utils.dp
 
 class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
-
-    private val textSize = 12.dp
+    private val dp = resources.dp
+    private val textSize = 12 * dp
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.GRAY
-        it.strokeWidth = 1.dp
+        it.strokeWidth = 1 * dp
         it.textSize = textSize
     }
-    private val textSideOffset = 30.dp
-    private val firstLevel = 25.dp
-    private val secondLevel = 15.dp
-    private val thirdLevel = 8.dp
-    private val topTextOffset = 9.dp
-    private val textOffset = 10.dp - textSize / 2
+    private val textSideOffset = 30 * dp
+    private val firstLevel = 25 * dp
+    private val secondLevel = 15 * dp
+    private val thirdLevel = 8 * dp
+    private val topTextOffset = 9 * dp
+    private val textOffset = 10 * dp - textSize / 2
     var cmInchFlip = false
         set(value) {
             field = value

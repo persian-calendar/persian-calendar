@@ -33,7 +33,7 @@ private fun showColorPickerDialog(
         )
         if (!isBackgroundPick) it.hideAlphaSeekBar()
         it.setPickedColor(initialColor)
-        it.setPadding(10.dp.toInt())
+        it.setPadding((10 * activity.resources.dp).toInt())
     }
     MaterialAlertDialogBuilder(activity)
         .setTitle(if (isBackgroundPick) R.string.widget_background_color else R.string.widget_text_color)

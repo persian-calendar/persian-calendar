@@ -172,7 +172,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
             it.adapter = SeasonsAdapter()
             it.currentItem = SeasonsAdapter.getCurrentIndex() - 3
-            it.setPageTransformer(MarginPageTransformer(8.dp.roundToInt()))
+            it.setPageTransformer(MarginPageTransformer((8 * resources.dp).toInt()))
         }
 
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {

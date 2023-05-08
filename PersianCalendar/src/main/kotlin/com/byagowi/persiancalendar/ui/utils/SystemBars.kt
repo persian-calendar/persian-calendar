@@ -76,6 +76,6 @@ fun Snackbar.considerSystemBarsInsets() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return // not needed in 30 >=
     view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
         // Not the best way but setOnApplyWindowInsetsListener refuses to give the value
-        bottomMargin = (48 + 8).dp.toInt()
+        bottomMargin = ((48 + 8) * context.resources.dp).toInt()
     }
 }

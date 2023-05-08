@@ -20,7 +20,7 @@ fun showDayPickerDialog(
 ) {
     val dayPickerView = DayPickerView(activity).also {
         it.jdn = jdn
-        it.setPadding(16.dp.toInt())
+        it.setPadding((16 * activity.resources.dp).toInt())
     }
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(dayPickerView)

@@ -219,10 +219,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         }
     }
 
+    private val dp = resources.dp
     private val trianglePath = Path().also {
-        it.moveTo(0f, 6.dp)
-        it.lineTo((-5).dp, .5.dp)
-        it.lineTo(5.dp, .5.dp)
+        it.moveTo(0f, 6 * dp)
+        it.lineTo(-5 * dp, .5f * dp)
+        it.lineTo(5 * dp, .5f * dp)
         it.close()
     }
     private val arcRect = RectF()
@@ -246,19 +247,19 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     private val circlesPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val zodiacSeparatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(com.google.android.material.R.attr.colorSurface)
-        it.strokeWidth = .5.dp
+        it.strokeWidth = .5f * dp
         it.style = Paint.Style.STROKE
     }
 
     private val zodiacPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0xFF808080.toInt()
-        it.strokeWidth = 1.dp
-        it.textSize = 10.dp
+        it.strokeWidth = 1 * dp
+        it.textSize = 10 * dp
         it.textAlign = Paint.Align.CENTER
     }
     private val moonOrbitPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
-        it.strokeWidth = 1.dp
+        it.strokeWidth = 1 * dp
         it.color = 0x40808080
     }
 

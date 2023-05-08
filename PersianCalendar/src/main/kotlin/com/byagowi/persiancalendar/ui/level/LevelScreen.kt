@@ -72,7 +72,7 @@ class LevelScreen : Fragment(R.layout.level_screen) {
         }
         binding.appBar.toolbar.menu.add(getString(R.string.full_screen)).also { menuItem ->
             val defaultMask = binding.maskableFrameLayout.shapeAppearanceModel
-            val rulerNonFullScreenTopSpace = 25.dp.toInt()
+            val rulerNonFullScreenTopSpace = (25 * resources.dp).toInt()
             binding.paddingFrameLayout.updatePadding(top = rulerNonFullScreenTopSpace)
             val toolbarContext = binding.appBar.toolbar.context
             menuItem.icon = toolbarContext.getCompatDrawable(R.drawable.ic_fullscreen)
@@ -134,7 +134,8 @@ class LevelScreen : Fragment(R.layout.level_screen) {
                 bottomMargin = insets.bottom / 2
             }
             binding.levelView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = if (insets.bottom != 0) insets.bottom + 75.dp.toInt() else 0
+                bottomMargin =
+                    if (insets.bottom != 0) insets.bottom + (75 * resources.dp).toInt() else 0
             }
             WindowInsetsCompat.CONSUMED
         }

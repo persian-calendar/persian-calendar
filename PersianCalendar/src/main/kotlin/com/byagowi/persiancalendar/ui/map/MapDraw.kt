@@ -369,9 +369,10 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     private val foregroundPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = mapForegroundColor ?: 0xFFFBF8E5.toInt()
     }
+    private val dp = context.resources.dp
     private val miscPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth = 5.dp
+        strokeWidth = 5 * dp
         color = mapForegroundColor ?: 0x80393CC4.toInt()
     }
     private val matrixProperties = FloatArray(9)
@@ -437,7 +438,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 ).toFloat() + if (centerPlus1.first < center.first) 180 else 0
                 val heading = from.toEarthHeading(to)
                 withRotation(textDegree, center.first, center.second) {
-                    drawText(heading.km, center.first, center.second - 2.dp, textPaint)
+                    drawText(heading.km, center.first, center.second - 2 * dp, textPaint)
                 }
             }
             if (displayGrid) {

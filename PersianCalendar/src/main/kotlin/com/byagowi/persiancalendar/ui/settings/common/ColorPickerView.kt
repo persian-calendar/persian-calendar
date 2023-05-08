@@ -24,7 +24,6 @@ package com.byagowi.persiancalendar.ui.settings.common
  */
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
@@ -53,7 +52,6 @@ import java.util.Locale
 
 class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
     LinearLayout(context, attrs) {
-
     private val colorResultView = EditText(context).apply {
         gravity = Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM
         setOnFocusChangeListener { _, hasFocus ->
@@ -88,8 +86,7 @@ class ColorPickerView(context: Context, attrs: AttributeSet? = null) :
             alphaSeekBar.progress, redSeekBar.progress, greenSeekBar.progress, blueSeekBar.progress
         )
 
-    private val Number.dp: Int
-        get() = (toFloat() * Resources.getSystem().displayMetrics.density).toInt()
+    private val Number.dp get() = (toFloat() * resources.displayMetrics.density).toInt()
 
     private fun createColorView(paint: Paint) = object : FrameLayout(context) {
         val rect = Rect()

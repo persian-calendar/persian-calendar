@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.athan
 
+import android.content.res.Resources
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
@@ -39,9 +40,7 @@ import kotlin.math.sin
 import kotlin.math.tan
 
 class PatternDrawable(
-    prayerKey: String = listOf(
-        FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY
-    ).random(),
+    prayerKey: String = listOf(FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY).random(),
     preferredTintColor: Int? = null,
     var rotationDegree: Float = 0f,
     private val darkBaseColor: Boolean = false
@@ -73,7 +72,7 @@ class PatternDrawable(
             // ::SecondPattern, This won't look as great as others when rotated, let's disable it for now
             ::ThirdPattern,
             // ::FourthPattern
-        ).random()(tintColor, 80.dp)
+        ).random()(tintColor, 80 * Resources.getSystem().dp) // TODO: Avoid Resources.getSystem()
         val bitmap = createBitmap(pattern.width.toInt(), pattern.height.toInt())
             .applyCanvas(pattern::draw)
         foregroundPaint.shader = BitmapShader(bitmap, pattern.tileModeX, pattern.tileModeY)

@@ -177,7 +177,7 @@ fun update(context: Context, updateDate: Boolean) {
             prefs.getBoolean(PREF_WIDGETS_PREFER_SYSTEM_COLORS, true)
 
     roundPixelSize =
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 16.dp
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) 16 * context.resources.dp
         else context.resources.getDimensionPixelSize(
             android.R.dimen.system_app_widget_background_radius
         ).toFloat()
@@ -246,7 +246,7 @@ fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, I
         else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
         if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT
         else AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT
-    ).map { getAppWidgetOptions(widgetId).getInt(it, 0).dp.toInt() }
+    ).map { (getAppWidgetOptions(widgetId).getInt(it, 0) * context.resources.dp).toInt() }
     // Crashes terribly if is below zero, let's make sure that won't happen till we understand it better
     return if (width > 10 && height > 10) width to height else 250 to 250
 }

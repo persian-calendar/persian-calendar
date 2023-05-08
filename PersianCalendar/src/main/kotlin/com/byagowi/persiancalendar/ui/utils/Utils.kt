@@ -60,8 +60,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-val Number.dp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.density
-val Number.sp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.scaledDensity
+inline val Resources.dp: Float get() = displayMetrics.density
+inline val Resources.sp: Float get() = displayMetrics.scaledDensity
 
 val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
 

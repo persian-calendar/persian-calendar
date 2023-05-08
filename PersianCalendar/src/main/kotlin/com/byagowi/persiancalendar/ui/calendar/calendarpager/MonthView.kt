@@ -31,7 +31,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     fun initialize(sharedDayViewData: SharedDayViewData, calendarPager: CalendarPager) {
         daysAdapter = DaysAdapter(context, sharedDayViewData, calendarPager)
         adapter = daysAdapter
-        addCellSpacing(4.dp.toInt())
+        addCellSpacing((4 * resources.dp).toInt())
     }
 
     fun initializeForRendering(

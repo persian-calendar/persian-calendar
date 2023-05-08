@@ -278,7 +278,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
                 bottomMargin = insets.bottom / 2
             }
             binding.compassView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom + 75.dp.toInt()
+                bottomMargin = insets.bottom + (75 * resources.dp).toInt()
             }
             WindowInsetsCompat.CONSUMED
         }

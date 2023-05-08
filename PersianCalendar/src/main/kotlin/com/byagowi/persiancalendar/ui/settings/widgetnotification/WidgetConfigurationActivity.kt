@@ -51,8 +51,8 @@ class WidgetConfigurationActivity : AppCompatActivity() {
             setContentView(it.root)
         }
 
-        val width = 200.dp.toInt()
-        val height = 60.dp.toInt()
+        val width = (200 * resources.dp).toInt()
+        val height = (60 * resources.dp).toInt()
         fun updateWidget() {
             binding.preview.addView(
                 createSampleRemoteViews(this, width, height)

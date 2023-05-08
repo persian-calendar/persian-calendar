@@ -188,7 +188,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
                 topMargin = insets.top
             }
             binding.timeBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = insets.bottom + 16.dp.toInt()
+                bottomMargin = insets.bottom + (16 * resources.dp).toInt()
             }
             WindowInsetsCompat.CONSUMED
         }

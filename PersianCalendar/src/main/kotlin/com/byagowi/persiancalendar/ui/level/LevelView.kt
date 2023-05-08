@@ -69,7 +69,7 @@ class LevelView(context: Context, attrs: AttributeSet? = null) : View(context, a
     private val markerThickness = resources.getDimensionPixelSize(R.dimen.marker_thickness)
     private val levelBorderWidth = resources.getDimensionPixelSize(R.dimen.level_border_width)
     private val levelBorderHeight = resources.getDimensionPixelSize(R.dimen.level_border_height)
-    private val sensorGap = 5.dp.toInt()
+    private val sensorGap = (5 * resources.dp).toInt()
     private var levelMaxDimension = 0
 
     /**

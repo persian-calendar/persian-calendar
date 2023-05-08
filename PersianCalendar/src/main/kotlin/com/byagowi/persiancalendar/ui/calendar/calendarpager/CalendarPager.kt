@@ -102,7 +102,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 }
             }
 
-            val cellHeight = suitableHeight / 7 - 4.5.sp
+            val cellHeight = suitableHeight / 7 - 4.5f * resources.sp
             val sharedDayViewData = SharedDayViewData(context, cellHeight)
             fun(binding: MonthPageBinding) {
                 binding.monthView.initialize(sharedDayViewData, this@CalendarPager)

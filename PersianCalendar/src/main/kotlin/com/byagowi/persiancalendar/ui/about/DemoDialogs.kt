@@ -247,7 +247,7 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
         private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.BLACK }
 
         init {
-            val scale = 100.dp.toInt()
+            val scale = (100 * resources.dp).toInt()
             layoutParams = LinearLayout.LayoutParams(scale, scale).also {
                 it.gravity = Gravity.CENTER_HORIZONTAL
             }
@@ -914,7 +914,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
         private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.color = Color.BLACK
             it.textAlign = Paint.Align.CENTER
-            it.textSize = 20.dp
+            it.textSize = 20 * resources.dp
         }
 
         override fun onDraw(canvas: Canvas) {
@@ -1273,7 +1273,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
 
         private val paths = List(4) { Path() } // just a hack to make different colors possible
         private val paintSink = Paint().also {
-            it.strokeWidth = 1.dp
+            it.strokeWidth = 1 * resources.dp
             it.style = Paint.Style.STROKE
             it.color = Color.GRAY
         }
@@ -1305,7 +1305,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
         spinner.context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
         listOf("Select a sensor") + sensors
     )
-    textView.setPadding(8.dp.toInt())
+    textView.setPadding((8 * activity.resources.dp).toInt())
     textView.isVisible = false
     textView.textDirection = View.TEXT_DIRECTION_LTR
     var previousListener: SensorEventListener? = null
@@ -1366,8 +1366,8 @@ fun showInputDeviceTestDialog(activity: FragmentActivity) {
     MaterialAlertDialogBuilder(activity)
         .setView(object : AppCompatEditText(activity) {
             init {
-                setPadding(8.dp.toInt())
-                textSize = 4.dp
+                setPadding((8 * resources.dp).toInt())
+                textSize = 4 * resources.dp
                 text?.append("Input Devices Monitor:")
             }
 
@@ -1409,11 +1409,13 @@ fun showIconsDemoDialog(activity: FragmentActivity) {
                             0 -> setImageResource(getDayIconResource(day))
                             1 -> setImageBitmap(createStatusIcon(day))
                         }
-                        layoutParams = ViewGroup.MarginLayoutParams(36.dp.toInt(), 36.dp.toInt())
-                            .apply { setMargins(4.dp.toInt()) }
+                        val dp = resources.dp
+                        layoutParams =
+                            ViewGroup.MarginLayoutParams((36 * dp).toInt(), (36 * dp).toInt())
+                                .apply { setMargins((4 * dp).toInt()) }
                         shapeAppearanceModel = ShapeAppearanceModel.Builder()
-                            .setAllCorners(CornerFamily.ROUNDED, 8.dp)
-                            .setAllEdges(TriangleEdgeTreatment(4.dp, true))
+                            .setAllCorners(CornerFamily.ROUNDED, 8 * dp)
+                            .setAllEdges(TriangleEdgeTreatment(4 * dp, true))
                             .build()
                         setBackgroundColor(Color.DKGRAY)
                     }) {}
@@ -1430,7 +1432,7 @@ fun showTypographyDemoDialog(activity: FragmentActivity) {
         textAppearances.forEach { (appearanceName, appearanceId) ->
             val textAppearance = TextAppearanceSpan(activity, appearanceId)
             inSpans(textAppearance) { append(appearanceName) }
-            append(" ${(textAppearance.textSize / 1.sp).roundToInt()}sp")
+            append(" ${(textAppearance.textSize / activity.resources.sp).roundToInt()}sp")
             appendLine()
         }
     }
@@ -1463,7 +1465,7 @@ fun showCarouselDialog(activity: FragmentActivity) {
             it.setHasFixedSize(true) // Just as an optimization
             it.layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                196.dp.roundToInt()
+                (196 * activity.resources.dp).toInt()
             )
             // When items have match parent width PagerSnapHelper can be used instead of LinearSnapHelper
             PagerSnapHelper().attachToRecyclerView(it) // LinearSnapHelper().attachToRecyclerView(it)

@@ -57,9 +57,10 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val markerPaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
     }
+    private val dp = resources.dp
     private val circlePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
-        it.strokeWidth = 0.5.dp
+        it.strokeWidth = .5f * dp
         it.style = Paint.Style.STROKE // Sadece Cember ciziyor.
     }
     private val moonPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -69,14 +70,14 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     private val moonShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x808080FF.toInt()
         it.style = Paint.Style.STROKE
-        it.strokeWidth = 9.dp
+        it.strokeWidth = 9 * dp
         it.strokeCap = Paint.Cap.ROUND
     }
     private val sunPaint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.style = Paint.Style.STROKE }
     private val sunShadePaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x80808080.toInt()
         it.style = Paint.Style.STROKE
-        it.strokeWidth = 9.dp
+        it.strokeWidth = 9 * dp
         it.strokeCap = Paint.Cap.ROUND
     }
     private val qiblaPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
@@ -85,7 +86,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         it.pathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
     }
     private val kaaba = context.getCompatDrawable(R.drawable.kaaba)
-        .toBitmap(32.dp.toInt(), 32.dp.toInt())
+        .toBitmap((32 * dp).toInt(), (32 * dp).toInt())
 
     private var cx = 0f
     private var cy = 0f // Center of Compass (cx, cy)
@@ -130,7 +131,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     }
     private val textStrokePaint = Paint(Paint.FAKE_BOLD_TEXT_FLAG).also {
         it.color = context.resolveColor(com.google.android.material.R.attr.colorSurface)
-        it.strokeWidth = 5.dp
+        it.strokeWidth = 5 * dp
         it.style = Paint.Style.STROKE
         it.textAlign = Paint.Align.CENTER
     }
@@ -160,8 +161,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     init {
         val matrixProperties = FloatArray(9)
         maxScale = 2f
-        val textSize = 12.sp
-        val dashSize = 1.dp
+        val textSize = 12 * resources.sp
+        val dashSize = 1 * dp
         onDraw = fun(canvas: Canvas, matrix: Matrix) {
             matrix.getValues(matrixProperties)
             val scale = matrixProperties[Matrix.MSCALE_X]
@@ -280,8 +281,8 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
             val textCenter = cy - radius / 2
             withRotation(90f, cx, textCenter) {
                 val distance = qiblaHeading.km
-                drawText(distance, cx, textCenter + 4.dp, textStrokePaint)
-                drawText(distance, cx, textCenter + 4.dp, textPaint)
+                drawText(distance, cx, textCenter + 4 * dp, textStrokePaint)
+                drawText(distance, cx, textCenter + 4 * dp, textPaint)
             }
         }
     }

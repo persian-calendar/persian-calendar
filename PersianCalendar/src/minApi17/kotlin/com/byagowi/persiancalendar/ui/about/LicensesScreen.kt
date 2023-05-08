@@ -95,7 +95,7 @@ ${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
                 val bounds = Rect()
                 paint.color = Color.WHITE
                 paint.getTextBounds(text, 0, text.length, bounds)
-                val padding = 1.dp
+                val padding = 1 * resources.dp
                 val width = bounds.width() + padding.toInt() * 2
                 val height = bounds.height()
                 val bitmap = createBitmap(width, height)
@@ -126,7 +126,7 @@ ${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
 
         // Based on https://stackoverflow.com/a/34623367
         class BadgeSpan : ReplacementSpan() {
-            private val sidePadding = 6.sp
+            private val sidePadding = 6 * resources.sp
 
             override fun getSize(
                 paint: Paint, text: CharSequence?, start: Int, end: Int, fm: Paint.FontMetricsInt?
@@ -136,14 +136,15 @@ ${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
                 canvas: Canvas, text: CharSequence?, start: Int, end: Int, x: Float, top: Int,
                 y: Int, bottom: Int, paint: Paint
             ) {
-                val verticalReduce = 5.sp
+                val verticalReduce = 5 * resources.sp
                 val rect = RectF(
                     x, top + verticalReduce,
                     x + getSize(paint, text, start, end, null), bottom.toFloat()
                 )
                 paint.color =
                     view.context.resolveColor(com.google.android.material.R.attr.colorSurfaceDim)
-                canvas.drawRoundRect(rect, 25.dp, 25.dp, paint)
+                val dp = resources.dp
+                canvas.drawRoundRect(rect, 25 * dp, 25 * dp, paint)
                 paint.color = view.context.resolveColor(android.R.attr.textColorPrimary)
                 canvas.drawText(text ?: "", start, end, x + sidePadding, y.toFloat(), paint)
             }
