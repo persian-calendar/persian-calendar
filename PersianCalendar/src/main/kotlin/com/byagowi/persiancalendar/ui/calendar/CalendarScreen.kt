@@ -344,12 +344,14 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
     ) {
         binding.root.doOnNextLayout {
             val width = binding.root.width.takeIf { it != 0 } ?: return@doOnNextLayout
+            val tabWidth = binding.viewPager.width.takeIf { it != 0 } ?: return@doOnNextLayout
+            binding.viewPager.minimumHeight = 0
+            val selectedTab = tabs[binding.viewPager.currentItem].second
+            selectedTab.minimumHeight = 0
             binding.root.measure(
                 View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
             )
-            val selectedTab = tabs[binding.viewPager.currentItem].second
-            val tabWidth = binding.viewPager.width.takeIf { it != 0 } ?: return@doOnNextLayout
             selectedTab.measure(
                 View.MeasureSpec.makeMeasureSpec(tabWidth, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
