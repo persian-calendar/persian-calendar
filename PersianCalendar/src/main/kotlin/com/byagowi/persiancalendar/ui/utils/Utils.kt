@@ -14,7 +14,6 @@ import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
 import android.os.Build
 import android.util.Base64
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.LayoutInflater
@@ -305,9 +304,10 @@ fun Activity.transparentSystemBars() {
     window.navigationBarColor =
         if (transparencyState.shouldNavigationBarBeTransparent) Color.TRANSPARENT else systemUiScrim
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+        window.navigationBarDividerColor = Color.TRANSPARENT
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
         window.isNavigationBarContrastEnforced = false
-    }
 }
 
 fun Snackbar.considerSystemBarsInsets() {
