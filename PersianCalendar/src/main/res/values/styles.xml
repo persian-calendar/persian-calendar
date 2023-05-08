@@ -69,13 +69,6 @@
         <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
-    <!-- Their actual definition is in v31/styles.xml -->
-    <style name="DynamicLightTheme" parent="LightTheme" />
-
-    <style name="DynamicDarkTheme" parent="DarkTheme" />
-
-    <style name="DynamicBlackTheme" parent="DarkTheme" />
-
     <style name="DarkTheme" parent="BaseDarkTheme">
         <item name="colorPrimary">@color/dark_accent</item>
         <item name="colorAccent">@color/dark_accent</item>
