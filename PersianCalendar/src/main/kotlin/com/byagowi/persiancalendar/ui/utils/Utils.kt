@@ -2,7 +2,6 @@ package com.byagowi.persiancalendar.ui.utils
 
 import android.Manifest
 import android.animation.LayoutTransition
-import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -38,15 +37,11 @@ import androidx.core.app.ShareCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
-import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.drawable.toDrawable
 import androidx.core.net.toUri
 import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
@@ -62,10 +57,8 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import java.io.ByteArrayOutputStream
 import java.io.File
-
 
 val Number.dp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.density
 val Number.sp: Float get() = this.toFloat() * Resources.getSystem().displayMetrics.scaledDensity
@@ -237,10 +230,7 @@ fun FragmentActivity.askForCalendarPermission() {
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun FragmentActivity.askForPostNotificationPermission(requestCode: Int) {
-    requestPermissions(
-        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-        requestCode
-    )
+    requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), requestCode)
 }
 
 fun Window.makeWallpaperTransparency() {
@@ -248,75 +238,6 @@ fun Window.makeWallpaperTransparency() {
         this.navigationBarColor = Color.TRANSPARENT
     this.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
     this.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-}
-
-class SystemBarsTransparency(activity: Activity) {
-    val isPrimaryColorLight = ColorUtils.calculateLuminance(
-        activity.resolveColor(R.attr.colorOnAppBar)
-    ) < 0.5
-    val isSurfaceColorLight = ColorUtils.calculateLuminance(
-        activity.resolveColor(com.google.android.material.R.attr.colorSurface)
-    ) > 0.5
-    val needsVisibleStatusBarPlaceHolder = !isPrimaryColorLight && isSurfaceColorLight
-
-    private val isLightStatusBarAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-    private val isLightNavigationBarAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
-
-    // Either primary color, what we use behind above status icons, isn't light so we don't need to worry
-    // about not being able to set isAppearanceLightStatusBars or let's check the sdk version so
-    // we at least use isAppearanceLightStatusBars.
-    val shouldStatusBarBeTransparent = !isPrimaryColorLight || isLightStatusBarAvailable
-
-    // Either surface color, what we use behind below navigation icons, isn't light so we don't need to worry
-    // about not being able to set isAppearanceLightNavigationBars or let's check the sdk version so
-    // we at least use isAppearanceLightStatusBars.
-    val shouldNavigationBarBeTransparent = !isSurfaceColorLight || isLightNavigationBarAvailable
-}
-
-/**
- * Make system bars (status and navigation bars) transparent as far as possible, also disables
- * decor view insets so we should consider the insets ourselves.
- *
- * From https://stackoverflow.com/a/76018821 with some modifications
- * Also have a look at [com.google.android.material.internal.EdgeToEdgeUtils.applyEdgeToEdge]
- */
-fun Activity.transparentSystemBars() {
-    // Android 4 is hard to debug and apparently ViewCompat.setOnApplyWindowInsetsListener isn't
-    // reporting any value there so let's skip and simplify
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return
-
-    WindowCompat.setDecorFitsSystemWindows(window, false)
-
-    val transparencyState = SystemBarsTransparency(this)
-
-    if (transparencyState.isPrimaryColorLight || transparencyState.isSurfaceColorLight) {
-        val insetsController: WindowInsetsControllerCompat =
-            WindowCompat.getInsetsController(window, window.decorView)
-        if (transparencyState.isPrimaryColorLight)
-            insetsController.isAppearanceLightStatusBars = true
-        if (transparencyState.isSurfaceColorLight)
-            insetsController.isAppearanceLightNavigationBars = true
-    }
-
-    val systemUiScrim = ColorUtils.setAlphaComponent(Color.BLACK, 0x40) // 25% black
-    window.statusBarColor =
-        if (transparencyState.shouldStatusBarBeTransparent) Color.TRANSPARENT else systemUiScrim
-    window.navigationBarColor =
-        if (transparencyState.shouldNavigationBarBeTransparent) Color.TRANSPARENT else systemUiScrim
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-        window.navigationBarDividerColor = Color.TRANSPARENT
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-        window.isNavigationBarContrastEnforced = false
-}
-
-fun Snackbar.considerSystemBarsInsets() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) return // no insets tweak here either
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) return // not needed in 30 >=
-    view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-        // Not the best way but setOnApplyWindowInsetsListener refuses to give the value
-        bottomMargin = (48 + 8).dp.toInt()
-    }
 }
 
 fun prepareViewForRendering(view: View, width: Int, height: Int) {
