@@ -65,6 +65,8 @@ enum class Theme(
                 } else activity.setTheme(if (isNightModeEnabled) DARK.styleRes else LIGHT.styleRes)
             } else activity.setTheme(theme.styleRes)
 
+            activity.setTheme(R.style.SharedStyle)
+
             // Apply blur considerations only if is supported by the device
             if (
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&

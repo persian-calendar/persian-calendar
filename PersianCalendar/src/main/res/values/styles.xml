@@ -37,40 +37,31 @@
     </style>
 
     <style name="BaseDarkTheme" parent="Theme.Material3.DynamicColors.Dark">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="screenBackground">@drawable/gradient_background</item>
         <item name="colorPrimaryContainer">@color/primary_container_dark</item>
         <item name="colorSecondaryContainer">@color/secondary_container_dark</item>
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
-        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Dark</item>
-        <item name="android:typeface">sans</item>
-        <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
         <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Dark</item>
-        <item name="popupMenuBackground">@drawable/popup_background</item>
-        <item name="sunViewNightColor">@color/sun_view_night_color</item>
-        <item name="sunViewDayColor">@color/sun_view_day_color</item>
-        <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
-        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
+        <item name="colorPrimaryContainer">@color/primary_container_light</item>
+        <item name="colorSecondaryContainer">@color/secondary_container_light</item>
+        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
+        <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
+    </style>
+
+    <!-- Applied to all themes -->
+    <style name="SharedStyle">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="screenBackground">@drawable/gradient_background</item>
-        <item name="colorPrimaryContainer">@color/primary_container_light</item>
-        <item name="colorSecondaryContainer">@color/secondary_container_light</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
-        <item name="appToolbarTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="android:typeface">sans</item>
+        <!-- Make Arabic letters separated -->
         <item name="android:letterSpacing" tools:targetApi="lollipop">0</item>
-        <item name="appToolbarPopupTheme">@style/ThemeOverlay.Material3.Light</item>
         <item name="popupMenuBackground">@drawable/popup_background</item>
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
