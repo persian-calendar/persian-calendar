@@ -54,6 +54,7 @@
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
     <style name="BaseLightTheme" parent="Theme.Material3.DynamicColors.Light">
@@ -74,6 +75,7 @@
         <item name="sunViewNightColor">@color/sun_view_night_color</item>
         <item name="sunViewDayColor">@color/sun_view_day_color</item>
         <item name="sunViewMidDayColor">@color/sun_view_midday_color</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
     <!-- Their actual definition is in v31/styles.xml -->
