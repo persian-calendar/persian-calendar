@@ -387,8 +387,9 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         generateReferenceCircle()
-        lastX = lastX.takeIf { it != -1f } ?: (bitmap.width / 2f)
-        lastY = lastY.takeIf { it != -1f } ?: (bitmap.height / 2f)
+
+        if (lastX == -1f) lastX = bitmap.width / 2f
+        if (lastY == -1f) lastY = bitmap.height / 2f
 
         strokePaint.strokeWidth = bitmap.width / 100f
         shadowPaint.shader = RadialGradient(
