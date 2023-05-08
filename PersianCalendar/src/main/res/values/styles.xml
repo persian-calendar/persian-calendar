@@ -282,6 +282,12 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
+    <style name="shapeAppearanceTopCornerLarge" parent="ShapeAppearance.Material3.Corner.Large">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
     <style name="shapeAppearanceBottomCornerExtraLarge" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
         <item name="cornerFamily">?attr/shapeCornerFamily</item>
         <item name="cornerSizeTopLeft">0dp</item>

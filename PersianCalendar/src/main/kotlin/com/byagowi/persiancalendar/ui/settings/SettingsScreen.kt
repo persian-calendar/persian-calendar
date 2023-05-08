@@ -116,10 +116,9 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         }
 
         if (!language.isArabicScript) {
-            binding.roundnessFrame.shapeAppearanceModel = ShapeAppearanceModel.Builder()
-                .setTopLeftCorner(CornerFamily.ROUNDED, 16.dp)
-                .setTopRightCorner(CornerFamily.ROUNDED, 16.dp)
-                .build()
+            binding.roundnessFrame.shapeAppearanceModel = ShapeAppearanceModel.builder(
+                binding.root.context, R.style.shapeAppearanceTopCornerLarge, 0
+            ).build()
         }
     }
 
