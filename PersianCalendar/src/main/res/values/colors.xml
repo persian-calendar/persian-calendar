@@ -24,7 +24,7 @@
     <color name="widget_refresh_icon_color">#ddd</color>
 
     <color name="dark_primary">#2F3133</color>
-    <color name="dark_accent">#219BCC</color>
+    <color name="dark_accent">#74BBEF</color>
     <color name="dark_gradient_start">#3E4042</color>
     <color name="dark_gradient_end">#191C1E</color>
     <color name="dark_text_holiday">#ef6c00</color>
@@ -37,7 +37,7 @@
     <color name="dark_event_indicator">#e0e0e0</color>
 
     <color name="black_primary">#000000</color>
-    <color name="black_accent">#219BCC</color>
+    <color name="black_accent">#74BBEF</color>
     <color name="black_gradient_start">#000000</color>
     <color name="black_gradient_end">#000000</color>
     <color name="black_text_holiday">#ef6c00</color>
