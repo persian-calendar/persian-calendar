@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.athan
 
-import android.content.res.Resources
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Color
@@ -28,7 +27,6 @@ import com.byagowi.persiancalendar.DHUHR_KEY
 import com.byagowi.persiancalendar.FAJR_KEY
 import com.byagowi.persiancalendar.ISHA_KEY
 import com.byagowi.persiancalendar.MAGHRIB_KEY
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.rotateBy
 import com.byagowi.persiancalendar.ui.utils.toPath
 import com.byagowi.persiancalendar.ui.utils.translateBy
@@ -43,7 +41,8 @@ class PatternDrawable(
     prayerKey: String = listOf(FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY).random(),
     preferredTintColor: Int? = null,
     var rotationDegree: Float = 0f,
-    private val darkBaseColor: Boolean = false
+    private val darkBaseColor: Boolean = false,
+    private val dp: Float,
 ) : Drawable() {
 
     private val tintColor = preferredTintColor ?: when (prayerKey) {
@@ -72,7 +71,7 @@ class PatternDrawable(
             // ::SecondPattern, This won't look as great as others when rotated, let's disable it for now
             ::ThirdPattern,
             // ::FourthPattern
-        ).random()(tintColor, 80 * Resources.getSystem().dp) // TODO: Avoid Resources.getSystem()
+        ).random()(tintColor, 80 * dp)
         val bitmap = createBitmap(pattern.width.toInt(), pattern.height.toInt())
             .applyCanvas(pattern::draw)
         foregroundPaint.shader = BitmapShader(bitmap, pattern.tileModeX, pattern.tileModeY)

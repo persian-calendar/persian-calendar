@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.AthanActivityBinding
 import com.byagowi.persiancalendar.entities.Theme
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.fadeIn
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -20,7 +21,9 @@ fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onCl
         binding.athanName.setText(getPrayTimeName(prayerKey))
         binding.place.fadeIn(TWO_SECONDS_IN_MILLIS)
         binding.root.setOnClickListener { onClick() }
-        val pattern = PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(activity))
+        val pattern = PatternDrawable(
+            prayerKey, darkBaseColor = Theme.isNightMode(activity), dp = activity.resources.dp
+        )
         val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
             it.duration = 180000L
             it.interpolator = LinearInterpolator()

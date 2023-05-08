@@ -17,6 +17,7 @@ import androidx.customview.widget.ViewDragHelper
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.google.android.material.color.DynamicColors
 import kotlin.math.hypot
 import kotlin.math.min
@@ -62,7 +63,8 @@ class PersianCalendarDreamService : DreamService() {
             ) else null
             val pattern = PatternDrawable(
                 preferredTintColor = accentColor,
-                darkBaseColor = Theme.isNightMode(this)
+                darkBaseColor = Theme.isNightMode(this),
+                dp = resources.dp,
             )
             it.background = pattern
             valueAnimator.addUpdateListener {

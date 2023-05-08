@@ -6,12 +6,13 @@ import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.color.DynamicColors
 
 class PersianCalendarWallpaperService : WallpaperService() {
     override fun onCreateEngine() = object : Engine() {
-        private var patternDrawable = PatternDrawable()
+        private var patternDrawable = PatternDrawable(dp = resources.dp)
         private val drawRunner = Runnable { draw() }
         private val handler = Handler(Looper.getMainLooper()).also { it.post(drawRunner) }
         private var visible = true
@@ -24,8 +25,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
                 else android.R.color.system_accent1_400
             ) else null
             patternDrawable = PatternDrawable(
-                preferredTintColor = accentColor,
-                darkBaseColor = Theme.isNightMode(context)
+                preferredTintColor = accentColor, darkBaseColor = Theme.isNightMode(context),
+                dp = resources.dp
             )
             this.visible = visible
             if (visible) handler.post(drawRunner)
