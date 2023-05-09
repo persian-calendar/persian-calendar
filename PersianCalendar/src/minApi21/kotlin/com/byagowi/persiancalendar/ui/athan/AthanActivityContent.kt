@@ -55,7 +55,10 @@ private fun AthanActivityContent(prayerKey: String, cityName: String?, onClick: 
     Box(modifier = Modifier.clickable { onClick() }) {
         Image(
             painter = rememberDrawablePainter(
-                PatternDrawable(prayerKey, darkBaseColor = Theme.isNightMode(LocalContext.current))
+                PatternDrawable(
+                    prayerKey, darkBaseColor = Theme.isNightMode(LocalContext.current),
+                    dp = 1.dp.value
+                )
             ),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
