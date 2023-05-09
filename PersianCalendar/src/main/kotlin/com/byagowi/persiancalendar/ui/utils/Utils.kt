@@ -129,6 +129,7 @@ fun Toolbar.setupMenuNavigation() {
 }
 
 // https://stackoverflow.com/a/58249983
+// Akin to https://github.com/material-components/material-components-android/blob/8938da8c/lib/java/com/google/android/material/internal/ContextUtils.java#L40
 private tailrec fun Context.getActivity(): FragmentActivity? = this as? FragmentActivity
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
