@@ -16,6 +16,7 @@ indent_size = 2
 insert_final_newline = true
 ij_kotlin_code_style_defaults = KOTLIN_OFFICIAL
 ij_continuation_indent_size = 8
+ij_kotlin_variable_annotation_wrap = off
 # Disable star imports
 ij_kotlin_name_count_to_use_star_import = 99
 ij_kotlin_name_count_to_use_star_import_for_members = 99

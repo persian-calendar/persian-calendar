@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.Px
 import androidx.annotation.StyleRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
@@ -117,9 +118,8 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
             windowInsets
         }
 
-        @StyleRes
-        var shape = R.style.shapeAppearanceTopCornerLarge
-        var pad = 0
+        @StyleRes var shape = R.style.shapeAppearanceTopCornerLarge
+        @Px var pad = 0
         if (language.isArabicScript) {
             shape = R.style.shapeAppearanceTopCornerExtraLarge
             pad = (8 * resources.dp).toInt()
