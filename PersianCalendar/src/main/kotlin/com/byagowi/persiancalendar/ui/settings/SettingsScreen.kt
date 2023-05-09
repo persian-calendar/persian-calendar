@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.StyleRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.edit
 import androidx.core.content.getSystemService
@@ -46,6 +47,7 @@ import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -115,11 +117,16 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
             windowInsets
         }
 
-        if (!language.isArabicScript) {
-            binding.roundnessFrame.shapeAppearanceModel = ShapeAppearanceModel.builder(
-                binding.root.context, R.style.shapeAppearanceTopCornerLarge, 0
-            ).build()
+        @StyleRes
+        var shape = R.style.shapeAppearanceTopCornerLarge
+        var pad = 0
+        if (language.isArabicScript) {
+            shape = R.style.shapeAppearanceTopCornerExtraLarge
+            pad = (8 * resources.dp).toInt()
         }
+        binding.viewPager.updatePadding(left = pad, right = pad)
+        binding.roundnessFrame.shapeAppearanceModel =
+            ShapeAppearanceModel.builder(binding.root.context, shape, 0).build()
     }
 
     companion object {
