@@ -8,9 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.TwoStatePreference
@@ -39,6 +36,7 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.settings.build
 import com.byagowi.persiancalendar.ui.settings.clickable
 import com.byagowi.persiancalendar.ui.settings.common.showColorPickerDialog
@@ -175,18 +173,9 @@ class WidgetNotificationFragment : PreferenceFragmentCompat(),
     }
 
     override fun onCreateRecyclerView(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        savedInstanceState: Bundle?
-    ): RecyclerView {
-        val view = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updatePadding(bottom = insets.bottom)
-            windowInsets
-        }
-        return view
-    }
+        inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?
+    ): RecyclerView =
+        SettingsScreen.insetsFix(super.onCreateRecyclerView(inflater, parent, savedInstanceState))
 
     companion object {
         const val IS_WIDGETS_CONFIGURATION = "IS_WIDGETS_CONFIGURATION"

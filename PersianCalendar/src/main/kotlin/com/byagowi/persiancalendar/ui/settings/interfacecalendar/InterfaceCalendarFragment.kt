@@ -9,9 +9,6 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
@@ -165,16 +162,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     }
 
     override fun onCreateRecyclerView(
-        inflater: LayoutInflater,
-        parent: ViewGroup,
-        savedInstanceState: Bundle?
-    ): RecyclerView {
-        val view = super.onCreateRecyclerView(inflater, parent, savedInstanceState)
-        ViewCompat.setOnApplyWindowInsetsListener(view) { _, windowInsets ->
-            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-            view.updatePadding(bottom = insets.bottom)
-            windowInsets
-        }
-        return view
-    }
+        inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?
+    ): RecyclerView =
+        SettingsScreen.insetsFix(super.onCreateRecyclerView(inflater, parent, savedInstanceState))
 }

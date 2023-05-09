@@ -19,8 +19,7 @@
     <com.google.android.material.carousel.MaskableFrameLayout
         android:id="@+id/roundness_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
+        android:layout_height="match_parent">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"

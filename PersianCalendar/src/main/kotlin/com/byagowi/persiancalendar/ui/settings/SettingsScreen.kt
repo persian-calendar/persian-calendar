@@ -22,9 +22,11 @@ import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
@@ -44,7 +46,6 @@ import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
 import com.byagowi.persiancalendar.ui.settings.locationathan.LocationAthanFragment
 import com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetNotificationFragment
-import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.hideToolbarBottomShadow
 import com.byagowi.persiancalendar.ui.utils.onClick
@@ -55,7 +56,6 @@ import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -122,18 +122,27 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         }
     }
 
-    private val tabs = listOf(
-        ::InterfaceCalendarFragment to listOf(R.string.pref_interface, R.string.calendar),
-        ::WidgetNotificationFragment to listOf(R.string.pref_notification, R.string.pref_widget),
-        ::LocationAthanFragment to listOf(R.string.location, R.string.athan)
-    )
-
     companion object {
+        fun insetsFix(recyclerView: RecyclerView): RecyclerView {
+            ViewCompat.setOnApplyWindowInsetsListener(recyclerView) { _, windowInsets ->
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                recyclerView.updatePadding(bottom = insets.bottom)
+                windowInsets
+            }
+            return recyclerView
+        }
+
         const val PREF_DESTINATION = "DESTINATION"
         const val INTERFACE_CALENDAR_TAB = 0
         const val WIDGET_NOTIFICATION_TAB = 1
         const val LOCATION_ATHAN_TAB = 2
     }
+
+    private val tabs = listOf(
+        ::InterfaceCalendarFragment to listOf(R.string.pref_interface, R.string.calendar),
+        ::WidgetNotificationFragment to listOf(R.string.pref_notification, R.string.pref_widget),
+        ::LocationAthanFragment to listOf(R.string.location, R.string.athan)
+    )
 
     // Development only functionalities
     private fun setupMenu(
