@@ -65,10 +65,8 @@ fun Activity.transparentSystemBars() {
     window.navigationBarColor =
         if (transparencyState.shouldNavigationBarBeTransparent) Color.TRANSPARENT else systemUiScrim
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
-        window.navigationBarDividerColor = Color.TRANSPARENT
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
-        window.isNavigationBarContrastEnforced = false
+    // There is a window:enforceNavigationBarContrast set to false in styles.xml as doing it here
+    // as code isn't as effective in dark themes.
 }
 
 fun Snackbar.considerSystemBarsInsets() {
