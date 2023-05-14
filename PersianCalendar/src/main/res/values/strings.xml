@@ -217,6 +217,7 @@ The app needs this only once, however, if you move to a new location, accessing 
     <string name="shift_work_starting_date_edit">%1$s, previously selected, is the chosen shift work starting day.</string>
     <string name="shift_work_reset_button">Disable or reprogram</string>
     <string name="spaced_and">" and "</string>
+    <string name="spaced_or">" or "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_information">Device Information</string>

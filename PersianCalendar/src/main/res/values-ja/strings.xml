@@ -137,6 +137,7 @@
         <item quantity="other">%1$s 時間</item>
     </plurals>
     <string name="spaced_and">と</string>
+    <string name="spaced_or">か</string>
     <string name="spaced_comma">、</string>
     <string name="spaced_colon">：</string>
     <string name="recurs">繰り返す</string>

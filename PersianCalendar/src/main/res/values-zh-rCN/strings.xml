@@ -176,6 +176,7 @@
     <string name="about_noClient">未安装任何邮件应用</string>
     <string name="shift_work_starting_date">当前日历上选择的日期（%1$s）将作为倒班的起始日。</string>
     <string name="spaced_and">和</string>
+    <string name="spaced_or"> 周或 </string>
     <string name="islamic_calendar">伊斯兰历</string>
     <string name="theme_black">黑色</string>
     <string name="iran_official_events">伊朗官方（波斯语）</string>

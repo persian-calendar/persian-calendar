@@ -210,6 +210,7 @@
     <string name="shift_work_starting_date_edit">%1$s هو اليوم الذي يبدء منه إزاحة وقت العمل.</string>
     <string name="shift_work_reset_button">تعطيل أو إعادة ظبط</string>
     <string name="spaced_and">" و "</string>
+    <string name="spaced_or">" أو "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_information">معلومات الجهاز</string>

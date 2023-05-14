@@ -194,6 +194,7 @@
         <item quantity="other">%1$s ساعت</item>
     </plurals>
     <string name="spaced_and">" و "</string>
+    <string name="spaced_or">" یا "</string>
     <string name="spaced_comma">"، "</string>
     <string name="spaced_colon">": "</string>
     <string name="device_information">اطلاعات دستگاه</string>

@@ -288,6 +288,7 @@
     <string name="shift_work_starting_date_edit">%1$s, выбранный ранее, является выбранным днем начала сменной работы.</string>
     <string name="shift_work_reset_button">Отключить или перепрограммировать</string>
     <string name="spaced_and">" и "</string>
+    <string name="spaced_or">" или "</string>
     <string name="device_information">Информация об устройстве</string>
     <string name="center_align_widgets">Выравнивание виджетов по центру</string>
     <string name="n_till">%1$s до %2$s</string>

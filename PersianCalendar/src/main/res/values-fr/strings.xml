@@ -25,6 +25,7 @@
     </plurals>
     <string name="shift_work_reset_button">Désactiver ou reprogrammer</string>
     <string name="spaced_and">" et "</string>
+    <string name="spaced_or">" ou "</string>
     <string name="spaced_comma">", "</string>
     <string name="spaced_colon">": "</string>
     <plurals name="n_hours">
