@@ -337,6 +337,7 @@ private fun createSunViewRemoteViews(
     if (prefersWidgetsDynamicColors || // dynamic colors for widget need this round clipping anyway
         selectedWidgetBackgroundColor != DEFAULT_SELECTED_WIDGET_BACKGROUND_COLOR
     ) sunView.clippingPath = createRoundPath(width, height, roundPixelSize)
+    remoteViews.setTextColor(R.id.message, color)
     remoteViews.setTextViewTextOrHideIfEmpty(
         R.id.message,
         if (coordinates.value == null) context.getString(R.string.ask_user_to_set_location) else ""
