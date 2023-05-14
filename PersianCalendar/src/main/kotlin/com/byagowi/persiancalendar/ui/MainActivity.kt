@@ -110,8 +110,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         override fun handleOnBackPressed() = binding.root.closeDrawer(GravityCompat.START)
     }
 
-    private val exitId = View.generateViewId()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
         applyAppLanguage(this)
@@ -140,7 +138,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             Triple(R.id.astronomy, R.drawable.ic_astrology_horoscope, R.string.astronomy),
             Triple(R.id.settings, R.drawable.ic_settings, R.string.settings),
             Triple(R.id.about, R.drawable.ic_info, R.string.about),
-            Triple(exitId, R.drawable.ic_cancel, R.string.exit)
+            Triple(R.id.exit, R.drawable.ic_cancel, R.string.exit)
         ).forEach { (id, icon, title) ->
             binding.navigation.menu.add(Menu.NONE, id, Menu.NONE, title).setIcon(icon)
         }
@@ -396,7 +394,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onNavigationItemSelected(selectedMenuItem: MenuItem): Boolean {
         when (val itemId = selectedMenuItem.itemId) {
-            exitId -> finish()
+            R.id.exit -> finish()
             else -> {
                 binding.root.closeDrawer(GravityCompat.START)
                 if (navHostFragment?.navController?.currentDestination?.id != itemId) {
