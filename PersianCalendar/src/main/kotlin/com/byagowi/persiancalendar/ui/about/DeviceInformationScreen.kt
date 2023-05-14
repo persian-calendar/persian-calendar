@@ -48,7 +48,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DeviceInformationItemBinding
 import com.byagowi.persiancalendar.databinding.DeviceInformationScreenBinding
-import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
@@ -57,7 +56,6 @@ import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.ui.utils.shareTextFile
 import com.byagowi.persiancalendar.utils.logException
-import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.circularreveal.CircularRevealCompat
 import com.google.android.material.circularreveal.CircularRevealWidget
 import com.google.android.material.snackbar.Snackbar
@@ -514,14 +512,7 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
             binding.content.movementMethod = LinkMovementMethod.getInstance()
         }
 
-        override fun onClick(v: View?) {
-            activity.copyToClipboard(deviceInformationItems[bindingAdapterPosition].content) {
-                val view = activity.findViewById<View?>(android.R.id.content).debugAssertNotNull
-                    ?: return@copyToClipboard
-                Snackbar.make(view, it, Snackbar.LENGTH_SHORT).also { snackBar ->
-                    snackBar.considerSystemBarsInsets()
-                }.show()
-            }
-        }
+        override fun onClick(v: View?) =
+            activity.copyToClipboard(deviceInformationItems[bindingAdapterPosition].content)
     }
 }

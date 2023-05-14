@@ -65,16 +65,15 @@ inline val Resources.sp: Float get() = displayMetrics.scaledDensity
 
 val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
 
-fun Context?.copyToClipboard(
-    text: CharSequence?,
-    onSuccess: ((String) -> Unit) = { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
-) {
+fun Context?.copyToClipboard(text: CharSequence?) {
     runCatching {
         this?.getSystemService<ClipboardManager>()
             ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
-        val message = (if (resources.isRtl) RLM else "") +
-                getString(R.string.date_copied_clipboard, text)
-        if (Build.VERSION.SDK_INT < 32) onSuccess(message) else Unit
+        if (Build.VERSION.SDK_INT < 32) {
+            val message = (if (resources.isRtl) RLM else "") +
+                    getString(R.string.date_copied_clipboard, text)
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        } else Unit
     }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
