@@ -73,7 +73,8 @@ fun Context?.copyToClipboard(
         ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
     val message = (if (resources.isRtl) RLM else "") +
             getString(R.string.date_copied_clipboard, text)
-    onSuccess(message)
+    if (Build.VERSION.SDK_INT < 32) onSuccess(message)
+    Unit
 }.onFailure(logException).getOrNull().debugAssertNotNull.let {}
 
 fun FragmentActivity.bringMarketPage() = runCatching {
