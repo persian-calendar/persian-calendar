@@ -348,6 +348,12 @@
         <item quantity="many">%1$s %2$s дней</item>
         <item quantity="other">%1$s %2$s дней</item>
     </plurals>
+    <plurals name="n_seconds">
+        <item quantity="one">%d секунда</item>
+        <item quantity="few">%d секунды</item>
+        <item quantity="many">%d секунд</item>
+        <item quantity="other">%d секунд</item>
+    </plurals>
     <plurals name="n_minutes">
         <item quantity="one">%1$s минута</item>
         <item quantity="few">%1$s минуты</item>
@@ -365,6 +371,12 @@
         <item quantity="few">%1$s дня</item>
         <item quantity="many">%1$s дней</item>
         <item quantity="other">%1$s дней</item>
+    </plurals>
+    <plurals name="n_weeks">
+        <item quantity="one">%1$s неделя</item>
+        <item quantity="few">%1$s недели</item>
+        <item quantity="many">%1$s недель</item>
+        <item quantity="other">%1$s недели</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s месяц</item>

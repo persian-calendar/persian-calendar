@@ -393,6 +393,10 @@ The app needs this only once, however, if you move to a new location, accessing 
         <item quantity="one">%1$s %2$s day</item>
         <item quantity="other">%1$s %2$s days</item>
     </plurals>
+    <plurals name="n_seconds">
+        <item quantity="one">%1$s second</item>
+        <item quantity="other">%1$s seconds</item>
+    </plurals>
     <plurals name="n_minutes">
         <item quantity="one">%1$s minute</item>
         <item quantity="other">%1$s minutes</item>
@@ -404,6 +408,10 @@ The app needs this only once, however, if you move to a new location, accessing 
     <plurals name="n_days">
         <item quantity="one">%1$s day</item>
         <item quantity="other">%1$s days</item>
+    </plurals>
+    <plurals name="n_weeks">
+        <item quantity="one">%1$s week</item>
+        <item quantity="other">%1$s weeks</item>
     </plurals>
     <plurals name="n_months">
         <item quantity="one">%1$s month</item>
