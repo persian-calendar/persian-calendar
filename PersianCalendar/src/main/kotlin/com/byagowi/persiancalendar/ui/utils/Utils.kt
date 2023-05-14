@@ -68,23 +68,26 @@ val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
 fun Context?.copyToClipboard(
     text: CharSequence?,
     onSuccess: ((String) -> Unit) = { Toast.makeText(this, it, Toast.LENGTH_SHORT).show() }
-) = runCatching {
-    this?.getSystemService<ClipboardManager>()
-        ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
-    val message = (if (resources.isRtl) RLM else "") +
-            getString(R.string.date_copied_clipboard, text)
-    if (Build.VERSION.SDK_INT < 32) onSuccess(message)
-    Unit
-}.onFailure(logException).getOrNull().debugAssertNotNull.let {}
-
-fun FragmentActivity.bringMarketPage() = runCatching {
-    startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
-}.onFailure(logException).onFailure {
+) {
     runCatching {
-        val uri = "https://play.google.com/store/apps/details?id=$packageName".toUri()
-        startActivity(Intent(Intent.ACTION_VIEW, uri))
-    }.onFailure(logException)
-}.let {}
+        this?.getSystemService<ClipboardManager>()
+            ?.setPrimaryClip(ClipData.newPlainText(null, text)) ?: return@runCatching null
+        val message = (if (resources.isRtl) RLM else "") +
+                getString(R.string.date_copied_clipboard, text)
+        if (Build.VERSION.SDK_INT < 32) onSuccess(message) else Unit
+    }.onFailure(logException).getOrNull().debugAssertNotNull
+}
+
+fun FragmentActivity.bringMarketPage() {
+    runCatching {
+        startActivity(Intent(Intent.ACTION_VIEW, "market://details?id=$packageName".toUri()))
+    }.onFailure(logException).onFailure {
+        runCatching {
+            val uri = "https://play.google.com/store/apps/details?id=$packageName".toUri()
+            startActivity(Intent(Intent.ACTION_VIEW, uri))
+        }.onFailure(logException)
+    }
+}
 
 fun Bitmap.toPngBase64(): String {
     val buffer = ByteArrayOutputStream()
