@@ -385,4 +385,8 @@
     <string name="add_quick_settings_tile">Ajouter une tuile de réglages rapides</string>
     <string name="true_north">Vrai Nord</string>
     <string name="lock">Verrouiller</string>
+    <string name="full_screen">Plein écran</string>
+    <string name="exit_full_screen">Quitter le plein écran</string>
+    <string name="color_gradient">Dégradé de couleurs</string>
+    <string name="color_gradient_summary">Utiliser un dégradé pour les couleurs du thème</string>
 </resources>
