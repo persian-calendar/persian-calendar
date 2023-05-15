@@ -87,7 +87,7 @@ enum class Theme(
         fun getWidgetSuitableStyle(context: Context): Int {
             val isNightMode = isNightMode(context)
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (isNightMode) R.style.DynamicDarkTheme else R.style.DynamicLightTheme
+                if (isNightMode) R.style.DynamicDarkTheme else R.style.DynamicModernTheme
             } else MODERN.styleRes
         }
 
