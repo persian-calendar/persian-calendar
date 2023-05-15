@@ -53,7 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textColor="@color/widget_holiday"
+            android:textColor="@color/notification_widget_holiday_color"
             android:textSize="14sp" />
 
         <TextView
