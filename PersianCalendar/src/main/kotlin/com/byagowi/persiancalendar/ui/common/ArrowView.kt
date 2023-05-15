@@ -26,11 +26,12 @@ class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageVi
         applyRotation(lastDegree)
     }
 
-    private val duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-    fun animateTo(direction: Direction) = ValueAnimator.ofFloat(lastDegree, direction.degree).also {
-        it.duration = duration
-        it.addUpdateListener { v -> applyRotation(v.animatedValue as? Float ?: 0f) }
-    }.start()
+    fun animateTo(direction: Direction) {
+        val animator = ValueAnimator.ofFloat(lastDegree, direction.degree)
+        animator.duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        animator.addUpdateListener { v -> applyRotation(v.animatedValue as? Float ?: 0f) }
+        animator.start()
+    }
 
     enum class Direction(val degree: Float) { START(90f), END(-90f), UP(180f), DOWN(0f) }
 }
