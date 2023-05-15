@@ -52,6 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/remove"
             app:srcCompat="@drawable/ic_remove_button" />
 
