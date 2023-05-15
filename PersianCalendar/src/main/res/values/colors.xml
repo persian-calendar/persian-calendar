@@ -96,6 +96,7 @@
     <color name="sun_view_widget_night_color">@color/sun_view_night_color</color>
     <color name="sun_view_widget_day_color">@color/sun_view_day_color</color>
     <color name="sun_view_widget_midday_color">@color/sun_view_midday_color</color>
+    <color name="notification_holiday_color">#ff8a65</color>
 
     <!-- == Level == -->
     <color name="black_reflect">#FF666666</color>

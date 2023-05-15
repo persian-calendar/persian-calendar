@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="viewStart"
-        android:textColor="@color/light_holiday"
+        android:textColor="@color/notification_holiday_color"
         tools:text="Holidays" />
 
     <TextView
