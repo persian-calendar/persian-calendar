@@ -394,4 +394,14 @@
     <string name="color_gradient_summary">Usar el degradado para los colores del tema</string>
     <string name="full_screen">Pantalla completa</string>
     <string name="color_gradient">Gradiente del color</string>
+    <plurals name="n_seconds">
+        <item quantity="one">%1$s segundo</item>
+        <item quantity="many">%1$s segundos</item>
+        <item quantity="other">%1$s segundos</item>
+    </plurals>
+    <plurals name="n_weeks">
+        <item quantity="one">%1$s semana</item>
+        <item quantity="many">%1$s semanas</item>
+        <item quantity="other">%1$s semanas</item>
+    </plurals>
 </resources>
