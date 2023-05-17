@@ -27,6 +27,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
@@ -363,7 +364,8 @@ private fun createMonthViewRemoteViews(
     context: Context, width: Int, height: Int, date: AbstractDate
 ): RemoteViews {
     val remoteViews = RemoteViews(context.packageName, R.layout.widget_month_view)
-    val monthView = MonthView(ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context)))
+    val widgetTheme = Theme.getWidgetSuitableStyle(context, prefersWidgetsDynamicColors)
+    val monthView = MonthView(ContextThemeWrapper(context, widgetTheme))
     val color = when {
         prefersWidgetsDynamicColors -> if (Theme.isNightMode(context)) Color.WHITE else Color.BLACK
         else -> selectedWidgetTextColor
@@ -608,8 +610,8 @@ private fun create4x2RemoteViews(
         if (prefersWidgetsDynamicColors) {
             remoteViews.setDynamicTextColor(nextViewId, android.R.attr.colorAccent)
         } else {
-            val color = ContextThemeWrapper(context, Theme.getWidgetSuitableStyle(context))
-                .resolveColor(R.attr.colorHoliday)
+            val widgetTheme = Theme.getWidgetSuitableStyle(context, prefersWidgetsDynamicColors)
+            val color = ContextThemeWrapper(context, widgetTheme).resolveColor(R.attr.colorHoliday)
             remoteViews.setTextColor(nextViewId, color)
         }
 
@@ -663,6 +665,11 @@ private fun setEventsInWidget(
         insertRLM = context.resources.isRtl, addIsHoliday = false
     ) else ""
     remoteViews.setTextViewTextOrHideIfEmpty(eventsId, nonHolidays)
+
+    if (!prefersWidgetsDynamicColors) remoteViews.setInt(
+        holidaysId, "setTextColor",
+        ContextCompat.getColor(context, R.color.light_holiday)
+    )
 }
 
 private fun updateNotification(
