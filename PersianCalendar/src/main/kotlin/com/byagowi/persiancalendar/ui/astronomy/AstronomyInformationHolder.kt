@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.annotation.ColorInt
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.byagowi.persiancalendar.databinding.AstronomyInformationHolderBinding
+import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 
@@ -31,7 +32,10 @@ class AstronomyInformationHolder(context: Context, attrs: AttributeSet? = null) 
             content
         } else {
             val binding = AstronomyInformationHolderBinding.inflate(context.layoutInflater)
-            setColor = { binding.title.chipBackgroundColor = ColorStateList.valueOf(it) }
+            setColor = {
+                @ColorInt val color = if (context.isDynamicGrayscale) 0xcc808080.toInt() else it
+                binding.title.chipBackgroundColor = ColorStateList.valueOf(color)
+            }
             setTitle = binding.title::setText
             setValue = binding.value::setText
             binding.root

@@ -19,6 +19,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
@@ -179,22 +180,25 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
             }
         }
 
-        listOf(
-            binding.firstSeason, binding.secondSeason, binding.thirdSeason, binding.fourthSeason
-        ).zip(
-            if (coordinates.value?.isSouthernHemisphere == true)
-                listOf(Season.WINTER, Season.SPRING, Season.SUMMER, Season.AUTUMN)
-            else
-                listOf(Season.SUMMER, Season.AUTUMN, Season.WINTER, Season.SPRING)
-        ).forEach { (holder, season) ->
-            holder.setTitle(getString(season.nameStringId))
-            holder.setColor(season.color)
-        }
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver { _, event ->
+            if (event != Lifecycle.Event.ON_RESUME) return@LifecycleEventObserver
+            listOf(
+                binding.firstSeason, binding.secondSeason, binding.thirdSeason, binding.fourthSeason
+            ).zip(
+                if (coordinates.value?.isSouthernHemisphere == true)
+                    listOf(Season.WINTER, Season.SPRING, Season.SUMMER, Season.AUTUMN)
+                else
+                    listOf(Season.SUMMER, Season.AUTUMN, Season.WINTER, Season.SPRING)
+            ).forEach { (holder, season) ->
+                holder.setTitle(getString(season.nameStringId))
+                holder.setColor(season.color)
+            }
+            binding.sun.setTitle(getString(R.string.sun))
+            binding.sun.setColor(0xcceaaa00.toInt())
+            binding.moon.setTitle(getString(R.string.moon))
+            binding.moon.setColor(0xcc606060.toInt())
+        })
 
-        binding.sun.setTitle(getString(R.string.sun))
-        binding.sun.setColor(0xcceaaa00.toInt())
-        binding.moon.setTitle(getString(R.string.moon))
-        binding.moon.setColor(0xcc606060.toInt())
 
         fun bringDate() {
             val currentJdn = Jdn(viewModel.astronomyState.value.date.toCivilDate())
