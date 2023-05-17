@@ -85,7 +85,7 @@
     <color name="modern_event_indicator">#000000</color>
 
     <!-- override of these exist in values-v31/colors.xml -->
-    <color name="notification_widget_holiday_color">#ff8a65</color>
+    <color name="remote_view_holiday_color">#ff8a65</color>
 
     <!-- == SunView == -->
     <color name="sun_view_sunrise_text_color">#FF9800</color>

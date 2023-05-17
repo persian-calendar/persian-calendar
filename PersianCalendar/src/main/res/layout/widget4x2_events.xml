@@ -33,7 +33,7 @@
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:maxLines="1"
-        android:textColor="@color/notification_widget_holiday_color"
+        android:textColor="@color/remote_view_holiday_color"
         android:textSize="13sp" />
 
     <TextView
