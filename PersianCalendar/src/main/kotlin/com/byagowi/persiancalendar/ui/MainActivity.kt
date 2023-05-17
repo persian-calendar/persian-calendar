@@ -167,12 +167,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             ) != PackageManager.PERMISSION_GRANTED
         ) askForCalendarPermission()
 
-        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
-            it.adapter = SeasonsAdapter()
-            it.currentItem = SeasonsAdapter.getCurrentIndex() - 3
-            it.setPageTransformer(MarginPageTransformer((8 * resources.dp).toInt()))
-        }
-
         if (!appPrefs.getBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, false)) {
             showChangeLanguageSnackbar()
             appPrefs.edit { putBoolean(CHANGE_LANGUAGE_IS_PROMOTED_ONCE, true) }
@@ -367,6 +361,12 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             if (navController?.currentDestination?.id == R.id.calendar) {
                 navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
             }
+        }
+
+        NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
+            it.adapter = SeasonsAdapter()
+            it.currentItem = SeasonsAdapter.getCurrentIndex() - 3
+            it.setPageTransformer(MarginPageTransformer((8 * resources.dp).toInt()))
         }
     }
 

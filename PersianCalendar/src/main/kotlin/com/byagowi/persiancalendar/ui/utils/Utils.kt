@@ -265,3 +265,21 @@ fun createFlingDetector(
 
     return GestureDetector(context, FlingListener())
 }
+
+// Android 14 will have a grayscale dynamic colors mode and this is somehow a hack to check for that
+// I guess there will be better ways to check for that in the future I guess but this does the trick
+// for now but apparently there will be AccessibilityManager.getUiContrast() in future per
+// https://www.reddit.com/r/Android/comments/12hmg5d/android_14_is_adding_support_for_generating/
+val Context.isDynamicGrayscale: Boolean
+    get() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return false
+        val hsv = FloatArray(3)
+        return listOf(
+            android.R.color.system_accent1_500,
+            android.R.color.system_accent2_500,
+            android.R.color.system_accent3_500,
+        ).all {
+            Color.colorToHSV(getColor(android.R.color.system_accent1_500), hsv)
+            hsv[1] == .0f
+        }
+    }
