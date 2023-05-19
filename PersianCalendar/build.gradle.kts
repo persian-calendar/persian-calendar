@@ -23,8 +23,8 @@ android {
         getByName("main").kotlin.srcDir(generatedAppSrcDir)
     }
 
-    // compileSdk = 33
-    compileSdkPreview = "UpsideDownCake"
+    compileSdk = 33
+    // compileSdkPreview = "UpsideDownCake"
     buildToolsVersion = "33.0.2"
 
     buildFeatures {
@@ -39,8 +39,8 @@ android {
     defaultConfig {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 17
-        // targetSdk = 33
-        targetSdkPreview = "UpsideDownCake"
+        targetSdk = 33
+        // targetSdkPreview = "UpsideDownCake"
         versionCode = 815
         versionName = "8.1.5"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
