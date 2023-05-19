@@ -6,9 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.SeasonItemBinding
 import com.byagowi.persiancalendar.entities.Season
+import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.ui.utils.isDynamicGrayscale
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.utils.appPrefs
 import java.util.Date
 
 class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder>() {
@@ -20,7 +22,8 @@ class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder
         viewType: Int
     ): SeasonImageViewHolder {
         val binding = SeasonItemBinding.inflate(parent.context.layoutInflater, parent, false)
-        if (parent.context.isDynamicGrayscale) binding.image.colorFilter = grayScaleColorFilter
+        if (Theme.isDynamicColor(parent.context.appPrefs) && parent.context.isDynamicGrayscale)
+            binding.image.colorFilter = grayScaleColorFilter
         return SeasonImageViewHolder(binding)
     }
 
