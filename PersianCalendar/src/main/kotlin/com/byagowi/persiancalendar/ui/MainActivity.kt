@@ -350,6 +350,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         ensureDirectionality()
     }
 
+    private var drawerOpenedOnce = false
+
     override fun onResume() {
         super.onResume()
         applyAppLanguage(this)
@@ -363,9 +365,10 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
         }
 
+        // Recreating on every resume to react to system theme change (Android 14's monotone theme)
         NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0)).seasonsPager.also {
             it.adapter = SeasonsAdapter()
-            it.currentItem = SeasonsAdapter.getCurrentIndex() - 3
+            it.currentItem = SeasonsAdapter.getCurrentIndex() - if (drawerOpenedOnce) 0 else 3
             it.setPageTransformer(MarginPageTransformer((8 * resources.dp).toInt()))
         }
     }
@@ -484,6 +487,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
             NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
                 .seasonsPager.setCurrentItem(SeasonsAdapter.getCurrentIndex(), true)
+
+            drawerOpenedOnce = true
         }
 
         override fun onDrawerClosed(drawerView: View) {
