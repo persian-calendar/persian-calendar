@@ -94,7 +94,9 @@
         <item name="sunViewMidDayColor">@color/sun_view_widget_midday_color</item>
     </style>
 
-    <style name="DynamicLightSurfaceOverride" />
+    <style name="DynamicLightSurfaceOverride">
+        <item name="colorSurface">@android:color/system_neutral1_10</item>
+    </style>
 
     <style name="DynamicDarkSurfaceOverride" />
 
