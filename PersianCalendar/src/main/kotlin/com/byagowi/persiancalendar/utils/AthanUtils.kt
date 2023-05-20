@@ -85,29 +85,31 @@ fun startAthan(context: Context, prayTimeKey: String, intendedTime: Long?) {
     startAthanBody(context, prayTimeKey)
 }
 
-private fun startAthanBody(context: Context, prayTimeKey: String) = runCatching {
-    debugLog("Alarms: startAthanBody for $prayTimeKey")
-
+private fun startAthanBody(context: Context, prayTimeKey: String) {
     runCatching {
-        context.getSystemService<PowerManager>()?.newWakeLock(
-            PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
-            "persiancalendar:alarm"
-        )?.acquire(THIRTY_SECONDS_IN_MILLIS)
-    }.onFailure(logException)
+        debugLog("Alarms: startAthanBody for $prayTimeKey")
 
-    if (notificationAthan) {
-        ContextCompat.startForegroundService(
-            context, Intent(context, AthanNotification::class.java)
-                .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
-        )
-    } else {
-        context.startActivity(
-            Intent(context, AthanActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
-        )
-    }
-}.onFailure(logException).let {}
+        runCatching {
+            context.getSystemService<PowerManager>()?.newWakeLock(
+                PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.SCREEN_DIM_WAKE_LOCK,
+                "persiancalendar:alarm"
+            )?.acquire(THIRTY_SECONDS_IN_MILLIS)
+        }.onFailure(logException)
+
+        if (notificationAthan) {
+            ContextCompat.startForegroundService(
+                context, Intent(context, AthanNotification::class.java)
+                    .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
+            )
+        } else {
+            context.startActivity(
+                Intent(context, AthanActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
+            )
+        }
+    }.onFailure(logException)
+}
 
 fun getEnabledAlarms(context: Context): Set<String> {
     if (coordinates.value == null) return emptySet()

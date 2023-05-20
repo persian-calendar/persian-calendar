@@ -217,7 +217,8 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
                 }
                 .show()
         }
-        fun viewCommandResult(command: String) = MaterialAlertDialogBuilder(activity).also {
+        fun viewCommandResult(command: String) {
+            val dialogBuilder = MaterialAlertDialogBuilder(activity)
             val result = Runtime.getRuntime().exec(command).inputStream.bufferedReader().readText()
             val button = ImageButton(activity).also { button ->
                 button.setImageDrawable(activity.getCompatDrawable(R.drawable.ic_baseline_share))
@@ -225,13 +226,13 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
                     activity.shareTextFile(result, "log.txt", "text/plain")
                 }
             }
-            it.setCustomTitle(
+            dialogBuilder.setCustomTitle(
                 LinearLayout(activity).also {
                     it.layoutDirection = View.LAYOUT_DIRECTION_LTR
                     it.addView(button)
                 }
             )
-            it.setView(
+            dialogBuilder.setView(
                 ScrollView(context).also { scrollView ->
                     scrollView.addView(TextView(context).also {
                         it.text = result
@@ -241,7 +242,8 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
                     scrollView.post { scrollView.fullScroll(View.FOCUS_DOWN) }
                 }
             )
-        }.show().let {}
+            dialogBuilder.show()
+        }
         toolbar.menu.addSubMenu("Log Viewer").also {
             it.add("Filtered").onClick {
                 viewCommandResult("logcat -v raw -t 500 *:S $LOG_TAG:V AndroidRuntime:E")

@@ -116,9 +116,10 @@ private var selectedWidgetBackgroundColor = DEFAULT_SELECTED_WIDGET_BACKGROUND_C
 private var prefersWidgetsDynamicColors = false
 
 // Is called from MainActivity to make sure is updated, probably should be removed however
-fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) = runCatching {
-    deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today())
-}.onFailure(logException).let {}
+fun readAndStoreDeviceCalendarEventsOfTheDay(context: Context) {
+    runCatching { deviceCalendarEvents = context.readDayDeviceEvents(Jdn.today()) }
+        .onFailure(logException)
+}
 
 private var latestFiredUpdate = 0L
 

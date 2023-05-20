@@ -452,13 +452,15 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
 
                         if (!regex.matches(it)) append(it)
                         else inSpans(object : ClickableSpan() {
-                            override fun onClick(textView: View) = runCatching {
-                                val pattern =
-                                    "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
-                                CustomTabsIntent.Builder().build().launchUrl(
-                                    activity, it.replace(regex, pattern).toUri()
-                                )
-                            }.onFailure(logException).let {}
+                            override fun onClick(textView: View) {
+                                runCatching {
+                                    val pattern =
+                                        "https://www.khronos.org/registry/OpenGL/extensions/$1/$1_$2.txt"
+                                    CustomTabsIntent.Builder().build().launchUrl(
+                                        activity, it.replace(regex, pattern).toUri()
+                                    )
+                                }.onFailure(logException)
+                            }
                         }) { append(it) }
                     }
                 }

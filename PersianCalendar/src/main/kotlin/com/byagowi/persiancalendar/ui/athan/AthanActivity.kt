@@ -38,12 +38,14 @@ class AthanActivity : ComponentActivity() {
     private var originalVolume = -1
     private val preventPhoneCallIntervention = PreventPhoneCallIntervention(::stop)
     private val stopTask = object : Runnable {
-        override fun run() = runCatching {
-            spentSeconds += 5
-            if (ringtone == null || ringtone?.isPlaying == false || spentSeconds > 360 ||
-                (stopAtHalfMinute && spentSeconds > 30)
-            ) finish() else handler.postDelayed(this, FIVE_SECONDS_IN_MILLIS)
-        }.onFailure(logException).onFailure { finish() }.let {}
+        override fun run() {
+            runCatching {
+                spentSeconds += 5
+                if (ringtone == null || ringtone?.isPlaying == false || spentSeconds > 360 ||
+                    (stopAtHalfMinute && spentSeconds > 30)
+                ) finish() else handler.postDelayed(this, FIVE_SECONDS_IN_MILLIS)
+            }.onFailure(logException).onFailure { finish() }
+        }
     }
     private var stopAtHalfMinute = false
 

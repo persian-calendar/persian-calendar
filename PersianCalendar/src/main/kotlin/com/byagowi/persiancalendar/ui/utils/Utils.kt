@@ -100,26 +100,32 @@ private fun Context.saveTextAsFile(text: String, fileName: String) = FileProvide
     File(externalCacheDir, fileName).also { it.writeText(text) }
 )
 
-fun Context.openHtmlInBrowser(html: String) = runCatching {
-    CustomTabsIntent.Builder().build()
-        .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-        .launchUrl(this, saveTextAsFile(html, "persian-calendar.html"))
-}.onFailure(logException).let {}
+fun Context.openHtmlInBrowser(html: String) {
+    runCatching {
+        CustomTabsIntent.Builder().build()
+            .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
+            .launchUrl(this, saveTextAsFile(html, "persian-calendar.html"))
+    }.onFailure(logException)
+}
 
-fun FragmentActivity.shareText(text: String) = runCatching {
-    ShareCompat.IntentBuilder(this)
-        .setType("text/plain")
-        .setChooserTitle(getString(R.string.date_converter))
-        .setText(text)
-        .startChooser()
-}.onFailure(logException).let {}
+fun FragmentActivity.shareText(text: String) {
+    runCatching {
+        ShareCompat.IntentBuilder(this)
+            .setType("text/plain")
+            .setChooserTitle(getString(R.string.date_converter))
+            .setText(text)
+            .startChooser()
+    }.onFailure(logException)
+}
 
-fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String) = runCatching {
-    startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
-        it.type = mime
-        it.putExtra(Intent.EXTRA_STREAM, saveTextAsFile(text, fileName))
-    }, getString(R.string.share)))
-}.onFailure(logException).let {}
+fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String) {
+    runCatching {
+        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
+            it.type = mime
+            it.putExtra(Intent.EXTRA_STREAM, saveTextAsFile(text, fileName))
+        }, getString(R.string.share)))
+    }.onFailure(logException)
+}
 
 fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
@@ -152,9 +158,9 @@ fun Flow.addViewsToFlow(viewList: List<View>) {
     }.toIntArray()
 }
 
-fun NavController.navigateSafe(directions: NavDirections) = runCatching {
-    navigate(directions)
-}.onFailure(logException).getOrNull().debugAssertNotNull.let {}
+fun NavController.navigateSafe(directions: NavDirections) {
+    runCatching { navigate(directions) }.onFailure(logException).getOrNull().debugAssertNotNull
+}
 
 fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
     AppCompatResources.getDrawable(this, drawableRes).debugAssertNotNull ?: ShapeDrawable()
@@ -174,8 +180,9 @@ fun View.fadeIn(durationMillis: Long = 250) {
     })
 }
 
-inline fun MenuItem.onClick(crossinline action: () -> Unit) =
-    this.setOnMenuItemClickListener { action(); false /* let it handle selected menu */ }.let {}
+inline fun MenuItem.onClick(crossinline action: () -> Unit) {
+    this.setOnMenuItemClickListener { action(); false /* let it handle selected menu */ }
+}
 
 fun View.setupExpandableAccessibilityDescription() {
     ViewCompat.setAccessibilityDelegate(this, object : AccessibilityDelegateCompat() {

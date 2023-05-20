@@ -469,15 +469,15 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         dayEvents.filterIsInstance<CalendarEvent.DeviceCalendarEvent>().forEachIndexed { i, event ->
             if (i != 0) appendLine()
             inSpans(object : ClickableSpan() {
-                override fun onClick(textView: View) = runCatching {
-                    viewEvent.launch(event.id.toLong())
-                }.onFailure(logException).onFailure {
-                    Snackbar.make(
-                        textView,
-                        R.string.device_does_not_support,
-                        Snackbar.LENGTH_SHORT
-                    ).also { it.considerSystemBarsInsets() }.show()
-                }.let {}
+                override fun onClick(textView: View) {
+                    runCatching { viewEvent.launch(event.id.toLong()) }.onFailure {
+                        Snackbar.make(
+                            textView,
+                            R.string.device_does_not_support,
+                            Snackbar.LENGTH_SHORT
+                        ).also { it.considerSystemBarsInsets() }.show()
+                    }.onFailure(logException)
+                }
 
                 override fun updateDrawState(ds: TextPaint) {
                     super.updateDrawState(ds)

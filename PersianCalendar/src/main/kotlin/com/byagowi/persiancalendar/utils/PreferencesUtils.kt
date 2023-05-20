@@ -32,7 +32,9 @@ import java.util.Locale
 
 val Context.appPrefs: SharedPreferences get() = PreferenceManager.getDefaultSharedPreferences(this)
 
-fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) = putLong(key, jdn.value).let {}
+fun SharedPreferences.Editor.putJdn(key: String, jdn: Jdn) {
+    putLong(key, jdn.value)
+}
 
 fun SharedPreferences.getJdnOrNull(key: String): Jdn? =
     getLong(key, -1).takeIf { it != -1L }?.let { Jdn(it) }
