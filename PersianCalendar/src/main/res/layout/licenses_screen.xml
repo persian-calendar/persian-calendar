@@ -31,17 +31,23 @@
                 app:labelVisibilityMode="labeled"
                 app:menuGravity="top" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:layoutDirection="ltr"
-                android:paddingStart="12dp"
-                android:paddingTop="12dp"
-                android:paddingEnd="4dp"
-                android:scrollbars="vertical"
-                android:textDirection="ltr" />
+                android:paddingStart="4dp"
+                android:paddingEnd="12dp">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:layoutDirection="ltr"
+                    android:paddingTop="12dp"
+                    android:scrollbars="vertical"
+                    android:textDirection="ltr" />
+
+            </FrameLayout>
 
         </LinearLayout>
 
