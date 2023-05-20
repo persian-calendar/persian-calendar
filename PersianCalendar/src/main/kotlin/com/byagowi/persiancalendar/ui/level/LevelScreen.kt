@@ -43,10 +43,8 @@ class LevelScreen : Fragment(R.layout.level_screen) {
         super.onViewCreated(view, savedInstanceState)
         setupRotationLock()
         val binding = LevelScreenBinding.bind(view)
-        binding.appBar.toolbar.also { toolbar ->
-            toolbar.setTitle(R.string.level)
-            toolbar.setupUpNavigation()
-        }
+        binding.appBar.toolbar.setTitle(R.string.level)
+        binding.appBar.toolbar.setupUpNavigation()
         val activity = activity ?: return
         provider = OrientationProvider(activity, binding.levelView)
         val announcer = SensorEventAnnouncer(R.string.level)

@@ -75,11 +75,9 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         super.onViewCreated(view, savedInstanceState)
         val binding = SettingsScreenBinding.bind(view)
         binding.appBar.root.hideToolbarBottomShadow()
-        binding.appBar.toolbar.let { toolbar ->
-            toolbar.setTitle(R.string.settings)
-            toolbar.setupMenuNavigation()
-            setupMenu(toolbar, binding, layoutInflater)
-        }
+        binding.appBar.toolbar.setTitle(R.string.settings)
+        binding.appBar.toolbar.setupMenuNavigation()
+        setupMenu(binding.appBar.toolbar, binding, layoutInflater)
 
         val args by navArgs<SettingsScreenArgs>()
         val viewModel by viewModels<SettingsViewModel>()

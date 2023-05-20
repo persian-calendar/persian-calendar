@@ -28,10 +28,8 @@ class SkyRendererScreen : Fragment(R.layout.sky_renderer_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = SkyRendererScreenBinding.bind(view)
-        binding.appBar.toolbar.let {
-            it.title = "PanoRendo"
-            it.setupUpNavigation()
-        }
+        binding.appBar.toolbar.title = "PanoRendo"
+        binding.appBar.toolbar.setupUpNavigation()
 
         binding.toneMap.adapter = ArrayAdapter(
             view.context,

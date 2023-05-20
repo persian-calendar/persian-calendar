@@ -85,10 +85,8 @@ class DeviceInformationScreen : Fragment(R.layout.device_information_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = DeviceInformationScreenBinding.bind(view)
-        binding.toolbar.let {
-            it.setTitle(R.string.device_information)
-            it.setupUpNavigation()
-        }
+        binding.toolbar.setTitle(R.string.device_information)
+        binding.toolbar.setupUpNavigation()
 
         binding.root.circularRevealFromMiddle()
 

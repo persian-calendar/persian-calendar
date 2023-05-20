@@ -155,13 +155,11 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         val binding = CompassScreenBinding.bind(view)
         this.binding = binding
 
-        binding.appBar.toolbar.let { toolbar ->
-            toolbar.setTitle(R.string.compass)
-            toolbar.subtitle = view.context.appPrefs.cityName ?: coordinates.value?.run {
-                formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
-            }
-            toolbar.setupMenuNavigation()
+        binding.appBar.toolbar.setTitle(R.string.compass)
+        binding.appBar.toolbar.subtitle = view.context.appPrefs.cityName ?: coordinates.value?.run {
+            formatCoordinateISO6709(latitude, longitude, elevation.takeIf { it != 0.0 })
         }
+        binding.appBar.toolbar.setupMenuNavigation()
 
         binding.bottomAppbar.menu.add(R.string.level).also {
             it.icon = binding.bottomAppbar.context.getCompatDrawable(R.drawable.ic_level)

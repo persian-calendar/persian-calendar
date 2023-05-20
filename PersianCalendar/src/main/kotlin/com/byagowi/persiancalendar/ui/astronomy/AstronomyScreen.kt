@@ -59,10 +59,8 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
         super.onViewCreated(view, savedInstanceState)
         val binding = AstronomyScreenBinding.bind(view)
 
-        binding.appBar.toolbar.let {
-            it.setTitle(R.string.astronomy)
-            it.setupMenuNavigation()
-        }
+        binding.appBar.toolbar.setTitle(R.string.astronomy)
+        binding.appBar.toolbar.setupMenuNavigation()
 
         val resetButton = binding.appBar.toolbar.menu.add(R.string.return_to_today).also {
             it.icon =

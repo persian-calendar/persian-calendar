@@ -62,10 +62,8 @@ class LicensesScreen : Fragment(R.layout.licenses_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = LicensesScreenBinding.bind(view)
-        binding.appBar.toolbar.let {
-            it.setTitle(R.string.about_license_title)
-            it.setupUpNavigation()
-        }
+        binding.appBar.toolbar.setTitle(R.string.about_license_title)
+        binding.appBar.toolbar.setupUpNavigation()
 
         @SuppressLint("SetTextI18n")
         binding.eventsStats.text = """Events count:
