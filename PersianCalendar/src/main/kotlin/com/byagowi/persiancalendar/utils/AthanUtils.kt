@@ -47,7 +47,6 @@ import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.variants.debugLog
 import io.github.persiancalendar.praytimes.PrayTimes
-import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
@@ -129,9 +128,9 @@ fun scheduleAlarms(context: Context) {
         scheduleAlarm(context, name, GregorianCalendar().also {
             // if (name == ISHA_KEY) return@also it.add(Calendar.SECOND, 5)
             val alarmTime = prayTimes.getFromStringId(getPrayTimeName(name))
-            it[Calendar.HOUR_OF_DAY] = alarmTime.hours
-            it[Calendar.MINUTE] = alarmTime.minutes
-            it[Calendar.SECOND] = 0
+            it[GregorianCalendar.HOUR_OF_DAY] = alarmTime.hours
+            it[GregorianCalendar.MINUTE] = alarmTime.minutes
+            it[GregorianCalendar.SECOND] = 0
         }.timeInMillis - athanGap, i)
     }
 }

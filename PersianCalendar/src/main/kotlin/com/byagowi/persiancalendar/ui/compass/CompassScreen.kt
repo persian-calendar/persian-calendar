@@ -46,7 +46,6 @@ import com.byagowi.persiancalendar.utils.formatCoordinateISO6709
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.Snackbar
-import java.util.Calendar
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -245,12 +244,12 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         binding.timeSlider.valueTo = 24f
         binding.timeSlider.setLabelFormatter {
             val time = GregorianCalendar()
-            time.add(Calendar.MINUTE, (it * 60f).roundToInt())
+            time.add(GregorianCalendar.MINUTE, (it * 60f).roundToInt())
             Clock(time).toBasicFormatString()
         }
         binding.timeSlider.addOnChangeListener { slider, value, fromUser ->
             val time = GregorianCalendar()
-            time.add(Calendar.MINUTE, (value * 60f).roundToInt())
+            time.add(GregorianCalendar.MINUTE, (value * 60f).roundToInt())
             binding.appBar.toolbar.title =
                 if (value == 0f || fromUser) slider.resources.getString(R.string.compass)
                 else Clock(time).toBasicFormatString()

@@ -20,7 +20,6 @@ import com.byagowi.persiancalendar.service.ApplicationService
 import com.byagowi.persiancalendar.service.BroadcastReceivers
 import com.byagowi.persiancalendar.service.UpdateWorker
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
-import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.concurrent.TimeUnit
 
@@ -31,10 +30,10 @@ fun scheduleAlarmManagerUpdates(context: Context) = runCatching {
     val alarmManager = context.getSystemService<AlarmManager>() ?: return@runCatching
 
     val startTime = GregorianCalendar().apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 1)
-        add(Calendar.DATE, 1)
+        set(GregorianCalendar.HOUR_OF_DAY, 0)
+        set(GregorianCalendar.MINUTE, 0)
+        set(GregorianCalendar.SECOND, 1)
+        add(GregorianCalendar.DATE, 1)
     }
 
     val dailyPendingIntent = PendingIntent.getBroadcast(

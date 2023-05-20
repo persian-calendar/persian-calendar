@@ -42,7 +42,6 @@ import io.github.persiancalendar.calendar.CivilDate
 import io.github.persiancalendar.calendar.IslamicDate
 import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.islamic.IranianIslamicDateConverter
-import java.util.Calendar
 import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
@@ -125,7 +124,11 @@ fun getA11yDaySummary(
 }
 
 fun GregorianCalendar.toCivilDate(): CivilDate {
-    return CivilDate(this[Calendar.YEAR], this[Calendar.MONTH] + 1, this[Calendar.DAY_OF_MONTH])
+    return CivilDate(
+        this[GregorianCalendar.YEAR],
+        this[GregorianCalendar.MONTH] + 1,
+        this[GregorianCalendar.DAY_OF_MONTH]
+    )
 }
 
 fun Date.toGregorianCalendar(forceLocalTime: Boolean = false): GregorianCalendar {
@@ -209,7 +212,7 @@ fun Context.readMonthDeviceEvents(jdn: Jdn) =
     )
 
 fun Context.getAllEnabledAppointments() = readDeviceEvents(
-    this, GregorianCalendar().apply { add(Calendar.YEAR, -1) },
+    this, GregorianCalendar().apply { add(GregorianCalendar.YEAR, -1) },
     365L * 2L * DAY_IN_MILLIS // all the events of previous and next year from today
 )
 

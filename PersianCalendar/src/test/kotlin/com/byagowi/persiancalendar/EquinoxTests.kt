@@ -4,7 +4,6 @@ import io.github.cosinekitty.astronomy.seasons
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import java.util.Calendar
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.test.assertEquals
@@ -60,12 +59,12 @@ class EquinoxTests {
     fun test_not_change(year: Int, month: Int, day: Int, hour: Int, minute: Int, second: Int) {
         val calendar = GregorianCalendar(TimeZone.getTimeZone(IRAN_TIMEZONE_ID))
         calendar.timeInMillis = seasons(year).marchEquinox.toMillisecondsSince1970()
-        assertEquals(year, calendar[Calendar.YEAR])
-        assertEquals(month, calendar[Calendar.MONTH] + 1)
-        assertEquals(day, calendar[Calendar.DAY_OF_MONTH])
-        assertEquals(hour, calendar[Calendar.HOUR_OF_DAY])
-        assertEquals(minute, calendar[Calendar.MINUTE])
-        assertEquals(second, calendar[Calendar.SECOND])
+        assertEquals(year, calendar[GregorianCalendar.YEAR])
+        assertEquals(month, calendar[GregorianCalendar.MONTH] + 1)
+        assertEquals(day, calendar[GregorianCalendar.DAY_OF_MONTH])
+        assertEquals(hour, calendar[GregorianCalendar.HOUR_OF_DAY])
+        assertEquals(minute, calendar[GregorianCalendar.MINUTE])
+        assertEquals(second, calendar[GregorianCalendar.SECOND])
     }
 
     @Test

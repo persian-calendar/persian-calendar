@@ -51,7 +51,6 @@ import io.github.cosinekitty.astronomy.rotationEqdHor
 import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.cosinekitty.astronomy.searchRiseSet
 import io.github.persiancalendar.praytimes.Coordinates
-import java.util.Calendar
 import java.util.GregorianCalendar
 import kotlin.math.absoluteValue
 import kotlin.math.acos
@@ -262,8 +261,8 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     private fun writeCrescentVisibilityMap(date: GregorianCalendar, mapType: MapType) {
         val isYallop = mapType == MapType.Yallop
         val baseTime = Time(
-            date[Calendar.YEAR], date[Calendar.MONTH] + 1,
-            date[Calendar.DAY_OF_MONTH] + 1, 0, 0, .0
+            date[GregorianCalendar.YEAR], date[GregorianCalendar.MONTH] + 1,
+            date[GregorianCalendar.DAY_OF_MONTH] + 1, 0, 0, .0
         )
         // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
         (0 until 360 / maskMapMoonScaleDown).forEach { x ->

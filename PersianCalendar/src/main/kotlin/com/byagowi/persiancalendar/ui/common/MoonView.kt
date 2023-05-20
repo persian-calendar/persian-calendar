@@ -13,7 +13,7 @@ import io.github.cosinekitty.astronomy.Spherical
 import io.github.cosinekitty.astronomy.Time
 import io.github.cosinekitty.astronomy.eclipticGeoMoon
 import io.github.cosinekitty.astronomy.sunPosition
-import java.util.Calendar
+import java.util.GregorianCalendar
 import kotlin.math.roundToInt
 
 class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -51,7 +51,7 @@ class MoonView(context: Context, attrs: AttributeSet? = null) : View(context, at
     fun update() {
         val date = Jdn(jdn.toLong()).toGregorianCalendar()
         val fractionOfDay = jdn % 1 // jdn is a float so it can do smooth transition
-        date[Calendar.HOUR_OF_DAY] = (fractionOfDay * 24).roundToInt().coerceIn(0, 23)
+        date[GregorianCalendar.HOUR_OF_DAY] = (fractionOfDay * 24).roundToInt().coerceIn(0, 23)
         val time = Time.fromMillisecondsSince1970(date.time.time)
         sun = sunPosition(time)
         moon = eclipticGeoMoon(time)
