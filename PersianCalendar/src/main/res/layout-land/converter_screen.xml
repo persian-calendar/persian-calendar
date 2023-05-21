@@ -35,6 +35,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+                    <include
+                        android:id="@+id/first_timezone_clock_picker"
+                        layout="@layout/time_zone_clock_picker" />
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/input_text_wrapper"
                         style="@style/AppTextInputLayoutFilledBox"
@@ -78,6 +82,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/second_timezone_clock_picker"
+                        layout="@layout/time_zone_clock_picker" />
 
                     <TextView
                         android:id="@+id/result_text"

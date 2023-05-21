@@ -393,4 +393,5 @@
     <string name="exit_full_screen">خروج از تمام‌صفحه</string>
     <string name="color_gradient">طیف رنگی</string>
     <string name="color_gradient_summary">استفاده از طیف در رنگ‌های پوسته</string>
+    <string name="time_zones">مناطق زمانی</string>
 </resources>

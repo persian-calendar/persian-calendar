@@ -22,6 +22,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.ConverterScreenBinding
 import com.byagowi.persiancalendar.databinding.ConverterSpinnerBinding
+import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.mainCalendar
@@ -32,6 +33,7 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
+import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
@@ -39,6 +41,8 @@ import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import java.util.GregorianCalendar
+import java.util.TimeZone
 
 class ConverterScreen : Fragment(R.layout.converter_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,7 +62,9 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         }
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
-            enumValues<ConverterScreenMode>().map { it.title }.map(spinner.context::getString)
+            enumValues<ConverterScreenMode>().filter {
+                it != ConverterScreenMode.Converter || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+            }.map { it.title }.map(spinner.context::getString)
         )
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
@@ -84,6 +90,35 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             it.onClick {
                 binding.dayPickerView.jdn = todayJdn
                 binding.secondDayPickerView.jdn = todayJdn
+                viewModel.resetTimeZoneClock()
+            }
+        }
+
+        val timeZones = TimeZone.getAvailableIDs()
+            .filter { it == "UTC" || ("/" in it && "GMT" !in it) }
+            .map { TimeZone.getTimeZone(it) }.sortedBy { it.rawOffset }
+        val timeZoneNames = timeZones.map {
+            val offset = Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
+                .toTimeZoneOffsetFormat()
+            val id = if (it.id == "UTC") it.id else it.id.replace("_", " ").split("/")[1]
+            "$id ($offset)"
+        }.toTypedArray()
+
+        listOf(
+            binding.firstTimezoneClockPicker to viewModel.firstTimeZone,
+            binding.secondTimezoneClockPicker to viewModel.secondTimeZone
+        ).forEach { (binding, timeZone) ->
+            binding.timeZone.minValue = 0
+            binding.timeZone.maxValue = timeZones.size - 1
+            binding.timeZone.displayedValues = timeZoneNames
+            binding.timeZone.value = timeZones.indexOf(timeZone.value)
+            binding.timeZone.setOnValueChangedListener { _, _, index ->
+                if (timeZone == viewModel.firstTimeZone)
+                    viewModel.changeFirstTimeZone(timeZones[index])
+                else viewModel.changeSecondTimeZone(timeZones[index])
+            }
+            binding.clock.setOnTimeChangedListener { _, hourOfDay, minute ->
+                viewModel.changeClock(hourOfDay, minute, timeZone.value)
             }
         }
 
@@ -94,11 +129,26 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         }.onClick {
             val jdn = binding.dayPickerView.jdn
             activity?.shareText(
-                if (viewModel.screenMode.value == ConverterScreenMode.Converter) listOf(
-                    dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
-                    getString(R.string.equivalent_to),
-                    dateStringOfOtherCalendars(jdn, spacedComma)
-                ).joinToString(" ") else binding.resultText.text.toString()
+                when (viewModel.screenMode.value) {
+                    ConverterScreenMode.Converter -> listOf(
+                        dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
+                        getString(R.string.equivalent_to),
+                        dateStringOfOtherCalendars(jdn, spacedComma)
+                    ).joinToString(" ")
+
+                    ConverterScreenMode.Calculator, ConverterScreenMode.Distance ->
+                        binding.resultText.text.toString()
+
+                    ConverterScreenMode.TimeZones -> listOf(
+                        binding.firstTimezoneClockPicker,
+                        binding.secondTimezoneClockPicker
+                    ).joinToString("\n") {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            timeZoneNames[it.timeZone.value] + ": " +
+                                    Clock(it.clock.hour, it.clock.minute).toBasicFormatString()
+                        } else ""
+                    }
+                }
             )
         }
 
@@ -156,6 +206,27 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                     eval(binding.inputText.text?.toString() ?: "")
                                 }.getOrElse { it.message }
                             }
+
+                            ConverterScreenMode.TimeZones -> {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    listOf(
+                                        viewModel.firstTimeZone to binding.firstTimezoneClockPicker,
+                                        viewModel.secondTimeZone to binding.secondTimezoneClockPicker
+                                    ).forEach { (timeZone, timePicker) ->
+                                        val clock = GregorianCalendar(timeZone.value)
+                                        clock.timeInMillis = viewModel.clock.value.timeInMillis
+                                        val hour = clock[GregorianCalendar.HOUR_OF_DAY]
+                                        val clockView = timePicker.clock
+                                        if (clockView.hour != hour) clockView.hour = hour
+                                        val minute = clock[GregorianCalendar.MINUTE]
+                                        if (clockView.minute != minute) clockView.minute = minute
+                                        val timeZoneView = timePicker.timeZone
+                                        val timeZoneIndex = timeZones.indexOf(timeZone.value)
+                                        if (timeZoneView.value != timeZoneIndex)
+                                            timeZoneView.value = timeZoneIndex
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -174,6 +245,8 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                     viewModel.screenModeChangeEvent.collectLatest {
                         when (viewModel.screenMode.value) {
                             ConverterScreenMode.Converter -> {
+                                binding.firstTimezoneClockPicker.root.isVisible = false
+                                binding.secondTimezoneClockPicker.root.isVisible = false
                                 binding.inputTextWrapper.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.dayPickerView.isVisible = true
@@ -183,6 +256,8 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                             }
 
                             ConverterScreenMode.Distance -> {
+                                binding.firstTimezoneClockPicker.root.isVisible = false
+                                binding.secondTimezoneClockPicker.root.isVisible = false
                                 binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
 
                                 binding.inputTextWrapper.isVisible = false
@@ -194,10 +269,23 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                             }
 
                             ConverterScreenMode.Calculator -> {
+                                binding.firstTimezoneClockPicker.root.isVisible = false
+                                binding.secondTimezoneClockPicker.root.isVisible = false
                                 binding.inputTextWrapper.isVisible = true
                                 binding.dayPickerView.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.resultText.isVisible = true
+                                binding.calendarsView.isVisible = false
+                                binding.resultCard?.isVisible = false
+                            }
+
+                            ConverterScreenMode.TimeZones -> {
+                                binding.firstTimezoneClockPicker.root.isVisible = true
+                                binding.secondTimezoneClockPicker.root.isVisible = true
+                                binding.inputTextWrapper.isVisible = false
+                                binding.dayPickerView.isVisible = false
+                                binding.secondDayPickerView.isVisible = false
+                                binding.resultText.isVisible = false
                                 binding.calendarsView.isVisible = false
                                 binding.resultCard?.isVisible = false
                             }
