@@ -404,4 +404,5 @@
         <item quantity="many">%1$s semanas</item>
         <item quantity="other">%1$s semanas</item>
     </plurals>
+    <string name="time_zones">Husos horarios</string>
 </resources>
