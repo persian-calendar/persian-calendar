@@ -46,7 +46,7 @@ class ConverterScreenTest {
                 viewModel.changeSecondSelectedDate(Jdn.today() + 1)
                 job.cancel()
                 val expected = listOf(
-                    false, false, false, false, true, false, true, false, false, false, false
+                    false, false, false, false, false, true, false, true, false, false, false, false
                 )
                 // Disabled for now
                 assertEquals(expected, values)
