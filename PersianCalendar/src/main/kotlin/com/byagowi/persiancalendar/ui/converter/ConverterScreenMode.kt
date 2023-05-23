@@ -6,8 +6,8 @@ import com.byagowi.persiancalendar.R
 enum class ConverterScreenMode(@StringRes val title: Int) {
     Converter(R.string.date_converter),
     Distance(R.string.days_distance),
-    TimeZones(R.string.time_zones),
-    Calculator(R.string.calculator);
+    Calculator(R.string.calculator),
+    TimeZones(R.string.time_zones);
 
     companion object {
         fun fromPosition(position: Int): ConverterScreenMode =
