@@ -1,11 +1,11 @@
 #ifdef GL_ES
-precision highp float;
+precision mediump float;
 #endif
 
 uniform float u_time;
 uniform vec2 u_resolution;
 
-// Clouds https://github.com/skyrim/klouds/blob/master/src/shader.frag MIT licensed
+// Klouds https://github.com/skyrim/klouds/blob/master/src/shader.frag MIT licensed
 
 #define TAU 6.28318530718
 
