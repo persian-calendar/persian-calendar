@@ -24,8 +24,6 @@
     </style>
 
     <style name="SplashScreenTheme" parent="Theme.Material3.DayNight.NoActionBar">
-        <item name="android:windowTranslucentStatus" tools:targetApi="lollipop">true</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>
         <item name="android:windowSplashscreenContent" tools:targetApi="o">@drawable/splash_screen
         </item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
