@@ -94,32 +94,29 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             }
         }
 
-        val timeZones = TimeZone.getAvailableIDs()
-            .map { TimeZone.getTimeZone(it) }.sortedBy { it.rawOffset }
-        val timeZoneNames = timeZones.map {
+        val zones = TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
+        val zoneNames = zones.map {
             val offset = Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
                 .toTimeZoneOffsetFormat()
-            val id = it.id.replace("_", " ").let { id ->
-                if ("/" in id) id.split("/")[1] else id
-            }
+            val id = it.id.replace("_", " ").replace(Regex(".*/"), "")
             "$id ($offset)"
         }.toTypedArray()
 
         listOf(
             binding.firstTimezoneClockPicker to viewModel.firstTimeZone,
             binding.secondTimezoneClockPicker to viewModel.secondTimeZone
-        ).forEach { (binding, timeZone) ->
-            binding.timeZone.minValue = 0
-            binding.timeZone.maxValue = timeZones.size - 1
-            binding.timeZone.displayedValues = timeZoneNames
-            binding.timeZone.value = timeZones.indexOf(timeZone.value)
-            binding.timeZone.setOnValueChangedListener { _, _, index ->
-                if (timeZone == viewModel.firstTimeZone)
-                    viewModel.changeFirstTimeZone(timeZones[index])
-                else viewModel.changeSecondTimeZone(timeZones[index])
+        ).forEach { (timePickerBinding, timeZoneValueFlow) ->
+            timePickerBinding.timeZone.minValue = 0
+            timePickerBinding.timeZone.maxValue = zones.size - 1
+            timePickerBinding.timeZone.displayedValues = zoneNames
+            timePickerBinding.timeZone.value = zones.indexOf(timeZoneValueFlow.value)
+            timePickerBinding.timeZone.setOnValueChangedListener { _, _, index ->
+                if (timeZoneValueFlow == viewModel.firstTimeZone)
+                    viewModel.changeFirstTimeZone(zones[index])
+                else viewModel.changeSecondTimeZone(zones[index])
             }
-            binding.clock.setOnTimeChangedListener { _, hourOfDay, minute ->
-                viewModel.changeClock(hourOfDay, minute, timeZone.value)
+            timePickerBinding.clock.setOnTimeChangedListener { _, hourOfDay, minute ->
+                viewModel.changeClock(hourOfDay, minute, timeZoneValueFlow.value)
             }
         }
 
@@ -145,7 +142,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                         binding.secondTimezoneClockPicker
                     ).joinToString("\n") {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            timeZoneNames[it.timeZone.value] + ": " +
+                            zoneNames[it.timeZone.value] + ": " +
                                     Clock(it.clock.hour, it.clock.minute).toBasicFormatString()
                         } else ""
                     }
@@ -213,18 +210,17 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                     listOf(
                                         viewModel.firstTimeZone to binding.firstTimezoneClockPicker,
                                         viewModel.secondTimeZone to binding.secondTimezoneClockPicker
-                                    ).forEach { (timeZone, timePicker) ->
+                                    ).forEach { (timeZone, timePickerBinding) ->
                                         val clock = GregorianCalendar(timeZone.value)
                                         clock.timeInMillis = viewModel.clock.value.timeInMillis
                                         val hour = clock[GregorianCalendar.HOUR_OF_DAY]
-                                        val clockView = timePicker.clock
+                                        val clockView = timePickerBinding.clock
                                         if (clockView.hour != hour) clockView.hour = hour
                                         val minute = clock[GregorianCalendar.MINUTE]
                                         if (clockView.minute != minute) clockView.minute = minute
-                                        val timeZoneView = timePicker.timeZone
-                                        val timeZoneIndex = timeZones.indexOf(timeZone.value)
-                                        if (timeZoneView.value != timeZoneIndex)
-                                            timeZoneView.value = timeZoneIndex
+                                        val zoneView = timePickerBinding.timeZone
+                                        val zoneIndex = zones.indexOf(timeZone.value)
+                                        if (zoneView.value != zoneIndex) zoneView.value = zoneIndex
                                     }
                                 }
                             }
