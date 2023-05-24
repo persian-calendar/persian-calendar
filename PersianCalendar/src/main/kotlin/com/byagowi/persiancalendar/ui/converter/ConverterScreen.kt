@@ -95,12 +95,13 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         }
 
         val timeZones = TimeZone.getAvailableIDs()
-            .filter { it == "UTC" || ("/" in it && "GMT" !in it) }
             .map { TimeZone.getTimeZone(it) }.sortedBy { it.rawOffset }
         val timeZoneNames = timeZones.map {
             val offset = Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
                 .toTimeZoneOffsetFormat()
-            val id = if (it.id == "UTC") it.id else it.id.replace("_", " ").split("/")[1]
+            val id = it.id.replace("_", " ").let { id ->
+                if ("/" in id) id.split("/")[1] else id
+            }
             "$id ($offset)"
         }.toTypedArray()
 
