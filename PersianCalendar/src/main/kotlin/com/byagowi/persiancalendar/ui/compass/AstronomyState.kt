@@ -1,8 +1,8 @@
 package com.byagowi.persiancalendar.ui.compass
 
 import android.hardware.GeomagneticField
-import com.byagowi.persiancalendar.utils.planetsTitles
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
+import com.byagowi.persiancalendar.utils.titleStringId
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
 import io.github.cosinekitty.astronomy.EquatorEpoch
@@ -30,7 +30,7 @@ class AstronomyState(observer: Observer, date: GregorianCalendar) {
     val planets = visiblePlanets.mapNotNull {
         val equator = equator(it, time, observer, EquatorEpoch.OfDate, Aberration.Corrected)
         val horizon = horizon(time, observer, equator.ra, equator.dec, Refraction.Normal)
-        if (horizon.altitude <= -5) null else planetsTitles.getValue(it) to horizon
+        if (horizon.altitude <= -5) null else it.titleStringId to horizon
     }
     val moonTiltAngle = sunlitSideMoonTiltAngle(time, observer).toFloat()
     val declination = GeomagneticField(

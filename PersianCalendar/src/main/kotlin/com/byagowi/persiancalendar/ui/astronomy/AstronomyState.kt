@@ -8,8 +8,8 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.utils.formatDateAndTime
 import com.byagowi.persiancalendar.utils.generateYearName
-import com.byagowi.persiancalendar.utils.planetsTitles
 import com.byagowi.persiancalendar.utils.sunlitSideMoonTiltAngle
+import com.byagowi.persiancalendar.utils.titleStringId
 import com.byagowi.persiancalendar.utils.toGregorianCalendar
 import com.byagowi.persiancalendar.utils.toObserver
 import io.github.cosinekitty.astronomy.Aberration
@@ -50,8 +50,7 @@ class AstronomyState(val date: GregorianCalendar) {
         horizon(time, observer, moonEquator.ra, moonEquator.dec, Refraction.Normal).altitude
     }
     val planets by lazy(LazyThreadSafetyMode.NONE) {
-        solarSystemPlanets
-            .map { planetsTitles.getValue(it) to equatorialToEcliptic(helioVector(it, time)) }
+        solarSystemPlanets.map { it.titleStringId to equatorialToEcliptic(helioVector(it, time)) }
     }
 
     fun generateHeader(context: Context, jdn: Jdn): String {

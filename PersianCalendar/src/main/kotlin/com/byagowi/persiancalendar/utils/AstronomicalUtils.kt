@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.utils
 import android.content.Context
 import android.icu.util.ChineseCalendar
 import android.os.Build
+import androidx.annotation.StringRes
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.language
@@ -84,18 +85,18 @@ fun sunlitSideMoonTiltAngle(time: Time, observer: Observer): Double {
     return Math.toDegrees(atan2(vec.z, vec.y))
 }
 
-val planetsTitles by lazy(LazyThreadSafetyMode.NONE) {
-    mapOf(
-        Body.Mercury to R.string.mercury,
-        Body.Venus to R.string.venus,
-        Body.Earth to R.string.earth,
-        Body.Mars to R.string.mars,
-        Body.Jupiter to R.string.jupiter,
-        Body.Saturn to R.string.saturn,
-        Body.Uranus to R.string.uranus,
-        Body.Neptune to R.string.neptune,
-        Body.Pluto to R.string.pluto,
-        Body.Sun to R.string.sun,
-        Body.Moon to R.string.moon,
-    ).withDefault { R.string.empty }
-}
+val Body.titleStringId
+    get(): @StringRes Int = when (this) {
+        Body.Mercury -> R.string.mercury
+        Body.Venus -> R.string.venus
+        Body.Earth -> R.string.earth
+        Body.Mars -> R.string.mars
+        Body.Jupiter -> R.string.jupiter
+        Body.Saturn -> R.string.saturn
+        Body.Uranus -> R.string.uranus
+        Body.Neptune -> R.string.neptune
+        Body.Pluto -> R.string.pluto
+        Body.Sun -> R.string.sun
+        Body.Moon -> R.string.moon
+        else -> R.string.empty
+    }

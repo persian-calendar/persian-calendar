@@ -2,7 +2,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.LRM
-import com.byagowi.persiancalendar.utils.planetsTitles
+import com.byagowi.persiancalendar.utils.titleStringId
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import io.github.cosinekitty.astronomy.Aberration
 import io.github.cosinekitty.astronomy.Body
@@ -37,7 +37,7 @@ fun showHoroscopesDialog(activity: FragmentActivity, date: Date = Date()) {
                 else -> equatorialToEcliptic(geoVector(body, time, Aberration.Corrected))
                     .let { it.elon to it.vec.length() }
             }
-            val name = activity.getString(planetsTitles.getValue(body))
+            val name = activity.getString(body.titleStringId)
             name + ": %s%s %s %,d km".format(
                 Locale.ENGLISH,
                 LRM,
