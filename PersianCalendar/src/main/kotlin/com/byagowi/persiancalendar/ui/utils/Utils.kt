@@ -289,7 +289,7 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent1_500,
             android.R.color.system_accent2_500,
             android.R.color.system_accent3_500,
-        ).maxOf { // Ugly hack, to be improved with actual Android 14 when available
+        ).maxOf { // Ugly hack, to be improved with actual Android 14 API when available
             Color.colorToHSV(getColor(android.R.color.system_accent1_500), hsv)
             hsv[1]
         } < .2
