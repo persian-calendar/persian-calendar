@@ -40,10 +40,12 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
             binding.monthPicker.also {
                 it.minValue = 1
-                it.maxValue = selectedCalendarType.getYearMonths(date.year)
+                val maxValue = selectedCalendarType.getYearMonths(date.year)
+                it.maxValue = maxValue
                 it.value = date.month
                 val months = date.calendarType.monthsNames
-                it.setFormatter { x -> months[x - 1] + " / " + formatNumber(x) }
+                it.displayedValues = (1..maxValue)
+                    .map { x -> months[x - 1] + " / " + formatNumber(x) }.toTypedArray()
                 it.isVerticalScrollBarEnabled = false
             }
             binding.dayPicker.also {
@@ -56,11 +58,12 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         }
 
     private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
-        dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
+        val maxValue = selectedCalendarType.getMonthLength(year, month)
+        dayPicker.maxValue = maxValue
         val monthStart = Jdn(selectedCalendarType, year, month, 1)
-        binding.dayPicker.setFormatter {
+        binding.dayPicker.displayedValues = (1..maxValue).map {
             (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it)
-        }
+        }.toTypedArray()
         binding.dayPicker.invalidate()
     }
 
