@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dream />
-<!--    xmlns:android="http://schemas.android.com/apk/res/android" -->
-<!--    android:settingsActivity="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />-->
+
+    <!--    xmlns:android="http://schemas.android.com/apk/res/android" -->
+    <!--    android:settingsActivity="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity" />-->

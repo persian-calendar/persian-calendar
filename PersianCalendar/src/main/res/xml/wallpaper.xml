@@ -2,4 +2,5 @@
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/app_name"
     android:thumbnail="@drawable/livewallpaper" />
-<!--    android:settingsActivity="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity"-->
+
+    <!--    android:settingsActivity="com.byagowi.persiancalendar.ui.settings.widgetnotification.WidgetConfigurationActivity"-->
