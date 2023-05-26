@@ -133,10 +133,11 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    val javaVersion = JavaVersion.VERSION_17
 
+    compileOptions {
+        sourceCompatibility = javaVersion
+        targetCompatibility = javaVersion
         // isCoreLibraryDesugaringEnabled = true
         //   Actually could be useful as makes use of java.time.Duration possible instead
         //   java.util.concurrent.TimeUnit but needs multidex as it says:
@@ -146,7 +147,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = javaVersion.majorVersion
     }
 
     lint { disable += listOf("MissingTranslation") }
