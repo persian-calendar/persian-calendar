@@ -35,13 +35,18 @@ enum class Theme(
         fun supportsGradient(context: Context) = getCurrent(context).supportsGradient &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
 
+        private fun dynamicTheme(themeKey: String): Boolean {
+            return when (themeKey) {
+                // Let's use dynamic colors also in black and modern theme of Android 12
+                SYSTEM_DEFAULT.key, BLACK.key, MODERN.key -> true
+                else -> false
+            }
+        }
+
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)
             val isDynamicColorAvailable = DynamicColors.isDynamicColorAvailable()
-            if (theme == SYSTEM_DEFAULT ||
-                // Let's use dynamic colors also in black and modern theme of Android 12
-                (isDynamicColorAvailable && (theme == BLACK || theme == MODERN))
-            ) {
+            if (theme == SYSTEM_DEFAULT || (isDynamicColorAvailable && dynamicTheme(theme.key))) {
                 val isNightModeEnabled = isNightMode(activity)
 
                 if (isDynamicColorAvailable) {
@@ -95,10 +100,7 @@ enum class Theme(
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
         fun isDynamicColor(prefs: SharedPreferences?): Boolean {
-            return DynamicColors.isDynamicColorAvailable() && when (prefs.theme) {
-                SYSTEM_DEFAULT.key, BLACK.key -> true
-                else -> false
-            }
+            return DynamicColors.isDynamicColorAvailable() && dynamicTheme(prefs.theme)
         }
 
         fun isNightMode(context: Context): Boolean =
