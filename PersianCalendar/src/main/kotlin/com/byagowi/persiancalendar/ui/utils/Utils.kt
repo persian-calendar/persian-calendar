@@ -278,8 +278,7 @@ fun createFlingDetector(
 
 // Android 14 will have a grayscale dynamic colors mode and this is somehow a hack to check for that
 // I guess there will be better ways to check for that in the future I guess but this does the trick
-// for now but apparently there will be AccessibilityManager.getUiContrast() in future per
-// https://www.reddit.com/r/Android/comments/12hmg5d/android_14_is_adding_support_for_generating/
+// Android 13, at least in Extension 5 emulator image, also provides such theme.
 // https://stackoverflow.com/a/76272434
 val Context.isDynamicGrayscale: Boolean
     get() {
@@ -289,7 +288,7 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent1_500,
             android.R.color.system_accent2_500,
             android.R.color.system_accent3_500,
-        ).maxOf { // Ugly hack, to be improved with actual Android 14 API when available
+        ).maxOf {
             Color.colorToHSV(getColor(android.R.color.system_accent1_500), hsv)
             hsv[1]
         } < .2
