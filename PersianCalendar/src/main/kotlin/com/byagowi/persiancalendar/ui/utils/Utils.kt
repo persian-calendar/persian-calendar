@@ -23,7 +23,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
-import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
@@ -288,8 +287,5 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent1_500,
             android.R.color.system_accent2_500,
             android.R.color.system_accent3_500,
-        ).maxOf {
-            Color.colorToHSV(getColor(android.R.color.system_accent1_500), hsv)
-            hsv[1]
-        } < .2
+        ).maxOf { Color.colorToHSV(getColor(it), hsv); hsv[1] } < .25
     }
