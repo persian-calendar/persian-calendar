@@ -94,30 +94,38 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             }
         }
 
-        val zones = TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
-        val zoneNames = zones.map {
-            val offset = Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
-                .toTimeZoneOffsetFormat()
-            val id = it.id.replace("_", " ").replace(Regex(".*/"), "")
-            "$id ($offset)"
-        }.toTypedArray()
-
+        val zones by lazy(LazyThreadSafetyMode.NONE) {
+            TimeZone.getAvailableIDs().map(TimeZone::getTimeZone).sortedBy { it.rawOffset }
+        }
+        val zoneNames by lazy(LazyThreadSafetyMode.NONE) {
+            zones.map {
+                val offset = Clock.fromMinutesCount(it.rawOffset / ONE_MINUTE_IN_MILLIS.toInt())
+                    .toTimeZoneOffsetFormat()
+                val id = it.id.replace("_", " ").replace(Regex(".*/"), "")
+                "$id ($offset)"
+            }.toTypedArray()
+        }
         val timeZonePickerBindingFlowPairs = listOf(
             binding.firstTimeZoneClockPicker to viewModel.firstTimeZone,
             binding.secondTimeZoneClockPicker to viewModel.secondTimeZone
         )
-        timeZonePickerBindingFlowPairs.forEach { (pickerBinding, timeZoneFlow) ->
-            pickerBinding.timeZone.minValue = 0
-            pickerBinding.timeZone.maxValue = zones.size - 1
-            pickerBinding.timeZone.displayedValues = zoneNames
-            pickerBinding.timeZone.value = zones.indexOf(timeZoneFlow.value)
-            pickerBinding.timeZone.setOnValueChangedListener { _, _, index ->
-                if (timeZoneFlow == viewModel.firstTimeZone)
-                    viewModel.changeFirstTimeZone(zones[index])
-                else viewModel.changeSecondTimeZone(zones[index])
-            }
-            pickerBinding.clock.setOnTimeChangedListener { _, hourOfDay, minute ->
-                viewModel.changeClock(hourOfDay, minute, timeZoneFlow.value)
+        var timeZonesIsEverInitialized = false
+        fun initializeTimeZones() {
+            if (timeZonesIsEverInitialized) return
+            timeZonesIsEverInitialized = true
+            timeZonePickerBindingFlowPairs.forEach { (pickerBinding, timeZoneFlow) ->
+                pickerBinding.timeZone.minValue = 0
+                pickerBinding.timeZone.maxValue = zones.size - 1
+                pickerBinding.timeZone.displayedValues = zoneNames
+                pickerBinding.timeZone.value = zones.indexOf(timeZoneFlow.value)
+                pickerBinding.timeZone.setOnValueChangedListener { _, _, index ->
+                    if (timeZoneFlow == viewModel.firstTimeZone)
+                        viewModel.changeFirstTimeZone(zones[index])
+                    else viewModel.changeSecondTimeZone(zones[index])
+                }
+                pickerBinding.clock.setOnTimeChangedListener { _, hourOfDay, minute ->
+                    viewModel.changeClock(hourOfDay, minute, timeZoneFlow.value)
+                }
             }
         }
 
@@ -273,6 +281,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                             }
 
                             ConverterScreenMode.TimeZones -> {
+                                initializeTimeZones()
                                 binding.firstTimeZoneClockPicker.root.isVisible = true
                                 binding.secondTimeZoneClockPicker.root.isVisible = true
                                 binding.inputTextWrapper.isVisible = false
