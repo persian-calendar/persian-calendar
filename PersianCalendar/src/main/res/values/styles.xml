@@ -58,7 +58,6 @@
     <style name="SharedStyle">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="screenBackground">@drawable/gradient_background</item>
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="materialAlertDialogTheme">@style/AlertDialogTheme</item>
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
@@ -174,10 +173,6 @@
         <item name="coloredTabIndicatorColor">@color/modern_accent</item>
         <item name="colorTextDaySelected">@color/modern_text_day</item>
         <item name="colorAppointment">@color/modern_accent</item>
-    </style>
-
-    <style name="NoGradientOverride">
-        <item name="screenBackground">?attr/screenBackgroundColor</item>
     </style>
 
     <style name="AthanTheme" parent="ModernTheme">

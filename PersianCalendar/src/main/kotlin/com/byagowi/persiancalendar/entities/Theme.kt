@@ -77,10 +77,6 @@ enum class Theme(
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.S &&
                 activity.windowManager.isCrossWindowBlurEnabled
             ) activity.setTheme(R.style.AlertDialogThemeBlurSupportedOverlay)
-
-            if (!activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
-                || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
-            ) activity.setTheme(R.style.NoGradientOverride)
         }
 
         private fun getCurrent(context: Context): Theme {

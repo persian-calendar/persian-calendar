@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="?attr/appToolbarTheme"
-            app:contentScrim="?attr/screenBackground"
+            app:contentScrim="?attr/screenBackgroundColor"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <com.byagowi.persiancalendar.ui.about.CheckerBoard

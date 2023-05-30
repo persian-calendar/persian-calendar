@@ -40,6 +40,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.CHANGE_LANGUAGE_IS_PROMOTED_ONCE
 import com.byagowi.persiancalendar.DEFAULT_NOTIFY_DATE
+import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
@@ -80,6 +81,7 @@ import com.byagowi.persiancalendar.ui.utils.bringMarketPage
 import com.byagowi.persiancalendar.ui.utils.considerSystemBarsInsets
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
@@ -128,6 +130,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             setContentView(it.root)
         }
         ensureDirectionality()
+        setNavHostBackground()
 
         binding.root.addDrawerListener(createDrawerListener())
 
@@ -179,7 +182,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         applyAppLanguage(this)
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
-        previousAppThemeGradientValueWasSet = PREF_THEME_GRADIENT in appPrefs
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { root, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -205,6 +207,13 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
     }
 
+    private fun setNavHostBackground() {
+        if (!appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT)
+            || Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP
+        ) binding.navHostFragment.setBackgroundColor(resolveColor(R.attr.screenBackgroundColor))
+        else binding.navHostFragment.setBackgroundResource(R.drawable.gradient_background)
+    }
+
     // This shouldn't be needed but as a the last resort
     private fun ensureDirectionality() {
         binding.root.layoutDirection =
@@ -213,7 +222,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     }
 
     private var previousAppThemeValue: String? = null
-    private var previousAppThemeGradientValueWasSet: Boolean = true
 
     private val navHostFragment by lazy {
         (supportFragmentManager.findFragmentById(R.id.navHostFragment) as? NavHostFragment)
@@ -284,10 +292,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (previousAppThemeValue != null || !Theme.isDefault(prefs)) restartToSettings()
             }
 
-            PREF_THEME_GRADIENT -> {
-                // Restart only if previous value was set otherwise it's just a transition to default
-                if (previousAppThemeGradientValueWasSet) restartToSettings()
-            }
+            PREF_THEME_GRADIENT -> setNavHostBackground()
 
             PREF_NOTIFY_DATE -> {
                 if (!prefs.getBoolean(PREF_NOTIFY_DATE, DEFAULT_NOTIFY_DATE)) {

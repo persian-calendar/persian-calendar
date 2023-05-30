@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="appTheme">
-        <attr name="screenBackground" format="reference" />
         <attr name="screenBackgroundColor" format="reference" />
         <attr name="screenBackgroundGradientStart" format="reference" />
         <attr name="screenBackgroundGradientEnd" format="reference" />
