@@ -2,6 +2,7 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 
 import android.Manifest
 import android.animation.ValueAnimator
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,8 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import androidx.preference.Preference
+import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
@@ -26,6 +29,7 @@ import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
+import com.byagowi.persiancalendar.databinding.ColorGradientToggleBinding
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
@@ -43,6 +47,7 @@ import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -66,19 +71,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                         summary = "كانون الثاني، شباط، آذار، …"
                     } else isVisible = false
                 }
-                singleSelect(
-                    PREF_THEME,
-                    enumValues<Theme>().map { getString(it.title) },
-                    enumValues<Theme>().map { it.key },
-                    Theme.SYSTEM_DEFAULT.key,
-                    R.string.select_skin
-                ) { title(R.string.select_skin) }
-                // TODO: To be integrated into the theme selection dialog one day
-                switch(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT) {
-                    title(R.string.color_gradient)
-                    summary(R.string.color_gradient_summary)
-                    if (!Theme.supportsGradient(activity)) isVisible = false
-                }
+                themeSelect()
                 // TODO: To be integrated into the language selection dialog one day
                 switch(PREF_LOCAL_DIGITS, true) {
                     title(R.string.native_digits)
@@ -158,6 +151,45 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                     summary(R.string.week_ends_summary)
                 }
             }
+        }
+    }
+
+    private fun PreferenceCategory.themeSelect() {
+        val entries = enumValues<Theme>().map { getString(it.title) }
+        val entryValues = enumValues<Theme>().map { it.key }
+        var preference: Preference? = null
+        clickable(
+            onClick = {
+                val currentValue = entryValues.indexOf(
+                    context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
+                )
+                val dialog = MaterialAlertDialogBuilder(context)
+                    .setTitle(R.string.select_skin)
+                    .setNegativeButton(R.string.cancel, null)
+                    .setSingleChoiceItems(entries.toTypedArray(), currentValue) { dialog, which ->
+                        context.appPrefs.edit { putString(PREF_THEME, entryValues[which]) }
+                        preference?.summary = entries[which]
+                        dialog.dismiss()
+                    }
+                    .show()
+
+                val activity = activity ?: return@clickable
+                if (!Theme.supportsGradient(activity)) return@clickable
+                val buttonBinding = ColorGradientToggleBinding.inflate(activity.layoutInflater)
+                (dialog.getButton(DialogInterface.BUTTON_NEGATIVE)?.parent as? ViewGroup)
+                    ?.addView(buttonBinding.root, 0)
+                if (activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT))
+                    buttonBinding.root.check(R.id.color_gradient)
+                buttonBinding.root.addOnButtonCheckedListener { _, _, isChecked ->
+                    activity.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, isChecked) }
+                }
+            }
+        ) {
+            preference = this
+            summary = entries[entryValues.indexOf(
+                context.appPrefs.getString(key, null) ?: Theme.SYSTEM_DEFAULT.key
+            )]
+            title(R.string.select_skin)
         }
     }
 

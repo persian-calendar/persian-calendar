@@ -429,5 +429,4 @@
     <string name="full_screen">ملء الشاشة</string>
     <string name="exit_full_screen">الخروج من وضع ملء الشاشة</string>
     <string name="color_gradient">تدرج اللون</string>
-    <string name="color_gradient_summary">استخدام التدرج اللوني لألوان النسق</string>
 </resources>

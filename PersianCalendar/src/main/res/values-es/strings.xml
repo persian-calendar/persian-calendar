@@ -391,7 +391,6 @@
     <string name="add_quick_settings_tile">Añadir la baldosa de Ajustes Rápidos</string>
     <string name="lock">Bloquear</string>
     <string name="exit_full_screen">Salir de la pantalla completa</string>
-    <string name="color_gradient_summary">Usar el degradado para los colores del tema</string>
     <string name="full_screen">Pantalla completa</string>
     <string name="color_gradient">Gradiente del color</string>
     <plurals name="n_seconds">
