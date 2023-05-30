@@ -42,18 +42,18 @@ import kotlin.math.floor
 enum class Zodiac(
     private val iauRangeEnd: Double, val emoji: String, @StringRes private val title: Int
 ) {
-    ARIES(33.18, "♈", R.string.aries), // 0-30 (Tropical)
-    TAURUS(51.16, "♉", R.string.taurus), // 30-60
-    GEMINI(93.44, "♊", R.string.gemini), // 60-90
-    CANCER(119.48, "♋", R.string.cancer), // 90-120
-    LEO(135.30, "♌", R.string.leo), // 120-150
-    VIRGO(173.34, "♍", R.string.virgo), // 150-180
-    LIBRA(224.17, "♎", R.string.libra), // 180-210
-    SCORPIO(242.57, "♏", R.string.scorpio), // 210-240
-    SAGITTARIUS(271.26, "♐", R.string.sagittarius), // 240-270
-    CAPRICORN(302.49, "♑", R.string.capricorn), // 270-300
-    AQUARIUS(311.72, "♒", R.string.aquarius), // 300-330
-    PISCES(348.58, "♓", R.string.pisces); // 330-360
+    ARIES(33.18, "♈", R.string.aries), // 15-45 (Tropical)
+    TAURUS(51.16, "♉", R.string.taurus), // 45-75
+    GEMINI(93.44, "♊", R.string.gemini), // 75-105
+    CANCER(119.48, "♋", R.string.cancer), // 105-135
+    LEO(135.30, "♌", R.string.leo), // 135-165
+    VIRGO(173.34, "♍", R.string.virgo), // 165-195
+    LIBRA(224.17, "♎", R.string.libra), // 195-225
+    SCORPIO(242.57, "♏", R.string.scorpio), // 225-255
+    SAGITTARIUS(271.26, "♐", R.string.sagittarius), // 255-285
+    CAPRICORN(302.49, "♑", R.string.capricorn), // 285-315
+    AQUARIUS(311.72, "♒", R.string.aquarius), // 315-345
+    PISCES(348.58, "♓", R.string.pisces); // 345-15
 
     fun format(context: Context, withEmoji: Boolean, short: Boolean = false) = buildString {
         if (withEmoji && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) append("$emoji ")
@@ -68,7 +68,7 @@ enum class Zodiac(
         }
 
     val iauRange get() = listOf(iauPreviousRangeEnd, iauRangeEnd)
-    val tropicalRange get() = listOf(ordinal * 30.0, (ordinal + 1) * 30.0)
+    val tropicalRange get() = listOf(ordinal * 30.0 + 15, (ordinal + 1) * 30.0 + 15)
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate): Zodiac =

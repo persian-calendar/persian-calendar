@@ -82,9 +82,9 @@ class AstronomyTests {
             val average = zodiac.iauRange.sum() / 2
             assertThat(average).isWithin(1.0e-10).of(centerOfZodiac)
         }
-        (0..11).zip(enumValues<Zodiac>()) { it, zodiac ->
+        (1..12).zip(enumValues<Zodiac>()) { it, zodiac ->
             val average = zodiac.tropicalRange.sum() / 2
-            assertThat(average).isWithin(1.0e-10).of(it * 30.0 + 15)
+            assertThat(average).isWithin(1.0e-10).of(it * 30.0)
         }
     }
 
