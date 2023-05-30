@@ -29,7 +29,7 @@ import com.byagowi.persiancalendar.PREF_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_WEEK_ENDS
 import com.byagowi.persiancalendar.PREF_WEEK_START
 import com.byagowi.persiancalendar.R
-import com.byagowi.persiancalendar.databinding.ColorGradientToggleBinding
+import com.byagowi.persiancalendar.databinding.ColorGradientSwitchBinding
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
@@ -175,12 +175,15 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
 
                 val activity = activity ?: return@clickable
                 if (!Theme.supportsGradient(activity)) return@clickable
-                val buttonBinding = ColorGradientToggleBinding.inflate(activity.layoutInflater)
+                val binding = ColorGradientSwitchBinding.inflate(activity.layoutInflater)
                 (dialog.getButton(DialogInterface.BUTTON_NEGATIVE)?.parent as? ViewGroup)
-                    ?.addView(buttonBinding.root, 0)
+                    ?.addView(binding.root, 0)
                 if (activity.appPrefs.getBoolean(PREF_THEME_GRADIENT, DEFAULT_THEME_GRADIENT))
-                    buttonBinding.root.check(R.id.color_gradient)
-                buttonBinding.root.addOnButtonCheckedListener { _, _, isChecked ->
+                    binding.button.isChecked = true
+                binding.label.setOnClickListener {
+                    binding.button.isChecked = !binding.button.isChecked
+                }
+                binding.button.setOnCheckedChangeListener { _, isChecked ->
                     activity.appPrefs.edit { putBoolean(PREF_THEME_GRADIENT, isChecked) }
                 }
             }
