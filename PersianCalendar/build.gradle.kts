@@ -41,8 +41,8 @@ android {
         minSdk = 17
         targetSdk = 33
         // targetSdkPreview = "UpsideDownCake"
-        versionCode = 815
-        versionName = "8.1.5"
+        versionCode = 820
+        versionName = "8.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         if (!isMinApi21Build) vectorDrawables.useSupportLibrary = true
         resourceConfigurations += listOf(
