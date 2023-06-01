@@ -59,11 +59,14 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
         val maxValue = selectedCalendarType.getMonthLength(year, month)
-        dayPicker.maxValue = maxValue
         val monthStart = Jdn(selectedCalendarType, year, month, 1)
-        binding.dayPicker.displayedValues = (1..maxValue).map {
+        // Order of setting maxValue vs displayedValues depends on whether current maxValue is
+        // than the going to be one or not, otherwise, it can crash
+        if (dayPicker.maxValue > maxValue) dayPicker.maxValue = maxValue
+        dayPicker.displayedValues = (1..maxValue).map {
             (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it)
         }.toTypedArray()
+        if (dayPicker.maxValue < maxValue) dayPicker.maxValue = maxValue
         binding.dayPicker.invalidate()
     }
 
