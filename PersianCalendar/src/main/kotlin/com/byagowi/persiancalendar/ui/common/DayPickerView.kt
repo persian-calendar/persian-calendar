@@ -41,11 +41,11 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             binding.monthPicker.also {
                 it.minValue = 1
                 val maxValue = selectedCalendarType.getYearMonths(date.year)
-                it.maxValue = maxValue
-                it.value = date.month
                 val months = date.calendarType.monthsNames
-                it.displayedValues = (1..maxValue)
-                    .map { x -> months[x - 1] + " / " + formatNumber(x) }.toTypedArray()
+                val displayedValues =
+                    (1..maxValue).map { x -> months[x - 1] + " / " + formatNumber(x) }
+                it.setMaxValueAndDisplayedValues(maxValue, displayedValues)
+                it.value = date.month
                 it.isVerticalScrollBarEnabled = false
             }
             binding.dayPicker.also {
@@ -60,14 +60,21 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
         val maxValue = selectedCalendarType.getMonthLength(year, month)
         val monthStart = Jdn(selectedCalendarType, year, month, 1)
-        // Order of setting maxValue vs displayedValues depends on whether current maxValue is
-        // than the going to be one or not, otherwise, it can crash
-        if (dayPicker.maxValue > maxValue) dayPicker.maxValue = maxValue
-        dayPicker.displayedValues = (1..maxValue).map {
-            (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it)
-        }.toTypedArray()
-        if (dayPicker.maxValue < maxValue) dayPicker.maxValue = maxValue
+        val displayedValues =
+            (1..maxValue).map { (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it) }
+        dayPicker.setMaxValueAndDisplayedValues(maxValue, displayedValues)
         binding.dayPicker.invalidate()
+    }
+
+    // Order of setting maxValue vs displayedValues depends on whether current maxValue is
+    // less than the going to be one or not, otherwise, it can crash so this applies maxValue
+    // and displayedValues in correct order.
+    private fun NumberPicker.setMaxValueAndDisplayedValues(
+        maxValue: Int, displayedValues: List<String>
+    ) {
+        if (this.maxValue > maxValue) this.maxValue = maxValue
+        this.displayedValues = displayedValues.toTypedArray()
+        if (this.maxValue < maxValue) this.maxValue = maxValue
     }
 
     private val todayJdn = Jdn.today()
