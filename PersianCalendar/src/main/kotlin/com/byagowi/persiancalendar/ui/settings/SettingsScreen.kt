@@ -153,25 +153,19 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
     private fun setupMenu(
         toolbar: Toolbar, binding: SettingsScreenBinding, inflater: LayoutInflater
     ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU || BuildConfig.DEVELOPMENT) {
-            toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
-                runCatching {
-                    startActivity(
-                        Intent(Intent.ACTION_MAIN).setClassName(
-                            "com.android.wallpaper.livepicker",
-                            "com.android.wallpaper.livepicker.LiveWallpaperActivity"
-                        )
+        toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
+            runCatching {
+                startActivity(
+                    Intent(Intent.ACTION_MAIN).setClassName(
+                        "com.android.wallpaper.livepicker",
+                        "com.android.wallpaper.livepicker.LiveWallpaperActivity"
                     )
-                }.onFailure(logException)
-            }
+                )
+            }.onFailure(logException).getOrNull().debugAssertNotNull
         }
-        if (!(Build.BRAND == "samsung" && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            || BuildConfig.DEVELOPMENT
-        ) {
-            toolbar.menu.add(R.string.screensaver_settings).onClick {
-                runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
-                    .onFailure(logException).getOrNull().debugAssertNotNull
-            }
+        toolbar.menu.add(R.string.screensaver_settings).onClick {
+            runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
+                .onFailure(logException).getOrNull().debugAssertNotNull
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             toolbar.menu.add(R.string.add_quick_settings_tile).onClick {
