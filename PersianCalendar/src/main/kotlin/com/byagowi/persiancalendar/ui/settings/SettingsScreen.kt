@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.settings
 
 import android.app.StatusBarManager
+import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Intent
 import android.graphics.drawable.Icon
@@ -154,14 +155,8 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         toolbar: Toolbar, binding: SettingsScreenBinding, inflater: LayoutInflater
     ) {
         toolbar.menu.add(R.string.live_wallpaper_settings).onClick {
-            runCatching {
-                startActivity(
-                    Intent(Intent.ACTION_MAIN).setClassName(
-                        "com.android.wallpaper.livepicker",
-                        "com.android.wallpaper.livepicker.LiveWallpaperActivity"
-                    )
-                )
-            }.onFailure(logException).getOrNull().debugAssertNotNull
+            runCatching { startActivity(Intent(WallpaperManager.ACTION_LIVE_WALLPAPER_CHOOSER)) }
+                .onFailure(logException).getOrNull().debugAssertNotNull
         }
         toolbar.menu.add(R.string.screensaver_settings).onClick {
             runCatching { startActivity(Intent(Settings.ACTION_DREAM_SETTINGS)) }
@@ -257,11 +252,10 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
             // https://stackoverflow.com/a/23112947
             runCatching {
                 startActivity(
-                    Intent(Intent.ACTION_MAIN)
-                        .setClassName(
-                            "com.android.systemui",
-                            "com.android.systemui.Somnambulator"
-                        )
+                    Intent(Intent.ACTION_MAIN).setClassName(
+                        "com.android.systemui",
+                        "com.android.systemui.Somnambulator"
+                    )
                 )
             }.onFailure(logException).getOrNull().debugAssertNotNull
         }
