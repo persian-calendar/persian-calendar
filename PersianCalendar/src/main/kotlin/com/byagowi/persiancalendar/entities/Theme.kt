@@ -17,34 +17,36 @@ enum class Theme(
     val key: String,
     @StringRes val title: Int,
     @StyleRes private val styleRes: Int,
-    private val supportsGradient: Boolean = true
+    private val hasGradient: Boolean = true,
+    private val hasDynamicColors: Boolean = false,
 ) {
-    SYSTEM_DEFAULT("SystemDefault", R.string.theme_default, R.style.LightTheme),
+    SYSTEM_DEFAULT(
+        "SystemDefault", R.string.theme_default, R.style.LightTheme,
+        hasDynamicColors = true
+    ),
     LIGHT("LightTheme", R.string.theme_light, R.style.LightTheme),
     DARK("DarkTheme", R.string.theme_dark, R.style.DarkTheme),
-    MODERN("ClassicTheme"/*legacy*/, R.string.theme_modern, R.style.ModernTheme),
+    MODERN(
+        "ClassicTheme"/*legacy*/, R.string.theme_modern, R.style.ModernTheme,
+        hasDynamicColors = true
+    ),
     AQUA("BlueTheme"/*legacy*/, R.string.theme_aqua, R.style.AquaTheme),
-    BLACK("BlackTheme", R.string.theme_black, R.style.BlackTheme, supportsGradient = false);
+    BLACK(
+        "BlackTheme", R.string.theme_black, R.style.BlackTheme,
+        hasGradient = false, hasDynamicColors = true
+    );
 
     companion object {
-        private val SharedPreferences?.theme
-            get() = this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
+        private fun SharedPreferences?.getTheme() =
+            this?.getString(PREF_THEME, null) ?: SYSTEM_DEFAULT.key
 
-        fun supportsGradient(context: Context) = getCurrent(context).supportsGradient &&
+        fun supportsGradient(context: Context) = getCurrent(context).hasGradient &&
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
-
-        private fun dynamicTheme(themeKey: String): Boolean {
-            return when (themeKey) {
-                // Let's use dynamic colors also in black and modern theme of Android 12
-                SYSTEM_DEFAULT.key, BLACK.key, MODERN.key -> true
-                else -> false
-            }
-        }
 
         fun apply(activity: AppCompatActivity) {
             val theme = getCurrent(activity)
             val isDynamicColorAvailable = DynamicColors.isDynamicColorAvailable()
-            if (theme == SYSTEM_DEFAULT || (isDynamicColorAvailable && dynamicTheme(theme.key))) {
+            if (theme == SYSTEM_DEFAULT || (isDynamicColorAvailable && theme.hasDynamicColors)) {
                 val isNightModeEnabled = isNightMode(activity)
 
                 if (isDynamicColorAvailable) {
@@ -78,7 +80,7 @@ enum class Theme(
         }
 
         private fun getCurrent(context: Context): Theme {
-            val key = context.appPrefs.theme
+            val key = context.appPrefs.getTheme()
             return enumValues<Theme>().find { it.key == key } ?: SYSTEM_DEFAULT
         }
 
@@ -90,11 +92,13 @@ enum class Theme(
             } else MODERN.styleRes
         }
 
-        fun isDefault(prefs: SharedPreferences?) = prefs.theme == SYSTEM_DEFAULT.key
+        fun isDefault(prefs: SharedPreferences?) = prefs.getTheme() == SYSTEM_DEFAULT.key
 
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.S)
         fun isDynamicColor(prefs: SharedPreferences?): Boolean {
-            return DynamicColors.isDynamicColorAvailable() && dynamicTheme(prefs.theme)
+            val themeKey = prefs.getTheme()
+            return DynamicColors.isDynamicColorAvailable() &&
+                    enumValues<Theme>().firstOrNull { it.key == themeKey }?.hasDynamicColors ?: false
         }
 
         fun isNightMode(context: Context): Boolean =
