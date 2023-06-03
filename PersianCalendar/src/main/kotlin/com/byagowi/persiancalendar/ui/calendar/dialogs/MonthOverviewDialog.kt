@@ -119,7 +119,11 @@ fun showMonthOverviewDialog(activity: FragmentActivity, date: AbstractDate) {
                     },
                     MonthOverviewItemAdapter(
                         activity,
-                        formatEventsList(events, false, activity.resolveColor(R.attr.colorTextHoliday)),
+                        formatEventsList(
+                            events,
+                            false,
+                            activity.resolveColor(R.attr.colorTextHoliday)
+                        ),
                     )
                 )
             }

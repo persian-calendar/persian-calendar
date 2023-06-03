@@ -12,7 +12,6 @@ import com.byagowi.persiancalendar.utils.formatNumber
 import java.util.GregorianCalendar
 import java.util.Locale
 import kotlin.math.absoluteValue
-import kotlin.math.sign
 
 data class Clock(val hours: Int, val minutes: Int) {
     constructor(date: GregorianCalendar) :

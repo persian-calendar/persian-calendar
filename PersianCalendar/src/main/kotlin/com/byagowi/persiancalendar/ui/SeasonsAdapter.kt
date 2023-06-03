@@ -22,7 +22,7 @@ class SeasonsAdapter : RecyclerView.Adapter<SeasonsAdapter.SeasonImageViewHolder
         viewType: Int
     ): SeasonImageViewHolder {
         val binding = SeasonItemBinding.inflate(parent.context.layoutInflater, parent, false)
-        if (Theme.isDynamicColor(parent.context.appPrefs) && parent.context. isDynamicGrayscale)
+        if (Theme.isDynamicColor(parent.context.appPrefs) && parent.context.isDynamicGrayscale)
             binding.image.colorFilter = grayScaleColorFilter
         return SeasonImageViewHolder(binding)
     }
