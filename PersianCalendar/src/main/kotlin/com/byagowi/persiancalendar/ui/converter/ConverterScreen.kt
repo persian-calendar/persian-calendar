@@ -255,7 +255,6 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                     val bitmap = createBitmap(bitmapSize, bitmapSize)
                                     Canvas(bitmap).also {
                                         val cellSize = bitmapSize.toFloat() / qrResult.size
-                                        val rect = RectF()
                                         val paint = Paint().also {
                                             it.color =
                                                 binding.root.context.resolveColor(android.R.attr.textColorPrimary)
@@ -263,12 +262,11 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                         qrResult.indices.forEach { y ->
                                             qrResult.indices.forEach inner@{ x ->
                                                 if (qrResult[y][x]) {
-                                                    rect.set(
-                                                        y * cellSize, x * cellSize,
-                                                        (y + 1) * cellSize, (x + 1) * cellSize
-                                                    )
-                                                    it.drawRoundRect(
-                                                        rect, cellSize / 2, cellSize / 2, paint
+                                                    it.drawCircle(
+                                                        y * cellSize + cellSize / 2,
+                                                        x * cellSize + cellSize / 2,
+                                                        cellSize / 2,
+                                                        paint
                                                     )
                                                 }
                                             }
