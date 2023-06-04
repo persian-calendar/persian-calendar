@@ -192,7 +192,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.1")
 
     implementation("com.google.openlocationcode:openlocationcode:1.0.4")
-    implementation("com.google.zxing:core:3.5.1")
+    testImplementation("com.google.zxing:core:3.5.1")
 
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("androidx.multidex:multidex:2.0.1")

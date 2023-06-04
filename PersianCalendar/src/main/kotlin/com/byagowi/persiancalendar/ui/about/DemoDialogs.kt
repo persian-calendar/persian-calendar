@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.about
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.ComposeShader
@@ -40,7 +39,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Scroller
@@ -59,7 +57,6 @@ import androidx.core.graphics.component1
 import androidx.core.graphics.component2
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
-import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
 import androidx.core.text.HtmlCompat
@@ -106,10 +103,6 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.google.android.material.shape.TriangleEdgeTreatment
 import com.google.android.material.slider.Slider
 import com.google.android.material.tabs.TabLayout
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.EncodeHintType
-import com.google.zxing.qrcode.QRCodeWriter
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOn
@@ -1154,29 +1147,6 @@ fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
     }
     MaterialAlertDialogBuilder(activity)
         .setView(view)
-        .show()
-}
-
-private fun textToQrCodeBitmap(text: String): Bitmap {
-    val size = 768
-    val bitmap = createBitmap(size, size)
-    val bitMatrix = QRCodeWriter().encode(
-        text, BarcodeFormat.QR_CODE, size, size, mapOf(
-            EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.M,
-            EncodeHintType.MARGIN to 0
-        )
-    )
-    (0 until bitMatrix.height).forEach { y ->
-        (0 until bitMatrix.width).forEach { x ->
-            bitmap[x, y] = if (bitMatrix[x, y]) Color.BLACK else Color.TRANSPARENT
-        }
-    }
-    return bitmap
-}
-
-fun showQrCode(activity: FragmentActivity, text: String) {
-    MaterialAlertDialogBuilder(activity)
-        .setView(ImageView(activity).also { it.setImageBitmap(textToQrCodeBitmap(text)) })
         .show()
 }
 
