@@ -11,6 +11,7 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ShapeDrawable
+import android.net.Uri
 import android.os.Build
 import android.util.Base64
 import android.util.TypedValue
@@ -88,17 +89,28 @@ fun FragmentActivity.bringMarketPage() {
     }
 }
 
-fun Bitmap.toPngBase64(): String {
+fun Bitmap.toByteArray(): ByteArray {
     val buffer = ByteArrayOutputStream()
     this.compress(Bitmap.CompressFormat.PNG, 100, buffer)
-    val base64 = Base64.encodeToString(buffer.toByteArray(), Base64.DEFAULT)
-    return "data:image/png;base64,$base64"
+    return buffer.toByteArray()
 }
 
-private fun Context.saveTextAsFile(text: String, fileName: String) = FileProvider.getUriForFile(
-    applicationContext, "$packageName.provider",
-    File(externalCacheDir, fileName).also { it.writeText(text) }
-)
+fun Bitmap.toPngBase64(): String =
+    "data:image/png;base64,${Base64.encodeToString(toByteArray(), Base64.DEFAULT)}"
+
+private fun Context.saveTextAsFile(text: String, fileName: String): Uri {
+    return FileProvider.getUriForFile(
+        applicationContext, "$packageName.provider",
+        File(externalCacheDir, fileName).also { it.writeText(text) }
+    )
+}
+
+private fun Context.saveBytesAsFile(byteArray: ByteArray, fileName: String): Uri {
+    return FileProvider.getUriForFile(
+        applicationContext, "$packageName.provider",
+        File(externalCacheDir, fileName).also { it.writeBytes(byteArray) }
+    )
+}
 
 fun Context.openHtmlInBrowser(html: String) {
     runCatching {
@@ -123,6 +135,15 @@ fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String)
         startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
             it.type = mime
             it.putExtra(Intent.EXTRA_STREAM, saveTextAsFile(text, fileName))
+        }, getString(R.string.share)))
+    }.onFailure(logException)
+}
+
+fun FragmentActivity.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) {
+    runCatching {
+        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
+            it.type = mime
+            it.putExtra(Intent.EXTRA_STREAM, saveBytesAsFile(binary, fileName))
         }, getString(R.string.share)))
     }.onFailure(logException)
 }

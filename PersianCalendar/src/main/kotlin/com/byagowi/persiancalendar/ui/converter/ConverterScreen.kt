@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
@@ -37,7 +38,9 @@ import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
+import com.byagowi.persiancalendar.ui.utils.shareBinaryFile
 import com.byagowi.persiancalendar.ui.utils.shareText
+import com.byagowi.persiancalendar.ui.utils.toByteArray
 import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
@@ -136,13 +139,15 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             }
         }
 
+        val bitmapKey = "Bitmap".hashCode() // TODO: Store the bitmap inside viewmodel maybe?
+
         binding.appBar.toolbar.menu.add(R.string.share).also { menu ->
             menu.icon =
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
             menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
             val jdn = binding.dayPickerView.jdn
-            activity?.shareText(
+            if (viewModel.screenMode.value != ConverterScreenMode.QrCode) activity?.shareText(
                 when (viewModel.screenMode.value) {
                     ConverterScreenMode.Converter -> listOf(
                         dayTitleSummary(jdn, jdn.toCalendar(mainCalendar)),
@@ -161,9 +166,13 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                         } else ""
                     }
 
-                    ConverterScreenMode.QrCode -> binding.inputText.text.toString()
+                    ConverterScreenMode.QrCode -> ""
                 }
-            )
+            ) else {
+                val byteArray = (binding.resultImage.getTag(bitmapKey) as? Bitmap)?.toByteArray()
+                if (byteArray != null)
+                    activity?.shareBinaryFile(byteArray, "result.png", "image/png")
+            }
         }
 
         binding.secondDayPickerView.jdn = viewModel.secondSelectedDate.value
@@ -265,8 +274,13 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                             }
                                         }
                                     }
+                                    binding.resultImage.setTag(bitmapKey, bitmap)
                                     binding.resultImage.setImageBitmap(bitmap)
-                                }.onFailure(logException).getOrNull()
+                                    if (!binding.resultImage.isVisible)
+                                        binding.resultImage.isVisible = true
+                                }.onFailure(logException).onFailure {
+                                    binding.resultImage.isVisible = false
+                                }
                             }
                         }
                     }
