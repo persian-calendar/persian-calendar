@@ -1,5 +1,8 @@
 package com.byagowi.persiancalendar.ui.converter
 
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.RectF
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.graphics.createBitmap
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -30,6 +34,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -37,12 +42,14 @@ import com.byagowi.persiancalendar.utils.ONE_MINUTE_IN_MILLIS
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
 import com.byagowi.persiancalendar.utils.dateStringOfOtherCalendars
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.logException
 import io.github.persiancalendar.calculator.eval
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import java.util.GregorianCalendar
 import java.util.TimeZone
+import kotlin.math.min
 
 class ConverterScreen : Fragment(R.layout.converter_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -153,6 +160,8 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                         .toBasicFormatString()
                         } else ""
                     }
+
+                    ConverterScreenMode.QrCode -> binding.inputText.text.toString()
                 }
             )
         }
@@ -228,6 +237,37 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                     }
                                 }
                             }
+
+                            ConverterScreenMode.QrCode -> {
+                                runCatching {
+                                    val bitmapSize = binding.root.context.resources.displayMetrics
+                                        .let { min(it.heightPixels, it.widthPixels) }
+                                    val qrResult = qr(binding.inputText.text?.toString() ?: "")
+                                    val bitmap = createBitmap(bitmapSize, bitmapSize)
+                                    Canvas(bitmap).also {
+                                        val cellSize = bitmapSize.toFloat() / qrResult.size
+                                        val rect = RectF()
+                                        val paint = Paint().also {
+                                            it.color =
+                                                binding.root.context.resolveColor(android.R.attr.textColorPrimary)
+                                        }
+                                        qrResult.indices.forEach { y ->
+                                            qrResult.indices.forEach inner@{ x ->
+                                                if (qrResult[y][x]) {
+                                                    rect.set(
+                                                        y * cellSize, x * cellSize,
+                                                        (y + 1) * cellSize, (x + 1) * cellSize
+                                                    )
+                                                    it.drawRoundRect(
+                                                        rect, cellSize / 2, cellSize / 2, paint
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                    binding.resultImage.setImageBitmap(bitmap)
+                                }.onFailure(logException).getOrNull()
+                            }
                         }
                     }
                 }
@@ -252,6 +292,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.secondDayPickerView.isVisible = false
                                 binding.dayPickerView.isVisible = true
                                 binding.resultText.isVisible = false
+                                binding.resultImage.isVisible = false
                                 binding.calendarsView.isVisible = true
                                 binding.resultCard?.isVisible = true
                             }
@@ -265,6 +306,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.dayPickerView.isVisible = true
                                 binding.secondDayPickerView.isVisible = true
                                 binding.resultText.isVisible = true
+                                binding.resultImage.isVisible = false
                                 binding.calendarsView.isVisible = false
                                 binding.resultCard?.isVisible = false
                             }
@@ -276,6 +318,19 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.dayPickerView.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.resultText.isVisible = true
+                                binding.resultImage.isVisible = false
+                                binding.calendarsView.isVisible = false
+                                binding.resultCard?.isVisible = false
+                            }
+
+                            ConverterScreenMode.QrCode -> {
+                                binding.firstTimeZoneClockPicker.root.isVisible = false
+                                binding.secondTimeZoneClockPicker.root.isVisible = false
+                                binding.inputTextWrapper.isVisible = true
+                                binding.dayPickerView.isVisible = false
+                                binding.secondDayPickerView.isVisible = false
+                                binding.resultText.isVisible = false
+                                binding.resultImage.isVisible = true
                                 binding.calendarsView.isVisible = false
                                 binding.resultCard?.isVisible = false
                             }
@@ -288,6 +343,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.dayPickerView.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.resultText.isVisible = false
+                                binding.resultImage.isVisible = false
                                 binding.calendarsView.isVisible = false
                                 binding.resultCard?.isVisible = false
                             }

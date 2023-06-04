@@ -44,7 +44,7 @@ class ConverterViewModel : ViewModel() {
         _selectedDate, _secondSelectedDate, _screenMode, _clock
     ).map {
         when (screenMode.value) {
-            ConverterScreenMode.Calculator -> false
+            ConverterScreenMode.Calculator, ConverterScreenMode.QrCode -> false
 
             ConverterScreenMode.Converter -> selectedDate.value != Jdn.today()
 
