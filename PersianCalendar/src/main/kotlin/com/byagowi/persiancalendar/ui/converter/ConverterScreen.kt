@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.converter
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.RectF
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
