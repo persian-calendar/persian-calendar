@@ -50,10 +50,7 @@ fun qr(
             buffer.put(data.size, QRUtil.getLengthInBits(versionValue))
             buffer.putBytes(data)
 
-            var totalDataCount = 0
-            for (block in rsBlocks) {
-                totalDataCount += block.dataCount
-            }
+            val totalDataCount = rsBlocks.sumOf { it.dataCount }
 
             if (buffer.lengthInBits <= totalDataCount * 8) break
             versionValue += 1
@@ -78,8 +75,8 @@ private fun qrMain(
     val cache = createData(version, errorCorrectionLevel, data)
 
     fun make(test: Boolean, maskPattern: MaskPattern) {
-        for (row in 0 until size) {
-            for (col in 0 until size) {
+        (0 until size).forEach { row ->
+            (0 until size).forEach { col ->
                 modules[row][col] = null
             }
         }
@@ -97,7 +94,7 @@ private fun qrMain(
     }
 
     val maskPatterns = MaskPattern.values()
-    for (i in 0 until 8) {
+    (0 until 8).forEach { i ->
         make(true, maskPatterns[i])
 
         val lostPoint = getLostPoint(modules)
@@ -151,8 +148,8 @@ private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, ver
         for (col in pos) {
             if (modules[row][col] != null) continue
 
-            for (r in -2..2) {
-                for (c in -2..2) {
+            (-2..2).forEach { r ->
+                (-2..2).forEach { c ->
                     modules[row + r][col + c] =
                         r == -2 || r == 2 || c == -2 || c == 2 || (r == 0 && c == 0)
                 }
@@ -162,15 +159,15 @@ private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, ver
 }
 
 private fun setupTimingPattern(modules: List<MutableList<Boolean?>>) {
-    for (r in 8 until modules.size - 8) {
-        if (modules[r][6] != null) continue
-        modules[r][6] = r % 2 == 0
-    }
+    (8 until modules.size - 8)
+        .asSequence()
+        .filter { modules[it][6] == null }
+        .forEach { modules[it][6] = it % 2 == 0 }
 
-    for (c in 8 until modules.size - 8) {
-        if (modules[6][c] != null) continue
-        modules[6][c] = c % 2 == 0
-    }
+    (8 until modules.size - 8)
+        .asSequence()
+        .filter { modules[6][it] == null }
+        .forEach { modules[6][it] = it % 2 == 0 }
 }
 
 private fun setupTypeInfo(
@@ -183,29 +180,25 @@ private fun setupTypeInfo(
     val bits = QRUtil.getBchTypeInfo(data)
 
     // vertical
-    for (i in 0 until 15) {
+    (0 until 15).forEach { i ->
         val mod = !test && bits.shr(i).and(1) == 1
 
-        if (i < 6) {
-            modules[i][8] = mod
-        } else if (i < 8) {
-            modules[i + 1][8] = mod
-        } else {
-            modules[modules.size - 15 + i][8] = mod
-        }
+        modules[when {
+            i < 6 -> i
+            i < 8 -> i + 1
+            else -> modules.size - 15 + i
+        }][8] = mod
     }
 
     // horizontal
-    for (i in 0 until 15) {
+    (0 until 15).forEach { i ->
         val mod = !test && bits.shr(i).and(1) == 1
 
-        if (i < 8) {
-            modules[8][modules.size - i - 1] = mod
-        } else if (i < 9) {
-            modules[8][15 - i - 1 + 1] = mod
-        } else {
-            modules[8][15 - i - 1] = mod
-        }
+        modules[8][when {
+            i < 8 -> modules.size - i - 1
+            i < 9 -> 15 - i - 1 + 1
+            else -> 15 - i - 1
+        }] = mod
     }
 
     // fixed module
@@ -215,12 +208,12 @@ private fun setupTypeInfo(
 private fun setupVersionNumber(modules: List<MutableList<Boolean?>>, version: Int, test: Boolean) {
     val bits = QRUtil.getBchTypeNumber(version)
 
-    for (i in 0 until 18) {
+    (0 until 18).forEach { i ->
         val mod = !test && bits.shr(i).and(1) == 1
         modules[i / 3][(i % 3) + modules.size - 8 - 3] = mod
     }
 
-    for (i in 0 until 18) {
+    (0 until 18).forEach { i ->
         val mod = !test && bits.shr(i).and(1) == 1
         modules[(i % 3) + modules.size - 8 - 3][i / 3] = mod
     }
@@ -242,7 +235,7 @@ private fun mapData(
         if (col == 6) col -= 1
 
         while (true) {
-            for (c in 0 until 2) {
+            (0 until 2).forEach { c ->
                 if (modules[row][col - c] == null) {
                     var dark = false
 
@@ -304,8 +297,8 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     }
 
     // LEVEL2
-    for (row in 0 until size - 1) {
-        for (col in 0 until size - 1) {
+    (0 until size - 1).forEach { row ->
+        (0 until size - 1).forEach { col ->
             var count = 0
             if (isDark(row, col)) count += 1
             if (isDark(row + 1, col)) count += 1
@@ -347,13 +340,7 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     }
 
     // LEVEL4
-    var darkCount = 0
-
-    for (col in 0 until size) {
-        for (row in 0 until size) {
-            if (isDark(row, col)) darkCount += 1
-        }
-    }
+    val darkCount = (0 until size).sumOf { col -> (0 until size).count { isDark(it, col) } }
 
     val ratio = ((100 * darkCount) / size / size - 50).absoluteValue / 5
     lostPoint += ratio * 10
@@ -372,7 +359,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
     val dcData = MutableList(rsBlocks.size) { mutableListOf<Int>() }
     val ecData = MutableList(rsBlocks.size) { mutableListOf<Int>() }
 
-    for (r in rsBlocks.indices) {
+    rsBlocks.indices.forEach { r ->
         val dcCount = rsBlocks[r].dataCount
         val ecCount = rsBlocks[r].totalCount - dcCount
 
@@ -381,7 +368,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
 
         dcData[r] = MutableList(dcCount) { 0 }
 
-        for (i in 0 until dcData[r].size) {
+        (0 until dcData[r].size).forEach { i ->
             dcData[r][i] = 0xff.and(buffer.getBuffer()[i + offset])
         }
         offset += dcCount
@@ -391,22 +378,19 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
 
         val modPoly = rawPoly.mod(rsPoly)
         ecData[r] = MutableList(rsPoly.length - 1) { 0 }
-        for (i in ecData[r].indices) {
+        ecData[r].indices.forEach { i ->
             val modIndex = i + modPoly.length - ecData[r].size
             ecData[r][i] = if (modIndex >= 0) modPoly.getAt(modIndex) else 0
         }
     }
 
-    var totalCodeCount = 0
-    for (block in rsBlocks) {
-        totalCodeCount += block.totalCount
-    }
+    val totalCodeCount = rsBlocks.sumOf { it.totalCount }
 
     val data = MutableList(totalCodeCount) { 0 }
     var index = 0
 
-    for (i in 0 until maxDcCount) {
-        for (r in rsBlocks.indices) {
+    (0 until maxDcCount).forEach { i ->
+        rsBlocks.indices.forEach { r ->
             if (i < dcData[r].size) {
                 data[index] = dcData[r][i]
                 index += 1
@@ -414,8 +398,8 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         }
     }
 
-    for (i in 0 until maxEcCount) {
-        for (r in rsBlocks.indices) {
+    (0 until maxEcCount).forEach { i ->
+        rsBlocks.indices.forEach { r ->
             if (i < ecData[r].size) {
                 data[index] = ecData[r][i]
                 index += 1
@@ -440,10 +424,7 @@ private fun createData(
     buffer.putBytes(data)
 
     // calc num max data.
-    var totalDataCount = 0
-    for (block in rsBlocks) {
-        totalDataCount += block.dataCount
-    }
+    val totalDataCount = rsBlocks.sumOf { it.dataCount }
 
     if (buffer.lengthInBits > totalDataCount * 8) {
         error(
@@ -455,9 +436,7 @@ private fun createData(
     if (buffer.lengthInBits + 4 <= totalDataCount * 8) buffer.put(0, 4)
 
     // padding
-    while (buffer.lengthInBits % 8 != 0) {
-        buffer.putBit(false)
-    }
+    while (buffer.lengthInBits % 8 != 0) buffer.putBit(false)
 
     // padding
     while (true) {
@@ -552,7 +531,7 @@ private object QRUtil {
 
     fun getErrorCorrectPolynomial(errorCorrectLength: Int): QrPolynomial {
         var a = QrPolynomial(listOf(1), 0)
-        for (i in 0 until errorCorrectLength) {
+        (0 until errorCorrectLength).forEach { i ->
             a = a.multiply(QrPolynomial(listOf(1, QRMath.gExp(i)), 0))
         }
         return a
@@ -574,14 +553,14 @@ private object QRMath {
 
     init {
         // initialize tables
-        for (i in 0 until 8) {
+        (0 until 8).forEach { i ->
             expTable[i] = 1.shl(i)
         }
-        for (i in 8 until 256) {
+        (8 until 256).forEach { i ->
             expTable[i] =
                 expTable[i - 4].xor(expTable[i - 5]).xor(expTable[i - 6]).xor(expTable[i - 8])
         }
-        for (i in 0 until 255) {
+        (0 until 255).forEach { i ->
             logTable[expTable[i]] = i
         }
     }
@@ -617,9 +596,7 @@ private class QrPolynomial(num: List<Int>, shift: Int) {
         }
 
         _num = MutableList(num.size - offset + shift) { 0 }
-        for (i in 0 until num.size - offset) {
-            _num[i] = num[i + offset]
-        }
+        (0 until num.size - offset).forEach { i -> _num[i] = num[i + offset] }
     }
 
     fun getAt(index: Int): Int = _num[index]
@@ -629,8 +606,8 @@ private class QrPolynomial(num: List<Int>, shift: Int) {
     fun multiply(e: QrPolynomial): QrPolynomial {
         val num = MutableList(length + e.length - 1) { 0 }
 
-        for (i in 0 until length) {
-            for (j in 0 until e.length) {
+        (0 until length).forEach { i ->
+            (0 until e.length).forEach { j ->
                 num[i + j] =
                     num[i + j].xor(QRMath.gExp(QRMath.gLog(getAt(i)) + QRMath.gLog(e.getAt(j))))
             }
@@ -645,11 +622,11 @@ private class QrPolynomial(num: List<Int>, shift: Int) {
         val ratio = QRMath.gLog(getAt(0)) - QRMath.gLog(e.getAt(0))
 
         val num = MutableList(length) { 0 }
-        for (i in 0 until length) {
+        (0 until length).forEach { i ->
             num[i] = getAt(i)
         }
 
-        for (i in 0 until e.length) {
+        (0 until e.length).forEach { i ->
             num[i] = num[i].xor(QRMath.gExp(QRMath.gLog(e.getAt(i)) + ratio))
         }
 
@@ -921,14 +898,13 @@ private object QRRSBlock {
 
         val list = mutableListOf<Rs>()
 
-        for (i in 0 until length) {
+        (0 until length).forEach { i ->
             val count = rsBlock[i * 3 + 0]
             val totalCount = rsBlock[i * 3 + 1]
             val dataCount = rsBlock[i * 3 + 2]
 
-            for (j in 0 until count) {
+            for (j in 0 until count)
                 list.add(Rs(totalCount = totalCount, dataCount = dataCount))
-            }
         }
 
         return list
@@ -942,7 +918,7 @@ private class QrBitBuffer {
     fun getBuffer(): List<Int> = _buffer
 
     fun put(num: Int, length: Int) {
-        for (i in 0 until length) {
+        (0 until length).forEach { i ->
             putBit(((num.ushr(length - i - 1)).and(1) == 1))
         }
     }
@@ -956,9 +932,5 @@ private class QrBitBuffer {
         _length += 1
     }
 
-    fun putBytes(bytes: ByteArray) {
-        for (i in bytes.indices) {
-            put(bytes[i].toInt(), 8)
-        }
-    }
+    fun putBytes(bytes: ByteArray) = bytes.indices.forEach { i -> put(bytes[i].toInt(), 8) }
 }
