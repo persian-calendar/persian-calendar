@@ -84,9 +84,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="@dimen/view_padding"
-                    android:layout_marginTop="@dimen/card_margin"
-                    android:layout_marginRight="@dimen/view_padding"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
                     android:importantForAccessibility="no"
                     android:visibility="gone" />
 
