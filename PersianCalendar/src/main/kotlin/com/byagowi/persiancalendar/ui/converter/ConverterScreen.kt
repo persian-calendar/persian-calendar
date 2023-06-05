@@ -60,17 +60,19 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         } else Spinner(binding.appBar.toolbar.context).also {
             binding.appBar.toolbar.addView(it)
         }
+        val availableModes = enumValues<ConverterScreenMode>().filter {
+            // Converter doesn't work in Android 5, let's hide it there
+            it != ConverterScreenMode.TimeZones || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+        }
         spinner.adapter = ArrayAdapter(
             spinner.context, R.layout.toolbar_dropdown_item,
-            enumValues<ConverterScreenMode>().filter {
-                it != ConverterScreenMode.Converter || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
-            }.map { it.title }.map(spinner.context::getString)
+            availableModes.map { it.title }.map(spinner.context::getString)
         )
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
-            ) = viewModel.changeScreenMode(ConverterScreenMode.fromPosition(position))
+            ) = viewModel.changeScreenMode(availableModes[position])
         }
         spinner.setSelection(viewModel.screenMode.value.ordinal)
 

@@ -8,10 +8,5 @@ enum class ConverterScreenMode(@StringRes val title: Int) {
     Distance(R.string.days_distance),
     Calculator(R.string.calculator),
     TimeZones(R.string.time_zones),
-    QrCode(R.string.qr_code);
-
-    companion object {
-        fun fromPosition(position: Int): ConverterScreenMode =
-            enumValues<ConverterScreenMode>()[position]
-    }
+    QrCode(R.string.qr_code),
 }
