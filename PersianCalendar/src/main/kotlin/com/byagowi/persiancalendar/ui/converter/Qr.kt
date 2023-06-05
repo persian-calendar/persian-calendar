@@ -43,11 +43,11 @@ fun qr(
     } else {
         versionValue = 1
         while (versionValue < 40) {
-            val rsBlocks = QRRSBlock.getRsBlocks(versionValue, errorCorrectionLevel)
+            val rsBlocks = QrRsBlock.getRsBlocks(versionValue, errorCorrectionLevel)
             val buffer = QrBitBuffer()
 
             buffer.put(4, 4)
-            buffer.put(data.size, QRUtil.getLengthInBits(versionValue))
+            buffer.put(data.size, QrUtil.getLengthInBits(versionValue))
             buffer.putBytes(data)
 
             val totalDataCount = rsBlocks.sumOf { it.dataCount }
@@ -144,7 +144,7 @@ private fun setupPositionProbePattern(
 }
 
 private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, version: Int) {
-    val pos = QRUtil.getPatternPosition(version)
+    val pos = QrUtil.getPatternPosition(version)
 
     pos.forEach { row ->
         pos
@@ -180,7 +180,7 @@ private fun setupTypeInfo(
     errorCorrectionLevel: ErrorCorrectionLevel,
 ) {
     val data = errorCorrectionLevel.value.shl(3).or(maskPattern.ordinal)
-    val bits = QRUtil.getBchTypeInfo(data)
+    val bits = QrUtil.getBchTypeInfo(data)
 
     // vertical
     (0 until 15).forEach { i ->
@@ -209,7 +209,7 @@ private fun setupTypeInfo(
 }
 
 private fun setupVersionNumber(modules: List<MutableList<Boolean?>>, version: Int, test: Boolean) {
-    val bits = QRUtil.getBchTypeNumber(version)
+    val bits = QrUtil.getBchTypeNumber(version)
 
     (0 until 18).forEach { i ->
         val mod = !test && bits.shr(i).and(1) == 1
@@ -359,7 +359,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         }
         offset += dcCount
 
-        val rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount)
+        val rsPoly = QrUtil.getErrorCorrectPolynomial(ecCount)
         val rawPoly = QrPolynomial(dcData[r], rsPoly.length - 1)
 
         val modPoly = rawPoly.mod(rsPoly)
@@ -401,12 +401,12 @@ private fun createData(
     errorCorrectionLevel: ErrorCorrectionLevel,
     data: ByteArray,
 ): List<Int> {
-    val rsBlocks = QRRSBlock.getRsBlocks(version, errorCorrectionLevel)
+    val rsBlocks = QrRsBlock.getRsBlocks(version, errorCorrectionLevel)
 
     val buffer = QrBitBuffer()
 
     buffer.put(4, 4)
-    buffer.put(data.size, QRUtil.getLengthInBits(version))
+    buffer.put(data.size, QrUtil.getLengthInBits(version))
     buffer.putBytes(data)
 
     // calc num max data.
@@ -436,7 +436,7 @@ private fun createData(
     return createBytes(buffer, rsBlocks)
 }
 
-private object QRUtil {
+private object QrUtil {
     private val patternPositionTable = listOf(
         listOf(),
         listOf(6, 18),
@@ -518,7 +518,7 @@ private object QRUtil {
     fun getErrorCorrectPolynomial(errorCorrectLength: Int): QrPolynomial {
         var a = QrPolynomial(listOf(1), 0)
         (0 until errorCorrectLength).forEach { i ->
-            a = a.multiply(QrPolynomial(listOf(1, QRMath.gExp(i)), 0))
+            a = a.multiply(QrPolynomial(listOf(1, QrMath.gExp(i)), 0))
         }
         return a
     }
@@ -533,7 +533,7 @@ private object QRUtil {
     }
 }
 
-private object QRMath {
+private object QrMath {
     private val expTable = MutableList(256) { 0 }
     private val logTable = MutableList(256) { 0 }
 
@@ -559,30 +559,19 @@ private object QRMath {
 
     fun gExp(n: Int): Int {
         var i = n
-
-        while (i < 0) {
-            i += 255
-        }
-
-        while (i >= 256) {
-            i -= 255
-        }
-
+        while (i < 0) i += 255
+        while (i >= 256) i -= 255
         return expTable[i]
     }
 }
 
 private class QrPolynomial(num: List<Int>, shift: Int) {
-    private val _num: MutableList<Int>
-
-    init {
+    private val _num = buildList {
         var offset = 0
-        while (offset < num.size && num[offset] == 0) {
-            offset += 1
-        }
+        while (offset < num.size && num[offset] == 0) offset += 1
 
-        _num = MutableList(num.size - offset + shift) { 0 }
-        (0 until num.size - offset).forEach { i -> _num[i] = num[i + offset] }
+        repeat(num.size - offset + shift) { add(0) }
+        (0 until num.size - offset).forEach { i -> this[i] = num[i + offset] }
     }
 
     fun getAt(index: Int): Int = _num[index]
@@ -595,7 +584,7 @@ private class QrPolynomial(num: List<Int>, shift: Int) {
         (0 until length).forEach { i ->
             (0 until e.length).forEach { j ->
                 num[i + j] =
-                    num[i + j].xor(QRMath.gExp(QRMath.gLog(getAt(i)) + QRMath.gLog(e.getAt(j))))
+                    num[i + j].xor(QrMath.gExp(QrMath.gLog(getAt(i)) + QrMath.gLog(e.getAt(j))))
             }
         }
 
@@ -605,15 +594,12 @@ private class QrPolynomial(num: List<Int>, shift: Int) {
     fun mod(e: QrPolynomial): QrPolynomial {
         if (length - e.length < 0) return this
 
-        val ratio = QRMath.gLog(getAt(0)) - QRMath.gLog(e.getAt(0))
+        val ratio = QrMath.gLog(getAt(0)) - QrMath.gLog(e.getAt(0))
 
-        val num = MutableList(length) { 0 }
-        (0 until length).forEach { i ->
-            num[i] = getAt(i)
-        }
+        val num = MutableList(length) { getAt(it) }
 
         (0 until e.length).forEach { i ->
-            num[i] = num[i].xor(QRMath.gExp(QRMath.gLog(e.getAt(i)) + ratio))
+            num[i] = num[i].xor(QrMath.gExp(QrMath.gLog(e.getAt(i)) + ratio))
         }
 
         // recursive call
@@ -621,7 +607,7 @@ private class QrPolynomial(num: List<Int>, shift: Int) {
     }
 }
 
-private object QRRSBlock {
+private object QrRsBlock {
     private val rsBlockTable = listOf(
         // L
         // M
