@@ -3,7 +3,8 @@ package com.byagowi.persiancalendar.ui.converter
 import kotlin.math.absoluteValue
 import kotlin.math.max
 
-// Adapted from https://github.com/Rich-Harris/headless-qr
+// Ported from https://github.com/ebraminio/headless_qr
+// which is a port from https://github.com/Rich-Harris/headless-qr
 // which is adapted from https://github.com/kazuhikoarase/qrcode-generator
 // License reproduced below
 
