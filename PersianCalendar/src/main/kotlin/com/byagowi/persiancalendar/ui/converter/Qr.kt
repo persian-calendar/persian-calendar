@@ -360,13 +360,13 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         offset += dcCount
 
         val rsPoly = QrUtil.getErrorCorrectPolynomial(ecCount)
-        val rawPoly = QrPolynomial(dcData[r], rsPoly.length - 1)
+        val rawPoly = QrPolynomial(dcData[r], rsPoly.size - 1)
 
         val modPoly = rawPoly.mod(rsPoly)
-        ecData[r] = MutableList(rsPoly.length - 1) { 0 }
+        ecData[r] = MutableList(rsPoly.size - 1) { 0 }
         ecData[r].indices.forEach { i ->
-            val modIndex = i + modPoly.length - ecData[r].size
-            ecData[r][i] = if (modIndex >= 0) modPoly.getAt(modIndex) else 0
+            val modIndex = i + modPoly.size - ecData[r].size
+            ecData[r][i] = if (modIndex >= 0) modPoly[modIndex] else 0
         }
     }
 
@@ -565,26 +565,29 @@ private object QrMath {
     }
 }
 
-private class QrPolynomial(num: List<Int>, shift: Int) {
-    private val _num = buildList {
-        var offset = 0
-        while (offset < num.size && num[offset] == 0) offset += 1
+@JvmInline
+private value class QrPolynomial private constructor(private val num: List<Int>) {
+    constructor(num: List<Int>, shift: Int) : this(
+        buildList {
+            var offset = 0
+            while (offset < num.size && num[offset] == 0) offset += 1
 
-        repeat(num.size - offset + shift) { add(0) }
-        (0 until num.size - offset).forEach { i -> this[i] = num[i + offset] }
-    }
+            repeat(num.size - offset + shift) { add(0) }
+            (0 until num.size - offset).forEach { i -> this[i] = num[i + offset] }
+        }
+    )
 
-    fun getAt(index: Int): Int = _num[index]
+    operator fun get(index: Int): Int = num[index]
 
-    val length get() = _num.size
+    val size get() = num.size
 
     fun multiply(e: QrPolynomial): QrPolynomial {
-        val num = MutableList(length + e.length - 1) { 0 }
+        val num = MutableList(size + e.size - 1) { 0 }
 
-        (0 until length).forEach { i ->
-            (0 until e.length).forEach { j ->
+        (0 until size).forEach { i ->
+            (0 until e.size).forEach { j ->
                 num[i + j] =
-                    num[i + j].xor(QrMath.gExp(QrMath.gLog(getAt(i)) + QrMath.gLog(e.getAt(j))))
+                    num[i + j].xor(QrMath.gExp(QrMath.gLog(get(i)) + QrMath.gLog(e[j])))
             }
         }
 
@@ -592,14 +595,14 @@ private class QrPolynomial(num: List<Int>, shift: Int) {
     }
 
     fun mod(e: QrPolynomial): QrPolynomial {
-        if (length - e.length < 0) return this
+        if (size - e.size < 0) return this
 
-        val ratio = QrMath.gLog(getAt(0)) - QrMath.gLog(e.getAt(0))
+        val ratio = QrMath.gLog(this[0]) - QrMath.gLog(e[0])
 
-        val num = MutableList(length) { getAt(it) }
+        val num = MutableList(size) { get(it) }
 
-        (0 until e.length).forEach { i ->
-            num[i] = num[i].xor(QrMath.gExp(QrMath.gLog(e.getAt(i)) + ratio))
+        (0 until e.size).forEach { i ->
+            num[i] = num[i].xor(QrMath.gExp(QrMath.gLog(e[i]) + ratio))
         }
 
         // recursive call
