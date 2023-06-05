@@ -67,7 +67,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     }
 
     fun share(activity: FragmentActivity?) {
-        val bitmap = createBitmap(350, 350)
+        val bitmap = createBitmap(1280, 1280)
         drawQr(Canvas(bitmap), bitmap.width)
         activity?.shareBinaryFile(bitmap.toByteArray(), "result.png", "image/png")
     }
