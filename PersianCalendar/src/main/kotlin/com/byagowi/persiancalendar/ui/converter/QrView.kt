@@ -9,6 +9,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.withScale
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -67,8 +68,14 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     }
 
     fun share(activity: FragmentActivity?) {
-        val bitmap = createBitmap(1280, 1280)
-        drawQr(Canvas(bitmap), bitmap.width)
+        val size = 1280f
+        val bitmap = createBitmap(size.toInt(), size.toInt())
+        Canvas(bitmap).apply {
+            drawColor(context.resolveColor(com.google.android.material.R.attr.colorSurface))
+            withScale(1 - 64 / size, 1 - 64 / size, size / 2, size / 2) {
+                drawQr(this, bitmap.width)
+            }
+        }
         activity?.shareBinaryFile(bitmap.toByteArray(), "result.png", "image/png")
     }
 
