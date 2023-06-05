@@ -128,33 +128,36 @@ private fun setupPositionProbePattern(
     row: Int,
     col: Int,
 ) {
-    for (r in -1..7) {
-        if (row + r <= -1 || modules.size <= row + r) continue
-
-        for (c in -1..7) {
-            if (col + c <= -1 || modules.size <= col + c) continue
-
-            modules[row + r][col + c] = (r in 0..6 && (c == 0 || c == 6)) ||
-                    (c in 0..6 && (r == 0 || r == 6)) ||
-                    (r in 2..4 && 2 <= c && c <= 4)
+    (-1..7)
+        .asSequence()
+        .filter { row + it > -1 && modules.size > row + it }
+        .forEach { r ->
+            (-1..7)
+                .asSequence()
+                .filter { col + it > -1 && modules.size > col + it }
+                .forEach {
+                    modules[row + r][col + it] = (r in 0..6 && (it == 0 || it == 6)) ||
+                            (it in 0..6 && (r == 0 || r == 6)) ||
+                            (r in 2..4 && 2 <= it && it <= 4)
+                }
         }
-    }
 }
 
 private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, version: Int) {
     val pos = QRUtil.getPatternPosition(version)
 
-    for (row in pos) {
-        for (col in pos) {
-            if (modules[row][col] != null) continue
-
-            (-2..2).forEach { r ->
-                (-2..2).forEach { c ->
-                    modules[row + r][col + c] =
-                        r == -2 || r == 2 || c == -2 || c == 2 || (r == 0 && c == 0)
+    pos.forEach { row ->
+        pos
+            .asSequence()
+            .filter { modules[row][it] == null }
+            .forEach {
+                (-2..2).forEach { r ->
+                    (-2..2).forEach { c ->
+                        modules[row + r][it + c] =
+                            r == -2 || r == 2 || c == -2 || c == 2 || (r == 0 && c == 0)
+                    }
                 }
             }
-        }
     }
 }
 
@@ -276,21 +279,18 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     fun isDark(row: Int, col: Int) = modules[row][col]!!
 
     // LEVEL1
-    for (row in 0 until size) {
-        for (col in 0 until size) {
+    (0 until size).forEach { row ->
+        (0 until size).forEach { col ->
             val dark = isDark(row, col)
-            var sameCount = 0
-
-            for (r in -1..1) {
-                if (row + r < 0 || size <= row + r) continue
-
-                for (c in -1..1) {
-                    if (col + c < 0 || size <= col + c) continue
-                    if (r == 0 && c == 0) continue
-
-                    if (dark == isDark(row + r, col + c)) sameCount += 1
+            val sameCount = (-1..1)
+                .asSequence()
+                .filter { row + it in 0 until size }
+                .sumOf { r ->
+                    (-1..1).count {
+                        col + it in 0 until size &&
+                                !(r == 0 && it == 0) && dark == isDark(row + r, col + it)
+                    }
                 }
-            }
 
             if (sameCount > 5) lostPoint += 3 + sameCount - 5
         }
@@ -309,35 +309,21 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     }
 
     // LEVEL3
-    for (row in 0 until size) {
-        for (col in 0 until size - 6) {
-            if (isDark(row, col) &&
-                !isDark(row, col + 1) &&
-                isDark(row, col + 2) &&
-                isDark(row, col + 3) &&
-                isDark(row, col + 4) &&
-                !isDark(row, col + 5) &&
-                isDark(row, col + 6)
-            ) {
-                lostPoint += 40
-            }
+    lostPoint += (0 until size).sumOf { row ->
+        (0 until size - 6).count {
+            isDark(row, it) && !isDark(row, it + 1) && isDark(row, it + 2) &&
+                    isDark(row, it + 3) && isDark(row, it + 4) &&
+                    !isDark(row, it + 5) && isDark(row, it + 6)
         }
-    }
+    } * 40.0
 
-    for (col in 0 until size) {
-        for (row in 0 until size - 6) {
-            if (isDark(row, col) &&
-                !isDark(row + 1, col) &&
-                isDark(row + 2, col) &&
-                isDark(row + 3, col) &&
-                isDark(row + 4, col) &&
-                !isDark(row + 5, col) &&
-                isDark(row + 6, col)
-            ) {
-                lostPoint += 40
-            }
+    lostPoint += (0 until size).sumOf { col ->
+        (0 until size - 6).count {
+            isDark(it, col) && !isDark(it + 1, col) && isDark(it + 2, col) &&
+                    isDark(it + 3, col) && isDark(it + 4, col) &&
+                    !isDark(it + 5, col) && isDark(it + 6, col)
         }
-    }
+    } * 40.0
 
     // LEVEL4
     val darkCount = (0 until size).sumOf { col -> (0 until size).count { isDark(it, col) } }
@@ -896,18 +882,13 @@ private object QRRSBlock {
 
         val length = rsBlock.size / 3
 
-        val list = mutableListOf<Rs>()
-
-        (0 until length).forEach { i ->
+        return (0 until length).flatMap { i ->
             val count = rsBlock[i * 3 + 0]
             val totalCount = rsBlock[i * 3 + 1]
             val dataCount = rsBlock[i * 3 + 2]
 
-            for (j in 0 until count)
-                list.add(Rs(totalCount = totalCount, dataCount = dataCount))
+            (0 until count).map { Rs(totalCount = totalCount, dataCount = dataCount) }
         }
-
-        return list
     }
 }
 
