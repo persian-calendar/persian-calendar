@@ -19,7 +19,7 @@ import kotlin.math.min
 
 class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var qr: List<List<Boolean>> = emptyList()
-    private var roundness = 1f
+    private var roundness = 0f
     private var viewSize = 0
     private val paint = Paint().also {
         it.color = context.resolveColor(android.R.attr.textColorPrimary)
