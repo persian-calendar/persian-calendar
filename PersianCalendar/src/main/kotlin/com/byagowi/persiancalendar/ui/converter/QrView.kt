@@ -77,7 +77,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
             MeasureSpec.getSize(widthMeasureSpec),
             context.resources.displayMetrics.let {
                 if (it.heightPixels > it.widthPixels) it.widthPixels
-                else it.heightPixels / 2
+                else it.heightPixels * 2 / 3
             }
         )
         super.onMeasure(
