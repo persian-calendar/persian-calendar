@@ -362,7 +362,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         val rsPoly = QrUtil.getErrorCorrectPolynomial(ecCount)
         val rawPoly = QrPolynomial(dcData[r], rsPoly.size - 1)
 
-        val modPoly = rawPoly.mod(rsPoly)
+        val modPoly = rawPoly % rsPoly
         ecData[r] = MutableList(rsPoly.size - 1) { 0 }
         ecData[r].indices.forEach { i ->
             val modIndex = i + modPoly.size - ecData[r].size
@@ -512,13 +512,12 @@ private object QrUtil {
         return data.shl(12).or(d)
     }
 
-    fun getPatternPosition(version: Int): List<Int> =
-        patternPositionTable[version - 1]
+    fun getPatternPosition(version: Int): List<Int> = patternPositionTable[version - 1]
 
     fun getErrorCorrectPolynomial(errorCorrectLength: Int): QrPolynomial {
         var a = QrPolynomial(listOf(1), 0)
         (0 until errorCorrectLength).forEach { i ->
-            a = a.multiply(QrPolynomial(listOf(1, QrMath.gExp(i)), 0))
+            a *= QrPolynomial(listOf(1, QrMath.gExp(i)), 0)
         }
         return a
     }
@@ -581,7 +580,7 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
 
     val size get() = num.size
 
-    fun multiply(e: QrPolynomial): QrPolynomial {
+    operator fun times(e: QrPolynomial): QrPolynomial {
         val num = MutableList(size + e.size - 1) { 0 }
 
         (0 until size).forEach { i ->
@@ -594,7 +593,7 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
         return QrPolynomial(num, 0)
     }
 
-    fun mod(e: QrPolynomial): QrPolynomial {
+    operator fun rem(e: QrPolynomial): QrPolynomial {
         if (size - e.size < 0) return this
 
         val ratio = QrMath.gLog(this[0]) - QrMath.gLog(e[0])
@@ -606,7 +605,7 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
         }
 
         // recursive call
-        return QrPolynomial(num, 0).mod(e)
+        return QrPolynomial(num, 0) % e
     }
 }
 
