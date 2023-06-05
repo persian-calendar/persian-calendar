@@ -47,12 +47,12 @@ fun qr(
             val buffer = QrBitBuffer()
 
             buffer.put(4, 4)
-            buffer.put(data.size, QrUtil.getLengthInBits(versionValue))
+            buffer.put(data.size, QrUtil.getSizeInBits(versionValue))
             buffer.putBytes(data)
 
             val totalDataCount = rsBlocks.sumOf { it.dataCount }
 
-            if (buffer.lengthInBits <= totalDataCount * 8) break
+            if (buffer.sizeInBits <= totalDataCount * 8) break
             versionValue += 1
         }
     }
@@ -355,7 +355,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         dcData[r] = MutableList(dcCount) { 0 }
 
         (0 until dcData[r].size).forEach { i ->
-            dcData[r][i] = 0xff.and(buffer.getBuffer()[i + offset])
+            dcData[r][i] = 0xff.and(buffer[i + offset])
         }
         offset += dcCount
 
@@ -406,30 +406,30 @@ private fun createData(
     val buffer = QrBitBuffer()
 
     buffer.put(4, 4)
-    buffer.put(data.size, QrUtil.getLengthInBits(version))
+    buffer.put(data.size, QrUtil.getSizeInBits(version))
     buffer.putBytes(data)
 
     // calc num max data.
     val totalDataCount = rsBlocks.sumOf { it.dataCount }
 
-    if (buffer.lengthInBits > totalDataCount * 8) {
+    if (buffer.sizeInBits > totalDataCount * 8) {
         error(
-            "code length overflow. (${buffer.lengthInBits}>${totalDataCount * 8})"
+            "code length overflow. (${buffer.sizeInBits}>${totalDataCount * 8})"
         )
     }
 
     // end code
-    if (buffer.lengthInBits + 4 <= totalDataCount * 8) buffer.put(0, 4)
+    if (buffer.sizeInBits + 4 <= totalDataCount * 8) buffer.put(0, 4)
 
     // padding
-    while (buffer.lengthInBits % 8 != 0) buffer.putBit(false)
+    while (buffer.sizeInBits % 8 != 0) buffer.putBit(false)
 
     // padding
     while (true) {
-        if (buffer.lengthInBits >= totalDataCount * 8) break
+        if (buffer.sizeInBits >= totalDataCount * 8) break
         buffer.put(pad0, 8)
 
-        if (buffer.lengthInBits >= totalDataCount * 8) break
+        if (buffer.sizeInBits >= totalDataCount * 8) break
         buffer.put(pad1, 8)
     }
 
@@ -522,7 +522,7 @@ private object QrUtil {
         return a
     }
 
-    fun getLengthInBits(type: Int): Int {
+    fun getSizeInBits(type: Int): Int {
         return when {
             type in 1..9 -> 8 // 1 - 9
             type < 27 -> 16 // 10 - 26
@@ -882,9 +882,9 @@ private object QrRsBlock {
 
 private class QrBitBuffer {
     private val _buffer = mutableListOf<Int>()
-    private var _length = 0
+    private var _size = 0
 
-    fun getBuffer(): List<Int> = _buffer
+    operator fun get(index: Int): Int = _buffer[index]
 
     fun put(num: Int, length: Int) {
         (0 until length).forEach { i ->
@@ -892,13 +892,13 @@ private class QrBitBuffer {
         }
     }
 
-    val lengthInBits: Int get() = _length
+    val sizeInBits: Int get() = _size
 
     fun putBit(bit: Boolean) {
-        val bufIndex = _length / 8
+        val bufIndex = _size / 8
         if (_buffer.size <= bufIndex) _buffer.add(0)
-        if (bit) _buffer[bufIndex] = _buffer[bufIndex].or(0x80.ushr(_length % 8))
-        _length += 1
+        if (bit) _buffer[bufIndex] = _buffer[bufIndex].or(0x80.ushr(_size % 8))
+        _size += 1
     }
 
     fun putBytes(bytes: ByteArray) = bytes.indices.forEach { i -> put(bytes[i].toInt(), 8) }
