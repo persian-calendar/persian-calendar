@@ -94,14 +94,14 @@ private fun qrMain(
     }
 
     val maskPatterns = MaskPattern.values()
-    (0 until 8).forEach { i ->
-        make(true, maskPatterns[i])
+    (0 until 8).forEach {
+        make(true, maskPatterns[it])
 
         val lostPoint = getLostPoint(modules)
 
-        if (i == 0 || minLostPoint > lostPoint) {
+        if (it == 0 || minLostPoint > lostPoint) {
             minLostPoint = lostPoint
-            bestPattern = maskPatterns[i]
+            bestPattern = maskPatterns[it]
         }
     }
 
@@ -183,24 +183,24 @@ private fun setupTypeInfo(
     val bits = QrUtil.getBchTypeInfo(data)
 
     // vertical
-    (0 until 15).forEach { i ->
-        val mod = !test && bits.shr(i).and(1) == 1
+    (0 until 15).forEach {
+        val mod = !test && bits.shr(it).and(1) == 1
 
         modules[when {
-            i < 6 -> i
-            i < 8 -> i + 1
-            else -> modules.size - 15 + i
+            it < 6 -> it
+            it < 8 -> it + 1
+            else -> modules.size - 15 + it
         }][8] = mod
     }
 
     // horizontal
-    (0 until 15).forEach { i ->
-        val mod = !test && bits.shr(i).and(1) == 1
+    (0 until 15).forEach {
+        val mod = !test && bits.shr(it).and(1) == 1
 
         modules[8][when {
-            i < 8 -> modules.size - i - 1
-            i < 9 -> 15 - i - 1 + 1
-            else -> 15 - i - 1
+            it < 8 -> modules.size - it - 1
+            it < 9 -> 15 - it - 1 + 1
+            else -> 15 - it - 1
         }] = mod
     }
 
@@ -211,14 +211,14 @@ private fun setupTypeInfo(
 private fun setupVersionNumber(modules: List<MutableList<Boolean?>>, version: Int, test: Boolean) {
     val bits = QrUtil.getBchTypeNumber(version)
 
-    (0 until 18).forEach { i ->
-        val mod = !test && bits.shr(i).and(1) == 1
-        modules[i / 3][(i % 3) + modules.size - 8 - 3] = mod
+    (0 until 18).forEach {
+        val mod = !test && bits.shr(it).and(1) == 1
+        modules[it / 3][(it % 3) + modules.size - 8 - 3] = mod
     }
 
-    (0 until 18).forEach { i ->
-        val mod = !test && bits.shr(i).and(1) == 1
-        modules[(i % 3) + modules.size - 8 - 3][i / 3] = mod
+    (0 until 18).forEach {
+        val mod = !test && bits.shr(it).and(1) == 1
+        modules[(it % 3) + modules.size - 8 - 3][it / 3] = mod
     }
 }
 
@@ -354,9 +354,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
 
         dcData[r] = MutableList(dcCount) { 0 }
 
-        (0 until dcData[r].size).forEach { i ->
-            dcData[r][i] = 0xff.and(buffer[i + offset])
-        }
+        dcData[r].indices.forEach { dcData[r][it] = 0xff.and(buffer[it + offset]) }
         offset += dcCount
 
         val rsPoly = QrUtil.getErrorCorrectPolynomial(ecCount)
@@ -516,8 +514,8 @@ private object QrUtil {
 
     fun getErrorCorrectPolynomial(errorCorrectLength: Int): QrPolynomial {
         var a = QrPolynomial(listOf(1), 0)
-        (0 until errorCorrectLength).forEach { i ->
-            a *= QrPolynomial(listOf(1, QrMath.gExp(i)), 0)
+        (0 until errorCorrectLength).forEach {
+            a *= QrPolynomial(listOf(1, QrMath.gExp(it)), 0)
         }
         return a
     }
@@ -538,16 +536,12 @@ private object QrMath {
 
     init {
         // initialize tables
-        (0 until 8).forEach { i ->
-            expTable[i] = 1.shl(i)
+        (0 until 8).forEach { expTable[it] = 1.shl(it) }
+        (8 until 256).forEach {
+            expTable[it] =
+                expTable[it - 4].xor(expTable[it - 5]).xor(expTable[it - 6]).xor(expTable[it - 8])
         }
-        (8 until 256).forEach { i ->
-            expTable[i] =
-                expTable[i - 4].xor(expTable[i - 5]).xor(expTable[i - 6]).xor(expTable[i - 8])
-        }
-        (0 until 255).forEach { i ->
-            logTable[expTable[i]] = i
-        }
+        (0 until 255).forEach { logTable[expTable[it]] = it }
     }
 
     fun gLog(n: Int): Int {
@@ -572,7 +566,7 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
             while (offset < num.size && num[offset] == 0) offset += 1
 
             repeat(num.size - offset + shift) { add(0) }
-            (0 until num.size - offset).forEach { i -> this[i] = num[i + offset] }
+            (0 until num.size - offset).forEach { this[it] = num[it + offset] }
         }
     )
 
@@ -586,7 +580,7 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
         (0 until size).forEach { i ->
             (0 until e.size).forEach { j ->
                 num[i + j] =
-                    num[i + j].xor(QrMath.gExp(QrMath.gLog(get(i)) + QrMath.gLog(e[j])))
+                    num[i + j].xor(QrMath.gExp(QrMath.gLog(this[i]) + QrMath.gLog(e[j])))
             }
         }
 
@@ -598,11 +592,9 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
 
         val ratio = QrMath.gLog(this[0]) - QrMath.gLog(e[0])
 
-        val num = MutableList(size) { get(it) }
+        val num = MutableList(size) { this[it] }
 
-        (0 until e.size).forEach { i ->
-            num[i] = num[i].xor(QrMath.gExp(QrMath.gLog(e[i]) + ratio))
-        }
+        e.num.indices.forEach { num[it] = num[it].xor(QrMath.gExp(QrMath.gLog(e[it]) + ratio)) }
 
         // recursive call
         return QrPolynomial(num, 0) % e
@@ -870,10 +862,10 @@ private object QrRsBlock {
 
         val length = rsBlock.size / 3
 
-        return (0 until length).flatMap { i ->
-            val count = rsBlock[i * 3 + 0]
-            val totalCount = rsBlock[i * 3 + 1]
-            val dataCount = rsBlock[i * 3 + 2]
+        return (0 until length).flatMap {
+            val count = rsBlock[it * 3 + 0]
+            val totalCount = rsBlock[it * 3 + 1]
+            val dataCount = rsBlock[it * 3 + 2]
 
             (0 until count).map { Rs(totalCount = totalCount, dataCount = dataCount) }
         }
@@ -887,9 +879,7 @@ private class QrBitBuffer {
     operator fun get(index: Int): Int = _buffer[index]
 
     fun put(num: Int, length: Int) {
-        (0 until length).forEach { i ->
-            putBit(((num.ushr(length - i - 1)).and(1) == 1))
-        }
+        (0 until length).forEach { putBit(num.ushr(length - it - 1).and(1) == 1) }
     }
 
     val sizeInBits: Int get() = _size
@@ -901,5 +891,5 @@ private class QrBitBuffer {
         _size += 1
     }
 
-    fun putBytes(bytes: ByteArray) = bytes.indices.forEach { i -> put(bytes[i].toInt(), 8) }
+    fun putBytes(bytes: ByteArray) = bytes.indices.forEach { put(bytes[it].toInt(), 8) }
 }
