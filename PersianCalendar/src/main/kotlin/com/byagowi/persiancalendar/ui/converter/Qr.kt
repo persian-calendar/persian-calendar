@@ -513,10 +513,8 @@ private object QrUtil {
     fun getPatternPosition(version: Int): List<Int> = patternPositionTable[version - 1]
 
     fun getErrorCorrectPolynomial(errorCorrectLength: Int): QrPolynomial {
-        var a = QrPolynomial(listOf(1), 0)
-        (0 until errorCorrectLength).forEach {
-            a *= QrPolynomial(listOf(1, QrMath.gExp(it)), 0)
-        }
+        var a = QrPolynomial(listOf(1))
+        (0 until errorCorrectLength).forEach { a *= QrPolynomial(listOf(1, QrMath.gExp(it))) }
         return a
     }
 
@@ -558,7 +556,7 @@ private object QrMath {
 
 @JvmInline
 private value class QrPolynomial private constructor(private val num: List<Int>) {
-    constructor(num: List<Int>, shift: Int) : this(
+    constructor(num: List<Int>, shift: Int = 0) : this(
         buildList {
             var offset = 0
             while (offset < num.size && num[offset] == 0) offset += 1
@@ -577,12 +575,11 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
 
         (0 until size).forEach { i ->
             (0 until e.size).forEach { j ->
-                num[i + j] =
-                    num[i + j].xor(QrMath.gExp(QrMath.gLog(this[i]) + QrMath.gLog(e[j])))
+                num[i + j] = num[i + j].xor(QrMath.gExp(QrMath.gLog(this[i]) + QrMath.gLog(e[j])))
             }
         }
 
-        return QrPolynomial(num, 0)
+        return QrPolynomial(num)
     }
 
     operator fun rem(e: QrPolynomial): QrPolynomial {
