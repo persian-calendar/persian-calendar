@@ -1251,7 +1251,6 @@
     { "holiday": false, "month": 5, "day": 15, "title": "روز جهانی خانواده", "type": "International" },
     { "holiday": false, "month": 5, "day": 20, "title": "روز جهانی زنبور", "type": "International" },
     { "holiday": false, "month": 5, "day": 29, "title": "روز جهانی حافظان صلح ملل متحد", "type": "International" },
-    { "holiday": false, "month": 6, "day": 1, "title": "روز جهانی والدین", "type": "International" },
     { "holiday": false, "month": 6, "day": 10, "title": "روز جهانی صنایع دستی", "type": "International" },
     { "holiday": false, "month": 6, "day": 12, "title": "روز جهانی منع کار کودکان", "type": "International" },
     { "holiday": false, "month": 6, "day": 14, "title": "روز جهانی اهدای خون", "type": "International" },
