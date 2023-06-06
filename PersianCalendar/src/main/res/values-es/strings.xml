@@ -404,4 +404,5 @@
         <item quantity="other">%1$s semanas</item>
     </plurals>
     <string name="time_zones">Husos horarios</string>
+    <string name="qr_code">Código QR</string>
 </resources>
