@@ -342,8 +342,8 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
     var maxDcCount = 0
     var maxEcCount = 0
 
-    val dcData = MutableList(rsBlocks.size) { mutableListOf<Int>() }
-    val ecData = MutableList(rsBlocks.size) { mutableListOf<Int>() }
+    val dcData = MutableList(rsBlocks.size) { emptyList<Int>() }
+    val ecData = MutableList(rsBlocks.size) { emptyList<Int>() }
 
     rsBlocks.indices.forEach { r ->
         val dcCount = rsBlocks[r].dataCount
@@ -352,19 +352,19 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         maxDcCount = max(maxDcCount, dcCount)
         maxEcCount = max(maxEcCount, ecCount)
 
-        dcData[r] = MutableList(dcCount) { 0 }
-
-        dcData[r].indices.forEach { dcData[r][it] = 0xff.and(buffer[it + offset]) }
+        dcData[r] = buildList(dcCount) { repeat(dcCount) { add(0xff.and(buffer[it + offset])) } }
         offset += dcCount
 
         val rsPoly = QrUtil.getErrorCorrectPolynomial(ecCount)
         val rawPoly = QrPolynomial(dcData[r], rsPoly.size - 1)
 
         val modPoly = rawPoly % rsPoly
-        ecData[r] = MutableList(rsPoly.size - 1) { 0 }
-        ecData[r].indices.forEach { i ->
-            val modIndex = i + modPoly.size - ecData[r].size
-            ecData[r][i] = if (modIndex >= 0) modPoly[modIndex] else 0
+        val ecDataSize = rsPoly.size - 1
+        ecData[r] = buildList(ecDataSize) {
+            repeat(ecDataSize) {
+                val modIndex = it + modPoly.size - ecDataSize
+                add(if (modIndex >= 0) modPoly[modIndex] else 0)
+            }
         }
     }
 
@@ -531,17 +531,15 @@ private object QrUtil {
 }
 
 private object QrMath {
-    private val expTable = MutableList(256) { 0 }
-    private val logTable = MutableList(256) { 0 }
-
-    init {
-        // initialize tables
-        (0 until 8).forEach { expTable[it] = 1.shl(it) }
+    private val expTable = buildList<Int>(256) {
+        (0 until 8).forEach { add(1.shl(it)) }
         (8 until 256).forEach {
-            expTable[it] =
-                expTable[it - 4].xor(expTable[it - 5]).xor(expTable[it - 6]).xor(expTable[it - 8])
+            add(this[it - 4].xor(this[it - 5]).xor(this[it - 6]).xor(this[it - 8]))
         }
-        (0 until 255).forEach { logTable[expTable[it]] = it }
+    }
+    private val logTable = buildList(256) {
+        repeat(256) { add(0) }
+        (0 until 255).forEach { this[expTable[it]] = it }
     }
 
     fun gLog(n: Int): Int {
@@ -592,7 +590,7 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
 
         val ratio = QrMath.gLog(this[0]) - QrMath.gLog(e[0])
 
-        val num = MutableList(size) { this[it] }
+        val num = num.toMutableList()
 
         e.num.indices.forEach { num[it] = num[it].xor(QrMath.gExp(QrMath.gLog(e[it]) + ratio)) }
 
