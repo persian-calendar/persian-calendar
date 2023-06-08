@@ -48,12 +48,12 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     private val rect = RectF()
     private fun drawQr(canvas: Canvas, size: Int) {
         val cellSize = size.toFloat() / (qr.size.takeIf { it != 0 } ?: return)
-        qr.indices.forEach { x ->
-            qr.indices.forEach { y ->
-                if (qr[x][y]) {
+        qr.forEachIndexed { i, row ->
+            row.forEachIndexed { j, v ->
+                if (v) {
                     rect.set(
-                        x * cellSize, y * cellSize,
-                        (x + 1) * cellSize, (y + 1) * cellSize
+                        i * cellSize, j * cellSize,
+                        (i + 1) * cellSize, (j + 1) * cellSize
                     )
                     rect.inset(-.25f * (1 - roundness), -.25f * (1 - roundness))
                     canvas.drawRoundRect(

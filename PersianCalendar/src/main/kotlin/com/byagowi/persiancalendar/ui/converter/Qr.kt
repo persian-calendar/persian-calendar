@@ -374,18 +374,18 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
     var index = 0
 
     (0 until maxDcCount).forEach { i ->
-        rsBlocks.indices.forEach { r ->
-            if (i < dcData[r].size) {
-                data[index] = dcData[r][i]
+        dcData.forEach {
+            if (i < it.size) {
+                data[index] = it[i]
                 index += 1
             }
         }
     }
 
     (0 until maxEcCount).forEach { i ->
-        rsBlocks.indices.forEach { r ->
-            if (i < ecData[r].size) {
-                data[index] = ecData[r][i]
+        ecData.forEach {
+            if (i < it.size) {
+                data[index] = it[i]
                 index += 1
             }
         }
@@ -411,9 +411,7 @@ private fun createData(
     val totalDataCount = rsBlocks.sumOf { it.dataCount }
 
     if (buffer.sizeInBits > totalDataCount * 8) {
-        error(
-            "code length overflow. (${buffer.sizeInBits}>${totalDataCount * 8})"
-        )
+        error("code length overflow. (${buffer.sizeInBits}>${totalDataCount * 8})")
     }
 
     // end code
@@ -886,5 +884,5 @@ private class QrBitBuffer {
         _size += 1
     }
 
-    fun putBytes(bytes: ByteArray) = bytes.indices.forEach { put(bytes[it].toInt(), 8) }
+    fun putBytes(bytes: ByteArray): Unit = bytes.forEach { put(it.toInt(), 8) }
 }
