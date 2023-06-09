@@ -7,6 +7,7 @@ import kotlin.test.assertEquals
 class QrTests {
     @Test
     fun `basic qr test`() {
+        // TODO: Use these instead, "█ ▀▄"
         val expected = """
 *******.**..*..*.***..*******
 *.....*.*..*...**.*...*.....*
