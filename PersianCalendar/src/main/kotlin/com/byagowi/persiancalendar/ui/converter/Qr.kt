@@ -34,7 +34,7 @@ fun qr(
     // Level L can be dirty/damaged for up to 7%, level M 15%, level Q 25%, level H 30%.
     errorCorrectionLevel: ErrorCorrectionLevel = ErrorCorrectionLevel.M,
 ): List<List<Boolean>> {
-    // This is a Utf8 only implementation
+    // This is a UTF-8 only implementation anyway
     val data = input.encodeToByteArray()
 
     var versionValue: Int
@@ -538,18 +538,9 @@ private object QrMath {
         (0 until 255).forEach { this[expTable[it]] = it }
     }
 
-    fun gLog(n: Int): Int {
-        if (n < 1) error("gLog($n)")
-
-        return logTable[n]
-    }
-
-    fun gExp(n: Int): Int {
-        var i = n
-        while (i < 0) i += 255
-        while (i >= 256) i -= 255
-        return expTable[i]
-    }
+    fun gLog(n: Int): Int = if (n < 1) error("gLog($n)") else logTable[n]
+    fun gExp(n: Int): Int = // Deal with negative and don't rely on mod/rem differences
+        expTable[if (n == 0) 0 else if (n < 0) 254 - (-n - 1) % 255 else (n - 1) % 255 + 1]
 }
 
 @JvmInline
@@ -871,9 +862,8 @@ private class QrBitBuffer {
 
     operator fun get(index: Int): Int = _buffer[index]
 
-    fun put(num: Int, length: Int) {
+    fun put(num: Int, length: Int): Unit =
         (0 until length).forEach { putBit(num.ushr(length - it - 1).and(1) == 1) }
-    }
 
     val sizeInBits: Int get() = _size
 
