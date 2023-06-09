@@ -102,7 +102,8 @@ import java.util.GregorianCalendar
 import kotlin.math.min
 
 
-private const val NOTIFICATION_ID = 1002
+private val NOTIFICATION_ID =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) 1002 else 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
 
@@ -685,12 +686,15 @@ private fun updateNotification(
 
     val notificationManager = context.getSystemService<NotificationManager>()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) NotificationManager.IMPORTANCE_DEFAULT
+            else NotificationManager.IMPORTANCE_LOW
         val channel = NotificationChannel(
             NOTIFICATION_ID.toString(),
             context.getString(R.string.app_name), importance
         )
-        channel.setSound(null, null)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            channel.setSound(null, null)
         channel.setShowBadge(false)
         notificationManager?.createNotificationChannel(channel)
     }
