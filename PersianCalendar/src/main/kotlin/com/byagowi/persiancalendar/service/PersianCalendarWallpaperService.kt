@@ -25,7 +25,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
                 else android.R.color.system_accent1_400
             ) else null
             patternDrawable = PatternDrawable(
-                preferredTintColor = accentColor, darkBaseColor = Theme.isNightMode(context),
+                preferredTintColor = accentColor,
+                darkBaseColor = true, // launcher always has white text so let's make it always dark, for now
                 dp = resources.dp
             )
             this.visible = visible
