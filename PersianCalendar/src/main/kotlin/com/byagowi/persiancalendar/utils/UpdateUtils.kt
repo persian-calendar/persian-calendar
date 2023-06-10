@@ -59,10 +59,12 @@ import com.byagowi.persiancalendar.WidgetMap
 import com.byagowi.persiancalendar.WidgetMonthView
 import com.byagowi.persiancalendar.WidgetMoon
 import com.byagowi.persiancalendar.WidgetSunView
+import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.DeviceCalendarEventsStore
 import com.byagowi.persiancalendar.entities.EventsStore
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.entities.Language
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.clockIn24
@@ -217,7 +219,7 @@ fun update(context: Context, updateDate: Boolean) {
     }
 
     // Notification
-    updateNotification(context, title, subtitle, jdn, date, owghat, now)
+    updateNotification(context, title, subtitle, jdn, date, owghat)
 }
 
 @StringRes
@@ -674,9 +676,10 @@ private fun setEventsInWidget(
     )
 }
 
+private var latestPostedNotification: NotificationData? = null
+
 private fun updateNotification(
-    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String,
-    time: Long
+    context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
 ) {
     if (!isNotifyDate) {
         if (enableWorkManager)
@@ -684,119 +687,154 @@ private fun updateNotification(
         return
     }
 
-    val notificationManager = context.getSystemService<NotificationManager>()
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val importance =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) NotificationManager.IMPORTANCE_DEFAULT
-            else NotificationManager.IMPORTANCE_LOW
-        val channel = NotificationChannel(
-            NOTIFICATION_ID.toString(),
-            context.getString(R.string.app_name), importance
-        )
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            channel.setSound(null, null)
-        channel.setShowBadge(false)
-        notificationManager?.createNotificationChannel(channel)
+    val notificationData = NotificationData(
+        title = title, subtitle = subtitle, jdn = jdn, date = date, owghat = owghat,
+        isRtl = context.resources.isRtl,
+        events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList(),
+        isTalkBackEnabled = isTalkBackEnabled,
+        isHighTextContrastEnabled = isHighTextContrastEnabled,
+        isNotifyDateOnLockScreen = isNotifyDateOnLockScreen,
+        deviceCalendarEvents = deviceCalendarEvents,
+        whatToShowOnWidgets = whatToShowOnWidgets,
+        spacedComma = spacedComma,
+        language = language,
+    )
+    if (latestPostedNotification != notificationData) {
+        notificationData.post(context)
+        latestPostedNotification = notificationData
     }
+}
 
-    // Prepend a right-to-left mark character to Android with sane text rendering stack
-    // to resolve a bug seems some Samsung devices have with characters with weak direction,
-    // digits being at the first of string on
-    val toPrepend =
-        if (context.resources.isRtl && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) RLM else ""
 
-    val builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
-        .setPriority(NotificationCompat.PRIORITY_LOW)
-        .setOngoing(true)
-        .setWhen(0)
-        .setContentIntent(context.launchAppPendingIntent())
-        .setVisibility(
-            if (isNotifyDateOnLockScreen)
-                NotificationCompat.VISIBILITY_PUBLIC
-            else
-                NotificationCompat.VISIBILITY_SECRET
-        )
-        .setContentTitle(toPrepend + title)
-        .setContentText(
-            when {
-                isTalkBackEnabled -> getA11yDaySummary(
-                    context = context, jdn = jdn,
-                    isToday = false, // Don't set isToday, per a feedback
-                    deviceCalendarEvents = deviceCalendarEvents, withZodiac = true,
-                    withOtherCalendars = true, withTitle = false
-                ) + if (owghat.isEmpty()) "" else spacedComma + owghat
+data class NotificationData(
+    val title: String,
+    val subtitle: String,
+    val jdn: Jdn,
+    val date: AbstractDate,
+    val owghat: String,
+    val isRtl: Boolean,
+    val events: List<CalendarEvent<*>>,
+    val isTalkBackEnabled: Boolean,
+    val isHighTextContrastEnabled: Boolean,
+    val isNotifyDateOnLockScreen: Boolean,
+    val deviceCalendarEvents: DeviceCalendarEventsStore,
+    val whatToShowOnWidgets: Set<String>,
+    val spacedComma: String,
+    val language: Language,
+) {
+    fun post(context: Context) {
+        val notificationManager = context.getSystemService<NotificationManager>()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val importance =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) NotificationManager.IMPORTANCE_DEFAULT
+                else NotificationManager.IMPORTANCE_LOW
+            val channel = NotificationChannel(
+                NOTIFICATION_ID.toString(),
+                context.getString(R.string.app_name), importance
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                channel.setSound(null, null)
+            channel.setShowBadge(false)
+            notificationManager?.createNotificationChannel(channel)
+        }
 
-                subtitle.isEmpty() -> subtitle
-                else -> toPrepend + subtitle
-            }
-        )
+        // Prepend a right-to-left mark character to Android with sane text rendering stack
+        // to resolve a bug seems some Samsung devices have with characters with weak direction,
+        // digits being at the first of string on
+        val toPrepend = if (isRtl && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) RLM else ""
 
-    // Dynamic small icon generator, most of the times disabled as it needs API 23 and
-    // we need to have the other path anyway
-    if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val icon = IconCompat.createWithBitmap(createStatusIcon(date.dayOfMonth))
-        builder.setSmallIcon(icon)
-    } else {
-        builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
-    }
+        val builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setOngoing(true)
+            .setWhen(0)
+            .setContentIntent(context.launchAppPendingIntent())
+            .setVisibility(
+                if (isNotifyDateOnLockScreen)
+                    NotificationCompat.VISIBILITY_PUBLIC
+                else
+                    NotificationCompat.VISIBILITY_SECRET
+            )
+            .setContentTitle(toPrepend + title)
+            .setContentText(
+                when {
+                    isTalkBackEnabled -> getA11yDaySummary(
+                        context = context, jdn = jdn,
+                        isToday = false, // Don't set isToday, per a feedback
+                        deviceCalendarEvents = deviceCalendarEvents, withZodiac = true,
+                        withOtherCalendars = true, withTitle = false
+                    ) + if (owghat.isEmpty()) "" else spacedComma + owghat
 
-    // Night mode doesn't like our custom notification in Samsung and HTC One UI
-    val shouldDisableCustomNotification = when (Build.BRAND) {
-        "samsung", "htc" -> Theme.isNightMode(context)
-        else -> false
-    }
+                    subtitle.isEmpty() -> subtitle
+                    else -> toPrepend + subtitle
+                }
+            )
 
-    if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        val events = eventsRepository?.getEvents(jdn, deviceCalendarEvents) ?: emptyList()
-        val holidays = getEventsTitle(
-            events, holiday = true,
-            compact = true, showDeviceCalendarEvents = true, insertRLM = context.resources.isRtl,
-            addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
-        )
-
-        val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
-            events, holiday = false,
-            compact = true, showDeviceCalendarEvents = true, insertRLM = context.resources.isRtl,
-            addIsHoliday = false
-        ) else ""
-
-        val notificationOwghat = if (OWGHAT_KEY in whatToShowOnWidgets) owghat else ""
-
-        if (shouldDisableCustomNotification) {
-            val content = listOf(subtitle, holidays.trim(), nonHolidays, notificationOwghat)
-                .filter { it.isNotBlank() }.joinToString("\n")
-            builder.setStyle(NotificationCompat.BigTextStyle().bigText(content))
+        // Dynamic small icon generator, most of the times disabled as it needs API 23 and
+        // we need to have the other path anyway
+        if (language.isNepali && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val icon = IconCompat.createWithBitmap(createStatusIcon(date.dayOfMonth))
+            builder.setSmallIcon(icon)
         } else {
-            builder.setCustomContentView(RemoteViews(
-                context.packageName, R.layout.custom_notification
-            ).also {
-                it.setDirection(R.id.custom_notification_root, context)
-                it.setTextViewText(R.id.title, title)
-                it.setTextViewText(R.id.body, subtitle)
-            })
+            builder.setSmallIcon(getDayIconResource(date.dayOfMonth))
+        }
 
-            if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
-                builder.setCustomBigContentView(RemoteViews(
-                    context.packageName, R.layout.custom_notification_big
+        // Night mode doesn't like our custom notification in Samsung and HTC One UI
+        val shouldDisableCustomNotification = when (Build.BRAND) {
+            "samsung", "htc" -> Theme.isNightMode(context)
+            else -> false
+        }
+
+        if (!isTalkBackEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val holidays = getEventsTitle(
+                events, holiday = true,
+                compact = true, showDeviceCalendarEvents = true, insertRLM = isRtl,
+                addIsHoliday = shouldDisableCustomNotification || isHighTextContrastEnabled
+            )
+
+            val nonHolidays = if (NON_HOLIDAYS_EVENTS_KEY in whatToShowOnWidgets) getEventsTitle(
+                events, holiday = false,
+                compact = true, showDeviceCalendarEvents = true, insertRLM = isRtl,
+                addIsHoliday = false
+            ) else ""
+
+            val notificationOwghat = if (OWGHAT_KEY in whatToShowOnWidgets) owghat else ""
+
+            if (shouldDisableCustomNotification) {
+                val content = listOf(subtitle, holidays.trim(), nonHolidays, notificationOwghat)
+                    .filter { it.isNotBlank() }.joinToString("\n")
+                builder.setStyle(NotificationCompat.BigTextStyle().bigText(content))
+            } else {
+                builder.setCustomContentView(RemoteViews(
+                    context.packageName, R.layout.custom_notification
                 ).also {
                     it.setDirection(R.id.custom_notification_root, context)
                     it.setTextViewText(R.id.title, title)
-                    it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
-                    it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
-                    it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
-                    it.setTextViewTextOrHideIfEmpty(R.id.owghat, notificationOwghat)
+                    it.setTextViewText(R.id.body, subtitle)
                 })
 
-            builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                if (listOf(holidays, nonHolidays, notificationOwghat).any { it.isNotBlank() })
+                    builder.setCustomBigContentView(RemoteViews(
+                        context.packageName, R.layout.custom_notification_big
+                    ).also {
+                        it.setDirection(R.id.custom_notification_root, context)
+                        it.setTextViewText(R.id.title, title)
+                        it.setTextViewTextOrHideIfEmpty(R.id.body, subtitle)
+                        it.setTextViewTextOrHideIfEmpty(R.id.holidays, holidays)
+                        it.setTextViewTextOrHideIfEmpty(R.id.nonholidays, nonHolidays)
+                        it.setTextViewTextOrHideIfEmpty(R.id.owghat, notificationOwghat)
+                    })
+
+                builder.setStyle(NotificationCompat.DecoratedCustomViewStyle())
+            }
         }
+
+        if (BuildConfig.DEVELOPMENT) builder.setWhen(System.currentTimeMillis())
+
+        if (enableWorkManager) notificationManager?.notify(NOTIFICATION_ID, builder.build())
+        else context.runCatching {
+            ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
+        }.onFailure(logException)
     }
-
-    if (BuildConfig.DEVELOPMENT) builder.setWhen(time)
-
-    if (enableWorkManager) notificationManager?.notify(NOTIFICATION_ID, builder.build())
-    else context.runCatching {
-        ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
-    }.onFailure(logException)
 }
 
 private fun RemoteViews.setRoundBackground(
