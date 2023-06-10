@@ -26,4 +26,10 @@ sealed class CalendarEvent<T : AbstractDate>(
         date: CivilDate, title: String, isHoliday: Boolean, val id: Int, val description: String,
         val start: Date, val end: Date, val color: String
     ) : CalendarEvent<CivilDate>(title, isHoliday, date)
+
+    override fun equals(other: Any?): Boolean {
+        return other is CalendarEvent<*>
+                && other.title == title && other.isHoliday == isHoliday && other.date == date
+        // Let's don't get into details of device calendar
+    }
 }
