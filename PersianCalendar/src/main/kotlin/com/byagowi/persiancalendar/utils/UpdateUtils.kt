@@ -705,8 +705,7 @@ private fun updateNotification(
     }
 }
 
-
-data class NotificationData(
+private data class NotificationData(
     val title: String,
     val subtitle: String,
     val jdn: Jdn,
