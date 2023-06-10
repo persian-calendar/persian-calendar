@@ -21,8 +21,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
             val context = this@PersianCalendarWallpaperService
             val isNightMode = Theme.isNightMode(context)
             val accentColor = if (DynamicColors.isDynamicColorAvailable()) context.getColor(
-                if (isNightMode) android.R.color.system_accent1_200
-                else android.R.color.system_accent1_400
+                if (isNightMode) android.R.color.system_accent1_500
+                else android.R.color.system_accent1_300
             ) else null
             patternDrawable = PatternDrawable(
                 preferredTintColor = accentColor,
