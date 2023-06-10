@@ -58,11 +58,11 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         }
 
     private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
-        val maxValue = selectedCalendarType.getMonthLength(year, month)
+        dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
         val monthStart = Jdn(selectedCalendarType, year, month, 1)
-        val displayedValues =
-            (1..maxValue).map { (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it) }
-        dayPicker.setMaxValueAndDisplayedValues(maxValue, displayedValues)
+        binding.dayPicker.setFormatter {
+            (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it)
+        }
         binding.dayPicker.invalidate()
     }
 
