@@ -44,7 +44,6 @@ class SolarDraw(context: Context) {
         val alpha =
             if (moonAltitude == null) 255 else (200 + moonAltitude.toInt() * 3).coerceIn(0, 255)
         moonShadowPaint.alpha = alpha
-        moonRect.set(cx - r, cy - r, cx + r, cy + r)
         moonDrawable.setBounds( // same as above
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
         )
@@ -52,8 +51,10 @@ class SolarDraw(context: Context) {
         moonDrawable.alpha = alpha
         val phase = (moon.lon - sun.elon).let { it + if (it < 0) 360 else 0 }
         canvas.withRotation(angle ?: if (phase < 180.0) 180f else 0f, cx, cy) {
-            val arcWidth = (cos(Math.toRadians(phase)) * r).toFloat()
-            moonOval.set(cx - abs(arcWidth), cy - r, cx + abs(arcWidth), cy + r)
+            val sr = r * .97f
+            val arcWidth = (cos(Math.toRadians(phase)) * sr).toFloat()
+            moonRect.set(cx - sr, cy - sr, cx + sr, cy + sr)
+            moonOval.set(cx - abs(arcWidth), cy - sr, cx + abs(arcWidth), cy + sr)
             ovalPath.rewind()
             ovalPath.arcTo(moonOval, 90f, if (arcWidth > 0) 180f else -180f)
             ovalPath.arcTo(moonRect, 270f, 180f)
