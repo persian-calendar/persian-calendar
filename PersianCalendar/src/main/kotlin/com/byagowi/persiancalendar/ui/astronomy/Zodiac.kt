@@ -78,6 +78,6 @@ enum class Zodiac(
             enumValues<Zodiac>().firstOrNull { longitude < it.iauRangeEnd } ?: ARIES
 
         fun fromTropical(longitude: Double): Zodiac =
-            enumValues<Zodiac>().getOrNull(floor(longitude / 30).toInt()) ?: ARIES
+            enumValues<Zodiac>().getOrNull(floor((longitude - 15) / 30).toInt()) ?: PISCES
     }
 }

@@ -67,8 +67,8 @@ class AstronomyTests {
         ) { longitude, zodiac ->
             assertEquals(zodiac, Zodiac.fromIau(longitude.toDouble()))
         }
-        (0..11).map { 10 + it * 30 }
-            .zip(enumValues<Zodiac>() + listOf(Zodiac.ARIES)) { longitude, zodiac ->
+        (0..11).map { 20 + it * 30 }
+            .zip(enumValues<Zodiac>() + listOf(Zodiac.PISCES)) { longitude, zodiac ->
                 assertEquals(zodiac, Zodiac.fromTropical(longitude.toDouble()))
             }
     }
