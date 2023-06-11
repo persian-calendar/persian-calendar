@@ -55,10 +55,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 animator.interpolator = AccelerateDecelerateInterpolator()
                 animator.addUpdateListener { _ ->
                     val fraction = animator.animatedValue as? Float ?: 0f
-                    val indicatorColor =
+                    monthsIndicator.color =
                         ColorUtils.setAlphaComponent(0x808080, (0x78 * fraction).roundToInt())
-                    monthsIndicator.color = indicatorColor
-                    yearIndicator.color = indicatorColor
                     ranges.indices.forEach {
                         ranges[it][0] = MathUtils.lerp(
                             iauRanges[it][0], tropicalRanges[it][0], fraction
@@ -246,7 +244,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         it.strokeWidth = 1f * dp
     }
     private val yearIndicator = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.color = Color.TRANSPARENT
+        it.color = 0x78808080
         it.style = Paint.Style.FILL_AND_STROKE
         it.strokeWidth = 2f * dp
     }
