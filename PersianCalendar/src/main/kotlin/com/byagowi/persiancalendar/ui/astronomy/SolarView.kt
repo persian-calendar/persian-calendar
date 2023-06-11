@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.astronomy
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
@@ -27,6 +28,7 @@ import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlin.math.sign
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
@@ -53,6 +55,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 animator.interpolator = AccelerateDecelerateInterpolator()
                 animator.addUpdateListener { _ ->
                     val fraction = animator.animatedValue as? Float ?: 0f
+                    monthsIndicator.color =
+                        ColorUtils.setAlphaComponent(0x808080, (0x78 * fraction).roundToInt())
                     ranges.indices.forEach {
                         ranges[it][0] = MathUtils.lerp(
                             iauRanges[it][0], tropicalRanges[it][0], fraction
@@ -181,6 +185,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 
     private fun drawEarthCentricView(canvas: Canvas) {
         val radius = min(width, height) / 2f
+        (0..12).forEach {
+            canvas.withRotation(it * 30f, pivotX = radius, pivotY = radius) {
+                canvas.drawLine(0f, radius, radius * .03f, radius, monthsIndicator)
+            }
+        }
         arcRect.set(0f, 0f, 2 * radius, 2 * radius)
         val circleInset = radius * .05f
         arcRect.inset(circleInset, circleInset)
@@ -228,6 +237,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     }
     private val arcRect = RectF()
 
+    private val monthsIndicator = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = Color.TRANSPARENT
+        it.style = Paint.Style.FILL_AND_STROKE
+        it.strokeWidth = 1 * dp
+    }
     private val moonIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x78808080
         it.style = Paint.Style.FILL
