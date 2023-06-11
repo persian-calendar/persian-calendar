@@ -88,7 +88,7 @@ class SolarDraw(context: Context) {
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()
         )
         earthDrawable.draw(canvas)
-        earthRect.inset(r / 16, r / 16)
+        earthRect.inset(r / 18, r / 18)
         val sunDegree = -sunEcliptic.elon.toFloat()
         canvas.drawArc(earthRect, sunDegree + 90f, 180f, true, earthShadowPaint)
     }
