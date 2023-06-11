@@ -190,7 +190,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         (0..12).forEach {
             canvas.withRotation(it * 30f, pivotX = radius, pivotY = radius) {
                 val indicator = if (it == 0) yearIndicator else monthsIndicator
-                canvas.drawLine(width * 1f, radius, width - radius * .03f, radius, indicator)
+                canvas.drawLine(width - dp / 2, radius, width - 6 * dp, radius, indicator)
             }
         }
         arcRect.set(0f, 0f, 2 * radius, 2 * radius)
