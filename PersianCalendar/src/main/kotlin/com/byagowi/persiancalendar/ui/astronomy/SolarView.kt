@@ -55,8 +55,10 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                 animator.interpolator = AccelerateDecelerateInterpolator()
                 animator.addUpdateListener { _ ->
                     val fraction = animator.animatedValue as? Float ?: 0f
-                    monthsIndicator.color =
+                    val indicatorColor =
                         ColorUtils.setAlphaComponent(0x808080, (0x78 * fraction).roundToInt())
+                    monthsIndicator.color = indicatorColor
+                    yearIndicator.color = indicatorColor
                     ranges.indices.forEach {
                         ranges[it][0] = MathUtils.lerp(
                             iauRanges[it][0], tropicalRanges[it][0], fraction
@@ -187,7 +189,8 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         val radius = min(width, height) / 2f
         (0..12).forEach {
             canvas.withRotation(it * 30f, pivotX = radius, pivotY = radius) {
-                canvas.drawLine(0f, radius, radius * .03f, radius, monthsIndicator)
+                val indicator = if (it == 0) yearIndicator else monthsIndicator
+                canvas.drawLine(width * 1f, radius, width - radius * .03f, radius, indicator)
             }
         }
         arcRect.set(0f, 0f, 2 * radius, 2 * radius)
@@ -240,7 +243,12 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
     private val monthsIndicator = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = Color.TRANSPARENT
         it.style = Paint.Style.FILL_AND_STROKE
-        it.strokeWidth = 1 * dp
+        it.strokeWidth = 1f * dp
+    }
+    private val yearIndicator = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.color = Color.TRANSPARENT
+        it.style = Paint.Style.FILL_AND_STROKE
+        it.strokeWidth = 2f * dp
     }
     private val moonIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = 0x78808080
