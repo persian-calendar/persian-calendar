@@ -190,7 +190,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         ) {
             preference = this
             summary = entries[entryValues.indexOf(
-                context.appPrefs.getString(key, null) ?: Theme.SYSTEM_DEFAULT.key
+                context.appPrefs.getString(PREF_THEME, null) ?: Theme.SYSTEM_DEFAULT.key
             )]
             title(R.string.select_skin)
         }
