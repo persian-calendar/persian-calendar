@@ -544,12 +544,15 @@ private object QrMath {
 }
 
 private class QrPolynomial(num: List<Int>, shift: Int = 0) {
-    private val num: List<Int> = buildList {
+    private val num: List<Int> = run {
         var offset = 0
         while (offset < num.size && num[offset] == 0) offset += 1
 
-        repeat(num.size - offset + shift) { add(0) }
-        (0 until num.size - offset).forEach { this[it] = num[it + offset] }
+        val size = num.size - offset + shift
+        buildList(size) {
+            repeat(size) { add(0) }
+            (0 until num.size - offset).forEach { this[it] = num[it + offset] }
+        }
     }
 
     operator fun get(index: Int): Int = num[index]
