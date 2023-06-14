@@ -93,7 +93,7 @@ private fun qrMain(
         mapData(modules, cache, maskPattern)
     }
 
-    val maskPatterns = MaskPattern.values()
+    val maskPatterns = enumValues<MaskPattern>()
     (0 until 8).forEach {
         make(true, maskPatterns[it])
 
