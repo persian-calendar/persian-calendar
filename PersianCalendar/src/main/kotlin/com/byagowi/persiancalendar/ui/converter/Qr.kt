@@ -543,17 +543,14 @@ private object QrMath {
         expTable[if (n == 0) 0 else if (n < 0) 254 - (-n - 1) % 255 else (n - 1) % 255 + 1]
 }
 
-@JvmInline
-private value class QrPolynomial private constructor(private val num: List<Int>) {
-    constructor(num: List<Int>, shift: Int = 0) : this(
-        buildList {
-            var offset = 0
-            while (offset < num.size && num[offset] == 0) offset += 1
+private class QrPolynomial(num: List<Int>, shift: Int = 0) {
+    private val num: List<Int> = buildList {
+        var offset = 0
+        while (offset < num.size && num[offset] == 0) offset += 1
 
-            repeat(num.size - offset + shift) { add(0) }
-            (0 until num.size - offset).forEach { this[it] = num[it + offset] }
-        }
-    )
+        repeat(num.size - offset + shift) { add(0) }
+        (0 until num.size - offset).forEach { this[it] = num[it + offset] }
+    }
 
     operator fun get(index: Int): Int = num[index]
 
@@ -581,7 +578,7 @@ private value class QrPolynomial private constructor(private val num: List<Int>)
         e.num.indices.forEach { num[it] = num[it].xor(QrMath.gExp(QrMath.gLog(e[it]) + ratio)) }
 
         // recursive call
-        return QrPolynomial(num, 0) % e
+        return QrPolynomial(num) % e
     }
 }
 
