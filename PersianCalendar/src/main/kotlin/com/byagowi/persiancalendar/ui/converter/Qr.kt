@@ -93,15 +93,14 @@ private fun qrMain(
         mapData(modules, cache, maskPattern)
     }
 
-    val maskPatterns = enumValues<MaskPattern>()
-    (0 until 8).forEach {
-        make(true, maskPatterns[it])
+    enumValues<MaskPattern>().forEachIndexed { i, pattern ->
+        make(true, pattern)
 
         val lostPoint = getLostPoint(modules)
 
-        if (it == 0 || minLostPoint > lostPoint) {
+        if (i == 0 || minLostPoint > lostPoint) {
             minLostPoint = lostPoint
-            bestPattern = maskPatterns[it]
+            bestPattern = pattern
         }
     }
 
