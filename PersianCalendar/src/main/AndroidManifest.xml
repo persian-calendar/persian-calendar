@@ -324,7 +324,7 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
-            <!-- Don't ever add additional meta-data such ACTIVE_TILE=true or TOGGLEABLE_TILE=false,
+            <!-- Don't ever add additional meta-data such as ACTIVE_TILE=true and TOGGLEABLE_TILE=false
                  that's how 8.2.5 become a defected release -->
         </service>
 
