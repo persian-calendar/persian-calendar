@@ -352,7 +352,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         maxDcCount = max(maxDcCount, dcCount)
         maxEcCount = max(maxEcCount, ecCount)
 
-        dcData[r] = buildList(dcCount) { repeat(dcCount) { add(0xff.and(buffer[it + offset])) } }
+        dcData[r] = List(dcCount) { 0xff.and(buffer[it + offset]) }
         offset += dcCount
 
         val rsPoly = QrUtil.getErrorCorrectPolynomial(ecCount)
@@ -360,11 +360,9 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
 
         val modPoly = rawPoly % rsPoly
         val ecDataSize = rsPoly.size - 1
-        ecData[r] = buildList(ecDataSize) {
-            repeat(ecDataSize) {
-                val modIndex = it + modPoly.size - ecDataSize
-                add(if (modIndex >= 0) modPoly[modIndex] else 0)
-            }
+        ecData[r] = List(ecDataSize) {
+            val modIndex = it + modPoly.size - ecDataSize
+            if (modIndex >= 0) modPoly[modIndex] else 0
         }
     }
 
