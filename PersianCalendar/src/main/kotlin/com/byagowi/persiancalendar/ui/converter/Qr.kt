@@ -134,10 +134,10 @@ private fun setupPositionProbePattern(
             (-1..7)
                 .asSequence()
                 .filter { col + it > -1 && modules.size > col + it }
-                .forEach {
-                    modules[row + r][col + it] = (r in 0..6 && (it == 0 || it == 6)) ||
-                            (it in 0..6 && (r == 0 || r == 6)) ||
-                            (r in 2..4 && 2 <= it && it <= 4)
+                .forEach { c ->
+                    modules[row + r][col + c] = (r in 0..6 && (c == 0 || c == 6)) ||
+                            (c in 0..6 && (r == 0 || r == 6)) ||
+                            (r in 2..4 && 2 <= c && c <= 4)
                 }
         }
 }
@@ -148,11 +148,11 @@ private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, ver
     pos.forEach { row ->
         pos
             .asSequence()
-            .filter { modules[row][it] == null }
-            .forEach {
+            .filter { col -> modules[row][col] == null }
+            .forEach { col ->
                 (-2..2).forEach { r ->
                     (-2..2).forEach { c ->
-                        modules[row + r][it + c] =
+                        modules[row + r][col + c] =
                             r == -2 || r == 2 || c == -2 || c == 2 || (r == 0 && c == 0)
                     }
                 }
@@ -163,13 +163,13 @@ private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, ver
 private fun setupTimingPattern(modules: List<MutableList<Boolean?>>) {
     (8 until modules.size - 8)
         .asSequence()
-        .filter { modules[it][6] == null }
-        .forEach { modules[it][6] = it % 2 == 0 }
+        .filter { r -> modules[r][6] == null }
+        .forEach { r -> modules[r][6] = r % 2 == 0 }
 
     (8 until modules.size - 8)
         .asSequence()
-        .filter { modules[6][it] == null }
-        .forEach { modules[6][it] = it % 2 == 0 }
+        .filter { c -> modules[6][c] == null }
+        .forEach { c -> modules[6][c] = c % 2 == 0 }
 }
 
 private fun setupTypeInfo(
@@ -309,23 +309,31 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
 
     // LEVEL3
     lostPoint += (0 until size).sumOf { row ->
-        (0 until size - 6).count {
-            isDark(row, it) && !isDark(row, it + 1) && isDark(row, it + 2) &&
-                    isDark(row, it + 3) && isDark(row, it + 4) &&
-                    !isDark(row, it + 5) && isDark(row, it + 6)
+        (0 until size - 6).count { col ->
+            isDark(row, col) &&
+                    !isDark(row, col + 1) &&
+                    isDark(row, col + 2) &&
+                    isDark(row, col + 3) &&
+                    isDark(row, col + 4) &&
+                    !isDark(row, col + 5) &&
+                    isDark(row, col + 6)
         }
     } * 40.0
 
     lostPoint += (0 until size).sumOf { col ->
-        (0 until size - 6).count {
-            isDark(it, col) && !isDark(it + 1, col) && isDark(it + 2, col) &&
-                    isDark(it + 3, col) && isDark(it + 4, col) &&
-                    !isDark(it + 5, col) && isDark(it + 6, col)
+        (0 until size - 6).count { row ->
+            isDark(row, col) &&
+                    !isDark(row + 1, col) &&
+                    isDark(row + 2, col) &&
+                    isDark(row + 3, col) &&
+                    isDark(row + 4, col) &&
+                    !isDark(row + 5, col) &&
+                    isDark(row + 6, col)
         }
     } * 40.0
 
     // LEVEL4
-    val darkCount = (0 until size).sumOf { col -> (0 until size).count { isDark(it, col) } }
+    val darkCount = (0 until size).sumOf { col -> (0 until size).count { row -> isDark(row, col) } }
 
     val ratio = ((100 * darkCount) / size / size - 50).absoluteValue / 5
     lostPoint += ratio * 10
@@ -371,18 +379,18 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
     var index = 0
 
     (0 until maxDcCount).forEach { i ->
-        dcData.forEach {
-            if (i < it.size) {
-                data[index] = it[i]
+        dcData.forEach { r ->
+            if (i < r.size) {
+                data[index] = r[i]
                 index += 1
             }
         }
     }
 
     (0 until maxEcCount).forEach { i ->
-        ecData.forEach {
-            if (i < it.size) {
-                data[index] = it[i]
+        ecData.forEach { r ->
+            if (i < r.size) {
+                data[index] = r[i]
                 index += 1
             }
         }
@@ -473,11 +481,26 @@ private object QrUtil {
         listOf(6, 30, 58, 86, 114, 142, 17),
     )
 
-    private const val g15 = 1.shl(10).or(1.shl(8)).or(1.shl(5)).or(1.shl(4))
-        .or(1.shl(2)).or(1.shl(1)).or(1.shl(0))
-    private const val g18 = 1.shl(12).or(1.shl(11)).or(1.shl(10)).or(1.shl(9))
-        .or(1.shl(8)).or(1.shl(5)).or(1.shl(2)).or(1.shl(0))
-    private const val g15Mask = (1.shl(14)).or(1.shl(12)).or(1.shl(10)).or(1.shl(4)).or(1.shl(1))
+    private const val g15 = 1.shl(10)
+        .or(1.shl(8))
+        .or(1.shl(5))
+        .or(1.shl(4))
+        .or(1.shl(2))
+        .or(1.shl(1))
+        .or(1.shl(0))
+    private const val g18 = 1.shl(12)
+        .or(1.shl(11))
+        .or(1.shl(10))
+        .or(1.shl(9))
+        .or(1.shl(8))
+        .or(1.shl(5))
+        .or(1.shl(2))
+        .or(1.shl(0))
+    private const val g15Mask = 1.shl(14)
+        .or(1.shl(12))
+        .or(1.shl(10))
+        .or(1.shl(4))
+        .or(1.shl(1))
 
     private fun getBchDigit(data: Int): Int {
         var d = data
@@ -848,7 +871,9 @@ private object QrRsBlock {
             val totalCount = rsBlock[it * 3 + 1]
             val dataCount = rsBlock[it * 3 + 2]
 
-            (0 until count).map { Rs(totalCount = totalCount, dataCount = dataCount) }
+            (0 until count)
+                .asSequence()
+                .map { Rs(totalCount = totalCount, dataCount = dataCount) }
         }
     }
 }
