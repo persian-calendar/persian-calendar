@@ -331,6 +331,8 @@
     <string name="november">نوامبر</string>
     <string name="december">دسامبر</string>
     <string name="saturday">شنبه</string>
+    <!-- https://apll.ir/wp-content/uploads/2018/10/D-1394.pdf
+         advices to use یکشنبه and پنجشنبه on "مرکبهایی که بسیطگونه است" -->
     <string name="sunday">یکشنبه</string>
     <string name="monday">دوشنبه</string>
     <string name="tuesday">سه‌شنبه</string>

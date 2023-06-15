@@ -479,6 +479,8 @@ enum class Language(val code: String, val nativeName: String) {
             "تشرين الأول", "تشرين الثاني", "كانون الأول"
         )
         private val weekDaysInPersian = listOf7Items(
+            // https://apll.ir/wp-content/uploads/2018/10/D-1394.pdf
+            // advices to use یکشنبه and پنجشنبه on "مرکبهایی که بسیطگونه است"
             "شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"
         )
         private val weekDaysInitialsInPersian = listOf7Items(
