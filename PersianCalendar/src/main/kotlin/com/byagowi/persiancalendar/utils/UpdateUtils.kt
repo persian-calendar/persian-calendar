@@ -708,20 +708,20 @@ private fun updateNotification(
 }
 
 private data class NotificationData(
-    val title: String,
-    val subtitle: String,
-    val jdn: Jdn,
-    val date: AbstractDate,
-    val owghat: String,
-    val isRtl: Boolean,
-    val events: List<CalendarEvent<*>>,
-    val isTalkBackEnabled: Boolean,
-    val isHighTextContrastEnabled: Boolean,
-    val isNotifyDateOnLockScreen: Boolean,
-    val deviceCalendarEventsList: List<CalendarEvent.DeviceCalendarEvent>,
-    val whatToShowOnWidgets: Set<String>,
-    val spacedComma: String,
-    val language: Language,
+    private val title: String,
+    private val subtitle: String,
+    private val jdn: Jdn,
+    private val date: AbstractDate,
+    private val owghat: String,
+    private val isRtl: Boolean,
+    private val events: List<CalendarEvent<*>>,
+    private val isTalkBackEnabled: Boolean,
+    private val isHighTextContrastEnabled: Boolean,
+    private val isNotifyDateOnLockScreen: Boolean,
+    private val deviceCalendarEventsList: List<CalendarEvent.DeviceCalendarEvent>,
+    private val whatToShowOnWidgets: Set<String>,
+    private val spacedComma: String,
+    private val language: Language,
 ) {
     fun post(context: Context) {
         val notificationManager = context.getSystemService<NotificationManager>()
