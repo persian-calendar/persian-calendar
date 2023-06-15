@@ -699,7 +699,7 @@ private fun updateNotification(
         spacedComma = spacedComma,
         language = language,
     )
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || // always update as complains in 8.3.0
         latestPostedNotification != notificationData
     ) {
         notificationData.post(context)
