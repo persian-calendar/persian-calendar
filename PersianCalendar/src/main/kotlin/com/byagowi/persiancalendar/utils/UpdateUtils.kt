@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.RemoteViews
 import android.widget.Toast
 import androidx.annotation.AttrRes
+import androidx.annotation.CheckResult
 import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.ColorInt
 import androidx.annotation.IdRes
@@ -704,8 +705,8 @@ private fun updateNotification(
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || // always update as complains in 8.3.0
         latestPostedNotification != notificationData
     ) {
-        notificationData.post(context)
-        latestPostedNotification = notificationData
+        if (notificationData.post(context))
+            latestPostedNotification = notificationData
     }
 }
 
@@ -725,8 +726,10 @@ private data class NotificationData(
     private val spacedComma: String,
     private val language: Language,
 ) {
-    fun post(context: Context) {
+    @CheckResult
+    fun post(context: Context): Boolean {
         val notificationManager = context.getSystemService<NotificationManager>()
+        if (enableWorkManager && notificationManager == null) return false
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID.toString(),
@@ -835,6 +838,7 @@ private data class NotificationData(
         else context.runCatching {
             ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
         }.onFailure(logException)
+        return true
     }
 }
 
