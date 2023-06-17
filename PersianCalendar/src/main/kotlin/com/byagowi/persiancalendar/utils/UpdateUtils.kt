@@ -726,15 +726,13 @@ private data class NotificationData(
     fun post(context: Context) {
         val notificationManager = context.getSystemService<NotificationManager>()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val importance =
-                if (useDefaultPriority) NotificationManager.IMPORTANCE_DEFAULT
-                else NotificationManager.IMPORTANCE_LOW
             val channel = NotificationChannel(
                 NOTIFICATION_ID.toString(),
-                context.getString(R.string.app_name), importance
+                context.getString(R.string.app_name),
+                if (useDefaultPriority) NotificationManager.IMPORTANCE_DEFAULT
+                else NotificationManager.IMPORTANCE_LOW
             )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                channel.setSound(null, null)
+            if (useDefaultPriority) channel.setSound(null, null)
             channel.setShowBadge(false)
             notificationManager?.createNotificationChannel(channel)
         }
