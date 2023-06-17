@@ -737,7 +737,10 @@ private data class NotificationData(
                 if (useDefaultPriority) NotificationManager.IMPORTANCE_DEFAULT
                 else NotificationManager.IMPORTANCE_LOW
             )
-            if (useDefaultPriority) channel.setSound(null, null)
+            if (useDefaultPriority) {
+                channel.setSound(null, null)
+                channel.enableVibration(false)
+            }
             channel.setShowBadge(false)
             notificationManager?.createNotificationChannel(channel)
         }
