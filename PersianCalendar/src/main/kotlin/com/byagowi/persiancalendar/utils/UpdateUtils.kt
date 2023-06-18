@@ -107,7 +107,7 @@ import kotlin.math.min
 
 private val useDefaultPriority
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen
-private val CHANNEL_ID get() = if (useDefaultPriority) 1002 else 1001
+private val CHANNEL_ID get() = if (useDefaultPriority) 1003 else 1001
 private const val NOTIFICATION_ID = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
