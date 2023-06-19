@@ -229,7 +229,7 @@ dependencies {
     testImplementation("org.mockito:mockito-core:5.3.1")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
 
-    testImplementation("com.google.truth:truth:1.1.4")
+    testImplementation("com.google.truth:truth:1.1.5")
 
     val androidTestVersion = "1.4.0"
     androidTestImplementation("androidx.test:runner:$androidTestVersion")
