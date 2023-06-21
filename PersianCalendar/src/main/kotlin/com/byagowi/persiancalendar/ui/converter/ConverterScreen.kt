@@ -184,6 +184,18 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             WindowInsetsCompat.CONSUMED
         }
 
+        var qrLongClickCount = 0
+        binding.qrView.setOnLongClickListener {
+            binding.inputText.setText(
+                when (qrLongClickCount++ % 3) {
+                    0 -> "https://example.com"
+                    1 -> "WIFI:S:MySSID;T:WPA;P:MyPassWord;;"
+                    else -> "MECARD:N:Smith,John;TEL:123123123;EMAIL:user@example.com;;"
+                }
+            )
+            true
+        }
+
         // Setup view model change listeners
         // https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware
         viewLifecycleOwner.lifecycleScope.launch {
