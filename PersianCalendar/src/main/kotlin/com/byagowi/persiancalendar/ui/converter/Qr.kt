@@ -112,14 +112,14 @@ private const val pad0 = 0xec
 private const val pad1 = 0x11
 
 private enum class MaskPattern(val maskFunction: (Int, Int) -> Boolean) {
-    Pattern000({ i: Int, j: Int -> (i + j) % 2 == 0 }),
-    Pattern001({ i: Int, _: Int -> i % 2 == 0 }),
-    Pattern010({ _: Int, j: Int -> j % 3 == 0 }),
-    Pattern011({ i: Int, j: Int -> (i + j) % 3 == 0 }),
-    Pattern100({ i: Int, j: Int -> ((i / 2) + (j / 3)) % 2 == 0 }),
-    Pattern101({ i: Int, j: Int -> ((i * j) % 2) + ((i * j) % 3) == 0 }),
-    Pattern110({ i: Int, j: Int -> (((i * j) % 2) + ((i * j) % 3)) % 2 == 0 }),
-    Pattern111({ i: Int, j: Int -> (((i * j) % 3) + ((i + j) % 2)) % 2 == 0 }),
+    Pattern000({ i, j -> (i + j) % 2 == 0 }),
+    Pattern001({ i, _ -> i % 2 == 0 }),
+    Pattern010({ _, j -> j % 3 == 0 }),
+    Pattern011({ i, j -> (i + j) % 3 == 0 }),
+    Pattern100({ i, j -> ((i / 2) + (j / 3)) % 2 == 0 }),
+    Pattern101({ i, j -> ((i * j) % 2) + ((i * j) % 3) == 0 }),
+    Pattern110({ i, j -> (((i * j) % 2) + ((i * j) % 3)) % 2 == 0 }),
+    Pattern111({ i, j -> (((i * j) % 3) + ((i + j) % 2)) % 2 == 0 }),
 }
 
 private fun setupPositionProbePattern(
