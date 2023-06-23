@@ -1444,3 +1444,40 @@ fun showCarouselDialog(activity: FragmentActivity) {
         })
     }).show()
 }
+
+// Lindenmayer system: https://en.wikipedia.org/wiki/L-system
+class LSystem(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
+    private fun lSystem(startAxiom: String, rules: Map<Char, String>): Sequence<String> = sequence {
+        var result = startAxiom
+        yield(result)
+        while (true) {
+            result = result.map { rules[it] ?: it.toString() }.joinToString("")
+            yield(result)
+        }
+    }
+
+    private val s = lSystem("X", mapOf('X' to "F+[[X]-X]-F[-FX]+X", 'F' to "FF"))
+        .take(7).last()
+
+    private val paint = Paint()
+
+    override fun onDraw(canvas: Canvas) {
+        canvas.scale(2f, -2f, width / 2f, height / 2f)
+        canvas.translate(width / 2f, height / 2f)
+        val angle = 25f
+        s.forEach {
+            when (it) {
+                '-' -> canvas.rotate(-angle)
+                '+' -> canvas.rotate(+angle)
+                '[' -> canvas.save()
+                ']' -> canvas.restore()
+
+                else -> {
+                    canvas.drawLine(0f, 0f, 0f, 1f, paint)
+                    canvas.translate(0f, 1f)
+                }
+            }
+        }
+        // postDelayed(1000) { invalidate() }
+    }
+}
