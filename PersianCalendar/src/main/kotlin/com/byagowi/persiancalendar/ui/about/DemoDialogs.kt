@@ -935,7 +935,7 @@ fun showSignalGeneratorDialog(activity: FragmentActivity, viewLifecycle: Lifecyc
         .map { semitone ->
             val frequency = getStandardFrequency(semitone)
             buffer.indices.forEach {
-                val phase = 2 * Math.PI * it / (sampleRate / frequency)
+                val phase = 2 * PI * it / (sampleRate / frequency)
                 buffer[it] = (when (0) {
                     0 -> sin(phase) // Sine
                     1 -> sign(sin(phase)) // Square
