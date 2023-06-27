@@ -12,7 +12,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import com.byagowi.persiancalendar.generated.globeFragmentShader
 import com.byagowi.persiancalendar.ui.common.BaseSlider
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import java.lang.Math.PI
+import kotlin.math.PI
 
 fun showGlobeDialog(activity: FragmentActivity, image: Bitmap) {
     val frame = FrameLayout(activity)
