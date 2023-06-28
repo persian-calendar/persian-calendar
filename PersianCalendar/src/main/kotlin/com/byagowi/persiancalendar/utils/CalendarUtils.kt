@@ -9,6 +9,7 @@ import android.provider.CalendarContract
 import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
 import androidx.core.text.HtmlCompat
+import androidx.core.text.parseAsHtml
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
 import com.byagowi.persiancalendar.R
@@ -218,7 +219,7 @@ fun Context.getAllEnabledAppointments() = readDeviceEvents(
 
 fun CalendarEvent.DeviceCalendarEvent.formatTitle(): String =
     (title + if (description.isNotBlank())
-        " (${HtmlCompat.fromHtml(description, HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim()})"
+        " (${description.parseAsHtml(HtmlCompat.FROM_HTML_MODE_LEGACY).toString().trim()})"
     else "").replace("\n", " ").trim()
 
 

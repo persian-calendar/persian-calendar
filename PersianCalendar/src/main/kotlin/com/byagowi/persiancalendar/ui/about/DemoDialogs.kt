@@ -62,6 +62,7 @@ import androidx.core.graphics.withTranslation
 import androidx.core.text.HtmlCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
+import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
 import androidx.core.view.setMargins
 import androidx.core.view.setPadding
@@ -584,11 +585,9 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
     }
 
     fun formatTitle(input: String): Spanned {
-        return HtmlCompat.fromHtml(
-            "<small><small>$input</small></small>"
-                .replace(Regex("([a-zA-Z])(\\d+)"), "$1<sup><small>$2</small></sup>"),
-            HtmlCompat.FROM_HTML_MODE_LEGACY
-        )
+        return "<small><small>$input</small></small>"
+            .replace(Regex("([a-zA-Z])(\\d+)"), "$1<sup><small>$2</small></sup>")
+            .parseAsHtml(HtmlCompat.FROM_HTML_MODE_LEGACY)
     }
 
     val dialog = MaterialAlertDialogBuilder(activity)
