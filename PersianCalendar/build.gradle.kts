@@ -24,7 +24,6 @@ android {
     }
 
     compileSdk = 34
-    // compileSdkPreview = "UpsideDownCake"
     buildToolsVersion = "33.0.2"
 
     buildFeatures {
@@ -40,7 +39,6 @@ android {
         applicationId = "com.byagowi.persiancalendar"
         minSdk = 17
         targetSdk = 34
-        // targetSdkPreview = "UpsideDownCake"
         versionCode = 831
         versionName = "8.3.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
