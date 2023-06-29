@@ -88,14 +88,14 @@ class AboutScreen : Fragment(R.layout.about_screen) {
             }
         }
         binding.aboutHeader.text = version
-        binding.icon.also {
+        run {
             val animation =
-                context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@also
-            it.setImageDrawable(animation)
+                context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@run
+            binding.icon.setImageDrawable(animation)
             animation.start()
             val clickHandlerDialog = createEasterEggClickHandler(::showPeriodicTableDialog)
-            val clickHandlerIcon = createIconRandomEffects(it)
-            it.setOnClickListener {
+            val clickHandlerIcon = createIconRandomEffects(binding.icon)
+            binding.headerPlaceHolder.setOnClickListener {
                 animation.stop()
                 animation.start()
                 clickHandlerDialog(activity)
