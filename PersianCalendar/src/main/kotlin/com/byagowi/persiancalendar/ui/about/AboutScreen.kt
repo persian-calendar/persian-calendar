@@ -88,6 +88,7 @@ class AboutScreen : Fragment(R.layout.about_screen) {
             }
         }
         binding.aboutHeader.text = version
+        binding.accessibleVersion.contentDescription = version
         run {
             val animation =
                 context?.getAnimatedDrawable(R.drawable.splash_icon_animation) ?: return@run

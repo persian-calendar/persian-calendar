@@ -59,11 +59,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <View
-                    android:id="@+id/header_place_holder"
+                <FrameLayout
+                    android:id="@+id/accessible_version"
                     android:layout_width="match_parent"
-                    android:layout_height="250dp"
-                    android:importantForAccessibility="no" />
+                    android:layout_height="wrap_content"
+                    android:importantForAccessibility="yes">
+
+                    <View
+                        android:id="@+id/header_place_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:importantForAccessibility="no" />
+
+                </FrameLayout>
 
                 <com.google.android.material.carousel.MaskableFrameLayout
                     android:layout_width="match_parent"
