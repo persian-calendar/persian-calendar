@@ -14,28 +14,6 @@ import com.google.android.material.color.DynamicColors
 
 class PersianCalendarWallpaperService : WallpaperService() {
     override fun onCreateEngine() = object : Engine() {
-        private var xOffset = 0f
-        private var yOffset = 0f
-        override fun onOffsetsChanged(
-            xOffset: Float,
-            yOffset: Float,
-            xOffsetStep: Float,
-            yOffsetStep: Float,
-            xPixelOffset: Int,
-            yPixelOffset: Int
-        ) {
-            this.xOffset = xPixelOffset / 10f
-            this.yOffset = yPixelOffset / 10f
-            draw(skipRotation = true)
-        }
-
-        private var zoom = 1f
-        override fun onZoomChanged(zoom: Float) {
-            // [0-1], indicating fully zoomed in to fully zoomed out
-            this.zoom = 1 - zoom / 1.2f
-            draw(skipRotation = true)
-        }
-
         private var patternDrawable = PatternDrawable(dp = resources.dp)
         private val drawRunner = Runnable { draw() }
         private val handler = Handler(Looper.getMainLooper()).also { it.post(drawRunner) }
@@ -67,14 +45,43 @@ class PersianCalendarWallpaperService : WallpaperService() {
                 val canvas = surfaceHolder.lockCanvas() ?: return@runCatching
                 canvas.getClipBounds(bounds)
                 patternDrawable.bounds = bounds
-                patternDrawable.rotationDegree = rotationDegree
-                canvas.withScale(zoom, zoom, bounds.exactCenterX(), bounds.exactCenterY()) {
+                patternDrawable.rotationDegree = rotationDegree + addedRotation
+                canvas.withScale(scale, scale, bounds.exactCenterX(), bounds.exactCenterY()) {
                     canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
                 }
                 surfaceHolder.unlockCanvasAndPost(canvas)
             }.onFailure(logException)
             handler.removeCallbacks(drawRunner)
             if (visible) handler.postDelayed(drawRunner, 1000 / 10)
+        }
+
+        private var rotateOnOffsetChange = true
+        private var xOffset = 0f
+        private var yOffset = 0f
+        private var addedRotation = 0f
+        override fun onOffsetsChanged(
+            xOffset: Float,
+            yOffset: Float,
+            xOffsetStep: Float,
+            yOffsetStep: Float,
+            xPixelOffset: Int,
+            yPixelOffset: Int
+        ) {
+            if (rotateOnOffsetChange) {
+                this.xOffset = xPixelOffset / 10f
+                this.yOffset = yPixelOffset / 10f
+            } else {
+                this.addedRotation = (xPixelOffset + yPixelOffset) / 1000f
+            }
+            draw(skipRotation = true)
+        }
+
+        private var scale = 1f
+        override fun onZoomChanged(
+            zoom: Float // [0-1], indicating fully zoomed in to fully zoomed out
+        ) {
+            this.scale = 1 - zoom / 2
+            draw(skipRotation = true)
         }
     }
 }
