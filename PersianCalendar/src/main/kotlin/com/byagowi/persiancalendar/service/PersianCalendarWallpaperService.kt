@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
+import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
@@ -12,6 +13,21 @@ import com.google.android.material.color.DynamicColors
 
 class PersianCalendarWallpaperService : WallpaperService() {
     override fun onCreateEngine() = object : Engine() {
+        private var xOffset = 0f
+        private var yOffset = 0f
+        override fun onOffsetsChanged(
+            xOffset: Float,
+            yOffset: Float,
+            xOffsetStep: Float,
+            yOffsetStep: Float,
+            xPixelOffset: Int,
+            yPixelOffset: Int
+        ) {
+            this.xOffset = xPixelOffset / 10f
+            this.yOffset = yPixelOffset / 10f
+            draw(skipRotation = true)
+        }
+
         private var patternDrawable = PatternDrawable(dp = resources.dp)
         private val drawRunner = Runnable { draw() }
         private val handler = Handler(Looper.getMainLooper()).also { it.post(drawRunner) }
@@ -36,15 +52,15 @@ class PersianCalendarWallpaperService : WallpaperService() {
 
         private var rotationDegree = 0f
         private val direction = listOf(1, -1).random()
-        private fun draw() {
+        private fun draw(skipRotation: Boolean = false) {
             val surfaceHolder = surfaceHolder
-            rotationDegree += .05f * direction
+            if (!skipRotation) rotationDegree += .05f * direction
             runCatching {
                 val canvas = surfaceHolder.lockCanvas() ?: return@runCatching
                 canvas.getClipBounds(bounds)
                 patternDrawable.bounds = bounds
                 patternDrawable.rotationDegree = rotationDegree
-                patternDrawable.draw(canvas)
+                canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
                 surfaceHolder.unlockCanvasAndPost(canvas)
             }.onFailure(logException)
             handler.removeCallbacks(drawRunner)
