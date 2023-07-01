@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
+import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
@@ -25,6 +26,13 @@ class PersianCalendarWallpaperService : WallpaperService() {
         ) {
             this.xOffset = xPixelOffset / 10f
             this.yOffset = yPixelOffset / 10f
+            draw(skipRotation = true)
+        }
+
+        private var zoom = 1f
+        override fun onZoomChanged(zoom: Float) {
+            // [0-1], indicating fully zoomed in to fully zoomed out
+            this.zoom = 1 - zoom / 1.2f
             draw(skipRotation = true)
         }
 
@@ -60,7 +68,9 @@ class PersianCalendarWallpaperService : WallpaperService() {
                 canvas.getClipBounds(bounds)
                 patternDrawable.bounds = bounds
                 patternDrawable.rotationDegree = rotationDegree
-                canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
+                canvas.withScale(zoom, zoom, bounds.exactCenterX(), bounds.exactCenterY()) {
+                    canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
+                }
                 surfaceHolder.unlockCanvasAndPost(canvas)
             }.onFailure(logException)
             handler.removeCallbacks(drawRunner)
