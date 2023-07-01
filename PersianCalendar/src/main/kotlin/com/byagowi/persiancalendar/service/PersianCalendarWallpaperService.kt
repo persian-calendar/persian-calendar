@@ -68,10 +68,10 @@ class PersianCalendarWallpaperService : WallpaperService() {
             yPixelOffset: Int
         ) {
             if (rotateOnOffsetChange) {
+                this.addedRotation = (xPixelOffset + yPixelOffset) / 1000f
+            } else {
                 this.xOffset = xPixelOffset / 10f
                 this.yOffset = yPixelOffset / 10f
-            } else {
-                this.addedRotation = (xPixelOffset + yPixelOffset) / 1000f
             }
             draw(skipRotation = true)
         }
@@ -80,7 +80,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
         override fun onZoomChanged(
             zoom: Float // [0-1], indicating fully zoomed in to fully zoomed out
         ) {
-            this.scale = 1 - zoom / 2
+            this.scale = 1 - zoom / 3
             draw(skipRotation = true)
         }
     }
