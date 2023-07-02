@@ -10,6 +10,7 @@ import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.color.DynamicColors
 
@@ -41,6 +42,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private val direction = listOf(1, -1).random()
         private fun draw() {
             val surfaceHolder = surfaceHolder
+            val fasterUpdate = fasterUpdateTimestamp != 0L &&
+                    fasterUpdateTimestamp + TWO_SECONDS_IN_MILLIS > System.currentTimeMillis()
             if (!fasterUpdate) rotationDegree += .05f * direction
             handler.removeCallbacks(drawRunner)
             runCatching {
@@ -61,15 +64,15 @@ class PersianCalendarWallpaperService : WallpaperService() {
             }.onFailure(logException)
             if (visible) {
                 val nextFrameDelay = if (fasterUpdate) {
-                    fasterUpdate = false
-                    1000L / 60
+                    this.fasterUpdateTimestamp = 0L
+                    1000L / 20
                 } else 1000L / 10
 
                 handler.postDelayed(drawRunner, nextFrameDelay)
             }
         }
 
-        private var fasterUpdate = false
+        private var fasterUpdateTimestamp = 0L
 
         private var xOffset = 0f
         private var yOffset = 0f
@@ -83,7 +86,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
             yPixelOffset: Int
         ) {
             this.addedRotation = (xPixelOffset + yPixelOffset) / 1000f
-            fasterUpdate = true
+            fasterUpdateTimestamp = System.currentTimeMillis()
         }
 
         private var scale = 1f
@@ -91,7 +94,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
             zoom: Float // [0-1], indicating fully zoomed in to fully zoomed out
         ) {
             this.scale = 1 - zoom / 3
-            fasterUpdate = true
+            fasterUpdateTimestamp = System.currentTimeMillis()
         }
 
         private var touchX = 0f
@@ -108,7 +111,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
                     touchY = 0f
                 }
             }
-            fasterUpdate = true
+            fasterUpdateTimestamp = System.currentTimeMillis()
         }
     }
 }
