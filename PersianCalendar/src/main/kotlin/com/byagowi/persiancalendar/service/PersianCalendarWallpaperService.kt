@@ -98,7 +98,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private var touchY = 0f
         override fun onTouchEvent(event: MotionEvent) {
             when (event.action) {
-                MotionEvent.ACTION_DOWN -> {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
                     touchX = event.x
                     touchY = event.y
                 }
