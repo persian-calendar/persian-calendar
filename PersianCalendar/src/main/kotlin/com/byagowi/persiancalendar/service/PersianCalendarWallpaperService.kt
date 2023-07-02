@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
+import android.view.MotionEvent
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Theme
@@ -38,24 +39,38 @@ class PersianCalendarWallpaperService : WallpaperService() {
 
         private var rotationDegree = 0f
         private val direction = listOf(1, -1).random()
-        private fun draw(skipRotation: Boolean = false) {
+        private fun draw() {
             val surfaceHolder = surfaceHolder
-            if (!skipRotation) rotationDegree += .05f * direction
+            if (!fasterUpdate) rotationDegree += .05f * direction
+            handler.removeCallbacks(drawRunner)
             runCatching {
                 val canvas = surfaceHolder.lockCanvas() ?: return@runCatching
                 canvas.getClipBounds(bounds)
+                val centerX = bounds.exactCenterX()
+                val centerY = bounds.exactCenterY()
+                if (touchX != 0f && touchY != 0f) {
+                    xOffset += (centerX - touchX) / 150f
+                    yOffset += (centerY - touchY) / 150f
+                }
                 patternDrawable.bounds = bounds
                 patternDrawable.rotationDegree = rotationDegree + addedRotation
-                canvas.withScale(scale, scale, bounds.exactCenterX(), bounds.exactCenterY()) {
+                canvas.withScale(scale, scale, centerX, centerY) {
                     canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
                 }
                 surfaceHolder.unlockCanvasAndPost(canvas)
             }.onFailure(logException)
-            handler.removeCallbacks(drawRunner)
-            if (visible) handler.postDelayed(drawRunner, 1000 / 10)
+            if (visible) {
+                val nextFrameDelay = if (fasterUpdate) {
+                    fasterUpdate = false
+                    1000L / 60
+                } else 1000L / 10
+
+                handler.postDelayed(drawRunner, nextFrameDelay)
+            }
         }
 
-        private var rotateOnOffsetChange = true
+        private var fasterUpdate = false
+
         private var xOffset = 0f
         private var yOffset = 0f
         private var addedRotation = 0f
@@ -67,13 +82,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
             xPixelOffset: Int,
             yPixelOffset: Int
         ) {
-            if (rotateOnOffsetChange) {
-                this.addedRotation = (xPixelOffset + yPixelOffset) / 1000f
-            } else {
-                this.xOffset = xPixelOffset / 10f
-                this.yOffset = yPixelOffset / 10f
-            }
-            draw(skipRotation = true)
+            this.addedRotation = (xPixelOffset + yPixelOffset) / 1000f
+            fasterUpdate = true
         }
 
         private var scale = 1f
@@ -81,7 +91,24 @@ class PersianCalendarWallpaperService : WallpaperService() {
             zoom: Float // [0-1], indicating fully zoomed in to fully zoomed out
         ) {
             this.scale = 1 - zoom / 3
-            draw(skipRotation = true)
+            fasterUpdate = true
+        }
+
+        private var touchX = 0f
+        private var touchY = 0f
+        override fun onTouchEvent(event: MotionEvent) {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    touchX = event.x
+                    touchY = event.y
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    touchX = 0f
+                    touchY = 0f
+                }
+            }
+            fasterUpdate = true
         }
     }
 }
