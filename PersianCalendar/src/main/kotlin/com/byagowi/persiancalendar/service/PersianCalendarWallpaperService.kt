@@ -43,9 +43,11 @@ class PersianCalendarWallpaperService : WallpaperService() {
             this.visible = visible
             if (visible) handler.post(drawRunner) else handler.removeCallbacks(drawRunner)
 
-            if (visible) sensorManager?.registerListener(
-                sensorListener, sensor, SensorManager.SENSOR_DELAY_UI
-            ) else sensorManager?.unregisterListener(sensorListener)
+            if (sensor != null) {
+                if (visible) sensorManager?.registerListener(
+                    sensorListener, sensor, SensorManager.SENSOR_DELAY_UI
+                ) else sensorManager?.unregisterListener(sensorListener)
+            }
         }
 
         private var sensorRotation = 0f
@@ -53,7 +55,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
             override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
             override fun onSensorChanged(event: SensorEvent) {
                 if (event.values.size != 3) return
-                sensorRotation = (event.values[0] + event.values[1] + event.values[2]) / 20
+                sensorRotation = (event.values[0] + event.values[1] + event.values[2]) / 10
             }
         }
 
