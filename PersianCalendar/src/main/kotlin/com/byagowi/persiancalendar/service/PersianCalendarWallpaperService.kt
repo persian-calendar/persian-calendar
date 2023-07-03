@@ -1,10 +1,15 @@
 package com.byagowi.persiancalendar.service
 
 import android.graphics.Rect
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Handler
 import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import android.view.MotionEvent
+import androidx.core.content.getSystemService
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
 import com.byagowi.persiancalendar.entities.Theme
@@ -21,6 +26,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private val handler = Handler(Looper.getMainLooper()).also { it.post(drawRunner) }
         private var visible = true
         private val bounds = Rect()
+        private val sensorManager = getSystemService<SensorManager>()
+        private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.getOrNull(0)
         override fun onVisibilityChanged(visible: Boolean) {
             val context = this@PersianCalendarWallpaperService
             val isNightMode = Theme.isNightMode(context)
@@ -34,8 +41,20 @@ class PersianCalendarWallpaperService : WallpaperService() {
                 dp = resources.dp
             )
             this.visible = visible
-            if (visible) handler.post(drawRunner)
-            else handler.removeCallbacks(drawRunner)
+            if (visible) handler.post(drawRunner) else handler.removeCallbacks(drawRunner)
+
+            if (visible) sensorManager?.registerListener(
+                sensorListener, sensor, SensorManager.SENSOR_DELAY_UI
+            ) else sensorManager?.unregisterListener(sensorListener)
+        }
+
+        private var sensorRotation = 0f
+        private val sensorListener = object : SensorEventListener {
+            override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+            override fun onSensorChanged(event: SensorEvent) {
+                if (event.values.size != 3) return
+                sensorRotation = (event.values[0] + event.values[1] + event.values[2]) / 20
+            }
         }
 
         private var rotationDegree = 0f
@@ -56,7 +75,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
                     yOffset += (centerY - touchY) / 400f
                 }
                 patternDrawable.bounds = bounds
-                patternDrawable.rotationDegree = rotationDegree + addedRotation
+                patternDrawable.rotationDegree = rotationDegree + slideRotation + sensorRotation
                 canvas.withScale(scale, scale, centerX, centerY) {
                     canvas.withTranslation(xOffset, yOffset, patternDrawable::draw)
                 }
@@ -76,7 +95,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
 
         private var xOffset = 0f
         private var yOffset = 0f
-        private var addedRotation = 0f
+        private var slideRotation = 0f
         override fun onOffsetsChanged(
             xOffset: Float,
             yOffset: Float,
@@ -85,7 +104,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
             xPixelOffset: Int,
             yPixelOffset: Int
         ) {
-            this.addedRotation = (xPixelOffset + yPixelOffset) / 2000f
+            this.slideRotation = (xPixelOffset + yPixelOffset) / 2000f
             fasterUpdateTimestamp = System.currentTimeMillis()
         }
 
