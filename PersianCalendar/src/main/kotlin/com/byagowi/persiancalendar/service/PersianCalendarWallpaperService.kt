@@ -52,8 +52,8 @@ class PersianCalendarWallpaperService : WallpaperService() {
                 val centerX = bounds.exactCenterX()
                 val centerY = bounds.exactCenterY()
                 if (touchX != 0f && touchY != 0f) {
-                    xOffset += (centerX - touchX) / 150f
-                    yOffset += (centerY - touchY) / 150f
+                    xOffset += (centerX - touchX) / 400f
+                    yOffset += (centerY - touchY) / 400f
                 }
                 patternDrawable.bounds = bounds
                 patternDrawable.rotationDegree = rotationDegree + addedRotation
@@ -85,7 +85,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
             xPixelOffset: Int,
             yPixelOffset: Int
         ) {
-            this.addedRotation = (xPixelOffset + yPixelOffset) / 1000f
+            this.addedRotation = (xPixelOffset + yPixelOffset) / 2000f
             fasterUpdateTimestamp = System.currentTimeMillis()
         }
 
@@ -93,7 +93,7 @@ class PersianCalendarWallpaperService : WallpaperService() {
         override fun onZoomChanged(
             zoom: Float // [0-1], indicating fully zoomed in to fully zoomed out
         ) {
-            this.scale = 1 - zoom / 3
+            this.scale = 1 - zoom / 5
             fasterUpdateTimestamp = System.currentTimeMillis()
         }
 
