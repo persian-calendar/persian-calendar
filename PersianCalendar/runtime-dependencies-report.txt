@@ -457,8 +457,8 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.7.21 -> 1.8.22 (*)
 |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 -> 1.7.2 (*)
 +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2 (*)
-+--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.1
-|    +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10 -> 1.8.22 (*)
-|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10 -> 1.8.22
++--- org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.0
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.20 -> 1.8.22 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.20 -> 1.8.22
 +--- com.google.openlocationcode:openlocationcode:1.0.4
 \--- androidx.activity:activity-ktx:1.7.2 (*)
