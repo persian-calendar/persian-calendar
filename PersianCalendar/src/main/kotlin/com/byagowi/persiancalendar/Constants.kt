@@ -134,6 +134,8 @@ val ATHANS_LIST = listOf(FAJR_KEY, DHUHR_KEY, ASR_KEY, MAGHRIB_KEY, ISHA_KEY)
 const val QIBLA_LATITUDE = 21.422522
 const val QIBLA_LONGITUDE = 39.826181
 
+const val AU_IN_KM = 149597871L // astronomical unit, ~earth/sun distance
+
 const val IRAN_TIMEZONE_ID = "Asia/Tehran"
 const val AFGHANISTAN_TIMEZONE_ID = "Asia/Kabul"
 const val NEPAL_TIMEZONE_ID = "Asia/Kathmandu"

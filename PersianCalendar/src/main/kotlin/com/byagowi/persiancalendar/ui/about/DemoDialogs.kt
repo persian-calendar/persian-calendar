@@ -1241,7 +1241,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
         }
 
         private val paths = List(4) { Path() } // just a hack to make different colors possible
-        private val paintSink = Paint().also {
+        private val paintSink = Paint(Paint.ANTI_ALIAS_FLAG).also {
             it.strokeWidth = 1 * resources.dp
             it.style = Paint.Style.STROKE
             it.color = Color.GRAY
@@ -1458,7 +1458,7 @@ class LSystem(context: Context, attrs: AttributeSet? = null) : View(context, att
     private val s = lSystem("X", mapOf('X' to "F+[[X]-X]-F[-FX]+X", 'F' to "FF"))
         .take(7).last()
 
-    private val paint = Paint()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     override fun onDraw(canvas: Canvas) {
         canvas.scale(2f, -2f, width / 2f, height / 2f)

@@ -232,7 +232,7 @@ class CheckerBoard(context: Context, attrs: AttributeSet? = null) : View(context
     //         }
     //     }.onFailure(logException).getOrNull().debugAssertNotNull
     // }
-    // private val shaderPaint = Paint().also {
+    // private val shaderPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
     //     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     //         it.shader = shader
     //     }

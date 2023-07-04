@@ -42,7 +42,7 @@ class SolarDraw(context: Context) {
         angle: Float? = null, moonAltitude: Double? = null
     ) {
         val alpha =
-            if (moonAltitude == null) 255 else (200 + moonAltitude.toInt() * 3).coerceIn(0, 255)
+            if (moonAltitude == null) 255 else (200 + moonAltitude.toInt() * 3).coerceIn(30, 255)
         moonShadowPaint.alpha = alpha
         moonDrawable.setBounds( // same as above
             (cx - r).toInt(), (cy - r).toInt(), (cx + r).toInt(), (cy + r).toInt()

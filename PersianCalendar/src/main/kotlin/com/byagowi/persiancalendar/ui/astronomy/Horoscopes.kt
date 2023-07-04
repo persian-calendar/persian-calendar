@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.astronomy
 
 import androidx.fragment.app.FragmentActivity
+import com.byagowi.persiancalendar.AU_IN_KM
 import com.byagowi.persiancalendar.LRM
 import com.byagowi.persiancalendar.utils.titleStringId
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,8 +17,6 @@ import java.util.Locale
 import kotlin.math.floor
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
-
-const val AU_IN_KM = 149597871L // astronomical unit, ~earth/sun distance
 
 private fun formatAngle(value: Double): String {
     val degrees = floor(value)

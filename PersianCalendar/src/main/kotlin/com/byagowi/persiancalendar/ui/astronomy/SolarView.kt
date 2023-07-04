@@ -10,12 +10,15 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.animation.AccelerateDecelerateInterpolator
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withRotation
 import androidx.core.graphics.withTranslation
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
+import com.byagowi.persiancalendar.AU_IN_KM
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
@@ -24,11 +27,13 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.math.MathUtils
 import java.util.GregorianCalendar
+import java.util.Locale
 import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.hypot
 import kotlin.math.min
 import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 import kotlin.math.sign
 
 class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(context, attrs) {
@@ -84,6 +89,13 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
                     AstronomyMode.Earth -> drawEarthCentricView(this)
                     AstronomyMode.Sun -> drawSolarSystemPlanetsView(this)
                 }
+            }
+            if (mode == AstronomyMode.Moon) {
+                val radius = min(width, height) / 2f
+                canvas.drawText(
+                    "%,d km".format(Locale.ENGLISH, (state.moon.dist * AU_IN_KM).roundToLong()),
+                    radius, radius * 1.7f, moonTextPaint
+                )
             }
         }
     }
@@ -181,6 +193,13 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             val alpha = ((127 + sunAltitude.toInt() * 3).coerceIn(0, 255) / 1.5).toInt()
             solarDraw.sun(canvas, radius, radius / 2, radius / 9, alpha = alpha)
         }
+    }
+
+    private val moonTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.textAlign = Paint.Align.CENTER
+        it.textSize = 40f
+        it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
     }
 
     private fun drawEarthCentricView(canvas: Canvas) {

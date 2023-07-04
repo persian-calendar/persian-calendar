@@ -23,7 +23,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     private var qr: List<List<Boolean>> = emptyList()
     private var roundness = 0f
     private var viewSize = 0
-    private val paint = Paint().also {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(android.R.attr.textColorPrimary)
     }
 
