@@ -62,22 +62,19 @@ enum class Zodiac(
     }
 
     private val iauPreviousRangeEnd: Double
-        get() {
-            return enumValues<Zodiac>().getOrNull(ordinal - 1)?.iauRangeEnd
-                ?: (PISCES.iauRangeEnd - 360)
-        }
+        get() = entries.getOrNull(ordinal - 1)?.iauRangeEnd ?: (PISCES.iauRangeEnd - 360)
 
     val iauRange get() = listOf(iauPreviousRangeEnd, iauRangeEnd)
     val tropicalRange get() = listOf(ordinal * 30.0 + 15, (ordinal + 1) * 30.0 + 15)
 
     companion object {
         fun fromPersianCalendar(persianDate: PersianDate): Zodiac =
-            enumValues<Zodiac>().getOrNull(persianDate.month - 1) ?: ARIES
+            entries.getOrNull(persianDate.month - 1) ?: ARIES
 
         fun fromIau(longitude: Double): Zodiac =
-            enumValues<Zodiac>().firstOrNull { longitude < it.iauRangeEnd } ?: ARIES
+            entries.firstOrNull { longitude < it.iauRangeEnd } ?: ARIES
 
         fun fromTropical(longitude: Double): Zodiac =
-            enumValues<Zodiac>().getOrNull(floor((longitude - 15) / 30).toInt()) ?: PISCES
+            entries.getOrNull(floor((longitude - 15) / 30).toInt()) ?: PISCES
     }
 }

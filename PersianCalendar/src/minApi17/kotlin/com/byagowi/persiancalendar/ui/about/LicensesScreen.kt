@@ -74,7 +74,7 @@ Nepali Events: ${nepaliEvents.size + 1}
 Irregular Recurring Events: ${irregularRecurringEvents.size + 1}
 
 Sources:
-${enumValues<EventType>().joinToString("\n") { "${it.name}: ${it.source}" }}"""
+${EventType.entries.joinToString("\n") { "${it.name}: ${it.source}" }}"""
         Linkify.addLinks(binding.eventsStats, Linkify.WEB_URLS or Linkify.EMAIL_ADDRESSES)
         val sideSheet = SideSheetBehavior.from(binding.standardSideSheet)
         sideSheet.addCallback(object : SideSheetCallback() {

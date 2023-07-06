@@ -75,8 +75,8 @@ private fun qrMain(
     val cache = createData(version, errorCorrectionLevel, data)
 
     fun make(test: Boolean, maskPattern: MaskPattern) {
-        (0 until size).forEach { row ->
-            (0 until size).forEach { col ->
+        (0..<size).forEach { row ->
+            (0..<size).forEach { col ->
                 modules[row][col] = null
             }
         }
@@ -93,7 +93,7 @@ private fun qrMain(
         mapData(modules, cache, maskPattern)
     }
 
-    enumValues<MaskPattern>().forEachIndexed { i, pattern ->
+    MaskPattern.entries.forEachIndexed { i, pattern ->
         make(true, pattern)
 
         val lostPoint = getLostPoint(modules)
@@ -161,12 +161,12 @@ private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, ver
 }
 
 private fun setupTimingPattern(modules: List<MutableList<Boolean?>>) {
-    (8 until modules.size - 8)
+    (8..<modules.size - 8)
         .asSequence()
         .filter { r -> modules[r][6] == null }
         .forEach { r -> modules[r][6] = r % 2 == 0 }
 
-    (8 until modules.size - 8)
+    (8..<modules.size - 8)
         .asSequence()
         .filter { c -> modules[6][c] == null }
         .forEach { c -> modules[6][c] = c % 2 == 0 }
@@ -182,7 +182,7 @@ private fun setupTypeInfo(
     val bits = QrUtil.getBchTypeInfo(data)
 
     // vertical
-    (0 until 15).forEach {
+    (0..<15).forEach {
         val mod = !test && bits.shr(it).and(1) == 1
 
         modules[when {
@@ -193,7 +193,7 @@ private fun setupTypeInfo(
     }
 
     // horizontal
-    (0 until 15).forEach {
+    (0..<15).forEach {
         val mod = !test && bits.shr(it).and(1) == 1
 
         modules[8][when {
@@ -210,12 +210,12 @@ private fun setupTypeInfo(
 private fun setupVersionNumber(modules: List<MutableList<Boolean?>>, version: Int, test: Boolean) {
     val bits = QrUtil.getBchTypeNumber(version)
 
-    (0 until 18).forEach {
+    (0..<18).forEach {
         val mod = !test && bits.shr(it).and(1) == 1
         modules[it / 3][(it % 3) + modules.size - 8 - 3] = mod
     }
 
-    (0 until 18).forEach {
+    (0..<18).forEach {
         val mod = !test && bits.shr(it).and(1) == 1
         modules[(it % 3) + modules.size - 8 - 3][it / 3] = mod
     }
@@ -237,7 +237,7 @@ private fun mapData(
         if (col == 6) col -= 1
 
         while (true) {
-            (0 until 2).forEach { c ->
+            (0..<2).forEach { c ->
                 if (modules[row][col - c] == null) {
                     var dark = false
 
@@ -278,15 +278,15 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     fun isDark(row: Int, col: Int) = modules[row][col]!!
 
     // LEVEL1
-    (0 until size).forEach { row ->
-        (0 until size).forEach { col ->
+    (0..<size).forEach { row ->
+        (0..<size).forEach { col ->
             val dark = isDark(row, col)
             val sameCount = (-1..1)
                 .asSequence()
-                .filter { row + it in 0 until size }
+                .filter { row + it in 0..<size }
                 .sumOf { r ->
                     (-1..1).count {
-                        col + it in 0 until size &&
+                        col + it in 0..<size &&
                                 !(r == 0 && it == 0) && dark == isDark(row + r, col + it)
                     }
                 }
@@ -296,8 +296,8 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     }
 
     // LEVEL2
-    (0 until size - 1).forEach { row ->
-        (0 until size - 1).forEach { col ->
+    (0..<size - 1).forEach { row ->
+        (0..<size - 1).forEach { col ->
             var count = 0
             if (isDark(row, col)) count += 1
             if (isDark(row + 1, col)) count += 1
@@ -308,8 +308,8 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     }
 
     // LEVEL3
-    lostPoint += (0 until size).sumOf { row ->
-        (0 until size - 6).count { col ->
+    lostPoint += (0..<size).sumOf { row ->
+        (0..<size - 6).count { col ->
             isDark(row, col) &&
                     !isDark(row, col + 1) &&
                     isDark(row, col + 2) &&
@@ -320,8 +320,8 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
         }
     } * 40.0
 
-    lostPoint += (0 until size).sumOf { col ->
-        (0 until size - 6).count { row ->
+    lostPoint += (0..<size).sumOf { col ->
+        (0..<size - 6).count { row ->
             isDark(row, col) &&
                     !isDark(row + 1, col) &&
                     isDark(row + 2, col) &&
@@ -333,7 +333,7 @@ private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
     } * 40.0
 
     // LEVEL4
-    val darkCount = (0 until size).sumOf { col -> (0 until size).count { row -> isDark(row, col) } }
+    val darkCount = (0..<size).sumOf { col -> (0..<size).count { row -> isDark(row, col) } }
 
     val ratio = ((100 * darkCount) / size / size - 50).absoluteValue / 5
     lostPoint += ratio * 10
@@ -378,7 +378,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
     val data = MutableList(totalCodeCount) { 0 }
     var index = 0
 
-    (0 until maxDcCount).forEach { i ->
+    (0..<maxDcCount).forEach { i ->
         dcData.forEach { r ->
             if (i < r.size) {
                 data[index] = r[i]
@@ -387,7 +387,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         }
     }
 
-    (0 until maxEcCount).forEach { i ->
+    (0..<maxEcCount).forEach { i ->
         ecData.forEach { r ->
             if (i < r.size) {
                 data[index] = r[i]
@@ -532,7 +532,7 @@ private object QrUtil {
 
     fun getErrorCorrectPolynomial(errorCorrectLength: Int): QrPolynomial {
         var a = QrPolynomial(listOf(1))
-        (0 until errorCorrectLength).forEach { a *= QrPolynomial(listOf(1, QrMath.gExp(it))) }
+        (0..<errorCorrectLength).forEach { a *= QrPolynomial(listOf(1, QrMath.gExp(it))) }
         return a
     }
 
@@ -548,14 +548,14 @@ private object QrUtil {
 
 private object QrMath {
     private val expTable = buildList<Int>(256) {
-        (0 until 8).forEach { add(1.shl(it)) }
-        (8 until 256).forEach {
+        (0..<8).forEach { add(1.shl(it)) }
+        (8..<256).forEach {
             add(this[it - 4].xor(this[it - 5]).xor(this[it - 6]).xor(this[it - 8]))
         }
     }
     private val logTable = buildList(256) {
         repeat(256) { add(0) }
-        (0 until 255).forEach { this[expTable[it]] = it }
+        (0..<255).forEach { this[expTable[it]] = it }
     }
 
     fun gLog(n: Int): Int = if (n < 1) error("gLog($n)") else logTable[n]
@@ -571,7 +571,7 @@ private class QrPolynomial(num: List<Int>, shift: Int = 0) {
         val size = num.size - offset + shift
         buildList(size) {
             repeat(size) { add(0) }
-            (0 until num.size - offset).forEach { this[it] = num[it + offset] }
+            (0..<num.size - offset).forEach { this[it] = num[it + offset] }
         }
     }
 
@@ -582,8 +582,8 @@ private class QrPolynomial(num: List<Int>, shift: Int = 0) {
     operator fun times(e: QrPolynomial): QrPolynomial {
         val num = MutableList(size + e.size - 1) { 0 }
 
-        (0 until size).forEach { i ->
-            (0 until e.size).forEach { j ->
+        (0..<size).forEach { i ->
+            (0..<e.size).forEach { j ->
                 num[i + j] = num[i + j].xor(QrMath.gExp(QrMath.gLog(this[i]) + QrMath.gLog(e[j])))
             }
         }
@@ -866,12 +866,12 @@ private object QrRsBlock {
 
         val length = rsBlock.size / 3
 
-        return (0 until length).flatMap {
+        return (0..<length).flatMap {
             val count = rsBlock[it * 3 + 0]
             val totalCount = rsBlock[it * 3 + 1]
             val dataCount = rsBlock[it * 3 + 2]
 
-            (0 until count)
+            (0..<count)
                 .asSequence()
                 .map { Rs(totalCount = totalCount, dataCount = dataCount) }
         }
@@ -885,7 +885,7 @@ private class QrBitBuffer {
     operator fun get(index: Int): Int = _buffer[index]
 
     fun put(num: Int, length: Int): Unit =
-        (0 until length).forEach { putBit(num.ushr(length - it - 1).and(1) == 1) }
+        (0..<length).forEach { putBit(num.ushr(length - it - 1).and(1) == 1) }
 
     val sizeInBits: Int get() = _size
 

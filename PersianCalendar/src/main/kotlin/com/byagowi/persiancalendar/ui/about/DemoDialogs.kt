@@ -402,7 +402,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
             0x00FFFFFF, Shader.TileMode.CLAMP
         )
         val saturation = (100 - brightness) / 100f
-        val colors = (0 until 360 step 30)
+        val colors = (0..<360 step 30)
             .map { Color.HSVToColor(floatArrayOf(it.toFloat(), saturation, 1f)) }
             .let { it + listOf(it[0]) } // Adds the first element at the end
             .toIntArray()
@@ -566,8 +566,8 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
     }
     zoomableView.onDraw = { canvas, matrix ->
         canvas.withMatrix(matrix) {
-            (0 until 18).forEach { i ->
-                (0 until 9).forEach { j ->
+            (0..<18).forEach { i ->
+                (0..<9).forEach { j ->
                     withTranslation(i * cellSize.toFloat(), j * cellSize.toFloat()) {
                         val index = elementsIndices.getOrNull(i + j * 18) ?: return@withTranslation
                         val details = elements[index - 1].split(",")
@@ -1129,7 +1129,7 @@ fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
         }
 
         init {
-            (0 until 360 step 40)
+            (0..<360 step 40)
                 .map { Color.HSVToColor(floatArrayOf(it.toFloat(), 100f, 1f)) }
                 .shuffled()
                 .mapIndexed { i, color ->
@@ -1163,7 +1163,7 @@ private fun guitarString(
     val n = (sampleRate / frequency).roundToInt()
 
     // Pick-direction lowpass filter
-    val random = (0 until n).runningFold(Random.nextDouble() * 2 - 1) { lastOut, _ ->
+    val random = (0..<n).runningFold(Random.nextDouble() * 2 - 1) { lastOut, _ ->
         (1 - p) * (Random.nextDouble() * 2 - 1) + p * lastOut
     }
 
@@ -1172,7 +1172,7 @@ private fun guitarString(
     val noise = DoubleArray(random.size) { random[it] - if (it < pick) .0 else random[it - pick] }
 
     val samples = DoubleArray((sampleRate * duration).roundToInt())
-    (0 until n).forEach { samples[it] = noise[it] }
+    (0..<n).forEach { samples[it] = noise[it] }
 
     fun delayLine(i: Int) = samples.getOrNull(i - n) ?: .0
 
@@ -1180,7 +1180,7 @@ private fun guitarString(
     fun stringDamplingFilter(i: Int) = 0.996 * ((1 - s) * delayLine(i) + s * delayLine(i - 1))
 
     // First-order string-tuning allpass filter
-    (n until samples.size).forEach {
+    (n..<samples.size).forEach {
         samples[it] =
             c * (stringDamplingFilter(it) - samples[it - 1]) + stringDamplingFilter(it - 1)
     }
@@ -1189,7 +1189,7 @@ private fun guitarString(
     val wTilde = PI * frequency / sampleRate
     val buffer = DoubleArray(samples.size)
     buffer[0] = wTilde / (1 + wTilde) * samples[0]
-    (1 until samples.size).forEach {
+    (1..<samples.size).forEach {
         buffer[it] =
             wTilde / (1 + wTilde) * (samples[it] + samples[it - 1]) + (1 - wTilde) / (1 + wTilde) * buffer[it - 1]
     }

@@ -31,7 +31,7 @@ class QrTests {
         val result = qr(text)
         assertEquals(
             expected,
-            (0 until ceil(result.size / 2.0).toInt() + 1).joinToString("\n") { row ->
+            (0..<ceil(result.size / 2.0).toInt() + 1).joinToString("\n") { row ->
                 "█" + result.indices.joinToString("") {
                     val first = !(result.getOrNull(row * 2 - 1)?.get(it) ?: false)
                     val second = !(result.getOrNull(row * 2)?.get(it) ?: false)

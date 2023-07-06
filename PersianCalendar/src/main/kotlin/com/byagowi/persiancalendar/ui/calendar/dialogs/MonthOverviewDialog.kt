@@ -136,7 +136,7 @@ private fun createEventsList(
 ): Map<Jdn, List<CalendarEvent<*>>> {
     val baseJdn = Jdn(date)
     val deviceEvents = context.readMonthDeviceEvents(baseJdn)
-    return (0 until mainCalendar.getMonthLength(date.year, date.month))
+    return (0..<mainCalendar.getMonthLength(date.year, date.month))
         .map { baseJdn + it }
         .associateWith { eventsRepository?.getEvents(it, deviceEvents) ?: emptyList() }
 }
@@ -230,9 +230,9 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
         val startingDayOfWeek = monthStartJdn.dayOfWeek
         val fixedStartingDayOfWeek = applyWeekStartOffsetToWeekDay(startingDayOfWeek)
         val startOfYearJdn = Jdn(date.calendarType, date.year, 1, 1)
-        (0 until (6 * 7)).map {
+        (0..<6 * 7).map {
             val index = it - fixedStartingDayOfWeek
-            if (index !in (0 until monthLength)) return@map null
+            if (index !in (0..<monthLength)) return@map null
             (index + 1) to (monthStartJdn + index)
         }.chunked(7).map { row ->
             val firstJdnInWeek = row.firstNotNullOfOrNull { it?.second/*jdn*/ } ?: return@map

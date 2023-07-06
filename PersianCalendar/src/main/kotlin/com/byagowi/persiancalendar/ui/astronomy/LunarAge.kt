@@ -19,7 +19,7 @@ value class LunarAge private constructor(private val fraction: Double) {
     val tithi get() = (floor(fraction * 30) + 1).toInt()
 
     // Eight is number phases in this system, named by most of the cultures
-    fun toPhase() = enumValues<Phase>().getOrNull((fraction * 8).roundToInt()) ?: Phase.NEW_MOON
+    fun toPhase() = Phase.entries.getOrNull((fraction * 8).roundToInt()) ?: Phase.NEW_MOON
 
     enum class Phase(val emoji: String) {
         NEW_MOON("🌑"), WAXING_CRESCENT("🌒"), FIRST_QUARTER("🌓"),

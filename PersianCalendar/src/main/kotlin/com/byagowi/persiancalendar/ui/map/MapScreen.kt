@@ -115,7 +115,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
         mapTypeButton.onClick {
             if (viewModel.state.value.mapType == MapType.None) {
                 val context = context ?: return@onClick
-                val options = enumValues<MapType>()
+                val options = MapType.entries
                     .drop(1) // Hide "None" option
                     // Hide moon visibilities for now unless is a development build
                     .filter { !it.isCrescentVisibility || BuildConfig.DEVELOPMENT }

@@ -185,8 +185,8 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
     }
 
     private fun writeMagneticMap(timeInMillis: Long, mapType: MapType) {
-        (0 until 360).forEach { x ->
-            (0 until 180).forEach { y ->
+        (0..<360).forEach { x ->
+            (0..<180).forEach { y ->
                 val latitude = 180 / 2f - y
                 val longitude = x - 360 / 2f
                 val field = GeomagneticField(latitude, longitude, 0f, timeInMillis)
@@ -220,8 +220,8 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
         val isMoonVisibility = currentMapType == MapType.MoonVisibility
 
         // https://github.com/cosinekitty/astronomy/blob/edcf9248/demo/c/worldmap.cpp
-        (0 until 360).forEach { x ->
-            (0 until 180).forEach { y ->
+        (0..<360).forEach { x ->
+            (0..<180).forEach { y ->
                 val latitude = 180 / 2.0 - y
                 val longitude = x - 360 / 2.0
                 val observer = Observer(latitude, longitude, .0)
@@ -265,8 +265,8 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
             date[GregorianCalendar.DAY_OF_MONTH] + 1, 0, 0, .0
         )
         // Source https://github.com/crescent-moon-visibility/crescent-moon-visibility
-        (0 until 360 / maskMapMoonScaleDown).forEach { x ->
-            (0 until 180 / maskMapMoonScaleDown).forEach heightForEach@{ y ->
+        (0..<360 / maskMapMoonScaleDown).forEach { x ->
+            (0..<180 / maskMapMoonScaleDown).forEach heightForEach@{ y ->
                 val latitude = 180 / 2.0 - y * maskMapMoonScaleDown
                 val longitude = x * maskMapMoonScaleDown - 360 / 2.0
                 val observer = Observer(latitude, longitude, .0)
@@ -441,11 +441,11 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                 }
             }
             if (displayGrid) {
-                (0 until mapWidth step mapWidth / 24).forEachIndexed { i, x ->
+                (0..<mapWidth step mapWidth / 24).forEachIndexed { i, x ->
                     if (i == 0 || i == 12) return@forEachIndexed
                     drawLine(x.toFloat(), 0f, x.toFloat(), mapHeight.toFloat(), gridPaint)
                 }
-                (0 until mapHeight step mapHeight / 12).forEachIndexed { i, y ->
+                (0..<mapHeight step mapHeight / 12).forEachIndexed { i, y ->
                     if (i == 0 || i == 6) return@forEachIndexed
                     drawLine(0f, y.toFloat(), mapWidth.toFloat(), y.toFloat(), gridPaint)
                 }

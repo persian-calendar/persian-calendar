@@ -100,7 +100,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
         binding.railView.itemIconTintList = null // makes it to not apply tint on modes icons
         binding.railView.menu.also { menu ->
             val buttons =
-                enumValues<AstronomyMode>().associateWith { menu.add(it.title).setIcon(it.icon) }
+                AstronomyMode.entries.associateWith { menu.add(it.title).setIcon(it.icon) }
             binding.railView.post { // Needs to be done in .post so selected button is applied correctly
                 buttons.forEach { (mode, item) ->
                     if (viewModel.mode.value == mode) item.isChecked = true

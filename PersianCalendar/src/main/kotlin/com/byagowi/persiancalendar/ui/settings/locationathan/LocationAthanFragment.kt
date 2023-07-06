@@ -109,15 +109,15 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 this@LocationAthanFragment.athanPreferenceCategory = this
                 singleSelect(
                     PREF_PRAY_TIME_METHOD,
-                    enumValues<CalculationMethod>().map { getString(it.titleStringId) },
-                    enumValues<CalculationMethod>().map { it.name },
+                    CalculationMethod.entries.map { getString(it.titleStringId) },
+                    CalculationMethod.entries.map { it.name },
                     DEFAULT_PRAY_TIME_METHOD,
                     R.string.pray_methods_calculation
                 ) { title(R.string.pray_methods) }
                 singleSelect(
                     PREF_HIGH_LATITUDES_METHOD,
-                    enumValues<HighLatitudesMethod>().map { getString(it.titleStringId) },
-                    enumValues<HighLatitudesMethod>().map { it.name },
+                    HighLatitudesMethod.entries.map { getString(it.titleStringId) },
+                    HighLatitudesMethod.entries.map { it.name },
                     DEFAULT_HIGH_LATITUDES_METHOD,
                     R.string.high_latitudes_method
                 ) {
@@ -176,7 +176,7 @@ class LocationAthanFragment : PreferenceFragmentCompat(),
                 }
                 clickable(
                     onClick = {
-                        val methodsToShow = enumValues<MidnightMethod>()
+                        val methodsToShow = MidnightMethod.entries
                             .filter { !it.isJafariOnly || calculationMethod.isJafari }
                         val entryValues = listOf("DEFAULT") + methodsToShow.map { it.name }
                         val entries = listOf(midnightDefaultTitle()) +

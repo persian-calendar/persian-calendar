@@ -60,7 +60,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         } else Spinner(binding.appBar.toolbar.context).also {
             binding.appBar.toolbar.addView(it)
         }
-        val availableModes = enumValues<ConverterScreenMode>().filter {
+        val availableModes = ConverterScreenMode.entries.filter {
             // Converter doesn't work in Android 5, let's hide it there
             it != ConverterScreenMode.TimeZones || Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         }

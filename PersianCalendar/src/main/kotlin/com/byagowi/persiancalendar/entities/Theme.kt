@@ -81,7 +81,7 @@ enum class Theme(
 
         private fun getCurrent(context: Context): Theme {
             val key = context.appPrefs.getTheme()
-            return enumValues<Theme>().find { it.key == key } ?: SYSTEM_DEFAULT
+            return entries.find { it.key == key } ?: SYSTEM_DEFAULT
         }
 
         @StyleRes
@@ -98,7 +98,7 @@ enum class Theme(
         fun isDynamicColor(prefs: SharedPreferences?): Boolean {
             val themeKey = prefs.getTheme()
             return DynamicColors.isDynamicColorAvailable() &&
-                    enumValues<Theme>().firstOrNull { it.key == themeKey }?.hasDynamicColors ?: false
+                    entries.firstOrNull { it.key == themeKey }?.hasDynamicColors ?: false
         }
 
         fun isNightMode(context: Context): Boolean =

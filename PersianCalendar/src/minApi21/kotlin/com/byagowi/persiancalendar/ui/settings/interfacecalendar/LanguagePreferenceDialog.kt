@@ -47,7 +47,7 @@ private fun LanguagePreferenceDialog(closeDialog: () -> Unit) {
                 closeDialog()
             }
             LazyColumn {
-                items(enumValues<Language>()) { item ->
+                items(Language.entries) { item ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier

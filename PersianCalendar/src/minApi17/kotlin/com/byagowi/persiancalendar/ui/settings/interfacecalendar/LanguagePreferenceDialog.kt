@@ -13,7 +13,7 @@ import java.util.TimeZone
 
 fun showLanguagePreferenceDialog(activity: FragmentActivity) {
     val currentLanguage = language
-    val languages = enumValues<Language>().toList().let { languages ->
+    val languages = Language.entries.let { languages ->
         if (TimeZone.getDefault().id in listOf(IRAN_TIMEZONE_ID, AFGHANISTAN_TIMEZONE_ID)) languages
         else languages.sortedBy { it.code }
     }.let { languages ->

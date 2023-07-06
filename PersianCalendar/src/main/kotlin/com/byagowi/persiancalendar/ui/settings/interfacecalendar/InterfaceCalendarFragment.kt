@@ -155,8 +155,8 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
     }
 
     private fun PreferenceCategory.themeSelect() {
-        val entries = enumValues<Theme>().map { getString(it.title) }
-        val entryValues = enumValues<Theme>().map { it.key }
+        val entries = Theme.entries.map { getString(it.title) }
+        val entryValues = Theme.entries.map { it.key }
         var preference: Preference? = null
         clickable(
             onClick = {

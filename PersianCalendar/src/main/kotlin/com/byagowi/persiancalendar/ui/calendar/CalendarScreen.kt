@@ -768,7 +768,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                     }
                 }
                 tbody {
-                    (0 until mainCalendar.getMonthLength(date.year, date.month)).forEach { day ->
+                    (0..<mainCalendar.getMonthLength(date.year, date.month)).forEach { day ->
                         tr {
                             val prayTimes = coordinates.calculatePrayTimes(
                                 Jdn(mainCalendar.createDate(date.year, date.month, day))

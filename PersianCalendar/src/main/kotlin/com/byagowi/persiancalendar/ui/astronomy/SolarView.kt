@@ -75,11 +75,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
             }.start()
             field = value
         }
-    private val tropicalRanges = enumValues<Zodiac>().map { it.tropicalRange.map(Double::toFloat) }
-    private val iauRanges = enumValues<Zodiac>().map { it.iauRange.map(Double::toFloat) }
+    private val tropicalRanges = Zodiac.entries.map { it.tropicalRange.map(Double::toFloat) }
+    private val iauRanges = Zodiac.entries.map { it.iauRange.map(Double::toFloat) }
     private val ranges = iauRanges.map { it.toFloatArray() }
 
-    private val labels = enumValues<Zodiac>().map { it.format(context, false, short = true) }
+    private val labels = Zodiac.entries.map { it.format(context, false, short = true) }
 
     init {
         onDraw = { canvas, matrix ->
