@@ -145,13 +145,13 @@ private fun setupPositionProbePattern(
 private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, version: Int) {
     val pos = QrUtil.getPatternPosition(version)
 
-    pos.forEach { row ->
+    for (row in pos) {
         pos
             .asSequence()
             .filter { col -> modules[row][col] == null }
             .forEach { col ->
-                (-2..2).forEach { r ->
-                    (-2..2).forEach { c ->
+                for (r in -2..2) {
+                    for (c in -2..2) {
                         modules[row + r][col + c] =
                             r == -2 || r == 2 || c == -2 || c == 2 || (r == 0 && c == 0)
                     }

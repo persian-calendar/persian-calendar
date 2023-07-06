@@ -164,7 +164,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         colorTextPaint.textSize = radius / 11
         circlesPaint.strokeWidth = radius / 9
         circlesPaint.style = Paint.Style.FILL_AND_STROKE
-        (1..8).forEach {
+        for (it in 1..8) {
             circlesPaint.color = ColorUtils.setAlphaComponent(0x808080, (9 - it) * 0x10)
             canvas.drawCircle(radius, radius, radius / 9 * it, circlesPaint)
             circlesPaint.style = Paint.Style.STROKE
@@ -204,7 +204,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 
     private fun drawEarthCentricView(canvas: Canvas) {
         val radius = min(width, height) / 2f
-        (0..12).forEach {
+        for (it in 0..12) {
             canvas.withRotation(it * 30f, pivotX = radius, pivotY = radius) {
                 val indicator = if (it == 0) yearIndicator else monthsIndicator
                 canvas.drawLine(width - dp / 2, radius, width - 6 * dp, radius, indicator)

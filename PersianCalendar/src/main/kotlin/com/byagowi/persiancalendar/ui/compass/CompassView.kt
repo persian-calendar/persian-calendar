@@ -198,7 +198,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
         val cardinalY = cy - radius * .85f
 
         // Draw the marker every 15 degrees and text every 45.
-        (0..23).forEach {
+        for (it in 0..23) {
             withRotation(15f * it, cx, cy) {
                 drawLine(cx, cy - radius, cx, cy - radius * .975f, markerPaint)
                 // Draw the cardinal points

@@ -622,8 +622,8 @@ fun showPeriodicTableDialog(activity: FragmentActivity) {
 private val elementsColor = buildMap {
     listOf(3, 11, 19, 37, 55, 87).forEach { put(it, 0xffff9d9d) } // Alkali metals
     listOf(4, 12, 20, 38, 56, 88).forEach { put(it, 0xffffdead) } // Alkaline earth metals
-    (57..71).forEach { put(it, 0xffffbfff) } // Lanthanides
-    (89..103).forEach { put(it, 0xffff99cc) } // Actinides
+    for (it in 57..71) put(it, 0xffffbfff) // Lanthanides
+    for (it in 89..103) put(it, 0xffff99cc) // Actinides
     listOf(1, 6, 7, 8, 15, 16, 34).forEach { put(it, 0xffa0ffa0) } // Other nonmetals
     listOf(5, 14, 32, 33, 51, 52).forEach { put(it, 0xffcccc99) } // Metalloids
     // Other nonmetals

@@ -144,7 +144,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
             val jdn = Jdn(civilDate)
             binding.headerInformation.text = headerCache[jdn]
 
-            (1..4).forEach { i ->
+            for (i in 1..4) {
                 when (i) {
                     1 -> binding.firstSeason
                     2 -> binding.secondSeason

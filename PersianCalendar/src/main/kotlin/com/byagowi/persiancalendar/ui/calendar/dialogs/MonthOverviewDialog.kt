@@ -223,7 +223,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
     table("calendar") {
         tr {
             if (isShowWeekOfYearEnabled) th {}
-            (0..6).forEach { th { +getWeekDayName(revertWeekStartOffsetFromWeekDay(it)) } }
+            for (it in 0..6) th { +getWeekDayName(revertWeekStartOffsetFromWeekDay(it)) }
         }
         val monthLength = date.calendarType.getMonthLength(date.year, date.month)
         val monthStartJdn = Jdn(date)

@@ -36,7 +36,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
         // Inch
         paint.textAlign = if (cmInchFlip) Paint.Align.RIGHT else Paint.Align.LEFT
         val steps = dpi / 4f
-        (0..(height / steps).toInt()).forEach { i ->
+        for (i in 0..(height / steps).toInt()) {
             val y = steps * i
             val w = when {
                 i % 4 == 0 -> {
@@ -60,7 +60,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
         // Centimeter
         paint.textAlign = if (cmInchFlip) Paint.Align.LEFT else Paint.Align.RIGHT
         val cmSteps = dpi / 2.54 / 10
-        (0..(height / cmSteps).toInt()).forEach { i ->
+        for (i in 0..(height / cmSteps).toInt()) {
             val y = cmSteps.toFloat() * i
             val w = when {
                 i % 10 == 0 -> {
