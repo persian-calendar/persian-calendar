@@ -69,17 +69,10 @@ private fun qrMain(
     val size = version * 4 + 17
     val modules = List(size) { MutableList<Boolean?>(size) { null } }
 
-    var minLostPoint = .0
-    var bestPattern = MaskPattern.Pattern000
-
     val cache = createData(version, errorCorrectionLevel, data)
 
     fun make(test: Boolean, maskPattern: MaskPattern) {
-        (0..<size).forEach { row ->
-            (0..<size).forEach { col ->
-                modules[row][col] = null
-            }
-        }
+        (0..<size).forEach { row -> (0..<size).forEach { col -> modules[row][col] = null } }
 
         setupPositionProbePattern(modules, 0, 0)
         setupPositionProbePattern(modules, size - 7, 0)
@@ -93,15 +86,9 @@ private fun qrMain(
         mapData(modules, cache, maskPattern)
     }
 
-    MaskPattern.entries.forEachIndexed { i, pattern ->
+    val bestPattern = MaskPattern.entries.minBy { pattern ->
         make(true, pattern)
-
-        val lostPoint = getLostPoint(modules)
-
-        if (i == 0 || minLostPoint > lostPoint) {
-            minLostPoint = lostPoint
-            bestPattern = pattern
-        }
+        getLostPoint(modules.map { row -> row.map { it!! } })
     }
 
     make(false, bestPattern)
@@ -271,11 +258,11 @@ private fun mapData(
     }
 }
 
-private fun getLostPoint(modules: List<MutableList<Boolean?>>): Double {
+private fun getLostPoint(modules: List<List<Boolean>>): Double {
     val size = modules.size
     var lostPoint = .0
 
-    fun isDark(row: Int, col: Int) = modules[row][col]!!
+    fun isDark(row: Int, col: Int) = modules[row][col]
 
     // LEVEL1
     (0..<size).forEach { row ->
@@ -879,21 +866,21 @@ private object QrRsBlock {
 }
 
 private class QrBitBuffer {
-    private val _buffer = mutableListOf<Int>()
-    private var _size = 0
+    private val buffer = mutableListOf<Int>()
+    private var size = 0
 
-    operator fun get(index: Int): Int = _buffer[index]
+    operator fun get(index: Int): Int = buffer[index]
 
     fun put(num: Int, length: Int): Unit =
         (0..<length).forEach { putBit(num.ushr(length - it - 1).and(1) == 1) }
 
-    val sizeInBits: Int get() = _size
+    val sizeInBits: Int get() = size
 
     fun putBit(bit: Boolean) {
-        val bufIndex = _size / 8
-        if (_buffer.size <= bufIndex) _buffer.add(0)
-        if (bit) _buffer[bufIndex] = _buffer[bufIndex].or(0x80.ushr(_size % 8))
-        _size += 1
+        val bufIndex = size / 8
+        if (buffer.size <= bufIndex) buffer.add(0)
+        if (bit) buffer[bufIndex] = buffer[bufIndex].or(0x80.ushr(size % 8))
+        size += 1
     }
 
     fun putBytes(bytes: ByteArray): Unit = bytes.forEach { put(it.toInt(), 8) }
