@@ -258,23 +258,21 @@ private fun mapData(
     }
 }
 
-private fun getLostPoint(modules: List<List<Boolean>>): Double {
-    val size = modules.size
+private fun getLostPoint(matrix: List<List<Boolean>>): Double {
+    val size = matrix.size
     var lostPoint = .0
-
-    fun isDark(row: Int, col: Int) = modules[row][col]
 
     // LEVEL1
     (0..<size).forEach { row ->
         (0..<size).forEach { col ->
-            val dark = isDark(row, col)
+            val dark = matrix[row][col]
             val sameCount = (-1..1)
                 .asSequence()
                 .filter { row + it in 0..<size }
                 .sumOf { r ->
                     (-1..1).count {
                         col + it in 0..<size &&
-                                !(r == 0 && it == 0) && dark == isDark(row + r, col + it)
+                                !(r == 0 && it == 0) && dark == matrix[row + r][col + it]
                     }
                 }
 
@@ -286,10 +284,10 @@ private fun getLostPoint(modules: List<List<Boolean>>): Double {
     (0..<size - 1).forEach { row ->
         (0..<size - 1).forEach { col ->
             var count = 0
-            if (isDark(row, col)) count += 1
-            if (isDark(row + 1, col)) count += 1
-            if (isDark(row, col + 1)) count += 1
-            if (isDark(row + 1, col + 1)) count += 1
+            if (matrix[row][col]) count += 1
+            if (matrix[row + 1][col]) count += 1
+            if (matrix[row][col + 1]) count += 1
+            if (matrix[row + 1][col + 1]) count += 1
             if (count == 0 || count == 4) lostPoint += 3
         }
     }
@@ -297,30 +295,30 @@ private fun getLostPoint(modules: List<List<Boolean>>): Double {
     // LEVEL3
     lostPoint += (0..<size).sumOf { row ->
         (0..<size - 6).count { col ->
-            isDark(row, col) &&
-                    !isDark(row, col + 1) &&
-                    isDark(row, col + 2) &&
-                    isDark(row, col + 3) &&
-                    isDark(row, col + 4) &&
-                    !isDark(row, col + 5) &&
-                    isDark(row, col + 6)
+            matrix[row][col] &&
+                    !matrix[row][col + 1] &&
+                    matrix[row][col + 2] &&
+                    matrix[row][col + 3] &&
+                    matrix[row][col + 4] &&
+                    !matrix[row][col + 5] &&
+                    matrix[row][col + 6]
         }
     } * 40.0
 
     lostPoint += (0..<size).sumOf { col ->
         (0..<size - 6).count { row ->
-            isDark(row, col) &&
-                    !isDark(row + 1, col) &&
-                    isDark(row + 2, col) &&
-                    isDark(row + 3, col) &&
-                    isDark(row + 4, col) &&
-                    !isDark(row + 5, col) &&
-                    isDark(row + 6, col)
+            matrix[row][col] &&
+                    !matrix[row + 1][col] &&
+                    matrix[row + 2][col] &&
+                    matrix[row + 3][col] &&
+                    matrix[row + 4][col] &&
+                    !matrix[row + 5][col] &&
+                    matrix[row + 6][col]
         }
     } * 40.0
 
     // LEVEL4
-    val darkCount = (0..<size).sumOf { col -> (0..<size).count { row -> isDark(row, col) } }
+    val darkCount = (0..<size).sumOf { col -> (0..<size).count { row -> matrix[row][col] } }
 
     val ratio = ((100 * darkCount) / size / size - 50).absoluteValue / 5
     lostPoint += ratio * 10
