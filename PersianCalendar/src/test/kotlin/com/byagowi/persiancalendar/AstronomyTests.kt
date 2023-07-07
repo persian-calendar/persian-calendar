@@ -79,12 +79,10 @@ class AstronomyTests {
             10.88, 42.17, 72.3, 106.46, 127.39, 154.32,
             198.755, 233.37, 256.915, 286.875, 307.105, 330.15
         ).zip(Zodiac.entries) { centerOfZodiac, zodiac ->
-            val average = zodiac.iauRange.sum() / 2
-            assertThat(average).isWithin(1.0e-10).of(centerOfZodiac)
+            assertThat(zodiac.iauRange.average()).isWithin(1.0e-10).of(centerOfZodiac)
         }
         (1..12).zip(Zodiac.entries) { it, zodiac ->
-            val average = zodiac.tropicalRange.sum() / 2
-            assertThat(average).isWithin(1.0e-10).of(it * 30.0)
+            assertThat(zodiac.tropicalRange.average()).isWithin(1.0e-10).of(it * 30.0)
         }
     }
 
