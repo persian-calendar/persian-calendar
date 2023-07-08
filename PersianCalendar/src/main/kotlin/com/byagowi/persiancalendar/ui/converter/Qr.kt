@@ -98,10 +98,10 @@ private fun setupPositionProbePattern(
     row: Int,
     col: Int,
 ) {
-    (-1..7).forEach { r ->
-        if (row + r <= -1 || modules.size <= row + r) return@forEach
-        (-1..7).forEach innerForEach@{ c ->
-            if (col + c <= -1 || modules.size <= col + c) return@innerForEach
+    for (r in -1..7) {
+        if (row + r <= -1 || modules.size <= row + r) continue
+        for (c in -1..7) {
+            if (col + c <= -1 || modules.size <= col + c) continue
             modules[row + r][col + c] = (r in 0..6 && (c == 0 || c == 6)) ||
                     (c in 0..6 && (r == 0 || r == 6)) ||
                     (r in 2..4 && 2 <= c && c <= 4)
@@ -113,8 +113,8 @@ private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, ver
     val pos = QrUtil.getPatternPosition(version)
 
     for (row in pos) {
-        pos.forEach { col ->
-            if (modules[row][col] != null) return@forEach
+        for (col in pos) {
+            if (modules[row][col] != null) continue
             for (r in -2..2) {
                 for (c in -2..2) {
                     modules[row + r][col + c] =
