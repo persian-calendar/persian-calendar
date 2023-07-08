@@ -93,11 +93,7 @@ private enum class MaskPattern(val maskFunction: (Int, Int) -> Boolean) {
     Pattern111({ i, j -> (((i * j) % 3) + ((i + j) % 2)) % 2 == 0 }),
 }
 
-private fun setupPositionProbePattern(
-    modules: List<MutableList<Boolean?>>,
-    row: Int,
-    col: Int,
-) {
+private fun setupPositionProbePattern(modules: List<MutableList<Boolean?>>, row: Int, col: Int) {
     for (r in -1..7) {
         if (row + r <= -1 || modules.size <= row + r) continue
         for (c in -1..7) {
