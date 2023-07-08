@@ -98,49 +98,37 @@ private fun setupPositionProbePattern(
     row: Int,
     col: Int,
 ) {
-    (-1..7)
-        .asSequence()
-        .filter { row + it > -1 && modules.size > row + it }
-        .forEach { r ->
-            (-1..7)
-                .asSequence()
-                .filter { col + it > -1 && modules.size > col + it }
-                .forEach { c ->
-                    modules[row + r][col + c] = (r in 0..6 && (c == 0 || c == 6)) ||
-                            (c in 0..6 && (r == 0 || r == 6)) ||
-                            (r in 2..4 && 2 <= c && c <= 4)
-                }
+    (-1..7).forEach { r ->
+        if (row + r <= -1 || modules.size <= row + r) return@forEach
+        (-1..7).forEach innerForEach@{ c ->
+            if (col + c <= -1 || modules.size <= col + c) return@innerForEach
+            modules[row + r][col + c] = (r in 0..6 && (c == 0 || c == 6)) ||
+                    (c in 0..6 && (r == 0 || r == 6)) ||
+                    (r in 2..4 && 2 <= c && c <= 4)
         }
+    }
 }
 
 private fun setupPositionAdjustPattern(modules: List<MutableList<Boolean?>>, version: Int) {
     val pos = QrUtil.getPatternPosition(version)
 
     for (row in pos) {
-        pos
-            .asSequence()
-            .filter { col -> modules[row][col] == null }
-            .forEach { col ->
-                for (r in -2..2) {
-                    for (c in -2..2) {
-                        modules[row + r][col + c] =
-                            r == -2 || r == 2 || c == -2 || c == 2 || (r == 0 && c == 0)
-                    }
+        pos.forEach { col ->
+            if (modules[row][col] != null) return@forEach
+            for (r in -2..2) {
+                for (c in -2..2) {
+                    modules[row + r][col + c] =
+                        r == -2 || r == 2 || c == -2 || c == 2 || (r == 0 && c == 0)
                 }
             }
+        }
     }
 }
 
 private fun setupTimingPattern(modules: List<MutableList<Boolean?>>) {
-    (8..<modules.size - 8)
-        .asSequence()
-        .filter { r -> modules[r][6] == null }
-        .forEach { r -> modules[r][6] = r % 2 == 0 }
+    (8..<modules.size - 8).forEach { r -> if (modules[r][6] == null) modules[r][6] = r % 2 == 0 }
 
-    (8..<modules.size - 8)
-        .asSequence()
-        .filter { c -> modules[6][c] == null }
-        .forEach { c -> modules[6][c] = c % 2 == 0 }
+    (8..<modules.size - 8).forEach { c -> if (modules[6][c] == null) modules[6][c] = c % 2 == 0 }
 }
 
 private fun setupTypeInfo(
@@ -154,24 +142,20 @@ private fun setupTypeInfo(
 
     // vertical
     (0..<15).forEach {
-        val mod = !test && bits.shr(it).and(1) == 1
-
         modules[when {
             it < 6 -> it
             it < 8 -> it + 1
             else -> modules.size - 15 + it
-        }][8] = mod
+        }][8] = !test && bits.shr(it).and(1) == 1
     }
 
     // horizontal
     (0..<15).forEach {
-        val mod = !test && bits.shr(it).and(1) == 1
-
         modules[8][when {
             it < 8 -> modules.size - it - 1
             it < 9 -> 15 - it - 1 + 1
             else -> 15 - it - 1
-        }] = mod
+        }] = !test && bits.shr(it).and(1) == 1
     }
 
     // fixed module
@@ -241,16 +225,13 @@ private fun getLostPoint(matrix: List<List<Boolean>>): Double {
     // LEVEL1
     (0..<size).forEach { row ->
         (0..<size).forEach { col ->
-            val dark = matrix[row][col]
-            val sameCount = (-1..1)
-                .asSequence()
-                .filter { row + it in 0..<size }
-                .sumOf { r ->
-                    (-1..1).count {
-                        col + it in 0..<size &&
-                                !(r == 0 && it == 0) && dark == matrix[row + r][col + it]
-                    }
-                }
+            val isDark = matrix[row][col]
+            val sameCount = (-1..1).sumOf { r ->
+                if (row + r in 0..<size) (-1..1).count {
+                    col + it in 0..<size &&
+                            !(r == 0 && it == 0) && isDark == matrix[row + r][col + it]
+                } else 0
+            }
 
             if (sameCount > 5) lostPoint += 3 + sameCount - 5
         }
@@ -813,9 +794,7 @@ private object QrRsBlock {
             val totalCount = rsBlock[it * 3 + 1]
             val dataCount = rsBlock[it * 3 + 2]
 
-            (0..<count)
-                .asSequence()
-                .map { Rs(totalCount = totalCount, dataCount = dataCount) }
+            (0..<count).asSequence().map { Rs(totalCount = totalCount, dataCount = dataCount) }
         }
     }
 }
