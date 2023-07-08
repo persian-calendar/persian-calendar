@@ -267,11 +267,7 @@ private fun getLostPoint(matrix: List<List<Boolean>>): Double {
     // LEVEL2
     (0..<size - 1).forEach { row ->
         (0..<size - 1).forEach { col ->
-            var count = 0
-            if (matrix[row][col]) count += 1
-            if (matrix[row + 1][col]) count += 1
-            if (matrix[row][col + 1]) count += 1
-            if (matrix[row + 1][col + 1]) count += 1
+            val count = (0..1).sumOf { r -> (0..1).count { c -> matrix[row + r][col + c] } }
             if (count == 0 || count == 4) lostPoint += 3
         }
     }
@@ -279,25 +275,13 @@ private fun getLostPoint(matrix: List<List<Boolean>>): Double {
     // LEVEL3
     lostPoint += (0..<size).sumOf { row ->
         (0..<size - 6).count { col ->
-            matrix[row][col] &&
-                    !matrix[row][col + 1] &&
-                    matrix[row][col + 2] &&
-                    matrix[row][col + 3] &&
-                    matrix[row][col + 4] &&
-                    !matrix[row][col + 5] &&
-                    matrix[row][col + 6]
+            (0..6).all { matrix[row][col + it].xor(it == 1 || it == 5) }
         }
     } * 40.0
 
     lostPoint += (0..<size).sumOf { col ->
         (0..<size - 6).count { row ->
-            matrix[row][col] &&
-                    !matrix[row + 1][col] &&
-                    matrix[row + 2][col] &&
-                    matrix[row + 3][col] &&
-                    matrix[row + 4][col] &&
-                    !matrix[row + 5][col] &&
-                    matrix[row + 6][col]
+            (0..6).all { matrix[row + it][col].xor(it == 1 || it == 5) }
         }
     } * 40.0
 
