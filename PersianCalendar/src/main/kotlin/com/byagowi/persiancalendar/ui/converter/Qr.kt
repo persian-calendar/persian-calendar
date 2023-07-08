@@ -30,42 +30,26 @@ enum class ErrorCorrectionLevel(internal val value: Int) { L(1), M(0), Q(3), H(2
 fun qr(
     input: String,
     // [1-40], set it to null for auto-size https://www.qrcode.com/en/about/version.html
-    version: Int? = null,
+    version_: Int? = null,
     // Level L can be dirty/damaged for up to 7%, level M 15%, level Q 25%, level H 30%.
     errorCorrectionLevel: ErrorCorrectionLevel = ErrorCorrectionLevel.M,
 ): List<List<Boolean>> {
     // This is a UTF-8 only implementation anyway
     val data = input.encodeToByteArray()
 
-    var versionValue: Int
-    if (version != null) {
-        versionValue = version
-    } else {
-        versionValue = 1
-        while (versionValue < 40) {
-            val rsBlocks = QrRsBlock.getRsBlocks(versionValue, errorCorrectionLevel)
-            val buffer = QrBitBuffer()
+    val version = version_ ?: (1..<40).first {
+        val rsBlocks = QrRsBlock.getRsBlocks(it, errorCorrectionLevel)
+        val buffer = QrBitBuffer()
 
-            buffer.put(4, 4)
-            buffer.put(data.size, QrUtil.getSizeInBits(versionValue))
-            buffer.putBytes(data)
+        buffer.put(4, 4)
+        buffer.put(data.size, QrUtil.getSizeInBits(it))
+        buffer.putBytes(data)
 
-            val totalDataCount = rsBlocks.sumOf { it.dataCount }
+        val totalDataCount = rsBlocks.sumOf(Rs::dataCount)
 
-            if (buffer.sizeInBits <= totalDataCount * 8) break
-            versionValue += 1
-        }
+        buffer.sizeInBits <= totalDataCount * 8
     }
 
-    // Now we have version also, let's call the concrete implementation
-    return qrMain(data, versionValue, errorCorrectionLevel)
-}
-
-private fun qrMain(
-    data: ByteArray,
-    version: Int,
-    errorCorrectionLevel: ErrorCorrectionLevel,
-): List<List<Boolean>> {
     val size = version * 4 + 17
     val modules = List(size) { MutableList<Boolean?>(size) { null } }
 
@@ -358,7 +342,7 @@ private fun createBytes(buffer: QrBitBuffer, rsBlocks: List<Rs>): List<Int> {
         }
     }
 
-    val totalCodeCount = rsBlocks.sumOf { it.totalCount }
+    val totalCodeCount = rsBlocks.sumOf(Rs::totalCount)
 
     val data = MutableList(totalCodeCount) { 0 }
     var index = 0
@@ -398,7 +382,7 @@ private fun createData(
     buffer.putBytes(data)
 
     // calc num max data.
-    val totalDataCount = rsBlocks.sumOf { it.dataCount }
+    val totalDataCount = rsBlocks.sumOf(Rs::dataCount)
 
     if (buffer.sizeInBits > totalDataCount * 8) {
         error("code length overflow. (${buffer.sizeInBits}>${totalDataCount * 8})")
