@@ -210,17 +210,9 @@ private fun mapData(
         while (true) {
             (0..<2).forEach { c ->
                 if (modules[row][col - c] == null) {
-                    var dark = false
-
-                    if (byteIndex < data.size) {
-                        dark = data[byteIndex].ushr(bitIndex).and(1) == 1
-                    }
-
-                    val mask = maskFunc(row, col - c)
-
-                    if (mask) dark = !dark
-
-                    modules[row][col - c] = dark
+                    modules[row][col - c] = maskFunc(row, col - c).xor(
+                        byteIndex < data.size && data[byteIndex].ushr(bitIndex).and(1) == 1
+                    )
                     bitIndex -= 1
 
                     if (bitIndex == -1) {
@@ -816,10 +808,7 @@ private object QrRsBlock {
         errorCorrectionLevel: ErrorCorrectionLevel,
     ): List<Rs> {
         val rsBlock = getRsBlockTable(version, errorCorrectionLevel)
-
-        val length = rsBlock.size / 3
-
-        return (0..<length).flatMap {
+        return (0..<rsBlock.size / 3).flatMap {
             val count = rsBlock[it * 3 + 0]
             val totalCount = rsBlock[it * 3 + 1]
             val dataCount = rsBlock[it * 3 + 2]
