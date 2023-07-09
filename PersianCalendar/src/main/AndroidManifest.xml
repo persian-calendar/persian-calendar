@@ -132,6 +132,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.settings.wallpaper.WallpaperSettingsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout"
+            android:exported="true"
+            android:launchMode="singleTop" />
+
         <receiver
             android:name=".Widget1x1"
             android:exported="false"

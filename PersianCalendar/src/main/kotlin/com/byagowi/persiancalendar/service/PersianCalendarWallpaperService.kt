@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.service
 
+import android.content.SharedPreferences
 import android.graphics.Rect
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -12,10 +13,13 @@ import android.view.MotionEvent
 import androidx.core.content.getSystemService
 import androidx.core.graphics.withScale
 import androidx.core.graphics.withTranslation
+import com.byagowi.persiancalendar.DEFAULT_WALLPAPER_DARK
+import com.byagowi.persiancalendar.PREF_WALLPAPER_DARK
 import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.ui.athan.PatternDrawable
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
+import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.logException
 import com.google.android.material.color.DynamicColors
 
@@ -28,18 +32,9 @@ class PersianCalendarWallpaperService : WallpaperService() {
         private val bounds = Rect()
         private val sensorManager = getSystemService<SensorManager>()
         private val sensor = sensorManager?.getSensorList(Sensor.TYPE_ACCELEROMETER)?.getOrNull(0)
+        private val appPrefs = this@PersianCalendarWallpaperService.appPrefs
         override fun onVisibilityChanged(visible: Boolean) {
-            val context = this@PersianCalendarWallpaperService
-            val isNightMode = Theme.isNightMode(context)
-            val accentColor = if (DynamicColors.isDynamicColorAvailable()) context.getColor(
-                if (isNightMode) android.R.color.system_accent1_500
-                else android.R.color.system_accent1_300
-            ) else null
-            patternDrawable = PatternDrawable(
-                preferredTintColor = accentColor,
-                darkBaseColor = true, // launcher always has white text so let's make it always dark, for now
-                dp = resources.dp
-            )
+            initPatternDrawable()
             this.visible = visible
             if (visible) handler.post(drawRunner) else handler.removeCallbacks(drawRunner)
 
@@ -48,6 +43,27 @@ class PersianCalendarWallpaperService : WallpaperService() {
                     sensorListener, sensor, SensorManager.SENSOR_DELAY_UI
                 ) else sensorManager?.unregisterListener(sensorListener)
             }
+
+            if (visible) appPrefs.registerOnSharedPreferenceChangeListener(prefListener)
+            else appPrefs.unregisterOnSharedPreferenceChangeListener(prefListener)
+        }
+
+        private fun initPatternDrawable() {
+            val context = this@PersianCalendarWallpaperService
+            val isNightMode = Theme.isNightMode(context)
+            val accentColor = if (DynamicColors.isDynamicColorAvailable()) context.getColor(
+                if (isNightMode) android.R.color.system_accent1_500
+                else android.R.color.system_accent1_300
+            ) else null
+            patternDrawable = PatternDrawable(
+                preferredTintColor = accentColor,
+                darkBaseColor = appPrefs.getBoolean(PREF_WALLPAPER_DARK, DEFAULT_WALLPAPER_DARK),
+                dp = resources.dp
+            )
+        }
+
+        private val prefListener = SharedPreferences.OnSharedPreferenceChangeListener { _, _ ->
+            initPatternDrawable()
         }
 
         private var sensorRotation = 0f

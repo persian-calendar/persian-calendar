@@ -66,6 +66,7 @@ const val PREF_HAS_EVER_VISITED = "PreferenceIsVisitedOnce"
 const val PREF_LAST_APP_VISIT_VERSION = "LastAppVisitVersion"
 const val PREF_SHOW_QIBLA_IN_COMPASS = "showQibla"
 const val PREF_TRUE_NORTH_IN_COMPASS = "trueNorth"
+const val PREF_WALLPAPER_DARK = "WallpaperDark"
 
 const val CHANGE_LANGUAGE_IS_PROMOTED_ONCE = "CHANGE_LANGUAGE_IS_PROMOTED_ONCE"
 
@@ -86,6 +87,7 @@ const val DEFAULT_ATHAN_VOLUME = 3
 const val DEFAULT_ISLAMIC_OFFSET = "0"
 const val DEFAULT_SECONDARY_CALENDAR_IN_TABLE = false
 const val DEFAULT_THEME_GRADIENT = true
+const val DEFAULT_WALLPAPER_DARK = true
 
 const val LOAD_APP_ID = 1000
 const val THREE_HOURS_APP_ID = 1010
