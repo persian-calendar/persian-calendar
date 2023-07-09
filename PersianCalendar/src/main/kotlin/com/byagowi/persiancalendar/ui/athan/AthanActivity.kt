@@ -114,7 +114,7 @@ class AthanActivity : ComponentActivity() {
             }
         }.onFailure(logException)
 
-        applyAppLanguage(this)
+        applyAppLanguage()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
             setShowWhenLocked(true)

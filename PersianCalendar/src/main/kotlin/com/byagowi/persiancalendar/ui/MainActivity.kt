@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
-        applyAppLanguage(this)
+        applyAppLanguage()
         super.onCreate(savedInstanceState)
         transparentSystemBars()
 
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             creationDateJdn.toPersianDate().year > supportedYearOfIranCalendar
         ) showAppIsOutDatedSnackbar()
 
-        applyAppLanguage(this)
+        applyAppLanguage()
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
 
@@ -243,7 +243,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         if (settingHasChanged) { // update when checked menu item is changed
-            applyAppLanguage(this)
+            applyAppLanguage()
             update(applicationContext, true)
             settingHasChanged = false // reset for the next time
         }
@@ -351,7 +351,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        applyAppLanguage(this)
+        applyAppLanguage()
         ensureDirectionality()
     }
 
@@ -359,7 +359,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onResume() {
         super.onResume()
-        applyAppLanguage(this)
+        applyAppLanguage()
         update(applicationContext, false)
         val today = Jdn.today()
         if (creationDateJdn != today) {
@@ -408,7 +408,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (navHostFragment?.navController?.currentDestination?.id != itemId) {
                     clickedItem = itemId
                 }
-                applyAppLanguage(this)
+                applyAppLanguage()
             }
         }
         return true

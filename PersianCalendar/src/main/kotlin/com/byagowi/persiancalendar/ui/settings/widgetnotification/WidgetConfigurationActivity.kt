@@ -40,7 +40,7 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
-        applyAppLanguage(this)
+        applyAppLanguage()
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
         transparentSystemBars()
@@ -81,6 +81,6 @@ class WidgetConfigurationActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        applyAppLanguage(this)
+        applyAppLanguage()
     }
 }

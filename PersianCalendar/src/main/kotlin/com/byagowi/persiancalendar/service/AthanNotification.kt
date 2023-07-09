@@ -49,7 +49,7 @@ class AthanNotification : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent ?: return START_STICKY
 
-        applyAppLanguage(this)
+        applyAppLanguage()
 
         val notificationId =
             if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000)

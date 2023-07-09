@@ -69,7 +69,7 @@ import kotlinx.html.tr
 import kotlinx.html.unsafe
 
 fun showMonthOverviewDialog(activity: FragmentActivity, date: AbstractDate) {
-    applyAppLanguage(activity)
+    applyAppLanguage()
     val events = createEventsList(activity, date)
 
     BottomSheetDialog(activity, R.style.TransparentBottomSheetDialog).also { dialog ->
