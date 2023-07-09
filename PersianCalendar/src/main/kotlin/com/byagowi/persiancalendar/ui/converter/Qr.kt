@@ -29,13 +29,16 @@ enum class ErrorCorrectionLevel(internal val value: Int) { L(1), M(0), Q(3), H(2
 
 fun qr(
     input: String,
+    // Level L can be dirty/damaged for up to 7%, level M 15%, level Q 25%, level H 30%
+    // Default or null is M except when it exceeds the space it falls back to L when null is set.
+    errorCorrectionLevel_: ErrorCorrectionLevel? = null,
     // [1-40], set it to null for auto-size https://www.qrcode.com/en/about/version.html
     version_: Int? = null,
-    // Level L can be dirty/damaged for up to 7%, level M 15%, level Q 25%, level H 30%.
-    errorCorrectionLevel: ErrorCorrectionLevel = ErrorCorrectionLevel.M,
 ): List<List<Boolean>> {
     // This is a UTF-8 only implementation anyway
     val data = input.encodeToByteArray()
+
+    val errorCorrectionLevel = errorCorrectionLevel_ ?: ErrorCorrectionLevel.M
 
     val version = version_ ?: (1..40).firstOrNull {
         val rsBlocks = QrRsBlock.getRsBlocks(it, errorCorrectionLevel)
@@ -48,7 +51,8 @@ fun qr(
         val totalDataCount = rsBlocks.sumOf(Rs::dataCount)
 
         buffer.sizeInBits <= totalDataCount * 8
-    } ?: return emptyList()
+    } ?: return if (errorCorrectionLevel_ == null)
+        qr(input, ErrorCorrectionLevel.L, null) else emptyList()
 
     val size = version * 4 + 17
     val modules = List(size) { MutableList<Boolean?>(size) { null } }
