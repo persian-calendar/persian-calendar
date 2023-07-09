@@ -1,16 +1,19 @@
 package com.byagowi.persiancalendar.utils
 
+import android.Manifest
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -96,15 +99,18 @@ private fun startAthanBody(context: Context, prayTimeKey: String) {
             )?.acquire(THIRTY_SECONDS_IN_MILLIS)
         }.onFailure(logException)
 
-        if (notificationAthan) {
-            ContextCompat.startForegroundService(
-                context, Intent(context, AthanNotification::class.java)
-                    .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
-            )
-        } else {
+        if (!notificationAthan && ActivityCompat.checkSelfPermission(
+                context, Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             context.startActivity(
                 Intent(context, AthanActivity::class.java)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
+            )
+        } else {
+            ContextCompat.startForegroundService(
+                context, Intent(context, AthanNotification::class.java)
                     .putExtra(KEY_EXTRA_PRAYER, prayTimeKey)
             )
         }

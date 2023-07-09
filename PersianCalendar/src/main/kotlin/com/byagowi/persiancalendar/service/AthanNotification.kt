@@ -26,7 +26,9 @@ import com.byagowi.persiancalendar.MAGHRIB_KEY
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.global.calculationMethod
 import com.byagowi.persiancalendar.global.coordinates
+import com.byagowi.persiancalendar.global.notificationAthan
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.ui.athan.AthanActivity
 import com.byagowi.persiancalendar.ui.athan.PreventPhoneCallIntervention
 import com.byagowi.persiancalendar.utils.SIX_MINUTES_IN_MILLIS
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -50,24 +52,32 @@ class AthanNotification : Service() {
         applyAppLanguage(this)
 
         val notificationId =
-            if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000) else 3000
+            if (BuildConfig.DEVELOPMENT) Random.nextInt(2000, 4000)
+            else (if (notificationAthan) 3000 else 3001)
         val notificationChannelId = notificationId.toString()
 
         val notificationManager = getSystemService<NotificationManager>()
 
-        val soundUri = getAthanUri(this)
-        runCatching {
+        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
+        if (!notificationAthan) startActivity(
+            Intent(this, AthanActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .putExtra(KEY_EXTRA_PRAYER, athanKey)
+        )
+
+        val soundUri = if (notificationAthan) getAthanUri(this) else null
+        if (soundUri != null) runCatching {
             // ensure custom reminder sounds play well
             grantUriPermission(
                 "com.android.systemui", soundUri, Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
         }.onFailure(logException)
 
-        val athanKey = intent.getStringExtra(KEY_EXTRA_PRAYER)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 notificationChannelId, getString(R.string.athan),
-                NotificationManager.IMPORTANCE_HIGH
+                if (notificationAthan) NotificationManager.IMPORTANCE_HIGH
+                else NotificationManager.IMPORTANCE_DEFAULT
             ).also {
                 it.description = getString(R.string.athan)
                 it.enableLights(true)
@@ -75,7 +85,7 @@ class AthanNotification : Service() {
                 it.vibrationPattern = LongArray(2) { 500 }
                 it.enableVibration(true)
                 it.setBypassDnd(athanKey == FAJR_KEY)
-                it.setSound(
+                if (soundUri == null) it.setSound(null, null) else it.setSound(
                     soundUri, AudioAttributes.Builder()
                         .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                         .setUsage(AudioAttributes.USAGE_NOTIFICATION)
@@ -117,10 +127,15 @@ class AthanNotification : Service() {
             .setSmallIcon(R.drawable.sun)
             .setContentTitle(title)
             .setContentText(subtitle)
-            .setSound(soundUri, AudioManager.STREAM_NOTIFICATION)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+
+        if (notificationAthan) {
+            notificationBuilder.priority = NotificationCompat.PRIORITY_MAX
+            notificationBuilder.setSound(soundUri, AudioManager.STREAM_NOTIFICATION)
+            notificationBuilder.setCategory(NotificationCompat.CATEGORY_ALARM)
+        } else {
+            notificationBuilder.setSound(null)
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             val cv = RemoteViews(applicationContext?.packageName, R.layout.custom_notification)
@@ -140,14 +155,15 @@ class AthanNotification : Service() {
         startForeground(notificationId, notificationBuilder.build())
 
         var stop = {}
-        val preventPhoneCallIntervention = PreventPhoneCallIntervention(stop)
+        val preventPhoneCallIntervention =
+            if (notificationAthan) PreventPhoneCallIntervention(stop) else null
         stop = {
-            preventPhoneCallIntervention.stopListener()
+            preventPhoneCallIntervention?.let { it.stopListener() }
             notificationManager?.cancel(notificationId)
             stopSelf()
         }
 
-        preventPhoneCallIntervention.startListener(this)
+        preventPhoneCallIntervention?.startListener(this)
         Handler(Looper.getMainLooper()).postDelayed(SIX_MINUTES_IN_MILLIS) { stop() }
 
         return super.onStartCommand(intent, flags, startId)
