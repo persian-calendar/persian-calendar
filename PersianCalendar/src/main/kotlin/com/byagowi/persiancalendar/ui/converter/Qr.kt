@@ -37,7 +37,7 @@ fun qr(
     // This is a UTF-8 only implementation anyway
     val data = input.encodeToByteArray()
 
-    val version = version_ ?: (1..<40).firstOrNull {
+    val version = version_ ?: (1..40).firstOrNull {
         val rsBlocks = QrRsBlock.getRsBlocks(it, errorCorrectionLevel)
         val buffer = QrBitBuffer()
 
@@ -48,7 +48,7 @@ fun qr(
         val totalDataCount = rsBlocks.sumOf(Rs::dataCount)
 
         buffer.sizeInBits <= totalDataCount * 8
-    } ?: 40
+    } ?: return emptyList()
 
     val size = version * 4 + 17
     val modules = List(size) { MutableList<Boolean?>(size) { null } }
