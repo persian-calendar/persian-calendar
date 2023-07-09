@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
@@ -11,6 +12,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withScale
+import androidx.core.graphics.withTranslation
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -21,7 +23,7 @@ import kotlin.math.min
 
 class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var qr: List<List<Boolean>> = emptyList()
-    private var roundness = 0f
+    private var roundness = 1f
     private var viewSize = 0
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(android.R.attr.textColorPrimary)
@@ -47,25 +49,33 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
     }
 
     private val rect = RectF()
+    private val path = Path()
     private fun drawQr(canvas: Canvas, size: Int) {
         val cellSize = size.toFloat() / (qr.size.takeIf { it != 0 } ?: return)
         qr.forEachIndexed { i, row ->
             row.forEachIndexed { j, v ->
-                if (v) {
-                    rect.set(
-                        i * cellSize, j * cellSize,
-                        (i + 1) * cellSize, (j + 1) * cellSize
-                    )
-                    rect.inset(-.25f * (1 - roundness), -.25f * (1 - roundness))
-                    canvas.drawRoundRect(
-                        rect,
-                        roundness * cellSize / 2,
-                        roundness * cellSize / 2,
-                        paint
-                    )
-                }
+                val s = qr.size
+                if (v && (i > 6 || j > 6) && (s - i > 7 || j > 6) && (i > 6 || s - j > 7))
+                    drawDot(canvas, i, j, cellSize)
             }
         }
+        path.rewind()
+        rect.set(0f, 0f, cellSize * 7, cellSize * 7)
+        val round = cellSize * roundness
+        path.addRoundRect(rect, round * 2, round * 2, Path.Direction.CW)
+        rect.set(cellSize, cellSize, cellSize * 6, cellSize * 6)
+        path.addRoundRect(rect, round * 1.5f, round * 1.5f, Path.Direction.CCW)
+        rect.set(cellSize * 2, cellSize * 2, cellSize * 5, cellSize * 5)
+        path.addRoundRect(rect, round, round, Path.Direction.CW)
+        canvas.drawPath(path, paint)
+        canvas.withTranslation(0f, cellSize * (qr.size - 7)) { canvas.drawPath(path, paint) }
+        canvas.withTranslation(cellSize * (qr.size - 7), 0f) { canvas.drawPath(path, paint) }
+    }
+
+    private fun drawDot(canvas: Canvas, i: Int, j: Int, cellSize: Float) {
+        rect.set(i * cellSize, j * cellSize, (i + 1) * cellSize, (j + 1) * cellSize)
+        rect.inset(-.25f * (1 - roundness), -.25f * (1 - roundness))
+        canvas.drawRoundRect(rect, roundness * cellSize / 2, roundness * cellSize / 2, paint)
     }
 
     fun share(activity: FragmentActivity?) {
