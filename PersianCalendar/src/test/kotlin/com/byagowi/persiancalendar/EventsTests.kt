@@ -12,15 +12,15 @@ class EventsTests {
     @Test
     fun `Test whether events repository sets IslamicDate global variable correctly`() {
         run {
-            EventsRepository(setOf(), Language.FA_AF)
+            EventsRepository(emptySet(), Language.FA_AF)
             assertEquals(IslamicDate.useUmmAlQura, true)
         }
         run {
-            EventsRepository(setOf(), Language.PS)
+            EventsRepository(emptySet(), Language.PS)
             assertEquals(IslamicDate.useUmmAlQura, true)
         }
         run {
-            EventsRepository(setOf(), Language.FA)
+            EventsRepository(emptySet(), Language.FA)
             assertEquals(IslamicDate.useUmmAlQura, false)
         }
     }
