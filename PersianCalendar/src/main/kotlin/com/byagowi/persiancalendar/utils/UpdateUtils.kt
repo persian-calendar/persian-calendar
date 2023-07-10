@@ -107,7 +107,8 @@ import kotlin.math.min
 
 private val useDefaultPriority
     get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isNotifyDateOnLockScreen
-private val NOTIFICATION_ID get() = if (useDefaultPriority) 1003 else 1001
+private const val NOTIFICATION_ID_DEFAULT_PRIORITY = 1003
+private const val NOTIFICATION_ID_LOW_PRIORITY = 1001
 private var pastDate: AbstractDate? = null
 private var deviceCalendarEvents: DeviceCalendarEventsStore = EventsStore.empty()
 
@@ -684,8 +685,11 @@ private fun updateNotification(
     context: Context, title: String, subtitle: String, jdn: Jdn, date: AbstractDate, owghat: String
 ) {
     if (!isNotifyDate) {
-        if (enableWorkManager)
-            context.getSystemService<NotificationManager>()?.cancel(NOTIFICATION_ID)
+        if (enableWorkManager) {
+            val notificationManager = context.getSystemService<NotificationManager>()
+            notificationManager?.cancel(NOTIFICATION_ID_LOW_PRIORITY)
+            notificationManager?.cancel(NOTIFICATION_ID_DEFAULT_PRIORITY)
+        }
         return
     }
 
@@ -700,6 +704,8 @@ private fun updateNotification(
         whatToShowOnWidgets = whatToShowOnWidgets,
         spacedComma = spacedComma,
         language = language,
+        notificationId =
+        if (useDefaultPriority) NOTIFICATION_ID_DEFAULT_PRIORITY else NOTIFICATION_ID_LOW_PRIORITY
     )
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || // always update as complains in 8.3.0
         latestPostedNotification != notificationData
@@ -724,6 +730,7 @@ private data class NotificationData(
     private val whatToShowOnWidgets: Set<String>,
     private val spacedComma: String,
     private val language: Language,
+    private val notificationId: Int,
 ) {
     @CheckResult
     fun post(context: Context): Boolean {
@@ -731,7 +738,7 @@ private data class NotificationData(
         if (enableWorkManager && notificationManager == null) return false
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                NOTIFICATION_ID.toString(),
+                notificationId.toString(),
                 context.getString(R.string.app_name),
                 if (useDefaultPriority) NotificationManager.IMPORTANCE_DEFAULT
                 else NotificationManager.IMPORTANCE_LOW
@@ -749,7 +756,7 @@ private data class NotificationData(
         // digits being at the first of string on
         val toPrepend = if (isRtl && Build.VERSION.SDK_INT < Build.VERSION_CODES.N) RLM else ""
 
-        val builder = NotificationCompat.Builder(context, NOTIFICATION_ID.toString())
+        val builder = NotificationCompat.Builder(context, notificationId.toString())
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
             .setWhen(0)
@@ -836,9 +843,9 @@ private data class NotificationData(
 
         if (BuildConfig.DEVELOPMENT) builder.setWhen(System.currentTimeMillis())
 
-        if (enableWorkManager) notificationManager?.notify(NOTIFICATION_ID, builder.build())
+        if (enableWorkManager) notificationManager?.notify(notificationId, builder.build())
         else context.runCatching {
-            ApplicationService.getInstance()?.startForeground(NOTIFICATION_ID, builder.build())
+            ApplicationService.getInstance()?.startForeground(notificationId, builder.build())
         }.onFailure(logException)
         return true
     }
