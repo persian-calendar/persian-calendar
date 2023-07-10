@@ -104,6 +104,11 @@
             android:name="preferenceKey"
             android:defaultValue=""
             app:argType="string" />
+        <action
+            android:id="@+id/navigate_to_self"
+            app:destination="@id/settings"
+            app:popUpTo="@id/settings"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

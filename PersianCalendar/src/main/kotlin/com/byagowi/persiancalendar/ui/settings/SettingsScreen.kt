@@ -29,6 +29,7 @@ import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.ExistingWorkPolicy
@@ -144,7 +145,7 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         const val LOCATION_ATHAN_TAB = 2
     }
 
-    private val tabs = listOf(
+    private val tabs = listOf<Pair<() -> (PreferenceFragmentCompat), List<Int>>>(
         ::InterfaceCalendarFragment to listOf(R.string.pref_interface, R.string.calendar),
         ::WidgetNotificationFragment to listOf(R.string.pref_notification, R.string.pref_widget),
         ::LocationAthanFragment to listOf(R.string.location, R.string.athan)

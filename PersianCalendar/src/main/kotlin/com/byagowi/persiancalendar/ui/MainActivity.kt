@@ -284,7 +284,6 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 ) askForCalendarPermission()
             }
 
-            PREF_APP_LANGUAGE -> restartToSettings()
             PREF_THEME -> {
                 // Restart activity if theme is changed and don't if app theme
                 // has just got a default value by preferences as going

@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar
 import android.Manifest
 import android.animation.ValueAnimator
 import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.core.app.ActivityCompat
 import androidx.core.content.edit
+import androidx.navigation.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
@@ -34,6 +36,7 @@ import com.byagowi.persiancalendar.entities.Theme
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
+import com.byagowi.persiancalendar.ui.settings.SettingsScreenDirections
 import com.byagowi.persiancalendar.ui.settings.build
 import com.byagowi.persiancalendar.ui.settings.clickable
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder.showCalendarPreferenceDialog
@@ -44,12 +47,14 @@ import com.byagowi.persiancalendar.ui.settings.summary
 import com.byagowi.persiancalendar.ui.settings.switch
 import com.byagowi.persiancalendar.ui.settings.title
 import com.byagowi.persiancalendar.ui.utils.askForCalendarPermission
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class InterfaceCalendarFragment : PreferenceFragmentCompat() {
+class InterfaceCalendarFragment : PreferenceFragmentCompat(),
+    SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val activity = activity ?: return
         val destination = arguments?.getString(SettingsScreen.PREF_DESTINATION)
@@ -152,6 +157,9 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
                 }
             }
         }
+
+        val appPrefs = activity.appPrefs
+        appPrefs.registerOnSharedPreferenceChangeListener(this)
     }
 
     private fun PreferenceCategory.themeSelect() {
@@ -200,4 +208,12 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat() {
         inflater: LayoutInflater, parent: ViewGroup, savedInstanceState: Bundle?
     ): RecyclerView =
         SettingsScreen.insetsFix(super.onCreateRecyclerView(inflater, parent, savedInstanceState))
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
+        if (key == PREF_APP_LANGUAGE) {
+            val navController = activity?.findNavController(R.id.navHostFragment)
+            if (navController?.currentDestination?.id == R.id.settings)
+                navController.navigateSafe(SettingsScreenDirections.navigateToSelf())
+        }
+    }
 }
