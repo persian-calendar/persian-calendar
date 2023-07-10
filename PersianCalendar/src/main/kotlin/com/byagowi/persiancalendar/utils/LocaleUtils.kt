@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.preferredDigits
 
 fun applyAppLanguage() =
-    AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(language.code))
+    AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(language.asSystemLocale()))
 
 val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.isLessKnownRtl
 
