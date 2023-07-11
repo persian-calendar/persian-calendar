@@ -160,7 +160,7 @@ dependencies {
     implementation("com.github.persian-calendar:calculator:371a91149d1fea9c318ef0def94ca0f93a1be0c2")
     implementation("com.github.persian-calendar:qr:05172e38e46f3e0e90728635fa669aa13de25487")
 
-    // The only third part libraries created in a collaboration, https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
+    // The only third part library created in a collaboration, https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     // bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f is equal to v2.1.17, the latest release
     implementation("com.github.cosinekitty:astronomy:bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f")
 
