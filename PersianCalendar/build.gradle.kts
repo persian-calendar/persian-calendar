@@ -29,6 +29,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        if (isMinApi21Build) compose = true
     }
 
     val gitInfo = providers.of(io.github.persiancalendar.gradle.GitInfoValueSource::class) {}.get()
@@ -123,12 +124,6 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = composeCompilerVersion
-    }
-
-    if (isMinApi21Build) {
-        buildFeatures {
-            compose = true
-        }
     }
 
     val javaVersion = JavaVersion.VERSION_17
