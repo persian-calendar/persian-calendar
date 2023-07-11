@@ -154,13 +154,14 @@ android {
 val minApi21Implementation by configurations
 
 dependencies {
-    implementation("com.github.persian-calendar:calendar:1.2.2")
-    implementation("com.github.persian-calendar:praytimes:3.1.2")
-    implementation("com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b")
-    implementation("com.github.persian-calendar:qr:c95d3822edf9de0d056d6142e74a5bedbd94157f")
+    implementation("com.github.persian-calendar:calendar:98dd3142603242edab31fac6008c1b060c97d0e1")
+    implementation("com.github.persian-calendar:praytimes:8510d2e6bf71d977979cde3e9961f113ecf4a7bf")
+    implementation("com.github.persian-calendar:calculator:371a91149d1fea9c318ef0def94ca0f93a1be0c2")
+    implementation("com.github.persian-calendar:qr:05172e38e46f3e0e90728635fa669aa13de25487")
 
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
-    implementation("com.github.cosinekitty:astronomy:v2.1.17")
+    // bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f is equal to v2.1.17, the latest release
+    implementation("com.github.cosinekitty:astronomy:bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.preference:preference-ktx:1.2.0")

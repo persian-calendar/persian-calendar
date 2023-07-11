@@ -8,15 +8,15 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.9.0 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.0
 |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.0 (*)
-+--- com.github.persian-calendar:calendar:1.2.2
-+--- com.github.persian-calendar:praytimes:3.1.2
++--- com.github.persian-calendar:calendar:98dd3142603242edab31fac6008c1b060c97d0e1
++--- com.github.persian-calendar:praytimes:8510d2e6bf71d977979cde3e9961f113ecf4a7bf
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.21 -> 1.9.0 (*)
-+--- com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b
++--- com.github.persian-calendar:calculator:371a91149d1fea9c318ef0def94ca0f93a1be0c2
 |    +--- org.antlr:antlr4-runtime:4.9.3
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.9.0 (*)
-+--- com.github.persian-calendar:qr:c95d3822edf9de0d056d6142e74a5bedbd94157f
++--- com.github.persian-calendar:qr:05172e38e46f3e0e90728635fa669aa13de25487
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.0 (*)
-+--- com.github.cosinekitty:astronomy:v2.1.17
++--- com.github.cosinekitty:astronomy:bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10 -> 1.9.0 (*)
 +--- androidx.appcompat:appcompat:1.6.1
 |    +--- androidx.activity:activity:1.6.0 -> 1.7.2
