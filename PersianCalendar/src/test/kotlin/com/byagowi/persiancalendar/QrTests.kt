@@ -1,6 +1,6 @@
 package com.byagowi.persiancalendar
 
-import com.byagowi.persiancalendar.ui.converter.qr
+import io.github.persiancalendar.qr.qr
 import org.junit.jupiter.api.Test
 import kotlin.math.ceil
 import kotlin.test.assertEquals
@@ -39,19 +39,5 @@ class QrTests {
                 } + "█"
             }
         )
-
-        // val bitMatrix = QRCodeWriter().encode(
-        //     text, BarcodeFormat.QR_CODE, result.size, result.size, mapOf(
-        //         EncodeHintType.ERROR_CORRECTION to ErrorCorrectionLevel.M,
-        //         EncodeHintType.MARGIN to 0
-        //     )
-        // )
-        // result.indices.forEach { i ->
-        //     val row = mutableListOf<Boolean>()
-        //     result.indices.forEach { j ->
-        //         row.add(bitMatrix[i, j])
-        //     }
-        //     println(row.joinToString("") { if (it) "*" else "." })
-        // }
     }
 }

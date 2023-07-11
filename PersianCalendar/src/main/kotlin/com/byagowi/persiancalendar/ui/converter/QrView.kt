@@ -21,6 +21,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.shareBinaryFile
 import com.byagowi.persiancalendar.ui.utils.toByteArray
 import com.byagowi.persiancalendar.utils.logException
+import io.github.persiancalendar.qr.qr
 import kotlin.math.min
 
 class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {

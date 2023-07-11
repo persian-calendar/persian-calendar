@@ -157,6 +157,7 @@ dependencies {
     implementation("com.github.persian-calendar:calendar:1.2.2")
     implementation("com.github.persian-calendar:praytimes:3.1.2")
     implementation("com.github.persian-calendar:calculator:0827f0fbcad2ffa8559f05dcc82002f1dac1464b")
+    implementation("com.github.persian-calendar:qr:c95d3822edf9de0d056d6142e74a5bedbd94157f")
 
     // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     implementation("com.github.cosinekitty:astronomy:v2.1.17")
