@@ -3,9 +3,11 @@ package com.byagowi.persiancalendar.ui.converter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
+import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
@@ -45,6 +47,12 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
                     invalidate()
                 }
             }.start()
+        }
+
+        // Show something in Android Studio preview
+        if (Build.DEVICE == "layoutlib") {
+            paint.color = Color.BLACK
+            update("Sample Text")
         }
     }
 
