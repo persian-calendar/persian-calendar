@@ -154,15 +154,17 @@ android {
 val minApi21Implementation by configurations
 
 dependencies {
+    // Project owned libraries
     implementation("com.github.persian-calendar:calendar:98dd3142603242edab31fac6008c1b060c97d0e1")
     implementation("com.github.persian-calendar:praytimes:8510d2e6bf71d977979cde3e9961f113ecf4a7bf")
     implementation("com.github.persian-calendar:calculator:371a91149d1fea9c318ef0def94ca0f93a1be0c2")
     implementation("com.github.persian-calendar:qr:05172e38e46f3e0e90728635fa669aa13de25487")
 
-    // https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
+    // The only third part libraries created in a collaboration, https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     // bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f is equal to v2.1.17, the latest release
     implementation("com.github.cosinekitty:astronomy:bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f")
 
+    // Google/JetBrains owned libraries (roughly platform libraries)
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
     implementation("androidx.recyclerview:recyclerview:1.3.0")
@@ -192,7 +194,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.0")
 
     implementation("com.google.openlocationcode:openlocationcode:1.0.4")
-    testImplementation("com.google.zxing:core:3.5.1")
 
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation("androidx.multidex:multidex:2.0.1")
