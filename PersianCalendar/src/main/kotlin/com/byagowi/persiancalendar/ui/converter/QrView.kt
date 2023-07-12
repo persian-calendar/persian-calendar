@@ -26,13 +26,15 @@ import kotlin.math.min
 
 class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private var qr: List<List<Boolean>> = emptyList()
+    private var previousQr: List<List<Boolean>> = emptyList()
     private var roundness = 1f
     private var viewSize = 0
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(android.R.attr.textColorPrimary)
     }
 
-    override fun onDraw(canvas: Canvas) = drawQr(canvas, viewSize)
+    override fun onDraw(canvas: Canvas) =
+        drawQr(canvas, viewSize, transitionAnimator.animatedValue as? Float ?: 1f, qr, previousQr)
 
     private var animator: ValueAnimator? = null
 
@@ -59,13 +61,22 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
 
     private val rect = RectF()
     private val path = Path()
-    private fun drawQr(canvas: Canvas, size: Int) {
+    private fun drawQr(
+        canvas: Canvas, size: Int, factor: Float,
+        qr: List<List<Boolean>>, previousQr: List<List<Boolean>>
+    ) {
+        val cells = qr.size // cells in a row or a column
         val cellSize = size.toFloat() / (qr.size.takeIf { it != 0 } ?: return)
-        qr.forEachIndexed { i, row ->
-            row.forEachIndexed { j, v ->
-                val s = qr.size
-                if (v && (i > 6 || j > 6) && (s - i > 7 || j > 6) && (i > 6 || s - j > 7))
-                    drawDot(canvas, i, j, cellSize)
+        (0..<cells).forEach { i ->
+            (0..<cells).forEach { j ->
+                if ((i > 6 || j > 6) && (cells - i > 7 || j > 6) && (i > 6 || cells - j > 7)) {
+                    val previous = previousQr.getOrNull(i)?.getOrNull(j) ?: false
+                    when {
+                        qr[i][j] && previous -> drawDot(canvas, i, j, cellSize, 1f)
+                        qr[i][j] && !previous -> drawDot(canvas, i, j, cellSize, factor)
+                        !qr[i][j] && previous -> drawDot(canvas, i, j, cellSize, 1 - factor)
+                    }
+                }
             }
         }
         path.rewind()
@@ -81,10 +92,12 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         canvas.withTranslation(cellSize * (qr.size - 7), 0f) { canvas.drawPath(path, paint) }
     }
 
-    private fun drawDot(canvas: Canvas, i: Int, j: Int, cellSize: Float) {
+    private fun drawDot(canvas: Canvas, i: Int, j: Int, cellSize: Float, factor: Float) {
         rect.set(i * cellSize, j * cellSize, (i + 1) * cellSize, (j + 1) * cellSize)
-        rect.inset(-.25f * (1 - roundness), -.25f * (1 - roundness))
-        canvas.drawRoundRect(rect, roundness * cellSize / 2, roundness * cellSize / 2, paint)
+        val inset = (roundness - 1) / 4 + (1 - factor) * cellSize / 2
+        rect.inset(inset, inset)
+        val r = roundness * cellSize / 2 * factor
+        canvas.drawRoundRect(rect, r, r, paint)
     }
 
     fun share(activity: FragmentActivity?) {
@@ -92,7 +105,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         val bitmap = createBitmap(size.toInt(), size.toInt()).applyCanvas {
             drawColor(context.resolveColor(com.google.android.material.R.attr.colorSurface))
             withScale(1 - 64 / size, 1 - 64 / size, size / 2, size / 2) {
-                drawQr(this, size.toInt())
+                drawQr(this, size.toInt(), 1f, qr, qr)
             }
         }
         activity?.shareBinaryFile(bitmap.toByteArray(), "result.png", "image/png")
@@ -112,9 +125,19 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         )
     }
 
+    private var transitionAnimator = ValueAnimator.ofFloat(0f, 1f)
+
     fun update(text: String) {
         runCatching {
+            previousQr = qr
             qr = qr(text)
+            transitionAnimator.cancel()
+            transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
+                it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+                it.interpolator = AccelerateDecelerateInterpolator()
+                it.start()
+                it.addUpdateListener { invalidate() }
+            }
             if (!isVisible) isVisible = true
             invalidate()
         }.onFailure(logException).onFailure {
