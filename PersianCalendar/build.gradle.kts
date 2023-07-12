@@ -186,7 +186,7 @@ dependencies {
     val coroutinesVersion = "1.7.2"
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.1")
 
     implementation("com.google.openlocationcode:openlocationcode:1.0.4")
 
