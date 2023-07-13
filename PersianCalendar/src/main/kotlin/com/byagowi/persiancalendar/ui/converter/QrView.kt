@@ -34,8 +34,11 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         it.color = context.resolveColor(android.R.attr.textColorPrimary)
     }
 
-    override fun onDraw(canvas: Canvas) =
-        drawQr(canvas, viewSize, transitionAnimator.animatedValue as? Float ?: 1f, qr, previousQr)
+    override fun onDraw(canvas: Canvas) {
+        // How much it should be similar to qr vs previousQr, 1 for qr, 0 for previousQr
+        val transitionFactor = transitionAnimator.animatedValue as? Float ?: 1f
+        drawQr(canvas, viewSize, transitionFactor, qr, previousQr)
+    }
 
     private var animator: ValueAnimator? = null
 
