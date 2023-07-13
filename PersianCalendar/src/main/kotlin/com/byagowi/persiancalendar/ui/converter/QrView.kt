@@ -11,6 +11,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.OvershootInterpolator
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withScale
@@ -134,7 +135,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
             transitionAnimator.cancel()
             transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
                 it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-                it.interpolator = AccelerateDecelerateInterpolator()
+                it.interpolator = OvershootInterpolator()
                 it.start()
                 it.addUpdateListener { invalidate() }
             }
