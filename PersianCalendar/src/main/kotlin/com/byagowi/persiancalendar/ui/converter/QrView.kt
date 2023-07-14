@@ -74,11 +74,12 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         (0..<cells).forEach { i ->
             (0..<cells).forEach { j ->
                 if ((i > 6 || j > 6) && (cells - i > 7 || j > 6) && (i > 6 || cells - j > 7)) {
+                    val current = qr[i][j]
                     val previous = previousQr.getOrNull(i)?.getOrNull(j) ?: false
                     when {
-                        qr[i][j] && previous -> drawDot(canvas, i, j, cellSize, 1f)
-                        qr[i][j] && !previous -> drawDot(canvas, i, j, cellSize, factor)
-                        !qr[i][j] && previous -> drawDot(canvas, i, j, cellSize, 1 - factor)
+                        current && previous -> drawDot(canvas, i, j, cellSize, 1f)
+                        current && !previous -> drawDot(canvas, i, j, cellSize, factor)
+                        !current && previous -> drawDot(canvas, i, j, cellSize, 1 - factor)
                     }
                 }
             }
