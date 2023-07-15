@@ -14,7 +14,7 @@ import java.util.Locale
 
 fun applyAppLanguage(context: Context) {
     val locale = language.asSystemLocale()
-    AppCompatDelegate.setApplicationLocales(LocaleListCompat.create())
+    AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(locale))
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
         Locale.setDefault(locale)
         val resources = context.resources
