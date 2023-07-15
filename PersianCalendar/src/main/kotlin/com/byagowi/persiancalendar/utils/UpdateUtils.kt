@@ -143,7 +143,7 @@ fun update(context: Context, updateDate: Boolean) {
     latestFiredUpdate = now
 
     debugLog("UpdateUtils: update")
-    applyAppLanguage()
+    applyAppLanguage(context)
 
     val jdn = Jdn.today()
     val date = jdn.toCalendar(mainCalendar)

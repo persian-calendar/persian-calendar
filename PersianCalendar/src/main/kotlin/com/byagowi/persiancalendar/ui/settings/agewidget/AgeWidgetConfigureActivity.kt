@@ -37,7 +37,7 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
-        applyAppLanguage()
+        applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         window?.makeWallpaperTransparency()
         transparentSystemBars()
@@ -106,6 +106,6 @@ class AgeWidgetConfigureActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        applyAppLanguage()
+        applyAppLanguage(this)
     }
 }

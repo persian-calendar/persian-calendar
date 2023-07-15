@@ -197,7 +197,7 @@ private var secondaryCalendarEnabled = false
 fun initGlobal(context: Context) {
     debugLog("Utils: initGlobal is called")
     updateStoredPreference(context)
-    applyAppLanguage()
+    applyAppLanguage(context)
     loadLanguageResources(context)
     scheduleAlarms(context)
     configureCalendarsAndLoadEvents(context)
@@ -313,7 +313,7 @@ fun updateStoredPreference(context: Context) {
     numericalDatePreferred = prefs.getBoolean(PREF_NUMERICAL_DATE_PREFERRED, false)
 
     // TODO: probably can be done in applyAppLanguage itself?
-    if (language.language != resources.getString(R.string.code)) applyAppLanguage()
+    if (language.language != resources.getString(R.string.code)) applyAppLanguage(context)
 
     calendarTypesTitleAbbr = CalendarType.entries.map { context.getString(it.shortTitle) }
 

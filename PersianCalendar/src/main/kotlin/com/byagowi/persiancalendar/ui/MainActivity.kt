@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Theme.apply(this)
-        applyAppLanguage()
+        applyAppLanguage(this)
         super.onCreate(savedInstanceState)
         transparentSystemBars()
 
@@ -179,7 +179,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             creationDateJdn.toPersianDate().year > supportedYearOfIranCalendar
         ) showAppIsOutDatedSnackbar()
 
-        applyAppLanguage()
+        applyAppLanguage(this)
 
         previousAppThemeValue = appPrefs.getString(PREF_THEME, null)
 
@@ -243,7 +243,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         }
 
         if (settingHasChanged) { // update when checked menu item is changed
-            applyAppLanguage()
+            applyAppLanguage(this)
             update(applicationContext, true)
             settingHasChanged = false // reset for the next time
         }
@@ -303,6 +303,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             PREF_EASTERN_GREGORIAN_ARABIC_MONTHS -> loadLanguageResources(this)
 
             PREF_PRAY_TIME_METHOD -> prefs.edit { remove(PREF_MIDNIGHT_METHOD) }
+
+            PREF_APP_LANGUAGE -> restartToSettings()
         }
 
         configureCalendarsAndLoadEvents(this)
@@ -350,7 +352,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        applyAppLanguage()
+        applyAppLanguage(this)
         ensureDirectionality()
     }
 
@@ -358,7 +360,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onResume() {
         super.onResume()
-        applyAppLanguage()
+        applyAppLanguage(this)
         update(applicationContext, false)
         val today = Jdn.today()
         if (creationDateJdn != today) {
@@ -407,7 +409,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 if (navHostFragment?.navController?.currentDestination?.id != itemId) {
                     clickedItem = itemId
                 }
-                applyAppLanguage()
+                applyAppLanguage(this)
             }
         }
         return true
