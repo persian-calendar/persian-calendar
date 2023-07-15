@@ -11,8 +11,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.WindowManager
-import androidx.activity.ComponentActivity
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.getSystemService
 import com.byagowi.persiancalendar.DEFAULT_ATHAN_VOLUME
 import com.byagowi.persiancalendar.FAJR_KEY
@@ -28,7 +28,7 @@ import com.byagowi.persiancalendar.utils.isAscendingAthanVolumeEnabled
 import com.byagowi.persiancalendar.utils.logException
 import java.util.concurrent.TimeUnit
 
-class AthanActivity : ComponentActivity() {
+class AthanActivity : AppCompatActivity() {
     private val ascendingVolumeStep = 6
     private var currentVolumeSteps = 1
     private val handler = Handler(Looper.getMainLooper())
