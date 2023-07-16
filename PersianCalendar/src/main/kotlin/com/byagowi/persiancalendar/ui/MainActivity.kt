@@ -300,14 +300,15 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
                 }
             }
 
-            PREF_EASTERN_GREGORIAN_ARABIC_MONTHS -> loadLanguageResources(this)
-
             PREF_PRAY_TIME_METHOD -> prefs.edit { remove(PREF_MIDNIGHT_METHOD) }
         }
 
         configureCalendarsAndLoadEvents(this)
         updateStoredPreference(this)
         update(applicationContext, true)
+
+        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_APP_LANGUAGE)
+            loadLanguageResources(this)
     }
 
     override fun onRequestPermissionsResult(
