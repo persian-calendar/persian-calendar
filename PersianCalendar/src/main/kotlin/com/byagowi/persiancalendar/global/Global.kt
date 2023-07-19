@@ -178,6 +178,8 @@ var pmString = DEFAULT_PM
     private set
 var spacedAndInDates = " و "
     private set
+var spacedOr = " و "
+    private set
 var spacedColon = ": "
     private set
 var spacedComma = "، "
@@ -348,6 +350,7 @@ fun updateStoredPreference(context: Context) {
         language.isDari -> "رخصتی"
         else -> context.getString(R.string.holiday)
     }
+    spacedOr = context.getString(R.string.spaced_or)
     spacedAndInDates = if (language.languagePrefersHalfSpaceAndInDates) " "
     else context.getString(R.string.spaced_and)
     spacedColon = context.getString(R.string.spaced_colon)

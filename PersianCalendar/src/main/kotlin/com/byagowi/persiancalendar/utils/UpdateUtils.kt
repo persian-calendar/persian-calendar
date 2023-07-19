@@ -307,7 +307,7 @@ fun createAgeRemoteViews(context: Context, width: Int, height: Int, widgetId: In
     val appPrefs = context.appPrefs
     val baseJdn = appPrefs.getJdnOrNull(PREF_SELECTED_DATE_AGE_WIDGET + widgetId) ?: Jdn.today()
     val title = appPrefs.getString(PREF_TITLE_AGE_WIDGET + widgetId, null) ?: ""
-    val subtitle = calculateDaysDifference(context.resources, baseJdn)
+    val subtitle = calculateDaysDifference(context.resources, baseJdn, isInWidget = true)
     val textColor = getWidgetTextColor(appPrefs, PREF_SELECTED_WIDGET_TEXT_COLOR + widgetId)
     val backgroundColor = getWidgetBackgroundColor(
         appPrefs, PREF_SELECTED_WIDGET_BACKGROUND_COLOR + widgetId

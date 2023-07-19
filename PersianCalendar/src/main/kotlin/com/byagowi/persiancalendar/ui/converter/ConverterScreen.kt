@@ -216,7 +216,8 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.resultText.textDirection = View.TEXT_DIRECTION_INHERIT
                                 binding.resultText.text = calculateDaysDifference(
                                     resources, viewModel.selectedDate.value,
-                                    viewModel.secondSelectedDate.value, viewModel.calendar.value
+                                    viewModel.secondSelectedDate.value,
+                                    calendarType = viewModel.calendar.value
                                 )
                             }
 

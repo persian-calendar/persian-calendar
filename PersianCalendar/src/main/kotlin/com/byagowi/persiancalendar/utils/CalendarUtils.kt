@@ -34,6 +34,7 @@ import com.byagowi.persiancalendar.global.numericalDatePreferred
 import com.byagowi.persiancalendar.global.preferredDigits
 import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
+import com.byagowi.persiancalendar.global.spacedOr
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekStartOffset
@@ -266,7 +267,9 @@ fun calculateDatePartsDifference(
 
 fun calculateDaysDifference(
     resources: Resources, jdn: Jdn,
-    baseJdn: Jdn = Jdn.today(), calendarType: CalendarType = mainCalendar
+    baseJdn: Jdn = Jdn.today(),
+    calendarType: CalendarType = mainCalendar,
+    isInWidget: Boolean = false
 ): String {
     val baseDate = baseJdn.toCalendar(calendarType)
     val date = jdn.toCalendar(calendarType)
@@ -275,13 +278,20 @@ fun calculateDaysDifference(
     )
     val days = abs(baseJdn - jdn)
         .let { resources.getQuantityString(R.plurals.n_days, it, formatNumber(it)) }
-    return if (months == 0 && years == 0) days else language.inParentheses.format(days, listOf(
-        R.plurals.n_years to years,
-        R.plurals.n_months to months,
-        R.plurals.n_days to daysOfMonth
-    ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
-        resources.getQuantityString(pluralId, n, formatNumber(n))
-    })
+    val weeks = if (isInWidget) 0 else jdn.getWeeksDistance(baseJdn)
+    val result = listOfNotNull(
+        if (months == 0 && years == 0) null else listOf(
+            R.plurals.n_years to years,
+            R.plurals.n_months to months,
+            R.plurals.n_days to daysOfMonth
+        ).filter { (_, n) -> n != 0 }.joinToString(spacedAndInDates) { (@PluralsRes pluralId, n) ->
+            resources.getQuantityString(pluralId, n, formatNumber(n))
+        },
+        if (weeks == 0) null
+        else "~" + resources.getQuantityString(R.plurals.n_weeks, weeks, formatNumber(weeks)),
+    )
+    if (result.isEmpty()) return days
+    return language.inParentheses.format(days, result.joinToString(spacedOr))
 }
 
 fun formatDate(
