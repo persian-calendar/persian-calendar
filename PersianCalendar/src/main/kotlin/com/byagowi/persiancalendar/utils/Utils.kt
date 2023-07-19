@@ -16,7 +16,7 @@ import io.github.persiancalendar.praytimes.HighLatitudesMethod
 import io.github.persiancalendar.praytimes.MidnightMethod
 import io.github.persiancalendar.praytimes.PrayTimes
 import java.util.GregorianCalendar
-import kotlin.math.absoluteValue
+import kotlin.math.abs
 
 // .split() turns an empty string into an array with an empty string which is undesirable
 // for our use so this filter any non empty string after split, its name rhymes with .filterNotNull
@@ -62,7 +62,7 @@ val CalculationMethod.titleStringId
 // Midnight sun occurs at latitudes from 65°44' to 90° north or south as
 // https://en.wikipedia.org/wiki/Midnight_sun
 val enableHighLatitudesConfiguration: Boolean
-    get() = coordinates.value?.let { it.latitude.absoluteValue > 50 } ?: false
+    get() = coordinates.value?.let { abs(it.latitude) > 50 } ?: false
 
 val HighLatitudesMethod.titleStringId
     get(): @StringRes Int = when (this) {

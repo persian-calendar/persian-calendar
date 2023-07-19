@@ -11,7 +11,7 @@ import android.view.View
 import androidx.dynamicanimation.animation.FlingAnimation
 import androidx.dynamicanimation.animation.FloatValueHolder
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
-import kotlin.math.absoluteValue
+import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -192,7 +192,7 @@ open class ZoomableView(context: Context, attrs: AttributeSet? = null) : View(co
 
             MotionEvent.ACTION_UP -> {
                 mode = NONE
-                if ((event.x - start.x).absoluteValue < 5 && (event.y - start.y).absoluteValue < 5) {
+                if (abs(event.x - start.x) < 5 && abs(event.y - start.y) < 5) {
                     performClick()
                     // https://stackoverflow.com/a/7418428
                     val inverse = Matrix()

@@ -115,7 +115,6 @@ import org.intellij.lang.annotations.Language
 import java.util.Locale
 import kotlin.math.PI
 import kotlin.math.abs
-import kotlin.math.absoluteValue
 import kotlin.math.asin
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -1196,7 +1195,7 @@ private fun guitarString(
     samples.indices
         .forEach { samples[it] = ((l.pow(4 / 3.0)) * samples[it]) + (1 - l) * buffer[it] }
 
-    val max = samples.maxOf { it.absoluteValue }
+    val max = samples.maxOf(::abs)
     return samples.map { (it / max * Short.MAX_VALUE).roundToInt().toShort() }.toShortArray()
 }
 
@@ -1250,7 +1249,7 @@ fun showSensorTestDialog(activity: FragmentActivity) {
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
             val h2 = height / 2
-            val max = log.maxOf { it.maxOfOrNull { it.absoluteValue } ?: 0f }.coerceAtLeast(1f)
+            val max = log.maxOf { it.maxOfOrNull(::abs) ?: 0f }.coerceAtLeast(1f)
             log[0].indices.forEach { n ->
                 val path = paths[n.coerceAtMost(paths.size - 1)]
                 path.rewind()

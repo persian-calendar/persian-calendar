@@ -44,7 +44,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.Date
 import kotlin.math.abs
-import kotlin.math.absoluteValue
 
 class MapScreen : Fragment(R.layout.map_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -147,7 +146,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
             val longitude = x / mapDraw.mapScaleFactor - 180
             if (abs(latitude) < 90 && abs(longitude) < 180) {
                 // Easter egg like feature, bring sky renderer fragment
-                if (latitude.absoluteValue < 2 && longitude.absoluteValue < 2 && viewModel.state.value.displayGrid) {
+                if (abs(latitude) < 2 && abs(longitude) < 2 && viewModel.state.value.displayGrid) {
                     findNavController().navigateSafe(MapScreenDirections.actionMapToSkyRenderer())
                 } else {
                     val coordinates = Coordinates(latitude.toDouble(), longitude.toDouble(), 0.0)

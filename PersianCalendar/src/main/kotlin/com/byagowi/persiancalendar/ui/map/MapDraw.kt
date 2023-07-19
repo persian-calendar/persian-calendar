@@ -52,7 +52,7 @@ import io.github.cosinekitty.astronomy.rotationEqjEqd
 import io.github.cosinekitty.astronomy.searchRiseSet
 import io.github.persiancalendar.praytimes.Coordinates
 import java.util.GregorianCalendar
-import kotlin.math.absoluteValue
+import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.atan2
 import kotlin.math.cos
@@ -199,7 +199,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                     when {
                         value > 1 -> ((value * 255 / 180).toInt() shl 24) + 0xFF0000
                         value < -1 -> ((-value + 255 / 180).toInt() shl 24) + 0xFF
-                        else -> ((30 - value.absoluteValue * 30).toInt() shl 24) + 0xFF00
+                        else -> ((30 - abs(value) * 30).toInt() shl 24) + 0xFF00
                     }
                 } else (field.fieldStrength / 68000/*25-65 μT*/ * 255).toInt() shl 24
             }
