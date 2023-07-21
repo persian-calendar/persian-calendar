@@ -15,7 +15,7 @@ class AstronomyViewModel : ViewModel() {
     private val _isTropical = MutableStateFlow(false)
     val isTropical: StateFlow<Boolean> = _isTropical
 
-    private val _mode = MutableStateFlow(AstronomyMode.Earth)
+    private val _mode = MutableStateFlow(AstronomyMode.entries[0])
     val mode: StateFlow<AstronomyMode> = _mode
 
     private val _minutesOffset = MutableStateFlow(DEFAULT_TIME)

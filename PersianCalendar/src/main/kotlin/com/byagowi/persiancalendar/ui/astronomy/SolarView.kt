@@ -40,7 +40,7 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
 
     private var state = AstronomyState(GregorianCalendar())
 
-    var mode: AstronomyMode = AstronomyMode.Earth
+    var mode: AstronomyMode = AstronomyMode.entries[0]
         set(value) {
             field = value
             invalidate()
