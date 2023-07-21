@@ -22,7 +22,7 @@ class ConverterViewModel : ViewModel() {
     private val _secondSelectedDate = MutableStateFlow(Jdn.today())
     val secondSelectedDate: StateFlow<Jdn> get() = _secondSelectedDate
 
-    private val _screenMode = MutableStateFlow(ConverterScreenMode.Converter)
+    private val _screenMode = MutableStateFlow(ConverterScreenMode.entries[0])
     val screenMode: StateFlow<ConverterScreenMode> get() = _screenMode
 
     private val _inputText = MutableStateFlow("1d 2h 3m 4s + 4h 5s - 2030s + 28h")
