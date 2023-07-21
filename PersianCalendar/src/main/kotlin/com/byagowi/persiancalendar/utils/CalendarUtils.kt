@@ -184,8 +184,8 @@ private fun readDeviceEvents(
             CalendarEvent.DeviceCalendarEvent(
                 id = it.getInt(0),
                 title =
-                if (it.getString(6) == "1") "\uD83D\uDCC5 ${it.getString(1) ?: ""}"
-                else "\uD83D\uDD53 ${it.getString(1) ?: ""} (${startCalendar.clock()}${
+                if (it.getString(6) == "1") it.getString(1) ?: ""
+                else "${it.getString(1) ?: ""} (${startCalendar.clock()}${
                     (if (it.getLong(3) != it.getLong(4) && it.getLong(4) != 0L)
                         "-${endCalendar.clock()}"
                     else "")
