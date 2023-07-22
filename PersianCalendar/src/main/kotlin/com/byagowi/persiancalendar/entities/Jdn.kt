@@ -59,8 +59,6 @@ value class Jdn(val value: Long) {
         return ceil(1 + (dayOfYear - applyWeekStartOffsetToWeekDay(this.dayOfWeek)) / 7.0).toInt()
     }
 
-    fun getWeeksDistance(from: Jdn): Int = abs(this - from) / 7
-
     val dayOfWeekName: String get() = weekDays[this.dayOfWeek]
 
     fun calculatePersianSeasonPassedDaysAndCount(): Pair<Int, Int> {

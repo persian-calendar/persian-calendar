@@ -48,6 +48,7 @@ import java.util.Date
 import java.util.GregorianCalendar
 import java.util.TimeZone
 import kotlin.math.abs
+import kotlin.math.roundToInt
 
 val supportedYearOfIranCalendar: Int get() = IranianIslamicDateConverter.latestSupportedYearOfIran
 
@@ -277,8 +278,8 @@ fun calculateDaysDifference(
         if (baseJdn > jdn) baseDate else date, if (baseJdn > jdn) date else baseDate, calendarType
     )
     val days = abs(baseJdn - jdn)
-        .let { resources.getQuantityString(R.plurals.n_days, it, formatNumber(it)) }
-    val weeks = if (isInWidget) 0 else jdn.getWeeksDistance(baseJdn)
+    val daysString = resources.getQuantityString(R.plurals.n_days, days, formatNumber(days))
+    val weeks = if (isInWidget || days < 7) 0 else (days / 7.0).roundToInt()
     val result = listOfNotNull(
         if (months == 0 && years == 0) null else listOf(
             R.plurals.n_years to years,
@@ -288,10 +289,11 @@ fun calculateDaysDifference(
             resources.getQuantityString(pluralId, n, formatNumber(n))
         },
         if (weeks == 0) null
-        else "~" + resources.getQuantityString(R.plurals.n_weeks, weeks, formatNumber(weeks)),
+        else (if (days % 7 == 0) "" else "~")
+                + resources.getQuantityString(R.plurals.n_weeks, weeks, formatNumber(weeks)),
     )
-    if (result.isEmpty()) return days
-    return language.inParentheses.format(days, result.joinToString(spacedOr))
+    if (result.isEmpty()) return daysString
+    return language.inParentheses.format(daysString, result.joinToString(spacedOr))
 }
 
 fun formatDate(
