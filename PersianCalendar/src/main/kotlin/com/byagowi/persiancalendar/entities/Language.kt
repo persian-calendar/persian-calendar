@@ -379,8 +379,7 @@ enum class Language(val code: String, val nativeName: String) {
         // Based on https://stackoverflow.com/a/28216764 but doesn't seem to work
         private fun guessLanguageFromKeyboards(context: Context): Language = runCatching {
             val imm = context.getSystemService<InputMethodManager>() ?: return EN_US
-            val imeMethods = imm.enabledInputMethodList
-            for (method in imeMethods ?: emptyList()) {
+            for (method in imm.enabledInputMethodList) {
                 for (submethod in imm.getEnabledInputMethodSubtypeList(method, true)) {
                     if (submethod.mode == "keyboard") {
                         val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

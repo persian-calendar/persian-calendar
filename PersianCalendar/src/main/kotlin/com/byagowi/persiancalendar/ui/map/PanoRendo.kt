@@ -155,7 +155,7 @@ fun panoRendo(
                 (I2 * B).toInt().coerceIn(0, 255),
                 (I3 * B).toInt().coerceIn(0, 255)
             ) else result[
-                    (x1 / 2.0 * (1 + fe * cos(VA))).toInt(), (y1 / 2.0 * (1 + fe * sin(VA))).toInt()
+                (x1 / 2.0 * (1 + fe * cos(VA))).toInt(), (y1 / 2.0 * (1 + fe * sin(VA))).toInt()
             ] = Color.rgb(
                 (I1 * B).toInt().coerceIn(0, 255),
                 (I2 * B).toInt().coerceIn(0, 255),

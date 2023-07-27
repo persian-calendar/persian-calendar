@@ -12,7 +12,6 @@ import io.github.persiancalendar.calendar.NepaliDate
 import io.github.persiancalendar.calendar.PersianDate
 import java.util.Date
 import java.util.GregorianCalendar
-import kotlin.math.abs
 import kotlin.math.ceil
 
 // Julian day number, basically a day counter starting from some day in concept
