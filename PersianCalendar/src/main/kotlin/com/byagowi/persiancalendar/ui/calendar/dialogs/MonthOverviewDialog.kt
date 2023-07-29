@@ -27,6 +27,7 @@ import com.byagowi.persiancalendar.global.secondaryCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.copyToClipboard
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.openHtmlInBrowser
@@ -67,6 +68,7 @@ import kotlinx.html.td
 import kotlinx.html.th
 import kotlinx.html.tr
 import kotlinx.html.unsafe
+import kotlin.math.roundToInt
 
 fun showMonthOverviewDialog(activity: FragmentActivity, date: AbstractDate) {
     applyAppLanguage(activity)
@@ -108,7 +110,10 @@ fun showMonthOverviewDialog(activity: FragmentActivity, date: AbstractDate) {
                                     it.layoutParams = FrameLayout.LayoutParams(
                                         FrameLayout.LayoutParams.MATCH_PARENT,
                                         FrameLayout.LayoutParams.WRAP_CONTENT
-                                    ).also { p -> p.gravity = Gravity.CENTER_HORIZONTAL }
+                                    ).also { p ->
+                                        p.gravity = Gravity.CENTER_HORIZONTAL
+                                        p.bottomMargin = (8 * it.context.resources.dp).roundToInt()
+                                    }
                                 }
                             )
                             root.layoutParams = FrameLayout.LayoutParams(
