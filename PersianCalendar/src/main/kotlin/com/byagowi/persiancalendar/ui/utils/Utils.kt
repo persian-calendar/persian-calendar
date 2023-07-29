@@ -308,5 +308,5 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent1_500,
             android.R.color.system_accent2_500,
             android.R.color.system_accent3_500,
-        ).maxOf { Color.colorToHSV(getColor(it), hsv); hsv[1] } < .25
+        ).all { Color.colorToHSV(getColor(it), hsv); hsv[1] < .25 }
     }
