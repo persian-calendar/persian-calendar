@@ -351,7 +351,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        applyAppLanguage(this)
+        applyAppLanguage(this, skipContextApply = true)
         ensureDirectionality()
     }
 
@@ -359,7 +359,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
 
     override fun onResume() {
         super.onResume()
-        applyAppLanguage(this)
+        applyAppLanguage(this, skipContextApply = true)
         update(applicationContext, false)
         val today = Jdn.today()
         if (creationDateJdn != today) {

@@ -12,10 +12,10 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.preferredDigits
 import java.util.Locale
 
-fun applyAppLanguage(context: Context) {
+fun applyAppLanguage(context: Context, skipContextApply: Boolean = false) {
     val locale = language.asSystemLocale()
     AppCompatDelegate.setApplicationLocales(LocaleListCompat.create(locale))
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && !skipContextApply) {
         Locale.setDefault(locale)
         val resources = context.resources
         val config = resources.configuration
