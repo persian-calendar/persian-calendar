@@ -25,10 +25,11 @@
 
         <TextView
             android:id="@+id/no_event"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:paddingLeft="@dimen/card_padding"
-            android:paddingTop="@dimen/card_padding"
+            android:paddingTop="24dp"
             android:paddingRight="@dimen/card_padding"
             android:text="@string/no_event"
             android:textColor="?android:attr/textColorSecondary"
