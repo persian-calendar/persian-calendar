@@ -97,6 +97,7 @@ import com.byagowi.persiancalendar.utils.calculatePrayTimes
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.cityName
 import com.byagowi.persiancalendar.utils.dayTitleSummary
+import com.byagowi.persiancalendar.utils.enableDeviceCalendar
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.getA11yDaySummary
 import com.byagowi.persiancalendar.utils.getFromStringId
@@ -443,7 +444,8 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 activity, Manifest.permission.READ_CALENDAR
             ) != PackageManager.PERMISSION_GRANTED
         ) activity.askForCalendarPermission() else {
-            runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
+            if (!isShowDeviceCalendarEvents) enableDeviceCalendar(activity, findNavController())
+            else runCatching { addEvent.launch(jdn) }.onFailure(logException).onFailure {
                 Snackbar.make(
                     view ?: return, R.string.device_does_not_support,
                     Snackbar.LENGTH_SHORT

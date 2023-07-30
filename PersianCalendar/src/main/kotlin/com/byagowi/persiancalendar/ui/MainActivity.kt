@@ -85,6 +85,7 @@ import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.transparentSystemBars
 import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.applyAppLanguage
+import com.byagowi.persiancalendar.utils.enableDeviceCalendar
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.putJdn
 import com.byagowi.persiancalendar.utils.readAndStoreDeviceCalendarEventsOfTheDay
@@ -316,17 +317,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            CALENDAR_READ_PERMISSION_REQUEST_CODE -> {
-                val isGranted = ActivityCompat.checkSelfPermission(
-                    this, Manifest.permission.READ_CALENDAR
-                ) == PackageManager.PERMISSION_GRANTED
-                appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
-                if (isGranted) {
-                    val navController = navHostFragment?.navController
-                    if (navController?.currentDestination?.id == R.id.calendar)
-                        navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
-                }
-            }
+            CALENDAR_READ_PERMISSION_REQUEST_CODE ->
+                enableDeviceCalendar(this, navHostFragment?.navController)
 
             POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION -> {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return

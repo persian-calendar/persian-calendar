@@ -8,10 +8,13 @@ import android.content.res.Resources
 import android.provider.CalendarContract
 import androidx.annotation.PluralsRes
 import androidx.core.app.ActivityCompat
+import androidx.core.content.edit
 import androidx.core.text.HtmlCompat
 import androidx.core.text.parseAsHtml
+import androidx.navigation.NavController
 import com.byagowi.persiancalendar.EN_DASH
 import com.byagowi.persiancalendar.IRAN_TIMEZONE_ID
+import com.byagowi.persiancalendar.PREF_SHOW_DEVICE_CALENDAR_EVENTS
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
 import com.byagowi.persiancalendar.entities.CalendarEvent
@@ -38,6 +41,8 @@ import com.byagowi.persiancalendar.global.spacedOr
 import com.byagowi.persiancalendar.global.weekDays
 import com.byagowi.persiancalendar.global.weekDaysInitials
 import com.byagowi.persiancalendar.global.weekStartOffset
+import com.byagowi.persiancalendar.ui.calendar.CalendarScreenDirections
+import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import io.github.persiancalendar.calendar.AbstractDate
 import io.github.persiancalendar.calendar.CivilDate
@@ -343,3 +348,12 @@ private fun getCalendarNameAbbr(date: AbstractDate) =
 
 fun dateStringOfOtherCalendars(jdn: Jdn, separator: String) =
     enabledCalendars.drop(1).joinToString(separator) { formatDate(jdn.toCalendar(it)) }
+
+fun enableDeviceCalendar(context: Context, navController: NavController?) {
+    val isGranted = ActivityCompat.checkSelfPermission(
+        context, Manifest.permission.READ_CALENDAR
+    ) == PackageManager.PERMISSION_GRANTED
+    context.appPrefs.edit { putBoolean(PREF_SHOW_DEVICE_CALENDAR_EVENTS, isGranted) }
+    if (isGranted && navController != null && navController.currentDestination?.id == R.id.calendar)
+        navController.navigateSafe(CalendarScreenDirections.navigateToSelf())
+}
