@@ -44,6 +44,7 @@
 
     </FrameLayout>
 
+    <!-- Reverse space as the end of the tab for event addition floating action button -->
     <Space
         android:layout_width="wrap_content"
         android:layout_height="80dp" />
