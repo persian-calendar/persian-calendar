@@ -7,6 +7,7 @@
     android:layout_marginTop="4dp"
     android:layout_marginRight="@dimen/card_padding"
     android:layout_marginBottom="4dp"
+    android:foreground="?attr/selectableItemBackground"
     android:importantForAccessibility="yes"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
