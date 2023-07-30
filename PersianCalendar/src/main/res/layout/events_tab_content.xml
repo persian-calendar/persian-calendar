@@ -1,59 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/events_parent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:minHeight="220dp"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/shift_work_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="24dp"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/no_event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingLeft="@dimen/card_padding"
+        android:paddingTop="24dp"
+        android:paddingRight="@dimen/card_padding"
+        android:text="@string/no_event"
+        android:textColor="?android:attr/textColorSecondary"
+        android:textSize="@dimen/text_size_description" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:shadowColor="?attr/colorAccent"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="4"
-        android:textAlignment="center"
-        android:textColor="?attr/colorSurface"
-        android:textSize="70sp" />
+        android:layout_marginTop="12dp" />
 
-    <LinearLayout
-        android:id="@+id/events_parent"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="220dp"
-        android:orientation="vertical"
-        android:paddingBottom="80dp">
+        android:layout_marginLeft="@dimen/card_padding"
+        android:layout_marginRight="@dimen/card_padding">
 
-        <TextView
-            android:id="@+id/no_event"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingLeft="@dimen/card_padding"
-            android:paddingTop="24dp"
-            android:paddingRight="@dimen/card_padding"
-            android:text="@string/no_event"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textSize="@dimen/text_size_description" />
+        <include
+            android:id="@+id/buttons_bar"
+            layout="@layout/settings_buttons_bar" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/events"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp" />
+    </FrameLayout>
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/card_padding"
-            android:layout_marginRight="@dimen/card_padding">
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="80dp" />
 
-            <include
-                android:id="@+id/buttons_bar"
-                layout="@layout/settings_buttons_bar" />
-
-        </FrameLayout>
-
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

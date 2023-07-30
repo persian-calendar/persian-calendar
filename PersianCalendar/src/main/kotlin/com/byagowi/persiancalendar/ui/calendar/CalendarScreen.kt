@@ -185,7 +185,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest {
                     val activity = activity ?: return@collectLatest
-                    binding.shiftWorkTitle.text = getShiftWorkTitle(it, false)
+                    val shiftWorkTitle = getShiftWorkTitle(it, false)
+                    binding.shiftWorkTitle.isVisible = shiftWorkTitle.isNotEmpty()
+                    binding.shiftWorkTitle.text = shiftWorkTitle
                     val events = eventsRepository?.getEvents(it, activity.readDayDeviceEvents(it))
                         ?: emptyList()
                     binding.noEvent.isVisible = events.isEmpty()
