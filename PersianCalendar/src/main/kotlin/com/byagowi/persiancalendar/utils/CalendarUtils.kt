@@ -171,7 +171,8 @@ private fun readDeviceEvents(
             CalendarContract.Instances.END, // 4
             CalendarContract.Instances.VISIBLE, // 5
             CalendarContract.Instances.ALL_DAY, // 6
-            CalendarContract.Instances.EVENT_COLOR // 7
+            CalendarContract.Instances.EVENT_COLOR, // 7
+            CalendarContract.Instances.DISPLAY_COLOR // 8
         ), null, null, null
     )?.use {
         generateSequence { if (it.moveToNext()) it else null }.filter {
@@ -195,7 +196,7 @@ private fun readDeviceEvents(
                 start = startDate,
                 end = endDate,
                 date = startCalendar.toCivilDate(),
-                color = it.getString(7) ?: "",
+                color = it.getString(7) ?: it.getString(8) ?: "",
                 isHoliday = false
             )
         }.take(1000 /* let's put some limitation */).toList()

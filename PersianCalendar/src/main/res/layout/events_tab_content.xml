@@ -17,47 +17,40 @@
         android:textSize="70sp" />
 
     <LinearLayout
-        android:id="@+id/events_content"
+        android:id="@+id/events_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="220dp"
-        android:orientation="vertical"
-        android:padding="@dimen/card_padding">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/no_event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/card_padding"
+            android:paddingTop="@dimen/card_padding"
+            android:paddingRight="@dimen/card_padding"
             android:text="@string/no_event"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="@dimen/text_size_description" />
 
-        <TextView
-            android:id="@+id/holiday_title"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/events"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?attr/colorTextHoliday"
-            android:textIsSelectable="true"
-            android:textSize="@dimen/text_size_description" />
+            android:layout_marginTop="12dp" />
 
-        <TextView
-            android:id="@+id/device_event_title"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textSize="@dimen/text_size_description" />
+            android:layout_marginLeft="@dimen/card_padding"
+            android:layout_marginRight="@dimen/card_padding">
 
-        <TextView
-            android:id="@+id/event_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?android:attr/textColorPrimary"
-            android:textIsSelectable="true"
-            android:textSize="@dimen/text_size_description" />
+            <include
+                android:id="@+id/buttons_bar"
+                layout="@layout/settings_buttons_bar" />
 
-        <include
-            android:id="@+id/buttons_bar"
-            layout="@layout/settings_buttons_bar" />
+        </FrameLayout>
 
     </LinearLayout>
 
