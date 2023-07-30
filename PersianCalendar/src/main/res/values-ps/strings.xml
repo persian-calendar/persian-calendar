@@ -115,7 +115,7 @@
     <string name="sunriseSunView">طلوع</string>
     <string name="middaySunView">ظهر</string>
     <string name="sunsetSunView">غروب</string>
-    <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد.</string>
+    <string name="no_event">مناسبت یا رویدادی برای این روز یافت نشد</string>
     <string name="length_of_day">طول روز</string>
     <string name="remaining_daylight">باقی‌مانده</string>
     <string name="n_hours_minutes">%1$sس %2$sد</string>

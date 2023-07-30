@@ -152,7 +152,7 @@
     <string name="middaySunView">Midi</string>
     <string name="sunriseSunView">Lever du soleil</string>
     <string name="warn_if_events_not_set">Pour sélectionner et afficher les jours fériés et les évènements préférés, rendez-vous dans les Paramètres</string>
-    <string name="no_event">Aucun évènement ou rendez-vous pour ce jour.</string>
+    <string name="no_event">Aucun évènement ou rendez-vous pour ce jour</string>
     <string name="events">Évènements</string>
     <string name="moonInScorpio">La Lune est en Scorpion</string>
     <string name="sagittarius">Sagittaire</string>

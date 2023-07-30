@@ -170,7 +170,7 @@
     <string name="animal_year_name_dragon">Аждаҳо</string>
     <string name="animal_year_name_horse">Асп</string>
     <string name="events">Рӯйдодҳо</string>
-    <string name="no_event">Дар ин рӯз ягон чорабинӣ ё таъинот нест.</string>
+    <string name="no_event">Дар ин рӯз ягон чорабинӣ ё таъинот нест</string>
     <string name="warn_if_events_not_set">Барои интихоб ва нишон додани идҳо ва рӯйдодҳои афзалиятнок, ба Танзимотҳо равед</string>
     <string name="midnight">Нимашаб</string>
     <string name="month">Моҳ</string>

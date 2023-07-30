@@ -128,7 +128,7 @@
     <string name="sunriseSunView">ڕۆژھەڵات</string>
     <string name="middaySunView">نیوەڕۆ</string>
     <string name="sunsetSunView">ڕۆژاوا</string>
-    <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە.</string>
+    <string name="no_event">بۆنە یان ڕووداوێک بۆ ئەم ڕۆژە نەدۆزرایەوە</string>
     <string name="length_of_day">ڕۆژگار</string>
     <string name="remaining_daylight">ماوەوە</string>
     <string name="n_hours_minutes">%1$sک %2$sخ</string>

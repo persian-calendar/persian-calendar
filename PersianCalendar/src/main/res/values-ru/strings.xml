@@ -60,7 +60,7 @@
     <string name="sagittarius">Стрелец</string>
     <string name="moonInScorpio">Луна в Скорпионе</string>
     <string name="events">События</string>
-    <string name="no_event">Нет событий или встреч на этот день.</string>
+    <string name="no_event">Нет событий или встреч на этот день</string>
     <string name="warn_if_events_not_set">Чтобы выбрать и отобразить предпочтительные праздники и события, посетите Настройки</string>
     <string name="sunriseSunView">Восход</string>
     <string name="middaySunView">Полдень</string>

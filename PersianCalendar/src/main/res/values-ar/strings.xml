@@ -62,7 +62,7 @@
     <string name="sagittarius">قوس</string>
     <string name="moonInScorpio">القمر في العقرب</string>
     <string name="events">المناسبات</string>
-    <string name="no_event">تعذّر العثور على أحداث أو مناسبات أو عُطل لليوم.</string>
+    <string name="no_event">تعذّر العثور على أحداث أو مناسبات أو عُطل لليوم</string>
     <string name="warn_if_events_not_set">لإختيار وإظهار المناسبات والعُطل إذهب إلى الإعدادات &gt; المناسبات</string>
     <string name="sunriseSunView">الشروق</string>
     <string name="middaySunView">الظهر</string>

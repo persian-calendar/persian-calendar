@@ -274,7 +274,7 @@
     <string name="length_of_day">Gündüz</string>
     <string name="sunsetSunView">Gün Batımı</string>
     <string name="middaySunView">Öğle</string>
-    <string name="no_event">Bu gün için bir etkinlik veya hatırlatıcı yok.</string>
+    <string name="no_event">Bu gün için bir etkinlik veya hatırlatıcı yok</string>
     <string name="events">Etkinlikler</string>
     <string name="moonInScorpio">Ay Akrep Burcunda</string>
     <string name="sagittarius">Yay</string>

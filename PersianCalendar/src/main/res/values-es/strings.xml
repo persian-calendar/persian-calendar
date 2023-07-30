@@ -63,7 +63,7 @@
     <string name="sagittarius">Sagitario</string>
     <string name="moonInScorpio">Luna en Escorpio</string>
     <string name="events">Eventos</string>
-    <string name="no_event">No hay evento ni cita para este día.</string>
+    <string name="no_event">No hay evento ni cita para este día</string>
     <string name="warn_if_events_not_set">Para seleccionar y mostrar los días festivos y eventos preferidos, visite los ajustes</string>
     <string name="sunriseSunView">Amanecer</string>
     <string name="middaySunView">Mediodía</string>
