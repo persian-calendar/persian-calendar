@@ -7,13 +7,15 @@
     android:layout_marginTop="4dp"
     android:layout_marginRight="@dimen/card_padding"
     android:layout_marginBottom="4dp"
+    android:importantForAccessibility="yes"
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
     <FrameLayout
         android:id="@+id/backgroundView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="noHideDescendants">
 
         <TextView
             android:id="@+id/title"

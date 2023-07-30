@@ -81,6 +81,8 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
                 event is CalendarEvent.DeviceCalendarEvent -> event.formatTitle()
                 else -> event.title
             }
+            binding.root.contentDescription = if (event.isHoliday)
+                binding.root.context.getString(R.string.holiday_reason, event.title) else text
 
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.title.setTextIsSelectable(false)
