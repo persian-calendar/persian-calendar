@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:contentDescription="@string/select_day"
-        android:orientation="vertical"
         android:padding="4dp">
 
         <NumberPicker
@@ -28,7 +27,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:contentDescription="@string/select_month"
-        android:orientation="vertical"
         android:padding="4dp">
 
         <NumberPicker
@@ -45,7 +43,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:contentDescription="@string/select_year"
-        android:orientation="vertical"
         android:padding="4dp">
 
         <NumberPicker
