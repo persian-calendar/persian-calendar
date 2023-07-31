@@ -118,9 +118,11 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
 
         val seasonsCache = lruCache(1024, create = ::seasons)
         val headerCache = lruCache(1024, create = { jdn: Jdn ->
-            val context = context
-            if (context == null) "" else viewModel.astronomyState.value.generateHeader(context, jdn)
+            val context = context ?: return@lruCache listOf("", "", "")
+            viewModel.astronomyState.value.generateHeader(context, jdn)
         })
+
+        val headerTextViews = listOf(binding.solarEclipse, binding.lunarEclipse, binding.yearNames)
 
         fun update(state: AstronomyState) {
             binding.solarView.setTime(state)
@@ -142,7 +144,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
 
             val civilDate = state.date.toCivilDate()
             val jdn = Jdn(civilDate)
-            binding.headerInformation.text = headerCache[jdn]
+            headerTextViews.zip(headerCache[jdn]) { textView, line -> textView.text = line }
 
             for (i in 1..4) {
                 when (i) {
@@ -276,6 +278,8 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
 
         binding.firstColumn.setupLayoutTransition()
         binding.secondColumn.setupLayoutTransition()
+
+        binding.contentRoot.setupLayoutTransition()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.contentRoot) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())

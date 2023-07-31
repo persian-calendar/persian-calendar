@@ -53,9 +53,9 @@ class AstronomyState(val date: GregorianCalendar) {
         solarSystemPlanets.map { it.titleStringId to equatorialToEcliptic(helioVector(it, time)) }
     }
 
-    fun generateHeader(context: Context, jdn: Jdn): String {
+    fun generateHeader(context: Context, jdn: Jdn): List<String> {
         val observer = coordinates.value?.toObserver()
-        return (listOf(
+        return listOf(
             if (observer != null)
                 searchLocalSolarEclipse(time, observer).let { it.kind to it.peak.time }
             else searchGlobalSolarEclipse(time).let { it.kind to it.peak },
@@ -67,9 +67,7 @@ class AstronomyState(val date: GregorianCalendar) {
             val title = if (isSolar) R.string.solar_eclipse else R.string.lunar_eclipse
             (language.tryTranslateEclipseType(isSolar, kind) ?: context.getString(title)) +
                     spacedColon + formattedDate
-        } + listOf(
-            generateYearName(context, jdn.toPersianDate(), true, date)
-        )).joinToString("\n")
+        } + generateYearName(context, jdn.toPersianDate(), true, date)
     }
 
     companion object {
