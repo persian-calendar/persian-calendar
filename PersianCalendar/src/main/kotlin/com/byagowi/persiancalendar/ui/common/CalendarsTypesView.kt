@@ -13,10 +13,7 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
 class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
-
-    var changeSelection = fun(_: CalendarType) {}
-        private set
-
+    val changeSelection: (CalendarType) -> Unit
     var onItemClick = fun(_: CalendarType) {}
 
     init {
