@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.ui.calendar
 import android.graphics.Color
 import android.os.Build
 import android.util.TypedValue
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.ColorInt
@@ -53,6 +54,9 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
         private fun TextView.putLineEndIcon(@DrawableRes icon: Int, @ColorInt color: Int) {
             val drawable = if (icon == 0) null else context.getCompatDrawable(icon)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) drawable?.setTint(color)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                drawable?.layoutDirection =
+                    if (resources.isRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
             if (resources.isRtl) setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
             else setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
         }
