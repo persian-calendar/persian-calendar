@@ -25,7 +25,6 @@ import com.byagowi.persiancalendar.databinding.ConverterSpinnerBinding
 import com.byagowi.persiancalendar.entities.Clock
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.enabledCalendars
-import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -52,7 +51,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
 
         val viewModel by viewModels<ConverterViewModel>()
         binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
-        binding.calendars.setup(viewModel::changeCalendar)
+        binding.calendars.onItemClick = viewModel::changeCalendar
         binding.calendars.changeSelection(viewModel.calendar.value)
         binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
 

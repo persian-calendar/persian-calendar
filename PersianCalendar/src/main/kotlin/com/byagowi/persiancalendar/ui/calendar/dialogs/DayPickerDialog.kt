@@ -30,7 +30,7 @@ fun showDayPickerDialog(
         .setNeutralButton(R.string.today, null)
         .show()
 
-    binding.calendars.setup(binding.dayPickerView::changeCalendarType)
+    binding.calendars.onItemClick = binding.dayPickerView::changeCalendarType
 
     val today = Jdn.today()
     val todayButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull

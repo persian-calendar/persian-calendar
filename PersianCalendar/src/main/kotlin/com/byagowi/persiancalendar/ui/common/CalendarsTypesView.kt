@@ -17,7 +17,9 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     var changeSelection = fun(_: CalendarType) {}
         private set
 
-    fun setup(onItemClick: (CalendarType) -> Unit) {
+    var onItemClick = fun(_: CalendarType) {}
+
+    init {
         val calendarTypes = enabledCalendars.map { calendarType ->
             calendarType to context.getString(
                 if (language.betterToUseShortCalendarName) calendarType.shortTitle
@@ -25,7 +27,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
             )
         }
 
-        val binding = CalendarsTypesBinding.inflate(context.layoutInflater)
+        val binding = CalendarsTypesBinding.inflate(context.layoutInflater, this, true)
         binding.buttonGroup.isSingleSelection = true
         val buttons = calendarTypes.map { (_, title) ->
             CalendarTypeBinding.inflate(context.layoutInflater).also {
@@ -40,12 +42,12 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
         }
         buttons.forEachIndexed { i, button ->
             button.setOnClickListener {
-                onItemClick(calendarTypes[i].first)
-                changeSelection(calendarTypes[i].first)
+                val (calendarType) = calendarTypes[i]
+                onItemClick(calendarType)
+                changeSelection(calendarType)
             }
             binding.buttonGroup.addView(button)
         }
         changeSelection(calendarTypes[0].first)
-        addView(binding.root)
     }
 }
