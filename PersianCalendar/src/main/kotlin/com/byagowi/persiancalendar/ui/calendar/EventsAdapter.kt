@@ -1,6 +1,7 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.graphics.Color
+import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
@@ -15,6 +16,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventItemBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.global.holidayString
+import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -22,6 +24,7 @@ import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 class EventsAdapter(private val onEventClick: (Int) -> Unit) :
     RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
@@ -54,11 +57,20 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
         private fun TextView.putLineEndIcon(@DrawableRes icon: Int, @ColorInt color: Int) {
             val drawable = if (icon == 0) null else context.getCompatDrawable(icon)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) drawable?.setTint(color)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                drawable?.layoutDirection =
-                    if (resources.isRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-            if (resources.isRtl) setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
-            else setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
+            val isRtl = resources.isRtl
+            val dp = context.resources.dp.roundToInt()
+            val insetDrawable = if (drawable == null) null else InsetDrawable(
+                drawable, if (isRtl) 0 else 4 * dp, 0, if (isRtl) 4 * dp else 0, 0
+            )
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val direction = if (isRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+                insetDrawable?.layoutDirection = direction
+                insetDrawable?.isAutoMirrored = true
+            }
+            setCompoundDrawablesWithIntrinsicBounds(
+                if (isRtl) insetDrawable else null, null,
+                if (isRtl) null else insetDrawable, null
+            )
         }
 
         fun bind(position: Int) {
