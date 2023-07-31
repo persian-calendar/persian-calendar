@@ -1,9 +1,11 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.graphics.Color
+import android.os.Build
 import android.util.TypedValue
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
@@ -12,6 +14,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventItemBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.global.holidayString
+import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatTitle
@@ -47,9 +50,11 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
     inner class EventViewHolder(val binding: EventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private fun TextView.putLineEndIcon(@DrawableRes icon: Int) {
-            if (resources.isRtl) setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
-            else setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
+        private fun TextView.putLineEndIcon(@DrawableRes icon: Int, @ColorInt color: Int) {
+            val drawable = if (icon == 0) null else context.getCompatDrawable(icon)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) drawable?.setTint(color)
+            if (resources.isRtl) setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
+            else setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null)
         }
 
         fun bind(position: Int) {
@@ -78,8 +83,9 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
                 backgroundColor
             }
 
-            val isContentBlack = ColorUtils.calculateLuminance(color) > .5
-            binding.title.setTextColor(if (isContentBlack) Color.BLACK else Color.WHITE)
+            val textColor =
+                if (ColorUtils.calculateLuminance(color) > .5) Color.BLACK else Color.WHITE
+            binding.title.setTextColor(textColor)
 
             val text = when {
                 event.isHoliday -> "${event.title} ($holidayString)"
@@ -93,14 +99,11 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.title.setTextIsSelectable(false)
                 binding.root.setOnClickListener { onEventClick(event.id) }
-                binding.title.putLineEndIcon(
-                    if (isContentBlack) R.drawable.ic_open_in_new_black
-                    else R.drawable.ic_open_in_new_white
-                )
+                binding.title.putLineEndIcon(R.drawable.ic_open_in_new, textColor)
             } else {
                 binding.title.setTextIsSelectable(true)
                 binding.root.setOnClickListener(null)
-                binding.title.putLineEndIcon(0)
+                binding.title.putLineEndIcon(0, textColor)
             }
         }
     }
