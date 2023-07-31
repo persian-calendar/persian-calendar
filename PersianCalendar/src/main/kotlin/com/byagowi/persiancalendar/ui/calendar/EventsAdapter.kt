@@ -1,13 +1,12 @@
 package com.byagowi.persiancalendar.ui.calendar
 
 import android.graphics.Color
-import android.text.style.UnderlineSpan
 import android.util.TypedValue
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
-import androidx.core.text.buildSpannedString
-import androidx.core.text.inSpans
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventItemBinding
@@ -16,6 +15,7 @@ import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatTitle
+import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.min
 
@@ -46,6 +46,12 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
 
     inner class EventViewHolder(val binding: EventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private fun TextView.putLineEndIcon(@DrawableRes icon: Int) {
+            if (resources.isRtl) setCompoundDrawablesWithIntrinsicBounds(icon, 0, 0, 0)
+            else setCompoundDrawablesWithIntrinsicBounds(0, 0, icon, 0)
+        }
+
         fun bind(position: Int) {
             val event = events[position]
 
@@ -72,9 +78,8 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
                 backgroundColor
             }
 
-            binding.title.setTextColor(
-                if (ColorUtils.calculateLuminance(color) > .5) Color.BLACK else Color.WHITE
-            )
+            val isContentBlack = ColorUtils.calculateLuminance(color) > .5
+            binding.title.setTextColor(if (isContentBlack) Color.BLACK else Color.WHITE)
 
             val text = when {
                 event.isHoliday -> "${event.title} ($holidayString)"
@@ -84,16 +89,18 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
             binding.root.contentDescription = if (event.isHoliday)
                 binding.root.context.getString(R.string.holiday_reason, event.title) else text
 
+            binding.title.text = text
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.title.setTextIsSelectable(false)
                 binding.root.setOnClickListener { onEventClick(event.id) }
-                binding.title.text = buildSpannedString {
-                    inSpans(UnderlineSpan()) { append(text) }
-                }
+                binding.title.putLineEndIcon(
+                    if (isContentBlack) R.drawable.ic_open_in_new_black
+                    else R.drawable.ic_open_in_new_white
+                )
             } else {
                 binding.title.setTextIsSelectable(true)
                 binding.root.setOnClickListener(null)
-                binding.title.text = text
+                binding.title.putLineEndIcon(0)
             }
         }
     }
