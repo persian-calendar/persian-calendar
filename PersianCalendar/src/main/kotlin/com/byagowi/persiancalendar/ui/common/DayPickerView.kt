@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 import android.widget.NumberPicker
-import androidx.core.view.isVisible
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
@@ -82,22 +81,6 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     private val binding = DayPickerViewBinding.inflate(
         context.layoutInflater, this, true
     ).also { binding ->
-        val calendarTypes = enabledCalendars.map { calendarType ->
-            calendarType to context.getString(
-                if (language.betterToUseShortCalendarName) calendarType.shortTitle
-                else calendarType.title
-            )
-        }.also {
-            selectedCalendarType = it[0].first
-            selectedCalendarListener(selectedCalendarType)
-        }
-        binding.calendars.setup(calendarTypes) {
-            selectedCalendarType = it
-            selectedCalendarListener(selectedCalendarType)
-            jdn = currentJdn
-            selectedDayListener(currentJdn)
-        }
-
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
@@ -112,14 +95,9 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.dayPicker.setOnValueChangedListener(onDaySelected)
     }
 
-    fun turnToSecondaryDatePicker() {
-        binding.calendars.isVisible = false
-    }
-
     // To use in init or when the picker is secondary, selectedCalendarListener isn't called
     fun changeCalendarType(calendarType: CalendarType) {
         selectedCalendarType = calendarType
-        binding.calendars.changeSelection(calendarType)
         jdn = currentJdn
     }
 }

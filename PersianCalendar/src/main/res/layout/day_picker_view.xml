@@ -2,74 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:baselineAligned="false"
     android:minWidth="400dp"
-    android:orientation="vertical">
+    android:orientation="horizontal">
 
-    <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
-        android:id="@+id/calendars"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp" />
-
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        android:layout_weight="1"
+        android:contentDescription="@string/select_day"
+        android:orientation="vertical"
+        android:padding="4dp">
 
-        <FrameLayout
+        <NumberPicker
+            android:id="@+id/dayPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/select_day"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:layerType="hardware"
+            android:textSize="@dimen/text_size_description" />
 
-            <NumberPicker
-                android:id="@+id/dayPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layerType="hardware"
-                android:textSize="@dimen/text_size_description" />
+    </FrameLayout>
 
-        </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/select_month"
+        android:orientation="vertical"
+        android:padding="4dp">
 
-        <FrameLayout
+        <NumberPicker
+            android:id="@+id/monthPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/select_month"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:layerType="hardware"
+            android:textSize="@dimen/text_size_description" />
 
-            <NumberPicker
-                android:id="@+id/monthPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layerType="hardware"
-                android:textSize="@dimen/text_size_description" />
+    </FrameLayout>
 
-        </FrameLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:contentDescription="@string/select_year"
+        android:orientation="vertical"
+        android:padding="4dp">
 
-        <FrameLayout
+        <NumberPicker
+            android:id="@+id/yearPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:contentDescription="@string/select_year"
-            android:orientation="vertical"
-            android:padding="4dp">
+            android:layerType="hardware"
+            android:textSize="@dimen/text_size_description" />
 
-            <NumberPicker
-                android:id="@+id/yearPicker"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layerType="hardware"
-                android:textSize="@dimen/text_size_description" />
-
-        </FrameLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </LinearLayout>

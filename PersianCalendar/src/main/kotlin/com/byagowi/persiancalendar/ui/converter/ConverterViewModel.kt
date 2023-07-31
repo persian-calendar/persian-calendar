@@ -38,7 +38,6 @@ class ConverterViewModel : ViewModel() {
     val clock: StateFlow<GregorianCalendar> get() = _clock
 
     // Events
-    val calendarChangeEvent: Flow<CalendarType> get() = _calendar
     val screenModeChangeEvent: Flow<ConverterScreenMode> get() = _screenMode
     val todayButtonVisibilityEvent = merge(
         _selectedDate, _secondSelectedDate, _screenMode, _clock

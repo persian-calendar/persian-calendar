@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentActivity
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.DayPickerDialogBinding
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.enabledCalendars
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.utils.calculateDaysDifference
@@ -27,6 +29,8 @@ fun showDayPickerDialog(
         .setPositiveButton(positiveButtonTitle) { _, _ -> onSuccess(binding.dayPickerView.jdn) }
         .setNeutralButton(R.string.today, null)
         .show()
+
+    binding.calendars.setup(binding.dayPickerView::changeCalendarType)
 
     val today = Jdn.today()
     val todayButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull

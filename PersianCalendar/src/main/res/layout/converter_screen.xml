@@ -59,6 +59,11 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
+                    android:id="@+id/calendars"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
                 <com.byagowi.persiancalendar.ui.common.DayPickerView
                     android:id="@+id/day_picker_view"
                     android:layout_width="match_parent"
