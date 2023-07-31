@@ -175,7 +175,7 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
                 val degree = angle + i * PI.toFloat() / 4
                 x + cos(degree) * c to y + sin(degree) * c
             }
-        } + listOf(path.last())
+        } + path.last()
     }
 
     override fun draw(canvas: Canvas) {
@@ -184,7 +184,7 @@ private class ThirdPattern(@ColorInt private val tintColor: Int, size: Float) : 
             it.style = Paint.Style.FILL
             it.color = ColorUtils.setAlphaComponent(tintColor, 0x20)
         }
-        canvas.withScale(width, height) { drawPath((path + listOf(1f to 1f)).toPath(true), paint) }
+        canvas.withScale(width, height) { drawPath((path + (1f to 1f)).toPath(true), paint) }
     }
 }
 

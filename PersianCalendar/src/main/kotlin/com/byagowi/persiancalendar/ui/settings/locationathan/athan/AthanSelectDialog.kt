@@ -25,11 +25,9 @@ fun showAthanSelectDialog(activity: FragmentActivity, pickRingtone: ActivityResu
                 putString(PREF_ATHAN_NAME, activity.getString(stringId))
             }
         }
-    } + listOf(
-        R.string.more to {
-            runCatching { pickRingtone.launch(Unit) }.onFailure(logException).getOrNull()
-        }
-    )
+    } + (R.string.more to {
+        runCatching { pickRingtone.launch(Unit) }.onFailure(logException).getOrNull()
+    })
     MaterialAlertDialogBuilder(activity)
         .setTitle(R.string.custom_athan)
         .setItems(items.map { activity.getString(it.first) }.toTypedArray()) { dialog, which ->

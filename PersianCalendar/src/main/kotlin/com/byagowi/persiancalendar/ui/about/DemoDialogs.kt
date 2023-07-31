@@ -403,7 +403,7 @@ class CircleColorPickerView(context: Context, attrs: AttributeSet? = null) : Vie
         val saturation = (100 - brightness) / 100f
         val colors = (0..<360 step 30)
             .map { Color.HSVToColor(floatArrayOf(it.toFloat(), saturation, 1f)) }
-            .let { it + listOf(it[0]) } // Adds the first element at the end
+            .let { it + it[0] } // Adds the first element at the end
             .toIntArray()
         val sweepGradient = SweepGradient(radius, radius, colors, null)
         paint.shader = ComposeShader(sweepGradient, radialGradient, PorterDuff.Mode.SRC_OVER)

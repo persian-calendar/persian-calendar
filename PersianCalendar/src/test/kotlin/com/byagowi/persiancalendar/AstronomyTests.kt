@@ -63,12 +63,12 @@ class AstronomyTests {
     @Test
     fun `Zodiac from ecliptic`() {
         listOf(10, 40, 60, 100, 130, 140, 180, 230, 260, 280, 310, 320, 350).zip(
-            Zodiac.entries + listOf(Zodiac.ARIES)
+            Zodiac.entries + Zodiac.ARIES
         ) { longitude, zodiac ->
             assertEquals(zodiac, Zodiac.fromIau(longitude.toDouble()))
         }
         (0..11).map { 20 + it * 30 }
-            .zip(Zodiac.entries + listOf(Zodiac.PISCES)) { longitude, zodiac ->
+            .zip(Zodiac.entries + Zodiac.PISCES) { longitude, zodiac ->
                 assertEquals(zodiac, Zodiac.fromTropical(longitude.toDouble()))
             }
     }
