@@ -118,9 +118,9 @@
                         android:id="@+id/second_day_picker_view"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/view_padding"
-                        android:layout_marginTop="@dimen/card_margin"
-                        android:layout_marginRight="@dimen/view_padding"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="16dp"
                         android:visibility="gone" />
 
                     <com.byagowi.persiancalendar.ui.common.CalendarsView
