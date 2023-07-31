@@ -114,9 +114,6 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
 
     fun turnToSecondaryDatePicker() {
         binding.calendars.isVisible = false
-        binding.dayTitle.isVisible = false
-        binding.monthTitle.isVisible = false
-        binding.yearTitle.isVisible = false
     }
 
     // To use in init or when the picker is secondary, selectedCalendarListener isn't called

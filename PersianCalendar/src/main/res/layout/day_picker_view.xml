@@ -28,22 +28,13 @@
         android:baselineAligned="false"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/select_day"
             android:orientation="vertical"
             android:padding="4dp">
-
-            <TextView
-                android:id="@+id/dayTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/day"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="@dimen/text_size_description" />
 
             <NumberPicker
                 android:id="@+id/dayPicker"
@@ -52,24 +43,15 @@
                 android:layerType="hardware"
                 android:textSize="@dimen/text_size_description" />
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/select_month"
             android:orientation="vertical"
             android:padding="4dp">
-
-            <TextView
-                android:id="@+id/monthTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/month"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="@dimen/text_size_description" />
 
             <NumberPicker
                 android:id="@+id/monthPicker"
@@ -78,24 +60,15 @@
                 android:layerType="hardware"
                 android:textSize="@dimen/text_size_description" />
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:contentDescription="@string/select_year"
             android:orientation="vertical"
             android:padding="4dp">
-
-            <TextView
-                android:id="@+id/yearTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/year"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="@dimen/text_size_description" />
 
             <NumberPicker
                 android:id="@+id/yearPicker"
@@ -104,7 +77,7 @@
                 android:layerType="hardware"
                 android:textSize="@dimen/text_size_description" />
 
-        </LinearLayout>
+        </FrameLayout>
 
     </LinearLayout>
 
