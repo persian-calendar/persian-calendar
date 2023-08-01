@@ -92,10 +92,10 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
                 .resourceId
 
             val color = if (backgroundColor == null) {
-                binding.backgroundView.setBackgroundResource(resourceId)
+                binding.title.setBackgroundResource(resourceId)
                 ContextCompat.getColor(context, resourceId)
             } else {
-                binding.backgroundView.setBackgroundColor(backgroundColor)
+                binding.title.setBackgroundColor(backgroundColor)
                 backgroundColor
             }
 

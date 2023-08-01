@@ -12,22 +12,15 @@
     app:cardCornerRadius="16dp"
     app:cardElevation="0dp">
 
-    <FrameLayout
-        android:id="@+id/backgroundView"
+    <TextView
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:importantForAccessibility="noHideDescendants">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="8dp"
-            android:textSize="@dimen/text_size_description" />
-
-    </FrameLayout>
+        android:importantForAccessibility="noHideDescendants"
+        android:paddingStart="12dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
+        android:textSize="@dimen/text_size_description" />
 
 </androidx.cardview.widget.CardView>
