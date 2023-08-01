@@ -19,20 +19,13 @@
         android:paddingStart="16dp"
         android:paddingEnd="16dp" />
 
-    <FrameLayout
-        android:id="@+id/days_distance_parent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/days_distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textAlignment="center" />
-
-    </FrameLayout>
+    <TextView
+        android:id="@+id/days_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textAlignment="center" />
 
 </LinearLayout>

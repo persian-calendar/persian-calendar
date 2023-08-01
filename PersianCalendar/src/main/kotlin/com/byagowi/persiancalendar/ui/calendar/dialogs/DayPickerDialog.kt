@@ -21,7 +21,7 @@ fun showDayPickerDialog(
 ) {
     val binding = DayPickerDialogBinding.inflate(activity.layoutInflater)
     binding.dayPickerView.jdn = jdn
-    binding.daysDistanceParent.setupLayoutTransition()
+    binding.root.setupLayoutTransition()
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
         .setPositiveButton(positiveButtonTitle) { _, _ -> onSuccess(binding.dayPickerView.jdn) }

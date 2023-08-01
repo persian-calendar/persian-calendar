@@ -2,56 +2,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:baselineAligned="false"
-    android:minWidth="400dp"
     android:orientation="horizontal">
 
-    <FrameLayout
+    <NumberPicker
+        android:id="@+id/dayPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:layout_weight="1"
         android:contentDescription="@string/select_day"
-        android:padding="4dp">
+        android:textSize="@dimen/text_size_description" />
 
-        <NumberPicker
-            android:id="@+id/dayPicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layerType="hardware"
-            android:textSize="@dimen/text_size_description" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <NumberPicker
+        android:id="@+id/monthPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:layout_weight="1"
         android:contentDescription="@string/select_month"
-        android:padding="4dp">
+        android:textSize="@dimen/text_size_description" />
 
-        <NumberPicker
-            android:id="@+id/monthPicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layerType="hardware"
-            android:textSize="@dimen/text_size_description" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <NumberPicker
+        android:id="@+id/yearPicker"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:layout_weight="1"
         android:contentDescription="@string/select_year"
-        android:padding="4dp">
-
-        <NumberPicker
-            android:id="@+id/yearPicker"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layerType="hardware"
-            android:textSize="@dimen/text_size_description" />
-
-    </FrameLayout>
+        android:textSize="@dimen/text_size_description" />
 
 </LinearLayout>
