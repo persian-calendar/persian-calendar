@@ -6,7 +6,6 @@ import android.widget.FrameLayout
 import android.widget.NumberPicker
 import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
-import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
