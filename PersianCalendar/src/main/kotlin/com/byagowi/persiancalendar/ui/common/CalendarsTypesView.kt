@@ -31,7 +31,10 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
                 if (language.betterToUseShortCalendarName) calendarType.shortTitle
                 else calendarType.title
             )
-            it.root.setOnClickListener { onValueChangeListener(calendarType) }
+            it.root.setOnClickListener {
+                onValueChangeListener(calendarType)
+                value = calendarType
+            }
         }.root
     }
 
