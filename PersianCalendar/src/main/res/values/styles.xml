@@ -254,7 +254,7 @@
     </style>
 
     <!-- Don't apply auto size to sun and moon text as it causes text get smaller and smaller -->
-    <style name="astronomyChipCaptionAutoSize">
+    <style name="astronomyAutoSize">
         <item name="android:maxLines">1</item>
         <item name="autoSizeMinTextSize">8dp</item>
         <item name="autoSizeTextType">uniform</item>

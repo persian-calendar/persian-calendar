@@ -29,6 +29,7 @@
 
                 <TextView
                     android:id="@+id/solarEclipse"
+                    style="@style/astronomyAutoSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -38,6 +39,7 @@
 
                 <TextView
                     android:id="@+id/lunarEclipse"
+                    style="@style/astronomyAutoSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
@@ -46,6 +48,7 @@
 
                 <TextView
                     android:id="@+id/yearNames"
+                    style="@style/astronomyAutoSize"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
