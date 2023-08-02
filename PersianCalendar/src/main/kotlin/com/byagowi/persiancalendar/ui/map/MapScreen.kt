@@ -92,7 +92,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
             else viewModel.addOneHour()
         }
         binding.endArrow.setOnLongClickListener { viewModel.addDays(10); true }
-        binding.dateParent.setupLayoutTransition()
+        binding.timeBar.setupLayoutTransition()
         binding.date.setOnClickListener {
             val currentJdn =
                 Jdn(Date(viewModel.state.value.time).toGregorianCalendar().toCivilDate())
