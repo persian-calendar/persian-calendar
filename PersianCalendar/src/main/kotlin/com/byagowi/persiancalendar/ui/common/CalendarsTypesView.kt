@@ -38,10 +38,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
         }.root
     }.also {
         it.forEachIndexed { i, button ->
-            button.setOnClickListener {
-                onCalendarTypeChange(calendarTypes[i])
-                this.calendarType = calendarTypes[i]
-            }
+            button.setOnClickListener { onCalendarTypeChange(calendarTypes[i].first) }
             binding.calendarsToggleGroup.addView(button)
         }
     }
