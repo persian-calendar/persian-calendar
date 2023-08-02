@@ -115,11 +115,8 @@ android {
     }
 
     bundle {
-        language {
-            // We have in app locale change and don't want Google Play's dependency so better
-            // to disable this.
-            enableSplit = false
-        }
+        // We have in app locale change and don't want Google Play's dependency so better to disable
+        language.enableSplit = false
     }
 
     composeOptions {
