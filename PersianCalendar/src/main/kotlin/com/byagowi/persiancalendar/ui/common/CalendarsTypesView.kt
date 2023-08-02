@@ -13,8 +13,8 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
 class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
-    val changeSelection: (CalendarType) -> Unit
-    var onItemClick = fun(_: CalendarType) {}
+    var onCalendarTypeChange = fun(_: CalendarType) {}
+    val setCalendarType: (CalendarType) -> Unit
 
     init {
         val calendarTypes = enabledCalendars.map { calendarType ->
@@ -32,7 +32,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
                 it.root.text = title
             }.root
         }
-        changeSelection = { calendarType ->
+        setCalendarType = { calendarType ->
             buttons.forEachIndexed { i, button ->
                 if (calendarType == calendarTypes[i].first)
                     binding.calendarsToggleGroup.check(button.id)
@@ -41,11 +41,11 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
         buttons.forEachIndexed { i, button ->
             button.setOnClickListener {
                 val (calendarType) = calendarTypes[i]
-                onItemClick(calendarType)
-                changeSelection(calendarType)
+                onCalendarTypeChange(calendarType)
+                setCalendarType(calendarType)
             }
             binding.calendarsToggleGroup.addView(button)
         }
-        changeSelection(calendarTypes[0].first)
+        setCalendarType(calendarTypes[0].first)
     }
 }

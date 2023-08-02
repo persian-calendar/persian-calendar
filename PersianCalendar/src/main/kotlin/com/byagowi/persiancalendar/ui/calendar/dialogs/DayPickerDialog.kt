@@ -28,13 +28,13 @@ fun showDayPickerDialog(
         .setNeutralButton(R.string.today, null)
         .show()
 
-    binding.calendars.onItemClick = { binding.dayPickerView.calendarType = it }
+    binding.calendars.onCalendarTypeChange = { binding.dayPickerView.calendarType = it }
 
     val today = Jdn.today()
     val todayButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull
     todayButton?.setOnClickListener { binding.dayPickerView.jdn = today }
     todayButton?.isVisible = jdn != today
-    binding.dayPickerView.selectedDayListener = {
+    binding.dayPickerView.onJdnChange = {
         todayButton?.isVisible = it != today
         binding.daysDistance.text = if (it == today) "" else listOf(
             activity.getString(R.string.days_distance),

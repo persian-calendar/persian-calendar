@@ -8,15 +8,13 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
-import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
-    var selectedDayListener = fun(_: Jdn) {}
-    var selectedCalendarListener = fun(_: CalendarType) {}
-    var calendarType = mainCalendar
+    var onJdnChange = fun(_: Jdn) {}
+    var calendarType = CalendarType.entries[0]
         set(value) {
             field = value
             jdn = currentJdn
@@ -55,7 +53,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 it.value = date.dayOfMonth // important to happen _after_ the reinitialization
                 it.isVerticalScrollBarEnabled = false
             }
-            selectedDayListener(value)
+            onJdnChange(value)
         }
 
     private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
@@ -90,7 +88,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             binding.monthPicker.maxValue = calendarType.getYearMonths(year)
 
             currentJdn = jdn
-            selectedDayListener(currentJdn)
+            onJdnChange(currentJdn)
         }
         binding.yearPicker.setOnValueChangedListener(onDaySelected)
         binding.monthPicker.setOnValueChangedListener(onDaySelected)

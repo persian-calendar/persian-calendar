@@ -50,8 +50,6 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         val binding = ConverterScreenBinding.bind(view)
 
         val viewModel by viewModels<ConverterViewModel>()
-        binding.calendars.onItemClick = viewModel::changeCalendar
-        binding.calendars.changeSelection(viewModel.calendar.value)
 
         val spinner = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val toolbarContext = binding.appBar.toolbar.context
@@ -162,11 +160,12 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             ) else binding.qrView.share(activity)
         }
 
-        binding.secondDayPickerView.jdn = viewModel.secondSelectedDate.value
-        binding.dayPickerView.selectedDayListener = viewModel::changeSelectedDate
-        binding.dayPickerView.selectedCalendarListener = viewModel::changeCalendar
+        binding.calendars.setCalendarType(viewModel.calendar.value)
+        binding.calendars.onCalendarTypeChange = viewModel::changeCalendar
         binding.dayPickerView.jdn = viewModel.selectedDate.value
-        binding.secondDayPickerView.selectedDayListener = viewModel::changeSecondSelectedDate
+        binding.dayPickerView.onJdnChange = viewModel::changeSelectedDate
+        binding.secondDayPickerView.jdn = viewModel.secondSelectedDate.value
+        binding.secondDayPickerView.onJdnChange = viewModel::changeSecondSelectedDate
         binding.inputText.setText(viewModel.inputText.value)
         binding.inputText.doOnTextChanged { text, _, _, _ ->
             viewModel.changeCalculatorInput(text?.toString() ?: "")
