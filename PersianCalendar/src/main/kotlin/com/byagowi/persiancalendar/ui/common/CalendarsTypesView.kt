@@ -18,27 +18,24 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
         set(value) {
             field = value
             buttons.forEachIndexed { i, button ->
-                if (value == calendarTypes[i].first) binding.toggleGroup.check(button.id)
+                if (value == enabledCalendars[i]) binding.toggleGroup.check(button.id)
             }
         }
-    private val calendarTypes = enabledCalendars.map { calendarType ->
-        calendarType to context.getString(
-            if (language.betterToUseShortCalendarName) calendarType.shortTitle
-            else calendarType.title
-        )
-    }
     private val binding = CalendarsTypesBinding.inflate(context.layoutInflater, this, true).also {
         it.toggleGroup.isSingleSelection = true
     }
-    private val buttons = calendarTypes.map { (calendarType, title) ->
+    private val buttons = enabledCalendars.map { calendarType ->
         CalendarTypeBinding.inflate(context.layoutInflater, binding.toggleGroup, true).also {
             it.root.id = View.generateViewId()
-            it.root.text = title
+            it.root.text = context.getString(
+                if (language.betterToUseShortCalendarName) calendarType.shortTitle
+                else calendarType.title
+            )
             it.root.setOnClickListener { onCalendarTypeChange(calendarType) }
         }.root
     }
 
     init {
-        calendarType = calendarTypes[0].first // to make one button checked at least
+        calendarType = enabledCalendars[0] // to make one button checked at least
     }
 }
