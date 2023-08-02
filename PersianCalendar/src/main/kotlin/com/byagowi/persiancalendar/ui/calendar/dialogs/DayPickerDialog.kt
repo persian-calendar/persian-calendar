@@ -20,21 +20,21 @@ fun showDayPickerDialog(
     onSuccess: (jdn: Jdn) -> Unit
 ) {
     val binding = DayPickerDialogBinding.inflate(activity.layoutInflater)
-    binding.dayPickerView.jdn = jdn
+    binding.dayPickerView.value = jdn
     binding.root.setupLayoutTransition()
     val dialog = MaterialAlertDialogBuilder(activity)
         .setView(binding.root)
-        .setPositiveButton(positiveButtonTitle) { _, _ -> onSuccess(binding.dayPickerView.jdn) }
+        .setPositiveButton(positiveButtonTitle) { _, _ -> onSuccess(binding.dayPickerView.value) }
         .setNeutralButton(R.string.today, null)
         .show()
 
-    binding.calendars.onCalendarTypeChange = { binding.dayPickerView.calendarType = it }
+    binding.calendarsTypes.onValueChangeListener = { binding.dayPickerView.calendarType = it }
 
     val today = Jdn.today()
     val todayButton = dialog.getButton(DialogInterface.BUTTON_NEUTRAL).debugAssertNotNull
-    todayButton?.setOnClickListener { binding.dayPickerView.jdn = today }
+    todayButton?.setOnClickListener { binding.dayPickerView.value = today }
     todayButton?.isVisible = jdn != today
-    binding.dayPickerView.onJdnChange = {
+    binding.dayPickerView.onValueChangeListener = {
         todayButton?.isVisible = it != today
         binding.daysDistance.text = if (it == today) "" else listOf(
             activity.getString(R.string.days_distance),

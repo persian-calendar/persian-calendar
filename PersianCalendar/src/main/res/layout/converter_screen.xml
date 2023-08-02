@@ -60,7 +60,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.byagowi.persiancalendar.ui.common.CalendarsTypesView
-                    android:id="@+id/calendars"
+                    android:id="@+id/calendars_types"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

@@ -13,8 +13,8 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 
 class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
-    var onCalendarTypeChange = fun(_: CalendarType) {}
-    var calendarType: CalendarType = enabledCalendars[0]
+    var onValueChangeListener = fun(_: CalendarType) {}
+    var value: CalendarType = enabledCalendars[0]
         set(value) {
             field = value
             buttons.forEachIndexed { i, button ->
@@ -31,11 +31,11 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
                 if (language.betterToUseShortCalendarName) calendarType.shortTitle
                 else calendarType.title
             )
-            it.root.setOnClickListener { onCalendarTypeChange(calendarType) }
+            it.root.setOnClickListener { onValueChangeListener(calendarType) }
         }.root
     }
 
     init {
-        calendarType = enabledCalendars[0] // to make one button checked at least
+        value = enabledCalendars[0] // to make one button checked at least
     }
 }

@@ -88,8 +88,8 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_restore_modified)
             it.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM)
             it.onClick {
-                binding.dayPickerView.jdn = todayJdn
-                binding.secondDayPickerView.jdn = todayJdn
+                binding.dayPickerView.value = todayJdn
+                binding.secondDayPickerView.value = todayJdn
                 viewModel.resetTimeZoneClock()
             }
         }
@@ -134,7 +134,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                 binding.appBar.toolbar.context.getCompatDrawable(R.drawable.ic_baseline_share)
             menu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         }.onClick {
-            val jdn = binding.dayPickerView.jdn
+            val jdn = binding.dayPickerView.value
             if (viewModel.screenMode.value != ConverterScreenMode.QrCode) activity?.shareText(
                 when (viewModel.screenMode.value) {
                     ConverterScreenMode.Converter -> listOf(
@@ -159,12 +159,12 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             ) else binding.qrView.share(activity)
         }
 
-        binding.calendars.calendarType = viewModel.calendar.value
-        binding.calendars.onCalendarTypeChange = viewModel::changeCalendar
-        binding.dayPickerView.jdn = viewModel.selectedDate.value
-        binding.dayPickerView.onJdnChange = viewModel::changeSelectedDate
-        binding.secondDayPickerView.jdn = viewModel.secondSelectedDate.value
-        binding.secondDayPickerView.onJdnChange = viewModel::changeSecondSelectedDate
+        binding.calendarsTypes.value = viewModel.calendar.value
+        binding.calendarsTypes.onValueChangeListener = viewModel::changeCalendar
+        binding.dayPickerView.value = viewModel.selectedDate.value
+        binding.dayPickerView.onValueChangeListener = viewModel::changeSelectedDate
+        binding.secondDayPickerView.value = viewModel.secondSelectedDate.value
+        binding.secondDayPickerView.onValueChangeListener = viewModel::changeSecondSelectedDate
         binding.inputText.setText(viewModel.inputText.value)
         binding.inputText.doOnTextChanged { text, _, _, _ ->
             viewModel.changeCalculatorInput(text?.toString() ?: "")
@@ -270,7 +270,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.inputTextWrapper.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.dayPickerView.isVisible = true
-                                binding.calendars.isVisible = true
+                                binding.calendarsTypes.isVisible = true
                                 binding.resultText.isVisible = false
                                 binding.qrView.isVisible = false
                                 binding.calendarsView.isVisible = true
@@ -284,7 +284,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
 
                                 binding.inputTextWrapper.isVisible = false
                                 binding.dayPickerView.isVisible = true
-                                binding.calendars.isVisible = true
+                                binding.calendarsTypes.isVisible = true
                                 binding.secondDayPickerView.isVisible = true
                                 binding.resultText.isVisible = true
                                 binding.qrView.isVisible = false
@@ -297,7 +297,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
                                 binding.inputTextWrapper.isVisible = true
                                 binding.dayPickerView.isVisible = false
-                                binding.calendars.isVisible = false
+                                binding.calendarsTypes.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.resultText.isVisible = true
                                 binding.qrView.isVisible = false
@@ -310,7 +310,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
                                 binding.inputTextWrapper.isVisible = true
                                 binding.dayPickerView.isVisible = false
-                                binding.calendars.isVisible = false
+                                binding.calendarsTypes.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.resultText.isVisible = false
                                 binding.qrView.isVisible = true
@@ -324,7 +324,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                                 binding.secondTimeZoneClockPicker.root.isVisible = true
                                 binding.inputTextWrapper.isVisible = false
                                 binding.dayPickerView.isVisible = false
-                                binding.calendars.isVisible = false
+                                binding.calendarsTypes.isVisible = false
                                 binding.secondDayPickerView.isVisible = false
                                 binding.resultText.isVisible = false
                                 binding.qrView.isVisible = false

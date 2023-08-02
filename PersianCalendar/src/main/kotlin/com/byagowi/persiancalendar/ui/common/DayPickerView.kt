@@ -13,13 +13,13 @@ import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
-    var onJdnChange = fun(_: Jdn) {}
+    var onValueChangeListener = fun(_: Jdn) {}
     var calendarType = mainCalendar
         set(value) {
             field = value
-            jdn = currentJdn
+            this.value = currentValue
         }
-    var jdn: Jdn
+    var value: Jdn
         get() {
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
@@ -27,7 +27,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             return Jdn(calendarType, year, month, day)
         }
         set(value) {
-            currentJdn = value
+            currentValue = value
             val date = value.toCalendar(calendarType)
             binding.yearPicker.also {
                 val today = todayJdn.toCalendar(calendarType)
@@ -53,7 +53,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 it.value = date.dayOfMonth // important to happen _after_ the reinitialization
                 it.isVerticalScrollBarEnabled = false
             }
-            onJdnChange(value)
+            onValueChangeListener(value)
         }
 
     private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
@@ -77,7 +77,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
     }
 
     private val todayJdn = Jdn.today()
-    private var currentJdn = todayJdn
+    private var currentValue = todayJdn
     private val binding = DayPickerViewBinding.inflate(
         context.layoutInflater, this, true
     ).also { binding ->
@@ -87,8 +87,8 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             reinitializeDayPicker(binding.dayPicker, year, month)
             binding.monthPicker.maxValue = calendarType.getYearMonths(year)
 
-            currentJdn = jdn
-            onJdnChange(currentJdn)
+            currentValue = value
+            onValueChangeListener(currentValue)
         }
         binding.yearPicker.setOnValueChangedListener(onDaySelected)
         binding.monthPicker.setOnValueChangedListener(onDaySelected)
