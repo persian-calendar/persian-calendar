@@ -162,7 +162,7 @@ dependencies {
     // Google/JetBrains owned libraries (roughly platform libraries)
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.preference:preference-ktx:1.2.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
@@ -174,7 +174,7 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
     implementation("androidx.core:core-ktx:1.10.1")
-    val fragmentVersion = "1.6.0"
+    val fragmentVersion = "1.6.1"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
