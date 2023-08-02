@@ -1,16 +1,17 @@
 package com.byagowi.persiancalendar.ui.calendar
 
+import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.util.lruCache
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventItemBinding
@@ -26,7 +27,7 @@ import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class EventsAdapter(private val onEventClick: (Int) -> Unit) :
+class EventsAdapter(private val onEventClick: (Int) -> Unit, private val context: Context) :
     RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
     fun showEvents(list: List<CalendarEvent<*>>) {
         val previousEventsCount = events.size
@@ -51,25 +52,28 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder =
         EventViewHolder(EventItemBinding.inflate(parent.context.layoutInflater, parent, false))
 
+    private val isRtl = context.resources.isRtl
+    private val openInNewIconCache = lruCache(16, create = { color: Int ->
+        val drawable = context.getCompatDrawable(R.drawable.ic_open_in_new)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) drawable.setTint(color)
+        val dp = context.resources.dp.roundToInt()
+        val insetDrawable = InsetDrawable(
+            drawable, if (isRtl) 0 else 4 * dp, 0, if (isRtl) 4 * dp else 0, 0
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val direction = if (isRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+            insetDrawable.layoutDirection = direction
+            insetDrawable.isAutoMirrored = true
+        }
+        insetDrawable
+    })
+
     inner class EventViewHolder(val binding: EventItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private fun TextView.putLineEndIcon(@DrawableRes icon: Int, @ColorInt color: Int) {
-            val drawable = if (icon == 0) null else context.getCompatDrawable(icon)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) drawable?.setTint(color)
-            val isRtl = resources.isRtl
-            val dp = context.resources.dp.roundToInt()
-            val insetDrawable = if (drawable == null) null else InsetDrawable(
-                drawable, if (isRtl) 0 else 4 * dp, 0, if (isRtl) 4 * dp else 0, 0
-            )
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                val direction = if (isRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-                insetDrawable?.layoutDirection = direction
-                insetDrawable?.isAutoMirrored = true
-            }
+        private fun TextView.putLineEndIcon(icon: Drawable?) {
             setCompoundDrawablesWithIntrinsicBounds(
-                if (isRtl) insetDrawable else null, null,
-                if (isRtl) null else insetDrawable, null
+                if (isRtl) icon else null, null, if (isRtl) null else icon, null
             )
         }
 
@@ -115,11 +119,11 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit) :
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.title.setTextIsSelectable(false)
                 binding.root.setOnClickListener { onEventClick(event.id) }
-                binding.title.putLineEndIcon(R.drawable.ic_open_in_new, textColor)
+                binding.title.putLineEndIcon(openInNewIconCache[textColor])
             } else {
                 binding.title.setTextIsSelectable(true)
                 binding.root.setOnClickListener(null)
-                binding.title.putLineEndIcon(0, textColor)
+                binding.title.putLineEndIcon(null)
             }
         }
     }

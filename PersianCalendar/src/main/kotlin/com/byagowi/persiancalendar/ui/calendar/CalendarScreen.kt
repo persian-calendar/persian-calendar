@@ -179,7 +179,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                     Snackbar.LENGTH_SHORT
                 ).also { it.considerSystemBarsInsets() }.show()
             }.onFailure(logException)
-        })
+        }, context = inflater.context)
         binding.events.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedDayChangeEvent
