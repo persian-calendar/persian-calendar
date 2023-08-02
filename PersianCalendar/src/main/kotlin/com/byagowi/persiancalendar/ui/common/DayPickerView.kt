@@ -13,22 +13,25 @@ import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
-
     var selectedDayListener = fun(_: Jdn) {}
     var selectedCalendarListener = fun(_: CalendarType) {}
-    private var selectedCalendarType = CalendarType.SHAMSI
+    var calendarType = CalendarType.SHAMSI
+        set(value) {
+            field = value
+            jdn = currentJdn
+        }
     var jdn: Jdn
         get() {
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             val day = binding.dayPicker.value
-            return Jdn(selectedCalendarType, year, month, day)
+            return Jdn(calendarType, year, month, day)
         }
         set(value) {
             currentJdn = value
-            val date = value.toCalendar(selectedCalendarType)
+            val date = value.toCalendar(calendarType)
             binding.yearPicker.also {
-                val today = todayJdn.toCalendar(selectedCalendarType)
+                val today = todayJdn.toCalendar(calendarType)
                 it.minValue = if (BuildConfig.DEVELOPMENT) 1 else today.year - 200
                 it.maxValue = today.year + 200
                 it.value = date.year
@@ -37,7 +40,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             }
             binding.monthPicker.also {
                 it.minValue = 1
-                val maxValue = selectedCalendarType.getYearMonths(date.year)
+                val maxValue = calendarType.getYearMonths(date.year)
                 val months = date.calendarType.monthsNames
                 val displayedValues =
                     (1..maxValue).map { x -> months[x - 1] + " / " + formatNumber(x) }
@@ -55,8 +58,8 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         }
 
     private fun reinitializeDayPicker(dayPicker: NumberPicker, year: Int, month: Int) {
-        dayPicker.maxValue = selectedCalendarType.getMonthLength(year, month)
-        val monthStart = Jdn(selectedCalendarType, year, month, 1)
+        dayPicker.maxValue = calendarType.getMonthLength(year, month)
+        val monthStart = Jdn(calendarType, year, month, 1)
         binding.dayPicker.setFormatter {
             (monthStart + it - 1).dayOfWeekName + " / " + formatNumber(it)
         }
@@ -83,7 +86,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             reinitializeDayPicker(binding.dayPicker, year, month)
-            binding.monthPicker.maxValue = selectedCalendarType.getYearMonths(year)
+            binding.monthPicker.maxValue = calendarType.getYearMonths(year)
 
             currentJdn = jdn
             selectedDayListener(currentJdn)
@@ -91,11 +94,5 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         binding.yearPicker.setOnValueChangedListener(onDaySelected)
         binding.monthPicker.setOnValueChangedListener(onDaySelected)
         binding.dayPicker.setOnValueChangedListener(onDaySelected)
-    }
-
-    // To use in init or when the picker is secondary, selectedCalendarListener isn't called
-    fun changeCalendarType(calendarType: CalendarType) {
-        selectedCalendarType = calendarType
-        jdn = currentJdn
     }
 }

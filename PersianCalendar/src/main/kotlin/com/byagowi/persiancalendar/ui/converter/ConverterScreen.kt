@@ -50,10 +50,8 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
         val binding = ConverterScreenBinding.bind(view)
 
         val viewModel by viewModels<ConverterViewModel>()
-        binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
         binding.calendars.onItemClick = viewModel::changeCalendar
         binding.calendars.changeSelection(viewModel.calendar.value)
-        binding.dayPickerView.changeCalendarType(viewModel.calendar.value)
 
         val spinner = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val toolbarContext = binding.appBar.toolbar.context
@@ -255,9 +253,9 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                 }
                 launch {
                     viewModel.calendar.collectLatest {
-                        binding.dayPickerView.changeCalendarType(it)
+                        binding.dayPickerView.calendarType = it
                         if (viewModel.screenMode.value == ConverterScreenMode.Distance)
-                            binding.secondDayPickerView.changeCalendarType(it)
+                            binding.secondDayPickerView.calendarType = it
                     }
                 }
                 launch {
@@ -284,7 +282,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                             ConverterScreenMode.Distance -> {
                                 binding.firstTimeZoneClockPicker.root.isVisible = false
                                 binding.secondTimeZoneClockPicker.root.isVisible = false
-                                binding.secondDayPickerView.changeCalendarType(viewModel.calendar.value)
+                                binding.secondDayPickerView.calendarType = viewModel.calendar.value
 
                                 binding.inputTextWrapper.isVisible = false
                                 binding.dayPickerView.isVisible = true
