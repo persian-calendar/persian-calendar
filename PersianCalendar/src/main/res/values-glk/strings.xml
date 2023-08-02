@@ -83,7 +83,7 @@
     <string name="days_distance">فاصله</string>
     <string name="calendars_priority">کؤيتأ تقويم اول نيشان بدأ ببه</string>
     <string name="calendars_priority_summary">تقويمˇتنظيم کۊدن ؤ اولویتˇتقويمانˇنيشان دأن یا نيشان ندأن</string>
-    <string name="week_of_year">هفته-يه سال</string>
+    <string name="week_number">هفته-يه سال</string>
     <string name="week_of_year_summary">هفته-يه سال تقويمˇدۊرۊن</string>
     <string name="accept">تأیید</string>
     <string name="calendar">تقویم</string>

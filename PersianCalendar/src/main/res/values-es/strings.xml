@@ -120,7 +120,7 @@
     <string name="calendars_priority_summary">Configurar calendarios para mostrar prioridad u ocultarlos</string>
     <string name="astronomy">Astronómica</string>
     <string name="astronomical_info_summary">Mostrar información adicional como constelación, nombres antiguos de años y la luna en escorpio</string>
-    <string name="week_of_year">Semana del año</string>
+    <string name="week_number">Semana del año</string>
     <string name="week_of_year_summary">Mostrar la semana del año en calendario</string>
     <string name="week_start">Inicio de semana</string>
     <string name="week_start_summary">Elegir día del inicio de semana</string>

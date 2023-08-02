@@ -83,7 +83,7 @@
     <string name="days_distance">مەودا</string>
     <string name="calendars_priority">ڕۆژژمێری سەرەکی</string>
     <string name="calendars_priority_summary">گۆڕینی ڕۆژژمێری سەرەکی، ڕیزبەندی و چالاکیی ڕۆژژمێرەکان</string>
-    <string name="week_of_year">ژمارەی حەفتە</string>
+    <string name="week_number">ژمارەی حەفتە</string>
     <string name="week_of_year_summary">نیشاندانی ژمارەی حەفتەی ساڵ</string>
     <string name="accept">باشە</string>
     <string name="calendar">ڕۆژژمێر</string>

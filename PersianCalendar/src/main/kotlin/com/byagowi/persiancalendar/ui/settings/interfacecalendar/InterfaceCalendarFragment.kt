@@ -128,7 +128,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat(),
                     summary(R.string.astronomical_info_summary)
                 }
                 switch(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false) {
-                    title(R.string.week_of_year)
+                    title(R.string.week_number)
                     summary(R.string.week_of_year_summary)
                 }
                 run { // reset Islamic offset if is already expired

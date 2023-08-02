@@ -83,7 +83,7 @@
     <string name="days_distance">سۆره</string>
     <string name="calendars_priority">تقویم‌لرین گؤستریش اولویتی</string>
     <string name="calendars_priority_summary">اساس تقویم‌ین تنظیمی و تقویم‌لرین گؤسترمک یا گؤرستممک اولویت‌لری</string>
-    <string name="week_of_year">ایل‌ین هفته‌سی</string>
+    <string name="week_number">ایل‌ین هفته‌سی</string>
     <string name="week_of_year_summary">ایل‌ین هفته‌سین تقویم‌ده گؤسترمک</string>
     <string name="accept">تأیید</string>
     <string name="calendar">تقویم</string>

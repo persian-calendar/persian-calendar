@@ -107,7 +107,7 @@
     <string name="calendars_priority">日历优先级</string>
     <string name="astronomy">天文信息</string>
     <string name="astronomical_info_summary">显示星座、生肖和月亮是否处在天蝎座等附加信息</string>
-    <string name="week_of_year">一年中的周数</string>
+    <string name="week_number">一年中的周数</string>
     <string name="week_of_year_summary">在日历上显示第几周</string>
     <string name="week_start_summary">选择一周中的起始日</string>
     <string name="islamic_offset">伊斯兰历偏移</string>

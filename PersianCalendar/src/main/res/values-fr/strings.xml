@@ -103,7 +103,7 @@
     <string name="week_start_summary">Sélectionnez le jour de début de semaine</string>
     <string name="week_start">Début de la semaine</string>
     <string name="week_of_year_summary">Afficher la semaine de l’année sur le calendrier</string>
-    <string name="week_of_year">Semaine de l’année</string>
+    <string name="week_number">Semaine de l’année</string>
     <string name="astronomical_info_summary">Afficher des informations supplémentaires comme les constellations, les anciens noms des années et la Lune en scorpion</string>
     <string name="astronomy">Astronomiques</string>
     <string name="calendars_priority_summary">Paramétrer les calendriers pour les afficher en priorité ou les masquer</string>
