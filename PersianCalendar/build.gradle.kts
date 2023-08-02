@@ -174,7 +174,7 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
 
     implementation("androidx.core:core-ktx:1.10.1")
-    val fragmentVersion = "1.5.2"
+    val fragmentVersion = "1.6.0"
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -227,12 +227,12 @@ dependencies {
 
     testImplementation("com.google.truth:truth:1.1.5")
 
-    val androidTestVersion = "1.4.0"
+    val androidTestVersion = "1.5.2"
     androidTestImplementation("androidx.test:runner:$androidTestVersion")
     androidTestImplementation("androidx.test:rules:$androidTestVersion")
     androidTestImplementation("androidx.test:core-ktx:$androidTestVersion")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    val espressoVersion = "3.4.0"
+    val espressoVersion = "3.5.1"
     androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
     androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
 }
