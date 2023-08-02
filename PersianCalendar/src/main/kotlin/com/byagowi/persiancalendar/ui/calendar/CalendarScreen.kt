@@ -322,7 +322,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         tabsViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 viewModel.changeSelectedTabIndex(position)
-                makeViewPagerHeightToAtLeastFitTheScreen(binding, tabs)
+                binding.root.doOnNextLayout {
+                    makeViewPagerHeightToAtLeastFitTheScreen(binding, tabs)
+                }
                 if (position == EVENTS_TAB) {
                     binding.addEvent.show()
                     binding.addEvent.postDelayed(THREE_SECONDS_AND_HALF_IN_MILLIS) {
@@ -375,32 +377,30 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         binding: CalendarScreenBinding,
         tabs: List<Pair<Int, View>>
     ) {
-        binding.root.doOnNextLayout {
-            val width = binding.root.width.takeIf { it != 0 } ?: return@doOnNextLayout
-            val tabWidth = binding.viewPager.width.takeIf { it != 0 } ?: return@doOnNextLayout
-            binding.viewPager.minimumHeight = 0
-            val selectedTab = tabs[binding.viewPager.currentItem].second
-            selectedTab.minimumHeight = 0
-            binding.root.measure(
-                View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            )
-            selectedTab.measure(
-                View.MeasureSpec.makeMeasureSpec(tabWidth, View.MeasureSpec.EXACTLY),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-            )
-            val minimumHeight = listOfNotNull(
-                selectedTab.measuredHeight,
-                binding.portraitContentRoot?.let {
-                    val calendarHeight = binding.calendarPager.measuredHeight
-                    binding.root.measuredHeight -
-                            (calendarHeight + binding.tabLayout.measuredHeight)
-                },
-                (220 * resources.sp).toInt()
-            ).max()
-            binding.viewPager.minimumHeight = minimumHeight
-            selectedTab.minimumHeight = minimumHeight
-        }
+        val width = binding.root.width.takeIf { it != 0 } ?: return
+        val tabWidth = binding.viewPager.width.takeIf { it != 0 } ?: return
+        binding.viewPager.minimumHeight = 0
+        val selectedTab = tabs[binding.viewPager.currentItem].second
+        selectedTab.minimumHeight = 0
+        binding.root.measure(
+            View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        selectedTab.measure(
+            View.MeasureSpec.makeMeasureSpec(tabWidth, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+        )
+        val minimumHeight = listOfNotNull(
+            selectedTab.measuredHeight,
+            binding.portraitContentRoot?.let {
+                val calendarHeight = binding.calendarPager.measuredHeight
+                binding.root.measuredHeight -
+                        (calendarHeight + binding.tabLayout.measuredHeight)
+            },
+            (220 * resources.sp).toInt()
+        ).max()
+        binding.viewPager.minimumHeight = minimumHeight
+        selectedTab.minimumHeight = minimumHeight
     }
 
     private fun createCalendarsTab(context: Context): View {
