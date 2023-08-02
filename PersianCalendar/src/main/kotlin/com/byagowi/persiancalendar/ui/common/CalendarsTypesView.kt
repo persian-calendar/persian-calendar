@@ -14,38 +14,39 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
     var onCalendarTypeChange = fun(_: CalendarType) {}
-    val setCalendarType: (CalendarType) -> Unit
-
-    init {
-        val calendarTypes = enabledCalendars.map { calendarType ->
-            calendarType to context.getString(
-                if (language.betterToUseShortCalendarName) calendarType.shortTitle
-                else calendarType.title
-            )
-        }
-
-        val binding = CalendarsTypesBinding.inflate(context.layoutInflater, this, true)
-        binding.calendarsToggleGroup.isSingleSelection = true
-        val buttons = calendarTypes.map { (_, title) ->
-            CalendarTypeBinding.inflate(context.layoutInflater).also {
-                it.root.id = View.generateViewId()
-                it.root.text = title
-            }.root
-        }
-        setCalendarType = { calendarType ->
+    var calendarType: CalendarType = enabledCalendars[0]
+        set(value) {
+            field = value
             buttons.forEachIndexed { i, button ->
-                if (calendarType == calendarTypes[i].first)
+                if (value == calendarTypes[i].first)
                     binding.calendarsToggleGroup.check(button.id)
             }
         }
-        buttons.forEachIndexed { i, button ->
+    private val calendarTypes = enabledCalendars.map { calendarType ->
+        calendarType to context.getString(
+            if (language.betterToUseShortCalendarName) calendarType.shortTitle
+            else calendarType.title
+        )
+    }
+    private val binding = CalendarsTypesBinding.inflate(context.layoutInflater, this, true).also {
+        it.calendarsToggleGroup.isSingleSelection = true
+    }
+    private val buttons = calendarTypes.map { (_, title) ->
+        CalendarTypeBinding.inflate(context.layoutInflater).also {
+            it.root.id = View.generateViewId()
+            it.root.text = title
+        }.root
+    }.also {
+        it.forEachIndexed { i, button ->
             button.setOnClickListener {
-                val (calendarType) = calendarTypes[i]
-                onCalendarTypeChange(calendarType)
-                setCalendarType(calendarType)
+                onCalendarTypeChange(calendarTypes[i])
+                this.calendarType = calendarTypes[i]
             }
             binding.calendarsToggleGroup.addView(button)
         }
-        setCalendarType(calendarTypes[0].first)
+    }
+
+    init {
+        calendarType = calendarTypes[0].first // to make one button checked at least
     }
 }

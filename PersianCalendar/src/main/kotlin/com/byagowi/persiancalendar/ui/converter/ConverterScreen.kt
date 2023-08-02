@@ -47,10 +47,9 @@ import java.util.TimeZone
 class ConverterScreen : Fragment(R.layout.converter_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val binding = ConverterScreenBinding.bind(view)
-
         val viewModel by viewModels<ConverterViewModel>()
 
+        val binding = ConverterScreenBinding.bind(view)
         val spinner = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val toolbarContext = binding.appBar.toolbar.context
             val spinnerBinding = ConverterSpinnerBinding.inflate(toolbarContext.layoutInflater)
@@ -160,7 +159,7 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
             ) else binding.qrView.share(activity)
         }
 
-        binding.calendars.setCalendarType(viewModel.calendar.value)
+        binding.calendars.calendarType = viewModel.calendar.value
         binding.calendars.onCalendarTypeChange = viewModel::changeCalendar
         binding.dayPickerView.jdn = viewModel.selectedDate.value
         binding.dayPickerView.onJdnChange = viewModel::changeSelectedDate
