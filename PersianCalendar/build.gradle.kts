@@ -227,9 +227,9 @@ dependencies {
 
     testImplementation("com.google.truth:truth:1.1.5")
 
-    androidTestImplementation("androidx.test:rules:1.5.0")
-    val androidTestVersion = "1.5.2"
-    androidTestImplementation("androidx.test:runner:$androidTestVersion")
+    androidTestImplementation("androidx.test:runner:1.5.2")
+    val androidTestVersion = "1.5.0"
+    androidTestImplementation("androidx.test:rules:$androidTestVersion")
     androidTestImplementation("androidx.test:core-ktx:$androidTestVersion")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     val espressoVersion = "3.5.1"
