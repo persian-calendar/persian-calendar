@@ -171,7 +171,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         val binding = EventsTabContentBinding.inflate(inflater, container, false)
         binding.eventsParent.setupLayoutTransition()
         binding.events.layoutManager = LinearLayoutManager(binding.events.context)
-        val adapter = EventsAdapter { id: Int ->
+        val adapter = EventsAdapter(onEventClick = { id: Int ->
             runCatching { viewEvent.launch(id.toLong()) }.onFailure {
                 Snackbar.make(
                     binding.root,
@@ -179,7 +179,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                     Snackbar.LENGTH_SHORT
                 ).also { it.considerSystemBarsInsets() }.show()
             }.onFailure(logException)
-        }
+        })
         binding.events.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedDayChangeEvent
