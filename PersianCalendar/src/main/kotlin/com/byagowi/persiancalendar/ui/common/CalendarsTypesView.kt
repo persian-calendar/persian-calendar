@@ -25,7 +25,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
         }
 
         val binding = CalendarsTypesBinding.inflate(context.layoutInflater, this, true)
-        binding.buttonGroup.isSingleSelection = true
+        binding.calendarsToggleGroup.isSingleSelection = true
         val buttons = calendarTypes.map { (_, title) ->
             CalendarTypeBinding.inflate(context.layoutInflater).also {
                 it.root.id = View.generateViewId()
@@ -34,7 +34,8 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
         }
         changeSelection = { calendarType ->
             buttons.forEachIndexed { i, button ->
-                if (calendarType == calendarTypes[i].first) binding.buttonGroup.check(button.id)
+                if (calendarType == calendarTypes[i].first)
+                    binding.calendarsToggleGroup.check(button.id)
             }
         }
         buttons.forEachIndexed { i, button ->
@@ -43,7 +44,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
                 onItemClick(calendarType)
                 changeSelection(calendarType)
             }
-            binding.buttonGroup.addView(button)
+            binding.calendarsToggleGroup.addView(button)
         }
         changeSelection(calendarTypes[0].first)
     }

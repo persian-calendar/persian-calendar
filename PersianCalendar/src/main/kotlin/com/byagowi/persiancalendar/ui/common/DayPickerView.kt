@@ -8,6 +8,7 @@ import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.entities.Jdn
+import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
@@ -15,7 +16,7 @@ import com.byagowi.persiancalendar.utils.formatNumber
 class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
     var selectedDayListener = fun(_: Jdn) {}
     var selectedCalendarListener = fun(_: CalendarType) {}
-    var calendarType = CalendarType.SHAMSI
+    var calendarType = mainCalendar
         set(value) {
             field = value
             jdn = currentJdn
