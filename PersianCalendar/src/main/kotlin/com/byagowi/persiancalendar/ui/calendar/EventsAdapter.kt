@@ -113,12 +113,12 @@ class EventsAdapter(
 
             binding.title.text = text
             if (event is CalendarEvent.DeviceCalendarEvent) {
-                binding.title.setTextIsSelectable(false)
                 binding.root.setOnClickListener { onEventClick(event.id) }
+                binding.title.setTextIsSelectable(false)
                 binding.title.putLineEndIcon(openInNewIconCache[textColor])
             } else {
-                binding.title.setTextIsSelectable(true)
                 binding.root.setOnClickListener(null)
+                binding.title.setTextIsSelectable(true)
                 binding.title.putLineEndIcon(null)
             }
         }
