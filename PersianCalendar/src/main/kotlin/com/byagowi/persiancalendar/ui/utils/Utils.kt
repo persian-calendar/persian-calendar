@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
@@ -183,8 +184,10 @@ fun NavController.navigateSafe(directions: NavDirections) {
     runCatching { navigate(directions) }.onFailure(logException).getOrNull().debugAssertNotNull
 }
 
-fun Context.getCompatDrawable(@DrawableRes drawableRes: Int) =
-    AppCompatResources.getDrawable(this, drawableRes).debugAssertNotNull ?: ShapeDrawable()
+fun Context?.getCompatDrawable(@DrawableRes drawableRes: Int): Drawable {
+    return this?.let { AppCompatResources.getDrawable(it, drawableRes) }.debugAssertNotNull
+        ?: ShapeDrawable()
+}
 
 fun Context.getAnimatedDrawable(@DrawableRes animatedDrawableRes: Int) =
     AnimatedVectorDrawableCompat.create(this, animatedDrawableRes)

@@ -171,15 +171,19 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         val binding = EventsTabContentBinding.inflate(inflater, container, false)
         binding.eventsParent.setupLayoutTransition()
         binding.events.layoutManager = LinearLayoutManager(binding.events.context)
-        val adapter = EventsAdapter(onEventClick = { id: Int ->
-            runCatching { viewEvent.launch(id.toLong()) }.onFailure {
-                Snackbar.make(
-                    binding.root,
-                    R.string.device_does_not_support,
-                    Snackbar.LENGTH_SHORT
-                ).also { it.considerSystemBarsInsets() }.show()
-            }.onFailure(logException)
-        }, context = inflater.context)
+        val adapter = EventsAdapter(
+            isRtl = resources.isRtl, dp = resources.dp,
+            createEventIcon = { context.getCompatDrawable(R.drawable.ic_open_in_new) },
+            onEventClick = { id: Int ->
+                runCatching { viewEvent.launch(id.toLong()) }.onFailure {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.device_does_not_support,
+                        Snackbar.LENGTH_SHORT
+                    ).also { it.considerSystemBarsInsets() }.show()
+                }.onFailure(logException)
+            },
+        )
         binding.events.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedDayChangeEvent

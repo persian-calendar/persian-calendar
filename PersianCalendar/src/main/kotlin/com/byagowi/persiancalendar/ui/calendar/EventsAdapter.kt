@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.calendar
 
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
@@ -17,17 +16,17 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventItemBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.global.holidayString
-import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatTitle
-import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class EventsAdapter(private val onEventClick: (Int) -> Unit, private val context: Context) :
+class EventsAdapter(
+    private val onEventClick: (Int) -> Unit, private val isRtl: Boolean, private val dp: Float,
+    private val createEventIcon: () -> Drawable,
+) :
     RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
     fun showEvents(list: List<CalendarEvent<*>>) {
         val previousEventsCount = events.size
@@ -52,20 +51,17 @@ class EventsAdapter(private val onEventClick: (Int) -> Unit, private val context
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder =
         EventViewHolder(EventItemBinding.inflate(parent.context.layoutInflater, parent, false))
 
-    private val isRtl = context.resources.isRtl
     private val openInNewIconCache = lruCache(16, create = { color: Int ->
-        val drawable = context.getCompatDrawable(R.drawable.ic_open_in_new)
+        val drawable = createEventIcon()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) drawable.setTint(color)
-        val dp = context.resources.dp.roundToInt()
-        val insetDrawable = InsetDrawable(
-            drawable, if (isRtl) 0 else 4 * dp, 0, if (isRtl) 4 * dp else 0, 0
-        )
+        val pad = (4 * dp).roundToInt()
+        val result = InsetDrawable(drawable, if (isRtl) 0 else pad, 0, if (isRtl) pad else 0, 0)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val direction = if (isRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
-            insetDrawable.layoutDirection = direction
-            insetDrawable.isAutoMirrored = true
+            result.layoutDirection =
+                if (isRtl) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
+            result.isAutoMirrored = true
         }
-        insetDrawable
+        result
     })
 
     inner class EventViewHolder(val binding: EventItemBinding) :
