@@ -84,7 +84,7 @@
     <string name="calendars_priority">اولویت نمایش تقویم‌ها</string>
     <string name="calendars_priority_summary">تنظیم تقویم اصلی و اولویت نمایش یا عدم نمایش تقویم‌ها</string>
     <string name="week_number">شمارهٔ هفته</string>
-    <string name="week_of_year_summary">نمایش شمارهٔ هفته در صفحهٔ تقویم</string>
+    <string name="week_number_summary">نمایش شمارهٔ هفته در صفحهٔ تقویم</string>
     <string name="accept">تأیید</string>
     <string name="calendar">تقویم</string>
     <string name="week_start">شروع هفته</string>

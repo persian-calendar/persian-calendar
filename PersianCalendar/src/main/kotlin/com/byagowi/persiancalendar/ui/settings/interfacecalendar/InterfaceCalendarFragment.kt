@@ -129,7 +129,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat(),
                 }
                 switch(PREF_SHOW_WEEK_OF_YEAR_NUMBER, false) {
                     title(R.string.week_number)
-                    summary(R.string.week_of_year_summary)
+                    summary(R.string.week_number_summary)
                 }
                 run { // reset Islamic offset if is already expired
                     val appPrefs = context.appPrefs

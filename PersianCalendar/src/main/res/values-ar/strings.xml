@@ -120,7 +120,7 @@
     <string name="astronomy">الفلك</string>
     <string name="astronomical_info_summary">إظهار المزيد من المعلومات مثل (الأبراج، أسماء الأعوام، القمر في العقرب)</string>
     <string name="week_number">رقم الأسبوع</string>
-    <string name="week_of_year_summary">إظهار رقم الأسبوع في تقويم الرئيسي</string>
+    <string name="week_number_summary">إظهار رقم الأسبوع في تقويم الرئيسي</string>
     <string name="week_start">بداية الأسبوع</string>
     <string name="week_start_summary">إختيار اليوم الذي يبدأ به الأسبوع</string>
     <string name="week_ends">عطلة نهاية الأسبوع</string>

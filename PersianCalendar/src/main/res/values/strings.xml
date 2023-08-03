@@ -121,7 +121,7 @@
     <string name="astronomy">Astronomy</string>
     <string name="astronomical_info_summary">"Show additional information like constellation, ancient names of years and moon in scorpio"</string>
     <string name="week_number">Week Number</string>
-    <string name="week_of_year_summary">Show week number on calendar</string>
+    <string name="week_number_summary">Show week number on calendar</string>
     <string name="week_start">Week Start</string>
     <string name="week_start_summary">Select week start day</string>
     <string name="week_ends">Weekends</string>

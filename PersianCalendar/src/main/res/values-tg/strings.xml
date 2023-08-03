@@ -84,7 +84,7 @@
     <string name="astronomy">Астрономӣ</string>
     <string name="week_number">Ҳафтаи сол</string>
     <string name="resume">оғози дубора</string>
-    <string name="week_of_year_summary">намоиши Ҳафтаи сол дар тақвим</string>
+    <string name="week_number_summary">намоиши Ҳафтаи сол дар тақвим</string>
     <string name="week_start_summary">намоиши Рӯзи оғози ҳафта</string>
     <string name="week_ends">охири ҳафта</string>
     <string name="clock_in_24">Соат дар 24 соат</string>

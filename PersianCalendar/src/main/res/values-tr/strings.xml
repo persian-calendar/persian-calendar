@@ -222,7 +222,7 @@
     <string name="week_ends">Haftasonu Günleri</string>
     <string name="week_start_summary">Haftanın ilk gününü seçin</string>
     <string name="week_start">Haftanın İlk Günü</string>
-    <string name="week_of_year_summary">Takvimde hafta no göster</string>
+    <string name="week_number_summary">Takvimde hafta no göster</string>
     <string name="week_number">Hafta No</string>
     <string name="astronomical_info_summary">Ek bilgileri göster (Akrep burcundaki ay, yılların isimleri ve burçlar gibi)</string>
     <string name="astronomy">Astronomi</string>

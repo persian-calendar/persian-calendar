@@ -83,7 +83,7 @@
     <string name="show_device_calendar_events_summary">व्यक्तिगत पात्रो घटनाहरू देखाउनुहोस्</string>
     <string name="calendars_priority_summary">प्राथमिकता देखाउन वा लुकाउन पात्रोहरू सेट गर्नुहोस्</string>
     <string name="week_number">वर्षको हप्ता</string>
-    <string name="week_of_year_summary">क्यालेन्डरमा वर्षको हप्ता देखाउनुहोस्</string>
+    <string name="week_number_summary">क्यालेन्डरमा वर्षको हप्ता देखाउनुहोस्</string>
     <string name="week_start">हप्ताको सुरुवात</string>
     <string name="ask_user_to_set_location">यो ठाउँ सही रूपमा हेर्नको लागि सेटिङहरूमा स्थान सेट गर्नुहोस्</string>
     <string name="notify_date_lock_screen">लक स्क्रिनमा सूचना देखाउनुहोस्</string>

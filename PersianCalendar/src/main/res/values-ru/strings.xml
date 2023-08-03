@@ -114,7 +114,7 @@
     <string name="astronomy">Астрономия</string>
     <string name="astronomical_info_summary">Показать дополнительную информацию, такую как созвездие, древние названия лет и луна в скорпионе</string>
     <string name="week_number">Неделя года</string>
-    <string name="week_of_year_summary">Показать неделю года в календаре</string>
+    <string name="week_number_summary">Показать неделю года в календаре</string>
     <string name="week_start">Начало недели</string>
     <string name="week_start_summary">Выберите день начала недели</string>
     <string name="week_ends">выходные</string>
