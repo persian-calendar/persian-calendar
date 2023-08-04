@@ -60,11 +60,7 @@ android {
         }
     }
 
-    testOptions {
-        unitTests.all {
-            it.useJUnitPlatform()
-        }
-    }
+    testOptions.unitTests.all { it.useJUnitPlatform() }
 
     buildTypes {
         create("nightly") {
