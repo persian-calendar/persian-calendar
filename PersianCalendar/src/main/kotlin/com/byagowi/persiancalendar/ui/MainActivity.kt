@@ -198,10 +198,8 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
             }
             NavigationHeaderBinding.bind(binding.navigation.getHeaderView(0))
                 .statusBarPlaceHolder.let { placeHolder ->
-                    placeHolder.updateLayoutParams {
-                        this@updateLayoutParams.height =
-                            if (transparencyState.shouldStatusBarBeTransparent) insets.top else 0
-                    }
+                    placeHolder.layoutParams.height =
+                        if (transparencyState.shouldStatusBarBeTransparent) insets.top else 0
                     placeHolder.isInvisible = !transparencyState.needsVisibleStatusBarPlaceHolder
                 }
             windowInsets

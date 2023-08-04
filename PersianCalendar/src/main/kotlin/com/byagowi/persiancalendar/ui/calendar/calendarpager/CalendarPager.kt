@@ -6,7 +6,6 @@ import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.doOnAttach
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.byagowi.persiancalendar.R
@@ -34,7 +33,9 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         )
 
     fun setSelectedDay(
-        jdn: Jdn, highlight: Boolean = true, monthChange: Boolean = true,
+        jdn: Jdn,
+        highlight: Boolean = true,
+        monthChange: Boolean = true,
         smoothScroll: Boolean = true
     ) {
         selectedJdn = if (highlight) jdn else null
@@ -49,8 +50,8 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
     }
 
     // Public API, to be reviewed
-    fun refresh(isEventsModified: Boolean = false) = pagesViewHolders
-        .mapNotNull { it.get() }.forEach { it.pageRefresh(isEventsModified, selectedJdn) }
+    fun refresh(isEventsModified: Boolean = false) = pagesViewHolders.mapNotNull { it.get() }
+        .forEach { it.pageRefresh(isEventsModified, selectedJdn) }
 
     private val pagesViewHolders = ArrayList<WeakReference<PagerAdapter.ViewHolder>>()
 
@@ -89,17 +90,15 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 resources.getDimension(R.dimen.grid_calendar_height_max)
             )
 
-            updateLayoutParams {
-                when (resources.configuration.orientation) {
-                    Configuration.ORIENTATION_PORTRAIT -> this.height = suitableHeight.toInt()
+            when (resources.configuration.orientation) {
+                Configuration.ORIENTATION_PORTRAIT -> layoutParams.height = suitableHeight.toInt()
 
-                    Configuration.ORIENTATION_LANDSCAPE -> this.width =
-                        (resources.displayMetrics.widthPixels / 2.05f).coerceAtMost(
-                            resources.getDimension(R.dimen.grid_calendar_land_width_max)
-                        ).toInt()
+                Configuration.ORIENTATION_LANDSCAPE -> layoutParams.width =
+                    (resources.displayMetrics.widthPixels / 2.05f).coerceAtMost(
+                        resources.getDimension(R.dimen.grid_calendar_land_width_max)
+                    ).toInt()
 
-                    else -> Unit
-                }
+                else -> Unit
             }
 
             val cellHeight = suitableHeight / 7 - 4.5f * resources.sp
@@ -107,8 +106,8 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
             fun(binding: MonthPageBinding) {
                 binding.monthView.initialize(sharedDayViewData, this@CalendarPager)
 
-                binding.previous.updateLayoutParams { this.height = (cellHeight / 1.4).toInt() }
-                binding.next.updateLayoutParams { this.height = (cellHeight / 1.4).toInt() }
+                binding.previous.layoutParams.height = (cellHeight / 1.4).toInt()
+                binding.next.layoutParams.height = (cellHeight / 1.4).toInt()
             }
         }
 
@@ -170,8 +169,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                         }
 
                         binding.monthView.selectDay(
-                            if (jdn != null && jdn >= monthStartJdn && jdn - monthStartJdn + 1 <= monthLength)
-                                jdn - monthStartJdn + 1
+                            if (jdn != null && jdn >= monthStartJdn && jdn - monthStartJdn + 1 <= monthLength) jdn - monthStartJdn + 1
                             else -1
                         )
                     } else binding.monthView.selectDay(-1)
