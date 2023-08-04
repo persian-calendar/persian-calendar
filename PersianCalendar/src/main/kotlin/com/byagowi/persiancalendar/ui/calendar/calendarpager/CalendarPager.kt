@@ -84,10 +84,10 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
         override fun getItemCount() = monthsLimit
 
         private val monthViewInitializer by lazy(LazyThreadSafetyMode.NONE) {
-            val suitableHeight = listOfNotNull(
+            val suitableHeight = (resources.displayMetrics.heightPixels / 2.2f).coerceIn(
                 resources.getDimension(R.dimen.grid_calendar_height),
-                resources.displayMetrics.heightPixels / 2.2f
-            ).max().coerceAtMost(resources.getDimension(R.dimen.grid_calendar_height_max))
+                resources.getDimension(R.dimen.grid_calendar_height_max)
+            )
 
             updateLayoutParams {
                 when (resources.configuration.orientation) {
