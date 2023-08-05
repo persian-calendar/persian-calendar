@@ -45,6 +45,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.service.AlarmWorker
 import com.byagowi.persiancalendar.service.PersianCalendarTileService
 import com.byagowi.persiancalendar.ui.about.showCarouselDialog
+import com.byagowi.persiancalendar.ui.about.showDynamicColorsDialog
 import com.byagowi.persiancalendar.ui.about.showIconsDemoDialog
 import com.byagowi.persiancalendar.ui.about.showTypographyDemoDialog
 import com.byagowi.persiancalendar.ui.settings.interfacecalendar.InterfaceCalendarFragment
@@ -183,6 +184,9 @@ class SettingsScreen : Fragment(R.layout.settings_screen) {
         if (!BuildConfig.DEVELOPMENT) return
         val activity = activity ?: return
         toolbar.menu.add("Static vs generated icons").onClick { showIconsDemoDialog(activity) }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            toolbar.menu.add("Dynamic Colors").onClick { showDynamicColorsDialog(activity) }
+        }
         toolbar.menu.add("Typography").onClick { showTypographyDemoDialog(activity) }
         toolbar.menu.add("Clear preferences store and exit").onClick {
             activity.appPrefs.edit { clear() }
