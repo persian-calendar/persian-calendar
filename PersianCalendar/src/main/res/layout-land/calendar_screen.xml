@@ -23,7 +23,7 @@
         <com.google.android.material.carousel.MaskableFrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:shapeAppearance="@style/shapeAppearanceTopCornerExtraLarge">
+            app:shapeAppearance="@style/shapeAppearanceLandscapeCalendarThreeCorners">
 
             <LinearLayout
                 android:layout_width="match_parent"

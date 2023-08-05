@@ -266,6 +266,12 @@
         <item name="cornerSizeBottomRight">0dp</item>
     </style>
 
+    <!-- It has an override in ldrtl -->
+    <style name="shapeAppearanceLandscapeCalendarThreeCorners" parent="ShapeAppearance.Material3.Corner.ExtraLarge">
+        <item name="cornerFamily">?attr/shapeCornerFamily</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
+
     <style name="shapeAppearanceTopCornerLarge" parent="ShapeAppearance.Material3.Corner.Large">
         <item name="cornerFamily">?attr/shapeCornerFamily</item>
         <item name="cornerSizeBottomLeft">0dp</item>
