@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.core.util.lruCache
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -20,6 +19,7 @@ import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.logException
+import com.google.android.material.color.MaterialColors
 import kotlin.math.min
 import kotlin.math.roundToInt
 
@@ -99,8 +99,7 @@ class EventsAdapter(
                 backgroundColor
             }
 
-            val textColor =
-                if (ColorUtils.calculateLuminance(color) > .5) Color.BLACK else Color.WHITE
+            val textColor = if (MaterialColors.isColorLight(color)) Color.BLACK else Color.WHITE
             binding.title.setTextColor(textColor)
 
             val text = when {

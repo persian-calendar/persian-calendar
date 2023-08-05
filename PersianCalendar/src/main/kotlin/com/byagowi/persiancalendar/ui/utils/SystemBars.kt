@@ -9,15 +9,16 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
 import com.byagowi.persiancalendar.R
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.snackbar.Snackbar
 
 class SystemBarsTransparency(activity: Activity) {
-    val isPrimaryColorLight = ColorUtils.calculateLuminance(
+    val isPrimaryColorLight = !MaterialColors.isColorLight(
         activity.resolveColor(R.attr.colorOnAppBar)
-    ) < 0.5
-    val isSurfaceColorLight = ColorUtils.calculateLuminance(
+    )
+    val isSurfaceColorLight = MaterialColors.isColorLight(
         activity.resolveColor(com.google.android.material.R.attr.colorSurface)
-    ) > 0.5
+    )
     val needsVisibleStatusBarPlaceHolder = !isPrimaryColorLight && isSurfaceColorLight
 
     private val isLightStatusBarAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
