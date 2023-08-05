@@ -103,7 +103,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     val betterToUseShortCalendarName: Boolean
         get() = when (this) {
-            EN_US, JA, ZH_CN, FR, ES, AR, TR, TG, RU -> true
+            EN_US, EN_IR, JA, ZH_CN, FR, ES, AR, TR, TG, RU, CKB -> true
             else -> false
         }
 
