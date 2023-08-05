@@ -1365,30 +1365,31 @@ fun showInputDeviceTestDialog(activity: FragmentActivity) {
 
 // Debug only dialog to check validity of dynamic icons generation
 fun showIconsDemoDialog(activity: FragmentActivity) {
+    val recyclerViewAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
+        override fun getItemCount() = 62
+        override fun getItemViewType(position: Int) = position
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            object : RecyclerView.ViewHolder(ShapeableImageView(activity).apply {
+                val day = viewType / 2 + 1
+                when (viewType % 2) {
+                    0 -> setImageResource(getDayIconResource(day))
+                    1 -> setImageBitmap(createStatusIcon(day))
+                }
+                val dp = resources.dp
+                layoutParams =
+                    ViewGroup.MarginLayoutParams((36 * dp).toInt(), (36 * dp).toInt())
+                        .apply { setMargins((4 * dp).toInt()) }
+                shapeAppearanceModel = ShapeAppearanceModel.Builder()
+                    .setAllCorners(CornerFamily.ROUNDED, 8 * dp)
+                    .setAllEdges(TriangleEdgeTreatment(4 * dp, true))
+                    .build()
+                setBackgroundColor(Color.DKGRAY)
+            }) {}
+    }
     MaterialAlertDialogBuilder(activity)
         .setView(RecyclerView(activity).also {
-            it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
-                override fun getItemCount() = 62
-                override fun getItemViewType(position: Int) = position
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                    object : RecyclerView.ViewHolder(ShapeableImageView(activity).apply {
-                        val day = viewType / 2 + 1
-                        when (viewType % 2) {
-                            0 -> setImageResource(getDayIconResource(day))
-                            1 -> setImageBitmap(createStatusIcon(day))
-                        }
-                        val dp = resources.dp
-                        layoutParams =
-                            ViewGroup.MarginLayoutParams((36 * dp).toInt(), (36 * dp).toInt())
-                                .apply { setMargins((4 * dp).toInt()) }
-                        shapeAppearanceModel = ShapeAppearanceModel.Builder()
-                            .setAllCorners(CornerFamily.ROUNDED, 8 * dp)
-                            .setAllEdges(TriangleEdgeTreatment(4 * dp, true))
-                            .build()
-                        setBackgroundColor(Color.DKGRAY)
-                    }) {}
-            }
+            it.adapter = recyclerViewAdapter
             it.layoutManager = GridLayoutManager(activity, 8)
             it.setBackgroundColor(Color.WHITE)
         })
@@ -1439,30 +1440,30 @@ fun showDynamicColorsDialog(activity: FragmentActivity) {
         "", "0", "10", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"
     )
     val cols = listOf("", "accent1", "accent2", "accent3", "neutral1", "neutral2")
+    val recyclerViewAdapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
+        override fun getItemCount() = 84
+        override fun getItemViewType(position: Int) = position
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+            object : RecyclerView.ViewHolder(TextView(activity).apply {
+                textAlignment = View.TEXT_ALIGNMENT_CENTER
+                val dp = resources.dp
+                setAutoSizeTextTypeUniformWithConfiguration(8, 16, 1, dp.toInt())
+                layoutParams = ViewGroup.MarginLayoutParams((50 * dp).toInt(), (25 * dp).toInt())
+                    .apply { setMargins((4 * dp).toInt()) }
+                val col = viewType % 6
+                val row = viewType / 6
+                if (row == 0) text = cols[col]
+                else if (col == 0) text = rows[row]
+                else {
+                    val index = (col - 1) * 13 + row - 1
+                    setBackgroundColor(context.getColor(dynamicColors[index]))
+                }
+            }) {}
+    }
     MaterialAlertDialogBuilder(activity)
         .setView(RecyclerView(activity).also {
-            it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-                override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
-                override fun getItemCount() = 84
-                override fun getItemViewType(position: Int) = position
-                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                    object : RecyclerView.ViewHolder(TextView(activity).apply {
-                        textAlignment = View.TEXT_ALIGNMENT_CENTER
-                        val dp = resources.dp
-                        setAutoSizeTextTypeUniformWithConfiguration(8, 16, 1, dp.toInt())
-                        layoutParams =
-                            ViewGroup.MarginLayoutParams((50 * dp).toInt(), (25 * dp).toInt())
-                                .apply { setMargins((4 * dp).toInt()) }
-                        val col = viewType % 6
-                        val row = viewType / 6
-                        if (row == 0) text = cols[col]
-                        else if (col == 0) text = rows[row]
-                        else {
-                            val index = (col - 1) * 13 + row - 1
-                            setBackgroundColor(context.getColor(dynamicColors[index]))
-                        }
-                    }) {}
-            }
+            it.adapter = recyclerViewAdapter
             it.layoutManager = GridLayoutManager(activity, 6)
         })
         .show()
