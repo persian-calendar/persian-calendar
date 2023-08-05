@@ -1435,23 +1435,35 @@ fun showDynamicColorsDialog(activity: FragmentActivity) {
         android.R.color.system_neutral2_800, android.R.color.system_neutral2_900,
         android.R.color.system_neutral2_1000,
     )
+    val rows = listOf(
+        "", "0", "10", "50", "100", "200", "300", "400", "500", "600", "700", "800", "900", "1000"
+    )
+    val cols = listOf("", "accent1", "accent2", "accent3", "neutral1", "neutral2")
     MaterialAlertDialogBuilder(activity)
         .setView(RecyclerView(activity).also {
             it.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {}
-                override fun getItemCount() = dynamicColors.size
+                override fun getItemCount() = 84
                 override fun getItemViewType(position: Int) = position
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                    object : RecyclerView.ViewHolder(FrameLayout(activity).apply {
+                    object : RecyclerView.ViewHolder(TextView(activity).apply {
+                        textAlignment = View.TEXT_ALIGNMENT_CENTER
                         val dp = resources.dp
+                        setAutoSizeTextTypeUniformWithConfiguration(8, 16, 1, dp.toInt())
                         layoutParams =
-                            ViewGroup.MarginLayoutParams((60 * dp).toInt(), (30 * dp).toInt())
+                            ViewGroup.MarginLayoutParams((50 * dp).toInt(), (25 * dp).toInt())
                                 .apply { setMargins((4 * dp).toInt()) }
-                        val index = (viewType % 5) * 13 + viewType / 5
-                        setBackgroundColor(context.getColor(dynamicColors[index]))
+                        val col = viewType % 6
+                        val row = viewType / 6
+                        if (row == 0) text = cols[col]
+                        else if (col == 0) text = rows[row]
+                        else {
+                            val index = (col - 1) * 13 + row - 1
+                            setBackgroundColor(context.getColor(dynamicColors[index]))
+                        }
                     }) {}
             }
-            it.layoutManager = GridLayoutManager(activity, 5)
+            it.layoutManager = GridLayoutManager(activity, 6)
         })
         .show()
 }
