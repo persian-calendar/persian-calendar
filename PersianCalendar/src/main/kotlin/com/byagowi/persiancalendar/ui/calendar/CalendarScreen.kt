@@ -171,7 +171,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         val binding = EventsTabContentBinding.inflate(inflater, container, false)
         binding.eventsParent.setupLayoutTransition()
         binding.events.layoutManager = LinearLayoutManager(binding.events.context)
-        val adapter = EventsAdapter(
+        val adapter = EventsRecyclerViewAdapter(
             isRtl = resources.isRtl, dp = resources.dp,
             createEventIcon = { context.getCompatDrawable(R.drawable.ic_open_in_new) },
             onEventClick = { id: Int ->

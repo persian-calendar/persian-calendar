@@ -23,11 +23,11 @@ import com.google.android.material.color.MaterialColors
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class EventsAdapter(
+class EventsRecyclerViewAdapter(
     private val onEventClick: (Int) -> Unit, private val isRtl: Boolean, private val dp: Float,
     private val createEventIcon: () -> Drawable,
 ) :
-    RecyclerView.Adapter<EventsAdapter.EventViewHolder>() {
+    RecyclerView.Adapter<EventsRecyclerViewAdapter.EventViewHolder>() {
     fun showEvents(list: List<CalendarEvent<*>>) {
         val previousEventsCount = events.size
         events = list.sortedBy {
