@@ -250,18 +250,18 @@ enum class Language(val code: String, val nativeName: String) {
         }
 
     fun getPersianMonths(context: Context): List<String> = when (this) {
-        FA, EN_IR -> persianCalendarMonthsInPersian
+        FA -> persianCalendarMonthsInPersian
         FA_AF -> persianCalendarMonthsInDari
         else -> persianCalendarMonths.map(context::getString)
     }
 
     fun getIslamicMonths(context: Context): List<String> = when (this) {
-        FA, EN_IR, FA_AF -> islamicCalendarMonthsInPersian
+        FA, FA_AF -> islamicCalendarMonthsInPersian
         else -> islamicCalendarMonths.map(context::getString)
     }
 
     fun getGregorianMonths(context: Context, easternGregorianArabicMonths: Boolean) = when (this) {
-        FA, EN_IR -> gregorianCalendarMonthsInPersian
+        FA -> gregorianCalendarMonthsInPersian
         FA_AF -> gregorianCalendarMonthsInDari
         AR -> {
             if (easternGregorianArabicMonths) easternGregorianCalendarMonths
@@ -277,13 +277,14 @@ enum class Language(val code: String, val nativeName: String) {
     }
 
     fun getWeekDays(context: Context): List<String> = when (this) {
-        FA, EN_IR, FA_AF -> weekDaysInPersian
+        FA, FA_AF -> weekDaysInPersian
+        EN_IR -> weekDaysInEnglishIran
         else -> weekDays.map(context::getString)
     }
 
     fun getWeekDaysInitials(context: Context): List<String> = when (this) {
-        EN_IR -> weekDaysInitialsInEnglishIran
         FA, FA_AF -> weekDaysInitialsInPersian
+        EN_IR -> weekDaysInitialsInEnglishIran
         else -> weekDaysInitials.map(context::getString)
     }
 
@@ -483,6 +484,10 @@ enum class Language(val code: String, val nativeName: String) {
         )
         private val weekDaysInitialsInPersian = listOf7Items(
             "ش", "ی", "د", "س", "چ", "پ", "ج"
+        )
+        private val weekDaysInEnglishIran = listOf7Items(
+            "Shambe", "Yekshambe", "Doshambe", "Seshambe", "Chahaarshambe",
+            "Panjshambe", "Jom'e"
         )
         private val weekDaysInitialsInEnglishIran = listOf7Items(
             "Sh", "Ye", "Do", "Se", "Ch", "Pa", "Jo"
