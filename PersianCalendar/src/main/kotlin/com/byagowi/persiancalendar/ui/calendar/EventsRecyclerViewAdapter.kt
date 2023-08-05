@@ -26,8 +26,7 @@ import kotlin.math.roundToInt
 class EventsRecyclerViewAdapter(
     private val onEventClick: (Int) -> Unit, private val isRtl: Boolean, private val dp: Float,
     private val createEventIcon: () -> Drawable,
-) :
-    RecyclerView.Adapter<EventsRecyclerViewAdapter.EventViewHolder>() {
+) : RecyclerView.Adapter<EventsRecyclerViewAdapter.EventViewHolder>() {
     fun showEvents(list: List<CalendarEvent<*>>) {
         val previousEventsCount = events.size
         events = list.sortedBy {
