@@ -15,7 +15,6 @@ import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.util.Base64
-import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -36,7 +35,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.constraintlayout.helper.widget.Flow
 import androidx.core.app.ShareCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.core.graphics.drawable.toDrawable
@@ -49,6 +47,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import com.byagowi.persiancalendar.BuildConfig
 import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
@@ -58,6 +57,7 @@ import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -165,9 +165,10 @@ private tailrec fun Context.getActivity(): FragmentActivity? = this as? Fragment
     ?: (this as? ContextWrapper)?.baseContext?.getActivity()
 
 @ColorInt
-fun Context.resolveColor(@AttrRes attribute: Int) = TypedValue().let {
-    theme.resolveAttribute(attribute, it, true)
-    ContextCompat.getColor(this, it.resourceId)
+fun Context.resolveColor(@AttrRes attribute: Int): Int {
+    return if (BuildConfig.DEBUG)
+        MaterialColors.getColor(this, attribute, "Unknown color")
+    else MaterialColors.getColor(this, attribute, Color.TRANSPARENT)
 }
 
 fun Flow.addViewsToFlow(viewList: List<View>) {
