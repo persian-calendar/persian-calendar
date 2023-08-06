@@ -100,7 +100,7 @@ class EventsRecyclerViewAdapter(
 
             val textColor = if (MaterialColors.isColorLight(color)) Color.BLACK else Color.WHITE
             binding.title.setTextColor(textColor)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && applyGradient) {
+            if (applyGradient && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 binding.title.foreground = GradientDrawable().also {
                     it.colors = intArrayOf(
                         Color.TRANSPARENT, ColorUtils.setAlphaComponent(textColor, 40)
