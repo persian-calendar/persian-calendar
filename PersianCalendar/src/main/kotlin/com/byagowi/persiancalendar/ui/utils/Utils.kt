@@ -133,23 +133,20 @@ fun FragmentActivity.shareText(text: String) {
     }.onFailure(logException)
 }
 
-fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String) {
+private fun FragmentActivity.shareUriFile(uri: Uri, mime: String) {
     runCatching {
         startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
             it.type = mime
-            it.putExtra(Intent.EXTRA_STREAM, saveTextAsFile(text, fileName))
+            it.putExtra(Intent.EXTRA_STREAM, uri)
         }, getString(R.string.share)))
     }.onFailure(logException)
 }
 
-fun FragmentActivity.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) {
-    runCatching {
-        startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).also {
-            it.type = mime
-            it.putExtra(Intent.EXTRA_STREAM, saveBytesAsFile(binary, fileName))
-        }, getString(R.string.share)))
-    }.onFailure(logException)
-}
+fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String) =
+    shareUriFile(saveTextAsFile(text, fileName), mime)
+
+fun FragmentActivity.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
+    shareUriFile(saveBytesAsFile(binary, fileName), mime)
 
 fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
