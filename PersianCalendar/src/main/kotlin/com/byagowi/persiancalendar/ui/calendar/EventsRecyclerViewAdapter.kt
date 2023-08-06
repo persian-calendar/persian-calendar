@@ -2,12 +2,14 @@ package com.byagowi.persiancalendar.ui.calendar
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.util.lruCache
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.R
@@ -25,7 +27,7 @@ import kotlin.math.roundToInt
 
 class EventsRecyclerViewAdapter(
     private val onEventClick: (Int) -> Unit, private val isRtl: Boolean, private val dp: Float,
-    private val createEventIcon: () -> Drawable,
+    private val createEventIcon: () -> Drawable, private val applyGradient: Boolean,
 ) : RecyclerView.Adapter<EventsRecyclerViewAdapter.EventViewHolder>() {
     fun showEvents(list: List<CalendarEvent<*>>) {
         val previousEventsCount = events.size
@@ -88,7 +90,7 @@ class EventsRecyclerViewAdapter(
                 else com.google.android.material.R.attr.colorButtonNormal
 
             val color = if (backgroundColor == null) {
-                val resourceId = binding.root.context.resolveResourceIdFromTheme(attr)
+                val resourceId = context.resolveResourceIdFromTheme(attr)
                 binding.title.setBackgroundResource(resourceId)
                 ContextCompat.getColor(context, resourceId)
             } else {
@@ -98,6 +100,16 @@ class EventsRecyclerViewAdapter(
 
             val textColor = if (MaterialColors.isColorLight(color)) Color.BLACK else Color.WHITE
             binding.title.setTextColor(textColor)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && applyGradient) {
+                binding.title.foreground = GradientDrawable().also {
+                    it.colors = intArrayOf(
+                        Color.TRANSPARENT, ColorUtils.setAlphaComponent(textColor, 40)
+                    )
+                    it.orientation =
+                        if (isRtl) GradientDrawable.Orientation.TR_BL
+                        else GradientDrawable.Orientation.TL_BR
+                }
+            }
 
             val text = when {
                 event.isHoliday -> "${event.title} ($holidayString)"
@@ -105,7 +117,7 @@ class EventsRecyclerViewAdapter(
                 else -> event.title
             }
             binding.root.contentDescription = if (event.isHoliday)
-                binding.root.context.getString(R.string.holiday_reason, event.title) else text
+                context.getString(R.string.holiday_reason, event.title) else text
 
             binding.title.text = text
             if (event is CalendarEvent.DeviceCalendarEvent) {
