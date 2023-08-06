@@ -15,6 +15,7 @@ import android.graphics.drawable.ShapeDrawable
 import android.net.Uri
 import android.os.Build
 import android.util.Base64
+import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -25,6 +26,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.animation.AlphaAnimation
 import android.widget.Toast
+import androidx.annotation.AnyRes
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
@@ -169,6 +171,18 @@ fun Context.resolveColor(@AttrRes attribute: Int): Int {
     return if (BuildConfig.DEBUG)
         MaterialColors.getColor(this, attribute, "Unknown color")
     else MaterialColors.getColor(this, attribute, Color.TRANSPARENT)
+}
+
+/**
+ * Turns an attribute to a resource id from the theme
+ *
+ * See also [com.google.android.material.resources.MaterialAttributes] which currently isn't exposed
+ */
+@AnyRes
+fun Context.resolveResourceIdFromTheme(@AttrRes attributeId: Int): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(attributeId, typedValue, true)
+    return typedValue.resourceId
 }
 
 fun Flow.addViewsToFlow(viewList: List<View>) {

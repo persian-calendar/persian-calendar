@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -16,6 +15,7 @@ import com.byagowi.persiancalendar.databinding.EventItemBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.global.holidayString
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatTitle
 import com.byagowi.persiancalendar.utils.logException
@@ -86,11 +86,9 @@ class EventsRecyclerViewAdapter(
             val attr =
                 if (event.isHoliday) R.attr.colorTextHoliday
                 else com.google.android.material.R.attr.colorButtonNormal
-            val resourceId = TypedValue()
-                .also { binding.root.context.theme.resolveAttribute(attr, it, true) }
-                .resourceId
 
             val color = if (backgroundColor == null) {
+                val resourceId = binding.root.context.resolveResourceIdFromTheme(attr)
                 binding.title.setBackgroundResource(resourceId)
                 ContextCompat.getColor(context, resourceId)
             } else {

@@ -4,7 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Build
-import android.util.TypedValue
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
@@ -17,6 +16,7 @@ import com.byagowi.persiancalendar.global.mainCalendarDigits
 import com.byagowi.persiancalendar.global.secondaryCalendarDigits
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.resolveColor
+import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
 import com.byagowi.persiancalendar.ui.utils.sp
 
 class SharedDayViewData(
@@ -41,14 +41,11 @@ class SharedDayViewData(
     }
 
     @DrawableRes
-    val selectableItemBackground = if (widgetTextColor == null) TypedValue().also {
-        context.theme.resolveAttribute(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                android.R.attr.selectableItemBackgroundBorderless
-            else android.R.attr.selectableItemBackground,
-            it, true
-        )
-    }.resourceId else 0
+    val selectableItemBackground = if (widgetTextColor == null) context.resolveResourceIdFromTheme(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            android.R.attr.selectableItemBackgroundBorderless
+        else android.R.attr.selectableItemBackground
+    ) else 0
 
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(R.attr.colorAppointment)
