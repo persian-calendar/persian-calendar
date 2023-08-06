@@ -101,19 +101,18 @@ fun Bitmap.toByteArray(): ByteArray {
 fun Bitmap.toPngBase64(): String =
     "data:image/png;base64,${Base64.encodeToString(toByteArray(), Base64.DEFAULT)}"
 
-private fun Context.saveTextAsFile(text: String, fileName: String): Uri {
+private inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
         applicationContext, "$packageName.provider",
-        File(externalCacheDir, fileName).also { it.writeText(text) }
+        File(externalCacheDir, fileName).also(action)
     )
 }
 
-private fun Context.saveBytesAsFile(byteArray: ByteArray, fileName: String): Uri {
-    return FileProvider.getUriForFile(
-        applicationContext, "$packageName.provider",
-        File(externalCacheDir, fileName).also { it.writeBytes(byteArray) }
-    )
-}
+private fun Context.saveTextAsFile(text: String, fileName: String): Uri =
+    saveAsFile(fileName) { it.writeText(text) }
+
+private fun Context.saveBytesAsFile(byteArray: ByteArray, fileName: String): Uri =
+    saveAsFile(fileName) { it.writeBytes(byteArray) }
 
 fun Context.openHtmlInBrowser(html: String) {
     runCatching {
