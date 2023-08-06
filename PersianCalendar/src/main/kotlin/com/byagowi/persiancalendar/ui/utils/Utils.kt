@@ -99,7 +99,7 @@ fun Bitmap.toByteArray(): ByteArray {
 }
 
 fun Bitmap.toPngBase64(): String =
-    "data:image/png;base64,${Base64.encodeToString(toByteArray(), Base64.DEFAULT)}"
+    "data:image/png;base64," + Base64.encodeToString(toByteArray(), Base64.DEFAULT)
 
 private inline fun Context.saveAsFile(fileName: String, crossinline action: (File) -> Unit): Uri {
     return FileProvider.getUriForFile(
@@ -108,17 +108,11 @@ private inline fun Context.saveAsFile(fileName: String, crossinline action: (Fil
     )
 }
 
-private fun Context.saveTextAsFile(text: String, fileName: String): Uri =
-    saveAsFile(fileName) { it.writeText(text) }
-
-private fun Context.saveBytesAsFile(byteArray: ByteArray, fileName: String): Uri =
-    saveAsFile(fileName) { it.writeBytes(byteArray) }
-
 fun Context.openHtmlInBrowser(html: String) {
     runCatching {
         CustomTabsIntent.Builder().build()
             .also { it.intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION) }
-            .launchUrl(this, saveTextAsFile(html, "persian-calendar.html"))
+            .launchUrl(this, saveAsFile("persian-calendar.html") { it.writeText(html) })
     }.onFailure(logException)
 }
 
@@ -142,10 +136,10 @@ private fun FragmentActivity.shareUriFile(uri: Uri, mime: String) {
 }
 
 fun FragmentActivity.shareTextFile(text: String, fileName: String, mime: String) =
-    shareUriFile(saveTextAsFile(text, fileName), mime)
+    shareUriFile(saveAsFile(fileName) { it.writeText(text) }, mime)
 
 fun FragmentActivity.shareBinaryFile(binary: ByteArray, fileName: String, mime: String) =
-    shareUriFile(saveBytesAsFile(binary, fileName), mime)
+    shareUriFile(saveAsFile(fileName) { it.writeBytes(binary) }, mime)
 
 fun Toolbar.setupUpNavigation() {
     navigationIcon = DrawerArrowDrawable(context).also { it.progress = 1f }
