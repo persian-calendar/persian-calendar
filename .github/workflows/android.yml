@@ -34,7 +34,7 @@ jobs:
           ./gradlew assembleMinApi21Debug lintMinApi21Debug testMinApi21DebugUnitTest --stacktrace
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: PersianCalendar
           path: PersianCalendar/build/outputs/apk/**/*.apk
