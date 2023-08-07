@@ -9,7 +9,7 @@
     android:layout_marginBottom="4dp"
     android:foreground="?attr/selectableItemBackground"
     android:importantForAccessibility="yes"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="0dp">
 
     <TextView
@@ -17,9 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:importantForAccessibility="noHideDescendants"
-        android:paddingStart="12dp"
+        android:paddingStart="9dp"
         android:paddingTop="8dp"
-        android:paddingEnd="12dp"
+        android:paddingEnd="9dp"
         android:paddingBottom="8dp"
         android:textSize="@dimen/text_size_description" />
 
