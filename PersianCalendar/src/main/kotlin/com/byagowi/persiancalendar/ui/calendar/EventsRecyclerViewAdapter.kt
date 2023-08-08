@@ -105,7 +105,7 @@ class EventsRecyclerViewAdapter(
             if (applyGradient && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 binding.title.foreground = GradientDrawable().also {
                     it.colors = intArrayOf(
-                        Color.TRANSPARENT, ColorUtils.setAlphaComponent(foregroundColor, 40)
+                        Color.TRANSPARENT, ColorUtils.setAlphaComponent(foregroundColor, 30)
                     )
                     it.orientation =
                         if (isRtl) GradientDrawable.Orientation.TR_BL
