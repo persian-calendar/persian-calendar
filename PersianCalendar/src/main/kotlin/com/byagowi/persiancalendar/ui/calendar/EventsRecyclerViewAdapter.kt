@@ -85,12 +85,12 @@ class EventsRecyclerViewAdapter(
                 }.onFailure(logException).getOrNull()
                     ?: context.resolveColor(com.google.android.material.R.attr.colorAccent)
             } else null
-            val attr =
+            val backgroundColorAttribute =
                 if (event.isHoliday) R.attr.colorTextHoliday
                 else com.google.android.material.R.attr.colorButtonNormal
 
-            val color = if (backgroundColor == null) {
-                val resourceId = context.resolveResourceIdFromTheme(attr)
+            val resolvedBackgroundColor = if (backgroundColor == null) {
+                val resourceId = context.resolveResourceIdFromTheme(backgroundColorAttribute)
                 binding.title.setBackgroundResource(resourceId)
                 ContextCompat.getColor(context, resourceId)
             } else {
@@ -98,12 +98,14 @@ class EventsRecyclerViewAdapter(
                 backgroundColor
             }
 
-            val textColor = if (MaterialColors.isColorLight(color)) Color.BLACK else Color.WHITE
-            binding.title.setTextColor(textColor)
+            val foregroundColor =
+                if (MaterialColors.isColorLight(resolvedBackgroundColor)) Color.BLACK
+                else Color.WHITE
+            binding.title.setTextColor(foregroundColor)
             if (applyGradient && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 binding.title.foreground = GradientDrawable().also {
                     it.colors = intArrayOf(
-                        Color.TRANSPARENT, ColorUtils.setAlphaComponent(textColor, 40)
+                        Color.TRANSPARENT, ColorUtils.setAlphaComponent(foregroundColor, 40)
                     )
                     it.orientation =
                         if (isRtl) GradientDrawable.Orientation.TR_BL
@@ -123,7 +125,7 @@ class EventsRecyclerViewAdapter(
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.root.setOnClickListener { onEventClick(event.id) }
                 binding.title.setTextIsSelectable(false)
-                binding.title.putLineEndIcon(openInNewIconCache[textColor])
+                binding.title.putLineEndIcon(openInNewIconCache[foregroundColor])
             } else {
                 binding.root.setOnClickListener(null)
                 binding.title.setTextIsSelectable(true)
