@@ -158,8 +158,7 @@ private tailrec fun Context.getActivity(): FragmentActivity? = this as? Fragment
 
 @ColorInt
 fun Context.resolveColor(@AttrRes attribute: Int): Int {
-    return if (BuildConfig.DEBUG)
-        MaterialColors.getColor(this, attribute, "Unknown color")
+    return if (BuildConfig.DEBUG) MaterialColors.getColor(this, attribute, "ui/Utils")
     else MaterialColors.getColor(this, attribute, Color.TRANSPARENT)
 }
 
