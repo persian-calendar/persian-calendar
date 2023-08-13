@@ -29,6 +29,7 @@ import android.os.Build
 import android.text.Spanned
 import android.text.style.TextAppearanceSpan
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.KeyEvent
 import android.view.MotionEvent
@@ -1474,7 +1475,14 @@ fun showTypographyDemoDialog(activity: FragmentActivity) {
         textAppearances.forEach { (appearanceName, appearanceId) ->
             val textAppearance = TextAppearanceSpan(activity, appearanceId)
             inSpans(textAppearance) { append(appearanceName) }
-            append(" ${(textAppearance.textSize / activity.resources.sp).roundToInt()}sp")
+            val originalSize = if (Build.VERSION.SDK_INT >= 34) {
+                TypedValue.deriveDimension(
+                    TypedValue.COMPLEX_UNIT_SP,
+                    textAppearance.textSize.toFloat(),
+                    activity.resources.displayMetrics
+                )
+            } else textAppearance.textSize / activity.resources.sp(1f)
+            append(" ${originalSize.roundToInt()}sp")
             appendLine()
         }
     }

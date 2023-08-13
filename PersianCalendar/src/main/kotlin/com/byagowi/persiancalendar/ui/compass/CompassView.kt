@@ -161,7 +161,7 @@ class CompassView(context: Context, attrs: AttributeSet? = null) : ZoomableView(
     init {
         val matrixProperties = FloatArray(9)
         maxScale = 2f
-        val textSize = 12 * resources.sp
+        val textSize = resources.sp(12f)
         val dashSize = 1 * dp
         onDraw = fun(canvas: Canvas, matrix: Matrix) {
             matrix.getValues(matrixProperties)

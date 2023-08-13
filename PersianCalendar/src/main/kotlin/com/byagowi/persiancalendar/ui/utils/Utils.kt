@@ -65,7 +65,8 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 inline val Resources.dp: Float get() = displayMetrics.density
-inline val Resources.sp: Float get() = displayMetrics.scaledDensity
+fun Resources.sp(value: Float): Float =
+    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, displayMetrics)
 
 val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
 

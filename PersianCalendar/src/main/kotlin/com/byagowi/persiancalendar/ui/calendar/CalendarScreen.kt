@@ -407,7 +407,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 binding.root.measuredHeight -
                         (calendarHeight + binding.tabLayout.measuredHeight)
             },
-            (220 * resources.sp).toInt()
+            resources.sp(220f).toInt()
         ).max()
         binding.viewPager.minimumHeight = minimumHeight
         selectedTab.minimumHeight = minimumHeight
