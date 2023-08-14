@@ -149,7 +149,7 @@ fun createEasterEggClickHandler(callback: (FragmentActivity) -> Unit): (Fragment
 fun createIconRandomEffects(view: View): () -> Unit {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return {}
     var clickCount = 0
-    val colorShader by lazy(LazyThreadSafetyMode.NONE) { RuntimeShader(colorShiftEffect) }
+    val colorShader by lazy(LazyThreadSafetyMode.NONE) { RuntimeShader(COLOR_SHIFT_EFFECT) }
     return {
         runCatching {
             view.setRenderEffect(
@@ -166,7 +166,7 @@ fun createIconRandomEffects(view: View): () -> Unit {
 }
 
 @Language("AGSL")
-private const val colorShiftEffect = """
+private const val COLOR_SHIFT_EFFECT = """
 uniform shader content;
 
 uniform float colorShift;
