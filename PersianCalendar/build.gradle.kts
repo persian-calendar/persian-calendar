@@ -13,7 +13,7 @@ plugins {
 
 // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 val composeCompilerVersion = "1.5.1"
-val composeVersion = "1.4.3"
+val composeVersion = "1.5.0"
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
@@ -148,20 +148,20 @@ dependencies {
     implementation("com.github.persian-calendar:calculator:371a91149d1fea9c318ef0def94ca0f93a1be0c2")
     implementation("com.github.persian-calendar:qr:60ad1863978b35205549eae6af177c45a1e67307")
 
-    // The only third part library created in a collaboration, https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
+    // The only runtime third part dependency created in a collaboration, https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     // bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f is equal to v2.1.17, the latest release
     implementation("com.github.cosinekitty:astronomy:bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f")
 
     // Google/JetBrains owned libraries (roughly platform libraries)
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.preference:preference-ktx:1.2.1")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
     implementation("com.google.android.material:material:1.9.0")
 
-    val navVersion = "2.6.0"
+    val navVersion = "2.7.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
     androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
@@ -172,7 +172,7 @@ dependencies {
     debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
 
-    implementation("androidx.browser:browser:1.5.0")
+    implementation("androidx.browser:browser:1.6.0")
 
     implementation("androidx.work:work-runtime-ktx:2.8.1")
 
