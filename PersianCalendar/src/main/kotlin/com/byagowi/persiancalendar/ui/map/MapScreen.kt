@@ -173,13 +173,10 @@ class MapScreen : Fragment(R.layout.map_screen) {
 
         // Best effort solution for landscape view till figuring out something better
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            binding.map.setBackgroundColor(
-                binding.root.context.resolveColor(R.attr.screenBackgroundColor)
-            )
+            binding.map.setBackgroundColor(view.context.resolveColor(R.attr.screenBackgroundColor))
         }
 
-        val showKaaba =
-            binding.root.context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
+        val showKaaba = view.context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
 
         fun onStateUpdate(state: MapState) {
             mapDraw.drawKaaba = coordinates.value != null && state.displayLocation && showKaaba
