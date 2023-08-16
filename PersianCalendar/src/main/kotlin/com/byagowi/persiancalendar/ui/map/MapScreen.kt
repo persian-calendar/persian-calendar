@@ -1,5 +1,6 @@
 package com.byagowi.persiancalendar.ui.map
 
+import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.os.Bundle
@@ -33,6 +34,7 @@ import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLoc
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
 import com.byagowi.persiancalendar.utils.appPrefs
@@ -168,6 +170,13 @@ class MapScreen : Fragment(R.layout.map_screen) {
         binding.map.contentWidth = mapDraw.mapWidth.toFloat()
         binding.map.contentHeight = mapDraw.mapHeight.toFloat()
         binding.map.maxScale = 512f
+
+        // Best effort solution for landscape view till figuring out something better
+        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            binding.map.setBackgroundColor(
+                binding.root.context.resolveColor(R.attr.screenBackgroundColor)
+            )
+        }
 
         val showKaaba =
             binding.root.context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
