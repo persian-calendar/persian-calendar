@@ -1,13 +1,13 @@
 package com.byagowi.persiancalendar.ui.level
 
 import android.content.Context
-import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.isPortrait
 
 class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
     private val dp = resources.dp
@@ -30,7 +30,7 @@ class RulerView(context: Context, attrs: AttributeSet? = null) : View(context, a
         }
 
     override fun onDraw(canvas: Canvas) {
-        val dpi = if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+        val dpi = if (resources.isPortrait)
             resources.displayMetrics.ydpi else resources.displayMetrics.xdpi
 
         // Inch

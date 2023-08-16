@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.content.Context
-import android.content.res.Configuration
 import android.util.AttributeSet
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -13,6 +12,7 @@ import com.byagowi.persiancalendar.databinding.MonthPageBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.common.ArrowView
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.sp
 import io.github.persiancalendar.calendar.AbstractDate
@@ -90,16 +90,11 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                 resources.getDimension(R.dimen.grid_calendar_height_max)
             )
 
-            when (resources.configuration.orientation) {
-                Configuration.ORIENTATION_PORTRAIT -> layoutParams.height = suitableHeight.toInt()
-
-                Configuration.ORIENTATION_LANDSCAPE -> layoutParams.width =
-                    (resources.displayMetrics.widthPixels / 2.05f).coerceAtMost(
-                        resources.getDimension(R.dimen.grid_calendar_land_width_max)
-                    ).toInt()
-
-                else -> Unit
-            }
+            if (resources.isLandscape) layoutParams.width =
+                (resources.displayMetrics.widthPixels / 2.05f)
+                    .coerceAtMost(resources.getDimension(R.dimen.grid_calendar_land_width_max))
+                    .toInt()
+            else layoutParams.height = suitableHeight.toInt()
 
             val cellHeight = suitableHeight / 7 - resources.sp(4.5f)
             val sharedDayViewData = SharedDayViewData(context, cellHeight)

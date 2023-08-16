@@ -7,6 +7,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -318,3 +319,6 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent3_500,
         ).all { Color.colorToHSV(getColor(it), hsv); hsv[1] < .25 }
     }
+
+val Resources.isPortrait get() = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+val Resources.isLandscape get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

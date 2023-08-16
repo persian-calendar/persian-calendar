@@ -1,6 +1,5 @@
 package com.byagowi.persiancalendar.ui.map
 
-import android.content.res.Configuration
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.os.Bundle
@@ -32,6 +31,7 @@ import com.byagowi.persiancalendar.ui.common.ArrowView
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showCoordinatesDialog
 import com.byagowi.persiancalendar.ui.settings.locationathan.location.showGPSLocationDialog
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
 import com.byagowi.persiancalendar.ui.utils.resolveColor
@@ -172,7 +172,7 @@ class MapScreen : Fragment(R.layout.map_screen) {
         binding.map.maxScale = 512f
 
         // Best effort solution for landscape view till figuring out something better
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (resources.isLandscape) {
             binding.map.setBackgroundColor(view.context.resolveColor(R.attr.screenBackgroundColor))
         }
 

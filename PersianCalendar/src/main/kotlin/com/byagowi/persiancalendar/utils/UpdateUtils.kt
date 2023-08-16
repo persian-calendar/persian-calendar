@@ -9,7 +9,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.ColorStateList
-import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Path
@@ -92,6 +91,7 @@ import com.byagowi.persiancalendar.ui.map.MapDraw
 import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.isPortrait
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.variants.debugLog
@@ -248,7 +248,7 @@ private fun PrayTimes.getNextOwghatTimeId(current: Clock): Int {
 
 fun AppWidgetManager.getWidgetSize(context: Context, widgetId: Int): Pair<Int, Int> {
     // https://stackoverflow.com/a/69080699
-    val isPortrait = context.resources.configuration.orientation == ORIENTATION_PORTRAIT
+    val isPortrait = context.resources.isPortrait
     val (width, height) = listOf(
         if (isPortrait) AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH
         else AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH,
