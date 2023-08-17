@@ -65,6 +65,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.io.File
 
+inline val Resources.isPortrait get() = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+inline val Resources.isLandscape get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 inline val Resources.dp: Float get() = displayMetrics.density
 fun Resources.sp(value: Float): Float =
     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, displayMetrics)
@@ -319,6 +321,3 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent3_500,
         ).all { Color.colorToHSV(getColor(it), hsv); hsv[1] < .25 }
     }
-
-val Resources.isPortrait get() = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-val Resources.isLandscape get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE

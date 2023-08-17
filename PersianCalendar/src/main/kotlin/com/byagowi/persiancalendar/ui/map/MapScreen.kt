@@ -172,9 +172,8 @@ class MapScreen : Fragment(R.layout.map_screen) {
         binding.map.maxScale = 512f
 
         // Best effort solution for landscape view till figuring out something better
-        if (resources.isLandscape) {
+        if (resources.isLandscape)
             binding.map.setBackgroundColor(view.context.resolveColor(R.attr.screenBackgroundColor))
-        }
 
         val showKaaba = view.context.appPrefs.getBoolean(PREF_SHOW_QIBLA_IN_COMPASS, true)
 
