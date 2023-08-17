@@ -55,8 +55,8 @@ import com.byagowi.persiancalendar.CALENDAR_READ_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.LOCATION_PERMISSION_REQUEST_CODE
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.RLM
+import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.DrawerHost
-import com.byagowi.persiancalendar.utils.isRtl
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.appbar.AppBarLayout
@@ -65,6 +65,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.io.File
 
+inline val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.isLessKnownRtl
 inline val Resources.isPortrait get() = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
 inline val Resources.isLandscape get() = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 inline val Resources.dp: Float get() = displayMetrics.density

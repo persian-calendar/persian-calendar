@@ -92,6 +92,7 @@ import com.byagowi.persiancalendar.ui.map.MapType
 import com.byagowi.persiancalendar.ui.settings.agewidget.AgeWidgetConfigureActivity
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isPortrait
+import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.prepareViewForRendering
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.variants.debugLog

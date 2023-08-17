@@ -1,9 +1,7 @@
 package com.byagowi.persiancalendar.utils
 
 import android.content.Context
-import android.content.res.Resources
 import android.os.Build
-import android.view.View
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
 import com.byagowi.persiancalendar.entities.CityItem
@@ -24,8 +22,6 @@ fun applyAppLanguage(context: Context) {
         resources.updateConfiguration(config, resources.displayMetrics)
     }
 }
-
-val Resources.isRtl get() = configuration.layoutDirection == View.LAYOUT_DIRECTION_RTL || language.isLessKnownRtl
 
 fun formatNumber(number: Double): String {
     if (isArabicDigitSelected) return number.toString()
