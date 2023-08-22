@@ -190,7 +190,7 @@ dependencies {
     implementation("androidx.activity:activity-ktx:$activityVersion")
     minApi21Implementation("androidx.activity:activity-compose:$activityVersion")
 
-    val accompanistVersion = "0.30.1"
+    val accompanistVersion = "0.32.0"
     minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
     minApi21Implementation("com.google.accompanist:accompanist-themeadapter-material3:$accompanistVersion")
