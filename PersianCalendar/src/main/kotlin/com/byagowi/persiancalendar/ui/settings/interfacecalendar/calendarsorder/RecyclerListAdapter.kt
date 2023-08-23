@@ -20,7 +20,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.MotionEvent
 import android.view.ViewGroup
-import androidx.core.view.MotionEventCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.byagowi.persiancalendar.databinding.CalendarTypeItemBinding
@@ -50,9 +49,7 @@ class RecyclerListAdapter(private var items: List<Item>) :
 
         // Start a drag whenever the handle view it touched
         holder.itemView.setOnTouchListener { _, event ->
-            if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                itemTouchHelper.startDrag(holder)
-            }
+            if (event.action == MotionEvent.ACTION_DOWN) itemTouchHelper.startDrag(holder)
             false
         }
     }
