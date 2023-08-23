@@ -17,7 +17,6 @@ package com.byagowi.persiancalendar.ui.settings.interfacecalendar.calendarsorder
  */
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -91,8 +90,12 @@ class RecyclerListAdapter(private var items: List<Item>) :
             it.checkTextView.isChecked = items[position].enabled
         }
 
-        fun onItemSelected() = binding.root.setBackgroundColor(0x40808080)
+        fun onItemSelected() {
+            binding.root.isPressed = true
+        }
 
-        fun onItemCleared() = binding.root.setBackgroundColor(0)
+        fun onItemCleared() {
+            binding.root.isPressed = false
+        }
     }
 }
