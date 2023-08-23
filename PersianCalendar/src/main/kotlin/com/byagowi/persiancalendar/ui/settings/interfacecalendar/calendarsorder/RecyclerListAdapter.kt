@@ -91,7 +91,7 @@ class RecyclerListAdapter(private var items: List<Item>) :
             it.checkTextView.isChecked = items[position].enabled
         }
 
-        fun onItemSelected() = binding.root.setBackgroundColor(Color.LTGRAY)
+        fun onItemSelected() = binding.root.setBackgroundColor(0x40808080)
 
         fun onItemCleared() = binding.root.setBackgroundColor(0)
     }
