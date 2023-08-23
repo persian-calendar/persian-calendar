@@ -17,6 +17,7 @@ import android.graphics.RenderEffect
 import android.graphics.RuntimeShader
 import android.graphics.Shader
 import android.graphics.SweepGradient
+import android.graphics.drawable.RippleDrawable
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -26,6 +27,8 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import android.opengl.GLSurfaceView
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.text.Spanned
 import android.text.style.TextAppearanceSpan
 import android.util.AttributeSet
@@ -61,6 +64,7 @@ import androidx.core.graphics.createBitmap
 import androidx.core.graphics.get
 import androidx.core.graphics.withMatrix
 import androidx.core.graphics.withTranslation
+import androidx.core.os.postDelayed
 import androidx.core.text.HtmlCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.inSpans
@@ -92,7 +96,9 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
 import com.byagowi.persiancalendar.ui.utils.sp
+import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
 import com.byagowi.persiancalendar.utils.createStatusIcon
 import com.byagowi.persiancalendar.utils.getDayIconResource
 import com.byagowi.persiancalendar.utils.logException
@@ -1046,9 +1052,33 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
         private val lifecycle = activity.lifecycleScope
     }
 
-    MaterialAlertDialogBuilder(activity)
+    val dialog = MaterialAlertDialogBuilder(activity)
         .setView(view)
         .show()
+
+    view.setBackgroundResource(
+        activity.resolveResourceIdFromTheme(android.R.attr.selectableItemBackground)
+    )
+    val rippleDrawable = view.background
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP &&
+        rippleDrawable is RippleDrawable
+    ) {
+        val handler = Handler(Looper.getMainLooper())
+        fun next() {
+            val delay = Random.nextLong(10, TWO_SECONDS_IN_MILLIS)
+            handler.postDelayed(delay) {
+                if (!dialog.isShowing) return@postDelayed
+                view.isPressed = false
+                rippleDrawable.setHotspot(
+                    view.width * Random.nextFloat(),
+                    view.height * Random.nextFloat()
+                )
+                view.isPressed = true
+                next()
+            }
+        }
+        next()
+    }
 }
 
 fun showViewDragHelperDemoDialog(activity: FragmentActivity) {
