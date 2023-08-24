@@ -143,8 +143,8 @@ val minApi21Implementation by configurations
 
 dependencies {
     // Project owned libraries
-    implementation("com.github.persian-calendar:calendar:98dd3142603242edab31fac6008c1b060c97d0e1")
-    implementation("com.github.persian-calendar:praytimes:8510d2e6bf71d977979cde3e9961f113ecf4a7bf")
+    implementation("com.github.persian-calendar:calendar:aa50eff1684cfaceac752c5d812b96e1c0ff95fa")
+    implementation("com.github.persian-calendar:praytimes:36eab5bf0b6f5057357d6fbf0007bea3fab73895")
     implementation("com.github.persian-calendar:calculator:371a91149d1fea9c318ef0def94ca0f93a1be0c2")
     implementation("com.github.persian-calendar:qr:60ad1863978b35205549eae6af177c45a1e67307")
 
