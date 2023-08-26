@@ -160,7 +160,7 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     androidTestImplementation(libs.navigation.testing)
 
-    implementation(libs.core.ktx)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.fragment.ktx)
     debugImplementation(libs.fragment.testing)
     implementation(libs.lifecycle.runtime.ktx)
@@ -181,7 +181,7 @@ dependencies {
     implementation(libs.activity.ktx)
     minApi21Implementation(libs.activity.compose)
 
-    minApi21Implementation(libs.bundles.accompanist)
+    minApi21Implementation(libs.bundles.compose.accompanist)
     minApi21Implementation(libs.compose.ui)
     minApi21Implementation(libs.compose.material3)
     minApi21Implementation(libs.compose.ui.tooling.preview)
@@ -206,8 +206,8 @@ dependencies {
 
     testImplementation(libs.truth)
 
-    androidTestImplementation(libs.runner)
-    androidTestImplementation(libs.rules)
+    androidTestImplementation(libs.test.runner)
+    androidTestImplementation(libs.test.rules)
     androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.androidx.test.ext.junit)
 

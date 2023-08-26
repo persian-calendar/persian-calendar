@@ -1,7 +1,7 @@
 [versions]
-accompanist = "0.32.0"
 agp = "8.1.1"
 android-test = "1.5.0"
+android-test-runner = "1.5.2"
 androidx-activity = "1.7.2"
 androidx-fragment = "1.6.1"
 androidx-navigation = "2.7.0"
@@ -11,9 +11,10 @@ astronomy = "bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f"
 browser = "1.6.0"
 cardview = "1.0.0"
 compose = "1.5.0"
+compose-accompanist = "0.32.0"
 compose-compiler = "1.5.2" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 compose-material3 = "1.1.1"
-core = "1.10.1"
+androidx-core = "1.10.1"
 coroutines = "1.7.3"
 dynamicanimation = "1.0.0"
 espresso = "3.5.1"
@@ -25,7 +26,7 @@ kotlin = "1.9.0"
 kotlinpoet = "1.14.2"
 kotlinx-html-jvm = "0.9.1"
 kotlinx-serialization-json = "1.6.0"
-lifecycle-runtime-ktx = "2.6.1"
+lifecycle-runtime = "2.6.1"
 material = "1.9.0"
 mockito-core = "5.5.0"
 mockito-kotlin = "5.1.0"
@@ -37,15 +38,11 @@ persiancalendar-praytimes = "36eab5bf0b6f5057357d6fbf0007bea3fab73895"
 persiancalendar-qr = "60ad1863978b35205549eae6af177c45a1e67307"
 preference = "1.2.1"
 recyclerview = "1.3.1"
-runner = "1.5.2"
 truth = "1.1.5"
 viewpager2 = "1.0.0"
 work-runtime = "2.8.1"
 
 [libraries]
-accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanist" }
-accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
-accompanist-themeadapter-material3 = { group = "com.google.accompanist", name = "accompanist-themeadapter-material3", version.ref = "accompanist" }
 activity-compose = { group = "androidx.activity", name = "compose-activity", version.ref = "androidx-activity" }
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
@@ -53,6 +50,9 @@ appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "a
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+compose-accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "compose-accompanist" }
+compose-accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "compose-accompanist" }
+compose-accompanist-themeadapter-material3 = { group = "com.google.accompanist", name = "accompanist-themeadapter-material3", version.ref = "compose-accompanist" }
 compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
@@ -60,7 +60,7 @@ compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compos
 compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
 compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }
 espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espresso" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso" }
@@ -76,7 +76,7 @@ kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-html-jvm", version.ref = "kotlinx-html-jvm" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization-json" }
-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
@@ -91,9 +91,9 @@ persiancalendar-praytimes = { group = "com.github.persian-calendar", name = "pra
 persiancalendar-qr = { group = "com.github.persian-calendar", name = "qr", version.ref = "persiancalendar-qr" }
 preference-ktx = { group = "androidx.preference", name = "preference-ktx", version.ref = "preference" }
 recyclerview = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recyclerview" }
-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "android-test" }
+test-rules = { group = "androidx.test", name = "rules", version.ref = "android-test" }
+test-runner = { group = "androidx.test", name = "runner", version.ref = "android-test-runner" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-runtime" }
@@ -106,6 +106,6 @@ org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kot
 org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
-accompanist = ["accompanist-drawablepainter", "accompanist-flowlayout", "accompanist-themeadapter-material3"]
+compose-accompanist = ["compose-accompanist-drawablepainter", "compose-accompanist-flowlayout", "compose-accompanist-themeadapter-material3"]
 espresso = ["espresso-core", "espresso-contrib"]
 mockito = ["mockito-core", "mockito-kotlin"]
