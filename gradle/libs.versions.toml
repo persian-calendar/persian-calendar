@@ -43,7 +43,7 @@ viewpager2 = "1.0.0"
 work-runtime = "2.8.1"
 
 [libraries]
-activity-compose = { group = "androidx.activity", name = "compose-activity", version.ref = "androidx-activity" }
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
