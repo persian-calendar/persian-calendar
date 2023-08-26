@@ -5,9 +5,9 @@ fun String.execute() = ProcessGroovyMethods.execute(this)
 val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    id("androidx.navigation.safeargs.kotlin")
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.androidx.navigation.safeargs.kotlin)
     id("io.github.persiancalendar.appbuildplugin") apply true
 }
 
@@ -143,60 +143,55 @@ val minApi21Implementation by configurations
 
 dependencies {
     // Project owned libraries
-    implementation("com.github.persian-calendar:calendar:aa50eff1684cfaceac752c5d812b96e1c0ff95fa")
-    implementation("com.github.persian-calendar:praytimes:36eab5bf0b6f5057357d6fbf0007bea3fab73895")
-    implementation("com.github.persian-calendar:calculator:371a91149d1fea9c318ef0def94ca0f93a1be0c2")
-    implementation("com.github.persian-calendar:qr:60ad1863978b35205549eae6af177c45a1e67307")
+    implementation(libs.calendar)
+    implementation(libs.praytimes)
+    implementation(libs.calculator)
+    implementation(libs.qr)
 
     // The only runtime third part dependency created in a collaboration, https://github.com/cosinekitty/astronomy/releases/tag/v2.1.0
     // bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f is equal to v2.1.17, the latest release
-    implementation("com.github.cosinekitty:astronomy:bd2db6a3805ac8a7c559b6b2276e16c1e1793d1f")
+    implementation(libs.astronomy)
 
     // Google/JetBrains owned libraries (roughly platform libraries)
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.preference:preference-ktx:1.2.1")
-    implementation("androidx.recyclerview:recyclerview:1.3.1")
-    implementation("androidx.cardview:cardview:1.0.0")
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
-    implementation("androidx.dynamicanimation:dynamicanimation:1.0.0")
-    implementation("com.google.android.material:material:1.9.0")
+    implementation(libs.appcompat)
+    implementation(libs.preference.ktx)
+    implementation(libs.recyclerview)
+    implementation(libs.cardview)
+    implementation(libs.viewpager2)
+    implementation(libs.dynamicanimation)
+    implementation(libs.material)
 
-    val navVersion = "2.7.0"
-    implementation("androidx.navigation:navigation-fragment-ktx:$navVersion")
-    implementation("androidx.navigation:navigation-ui-ktx:$navVersion")
-    androidTestImplementation("androidx.navigation:navigation-testing:$navVersion")
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
+    androidTestImplementation(libs.navigation.testing)
 
-    implementation("androidx.core:core-ktx:1.10.1")
-    val fragmentVersion = "1.6.1"
-    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
-    debugImplementation("androidx.fragment:fragment-testing:$fragmentVersion")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation(libs.core.ktx)
+    implementation(libs.fragment.ktx)
+    debugImplementation(libs.fragment.testing)
+    implementation(libs.lifecycle.runtime.ktx)
 
-    implementation("androidx.browser:browser:1.6.0")
+    implementation(libs.browser)
 
-    implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation(libs.work.runtime.ktx)
 
-    val coroutinesVersion = "1.7.3"
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutinesVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.9.1")
+    implementation(libs.kotlinx.coroutines.android)
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    implementation(libs.kotlinx.html.jvm)
 
-    implementation("com.google.openlocationcode:openlocationcode:1.0.4")
+    implementation(libs.openlocationcode)
 
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
-    debugImplementation("androidx.multidex:multidex:2.0.1")
+    debugImplementation(libs.multidex)
 
-    val activityVersion = "1.7.2"
-    implementation("androidx.activity:activity-ktx:$activityVersion")
-    minApi21Implementation("androidx.activity:activity-compose:$activityVersion")
+    implementation(libs.activity.ktx)
+    minApi21Implementation(libs.activity.compose)
 
-    val accompanistVersion = "0.32.0"
-    minApi21Implementation("com.google.accompanist:accompanist-flowlayout:$accompanistVersion")
-    minApi21Implementation("com.google.accompanist:accompanist-drawablepainter:$accompanistVersion")
-    minApi21Implementation("com.google.accompanist:accompanist-themeadapter-material3:$accompanistVersion")
-    minApi21Implementation("androidx.compose.ui:ui:$composeVersion")
-    minApi21Implementation("androidx.compose.material3:material3:1.1.1")
-    minApi21Implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion")
+    minApi21Implementation(libs.accompanist.flowlayout)
+    minApi21Implementation(libs.accompanist.drawablepainter)
+    minApi21Implementation(libs.accompanist.themeadapter.material3)
+    minApi21Implementation(libs.ui)
+    minApi21Implementation(libs.material3)
+    minApi21Implementation(libs.ui.tooling.preview)
     if (isMinApi21Build) {
         implementation("androidx.compose.runtime:runtime:$composeVersion")
         androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
@@ -205,29 +200,27 @@ dependencies {
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
 
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
 
     testImplementation(kotlin("test"))
 
-    testImplementation("org.junit.platform:junit-platform-runner:1.10.0")
-    val junit5Version = "5.10.0"
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit5Version")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:$junit5Version")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit5Version")
+    testImplementation(libs.junit.platform.runner)
+    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit.jupiter.params)
+    testRuntimeOnly(libs.junit.jupiter.engine)
 
-    testImplementation("org.mockito:mockito-core:5.5.0")
-    testImplementation("org.mockito.kotlin:mockito-kotlin:5.1.0")
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
 
-    testImplementation("com.google.truth:truth:1.1.5")
+    testImplementation(libs.truth)
 
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    val androidTestVersion = "1.5.0"
-    androidTestImplementation("androidx.test:rules:$androidTestVersion")
-    androidTestImplementation("androidx.test:core-ktx:$androidTestVersion")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    val espressoVersion = "3.5.1"
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:$espressoVersion")
-    androidTestImplementation("androidx.test.espresso:espresso-core:$espressoVersion")
+    androidTestImplementation(libs.runner)
+    androidTestImplementation(libs.rules)
+    androidTestImplementation(libs.test.core.ktx)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+
+    androidTestImplementation(libs.espresso.contrib)
+    androidTestImplementation(libs.espresso.core)
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }
