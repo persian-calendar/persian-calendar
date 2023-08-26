@@ -57,6 +57,7 @@ appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat"
 astronomy = { module = "com.github.cosinekitty:astronomy", version.ref = "astronomy" }
 browser = { module = "androidx.browser:browser", version.ref = "browser" }
 cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "compose-compiler" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "core" }
 dynamicanimation = { module = "androidx.dynamicanimation:dynamicanimation", version.ref = "dynamicanimation" }
 espresso-contrib = { module = "androidx.test.espresso:espresso-contrib", version.ref = "espresso" }
