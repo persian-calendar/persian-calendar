@@ -1,3 +1,6 @@
+// We apparently can't use Gradle Version Catalogs here right now as:
+// https://github.com/gradle/gradle/issues/15383
+
 plugins {
     `kotlin-dsl`
     val kotlinVersion = "1.9.10"
