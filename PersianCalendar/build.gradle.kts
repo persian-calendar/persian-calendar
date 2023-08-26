@@ -182,13 +182,13 @@ dependencies {
     minApi21Implementation(libs.activity.compose)
 
     minApi21Implementation(libs.bundles.accompanist)
-    minApi21Implementation(libs.ui)
-    minApi21Implementation(libs.material3)
-    minApi21Implementation(libs.ui.tooling.preview)
+    minApi21Implementation(libs.compose.ui)
+    minApi21Implementation(libs.compose.material3)
+    minApi21Implementation(libs.compose.ui.tooling.preview)
     if (isMinApi21Build) {
-        implementation(libs.androidx.runtime)
-        androidTestImplementation(libs.androidx.ui.test.junit4)
-        debugImplementation(libs.androidx.ui.tooling)
+        implementation(libs.compose.runtime)
+        androidTestImplementation(libs.compose.ui.test.junit4)
+        debugImplementation(libs.compose.ui.tooling)
     }
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")

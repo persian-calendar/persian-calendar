@@ -12,6 +12,7 @@ browser = "1.6.0"
 cardview = "1.0.0"
 compose = "1.5.0"
 compose-compiler = "1.5.2" # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+compose-material3 = "1.1.1"
 core = "1.10.1"
 coroutines = "1.7.3"
 dynamicanimation = "1.0.0"
@@ -26,7 +27,6 @@ kotlinx-html-jvm = "0.9.1"
 kotlinx-serialization-json = "1.6.0"
 lifecycle-runtime-ktx = "2.6.1"
 material = "1.9.0"
-material3 = "1.1.1"
 mockito-core = "5.5.0"
 mockito-kotlin = "5.1.0"
 multidex = "2.0.1"
@@ -46,17 +46,20 @@ work-runtime = "2.8.1"
 accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "accompanist" }
 accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "accompanist" }
 accompanist-themeadapter-material3 = { group = "com.google.accompanist", name = "accompanist-themeadapter-material3", version.ref = "accompanist" }
-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
+activity-compose = { group = "androidx.activity", name = "compose-activity", version.ref = "androidx-activity" }
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
-androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 astronomy = { group = "com.github.cosinekitty", name = "astronomy", version.ref = "astronomy" }
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
+compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "compose" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core" }
 dynamicanimation = { group = "androidx.dynamicanimation", name = "dynamicanimation", version.ref = "dynamicanimation" }
 espresso-contrib = { group = "androidx.test.espresso", name = "espresso-contrib", version.ref = "espresso" }
@@ -75,7 +78,6 @@ kotlinx-html-jvm = { group = "org.jetbrains.kotlinx", name = "kotlinx-html-jvm",
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization-json" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito-core" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
@@ -93,8 +95,6 @@ rules = { group = "androidx.test", name = "rules", version.ref = "android-test" 
 runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 test-core-ktx = { group = "androidx.test", name = "core-ktx", version.ref = "android-test" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "compose" }
-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose" }
 viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work-runtime" }
 
