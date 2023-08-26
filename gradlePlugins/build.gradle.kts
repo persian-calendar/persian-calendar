@@ -1,11 +1,11 @@
-// We apparently can't use Gradle Version Catalogs here right now as:
-// https://github.com/gradle/gradle/issues/15383
+// Doesn't work without this workaround: https://github.com/gradle/gradle/issues/15383
+// See settings.gradle.kts of this folder also.
+val Project.libs: org.gradle.accessors.dm.LibrariesForLibs get() = extensions.getByType()
 
 plugins {
     `kotlin-dsl`
-    val kotlinVersion = "1.9.10"
-    kotlin("jvm") version kotlinVersion
-    kotlin("plugin.serialization") version kotlinVersion
+    alias(libs.plugins.org.jetbrains.kotlin.jvm)
+    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
 }
 
 repositories {
@@ -13,8 +13,8 @@ repositories {
 }
 
 dependencies {
-    implementation("com.squareup:kotlinpoet:1.14.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    implementation(libs.kotlinpoet)
+    implementation(libs.kotlinx.serialization.json)
 }
 
 gradlePlugin {

@@ -16,9 +16,11 @@ core = "1.10.1"
 coroutines = "1.7.3"
 dynamicanimation = "1.0.0"
 espresso = "3.5.1"
+jetbrains-kotlinx-serialization-json = "1.6.0"
 junit = "4.13.2"
 junit-runner = "1.10.0"
 junit5 = "5.10.0"
+kotlin = "1.9.0"
 kotlinpoet = "1.14.2"
 kotlinx-html-jvm = "0.9.1"
 kotlinx-serialization-json = "1.6.0"
@@ -29,7 +31,6 @@ mockito-core = "5.5.0"
 mockito-kotlin = "5.1.0"
 multidex = "2.0.1"
 openlocationcode = "1.0.4"
-org-jetbrains-kotlin-android = "1.9.0"
 persiancalendar-calculator = "371a91149d1fea9c318ef0def94ca0f93a1be0c2"
 persiancalendar-calendar = "aa50eff1684cfaceac752c5d812b96e1c0ff95fa"
 persiancalendar-praytimes = "36eab5bf0b6f5057357d6fbf0007bea3fab73895"
@@ -37,6 +38,7 @@ persiancalendar-qr = "60ad1863978b35205549eae6af177c45a1e67307"
 preference = "1.2.1"
 recyclerview = "1.3.1"
 runner = "1.5.2"
+squareup-kotlinpoet = "1.14.2"
 truth = "1.1.5"
 viewpager2 = "1.0.0"
 work-runtime = "2.8.1"
@@ -66,9 +68,11 @@ junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.re
 junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 junit-jupiter-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5" }
 junit-platform-runner = { module = "org.junit.platform:junit-platform-runner", version.ref = "junit-runner" }
+kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "squareup-kotlinpoet" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
 kotlinx-html-jvm = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinx-html-jvm" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "jetbrains-kotlinx-serialization-json" }
 lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 material3 = { module = "androidx.compose.material3:material3", version.ref = "material3" }
@@ -97,7 +101,9 @@ work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "w
 [plugins]
 androidx-navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidx-navigation" }
 com-android-application = { id = "com.android.application", version.ref = "agp" }
-org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+org-jetbrains-kotlin-plugin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
 accompanist = ["accompanist-drawablepainter", "accompanist-flowlayout", "accompanist-themeadapter-material3"]
