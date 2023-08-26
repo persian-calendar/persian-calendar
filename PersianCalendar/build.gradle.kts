@@ -11,10 +11,6 @@ plugins {
     id("io.github.persiancalendar.appbuildplugin") apply true
 }
 
-// https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-val composeCompilerVersion = "1.5.2"
-val composeVersion = "1.5.0"
-
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
 val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
@@ -116,7 +112,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = composeCompilerVersion
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 
     val javaVersion = JavaVersion.VERSION_17
@@ -191,9 +187,9 @@ dependencies {
     minApi21Implementation(libs.material3)
     minApi21Implementation(libs.ui.tooling.preview)
     if (isMinApi21Build) {
-        implementation("androidx.compose.runtime:runtime:$composeVersion")
-        androidTestImplementation("androidx.compose.ui:ui-test-junit4:$composeVersion")
-        debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion")
+        implementation(libs.androidx.runtime)
+        androidTestImplementation(libs.androidx.ui.test.junit4)
+        debugImplementation(libs.androidx.ui.tooling)
     }
 
     // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
