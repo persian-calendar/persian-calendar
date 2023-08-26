@@ -186,9 +186,7 @@ dependencies {
     implementation(libs.activity.ktx)
     minApi21Implementation(libs.activity.compose)
 
-    minApi21Implementation(libs.accompanist.flowlayout)
-    minApi21Implementation(libs.accompanist.drawablepainter)
-    minApi21Implementation(libs.accompanist.themeadapter.material3)
+    minApi21Implementation(libs.bundles.accompanist)
     minApi21Implementation(libs.ui)
     minApi21Implementation(libs.material3)
     minApi21Implementation(libs.ui.tooling.preview)
@@ -209,8 +207,7 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
 
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.bundles.mockito)
 
     testImplementation(libs.truth)
 
@@ -219,8 +216,7 @@ dependencies {
     androidTestImplementation(libs.test.core.ktx)
     androidTestImplementation(libs.androidx.test.ext.junit)
 
-    androidTestImplementation(libs.espresso.contrib)
-    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.bundles.espresso)
 }
 
 tasks.named("preBuild").configure { dependsOn(getTasksByName("codegenerators", false)) }

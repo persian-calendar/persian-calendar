@@ -96,3 +96,6 @@ com-android-application = { id = "com.android.application", version.ref = "agp" 
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }
 
 [bundles]
+accompanist = ["accompanist-drawablepainter", "accompanist-flowlayout", "accompanist-themeadapter-material3"]
+espresso = ["espresso-core", "espresso-contrib"]
+mockito = ["mockito-core", "mockito-kotlin"]
