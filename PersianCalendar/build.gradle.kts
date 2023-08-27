@@ -179,7 +179,7 @@ dependencies {
     debugImplementation(libs.multidex)
 
     implementation(libs.activity.ktx)
-    minApi21Implementation(libs.activity.compose)
+    minApi21Implementation(libs.compose.activity)
 
     minApi21Implementation(libs.bundles.compose.accompanist)
     minApi21Implementation(libs.compose.ui)

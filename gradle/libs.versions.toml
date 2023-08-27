@@ -44,7 +44,6 @@ viewpager2 = "1.0.0"
 work-runtime = "2.8.1"
 
 [libraries]
-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
@@ -55,6 +54,7 @@ cardview = { group = "androidx.cardview", name = "cardview", version.ref = "card
 compose-accompanist-drawablepainter = { group = "com.google.accompanist", name = "accompanist-drawablepainter", version.ref = "compose-accompanist" }
 compose-accompanist-flowlayout = { group = "com.google.accompanist", name = "accompanist-flowlayout", version.ref = "compose-accompanist" }
 compose-accompanist-themeadapter-material3 = { group = "com.google.accompanist", name = "accompanist-themeadapter-material3", version.ref = "compose-accompanist" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity" }
 compose-compiler = { group = "androidx.compose.compiler", name = "compiler", version.ref = "compose-compiler" }
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "compose-material3" }
 compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose" }
