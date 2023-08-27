@@ -191,7 +191,7 @@ dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
 
-    // debugImplementation("com.squareup.leakcanary:leakcanary-android:2.8.1")
+    debugImplementation(libs.leakcanary)
 
     testImplementation(libs.junit)
 
