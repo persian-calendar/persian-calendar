@@ -6,7 +6,7 @@ val Process.text: String? get() = ProcessGroovyMethods.getText(this)
 
 plugins {
     alias(libs.plugins.com.android.application)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.androidx.navigation.safeargs.kotlin)
     id("io.github.persiancalendar.appbuildplugin") apply true
 }

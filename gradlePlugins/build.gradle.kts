@@ -4,8 +4,8 @@ val Project.libs: org.gradle.accessors.dm.LibrariesForLibs get() = extensions.ge
 
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.org.jetbrains.kotlin.jvm)
-    alias(libs.plugins.org.jetbrains.kotlin.plugin.serialization)
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.plugin.serialization)
 }
 
 repositories {
