@@ -191,7 +191,7 @@ dependencies {
         debugImplementation(libs.compose.ui.tooling)
     }
 
-    debugImplementation(libs.leakcanary)
+    // debugImplementation(libs.leakcanary)
 
     testImplementation(libs.junit)
 
