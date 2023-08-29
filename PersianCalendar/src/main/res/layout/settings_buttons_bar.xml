@@ -29,6 +29,7 @@
             android:text="@string/ignore" />
 
         <Button
+            style="@style/commonAutoSize"
             android:id="@+id/settings"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
