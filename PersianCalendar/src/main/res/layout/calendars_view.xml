@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/padding_item"
-        android:paddingTop="@dimen/padding_item"
+        android:paddingTop="16dp"
         android:paddingEnd="@dimen/padding_item">
 
         <com.byagowi.persiancalendar.ui.common.MoonView
