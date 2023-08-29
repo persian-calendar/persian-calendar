@@ -13,7 +13,8 @@ plugins {
 
 val isMinApi21Build = gradle.startParameter.taskNames.any { "minApi21" in it || "MinApi21" in it }
 
-val generatedAppSrcDir = buildDir / "generated" / "source" / "appsrc" / "main"
+val generatedAppSrcDir =
+    layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
 android {
     sourceSets {
         getByName("main").kotlin.srcDir(generatedAppSrcDir)
