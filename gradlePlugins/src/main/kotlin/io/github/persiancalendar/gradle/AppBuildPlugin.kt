@@ -14,7 +14,8 @@ class AppBuildPlugin : Plugin<Project> {
         target.tasks.register("codegenerators", CodeGenerators::class.java) {
             val task = this
             val projectDir = project.projectDir
-            val generatedAppSrcDir = target.buildDir / "generated" / "source" / "appsrc" / "main"
+            val generatedAppSrcDir =
+                target.layout.buildDirectory.get().asFile / "generated" / "source" / "appsrc" / "main"
             generatedAppSrcDir.mkdirs()
             task.setProperty("generatedAppSrcDir", generatedAppSrcDir)
             val generateDir =
