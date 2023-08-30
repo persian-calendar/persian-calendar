@@ -42,6 +42,7 @@ hs_err_pid*
 
 ## Directory-based project format:
 .idea/
+!.idea/icon.svg
 
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
