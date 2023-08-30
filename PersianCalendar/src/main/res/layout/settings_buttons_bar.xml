@@ -14,9 +14,9 @@
         android:paddingTop="@dimen/padding_item" />
 
     <LinearLayout
-        android:layout_marginTop="@dimen/padding_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/padding_item"
         android:orientation="horizontal">
 
         <Button
@@ -26,18 +26,18 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:textSize="14sp"
-            android:text="@string/ignore" />
+            android:text="@string/ignore"
+            android:textSize="14sp" />
 
         <Button xmlns:app="http://schemas.android.com/apk/res-auto"
-            style="@style/commonAutoSize"
-            app:autoSizeMaxTextSize="14sp"
             android:id="@+id/settings"
+            style="@style/commonAutoSize"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="4dp"
-            android:text="@string/settings" />
+            android:layout_weight="1"
+            android:text="@string/settings"
+            app:autoSizeMaxTextSize="14sp" />
 
     </LinearLayout>
 
