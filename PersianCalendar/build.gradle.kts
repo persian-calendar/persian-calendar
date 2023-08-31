@@ -168,7 +168,7 @@ dependencies {
 
     implementation(libs.browser)
 
-    implementation(libs.work.runtime.ktx)
+    implementation(libs.work.manager.ktx)
 
     implementation(libs.kotlinx.coroutines.android)
     androidTestImplementation(libs.kotlinx.coroutines.test)
