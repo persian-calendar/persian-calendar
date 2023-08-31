@@ -643,29 +643,32 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 }
             }
         }
-        toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
-            val groupId = Menu.FIRST
-            val prefs = context.appPrefs
-            (listOf(null) + enabledCalendars.drop(1)).forEach {
-                val item = menu.add(groupId, Menu.NONE, Menu.NONE, it?.title ?: R.string.none)
-                item.isChecked = it == secondaryCalendar
-                item.onClick {
-                    prefs.edit {
-                        if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
-                        else {
-                            putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
-                            putString(
-                                PREF_OTHER_CALENDARS_KEY,
-                                // Put the chosen calendars at the first of calendars priorities
-                                (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
-                            )
+        // It doesn't have any effect in talkback ui, let's disable it there to avoid the confusion
+        if (!isTalkBackEnabled) {
+            toolbar.menu.addSubMenu(R.string.show_secondary_calendar).also { menu ->
+                val groupId = Menu.FIRST
+                val prefs = context.appPrefs
+                (listOf(null) + enabledCalendars.drop(1)).forEach {
+                    val item = menu.add(groupId, Menu.NONE, Menu.NONE, it?.title ?: R.string.none)
+                    item.isChecked = it == secondaryCalendar
+                    item.onClick {
+                        prefs.edit {
+                            if (it == null) remove(PREF_SECONDARY_CALENDAR_IN_TABLE)
+                            else {
+                                putBoolean(PREF_SECONDARY_CALENDAR_IN_TABLE, true)
+                                putString(
+                                    PREF_OTHER_CALENDARS_KEY,
+                                    // Put the chosen calendars at the first of calendars priorities
+                                    (listOf(it) + (enabledCalendars.drop(1) - it)).joinToString(",")
+                                )
+                            }
                         }
+                        updateStoredPreference(context)
+                        findNavController().navigateSafe(CalendarScreenDirections.navigateToSelf())
                     }
-                    updateStoredPreference(context)
-                    findNavController().navigateSafe(CalendarScreenDirections.navigateToSelf())
                 }
+                menu.setGroupCheckable(groupId, true, true)
             }
-            menu.setGroupCheckable(groupId, true, true)
         }
     }
 
