@@ -176,6 +176,10 @@ dependencies {
 
     implementation(libs.openlocationcode)
 
+    // Not used directly on the app but is used by work manager anyway
+    implementation(libs.bundles.room)
+    annotationProcessor(libs.room.compiler)
+
     // Only needed for debug builds for now, won't be needed for minApi21 builds either
     debugImplementation(libs.multidex)
 

@@ -504,20 +504,20 @@
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.6.1 (c)
 |    |    |    +--- androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1 (c)
 |    |    |    \--- androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1 (c)
-|    |    +--- androidx.room:room-runtime:2.5.0
+|    |    +--- androidx.room:room-runtime:2.5.0 -> 2.5.2
 |    |    |    +--- androidx.annotation:annotation-experimental:1.1.0 -> 1.3.0 (*)
 |    |    |    +--- androidx.arch.core:core-runtime:2.0.1 -> 2.2.0 (*)
-|    |    |    +--- androidx.room:room-common:2.5.0
+|    |    |    +--- androidx.room:room-common:2.5.2
 |    |    |    |    +--- androidx.annotation:annotation:1.3.0 -> 1.6.0 (*)
 |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.20 -> 1.9.10 (*)
-|    |    |    +--- androidx.sqlite:sqlite:2.3.0
+|    |    |    +--- androidx.sqlite:sqlite:2.3.1
 |    |    |    |    +--- androidx.annotation:annotation:1.0.0 -> 1.6.0 (*)
 |    |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.20 -> 1.9.10 (*)
-|    |    |    \--- androidx.sqlite:sqlite-framework:2.3.0
+|    |    |    \--- androidx.sqlite:sqlite-framework:2.3.1
 |    |    |         +--- androidx.annotation:annotation:1.2.0 -> 1.6.0 (*)
-|    |    |         +--- androidx.sqlite:sqlite:2.3.0 (*)
+|    |    |         +--- androidx.sqlite:sqlite:2.3.1 (*)
 |    |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.20 -> 1.9.10 (*)
-|    |    +--- androidx.sqlite:sqlite-framework:2.3.0 (*)
+|    |    +--- androidx.sqlite:sqlite-framework:2.3.0 -> 2.3.1 (*)
 |    |    +--- androidx.startup:startup-runtime:1.0.0 -> 1.1.1 (*)
 |    |    +--- com.google.guava:listenablefuture:1.0
 |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.21 -> 1.9.10 (*)
@@ -528,4 +528,24 @@
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.20 -> 1.9.10 (*)
 |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.8.20 -> 1.9.10
 +--- com.google.openlocationcode:openlocationcode:1.0.4
++--- androidx.room:room-ktx:2.5.2
+|    +--- androidx.room:room-common:2.5.2 (*)
+|    +--- androidx.room:room-runtime:2.5.2 (*)
+|    +--- org.jetbrains.kotlin:kotlin-stdlib:1.7.20 -> 1.9.10 (*)
+|    \--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 -> 1.7.3 (*)
++--- androidx.room:room-paging:2.5.2
+|    +--- androidx.paging:paging-common:3.1.1
+|    |    +--- androidx.annotation:annotation:1.1.0 -> 1.6.0 (*)
+|    |    +--- androidx.arch.core:core-common:2.1.0 -> 2.2.0 (*)
+|    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.31 -> 1.9.10 (*)
+|    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2 -> 1.7.3 (*)
+|    +--- androidx.room:room-ktx:2.5.2 (*)
+|    +--- androidx.room:room-runtime:2.5.2 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.20 -> 1.9.10 (*)
++--- androidx.room:room-runtime:2.5.2 (*)
++--- androidx.sqlite:sqlite:2.3.1 (*)
++--- androidx.sqlite:sqlite-framework:2.3.1 (*)
++--- androidx.sqlite:sqlite-ktx:2.3.1
+|    +--- androidx.sqlite:sqlite:2.3.1 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.7.20 -> 1.9.10 (*)
 \--- androidx.activity:activity-ktx:1.7.2 (*)
