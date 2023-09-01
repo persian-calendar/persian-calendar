@@ -110,7 +110,7 @@ class SunView @JvmOverloads constructor(
         curvePath.also {
             it.rewind()
             it.moveTo(0f, height.toFloat())
-            for (x in 0..width) {
+            (0..width).forEach { x ->
                 it.lineTo(x.toFloat(), getY(x, segmentByPixel, (height * .9f).toInt()))
             }
         }

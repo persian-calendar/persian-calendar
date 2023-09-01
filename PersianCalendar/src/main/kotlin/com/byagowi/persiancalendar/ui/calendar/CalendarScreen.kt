@@ -701,7 +701,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 thead {
                     tr {
                         th { +getString(R.string.day) }
-                        for (it in getTimeNames()) th { +getString(it) }
+                        getTimeNames().forEach { th { +getString(it) } }
                     }
                 }
                 tbody {
@@ -712,7 +712,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                                     .toGregorianCalendar()
                             )
                             th { +formatNumber(day + 1) }
-                            for (it in getTimeNames()) {
+                            getTimeNames().forEach {
                                 td { +prayTimes.getFromStringId(it).toBasicFormatString() }
                             }
                         }

@@ -221,7 +221,7 @@ private class SpiralPattern(@ColorInt private val tintColor: Int, size: Float) :
 
     private fun pattern(): Path {
         val result = Path()
-        for (angle in 0..3600) {
+        (0..3600).forEach { angle ->
             val scaledRadius = width / 2 * angle / 3600
             val radians = Math.toRadians(angle.toDouble()).toFloat()
             val x = width / 2f + scaledRadius * cos(radians)
