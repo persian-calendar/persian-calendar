@@ -44,8 +44,8 @@ import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.LAST_CHOSEN_TAB_KEY
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_ATHAN_NOTIFICATION
 import com.byagowi.persiancalendar.POST_NOTIFICATION_PERMISSION_REQUEST_CODE_ENABLE_CALENDAR_NOTIFICATION
+import com.byagowi.persiancalendar.PREF_ALTERNATIVE_GREGORIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
-import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
 import com.byagowi.persiancalendar.PREF_HAS_EVER_VISITED
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET_SET_DATE
@@ -306,7 +306,7 @@ class MainActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceCh
         updateStoredPreference(this)
         update(applicationContext, true)
 
-        if (key == PREF_EASTERN_GREGORIAN_ARABIC_MONTHS || key == PREF_APP_LANGUAGE)
+        if (key == PREF_ALTERNATIVE_GREGORIAN_MONTHS || key == PREF_APP_LANGUAGE)
             loadLanguageResources(this)
     }
 

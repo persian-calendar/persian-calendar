@@ -259,11 +259,16 @@ enum class Language(val code: String, val nativeName: String) {
         else -> islamicCalendarMonths.map(context::getString)
     }
 
-    fun getGregorianMonths(context: Context, easternGregorianArabicMonths: Boolean) = when (this) {
-        FA -> gregorianCalendarMonthsInPersian
+    fun getGregorianMonths(context: Context, alternativeGregorianMonths: Boolean) = when (this) {
+        FA -> {
+            if (alternativeGregorianMonths) gregorianCalendarMonthsInPersianEnglishPronunciation
+            else gregorianCalendarMonthsInPersian
+        }
+
         FA_AF -> gregorianCalendarMonthsInDari
+
         AR -> {
-            if (easternGregorianArabicMonths) easternGregorianCalendarMonths
+            if (alternativeGregorianMonths) easternGregorianCalendarMonths
             else gregorianCalendarMonths.map(context::getString)
         }
 
@@ -361,8 +366,9 @@ enum class Language(val code: String, val nativeName: String) {
         fun getPreferredDefaultLanguage(context: Context): Language {
             return when (userDeviceLanguage) {
                 FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
-                "en", EN_US.code ->
-                    guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(context)
+                "en", EN_US.code -> guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(
+                    context
+                )
 
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
@@ -460,13 +466,16 @@ enum class Language(val code: String, val nativeName: String) {
             "رجب", "شعبان", "رمضان", "شوال", "ذی‌القعده", "ذی‌الحجه"
         )
         private val gregorianCalendarMonthsInPersian = listOf12Items(
-            "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن", "ژوئیه", "اوت", "سپتامبر", "اکتبر",
-            "نوامبر", "دسامبر"
+            "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن",
+            "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
+        )
+        private val gregorianCalendarMonthsInPersianEnglishPronunciation = listOf12Items(
+            "جنیوئری", "فبروئری", "مارچ", "ایپریل", "می", "جون",
+            "جولای", "آگوست", "سپتمبر", "آکتوبر", "نوومبر", "دیسمبر"
         )
         private val persianCalendarMonthsInDari = listOf12Items(
             "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله",
-            "میزان", "عقرب", "قوس", "جدی", "دلو",
-            "حوت"
+            "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"
         )
         private val gregorianCalendarMonthsInDari = listOf12Items(
             "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون", "جولای", "آگست", "سپتمبر", "اکتبر",
