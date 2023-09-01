@@ -16,6 +16,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.byagowi.persiancalendar.DEFAULT_ALTERNATIVE_GREGORIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
 import com.byagowi.persiancalendar.PREF_ALTERNATIVE_GREGORIAN_MONTHS
@@ -71,7 +72,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat(),
                     else title(R.string.language)
                     summary = language.nativeName
                 }
-                switch(PREF_ALTERNATIVE_GREGORIAN_MONTHS, false) {
+                switch(PREF_ALTERNATIVE_GREGORIAN_MONTHS, DEFAULT_ALTERNATIVE_GREGORIAN_MONTHS) {
                     if (language.isArabic) {
                         title = "السنة الميلادية بالاسماء الشرقية"
                         summary = "كانون الثاني، شباط، آذار، …"

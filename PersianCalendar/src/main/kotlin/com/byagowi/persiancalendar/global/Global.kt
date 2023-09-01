@@ -3,6 +3,7 @@ package com.byagowi.persiancalendar.global
 import android.content.Context
 import android.view.accessibility.AccessibilityManager
 import androidx.core.content.getSystemService
+import com.byagowi.persiancalendar.DEFAULT_ALTERNATIVE_GREGORIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_AM
 import com.byagowi.persiancalendar.DEFAULT_HIGH_LATITUDES_METHOD
 import com.byagowi.persiancalendar.DEFAULT_HOLIDAY
@@ -233,7 +234,8 @@ fun updateStoredPreference(context: Context) {
 
     language = prefs.getString(PREF_APP_LANGUAGE, null)?.let(Language::valueOfLanguageCode)
         ?: Language.getPreferredDefaultLanguage(context)
-    alternativeGregorianMonths = prefs.getBoolean(PREF_ALTERNATIVE_GREGORIAN_MONTHS, false)
+    alternativeGregorianMonths =
+        prefs.getBoolean(PREF_ALTERNATIVE_GREGORIAN_MONTHS, DEFAULT_ALTERNATIVE_GREGORIAN_MONTHS)
 
     preferredDigits = if (!prefs.getBoolean(
             PREF_LOCAL_DIGITS,
