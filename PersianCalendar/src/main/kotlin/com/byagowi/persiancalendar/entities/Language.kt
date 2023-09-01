@@ -261,7 +261,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     fun getGregorianMonths(context: Context, alternativeGregorianMonths: Boolean) = when (this) {
         FA -> {
-            if (alternativeGregorianMonths) gregorianCalendarMonthsInPersianEnglishPronunciation
+            if (alternativeGregorianMonths) gregorianCalendarMonthsInDari
             else gregorianCalendarMonthsInPersian
         }
 
@@ -469,17 +469,13 @@ enum class Language(val code: String, val nativeName: String) {
             "ژانویه", "فوریه", "مارس", "آوریل", "مه", "ژوئن",
             "ژوئیه", "اوت", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
         )
-        private val gregorianCalendarMonthsInPersianEnglishPronunciation = listOf12Items(
-            "جنیوئری", "فبروئری", "مارچ", "ایپریل", "می", "جون",
-            "جولای", "آگست", "سپتمبر", "آکتوبر", "نوومبر", "دیسمبر"
-        )
         private val persianCalendarMonthsInDari = listOf12Items(
             "حمل", "ثور", "جوزا", "سرطان", "اسد", "سنبله",
             "میزان", "عقرب", "قوس", "جدی", "دلو", "حوت"
         )
         private val gregorianCalendarMonthsInDari = listOf12Items(
-            "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون", "جولای", "آگست", "سپتمبر", "اکتبر",
-            "نومبر", "دیسمبر"
+            "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون",
+            "جولای", "آگست", "سپتمبر", "اکتبر", "نومبر", "دیسمبر"
         )
         private val easternGregorianCalendarMonths = listOf12Items(
             "كانون الثاني", "شباط", "آذار", "نيسان", "أيار", "حزيران", "تموز", "آب", "أيلول",
