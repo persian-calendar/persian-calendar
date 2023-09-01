@@ -77,7 +77,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat(),
                         title = "السنة الميلادية بالاسماء الشرقية"
                         summary = "كانون الثاني، شباط، آذار، …"
                     } else if (language.isPersian) {
-                        title = "نام انگلیسی ماه‌های میلادی"
+                        title = "ماه‌های میلادی با نام انگلیسی"
                         summary = "جنیوئری، فبروئری، مارچ، …"
                     } else isVisible = false
                 }
