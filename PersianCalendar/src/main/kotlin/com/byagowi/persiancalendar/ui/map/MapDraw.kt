@@ -415,11 +415,11 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
                     directPathDestination.latitude,
                     directPathDestination.longitude
                 )
-                val points = from.intermediatePoints(to, 24).map { point ->
-                    val userX = (point.longitude.toFloat() + 180) * mapScaleFactor
-                    val userY = (90 - point.latitude.toFloat()) * mapScaleFactor
+                val points = from.intermediatePoints(to, 24).map { (latitude, longitude) ->
+                    val userX = (longitude.toFloat() + 180) * mapScaleFactor
+                    val userY = (90 - latitude.toFloat()) * mapScaleFactor
                     userX to userY
-                }
+                }.toList()
                 points.forEachIndexed { i, (x1, y1) ->
                     if (i >= points.size - 1) return@forEachIndexed
                     val (x2, y2) = points[i + 1]

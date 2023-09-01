@@ -12,7 +12,7 @@ class EarthPositionTests {
     @Test
     fun intermediatePoints() {
         // https://www.movable-type.co.uk/scripts/latlong.html
-        val points = cambridge.intermediatePoints(paris, 4)
+        val points = cambridge.intermediatePoints(paris, 4).toList()
         // include start and end and three points, not the best API yet
         assertThat(points.size).isEqualTo(5)
         assertThat(points[1].latitude).isWithin(1.0e-4).of(51.3721)

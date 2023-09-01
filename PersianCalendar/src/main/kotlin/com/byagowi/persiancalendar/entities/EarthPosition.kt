@@ -24,7 +24,9 @@ data class EarthPosition(val latitude: Double, val longitude: Double) {
     }
 
     // Ported from https://www.movable-type.co.uk/scripts/latlong.html MIT License
-    fun intermediatePoints(target: EarthPosition, pointsCount: Int): List<EarthPosition> {
+    fun intermediatePoints(
+        target: EarthPosition, pointsCount: Int
+    ): Sequence<EarthPosition> = sequence {
         val φ1 = Math.toRadians(latitude)
         val λ1 = Math.toRadians(longitude)
         val φ2 = Math.toRadians(target.latitude)
@@ -43,7 +45,7 @@ data class EarthPosition(val latitude: Double, val longitude: Double) {
         val a = sin(Δφ / 2) * sin(Δφ / 2) + cosφ1 * cosφ2 * sin(Δλ / 2) * sin(Δλ / 2)
         val δ = 2 * atan2(sqrt(a), sqrt(1 - a))
         val sinδ = sin(δ)
-        return (0..pointsCount).map {
+        (0..pointsCount).forEach {
             val fraction = it.toDouble() / pointsCount
             val A = sin((1 - fraction) * δ) / sinδ
             val B = sin(fraction * δ) / sinδ
@@ -52,7 +54,7 @@ data class EarthPosition(val latitude: Double, val longitude: Double) {
             val z = A * sinφ1 + B * sinφ2
             val φ3 = atan2(z, hypot(x, y))
             val λ3 = atan2(y, x)
-            EarthPosition(Math.toDegrees(φ3), Math.toDegrees(λ3))
+            yield(EarthPosition(Math.toDegrees(φ3), Math.toDegrees(λ3)))
         }
     }
 
