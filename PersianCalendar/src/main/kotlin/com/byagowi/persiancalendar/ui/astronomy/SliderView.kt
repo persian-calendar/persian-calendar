@@ -19,9 +19,9 @@ class SliderView(context: Context, attrs: AttributeSet? = null) : BaseSlider(con
 
     override fun onDraw(canvas: Canvas) {
         val linesCount = width / space.toInt()
-        (0..linesCount).forEachIndexed { index, it ->
+        repeat(linesCount) {
             val x = it * space + positionX.value % space
-            val deviation = 2 * (index - linesCount / 2f) / linesCount
+            val deviation = 2 * (it - linesCount / 2f) / linesCount
             paint.alpha = (cos(deviation * PI / 2) * 255).toInt()
             canvas.drawLine(x, 0f, x, height.toFloat(), paint)
         }

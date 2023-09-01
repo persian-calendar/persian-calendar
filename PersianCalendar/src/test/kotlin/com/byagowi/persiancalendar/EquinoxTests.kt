@@ -70,7 +70,7 @@ class EquinoxTests {
     @Test
     fun test_range() {
         // And not having random crashes
-        for (i in 1..4000) seasons(i)
+        repeat(4000, ::seasons)
     }
 
     @Test
