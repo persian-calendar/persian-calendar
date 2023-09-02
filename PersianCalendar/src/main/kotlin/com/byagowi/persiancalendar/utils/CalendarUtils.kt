@@ -35,6 +35,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.numericalDatePreferred
 import com.byagowi.persiancalendar.global.preferredDigits
+import com.byagowi.persiancalendar.global.shiftWorks
 import com.byagowi.persiancalendar.global.spacedAndInDates
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.spacedOr
@@ -298,6 +299,14 @@ fun calculateDaysDifference(
         if (weeks == 0) null
         else (if (days % 7 == 0) "" else "~")
                 + resources.getQuantityString(R.plurals.n_weeks, weeks, formatNumber(weeks)),
+        run {
+            if (years != 0 || isInWidget || shiftWorks.isNotEmpty()) return@run null
+            val workDays = eventsRepository?.calculateWorkDays(
+                if (baseJdn > jdn) jdn else baseJdn, if (baseJdn > jdn) baseJdn else jdn
+            ) ?: 0
+            if (workDays == days) return@run null
+            resources.getQuantityString(R.plurals.n_work_days, workDays, formatNumber(workDays))
+        }
     )
     if (result.isEmpty()) return daysString
     return language.inParentheses.format(daysString, result.joinToString(spacedOr))

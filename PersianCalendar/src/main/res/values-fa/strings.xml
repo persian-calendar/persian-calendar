@@ -243,6 +243,10 @@
         <item quantity="one">%1$s روز</item>
         <item quantity="other">%1$s روز</item>
     </plurals>
+    <plurals name="n_work_days">
+        <item quantity="one">%1$s روز کاری</item>
+        <item quantity="other">%1$s روز کاری</item>
+    </plurals>
     <plurals name="n_weeks">
         <item quantity="one">%1$s هفته</item>
         <item quantity="other">%1$s هفته</item>
