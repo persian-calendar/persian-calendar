@@ -21,8 +21,8 @@ jobs:
 
       - name: Upgrade gradle wrapper
         run: |
-          ./gradlew wrapper --gradle-version latest
-          ./gradlew wrapper --gradle-version latest
+          ./gradlew wrapper --gradle-version latest --gradle-distribution-sha256-sum
+          ./gradlew wrapper --gradle-version latest --gradle-distribution-sha256-sum
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
