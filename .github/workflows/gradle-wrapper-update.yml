@@ -1,16 +1,28 @@
 name: Gradle wrapper update
 
 on:
+  workflow_dispatch: # to run the workflow manually if needed
   schedule:
     - cron: '0 12 * * *'
 
 jobs:
   update:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Update Gradle Wrapper
-        uses: gradle-update/update-gradle-wrapper-action@a116d8b533be6c4e71a8b3c3871b7344ca72bf12
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Upgrade gradle wrapper
+        run: |
+          ./gradlew wrapper --gradle-version latest
+          ./gradlew wrapper --gradle-version latest
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
