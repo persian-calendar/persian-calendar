@@ -29,4 +29,5 @@ jobs:
         with:
           title: 'Upgrade Gradle version'
           body: ''
+          branch: 'upgrade-gradle-version'
           commit-message: 'Upgrade Gradle version'
