@@ -366,9 +366,9 @@ enum class Language(val code: String, val nativeName: String) {
         fun getPreferredDefaultLanguage(context: Context): Language {
             return when (userDeviceLanguage) {
                 FA.code -> if (userDeviceCountry == "AF") FA_AF else FA
-                "en", EN_US.code -> guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(
-                    context
-                )
+
+                "en", EN_US.code ->
+                    guessLanguageFromTimezoneId() ?: guessLanguageFromKeyboards(context)
 
                 else -> valueOfLanguageCode(userDeviceLanguage) ?: EN_US
             }
@@ -385,7 +385,7 @@ enum class Language(val code: String, val nativeName: String) {
         // Based on https://stackoverflow.com/a/28216764 but doesn't seem to work
         private fun guessLanguageFromKeyboards(context: Context): Language = runCatching {
             val imm = context.getSystemService<InputMethodManager>() ?: return EN_US
-            imm.enabledInputMethodList.forEach { method ->
+            imm.enabledInputMethodList.forEach outer@{ method ->
                 imm.getEnabledInputMethodSubtypeList(method, true).forEach { submethod ->
                     if (submethod.mode == "keyboard") {
                         val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

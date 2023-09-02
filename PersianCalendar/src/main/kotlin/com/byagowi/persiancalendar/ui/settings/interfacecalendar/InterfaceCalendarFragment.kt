@@ -16,12 +16,14 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.byagowi.persiancalendar.DEFAULT_ALTERNATIVE_GREGORIAN_MONTHS
+import com.byagowi.persiancalendar.DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
+import com.byagowi.persiancalendar.DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.DEFAULT_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.DEFAULT_THEME_GRADIENT
-import com.byagowi.persiancalendar.PREF_ALTERNATIVE_GREGORIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_APP_LANGUAGE
 import com.byagowi.persiancalendar.PREF_ASTRONOMICAL_FEATURES
+import com.byagowi.persiancalendar.PREF_EASTERN_GREGORIAN_ARABIC_MONTHS
+import com.byagowi.persiancalendar.PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS
 import com.byagowi.persiancalendar.PREF_HOLIDAY_TYPES
 import com.byagowi.persiancalendar.PREF_ISLAMIC_OFFSET
 import com.byagowi.persiancalendar.PREF_LOCAL_DIGITS
@@ -72,11 +74,18 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat(),
                     else title(R.string.language)
                     summary = language.nativeName
                 }
-                switch(PREF_ALTERNATIVE_GREGORIAN_MONTHS, DEFAULT_ALTERNATIVE_GREGORIAN_MONTHS) {
+                switch(
+                    PREF_EASTERN_GREGORIAN_ARABIC_MONTHS, DEFAULT_EASTERN_GREGORIAN_ARABIC_MONTHS
+                ) {
                     if (language.isArabic) {
                         title = "السنة الميلادية بالاسماء الشرقية"
                         summary = "كانون الثاني، شباط، آذار، …"
-                    } else if (language.isPersian) {
+                    } else isVisible = false
+                }
+                switch(
+                    PREF_ENGLISH_GREGORIAN_PERSIAN_MONTHS, DEFAULT_ENGLISH_GREGORIAN_PERSIAN_MONTHS
+                ) {
+                    if (language.isPersian) {
                         title = "ماه‌های میلادی با نام انگلیسی"
                         summary = "جون، جولای، آگست، …"
                     } else isVisible = false
