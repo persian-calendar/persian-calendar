@@ -403,7 +403,7 @@ private class DeviceInformationAdapter(private val activity: FragmentActivity) :
             EGL14.EGL_LEVEL, 0, EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
             EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT, EGL14.EGL_NONE
         )
-        val configs = Array<EGLConfig?>(1) { null }
+        val configs = arrayOfNulls<EGLConfig?>(1)
         val configsCount = IntArray(1)
         EGL14.eglChooseConfig(display, configAttr, 0, configs, 0, 1, configsCount, 0)
         if (configsCount[0] != 0) {

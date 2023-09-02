@@ -639,14 +639,14 @@ private val elementsColor = buildMap {
     listOf(2, 10, 18, 36, 54, 86, 118).forEach { put(it, 0xffc0ffff) } // Noble gases
 }.withDefault { 0xffffc0c0 } // Transition metals
 
-private val elementsIndices = buildList {
+private val elementsIndices = buildList<Int?> {
     var i = 1
     add(i++)
-    addAll(List(16) { null })
+    addAll(arrayOfNulls(16))
     add(i++)
     repeat(2) {
         addAll(List(2) { i++ })
-        addAll(List(10) { null })
+        addAll(arrayOfNulls(10))
         addAll(List(6) { i++ })
     }
     repeat(2) { addAll(List(18) { i++ }) }
@@ -657,9 +657,9 @@ private val elementsIndices = buildList {
     }
     repeat(2) {
         i = if (it == 0) 57 else 89
-        addAll(List(2) { null })
+        addAll(arrayOfNulls(2))
         addAll(List(14) { i++ })
-        addAll(List(2) { null })
+        addAll(arrayOfNulls(2))
     }
 }
 
