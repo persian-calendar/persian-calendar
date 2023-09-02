@@ -25,5 +25,6 @@ jobs:
           ./gradlew wrapper --gradle-version latest
 
       - name: Create Pull Request
-        title: 'Upgrade Gradle Wrapper'
         uses: peter-evans/create-pull-request@153407881ec5c347639a548ade7d8ad1d6740e38
+        with:
+          title: 'Upgrade Gradle Wrapper'
