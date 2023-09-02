@@ -1,7 +1,7 @@
 name: Nightly Build
 
 on:
-  workflow_dispatch: # to be able to run the workflow manually if needed
+  workflow_dispatch: # To run the workflow manually if needed
   schedule:
     - cron: '0 0 * * *' # once a day
 
@@ -24,7 +24,6 @@ jobs:
           else
             echo shouldBuild=false >> $GITHUB_OUTPUT
           fi
-
 
   build:
     name: Generate Nightly Build
