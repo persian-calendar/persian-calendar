@@ -59,6 +59,18 @@ class EventsTest {
     }
 
     @Test
+    fun testCalculateWorkDays() {
+        val repository = EventsRepository(EventsRepository.iranDefault, Language.FA)
+        assertEquals(
+            35,
+            repository.calculateWorkDays(
+                Jdn(PersianDate(1402, 6, 10)),
+                Jdn(PersianDate(1402, 7, 25))
+            )
+        )
+    }
+
+    @Test
     fun testInternationEventsRepository() {
         val repository = EventsRepository(setOf(EventsRepository.internationalKey), Language.UR)
         assertEquals(IslamicDate.useUmmAlQura, true)

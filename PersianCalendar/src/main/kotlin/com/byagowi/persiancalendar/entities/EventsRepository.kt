@@ -172,6 +172,13 @@ class EventsRepository(
         return language.dm.format(formatNumber(day), monthName)
     }
 
+    fun calculateWorkDays(fromJdn: Jdn, toJdn: Jdn): Int {
+        val emptyDeviceCalendar: DeviceCalendarEventsStore = EventsStore.empty()
+        return (fromJdn + 1..toJdn).count {
+            !it.isWeekEnd() && getEvents(it, emptyDeviceCalendar).none(CalendarEvent<*>::isHoliday)
+        }
+    }
+
     companion object {
         const val iranHolidaysKey = "iran_holidays"
         const val iranOthersKey = "iran_others"

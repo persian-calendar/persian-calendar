@@ -32,4 +32,11 @@ sealed class CalendarEvent<T : AbstractDate>(
                 && other.title == title && other.isHoliday == isHoliday && other.date == date
         // Let's don't get into details of device calendar
     }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + isHoliday.hashCode()
+        result = 31 * result + date.hashCode()
+        return result
+    }
 }
