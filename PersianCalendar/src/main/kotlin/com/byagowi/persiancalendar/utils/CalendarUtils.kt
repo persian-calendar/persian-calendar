@@ -287,7 +287,8 @@ fun calculateDaysDifference(
     val daysString = resources.getQuantityString(R.plurals.n_days, days, formatNumber(days))
     val weeks = if (isInWidget || days < 7) 0 else (days / 7.0).roundToInt()
     val result = listOfNotNull(
-        if (months == 0 && years == 0) null else listOf(
+        if (months == 0 && years == 0) null
+        else listOf(
             R.plurals.n_years to years,
             R.plurals.n_months to months,
             R.plurals.n_days to daysOfMonth
