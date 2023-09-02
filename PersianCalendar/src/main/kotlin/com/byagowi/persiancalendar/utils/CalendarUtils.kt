@@ -257,18 +257,18 @@ val AbstractDate.calendarType: CalendarType
     }
 
 fun calculateDatePartsDifference(
-    higher: AbstractDate, lower: AbstractDate, calendar: CalendarType
+    fromDate: AbstractDate, toDate: AbstractDate, calendar: CalendarType
 ): Triple<Int, Int, Int> {
-    var y = higher.year - lower.year
-    var m = higher.month - lower.month
-    var d = higher.dayOfMonth - lower.dayOfMonth
+    var y = toDate.year - fromDate.year
+    var m = toDate.month - fromDate.month
+    var d = toDate.dayOfMonth - fromDate.dayOfMonth
     if (d < 0) {
         m--
-        d += calendar.getMonthLength(lower.year, lower.month)
+        d += calendar.getMonthLength(fromDate.year, fromDate.month)
     }
     if (m < 0) {
         y--
-        m += calendar.getYearMonths(lower.year)
+        m += calendar.getYearMonths(fromDate.year)
     }
     return Triple(y, m, d)
 }
@@ -282,7 +282,7 @@ fun calculateDaysDifference(
     val baseDate = baseJdn.toCalendar(calendarType)
     val date = jdn.toCalendar(calendarType)
     val (years, months, daysOfMonth) = calculateDatePartsDifference(
-        if (baseJdn > jdn) baseDate else date, if (baseJdn > jdn) date else baseDate, calendarType
+        if (baseJdn > jdn) date else baseDate, if (baseJdn > jdn) baseDate else date, calendarType
     )
     val days = abs(baseJdn - jdn)
     val daysString = resources.getQuantityString(R.plurals.n_days, days, formatNumber(days))

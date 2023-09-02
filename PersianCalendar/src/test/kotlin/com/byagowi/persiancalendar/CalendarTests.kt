@@ -102,32 +102,32 @@ class CalendarTests {
 
     @ParameterizedTest
     @CsvSource(
-        "1400, 11, 15, 1363, 3, 19, 37, 7, 27",
-        "1400, 8, 1, 1400, 6, 31, 0, 1, 1",
-        "1400, 11, 15, 1363, 11, 15, 37, 0, 0",
-        "1400, 11, 15, 1363, 11, 14, 37, 0, 1",
-        "1400, 11, 15, 1363, 11, 16, 36, 11, 29",
-        "1400, 11, 15, 1400, 7, 15, 0, 4, 0",
-        "1400, 11, 15, 1400, 8, 15, 0, 3, 0",
-        "1400, 11, 15, 1400, 9, 15, 0, 2, 0",
-        "1400, 11, 15, 1400, 10, 15, 0, 1, 0",
+        "1363, 3, 19, 1400, 11, 15, 37, 7, 27",
+        "1400, 6, 31, 1400, 8, 1, 0, 1, 1",
+        "1363, 11, 15, 1400, 11, 15, 37, 0, 0",
+        "1363, 11, 14, 1400, 11, 15, 37, 0, 1",
+        "1363, 11, 16, 1400, 11, 15, 36, 11, 29",
+        "1400, 7, 15, 1400, 11, 15, 0, 4, 0",
+        "1400, 8, 15, 1400, 11, 15, 0, 3, 0",
+        "1400, 9, 15, 1400, 11, 15, 0, 2, 0",
+        "1400, 10, 15, 1400, 11, 15, 0, 1, 0",
         // Adopted from http://www.ssu.ac.ir/cms/fileadmin/user_upload/Moavenatha/MBehdashti/Gostaresh/pdf/amar/dastor/Mohasebe-Sen.pdf
         // Except we don't have the same result
-        "1379, 6, 10, 1360, 5, 20, 19, 0, 21",
-        "1379, 6, 10, 1360, 5, 20, 19, 0, 21",
-        "1360, 6, 10, 1360, 5, 20, 0, 0, 21",
+        "1360, 5, 20, 1379, 6, 10, 19, 0, 21",
+        "1360, 5, 20, 1379, 6, 10, 19, 0, 21",
+        "1360, 5, 20, 1360, 6, 10, 0, 0, 21",
     )
     fun `test date parts difference`(
-        higherYear: Int, higherMonth: Int, higherDay: Int,
-        lowerYear: Int, lowerMonth: Int, lowerDay: Int,
+        fromYear: Int, fromMonth: Int, fromDay: Int,
+        toYear: Int, toMonth: Int, toDay: Int,
         year: Int, month: Int, day: Int,
     ) {
-        val higher = PersianDate(higherYear, higherMonth, higherDay)
-        val lower = PersianDate(lowerYear, lowerMonth, lowerDay)
-        val (y, m, d) = calculateDatePartsDifference(higher, lower, CalendarType.SHAMSI)
-        assertEquals(year, y)
-        assertEquals(month, m)
+        val lower = PersianDate(fromYear, fromMonth, fromDay)
+        val higher = PersianDate(toYear, toMonth, toDay)
+        val (y, m, d) = calculateDatePartsDifference(lower, higher, CalendarType.SHAMSI)
         assertEquals(day, d)
+        assertEquals(month, m)
+        assertEquals(year, y)
     }
 
     @ParameterizedTest
