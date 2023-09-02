@@ -62,6 +62,7 @@ class EventsTest {
     @Test
     fun testCalculateWorkDays() {
         val weekEndsCopy = weekEnds.copyOf()
+        weekEnds.indices.forEach { weekEnds[it] = false }
         Language.FA.defaultWeekEnds.mapNotNull(String::toIntOrNull).forEach { weekEnds[it] = true }
         val repository = EventsRepository(EventsRepository.iranDefault, Language.FA)
         assertEquals(
