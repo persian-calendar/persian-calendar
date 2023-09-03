@@ -205,7 +205,9 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                                     .groupBy { it }
                                     .entries
                                     .joinToString(spacedComma) { (title, days) ->
-                                        title + spacedColon + formatNumber(days.size)
+                                        activity.resources.getQuantityString(
+                                            R.plurals.n_days, days.size, formatNumber(days.size)
+                                        ) + " " + title
                                     }
                     val events = eventsRepository?.getEvents(jdn, activity.readDayDeviceEvents(jdn))
                         ?: emptyList()
