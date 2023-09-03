@@ -67,6 +67,7 @@ import com.byagowi.persiancalendar.global.isTalkBackEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.global.secondaryCalendar
+import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.global.updateStoredPreference
 import com.byagowi.persiancalendar.ui.calendar.calendarpager.CalendarPager
@@ -188,12 +189,25 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedDayChangeEvent
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-                .collectLatest {
+                .collectLatest { jdn ->
                     val activity = activity ?: return@collectLatest
-                    val shiftWorkTitle = getShiftWorkTitle(it, false)
+                    val shiftWorkTitle = getShiftWorkTitle(jdn, false)
                     binding.shiftWorkTitle.isVisible = shiftWorkTitle.isNotEmpty()
                     binding.shiftWorkTitle.text = shiftWorkTitle
-                    val events = eventsRepository?.getEvents(it, activity.readDayDeviceEvents(it))
+                    val today = Jdn.today()
+                    val isShiftDiffVisible =
+                        shiftWorkTitle.isNotEmpty() && (jdn - today) in 1..365
+                    binding.shiftWorkDiff.isVisible = isShiftDiffVisible
+                    binding.shiftWorkDiff.text = if (!isShiftDiffVisible) "" else
+                        activity.getString(R.string.days_distance) + spacedColon +
+                                (today + 1..jdn)
+                                    .map { getShiftWorkTitle(it, false) }
+                                    .groupBy { it }
+                                    .entries
+                                    .joinToString(spacedComma) { (title, days) ->
+                                        title + spacedColon + formatNumber(days.size)
+                                    }
+                    val events = eventsRepository?.getEvents(jdn, activity.readDayDeviceEvents(jdn))
                         ?: emptyList()
                     binding.noEvent.isVisible = events.isEmpty()
                     adapter.showEvents(events)
