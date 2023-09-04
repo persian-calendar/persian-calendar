@@ -102,7 +102,8 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun setAll(
         text: String, isToday: Boolean = false, isSelected: Boolean = false,
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
-        jdn: Jdn? = null, dayOfMonth: Int = -1, header: String = "", isWeekNumber: Boolean = false
+        jdn: Jdn? = null, dayOfMonth: Int = -1, header: String? = null,
+        isWeekNumber: Boolean = false
     ) {
         this.text = text
         this.today = isToday
@@ -132,7 +133,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     fun setDayOfMonthItem(
         isToday: Boolean, isSelected: Boolean,
         hasEvent: Boolean, hasAppointment: Boolean, isHoliday: Boolean,
-        jdn: Jdn, dayOfMonth: Int, header: String
+        jdn: Jdn, dayOfMonth: Int, header: String?
     ) = setAll(
         text = formatNumber(dayOfMonth, mainCalendarDigits), isToday = isToday,
         isSelected = isSelected, hasEvent = hasEvent, hasAppointment = hasAppointment, jdn = jdn,

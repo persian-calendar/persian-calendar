@@ -85,7 +85,7 @@ fun getA11yDaySummary(
     if (withTitle) appendLine().append(dayTitleSummary(jdn, mainDate))
 
     val shift = getShiftWorkTitle(jdn)
-    if (shift.isNotEmpty()) appendLine().append(shift)
+    if (shift != null) appendLine().append(shift)
 
     if (withOtherCalendars) {
         val otherCalendars = dateStringOfOtherCalendars(jdn, spacedComma)

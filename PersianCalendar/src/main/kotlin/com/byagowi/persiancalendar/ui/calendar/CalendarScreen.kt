@@ -192,7 +192,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 .collectLatest { jdn ->
                     val activity = activity ?: return@collectLatest
                     val shiftWorkTitle = getShiftWorkTitle(jdn)
-                    binding.shiftWorkTitle.isVisible = shiftWorkTitle.isNotEmpty()
+                    binding.shiftWorkTitle.isVisible = shiftWorkTitle != null
                     binding.shiftWorkTitle.text = shiftWorkTitle
                     val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn, activity)
                     binding.shiftWorkInDaysDistance.isVisible = shiftWorkInDaysDistance != null
