@@ -256,7 +256,7 @@ private fun DIV.generateMonthPage(context: Context, date: AbstractDate) {
                                 val digits = secondaryCalendarDigits
                                 formatNumber(secondaryDateDay, digits)
                             },
-                            getShiftWorkTitle(jdn, false).takeIf { it.isNotEmpty() }
+                            getShiftWorkTitle(jdn).takeIf { it.isNotEmpty() }
                         ).joinToString(" ").takeIf { it.isNotEmpty() }?.let { sup { +" $it" } }
                     }
                 }

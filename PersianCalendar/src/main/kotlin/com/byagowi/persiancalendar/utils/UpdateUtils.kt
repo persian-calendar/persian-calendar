@@ -156,7 +156,7 @@ fun update(context: Context, updateDate: Boolean) {
         readAndStoreDeviceCalendarEventsOfTheDay(context)
     }
 
-    val shiftWorkTitle = getShiftWorkTitle(jdn, false)
+    val shiftWorkTitle = getShiftWorkTitle(jdn)
     val title = dayTitleSummary(jdn, date) +
             if (shiftWorkTitle.isEmpty()) "" else " ($shiftWorkTitle)"
     val widgetTitle = dayTitleSummary(

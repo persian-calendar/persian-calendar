@@ -191,7 +191,7 @@ class CalendarScreen : Fragment(R.layout.calendar_screen) {
                 .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
                 .collectLatest { jdn ->
                     val activity = activity ?: return@collectLatest
-                    val shiftWorkTitle = getShiftWorkTitle(jdn, false)
+                    val shiftWorkTitle = getShiftWorkTitle(jdn)
                     binding.shiftWorkTitle.isVisible = shiftWorkTitle.isNotEmpty()
                     binding.shiftWorkTitle.text = shiftWorkTitle
                     val shiftWorkInDaysDistance = getShiftWorksInDaysDistance(jdn, activity)

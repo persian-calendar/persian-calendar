@@ -11,7 +11,7 @@ import com.byagowi.persiancalendar.global.shiftWorks
 import com.byagowi.persiancalendar.global.spacedColon
 import com.byagowi.persiancalendar.global.spacedComma
 
-fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean): String {
+fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean = false): String {
     val shiftWorkStartingJdn = shiftWorkStartingJdn ?: return ""
     if (jdn < shiftWorkStartingJdn || shiftWorkPeriod == 0)
         return ""
@@ -41,7 +41,7 @@ fun getShiftWorksInDaysDistance(jdn: Jdn, context: Context): String? {
     if (shiftWorks.isEmpty()) return null
     val today = Jdn.today()
     if ((jdn - today) !in 1..365) return null
-    val shiftWorksInDaysDistance = (today + 1..jdn).groupBy { getShiftWorkTitle(it, false) }
+    val shiftWorksInDaysDistance = (today + 1..jdn).groupBy(::getShiftWorkTitle)
     if (shiftWorksInDaysDistance.size < 2) return null
     return context.getString(R.string.days_distance) + spacedColon +
             shiftWorksInDaysDistance.entries.joinToString(spacedComma) { (title, days) ->
