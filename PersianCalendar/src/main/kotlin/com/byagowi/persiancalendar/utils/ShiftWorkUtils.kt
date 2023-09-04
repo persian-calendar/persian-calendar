@@ -41,11 +41,10 @@ fun getShiftWorksInDaysDistance(jdn: Jdn, context: Context): String? {
     if (shiftWorks.isEmpty()) return null
     val today = Jdn.today()
     if ((jdn - today) !in 1..365) return null
-    val shiftWorksInDaysDistance =
-        (today + 1..jdn).map { getShiftWorkTitle(it, false) }.groupBy { it }.entries
+    val shiftWorksInDaysDistance = (today + 1..jdn).groupBy { getShiftWorkTitle(it, false) }
     if (shiftWorksInDaysDistance.size < 2) return null
     return context.getString(R.string.days_distance) + spacedColon +
-            shiftWorksInDaysDistance.joinToString(spacedComma) { (title, days) ->
+            shiftWorksInDaysDistance.entries.joinToString(spacedComma) { (title, days) ->
                 context.resources.getQuantityString(
                     R.plurals.n_days, days.size, formatNumber(days.size)
                 ) + " " + title
