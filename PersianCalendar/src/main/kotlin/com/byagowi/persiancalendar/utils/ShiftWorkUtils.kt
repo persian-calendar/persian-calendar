@@ -38,9 +38,10 @@ fun getShiftWorkTitle(jdn: Jdn, abbreviated: Boolean = false): String {
 }
 
 fun getShiftWorksInDaysDistance(jdn: Jdn, context: Context): String? {
+    val shiftWorkStartingJdn = shiftWorkStartingJdn ?: return null
     if (shiftWorks.isEmpty()) return null
     val today = Jdn.today()
-    if ((jdn - today) !in 1..365) return null
+    if ((jdn - today) !in 1..365 || shiftWorkStartingJdn > today) return null
     val shiftWorksInDaysDistance = (today + 1..jdn).groupBy(::getShiftWorkTitle)
     if (shiftWorksInDaysDistance.size < 2) return null
     return context.getString(R.string.days_distance) + spacedColon +
