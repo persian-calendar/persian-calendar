@@ -10,7 +10,6 @@ import android.graphics.Path
 import android.graphics.Rect
 import android.hardware.GeomagneticField
 import androidx.annotation.RawRes
-import androidx.core.graphics.PathParser
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.set
 import androidx.core.graphics.withMatrix
@@ -22,6 +21,7 @@ import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
+import com.byagowi.persiancalendar.ui.common.PathParser
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable

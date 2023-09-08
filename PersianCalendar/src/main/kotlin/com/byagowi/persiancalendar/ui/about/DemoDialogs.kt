@@ -56,7 +56,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.getSystemService
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
-import androidx.core.graphics.PathParser
 import androidx.core.graphics.applyCanvas
 import androidx.core.graphics.component1
 import androidx.core.graphics.component2
@@ -92,6 +91,7 @@ import com.byagowi.persiancalendar.databinding.ShaderSandboxBinding
 import com.byagowi.persiancalendar.generated.sandboxFragmentShader
 import com.byagowi.persiancalendar.ui.SeasonsAdapter
 import com.byagowi.persiancalendar.ui.common.BaseSlider
+import com.byagowi.persiancalendar.ui.common.PathParser
 import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
