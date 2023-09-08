@@ -60,14 +60,17 @@ class MapScreen : Fragment(R.layout.map_screen) {
         val mapTypeButton = binding.toolbar.menu.findItem(R.id.menu_map_type)
         val globeViewButton = binding.toolbar.menu.findItem(R.id.menu_globe_view)
 
-        val viewModel by navGraphViewModels<MapViewModel>(R.id.map)
+        // Just that our UI tests don't have access to the nav controllers, let's don't access nav there
+        val ifNavAvailable = runCatching { findNavController() }.getOrNull() != null
+        val viewModel =
+            if (ifNavAvailable) navGraphViewModels<MapViewModel>(R.id.map).value else MapViewModel()
 
         // Don't set the title as we got lots of icons
         // binding.toolbar.setTitle(R.string.map)
         binding.toolbar.setupUpNavigation()
 
         // Set time from Astronomy screen state if we are brought from the screen to here directly
-        if (findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
+        if (ifNavAvailable && findNavController().previousBackStackEntry?.destination?.id == R.id.astronomy) {
             val astronomyViewModel by navGraphViewModels<AstronomyViewModel>(R.id.astronomy)
             viewModel.changeToTime(astronomyViewModel.astronomyState.value.date.time)
             // Let's apply changes here to astronomy screen's view model also

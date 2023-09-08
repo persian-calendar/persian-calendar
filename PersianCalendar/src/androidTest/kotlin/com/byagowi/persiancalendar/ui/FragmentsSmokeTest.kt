@@ -9,10 +9,13 @@ import androidx.test.filters.LargeTest
 import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.ui.about.AboutScreen
 import com.byagowi.persiancalendar.ui.about.LicensesScreen
+import com.byagowi.persiancalendar.ui.astronomy.AstronomyScreen
 import com.byagowi.persiancalendar.ui.calendar.CalendarScreen
 import com.byagowi.persiancalendar.ui.compass.CompassScreen
 import com.byagowi.persiancalendar.ui.converter.ConverterScreen
 import com.byagowi.persiancalendar.ui.level.LevelScreen
+import com.byagowi.persiancalendar.ui.map.MapScreen
+import com.byagowi.persiancalendar.ui.map.SkyRendererScreen
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.INTERFACE_CALENDAR_TAB
 import com.byagowi.persiancalendar.ui.settings.SettingsScreen.Companion.LOCATION_ATHAN_TAB
@@ -52,21 +55,9 @@ class FragmentsSmokeTest {
         launchFragmentInContainer<CompassScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<ConverterScreen>(themeResId = R.style.LightTheme)
         launchFragmentInContainer<LevelScreen>(themeResId = R.style.LightTheme)
-//      FIXME: These won't work as the use of navigation to retrieve their view model
-//        launchFragmentInContainer<AstronomyScreen>(
-//            themeResId = R.style.LightTheme,
-//            fragmentArgs = AstronomyScreenArgs(0).toBundle()
-//        )
-//        val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
-//        navController.setViewModelStore(ViewModelStore())
-//        launchFragmentInContainer<MapFragment>(themeResId = R.style.LightTheme).onFragment {
-//            navController.setGraph(R.navigation.navigation_graph)
-//            Navigation.setViewNavController(it.requireView(), navController)
-//        }
-//        launchFragmentInContainer<PanoRendoFragment>(themeResId = R.style.LightTheme).onFragment {
-//            navController.setGraph(R.navigation.navigation_graph)
-//            Navigation.setViewNavController(it.requireView(), navController)
-//        }
+        launchFragmentInContainer<AstronomyScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<MapScreen>(themeResId = R.style.LightTheme)
+        launchFragmentInContainer<SkyRendererScreen>(themeResId = R.style.LightTheme)
         listOf(INTERFACE_CALENDAR_TAB, WIDGET_NOTIFICATION_TAB, LOCATION_ATHAN_TAB).forEach {
             launchFragmentInContainer<SettingsScreen>(
                 themeResId = R.style.LightTheme,
