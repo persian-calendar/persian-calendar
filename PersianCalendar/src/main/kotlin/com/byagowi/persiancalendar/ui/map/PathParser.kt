@@ -78,7 +78,7 @@ private fun getFloats(s: String): FloatArray {
         val results = FloatArray(s.length)
         var count = 0
         var startPosition = 1
-        var endPosition = 0
+        var endPosition: Int
         val result = ExtractFloatResult()
         val totalLength = s.length
 
@@ -87,11 +87,11 @@ private fun getFloats(s: String): FloatArray {
         // number.
         while (startPosition < totalLength) {
             extract(s, startPosition, result)
-            endPosition = result.mEndPosition
+            endPosition = result.endPosition
             if (startPosition < endPosition) {
                 results[count++] = s.substring(startPosition, endPosition).toFloat()
             }
-            startPosition = if (result.mEndWithNegOrDot) {
+            startPosition = if (result.endWithNegOrDot) {
                 // Keep the '-' or '.' sign with next number.
                 endPosition
             } else {
@@ -121,19 +121,18 @@ private fun extract(s: String, start: Int, result: ExtractFloatResult) {
     // Now looking for ' ', ',', '.' or '-' from the start.
     var currentIndex = start
     var foundSeparator = false
-    result.mEndWithNegOrDot = false
+    result.endWithNegOrDot = false
     var secondDot = false
     var isExponential = false
     while (currentIndex < s.length) {
         val isPrevExponential = isExponential
         isExponential = false
-        val currentChar = s[currentIndex]
-        when (currentChar) {
+        when (s[currentIndex]) {
             ' ', ',' -> foundSeparator = true
             '-' ->                     // The negative sign following a 'e' or 'E' is not a separator.
                 if (currentIndex != start && !isPrevExponential) {
                     foundSeparator = true
-                    result.mEndWithNegOrDot = true
+                    result.endWithNegOrDot = true
                 }
 
             '.' -> if (!secondDot) {
@@ -141,7 +140,7 @@ private fun extract(s: String, start: Int, result: ExtractFloatResult) {
             } else {
                 // This is the second dot, and it is considered as a separator.
                 foundSeparator = true
-                result.mEndWithNegOrDot = true
+                result.endWithNegOrDot = true
             }
 
             'e', 'E' -> isExponential = true
@@ -153,19 +152,19 @@ private fun extract(s: String, start: Int, result: ExtractFloatResult) {
     }
     // When there is nothing found, then we put the end position to the end
     // of the string.
-    result.mEndPosition = currentIndex
+    result.endPosition = currentIndex
 }
 
 private class ExtractFloatResult(
     // We need to return the position of the next separator and whether the
     // next float starts with a '-' or a '.'.
-    var mEndPosition: Int = 0, var mEndWithNegOrDot: Boolean = false
+    var endPosition: Int = 0, var endWithNegOrDot: Boolean = false
 )
 
 private fun addCommand(
-    path: Path, current: FloatArray, previousCmd: Char, cmd: Char, values: FloatArray
+    path: Path, current: FloatArray, previousCommand: Char, cmd: Char, values: FloatArray
 ) {
-    var previousCmd = previousCmd
+    var previousCmd = previousCommand
     var incr = 2
     var currentX = current[0]
     var currentY = current[1]
@@ -197,65 +196,65 @@ private fun addCommand(
     while (k < values.size) {
         when (cmd) {
             'm' -> {
-                currentX += values[k + 0]
+                currentX += values[k]
                 currentY += values[k + 1]
                 if (k > 0) {
                     // According to the spec, if a moveto is followed by multiple
                     // pairs of coordinates, the subsequent pairs are treated as
                     // implicit lineto commands.
-                    path.rLineTo(values[k + 0], values[k + 1])
+                    path.rLineTo(values[k], values[k + 1])
                 } else {
-                    path.rMoveTo(values[k], values[k + 1])
+                    path.rMoveTo(values[0], values[1])
                     currentSegmentStartX = currentX
                     currentSegmentStartY = currentY
                 }
             }
 
             'M' -> {
-                currentX = values[k + 0]
+                currentX = values[k]
                 currentY = values[k + 1]
                 if (k > 0) {
                     // According to the spec, if a moveto is followed by multiple
                     // pairs of coordinates, the subsequent pairs are treated as
                     // implicit lineto commands.
-                    path.lineTo(values[k + 0], values[k + 1])
+                    path.lineTo(values[k], values[k + 1])
                 } else {
-                    path.moveTo(values[k], values[k + 1])
+                    path.moveTo(values[0], values[1])
                     currentSegmentStartX = currentX
                     currentSegmentStartY = currentY
                 }
             }
 
             'l' -> {
-                path.rLineTo(values[k + 0], values[k + 1])
-                currentX += values[k + 0]
+                path.rLineTo(values[k], values[k + 1])
+                currentX += values[k]
                 currentY += values[k + 1]
             }
 
             'L' -> {
-                path.lineTo(values[k + 0], values[k + 1])
-                currentX = values[k + 0]
+                path.lineTo(values[k], values[k + 1])
+                currentX = values[k]
                 currentY = values[k + 1]
             }
 
             'h' -> {
-                path.rLineTo(values[k + 0], 0f)
-                currentX += values[k + 0]
+                path.rLineTo(values[k], 0f)
+                currentX += values[k]
             }
 
             'H' -> {
-                path.lineTo(values[k + 0], currentY)
-                currentX = values[k + 0]
+                path.lineTo(values[k], currentY)
+                currentX = values[k]
             }
 
             'v' -> {
-                path.rLineTo(0f, values[k + 0])
-                currentY += values[k + 0]
+                path.rLineTo(0f, values[k])
+                currentY += values[k]
             }
 
             'V' -> {
-                path.lineTo(currentX, values[k + 0])
-                currentY = values[k + 0]
+                path.lineTo(currentX, values[k])
+                currentY = values[k]
             }
 
             'c' -> {
@@ -271,7 +270,7 @@ private fun addCommand(
 
             'C' -> {
                 path.cubicTo(
-                    values[k + 0], values[k + 1], values[k + 2], values[k + 3],
+                    values[k], values[k + 1], values[k + 2], values[k + 3],
                     values[k + 4], values[k + 5]
                 )
                 currentX = values[k + 4]
@@ -289,10 +288,10 @@ private fun addCommand(
                 }
                 path.rCubicTo(
                     reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k + 0], values[k + 1],
+                    values[k], values[k + 1],
                     values[k + 2], values[k + 3]
                 )
-                ctrlPointX = currentX + values[k + 0]
+                ctrlPointX = currentX + values[k]
                 ctrlPointY = currentY + values[k + 1]
                 currentX += values[k + 2]
                 currentY += values[k + 3]
@@ -307,25 +306,25 @@ private fun addCommand(
                 }
                 path.cubicTo(
                     reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k + 0], values[k + 1], values[k + 2], values[k + 3]
+                    values[k], values[k + 1], values[k + 2], values[k + 3]
                 )
-                ctrlPointX = values[k + 0]
+                ctrlPointX = values[k]
                 ctrlPointY = values[k + 1]
                 currentX = values[k + 2]
                 currentY = values[k + 3]
             }
 
             'q' -> {
-                path.rQuadTo(values[k + 0], values[k + 1], values[k + 2], values[k + 3])
-                ctrlPointX = currentX + values[k + 0]
+                path.rQuadTo(values[k], values[k + 1], values[k + 2], values[k + 3])
+                ctrlPointX = currentX + values[k]
                 ctrlPointY = currentY + values[k + 1]
                 currentX += values[k + 2]
                 currentY += values[k + 3]
             }
 
             'Q' -> {
-                path.quadTo(values[k + 0], values[k + 1], values[k + 2], values[k + 3])
-                ctrlPointX = values[k + 0]
+                path.quadTo(values[k], values[k + 1], values[k + 2], values[k + 3])
+                ctrlPointX = values[k]
                 ctrlPointY = values[k + 1]
                 currentX = values[k + 2]
                 currentY = values[k + 3]
@@ -340,11 +339,11 @@ private fun addCommand(
                 }
                 path.rQuadTo(
                     reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k + 0], values[k + 1]
+                    values[k], values[k + 1]
                 )
                 ctrlPointX = currentX + reflectiveCtrlPointX
                 ctrlPointY = currentY + reflectiveCtrlPointY
-                currentX += values[k + 0]
+                currentX += values[k]
                 currentY += values[k + 1]
             }
 
@@ -357,11 +356,11 @@ private fun addCommand(
                 }
                 path.quadTo(
                     reflectiveCtrlPointX, reflectiveCtrlPointY,
-                    values[k + 0], values[k + 1]
+                    values[k], values[k + 1]
                 )
                 ctrlPointX = reflectiveCtrlPointX
                 ctrlPointY = reflectiveCtrlPointY
-                currentX = values[k + 0]
+                currentX = values[k]
                 currentY = values[k + 1]
             }
         }
