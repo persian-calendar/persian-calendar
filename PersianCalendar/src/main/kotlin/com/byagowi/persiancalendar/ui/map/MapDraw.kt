@@ -21,7 +21,6 @@ import com.byagowi.persiancalendar.entities.EarthPosition
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.coordinates
 import com.byagowi.persiancalendar.global.mainCalendar
-import com.byagowi.persiancalendar.ui.common.PathParser
 import com.byagowi.persiancalendar.ui.common.SolarDraw
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
@@ -72,7 +71,7 @@ class MapDraw(context: Context, mapBackgroundColor: Int? = null, mapForegroundCo
 
     private fun createPathFromResourceText(context: Context, @RawRes id: Int): Path {
         val path = context.resources.openRawResource(id).readBytes().decodeToString()
-        return PathParser.createPathFromPathData(path)
+        return createPathFromPathData(path)
     }
 
     private val mapPath: Path = createPathFromResourceText(context, R.raw.worldmap)
