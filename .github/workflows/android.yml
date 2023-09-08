@@ -71,7 +71,7 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
 
       - name: Run Android tests
-        uses: reactivecircus/android-emulator-runner@76c2bf6f95ed6458fd659a1bdb680a0f8df232dc
+        uses: reactivecircus/android-emulator-runner@fabc29122a1b0c3dae73371fb67de3ce88f98a32
         with:
           api-level: ${{ matrix.api-level }}
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
