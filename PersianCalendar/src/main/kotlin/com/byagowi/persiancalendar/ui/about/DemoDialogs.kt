@@ -240,31 +240,31 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
         )
     })
 
-    val morphedPathView = object : View(activity) {
-        private val pathMorph = MorphedPath(
-            "m 100 0 l -100 100 l 100 100 l 100 -100 z",
-            "m 50 50 l 0 100 l 100 0 l 0 -100 z"
-        )
-        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.BLACK }
-
-        init {
-            val scale = (100 * resources.dp).toInt()
-            layoutParams = LinearLayout.LayoutParams(scale, scale).also {
-                it.gravity = Gravity.CENTER_HORIZONTAL
-            }
-        }
-
-        override fun onDraw(canvas: Canvas) = canvas.drawPath(pathMorph.path, paint)
-
-        fun setFraction(value: Float) {
-            pathMorph.interpolateTo(value)
-            invalidate()
-        }
-    }
-    root.addView(morphedPathView)
-    root.addView(Slider(activity).also {
-        it.addOnChangeListener { _, value, _ -> morphedPathView.setFraction(value) }
-    })
+//    val morphedPathView = object : View(activity) {
+//        private val pathMorph = MorphedPath(
+//            "m 100 0 l -100 100 l 100 100 l 100 -100 z",
+//            "m 50 50 l 0 100 l 100 0 l 0 -100 z"
+//        )
+//        private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also { it.color = Color.BLACK }
+//
+//        init {
+//            val scale = (100 * resources.dp).toInt()
+//            layoutParams = LinearLayout.LayoutParams(scale, scale).also {
+//                it.gravity = Gravity.CENTER_HORIZONTAL
+//            }
+//        }
+//
+//        override fun onDraw(canvas: Canvas) = canvas.drawPath(pathMorph.path, paint)
+//
+//        fun setFraction(value: Float) {
+//            pathMorph.interpolateTo(value)
+//            invalidate()
+//        }
+//    }
+//    root.addView(morphedPathView)
+//    root.addView(Slider(activity).also {
+//        it.addOnChangeListener { _, value, _ -> morphedPathView.setFraction(value) }
+//    })
 
     root.addView(ProgressBar(activity).also { progressBar ->
         progressBar.isIndeterminate = true
@@ -288,24 +288,24 @@ fun showHiddenUiDialog(activity: FragmentActivity) {
     BottomSheetDialog(activity).also { it.setContentView(root) }.show()
 }
 
-class MorphedPath(fromPath: String, toPath: String) {
-    val path = Path()
-
-    private val nodesFrom = PathParser.createNodesFromPathData(fromPath)
-    private val currentNodes = PathParser.deepCopyNodes(nodesFrom)
-    private val nodesTo = PathParser.createNodesFromPathData(toPath)
-
-    init {
-        if (BuildConfig.DEVELOPMENT) check(PathParser.canMorph(nodesFrom, nodesTo))
-        interpolateTo(0f)
-    }
-
-    fun interpolateTo(fraction: Float) {
-        PathParser.interpolatePathDataNodes(currentNodes, nodesFrom, nodesTo, fraction)
-        path.rewind()
-        PathParser.PathDataNode.nodesToPath(currentNodes, path)
-    }
-}
+//class MorphedPath(fromPath: String, toPath: String) {
+//    val path = Path()
+//
+//    private val nodesFrom = PathParser.createNodesFromPathData(fromPath)
+//    private val currentNodes = PathParser.deepCopyNodes(nodesFrom)
+//    private val nodesTo = PathParser.createNodesFromPathData(toPath)
+//
+//    init {
+//        if (BuildConfig.DEVELOPMENT) check(PathParser.canMorph(nodesFrom, nodesTo))
+//        interpolateTo(0f)
+//    }
+//
+//    fun interpolateTo(fraction: Float) {
+//        PathParser.interpolatePathDataNodes(currentNodes, nodesFrom, nodesTo, fraction)
+//        path.rewind()
+//        PathParser.PathDataNode.nodesToPath(currentNodes, path)
+//    }
+//}
 
 fun showShaderSandboxDialog(activity: FragmentActivity) {
     val frame = object : FrameLayout(activity) {
