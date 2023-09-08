@@ -29,7 +29,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:paddingStart="4dp"
                 android:paddingEnd="24dp"
-                android:popupBackground="@drawable/popup_background" />
+                android:popupBackground="@drawable/popup_background"
+                app:popupTheme="?attr/appToolbarPopupTheme" />
 
         </FrameLayout>
 
