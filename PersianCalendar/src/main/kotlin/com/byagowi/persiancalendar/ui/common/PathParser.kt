@@ -32,36 +32,34 @@ object PathParser {
      */
     fun createPathFromPathData(pathData: String): Path {
         val path = Path()
-        var start = 0
-        var end = 1
-        val list = ArrayList<PathDataNode>()
-        while (end < pathData.length) {
-            var c: Char
-            while (end < pathData.length) {
-                c = pathData[end]
-                // Note that 'e' or 'E' are not valid path commands, but could be
-                // used for floating point numbers' scientific notation.
-                // Therefore, when searching for next command, we should ignore 'e'
-                // and 'E'.
-                if (((c.code - 'A'.code) * (c.code - 'Z'.code) <= 0 || (c.code - 'a'.code) * (c.code - 'z'.code) <= 0) && c != 'e' && c != 'E') {
-                    break
-                }
-                end++
-            }
-            val s = pathData.substring(start, end).trim()
-            if (s.isNotEmpty()) list.add(PathDataNode(s[0], getFloats(s)))
-            start = end
-            end++
-        }
-        if (end - start == 1 && start < pathData.length) {
-            list.add(PathDataNode(pathData[start], FloatArray(0)))
-        }
         runCatching {
             val current = FloatArray(6)
             var previousCommand = 'm'
-            for (node in list) {
-                addCommand(path, current, previousCommand, node.mType, node.mParams)
-                previousCommand = node.mType
+            var start = 0
+            var end = 1
+            while (end < pathData.length) {
+                var c: Char
+                while (end < pathData.length) {
+                    c = pathData[end]
+                    // Note that 'e' or 'E' are not valid path commands, but could be
+                    // used for floating point numbers' scientific notation.
+                    // Therefore, when searching for next command, we should ignore 'e'
+                    // and 'E'.
+                    if (((c.code - 'A'.code) * (c.code - 'Z'.code) <= 0 || (c.code - 'a'.code) * (c.code - 'z'.code) <= 0) && c != 'e' && c != 'E') {
+                        break
+                    }
+                    end++
+                }
+                val s = pathData.substring(start, end).trim()
+                if (s.isNotEmpty()) {
+                    addCommand(path, current, previousCommand, s[0], getFloats(s))
+                    previousCommand = s[0]
+                }
+                start = end
+                end++
+            }
+            if (end - start == 1 && start < pathData.length) {
+                addCommand(path, current, previousCommand, pathData[start], FloatArray(0))
             }
         }.onFailure(logException)
         return path
@@ -92,8 +90,7 @@ object PathParser {
                 extract(s, startPosition, result)
                 endPosition = result.mEndPosition
                 if (startPosition < endPosition) {
-                    results[count++] =
-                        s.substring(startPosition, endPosition).toFloat()
+                    results[count++] = s.substring(startPosition, endPosition).toFloat()
                 }
                 startPosition = if (result.mEndWithNegOrDot) {
                     // Keep the '-' or '.' sign with next number.
@@ -160,26 +157,14 @@ object PathParser {
         result.mEndPosition = currentIndex
     }
 
-    private class ExtractFloatResult {
+    private class ExtractFloatResult(
         // We need to return the position of the next separator and whether the
         // next float starts with a '-' or a '.'.
-        var mEndPosition = 0
-        var mEndWithNegOrDot = false
-    }
-
-    /**
-     * Each PathDataNode represents one command in the "d" attribute of the svg
-     * file.
-     * An array of PathDataNode can represent the whole "d" attribute.
-     */
-    private class PathDataNode(type: Char, params: FloatArray) {
-        var mType: Char = type
-        var mParams: FloatArray = params
-    }
+        var mEndPosition: Int = 0, var mEndWithNegOrDot: Boolean = false
+    )
 
     private fun addCommand(
-        path: Path, current: FloatArray,
-        previousCmd: Char, cmd: Char, values: FloatArray
+        path: Path, current: FloatArray, previousCmd: Char, cmd: Char, values: FloatArray
     ) {
         var previousCmd = previousCmd
         var incr = 2
