@@ -33,9 +33,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha=".85"
-            android:theme="?attr/appToolbarTheme"
-            app:popupTheme="?attr/appToolbarPopupTheme" />
+            android:alpha=".85" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
