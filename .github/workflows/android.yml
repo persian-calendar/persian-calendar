@@ -21,13 +21,6 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
-
       - name: Build debug APK and run JVM tests
         run: |
           ./gradlew assembleMinApi17Debug lintMinApi17Debug testMinApi17DebugUnitTest --stacktrace
@@ -62,13 +55,6 @@ jobs:
         with:
           java-version: "17"
           distribution: "temurin"
-
-      - name: Cache Gradle dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts') }}
-          restore-keys: ${{ runner.os }}-gradle
 
       - name: Run Android tests
         uses: reactivecircus/android-emulator-runner@76c2bf6f95ed6458fd659a1bdb680a0f8df232dc
