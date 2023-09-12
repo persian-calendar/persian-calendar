@@ -23,6 +23,7 @@ class GLRenderer(
     private var positionHandle = 0
     private var resolutionHandle = 0
     private var timeHandle = 0
+    private var xHandle = 0
     private var yHandle = 0
     private var zoomHandle = 0
     private var verticesHandle = 0
@@ -85,9 +86,9 @@ class GLRenderer(
             positionHandle, perVertex, GLES20.GL_FLOAT, false, vertexStride, 0
         )
         GLES20.glUniform2f(resolutionHandle, width, height)
-        GLES20.glUniform1f(
-            timeHandle, if (overriddenTime == 0f) System.nanoTime() / 1e9f else overriddenTime
-        )
+        val time = System.nanoTime() / 1e9f
+        GLES20.glUniform1f(timeHandle, time)
+        GLES20.glUniform1f(xHandle, if (overriddenTime == 0f) time else overriddenTime)
         GLES20.glUniform1f(yHandle, overriddenY)
         GLES20.glUniform1f(zoomHandle, overriddenZoom)
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, vertexCount)
@@ -113,6 +114,7 @@ class GLRenderer(
         positionHandle = GLES20.glGetAttribLocation(program, "position")
         resolutionHandle = GLES20.glGetUniformLocation(program, "u_resolution")
         timeHandle = GLES20.glGetUniformLocation(program, "u_time")
+        xHandle = GLES20.glGetUniformLocation(program, "u_x")
         yHandle = GLES20.glGetUniformLocation(program, "u_y")
         zoomHandle = GLES20.glGetUniformLocation(program, "u_zoom")
         textureUniformHandle = GLES20.glGetUniformLocation(program, "u_tex0")
