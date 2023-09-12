@@ -11,7 +11,7 @@ const float PI = 3.1415926;
 
 float rand(vec2 co) {
     // http://byteblacksmith.com/improvements-to-the-canonical-one-liner-glsl-rand-for-opengl-es-2-0/
-    return fract(sin(mod(dot(co, vec2(12.9898, 78.233)), 3.14)) * 43758.5453);
+    return fract(sin(mod(dot(co, vec2(12.9898, 78.233)), PI)) * 43758.5453);
 }
 
 void main() {
