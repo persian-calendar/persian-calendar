@@ -32,7 +32,7 @@ void main() {
         float v = 4.4 - r / R * 3.7; // Globe's glow
         // Adds random stars
         if (rand(vec2(floor(-x * 10.0 + xy.x / 4.0), floor(u_y * 10.0 + xy.y / 4.0))) > 0.995)
-            v = sin(xy.x + xy.y + u_time * 2.0) / 2.0 + 0.5;
+            v = clamp(sin(xy.x + xy.y + u_time * 2.0) * 2.0, 0.0, 1.0);
         gl_FragColor = vec4(v, v, v, 1.0);
     }
 }
