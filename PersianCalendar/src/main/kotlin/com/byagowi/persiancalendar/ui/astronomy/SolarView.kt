@@ -195,10 +195,11 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         }
     }
 
+    private val dp = resources.dp
     private val moonTextPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
         it.textAlign = Paint.Align.CENTER
-        it.textSize = 40f
+        it.textSize = 14 * dp
         it.color = ContextCompat.getColor(context, R.color.compass_marker_color)
     }
 
@@ -248,7 +249,6 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         }
     }
 
-    private val dp = resources.dp
     private val trianglePath = Path().also {
         it.moveTo(0f, 6 * dp)
         it.lineTo(-5 * dp, .5f * dp)
