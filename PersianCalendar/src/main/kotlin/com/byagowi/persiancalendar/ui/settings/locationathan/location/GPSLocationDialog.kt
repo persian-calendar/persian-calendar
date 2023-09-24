@@ -1,7 +1,6 @@
 package com.byagowi.persiancalendar.ui.settings.locationathan.location
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -186,10 +185,6 @@ fun showGPSLocationDialog(activity: FragmentActivity, viewLifecycleOwner: Lifecy
             activity.appPrefs.saveLocation(coordinate, cityName ?: "", countryCode ?: "")
         }
 
-        // AGP 7 has false alarms claims removeUpdates can't be called here
-        // but that's incorrect and we are exactly checking permission before
-        // trying to remove the listener
-        @SuppressLint("MissingPermission")
         if (ActivityCompat.checkSelfPermission(
                 activity, Manifest.permission.ACCESS_FINE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
