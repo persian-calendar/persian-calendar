@@ -87,7 +87,7 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat(),
                 ) {
                     if (language.isPersian) {
                         title = "ماه‌های میلادی با نام انگلیسی"
-                        summary = "جون، جولای، آگست، …"
+                        summary = "جون، جولای، آگوست، …"
                     } else isVisible = false
                 }
                 // TODO: To be integrated into the language selection dialog one day
