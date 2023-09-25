@@ -261,7 +261,7 @@ enum class Language(val code: String, val nativeName: String) {
 
     fun getGregorianMonths(context: Context, alternativeGregorianMonths: Boolean) = when (this) {
         FA -> {
-            if (alternativeGregorianMonths) gregorianCalendarMonthsEnglishPronunciation
+            if (alternativeGregorianMonths) gregorianCalendarMonthsInPersianEnglishPronunciation
             else gregorianCalendarMonthsInPersian
         }
 
@@ -477,7 +477,7 @@ enum class Language(val code: String, val nativeName: String) {
             "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون",
             "جولای", "آگست", "سپتامبر", "اکتوبر", "نوامبر", "دسامبر"
         )
-        private val gregorianCalendarMonthsEnglishPronunciation = listOf12Items(
+        private val gregorianCalendarMonthsInPersianEnglishPronunciation = listOf12Items(
             "جنوری", "فبروری", "مارچ", "اپریل", "می", "جون",
             "جولای", "آگوست", "سپتامبر", "اکتبر", "نوامبر", "دسامبر"
         )
