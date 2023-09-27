@@ -13,12 +13,12 @@
 </div>
 
 ## Download
-
-- [F-Droid](https://f-droid.org/app/com.byagowi.persiancalendar)
-- [Google Play](https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar)
-- [GitHub](https://github.com/persian-calendar/persian-calendar/releases/)
-- [Bazaar](https://cafebazaar.ir/app/com.byagowi.persiancalendar)
-- [Myket](https://myket.ir/app/com.byagowi.persiancalendar)
+<a href='https://play.google.com/store/apps/details?id=com.byagowi.persiancalendar'><img height=70 alt='Get it on Google Play' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GooglePlay.svg'/></a>
+<a href='https://f-droid.org/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on F-Droid' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/FDroid.svg'/></a>
+<a href='https://github.com/persian-calendar/persian-calendar/releases/'><img height=70 alt='Get it on GitHub' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/GitHub.svg'/></a>
+<a href='https://cafebazaar.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Bazaar' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Bazaar.svg'/></a>
+<a href='https://myket.ir/app/com.byagowi.persiancalendar'><img height=70 alt='Get it on Myket' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Myket.svg'/></a>
+<a href='https://www.amazon.com/Persian-Calendar/dp/B09HSLZSY2'><img height=70 alt='Get it on Amazon Appstore' src='https://raw.githubusercontent.com/persian-calendar/persian-calendar/main/assets/Amazon.svg'/></a>
 
 ## License
 
