@@ -14,6 +14,7 @@ import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.databinding.EventItemBinding
 import com.byagowi.persiancalendar.entities.CalendarEvent
 import com.byagowi.persiancalendar.global.holidayString
+import com.byagowi.persiancalendar.ui.utils.copyToClipboard
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
@@ -112,11 +113,9 @@ class EventsRecyclerViewAdapter(
             binding.title.text = text
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.root.setOnClickListener { onEventClick(event.id) }
-                binding.title.setTextIsSelectable(false)
                 binding.title.putLineEndIcon(openInNewIconCache[foregroundColor])
             } else {
-                binding.root.setOnClickListener(null)
-                binding.title.setTextIsSelectable(true)
+                binding.root.setOnClickListener { context?.copyToClipboard(text) }
                 binding.title.putLineEndIcon(null)
             }
         }
