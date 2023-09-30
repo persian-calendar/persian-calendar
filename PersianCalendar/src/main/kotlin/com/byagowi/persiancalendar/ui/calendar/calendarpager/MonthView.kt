@@ -8,6 +8,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.animation.OvershootInterpolator
 import androidx.annotation.ColorInt
+import androidx.core.animation.doOnEnd
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -74,10 +75,12 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     private var currentSelectionY = 0f
     private var lastSelectionX = 0f
     private var lastSelectionY = 0f
+    private var changeRadius = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
         it.interpolator = OvershootInterpolator()
         it.addUpdateListener { invalidate() }
+        it.doOnEnd { changeRadius = false }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -90,6 +93,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         if (selectedDayPosition == -1) currentSelectionPosition = -1
         if (selectedDayPosition != currentSelectionPosition) {
             if (currentSelectionPosition == -1) {
+                changeRadius = true
                 val dayView =
                     findViewHolderForAdapterPosition(selectedDayPosition)?.itemView ?: return
                 currentSelectionX = dayView.left * 1f
@@ -105,10 +109,15 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
             val fraction = transitionAnimator.animatedFraction
             lastSelectionX = MathUtils.lerp(currentSelectionX, dayView.left * 1f, fraction)
             lastSelectionY = MathUtils.lerp(currentSelectionY, dayView.top * 1f, fraction)
+            val radius = MathUtils.lerp(
+                0f,
+                min(dayView.width, dayView.height) / 2f,
+                if (changeRadius) fraction else 1f
+            )
             canvas.drawCircle(
                 lastSelectionX + dayView.width / 2f,
                 lastSelectionY + dayView.height / 2f,
-                min(dayView.width, dayView.height) / 2f - sharedData.circlesPadding,
+                radius,
                 sharedData.selectedPaint
             )
         }
