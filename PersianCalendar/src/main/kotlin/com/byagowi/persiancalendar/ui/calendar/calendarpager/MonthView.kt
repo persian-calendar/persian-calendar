@@ -22,7 +22,6 @@ import com.byagowi.persiancalendar.utils.monthName
 import com.google.android.material.math.MathUtils
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlin.math.min
-import kotlin.math.roundToInt
 
 class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(context, attrs) {
 
@@ -101,15 +100,12 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
                 fadeAnimator.start()
             } else if (fadeAnimator.animatedFraction != 0f && fadeAnimator.animatedFraction != 1f) {
                 val dayView = findViewHolderForAdapterPosition(0)?.itemView ?: return
-                sharedData.selectedPaint.alpha =
-                    (255 * (1f - fadeAnimator.animatedFraction)).roundToInt()
                 canvas.drawCircle(
                     lastSelectionX + dayView.width / 2f,
                     lastSelectionY + dayView.height / 2f,
-                    min(dayView.width, dayView.height) / 2f,
+                    min(dayView.width, dayView.height) / 2f * (1 - fadeAnimator.animatedFraction),
                     sharedData.selectedPaint
                 )
-                sharedData.selectedPaint.alpha = 255
             }
         }
         if (selectedDayPosition != currentSelectionPosition) {
