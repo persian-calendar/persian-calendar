@@ -300,9 +300,7 @@ fun createFlingDetector(
     class FlingListener : GestureDetector.SimpleOnGestureListener() {
         override fun onFling(
             e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float
-        ): Boolean {
-            return callback(velocityX, velocityY)
-        }
+        ): Boolean = callback(velocityX, velocityY)
     }
 
     return GestureDetector(context, FlingListener())
