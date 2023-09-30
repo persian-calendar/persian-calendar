@@ -79,7 +79,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     private var isSelectionReveal = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-        it.interpolator = OvershootInterpolator()
+        it.interpolator = OvershootInterpolator(1.5f)
         it.addUpdateListener { invalidate() }
         it.doOnEnd { isSelectionReveal = false }
     }
