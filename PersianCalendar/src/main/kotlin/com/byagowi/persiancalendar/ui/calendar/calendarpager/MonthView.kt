@@ -26,6 +26,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
 
     init {
         setHasFixedSize(true)
+        itemAnimator = null
         layoutManager = GridLayoutManager(context, if (isShowWeekOfYearEnabled) 8 else 7)
     }
 
