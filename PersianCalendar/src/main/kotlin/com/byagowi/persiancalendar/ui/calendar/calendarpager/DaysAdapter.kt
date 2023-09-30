@@ -35,24 +35,24 @@ class DaysAdapter(
     var weeksCount: Int = 0
 
     private var monthDeviceEvents: DeviceCalendarEventsStore = EventsStore.empty()
-    private var selectedDay = -1
+    internal var selectedDayPosition = -1
 
     fun initializeMonthEvents() {
         if (isShowDeviceCalendarEvents) monthDeviceEvents = context.readMonthDeviceEvents(days[0])
     }
 
     internal fun selectDay(dayOfMonth: Int) {
-        val prevDay = selectedDay
-        selectedDay = -1
+        val prevDay = selectedDayPosition
+        selectedDayPosition = -1
         notifyItemChanged(prevDay)
 
         if (dayOfMonth == -1) return
 
-        selectedDay = dayOfMonth + 6 + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
+        selectedDayPosition = dayOfMonth + 6 + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
 
-        if (isShowWeekOfYearEnabled) selectedDay += selectedDay / 7 + 1
+        if (isShowWeekOfYearEnabled) selectedDayPosition += selectedDayPosition / 7 + 1
 
-        notifyItemChanged(selectedDay)
+        notifyItemChanged(selectedDayPosition)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
@@ -133,7 +133,7 @@ class DaysAdapter(
 
                     val dayOfMonth = position - 6 - fixedStartingDayOfWeek
                     dayView.setDayOfMonthItem(
-                        isToday, pos == selectedDay,
+                        isToday, pos == selectedDayPosition,
                         events.any { it !is CalendarEvent.DeviceCalendarEvent },
                         events.any { it is CalendarEvent.DeviceCalendarEvent },
                         events.any { it.isHoliday }, day, dayOfMonth, getShiftWorkTitle(day, true)

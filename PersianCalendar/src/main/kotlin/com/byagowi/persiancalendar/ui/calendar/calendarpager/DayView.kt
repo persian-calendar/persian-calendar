@@ -36,19 +36,16 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     override fun onDraw(canvas: Canvas) {
         val shared = sharedDayViewData ?: return
 
-        val radius = min(width, height) / 2f
-        drawCircle(canvas, shared, radius) // background circle, if is needed
+        drawCircle(canvas, shared) // background circle, if is needed
         drawText(canvas, shared) // can be a day number, week day name abbr or week number of year
         drawIndicators(canvas, shared) // whether a day has event or appointment
         drawHeader(canvas, shared) // shift work header
     }
 
-    private fun drawCircle(canvas: Canvas, shared: SharedDayViewData, radius: Float) {
-        if (dayIsSelected) canvas.drawCircle(
-            width / 2f, height / 2f, radius - shared.circlesPadding, shared.selectedPaint
-        )
+    private fun drawCircle(canvas: Canvas, shared: SharedDayViewData) {
         if (today) canvas.drawCircle(
-            width / 2f, height / 2f, radius - shared.circlesPadding, shared.todayPaint
+            width / 2f, height / 2f, min(width, height) / 2f - shared.circlesPadding,
+            shared.todayPaint
         )
     }
 
@@ -125,7 +122,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
                 hasAppointment to shared.appointmentIndicatorPaint,
                 (hasEvent || (isHighTextContrastEnabled && holiday)) to shared.eventIndicatorPaint
             ).mapNotNull { (condition, paint) -> paint.takeIf { condition } }
-            if (jdn != null) setBackgroundResource(shared.selectableItemBackground)
         }
         invalidate()
     }

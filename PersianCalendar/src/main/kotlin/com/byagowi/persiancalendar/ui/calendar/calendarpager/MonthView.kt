@@ -68,8 +68,21 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas) // This is important, don't remove it ever
 
+        val daysAdapter = daysAdapter ?: return
+        val sharedData = daysAdapter.sharedDayViewData
+
+        val selectedDayPosition = daysAdapter.selectedDayPosition
+        if (selectedDayPosition != -1) {
+            val dayView = findViewHolderForAdapterPosition(selectedDayPosition)?.itemView ?: return
+            canvas.drawCircle(
+                dayView.left + dayView.width / 2f,
+                dayView.top + dayView.height / 2f,
+                min(dayView.width, dayView.height) / 2f - sharedData.circlesPadding,
+                sharedData.selectedPaint
+            )
+        }
+
         // Widget only tweak
-        val sharedData = daysAdapter?.sharedDayViewData ?: return
         val widgetFooterTextPaint = sharedData.widgetFooterTextPaint ?: return
         canvas.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
     }

@@ -39,13 +39,6 @@ class SharedDayViewData(
         paint.setShadowLayer(1f, 1f, 1f, Color.BLACK)
     }
 
-    @DrawableRes
-    val selectableItemBackground = if (widgetTextColor == null) context.resolveResourceIdFromTheme(
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            android.R.attr.selectableItemBackgroundBorderless
-        else android.R.attr.selectableItemBackground
-    ) else 0
-
     val appointmentIndicatorPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.color = context.resolveColor(R.attr.colorAppointment)
     }
