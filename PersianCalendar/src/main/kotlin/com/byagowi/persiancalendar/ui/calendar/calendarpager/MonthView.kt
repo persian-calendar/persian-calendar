@@ -75,12 +75,12 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     private var currentSelectionY = 0f
     private var lastSelectionX = 0f
     private var lastSelectionY = 0f
-    private var changeRadius = false
+    private var isSelectionReveal = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
         it.interpolator = OvershootInterpolator()
         it.addUpdateListener { invalidate() }
-        it.doOnEnd { changeRadius = false }
+        it.doOnEnd { isSelectionReveal = false }
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -93,7 +93,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         if (selectedDayPosition == -1) currentSelectionPosition = -1
         if (selectedDayPosition != currentSelectionPosition) {
             if (currentSelectionPosition == -1) {
-                changeRadius = true
+                isSelectionReveal = true
                 val dayView =
                     findViewHolderForAdapterPosition(selectedDayPosition)?.itemView ?: return
                 currentSelectionX = dayView.left * 1f
@@ -112,7 +112,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
             val radius = MathUtils.lerp(
                 0f,
                 min(dayView.width, dayView.height) / 2f,
-                if (changeRadius) fraction else 1f
+                if (isSelectionReveal) fraction else 1f
             )
             canvas.drawCircle(
                 lastSelectionX + dayView.width / 2f,
