@@ -103,7 +103,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
                 canvas.drawCircle(
                     lastSelectionX + dayView.width / 2f,
                     lastSelectionY + dayView.height / 2f,
-                    min(dayView.width, dayView.height) / 2f * (1 - fadeAnimator.animatedFraction),
+                    DayView.radius(dayView) * (1 - fadeAnimator.animatedFraction),
                     sharedData.selectedPaint
                 )
             }
@@ -127,9 +127,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
             lastSelectionX = MathUtils.lerp(currentSelectionX, dayView.left * 1f, fraction)
             lastSelectionY = MathUtils.lerp(currentSelectionY, dayView.top * 1f, fraction)
             val radius = MathUtils.lerp(
-                0f,
-                min(dayView.width, dayView.height) / 2f,
-                if (isSelectionReveal) fraction else 1f
+                0f, DayView.radius(dayView), if (isSelectionReveal) fraction else 1f
             )
             canvas.drawCircle(
                 lastSelectionX + dayView.width / 2f,
