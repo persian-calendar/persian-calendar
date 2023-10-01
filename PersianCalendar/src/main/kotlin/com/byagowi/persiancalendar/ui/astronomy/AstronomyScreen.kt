@@ -38,6 +38,7 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackTick
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -240,10 +241,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
                 val current = System.currentTimeMillis()
                 if (current - lastButtonClickTimestamp > 2000) {
                     if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                        binding.slider.performHapticFeedback(
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) HapticFeedbackConstants.CLOCK_TICK
-                            else HapticFeedbackConstants.LONG_PRESS
-                        )
+                        binding.slider.performHapticFeedbackTick()
                         latestVibration = current
                     }
                     viewModel.addMinutesOffset((dx * viewDirection).toInt())

@@ -9,6 +9,7 @@ import com.byagowi.persiancalendar.databinding.DayPickerViewBinding
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackTick
 import com.byagowi.persiancalendar.utils.calendarType
 import com.byagowi.persiancalendar.utils.formatNumber
 
@@ -82,6 +83,7 @@ class DayPickerView(context: Context, attrs: AttributeSet? = null) : FrameLayout
         context.layoutInflater, this, true
     ).also { binding ->
         val onDaySelected = NumberPicker.OnValueChangeListener { _, _, _ ->
+            performHapticFeedbackTick()
             val year = binding.yearPicker.value
             val month = binding.monthPicker.value
             reinitializeDayPicker(binding.dayPicker, year, month)

@@ -18,6 +18,7 @@ import android.os.Build
 import android.util.Base64
 import android.util.TypedValue
 import android.view.GestureDetector
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.MotionEvent
@@ -59,6 +60,7 @@ import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.DrawerHost
 import com.byagowi.persiancalendar.utils.logException
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
+import com.byagowi.persiancalendar.variants.debugLog
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -320,3 +322,11 @@ val Context.isDynamicGrayscale: Boolean
             android.R.color.system_accent3_500,
         ).all { Color.colorToHSV(getColor(it), hsv); hsv[1] < .25 }
     }
+
+fun View.performHapticFeedbackTick() {
+    debugLog("Preformed a haptic feedback tick")
+    performHapticFeedback(
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) HapticFeedbackConstants.CLOCK_TICK
+        else HapticFeedbackConstants.LONG_PRESS
+    )
+}
