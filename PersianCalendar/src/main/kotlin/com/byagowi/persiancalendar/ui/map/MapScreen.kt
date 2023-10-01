@@ -34,6 +34,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackPress
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
@@ -85,14 +86,14 @@ class MapScreen : Fragment(R.layout.map_screen) {
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
-            binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            binding.startArrow.performHapticFeedbackPress()
             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
             else viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener { viewModel.addDays(-10); true }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
-            binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            binding.endArrow.performHapticFeedbackPress()
             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
             else viewModel.addOneHour()
         }

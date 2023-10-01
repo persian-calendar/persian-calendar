@@ -38,7 +38,7 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackTick
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackPress
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -241,7 +241,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
                 val current = System.currentTimeMillis()
                 if (current - lastButtonClickTimestamp > 2000) {
                     if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                        binding.slider.performHapticFeedbackTick()
+                        binding.slider.performHapticFeedbackPress()
                         latestVibration = current
                     }
                     viewModel.addMinutesOffset((dx * viewDirection).toInt())
@@ -262,7 +262,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
-            binding.startArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            binding.startArrow.performHapticFeedbackPress()
             buttonScrollSlider(-1)
         }
         binding.startArrow.setOnLongClickListener { buttonScrollSlider(-365) }
@@ -270,7 +270,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
             getString(R.string.previous_x, getString(R.string.day))
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
-            binding.endArrow.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            binding.endArrow.performHapticFeedbackPress()
             buttonScrollSlider(1)
         }
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }

@@ -323,10 +323,7 @@ val Context.isDynamicGrayscale: Boolean
         ).all { Color.colorToHSV(getColor(it), hsv); hsv[1] < .25 }
     }
 
-fun View.performHapticFeedbackTick() {
-    debugLog("Preformed a haptic feedback tick")
-    performHapticFeedback(
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) HapticFeedbackConstants.CLOCK_TICK
-        else HapticFeedbackConstants.LONG_PRESS
-    )
+fun View.performHapticFeedbackPress() {
+    debugLog("Preformed a haptic feedback press")
+    performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
 }
