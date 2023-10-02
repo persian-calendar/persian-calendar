@@ -94,34 +94,18 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         val sharedData = daysAdapter.sharedDayViewData
 
         val selectedDayPosition = daysAdapter.selectedDayPosition
-        if (selectedDayPosition == -1) {
-            if (currentSelectionPosition != -1) {
-                currentSelectionPosition = -1
-                fadeAnimator.start()
-            } else if (fadeAnimator.animatedFraction != 0f && fadeAnimator.animatedFraction != 1f) {
-                val dayView = findViewHolderForAdapterPosition(0)?.itemView ?: return
-                canvas.drawCircle(
-                    lastSelectionX + dayView.width / 2f,
-                    lastSelectionY + dayView.height / 2f,
-                    DayView.radius(dayView) * (1 - fadeAnimator.animatedFraction),
-                    sharedData.selectedPaint
-                )
-            }
+        if (selectedDayPosition == -1 && currentSelectionPosition == -1 &&
+            fadeAnimator.animatedFraction != 0f && fadeAnimator.animatedFraction != 1f
+        ) {
+            val dayView = findViewHolderForAdapterPosition(0)?.itemView ?: return
+            canvas.drawCircle(
+                lastSelectionX + dayView.width / 2f,
+                lastSelectionY + dayView.height / 2f,
+                DayView.radius(dayView) * (1 - fadeAnimator.animatedFraction),
+                sharedData.selectedPaint
+            )
         }
-        if (selectedDayPosition != currentSelectionPosition) {
-            if (currentSelectionPosition == -1) {
-                isSelectionReveal = true
-                val dayView =
-                    findViewHolderForAdapterPosition(selectedDayPosition)?.itemView ?: return
-                currentSelectionX = dayView.left * 1f
-                currentSelectionY = dayView.top * 1f
-            } else {
-                currentSelectionX = lastSelectionX
-                currentSelectionY = lastSelectionY
-            }
-            transitionAnimator.start()
-            currentSelectionPosition = selectedDayPosition
-        } else {
+        if (selectedDayPosition == currentSelectionPosition) {
             val dayView = findViewHolderForAdapterPosition(selectedDayPosition)?.itemView ?: return
             val fraction = transitionAnimator.animatedFraction
             lastSelectionX = MathUtils.lerp(currentSelectionX, dayView.left * 1f, fraction)
@@ -164,6 +148,28 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     }
 
     fun selectDay(dayOfMonth: Int) {
-        daysAdapter?.selectDayInternal(dayOfMonth)
+        val daysAdapter = daysAdapter ?: return
+
+        daysAdapter.selectDayInternal(dayOfMonth)
+        if (dayOfMonth == -1) {
+            if (currentSelectionPosition != -1) {
+                currentSelectionPosition = -1
+                fadeAnimator.start()
+            }
+            return
+        }
+
+        val selectedDayPosition = daysAdapter.selectedDayPosition
+        if (currentSelectionPosition == -1) {
+            isSelectionReveal = true
+            val dayView =
+                findViewHolderForAdapterPosition(selectedDayPosition)?.itemView ?: return
+            lastSelectionX = dayView.left * 1f
+            lastSelectionY = dayView.top * 1f
+        }
+        currentSelectionX = lastSelectionX
+        currentSelectionY = lastSelectionY
+        transitionAnimator.start()
+        currentSelectionPosition = selectedDayPosition
     }
 }
