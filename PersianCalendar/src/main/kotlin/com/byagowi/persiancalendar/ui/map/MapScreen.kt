@@ -3,7 +3,6 @@ package com.byagowi.persiancalendar.ui.map
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.createBitmap
@@ -34,7 +33,7 @@ import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.ui.utils.isLandscape
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackPress
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
 import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupUpNavigation
@@ -86,14 +85,14 @@ class MapScreen : Fragment(R.layout.map_screen) {
 
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
-            binding.startArrow.performHapticFeedbackPress()
+            binding.startArrow.performHapticFeedbackLongPress()
             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(-1)
             else viewModel.subtractOneHour()
         }
         binding.startArrow.setOnLongClickListener { viewModel.addDays(-10); true }
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
-            binding.endArrow.performHapticFeedbackPress()
+            binding.endArrow.performHapticFeedbackLongPress()
             if (mapDraw.currentMapType.isCrescentVisibility) viewModel.addDays(1)
             else viewModel.addOneHour()
         }

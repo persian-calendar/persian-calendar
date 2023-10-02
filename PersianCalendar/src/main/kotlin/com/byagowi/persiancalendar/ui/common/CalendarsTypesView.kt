@@ -10,7 +10,7 @@ import com.byagowi.persiancalendar.entities.CalendarType
 import com.byagowi.persiancalendar.global.enabledCalendars
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackPress
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 
 class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
     FrameLayout(context, attrs) {
@@ -33,7 +33,7 @@ class CalendarsTypesView(context: Context, attrs: AttributeSet? = null) :
                 else calendarType.title
             )
             it.root.setOnClickListener {
-                performHapticFeedbackPress()
+                performHapticFeedbackVirtualKey()
                 onValueChangeListener(calendarType)
                 value = calendarType
             }

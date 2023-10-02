@@ -93,7 +93,7 @@ import com.byagowi.persiancalendar.ui.common.ZoomableView
 import com.byagowi.persiancalendar.ui.map.GLRenderer
 import com.byagowi.persiancalendar.ui.utils.createFlingDetector
 import com.byagowi.persiancalendar.ui.utils.dp
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackPress
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.resolveResourceIdFromTheme
 import com.byagowi.persiancalendar.ui.utils.sp
 import com.byagowi.persiancalendar.utils.TWO_SECONDS_IN_MILLIS
@@ -513,7 +513,7 @@ fun showFlingDemoDialog(activity: FragmentActivity) {
                 isWallHit = true
             }
             if (isWallHit) {
-                performHapticFeedbackPress()
+                performHapticFeedbackVirtualKey()
                 lifecycle.launch { playSoundTick(Random.nextDouble() * 20) }
             }
         }
@@ -1044,7 +1044,7 @@ fun showSpringDemoDialog(activity: FragmentActivity) {
                     verticalSpring.animateToFinalPosition(height / 2f)
 
                     val angle = atan2(y.value - height / 2f, x.value - width / 2f)
-                    performHapticFeedbackPress()
+                    performHapticFeedbackVirtualKey()
                     lifecycle.launch { playSoundTick(angle * 10.0) }
                 }
             }

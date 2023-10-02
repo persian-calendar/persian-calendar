@@ -30,7 +30,7 @@ import com.byagowi.persiancalendar.global.spacedComma
 import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.layoutInflater
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackPress
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.ui.utils.shareText
@@ -120,13 +120,13 @@ class ConverterScreen : Fragment(R.layout.converter_screen) {
                 pickerBinding.timeZone.displayedValues = zoneNames
                 pickerBinding.timeZone.value = zones.indexOf(timeZoneFlow.value)
                 pickerBinding.timeZone.setOnValueChangedListener { picker, _, index ->
-                    picker.performHapticFeedbackPress()
+                    picker.performHapticFeedbackVirtualKey()
                     if (timeZoneFlow == viewModel.firstTimeZone)
                         viewModel.changeFirstTimeZone(zones[index])
                     else viewModel.changeSecondTimeZone(zones[index])
                 }
                 pickerBinding.clock.setOnTimeChangedListener { view, hourOfDay, minute ->
-                    view.performHapticFeedbackPress()
+                    view.performHapticFeedbackVirtualKey()
                     viewModel.changeClock(hourOfDay, minute, timeZoneFlow.value)
                 }
             }

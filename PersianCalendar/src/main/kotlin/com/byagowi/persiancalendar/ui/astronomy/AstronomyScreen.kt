@@ -6,7 +6,6 @@ import android.graphics.PixelFormat
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
-import android.view.HapticFeedbackConstants
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,8 @@ import com.byagowi.persiancalendar.ui.utils.getCompatDrawable
 import com.byagowi.persiancalendar.ui.utils.isRtl
 import com.byagowi.persiancalendar.ui.utils.navigateSafe
 import com.byagowi.persiancalendar.ui.utils.onClick
-import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackPress
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackLongPress
+import com.byagowi.persiancalendar.ui.utils.performHapticFeedbackVirtualKey
 import com.byagowi.persiancalendar.ui.utils.setupLayoutTransition
 import com.byagowi.persiancalendar.ui.utils.setupMenuNavigation
 import com.byagowi.persiancalendar.utils.formatDateAndTime
@@ -241,7 +241,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
                 val current = System.currentTimeMillis()
                 if (current - lastButtonClickTimestamp > 2000) {
                     if (current >= latestVibration + 25_000_000 / abs(dx)) {
-                        binding.slider.performHapticFeedbackPress()
+                        binding.slider.performHapticFeedbackVirtualKey()
                         latestVibration = current
                     }
                     viewModel.addMinutesOffset((dx * viewDirection).toInt())
@@ -262,7 +262,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
         }
         binding.startArrow.rotateTo(ArrowView.Direction.START)
         binding.startArrow.setOnClickListener {
-            binding.startArrow.performHapticFeedbackPress()
+            binding.startArrow.performHapticFeedbackLongPress()
             buttonScrollSlider(-1)
         }
         binding.startArrow.setOnLongClickListener { buttonScrollSlider(-365) }
@@ -270,7 +270,7 @@ class AstronomyScreen : Fragment(R.layout.astronomy_screen) {
             getString(R.string.previous_x, getString(R.string.day))
         binding.endArrow.rotateTo(ArrowView.Direction.END)
         binding.endArrow.setOnClickListener {
-            binding.endArrow.performHapticFeedbackPress()
+            binding.endArrow.performHapticFeedbackLongPress()
             buttonScrollSlider(1)
         }
         binding.endArrow.setOnLongClickListener { buttonScrollSlider(365) }
