@@ -34,7 +34,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     private var daysAdapter: DaysAdapter? = null
 
     fun initialize(sharedDayViewData: SharedDayViewData, calendarPager: CalendarPager) {
-        daysAdapter = DaysAdapter(context, sharedDayViewData, calendarPager)
+        daysAdapter = DaysAdapter(context, sharedDayViewData, calendarPager, this)
         adapter = daysAdapter
         addCellSpacing((4 * resources.dp).toInt())
     }
@@ -48,7 +48,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         val sharedData = SharedDayViewData(
             context, height / 7f, min(width, height) / 7f, textColor
         )
-        daysAdapter = DaysAdapter(context, sharedData, null)
+        daysAdapter = DaysAdapter(context, sharedData, null, this)
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)
         bind(jdn, jdn.toCalendar(mainCalendar))
@@ -164,6 +164,6 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     }
 
     fun selectDay(dayOfMonth: Int) {
-        daysAdapter?.selectDay(dayOfMonth)
+        daysAdapter?.selectDayInternal(dayOfMonth)
     }
 }

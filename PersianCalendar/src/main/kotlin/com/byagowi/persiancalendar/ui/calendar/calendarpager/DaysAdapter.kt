@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 class DaysAdapter(
     private val context: Context, val sharedDayViewData: SharedDayViewData,
-    private val calendarPager: CalendarPager?
+    private val calendarPager: CalendarPager?, private val monthView: MonthView
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
     var days = emptyList<Jdn>()
@@ -41,7 +41,7 @@ class DaysAdapter(
         if (isShowDeviceCalendarEvents) monthDeviceEvents = context.readMonthDeviceEvents(days[0])
     }
 
-    internal fun selectDay(dayOfMonth: Int) {
+    internal fun selectDayInternal(dayOfMonth: Int) {
         val prevDay = selectedDayPosition
         selectedDayPosition = -1
         notifyItemChanged(prevDay)
@@ -81,7 +81,7 @@ class DaysAdapter(
             val itemDayView = (v as? DayView).debugAssertNotNull ?: return
             val jdn = itemDayView.jdn ?: return
             calendarPager?.let { it.onDayClicked(jdn) }
-            selectDay(itemDayView.dayOfMonth)
+            monthView.selectDay(itemDayView.dayOfMonth)
         }
 
         override fun onLongClick(v: View): Boolean {
