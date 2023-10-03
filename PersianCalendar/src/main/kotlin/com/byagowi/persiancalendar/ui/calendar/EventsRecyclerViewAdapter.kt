@@ -113,9 +113,11 @@ class EventsRecyclerViewAdapter(
             binding.title.text = text
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.root.setOnClickListener { onEventClick(event.id) }
+                binding.root.setOnLongClickListener(null)
                 binding.title.putLineEndIcon(openInNewIconCache[foregroundColor])
             } else {
-                binding.root.setOnClickListener { context?.copyToClipboard(text) }
+                binding.root.setOnClickListener(null)
+                binding.root.setOnLongClickListener { context?.copyToClipboard(text); true }
                 binding.title.putLineEndIcon(null)
             }
         }
