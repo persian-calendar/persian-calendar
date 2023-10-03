@@ -165,7 +165,7 @@ class CalendarPager(context: Context, attrs: AttributeSet? = null) : FrameLayout
                     }
                     binding.monthView.selectDay(
                         if (jdn != null && jdn >= monthStartJdn && jdn - monthStartJdn + 1 <= monthLength) jdn - monthStartJdn + 1
-                        else -1
+                        else null
                     )
                 }
 

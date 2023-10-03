@@ -35,24 +35,25 @@ class DaysAdapter(
     var weeksCount: Int = 0
 
     private var monthDeviceEvents: DeviceCalendarEventsStore = EventsStore.empty()
-    internal var selectedDayPosition = -1
+    private var selectedDayPosition: Int? = null
 
     fun initializeMonthEvents() {
         if (isShowDeviceCalendarEvents) monthDeviceEvents = context.readMonthDeviceEvents(days[0])
     }
 
-    internal fun selectDayInternal(dayOfMonth: Int): Int {
-        val prevDay = selectedDayPosition
-        selectedDayPosition = -1
-        notifyItemChanged(prevDay)
+    // Also returns recycler view position of the selected day view to use in the selection indicator
+    internal fun selectDayInternal(dayOfMonth: Int?): Int? {
+        selectedDayPosition?.let(::notifyItemChanged)
+        if (dayOfMonth == null) {
+            selectedDayPosition = null
+            return null
+        }
 
-        if (dayOfMonth == -1) return -1
-
-        selectedDayPosition = dayOfMonth + 6 + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
-
+        var selectedDayPosition = dayOfMonth + 6 + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
         if (isShowWeekOfYearEnabled) selectedDayPosition += selectedDayPosition / 7 + 1
 
         notifyItemChanged(selectedDayPosition)
+        this.selectedDayPosition = selectedDayPosition
         return selectedDayPosition
     }
 

@@ -107,7 +107,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         daysAdapter?.initializeMonthEvents()
     }
 
-    fun selectDay(dayOfMonth: Int) {
+    fun selectDay(dayOfMonth: Int?) {
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         val selectedDayPosition = daysAdapter.selectDayInternal(dayOfMonth)
         selectionIndicator.selectDay(selectedDayPosition)
@@ -118,7 +118,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     private var isCurrentlySelected = false
     private var currentX = 0f
     private var currentY = 0f
-    private var lastPosition = -1
+    private var lastPosition: Int? = null
     private var lastX = 0f
     private var lastY = 0f
     private var isReveal = false
@@ -137,8 +137,8 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         it.color = context.resolveColor(R.attr.colorSelectedDay)
     }
 
-    fun selectDay(selectedDayPosition: Int) {
-        if (selectedDayPosition == -1) {
+    fun selectDay(selectedDayPosition: Int?) {
+        if (selectedDayPosition == null) {
             if (isCurrentlySelected) {
                 isCurrentlySelected = false
                 hideAnimator.start()
@@ -154,7 +154,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     }
 
     fun onDraw(canvas: Canvas, recyclerView: RecyclerView) {
-        if (lastPosition == -1) return
+        val lastPosition = lastPosition ?: return
         val dayView =
             recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView ?: return
         if (isCurrentlySelected) {
