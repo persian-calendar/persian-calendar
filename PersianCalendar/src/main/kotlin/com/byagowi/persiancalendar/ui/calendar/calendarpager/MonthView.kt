@@ -73,13 +73,13 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     }
 
     private var monthName = ""
-    private var movableCircle = MovableCircle(context) { invalidate() }
+    private var selectionIndicator = SelectionIndicator(context) { invalidate() }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas) // This is important, don't remove it ever
 
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
-        movableCircle.onDraw(canvas, daysAdapter, this)
+        selectionIndicator.onDraw(canvas, daysAdapter, this)
 
         // Widget only tweak
         val widgetFooterTextPaint = daysAdapter.sharedDayViewData.widgetFooterTextPaint ?: return
@@ -110,76 +110,77 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     fun selectDay(dayOfMonth: Int) {
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         daysAdapter.selectDayInternal(dayOfMonth)
-        movableCircle.selectDay(dayOfMonth, daysAdapter)
+        // Below uses selectedDayPosition which is set in daysAdapter by above selectDayInternal call
+        selectionIndicator.selectDay(daysAdapter.selectedDayPosition)
     }
 }
 
-private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> Unit) {
-    private var currentSelectionPosition = -1
-    private var currentSelectionX = 0f
-    private var currentSelectionY = 0f
-    private var lastSelectionX = 0f
-    private var lastSelectionY = 0f
-    private var isSelectionReveal = false
+private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator) -> Unit) {
+    private var currentPosition = -1
+    private var currentX = 0f
+    private var currentY = 0f
+    private var lastX = 0f
+    private var lastY = 0f
+    private var isReveal = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = context.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
         it.interpolator = OvershootInterpolator(1.5f)
         it.addUpdateListener(invalidate)
-        it.doOnEnd { isSelectionReveal = false }
+        it.doOnEnd { isReveal = false }
     }
     private val hideAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         it.addUpdateListener(invalidate)
     }
-    private val selectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.FILL
         it.color = context.resolveColor(R.attr.colorSelectedDay)
     }
 
-    fun selectDay(dayOfMonth: Int, daysAdapter: DaysAdapter) {
-        if (dayOfMonth == -1) {
-            if (currentSelectionPosition != -1) {
-                currentSelectionPosition = -1
+    fun selectDay(selectedDayPosition: Int) {
+        if (selectedDayPosition == -1) {
+            if (currentPosition != -1) {
+                currentPosition = -1
                 hideAnimator.start()
             }
-            return
+        } else {
+            isReveal = currentPosition == -1
+            currentPosition = selectedDayPosition
+            currentX = lastX
+            currentY = lastY
+            transitionAnimator.start()
         }
-        isSelectionReveal = currentSelectionPosition == -1 && daysAdapter.selectedDayPosition != -1
-        currentSelectionPosition = daysAdapter.selectedDayPosition
-        currentSelectionX = lastSelectionX
-        currentSelectionY = lastSelectionY
-        transitionAnimator.start()
     }
 
     fun onDraw(canvas: Canvas, daysAdapter: DaysAdapter, recyclerView: RecyclerView) {
-        val selectedDayPosition = daysAdapter.selectedDayPosition
-        if (selectedDayPosition == -1 && currentSelectionPosition == -1 &&
+        val dayPosition = daysAdapter.selectedDayPosition
+        if (dayPosition == -1 && currentPosition == -1 &&
             hideAnimator.animatedFraction != 0f && hideAnimator.animatedFraction != 1f
         ) {
             val dayView = recyclerView.findViewHolderForAdapterPosition(0)?.itemView ?: return
             canvas.drawCircle(
-                lastSelectionX + dayView.width / 2f,
-                lastSelectionY + dayView.height / 2f,
+                lastX + dayView.width / 2f,
+                lastY + dayView.height / 2f,
                 DayView.radius(dayView) * (1 - hideAnimator.animatedFraction),
-                selectionPaint
+                paint
             )
-        } else if (selectedDayPosition != -1 && selectedDayPosition == currentSelectionPosition) {
+        } else if (dayPosition != -1 && dayPosition == currentPosition) {
             val dayView =
-                recyclerView.findViewHolderForAdapterPosition(selectedDayPosition)?.itemView
+                recyclerView.findViewHolderForAdapterPosition(dayPosition)?.itemView
                     ?: return
             val fraction = transitionAnimator.animatedFraction
-            lastSelectionX = MathUtils.lerp(
-                currentSelectionX, dayView.left * 1f, if (isSelectionReveal) 1f else fraction
+            lastX = MathUtils.lerp(
+                currentX, dayView.left * 1f, if (isReveal) 1f else fraction
             )
-            lastSelectionY = MathUtils.lerp(
-                currentSelectionY, dayView.top * 1f, if (isSelectionReveal) 1f else fraction
+            lastY = MathUtils.lerp(
+                currentY, dayView.top * 1f, if (isReveal) 1f else fraction
             )
             val radius = MathUtils.lerp(
-                0f, DayView.radius(dayView), if (isSelectionReveal) fraction else 1f
+                0f, DayView.radius(dayView), if (isReveal) fraction else 1f
             )
             canvas.drawCircle(
-                lastSelectionX + dayView.width / 2f, lastSelectionY + dayView.height / 2f,
-                radius, selectionPaint
+                lastX + dayView.width / 2f, lastY + dayView.height / 2f,
+                radius, paint
             )
         }
     }
