@@ -26,7 +26,7 @@ import com.byagowi.persiancalendar.variants.debugAssertNotNull
 
 class DaysAdapter(
     private val context: Context, val sharedDayViewData: SharedDayViewData,
-    private val calendarPager: CalendarPager?, private val monthView: MonthView
+    private val calendarPager: CalendarPager?
 ) : RecyclerView.Adapter<DaysAdapter.ViewHolder>() {
 
     var days = emptyList<Jdn>()
@@ -81,7 +81,6 @@ class DaysAdapter(
             val itemDayView = (v as? DayView).debugAssertNotNull ?: return
             val jdn = itemDayView.jdn ?: return
             calendarPager?.let { it.onDayClicked(jdn) }
-            monthView.selectDay(itemDayView.dayOfMonth)
         }
 
         override fun onLongClick(v: View): Boolean {

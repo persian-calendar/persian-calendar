@@ -20,6 +20,7 @@ import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.dp
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
+import com.byagowi.persiancalendar.variants.debugAssertNotNull
 import com.google.android.material.math.MathUtils
 import io.github.persiancalendar.calendar.AbstractDate
 import kotlin.math.min
@@ -35,7 +36,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     private var daysAdapter: DaysAdapter? = null
 
     fun initialize(sharedDayViewData: SharedDayViewData, calendarPager: CalendarPager) {
-        daysAdapter = DaysAdapter(context, sharedDayViewData, calendarPager, this)
+        daysAdapter = DaysAdapter(context, sharedDayViewData, calendarPager)
         adapter = daysAdapter
         addCellSpacing((4 * resources.dp).toInt())
     }
@@ -49,7 +50,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         val sharedData = SharedDayViewData(
             context, height / 7f, min(width, height) / 7f, textColor
         )
-        daysAdapter = DaysAdapter(context, sharedData, null, this)
+        daysAdapter = DaysAdapter(context, sharedData, null)
         adapter = daysAdapter
         val jdn = Jdn(mainCalendar, today.year, today.month, 1)
         bind(jdn, jdn.toCalendar(mainCalendar))
@@ -75,7 +76,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas) // This is important, don't remove it ever
 
-        val daysAdapter = daysAdapter ?: return
+        val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         val sharedData = daysAdapter.sharedDayViewData
 
         movableCircle.onDraw(canvas, daysAdapter, sharedData, this)
@@ -107,7 +108,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     }
 
     fun selectDay(dayOfMonth: Int) {
-        val daysAdapter = daysAdapter ?: return
+        val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         daysAdapter.selectDayInternal(dayOfMonth)
         movableCircle.selectDay(dayOfMonth, daysAdapter, this)
     }
@@ -148,6 +149,8 @@ private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator)
                     ?: return
             lastSelectionX = dayView.left * 1f
             lastSelectionY = dayView.top * 1f
+        } else {
+            isSelectionReveal = false
         }
         currentSelectionX = lastSelectionX
         currentSelectionY = lastSelectionY
@@ -156,9 +159,7 @@ private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator)
     }
 
     fun onDraw(
-        canvas: Canvas,
-        daysAdapter: DaysAdapter,
-        sharedData: SharedDayViewData,
+        canvas: Canvas, daysAdapter: DaysAdapter, sharedData: SharedDayViewData,
         recyclerView: RecyclerView
     ) {
         val selectedDayPosition = daysAdapter.selectedDayPosition
@@ -172,8 +173,7 @@ private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator)
                 DayView.radius(dayView) * (1 - fadeAnimator.animatedFraction),
                 sharedData.selectedPaint
             )
-        }
-        if (selectedDayPosition == currentSelectionPosition) {
+        } else if (selectedDayPosition != -1 && selectedDayPosition == currentSelectionPosition) {
             val dayView =
                 recyclerView.findViewHolderForAdapterPosition(selectedDayPosition)?.itemView
                     ?: return
