@@ -2,8 +2,8 @@ package com.byagowi.persiancalendar.ui.calendar.calendarpager
 
 import android.animation.ValueAnimator
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
@@ -13,11 +13,13 @@ import androidx.core.animation.doOnEnd
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.byagowi.persiancalendar.R
 import com.byagowi.persiancalendar.entities.Jdn
 import com.byagowi.persiancalendar.global.isShowWeekOfYearEnabled
 import com.byagowi.persiancalendar.global.language
 import com.byagowi.persiancalendar.global.mainCalendar
 import com.byagowi.persiancalendar.ui.utils.dp
+import com.byagowi.persiancalendar.ui.utils.resolveColor
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.monthName
 import com.byagowi.persiancalendar.variants.debugAssertNotNull
@@ -71,18 +73,16 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     }
 
     private var monthName = ""
-    private var movableCircle = MovableCircle(resources) { invalidate() }
+    private var movableCircle = MovableCircle(context) { invalidate() }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas) // This is important, don't remove it ever
 
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
-        val sharedData = daysAdapter.sharedDayViewData
-
-        movableCircle.onDraw(canvas, daysAdapter, sharedData, this)
+        movableCircle.onDraw(canvas, daysAdapter, this)
 
         // Widget only tweak
-        val widgetFooterTextPaint = sharedData.widgetFooterTextPaint ?: return
+        val widgetFooterTextPaint = daysAdapter.sharedDayViewData.widgetFooterTextPaint ?: return
         canvas.drawText(monthName, width / 2f, height * .95f, widgetFooterTextPaint)
     }
 
@@ -114,7 +114,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     }
 }
 
-private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator) -> Unit) {
+private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> Unit) {
     private var currentSelectionPosition = -1
     private var currentSelectionX = 0f
     private var currentSelectionY = 0f
@@ -122,14 +122,18 @@ private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator)
     private var lastSelectionY = 0f
     private var isSelectionReveal = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+        it.duration = context.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
         it.interpolator = OvershootInterpolator(1.5f)
         it.addUpdateListener(invalidate)
         it.doOnEnd { isSelectionReveal = false }
     }
     private val fadeAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        it.duration = context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         it.addUpdateListener(invalidate)
+    }
+    private val selectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
+        it.style = Paint.Style.FILL
+        it.color = context.resolveColor(R.attr.colorSelectedDay)
     }
 
     fun selectDay(dayOfMonth: Int, daysAdapter: DaysAdapter, recyclerView: RecyclerView) {
@@ -158,10 +162,7 @@ private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator)
         currentSelectionPosition = selectedDayPosition
     }
 
-    fun onDraw(
-        canvas: Canvas, daysAdapter: DaysAdapter, sharedData: SharedDayViewData,
-        recyclerView: RecyclerView
-    ) {
+    fun onDraw(canvas: Canvas, daysAdapter: DaysAdapter, recyclerView: RecyclerView) {
         val selectedDayPosition = daysAdapter.selectedDayPosition
         if (selectedDayPosition == -1 && currentSelectionPosition == -1 &&
             fadeAnimator.animatedFraction != 0f && fadeAnimator.animatedFraction != 1f
@@ -171,7 +172,7 @@ private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator)
                 lastSelectionX + dayView.width / 2f,
                 lastSelectionY + dayView.height / 2f,
                 DayView.radius(dayView) * (1 - fadeAnimator.animatedFraction),
-                sharedData.selectedPaint
+                selectionPaint
             )
         } else if (selectedDayPosition != -1 && selectedDayPosition == currentSelectionPosition) {
             val dayView =
@@ -187,7 +188,7 @@ private class MovableCircle(resources: Resources, invalidate: (_: ValueAnimator)
                 lastSelectionX + dayView.width / 2f,
                 lastSelectionY + dayView.height / 2f,
                 radius,
-                sharedData.selectedPaint
+                selectionPaint
             )
         }
     }

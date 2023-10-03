@@ -46,11 +46,6 @@ class SharedDayViewData(
         it.color = widgetTextColor ?: context.resolveColor(R.attr.colorEventIndicator)
     }
 
-    val selectedPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
-        it.style = Paint.Style.FILL
-        it.color = context.resolveColor(R.attr.colorSelectedDay)
-    }
-
     val todayPaint = Paint(Paint.ANTI_ALIAS_FLAG).also {
         it.style = Paint.Style.STROKE
         it.strokeWidth = 1 * dp
