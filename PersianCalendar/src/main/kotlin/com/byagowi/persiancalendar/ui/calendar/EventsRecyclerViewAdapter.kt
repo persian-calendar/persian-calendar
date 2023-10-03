@@ -111,13 +111,12 @@ class EventsRecyclerViewAdapter(
                 context.getString(R.string.holiday_reason, event.title) else text
 
             binding.title.text = text
+            binding.root.setOnLongClickListener { context?.copyToClipboard(text); true }
             if (event is CalendarEvent.DeviceCalendarEvent) {
                 binding.root.setOnClickListener { onEventClick(event.id) }
-                binding.root.setOnLongClickListener(null)
                 binding.title.putLineEndIcon(openInNewIconCache[foregroundColor])
             } else {
                 binding.root.setOnClickListener(null)
-                binding.root.setOnLongClickListener { context?.copyToClipboard(text); true }
                 binding.title.putLineEndIcon(null)
             }
         }
