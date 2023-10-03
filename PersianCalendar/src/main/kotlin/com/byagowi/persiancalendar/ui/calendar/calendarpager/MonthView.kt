@@ -118,6 +118,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     private var isCurrentlySelected = false
     private var currentX = 0f
     private var currentY = 0f
+    // Last position, regardless of being selected right now or not
     private var lastPosition: Int? = null
     private var lastX = 0f
     private var lastY = 0f
