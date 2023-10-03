@@ -36,24 +36,24 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
 
     override fun onDraw(canvas: Canvas) {
         // How much it should be similar to qr vs previousQr, 1 for qr, 0 for previousQr
-        val transitionFactor = transitionAnimator.animatedValue as? Float ?: 1f
+        val transitionFactor = transitionAnimator.animatedFraction
         drawQr(canvas, viewSize, transitionFactor, qr, previousQr)
     }
 
-    private var animator: ValueAnimator? = null
+    private var roundnessAnimator = ValueAnimator.ofFloat(
+        roundness, if (roundness > .5f) 0f else 1f
+    ).also {
+        it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+        it.interpolator = AccelerateDecelerateInterpolator()
+        it.addUpdateListener { _ ->
+            roundness = it.animatedFraction
+            invalidate()
+        }
+    }
 
     init {
         setOnClickListener {
-            animator?.cancel()
-            ValueAnimator.ofFloat(roundness, if (roundness > .5f) 0f else 1f).also {
-                animator = it
-                it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-                it.interpolator = AccelerateDecelerateInterpolator()
-                it.addUpdateListener { _ ->
-                    roundness = it.animatedValue as? Float ?: return@addUpdateListener
-                    invalidate()
-                }
-            }.start()
+            if (roundness < .5f) roundnessAnimator.start() else roundnessAnimator.reverse()
         }
 
         // Show something in Android Studio preview
@@ -130,19 +130,17 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         )
     }
 
-    private var transitionAnimator = ValueAnimator.ofFloat(0f, 1f)
+    private var transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
+        it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+        it.interpolator = OvershootInterpolator()
+        it.addUpdateListener { invalidate() }
+    }
 
     fun update(text: String) {
         runCatching {
             previousQr = qr
             qr = qr(text)
-            transitionAnimator.cancel()
-            transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
-                it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-                it.interpolator = OvershootInterpolator()
-                it.start()
-                it.addUpdateListener { invalidate() }
-            }
+            transitionAnimator.start()
             if (!isVisible) isVisible = true
             invalidate()
         }.onFailure(logException).onFailure {

@@ -49,6 +49,7 @@ import com.google.android.material.snackbar.Snackbar
 import java.util.GregorianCalendar
 import kotlin.math.abs
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 /**
  * Compass/Qibla activity
@@ -226,12 +227,10 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         }
         if (BuildConfig.DEVELOPMENT) {
             binding.appBar.toolbar.menu.add("Do a rotation").onClick {
-                ValueAnimator.ofFloat(0f, 360f).also {
-                    it.duration = TEN_SECONDS_IN_MILLIS
-                    it.addUpdateListener { _ ->
-                        binding.compassView.angle = it.animatedValue as? Float ?: 0f
-                    }
-                }.start()
+                val animator = ValueAnimator.ofFloat(0f, 1f)
+                animator.duration = TEN_SECONDS_IN_MILLIS
+                animator.addUpdateListener { binding.compassView.angle = it.animatedFraction * 360 }
+                if (Random.nextBoolean()) animator.start() else animator.reverse()
             }
         }
 
@@ -295,16 +294,16 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
         stopAnimator = false
         val binding = binding ?: return
         binding.timeSlider.isVisible = true
-        val valueAnimator = ValueAnimator.ofFloat(0f, 24f)
-        valueAnimator.duration = 10000
-        valueAnimator.interpolator = AccelerateDecelerateInterpolator()
-        valueAnimator.addUpdateListener {
-            if (stopAnimator) valueAnimator.removeAllUpdateListeners() else {
-                val value = valueAnimator.animatedValue as? Float ?: 0f
+        val animator = ValueAnimator.ofFloat(0f, 1f)
+        animator.duration = 10000
+        animator.interpolator = AccelerateDecelerateInterpolator()
+        animator.addUpdateListener {
+            if (stopAnimator) animator.removeAllUpdateListeners() else {
+                val value = animator.animatedFraction * 24f
                 binding.timeSlider.value = if (value == 24f) 0f else value
             }
         }
-        valueAnimator.start()
+        animator.start()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

@@ -24,13 +24,13 @@ fun setAthanActivityContent(activity: ComponentActivity, prayerKey: String, onCl
         val pattern = PatternDrawable(
             prayerKey, darkBaseColor = Theme.isNightMode(activity), dp = activity.resources.dp
         )
-        val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
+        val valueAnimator = ValueAnimator.ofFloat(0f, 1f).also {
             it.duration = 180000L
             it.interpolator = LinearInterpolator()
             it.repeatMode = ValueAnimator.RESTART
             it.repeatCount = ValueAnimator.INFINITE
             it.addUpdateListener { valueAnimator ->
-                pattern.rotationDegree = valueAnimator.animatedValue as? Float ?: 0f
+                pattern.rotationDegree = valueAnimator.animatedFraction * 360
                 pattern.invalidateSelf()
             }
             listOf(it::start, it::reverse).random()()

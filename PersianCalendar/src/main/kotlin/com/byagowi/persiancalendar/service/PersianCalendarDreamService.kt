@@ -27,7 +27,7 @@ import kotlin.random.Random
 
 class PersianCalendarDreamService : DreamService() {
 
-    private val valueAnimator = ValueAnimator.ofFloat(0f, 360f).also {
+    private val valueAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = 360000L
         it.interpolator = LinearInterpolator()
         it.repeatMode = ValueAnimator.RESTART
@@ -70,7 +70,7 @@ class PersianCalendarDreamService : DreamService() {
             )
             it.background = pattern
             valueAnimator.addUpdateListener {
-                pattern.rotationDegree = valueAnimator.animatedValue as? Float ?: 0f
+                pattern.rotationDegree = valueAnimator.animatedFraction * 360f
                 pattern.invalidateSelf()
             }
             it.setOnClickListener {

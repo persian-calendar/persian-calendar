@@ -55,6 +55,7 @@ import com.byagowi.persiancalendar.utils.appPrefs
 import com.byagowi.persiancalendar.utils.formatNumber
 import com.byagowi.persiancalendar.utils.isIslamicOffsetExpired
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlin.random.Random
 
 class InterfaceCalendarFragment : PreferenceFragmentCompat(),
     SharedPreferences.OnSharedPreferenceChangeListener {
@@ -124,13 +125,11 @@ class InterfaceCalendarFragment : PreferenceFragmentCompat(),
                     showCalendarPreferenceDialog(activity, onEmpty = {
                         // Easter egg when empty result is rejected
                         val view = view?.rootView ?: return@showCalendarPreferenceDialog
-                        ValueAnimator.ofFloat(0f, 360f).also {
-                            it.duration = 3000L
-                            it.interpolator = AccelerateDecelerateInterpolator()
-                            it.addUpdateListener { value ->
-                                view.rotation = value.animatedValue as? Float ?: 0f
-                            }
-                        }.start()
+                        val animator = ValueAnimator.ofFloat(0f, 1f)
+                        animator.duration = 3000L
+                        animator.interpolator = AccelerateDecelerateInterpolator()
+                        animator.addUpdateListener { view.rotation = it.animatedFraction * 360f }
+                        if (Random.nextBoolean()) animator.start() else animator.reverse()
                     })
                 }) {
                     title(R.string.calendars_priority)
