@@ -41,18 +41,19 @@ class DaysAdapter(
         if (isShowDeviceCalendarEvents) monthDeviceEvents = context.readMonthDeviceEvents(days[0])
     }
 
-    internal fun selectDayInternal(dayOfMonth: Int) {
+    internal fun selectDayInternal(dayOfMonth: Int): Int {
         val prevDay = selectedDayPosition
         selectedDayPosition = -1
         notifyItemChanged(prevDay)
 
-        if (dayOfMonth == -1) return
+        if (dayOfMonth == -1) return -1
 
         selectedDayPosition = dayOfMonth + 6 + applyWeekStartOffsetToWeekDay(startingDayOfWeek)
 
         if (isShowWeekOfYearEnabled) selectedDayPosition += selectedDayPosition / 7 + 1
 
         notifyItemChanged(selectedDayPosition)
+        return selectedDayPosition
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(

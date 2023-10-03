@@ -79,7 +79,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
         super.onDraw(canvas) // This is important, don't remove it ever
 
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
-        selectionIndicator.onDraw(canvas, daysAdapter, this)
+        selectionIndicator.onDraw(canvas, this)
 
         // Widget only tweak
         val widgetFooterTextPaint = daysAdapter.sharedDayViewData.widgetFooterTextPaint ?: return
@@ -109,9 +109,8 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
 
     fun selectDay(dayOfMonth: Int) {
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
-        daysAdapter.selectDayInternal(dayOfMonth)
-        // Below uses selectedDayPosition which is set in daysAdapter by above selectDayInternal call
-        selectionIndicator.selectDay(daysAdapter.selectedDayPosition)
+        val selectedDayPosition = daysAdapter.selectDayInternal(dayOfMonth)
+        selectionIndicator.selectDay(selectedDayPosition)
     }
 }
 
@@ -119,6 +118,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     private var currentPosition = -1
     private var currentX = 0f
     private var currentY = 0f
+    private var lastPosition = -1
     private var lastX = 0f
     private var lastY = 0f
     private var isReveal = false
@@ -145,6 +145,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
             }
         } else {
             isReveal = currentPosition == -1
+            lastPosition = selectedDayPosition
             currentPosition = selectedDayPosition
             currentX = lastX
             currentY = lastY
@@ -152,22 +153,10 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         }
     }
 
-    fun onDraw(canvas: Canvas, daysAdapter: DaysAdapter, recyclerView: RecyclerView) {
-        val dayPosition = daysAdapter.selectedDayPosition
-        if (dayPosition == -1 && currentPosition == -1 &&
-            hideAnimator.animatedFraction != 0f && hideAnimator.animatedFraction != 1f
-        ) {
-            val dayView = recyclerView.findViewHolderForAdapterPosition(0)?.itemView ?: return
-            canvas.drawCircle(
-                lastX + dayView.width / 2f,
-                lastY + dayView.height / 2f,
-                DayView.radius(dayView) * (1 - hideAnimator.animatedFraction),
-                paint
-            )
-        } else if (dayPosition != -1 && dayPosition == currentPosition) {
-            val dayView =
-                recyclerView.findViewHolderForAdapterPosition(dayPosition)?.itemView
-                    ?: return
+    fun onDraw(canvas: Canvas, recyclerView: RecyclerView) {
+        if (currentPosition != -1) {
+            val dayView = recyclerView.findViewHolderForAdapterPosition(currentPosition)?.itemView
+                ?: return
             val fraction = transitionAnimator.animatedFraction
             lastX = MathUtils.lerp(
                 currentX, dayView.left * 1f, if (isReveal) 1f else fraction
@@ -179,8 +168,14 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
                 0f, DayView.radius(dayView), if (isReveal) fraction else 1f
             )
             canvas.drawCircle(
-                lastX + dayView.width / 2f, lastY + dayView.height / 2f,
-                radius, paint
+                lastX + dayView.width / 2f, lastY + dayView.height / 2f, radius, paint
+            )
+        } else if (hideAnimator.isRunning) {
+            val dayView = recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView
+                ?: return
+            canvas.drawCircle(
+                dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
+                DayView.radius(dayView) * (1 - hideAnimator.animatedFraction), paint
             )
         }
     }
