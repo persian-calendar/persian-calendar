@@ -51,28 +51,30 @@ class SolarView(context: Context, attrs: AttributeSet? = null) : ZoomableView(co
         invalidate()
     }
 
+    private val tropicalAnimator = ValueAnimator.ofFloat(0f, 1f).also { animator ->
+        animator.duration =
+            resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
+        animator.interpolator = AccelerateDecelerateInterpolator()
+        animator.addUpdateListener { _ ->
+            val fraction = animator.animatedFraction
+            monthsIndicator.color =
+                ColorUtils.setAlphaComponent(0x808080, (0x78 * fraction).roundToInt())
+            ranges.indices.forEach {
+                ranges[it][0] = MathUtils.lerp(
+                    iauRanges[it][0], tropicalRanges[it][0], fraction
+                )
+                ranges[it][1] = MathUtils.lerp(
+                    iauRanges[it][1], tropicalRanges[it][1], fraction
+                )
+            }
+            invalidate()
+        }
+    }
+
     var isTropicalDegree = false
         set(value) {
             if (value == field) return
-            ValueAnimator.ofFloat(if (value) 0f else 1f, if (value) 1f else 0f).also { animator ->
-                animator.duration =
-                    resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-                animator.interpolator = AccelerateDecelerateInterpolator()
-                animator.addUpdateListener { _ ->
-                    val fraction = animator.animatedValue as? Float ?: 0f
-                    monthsIndicator.color =
-                        ColorUtils.setAlphaComponent(0x808080, (0x78 * fraction).roundToInt())
-                    ranges.indices.forEach {
-                        ranges[it][0] = MathUtils.lerp(
-                            iauRanges[it][0], tropicalRanges[it][0], fraction
-                        )
-                        ranges[it][1] = MathUtils.lerp(
-                            iauRanges[it][1], tropicalRanges[it][1], fraction
-                        )
-                    }
-                    invalidate()
-                }
-            }.start()
+            if (value) tropicalAnimator.start() else tropicalAnimator.reverse()
             field = value
         }
     private val tropicalRanges = Zodiac.entries.map { it.tropicalRange.map(Double::toFloat) }
