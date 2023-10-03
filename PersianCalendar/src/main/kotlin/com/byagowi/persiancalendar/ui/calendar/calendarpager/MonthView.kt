@@ -115,7 +115,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
 }
 
 private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator) -> Unit) {
-    private var currentPosition = -1
+    private var isCurrentlySelected = false
     private var currentX = 0f
     private var currentY = 0f
     private var lastPosition = -1
@@ -139,14 +139,14 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
 
     fun selectDay(selectedDayPosition: Int) {
         if (selectedDayPosition == -1) {
-            if (currentPosition != -1) {
-                currentPosition = -1
+            if (isCurrentlySelected) {
+                isCurrentlySelected = false
                 hideAnimator.start()
             }
         } else {
-            isReveal = currentPosition == -1
+            isReveal = !isCurrentlySelected
+            isCurrentlySelected = true
             lastPosition = selectedDayPosition
-            currentPosition = selectedDayPosition
             currentX = lastX
             currentY = lastY
             transitionAnimator.start()
@@ -154,9 +154,10 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     }
 
     fun onDraw(canvas: Canvas, recyclerView: RecyclerView) {
-        if (currentPosition != -1) {
-            val dayView = recyclerView.findViewHolderForAdapterPosition(currentPosition)?.itemView
-                ?: return
+        if (lastPosition == -1) return
+        val dayView =
+            recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView ?: return
+        if (isCurrentlySelected) {
             val fraction = transitionAnimator.animatedFraction
             lastX = if (isReveal) dayView.left.toFloat() else
                 MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
@@ -168,8 +169,6 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
                 lastX + dayView.width / 2f, lastY + dayView.height / 2f, radius, paint
             )
         } else if (hideAnimator.isRunning) {
-            val dayView = recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView
-                ?: return
             canvas.drawCircle(
                 dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
                 DayView.radius(dayView) * (1 - hideAnimator.animatedFraction), paint
