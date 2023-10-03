@@ -158,15 +158,12 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
             val dayView = recyclerView.findViewHolderForAdapterPosition(currentPosition)?.itemView
                 ?: return
             val fraction = transitionAnimator.animatedFraction
-            lastX = MathUtils.lerp(
-                currentX, dayView.left * 1f, if (isReveal) 1f else fraction
-            )
-            lastY = MathUtils.lerp(
-                currentY, dayView.top * 1f, if (isReveal) 1f else fraction
-            )
-            val radius = MathUtils.lerp(
-                0f, DayView.radius(dayView), if (isReveal) fraction else 1f
-            )
+            lastX = if (isReveal) dayView.left.toFloat() else
+                MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
+            lastY = if (isReveal) dayView.top.toFloat() else
+                MathUtils.lerp(currentY, dayView.top.toFloat(), fraction)
+            val radius = if (isReveal) MathUtils.lerp(0f, DayView.radius(dayView), fraction) else
+                DayView.radius(dayView)
             canvas.drawCircle(
                 lastX + dayView.width / 2f, lastY + dayView.height / 2f, radius, paint
             )
