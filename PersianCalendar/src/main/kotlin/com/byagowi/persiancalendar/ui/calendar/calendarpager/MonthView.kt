@@ -110,7 +110,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     fun selectDay(dayOfMonth: Int) {
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         daysAdapter.selectDayInternal(dayOfMonth)
-        movableCircle.selectDay(dayOfMonth, daysAdapter, this)
+        movableCircle.selectDay(dayOfMonth, daysAdapter)
     }
 }
 
@@ -136,7 +136,7 @@ private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> 
         it.color = context.resolveColor(R.attr.colorSelectedDay)
     }
 
-    fun selectDay(dayOfMonth: Int, daysAdapter: DaysAdapter, recyclerView: RecyclerView) {
+    fun selectDay(dayOfMonth: Int, daysAdapter: DaysAdapter) {
         if (dayOfMonth == -1) {
             if (currentSelectionPosition != -1) {
                 currentSelectionPosition = -1
@@ -144,22 +144,11 @@ private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> 
             }
             return
         }
-
-        val selectedDayPosition = daysAdapter.selectedDayPosition
-        if (currentSelectionPosition == -1) {
-            isSelectionReveal = true
-            val dayView =
-                recyclerView.findViewHolderForAdapterPosition(selectedDayPosition)?.itemView
-                    ?: return
-            lastSelectionX = dayView.left * 1f
-            lastSelectionY = dayView.top * 1f
-        } else {
-            isSelectionReveal = false
-        }
+        isSelectionReveal = currentSelectionPosition == -1 && daysAdapter.selectedDayPosition != -1
+        currentSelectionPosition = daysAdapter.selectedDayPosition
         currentSelectionX = lastSelectionX
         currentSelectionY = lastSelectionY
         transitionAnimator.start()
-        currentSelectionPosition = selectedDayPosition
     }
 
     fun onDraw(canvas: Canvas, daysAdapter: DaysAdapter, recyclerView: RecyclerView) {
@@ -179,16 +168,18 @@ private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> 
                 recyclerView.findViewHolderForAdapterPosition(selectedDayPosition)?.itemView
                     ?: return
             val fraction = transitionAnimator.animatedFraction
-            lastSelectionX = MathUtils.lerp(currentSelectionX, dayView.left * 1f, fraction)
-            lastSelectionY = MathUtils.lerp(currentSelectionY, dayView.top * 1f, fraction)
+            lastSelectionX = MathUtils.lerp(
+                currentSelectionX, dayView.left * 1f, if (isSelectionReveal) 1f else fraction
+            )
+            lastSelectionY = MathUtils.lerp(
+                currentSelectionY, dayView.top * 1f, if (isSelectionReveal) 1f else fraction
+            )
             val radius = MathUtils.lerp(
                 0f, DayView.radius(dayView), if (isSelectionReveal) fraction else 1f
             )
             canvas.drawCircle(
-                lastSelectionX + dayView.width / 2f,
-                lastSelectionY + dayView.height / 2f,
-                radius,
-                selectionPaint
+                lastSelectionX + dayView.width / 2f, lastSelectionY + dayView.height / 2f,
+                radius, selectionPaint
             )
         }
     }
