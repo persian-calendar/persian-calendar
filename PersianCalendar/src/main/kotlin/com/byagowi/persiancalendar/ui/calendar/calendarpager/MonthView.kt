@@ -127,7 +127,7 @@ private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> 
         it.addUpdateListener(invalidate)
         it.doOnEnd { isSelectionReveal = false }
     }
-    private val fadeAnimator = ValueAnimator.ofFloat(0f, 1f).also {
+    private val hideAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = context.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         it.addUpdateListener(invalidate)
     }
@@ -140,7 +140,7 @@ private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> 
         if (dayOfMonth == -1) {
             if (currentSelectionPosition != -1) {
                 currentSelectionPosition = -1
-                fadeAnimator.start()
+                hideAnimator.start()
             }
             return
         }
@@ -154,13 +154,13 @@ private class MovableCircle(context: Context, invalidate: (_: ValueAnimator) -> 
     fun onDraw(canvas: Canvas, daysAdapter: DaysAdapter, recyclerView: RecyclerView) {
         val selectedDayPosition = daysAdapter.selectedDayPosition
         if (selectedDayPosition == -1 && currentSelectionPosition == -1 &&
-            fadeAnimator.animatedFraction != 0f && fadeAnimator.animatedFraction != 1f
+            hideAnimator.animatedFraction != 0f && hideAnimator.animatedFraction != 1f
         ) {
             val dayView = recyclerView.findViewHolderForAdapterPosition(0)?.itemView ?: return
             canvas.drawCircle(
                 lastSelectionX + dayView.width / 2f,
                 lastSelectionY + dayView.height / 2f,
-                DayView.radius(dayView) * (1 - fadeAnimator.animatedFraction),
+                DayView.radius(dayView) * (1 - hideAnimator.animatedFraction),
                 selectionPaint
             )
         } else if (selectedDayPosition != -1 && selectedDayPosition == currentSelectionPosition) {
