@@ -26,8 +26,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private var holiday = false
     var jdn: Jdn? = null
         private set
-    var dayOfMonth = -1
-        private set
     private var isWeekNumber = false
     private var header = ""
 
@@ -99,7 +97,7 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
     private fun setAll(
         text: String, isToday: Boolean = false, isSelected: Boolean = false,
         hasEvent: Boolean = false, hasAppointment: Boolean = false, isHoliday: Boolean = false,
-        jdn: Jdn? = null, dayOfMonth: Int = -1, header: String? = null,
+        jdn: Jdn? = null, dayOfMonth: Int? = null, header: String? = null,
         isWeekNumber: Boolean = false
     ) {
         this.text = text
@@ -107,7 +105,6 @@ class DayView(context: Context, attrs: AttributeSet? = null) : View(context, att
         this.dayIsSelected = isSelected
         this.holiday = isHoliday
         this.jdn = jdn
-        this.dayOfMonth = dayOfMonth
         this.isWeekNumber = isWeekNumber
         val secondaryCalendar = secondaryCalendar
         this.header = listOfNotNull(
