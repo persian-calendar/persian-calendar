@@ -40,9 +40,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         drawQr(canvas, viewSize, transitionFactor, qr, previousQr)
     }
 
-    private var roundnessAnimator = ValueAnimator.ofFloat(
-        roundness, if (roundness > .5f) 0f else 1f
-    ).also {
+    private val roundnessAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
         it.interpolator = AccelerateDecelerateInterpolator()
         it.addUpdateListener { _ ->
@@ -130,7 +128,7 @@ class QrView(context: Context, attrs: AttributeSet? = null) : View(context, attr
         )
     }
 
-    private var transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
+    private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
         it.interpolator = OvershootInterpolator()
         it.addUpdateListener { invalidate() }
