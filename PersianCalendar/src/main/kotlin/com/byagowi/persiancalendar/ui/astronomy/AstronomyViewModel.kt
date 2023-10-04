@@ -44,21 +44,20 @@ class AstronomyViewModel : ViewModel() {
         _astronomyState.value = AstronomyState(dateSink)
     }
 
-    private var animator: ValueAnimator? = null
-    private val interpolator = AccelerateDecelerateInterpolator()
+    private val animator = ValueAnimator().also {
+        it.duration = 400 // android.R.integer.config_mediumAnimTime
+        it.interpolator = AccelerateDecelerateInterpolator()
+        it.addUpdateListener { _ -> setAstronomyState(it.animatedValue as? Int ?: 0) }
+    }
+
     fun animateToAbsoluteMinutesOffset(value: Int) {
-        animator?.removeAllUpdateListeners()
-        ValueAnimator.ofInt(
+        animator.setIntValues(
             // If the animation is still going on use its current value to not have jumps
-            if (animator?.isRunning == true) animator?.animatedValue as? Int ?: 0
+            if (animator.isRunning) animator.animatedValue as? Int ?: 0
             else _minutesOffset.value,
             value
-        ).also {
-            animator = it
-            it.duration = 400 // android.R.integer.config_mediumAnimTime
-            it.interpolator = interpolator
-            it.addUpdateListener { _ -> setAstronomyState(it.animatedValue as? Int ?: 0) }
-        }.start()
+        )
+        animator.start()
         _minutesOffset.value = value
     }
 
