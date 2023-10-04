@@ -43,7 +43,7 @@ jobs:
           path: "*/build/reports"
 
   test-android:
-    runs-on: macos-latest
+    runs-on: macos-latest-xlarge
     strategy:
       fail-fast: false
       matrix:
