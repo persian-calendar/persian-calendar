@@ -13,7 +13,6 @@ import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -260,7 +259,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
 
             @SuppressLint("RestrictedApi")
             override fun onStartTrackingTouch(slider: Slider) {
-                stopAnimator = true
+                animator.cancel()
             }
         })
 
@@ -288,21 +287,16 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
             .getString(if (stop) R.string.resume else R.string.stop)
     }
 
-    private var stopAnimator: Boolean = false
+    private val animator = ValueAnimator.ofFloat(0f, 1f).also {
+        it.duration = 10000
+        it.addUpdateListener { animator ->
+            val value = animator.animatedFraction * 24f
+            binding?.timeSlider?.value = if (value == 24f) 0f else value
+        }
+    }
 
     private fun animateMoonAndSun() {
-        stopAnimator = false
-        val binding = binding ?: return
-        binding.timeSlider.isVisible = true
-        val animator = ValueAnimator.ofFloat(0f, 1f)
-        animator.duration = 10000
-        animator.interpolator = AccelerateDecelerateInterpolator()
-        animator.addUpdateListener {
-            if (stopAnimator) animator.removeAllUpdateListeners() else {
-                val value = animator.animatedFraction * 24f
-                binding.timeSlider.value = if (value == 24f) 0f else value
-            }
-        }
+        binding?.timeSlider?.isVisible = true
         animator.start()
     }
 
@@ -360,7 +354,7 @@ class CompassScreen : Fragment(R.layout.compass_screen) {
     }
 
     override fun onPause() {
-        stopAnimator = true
+        animator.cancel()
         if (orientationSensor != null)
             sensorManager?.unregisterListener(orientationSensorListener)
         else if (accelerometerSensor != null && magnetometerSensor != null)

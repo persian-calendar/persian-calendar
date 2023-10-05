@@ -11,7 +11,7 @@ class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageVi
         setImageResource(androidx.preference.R.drawable.ic_arrow_down_24dp)
     }
 
-    private var animator = ValueAnimator().also {
+    private val animator = ValueAnimator().also {
         it.duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         it.addUpdateListener { v -> applyRotation(v.animatedValue as? Float ?: 0f) }
     }
