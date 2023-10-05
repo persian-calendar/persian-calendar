@@ -15,8 +15,10 @@ class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageVi
         it.duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
         it.addUpdateListener { v -> applyRotation(v.animatedValue as? Float ?: 0f) }
     }
+    private var lastDegree = 0f
     private var isRtl = false
     private fun applyRotation(degree: Float) {
+        lastDegree = degree
         rotation = if (isRtl) -degree else degree
     }
 
@@ -25,7 +27,7 @@ class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageVi
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
-        applyRotation(animator.animatedValue as? Float ?: 0f)
+        applyRotation(lastDegree)
     }
 
     fun animateTo(direction: Direction) {
