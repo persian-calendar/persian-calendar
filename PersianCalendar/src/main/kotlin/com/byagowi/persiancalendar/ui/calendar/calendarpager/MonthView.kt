@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.LinearInterpolator
 import android.view.animation.OvershootInterpolator
 import androidx.annotation.ColorInt
 import androidx.core.animation.doOnEnd
@@ -76,7 +77,7 @@ class MonthView(context: Context, attrs: AttributeSet? = null) : RecyclerView(co
     private var selectionIndicator = SelectionIndicator(context) { invalidate() }
 
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas) // This is important, don't remove it ever
+        super.onDraw(canvas)
 
         val daysAdapter = daysAdapter.debugAssertNotNull ?: return
         selectionIndicator.onDraw(canvas, this)
@@ -125,7 +126,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
     private var isReveal = false
     private val transitionAnimator = ValueAnimator.ofFloat(0f, 1f).also {
         it.duration = context.resources.getInteger(android.R.integer.config_mediumAnimTime).toLong()
-        it.interpolator = OvershootInterpolator(1.5f)
+        it.interpolator = LinearInterpolator()
         it.addUpdateListener(invalidate)
         it.doOnEnd { isReveal = false }
     }
@@ -137,6 +138,7 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         it.style = Paint.Style.FILL
         it.color = context.resolveColor(R.attr.colorSelectedDay)
     }
+    private val interpolators = listOf(1.25f, 1f).map(::OvershootInterpolator)
 
     fun selectDay(selectedDayPosition: Int?) {
         if (selectedDayPosition == null) {
@@ -159,16 +161,19 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         val dayView =
             recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView ?: return
         if (isCurrentlySelected) {
-            val fraction = transitionAnimator.animatedFraction
-            lastX = if (isReveal) dayView.left.toFloat() else
-                MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
-            lastY = if (isReveal) dayView.top.toFloat() else
-                MathUtils.lerp(currentY, dayView.top.toFloat(), fraction)
-            val radius = if (isReveal) MathUtils.lerp(0f, DayView.radius(dayView), fraction) else
-                DayView.radius(dayView)
-            canvas.drawCircle(
-                lastX + dayView.width / 2f, lastY + dayView.height / 2f, radius, paint
-            )
+            interpolators.forEach { interpolator ->
+                val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
+                lastX = if (isReveal) dayView.left.toFloat() else
+                    MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
+                lastY = if (isReveal) dayView.top.toFloat() else
+                    MathUtils.lerp(currentY, dayView.top.toFloat(), fraction)
+                val radius =
+                    if (isReveal) MathUtils.lerp(0f, DayView.radius(dayView), fraction) else
+                        DayView.radius(dayView)
+                canvas.drawCircle(
+                    lastX + dayView.width / 2f, lastY + dayView.height / 2f, radius, paint
+                )
+            }
         } else if (hideAnimator.isRunning) {
             canvas.drawCircle(
                 dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
