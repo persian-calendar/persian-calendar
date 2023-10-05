@@ -138,7 +138,8 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         it.style = Paint.Style.FILL
         it.color = context.resolveColor(R.attr.colorSelectedDay)
     }
-    private val interpolators = listOf(1.25f, 1f).map(::OvershootInterpolator)
+    private val interpolators = listOf(1f, 1.25f).map(::OvershootInterpolator)
+    private val revealInterpolator = OvershootInterpolator(1.5f)
 
     fun selectDay(selectedDayPosition: Int?) {
         if (selectedDayPosition == null) {
@@ -161,17 +162,21 @@ private class SelectionIndicator(context: Context, invalidate: (_: ValueAnimator
         val dayView =
             recyclerView.findViewHolderForAdapterPosition(lastPosition)?.itemView ?: return
         if (isCurrentlySelected) {
-            interpolators.forEach { interpolator ->
-                val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
-                lastX = if (isReveal) dayView.left.toFloat() else
-                    MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
-                lastY = if (isReveal) dayView.top.toFloat() else
-                    MathUtils.lerp(currentY, dayView.top.toFloat(), fraction)
-                val radius =
-                    if (isReveal) MathUtils.lerp(0f, DayView.radius(dayView), fraction) else
-                        DayView.radius(dayView)
+            if (isReveal) {
+                val fraction =
+                    revealInterpolator.getInterpolation(transitionAnimator.animatedFraction)
+                val radius = MathUtils.lerp(0f, DayView.radius(dayView), fraction)
                 canvas.drawCircle(
-                    lastX + dayView.width / 2f, lastY + dayView.height / 2f, radius, paint
+                    dayView.left + dayView.width / 2f, dayView.top + dayView.height / 2f,
+                    radius, paint
+                )
+            } else interpolators.forEach { interpolator ->
+                val fraction = interpolator.getInterpolation(transitionAnimator.animatedFraction)
+                lastX = MathUtils.lerp(currentX, dayView.left.toFloat(), fraction)
+                lastY = MathUtils.lerp(currentY, dayView.top.toFloat(), fraction)
+                canvas.drawCircle(
+                    lastX + dayView.width / 2f, lastY + dayView.height / 2f,
+                    DayView.radius(dayView), paint
                 )
             }
         } else if (hideAnimator.isRunning) {
