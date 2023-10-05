@@ -39,7 +39,7 @@ import kotlin.math.sqrt
  */
 class SunView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, @ColorInt textColor: Int? = null
-) : View(context, attrs), ValueAnimator.AnimatorUpdateListener {
+) : View(context, attrs) {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val dayPaint =
@@ -134,12 +134,13 @@ class SunView @JvmOverloads constructor(
     var clippingPath = Path()
 
     private fun mainDraw(canvas: Canvas) {
+        val value = (if (animator.isRunning) animator.animatedFraction else 1f) * current
         val width = width
         val height = height
         val isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
         canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = width / 2f) {
             // draw fill of night
-            withClip(0f, height * .75f, width * current, height.toFloat()) {
+            withClip(0f, height * .75f, width * value, height.toFloat()) {
                 paint.also {
                     it.style = Paint.Style.FILL
                     it.color = nightColor
@@ -148,7 +149,7 @@ class SunView @JvmOverloads constructor(
             }
 
             // draw fill of day
-            withClip(0f, 0f, width * current, height * .75f) {
+            withClip(0f, 0f, width * value, height * .75f) {
                 drawPath(curvePath, dayPaint)
             }
 
@@ -169,10 +170,10 @@ class SunView @JvmOverloads constructor(
 
             // draw sun
             val radius = sqrt(width * height * .002f)
-            val cx = width * current
-            val cy = getY((width * current).toInt(), segmentByPixel, (height * .9f).toInt())
-            if (current in .17f..0.83f) {
-                solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(current))
+            val cx = width * value
+            val cy = getY((width * value).toInt(), segmentByPixel, (height * .9f).toInt())
+            if (value in .17f..0.83f) {
+                solarDraw.sun(canvas, cx, cy, radius, solarDraw.sunColor(value))
             } else canvas.withScale(x = if (isRtl) -1f else 1f, pivotX = cx) { // cancel parent flip
                 run {
                     solarDraw.moon(
@@ -250,23 +251,19 @@ class SunView @JvmOverloads constructor(
                     remaining.asRemainingTime(resources))
     }
 
+    private val animator = ValueAnimator.ofFloat(0f, 1f).also {
+        it.duration = 1500
+        it.interpolator = DecelerateInterpolator()
+        it.addUpdateListener { invalidate() }
+    }
+
     fun startAnimate() {
         initiate()
-        // "current" has the final value after #initiate() call, let's animate from zero to it.
-        ValueAnimator.ofFloat(0f, current).also {
-            it.duration = 1500L
-            it.interpolator = DecelerateInterpolator()
-            it.addUpdateListener(this)
-        }.start()
+        animator.start()
     }
 
     fun clear() {
         current = 0f
-        invalidate()
-    }
-
-    override fun onAnimationUpdate(valueAnimator: ValueAnimator) {
-        current = valueAnimator.animatedValue as? Float ?: 0f
         invalidate()
     }
 
