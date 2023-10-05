@@ -11,10 +11,12 @@ class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageVi
         setImageResource(androidx.preference.R.drawable.ic_arrow_down_24dp)
     }
 
-    private var lastDegree = 0f
+    private var animator = ValueAnimator().also {
+        it.duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+        it.addUpdateListener { v -> applyRotation(v.animatedValue as? Float ?: 0f) }
+    }
     private var isRtl = false
     private fun applyRotation(degree: Float) {
-        lastDegree = degree
         rotation = if (isRtl) -degree else degree
     }
 
@@ -23,13 +25,11 @@ class ArrowView(context: Context, attr: AttributeSet? = null) : AppCompatImageVi
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         isRtl = layoutDirection == LAYOUT_DIRECTION_RTL
-        applyRotation(lastDegree)
+        applyRotation(animator.animatedValue as? Float ?: 0f)
     }
 
     fun animateTo(direction: Direction) {
-        val animator = ValueAnimator.ofFloat(lastDegree, direction.degree)
-        animator.duration = resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
-        animator.addUpdateListener { v -> applyRotation(v.animatedValue as? Float ?: 0f) }
+        animator.setFloatValues(animator.animatedValue as? Float ?: 0f, direction.degree)
         animator.start()
     }
 
