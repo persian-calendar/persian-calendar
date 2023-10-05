@@ -190,7 +190,7 @@ fun <T> T.circularRevealFromMiddle() where T : View?, T : CircularRevealWidget {
                     Color.GRAY, Color.TRANSPARENT
                 )
             )
-            it.duration = 500
+            it.duration = resources.getInteger(android.R.integer.config_longAnimTime).toLong()
         }.start()
     }
 }

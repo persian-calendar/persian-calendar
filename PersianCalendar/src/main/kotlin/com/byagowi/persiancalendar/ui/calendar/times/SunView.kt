@@ -252,7 +252,7 @@ class SunView @JvmOverloads constructor(
     }
 
     private val animator = ValueAnimator.ofFloat(0f, 1f).also {
-        it.duration = 1500
+        it.duration = resources.getInteger(android.R.integer.config_longAnimTime) * 3L
         it.interpolator = DecelerateInterpolator()
         it.addUpdateListener { invalidate() }
     }
